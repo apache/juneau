@@ -127,7 +127,7 @@ public class HeaderArg implements RestOpArg {
 		// @formatter:on
 		if (fromAnnotation.isPresent())
 			return fromAnnotation;
-		return Optional.ofNullable(nameFromTypeNameField(pi));
+		return opt(nameFromTypeNameField(pi));
 	}
 
 	private static String nameFromTypeNameField(ParameterInfo pi) {
@@ -196,7 +196,7 @@ public class HeaderArg implements RestOpArg {
 		schemaBuilder.applyAll(Header.class, pi);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelHeader).filter(h -> ne(h.def())).map(Header::def)).orElse(null);
+		this.def = findDef(pi).or(() -> opt(classLevelHeader).filter(h -> ne(h.def())).map(Header::def)).orElse(null);
 		this.type = pi.getParameterType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

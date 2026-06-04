@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
  * For a mixin endpoint, the host's hooks must fire before the mixin's hooks (in declaration order: start →
  * pre → method → post → end). For a host endpoint, only the host's hooks fire.
  */
+@SuppressWarnings({
+	"java:S3415" // EVENTS is the actual runtime-collected event list; the expected List literal is correctly the first arg (the final-field heuristic misclassifies it).
+})
 class MixinHooks_DualFire_Test extends TestBase {
 
 	private static final List<String> EVENTS = new CopyOnWriteArrayList<>();

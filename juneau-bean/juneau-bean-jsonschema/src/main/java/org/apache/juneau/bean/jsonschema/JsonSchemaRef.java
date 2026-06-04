@@ -19,6 +19,8 @@ package org.apache.juneau.bean.jsonschema;
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.UriResolver;
+
 
 /**
  * Convenience class for representing a schema reference such as <js>"{'$ref':'/url/to/ref'}"</js>.

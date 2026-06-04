@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.time.*;
 import java.time.format.*;
 
@@ -36,7 +38,8 @@ public final class DateFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
+		"unchecked", // Cast is safe: type verified by caller context.
+		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Now.class, ParseDate.class, FormatDate.class
@@ -61,13 +64,13 @@ public final class DateFunctions {
 		@Override public String name() { return "parseDate"; }
 
 		public String invoke(String s) {
-			if (s == null || s.isEmpty()) return "0";
+			if (isEmpty(s)) return "0";
 			return String.valueOf(parseIso(s));
 		}
 
 		public String invoke(String s, String format) {
-			if (s == null || s.isEmpty()) return "0";
-			if (format == null || format.isEmpty()) return invoke(s);
+			if (isEmpty(s)) return "0";
+			if (isEmpty(format)) return invoke(s);
 			var fmt = DateTimeFormatter.ofPattern(format);
 			try {
 				return String.valueOf(LocalDateTime.parse(s, fmt).toInstant(ZoneOffset.UTC).toEpochMilli());

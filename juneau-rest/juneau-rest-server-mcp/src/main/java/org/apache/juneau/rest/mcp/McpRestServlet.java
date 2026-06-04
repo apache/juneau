@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.mcp;
 
+import java.util.concurrent.atomic.*;
+
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.BasicBeanStore;
 import org.apache.juneau.http.annotation.Content;
@@ -56,7 +58,7 @@ import org.apache.juneau.serializer.annotation.*;
 public abstract class McpRestServlet extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
-	private transient McpServerConfig config;
+	private final transient AtomicReference<McpServerConfig> config = new AtomicReference<>();
 
 	/**
 	 * Returns the {@link McpServerConfig} backing this servlet.
@@ -68,12 +70,14 @@ public abstract class McpRestServlet extends BasicRestServlet {
 	 * @return The config. Never {@code null}.
 	 */
 	public synchronized McpServerConfig getMcpConfig() {
-		if (config == null) {
-			config = createMcpConfig();
-			if (config == null)
+		var c = config.get();
+		if (c == null) {
+			c = createMcpConfig();
+			if (c == null)
 				throw new IllegalStateException("createMcpConfig() returned null");
+			config.set(c);
 		}
-		return config;
+		return c;
 	}
 
 	/**

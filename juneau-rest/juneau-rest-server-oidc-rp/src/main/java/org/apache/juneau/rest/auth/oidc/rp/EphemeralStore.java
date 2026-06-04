@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;
@@ -121,15 +122,15 @@ public class EphemeralStore {
 	 */
 	public Optional<PendingLogin> consume(String state) {
 		if (state == null)
-			return Optional.empty();
+			return opte();
 		var now = clock.instant();
 		synchronized (lock) {
 			var p = entries.remove(state);
 			if (p == null)
-				return Optional.empty();
+				return opte();
 			if (isExpired(p, now))
-				return Optional.empty();
-			return Optional.of(p);
+				return opte();
+			return opt(p);
 		}
 	}
 

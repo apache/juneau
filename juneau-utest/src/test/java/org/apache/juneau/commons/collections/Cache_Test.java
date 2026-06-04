@@ -1278,7 +1278,7 @@ class Cache_Test extends TestBase {
 			.build();
 
 		// Cleanup before any access - threadLocalMap and threadLocalWrapperCache are null; should not throw
-		cache.cleanup();
+		assertDoesNotThrow(cache::cleanup);
 	}
 }
 

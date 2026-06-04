@@ -55,7 +55,8 @@ import org.apache.juneau.http.classic.header.*;
  */
 @Marshalled(as=MarshalledAs.STRING)
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_status)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_status)
+	"java:S110" // Deep exception-hierarchy inheritance is structural and intentional; flattening would break the HTTP-response exception model.
 })
 public class BasicHttpException extends BasicRuntimeException implements HttpResponse {
 

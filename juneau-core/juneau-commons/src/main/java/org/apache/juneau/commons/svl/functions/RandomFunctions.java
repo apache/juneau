@@ -47,7 +47,8 @@ public final class RandomFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
+		"unchecked", // Cast is safe: type verified by caller context.
+		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Rand.class, RandInt.class, RandLong.class, RandString.class, RandChoice.class, Uuid.class
@@ -76,7 +77,7 @@ public final class RandomFunctions {
 		}
 		public String invoke(int min, int max) {
 			if (min > max) throw illegalArg("randInt: min ({0}) must be <= max ({1})", min, max);
-			return String.valueOf(ThreadLocalRandom.current().nextLong((long) min, (long) max + 1));
+			return String.valueOf(ThreadLocalRandom.current().nextLong(min, (long) max + 1));
 		}
 	}
 

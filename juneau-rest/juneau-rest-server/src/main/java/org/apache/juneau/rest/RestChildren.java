@@ -80,6 +80,9 @@ public class RestChildren {
 		final ServletConfig servletConfig;
 
 		/** Written once under {@link #lock}; volatile for lock-free reads. */
+		@SuppressWarnings({
+			"java:S3077" // Publish-once reference: assigned once under double-checked locking in materialize(); the RestContext is fully built before assignment, so volatile safe-publication is sufficient.
+		})
 		volatile RestContext materialized;
 
 		private final Object lock = new Object();
@@ -116,7 +119,7 @@ public class RestChildren {
 				rc = materialized;
 				if (rc != null)
 					return rc;
-				LOGGER.info("Lazy REST child materializing: " + resourceClass.getName() + " at path '" + path + "'");
+				LOGGER.info(() -> "Lazy REST child materializing: " + resourceClass.getName() + " at path '" + path + "'");
 				try {
 					rc = buildChildContext(parent, beanStore, servletConfig, resourceClass, null, "");
 					rc.postInit();
@@ -125,7 +128,7 @@ public class RestChildren {
 					throw new ServletException("Failed to lazily materialize child REST context for " + resourceClass.getName(), unwrapThrowable(e));
 				}
 				materialized = rc;
-				LOGGER.info("Lazy REST child materialized: " + resourceClass.getName() + " at path '" + path + "'");
+				LOGGER.info(() -> "Lazy REST child materialized: " + resourceClass.getName() + " at path '" + path + "'");
 				return rc;
 			}
 		}
@@ -253,6 +256,9 @@ public class RestChildren {
 	private final Object writeLock = new Object();
 
 	/** Eager-init children keyed by composed path. Copy-on-write; volatile for lock-free reads. */
+	@SuppressWarnings({
+		"java:S3077" // Copy-on-write snapshot: the map reference is replaced wholesale under writeLock and never compound-mutated, so volatile safe-publication is sufficient for lock-free reads.
+	})
 	private volatile Map<String,RestContext> children;
 
 	/**
@@ -333,7 +339,8 @@ public class RestChildren {
 			// Check eager children first.
 			var snapshot = children;  // single volatile read
 			for (var rc : snapshot.values()) {
-				UrlPathMatch uppm = rc.getPathMatcher().match(builder.getUrlPath());
+				var pm = rc.getPathMatcher();  // Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).
+				UrlPathMatch uppm = pm == null ? null : pm.match(builder.getUrlPath());
 				if (nn(uppm))
 					return opt(RestChildMatch.create(uppm, rc));
 			}

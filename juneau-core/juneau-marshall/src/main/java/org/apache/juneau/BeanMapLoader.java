@@ -66,9 +66,8 @@ public final class BeanMapLoader {
 	 * @param p The parser to use to parse the text.
 	 * @return The supplied bean map for fluent chaining.
 	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by the reader.
 	 */
-	public static <T> BeanMap<T> load(BeanMap<T> m, Reader r, ReaderParser p) throws ParseException, IOException {
+	public static <T> BeanMap<T> load(BeanMap<T> m, Reader r, ReaderParser p) throws ParseException {
 		m.putAll(JsonMap.ofString(r, p));
 		return m;
 	}

@@ -70,6 +70,9 @@ public interface BeanFactory<T> {
 	 * @return A new bean instance.
 	 * @throws Exception If the bean cannot be created.
 	 */
+	@SuppressWarnings({
+		"java:S112" // Functional-interface factory hook: implementations (e.g. Spring factory methods) must be free to throw any checked exception.
+	})
 	T create() throws Exception;
 
 	/**

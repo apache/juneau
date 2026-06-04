@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.springboot.template;
 
+import java.util.*;
+
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.springboot.*;
 import org.springframework.boot.autoconfigure.*;
@@ -60,10 +62,13 @@ public class App {
 	/**
 	 * Optionally return the {@link HelloWorldResource} object as an injectable bean.
 	 *
+	 * @param messageProvider Optional message provider injected into the hello-world REST bean.
 	 * @return The hello-world REST bean.
 	 */
 	@Bean
-	public HelloWorldResource getHelloWorldResource() { return new HelloWorldResource("Hello Spring user!"); }
+	public HelloWorldResource getHelloWorldResource(Optional<HelloWorldMessageProvider> messageProvider) {
+		return new HelloWorldResource("Hello Spring user!", messageProvider);
+	}
 
 	/**
 	 * Our root REST bean.

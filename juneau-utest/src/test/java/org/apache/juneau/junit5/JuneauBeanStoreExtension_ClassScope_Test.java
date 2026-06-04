@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 
 /**
- * Tests for class-scope overlays produced by {@link JuneauBeanStoreExtension} (Phase 3 of TODO-35).
+ * Tests for class-scope overlays produced by {@link JuneauBeanStoreExtension} (Phase 3 of work item 35).
  *
  * <p>
  * Phase 3 covers {@code @TestBean(scope = CLASS)} discovery, shared lifetime across test methods,
@@ -233,6 +233,9 @@ class JuneauBeanStoreExtension_ClassScope_Test extends TestBase {
  * extension's runtime state.  Lives at file scope (separate top-level package-private class) so JUnit
  * runs it after the enclosing test class has completed all callbacks, exercising the cleanup path.
  */
+@SuppressWarnings({
+	"java:S3577" // Companion fixture verifying the sibling class's afterAll cleanup; intentionally named, not a standalone *Test suite.
+})
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @ExtendWith(JuneauBeanStoreExtension.class)
 class C_AfterAllReleasesClassScope extends TestBase {

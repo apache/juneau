@@ -31,7 +31,7 @@ import org.junit.jupiter.api.condition.*;
 import org.slf4j.*;
 
 /**
- * Tests for {@link Rest#asyncCompletionExecutor()} / {@link RestOp#asyncCompletionExecutor()} (TODO-118).
+ * Tests for {@link Rest#asyncCompletionExecutor()} / {@link RestOp#asyncCompletionExecutor()}.
  *
  * <p>
  * The {@code MockRestClient} harness exercises the synchronous fallback path of

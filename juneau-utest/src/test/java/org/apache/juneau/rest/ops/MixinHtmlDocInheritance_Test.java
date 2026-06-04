@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Validates that a mixin op inherits the host resource's class-level {@link HtmlDocConfig @HtmlDocConfig}
- * page decoration (TODO-148).
+ * page decoration.
  *
  * <p>
  * A mixin's {@code @RestOp} methods bind to a per-mixin {@link RestContext} sub-context whose

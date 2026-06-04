@@ -190,10 +190,12 @@ class BasicConvention_Builders_Test extends TestBase {
 
 	@Test void version_fromGitPropertiesViaClasspathResource(@TempDir Path tempDir) throws Exception {
 		// Build a tiny synthetic classpath that contains git.properties at the root.
-		var props = "git.commit.id=abcdef0123456789\n"
-			+ "git.commit.id.abbrev=abcdef0\n"
-			+ "git.branch=feature\n"
-			+ "git.build.time=2026-05-24T17:00:00Z\n";
+		var props = """
+			git.commit.id=abcdef0123456789
+			git.commit.id.abbrev=abcdef0
+			git.branch=feature
+			git.build.time=2026-05-24T17:00:00Z
+			""";
 		Files.writeString(tempDir.resolve("git.properties"), props, StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
 			var v = VersionMixin.create()
@@ -206,8 +208,10 @@ class BasicConvention_Builders_Test extends TestBase {
 	}
 
 	@Test void version_fromGitPropertiesAbbrevFallback(@TempDir Path tempDir) throws Exception {
-		var props = "git.commit.id.abbrev=abcdef0\n"
-			+ "git.branch=main\n";
+		var props = """
+			git.commit.id.abbrev=abcdef0
+			git.branch=main
+			""";
 		Files.writeString(tempDir.resolve("git.properties"), props, StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
 			var v = VersionMixin.create()
@@ -267,9 +271,11 @@ class BasicConvention_Builders_Test extends TestBase {
 	}
 
 	@Test void version_fromGitPropertiesEmptyValuesAreSkipped(@TempDir Path tempDir) throws Exception {
-		var props = "git.commit.id=\n"
-			+ "git.branch=\n"
-			+ "git.build.time=\n";
+		var props = """
+			git.commit.id=
+			git.branch=
+			git.build.time=
+			""";
 		Files.writeString(tempDir.resolve("git.properties"), props, StandardCharsets.UTF_8);
 		try (var cl = new URLClassLoader(new URL[]{ tempDir.toUri().toURL() }, null)) {
 			var v = VersionMixin.create().fromGitProperties(cl).build();

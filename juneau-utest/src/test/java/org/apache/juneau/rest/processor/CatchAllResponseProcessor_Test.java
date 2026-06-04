@@ -23,7 +23,7 @@ import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Marker-conformance tests for {@link CatchAllResponseProcessor} (TODO-96).
+ * Marker-conformance tests for {@link CatchAllResponseProcessor}.
  *
  * @since 9.5.0
  */

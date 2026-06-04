@@ -59,6 +59,9 @@ import java.io.InputStream;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF parser hierarchy.
+})
 public class RdfThriftParser extends RdfStreamParser {
 
 	/** Default RDF/THRIFT parser.*/

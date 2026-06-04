@@ -61,6 +61,22 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	/**
+	 * Maps an SLF4J integer log level to the equivalent {@link java.util.logging.Level}.
+	 *
+	 * @param level The SLF4J level constant (e.g. {@link LocationAwareLogger#DEBUG_INT}).
+	 * @return The equivalent Java Util Logging level.
+	 */
+	private static Level toLevel(int level) {
+		return switch (level) {
+			case LocationAwareLogger.TRACE_INT -> FINEST;
+			case LocationAwareLogger.DEBUG_INT -> FINE;
+			case LocationAwareLogger.INFO_INT -> INFO;
+			case LocationAwareLogger.WARN_INT -> WARNING;
+			default -> SEVERE;  // ERROR_INT and any out-of-range value map to the highest severity.
+		};
+	}
+
+	/**
 	 * The originally configured log level, used to restore the level when debug mode is disabled.
 	 */
 	private Level configuredLevel;
@@ -92,38 +108,33 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void debug(Marker marker, String msg) {
-		// TODO Auto-generated method stub
-
+		debug(msg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void debug(Marker marker, String format, Object arg) {
-		// TODO Auto-generated method stub
-
+		debug(format, arg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void debug(Marker marker, String format, Object...arguments) {
-		// TODO Auto-generated method stub
-
+		debug(format, arguments);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void debug(Marker marker, String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-
+		debug(format, arg1, arg2);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void debug(Marker marker, String msg, Throwable t) {
-		// TODO Auto-generated method stub
-
+		debug(msg, t);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void debug(String msg) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINE))
+			log(FINE, msg, null);
 	}
 
 	/**
@@ -145,14 +156,14 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void debug(String format, Object arg) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINE))
+			log(FINE, format(format, arg), null);
 	}
 
 	@Override
 	public void debug(String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINE))
+			log(FINE, format(format, arg1, arg2), null);
 	}
 
 	@Override
@@ -173,52 +184,57 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void error(Marker marker, String msg) {
-		// TODO Auto-generated method stub
+		error(msg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void error(Marker marker, String format, Object arg) {
-		// TODO Auto-generated method stub
+		error(format, arg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void error(Marker marker, String format, Object...arguments) {
-		// TODO Auto-generated method stub
+		error(format, arguments);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void error(Marker marker, String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
+		error(format, arg1, arg2);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void error(Marker marker, String msg, Throwable t) {
-		// TODO Auto-generated method stub
+		error(msg, t);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void error(String msg) {
-		// TODO Auto-generated method stub
+		if (isLoggable(SEVERE))
+			log(SEVERE, msg, null);
 	}
 
 	@Override
 	public void error(String format, Object arg) {
-		// TODO Auto-generated method stub
+		if (isLoggable(SEVERE))
+			log(SEVERE, format(format, arg), null);
 	}
 
 	@Override
 	public void error(String format, Object...arguments) {
-		// TODO Auto-generated method stub
+		if (isLoggable(SEVERE))
+			log(SEVERE, format(format, arguments), null);
 	}
 
 	@Override
 	public void error(String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
+		if (isLoggable(SEVERE))
+			log(SEVERE, format(format, arg1, arg2), null);
 	}
 
 	@Override
 	public void error(String msg, Throwable t) {
-		// TODO Auto-generated method stub
+		if (isLoggable(SEVERE))
+			log(SEVERE, msg, t);
 	}
 
 	/**
@@ -246,34 +262,33 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void info(Marker marker, String msg) {
-		// TODO Auto-generated method stub
+		info(msg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void info(Marker marker, String format, Object arg) {
-		// TODO Auto-generated method stub
-
+		info(format, arg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void info(Marker marker, String format, Object...arguments) {
-		// TODO Auto-generated method stub
+		info(format, arguments);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void info(Marker marker, String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
+		info(format, arg1, arg2);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void info(Marker marker, String msg, Throwable t) {
-		// TODO Auto-generated method stub
-
+		info(msg, t);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void info(String msg) {
-		// TODO Auto-generated method stub
+		if (isLoggable(INFO))
+			log(INFO, msg, null);
 	}
 
 	@Override
@@ -284,12 +299,14 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void info(String format, Object arg) {
-		// TODO Auto-generated method stub
+		if (isLoggable(INFO))
+			log(INFO, format(format, arg), null);
 	}
 
 	@Override
 	public void info(String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
+		if (isLoggable(INFO))
+			log(INFO, format(format, arg1, arg2), null);
 	}
 
 	@Override
@@ -312,62 +329,37 @@ public class JettyLogger implements LocationAwareLogger {
 	public boolean isDebugEnabled() { return isLoggable(FINE); }
 
 	@Override
-	public boolean isDebugEnabled(Marker marker) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isDebugEnabled(Marker marker) { return isLoggable(FINE); }
 
 	@Override
-	public boolean isErrorEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isErrorEnabled() { return isLoggable(SEVERE); }
 
 	@Override
-	public boolean isErrorEnabled(Marker marker) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isErrorEnabled(Marker marker) { return isLoggable(SEVERE); }
 
 	@Override
-	public boolean isInfoEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isInfoEnabled() { return isLoggable(INFO); }
 
 	@Override
-	public boolean isInfoEnabled(Marker marker) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isInfoEnabled(Marker marker) { return isLoggable(INFO); }
 
 	@Override
-	public boolean isTraceEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isTraceEnabled() { return isLoggable(FINEST); }
 
 	@Override
-	public boolean isTraceEnabled(Marker marker) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isTraceEnabled(Marker marker) { return isLoggable(FINEST); }
 
 	@Override
-	public boolean isWarnEnabled() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isWarnEnabled() { return isLoggable(WARNING); }
 
 	@Override
-	public boolean isWarnEnabled(Marker marker) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public boolean isWarnEnabled(Marker marker) { return isLoggable(WARNING); }
 
 	@Override
 	public void log(Marker marker, String fqcn, int level, String message, Object[] argArray, Throwable t) {
-		// TODO Auto-generated method stub
+		var l = toLevel(level);
+		if (isLoggable(l))
+			log(l, argArray == null ? message : format(message, argArray), t);
 	}
 
 	/**
@@ -389,92 +381,88 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void trace(Marker marker, String msg) {
-		// TODO Auto-generated method stub
-
+		trace(msg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void trace(Marker marker, String format, Object arg) {
-		// TODO Auto-generated method stub
-
+		trace(format, arg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void trace(Marker marker, String format, Object...argArray) {
-		// TODO Auto-generated method stub
-
+		trace(format, argArray);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void trace(Marker marker, String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-
+		trace(format, arg1, arg2);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void trace(Marker marker, String msg, Throwable t) {
-		// TODO Auto-generated method stub
-
+		trace(msg, t);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void trace(String msg) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINEST))
+			log(FINEST, msg, null);
 	}
 
 	@Override
 	public void trace(String format, Object arg) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINEST))
+			log(FINEST, format(format, arg), null);
 	}
 
 	@Override
 	public void trace(String format, Object...arguments) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINEST))
+			log(FINEST, format(format, arguments), null);
 	}
 
 	@Override
 	public void trace(String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINEST))
+			log(FINEST, format(format, arg1, arg2), null);
 	}
 
 	@Override
 	public void trace(String msg, Throwable t) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(FINEST))
+			log(FINEST, msg, t);
 	}
 
 	@Override
 	public void warn(Marker marker, String msg) {
-		// TODO Auto-generated method stub
+		warn(msg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void warn(Marker marker, String format, Object arg) {
-		// TODO Auto-generated method stub
+		warn(format, arg);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void warn(Marker marker, String format, Object...arguments) {
-		// TODO Auto-generated method stub
+		warn(format, arguments);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void warn(Marker marker, String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
+		warn(format, arg1, arg2);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void warn(Marker marker, String msg, Throwable t) {
-		// TODO Auto-generated method stub
+		warn(msg, t);  // Markers are not used by this JUL-backed implementation.
 	}
 
 	@Override
 	public void warn(String msg) {
-		// TODO Auto-generated method stub
+		if (isLoggable(WARNING))
+			log(WARNING, msg, null);
 	}
 
 	@Override
@@ -485,13 +473,14 @@ public class JettyLogger implements LocationAwareLogger {
 
 	@Override
 	public void warn(String format, Object arg) {
-		// TODO Auto-generated method stub
+		if (isLoggable(WARNING))
+			log(WARNING, format(format, arg), null);
 	}
 
 	@Override
 	public void warn(String format, Object arg1, Object arg2) {
-		// TODO Auto-generated method stub
-
+		if (isLoggable(WARNING))
+			log(WARNING, format(format, arg1, arg2), null);
 	}
 
 	@Override

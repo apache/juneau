@@ -36,13 +36,6 @@ import org.junit.jupiter.api.*;
  * 403, via {@link org.apache.juneau.commons.utils.FileUtils#resolveVirtualPathSafely
  * FileUtils.resolveVirtualPathSafely}.
  *
- * <p>
- * MockRest does not URL-normalize request paths the way a real servlet container does, so
- * {@code @Path("/*") String path} receives the raw {@code ..} segments &mdash; which is what the
- * handler-layer boundary check is designed to catch. (Real-container coverage is deferred to the
- * Mustache analog of TODO-97 / TODO-107 that lights up Jetty/Spring Boot end-to-end alongside
- * the JSP and Thymeleaf modules.)
- *
  * @since 9.5.0
  */
 class MustacheMixin_PathTraversal_Test extends TestBase {

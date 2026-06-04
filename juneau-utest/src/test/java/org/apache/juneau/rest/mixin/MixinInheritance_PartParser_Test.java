@@ -83,7 +83,7 @@ class MixinInheritance_PartParser_Test extends TestBase {
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
 
-	@Test void a01_mixinInheritsHostPartParser() throws Exception {
+	@Test void a01_mixinInheritsHostPartParser() {
 		MockRestClient.buildLax(HostInheritsToMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostInheritsToMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoPPDeclared.class);
@@ -95,7 +95,7 @@ class MixinInheritance_PartParser_Test extends TestBase {
 			"Mixin with no partParser override must inherit the host's HostPP part parser");
 	}
 
-	@Test void a02_mixinOverridesHostPartParser() throws Exception {
+	@Test void a02_mixinOverridesHostPartParser() {
 		MockRestClient.buildLax(HostWithMixinOverride.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinOverride.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_MixinPP.class);
@@ -107,7 +107,7 @@ class MixinInheritance_PartParser_Test extends TestBase {
 			"Mixin's own @Rest(partParser=MixinPP) must win as most-derived in walk");
 	}
 
-	@Test void a03_mixinNoInheritPartParser() throws Exception {
+	@Test void a03_mixinNoInheritPartParser() {
 		MockRestClient.buildLax(HostWithNoInherit.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInherit.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritPP.class);

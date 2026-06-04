@@ -112,6 +112,9 @@ class HtmlElement_Attr_Test extends TestBase {
 	}
 
 	// attrUri() on all element classes not covered by a01-a11
+	@SuppressWarnings({
+		"java:S5961" // Comprehensive single-feature coverage: one assertion per HTML5 element class exercising the attrUri() override.
+	})
 	@Test void b01_attrUri_allRemainingElements() {
 		var u = "http://example.org/";
 		assertNotNull(abbr().attrUri("data-u", u));

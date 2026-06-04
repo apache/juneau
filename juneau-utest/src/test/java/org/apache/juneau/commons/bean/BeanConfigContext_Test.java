@@ -26,7 +26,10 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5961" // Comprehensive single-feature coverage test exceeds the per-method assertion threshold.
+})
 class BeanConfigContext_Test extends TestBase {
 
 	//====================================================================================================
@@ -247,6 +250,9 @@ class BeanConfigContext_Test extends TestBase {
 	// copy()
 	//====================================================================================================
 
+	@SuppressWarnings({
+		"java:S5961" // Comprehensive single-feature coverage: verifies copy() preserves every configuration field.
+	})
 	@Test
 	void d01_copy_preservesAllValues() {
 		var store = new BasicBeanStore(null);

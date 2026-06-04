@@ -236,36 +236,38 @@ class Operation_Test extends TestBase {
 		}
 
 		@Test void a17_nullSafeMethods() {
-			var x = bean();
-			// addParameters null collection, null varargs, null element
-			List<Parameter> nullParamList = null;
-			x.addParameters(nullParamList);
-			x.addParameters((Parameter[])null);
-			x.addParameters(new Parameter[]{null});
-			// addSecurity null collection, null varargs, null element
-			List<SecurityRequirement> nullSecList = null;
-			x.addSecurity(nullSecList);
-			x.addSecurity((SecurityRequirement[])null);
-			x.addSecurity(new SecurityRequirement[]{null});
-			// addServers null collection, null varargs, null element
-			List<Server> nullServerList = null;
-			x.addServers(nullServerList);
-			x.addServers((Server[])null);
-			x.addServers(new Server[]{null});
-			// addTags null collection, null varargs, null element
-			List<String> nullTagList = null;
-			x.addTags(nullTagList);
-			x.addTags((String[])null);
-			x.addTags(new String[]{null});
-			// setXxx(null) - covers the false branches of nn(value) checks
-			Map<String,Callback> nullCallbackMap = null;
-			x.setCallbacks(nullCallbackMap);
-			x.setParameters(nullParamList);
-			Map<String,Response> nullResponseMap = null;
-			x.setResponses(nullResponseMap);
-			x.setSecurity(nullSecList);
-			x.setServers(nullServerList);
-			x.setTags(nullTagList);
+			assertDoesNotThrow(() -> {
+				var x = bean();
+				// addParameters null collection, null varargs, null element
+				List<Parameter> nullParamList = null;
+				x.addParameters(nullParamList);
+				x.addParameters((Parameter[])null);
+				x.addParameters(new Parameter[]{null});
+				// addSecurity null collection, null varargs, null element
+				List<SecurityRequirement> nullSecList = null;
+				x.addSecurity(nullSecList);
+				x.addSecurity((SecurityRequirement[])null);
+				x.addSecurity(new SecurityRequirement[]{null});
+				// addServers null collection, null varargs, null element
+				List<Server> nullServerList = null;
+				x.addServers(nullServerList);
+				x.addServers((Server[])null);
+				x.addServers(new Server[]{null});
+				// addTags null collection, null varargs, null element
+				List<String> nullTagList = null;
+				x.addTags(nullTagList);
+				x.addTags((String[])null);
+				x.addTags(new String[]{null});
+				// setXxx(null) - covers the false branches of nn(value) checks
+				Map<String,Callback> nullCallbackMap = null;
+				x.setCallbacks(nullCallbackMap);
+				x.setParameters(nullParamList);
+				Map<String,Response> nullResponseMap = null;
+				x.setResponses(nullResponseMap);
+				x.setSecurity(nullSecList);
+				x.setServers(nullServerList);
+				x.setTags(nullTagList);
+			});
 		}
 	}
 

@@ -102,19 +102,21 @@ public class JuneauRestAutoConfiguration {
 
 		var store = appContext.getBeanProvider(BeanStore.class).getIfAvailable();
 
-		for (var e : servlets.entrySet()) {
-			var servlet = e.getValue();
-			if (manual.contains(servlet))
-				continue;
-			var resolved = RestContext.resolveTopLevelPaths(servlet.getClass(), servlet, store);
-			if (resolved.length == 0)
-				continue;
-			var reg = servletContext.addServlet(e.getKey(), servlet);
-			if (reg == null)
-				continue; // A servlet with this name is already registered (container-level dedup).
-			for (var path : resolved)
-				reg.addMapping(toUrlMapping(path));
-		}
+		for (var e : servlets.entrySet())
+			register(servletContext, e.getKey(), e.getValue(), manual, store);
+	}
+
+	private static void register(ServletContext servletContext, String name, RestServlet servlet, Set<Servlet> manual, BeanStore store) {
+		if (manual.contains(servlet))
+			return;
+		var resolved = RestContext.resolveTopLevelPaths(servlet.getClass(), servlet, store);
+		if (resolved.length == 0)
+			return;
+		var reg = servletContext.addServlet(name, servlet);
+		if (reg == null)
+			return; // A servlet with this name is already registered (container-level dedup).
+		for (var path : resolved)
+			reg.addMapping(toUrlMapping(path));
 	}
 
 	private static String toUrlMapping(String rawPath) {

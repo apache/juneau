@@ -82,7 +82,7 @@ class MixinInheritance_CallLogger_Test extends TestBase {
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
 
-	@Test void a01_mixinInheritsHostCallLogger() throws Exception {
+	@Test void a01_mixinInheritsHostCallLogger() {
 		MockRestClient.buildLax(HostInheritsToMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostInheritsToMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoLoggerDeclared.class);
@@ -94,7 +94,7 @@ class MixinInheritance_CallLogger_Test extends TestBase {
 			"Mixin with no callLogger declaration must inherit the host's HostLogger");
 	}
 
-	@Test void a02_mixinOverridesHostCallLogger() throws Exception {
+	@Test void a02_mixinOverridesHostCallLogger() {
 		MockRestClient.buildLax(HostWithMixinOverride.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinOverride.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_MixinLogger.class);
@@ -106,7 +106,7 @@ class MixinInheritance_CallLogger_Test extends TestBase {
 			"Mixin endpoint must use the mixin's MixinLogger (most-derived wins in resolution chain)");
 	}
 
-	@Test void a03_noInheritOnMixinUsesMixinOnly() throws Exception {
+	@Test void a03_noInheritOnMixinUsesMixinOnly() {
 		MockRestClient.buildLax(HostWithNoInherit.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInherit.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritLogger.class);

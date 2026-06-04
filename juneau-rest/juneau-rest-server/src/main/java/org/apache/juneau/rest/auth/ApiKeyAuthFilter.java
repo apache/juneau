@@ -18,6 +18,7 @@ package org.apache.juneau.rest.auth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -212,7 +213,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
 		var key = readKey(req);
 		if (isBlank(key))
-			return Optional.empty();
+			return opte();
 
 		java.security.Principal principal;
 		try {
@@ -231,7 +232,7 @@ public class ApiKeyAuthFilter extends AuthFilter {
 		}
 
 		var roles = ClaimsRoleExtractor.extractRoles(principal, rolesClaim);
-		return Optional.of(AuthResult.of(principal, roles));
+		return opt(AuthResult.of(principal, roles));
 	}
 
 	private String readKey(HttpServletRequest req) {

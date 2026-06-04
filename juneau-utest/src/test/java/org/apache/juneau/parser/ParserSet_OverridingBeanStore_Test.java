@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 /**
  * Verifies that {@link ParserSet.Builder#overridingBeanStore(BeanStore)} threads the overlay
  * through to the builder's reflective bean lookups so test-time overrides win over the builder's
- * regular bean store entries (Phase 4 of TODO-35).
+ * regular bean store entries.
  */
 class ParserSet_OverridingBeanStore_Test extends TestBase {
 

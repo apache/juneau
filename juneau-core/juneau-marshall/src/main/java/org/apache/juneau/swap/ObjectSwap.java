@@ -169,7 +169,7 @@ public abstract class ObjectSwap<T,S> {
 	 * @return The media types that this swap is applicable to, or <jk>null</jk> if it's applicable for all media types.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: Intentional null = applicable to all media types. Consider empty array.
+		"java:S1168"     // Intentional null = applicable to all media types; callers branch on null (not an empty array).
 	})
 	public MediaType[] forMediaTypes() {
 		return null;

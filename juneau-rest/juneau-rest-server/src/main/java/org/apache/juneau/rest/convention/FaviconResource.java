@@ -41,7 +41,7 @@ import org.apache.juneau.rest.servlet.*;
 @Rest(path="/favicon.ico")
 public class FaviconResource extends RestResource {
 
-	private final transient FaviconProvider worker;
+	private final FaviconProvider worker;
 
 	/** No-arg constructor &mdash; uses a default {@link FaviconProvider} worker. */
 	public FaviconResource() {

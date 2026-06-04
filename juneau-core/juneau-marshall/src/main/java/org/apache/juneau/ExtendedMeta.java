@@ -20,4 +20,7 @@ package org.apache.juneau;
  * Superclass of all extended metadata classes.
  *
  */
+@SuppressWarnings({
+	"java:S2094" // Intentional empty common base class for the extended-metadata hierarchy (ExtendedClassMeta/ExtendedBeanMeta/ExtendedBeanPropertyMeta).
+})
 public class ExtendedMeta {}

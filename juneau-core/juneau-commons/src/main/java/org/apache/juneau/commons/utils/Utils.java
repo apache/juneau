@@ -1942,9 +1942,9 @@ public class Utils {
 	 */
 	public static <T> Optional<T> safeOpt(ThrowingSupplier<T> s) {
 		try {
-			return Optional.of(s.get());
+			return opt(s.get());
 		} catch (@SuppressWarnings("unused") Exception e) {
-			return Optional.empty();
+			return opte();
 		}
 	}
 

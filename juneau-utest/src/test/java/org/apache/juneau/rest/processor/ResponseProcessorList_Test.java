@@ -32,7 +32,7 @@ import org.apache.juneau.rest.view.thymeleaf.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for the {@link ResponseProcessorList} partition pass (TODO-96) that repositions
+ * Tests for the {@link ResponseProcessorList} partition pass that repositions
  * {@link ViewRenderer} processors before the first {@link CatchAllResponseProcessor}.
  *
  * @since 9.5.0

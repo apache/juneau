@@ -179,7 +179,6 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * @param index The zero-based index of this parameter in the method/constructor signature.
 	 * @param type The ClassInfo representing the parameter type.
 	 */
-	// TODO - Investigate if we can construct ClassInfo directly from parameter.
 	protected ParameterInfo(ExecutableInfo executable, Parameter inner, int index, ClassInfo type) {
 		super(inner.getModifiers());
 		this.executable = executable;
@@ -910,8 +909,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			// to Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
 			if (pt.is(Optional.class))
 				return (resolved == null || (resolved instanceof String s && s.isEmpty()))
-					? Optional.empty()
-					: Optional.of(resolved);
+					? opte()
+					: opt(resolved);
 			return resolved;
 		}
 
@@ -994,7 +993,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			collectionValue = ReflectionUtils.resolveCollectionValue(elementType, beanStore, ptu);
 		}
 		if (nn(collectionValue))
-			return pt.is(Optional.class) ? Optional.of(collectionValue) : collectionValue;
+			return pt.is(Optional.class) ? opt(collectionValue) : collectionValue;
 
 		// Handle single bean
 		var ptc = ptu.inner();

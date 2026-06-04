@@ -58,7 +58,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  */
 @SuppressWarnings({
 	"java:S100", // RDF method names (getRdfXml, isXmlLang, etc.) use domain-specific casing
-	"java:S115"  // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S110"  // Deep inheritance inherent to the RDF parser hierarchy.
 })
 public class RdfParser extends ReaderParser implements RdfMetaProvider {
 

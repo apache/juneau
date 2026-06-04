@@ -45,7 +45,7 @@ import org.apache.juneau.rest.view.*;
 )
 public class FreemarkerResource extends ViewResource {
 
-	private final transient FreemarkerDispatcher worker;
+	private final FreemarkerDispatcher worker;
 
 	/** No-arg constructor &mdash; uses a default {@link FreemarkerDispatcher} worker. */
 	public FreemarkerResource() {

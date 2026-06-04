@@ -554,7 +554,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param consumer The entry consumer.
 	 */
 	public final <E> void forEachEntry(Collection<E> c, Consumer<E> consumer) {
-		if (c == null || c.isEmpty())
+		if (isEmpty(c))
 			return;
 		if (isSortCollections() && !(c instanceof SortedSet) && isSortable(c))
 			c.stream().sorted().forEach(consumer);
@@ -574,7 +574,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 		"cast" // Cast required for generic type safety
 	})
 	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
-		if (m == null || m.isEmpty())
+		if (isEmpty(m))
 			return;
 		if (isSortMaps() && !(m instanceof SortedMap) && isSortable(m.keySet()))
 			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>)x));
@@ -605,18 +605,11 @@ public class SerializerSession extends MarshallingTraverseSession {
 		} else if (type.isIterable()) {
 			if (o instanceof BeanSupplier bs) {
 				try {
-					bs.begin();
-					try {
-						bs.iterator().forEachRemaining(consumer);
-					} catch (Exception e) {
-						bs.onError(e);
-					} finally {
-						bs.complete();
-					}
+					drainBeanSupplier(bs, consumer);
 				} catch (RuntimeException e) {
 					throw e;
 				} catch (Exception e) {
-					throw new RuntimeException(e);
+					throw new BasicRuntimeException(e);
 				}
 			} else {
 				((Iterable)o).forEach(consumer);
@@ -630,6 +623,17 @@ public class SerializerSession extends MarshallingTraverseSession {
 			try (var stream = (Stream)o) {
 				stream.forEach(consumer);
 			}
+		}
+	}
+
+	private static void drainBeanSupplier(BeanSupplier bs, Consumer consumer) throws Exception {
+		bs.begin();
+		try {
+			bs.iterator().forEachRemaining(consumer);
+		} catch (Exception e) {
+			bs.onError(e);
+		} finally {
+			bs.complete();
 		}
 	}
 
@@ -839,7 +843,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> Collection<E> sort(Collection<E> c) {
-		if (c == null || c.isEmpty() || c instanceof SortedSet)
+		if (isEmpty(c) || c instanceof SortedSet)
 			return c;
 		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().toList();
@@ -854,7 +858,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return A new sorted {@link TreeSet}.
 	 */
 	public final <E> List<E> sort(List<E> c) {
-		if (c == null || c.isEmpty())
+		if (isEmpty(c))
 			return c;
 		if (isSortCollections() && isSortable(c))
 			return c.stream().sorted().toList();
@@ -870,7 +874,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return A new sorted {@link TreeMap}.
 	 */
 	public final <K,V> Map<K,V> sort(Map<K,V> m) {
-		if (m == null || m.isEmpty() || m instanceof SortedMap)
+		if (isEmpty(m) || m instanceof SortedMap)
 			return m;
 		if (isSortMaps() && isSortable(m.keySet()))
 			return new TreeMap<>(m);

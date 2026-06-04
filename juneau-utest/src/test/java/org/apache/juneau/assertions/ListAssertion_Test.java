@@ -50,7 +50,7 @@ class ListAssertion_Test extends TestBase {
 	}
 
 	@Test void a02_stdout() {
-		test(null).setStdOut();
+		assertNotNull(test(null).setStdOut());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -466,6 +466,6 @@ class ListAssertion_Test extends TestBase {
 
 	@Test void cc03_each_wNullPredicate() {
 		var x1 = l("a","b");
-		test(x1).isEach(null, null);
+		assertDoesNotThrow(() -> test(x1).isEach(null, null));  // null predicates are treated as always-true — must not throw
 	}
 }

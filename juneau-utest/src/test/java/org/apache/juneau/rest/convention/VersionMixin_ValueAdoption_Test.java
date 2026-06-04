@@ -22,7 +22,7 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-92 acceptance tests for the {@code @Value}-driven {@code java.version} default on
+ * Acceptance tests for the {@code @Value}-driven {@code java.version} default on
  * {@link VersionMixin.Builder}.
  *
  * <p>

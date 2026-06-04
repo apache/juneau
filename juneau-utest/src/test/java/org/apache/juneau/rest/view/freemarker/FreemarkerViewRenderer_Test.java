@@ -24,13 +24,6 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link FreemarkerViewRenderer}.
  *
- * <p>
- * Covers the diagnostic-message constant + default content-type. The full
- * {@link FreemarkerViewRenderer#process process(...)} dispatch path is exercised end-to-end by
- * the MockRest-flavored tests in this package (full Jetty / Spring Boot real-container coverage
- * is deferred to a follow-on TODO, the FreeMarker analog of TODO-97 for JSP, TODO-107 for
- * Thymeleaf, and TODO-108 for Mustache).
- *
  * @since 9.5.0
  */
 class FreemarkerViewRenderer_Test extends TestBase {

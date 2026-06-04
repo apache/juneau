@@ -50,6 +50,9 @@ import org.apache.juneau.http.response.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the exception hierarchy
+})
 public class AuthenticationException extends Unauthorized {
 
 	private static final long serialVersionUID = 1L;

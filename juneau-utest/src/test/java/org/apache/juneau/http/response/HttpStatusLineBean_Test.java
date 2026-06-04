@@ -70,8 +70,8 @@ class HttpStatusLineBean_Test extends TestBase {
 		assertNotEquals(a, c);
 		assertNotEquals(a, d);
 		assertNotEquals(a, e);
-		assertNotEquals(a, "not a status line");
-		assertNotEquals(a, null);
+		assertNotEquals("not a status line", a);
+		assertNotEquals(null, a);
 	}
 
 	@Test void a07_nullReasonPhrase_equalsAndHash() {

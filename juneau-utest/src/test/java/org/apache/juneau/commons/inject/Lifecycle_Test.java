@@ -118,7 +118,7 @@ class Lifecycle_Test extends TestBase {
 		store.close();
 		assertThrows(IllegalStateException.class, () -> store.addBean(TracedBean.class, null));
 		assertThrows(IllegalStateException.class, () -> store.getBean(TracedBean.class));
-		assertThrows(IllegalStateException.class, () -> store.clear());
+		assertThrows(IllegalStateException.class, store::clear);
 	}
 
 	@Test

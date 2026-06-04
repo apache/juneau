@@ -70,7 +70,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * @return The Java method. Never <jk>null</jk>.
 	 */
 	public Method getJavaMethod() {
-		return method;
+		return getMethod();
 	}
 
 	/**

@@ -35,6 +35,9 @@ import org.apache.juneau.rest.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S6548" // Intentional process-wide no-op singleton; the Singleton pattern is required to satisfy the TracerHook SPI contract with zero allocation.
+})
 public final class NoOpTracerHook implements TracerHook {
 
 	/** Process-wide singleton instance. */
@@ -57,7 +60,8 @@ public final class NoOpTracerHook implements TracerHook {
 	 * private equivalent.
 	 */
 	@SuppressWarnings({
-		"resource" // Singleton; intentionally held for the process lifetime.
+		"resource", // Singleton; intentionally held for the process lifetime.
+		"java:S6548" // Intentional process-wide no-op singleton returned for every span; the Singleton pattern is required for the zero-allocation no-op scope.
 	})
 	public static final class NoOpScope implements Scope {
 

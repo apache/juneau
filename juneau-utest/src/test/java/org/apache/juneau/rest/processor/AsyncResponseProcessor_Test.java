@@ -29,7 +29,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.Test;
 
 /**
- * Tests {@link AsyncResponseProcessor} — the new processor (TODO-70) that unwraps
+ * Tests {@link AsyncResponseProcessor} — the new processor that unwraps
  * {@link CompletableFuture} / {@link CompletionStage} return values from {@code @RestOp} methods
  * and bridges them to the servlet container's {@link jakarta.servlet.AsyncContext} lifecycle.
  *

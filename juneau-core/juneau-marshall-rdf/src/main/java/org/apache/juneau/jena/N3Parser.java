@@ -62,6 +62,9 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF parser hierarchy.
+})
 public class N3Parser extends RdfParser {
 
 	/** Default N3 parser, all default settings.*/

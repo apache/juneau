@@ -157,7 +157,8 @@ final class VarTemplateCompiler {
 		var isDollarBraceShortcut = false;
 		var length = input.length();
 
-		for (var i = 0; i < length; i++) {
+		var i = 0;
+		while (i < length) {
 			var c = input.charAt(i);
 			if (state == S1) {
 				if (isInEscape) {
@@ -282,6 +283,7 @@ final class VarTemplateCompiler {
 					}
 				}
 			}
+			i++;
 		}
 
 		// End-of-input handling — preserve legacy fallthrough exactly.
@@ -300,7 +302,7 @@ final class VarTemplateCompiler {
 	}
 
 	private static void flushLiteral(List<TemplateSegment> out, StringBuilder buf) {
-		if (buf.length() > 0) {
+		if (!buf.isEmpty()) {
 			out.add(new LiteralSegment(buf.toString()));
 			buf.setLength(0);
 		}

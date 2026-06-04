@@ -41,7 +41,7 @@ public class SystemUtils {
 		Runtime.getRuntime().addShutdownHook(new Thread() {
 			@Override
 			public void run() {
-				if (! Settings.get().get("juneau.shutdown.quiet").asBoolean().orElse(false)) // HTT - shutdown hook; true branch tested, false requires JVM shutdown with system property set
+				if (Boolean.FALSE.equals(Settings.get().get("juneau.shutdown.quiet").asBoolean().orElse(false))) // HTT - shutdown hook; true branch tested, false requires JVM shutdown with system property set
 					SHUTDOWN_MESSAGES.forEach(x -> LOG.info(x.get()));
 			}
 		});

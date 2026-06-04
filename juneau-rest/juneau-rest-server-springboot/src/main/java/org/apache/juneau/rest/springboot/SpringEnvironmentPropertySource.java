@@ -68,6 +68,9 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 
 	// Guarded by the synchronized block in get(...); volatile reads cover the fast-path check.
 	private volatile boolean resolved;
+	@SuppressWarnings({
+		"java:S3077" // Publish-once reference: env is fully resolved before its single assignment (constructor or inside the synchronized block) and is never compound-mutated, so volatile visibility is sufficient.
+	})
 	private volatile Environment env;
 
 	/**

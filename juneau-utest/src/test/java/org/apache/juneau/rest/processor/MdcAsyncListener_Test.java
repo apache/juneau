@@ -26,7 +26,7 @@ import org.slf4j.*;
 
 /**
  * Tests for {@link MdcAsyncListener} — the SLF4J MDC bridge that propagates request-thread MDC to
- * {@link CompletableFuture} completion threads (TODO-117).
+ * {@link CompletableFuture} completion threads.
  *
  * <p>
  * All direct unit tests exercise {@link MdcAsyncListener} in isolation via its static factory methods.

@@ -166,7 +166,8 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 
 	@SuppressWarnings({
 		"java:S2142", // We re-set the interrupt flag immediately and surface as a 500.
-		"java:S1166"  // CancellationException is intentionally swallowed; we surface it as a 500 via convertThrowable.
+		"java:S1166", // CancellationException is intentionally swallowed; we surface it as a 500 via convertThrowable.
+		"java:S3516"  // Always returns RESTART by design: every outcome (success or error) re-runs the chain on the now-synchronous content.
 	})
 	private int processSyncFallback(RestOpSession opSession, CompletableFuture<?> cf, long timeoutMs) {
 		var res = opSession.getResponse();
@@ -246,7 +247,8 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 
 	@SuppressWarnings({
 		"java:S3776", // Async finalization is inherently branchy.
-		"java:S1141"  // Nested try/catch separates response-processing from container cleanup.
+		"java:S1141", // Nested try/catch separates response-processing from container cleanup.
+		"java:S107"   // The 8 parameters are the internal async-finalization context (session, future, async ctx, error, done-latch, timeout flag, timeout ms, resolved value); a holder object would obscure this hot-path call and its sibling overload.
 	})
 	private void finalizeAsync(RestOpSession opSession, CompletableFuture<?> cf, AsyncContext asyncCtx,
 			Throwable error, AtomicBoolean done, boolean timeout, long timeoutMs, Object value) {

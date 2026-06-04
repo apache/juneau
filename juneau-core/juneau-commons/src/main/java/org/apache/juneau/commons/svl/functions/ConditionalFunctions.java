@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import org.apache.juneau.commons.svl.*;
 
 /**
@@ -31,7 +33,8 @@ public final class ConditionalFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
+		"unchecked", // Cast is safe: type verified by caller context.
+		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		If.class, Switch.class, Coalesce.class, NotEmpty.class
@@ -48,7 +51,9 @@ public final class ConditionalFunctions {
 	public static class If extends TypedFunction {
 		@Override public String name() { return "if"; }
 		public String invoke(boolean cond, String thenVal, String elseVal) {
-			return cond ? (thenVal == null ? "" : thenVal) : (elseVal == null ? "" : elseVal);
+			var then = thenVal == null ? "" : thenVal;
+			var els = elseVal == null ? "" : elseVal;
+			return cond ? then : els;
 		}
 	}
 
@@ -117,7 +122,7 @@ public final class ConditionalFunctions {
 		@Override public String name() { return "coalesce"; }
 		public String invoke(String[] args) {
 			for (var a : args)
-				if (a != null && !a.isEmpty()) return a;
+				if (!isEmpty(a)) return a;
 			return "";
 		}
 	}
@@ -131,6 +136,6 @@ public final class ConditionalFunctions {
 	 */
 	public static class NotEmpty extends TypedFunction {
 		@Override public String name() { return "notEmpty"; }
-		public String invoke(String s) { return String.valueOf(s != null && !s.isEmpty()); }
+		public String invoke(String s) { return String.valueOf(!isEmpty(s)); }
 	}
 }

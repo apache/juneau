@@ -812,6 +812,9 @@ public @interface Schema {
 	 * @deprecated Use {@link #exclusiveMaximumValue()} for JSON Schema Draft 2020-12 compliance.
 	 */
 	@Deprecated(since = "9.2.0", forRemoval = true)
+	@SuppressWarnings({
+		"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	})
 	boolean exclusiveMaximum() default false;
 
 	/**
@@ -890,6 +893,9 @@ public @interface Schema {
 	 * @deprecated Use {@link #exclusiveMinimumValue()} for JSON Schema Draft 2020-12 compliance.
 	 */
 	@Deprecated(since = "9.2.0", forRemoval = true)
+	@SuppressWarnings({
+		"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
+	})
 	boolean exclusiveMinimum() default false;
 
 	/**

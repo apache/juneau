@@ -79,12 +79,12 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 	 * Public so tests and consumer apps can pattern-match against the message text without
 	 * depending on internal string literals.
 	 */
-	public static final String NO_ENGINE_DIAGNOSTIC =
-		"No Thymeleaf engine is available on the classpath. Add one of:\n"
-		+ "  - org.springframework.boot:spring-boot-starter-thymeleaf  (Spring Boot autoconfig)\n"
-		+ "  - org.thymeleaf:thymeleaf                                  (Juneau microservice / Jetty)\n"
-		+ "Or register a custom @Bean TemplateEngine that picks up your preferred resolvers.\n"
-		+ "See https://juneau.apache.org/docs/topics/ThymeleafViewSupport for the full matrix.";
+	public static final String NO_ENGINE_DIAGNOSTIC = """
+		No Thymeleaf engine is available on the classpath. Add one of:
+		  - org.springframework.boot:spring-boot-starter-thymeleaf  (Spring Boot autoconfig)
+		  - org.thymeleaf:thymeleaf                                  (Juneau microservice / Jetty)
+		Or register a custom @Bean TemplateEngine that picks up your preferred resolvers.
+		See https://juneau.apache.org/docs/topics/ThymeleafViewSupport for the full matrix.""";
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {

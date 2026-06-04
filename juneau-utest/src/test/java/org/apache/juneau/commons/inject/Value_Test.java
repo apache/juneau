@@ -28,7 +28,7 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Acceptance tests for the {@code @Value} annotation introduced in TODO-79.
+ * Acceptance tests for the {@code @Value} annotation.
  *
  * <p>
  * Covers Juneau's {@link Value @Value}, Spring's {@code @Value} (detected by FQN), and the negative
@@ -135,7 +135,7 @@ class Value_Test extends TestBase {
 		}
 	}
 
-	/** Setter that accepts an {@code Optional<String>} @Value parameter — worked example of the TODO-128 fix. */
+	/** Setter that accepts an {@code Optional<String>} @Value parameter — worked example of the FINISHED-128 fix. */
 	public static class OptionalSetterBean {
 		Optional<String> maybe;
 
@@ -145,7 +145,7 @@ class Value_Test extends TestBase {
 		}
 	}
 
-	/** Constructor that mixes a plain and an Optional @Value parameter — worked example of the TODO-128 fix. */
+	/** Constructor that mixes a plain and an Optional @Value parameter — worked example of the FINISHED-128 fix. */
 	public static class OptionalConstructorBean {
 		final String plain;
 		final Optional<String> maybe;
@@ -299,7 +299,7 @@ class Value_Test extends TestBase {
 		assertEquals("from-settings", bean.field);
 	}
 
-	// TODO-128 worked example: Optional<T> setter parameter previously threw IAE at reflective invoke.
+	// FINISHED-128 worked example: Optional<T> setter parameter previously threw IAE at reflective invoke.
 	@Test
 	void c03_setter_optionalParam_missing_isEmpty() {
 		var bean = BeanInstantiator.of(OptionalSetterBean.class, beanStore).run();
@@ -316,7 +316,7 @@ class Value_Test extends TestBase {
 		assertEquals("setter-opt", bean.maybe.get());
 	}
 
-	// TODO-128 worked example: Optional<T> constructor parameter.
+	// FINISHED-128 worked example: Optional<T> constructor parameter.
 	@Test
 	void b03_constructorParam_optionalMissing_isEmpty() {
 		var bean = BeanInstantiator.of(OptionalConstructorBean.class, beanStore).run();
@@ -341,16 +341,16 @@ class Value_Test extends TestBase {
 
 	@Test
 	void d01_field_value_plus_inject_throws() {
-		var ex = assertThrows(BeanCreationException.class,
-			() -> BeanInstantiator.of(ConflictFieldBean.class, beanStore).run());
+		var inst = BeanInstantiator.of(ConflictFieldBean.class, beanStore);
+		var ex = assertThrows(BeanCreationException.class, inst::run);
 		assertTrue(ex.getMessage().contains("@Value and @Inject are mutually exclusive"),
 			"Unexpected message: " + ex.getMessage());
 	}
 
 	@Test
 	void d02_parameter_value_plus_inject_throws() {
-		var ex = assertThrows(BeanCreationException.class,
-			() -> BeanInstantiator.of(ConflictParamBean.class, beanStore).run());
+		var inst = BeanInstantiator.of(ConflictParamBean.class, beanStore);
+		var ex = assertThrows(BeanCreationException.class, inst::run);
 		assertTrue(ex.getMessage().contains("@Value and @Inject are mutually exclusive"),
 			"Unexpected message: " + ex.getMessage());
 	}
@@ -361,8 +361,8 @@ class Value_Test extends TestBase {
 
 	@Test
 	void e01_primitive_missing_noDefault_throws() {
-		var ex = assertThrows(BeanCreationException.class,
-			() -> BeanInstantiator.of(PrimitiveMissingNoDefaultBean.class, beanStore).run());
+		var inst = BeanInstantiator.of(PrimitiveMissingNoDefaultBean.class, beanStore);
+		var ex = assertThrows(BeanCreationException.class, inst::run);
 		assertTrue(ex.getMessage().contains("Could not resolve required @Value"),
 			"Unexpected message: " + ex.getMessage());
 	}
@@ -370,8 +370,8 @@ class Value_Test extends TestBase {
 	@Test
 	void e02_coerce_failure_wrapped() {
 		Settings.get().setGlobal("Value_Test.coerceFail", "not-a-number");
-		var ex = assertThrows(BeanCreationException.class,
-			() -> BeanInstantiator.of(CoerceFailureBean.class, beanStore).run());
+		var inst = BeanInstantiator.of(CoerceFailureBean.class, beanStore);
+		var ex = assertThrows(BeanCreationException.class, inst::run);
 		assertTrue(ex.getMessage().contains("Could not coerce @Value"),
 			"Unexpected message: " + ex.getMessage());
 	}

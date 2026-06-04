@@ -55,7 +55,7 @@ public class RequestBeanMeta {
 			this.cm = MarshallingContext.DEFAULT.getClassMeta(c);
 			var ap = cm.getMarshallingContext().getAnnotationProvider();
 			apply(ap.find(Request.class, cm).stream().findFirst().map(x -> x.inner()).orElse(null));
-			cm.getPublicMethods().stream().forEach(x -> {
+			cm.getPublicMethods().forEach(x -> {
 				var n = x.getNameSimple();
 				if (x.hasAnnotation(Header.class)) {
 					assertNoArgs(x, Header.class);
@@ -86,7 +86,11 @@ public class RequestBeanMeta {
 			return apply(mpi.getParameterType().inner()).apply(AP.find(Request.class, mpi).stream().findFirst().map(AnnotationInfo::inner).orElse(null));
 		}
 
-		Builder apply(@SuppressWarnings("unused") Request a) {
+		@SuppressWarnings({
+			"java:S1172", // 'a' retained for builder apply-overload symmetry; @Request attributes are now handled via @HttpPartMarshalling
+			"unused" // Parameter intentionally unused — placeholder overload
+		})
+		Builder apply(Request a) {
 			// Serializer/parser now specified via @HttpPartMarshalling annotation instead of @Request attributes
 			return this;
 		}

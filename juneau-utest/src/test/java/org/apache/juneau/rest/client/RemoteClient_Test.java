@@ -43,7 +43,10 @@ import org.junit.jupiter.api.*;
  * Tests for the ng.* remote proxy support: @Remote, @RemoteGet/Post/etc., parameter annotations,
  * RrpcInterfaceMeta, RrpcInterfaceMethodMeta, and RemoteClient.
  */
-public class RemoteClient_Test {
+@SuppressWarnings({
+	"java:S114" // Snake_case fixture interface names (A01_UserService, etc.) are intentional test-local naming.
+})
+class RemoteClient_Test {
 
 	// ------------------------------------------------------------------------------------------------------------------
 	// A — @Remote annotation and metadata
@@ -263,7 +266,7 @@ public class RemoteClient_Test {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(204).build()).build();
 		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(E01_VoidService.class);
-			assertDoesNotThrow(() -> svc.doSomething());
+			assertDoesNotThrow(svc::doSomething);
 		}
 	}
 
@@ -375,7 +378,7 @@ public class RemoteClient_Test {
 	@Test void j01_unannotated_method_throws() throws Exception {
 		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "ok")).rootUrl("http://x.com").build()) {
 			var svc = client.remote(J01_MixedService.class);
-			assertThrows(UnsupportedOperationException.class, () -> svc.notAnnotated());
+			assertThrows(UnsupportedOperationException.class, svc::notAnnotated);
 		}
 	}
 
@@ -560,7 +563,7 @@ public class RemoteClient_Test {
 		var transport = MockHttpTransport.builder().fallback(req -> TransportResponse.builder().statusCode(204).build()).build();
 		try (var client = RestClient.builder().transport(transport).rootUrl("http://x.com").build()) {
 			var svc = client.remote(O01_ReturnTypeService.class);
-			assertDoesNotThrow(() -> svc.doVoid());
+			assertDoesNotThrow(svc::doVoid);
 		}
 	}
 
@@ -714,7 +717,7 @@ public class RemoteClient_Test {
 			var svc = client.remote(T01_VoidBoxedReturnService.class);
 			// STATUS mode with non-int/non-boolean return falls through to yield sc (Integer)
 			// The proxy returns it; a ClassCastException occurs when the caller tries to use it as String
-			assertThrows(Exception.class, () -> svc.getStatusAsString());
+			assertThrows(Exception.class, svc::getStatusAsString);
 		}
 	}
 

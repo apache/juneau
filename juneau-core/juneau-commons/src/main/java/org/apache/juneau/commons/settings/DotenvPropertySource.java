@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -53,9 +54,9 @@ public class DotenvPropertySource implements PropertySource {
 
 	private static Path resolvePath() {
 		var configured = System.getProperty(DOTENV_PATH_PROP);
-		if (configured == null || configured.isEmpty())
+		if (isEmpty(configured))
 			configured = System.getenv(DOTENV_PATH_ENV);
-		if (configured == null || configured.isEmpty())
+		if (isEmpty(configured))
 			configured = DEFAULT_PATH;
 		return Paths.get(configured);
 	}

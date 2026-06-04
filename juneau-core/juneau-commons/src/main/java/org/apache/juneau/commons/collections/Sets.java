@@ -292,11 +292,6 @@ public class Sets<E> {
 	/**
 	 * Builds the set.
 	 *
-	 * @return A set conforming to the settings on this builder.
-	 */
-	/**
-	 * Builds the set.
-	 *
 	 * <p>
 	 * Applies filtering, sorting, ordering, concurrent, unmodifiable, and sparse options.
 	 *
@@ -402,6 +397,9 @@ public class Sets<E> {
 	 *
 	 * @return The built set as a {@link FilteredSet}, or {@code null} if {@link #sparse()} is set and the set is empty.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Propagates the documented sparse+empty null from build(); callers rely on null to mean "absent" (tests assert null).
+	})
 	public FilteredSet<E> buildFiltered() {
 		var s = build();
 		if (s == null)  // sparse mode and empty

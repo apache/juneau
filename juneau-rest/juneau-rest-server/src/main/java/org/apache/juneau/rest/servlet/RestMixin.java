@@ -89,7 +89,7 @@ public abstract class RestMixin {
 	/**
 	 * The programmatic configuration builder stashed on this instance, or <jk>null</jk> when the
 	 * mixin was constructed without a builder.  Mutable so it can be written by either the
-	 * {@link #RestMixin(RestBuilder<?>)} constructor or {@link Builder#build()}.  Read non-reflectively by
+	 * {@link #RestMixin(RestBuilder)} constructor or {@link Builder#build()}.  Read non-reflectively by
 	 * {@link RestContext} during mixin sub-context construction so builder-supplied values take precedence over
 	 * {@link Rest @Rest} annotation values.
 	 */

@@ -757,8 +757,8 @@ public class CollectionUtils {
 	 */
 	public static <E> Optional<E> next(Iterator<? extends E> iterator) {
 		if (iterator == null || !iterator.hasNext())
-			return Optional.empty();
-		return Optional.of(iterator.next());
+			return opte();
+		return opt(iterator.next());
 	}
 
 	/**
@@ -788,7 +788,7 @@ public class CollectionUtils {
 	 */
 	public static <E> Optional<E> first(Iterable<? extends E> iterable) {
 		if (iterable == null)
-			return Optional.empty();
+			return opte();
 		Iterator<? extends E> iterator = iterable.iterator();
 		return next(iterator);
 	}
@@ -1980,13 +1980,6 @@ public class CollectionUtils {
 		return value;
 	}
 
-	/**
-	 * Reverses the entries in an array.
-	 *
-	 * @param <E> The element type.
-	 * @param array The array to reverse.
-	 * @return The same array.
-	 */
 	/**
 	 * Reverses the elements in the specified array in-place.
 	 *

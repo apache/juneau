@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * The Jetty- / Spring-Boot-flavored integration tests in this package exercise the mixin's
  * routing + JSP-engine integration end-to-end; these tests pin the builder API surface so
- * sibling view modules (TODO-82/83/84) can mirror it.
+ * sibling view modules can mirror it.
  *
  * @since 9.5.0
  */

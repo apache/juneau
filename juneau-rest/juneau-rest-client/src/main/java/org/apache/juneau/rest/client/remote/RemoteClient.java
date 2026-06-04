@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.remote;
 import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
 import static org.apache.juneau.commons.utils.StringUtils.firstNonEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.rex;
+import static org.apache.juneau.commons.utils.Utils.opt;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -121,7 +122,8 @@ public final class RemoteClient {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	@SuppressWarnings({
-		"resource" // resp is closed within this method or returned to caller (RESPONSE mode)
+		"resource", // resp is closed within this method or returned to caller (RESPONSE mode)
+		"java:S112" // Reflective remote-proxy dispatch intentionally propagates arbitrary exceptions (target-method, parse, transport, and user-declared @Remote exception types) to the caller; narrowing the throws clauses would break that contract.
 	})
 	private static final class RemoteInvocationHandler implements InvocationHandler {
 
@@ -257,6 +259,9 @@ public final class RemoteClient {
 		 * @param fallbackName The name to use when the annotation specifies none (param or bean-property name).
 		 * @param adder Sink that records a single name/value part on the request.
 		 */
+		@SuppressWarnings({
+			"java:S107" // The 8 parameters form one cohesive HTTP-part binding descriptor (type/schema/name/default/value/sink) threaded through internal dispatch; a holder object would add indirection without improving this beta reflective-proxy code.
+		})
 		private static void bindParts(HttpPartType partType, HttpPartSchema schema, String annValue, String annName, String def, Object arg, String fallbackName, BiConsumer<String,String> adder) {
 			var explicit = firstNonEmpty(annValue, annName);
 			if (arg == null) {
@@ -423,7 +428,7 @@ public final class RemoteClient {
 		private Object processBody(RestRequest req, Class<?> returnType, Type genericReturnType, Method method) throws Exception {
 			if (returnType == Optional.class) {
 				var inner = innerType(genericReturnType);
-				return Optional.ofNullable(processBodyValue(req, rawClass(inner), inner, method));
+				return opt(processBodyValue(req, rawClass(inner), inner, method));
 			}
 			if (returnType == CompletableFuture.class || returnType == Future.class) {
 				var inner = innerType(genericReturnType);
@@ -483,13 +488,18 @@ public final class RemoteClient {
 		 */
 		private static Object instantiateHttpType(Class<?> c, String body) {
 			try {
-				try {
-					return c.getConstructor(String.class).newInstance(body);
-				} catch (NoSuchMethodException e) {
-					return c.getConstructor().newInstance();
-				}
+				return newHttpTypeInstance(c, body);
 			} catch (ReflectiveOperationException e) {
 				throw rex(e, "Could not instantiate HTTP response/exception type {0}", c.getName());
+			}
+		}
+
+		/** Instantiates {@code c} preferring a {@code (String body)} constructor, falling back to the no-arg constructor. */
+		private static Object newHttpTypeInstance(Class<?> c, String body) throws ReflectiveOperationException {
+			try {
+				return c.getConstructor(String.class).newInstance(body);
+			} catch (NoSuchMethodException e) {
+				return c.getConstructor().newInstance();
 			}
 		}
 

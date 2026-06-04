@@ -24,8 +24,7 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link ConfigPropertySourceProvider} — the auto-registered SPI bridge from {@link Config}
- * to {@link Settings} introduced in Phase 3 of TODO-79.
+ * Tests for {@link ConfigPropertySourceProvider}.
  *
  * <p>
  * Covers three layers:

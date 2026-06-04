@@ -52,7 +52,7 @@ import org.junit.jupiter.params.provider.*;
  * Cross-pair round-trip coverage for {@link DurationFormat} across every supported serializer/parser pair.
  *
  * <p>
- * This is the pilot test for the TODO-50/TODO-54 format-control round-trip pattern.  It varies the
+ * This is the pilot test for the work item 50/work item 54 format-control round-trip pattern.  It varies the
  * {@link DurationFormat} setting on both the serializer and parser builders for each tester template, then
  * round-trips representative {@link Duration} values:
  * <ul>

@@ -73,17 +73,17 @@ import org.junit.jupiter.params.provider.*;
  */
 class CurrencyFormat_RoundTrip_Test extends TestBase {
 
-	private static Locale ORIGINAL_LOCALE;
+	private static Locale originalLocale;
 
 	@BeforeAll
 	static void pinLocale() {
-		ORIGINAL_LOCALE = Locale.getDefault();
+		originalLocale = Locale.getDefault();
 		Locale.setDefault(Locale.US);
 	}
 
 	@AfterAll
 	static void restoreLocale() {
-		Locale.setDefault(ORIGINAL_LOCALE);
+		Locale.setDefault(originalLocale);
 	}
 
 	@FunctionalInterface

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 
 /**
- * Tests for {@link JuneauBeanStoreExtension} discovery and per-test isolation (Phase 2 of TODO-35).
+ * Tests for {@link JuneauBeanStoreExtension} discovery and per-test isolation.
  *
  * <p>
  * Phase 2 covers {@code @TestBean} field/method discovery, per-test overlay isolation, parameter resolution,

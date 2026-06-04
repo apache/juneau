@@ -81,13 +81,14 @@ public class MustacheViewRenderer implements ViewRenderer {
 	 * depending on internal string literals.
 	 */
 	public static final String NO_ENGINE_DIAGNOSTIC =
-		"No Mustache engine is available on the classpath. Add:\n"
-		+ "  - com.github.spullara.mustache.java:compiler   (mustache.java — the engine the bridge targets)\n"
-		+ "Or register a custom @Bean MustacheFactory that picks up your preferred resolvers.\n"
-		+ "Note: Spring Boot's spring-boot-starter-mustache ships com.samskivert:jmustache, NOT\n"
-		+ "mustache.java; the bridge is mustache.java-specific. To use jmustache, supply your own\n"
-		+ "ResponseProcessor instead of MustacheViewRenderer.\n"
-		+ "See https://juneau.apache.org/docs/topics/MustacheViewSupport for the full matrix.";
+		"""
+		No Mustache engine is available on the classpath. Add:
+		  - com.github.spullara.mustache.java:compiler   (mustache.java — the engine the bridge targets)
+		Or register a custom @Bean MustacheFactory that picks up your preferred resolvers.
+		Note: Spring Boot's spring-boot-starter-mustache ships com.samskivert:jmustache, NOT
+		mustache.java; the bridge is mustache.java-specific. To use jmustache, supply your own
+		ResponseProcessor instead of MustacheViewRenderer.
+		See https://juneau.apache.org/docs/topics/MustacheViewSupport for the full matrix.""";
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {

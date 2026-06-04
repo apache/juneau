@@ -271,6 +271,9 @@ class UuidFormat_RoundTrip_Test extends TestBase {
 	 * ({@link RoundTrip_Tester#isValidationOnly()} == {@code true}: Json schema, CSV, Parquet) return
 	 * the original object unchanged.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // 'fmt' is part of the shared expectedAfter(...) helper signature used across all *Format RoundTrip tests; kept for template symmetry even where this type's expected value is format-independent.
+	})
 	private static UUID expectedAfter(UUID original, RoundTrip_Tester t, UuidFormat fmt) {
 		if (original == null)
 			return null;

@@ -86,7 +86,8 @@ public final class ResponseBody {
 	 * @throws IOException If an I/O error occurs reading the body.
 	 */
 	@SuppressWarnings({
-		"resource" // Body stream owned by transport; release by closing RestResponse, not the stream
+		"resource", // Body stream owned by transport; release by closing RestResponse, not the stream
+		"java:S1168" // 'null' is a documented sentinel distinguishing 'no response body' (e.g. HTTP 204) from an empty body; callers rely on it (see RestClientFeatures_Test.l04_responseBody_nullBody).
 	})
 	public byte[] asBytes() throws IOException {
 		var stream = response.getBodyStream();

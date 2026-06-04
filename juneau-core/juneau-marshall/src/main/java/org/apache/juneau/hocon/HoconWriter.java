@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.hocon;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
@@ -196,7 +198,7 @@ public class HoconWriter extends SerializerWriter {
 	 * @return <jk>true</jk> if the key must be quoted.
 	 */
 	public boolean needsQuoting(String key) {
-		if (key == null || key.isEmpty())
+		if (isEmpty(key))
 			return true;
 		if (!useUnquotedKeys)
 			return true;
@@ -214,7 +216,7 @@ public class HoconWriter extends SerializerWriter {
 	 * @return <jk>true</jk> if the value can be unquoted.
 	 */
 	public boolean isSimpleValue(String value) {
-		if (value == null || value.isEmpty())
+		if (isEmpty(value))
 			return false;
 		if (!useUnquotedStrings)
 			return false;
@@ -234,7 +236,7 @@ public class HoconWriter extends SerializerWriter {
 	}
 
 	private static boolean isNumber(String s) {
-		if (s == null || s.isEmpty())
+		if (isEmpty(s))
 			return false;
 		var i = s.startsWith("-") ? 1 : 0;
 		if (i >= s.length())

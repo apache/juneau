@@ -90,11 +90,12 @@ public class JspViewRenderer implements ViewRenderer {
 	 * depending on internal string literals.
 	 */
 	public static final String NO_ENGINE_DIAGNOSTIC =
-		"No JSP engine is available on the classpath. Add one of:\n"
-		+ "  - org.eclipse.jetty.ee11:jetty-ee11-apache-jsp  (Jetty 12 EE11)\n"
-		+ "  - org.apache.tomcat.embed:tomcat-embed-jasper  (embedded Tomcat / Spring Boot default)\n"
-		+ "  - Or rely on the deployment container's bundled engine (Tomcat / JBoss / WildFly / ...)\n"
-		+ "See https://juneau.apache.org/docs/topics/JspViewSupport for the full matrix.";
+		"""
+		No JSP engine is available on the classpath. Add one of:
+		  - org.eclipse.jetty.ee11:jetty-ee11-apache-jsp  (Jetty 12 EE11)
+		  - org.apache.tomcat.embed:tomcat-embed-jasper  (embedded Tomcat / Spring Boot default)
+		  - Or rely on the deployment container's bundled engine (Tomcat / JBoss / WildFly / ...)
+		See https://juneau.apache.org/docs/topics/JspViewSupport for the full matrix.""";
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {

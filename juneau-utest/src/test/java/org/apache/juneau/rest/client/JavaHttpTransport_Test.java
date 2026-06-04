@@ -31,7 +31,7 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link JavaHttpTransport} against a real embedded HTTP server.
  */
-public class JavaHttpTransport_Test {
+class JavaHttpTransport_Test {
 
 	private static HttpServer server;
 	private static int port;

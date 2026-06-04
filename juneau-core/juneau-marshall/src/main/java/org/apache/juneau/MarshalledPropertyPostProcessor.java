@@ -936,6 +936,9 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			}
 
 			@Override /* ObjectSwap */
+			@SuppressWarnings({
+				"java:S2447" // Null passthrough is the ObjectSwap.unswap contract (null/blank input → null); the generic override is bound to boxed Boolean, mirrors sibling binarySwap's java:S1168 suppression.
+			})
 			public Boolean unswap(MarshallingSession session, Object o, ClassMeta<?> hint) {
 				if (o == null)
 					return null;

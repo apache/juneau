@@ -49,13 +49,7 @@ import org.springframework.context.*;
  * 		accepted under the permissive {@code Object}-typed contract and flows through the same
  * 		SVL + comma-split pipeline as any other leaf.
  * </ul>
- *
- * <p>
- * Spring Boot integration via {@code application.yaml} / Spring {@code Environment} is intentionally
- * out of scope here &mdash; that's TODO-79 (Config bridge) territory.  Once the bridge lands,
- * {@code $C{key}} on {@code @Rest(paths=...)} elements will transparently consult Spring's
- * {@code Environment} under Spring Boot via the bridge.
- *
+ * 
  * @since 9.5.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
@@ -159,7 +153,7 @@ class RestPathsRuntimeOverride_Springboot_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// e — BeanStore parity: getter override resolves identically through SpringBeanStore as it would
-	//     through a plain BasicBeanStore (acceptance bullet from the original TODO-73 plan).
+	//     through a plain BasicBeanStore (acceptance bullet from the original work item 73 plan).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test

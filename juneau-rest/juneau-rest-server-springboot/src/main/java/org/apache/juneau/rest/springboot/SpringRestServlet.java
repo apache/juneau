@@ -44,6 +44,9 @@ public abstract class SpringRestServlet extends RestServlet {
 	private static final long serialVersionUID = 1L;
 
 	@Autowired
+	@SuppressWarnings({
+		"java:S6813" // Field injection is structurally required: this abstract base servlet is extended by user subclasses that declare no constructors; Spring instantiates them via the no-arg constructor and injects this transient field afterward. Constructor injection would force every subclass to thread ApplicationContext through a boilerplate super(...) call.
+	})
 	private transient Optional<ApplicationContext> appContext;
 
 	/**

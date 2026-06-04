@@ -363,9 +363,10 @@ public class HoconTokenizer {
 		if (c == ':') {
 			return Token.of(TokenType.COLON);
 		}
-		// '=' is always the EQUALS token regardless of the next character.
-		// The '+=' (PLUS_EQUALS) operator is handled by the check below, which reads '+' first;
-		// the two-char sequence '=+' is therefore never mistaken for a partial '+='.
+		// An equals sign always produces the EQUALS token regardless of the character that follows it.
+		// The plus-equals operator is recognized by the separate check below that reads the leading
+		// plus first, so an equals immediately followed by a plus is never mistaken for a partial
+		// plus-equals operator.
 		if (c == '=')
 			return Token.of(TokenType.EQUALS);
 		if (c == '+' && peekChar() == '=') {

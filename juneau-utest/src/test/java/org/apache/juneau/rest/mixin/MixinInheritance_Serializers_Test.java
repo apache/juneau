@@ -75,7 +75,7 @@ class MixinInheritance_Serializers_Test extends TestBase {
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
 
-	@Test void a01_mixinInheritsHostSerializer() throws Exception {
+	@Test void a01_mixinInheritsHostSerializer() {
 		MockRestClient.buildLax(HostBasic.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostBasic.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
@@ -87,7 +87,7 @@ class MixinInheritance_Serializers_Test extends TestBase {
 			"Mixin with no serializer overrides must inherit the host's HostS1 serializer");
 	}
 
-	@Test void a02_mixinAppendsMixinS1OverInheritedHostSet() throws Exception {
+	@Test void a02_mixinAppendsMixinS1OverInheritedHostSet() {
 		MockRestClient.buildLax(HostWithMixinS1.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinS1.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinS1.class);

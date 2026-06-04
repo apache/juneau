@@ -160,6 +160,9 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 		public String cItem() { return "c"; }
 	}
 
+	@SuppressWarnings({
+		"java:S1874" // Class C is intentionally @Deprecated to verify class-level deprecation propagation into the route index.
+	})
 	private static final MockRestClient cc = MockRestClient.buildLax(C.class);
 
 	@Test void c01_classLevelDeprecatedPropagates() throws Exception {

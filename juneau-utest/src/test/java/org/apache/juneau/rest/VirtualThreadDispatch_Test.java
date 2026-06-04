@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Tests virtual-thread dispatch (TODO-70 Part 2) — opt-in via
+ * Tests virtual-thread dispatch — opt-in via
  * {@link Rest#virtualThreads() @Rest(virtualThreads=true)} or {@link RestOp#virtualThreads()}, with
  * graceful degradation on Java 17/18/19/20 (one-shot {@code WARNING} log + caller-thread fallback).
  *
@@ -48,8 +48,11 @@ import org.junit.jupiter.api.condition.*;
  * ({@code Runtime.version().feature() &gt;= 21}) gates the reflective lookup; on Java 17 we never
  * touch the missing method and the {@code Executor} memoizer returns {@code null} after logging the
  * warning. {@link RestOpInvoker} then falls through to the standard caller-thread dispatch path —
- * exactly the existing pre-TODO-70 behavior.
+ * exactly the existing behavior.
  */
+@SuppressWarnings({
+	"java:S4144" // Per-fixture handlers share the same thread-introspection body but probe distinct virtual-thread scenarios across separate @Rest resources.
+})
 class VirtualThreadDispatch_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -80,8 +83,6 @@ class VirtualThreadDispatch_Test extends TestBase {
 		try {
 			var m = Thread.class.getMethod("isVirtual");
 			return (Boolean) m.invoke(t);
-		} catch (NoSuchMethodException nsme) {
-			return false;
 		} catch (Exception e) {
 			return false;
 		}

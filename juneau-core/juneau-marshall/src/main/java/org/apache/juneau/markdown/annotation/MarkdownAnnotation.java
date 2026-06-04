@@ -24,6 +24,8 @@ import org.apache.juneau.commons.annotation.*;
  */
 public class MarkdownAnnotation {
 
+	private MarkdownAnnotation() {}
+
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})

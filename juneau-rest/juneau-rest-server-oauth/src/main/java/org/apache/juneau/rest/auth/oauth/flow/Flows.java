@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.auth.oauth.flow;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.*;
@@ -77,17 +78,17 @@ final class Flows {
 		String tokenType = access.getType() != null ? access.getType().getValue() : "Bearer";
 		Instant expiresAt = computeExpiry(access);
 		Optional<String> refreshToken = tokens.getRefreshToken() != null
-			? Optional.of(tokens.getRefreshToken().getValue())
-			: Optional.empty();
+			? opt(tokens.getRefreshToken().getValue())
+			: opte();
 		Optional<Set<String>> scope = access.getScope() != null
-			? Optional.of(new LinkedHashSet<>(access.getScope().toStringList()))
-			: Optional.empty();
-		Optional<String> idToken = Optional.empty();
+			? opt(new LinkedHashSet<>(access.getScope().toStringList()))
+			: opte();
+		Optional<String> idToken = opte();
 		var custom = success.getCustomParameters();
 		if (custom != null) {
 			var v = custom.get("id_token");
 			if (v instanceof String s)
-				idToken = Optional.of(s);
+				idToken = opt(s);
 		}
 		return new OAuthToken(access.getValue(), tokenType, expiresAt, refreshToken, scope, idToken);
 	}

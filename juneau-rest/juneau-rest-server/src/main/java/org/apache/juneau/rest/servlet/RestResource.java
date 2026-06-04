@@ -48,7 +48,7 @@ public abstract class RestResource {
 	/**
 	 * The programmatic configuration builder stashed on this instance, or <jk>null</jk> when the
 	 * resource was constructed without a builder.  Mutable so it can be written by either the
-	 * {@link #RestResource(RestBuilder<?>)} constructor or {@link Builder#build()}.  Read non-reflectively by
+	 * {@link #RestResource(RestBuilder)} constructor or {@link Builder#build()}.  Read non-reflectively by
 	 * {@link RestContext} during construction so builder-supplied values take precedence over {@code @Rest}
 	 * annotation values.
 	 */

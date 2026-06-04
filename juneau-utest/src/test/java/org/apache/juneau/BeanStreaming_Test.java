@@ -155,7 +155,7 @@ class BeanStreaming_Test extends TestBase {
 		@Test
 		void c01_parseToBeanConsumer_basic() throws Exception {
 			var received = new ArrayList<String>();
-			BeanConsumer<String> a = item -> received.add(item);
+			BeanConsumer<String> a = received::add;
 			Json5Parser.DEFAULT.getSession().parseToBeanConsumer("['x','y','z']", a, String.class);
 			assertEquals(list("x", "y", "z"), received);
 		}
@@ -186,8 +186,9 @@ class BeanStreaming_Test extends TestBase {
 				}
 				@Override public void complete() throws Exception { lifecycleLog.add("complete"); }
 			};
+			var session = Json5Parser.DEFAULT.getSession();
 			assertThrows(ParseException.class, () ->
-				Json5Parser.DEFAULT.getSession().parseToBeanConsumer("['good','bad','ignored']", a, String.class));
+				session.parseToBeanConsumer("['good','bad','ignored']", a, String.class));
 			assertTrue(lifecycleLog.contains("complete"), "complete should always be called");
 			assertTrue(lifecycleLog.contains("onError"), "onError should be called");
 			assertFalse(lifecycleLog.contains("accept:ignored"), "parsing should stop after rethrow");
@@ -213,9 +214,10 @@ class BeanStreaming_Test extends TestBase {
 
 		@Test
 		void c05_beanSupplier_used_as_parser_target_throws() {
-			BeanSupplier<String> a = () -> Collections.emptyIterator();
-			assertThrows(ParseException.class, () ->
-				Json5Parser.DEFAULT.getSession().parse("['x']", a.getClass()));
+		BeanSupplier<String> a = Collections::emptyIterator;
+		var session = Json5Parser.DEFAULT.getSession();
+		var type = a.getClass();
+		assertThrows(ParseException.class, () -> session.parse("['x']", type));
 		}
 	}
 

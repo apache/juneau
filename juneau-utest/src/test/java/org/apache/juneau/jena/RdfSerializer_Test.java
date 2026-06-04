@@ -30,6 +30,9 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Nested;
 import org.apache.juneau.commons.bean.*;
 
+@SuppressWarnings({
+	"java:S5976" // Explicit per-case builder/serializer tests are clearer here than a single parameterized rewrite.
+})
 class RdfSerializer_Test extends TestBase {
 
 	public static class NamedBean {

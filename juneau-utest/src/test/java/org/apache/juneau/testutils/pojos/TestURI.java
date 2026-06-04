@@ -50,7 +50,7 @@ public class TestURI {
 		f4 = "f4/x4";
 		f5 = "/f5/x5";
 		f6 = "http://www.apache.org/f6/x6";
-		f7 = new URL("http://www.apache.org/f7/x7");
+		f7 = new URI("http://www.apache.org/f7/x7").toURL();
 		f8 = new TestURIb();
 		fa = "http://www.apache.org/fa/xa#MY_LABEL";
 		fb = "http://www.apache.org/fb/xb?label=MY_LABEL&foo=bar";

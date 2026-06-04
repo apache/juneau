@@ -19,6 +19,7 @@ package org.apache.juneau.commons.conversion;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.math.*;
@@ -349,8 +350,8 @@ public class BasicConverter extends CachingConverter {
 				return opt.map(x -> to(x, memberOf, session, args[0]));
 			}
 			if (args.length == 0)
-				return Optional.of(in);
-			return Optional.of(to(in, memberOf, session, args[0]));
+				return opt(in);
+			return opt(to(in, memberOf, session, args[0]));
 		};
 	}
 

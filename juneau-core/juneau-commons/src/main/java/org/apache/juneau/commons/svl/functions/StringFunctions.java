@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.svl.*;
@@ -36,7 +38,8 @@ public final class StringFunctions {
 	/** All function classes in this category, in registration order. */
 	@SuppressWarnings({
 		"unchecked",   // Array initializer with parameterized element type; class literals are always erased at runtime.
-		"java:S2368"   // Public array field is intentional: ALL is a compile-time registry constant, not a mutable collection.
+		"java:S2368",  // Public array field is intentional: ALL is a compile-time registry constant, not a mutable collection.
+		"java:S2386"   // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Substring.class, Upper.class, Lower.class, Trim.class, StripLeading.class,
@@ -143,7 +146,7 @@ public final class StringFunctions {
 	public static class PathToken extends TypedFunction {
 		@Override public String name() { return "pathToken"; }
 		public String invoke(String s) {
-			if (s == null || s.isEmpty()) return "";
+			if (isEmpty(s)) return "";
 			var t = s;
 			// Strip a trailing /* or trailing * (when sitting right after a /).
 			if (t.endsWith("/*"))
@@ -296,9 +299,9 @@ public final class StringFunctions {
 	public static class Split extends TypedFunction {
 		@Override public String name() { return "split"; }
 		public String invoke(String s, String separator) {
-			if (s == null || s.isEmpty()) return "[]";
+			if (isEmpty(s)) return "[]";
 			var parts = new ArrayList<String>();
-			if (separator == null || separator.isEmpty()) {
+			if (isEmpty(separator)) {
 				parts.add(s);
 			} else {
 				var i = 0;

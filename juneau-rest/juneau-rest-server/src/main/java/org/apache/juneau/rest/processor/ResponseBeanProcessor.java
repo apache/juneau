@@ -139,6 +139,9 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 	 * {@link HttpStringHeader}. Returns {@code null} only if the serialized value would be a blank string
 	 * and {@code skipIfEmpty} semantics apply.
 	 */
+	@SuppressWarnings({
+		"java:S112" // Propagates the checked exceptions thrown by HttpPartSerializerSession.serialize(...); the caller already re-wraps them in InternalServerError.
+	})
 	private static HttpHeader toHeader(String name, Object value, HttpPartSerializerSession session, HttpPartSchema schema) throws Exception {
 		String v;
 		if (session != null)

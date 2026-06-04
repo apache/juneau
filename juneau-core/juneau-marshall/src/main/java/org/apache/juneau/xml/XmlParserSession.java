@@ -51,6 +51,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S110",  // Deep inheritance inherent to the serializer/parser session hierarchy
 	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling

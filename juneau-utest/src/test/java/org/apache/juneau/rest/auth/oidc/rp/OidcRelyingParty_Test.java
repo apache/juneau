@@ -180,14 +180,16 @@ class OidcRelyingParty_Test extends TestBase {
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5), null);
 		rp.completeLogin(MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state), MockServletResponse.create());
 		// Second callback with the same (already-consumed) state must fail.
-		assertThrows(AuthenticationException.class,
-			() -> rp.completeLogin(MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state), MockServletResponse.create()));
+		var replayReq = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var replayRes = MockServletResponse.create();
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(replayReq, replayRes));
 	}
 
 	@Test void b02_unknownState_isRejected() throws Exception {
 		var rp = rp(InMemorySessionStore.create());
-		assertThrows(AuthenticationException.class,
-			() -> rp.completeLogin(MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=never-issued"), MockServletResponse.create()));
+		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=never-issued");
+		var res = MockServletResponse.create();
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req, res));
 	}
 
 	@Test void b03_badNonce_isRejected() throws Exception {
@@ -197,8 +199,9 @@ class OidcRelyingParty_Test extends TestBase {
 		rp.startLogin(req1, res1);
 		var state = queryParam(res1.getHeader("Location"), "state");
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", "WRONG-NONCE", Instant.now(), Duration.ofMinutes(5), null);
-		assertThrows(AuthenticationException.class,
-			() -> rp.completeLogin(MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state), MockServletResponse.create()));
+		var req2 = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=" + state);
+		var res2 = MockServletResponse.create();
+		assertThrows(AuthenticationException.class, () -> rp.completeLogin(req2, res2));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

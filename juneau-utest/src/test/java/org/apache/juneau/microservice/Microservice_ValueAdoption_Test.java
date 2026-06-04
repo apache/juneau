@@ -25,7 +25,7 @@ import org.apache.juneau.testing.annotations.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-92 acceptance tests for the {@code @Value}-driven {@code juneau.workingDir} default on
+ * Acceptance tests for the {@code @Value}-driven {@code juneau.workingDir} default on
  * {@link Microservice.Builder}.
  *
  * <p>

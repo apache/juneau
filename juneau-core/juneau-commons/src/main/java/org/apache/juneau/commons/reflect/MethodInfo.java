@@ -765,7 +765,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 		iface.getDeclaredMethods().stream().filter(this::matches).forEach(result::add);
 
 		// Recursively search parent interfaces
-		iface.getDeclaredInterfaces().stream().forEach(pi -> addMatchingMethodsFromInterface(result, pi));
+		iface.getDeclaredInterfaces().forEach(pi -> addMatchingMethodsFromInterface(result, pi));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -780,7 +780,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 
 		while (nn(cc)) {
 			// 2. Add matching methods from declared interfaces of current class
-			cc.getDeclaredInterfaces().stream().forEach(di -> addMatchingMethodsFromInterface(result, di));
+			cc.getDeclaredInterfaces().forEach(di -> addMatchingMethodsFromInterface(result, di));
 
 			// 3. Move to parent class
 			cc = cc.getSuperclass();

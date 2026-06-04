@@ -68,7 +68,7 @@ class HttpRequestLineBean_Test extends TestBase {
 		assertNotEquals(a, c);
 		assertNotEquals(a, d);
 		assertNotEquals(a, e);
-		assertNotEquals(a, "not a request line");
-		assertNotEquals(a, null);
+		assertNotEquals("not a request line", a);
+		assertNotEquals(null, a);
 	}
 }

@@ -232,27 +232,6 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		}
 	}
 
-	/**
-	 * Concrete default builder leaf for the non-subclassed {@link JsonParser#create()} / {@link JsonParser#copy()} path.
-	 */
-//	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
-//
-//		DefaultBuilder() {}
-//
-//		DefaultBuilder(JsonParser copyFrom) {
-//			super(copyFrom);
-//		}
-//
-//		DefaultBuilder(Builder<?> copyFrom) {
-//			super(copyFrom);
-//		}
-//
-//		@Override /* Overridden from Context.Builder<?> */
-//		public DefaultBuilder copy() {
-//			return new DefaultBuilder(this);
-//		}
-//	}
-
 	/** Default parser, all default settings.*/
 	public static final JsonParser DEFAULT = new JsonParser(create());
 

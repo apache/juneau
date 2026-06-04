@@ -88,7 +88,9 @@ public class HttpMediaRangesHeader extends HttpHeaderBean {
 			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var m = ((Supplier<MediaRanges>) supplier).get();
-				return m == null ? null : m.toString();
+				if (m == null)
+					return null;
+				return m.toString();
 			});
 		this.cachedForStringOrDirect = null;
 		this.lazySupplier = supplier;

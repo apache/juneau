@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.junit5;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -152,6 +153,9 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 
 	private ExtensionContext currentClassContext;
 	private ExtensionContext currentMethodContext;
+	@SuppressWarnings({
+		"java:S3077" // Publish-once reference: only plain-assigned in attach()/detach() and read-once into a local; volatile suffices for safe publication. The referenced WritableBeanStore manages its own thread-safety.
+	})
 	private volatile WritableBeanStore attached;
 
 	/**
@@ -216,7 +220,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @since 9.5.0
 	 */
 	public Optional<WritableBeanStore> getAttachedStore() {
-		return Optional.ofNullable(attached);
+		return opt(attached);
 	}
 
 	/**
@@ -256,7 +260,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 */
 	public Optional<TestBeanStore> getStore(Scope scope) {
 		Objects.requireNonNull(scope, "scope must not be null");
-		return Optional.ofNullable(scope == Scope.METHOD ? currentMethodStore() : currentClassStore());
+		return opt(scope == Scope.METHOD ? currentMethodStore() : currentClassStore());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

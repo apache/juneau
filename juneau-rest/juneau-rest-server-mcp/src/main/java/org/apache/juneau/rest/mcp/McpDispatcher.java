@@ -19,7 +19,6 @@ package org.apache.juneau.rest.mcp;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.collections.*;
@@ -88,7 +87,10 @@ public class McpDispatcher {
 				.setId(id)
 				.setError(e.toJsonRpcError());
 		} catch (Exception e) {
-			return notification(id) ? null : errorResponse(id, CODE_INTERNAL_ERROR, e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage(), JsonMap.of("type", e.getClass().getName()));
+			if (notification(id))
+				return null;
+			var message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
+			return errorResponse(id, CODE_INTERNAL_ERROR, message, JsonMap.of("type", e.getClass().getName()));
 		}
 	}
 
@@ -149,7 +151,7 @@ public class McpDispatcher {
 	// -------------------------------------------------------------------------------------------
 
 	private static ListToolsResult listTools(McpServerConfig config, Object params, BeanStore ctx) {
-		var descriptors = config.getTools().stream().map(McpToolHandler::descriptor).collect(Collectors.toList());
+		var descriptors = config.getTools().stream().map(McpToolHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, cursorOf(params), ctx);
 		return new ListToolsResult().setTools(page.items()).setNextCursor(page.nextCursor());
 	}
@@ -172,7 +174,7 @@ public class McpDispatcher {
 	// -------------------------------------------------------------------------------------------
 
 	private static ListPromptsResult listPrompts(McpServerConfig config, Object params, BeanStore ctx) {
-		var descriptors = config.getPrompts().stream().map(McpPromptHandler::descriptor).collect(Collectors.toList());
+		var descriptors = config.getPrompts().stream().map(McpPromptHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, cursorOf(params), ctx);
 		return new ListPromptsResult().setPrompts(page.items()).setNextCursor(page.nextCursor());
 	}
@@ -195,7 +197,7 @@ public class McpDispatcher {
 	// -------------------------------------------------------------------------------------------
 
 	private static ListResourcesResult listResources(McpServerConfig config, Object params, BeanStore ctx) {
-		var descriptors = config.getResources().stream().map(McpResourceHandler::descriptor).collect(Collectors.toList());
+		var descriptors = config.getResources().stream().map(McpResourceHandler::descriptor).toList();
 		var page = config.getCursor().page(descriptors, cursorOf(params), ctx);
 		return new ListResourcesResult().setResources(page.items()).setNextCursor(page.nextCursor());
 	}

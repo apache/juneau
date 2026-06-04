@@ -29,7 +29,10 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.Nested;
 import org.apache.juneau.commons.bean.*;
 
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
+	"java:S5976" // Explicit per-case parser tests are clearer for diagnostics than a single parameterized rewrite.
+})
 class RdfParser_Test extends TestBase {
 
 	public static class NamedBean {
@@ -172,13 +175,13 @@ class RdfParser_Test extends TestBase {
 		@Test void a25_swap_twoFunction() {
 			// The 3-param swap always throws since unswapFunction is required
 			assertThrows(IllegalArgumentException.class, () ->
-				RdfParser.create().swap(Integer.class, String.class, i -> String.valueOf(i)).build()
+				RdfParser.create().swap(Integer.class, String.class, String::valueOf).build()
 			);
 		}
 
 		@Test void a26_swap_fourFunction() {
 			var x = RdfParser.create()
-				.swap(Integer.class, String.class, i -> String.valueOf(i), s -> Integer.parseInt(s))
+				.swap(Integer.class, String.class, String::valueOf, Integer::parseInt)
 				.build();
 			assertNotNull(x);
 		}
@@ -449,7 +452,7 @@ class RdfParser_Test extends TestBase {
 
 		@Test void d18_swapBuilderMethod() {
 			// Cover swap(normalClass, swappedClass, swapFunction) with 3 args
-			assertNotNull(RdfParser.create().swap(String.class, Integer.class, x -> Integer.parseInt(x), x -> x.toString()).build());
+			assertNotNull(RdfParser.create().swap(String.class, Integer.class, Integer::parseInt, Object::toString).build());
 		}
 	}
 }

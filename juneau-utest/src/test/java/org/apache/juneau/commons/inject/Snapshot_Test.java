@@ -25,12 +25,6 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link Snapshot}.
- *
- * <p>
- * Validates the opaque token semantics of the Phase 6 push/pop overlay primitive (TODO-35):
- * snapshots cannot be constructed by external code (only by the producing {@link WritableBeanStore}),
- * equality is identity-based, and the {@link Snapshot#toString()} representation is non-trivial for
- * diagnostic logs.
  */
 class Snapshot_Test extends TestBase {
 

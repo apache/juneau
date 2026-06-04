@@ -59,7 +59,7 @@ class MixinHooks_DestroyOrder_Test extends TestBase {
 		@RestDestroy public void hostDestroy() { EVENTS.add("host:destroy"); }
 	}
 
-	@Test void a01_destroyFiresHostThenEachMixin() throws Exception {
+	@Test void a01_destroyFiresHostThenEachMixin() {
 		MockRestClient.buildLax(Host.class);
 		var ctx = RestContext.getGlobalRegistry().get(Host.class);
 		assertNotNull(ctx, "Host RestContext should be registered after MockRestClient build");

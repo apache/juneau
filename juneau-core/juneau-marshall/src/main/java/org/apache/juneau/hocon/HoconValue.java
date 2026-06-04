@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.hocon;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.util.*;
 
 /**
@@ -352,7 +354,7 @@ public abstract class HoconValue {
 		 * @return <jk>true</jk> if any part is a substitution for that path.
 		 */
 		public boolean referencesPath(String path) {
-			if (path == null || path.isEmpty())
+			if (isEmpty(path))
 				return false;
 			for (var p : parts) {
 				if (p instanceof HoconSubstitution sub && path.equals(sub.getPath()))

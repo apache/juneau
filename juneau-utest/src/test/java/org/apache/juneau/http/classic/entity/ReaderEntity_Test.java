@@ -56,6 +56,9 @@ class ReaderEntity_Test extends TestBase {
 		assertArrayEquals("hello world".getBytes(StandardCharsets.UTF_8), x.asBytes());
 	}
 
+	@SuppressWarnings({
+		"java:S4144" // Distinct documented scenario (uncached asString) that coincidentally shares a01_basic's body.
+	})
 	@Test void a05_asString_uncached() throws Exception {
 		var x = new ReaderEntity().setContent(reader());
 		assertEquals("hello world", x.asString());

@@ -24,6 +24,9 @@ import java.text.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the exception hierarchy
+})
 public class ContextRuntimeException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;

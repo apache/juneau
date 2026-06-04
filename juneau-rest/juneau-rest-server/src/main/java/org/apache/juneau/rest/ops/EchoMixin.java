@@ -278,6 +278,9 @@ public class EchoMixin {
 		return redactedHeadersLower;
 	}
 
+	@SuppressWarnings({
+		"java:S135" // The two breaks are distinct truncation exits (limit-reached vs. partial-final-chunk); merging them would obscure the bounded-read logic.
+	})
 	private static BodyCapture readBoundedBody(InputStream in, long limit) throws IOException {
 		if (in == null)
 			return new BodyCapture(new byte[0], 0, false);

@@ -27,7 +27,7 @@ import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-92 acceptance tests for the {@code @Value}-driven env-default fields on {@link RestContext}.
+ * Acceptance tests for the {@code @Value}-driven env-default fields on {@link RestContext}.
  *
  * <p>
  * 3-test triad per migrated field per OQA #4 — system property set, unset (default), and

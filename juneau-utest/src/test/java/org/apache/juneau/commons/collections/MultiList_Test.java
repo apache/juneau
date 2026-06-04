@@ -808,8 +808,8 @@ class MultiList_Test extends TestBase {
 	@Test
 	void h15_equals_nonList() {
 		var ml = new MultiList<>(l("a", "b"), l("c"));
-		assertFalse(ml.equals((Object)"not-a-list"));
-		assertFalse(ml.equals(null));
+		assertNotEquals(ml, "not-a-list");
+		assertNotEquals(ml, null);
 	}
 
 	@Test

@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Together these assertions cover Mode OVERLAY's central promise: an existing SUT can host per-test overlays
- * without being torn down and re-stood-up between tests.  See TODO-35 Phase 6.
+ * without being torn down and re-stood-up between tests.
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.MethodName.class)

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 /** Regression matrix for `@Debug(config=...)` inheritance on mixins. */
 class MixinInheritance_DebugEnablement_Test extends TestBase {
 
-	private static abstract class BaseConfig extends DebugConfig {
+	private abstract static class BaseConfig extends DebugConfig {
 		protected final boolean enabled;
 		protected BaseConfig(BeanStore bs, boolean enabled) {
 			super(bs);

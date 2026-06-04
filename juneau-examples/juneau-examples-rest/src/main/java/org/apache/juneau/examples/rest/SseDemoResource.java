@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.examples.rest;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.time.*;
 import java.time.format.*;
@@ -108,7 +109,7 @@ public class SseDemoResource extends BasicRestResource {
 		"resource" // Scheduler is explicitly shutdown in finally; subscription/SSE support are closed via try-with-resources.
 	})
 	public void broadcast(RestRequest req, RestResponse res, SseBroadcaster broadcaster) throws IOException {
-		var id = Optional.ofNullable(req.getHttpServletRequest().getRequestId()).orElse(UUID.randomUUID().toString());
+		var id = opt(req.getHttpServletRequest().getRequestId()).orElse(UUID.randomUUID().toString());
 		var counter = new AtomicInteger();
 		var scheduler = Executors.newSingleThreadScheduledExecutor();
 		ScheduledFuture<?> task = null;

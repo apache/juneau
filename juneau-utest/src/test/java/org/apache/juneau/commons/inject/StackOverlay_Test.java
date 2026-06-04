@@ -26,10 +26,6 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link StackOverlay}.
- *
- * <p>
- * Validates the Phase 0 spike (TODO-35) — composition-based stack overlay over the
- * {@code overridingParent} slot of {@link BasicBeanStore}.
  */
 class StackOverlay_Test extends TestBase {
 
@@ -236,6 +232,9 @@ class StackOverlay_Test extends TestBase {
 	// e — concurrency smoke test
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S2093" // ExecutorService teardown uses explicit shutdownNow() in finally; try-with-resources close() would instead block awaiting termination, changing this concurrency smoke test's teardown semantics.
+	})
 	@Test
 	void e01_concurrentReads_whilePushPopInFlight_doNotThrow() throws Exception {
 		var overlay = new StackOverlay();

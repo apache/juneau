@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -134,7 +135,7 @@ public final class StackOverlay implements BeanStore {
 			if (b.isPresent())
 				return b;
 		}
-		return Optional.empty();
+		return opte();
 	}
 
 	@Override /* BeanStore */
@@ -174,7 +175,7 @@ public final class StackOverlay implements BeanStore {
 			if (s.isPresent())
 				return s;
 		}
-		return Optional.empty();
+		return opte();
 	}
 
 	@Override /* BeanStore */
@@ -184,7 +185,7 @@ public final class StackOverlay implements BeanStore {
 			if (t.isPresent())
 				return t;
 		}
-		return Optional.empty();
+		return opte();
 	}
 
 	@Override /* Overridden from Object */

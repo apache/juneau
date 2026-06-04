@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Validates {@link NavigationMixin} mounted as a mixin via {@code @Rest(mixins=...)} on a vanilla
- * {@link RestServlet} host (TODO-146).
+ * {@link RestServlet} host.
  *
  * <p>
  * The navigation op lives on the mixin's (empty) sub-context but must enumerate the HOST's child resources

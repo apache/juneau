@@ -426,8 +426,8 @@ class MockServletRequest_Coverage_Test extends TestBase {
 
 	@Test void b15_pathVarsNullMap() {
 		var req = MockServletRequest.create("GET", "/test");
-		req.pathVars((Map<String,String>)null);
-		// Should not throw, pathVars accepts null and is a no-op
+		// pathVars accepts null and is a no-op
+		assertDoesNotThrow(() -> req.pathVars((Map<String,String>)null));
 	}
 
 	@Test void b16_noTrace() {

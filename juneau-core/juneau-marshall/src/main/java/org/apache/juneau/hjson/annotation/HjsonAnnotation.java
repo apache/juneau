@@ -23,6 +23,8 @@ import org.apache.juneau.commons.annotation.*;
  */
 public class HjsonAnnotation {
 
+	private HjsonAnnotation() {}
+
 	private static class Object extends AnnotationObject implements Hjson {
 		Object() {
 			super(new AnnotationObject.Builder(Hjson.class));

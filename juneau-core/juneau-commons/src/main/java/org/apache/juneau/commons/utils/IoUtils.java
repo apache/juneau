@@ -53,11 +53,11 @@ public class IoUtils {
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
 	})
-	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (env("juneau.disableIoBufferReuse", false) ? null : new ThreadLocal<>());
+	private static final ThreadLocal<byte[]> BYTE_BUFFER_CACHE = (Boolean.TRUE.equals(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanupThreadLocals()
 	})
-	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (env("juneau.disableIoBufferReuse", false) ? null : new ThreadLocal<>());
+	private static final ThreadLocal<char[]> CHAR_BUFFER_CACHE = (Boolean.TRUE.equals(env("juneau.disableIoBufferReuse", false)) ? null : new ThreadLocal<>());
 	static final AtomicInteger BYTE_BUFFER_CACHE_HITS = new AtomicInteger();
 
 	static final AtomicInteger BYTE_BUFFER_CACHE_MISSES = new AtomicInteger();

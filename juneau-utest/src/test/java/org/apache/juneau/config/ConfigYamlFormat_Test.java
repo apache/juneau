@@ -26,6 +26,9 @@ import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S1130" // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (IOException) is high-churn/low-value.
+})
 class ConfigYamlFormat_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -140,21 +143,21 @@ class ConfigYamlFormat_Test extends TestBase {
 	}
 
 	@Test void b05_toInternalNestedSection() throws Exception {
-		var ini = YamlConfigFormat.INSTANCE.toInternal(
-			"foo:\n"
-			+ "  bar:\n"
-			+ "    k1: v1\n"
-		);
+		var ini = YamlConfigFormat.INSTANCE.toInternal("""
+			foo:
+			  bar:
+			    k1: v1
+			""");
 		assertEquals("[foo/bar]\nk1 = v1\n", ini);
 	}
 
 	@Test void b06_toInternalLeavesBlanksAndComments() throws Exception {
-		var ini = YamlConfigFormat.INSTANCE.toInternal(
-			"# header\n"
-			+ "\n"
-			+ "foo:\n"
-			+ "  k1: v1\n"
-		);
+		var ini = YamlConfigFormat.INSTANCE.toInternal("""
+			# header
+
+			foo:
+			  k1: v1
+			""");
 		// Comments and blanks are preserved verbatim alongside the new INI section header.
 		assertTrue(ini.contains("# header"));
 		assertTrue(ini.contains("[foo]"));
@@ -162,13 +165,13 @@ class ConfigYamlFormat_Test extends TestBase {
 	}
 
 	@Test void b07_toInternalUnindentReducesStack() throws Exception {
-		var ini = YamlConfigFormat.INSTANCE.toInternal(
-			"a:\n"
-			+ "  b:\n"
-			+ "    k1: v1\n"
-			+ "c:\n"
-			+ "  k2: v2\n"
-		);
+		var ini = YamlConfigFormat.INSTANCE.toInternal("""
+			a:
+			  b:
+			    k1: v1
+			c:
+			  k2: v2
+			""");
 		assertTrue(ini.contains("[a/b]"));
 		assertTrue(ini.contains("[c]"));
 		assertTrue(ini.contains("k1 = v1"));
@@ -176,10 +179,10 @@ class ConfigYamlFormat_Test extends TestBase {
 	}
 
 	@Test void b08_toInternalInlineComment() throws Exception {
-		var ini = YamlConfigFormat.INSTANCE.toInternal(
-			"foo:\n"
-			+ "  k1: v1 # inline\n"
-		);
+		var ini = YamlConfigFormat.INSTANCE.toInternal("""
+			foo:
+			  k1: v1 # inline
+			""");
 		assertEquals("[foo]\nk1 = v1 # inline\n", ini);
 	}
 
@@ -300,11 +303,11 @@ class ConfigYamlFormat_Test extends TestBase {
 
 	@Test void b23_toInternalAllBlankLineHandled() throws Exception {
 		// A line of only spaces exercises the leadingSpaces "i < length false" branch.
-		var ini = YamlConfigFormat.INSTANCE.toInternal(
-			"foo:\n"
-			+ "    \n"
-			+ "  k1: v1\n"
-		);
+		var ini = YamlConfigFormat.INSTANCE.toInternal("""
+			foo:
+			\s\s\s\s
+			  k1: v1
+			""");
 		assertTrue(ini.contains("k1 = v1"));
 	}
 

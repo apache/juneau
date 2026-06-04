@@ -36,7 +36,10 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for all http classes: headers, parts, bodies, response, and static factory helpers.
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.
+	"java:S5961" // Comprehensive coverage tests over all HTTP header/part/body/response classes; the high assertion count per test is intentional and splitting would fragment related coverage.
+})
 public class Http_Test {
 
 	// ------------------------------------------------------------------------------------------------------------------

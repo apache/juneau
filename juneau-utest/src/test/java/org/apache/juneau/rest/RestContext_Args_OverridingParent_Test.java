@@ -26,7 +26,7 @@ import org.apache.juneau.rest.logger.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates Phase 1 of TODO-35: the {@code overridingParent} component on
+ * Validates the {@code overridingParent} component on
  * {@link RestContext.Args} threads through to the {@code overridingParent} slot of the
  * freshly-constructed {@link BasicBeanStore} so test-time overrides win over the resource's
  * local {@code @Bean} factory methods.

@@ -50,6 +50,7 @@ import org.apache.juneau.xml.annotation.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
 	"rawtypes",  // Raw Map/Collection necessary for serializer dispatch over heterogeneous types
 	"unchecked", // Type erasure requires unchecked casts in serializer dispatch
 	"resource",  // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
@@ -237,12 +238,6 @@ public class XmlSerializerSession extends WriterSerializerSession {
 	 * Creates a new builder for this object.
 	 *
 	 * @param ctx The context creating this session.
-	 * @return A new builder.
-	 */
-	/**
-	 * Creates a new builder for this object.
-	 *
-	 * @param ctx The context creating this session.
 	 * 	<br>Cannot be <jk>null</jk>.
 	 * @return A new builder.
 	 */
@@ -388,8 +383,8 @@ public class XmlSerializerSession extends WriterSerializerSession {
 		if (nn(p.getThrown()))
 			onBeanGetterException(pMeta, p.getThrown());
 		if (canIgnoreValue(cMeta, key, value))
-			return Optional.empty();
-		return Optional.of(new AbstractMap.SimpleEntry<>(key, value));
+			return opte();
+		return opt(new AbstractMap.SimpleEntry<>(key, value));
 	}
 
 	@SuppressWarnings({
@@ -473,9 +468,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 						isMixedOrText = true;
 					if (cf.isOneOf(MIXED_PWS, TEXT_PWS))
 						preserveWhitespace = true;
-					if (contentType.isCollection() && ((Collection)content).isEmpty())
-						hasContent = false;
-					else if (contentType.isArray() && Array.getLength(content) == 0)
+					if ((contentType.isCollection() && ((Collection)content).isEmpty()) || (contentType.isArray() && Array.getLength(content) == 0))
 						hasContent = false;
 				} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*")) {
 					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, cMeta);

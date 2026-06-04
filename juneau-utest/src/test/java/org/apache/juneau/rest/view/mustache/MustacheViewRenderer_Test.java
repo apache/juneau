@@ -23,15 +23,6 @@ import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for {@link MustacheViewRenderer}.
- *
- * <p>
- * Covers the diagnostic-message constant + default content-type. The full
- * {@link MustacheViewRenderer#process process(...)} dispatch path is exercised end-to-end by the
- * MockRest-flavored tests in this package (full Jetty / Spring Boot real-container coverage is
- * deferred to a follow-on TODO, the Mustache analog of TODO-97 for JSP and TODO-107 for
- * Thymeleaf).
- *
- * @since 9.5.0
  */
 class MustacheViewRenderer_Test extends TestBase {
 

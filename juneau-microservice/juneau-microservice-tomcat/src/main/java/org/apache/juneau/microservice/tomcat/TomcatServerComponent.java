@@ -99,14 +99,14 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code availablePort} system property).
 	 */
 	@Value("${availablePort}")
-	Optional<String> availablePortEnv;
+	Optional<String> availablePortEnv = opte();
 
 	/**
 	 * Env-driven sentinel for {@code juneau.serverPort}; {@link Optional#empty()} when unset (in which case
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code juneau.serverPort} system property).
 	 */
 	@Value("${juneau.serverPort}")
-	Optional<String> serverPortEnv;
+	Optional<String> serverPortEnv = opte();
 
 	private static int[] parseIntArray(String csv) {
 		if (csv == null || csv.isEmpty())
@@ -188,7 +188,6 @@ public class TomcatServerComponent implements MicroserviceListener {
 	@Override /* Overridden from MicroserviceListener */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for server creation logic
-		"java:S1141", // Nested try blocks scope checked-exception translation tightly to single call sites
 		"resource"    // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
 	})
 	public void onStart(Microservice ms) {
@@ -207,7 +206,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 					.orElseGet(() -> mf.get("Tomcat-Port").map(TomcatServerComponent::parseIntArray).orElseGet(() -> ints(8000)));
 			var availablePort = findOpenPort(ports);
 
-			if (availablePortEnv == null || availablePortEnv.isEmpty())
+			if (availablePortEnv.isEmpty())
 				System.setProperty("availablePort", String.valueOf(availablePort));
 
 			// Prefer a @Bean-supplied Tomcat, else build one programmatically via the factory.
@@ -216,12 +215,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				tomcat.set(injectedTomcat);
 			} else {
 				var factory = store.getBean(TomcatServerFactory.class).orElseGet(BasicTomcatServerFactory::new);
-				var dir = resolveBaseDir(settings);
-				try {
-					tomcat.set(factory.create(dir));
-				} catch (Exception e) {
-					throw toRex(e);
-				}
+				tomcat.set(createServer(factory, resolveBaseDir(settings)));
 			}
 			tomcat.get().setPort(availablePort);
 			tomcat.get().getConnector();
@@ -232,33 +226,10 @@ public class TomcatServerComponent implements MicroserviceListener {
 			// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
 			var mountedPaths = new LinkedHashMap<String,String>();
 
-			for (var s : cf.get("Tomcat/servlets").asStringArray().orElse(new String[0])) {
-				try {
-					var c = info(Class.forName(s));
-					if (c.isAssignableTo(RestServlet.class)) {
-						var rs = (RestServlet)c.newInstance();
-						mountWithCollisionCheck(rs, rs.getPath(), "Tomcat/servlets[" + s + "]", mountedPaths);
-					} else {
-						throw rex("Invalid servlet specified in Tomcat/servlets.  Must be a subclass of RestServlet: {0}", s);
-					}
-				} catch (ClassNotFoundException e) {
-					throw toRex(e);
-				}
-			}
+			for (var s : cf.get("Tomcat/servlets").asStringArray().orElse(new String[0]))
+				mountConfiguredServlet(s, mountedPaths);
 
-			cf.get("Tomcat/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -> {
-				try {
-					var c = info(Class.forName(v.toString()));
-					if (c.isAssignableTo(Servlet.class)) {
-						var rs = (Servlet)c.newInstance();
-						mountWithCollisionCheck(rs, k, "Tomcat/servletMap[" + k + "]", mountedPaths);
-					} else {
-						throw rex("Invalid servlet specified in Tomcat/servletMap.  Must be a subclass of Servlet: {0}", cn(v));
-					}
-				} catch (ClassNotFoundException e) {
-					throw toRex(e);
-				}
-			});
+			cf.get("Tomcat/servletMap").asMap().orElse(EMPTY_MAP).forEach((k, v) -> mountMappedServlet(k, v, mountedPaths));
 
 			cf.get("Tomcat/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);
 
@@ -280,7 +251,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				addServlet(servlet, pathSpecs);
 			}
 
-			if (serverPortEnv == null || serverPortEnv.isEmpty())
+			if (serverPortEnv.isEmpty())
 				System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 			tomcat.get().start();
@@ -476,6 +447,14 @@ public class TomcatServerComponent implements MicroserviceListener {
 		}
 	}
 
+	private static Tomcat createServer(TomcatServerFactory factory, File dir) {
+		try {
+			return factory.create(dir);
+		} catch (Exception e) {
+			throw toRex(e);
+		}
+	}
+
 	private File resolveBaseDir(TomcatSettings settings) {
 		var configured = settings.getBaseDir();
 		if (ne(configured)) {
@@ -485,20 +464,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 			return f;
 		}
 		try {
-			Path dirPath;
-			try {
-				// Explicitly restrict to owner-only access (rwx------) on POSIX file systems.
-				Set<PosixFilePermission> ownerOnly = EnumSet.of(
-					PosixFilePermission.OWNER_READ,
-					PosixFilePermission.OWNER_WRITE,
-					PosixFilePermission.OWNER_EXECUTE);
-				dirPath = Files.createTempDirectory("juneau-tomcat",
-					PosixFilePermissions.asFileAttribute(ownerOnly));
-			} catch (UnsupportedOperationException e) {
-				// Non-POSIX filesystem (e.g. Windows) — fall back to default temp-dir creation.
-				dirPath = Files.createTempDirectory("juneau-tomcat");
-			}
-			var f = dirPath.toFile();
+			var f = createTempBaseDir().toFile();
 			ownsBaseDir.set(true);
 			baseDir.set(f);
 			return f;
@@ -507,11 +473,57 @@ public class TomcatServerComponent implements MicroserviceListener {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S5443" // Temp dir created via Files.createTempDirectory with owner-only (rwx------) POSIX perms; non-POSIX fallback relies on OS-default owner-restricted temp dirs.
+	})
+	private static Path createTempBaseDir() throws IOException {
+		try {
+			// Explicitly restrict to owner-only access (rwx------) on POSIX file systems.
+			Set<PosixFilePermission> ownerOnly = EnumSet.of(
+				PosixFilePermission.OWNER_READ,
+				PosixFilePermission.OWNER_WRITE,
+				PosixFilePermission.OWNER_EXECUTE);
+			return Files.createTempDirectory("juneau-tomcat",
+				PosixFilePermissions.asFileAttribute(ownerOnly));
+		} catch (UnsupportedOperationException e) {
+			// Non-POSIX filesystem (e.g. Windows) — fall back to default temp-dir creation.
+			return Files.createTempDirectory("juneau-tomcat");
+		}
+	}
+
 	private void cleanupBaseDir() {
 		if (ownsBaseDir.get()) {
 			var f = baseDir.getAndSet(null);
 			if (nn(f))
 				deleteFile(f);
+		}
+	}
+
+	private void mountConfiguredServlet(String className, Map<String,String> mountedPaths) {
+		try {
+			var c = info(Class.forName(className));
+			if (c.isAssignableTo(RestServlet.class)) {
+				var rs = (RestServlet)c.newInstance();
+				mountWithCollisionCheck(rs, rs.getPath(), "Tomcat/servlets[" + className + "]", mountedPaths);
+			} else {
+				throw rex("Invalid servlet specified in Tomcat/servlets.  Must be a subclass of RestServlet: {0}", className);
+			}
+		} catch (ClassNotFoundException e) {
+			throw toRex(e);
+		}
+	}
+
+	private void mountMappedServlet(String pathKey, Object className, Map<String,String> mountedPaths) {
+		try {
+			var c = info(Class.forName(className.toString()));
+			if (c.isAssignableTo(Servlet.class)) {
+				var rs = (Servlet)c.newInstance();
+				mountWithCollisionCheck(rs, pathKey, "Tomcat/servletMap[" + pathKey + "]", mountedPaths);
+			} else {
+				throw rex("Invalid servlet specified in Tomcat/servletMap.  Must be a subclass of Servlet: {0}", cn(className));
+			}
+		} catch (ClassNotFoundException e) {
+			throw toRex(e);
 		}
 	}
 

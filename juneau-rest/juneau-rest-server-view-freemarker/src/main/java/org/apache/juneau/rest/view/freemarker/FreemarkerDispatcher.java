@@ -70,6 +70,9 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	// Lazy bridge-default configuration. Built on first call to resolveConfiguration(...) when
 	// no Configuration bean is registered in the request's BeanStore. Volatile so the
 	// double-checked-locking idiom is safe under concurrent first-request load.
+	@SuppressWarnings({
+		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-built default Configuration in resolveConfiguration(); the reference is publish-once (fully constructed before assignment) and never compound-mutated.
+	})
 	private volatile Configuration defaultConfiguration;
 
 	/**
@@ -266,13 +269,9 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 			res.getWriter().flush();
 		} catch (LinkageError ex) {
 			throw new InternalServerError(ex, FreemarkerViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
+		} catch (IOException | BasicHttpException ex) {
 			throw ex;
-		} catch (BasicHttpException ex) {
-			throw ex;
-		} catch (TemplateException ex) {
-			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", safeTemplate);
-		} catch (RuntimeException ex) {
+		} catch (TemplateException | RuntimeException ex) {
 			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", safeTemplate);
 		}
 	}

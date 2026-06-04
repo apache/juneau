@@ -23,7 +23,7 @@ import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 0 spike (TODO-35) — validates that wedging a {@link StackOverlay} into the
+ * Validates that wedging a {@link StackOverlay} into the
  * {@code overridingParent} slot of a {@link BasicBeanStore} preserves the existing
  * resolution semantics that {@code RestContext_Precedence_Test} exercises.
  *

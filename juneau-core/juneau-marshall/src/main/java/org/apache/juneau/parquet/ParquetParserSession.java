@@ -17,6 +17,7 @@
 package org.apache.juneau.parquet;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.parquet.ParquetSchemaElement.*;
 
 import java.io.ByteArrayInputStream;
@@ -170,7 +171,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 		if (rows.size() == 1 && rows.get(0) instanceof Map<?, ?> m && m.containsKey("value") && targetWantsScalar) {
 			var inner = m.get("value");
 			if (type.isOptional())
-				return (T)(inner == null ? Optional.empty() : Optional.of(convertToType(inner, type.getElementType())));
+				return (T)(inner == null ? opte() : opt(convertToType(inner, type.getElementType())));
 			if (type.isArray()) {
 				var list = new ArrayList<>();
 				if (inner != null)
@@ -219,9 +220,9 @@ public class ParquetParserSession extends InputStreamParserSession {
 		}
 		if (type.isOptional()) {
 			if (rows.isEmpty())
-				return (T)Optional.empty();
+				return (T)opte();
 			var inner = unwrapValueHolder(rows.get(0), type.getElementType());
-			return (T)Optional.of(inner);
+			return (T)opt(inner);
 		}
 		if (type.isArray()) {
 			var componentMeta = type.getElementType();
@@ -389,7 +390,7 @@ public class ParquetParserSession extends InputStreamParserSession {
 				// the legacy "FIXED_LEN_BYTE_ARRAY == UUID" physical-type heuristic for backward compatibility
 				// with files written without the opt-in discriminator (work item 134).
 				if (type == TYPE_FIXED_LEN_BYTE_ARRAY) {
-					var readAsUuid = (logicalType != null) ? (logicalType == LOGICAL_TYPE_UUID) : true;
+					var readAsUuid = logicalType == null || logicalType == LOGICAL_TYPE_UUID;
 					if (readAsUuid)
 						uuidPaths.add(path);
 				}

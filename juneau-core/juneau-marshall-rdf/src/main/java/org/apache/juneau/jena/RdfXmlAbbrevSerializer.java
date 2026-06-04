@@ -72,6 +72,9 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF serializer hierarchy.
+})
 public class RdfXmlAbbrevSerializer extends RdfSerializer {
 
 	/** Default RDF/XML serializer, all default settings.*/

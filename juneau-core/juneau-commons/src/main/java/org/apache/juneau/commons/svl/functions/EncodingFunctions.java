@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl.functions;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.net.*;
 import java.util.*;
@@ -36,7 +37,8 @@ public final class EncodingFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
+		"unchecked", // Cast is safe: type verified by caller context.
+		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		Base64Encode.class, Base64Decode.class, UrlEncode.class, UrlDecode.class,
@@ -56,7 +58,7 @@ public final class EncodingFunctions {
 	public static class Base64Decode extends TypedFunction {
 		@Override public String name() { return "base64Decode"; }
 		public String invoke(String s) {
-			if (s == null || s.isEmpty()) return "";
+			if (isEmpty(s)) return "";
 			return new String(Base64.getDecoder().decode(s), UTF_8);
 		}
 	}
@@ -111,6 +113,9 @@ public final class EncodingFunctions {
 	})
 	public static class HtmlUnescape extends TypedFunction {
 		@Override public String name() { return "htmlUnescape"; }
+		@SuppressWarnings({
+			"java:S135" // State-machine entity-decode loop; early continues are clearer than restructuring.
+		})
 		public String invoke(String s) {
 			if (s == null) return "";
 			var sb = new StringBuilder(s.length());

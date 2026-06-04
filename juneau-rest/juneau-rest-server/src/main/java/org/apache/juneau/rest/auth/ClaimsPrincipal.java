@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.security.*;
 import java.util.*;
@@ -115,8 +116,8 @@ public class ClaimsPrincipal implements Principal {
 		assertArgNotNull("type", type);
 		var v = claims.get(claimName);
 		if (v == null)
-			return Optional.empty();
-		return Optional.ofNullable(coerce(v, type));
+			return opte();
+		return opt(coerce(v, type));
 	}
 
 	/**

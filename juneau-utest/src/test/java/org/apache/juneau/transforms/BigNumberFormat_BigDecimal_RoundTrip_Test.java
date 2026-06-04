@@ -291,6 +291,9 @@ class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 	 * rejects.  Validation-only testers ({@link RoundTrip_Tester#isValidationOnly()} == {@code true}: Json
 	 * schema, CSV, Parquet) return the original object unchanged.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // 'fmt' is part of the shared expectedAfter(...) helper signature used across all *Format RoundTrip tests; kept for template symmetry even where this type's expected value is format-independent.
+	})
 	private static BigDecimal expectedAfter(BigDecimal original, RoundTrip_Tester t, BigNumberFormat fmt) {
 		if (original == null)
 			return null;

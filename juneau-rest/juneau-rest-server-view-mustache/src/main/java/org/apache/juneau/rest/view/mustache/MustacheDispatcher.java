@@ -65,6 +65,9 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 	// Lazy bridge-default factory. Built on first call to resolveMustacheFactory(...) when no
 	// MustacheFactory bean is registered in the request's BeanStore. Volatile so the
 	// double-checked-locking idiom is safe under concurrent first-request load.
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in resolveMustacheFactory(); the MustacheFactory is fully built before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile MustacheFactory defaultFactory;
 
 	/**
@@ -234,9 +237,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 			mustache.execute(res.getWriter(), Map.of()).flush();
 		} catch (LinkageError ex) {
 			throw new InternalServerError(ex, MustacheViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
-			throw ex;
-		} catch (BasicHttpException ex) {
+		} catch (IOException | BasicHttpException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			throw new InternalServerError(ex, "Mustache render failed for ''{0}''", safeTemplate);

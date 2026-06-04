@@ -62,6 +62,9 @@ import org.springframework.test.context.*;
 	"spring.boot.demo.other=other-value"
 })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@SuppressWarnings({
+	"java:S2093" // Cleanup calls clear() (Settings-bridge deregistration), not close() (PreDestroy lifecycle); try-with-resources would invoke the wrong method and change semantics.
+})
 class SpringEnvironmentPropertySource_SpringbootIntegration_Test extends TestBase {
 
 	/**

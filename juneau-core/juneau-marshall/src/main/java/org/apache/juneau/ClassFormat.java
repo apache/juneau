@@ -286,17 +286,13 @@ public enum ClassFormat {
 	private static Class<?> nestedTypeFallback(String s, ClassLoader cl) {
 		var chars = s.toCharArray();
 		for (var i = chars.length - 1; i > 0; i--) {
-			if (chars[i] != '.')
-				continue;
-			if (i + 1 >= chars.length)
-				continue;
-			if (! Character.isUpperCase(chars[i + 1]))
-				continue;
-			chars[i] = '$';
-			try {
-				return Class.forName(new String(chars), true, cl);
-			} catch (@SuppressWarnings("unused") ClassNotFoundException ignored) {
-				// Keep walking; the previous-dot replacement persists in chars so deeper nesting can resolve.
+			if (chars[i] == '.' && i + 1 < chars.length && Character.isUpperCase(chars[i + 1])) {
+				chars[i] = '$';
+				try {
+					return Class.forName(new String(chars), true, cl);
+				} catch (@SuppressWarnings("unused") ClassNotFoundException ignored) {
+					// Keep walking; the previous-dot replacement persists in chars so deeper nesting can resolve.
+				}
 			}
 		}
 		return null;

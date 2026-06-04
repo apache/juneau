@@ -62,6 +62,9 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF parser hierarchy.
+})
 public class TriGParser extends RdfParser {
 
 	/** Default TriG parser, all default settings.*/

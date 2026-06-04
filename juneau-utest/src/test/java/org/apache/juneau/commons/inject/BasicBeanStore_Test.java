@@ -30,7 +30,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 @SuppressWarnings({
-	"java:S4144" // Identical test methods intentional for testing different scenarios
+	"java:S4144", // Identical test methods intentional for testing different scenarios
+	"java:S114" // Snake_case fixture interface names (X_Iface, X_BasicIface) are intentional test-local naming.
 })
 class BasicBeanStore_Test extends TestBase {
 
@@ -1308,6 +1309,9 @@ class BasicBeanStore_Test extends TestBase {
 	// X - BeanStore default methods: outer-instance, Optional, named-qualifier
 	// =========================================================================
 
+	@SuppressWarnings({
+		"java:S114" // Test-fixture interface; snake_case name groups it with its test section (X_*).
+	})
 	interface X_Iface {
 		TestBean create(Object outer, String msg);
 		TestBean createNamed(@Named("msg") String msg);
@@ -1455,6 +1459,9 @@ class BasicBeanStore_Test extends TestBase {
 		assertTrue(store.getBeanType(TestBean.class).isEmpty());
 	}
 
+	@SuppressWarnings({
+		"java:S114" // Test-fixture interface; snake_case name groups it with its test section (X_*).
+	})
 	interface X_BasicIface {
 		TestBean create(String msg);
 		TestBean createMissingUnnamed(Integer missingInt);

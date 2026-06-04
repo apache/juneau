@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * This is the next-gen counterpart to the classic {@code org.apache.juneau.http.remote.Remote_*_Test} corpus and tracks
- * {@code todo/TODO-150-remote-proxy-nextgen-client-parity-tests.md}.  The single shared engine
+ * The single shared engine
  * ({@code RemoteClient}) is the system-under-test; it is driven through two columns:
  * <ul>
  * 	<li><b>{@link B_MockServerColumn}</b> &mdash; the {@link MockRestClient} in-JVM servlet round-trip
@@ -51,19 +51,11 @@ import org.junit.jupiter.api.*;
  * </ul>
  *
  * <p>
- * Capabilities were originally landed as <b>{@code @Disabled}</b> specs whose bodies assert the <i>desired</i> parity
- * behavior, each flipping green as its gap closed.  Gap ids (G1&ndash;G12) match the plan's gap inventory; as of the
- * G6 + G12 slice <b>all gaps are closed</b> and all 72 cells are active (no remaining {@code @Disabled} specs) &mdash;
- * G6 adds part-serializer/{@code @Schema} coverage ({@code b33}/{@code b34}/{@code c44}/{@code c45}) and G12 adds
- * {@code @PathRemainder} coverage ({@code b35}/{@code c46}).  The synthetic interface, DTOs,
- * enums, and the shared {@code @Rest} fixture are nested static types below (house convention, mirroring
- * {@code RemoteClient_Test}).
- *
- * <p>
  * Cross-walk: each synthetic method's comment names the feature id (F-row) it exercises.
  */
 @SuppressWarnings({
 	"java:S5961",  // High assertion/case count is expected in a comprehensive parity matrix.
+	"java:S114",   // Snake_case fixture interface names (A_ParityClient, A_OpClient) are intentional test-local naming.
 	"resource"     // try-with-resources closes clients; RestResponse closed where applicable.
 })
 class RemoteProxy_FeatureParity_Test {
@@ -460,7 +452,8 @@ class RemoteProxy_FeatureParity_Test {
 
 		@Test void b29_typedException_onErrorStatus_F22() throws Exception {
 			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				assertThrows(NotFound.class, () -> proxy(mrc).getOrThrow("missing"));
+				var p = proxy(mrc);
+				assertThrows(NotFound.class, () -> p.getOrThrow("missing"));
 			}
 		}
 

@@ -50,7 +50,8 @@ import com.nimbusds.oauth2.sdk.id.ClientID;
  */
 @Deprecated(since = "9.5.0", forRemoval = false)
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "username"); intentional
+	"java:S1192", // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "username"); intentional
+	"java:S1133" // Intentional deprecation retained for backward compatibility until the documented removal; the reminder is not actionable now.
 })
 public class OAuthResourceOwnerFlow {
 

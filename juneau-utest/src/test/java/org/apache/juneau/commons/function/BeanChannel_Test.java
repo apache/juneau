@@ -52,7 +52,7 @@ class BeanChannel_Test extends TestBase {
 
 	@Test void b01_beanConsumer_defaultLifecycle() throws Exception {
 		var received = new ArrayList<String>();
-		BeanConsumer<String> a = item -> received.add(item);
+		BeanConsumer<String> a = received::add;
 		a.begin();
 		a.acceptThrows("x");
 		a.acceptThrows("y");
@@ -94,7 +94,7 @@ class BeanChannel_Test extends TestBase {
 
 	@Test void c01_beanSupplier_defaultLifecycle() throws Exception {
 		var data = List.of("a", "b", "c");
-		BeanSupplier<String> a = () -> data.iterator();
+		BeanSupplier<String> a = data::iterator;
 		a.begin();
 		var result = new ArrayList<String>();
 		a.iterator().forEachRemaining(result::add);

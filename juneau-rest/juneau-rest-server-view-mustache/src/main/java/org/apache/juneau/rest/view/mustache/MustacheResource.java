@@ -45,7 +45,7 @@ import org.apache.juneau.rest.view.*;
 )
 public class MustacheResource extends ViewResource {
 
-	private final transient MustacheDispatcher worker;
+	private final MustacheDispatcher worker;
 
 	/** No-arg constructor &mdash; uses a default {@link MustacheDispatcher} worker. */
 	public MustacheResource() {

@@ -72,7 +72,13 @@ class ReactiveOptIn_BareServer_Test {
 	private static final MockRestClient CA = MockRestClient.buildLax(A.class);
 
 	@Test void a01_bareServer_doesNotProcessFlowPublisherReactively() throws Exception {
-		var content = CA.get("/flux").accept("application/json").run().getContent().asString();
+		String content;
+		try (var req = CA.get("/flux")) {
+			req.accept("application/json");
+			try (var res = req.run()) {
+				content = res.getContent().asString();
+			}
+		}
 		// Reactive (buffer-shape) handling would have subscribed to the publisher and produced a JSON
 		// array of the emitted Pojo elements. With no reactive module on the classpath the publisher is
 		// instead serialized as a plain (property-less) bean — so the element payload must be absent.

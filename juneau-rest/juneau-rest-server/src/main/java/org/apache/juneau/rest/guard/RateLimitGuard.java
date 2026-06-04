@@ -149,6 +149,9 @@ public class RateLimitGuard extends RestGuard {
 	}
 
 	@Override /* Overridden from RestGuard */
+	@SuppressWarnings({
+		"java:S3516" // Always returns true by design: a throttled request throws TooManyRequests (the guard's rejection signal per RestGuard's contract), so the normal-exit paths intentionally only ever return true.
+	})
 	public boolean guard(RestRequest req, RestResponse res) {
 		if (isExempt(req))
 			return true;
@@ -168,6 +171,9 @@ public class RateLimitGuard extends RestGuard {
 	}
 
 	@Override /* Overridden from RestGuard */
+	@SuppressWarnings({
+		"java:S3516" // Always returns true by design: throttling is enforced in the overridden guard() method, so this abstract-contract method intentionally never rejects on its own.
+	})
 	public boolean isRequestAllowed(RestRequest req) {
 		return true;
 	}

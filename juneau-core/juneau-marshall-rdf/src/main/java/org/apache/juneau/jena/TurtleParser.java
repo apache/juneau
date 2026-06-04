@@ -66,6 +66,9 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF parser hierarchy.
+})
 public class TurtleParser extends RdfParser {
 
 	/** Default Turtle parser, all default settings.*/

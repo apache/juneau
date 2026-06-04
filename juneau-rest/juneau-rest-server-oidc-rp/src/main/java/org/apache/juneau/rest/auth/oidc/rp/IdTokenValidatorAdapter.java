@@ -150,7 +150,7 @@ public class IdTokenValidatorAdapter {
 		 * Sets the signing-algorithm allowlist.  Replaces the default {@code [RS256, ES256]}.
 		 *
 		 * @param values The allowed algorithms.  Must be non-empty and must not contain
-		 * 	{@link JWSAlgorithm#NONE}.
+		 * 	{@link Algorithm#NONE}.
 		 * @return This object.
 		 */
 		public Builder algorithms(JWSAlgorithm...values) {
@@ -159,7 +159,7 @@ public class IdTokenValidatorAdapter {
 			var next = new LinkedHashSet<JWSAlgorithm>();
 			for (var a : values) {
 				assertArgNotNull("algorithm", a);
-				assertArg(! JWSAlgorithm.NONE.equals(a), "\"none\" algorithm is permanently rejected");
+				assertArg(! Algorithm.NONE.equals(a), "\"none\" algorithm is permanently rejected");
 				next.add(a);
 			}
 			algorithms = next;

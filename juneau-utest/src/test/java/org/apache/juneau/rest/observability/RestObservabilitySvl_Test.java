@@ -46,6 +46,9 @@ class RestObservabilitySvl_Test extends TestBase {
 	public static final class RecordingMetricsRecorder implements MetricsRecorder {
 		public final List<Event> events = new CopyOnWriteArrayList<>();
 
+		@SuppressWarnings({
+			"java:S6213" // 'record' mirrors the MetricsRecorder SPI method name; renaming would break the @Override contract.
+		})
 		@Override
 		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 			events.add(new Event(metricName, metricTags));

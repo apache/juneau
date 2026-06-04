@@ -26,7 +26,7 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Acceptance tests for TODO-128: {@code @Value Optional<T>} wrapping parity between
+ * Acceptance tests for {@code @Value Optional<T>} wrapping parity between
  * {@link ParameterInfo#resolveValue} and {@link FieldInfo#inject}.
  *
  * <p>

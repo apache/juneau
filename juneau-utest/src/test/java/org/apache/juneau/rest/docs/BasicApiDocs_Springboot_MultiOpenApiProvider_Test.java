@@ -42,13 +42,12 @@ import org.springframework.context.annotation.*;
  * 	<li><b>{@code @Primary} wins.</b> When two providers are registered, one of them marked
  * 		{@link Primary @Primary}, the
  * 		{@link SpringBeanStore SpringBeanStore.getBean(OpenApiProvider.class)} call returns the
- * 		{@code @Primary} one. This is the documented Juneau-on-Spring-Boot recommendation in
- * 		TODO-74 (Phase 5 + Dependency-injection notes).
+ * 		{@code @Primary} one.
  * 	<li><b>Two unmarked providers &rarr; {@link BeanDefinitionOverrideException}.</b> Spring
  * 		refuses to start the context when two {@code @Bean} methods declare beans with the same
  * 		name (the default name is derived from the method name; we collide them on purpose using
  * 		{@code @Bean(name=...)} so both compete for the same bean id). This is the documented
- * 		"known rough edge" from TODO-74's resolved decisions: Juneau cannot give the user a
+ * 		"known rough edge" from resolved decisions: Juneau cannot give the user a
  * 		friendlier error here because Spring fails the context-load before Juneau gets a chance to
  * 		look the provider up.
  * </ol>

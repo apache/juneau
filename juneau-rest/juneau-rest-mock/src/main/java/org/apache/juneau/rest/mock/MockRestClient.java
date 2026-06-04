@@ -242,6 +242,9 @@ public final class MockRestClient implements Closeable {
 		 *
 		 * @return A new instance. Never <jk>null</jk>.
 		 */
+		@SuppressWarnings({
+			"java:S112" // Re-wrap as RuntimeException - build() wraps arbitrary checked exceptions from reflection (newInstance) and RestContext init/postInit; no specific type fits and the fluent build() method cannot declare checked exceptions.
+		})
 		public MockRestClient build() {
 			try {
 				var c = impl instanceof Class<?> c2 ? c2 : impl.getClass();

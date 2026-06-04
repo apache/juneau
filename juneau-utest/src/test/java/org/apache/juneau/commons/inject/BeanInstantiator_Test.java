@@ -4592,7 +4592,7 @@ class BeanInstantiator_Test extends TestBase {
 		void w09_builderInParentClass() {
 			// W_BeanWithParentInnerBuilder has no declared @Builder, no static factory, and no inner class of
 			// its own.  Priority 3c does find W_BeanWithInnerBuilder.Builder on the parent, BUT that builder's
-			// build() only promises the *supertype* W_BeanWithInnerBuilder.  Under TODO-143 Option D a
+			// build() only promises the *supertype* W_BeanWithInnerBuilder.  Under FINISHED-143 Option D a
 			// supertype-only builder candidate must not displace a usable direct constructor on the more-specific
 			// requested type, so selection is declined in favor of the no-arg constructor.  (Previously the
 			// parent-only builder was reported as discovered even though its output — a parent instance — was

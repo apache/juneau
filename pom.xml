@@ -50,6 +50,10 @@
 		<tomcat.version>11.0.21</tomcat.version>
 		<spring.version>4.0.6</spring.version>
 		<sonar.organization>apache</sonar.organization>
+		<!-- javadoc.css uses custom HTML element selectors (ja, jc, jd, ...) for Javadoc syntax highlighting; css:S4670 false positives. -->
+		<sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
+		<sonar.issue.ignore.multicriteria.e1.ruleKey>css:S4670</sonar.issue.ignore.multicriteria.e1.ruleKey>
+		<sonar.issue.ignore.multicriteria.e1.resourceKey>**/javadoc.css</sonar.issue.ignore.multicriteria.e1.resourceKey>
 		<jena.version>5.6.0</jena.version>
 	</properties>
 

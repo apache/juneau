@@ -22,6 +22,9 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage tests for MockRestClient.
  */
+@SuppressWarnings({
+	"java:S1130" // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to specific checked types is high-churn/low-value.
+})
 class MockRestClient_Coverage_Test extends TestBase {
 
 	@Rest
@@ -81,38 +84,38 @@ class MockRestClient_Coverage_Test extends TestBase {
 	// getCurrentXxx() methods - returns values during request execution
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_getCurrentClientRequest() throws Exception {
+	@Test void a01_getCurrentClientRequest() {
 		var client = MockRestClient.create(A.class).build();
 		// Before a request, the value is null
 		assertNull(client.getCurrentClientRequest());
 	}
 
-	@Test void a02_getCurrentClientResponse() throws Exception {
+	@Test void a02_getCurrentClientResponse() {
 		var client = MockRestClient.create(A.class).build();
 		assertNull(client.getCurrentClientResponse());
 	}
 
-	@Test void a03_getCurrentServerRequest() throws Exception {
+	@Test void a03_getCurrentServerRequest() {
 		var client = MockRestClient.create(A.class).build();
 		assertNull(client.getCurrentServerRequest());
 	}
 
-	@Test void a04_getCurrentServerResponse() throws Exception {
+	@Test void a04_getCurrentServerResponse() {
 		var client = MockRestClient.create(A.class).build();
 		assertNull(client.getCurrentServerResponse());
 	}
 
-	@Test void a05_getMetrics() throws Exception {
+	@Test void a05_getMetrics() {
 		var client = MockRestClient.create(A.class).build();
 		assertNull(client.getMetrics());
 	}
 
-	@Test void a06_getSocketTimeout() throws Exception {
+	@Test void a06_getSocketTimeout() {
 		var client = MockRestClient.create(A.class).build();
 		assertEquals(Integer.MAX_VALUE, client.getSocketTimeout());
 	}
 
-	@Test void a07_isOpen() throws Exception {
+	@Test void a07_isOpen() {
 		var client = MockRestClient.create(A.class).build();
 		assertTrue(client.isOpen());
 	}
@@ -203,8 +206,8 @@ class MockRestClient_Coverage_Test extends TestBase {
 		var cm2 = new MockHttpClientConnectionManager();
 		assertEquals(cm1, cm2); // All are equal
 		assertEquals(cm1, cm1); // Same instance
-		assertNotEquals(cm1, null); // Not equal to null
-		assertNotEquals(cm1, "string"); // Not equal to different type
+		assertNotEquals(null, cm1); // Not equal to null
+		assertNotEquals("string", cm1); // Not equal to different type
 	}
 
 	@Test void d02_connectionManager_hashCode() {
@@ -213,15 +216,15 @@ class MockRestClient_Coverage_Test extends TestBase {
 		assertEquals(cm1.hashCode(), cm2.hashCode()); // Same hash
 	}
 
-	@Test void d03_connectionManager_noOpMethods() throws Exception {
+	@Test void d03_connectionManager_noOpMethods() {
 		var cm = new MockHttpClientConnectionManager();
 		// These should be no-ops
-		assertDoesNotThrow(() -> cm.closeExpiredConnections());
+		assertDoesNotThrow(cm::closeExpiredConnections);
 		assertDoesNotThrow(() -> cm.closeIdleConnections(10, java.util.concurrent.TimeUnit.SECONDS));
 		assertDoesNotThrow(() -> cm.connect(null, null, 0, null));
 		assertDoesNotThrow(() -> cm.releaseConnection(null, null, 0, java.util.concurrent.TimeUnit.SECONDS));
 		assertDoesNotThrow(() -> cm.routeComplete(null, null, null));
-		assertDoesNotThrow(() -> cm.shutdown());
+		assertDoesNotThrow(cm::shutdown);
 		assertDoesNotThrow(() -> cm.upgrade(null, null, null));
 	}
 

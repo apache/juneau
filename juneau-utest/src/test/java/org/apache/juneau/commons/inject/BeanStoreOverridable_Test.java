@@ -30,11 +30,6 @@ import org.junit.jupiter.api.*;
  * Tests the {@link BeanStoreOverridable} marker interface and verifies the canonical bindings
  * (SerializerSet.Builder, ParserSet.Builder, EncoderSet.Builder, MockRestClient.Builder) implement it
  * with the correct self-typed return.
- *
- * <p>
- * This is a Phase 4 deliverable for {@code TODO-35} &mdash; the interface formalizes the previously
- * ad-hoc {@code overridingBeanStore(...)} pattern so the JUnit extension can wire via
- * {@code instanceof BeanStoreOverridable<?>} rather than a builder-class type switch.
  */
 class BeanStoreOverridable_Test extends TestBase {
 

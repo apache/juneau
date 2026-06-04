@@ -416,6 +416,9 @@ class JwksCache_Test extends TestBase {
 		assertEquals(2, src.fetches.get(), "TTL window must be reset by the eager refresh; no extra fetch at t0+4min");
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep lets concurrent threads queue on the latched eager-refresh fetch (thundering-herd test).
+	})
 	@Test void d07_eagerRefresh_singleInFlight_noThunderingHerd() throws Exception {
 		var oldKey = generateRsa("kid-old");
 		var newKey = generateRsa("kid-new");

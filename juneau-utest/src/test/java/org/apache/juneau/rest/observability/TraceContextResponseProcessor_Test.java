@@ -43,7 +43,7 @@ import io.opentelemetry.sdk.trace.*;
 import io.opentelemetry.sdk.trace.export.*;
 
 /**
- * Tests for {@link TraceContextResponseProcessor} (TODO-114) — outgoing-response W3C trace-context
+ * Tests for {@link TraceContextResponseProcessor} — outgoing-response W3C trace-context
  * header injection.
  *
  * <p>

@@ -51,7 +51,8 @@ import org.springframework.mock.env.*;
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SuppressWarnings({
-	"java:S2094" // Test fixture / data class, no methods required.
+	"java:S2094", // Test fixture / data class, no methods required.
+	"java:S2093" // SpringBeanStore teardown uses clear() (which removes the installed Settings source); try-with-resources would call close() instead, which does not remove the source and would leak the bridge into later tests.
 })
 class SpringEnvironmentPropertySource_Test extends TestBase {
 

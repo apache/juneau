@@ -59,6 +59,9 @@ import org.apache.juneau.http.*;
  * @param <T> The type this converter handles.
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S2326" // 'T' is a phantom type parameter binding a converter to its handled type for type-safe registration (BodyConverter<?> lists) and the of() factory; removing it would break this public (beta) API.
+})
 public interface BodyConverter<T> {
 
 	/**

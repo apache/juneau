@@ -30,10 +30,10 @@ import org.apache.juneau.rest.processor.*;
  * <p>
  * The four built-in renderers automatically implement this interface:
  * <ul>
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.jsp.JspViewRenderer}
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.thymeleaf.ThymeleafViewRenderer}
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.mustache.MustacheViewRenderer}
- * 	<li class='jc'>{@link org.apache.juneau.rest.view.freemarker.FreemarkerViewRenderer}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.view.jsp.JspViewRenderer}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.view.thymeleaf.ThymeleafViewRenderer}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.view.mustache.MustacheViewRenderer}
+ * 	<li class='jc'>{@code org.apache.juneau.rest.view.freemarker.FreemarkerViewRenderer}
  * </ul>
  *
  * <p>

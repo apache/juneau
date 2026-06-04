@@ -338,6 +338,9 @@ public class FileStore extends ConfigStore {
 			}
 		}
 
+		@SuppressWarnings({
+			"java:S5738" // com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.
+		})
 		private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {
 			try {
 				return switch (s) {

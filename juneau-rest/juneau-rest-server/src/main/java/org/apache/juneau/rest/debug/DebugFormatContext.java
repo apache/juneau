@@ -28,6 +28,9 @@ import jakarta.servlet.http.*;
  * @param requestContent Cached request content.
  * @param responseContent Cached response content.
  */
+@SuppressWarnings({
+	"java:S6218" // DebugFormatContext is a transient input holder for DebugFormat rendering; it is never compared for equality or used as a map key, so array-identity semantics on the content[] components are irrelevant.
+})
 public record DebugFormatContext(
 	HttpServletRequest request,
 	HttpServletResponse response,

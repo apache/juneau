@@ -83,6 +83,9 @@ public final class ResponseHeaderAssertion {
 	 * @return This object (for chaining).
 	 * @throws AssertionError If the value does not match.
 	 */
+	@SuppressWarnings({
+		"java:S1201" // 'equals(String)' is an intentional fluent-assertion DSL method (asserts header equality), not an override of Object.equals(Object); renaming would break this public (beta) API.
+	})
 	public ResponseHeaderAssertion equals(String expected) {
 		var h = response.getFirstHeader(name);
 		var actual = h != null ? h.value() : null;

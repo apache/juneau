@@ -33,7 +33,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!--
-			Nimbus OAuth 2.0 SDK pin (per TODO-94c 2026-05-27 Nimbus pivot).  11.37.2 (May 2026) is the
+			Nimbus OAuth 2.0 SDK pin.  11.37.2 (May 2026) is the
 			current stable on Maven Central as of land time.
 		-->
 		<nimbus-oauth2-oidc-sdk.version>11.37.2</nimbus-oauth2-oidc-sdk.version>

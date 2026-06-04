@@ -62,6 +62,9 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF serializer hierarchy.
+})
 public class NQuadsSerializer extends RdfSerializer {
 
 	/** Default N-Quads serializer, all default settings.*/

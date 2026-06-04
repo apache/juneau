@@ -56,7 +56,7 @@ import org.junit.jupiter.params.provider.*;
  * Sibling of {@link TemporalFormat_Instant_RoundTrip_Test} — scopes to the second-most-common
  * {@link Temporal} subtype.  The remaining subtypes ({@link LocalDate}, {@link OffsetDateTime},
  * {@link ZonedDateTime}, {@link Year}, {@link YearMonth}, {@link LocalTime}, {@link OffsetTime},
- * {@link MonthDay}) are deferred per {@code TODO-57}.
+ * {@link MonthDay}) are deferred.
  *
  * <p>
  * Test combos = (tester templates) &times; ({@link TemporalFormat} values).  At the time of writing this

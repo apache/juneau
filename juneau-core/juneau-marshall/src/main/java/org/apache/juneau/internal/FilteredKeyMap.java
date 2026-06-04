@@ -43,6 +43,9 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	/**
 	 * A set with ordered entries (a List with a Set API).
 	 */
+	@SuppressWarnings({
+		"java:S2160" // AbstractSet's content-based equals/hashCode are intentionally inherited; 'entries' is only the ordered backing store.
+	})
 	private static class ListSet<E> extends AbstractSet<E> {
 
 		private List<E> entries;
@@ -74,7 +77,6 @@ public class FilteredKeyMap<K,V> extends AbstractMap<K,V> implements Delegate<Ma
 	 * @param innerMap The map being wrapped.  Must not be <jk>null</jk>.
 	 * @param keys The keys in the new map.  Must not be <jk>null</jk>.
 	 */
-	// TODO - Convert keys to List<K>
 	public FilteredKeyMap(ClassMeta<Map<K,V>> classMeta, Map<K,V> innerMap, K[] keys) {
 		assertArgNotNull(ARG_innerMap, innerMap);
 		assertArgNotNull(ARG_keys, keys);

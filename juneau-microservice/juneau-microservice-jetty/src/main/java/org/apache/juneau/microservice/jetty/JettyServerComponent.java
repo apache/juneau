@@ -95,14 +95,14 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code availablePort} system property).
 	 */
 	@Value("${availablePort}")
-	Optional<String> availablePortEnv;
+	Optional<String> availablePortEnv = opte();
 
 	/**
 	 * Env-driven sentinel for {@code juneau.serverPort}; {@link Optional#empty()} when unset (in which case
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code juneau.serverPort} system property).
 	 */
 	@Value("${juneau.serverPort}")
-	Optional<String> serverPortEnv;
+	Optional<String> serverPortEnv = opte();
 
 	private static int[] parseIntArray(String csv) {
 		if (csv == null || csv.isEmpty())
@@ -205,7 +205,7 @@ public class JettyServerComponent implements MicroserviceListener {
 					.orElseGet(() -> mf.get("Jetty-Port").map(JettyServerComponent::parseIntArray).orElseGet(() -> ints(8000)));
 			var availablePort = findOpenPort(ports);
 
-			if (availablePortEnv == null || availablePortEnv.isEmpty())
+			if (availablePortEnv.isEmpty())
 				System.setProperty("availablePort", String.valueOf(availablePort));
 
 			// Prefer a @Bean-supplied Server, else build one from jetty.xml.
@@ -290,7 +290,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				addServlet(servlet, pathSpecs);
 			}
 
-			if (serverPortEnv == null || serverPortEnv.isEmpty())
+			if (serverPortEnv.isEmpty())
 				System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 			server.get().start();

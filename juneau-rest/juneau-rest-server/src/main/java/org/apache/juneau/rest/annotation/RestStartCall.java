@@ -21,6 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.http.response.BasicHttpException;
+
 import jakarta.servlet.http.*;
 
 /**

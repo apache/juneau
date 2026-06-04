@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.auth;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 /**
@@ -47,9 +48,9 @@ class BearerTokenExtractor {
 	static Optional<String> extract(String header) {
 		if (header.length() <= BEARER_PREFIX.length()
 				|| !header.regionMatches(true, 0, BEARER_PREFIX, 0, BEARER_PREFIX.length()))
-			return Optional.empty();
+			return opte();
 		var token = header.substring(BEARER_PREFIX.length()).trim();
-		return token.isEmpty() ? Optional.empty() : Optional.of(token);
+		return token.isEmpty() ? opte() : opt(token);
 	}
 
 	private BearerTokenExtractor() {}

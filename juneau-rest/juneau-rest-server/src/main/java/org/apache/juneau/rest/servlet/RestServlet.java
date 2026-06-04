@@ -81,10 +81,13 @@ public abstract class RestServlet extends HttpServlet {
 	/**
 	 * The programmatic configuration builder stashed on this instance, or <jk>null</jk> when the
 	 * resource was constructed without a builder.  Mutable so it can be written by either the
-	 * {@link #RestServlet(RestBuilder<?>)} constructor or {@link Builder#build()} (the no-arg-only setter-stash path).
+	 * {@link #RestServlet(RestBuilder)} constructor or {@link Builder#build()} (the no-arg-only setter-stash path).
 	 * Read non-reflectively by {@link RestContext} during construction so builder-supplied values take precedence
 	 * over {@link Rest @Rest} annotation values.
 	 */
+	@SuppressWarnings({
+		"java:S2226" // Write-once-before-service stash: set only by the (RestBuilder) constructor or Builder.build() (the no-arg + setter-stash path) before the servlet is placed in service, then read-only; it cannot be final because of the no-arg construction path.
+	})
 	transient RestBuilder<?> restBuilder;
 
 	/**

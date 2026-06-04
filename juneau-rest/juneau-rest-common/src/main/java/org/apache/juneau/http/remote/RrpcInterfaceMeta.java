@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.StringUtils.isOneOf;
 import static org.apache.juneau.commons.utils.StringUtils.trimSlashes;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -73,6 +74,9 @@ public final class RrpcInterfaceMeta {
 	 * @param iface The interface class. Must not be <jk>null</jk>.
 	 * @param uri Reserved for compatibility with the classic constructor. May be <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // 'uri' is part of the public constructor signature retained for API parity with the classic RrpcInterfaceMeta; intentionally ignored
+	})
 	public RrpcInterfaceMeta(Class<?> iface, String uri) {
 		this(iface, true);
 	}
@@ -83,7 +87,7 @@ public final class RrpcInterfaceMeta {
 		var remote = iface.getAnnotation(Remote.class);
 
 		this.iface = iface;
-		this.basePath = remote == null ? "" : (remote.path().isEmpty() ? remote.value() : remote.path());
+		this.basePath = buildBasePath(remote);
 
 		var metas = new LinkedHashMap<Method, RrpcInterfaceMethodMeta>();
 		for (var m : iface.getMethods()) {
@@ -100,6 +104,12 @@ public final class RrpcInterfaceMeta {
 		for (var v : metas.values())
 			byPath.put(v.getPath(), v);
 		this.methodMetasByPath = Collections.unmodifiableMap(byPath);
+	}
+
+	private static String buildBasePath(Remote remote) {
+		if (remote == null)
+			return "";
+		return remote.path().isEmpty() ? remote.value() : remote.path();
 	}
 
 	private static String buildSignaturePath(Method m) {
@@ -161,7 +171,7 @@ public final class RrpcInterfaceMeta {
 	 * @return The Java class. Never <jk>null</jk>.
 	 */
 	public Class<?> getJavaClass() {
-		return iface;
+		return getInterface();
 	}
 
 	/**
@@ -212,64 +222,58 @@ public final class RrpcInterfaceMeta {
 	}
 
 	private static Optional<RrpcInterfaceMethodMeta> buildMethodMeta(Method m) {
-		String httpMethod = null;
-		String path = "";
-		var returnType = RemoteReturn.BODY;
-
 		if (m.isAnnotationPresent(RemoteGet.class)) {
 			var a = m.getAnnotation(RemoteGet.class);
-			httpMethod = "GET";
-			path = a.path().isEmpty() ? a.value() : a.path();
-			returnType = a.returns();
-		} else if (m.isAnnotationPresent(RemotePost.class)) {
-			var a = m.getAnnotation(RemotePost.class);
-			httpMethod = "POST";
-			path = a.path().isEmpty() ? a.value() : a.path();
-			returnType = a.returns();
-		} else if (m.isAnnotationPresent(RemotePut.class)) {
-			var a = m.getAnnotation(RemotePut.class);
-			httpMethod = "PUT";
-			path = a.path().isEmpty() ? a.value() : a.path();
-			returnType = a.returns();
-		} else if (m.isAnnotationPresent(RemotePatch.class)) {
-			var a = m.getAnnotation(RemotePatch.class);
-			httpMethod = "PATCH";
-			path = a.path().isEmpty() ? a.value() : a.path();
-			returnType = a.returns();
-		} else if (m.isAnnotationPresent(RemoteDelete.class)) {
-			var a = m.getAnnotation(RemoteDelete.class);
-			httpMethod = "DELETE";
-			path = a.path().isEmpty() ? a.value() : a.path();
-			returnType = a.returns();
-		} else if (m.isAnnotationPresent(RemoteOp.class)) {
-			var a = m.getAnnotation(RemoteOp.class);
-			String method = a.method().trim();
-			path = a.path().trim();
-			returnType = a.returns();
-			var v = a.value().trim();
-			if (!v.isEmpty()) {
-				var i = v.indexOf(' ');
-				if (i == -1) {
-					method = v.toUpperCase();
-				} else {
-					method = v.substring(0, i).trim().toUpperCase();
-					path = v.substring(i).trim();
-				}
-			}
-			if (path.isEmpty())
-				path = HttpUtils.detectHttpPath(m, isEmpty(method) ? null : method);
-			if (method.isEmpty())
-				method = HttpUtils.detectHttpMethod(m, true, "GET");
-			if (!isOneOf(method, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
-				throw illegalArg("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
-			httpMethod = method;
-			path = trimSlashes(path);
+			return opt(simpleMeta(m, "GET", a.path(), a.value(), a.returns()));
 		}
+		if (m.isAnnotationPresent(RemotePost.class)) {
+			var a = m.getAnnotation(RemotePost.class);
+			return opt(simpleMeta(m, "POST", a.path(), a.value(), a.returns()));
+		}
+		if (m.isAnnotationPresent(RemotePut.class)) {
+			var a = m.getAnnotation(RemotePut.class);
+			return opt(simpleMeta(m, "PUT", a.path(), a.value(), a.returns()));
+		}
+		if (m.isAnnotationPresent(RemotePatch.class)) {
+			var a = m.getAnnotation(RemotePatch.class);
+			return opt(simpleMeta(m, "PATCH", a.path(), a.value(), a.returns()));
+		}
+		if (m.isAnnotationPresent(RemoteDelete.class)) {
+			var a = m.getAnnotation(RemoteDelete.class);
+			return opt(simpleMeta(m, "DELETE", a.path(), a.value(), a.returns()));
+		}
+		if (m.isAnnotationPresent(RemoteOp.class))
+			return opt(buildRemoteOpMeta(m, m.getAnnotation(RemoteOp.class)));
 
-		if (httpMethod == null)
-			return Optional.empty();
+		return opte();
+	}
 
-		return Optional.of(new RrpcInterfaceMethodMeta(m, httpMethod, path, returnType));
+	private static RrpcInterfaceMethodMeta simpleMeta(Method m, String httpMethod, String pathAttr, String valueAttr, RemoteReturn returnType) {
+		var path = pathAttr.isEmpty() ? valueAttr : pathAttr;
+		return new RrpcInterfaceMethodMeta(m, httpMethod, path, returnType);
+	}
+
+	private static RrpcInterfaceMethodMeta buildRemoteOpMeta(Method m, RemoteOp a) {
+		var method = a.method().trim();
+		var path = a.path().trim();
+		var returnType = a.returns();
+		var v = a.value().trim();
+		if (!v.isEmpty()) {
+			var i = v.indexOf(' ');
+			if (i == -1) {
+				method = v.toUpperCase();
+			} else {
+				method = v.substring(0, i).trim().toUpperCase();
+				path = v.substring(i).trim();
+			}
+		}
+		if (path.isEmpty())
+			path = HttpUtils.detectHttpPath(m, isEmpty(method) ? null : method);
+		if (method.isEmpty())
+			method = HttpUtils.detectHttpMethod(m, true, "GET");
+		if (!isOneOf(method, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
+			throw illegalArg("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
+		return new RrpcInterfaceMethodMeta(m, method, trimSlashes(path), returnType);
 	}
 
 	@Override /* Object */

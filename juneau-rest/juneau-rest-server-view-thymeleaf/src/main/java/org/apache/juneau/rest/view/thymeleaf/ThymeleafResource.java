@@ -45,7 +45,7 @@ import org.apache.juneau.rest.view.*;
 )
 public class ThymeleafResource extends ViewResource {
 
-	private final transient ThymeleafDispatcher worker;
+	private final ThymeleafDispatcher worker;
 
 	/** No-arg constructor &mdash; uses a default {@link ThymeleafDispatcher} worker. */
 	public ThymeleafResource() {

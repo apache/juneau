@@ -494,6 +494,9 @@ class OpenApiUI_Test extends TestBase {
 	}
 
 	// Tests modelsBlockContents with schemas (another path ensuring models block renders)
+	@SuppressWarnings({
+		"java:S4144" // Distinct documented scenario (null schemas map) that happens to build the same minimal doc as a24; kept separate for coverage intent.
+	})
 	@Test void a27_swap_componentsWithNullSchemasMap() throws Exception {
 		// A minimal openApi with components but getSchemas() returns null
 		var doc = openApi()

@@ -17,6 +17,7 @@
 package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -46,6 +47,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
 public class IniSerializerSession extends WriterSerializerSession {
 
 	private static final String ARG_ctx = "ctx";
+	private static final String SECTION_PATH_DELIMITER = "/";
 
 	/**
 	 * Builder for INI serializer session.
@@ -155,7 +157,7 @@ public class IniSerializerSession extends WriterSerializerSession {
 			var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);
 			var key = ne(iniMeta.getSection()) ? iniMeta.getSection() : pMeta.getName();
 			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
-			var newPath = sectionPath.isEmpty() ? key : sectionPath + "/" + key;
+			var newPath = sectionPath.isEmpty() ? key : sectionPath + SECTION_PATH_DELIMITER + key;
 
 			if (nn(value)) {
 				if (isUseWhitespace() && !sectionPath.isEmpty())
@@ -256,9 +258,13 @@ public class IniSerializerSession extends WriterSerializerSession {
 		if (value == null && !isKeepNullProperties())
 			return;
 
-		var valueStr = value == null ? "null"
-			: isSimpleOrJson5Inline(aType, value) ? formatSimpleValue(value, aType)
-			: encodeComplexValue(value);
+		String valueStr;
+		if (value == null)
+			valueStr = "null";
+		else if (isSimpleOrJson5Inline(aType, value))
+			valueStr = formatSimpleValue(value, aType);
+		else
+			valueStr = encodeComplexValue(value);
 		w.keyValue(key, valueStr);
 	}
 

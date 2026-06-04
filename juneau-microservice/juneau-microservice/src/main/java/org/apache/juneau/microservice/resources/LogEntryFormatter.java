@@ -116,10 +116,11 @@ public class LogEntryFormatter extends Formatter {
 		int index = 1;
 		var re = new StringBuilder();
 
-		// S1: Looking for %
-		// S2: Found %, looking for number.
-		// S3: Found number, looking for $.
-		// S4: Found $, looking for s.
+		// The parser state machine uses four states while scanning for format placeholders.
+		// In state S1 we are looking for a percent sign.
+		// In state S2 we have found a percent sign and are looking for a number.
+		// In state S3 we have found a number and are looking for a dollar sign.
+		// In state S4 we have found a dollar sign and are looking for an 's'.
 		var state = S1;
 		int i1 = 0;
 		for (var i = 0; i < format.length(); i++) {

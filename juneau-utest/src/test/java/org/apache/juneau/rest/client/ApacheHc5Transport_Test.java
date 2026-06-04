@@ -31,7 +31,7 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link ApacheHc5Transport} against a real embedded HTTP server.
  */
-public class ApacheHc5Transport_Test {
+class ApacheHc5Transport_Test {
 
 	private static HttpServer server;
 	private static int port;

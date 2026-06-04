@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-143 (Option D) acceptance tests for {@link BeanInstantiator}'s stricter builder-candidate selection.
+ * Acceptance tests for {@link BeanInstantiator}'s stricter builder-candidate selection.
  *
  * <p>
  * A builder candidate whose {@code build()} only promises a <b>supertype</b> of the requested bean type (e.g.

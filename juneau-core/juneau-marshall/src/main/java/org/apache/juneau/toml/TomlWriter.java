@@ -237,7 +237,7 @@ public class TomlWriter extends SerializerWriter {
 	}
 
 	boolean isBareKey(String key) {
-		if (key == null || key.isEmpty())
+		if (isEmpty(key))
 			return false;
 		for (int i = 0; i < key.length(); i++) {
 			char c = key.charAt(i);

@@ -687,12 +687,15 @@ class SortedArrayList_Test extends TestBase {
 		assertEquals(new ArrayList<>(linkedList), new ArrayList<>(sortedList));
 	}
 
+	@SuppressWarnings({
+		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
+	})
 	@Test
 	void n10_equals_notAList() {
 		var list = new SortedArrayList<String>();
 		list.add("a");
-		assertFalse(list.equals((Object)"not-a-list"));
-		assertFalse(list.equals(null));
+		assertNotEquals("not-a-list", list);
+		assertNotEquals(null, list);
 	}
 
 	@Test

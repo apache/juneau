@@ -84,7 +84,7 @@ class MixinInheritance_ResponseProcessors_Test extends TestBase {
 		return l;
 	}
 
-	@Test void a01_mixinInheritsHostResponseProcessor() throws Exception {
+	@Test void a01_mixinInheritsHostResponseProcessor() {
 		MockRestClient.buildLax(HostBasic.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostBasic.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
@@ -96,7 +96,7 @@ class MixinInheritance_ResponseProcessors_Test extends TestBase {
 			"Mixin with no responseProcessors overrides must inherit the host's HostRp1");
 	}
 
-	@Test void a02_mixinAppendsMixinRpOverInheritedHostSet() throws Exception {
+	@Test void a02_mixinAppendsMixinRpOverInheritedHostSet() {
 		MockRestClient.buildLax(HostWithMixinRp.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinRp.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinRp.class);
@@ -110,7 +110,7 @@ class MixinInheritance_ResponseProcessors_Test extends TestBase {
 			"Mixin endpoint must still have the host's HostRp1 (inheritance walk)");
 	}
 
-	@Test void a03_noInheritBlocksParentRpWalk() throws Exception {
+	@Test void a03_noInheritBlocksParentRpWalk() {
 		MockRestClient.buildLax(HostWithNoInheritMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInheritMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritRp.class);

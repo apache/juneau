@@ -83,7 +83,9 @@ public final class MdcAsyncListener {
 
 	static {
 		boolean available = false;
-		Method copyOf = null, set = null, clr = null;
+		Method copyOf = null;
+		Method set = null;
+		Method clr = null;
 		try {
 			Class<?> mdc = Class.forName("org.slf4j.MDC");
 			copyOf = mdc.getMethod("getCopyOfContextMap");
@@ -131,7 +133,8 @@ public final class MdcAsyncListener {
 	 * @return A copy of the current MDC map, or {@code null}.
 	 */
 	@SuppressWarnings({
-		"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+		"unchecked", // Type erasure on reflective/generic cast; element type is verified at call site
+		"java:S1168" // null is a meaningful lazy-skip sentinel: wrap() treats null as "no MDC to propagate"; an empty map would force unnecessary MDC installation.
 	})
 	public static Map<String, String> snapshot() {
 		if (!AVAILABLE)

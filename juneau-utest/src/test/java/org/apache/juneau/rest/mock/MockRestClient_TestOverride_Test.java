@@ -24,14 +24,14 @@ import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**
- * End-to-end tests for {@code MockRestClient.Builder.overridingBeanStore(...)} (Phase 1 of TODO-35).
+ * End-to-end tests for {@code MockRestClient.Builder.overridingBeanStore(...)} (Phase 1 of work item 35).
  *
  * <p>
  * Builds a {@link TestBeanStore} overlay, threads it into {@link MockRestClient} via the new builder
  * method, hits an endpoint that depends on the overlaid bean, and verifies the overlay's bean is the
  * one the resource saw.
  */
-public class MockRestClient_TestOverride_Test {
+class MockRestClient_TestOverride_Test {
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Test resource

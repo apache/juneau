@@ -28,7 +28,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for opt-in lazy {@code @Rest(children=...)} materialization (TODO-121).
+ * Tests for opt-in lazy {@code @Rest(children=...)} materialization (FINISHED-121).
  *
  * <p>
  * Each scenario uses a distinct parent class so the {@link MockRestClient}'s per-class

@@ -32,7 +32,7 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link JettyHttpTransport} against a real embedded HTTP server.
  */
-public class JettyHttpTransport_Test {
+class JettyHttpTransport_Test {
 
 	private static HttpServer server;
 	private static int port;

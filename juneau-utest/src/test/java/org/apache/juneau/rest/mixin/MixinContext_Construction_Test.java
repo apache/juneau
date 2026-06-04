@@ -86,7 +86,7 @@ class MixinContext_Construction_Test extends TestBase {
 			"Each mixin must get its own RestContext instance");
 	}
 
-	@Test void a03_mixinContextsAreEmptyOnMixinContextItself() throws Exception {
+	@Test void a03_mixinContextsAreEmptyOnMixinContextItself() {
 		MockRestClient.buildLax(HostNoOps.class);
 		var ctx = RestContext.getGlobalRegistry().get(HostNoOps.class);
 		var m1Ctx = ctx.getMixinContexts().get(M1.class);
@@ -95,7 +95,7 @@ class MixinContext_Construction_Test extends TestBase {
 			"Mixin sub-contexts must not discover their own mixins (flat-inheritance rule)");
 	}
 
-	@Test void a04_mixinResourceInstanceIsConstructed() throws Exception {
+	@Test void a04_mixinResourceInstanceIsConstructed() {
 		MockRestClient.buildLax(HostOne.class);
 		var ctx = RestContext.getGlobalRegistry().get(HostOne.class);
 		var m1Ctx = ctx.getMixinContexts().get(M1.class);

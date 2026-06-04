@@ -49,7 +49,7 @@ import org.apache.juneau.rest.servlet.*;
 @Rest(path="/version")
 public class VersionResource extends RestResource {
 
-	private final transient VersionProvider worker;
+	private final VersionProvider worker;
 
 	/** No-arg constructor &mdash; uses a default {@link VersionProvider} worker. */
 	public VersionResource() {

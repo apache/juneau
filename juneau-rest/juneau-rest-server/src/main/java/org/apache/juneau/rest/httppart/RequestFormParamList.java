@@ -190,7 +190,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 					add(new RequestFormParam(req, name, value));
 			}
 		} else if (nn(c)) {
-			c.stream().forEach(this::add);
+			c.forEach(this::add);
 		}
 	}
 

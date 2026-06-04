@@ -35,8 +35,8 @@ import org.apache.juneau.commons.http.NameValuePair;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"java:S2160",
-	"unchecked"
+	"java:S2160", // equals() on HttpHeaderBean uses name + getValue(); typed state is reflected in getValue()
+	"unchecked" // Supplier<?> branches cast to typed suppliers after lazy-mode check
 })
 public class HttpMediaTypeHeader extends HttpHeaderBean {
 
@@ -66,7 +66,9 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var m = ((Supplier<MediaType>) supplier).get();
-				return m == null ? null : m.toString();
+				if (m == null)
+					return null;
+				return m.toString();
 			});
 		this.cachedForStringOrDirect = null;
 		this.lazySupplier = supplier;

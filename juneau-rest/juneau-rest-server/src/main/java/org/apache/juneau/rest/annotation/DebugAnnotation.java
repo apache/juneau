@@ -45,6 +45,9 @@ public final class DebugAnnotation {
 		public Debug build() { return new Object(this); }
 	}
 
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
 	private static class Object extends AnnotationObject implements Debug {
 		private final String value;
 		private final Class<? extends DebugFormat> format;

@@ -39,6 +39,9 @@ import org.apache.juneau.commons.utils.*;
  * {@link BeanConfigContext} carried by every {@link MarshallingContext} (see
  * {@code MarshallingContext.buildBeanConfigContext()}).
  */
+@SuppressWarnings({
+	"java:S6548" // Intentional stateless singleton SPI implementation wired through BeanConfigContext.
+})
 final class MarshalledBeanMetaInitializer implements BeanMetaInitializer {
 
 	/** Singleton instance wired into {@link MarshallingContext}-built {@link BeanConfigContext}s. */

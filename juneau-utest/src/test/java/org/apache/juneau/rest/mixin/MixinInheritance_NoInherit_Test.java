@@ -67,7 +67,7 @@ class MixinInheritance_NoInherit_Test extends TestBase {
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
 
-	@Test void a01_noInheritBlocksParentSerializerWalk() throws Exception {
+	@Test void a01_noInheritBlocksParentSerializerWalk() {
 		MockRestClient.buildLax(Host.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(Host.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_MixinS1Only.class);
@@ -79,7 +79,7 @@ class MixinInheritance_NoInherit_Test extends TestBase {
 			"Mixin with noInherit=\"serializers\" must NOT see the host's HostS1 (parent walk blocked)");
 	}
 
-	@Test void a02_hostUnaffectedByMixinNoInherit() throws Exception {
+	@Test void a02_hostUnaffectedByMixinNoInherit() {
 		MockRestClient.buildLax(Host.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(Host.class);
 

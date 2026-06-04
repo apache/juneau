@@ -63,6 +63,9 @@ package org.apache.juneau.jena;
  * 	<li class='link'>{doc jmr.RdfDetails}
  * </ul>
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the RDF serializer hierarchy.
+})
 public class TurtleSerializer extends RdfSerializer {
 
 	/** Default Turtle serializer, all default settings.*/

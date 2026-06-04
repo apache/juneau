@@ -47,6 +47,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S110",  // Deep inheritance inherent to the serializer/parser session hierarchy
 	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
 	"java:S125",  // State-machine and parse-path comments (S1: ..., Let o be null) are documentation, not commented-out code
 	"java:S6541", // Brain method acceptable for JSON parser dispatch and state machines

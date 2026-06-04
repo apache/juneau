@@ -223,7 +223,7 @@ public interface BeanStore {
 	 * @see BeanInstantiator BeanInstantiator — for instantiating a bean from its own constructors, builders, or factory methods
 	 */
 	default <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
-		return Optional.empty();
+		return opte();
 	}
 
 	/**
@@ -257,7 +257,7 @@ public interface BeanStore {
 	 * @return The implementation class, or {@link Optional#empty()} if no binding exists.
 	 */
 	default <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
-		return Optional.empty();
+		return opte();
 	}
 
 	/**

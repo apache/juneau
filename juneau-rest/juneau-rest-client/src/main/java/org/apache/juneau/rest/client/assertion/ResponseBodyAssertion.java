@@ -60,6 +60,9 @@ public final class ResponseBodyAssertion {
 	 * @throws AssertionError If the body does not match.
 	 * @throws UncheckedIOException If reading the body throws {@link IOException}.
 	 */
+	@SuppressWarnings({
+		"java:S1201" // 'equals(String)' is an intentional fluent-assertion DSL method (asserts body equality), not an override of Object.equals(Object); renaming would break this public (beta) API.
+	})
 	public ResponseBodyAssertion equals(String expected) {
 		var actual = readBodyAsString();
 		if (expected == null ? actual != null : !expected.equals(actual))

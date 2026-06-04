@@ -958,7 +958,7 @@ class Cache2_Test extends TestBase {
 			.build();
 
 		// Cleanup before any access - threadLocalMap is null; should not throw
-		x.cleanup();
+		assertDoesNotThrow(x::cleanup);
 	}
 }
 

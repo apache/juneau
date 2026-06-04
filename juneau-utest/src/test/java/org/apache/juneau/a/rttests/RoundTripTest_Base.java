@@ -277,7 +277,6 @@ public abstract class RoundTripTest_Base extends TestBase {
 	 * whose properties are primitives, strings, numbers, dates, byte arrays, or primitive arrays.
 	 * Nested structures require {@code allowNestedStructures(true)}.
 	 */
-	// TODO - Figure out how to support these.
 	protected static boolean isCsvRoundTripCompatible(Object o) {
 		if (o == null)
 			return false;
@@ -291,7 +290,6 @@ public abstract class RoundTripTest_Base extends TestBase {
 		return isCsvCompatibleElement(first);
 	}
 
-	// TODO - Figure out how to support these.
 	private static boolean isCsvCompatibleElement(Object elem) {
 		if (elem == null) return false;
 		var cls = elem.getClass();

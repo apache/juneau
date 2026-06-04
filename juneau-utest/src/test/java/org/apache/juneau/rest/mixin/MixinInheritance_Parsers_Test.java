@@ -78,7 +78,7 @@ class MixinInheritance_Parsers_Test extends TestBase {
 		@RestGet(path="/my") public String my() { return "my"; }
 	}
 
-	@Test void a01_mixinInheritsHostParser() throws Exception {
+	@Test void a01_mixinInheritsHostParser() {
 		MockRestClient.buildLax(HostBasic.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostBasic.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
@@ -90,7 +90,7 @@ class MixinInheritance_Parsers_Test extends TestBase {
 			"Mixin with no parser overrides must inherit the host's HostP1 parser");
 	}
 
-	@Test void a02_mixinAppendsMixinP1OverInheritedHostSet() throws Exception {
+	@Test void a02_mixinAppendsMixinP1OverInheritedHostSet() {
 		MockRestClient.buildLax(HostWithMixinP1.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinP1.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinP1.class);
@@ -104,7 +104,7 @@ class MixinInheritance_Parsers_Test extends TestBase {
 			"Mixin endpoint must still have the host's HostP1 (inheritance walk)");
 	}
 
-	@Test void a03_noInheritBlocksParentParserWalk() throws Exception {
+	@Test void a03_noInheritBlocksParentParserWalk() {
 		MockRestClient.buildLax(HostWithNoInheritMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInheritMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritP1.class);

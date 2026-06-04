@@ -38,4 +38,7 @@ package org.apache.juneau.rest.annotation;
  * </p>
  *
  */
+@SuppressWarnings({
+	"java:S2094" // Sentinel marker class used as the None.class default value in annotation Class<?>[] attributes; it must remain an instantiable class, not an interface.
+})
 public class None {}

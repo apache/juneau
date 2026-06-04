@@ -44,6 +44,9 @@ import org.apache.juneau.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the exception hierarchy
+})
 public class ObjectRestException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;

@@ -25,7 +25,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link RestMixin#getHostContext()} (TODO-146).
+ * Tests for {@link RestMixin#getHostContext()}.
  *
  * <p>
  * Verifies the opt-in host-context accessor: it returns the host {@link RestContext} when the mixin is

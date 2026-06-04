@@ -214,10 +214,10 @@ public class SeoMixin extends RestMixin {
 				w.write("\t\t<priority>" + priority + "</priority>\n");
 			w.write("\t</url>\n");
 		}
-	}
 
-	private static String xmlEscape(String s) {
-		return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;");
+		private static String xmlEscape(String s) {
+			return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&apos;");
+		}
 	}
 
 	/**
@@ -340,6 +340,9 @@ public class SeoMixin extends RestMixin {
 	}
 
 	/** Internal representation of a single user-agent + allow/disallow + paths rule. */
+	@SuppressWarnings({
+		"java:S125" // The constructor comment is explanatory prose referencing robotsAllow/robotsDisallow, not commented-out code.
+	})
 	private static final class RobotsRule {
 		final String userAgent;
 		final boolean allow;

@@ -23,6 +23,8 @@ import org.apache.juneau.commons.annotation.*;
  */
 public class HoconAnnotation {
 
+	private HoconAnnotation() {}
+
 	private static class Object extends AnnotationObject implements Hocon {
 		Object() {
 			super(new AnnotationObject.Builder(Hocon.class));

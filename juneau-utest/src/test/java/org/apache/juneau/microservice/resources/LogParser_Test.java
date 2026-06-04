@@ -131,7 +131,7 @@ class LogParser_Test extends TestBase {
 		var p = new LogParser(formatter, f, null, null, null, null, null);
 		// Close multiple times should not throw
 		p.close();
-		assertDoesNotThrow(() -> p.close());
+		assertDoesNotThrow(p::close);
 	}
 
 	@Test void a08_nonMatchingLine(@TempDir Path tempDir) throws Exception {
@@ -162,7 +162,7 @@ class LogParser_Test extends TestBase {
 		try (var p = new LogParser(formatter, f, null, null, null, null, null)) {
 			var e = p.iterator().next();
 			// Thread may be null depending on format
-			assertDoesNotThrow(() -> e.getThread());
+			assertDoesNotThrow(e::getThread);
 		}
 	}
 
@@ -381,7 +381,7 @@ class LogParser_Test extends TestBase {
 		var p = new LogParser(formatter, f, null, null, null, null, null);
 		p.hasNext(); // This triggers load(), setting br = null internally
 		// Now close() should not throw even though br is null
-		assertDoesNotThrow(() -> p.close());
+		assertDoesNotThrow(p::close);
 	}
 
 	@Test void a26_startDateFilter_entryBeforeStart(@TempDir Path tempDir) throws Exception {

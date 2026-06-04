@@ -36,19 +36,6 @@ import org.junit.jupiter.api.*;
  * <h5 class='section'>Deferred &mdash; typed {@link org.apache.juneau.rest.view.View View} return
  * path:</h5>
  *
- * <p>
- * Verifying that an {@code @RestOp} method returning a {@link MustacheView} renders through
- * {@link MustacheViewRenderer} requires the renderer to run <b>before</b> the default
- * HTML/JSON/&hellip; serializer processors in the response chain. Today the mixin's
- * {@link Rest#responseProcessors() @Rest(responseProcessors=...)} declaration appends to the
- * chain, so the default HTML serializer wins under MockRest and the {@code MustacheView} is
- * serialized as a Juneau-bean HTML table instead of routed through Mustache. The response-
- * processor "prepend" mechanism that fixes this is tracked separately (TODO-96) and blocks the
- * typed-handler integration matrix for all three sibling view modules (JSP / Thymeleaf /
- * Mustache). The typed-handler test surface lights up alongside the real-container coverage
- * once TODO-96 lands &mdash; tracked as the Mustache analog of TODO-97 (JSP) and TODO-107
- * (Thymeleaf).
- *
  * <h5 class='figure'>Test resource layout (classpath {@code src/test/resources}):</h5>
  *
  * <pre>

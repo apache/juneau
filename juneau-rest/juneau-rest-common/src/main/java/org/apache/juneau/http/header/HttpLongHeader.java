@@ -30,8 +30,8 @@ import java.util.function.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"java:S2160",
-	"unchecked"
+	"java:S2160", // equals() on HttpHeaderBean uses name + getValue(); typed state is reflected in getValue()
+	"unchecked" // Supplier<?> branches cast to typed suppliers after lazy-mode check
 })
 public class HttpLongHeader extends HttpHeaderBean {
 
@@ -80,7 +80,7 @@ public class HttpLongHeader extends HttpHeaderBean {
 
 	protected HttpLongHeader(String name, Supplier<?> supplier, int lazyMode) {
 		super(name, lazyMode == LAZY_WIRE_STRING
-			? () -> ((Supplier<String>) supplier).get()
+			? ((Supplier<String>) supplier)::get
 			: () -> s(((Supplier<Long>) supplier).get()));
 		this.value = null;
 		this.lazySupplier = supplier;

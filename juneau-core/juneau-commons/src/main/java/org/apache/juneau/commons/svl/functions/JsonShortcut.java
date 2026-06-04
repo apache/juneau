@@ -51,7 +51,8 @@ final class JsonShortcut {
 	 * {@code ]}, mirroring {@code ArgCoercer.parseStringArray}.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity: small inline parser.
+		"java:S3776", // Cognitive complexity: small inline parser.
+		"java:S135" // State-machine array-parse loop; early break/continue are clearer than restructuring.
 	})
 	static String[] decodeArray(String s) {
 		if (s == null) return new String[0];
@@ -90,9 +91,7 @@ final class JsonShortcut {
 				out.add(body.substring(start, i).trim());
 			}
 			while (i < len && Character.isWhitespace(body.charAt(i))) i++;
-			if (i < len) {
-				if (body.charAt(i) == ',') i++;
-			}
+			if (i < len && body.charAt(i) == ',') i++;
 		}
 		return out.toArray(new String[0]);
 	}

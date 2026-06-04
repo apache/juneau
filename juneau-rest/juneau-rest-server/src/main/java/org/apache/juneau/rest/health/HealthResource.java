@@ -55,7 +55,7 @@ import org.apache.juneau.rest.servlet.*;
 @Rest(path="/health")
 public class HealthResource extends BasicRestResource {
 
-	private final transient HealthAggregator aggregator = new HealthAggregator();
+	private final HealthAggregator aggregator = new HealthAggregator();
 
 	/**
 	 * Health probe endpoint.

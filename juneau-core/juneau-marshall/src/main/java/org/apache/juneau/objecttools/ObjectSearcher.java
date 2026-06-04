@@ -289,7 +289,7 @@ public class ObjectSearcher implements ObjectTool<SearchArgs> {
 	 * @return A list of maps/beans matching the
 	 */
 	@SuppressWarnings({
-		"java:S1168",    // TODO: null when result not list/collection/array. Consider empty list.
+		"java:S1168",    // Intentional null when result is not a list/collection/array; callers branch on null (not an empty list).
 		"unchecked", // Type erasure requires unchecked casts
 	})
 	public <R> List<R> run(Object input, String searchArgs) {

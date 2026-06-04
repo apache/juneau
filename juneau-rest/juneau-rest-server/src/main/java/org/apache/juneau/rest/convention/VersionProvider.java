@@ -230,8 +230,8 @@ public class VersionProvider {
 		public Builder fromManifest(Manifest manifest) {
 			var main = manifest.getMainAttributes();
 			var attrs = new HashMap<String,String>();
-			for (var k : main.keySet())
-				attrs.put(k.toString(), String.valueOf(main.get(k)));
+			for (var e : main.entrySet())
+				attrs.put(e.getKey().toString(), String.valueOf(e.getValue()));
 			ifNotEmpty(attrs, "Implementation-Title", v -> entry("name", v));
 			ifNotEmpty(attrs, "Implementation-Version", v -> entry("version", v));
 			ifNotEmpty(attrs, "Implementation-Vendor", v -> entry("vendor", v));
@@ -324,6 +324,9 @@ public class VersionProvider {
 			return attrs;
 		}
 
+		@SuppressWarnings({
+			"java:S1168" // null is a meaningful "resource absent" sentinel: fromGitProperties() skips entirely (and leaves the explicit flag unset) when no git.properties is present.
+		})
 		private static Properties readProperties(ClassLoader cl, String path) {
 			try (var in = cl.getResourceAsStream(path)) {
 				if (in == null)

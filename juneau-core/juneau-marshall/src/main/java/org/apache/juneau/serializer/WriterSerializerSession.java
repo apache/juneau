@@ -44,6 +44,7 @@ import org.apache.juneau.commons.collections.FluentMap;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
 public class WriterSerializerSession extends SerializerSession {

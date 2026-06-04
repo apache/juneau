@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
  * <p>
  * The full happy-path is covered indirectly by {@link SamlAssertionValidator_HappyPath_Test} using
  * unencrypted assertions; encrypt-path full coverage is deferred to integration testing against a real IdP
- * once the integration-test harness lands (separate TODO).
+ * once the integration-test harness lands (separate task).
  *
  * @since 9.5.0
  */

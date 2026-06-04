@@ -116,12 +116,12 @@ class MockServletResponse_Coverage_Test extends TestBase {
 
 	@Test void a14_reset() {
 		var res = new MockServletResponse();
-		assertDoesNotThrow(() -> res.reset());
+		assertDoesNotThrow(res::reset);
 	}
 
 	@Test void a15_resetBuffer() {
 		var res = new MockServletResponse();
-		assertDoesNotThrow(() -> res.resetBuffer());
+		assertDoesNotThrow(res::resetBuffer);
 	}
 
 	@Test void a16_sendError_int() throws Exception {

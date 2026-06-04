@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest;
 
+import org.apache.juneau.rest.metrics.MetricsRecorder;
+
 /**
  * Static literals for {@code juneau-rest-server}: annotation attribute name constants used for
  * allowlist inheritance checks and other module-internal logic.
@@ -241,7 +243,7 @@ public final class RestServerConstants {
 
 	/**
 	 * The {@code "metricName"} annotation attribute name — per-op override for the metric name passed to
-	 * {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}. Empty string (default) uses
+	 * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Empty string (default) uses
 	 * the recorder's own default name derivation.
 	 *
 	 * @see org.apache.juneau.rest.annotation.RestOp#metricName()
@@ -250,7 +252,7 @@ public final class RestServerConstants {
 
 	/**
 	 * The {@code "metricTags"} annotation attribute name — per-op additional metric tags passed to
-	 * {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record()}. Format: comma-separated
+	 * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Format: comma-separated
 	 * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means
 	 * no additional tags.
 	 *

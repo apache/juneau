@@ -406,6 +406,9 @@ public class Maps<K,V> {
 	 *
 	 * @return The built map as a {@link FilteredMap}, or {@code null} if {@link #sparse()} is set and the map is empty.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Propagates the documented sparse+empty null from build(); callers rely on null to mean "absent" (tests assert null).
+	})
 	public FilteredMap<K,V> buildFiltered() {
 		var m = build();
 		if (m == null)  // sparse mode and empty

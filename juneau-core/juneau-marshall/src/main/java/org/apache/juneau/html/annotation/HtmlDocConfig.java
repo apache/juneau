@@ -607,7 +607,7 @@ public @interface HtmlDocConfig {
 	 *
 	 * <ul class='spaced-list'>
 	 * 	<li>
-	 * 		<js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(VarResolverSession)}.
+	 * 		<js>"$W{name}"</js> - Contents returned by {@link HtmlWidget#getHtml(org.apache.juneau.commons.svl.VarResolverSession)}.
 	 * </ul>
 	 *
 	 * <p>

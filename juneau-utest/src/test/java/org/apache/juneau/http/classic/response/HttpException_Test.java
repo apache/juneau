@@ -158,8 +158,8 @@ class HttpException_Test extends TestBase {
 		assertNotEquals(x1, x2);
 
 		// Non-BasicHttpException
-		assertNotEquals(x1, "foo");
-		assertNotEquals(x1, null);
+		assertNotEquals("foo", x1);
+		assertNotEquals(null, x1);
 
 		// hashCode is consistent
 		assertNotEquals(0, x1.hashCode());

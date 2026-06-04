@@ -80,15 +80,15 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 	 * Public so tests and consumer apps can pattern-match against the message text without
 	 * depending on internal string literals.
 	 */
-	public static final String NO_ENGINE_DIAGNOSTIC =
-		"No Apache FreeMarker engine is available on the classpath. Add:\n"
-		+ "  - org.freemarker:freemarker                       (FreeMarker engine core)\n"
-		+ "Or, for Spring Boot:\n"
-		+ "  - org.springframework.boot:spring-boot-starter-freemarker\n"
-		+ "    (autoconfigures a freemarker.template.Configuration bean the bridge picks up).\n"
-		+ "Or register a custom @Bean freemarker.template.Configuration with whatever loaders /\n"
-		+ "encodings / output formats you need.\n"
-		+ "See https://juneau.apache.org/docs/topics/FreemarkerViewSupport for the full matrix.";
+	public static final String NO_ENGINE_DIAGNOSTIC = """
+		No Apache FreeMarker engine is available on the classpath. Add:
+		  - org.freemarker:freemarker                       (FreeMarker engine core)
+		Or, for Spring Boot:
+		  - org.springframework.boot:spring-boot-starter-freemarker
+		    (autoconfigures a freemarker.template.Configuration bean the bridge picks up).
+		Or register a custom @Bean freemarker.template.Configuration with whatever loaders /
+		encodings / output formats you need.
+		See https://juneau.apache.org/docs/topics/FreemarkerViewSupport for the full matrix.""";
 
 	@Override /* Overridden from ResponseProcessor */
 	public int process(RestOpSession opSession) throws IOException, BasicHttpException {
@@ -123,9 +123,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 			throw new InternalServerError(ex, NO_ENGINE_DIAGNOSTIC);
 		} catch (IOException ex) {
 			throw ex;
-		} catch (TemplateException ex) {
-			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", templateName);
-		} catch (RuntimeException ex) {
+		} catch (TemplateException | RuntimeException ex) {
 			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", templateName);
 		}
 	}

@@ -119,6 +119,6 @@ class BasicHttpResponse_FluentSetters_Test extends TestBase {
 	@Test void a15_getHeaders_isUnmodifiableView() {
 		var r = newOk().addHeader("X-Trace", "1");
 		var view = r.getHeaders();
-		assertThrows(UnsupportedOperationException.class, () -> view.clear());
+		assertThrows(UnsupportedOperationException.class, view::clear);
 	}
 }

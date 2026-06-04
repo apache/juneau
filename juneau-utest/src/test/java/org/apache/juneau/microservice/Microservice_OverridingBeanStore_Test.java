@@ -27,7 +27,6 @@ import org.junit.jupiter.api.*;
  * Verifies that {@link Microservice.Builder#overridingBeanStore(BeanStore)} installs the overlay
  * in the {@code overridingParent} slot of the microservice's bean store so test-time overrides
  * resolve before locally-registered beans during the microservice's startup-time injection
- * (Phase 4 of TODO-35).
  */
 @org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class Microservice_OverridingBeanStore_Test extends TestBase {

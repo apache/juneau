@@ -4310,12 +4310,6 @@ public class StringUtils {
 		return count;
 	}
 
-	// TODO: See if we can remove StringUtils.parseIsoCalendar.
-	// Currently used by:
-	//   - OpenApiParserSession.java for DATE/DATE_TIME format parsing
-	//   - StringUtils.parseIsoDate() (which wraps this method)
-	// Investigation needed: Can we replace this with java.time APIs or other standard date parsing?
-
 	/**
 	 * Null-safe convenience method for {@link String#toLowerCase()}.
 	 *

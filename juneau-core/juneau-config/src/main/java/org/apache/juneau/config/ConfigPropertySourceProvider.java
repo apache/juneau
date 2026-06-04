@@ -115,6 +115,9 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 
 		// Guarded by the synchronized block in get(...); volatile reads cover the fast-path check.
 		private volatile boolean resolved;
+		@SuppressWarnings({
+			"java:S3077" // Publish-once reference: delegate is fully constructed before its single assignment inside the synchronized block, so volatile visibility is sufficient.
+		})
 		private volatile ConfigPropertySource delegate;
 
 		@Override

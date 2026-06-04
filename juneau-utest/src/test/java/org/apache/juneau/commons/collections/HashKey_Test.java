@@ -150,6 +150,9 @@ class HashKey_Test extends TestBase {
 		assertNotEquals(key1, key2);
 	}
 
+	@SuppressWarnings({
+		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
+	})
 	@Test
 	void b10_equals_withNullObject() {
 		HashKey key = HashKey.of("a", "b");
@@ -453,11 +456,14 @@ class HashKey_Test extends TestBase {
 		assertNotNull(key);
 	}
 
+	@SuppressWarnings({
+		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
+	})
 	@Test
 	void h05_equals_nonHashKeyObject() {
 		HashKey key = HashKey.of("a", "b");
-		assertFalse(key.equals((Object)"not-a-hashkey"));
-		assertFalse(key.equals(null));
+		assertNotEquals("not-a-hashkey", key);
+		assertNotEquals(null, key);
 	}
 }
 

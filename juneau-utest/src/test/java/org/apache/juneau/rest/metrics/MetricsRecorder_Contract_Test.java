@@ -41,6 +41,9 @@ class MetricsRecorder_Contract_Test extends TestBase {
 		public final List<Event> events = new CopyOnWriteArrayList<>();
 
 		@Override
+		@SuppressWarnings({
+			"java:S6213" // 'record' matches the MetricsRecorder SPI method name; renaming would break the @Override contract.
+		})
 		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 			events.add(new Event(opName, httpMethod, uriTemplate, statusCode, elapsed, error));
 		}

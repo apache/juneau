@@ -23,7 +23,6 @@ import static org.apache.juneau.commons.utils.Utils.eqic;
 
 import java.util.*;
 import java.util.function.*;
-import java.util.stream.*;
 
 import org.apache.juneau.http.*;
 
@@ -326,7 +325,7 @@ public class HttpHeaderList extends ArrayList<HttpHeader> {
 	 * @return A new list of matching headers. Never <jk>null</jk>.
 	 */
 	public List<HttpHeader> getAll(String name) {
-		return stream().filter(h -> nameMatches(h, name)).collect(Collectors.toList());
+		return stream().filter(h -> nameMatches(h, name)).toList();
 	}
 
 	/**

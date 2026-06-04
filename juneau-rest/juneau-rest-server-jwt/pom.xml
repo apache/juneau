@@ -49,7 +49,7 @@
 			JWT validation must declare nimbus-jose-jwt themselves (at the version they want).
 
 			Containment guarantee: a `dependency:tree` on juneau-rest-server (the upstream module)
-			must never surface nimbus.  See TODO-69 Resolved Decision #1.
+			must never surface nimbus.  This `provided` scoping is a deliberate design decision.
 		-->
 		<dependency>
 			<groupId>com.nimbusds</groupId>

@@ -17,6 +17,7 @@
 package org.apache.juneau.sse;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -132,7 +133,7 @@ public class SseSerializerSession extends WriterSerializerSession {
 	private static void writeEvent(Writer w, SseEvent e) throws IOException {
 		if (e == null)
 			return;
-		if (e.getEvent() != null && !e.getEvent().isEmpty())
+		if (!isEmpty(e.getEvent()))
 			writeField(w, "event", e.getEvent());
 		if (e.getData() != null) {
 			for (var line : splitData(e.getData()))

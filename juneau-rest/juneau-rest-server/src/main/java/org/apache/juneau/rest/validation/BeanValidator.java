@@ -215,6 +215,9 @@ public final class BeanValidator {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity is marginally over (16) due to null-guard ternaries and the stable-ordering comparator; the validation payload shape is asserted by tests, so the logic is kept inline rather than fragmented.
+	})
 	private static List<ValidationViolation> toViolationList(Set<? extends ConstraintViolation<?>> violations) {
 		var result = new ArrayList<ValidationViolation>(violations.size());
 		for (var cv : violations) {

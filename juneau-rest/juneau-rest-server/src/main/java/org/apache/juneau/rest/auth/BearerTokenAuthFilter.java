@@ -18,6 +18,7 @@ package org.apache.juneau.rest.auth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -159,13 +160,13 @@ public class BearerTokenAuthFilter extends AuthFilter {
 	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
 		var header = req.getHeader(BearerTokenExtractor.AUTHORIZATION);
 		if (isBlank(header))
-			return Optional.empty();
+			return opte();
 		var optToken = BearerTokenExtractor.extract(header);
 		if (optToken.isEmpty())
-			return Optional.empty();
+			return opte();
 		var principal = validateToken(optToken.get());
 		var roles = ClaimsRoleExtractor.extractRoles(principal, rolesClaim);
-		return Optional.of(AuthResult.of(principal, roles));
+		return opt(AuthResult.of(principal, roles));
 	}
 
 	private java.security.Principal validateToken(String token) throws AuthenticationException {

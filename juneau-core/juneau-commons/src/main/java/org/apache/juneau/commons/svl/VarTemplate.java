@@ -127,7 +127,10 @@ public final class VarTemplate {
 		this.literal = computeIsLiteral(segments);
 		// For literal-only templates, pre-compute the resolved text. For null source we keep
 		// literalText null so resolve() returns null (matching VarResolverSession.resolve(null)).
-		this.literalText = literal ? (input == null ? null : joinLiteralSegments(segments)) : null;
+		if (literal && input != null)
+			this.literalText = joinLiteralSegments(segments);
+		else
+			this.literalText = null;
 	}
 
 	/**

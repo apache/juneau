@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 /**
  * Integration tests for {@link MockRestClient}.
  */
-public class MockRestClient_Test {
+class MockRestClient_Test {
 
 	// =================================================================================================================
 	// Test REST resources
@@ -266,7 +266,7 @@ public class MockRestClient_Test {
 		// This validates that head() dispatches the request correctly (not 500)
 		try (var client = MockRestClient.create(RootResource.class)) {
 			try (var response = client.head("/").run()) {
-				assertTrue(response.getStatusCode() != 500, "Unexpected server error on HEAD");
+				assertNotEquals(500, response.getStatusCode(), "Unexpected server error on HEAD");
 			}
 		}
 	}

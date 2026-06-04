@@ -57,8 +57,7 @@ import org.junit.jupiter.params.provider.*;
  * hierarchy ({@link Instant}, {@link LocalDate}, {@link LocalDateTime}, {@link OffsetDateTime},
  * {@link ZonedDateTime}, etc.).  Rather than parameterize a single test over both format and subtype
  * (combinatorial explosion), this file scopes itself to {@code Instant} — the most common subtype.  A
- * sibling file does the same for {@link LocalDateTime}; the remaining subtypes are deferred per
- * {@code TODO-57}.
+ * sibling file does the same for {@link LocalDateTime}; the remaining subtypes are deferred.
  *
  * <p>
  * Test combos = (tester templates) &times; ({@link TemporalFormat} values).  At the time of writing this

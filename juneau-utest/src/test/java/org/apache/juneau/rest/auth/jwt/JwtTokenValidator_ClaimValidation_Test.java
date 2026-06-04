@@ -53,7 +53,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.expirationTime(Date.from(NOW.minus(Duration.ofMinutes(10))))
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("expired"));
 	}
 
@@ -63,7 +64,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.notBeforeTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("not yet"));
 	}
 
@@ -73,7 +75,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.audience("https://other.example.com")
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("aud"));
 	}
 
@@ -83,7 +86,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.issuer("https://other-issuer.example.com/")
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("iss"));
 	}
 
@@ -96,7 +100,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.notBeforeTime(Date.from(NOW))
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("\"exp\""));
 	}
 
@@ -109,7 +114,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.expirationTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("\"nbf\""));
 	}
 
@@ -122,7 +128,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.expirationTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("\"iss\""));
 	}
 
@@ -135,7 +142,8 @@ class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 			.expirationTime(Date.from(NOW.plus(Duration.ofMinutes(5))))
 			.build();
 		var token = signRsa(rsa, claims);
-		var ex = assertThrows(AuthenticationException.class, () -> newValidator(fixed(rsa)).validate(token));
+		var validator = newValidator(fixed(rsa));
+		var ex = assertThrows(AuthenticationException.class, () -> validator.validate(token));
 		assertTrue(ex.getMessage().toLowerCase().contains("\"aud\""));
 	}
 

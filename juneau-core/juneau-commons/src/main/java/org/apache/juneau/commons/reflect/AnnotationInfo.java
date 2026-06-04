@@ -762,7 +762,7 @@ public class AnnotationInfo<T extends Annotation> {
 		// @formatter:off
 		var ca = info(a.annotationType());
 		var ja = mapb().sorted().buildFluent();  // NOAI
-		ca.getDeclaredMethods().stream().forEach(x -> safeOptCatch(() -> {
+		ca.getDeclaredMethods().forEach(x -> safeOptCatch(() -> {
 			var val = x.invoke(a);
 			var d = x.inner().getDefaultValue();
 			// Add values only if they're different from the default.
@@ -847,7 +847,7 @@ public class AnnotationInfo<T extends Annotation> {
 		// Get annotation values (non-default only)
 		var ca = info(annotationType);
 		var values = new ArrayList<String>();
-		ca.getDeclaredMethods().stream().forEach(m -> safeOptCatch(() -> {
+		ca.getDeclaredMethods().forEach(m -> safeOptCatch(() -> {
 			var val = m.invoke(a);
 			var d = m.inner().getDefaultValue();
 			// Add values only if they're different from the default

@@ -40,7 +40,8 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S110" // Deep inheritance inherent to the RDF parser hierarchy.
 })
 public class RdfStreamParser extends InputStreamParser implements RdfMetaProvider {
 

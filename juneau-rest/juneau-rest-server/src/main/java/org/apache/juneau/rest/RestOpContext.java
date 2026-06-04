@@ -1153,13 +1153,6 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	}
 
 	/**
-	 * Returns the first non-blank, SVL-resolved value of the given attribute across all
-	 * {@code @RestOp}-group annotations on this method (child-to-parent order).
-	 *
-	 * @param attr The annotation attribute name (e.g. {@code "defaultCharset"}).
-	 * @return The resolved string, or empty if no annotation defines it.
-	 */
-	/**
 	 * Startup-fail: validates that when the effective observability attribute for this op is {@code "true"},
 	 * at least one real backend ({@link org.apache.juneau.rest.metrics.MetricsRecorder} or
 	 * {@link org.apache.juneau.rest.tracing.TracerHook}) is registered.
@@ -1185,6 +1178,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				+ "Either wire a backend or change observability to \"\" (inherit) or \"false\" (opt-out).");
 	}
 
+	/**
+	 * Returns the first non-blank, SVL-resolved value of the given attribute across all
+	 * {@code @RestOp}-group annotations on this method (child-to-parent order).
+	 *
+	 * @param attr The annotation attribute name (e.g. {@code "defaultCharset"}).
+	 * @return The resolved string, or empty if no annotation defines it.
+	 */
 	private Optional<String> findOpString(String attr) {
 		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
@@ -1192,10 +1192,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (!s.isEmpty()) {
 				var resolved = vr.resolve(s);
 				if (!resolved.isEmpty())
-					return Optional.of(resolved);
+					return opt(resolved);
 			}
 		}
-		return Optional.empty();
+		return opte();
 	}
 
 	private List<MediaType> collectAnnotationMediaTypes(String attr) {

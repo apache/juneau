@@ -18,6 +18,7 @@ package org.apache.juneau.rest.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -69,7 +70,7 @@ public class OidcSessionAuthFilter extends AuthFilter {
 	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
 		var cookies = req.getCookies();
 		if (cookies == null)
-			return Optional.empty();
+			return opte();
 		String value = null;
 		for (var c : cookies) {
 			if (cookieName.equals(c.getName())) {
@@ -78,11 +79,11 @@ public class OidcSessionAuthFilter extends AuthFilter {
 			}
 		}
 		if (isBlank(value))
-			return Optional.empty();
+			return opte();
 		var session = sessionStore.lookup(value);
 		if (session.isEmpty())
-			return Optional.empty();
+			return opte();
 		var s = session.get();
-		return Optional.of(AuthResult.of(s.principal(), s.roles()));
+		return opt(AuthResult.of(s.principal(), s.roles()));
 	}
 }

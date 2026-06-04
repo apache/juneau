@@ -185,22 +185,26 @@ class JettyLogger_Test extends TestBase {
 
 	@Test void a26_isErrorEnabled() {
 		var l = new JettyLogger("test.error.logger");
-		assertFalse(l.isErrorEnabled());
+		Logger.getLogger("test.error.logger").setLevel(Level.ALL);
+		assertTrue(l.isErrorEnabled());
 	}
 
 	@Test void a27_isInfoEnabled() {
 		var l = new JettyLogger("test.isinfo.logger");
-		assertFalse(l.isInfoEnabled());
+		Logger.getLogger("test.isinfo.logger").setLevel(Level.ALL);
+		assertTrue(l.isInfoEnabled());
 	}
 
 	@Test void a28_isTraceEnabled() {
 		var l = new JettyLogger("test.trace.logger");
+		Logger.getLogger("test.trace.logger").setLevel(Level.OFF);
 		assertFalse(l.isTraceEnabled());
 	}
 
 	@Test void a29_isWarnEnabled() {
 		var l = new JettyLogger("test.iswarn.logger");
-		assertFalse(l.isWarnEnabled());
+		Logger.getLogger("test.iswarn.logger").setLevel(Level.ALL);
+		assertTrue(l.isWarnEnabled());
 	}
 
 	@Test void a30_log_withThrown() {
@@ -210,7 +214,7 @@ class JettyLogger_Test extends TestBase {
 		assertDoesNotThrow(() -> l.debug("msg with thrown", new RuntimeException("err")));
 	}
 
-	// --- Coverage for empty/TODO stubs (debug Marker variants) ---
+	// --- Coverage for empty/no-op stubs (debug Marker variants) ---
 
 	@Test void b01_debug_marker_msg() {
 		var l = new JettyLogger("test.b01");
@@ -279,7 +283,7 @@ class JettyLogger_Test extends TestBase {
 		assertDoesNotThrow(() -> l.debug(new RuntimeException("not logged")));
 	}
 
-	// --- Coverage for empty/TODO stubs (error variants) ---
+	// --- Coverage for empty/no-op stubs (error variants) ---
 
 	@Test void c01_error_marker_msg() {
 		var l = new JettyLogger("test.c01");
@@ -331,7 +335,7 @@ class JettyLogger_Test extends TestBase {
 		assertDoesNotThrow(() -> l.error("msg", new RuntimeException()));
 	}
 
-	// --- Coverage for empty/TODO stubs (info Marker variants) ---
+	// --- Coverage for empty/no-op stubs (info Marker variants) ---
 
 	@Test void d01_info_marker_msg() {
 		var l = new JettyLogger("test.d01");
@@ -393,7 +397,7 @@ class JettyLogger_Test extends TestBase {
 		assertDoesNotThrow(() -> l.info(new RuntimeException("not logged")));
 	}
 
-	// --- Coverage for empty/TODO stubs (warn Marker variants) ---
+	// --- Coverage for empty/no-op stubs (warn Marker variants) ---
 
 	@Test void e01_warn_marker_msg() {
 		var l = new JettyLogger("test.e01");
@@ -455,7 +459,7 @@ class JettyLogger_Test extends TestBase {
 		assertDoesNotThrow(() -> l.warn(new RuntimeException("not logged")));
 	}
 
-	// --- Coverage for empty/TODO stubs (trace variants) ---
+	// --- Coverage for empty/no-op stubs (trace variants) ---
 
 	@Test void f01_trace_marker_msg() {
 		var l = new JettyLogger("test.f01");
@@ -516,22 +520,26 @@ class JettyLogger_Test extends TestBase {
 
 	@Test void g02_isErrorEnabled_marker() {
 		var l = new JettyLogger("test.g02");
-		assertFalse(l.isErrorEnabled(null));
+		Logger.getLogger("test.g02").setLevel(Level.ALL);
+		assertTrue(l.isErrorEnabled(null));
 	}
 
 	@Test void g03_isInfoEnabled_marker() {
 		var l = new JettyLogger("test.g03");
-		assertFalse(l.isInfoEnabled(null));
+		Logger.getLogger("test.g03").setLevel(Level.ALL);
+		assertTrue(l.isInfoEnabled(null));
 	}
 
 	@Test void g04_isTraceEnabled_marker() {
 		var l = new JettyLogger("test.g04");
+		Logger.getLogger("test.g04").setLevel(Level.OFF);
 		assertFalse(l.isTraceEnabled(null));
 	}
 
 	@Test void g05_isWarnEnabled_marker() {
 		var l = new JettyLogger("test.g05");
-		assertFalse(l.isWarnEnabled(null));
+		Logger.getLogger("test.g05").setLevel(Level.ALL);
+		assertTrue(l.isWarnEnabled(null));
 	}
 
 	@Test void g06_log_marker() {

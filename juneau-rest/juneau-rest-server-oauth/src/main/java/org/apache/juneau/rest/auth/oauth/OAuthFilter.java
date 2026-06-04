@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.oauth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.security.Principal;
 import java.util.*;
@@ -158,12 +159,12 @@ public class OAuthFilter extends AuthFilter {
 	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
 		var header = req.getHeader(AUTHORIZATION);
 		if (header == null || !header.regionMatches(true, 0, BEARER_PREFIX, 0, BEARER_PREFIX.length()))
-			return Optional.empty();
+			return opte();
 		var token = header.substring(BEARER_PREFIX.length()).trim();
 		if (token.isEmpty())
-			return Optional.empty();
+			return opte();
 		var principal = validate(token);
-		return Optional.of(AuthResult.of(principal, extractRoles(principal)));
+		return opt(AuthResult.of(principal, extractRoles(principal)));
 	}
 
 	private Principal validate(String token) throws AuthenticationException {

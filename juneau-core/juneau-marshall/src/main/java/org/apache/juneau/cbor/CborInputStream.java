@@ -200,14 +200,14 @@ public class CborInputStream extends ParserInputStream {
 		}
 
 		lastDataType = dt;
-		if (dt == FLOAT)
+		if (dt == FLOAT) {
 			if (additionalInfo == 25)
 				length = 2;
 			else if (additionalInfo == 26)
 				length = 4;
 			else
 				length = 8;
-		else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK)
+		} else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK)
 			length = readArgument(additionalInfo);
 		else
 			length = dt == BOOLEAN ? -1 : 0;

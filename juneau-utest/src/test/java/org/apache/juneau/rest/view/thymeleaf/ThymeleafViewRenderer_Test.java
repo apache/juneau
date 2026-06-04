@@ -28,12 +28,6 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ThymeleafViewRenderer}.
  *
- * <p>
- * Covers the diagnostic-message constant and the {@code Context}-building helper. The full
- * {@link ThymeleafViewRenderer#process process(...)} dispatch path is exercised end-to-end by the
- * MockRest-flavored tests in this package (full Jetty / Spring Boot real-container coverage is
- * deferred to a follow-on TODO, the Thymeleaf analog of TODO-97 for JSP).
- *
  * @since 9.5.0
  */
 class ThymeleafViewRenderer_Test extends TestBase {

@@ -147,8 +147,8 @@ class BasicStatusLine_Test extends TestBase {
 
 	@Test void a19_equals_nonStatusLine() {
 		var sl = BasicStatusLine.create(200, "OK");
-		assertNotEquals(sl, "not a status line");
-		assertNotEquals(sl, null);
+		assertNotEquals("not a status line", sl);
+		assertNotEquals(null, sl);
 	}
 
 	@Test void a20_hashCode_consistency() {

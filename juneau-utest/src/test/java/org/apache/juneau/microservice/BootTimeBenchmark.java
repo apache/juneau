@@ -53,6 +53,11 @@ import jakarta.servlet.*;
  * Each (servlet-count) variant runs 1 cold iteration + 5 warm iterations.  Output goes to stdout with the prefix
  * {@code BOOTBENCH:} so it can be greped out of surefire console output.
  */
+@SuppressWarnings({
+	"java:S5786", // Manual benchmark harness, not a real JUnit test — public visibility is intentional.
+	"java:S2699", // Manual benchmark harness — it measures boot timings and has no assertions by design.
+	"java:S3577"  // Manual benchmark harness — name intentionally excluded from the surefire *Test include pattern.
+})
 public class BootTimeBenchmark {
 
 	private static final int WARM_ITERS = 5;

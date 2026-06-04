@@ -49,6 +49,9 @@ public class XmlValidatorParser extends XmlParser {
 	}
 
 	@Override /* Context */
+	@SuppressWarnings({
+		"rawtypes" // CRTP Builder<SELF extends Builder<SELF>>: diamond inference is not supported for anonymous subclasses of recursive generics
+	})
 	public XmlParserSession.Builder<?> createSession() {
 		return new XmlParserSession.Builder(XmlParser.DEFAULT) {
 			@Override

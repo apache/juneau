@@ -21,6 +21,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S1130" // Test methods uniformly declare 'throws Exception'; per-method pruning is high-churn/low-value.
+})
 class ByteArrayEntity_Test extends TestBase {
 
 	private static final byte[] BYTES = "hello world".getBytes();

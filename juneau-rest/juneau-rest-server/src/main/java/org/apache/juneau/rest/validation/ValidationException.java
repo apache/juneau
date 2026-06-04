@@ -52,6 +52,9 @@ import org.apache.juneau.http.response.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S110" // Deep inheritance inherent to the exception hierarchy
+})
 public class ValidationException extends BadRequest {
 
 	private static final long serialVersionUID = 1L;
@@ -59,7 +62,7 @@ public class ValidationException extends BadRequest {
 	/** The default detail message used when constructed without an explicit message. */
 	public static final String DEFAULT_MESSAGE = "Request validation failed";
 
-	private final List<ValidationViolation> violations;
+	private final transient List<ValidationViolation> violations;
 
 	/**
 	 * Constructor.

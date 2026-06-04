@@ -122,8 +122,8 @@ public class Args {
 	 */
 	public Optional<String> get(int index) {
 		if (index < 0 || index >= positional.size())
-			return Optional.empty();
-		return Optional.of(positional.get(index));
+			return opte();
+		return opt(positional.get(index));
 	}
 
 	/**
@@ -139,8 +139,8 @@ public class Args {
 	public Optional<String> get(String key) {
 		var v = options.get(normalize(key));
 		if (v == null || v.isEmpty())
-			return Optional.empty();
-		return Optional.of(v.get(0));
+			return opte();
+		return opt(v.get(0));
 	}
 
 	/**
@@ -329,7 +329,8 @@ public class Args {
 		 * @return A new immutable {@link Args} instance.
 		 */
 		@SuppressWarnings({
-			"java:S3776" // Cognitive complexity acceptable for argument prefix resolution and parsing logic
+			"java:S3776", // Cognitive complexity acceptable for argument prefix resolution and parsing logic
+			"java:S135"   // Argv tokenizer dispatch loop; per-token continue guards are clearer than restructuring the parse flow.
 		})
 		public Args build(String[] argv) {
 			var prefixes = resolvePrefixes();
@@ -350,7 +351,7 @@ public class Args {
 						continue;
 					}
 					var body = token.substring(matched.length());
-					if (allowSystemPropStyle && body.length() > 1 && body.charAt(0) == 'D' && body.indexOf('=') > 0)
+					if (allowSystemPropStyle && body.length() > 1 && body.charAt(0) == 'D' && body.indexOf('=') >= 0)
 						body = body.substring(1);
 					if (allowEquals && body.indexOf('=') >= 0) {
 						var eq = body.indexOf('=');

@@ -17,6 +17,7 @@
 package org.apache.juneau.objecttools;
 
 import static java.net.HttpURLConnection.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -609,7 +610,7 @@ public class ObjectRest {
 	 * @return The list of methods.
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null when object not found at URL. Consider empty collection.
+		"java:S1168"     // null when object not found at URL.
 	})
 	public Collection<String> getPublicMethods(String url) {
 		var o = get(url);
@@ -829,7 +830,8 @@ public class ObjectRest {
 	 * Workhorse method.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for REST operation routing logic
+		"java:S3776", // Cognitive complexity acceptable for REST operation routing logic
+		"java:S6541" // Cognitive complexity acceptable for REST operation routing logic
 	})
 	private Object service(int method, String url, Object val) throws ObjectRestException {
 
@@ -986,7 +988,7 @@ public class ObjectRest {
 		"java:S3776" // Cognitive complexity acceptable for recursive node navigation
 	})
 	JsonNode getNode(String url, JsonNode n) {
-		if (url == null || url.isEmpty())
+		if (isEmpty(url))
 			return n;
 		int i = url.indexOf('/');
 		String parentKey;

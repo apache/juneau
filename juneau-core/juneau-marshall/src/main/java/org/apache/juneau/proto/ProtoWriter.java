@@ -230,7 +230,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @return This object.
 	 */
 	public ProtoWriter comment(String text) {
-		if (text != null && !text.isEmpty())
+		if (!isEmpty(text))
 			w("# ").w(text).w('\n');
 		return this;
 	}
@@ -245,7 +245,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @return <jk>true</jk> if it can be written as a bare identifier.
 	 */
 	public boolean isBareIdentifier(String name) {
-		if (name == null || name.isEmpty())
+		if (isEmpty(name))
 			return false;
 		char c = name.charAt(0);
 		if (!((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') || c == '_'))
@@ -273,7 +273,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @return <jk>true</jk> if it can be written as a bare integer field tag.
 	 */
 	public boolean isBareIntegerTag(String name) {
-		if (name == null || name.isEmpty())
+		if (isEmpty(name))
 			return false;
 		for (int i = 0; i < name.length(); i++) {
 			char c = name.charAt(i);

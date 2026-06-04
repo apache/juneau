@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * End-to-end integration smoke test for FINISHED-77's
- * {@link AdminMixin}-with-DenyAllGuard-default ↔ TODO-69's {@link BearerTokenGuard}
+ * {@link AdminMixin}-with-DenyAllGuard-default ↔ {@link BearerTokenGuard}
  * cross-cut. Confirms the migration claim from FINISHED-77's Related-work cross-link: swapping
  * {@link org.apache.juneau.rest.guard.DenyAllGuard DenyAllGuard} for an AuthN guard is a
  * zero-mixin-source-change drop-in.

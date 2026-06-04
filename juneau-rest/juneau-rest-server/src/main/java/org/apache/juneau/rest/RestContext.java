@@ -153,6 +153,7 @@ import jakarta.servlet.http.*;
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., PROP_allowContentParam)
 	"java:S1200", // Class has many dependencies; acceptable for this core context class
 	"java:S1192", // Duplicate string literals are property key names and REST annotation attribute values; intentional
+	"java:S125",  // Explanatory comments reference SVL ($C{...}/$E{...}) and annotation (@Bean/@Rest) tokens that Sonar misreads as commented-out code
 	"java:S3776", // Cognitive complexity in field-initializer lambdas (memoizer wiring); cannot annotate at lambda scope
 	"java:S6539", // Monster class; RestContext is intentionally a central hub for REST framework configuration
 	"resource"    // Streams and session objects returned to callers; lifecycle managed by the servlet container or RestCall
@@ -233,6 +234,9 @@ public class RestContext extends Context {
 	 *
 	 * @since 9.5.0
 	 */
+	@SuppressWarnings({
+		"java:S6218" // Args is a transient constructor-parameter holder; it is never compared for equality or used as a map key, so array-identity semantics on the paths[] component are irrelevant.
+	})
 	public static record Args(
 		Class<?> resourceClass,
 		RestContext parentContext,
@@ -563,7 +567,7 @@ public class RestContext extends Context {
 	public static String[] resolveTopLevelPaths(Class<?> resourceClass, Object resource, BeanStore store) {
 		var ap = AnnotationProvider.INSTANCE;
 		var ci = ClassInfo.of(resourceClass);
-		var annotations = rstream(ap.find(Rest.class, ci)).collect(Collectors.toList());
+		var annotations = rstream(ap.find(Rest.class, ci)).toList();
 		var vr = (store == null) ? null : store.getBean(VarResolver.class).orElse(null);
 		// Cast for the bean-store-backed resolver session only — when store is a plain BeanStore (not
 		// WritableBeanStore) we skip the session form and call vr.resolve(...) directly.
@@ -938,7 +942,8 @@ public class RestContext extends Context {
 	 * through to {@code @Value} resolution.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for multi-source REST config property collection
+		"java:S3776", // Cognitive complexity acceptable for multi-source REST config property collection
+		"java:S135"   // Per-annotation continue guards are clearer than restructuring the config-source filter chain.
 	})
 	private List<PropertySource> collectRestConfigPropertySources() {
 		var bs = beanStore();
@@ -1673,6 +1678,9 @@ public class RestContext extends Context {
 	 * {@code juneau-rest-server-reactive}) ships a
 	 * {@code META-INF/services/org.apache.juneau.rest.processor.ResponseProcessor} provider file.
 	 */
+	@SuppressWarnings({
+		"java:S3077" // volatile is required for correct double-checked-locking safe-publication of this JVM-wide cache; the reference is publish-once and never compound-mutated.
+	})
 	private static volatile List<Class<? extends ResponseProcessor>> serviceLoaderResponseProcessors;
 
 	/**
@@ -1704,17 +1712,20 @@ public class RestContext extends Context {
 	private static List<Class<? extends ResponseProcessor>> loadServiceLoaderResponseProcessors() {
 		var out = new ArrayList<Class<? extends ResponseProcessor>>();
 		try {
-			for (var it = ServiceLoader.load(ResponseProcessor.class).stream().iterator(); it.hasNext();) {
-				try {
-					out.add(it.next().type());
-				} catch (ServiceConfigurationError | RuntimeException e) {
-					LOG.log(Level.FINE, e, () -> "Skipping ServiceLoader-discovered ResponseProcessor: " + e.getMessage());
-				}
-			}
+			for (var it = ServiceLoader.load(ResponseProcessor.class).stream().iterator(); it.hasNext();)
+				addNextServiceLoaderResponseProcessor(out, it);
 		} catch (ServiceConfigurationError | RuntimeException e) {
 			LOG.log(Level.FINE, e, () -> "ServiceLoader for ResponseProcessor failed: " + e.getMessage());
 		}
 		return List.copyOf(out);
+	}
+
+	private static void addNextServiceLoaderResponseProcessor(List<Class<? extends ResponseProcessor>> out, Iterator<ServiceLoader.Provider<ResponseProcessor>> it) {
+		try {
+			out.add(it.next().type());
+		} catch (ServiceConfigurationError | RuntimeException e) {
+			LOG.log(Level.FINE, e, () -> "Skipping ServiceLoader-discovered ResponseProcessor: " + e.getMessage());
+		}
 	}
 
 	/**
@@ -2598,11 +2609,11 @@ public class RestContext extends Context {
 	private <E extends Enum<E>> Optional<E> parseEnumConstant(Class<E> enumClass, String resolved) {
 		var t = leadingEnumToken(trim(emptyIfNull(resolved)));
 		if (isEmpty(t))
-			return Optional.empty();
+			return opte();
 		try {
-			return Optional.of(Enum.valueOf(enumClass, t));
+			return opt(Enum.valueOf(enumClass, t));
 		} catch (IllegalArgumentException ignored) {
-			return Optional.empty();
+			return opte();
 		}
 	}
 
@@ -3740,7 +3751,10 @@ public class RestContext extends Context {
 		Swagger s = swaggerCache.get(locale);
 		if (s == null) {
 			try {
-				s = getSwaggerProvider().getSwagger(this, locale);
+				var provider = getSwaggerProvider();
+				if (provider == null)
+					return opte();
+				s = provider.getSwagger(this, locale);
 				if (nn(s))
 					swaggerCache.put(locale, s);
 			} catch (Exception e) {
@@ -3775,7 +3789,7 @@ public class RestContext extends Context {
 			try {
 				var provider = getOpenApiProvider();
 				if (provider == null)
-					return Optional.empty();
+					return opte();
 				o = provider.getOpenApi(this, locale);
 				if (nn(o))
 					openApiCache.put(locale, o);
@@ -4165,10 +4179,6 @@ public class RestContext extends Context {
 		return getDebugConfig().resolve(this, call.getRequest()).enabled();
 	}
 
-	/**
-	 * Ensures framework bean memoizers that can mutate creator state from {@code @Rest(...)} annotation walks
-	 * have run before {@link RestOpContext} instances are built.
-	 */
 	/**
 	 * Validates that when {@code @Rest(observability="true")} is declared on this resource, at least one real
 	 * observability backend ({@link org.apache.juneau.rest.metrics.MetricsRecorder} or

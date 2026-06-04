@@ -36,6 +36,9 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code writeTo(Writer)} uses {@link Json5Serializer#DEFAULT}.
  * </ul>
  */
+@SuppressWarnings({
+	"java:S1130" // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (ParseException/IOException/SerializeException) is high-churn/low-value.
+})
 class Json5Map_Test extends TestBase {
 
 	@Test void a01_emptyToString() {

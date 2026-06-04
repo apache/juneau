@@ -805,25 +805,46 @@ public class ParserSession extends MarshallingSession {
 		List<T> list = (List<T>) doParse(pipe, getClassMeta(List.class, elementType));
 		if (list == null)
 			return;
+		var bodyThrown = drainToConsumer(consumer, list);
+		var completeThrown = completeQuietly(consumer);
+		if (bodyThrown != null) {
+			if (completeThrown != null)
+				bodyThrown.addSuppressed(completeThrown);
+			if (bodyThrown instanceof ParseException e)
+				throw e;
+			if (bodyThrown instanceof IOException e)
+				throw e;
+			throw new ParseException(this, bodyThrown, "Exception occurred.  exception={0}, message={1}.", cns(bodyThrown), lm(bodyThrown));
+		}
+		if (completeThrown != null)
+			throw new ParseException(this, completeThrown, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(completeThrown), lm(completeThrown));
+	}
+
+	private <T> Exception drainToConsumer(BeanConsumer<T> consumer, List<T> list) {
 		try {
 			consumer.begin();
-			for (var element : list) {
-				try {
-					consumer.acceptThrows(element);
-				} catch (Exception e) {
-					consumer.onError(e);
-				}
-			}
-		} catch (ParseException | IOException e) {
-			throw e;
+			for (var element : list)
+				acceptOrError(consumer, element);
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
-		} finally {
-			try {
-				consumer.complete();
-			} catch (Exception e) {
-				throw new ParseException(this, e, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(e), lm(e));
-			}
+			return e;
+		}
+		return null;
+	}
+
+	private static <T> void acceptOrError(BeanConsumer<T> consumer, T element) throws Exception {
+		try {
+			consumer.acceptThrows(element);
+		} catch (Exception e) {
+			consumer.onError(e);
+		}
+	}
+
+	private static Exception completeQuietly(BeanConsumer<?> consumer) {
+		try {
+			consumer.complete();
+			return null;
+		} catch (Exception e) {
+			return e;
 		}
 	}
 

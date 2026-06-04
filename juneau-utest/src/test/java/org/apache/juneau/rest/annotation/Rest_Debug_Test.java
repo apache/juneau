@@ -23,7 +23,7 @@ import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
-/** Focused typed-debug coverage for TODO-20 migration. */
+/** Focused typed-debug coverage. */
 class Rest_Debug_Test extends TestBase {
 
 	public static final CaptureLogger LOGGER = new CaptureLogger();

@@ -174,7 +174,9 @@ public final class RestLogEntry {
 		var status = getStatusCode() > 0 ? String.valueOf(getStatusCode()) : "0";
 		var reason = response != null && response.getReasonPhrase() != null ? response.getReasonPhrase() : "";
 		var elapsedMs = elapsed.toMillis() + "ms";
-		var errorMsg = error != null ? error.getMessage() != null ? error.getMessage() : error.getClass().getSimpleName() : "";
+		var errorMsg = "";
+		if (error != null)
+			errorMsg = error.getMessage() != null ? error.getMessage() : error.getClass().getSimpleName();
 
 		return template
 			.replace("{method}", method)

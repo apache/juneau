@@ -17,6 +17,8 @@
 package org.apache.juneau.toml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.time.temporal.*;
@@ -95,7 +97,7 @@ public class TomlParserSession extends ReaderParserSession {
 			if (r == null)
 				return null;
 			Map<String, Object> root = parseTomlDocument(new TomlTokenizer(r));
-			if (root == null || root.isEmpty())
+			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			// Root _value wrapper: document has exactly one key _value
 			if (root.size() == 1 && root.containsKey("_value")) {
@@ -244,7 +246,7 @@ public class TomlParserSession extends ReaderParserSession {
 		}
 		if (Character.isDigit(c) || c == '+' || c == '-') {
 			String s = readUntilValueEnd(t);
-			if (s == null || s.isEmpty())
+			if (isEmpty(s))
 				throw t.parseException("Expected value");
 			String noUnderscore = s.replace("_", "");
 			if (s.equals("inf") || s.equals("-inf") || s.equals("+inf") || s.toLowerCase().startsWith("nan"))
@@ -467,6 +469,9 @@ public class TomlParserSession extends ReaderParserSession {
 	 * {@code byte[]}, the value isn't a {@link String}, or no swap is matched on the current session
 	 * (e.g. {@link BinaryFormat#NOT_SET} is configured).
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Null is a meaningful 'no byte[] unswap applies' signal; callers fall through on null (an empty array would wrongly mean 'unswapped to empty bytes').
+	})
 	private byte[] tryUnswapByteArray(Object val, ClassMeta<?> targetType) throws ParseException {
 		if (!(val instanceof String s) || targetType == null || targetType.inner() != byte[].class)
 			return null;

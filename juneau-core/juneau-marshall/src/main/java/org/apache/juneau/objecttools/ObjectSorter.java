@@ -186,7 +186,7 @@ public class ObjectSorter implements ObjectTool<SortArgs> {
 	 * @return A list of maps/beans matching the
 	 */
 	@SuppressWarnings({
-		"java:S1168"     // TODO: null when result not list/collection/array. Consider empty list.
+		"java:S1168"     // Intentional null when result is not a list/collection/array; callers branch on null (not an empty list).
 	})
 	public <R> List<R> run(Object input, String sortArgs) {
 		var r = run(MarshallingContext.DEFAULT_SESSION, input, SortArgs.create(sortArgs));

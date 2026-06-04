@@ -64,7 +64,7 @@ import org.apache.juneau.rest.servlet.*;
 )
 public class AdminResource extends RestResource {
 
-	private final transient AdminProvider worker;
+	private final AdminProvider worker;
 
 	/** No-arg constructor &mdash; uses a default {@link AdminProvider} worker. */
 	public AdminResource() {

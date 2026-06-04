@@ -23,7 +23,7 @@ import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
 
 /**
- * TODO-92 acceptance tests for {@code @Value}-driven defaults on {@link BctConfiguration.Defaults}.
+ * Acceptance tests for {@code @Value}-driven defaults on {@link BctConfiguration.Defaults}.
  *
  * <p>
  * 3-test triad per migrated field per OQA #4 — system property set, unset (default), and {@code Settings.setGlobal}.

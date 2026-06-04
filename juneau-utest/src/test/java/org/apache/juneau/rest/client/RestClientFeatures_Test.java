@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * BasicRestLogger, BodyConverter, and related RestClient features.
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
-public class RestClientFeatures_Test {
+class RestClientFeatures_Test {
 
 	// =================================================================================================================
 	// A — RestCallInterceptor
@@ -91,7 +91,7 @@ public class RestClientFeatures_Test {
 					}
 				})
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertTrue(closeCalled.get(), "onClose should have been called");
 	}
@@ -161,7 +161,7 @@ public class RestClientFeatures_Test {
 						@Override public void onClose(RestRequest req, RestResponse res) { order.add("close-2"); }
 					})
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(List.of("init-1", "init-2", "connect-1", "connect-2", "close-1", "close-2"), order);
 	}
@@ -199,7 +199,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/api").run()) {}
+			try (var r = client.get("/api").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, entries.size());
 		var entry = entries.get(0);
@@ -244,7 +244,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/missing").run()) {}
+			try (var r = client.get("/missing").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, entries.size());
 		assertEquals(System.Logger.Level.WARNING, entries.get(0).getLevel());
@@ -260,7 +260,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/crash").run()) {}
+			try (var r = client.get("/crash").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, entries.size());
 		assertEquals(System.Logger.Level.ERROR, entries.get(0).getLevel());
@@ -275,7 +275,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/").debug().run()) {}
+			try (var r = client.get("/").debug().run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertTrue(entries.get(0).isDebug());
 	}
@@ -309,7 +309,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/users").run()) {}
+			try (var r = client.get("/users").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		var fmt = entries.get(0).format();
 		assertTrue(fmt.contains("GET"), "format should contain method: " + fmt);
@@ -326,7 +326,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://example.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/items").run()) {}
+			try (var r = client.get("/items").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		var entry = entries.get(0);
 		assertEquals("GET", entry.format("{method}"));
@@ -367,7 +367,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		var entry = entries.get(0);
 		assertTrue(entry.hasResponseHeader("X-Custom"));
@@ -399,7 +399,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/path").run()) {}
+			try (var r = client.get("/path").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		var uri = entries.get(0).getRequest().getUri();
 		assertNotNull(uri);
@@ -460,7 +460,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(entries::add)
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		// Thrown header present with 200 → WARNING
 		assertEquals(System.Logger.Level.WARNING, entries.get(0).getLevel());
@@ -487,7 +487,7 @@ public class RestClientFeatures_Test {
 				.rootUrl("http://x.com")
 				.logger(BasicRestLogger.of(jdkLogger))
 				.build()) {
-			try (var r = client.get("/test").run()) {}
+			try (var r = client.get("/test").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, messages.size());
 		assertTrue(messages.get(0).startsWith("INFO:"), "Should log at INFO level: " + messages.get(0));
@@ -540,7 +540,7 @@ public class RestClientFeatures_Test {
 					.filter(e -> false) // filter all
 					.build())
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertTrue(messages.isEmpty(), "Filtered logger should log nothing");
 	}
@@ -563,7 +563,7 @@ public class RestClientFeatures_Test {
 					.infoTemplate("CUSTOM:{method}:{status}")
 					.build())
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, messages.size());
 		assertTrue(messages.get(0).startsWith("CUSTOM:GET:200"), "Expected custom template: " + messages.get(0));
@@ -587,7 +587,7 @@ public class RestClientFeatures_Test {
 					.debugTemplate("DBG:{method}")
 					.build())
 				.build()) {
-			try (var r = client.get("/").debug().run()) {}
+			try (var r = client.get("/").debug().run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, messages.size());
 		assertTrue(messages.get(0).startsWith("DEBUG:DBG:GET"), "Expected debug template: " + messages.get(0));
@@ -611,7 +611,7 @@ public class RestClientFeatures_Test {
 					.warningTemplate("WARN:{status}")
 					.build())
 				.build()) {
-			try (var r = client.get("/missing").run()) {}
+			try (var r = client.get("/missing").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, messages.size());
 		assertTrue(messages.get(0).startsWith("WARNING:WARN:404"), "Expected warning template: " + messages.get(0));
@@ -638,7 +638,7 @@ public class RestClientFeatures_Test {
 					.levelResolver(alwaysError)
 					.build())
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		assertEquals(1, messages.size());
 		assertTrue(messages.get(0).startsWith("ERROR:"), "Should log at ERROR even for 200: " + messages.get(0));
@@ -944,7 +944,7 @@ public class RestClientFeatures_Test {
 					.filter(e -> true) // filter allows all entries
 					.build())
 				.build()) {
-			try (var r = client.get("/").run()) {}
+			try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
 		}
 		// With filter returning true, entry IS logged
 		assertEquals(1, messages.size(), "Entry should be logged when filter returns true");
@@ -1590,8 +1590,8 @@ public class RestClientFeatures_Test {
 				.logger(entries::add)
 				.build()) {
 			try {
-				try (var r = client.get("/").run()) {}
-			} catch (Exception ignored) {}
+				try (var r = client.get("/").run()) { /* Intentionally empty: response is executed and auto-closed via try-with-resources; assertions follow. */ }
+			} catch (Exception ignored) { /* Intentionally empty: the request may fail in error/exception scenarios; the test only inspects the captured log entries. */ }
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

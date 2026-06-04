@@ -106,6 +106,9 @@ final class MiniJson {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S135" // State-machine string/escape parse loop; early continues are clearer than restructuring.
+	})
 	private String parseString() {
 		var quote = src.charAt(pos);
 		if (quote != '"' && quote != '\'') throw err("Expected string");

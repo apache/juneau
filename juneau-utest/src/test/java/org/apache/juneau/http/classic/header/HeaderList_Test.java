@@ -215,16 +215,19 @@ class HeaderList_Test extends TestBase {
 		assertEquals(2, i2.get());
 	}
 
+	@SuppressWarnings({
+		"java:S4144" // Distinct stream-all coverage scenario; implementation intentionally mirrors a14_forEach_all.
+	})
 	@Test void a16_stream_all() {
 		var x = HeaderList.of();
 
 		var i1 = new AtomicInteger();
-		x.stream().forEach(h -> i1.incrementAndGet());
+		x.forEach(h -> i1.incrementAndGet());
 		assertEquals(0, i1.get());
 
 		x = HeaderList.of(FOO_1, FOO_2);
 		var i2 = new AtomicInteger();
-		x.stream().forEach(h -> i2.incrementAndGet());
+		x.forEach(h -> i2.incrementAndGet());
 		assertEquals(2, i2.get());
 	}
 

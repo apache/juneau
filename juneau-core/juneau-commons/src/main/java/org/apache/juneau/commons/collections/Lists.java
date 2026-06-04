@@ -283,11 +283,6 @@ public class Lists<E> {
 	/**
 	 * Builds the list.
 	 *
-	 * @return A list conforming to the settings on this builder.
-	 */
-	/**
-	 * Builds the list.
-	 *
 	 * <p>
 	 * Applies filtering, sorting, concurrent, unmodifiable, and sparse options.
 	 *
@@ -373,6 +368,9 @@ public class Lists<E> {
 	 *
 	 * @return The built list as a {@link FilteredList}, or {@code null} if {@link #sparse()} is set and the list is empty.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Propagates the documented sparse+empty null from build(); callers rely on null to mean "absent" (tests assert null).
+	})
 	public FilteredList<E> buildFiltered() {
 		var l = build();
 		if (l == null)  // sparse mode and empty

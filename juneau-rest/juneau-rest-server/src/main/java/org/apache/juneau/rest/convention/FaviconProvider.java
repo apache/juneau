@@ -179,6 +179,9 @@ public class FaviconProvider {
 			return readClasspath(DEFAULT_FAVICON_RESOURCE);
 		}
 
+		@SuppressWarnings({
+			"java:S1168" // null is a meaningful "resource not found" sentinel: resolveBytes() falls through to the default favicon; an empty array would suppress that fallback.
+		})
 		private static byte[] readClasspath(String path) {
 			try (var in = FaviconProvider.class.getResourceAsStream(path)) {
 				if (in == null)

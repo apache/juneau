@@ -47,6 +47,7 @@ import org.opensaml.xmlsec.encryption.support.SimpleRetrievalMethodEncryptedKeyR
 import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
 import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
 import org.opensaml.xmlsec.signature.SignableXMLObject;
+import org.opensaml.xmlsec.signature.X509Data;
 import org.opensaml.xmlsec.signature.support.SignatureConstants;
 import org.opensaml.xmlsec.signature.support.SignatureException;
 import org.opensaml.xmlsec.signature.support.SignatureValidator;
@@ -411,8 +412,7 @@ public class SamlAssertionValidator {
 			var decrypter = new Decrypter(null, resolver, keyResolver);
 			decrypter.setRootInNewDocument(true);
 			try {
-				var decrypted = decrypter.decrypt(encrypted.get(0));
-				return decrypted;
+				return decrypter.decrypt(encrypted.get(0));
 			} catch (org.opensaml.xmlsec.encryption.support.DecryptionException e) {
 				throw new AuthenticationException(e, "SAML <EncryptedAssertion> could not be decrypted")
 					.wwwAuthenticate("SAML error=\"decryption_failed\"");
@@ -421,9 +421,6 @@ public class SamlAssertionValidator {
 		return assertions.get(0);
 	}
 
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for multi-step SAML signature verification
-	})
 	private void verifySignature(Assertion assertion) throws AuthenticationException {
 		var signature = assertion.getSignature();
 		if (signature == null)
@@ -455,6 +452,15 @@ public class SamlAssertionValidator {
 	private Credential resolveSigningCredential() throws AuthenticationException {
 		if (signingCredential != null)
 			return signingCredential;
+		var idp = resolveIdpDescriptor();
+		var credential = extractSigningCredential(idp);
+		if (credential == null)
+			throw new AuthenticationException("No signing X.509 certificate in metadata for issuer: " + expectedIssuer)
+				.wwwAuthenticate("SAML error=\"metadata_invalid\"");
+		return credential;
+	}
+
+	private IDPSSODescriptor resolveIdpDescriptor() throws AuthenticationException {
 		try {
 			var criteria = new CriteriaSet(
 				new EntityIdCriterion(expectedIssuer),
@@ -468,33 +474,60 @@ public class SamlAssertionValidator {
 			if (idp == null)
 				throw new AuthenticationException("SAML metadata for issuer has no IDPSSODescriptor")
 					.wwwAuthenticate("SAML error=\"metadata_invalid\"");
-			for (KeyDescriptor kd : idp.getKeyDescriptors()) {
-				if (kd.getUse() == null || kd.getUse() == UsageType.SIGNING || kd.getUse() == UsageType.UNSPECIFIED) {
-					var keyInfo = kd.getKeyInfo();
-					if (keyInfo != null) {
-						for (var x509 : keyInfo.getX509Datas()) {
-							for (var cert : x509.getX509Certificates()) {
-								var base64 = cert.getValue();
-								if (base64 != null) {
-									try {
-										var bytes = Base64.getMimeDecoder().decode(base64);
-										var cf = java.security.cert.CertificateFactory.getInstance("X.509");
-										var certificate = (java.security.cert.X509Certificate) cf.generateCertificate(new ByteArrayInputStream(bytes));
-										return new BasicX509Credential(certificate);
-									} catch (java.security.cert.CertificateException | IllegalArgumentException e) {
-										// Try next certificate.
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-			throw new AuthenticationException("No signing X.509 certificate in metadata for issuer: " + expectedIssuer)
-				.wwwAuthenticate("SAML error=\"metadata_invalid\"");
+			return idp;
 		} catch (ResolverException e) {
 			throw new AuthenticationException(e, "SAML metadata resolution failed")
 				.wwwAuthenticate("SAML error=\"metadata_invalid\"");
+		}
+	}
+
+	private static Credential extractSigningCredential(IDPSSODescriptor idp) {
+		for (KeyDescriptor kd : idp.getKeyDescriptors()) {
+			var credential = credentialFromKeyDescriptor(kd);
+			if (credential != null)
+				return credential;
+		}
+		return null;
+	}
+
+	private static Credential credentialFromKeyDescriptor(KeyDescriptor kd) {
+		if (!isSigningKey(kd))
+			return null;
+		var keyInfo = kd.getKeyInfo();
+		if (keyInfo == null)
+			return null;
+		for (var x509 : keyInfo.getX509Datas()) {
+			var credential = credentialFromX509Data(x509);
+			if (credential != null)
+				return credential;
+		}
+		return null;
+	}
+
+	private static Credential credentialFromX509Data(X509Data x509) {
+		for (var cert : x509.getX509Certificates()) {
+			var base64 = cert.getValue();
+			if (base64 == null)
+				continue;
+			var credential = parseX509Credential(base64);
+			if (credential != null)
+				return credential;
+		}
+		return null;
+	}
+
+	private static boolean isSigningKey(KeyDescriptor kd) {
+		return kd.getUse() == null || kd.getUse() == UsageType.SIGNING || kd.getUse() == UsageType.UNSPECIFIED;
+	}
+
+	private static BasicX509Credential parseX509Credential(String base64) {
+		try {
+			var bytes = Base64.getMimeDecoder().decode(base64);
+			var cf = java.security.cert.CertificateFactory.getInstance("X.509");
+			var certificate = (java.security.cert.X509Certificate) cf.generateCertificate(new ByteArrayInputStream(bytes));
+			return new BasicX509Credential(certificate);
+		} catch (java.security.cert.CertificateException | IllegalArgumentException e) {
+			return null;  // Caller tries the next certificate.
 		}
 	}
 
@@ -589,7 +622,7 @@ public class SamlAssertionValidator {
 	@SuppressWarnings({
 		"unused" // Symbols are referenced indirectly; method exists to keep imports from being flagged.
 	})
-	private static void __apiReferences() {
+	private static void apiReferences() {
 		var ignore = new Object[] {
 			SignableXMLObject.class, ValidationContext.class, QName.class, UsageType.class, SignatureConstants.class
 		};

@@ -298,7 +298,7 @@ public class BeanInstantiator<T> {
 	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if the type is <jk>null</jk> or instantiation fails.
 	 */
 	public static <T> Optional<T> optionalOf(Class<T> beanType) {
-		return beanType == null ? Optional.empty() : of(beanType).asOptional();
+		return beanType == null ? opte() : of(beanType).asOptional();
 	}
 
 	/**
@@ -350,9 +350,9 @@ public class BeanInstantiator<T> {
 	 */
 	public Optional<T> asOptional() {
 		try {
-			return Optional.of(run());
+			return opt(run());
 		} catch (@SuppressWarnings("unused") ExecutableException e) {
-			return Optional.empty();
+			return opte();
 		}
 	}
 

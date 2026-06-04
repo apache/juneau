@@ -38,7 +38,8 @@ import org.junit.jupiter.api.*;
  * Covers WHATWG spec compliance, round-trips, edge cases, iterator semantics, and a REST smoke test.
  */
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"java:S5976" // Similar-but-distinct WHATWG spec scenarios read clearer as individually-named tests than a parameterized test.
 })
 class Sse_Test extends TestBase {
 
@@ -73,8 +74,8 @@ class Sse_Test extends TestBase {
 		assertEquals(e1, e2);
 		assertEquals(e1.hashCode(), e2.hashCode());
 		assertNotEquals(e1, e3);
-		assertNotEquals(e1, "not an event");
-		assertNotEquals(e1, null);
+		assertNotEquals("not an event", e1);
+		assertNotEquals(null, e1);
 	}
 
 	@Test void a05_toString() {
@@ -207,7 +208,8 @@ class Sse_Test extends TestBase {
 	}
 
 	@Test void b16_iterableWithNonEventThrows() {
-		assertThrows(SerializeException.class, () -> Sse.of(List.of("not", "events")));
+		var input = List.of("not", "events");
+		assertThrows(SerializeException.class, () -> Sse.of(input));
 	}
 
 	@Test void b17_nullInputReturnsEmpty() throws Exception {
@@ -719,10 +721,20 @@ class Sse_Test extends TestBase {
 	@Test void g01_restEndpointEmitsAllEventsInOrder() throws Exception {
 		var c = MockRestClient.buildLax(SseEndpoint.class);
 		var body = c.get("/stream").header("Accept", "text/event-stream").run().getContent().asString();
-		var expected =
-			"event: progress\ndata: step 1\nid: 1\n\n"
-			+ "event: progress\ndata: step 2\nid: 2\n\n"
-			+ "event: progress\ndata: step 3\nid: 3\n\n";
+		var expected = """
+			event: progress
+			data: step 1
+			id: 1
+
+			event: progress
+			data: step 2
+			id: 2
+
+			event: progress
+			data: step 3
+			id: 3
+
+			""";
 		assertEquals(expected, body);
 	}
 }

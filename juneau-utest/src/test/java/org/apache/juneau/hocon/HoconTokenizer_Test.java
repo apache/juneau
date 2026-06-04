@@ -27,6 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link HoconTokenizer}.
  */
+@SuppressWarnings({
+	"java:S5976" // Explicit per-token-type tests are clearer and easier to debug than a single parameterized table; intentional.
+})
 class HoconTokenizer_Test extends TestBase {
 
 	private static HoconTokenizer tokenizer(String input) {
@@ -156,7 +159,7 @@ class HoconTokenizer_Test extends TestBase {
 		assertEquals(UNQUOTED_STRING, t.read().type());
 	}
 
-	// Regression test for the '=+' lookahead bug (TODO-137).
+	// Regression test for the '=+' lookahead bug (FINISHED-137).
 	// '=' is always EQUALS regardless of the following character; the '+=' (PLUS_EQUALS)
 	// operator is handled by a separate branch that reads '+' first, so '=+' is never
 	// confused with a partial '+='.

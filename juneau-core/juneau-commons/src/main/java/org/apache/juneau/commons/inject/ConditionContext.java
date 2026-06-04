@@ -16,63 +16,11 @@ import org.apache.juneau.commons.settings.*;
 
 /**
  * Runtime context for evaluating {@link Condition} instances.
+ *
+ * @param beanStore The bean store.
+ * @param settings The settings facade.
+ * @param classLoader The classloader used for class-presence checks.
+ * @param annotatedElement The annotated class/method/field under evaluation.
  */
-public final class ConditionContext {
-
-	private final BeanStore beanStore;
-	private final Settings settings;
-	private final ClassLoader classLoader;
-	private final AnnotatedElement annotatedElement;
-
-	/**
-	 * Constructor.
-	 *
-	 * @param beanStore The bean store.
-	 * @param settings The settings facade.
-	 * @param classLoader The classloader used for class-presence checks.
-	 * @param annotatedElement The annotated class/method/field under evaluation.
-	 */
-	public ConditionContext(BeanStore beanStore, Settings settings, ClassLoader classLoader, AnnotatedElement annotatedElement) {
-		this.beanStore = beanStore;
-		this.settings = settings;
-		this.classLoader = classLoader;
-		this.annotatedElement = annotatedElement;
-	}
-
-	/**
-	 * The bean store.
-	 *
-	 * @return The bean store.
-	 */
-	public BeanStore beanStore() {
-		return beanStore;
-	}
-
-	/**
-	 * The settings facade.
-	 *
-	 * @return The settings facade.
-	 */
-	public Settings settings() {
-		return settings;
-	}
-
-	/**
-	 * The class loader.
-	 *
-	 * @return The class loader.
-	 */
-	public ClassLoader classLoader() {
-		return classLoader;
-	}
-
-	/**
-	 * The element being evaluated.
-	 *
-	 * @return The annotated element.
-	 */
-	public AnnotatedElement annotatedElement() {
-		return annotatedElement;
-	}
-}
+public record ConditionContext(BeanStore beanStore, Settings settings, ClassLoader classLoader, AnnotatedElement annotatedElement) {}
 

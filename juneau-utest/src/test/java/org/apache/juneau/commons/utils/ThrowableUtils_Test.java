@@ -537,8 +537,8 @@ class ThrowableUtils_Test extends TestBase {
 	void a032_printStackTrace_integer() {
 		// Redirects to System.err — just verify it doesn't throw
 		var ex = new RuntimeException("test error");
-		printStackTrace(ex, (Integer)null);
-		printStackTrace(ex, 2);
+		assertDoesNotThrow(() -> printStackTrace(ex, (Integer)null));
+		assertDoesNotThrow(() -> printStackTrace(ex, 2));
 	}
 
 	//====================================================================================================

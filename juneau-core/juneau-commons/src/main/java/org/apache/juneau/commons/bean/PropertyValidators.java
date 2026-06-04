@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.bean;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 /**
  * Discovery helper for {@link PropertyValidatorFactory} via {@link java.util.ServiceLoader ServiceLoader}.
@@ -38,7 +39,7 @@ import java.util.*;
  */
 public final class PropertyValidators {
 
-	private static volatile PropertyValidatorFactory factory = resolve();
+	private static final AtomicReference<PropertyValidatorFactory> factory = new AtomicReference<>(resolve());
 
 	private PropertyValidators() {
 	}
@@ -49,7 +50,7 @@ public final class PropertyValidators {
 	 * @return The factory, or <jk>null</jk>.
 	 */
 	public static PropertyValidatorFactory factory() {
-		return factory;
+		return factory.get();
 	}
 
 	/**
@@ -61,7 +62,7 @@ public final class PropertyValidators {
 	 * @param value The factory to use, or <jk>null</jk> to disable.
 	 */
 	public static void setFactory(PropertyValidatorFactory value) {
-		factory = value;
+		factory.set(value);
 	}
 
 	private static PropertyValidatorFactory resolve() {

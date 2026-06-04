@@ -194,16 +194,17 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		assertEquals("x", b.name);
 	}
 
-	@Test void c02_validation_disabledByDefault_serialize() throws Exception {
+	@Test void c02_validation_disabledByDefault_serialize() {
 		var s = JsonSerializer.create().build();
 		var b = new StringBean();
 		b.name = "x";
-		s.serialize(b);  // does not throw
+		assertDoesNotThrow(() -> s.serialize(b));  // validation disabled by default — serialization must not throw
 	}
 
-	@Test void c03_validateSchema_falseExplicitOverride() throws Exception {
+	@Test void c03_validateSchema_falseExplicitOverride() {
 		var p = JsonParser.create().validateSchema(false).build();
-		p.parse("{\"name\":\"x\"}", StringBean.class);
+		var b = assertDoesNotThrow(() -> p.parse("{\"name\":\"x\"}", StringBean.class));  // explicit validateSchema(false) — parse must not throw
+		assertEquals("x", b.name);
 	}
 
 	// =================================================================================================================
@@ -226,6 +227,9 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		assertTrue(p.getMarshallingContext().isValidateSchema());
 	}
 
+	@SuppressWarnings({
+		"java:S5961" // Comprehensive single-feature check: every format's covariant validateSchema() override is verified in one test.
+	})
 	@Test void d04_validateSchemaCovariantOnAllFormats() {
 		// Each format's Builder must override validateSchema() to preserve the fluent chain through format-specific
 		// methods. If any of these calls return the parent builder type, the test will fail to compile.
@@ -291,12 +295,12 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		assertTrue(s.serialize(b).contains("abc"));
 	}
 
-	@Test void e06_session_isValidateSchemaPropagatedFromContext() throws Exception {
+	@Test void e06_session_isValidateSchemaPropagatedFromContext() {
 		// Serializer round-trip exercises MarshallingSession.isValidateSchema()-driven branch in transforms.
 		var s = JsonSerializer.create().validateSchema().build();
 		var b = new StringBean();
 		b.name = "abc";
-		s.serialize(b);  // passes - validation triggered, validateSchema=true session
+		assertDoesNotThrow(() -> s.serialize(b));  // valid value with validateSchema=true session — must not throw
 	}
 
 	@Test void e07_parse_dualAnnotations_mergedConstraintsApplied() throws Exception {

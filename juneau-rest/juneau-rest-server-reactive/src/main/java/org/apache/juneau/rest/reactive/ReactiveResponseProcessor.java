@@ -114,6 +114,9 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 
 	private static final Logger LOG = Logger.getLogger(ReactiveResponseProcessor.class.getName());
 
+	@SuppressWarnings({
+		"java:S3077" // Write-once double-checked-locking cache holding an immutable List.copyOf(...); volatile gives correct safe publication of the one-time assignment and the reference is never mutated afterward.
+	})
 	private static volatile List<ReactiveStreamsAdapter> adapters;
 
 	private enum Shape { BUFFER, SSE, NDJSON }
@@ -254,11 +257,15 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		} catch (IOException e) {
 			LOG.log(Level.FINEST, e, () -> "Flush during async stream completion failed: " + e.getMessage());
 		} finally {
-			try {
-				asyncCtx.complete();
-			} catch (IllegalStateException e) {
-				LOG.log(Level.FINEST, e, () -> "AsyncContext.complete() raced with the container: " + e.getMessage());
-			}
+			completeQuietly(asyncCtx);
+		}
+	}
+
+	private static void completeQuietly(AsyncContext asyncCtx) {
+		try {
+			asyncCtx.complete();
+		} catch (IllegalStateException e) {
+			LOG.log(Level.FINEST, e, () -> "AsyncContext.complete() raced with the container: " + e.getMessage());
 		}
 	}
 
@@ -279,7 +286,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	}
 
 	@SuppressWarnings({ "java:S2095", "resource" }) // Writer is response-owned; we never close it.
-	private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws IOException, SerializeException {
+	private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws SerializeException {
 		if (element == null)
 			return;
 		var json = element instanceof CharSequence c ? c.toString() : Json.of(element);
@@ -333,17 +340,20 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		var out = new ArrayList<ReactiveStreamsAdapter>();
 		try {
 			var it = ServiceLoader.load(ReactiveStreamsAdapter.class).iterator();
-			while (it.hasNext()) {
-				try {
-					out.add(it.next());
-				} catch (ServiceConfigurationError | RuntimeException e) {
-					LOG.log(Level.FINE, e, () -> "Skipping reactive adapter (backing library likely absent): " + e.getMessage());
-				}
-			}
+			while (it.hasNext())
+				addNextAdapter(it, out);
 		} catch (ServiceConfigurationError | RuntimeException e) {
 			LOG.log(Level.FINE, e, () -> "ServiceLoader for ReactiveStreamsAdapter failed: " + e.getMessage());
 		}
 		return List.copyOf(out);
+	}
+
+	private static void addNextAdapter(Iterator<ReactiveStreamsAdapter> it, List<ReactiveStreamsAdapter> out) {
+		try {
+			out.add(it.next());
+		} catch (ServiceConfigurationError | RuntimeException e) {
+			LOG.log(Level.FINE, e, () -> "Skipping reactive adapter (backing library likely absent): " + e.getMessage());
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -433,11 +443,11 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 			});
 			onTerminate.accept(t);
 		}
-	}
 
-	private static Throwable unwrap(Throwable t) {
-		if ((t instanceof IllegalStateException || t instanceof CompletionException) && t.getCause() != null)
-			return t.getCause();
-		return t;
+		private static Throwable unwrap(Throwable t) {
+			if ((t instanceof IllegalStateException || t instanceof CompletionException) && t.getCause() != null)
+				return t.getCause();
+			return t;
+		}
 	}
 }

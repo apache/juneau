@@ -27,6 +27,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.runtime.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S5976" // Explicit per-case tests are clearer than a single parameterized test for these distinct property-source scenarios.
+})
 class PropertySources_Test extends TestBase {
 
 	//====================================================================================================

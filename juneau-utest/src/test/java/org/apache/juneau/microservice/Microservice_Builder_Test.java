@@ -43,7 +43,7 @@ class Microservice_Builder_Test extends TestBase {
 	@Test void a02_getInstance_noInstance() {
 		// getInstance() returns null if no microservice is running
 		// Don't rely on value being null since another test might have set it
-		assertDoesNotThrow(() -> Microservice.getInstance());
+		assertDoesNotThrow(Microservice::getInstance);
 	}
 
 	@Test void a03_builder_args_array() {

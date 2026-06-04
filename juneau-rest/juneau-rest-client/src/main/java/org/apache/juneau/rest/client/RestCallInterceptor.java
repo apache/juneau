@@ -48,6 +48,9 @@ package org.apache.juneau.rest.client;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S112" // Interceptor SPI callbacks intentionally declare 'throws Exception' so implementations may abort a call with any exception type.
+})
 public interface RestCallInterceptor {
 
 	/**

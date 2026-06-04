@@ -32,6 +32,9 @@ import org.junit.jupiter.api.*;
  * Covers both the filesystem-root branch (delegates to {@code FileUtils.resolveSafely}) and
  * the classpath-resource branch ({@code ..} segment rejection).
  */
+@SuppressWarnings({
+	"java:S5976" // Explicit per-case tests preferred for readability/diagnostics over a single parameterized test.
+})
 class LocalDir_PathTraversal_Test extends TestBase {
 
 	private static final Path TEST_DIR = Paths.get("src/test/resources/files");

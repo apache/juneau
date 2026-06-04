@@ -614,8 +614,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 				// VarResolver substitutes "" for a missing key with no default. Collapse both to
 				// Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
 				set(bean, (resolved == null || (resolved instanceof String s && s.isEmpty()))
-					? Optional.empty()
-					: Optional.of(resolved));
+					? opte()
+					: opt(resolved));
 			} else {
 				set(bean, resolved);
 			}
@@ -663,7 +663,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 
 		Object value;
 		if (nn(collectionValue)) {
-			value = fieldType.is(Optional.class) ? Optional.of(collectionValue) : collectionValue;
+			value = fieldType.is(Optional.class) ? opt(collectionValue) : collectionValue;
 		} else {
 			// Handle single bean
 			var ptc = ptUnwrapped.inner();

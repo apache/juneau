@@ -49,6 +49,7 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S110",   // Deep inheritance inherent to the serializer/parser session hierarchy
 	"java:S125",   // State-machine comments are documentation, not commented-out code
 	"java:S115",   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 	"rawtypes",    // Raw types necessary for generic type handling

@@ -639,6 +639,9 @@ class BidiMap_Test extends TestBase {
 		assertEquals(regularMap.entrySet(), map.entrySet());
 	}
 
+	@SuppressWarnings({
+		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
+	})
 	@Test
 	void w05_equals_notAMap() {
 		var map = BidiMap.<String,Integer>create()
@@ -690,7 +693,7 @@ class BidiMap_Test extends TestBase {
 		var map = BidiMap.<String,Integer>create()
 			.add("one", 1)
 			.build();
-		assertFalse(map.equals((Object)"notAMap"));
+		assertNotEquals("notAMap", map);
 	}
 
 	@Test

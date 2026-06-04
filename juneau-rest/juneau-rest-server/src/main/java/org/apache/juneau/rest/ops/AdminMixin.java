@@ -149,7 +149,7 @@ public class AdminMixin {
 	 * Default thread-name-prefix exclude list: filter out JVM internals, servlet container, and
 	 * Spring Boot infrastructure threads.
 	 */
-	public static final List<String> DEFAULT_THREAD_NAME_PREFIX_EXCLUDE = AdminProvider.DEFAULT_THREAD_NAME_PREFIX_EXCLUDE;
+	public static final List<String> DEFAULT_THREAD_NAME_PREFIX_EXCLUDE = List.copyOf(AdminProvider.DEFAULT_THREAD_NAME_PREFIX_EXCLUDE);
 
 	/**
 	 * Creates a new builder.

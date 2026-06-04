@@ -134,7 +134,7 @@ public class QueryArg implements RestOpArg {
 		schemaBuilder.applyAll(Query.class, pi);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelQuery).filter(q -> ne(q.def())).map(Query::def)).orElse(null);
+		this.def = findDef(pi).or(() -> opt(classLevelQuery).filter(q -> ne(q.def())).map(Query::def)).orElse(null);
 		this.type = pi.getParameterType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

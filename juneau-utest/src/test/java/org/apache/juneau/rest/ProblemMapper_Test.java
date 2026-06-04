@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.rest;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+
 import java.net.URI;
 import java.util.Locale;
 
@@ -311,7 +314,7 @@ class ProblemMapper_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("application/problem+json")
 			.assertContent().isContains("\"locale\":\"fr-CA\"");
 		// Sanity: the strategy ran at least once.
-		assert CAPTURED_LOCALE.get() != null;
+		assertNotNull(CAPTURED_LOCALE.get());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -345,13 +348,13 @@ class ProblemMapper_Test extends TestBase {
 	void h01_identityStrategy_returnsInputUnchanged() {
 		var p = Problem.fromStatus(404, "Not Found", "Gone").set("k", "v");
 		var result = ProblemLocalizationStrategy.IDENTITY.localize(p, Locale.US);
-		assert result == p;
+		assertSame(p, result);
 	}
 
 	@Test
 	void h02_identityStrategy_acceptsNullLocale() {
 		var p = new Problem().setTitle("t");
 		var result = ProblemLocalizationStrategy.IDENTITY.localize(p, null);
-		assert result == p;
+		assertSame(p, result);
 	}
 }

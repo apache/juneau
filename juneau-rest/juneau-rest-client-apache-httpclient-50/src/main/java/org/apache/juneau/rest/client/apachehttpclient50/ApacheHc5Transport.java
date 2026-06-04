@@ -127,8 +127,7 @@ public final class ApacheHc5Transport implements HttpTransport {
 		var builder = TransportResponse.builder()
 			.statusCode(hcResponse.getCode())
 			.reasonPhrase(hcResponse.getReasonPhrase());
-		if (hcResponse instanceof Closeable)
-			builder.closeCallback((Closeable) hcResponse);
+		builder.closeCallback(hcResponse);
 		for (var h : hcResponse.getHeaders())
 			builder.header(h.getName(), h.getValue());
 		var entity = hcResponse.getEntity();

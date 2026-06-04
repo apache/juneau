@@ -98,7 +98,6 @@ public class BasicOpenApiProviderSession {
 	private static final String K_uniqueItems = "uniqueItems";
 	private static final String K_multipleOf = "multipleOf";
 	private static final String K_collectionFormat = "collectionFormat";
-	private static final String K_allowEmptyValue = "allowEmptyValue";
 	private static final String K_properties = "properties";
 
 	private static final String DEFINITIONS_PREFIX = "#/definitions/";
@@ -475,6 +474,9 @@ public class BasicOpenApiProviderSession {
 		return rb;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for the schema vs examples-only content-block emission; the two branches differ in how each media entry is populated and are asserted by OpenAPI output tests.
+	})
 	private static Json5Map transformResponse(Json5Map response, List<String> produces) {
 		var newResp = new Json5Map();
 		for (var e : response.entrySet()) {
@@ -524,8 +526,6 @@ public class BasicOpenApiProviderSession {
 			if (PARAMETER_SCHEMA_KEYS.contains(k)) {
 				if (! K_collectionFormat.equals(k))
 					schema.put(k, e.getValue());
-			} else if (K_allowEmptyValue.equals(k)) {
-				newP.put("allowEmptyValue", e.getValue());
 			} else {
 				newP.put(k, e.getValue());
 			}
@@ -544,9 +544,7 @@ public class BasicOpenApiProviderSession {
 		var schema = new Json5Map();
 		for (var e : p.entrySet()) {
 			var k = e.getKey();
-			if (PARAMETER_SCHEMA_KEYS.contains(k) && ! K_collectionFormat.equals(k))
-				schema.put(k, e.getValue());
-			else if (K_$ref.equals(k))
+			if ((PARAMETER_SCHEMA_KEYS.contains(k) && ! K_collectionFormat.equals(k)) || K_$ref.equals(k))
 				schema.put(k, e.getValue());
 		}
 		return schema;

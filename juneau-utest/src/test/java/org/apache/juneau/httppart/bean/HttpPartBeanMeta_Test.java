@@ -71,7 +71,7 @@ class HttpPartBeanMeta_Test {
 	@Test
 	void req04_getParser_parserNull_returnsDefault() throws Exception {
 		var meta = buildReqMeta("getQuery", null, null);
-		var session = mock(HttpPartParserSession.class);
+		var session = mock();
 		assertSame(session, meta.getParser(session));
 	}
 
@@ -155,7 +155,7 @@ class HttpPartBeanMeta_Test {
 	}
 
 	// Minimal mock to avoid requiring full HttpPartParserSession instantiation
-	private static HttpPartParserSession mock(Class<HttpPartParserSession> cls) {
+	private static HttpPartParserSession mock() {
 		return new HttpPartParserSession() {
 			@Override public <T> T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> type) { return null; }
 		};

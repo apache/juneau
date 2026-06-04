@@ -84,7 +84,7 @@ class MixinInheritance_Encoders_Test extends TestBase {
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
 
-	@Test void a01_mixinInheritsHostEncoder() throws Exception {
+	@Test void a01_mixinInheritsHostEncoder() {
 		MockRestClient.buildLax(HostBasic.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostBasic.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
@@ -96,7 +96,7 @@ class MixinInheritance_Encoders_Test extends TestBase {
 			"Mixin with no encoder overrides must inherit the host's HostEnc1 encoder");
 	}
 
-	@Test void a02_mixinAppendsMixinEncOverInheritedHostSet() throws Exception {
+	@Test void a02_mixinAppendsMixinEncOverInheritedHostSet() {
 		MockRestClient.buildLax(HostWithMixinEnc.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinEnc.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinEnc.class);
@@ -110,7 +110,7 @@ class MixinInheritance_Encoders_Test extends TestBase {
 			"Mixin endpoint must still have the host's HostEnc1 (inheritance walk)");
 	}
 
-	@Test void a03_noInheritBlocksParentEncoderWalk() throws Exception {
+	@Test void a03_noInheritBlocksParentEncoderWalk() {
 		MockRestClient.buildLax(HostWithNoInheritMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInheritMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritEnc.class);

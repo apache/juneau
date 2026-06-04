@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.hocon;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.rex;
 
 import java.util.*;
@@ -150,7 +151,7 @@ public class HoconResolver {
 	 * @return The value at that path, or <jk>null</jk>.
 	 */
 	public HoconValue lookup(String path) {
-		if (path == null || path.isEmpty())
+		if (isEmpty(path))
 			return null;
 		var parts = path.split("\\.", -1);
 		return root.getPath(parts);

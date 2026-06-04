@@ -44,4 +44,7 @@ package org.apache.juneau.rest.annotation;
  * </p>
  *
  */
+@SuppressWarnings({
+	"java:S2094" // Sentinel marker class used as the Inherit.class default value in annotation Class<?>[] attributes; it must remain an instantiable class, not an interface.
+})
 public class Inherit {}

@@ -6009,6 +6009,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 *
 	 * @return A new {@link Builder} object.
 	 */
+	@SuppressWarnings({
+		"unchecked" // DefaultBuilder is the concrete Builder subtype; CRTP type variable T cannot be recovered at the static call site
+	})
 	public static <T extends Builder<T>> Builder<T> create() {
 		return (Builder<T>) new DefaultBuilder();
 	}

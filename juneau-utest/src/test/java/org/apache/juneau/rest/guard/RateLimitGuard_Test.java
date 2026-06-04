@@ -81,6 +81,9 @@ class RateLimitGuard_Test extends TestBase {
 		public String b() { return "ok"; }
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Thread.sleep verifies real-time token-bucket refill at the configured rate.
+	})
 	@Test void b01_bucketRefillsAtConfiguredRate() throws Exception {
 		var c = MockRestClient.buildLax(B.class);
 		c.get("/b").run().assertStatus(200);
@@ -132,7 +135,7 @@ class RateLimitGuard_Test extends TestBase {
 	// onLimitExceeded callback fires on rejection
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static volatile boolean E_FIRED;
+	private static volatile boolean eFired;
 
 	@Rest
 	public static class E extends BasicRestServlet {
@@ -144,7 +147,7 @@ class RateLimitGuard_Test extends TestBase {
 					.burst(1)
 					.keyBy(req -> "static")
 					.exemptPaths()
-					.whenLimitExceeded((req, info) -> E_FIRED = true)
+					.whenLimitExceeded((req, info) -> eFired = true)
 					.build()
 			).build();
 		}
@@ -153,11 +156,11 @@ class RateLimitGuard_Test extends TestBase {
 	}
 
 	@Test void e01_onLimitExceededCallbackFiresOnRejection() throws Exception {
-		E_FIRED = false;
+		eFired = false;
 		var c = MockRestClient.buildLax(E.class);
 		c.get("/e").run().assertStatus(200);
 		c.get("/e").run().assertStatus(429);
-		assertTrue(E_FIRED);
+		assertTrue(eFired);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

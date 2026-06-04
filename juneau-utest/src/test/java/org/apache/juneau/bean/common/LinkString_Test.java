@@ -64,16 +64,20 @@ class LinkString_Test extends TestBase {
 		assertEquals(0, a.compareTo(a));
 	}
 
-	@Test void a07_equals() {
+	@Test
+	@SuppressWarnings({
+		"java:S5785" // Self-equals contract test; assertEquals(a,a) would trip S5863 (object compared to itself).
+	})
+	void a07_equals() {
 		var a = new LinkString("Home", "http://example.org/");
 		var b = new LinkString("Home", "http://example.org/");
 		var c = new LinkString("Other", "http://other.org/");
 
-		assertTrue(a.equals(b));
-		assertFalse(a.equals(c));
-		assertFalse(a.equals(null));
-		assertFalse(a.equals((Object)"notALinkString"));
-		assertTrue(a.equals(a));
+		assertEquals(a, b);
+		assertNotEquals(a, c);
+		assertNotEquals(null, a);
+		assertNotEquals("notALinkString", a);
+		assertTrue(a.equals(a));  // Keep self-equals form: assertEquals(a,a) would trip S5863 (object compared to itself).
 	}
 
 	@Test void a08_hashCode_withNonNullName() {

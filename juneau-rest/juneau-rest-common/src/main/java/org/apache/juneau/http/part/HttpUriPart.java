@@ -31,6 +31,9 @@ import java.util.function.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S2160" // Equality is fully determined by name + getValue() in HttpPartBean; the typed fields are derived from the wire value and add no state to compare
+})
 public class HttpUriPart extends HttpPartBean {
 
 	/**

@@ -77,6 +77,9 @@ class RestRequest_CheckPreconditions_Test extends TestBase {
 		}
 
 		// Non-safe method to verify If-Modified-Since is ignored.
+		@SuppressWarnings({
+			"java:S4144" // Intentionally mirrors strong() to verify If-Modified-Since is ignored on a non-safe method.
+		})
 		@RestPost("/postStrong")
 		public String postStrong(RestRequest req, RestResponse res) {
 			res.eTag(ETAG_STRONG).lastModified(Instant.parse("2026-05-22T00:00:00Z"));

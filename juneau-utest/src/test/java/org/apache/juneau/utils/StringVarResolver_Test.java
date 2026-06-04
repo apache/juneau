@@ -220,10 +220,6 @@ class StringVarResolver_Test extends TestBase {
 		assertEquals(in, vr.resolve(in));
 		in = "${{foobar}";
 		assertEquals(in, vr.resolve(in));
-		// Note: "${$foobar}" used to be a "false trigger" (empty var name, unresolved). After the
-		// TODO-79 ${xxx} shortcut, "${...}" routes to $P{...} (Settings-backed PropertyVar) by
-		// default. The inner "$foobar" is not a valid var ref (no '{' follows), so the body
-		// becomes the literal "$foobar". Settings has no such key, so the result is "".
 		in = "${$foobar}";
 		assertEquals("", vr.resolve(in));
 

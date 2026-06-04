@@ -17,6 +17,7 @@
 package org.apache.juneau.proto;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
@@ -108,8 +109,8 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 		if (!cm.isMap() && !cm.isCollection() && !cm.isArray() && !cm.isStreamable()) {
 			try {
 				var bm = toBeanMap(o);
-				if (bm != null && !bm.isEmpty()) {
-					serializeBeanMap(w, bm, getBeanTypeName(this, eType, cm, null));
+			if (!isEmpty(bm)) {
+				serializeBeanMap(w, bm, getBeanTypeName(this, eType, cm, null));
 					return;
 				}
 			} catch (@SuppressWarnings("unused") Exception e) {
@@ -187,7 +188,7 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 		if (!treatAsBean && fieldName == null && !sType.isMap() && !sType.isCollection() && !sType.isArray() && !sType.isStreamable()) {
 			try {
 				var bm = toBeanMap(o);
-				treatAsBean = bm != null && !bm.isEmpty();
+				treatAsBean = !isEmpty(bm);
 			} catch (@SuppressWarnings("unused") Exception e) {
 				// Not a bean, will use scalar path
 			}

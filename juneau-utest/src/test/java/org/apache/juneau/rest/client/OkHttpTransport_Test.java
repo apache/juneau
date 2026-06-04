@@ -33,7 +33,7 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link OkHttpTransport} against a real embedded HTTP server.
  */
-public class OkHttpTransport_Test {
+class OkHttpTransport_Test {
 
 	private static HttpServer server;
 	private static int port;

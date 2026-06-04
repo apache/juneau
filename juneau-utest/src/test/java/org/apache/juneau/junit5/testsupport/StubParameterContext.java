@@ -70,7 +70,10 @@ public final class StubParameterContext implements ParameterContext {
 	/**
 	 * Sink methods used as real {@link Parameter} sources.  Add a method here when a test needs a new type.
 	 */
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused", // Sink methods are never invoked; they exist only so reflection can read their declared Parameter objects.
+		"java:S1172" // The 'v' parameters are required so each sink declares a Parameter of the target type for reflection.
+	})
 	private static final class Sinks {
 		static void acceptString(String v) { /* no-op */ }
 		static void acceptTestBeanStore(TestBeanStore v) { /* no-op */ }

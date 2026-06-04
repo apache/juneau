@@ -270,7 +270,7 @@ class PackageInfo_Test extends TestBase {
 	@Test
 	void a017_isSealed_withUrl() throws Exception {
 		var pi = PackageInfo.of(TestClass1.class);
-		var url = new URL("file:///test.jar");
+		var url = new URI("file:///test.jar").toURL();
 		assertDoesNotThrow(() -> pi.isSealed(url));
 		// Most packages are not sealed with respect to a specific URL
 	}

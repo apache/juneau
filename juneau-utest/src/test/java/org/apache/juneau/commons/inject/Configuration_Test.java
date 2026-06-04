@@ -66,7 +66,7 @@ class Configuration_Test extends TestBase {
 
 	@Configuration
 	static class StaticFieldConfig {
-		@Bean static SvcA STATIC_A = new SvcA("static");
+		@Bean static final SvcA STATIC_A = new SvcA("static");
 	}
 
 	@Configuration

@@ -199,7 +199,7 @@ public class TestUtils extends Utils {
 	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
 		var exception = Assertions.assertThrows(expectedType, executable);
 		var messages = getMessages(exception);
-		expectedSubstrings.stream().forEach(x -> assertTrue(messages.contains(x), fs("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
+		expectedSubstrings.forEach(x -> assertTrue(messages.contains(x), fs("Expected message to contain: {0}.\nActual:\n{1}", x, messages)));
 		return exception;
 	}
 

@@ -45,7 +45,7 @@ import org.apache.juneau.rest.view.*;
 )
 public class JspResource extends ViewResource {
 
-	private final transient JspDispatcher worker;
+	private final JspDispatcher worker;
 
 	/** No-arg constructor &mdash; uses a default {@link JspDispatcher} worker. */
 	public JspResource() {

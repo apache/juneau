@@ -212,14 +212,13 @@ final class ArgCoercer {
 					if (c2 == '\\' && i + 1 < len) {
 						sb.append(body.charAt(i + 1));
 						i += 2;
-						continue;
-					}
-					if (c2 == quote) {
+					} else if (c2 == quote) {
 						i++;
 						break;
+					} else {
+						sb.append(c2);
+						i++;
 					}
-					sb.append(c2);
-					i++;
 				}
 				out.add(sb.toString());
 			} else {

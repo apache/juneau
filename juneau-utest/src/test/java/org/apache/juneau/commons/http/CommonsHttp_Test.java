@@ -164,7 +164,7 @@ class CommonsHttp_Test extends TestBase {
 
 	@Test
 	void b05_basicNameValuePair_notEqualToOtherType() {
-		assertNotEquals(new BasicNameValuePair("a", "b"), "a=b");
+		assertNotEquals("a=b", new BasicNameValuePair("a", "b"));
 	}
 
 	@Test

@@ -34,14 +34,6 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<!--
-		Pin the Apache HttpComponents 5.x stack on the test classpath.  Both nimbus-jose-jwt 10.3
-		(via juneau-rest-server-jwt) and OpenSAML 5.2.2 (via juneau-rest-server-saml's transitive
-		shib-networking) pull older httpclient5/httpcore5 builds that conflict with the 5.6.1 /
-		5.4 versions juneau-rest-client-apache-httpclient-50 declares in compile scope.  Without
-		this pin, Maven's nearest-wins mediation picks 5.3.1/5.2.5 and ApacheHc5Transport_Test
-		fails with NoSuchMethodError on DefaultHttpRequestWriterFactory.<init>(Http1Config).
-	-->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -210,23 +202,12 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			juneau-rest-server-jwt declares nimbus-jose-jwt as `provided` scope so the dep does NOT
-			leak transitively into consumer projects. juneau-utest exercises the JWT tests end-to-end
-			against a real validator, so we add nimbus here in `test` scope explicitly. See TODO-69
-			Resolved Decision #1 — the containment requirement is verified by
-			`mvn -pl juneau-rest/juneau-rest-server dependency:tree | grep -i nimbus` returning nothing.
-		-->
 		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>10.3</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			juneau-rest-server-saml + opensaml deps (test scope).  See TODO-94b POM comment for why
-			OpenSAML lives on the Shibboleth repository (declared on the SAML module's own pom.xml).
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-saml</artifactId>
@@ -281,10 +262,6 @@
 			<version>5.2.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			juneau-rest-server-oauth + Nimbus OAuth 2.0 SDK (test scope).  Nimbus is `provided` on the
-			OAuth module's POM so the upstream tree never sees it.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-oauth</artifactId>
@@ -297,11 +274,6 @@
 			<version>11.37.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			juneau-rest-server-oidc-rp (OpenID Connect Relying Party login).  Nimbus is `provided` on
-			the module's POM, so the upstream tree never sees it; juneau-utest pulls it explicitly in
-			`test` scope to drive the end-to-end stub-IdP tests.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-oidc-rp</artifactId>
@@ -313,13 +285,6 @@
 			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!--
-			JSP view bridge + per-container JSP engines for the BasicJspResource / JspView test
-			matrix. Engine-agnostic POM stance (TODO-78 resolved decision #2): the bridge module
-			itself has no engine dep, so juneau-utest supplies BOTH engines in `test` scope so the
-			Jetty- and Tomcat-flavored test classes can each exercise the bridge against its
-			matching container.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-view-jsp</artifactId>
@@ -338,13 +303,6 @@
 			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			Thymeleaf view bridge + engines for the BasicThymeleafResource / ThymeleafView test
-			matrix. Engine-agnostic POM stance (TODO-82 resolved decision #2 / mirrored from
-			TODO-78 #2): the bridge module itself has no concrete engine dep, so juneau-utest
-			supplies thymeleaf in `test` scope for the MockRest / Jetty flavors, and the Spring
-			Boot starter for the Spring-Boot flavor (autoconfigured SpringTemplateEngine).
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-view-thymeleaf</artifactId>
@@ -363,15 +321,6 @@
 			<version>${spring.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			Mustache view bridge + mustache.java engine for the BasicMustacheResource /
-			MustacheView test matrix. Engine-agnostic POM stance (TODO-83 resolved decision #2 /
-			mirrored from TODO-78 #2 + TODO-82 #2): the bridge module itself has no concrete
-			engine dep, so juneau-utest supplies mustache.java's compiler in `test` scope. The
-			bridge is mustache.java-specific (Spring Boot's spring-boot-starter-mustache ships
-			com.samskivert:jmustache instead), so there is no Spring-Boot-starter flavor in this
-			test surface.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-view-mustache</artifactId>
@@ -384,15 +333,6 @@
 			<version>0.9.14</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			FreeMarker view bridge + engine for the BasicFreemarkerResource / FreemarkerView test
-			matrix. Engine-agnostic POM stance (TODO-84 resolved decision #2 / mirrored from
-			TODO-78 #2 + TODO-82 #2 + TODO-83 #2): the bridge module itself has no concrete
-			engine dep, so juneau-utest supplies the FreeMarker engine in `test` scope. Spring
-			Boot's spring-boot-starter-freemarker is not added here in v1 — the real-container
-			Spring-Boot integration matrix is deferred to a follow-on TODO behind the TODO-96
-			response-processor-prepend prereq.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-view-freemarker</artifactId>
@@ -472,38 +412,18 @@
 			<version>3.0.2</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			Hibernate Validator 8.0.x is the Jakarta Bean Validation 3.0 reference implementation.
-			Provides the concrete jakarta.validation.Validator engine that backs the optional
-			BeanValidator integration in juneau-rest-server. Test-scope only — production consumers
-			supply their own provider on their classpath.
-		-->
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 			<version>8.0.3.Final</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			Jakarta Expression Language implementation — required at runtime by Hibernate Validator
-			for interpolating dynamic constraint messages. Without it the validator throws
-			ValidationException on first .validate() call ("HV000183: Unable to load 'jakarta.el.*'").
-		-->
 		<dependency>
 			<groupId>org.glassfish.expressly</groupId>
 			<artifactId>expressly</artifactId>
 			<version>5.0.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			Micrometer + OpenTelemetry observability bridge modules. Both module poms declare
-			their external dep (`micrometer-core` / `opentelemetry-api`) in `provided` scope so
-			the consumer picks the version they want — juneau-utest exercises the bridges
-			end-to-end against the real Micrometer / OTel runtimes, so we add the runtime libs
-			here in `test` scope explicitly. The Prometheus registry covers the Spring-style
-			scrape-output assertion in the Micrometer bridge tests; the OpenTelemetry SDK
-			testing artifact provides the in-memory span exporter the OTel bridge tests use.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-micrometer</artifactId>
@@ -546,25 +466,6 @@
 			<version>1.62.0</version>
 			<scope>test</scope>
 		</dependency>
-		<!--
-			Reactive-Streams return-type modules (both opt-in; the reactive feature is no longer in
-			juneau-rest-server core / DefaultConfig — see FINISHED-119/120).
-
-			- juneau-rest-server-reactive: dependency-free JDK Flow.Publisher spine + ReactiveStreamsAdapter
-			  SPI + the ServiceLoader auto-registration file for ReactiveResponseProcessor. Its mere presence
-			  on this test classpath is what activates the reactive processor for ReactiveResponseProcessor_Test
-			  (the JDK-native path needs no third-party library). Pulled transitively by reactor, but declared
-			  explicitly here for clarity and so the JDK-Flow tests don't silently depend on reactor.
-			- juneau-rest-server-reactor: the Reactor / RxJava / Reactive-Streams adapter bridge. The module
-			  declares reactor-core / rxjava / reactive-streams in `provided` scope (so they never leak into
-			  consumers); juneau-utest exercises all three adapters end-to-end, so we add the runtime libs here
-			  in `test` scope explicitly.
-
-			NOTE: because juneau-rest-server-reactive is on this classpath, EVERY resource in juneau-utest gets
-			the ReactiveResponseProcessor auto-discovered. The "bare juneau-rest-server has zero reactive
-			behavior" assertion therefore cannot live here — it is exercised in juneau-rest-mock (whose test
-			classpath has no reactive module). See ReactiveOptIn_BareServer_Test.
-		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-reactive</artifactId>

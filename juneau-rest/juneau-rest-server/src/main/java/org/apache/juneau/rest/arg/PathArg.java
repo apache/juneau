@@ -132,7 +132,7 @@ public class PathArg implements RestOpArg {
 		schemaBuilder.applyAll(Path.class, paramInfo);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(paramInfo).or(() -> Optional.ofNullable(classLevelPath).filter(p -> ne(p.def()) && neq(NONE, p.def())).map(Path::def)).orElse(null);
+		this.def = findDef(paramInfo).or(() -> opt(classLevelPath).filter(p -> ne(p.def()) && neq(NONE, p.def())).map(Path::def)).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
@@ -146,7 +146,7 @@ public class PathArg implements RestOpArg {
 		var req = opSession.getRequest();
 		if (name.equals("*")) {
 			var m = new JsonMap();
-			req.getPathParams().stream().forEach(x -> m.put(x.getName(), x.getValue()));
+			req.getPathParams().forEach(x -> m.put(x.getName(), x.getValue()));
 			return req.getMarshallingSession().convertToType(m, type);
 		}
 		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();

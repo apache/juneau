@@ -82,21 +82,24 @@ public class JuneauRestServletContainerInitializer implements ServletContainerIn
 		if (classes == null)
 			return;
 
-		for (var c : classes) {
-			if (! isMountable(c))
-				continue;
-			var servlet = instantiate(c);
-			if (servlet == null)
-				continue;
-			var resolved = RestContext.resolveTopLevelPaths(c, servlet, null);
-			if (resolved.length == 0)
-				continue;
-			var reg = ctx.addServlet(c.getName(), servlet);
-			if (reg == null)
-				continue; // A servlet with this name is already registered (e.g. via web.xml).
-			for (var path : resolved)
-				reg.addMapping(toUrlMapping(path));
-		}
+		for (var c : classes)
+			tryMount(c, ctx);
+	}
+
+	private static void tryMount(Class<?> c, ServletContext ctx) {
+		if (! isMountable(c))
+			return;
+		var servlet = instantiate(c);
+		if (servlet == null)
+			return;
+		var resolved = RestContext.resolveTopLevelPaths(c, servlet, null);
+		if (resolved.length == 0)
+			return;
+		var reg = ctx.addServlet(c.getName(), servlet);
+		if (reg == null)
+			return; // A servlet with this name is already registered (e.g. via web.xml).
+		for (var path : resolved)
+			reg.addMapping(toUrlMapping(path));
 	}
 
 	private static boolean isMountable(Class<?> c) {

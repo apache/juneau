@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
  * Tests for {@link BasicBeanStore#pushOverlay(BeanStore)} / {@link BasicBeanStore#popOverlay(Snapshot)}.
  *
  * <p>
- * Validates the Phase 6 (Mode OVERLAY) push/pop overlay primitive on {@link BasicBeanStore} (TODO-35):
+ * Validates the Phase 6 (Mode OVERLAY) push/pop overlay primitive on {@link BasicBeanStore} (work item 35):
  * overlay precedence over local entries and the construction-time {@code overridingParent} slot, LIFO
  * discipline, foreign-snapshot rejection, null-overlay rejection, empty-stack pop rejection, and the
  * happy-path lookup-shadow-then-restore semantics that the {@code JuneauBeanStoreExtension} Mode OVERLAY

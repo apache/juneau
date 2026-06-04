@@ -30,7 +30,7 @@ import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for TODO-115: per-resource / per-op observability opt-in attributes.
+ * Tests for per-resource / per-op observability opt-in attributes.
  *
  * <ul>
  *   <li>A — {@code @Rest(observability="false")} suppresses all metrics for the resource.
@@ -49,6 +49,9 @@ class RestObservabilityAttributes_Test extends TestBase {
 	public static final class RecordingMetricsRecorder implements MetricsRecorder {
 		public final List<Event> events = new CopyOnWriteArrayList<>();
 
+		@SuppressWarnings({
+			"java:S6213" // 'record' mirrors the MetricsRecorder SPI method name; renaming would break the @Override contract.
+		})
 		@Override
 		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 			events.add(new Event(opName, httpMethod, uriTemplate, statusCode, elapsed, error, metricName, metricTags));

@@ -397,22 +397,22 @@ class CharRdfMarshallers_Test extends TestBase {
 
 	@Test void b07_nquads_to_reader() throws Exception {
 		var serialized = NQuads.of("foo");
-		NQuads.to(new StringReader(serialized), String.class);
+		assertDoesNotThrow(() -> NQuads.to(new StringReader(serialized), String.class));
 	}
 
 	@Test void b08_nquads_to_reader_type() throws Exception {
 		var serialized = NQuads.of("foo");
-		NQuads.to(new StringReader(serialized), String.class, new java.lang.reflect.Type[0]);
+		assertDoesNotThrow(() -> NQuads.to(new StringReader(serialized), String.class, new java.lang.reflect.Type[0]));
 	}
 
 	@Test void b09_nquads_to_string() throws Exception {
 		var serialized = NQuads.of("foo");
-		NQuads.to(serialized, String.class);
+		assertDoesNotThrow(() -> NQuads.to(serialized, String.class));
 	}
 
 	@Test void b10_nquads_to_string_type() throws Exception {
 		var serialized = NQuads.of("foo");
-		NQuads.to(serialized, String.class, new java.lang.reflect.Type[0]);
+		assertDoesNotThrow(() -> NQuads.to(serialized, String.class, new java.lang.reflect.Type[0]));
 	}
 
 	@Test void b11_ntriple_to_reader() throws Exception {
@@ -485,42 +485,42 @@ class CharRdfMarshallers_Test extends TestBase {
 
 	@Test void b23_trig_to_reader() throws Exception {
 		var serialized = TriG.of("foo");
-		TriG.to(new StringReader(serialized), String.class);
+		assertDoesNotThrow(() -> TriG.to(new StringReader(serialized), String.class));
 	}
 
 	@Test void b24_trig_to_reader_type() throws Exception {
 		var serialized = TriG.of("foo");
-		TriG.to(new StringReader(serialized), String.class, new java.lang.reflect.Type[0]);
+		assertDoesNotThrow(() -> TriG.to(new StringReader(serialized), String.class, new java.lang.reflect.Type[0]));
 	}
 
 	@Test void b25_trig_to_string() throws Exception {
 		var serialized = TriG.of("foo");
-		TriG.to(serialized, String.class);
+		assertDoesNotThrow(() -> TriG.to(serialized, String.class));
 	}
 
 	@Test void b26_trig_to_string_type() throws Exception {
 		var serialized = TriG.of("foo");
-		TriG.to(serialized, String.class, new java.lang.reflect.Type[0]);
+		assertDoesNotThrow(() -> TriG.to(serialized, String.class, new java.lang.reflect.Type[0]));
 	}
 
 	@Test void b27_trix_to_reader() throws Exception {
 		var serialized = TriX.of("foo");
-		TriX.to(new StringReader(serialized), String.class);
+		assertDoesNotThrow(() -> TriX.to(new StringReader(serialized), String.class));
 	}
 
 	@Test void b28_trix_to_reader_type() throws Exception {
 		var serialized = TriX.of("foo");
-		TriX.to(new StringReader(serialized), String.class, new java.lang.reflect.Type[0]);
+		assertDoesNotThrow(() -> TriX.to(new StringReader(serialized), String.class, new java.lang.reflect.Type[0]));
 	}
 
 	@Test void b29_trix_to_string() throws Exception {
 		var serialized = TriX.of("foo");
-		TriX.to(serialized, String.class);
+		assertDoesNotThrow(() -> TriX.to(serialized, String.class));
 	}
 
 	@Test void b30_trix_to_string_type() throws Exception {
 		var serialized = TriX.of("foo");
-		TriX.to(serialized, String.class, new java.lang.reflect.Type[0]);
+		assertDoesNotThrow(() -> TriX.to(serialized, String.class, new java.lang.reflect.Type[0]));
 	}
 
 	@Test void b31_turtle_to_reader() throws Exception {

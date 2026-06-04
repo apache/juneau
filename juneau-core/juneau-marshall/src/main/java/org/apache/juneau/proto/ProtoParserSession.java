@@ -17,6 +17,8 @@
 package org.apache.juneau.proto;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -80,7 +82,7 @@ public class ProtoParserSession extends ReaderParserSession {
 				return null;
 			var t = new ProtoTokenizer(r);
 			Map<String, Object> root = parseMessage(t, false);
-			if (root == null || root.isEmpty())
+			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (root.size() == 1 && root.containsKey("_value")) {
 				var raw = root.get("_value");
@@ -124,7 +126,7 @@ public class ProtoParserSession extends ReaderParserSession {
 			}
 
 			var fieldName = readFieldName(t);
-			if (fieldName == null || fieldName.isEmpty())
+			if (isEmpty(fieldName))
 				break;
 
 			t.skipWhitespaceAndComments();
@@ -317,7 +319,7 @@ public class ProtoParserSession extends ReaderParserSession {
 			if (targetType.isBean()) {
 				var typeName = (String) val2.get(getBeanTypePropertyName(targetType));
 				var beanType = targetType;
-				if (typeName != null && !typeName.isEmpty()) {
+				if (!isEmpty(typeName)) {
 					var resolved = getClassMeta(typeName, null, targetType);
 					if (resolved != null)
 						beanType = resolved;

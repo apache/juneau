@@ -23,6 +23,9 @@ import java.time.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"java:S2925" // Thread.sleep drives real-time bucket aging so eviction/TTL behavior can be observed.
+})
 class RateLimitGuard_Eviction_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

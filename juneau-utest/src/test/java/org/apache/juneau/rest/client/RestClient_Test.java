@@ -31,8 +31,11 @@ import org.junit.jupiter.api.*;
 /**
  * First end-to-end tests for the next-generation REST client using {@link MockHttpTransport}.
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
-public class RestClient_Test {
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5783" // Dense try-with-resources assertThrows blocks intentionally assert the whole build/run/assert sequence throws; hoisting setup outside would change what is tested
+})
+class RestClient_Test {
 
 	// =================================================================================================================
 	// A — Basic GET / response reading
@@ -492,7 +495,7 @@ public class RestClient_Test {
 	// =================================================================================================================
 
 	@Test
-	void l01_transportException_message() throws Exception {
+	void l01_transportException_message() {
 		var thrown = assertThrows(TransportException.class, () -> {
 			var transport = MockHttpTransport.builder()
 				.fallback(req -> { throw new TransportException("connection refused"); })
@@ -505,7 +508,7 @@ public class RestClient_Test {
 	}
 
 	@Test
-	void l02_transportException_withCause() throws Exception {
+	void l02_transportException_withCause() {
 		var cause = new IOException("timeout");
 		var thrown = assertThrows(TransportException.class, () -> {
 			var transport = MockHttpTransport.builder()
@@ -519,7 +522,7 @@ public class RestClient_Test {
 	}
 
 	@Test
-	void l03_transportException_causeOnly() throws Exception {
+	void l03_transportException_causeOnly() {
 		var cause = new IOException("connection reset");
 		var thrown = assertThrows(TransportException.class, () -> {
 			var transport = MockHttpTransport.builder()
@@ -737,12 +740,13 @@ public class RestClient_Test {
 	}
 
 	@Test
-	void o04_clearRecordedRequests_recordingDisabled() throws Exception {
+	void o04_clearRecordedRequests_recordingDisabled() {
 		// When recording is not enabled, clearRecordedRequests() should be a no-op
 		var transport = MockHttpTransport.builder()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		transport.clearRecordedRequests(); // should not throw
+		assertDoesNotThrow(transport::clearRecordedRequests);
+		assertEquals(0, transport.getRecordedRequests().size());
 	}
 
 	@Test

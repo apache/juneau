@@ -106,5 +106,9 @@ public interface MetricsRecorder {
 	 * 	Format: comma-separated {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}).
 	 * 	Empty string (default) means no additional tags. Never <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S6213", // 'record' is the established SPI method name; renaming would break the public observability API.
+		"java:S107"   // The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.
+	})
 	void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);
 }

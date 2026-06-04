@@ -241,11 +241,11 @@ public class OtelTracerHook implements TracerHook {
 	private static final class OtelScope implements Scope {
 
 		private final Span span;
-		private final io.opentelemetry.context.Scope otelScope;
+		private final io.opentelemetry.context.Scope scope;
 
-		OtelScope(Span span, io.opentelemetry.context.Scope otelScope) {
+		OtelScope(Span span, io.opentelemetry.context.Scope scope) {
 			this.span = span;
-			this.otelScope = otelScope;
+			this.scope = scope;
 		}
 
 		@Override /* Scope */
@@ -267,7 +267,7 @@ public class OtelTracerHook implements TracerHook {
 		@Override /* Scope */
 		public void close() {
 			try {
-				otelScope.close();
+				scope.close();
 			} finally {
 				span.end();
 			}

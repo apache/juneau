@@ -17,13 +17,11 @@
 package org.apache.juneau.microservice.springboot.template;
 
 import static org.apache.juneau.commons.utils.Utils.*;
-
 import java.util.*;
 
 import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
-import org.springframework.beans.factory.annotation.*;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.
@@ -39,12 +37,7 @@ import org.springframework.beans.factory.annotation.*;
 public class HelloWorldResource extends BasicRestResource {
 
 	private final String message;
-
-	/**
-	 * Optional message provider that can be injected into this object.
-	 */
-	@Autowired
-	private Optional<HelloWorldMessageProvider> messageProvider;
+	private final Optional<HelloWorldMessageProvider> messageProvider;
 
 	/**
 	 * Default constructor.
@@ -61,7 +54,18 @@ public class HelloWorldResource extends BasicRestResource {
 	 * @param message The message to display.
 	 */
 	public HelloWorldResource(String message) {
+		this(message, opte());
+	}
+
+	/**
+	 * Constructor with an injectable message provider.
+	 *
+	 * @param message The message to display.
+	 * @param messageProvider Optional message provider that can be injected into this object.
+	 */
+	public HelloWorldResource(String message, Optional<HelloWorldMessageProvider> messageProvider) {
 		this.message = message;
+		this.messageProvider = messageProvider;
 	}
 
 	/**
@@ -72,7 +76,7 @@ public class HelloWorldResource extends BasicRestResource {
 	@RestGet(path = "/*", summary = "Responds with \"Hello world!\"")
 	public String sayHello() {
 		var message2 = this.message;
-		if (nn(messageProvider) && messageProvider.isPresent())
+		if (messageProvider.isPresent())
 			message2 = messageProvider.get().get();
 		return message2;
 	}

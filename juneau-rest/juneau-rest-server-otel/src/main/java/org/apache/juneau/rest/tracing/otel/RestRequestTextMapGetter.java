@@ -38,6 +38,9 @@ import io.opentelemetry.context.propagation.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S6548" // Singleton pattern is intentional; INSTANCE is a stateless, thread-safe TextMapGetter implementation.
+})
 public final class RestRequestTextMapGetter implements TextMapGetter<RestRequest> {
 
 	/** Process-wide singleton instance. */

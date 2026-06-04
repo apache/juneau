@@ -113,7 +113,7 @@ public final class StubExtensionContext {
 				case "getExecutionException" -> Optional.empty();
 				case "getConfigurationParameter" -> Optional.empty();
 				case "publishReportEntry", "publishFile", "publishDirectory" -> null;
-				case "getStore" -> storeFor(method, args);
+				case "getStore" -> storeFor(args);
 				case "getExecutionMode" -> throw new UnsupportedOperationException("getExecutionMode");
 				case "getExecutableInvoker" -> throw new UnsupportedOperationException("getExecutableInvoker");
 				case "equals" -> proxy == args[0];
@@ -123,7 +123,7 @@ public final class StubExtensionContext {
 			};
 		}
 
-		private Store storeFor(Method method, Object[] args) {
+		private Store storeFor(Object[] args) {
 			// Last argument is always the Namespace (either getStore(Namespace) or getStore(StoreScope, Namespace)).
 			var ns = (ExtensionContext.Namespace) args[args.length - 1];
 			var backing = state.namespaces.computeIfAbsent(ns, k -> new ConcurrentHashMap<>());
@@ -163,8 +163,7 @@ public final class StubExtensionContext {
 				case "getOrDefault":
 					var existing = backing.get(args[0]);
 					return existing != null ? ((Class<?>) args[1]).cast(existing) : args[2];
-				case "getOrComputeIfAbsent":
-				case "computeIfAbsent":
+				case "getOrComputeIfAbsent", "computeIfAbsent":
 					if (args.length == 1) {
 						var typeKey = (Class<?>) args[0];
 						return typeKey.cast(backing.computeIfAbsent(typeKey, k -> instantiate(typeKey)));

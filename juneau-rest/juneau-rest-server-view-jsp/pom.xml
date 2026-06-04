@@ -35,7 +35,7 @@
 	</properties>
 
 	<!--
-		Engine-agnostic POM stance (TODO-78 resolved decision #2).
+		Engine-agnostic POM stance.
 
 		The bridge module declares ONLY the JSP API + JSTL impl in `provided` scope. NO JSP-engine
 		dependency ships here — consumers pick the engine matching their container:

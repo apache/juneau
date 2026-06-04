@@ -164,10 +164,12 @@ class JuneauBeanStoreExtension_OverlayMode_Test extends TestBase {
 
 		var holder = new InjectHolder();
 		var ctx = StubExtensionContext.of(InjectHolder.class, holder);
-		ext.beforeAll(ctx);
-		ext.beforeEach(ctx);
-		ext.afterEach(ctx);
-		ext.afterAll(ctx);
-		// Should complete without throwing — Mode.INJECT is the back-compat default.
+		// Mode.INJECT is the back-compat default; the full lifecycle must complete without throwing.
+		assertDoesNotThrow(() -> {
+			ext.beforeAll(ctx);
+			ext.beforeEach(ctx);
+			ext.afterEach(ctx);
+			ext.afterAll(ctx);
+		});
 	}
 }

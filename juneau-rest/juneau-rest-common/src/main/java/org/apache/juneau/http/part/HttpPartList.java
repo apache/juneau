@@ -23,7 +23,6 @@ import static org.apache.juneau.commons.utils.Utils.eqic;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.*;
 
 import org.apache.juneau.http.*;
 
@@ -314,7 +313,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * @return A new list of matching parts. Never <jk>null</jk>.
 	 */
 	public List<HttpPart> getAll(String name) {
-		return stream().filter(p -> nameMatches(p, name)).collect(Collectors.toList());
+		return stream().filter(p -> nameMatches(p, name)).toList();
 	}
 
 	/**

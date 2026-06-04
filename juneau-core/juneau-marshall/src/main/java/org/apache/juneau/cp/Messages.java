@@ -357,8 +357,8 @@ public class Messages extends ResourceBundle {
 	}
 
 	/*
-	 * Returns a deep copy of the {@code c} chain in which the deepest link's {@code parent2 == null}
-	 * has been replaced with {@code newLeafParent}.  Recurses without mutating any input.
+	 * Returns a deep copy of the child chain in which the deepest link (the one with no parent)
+	 * has its parent replaced by the new leaf parent.  Recurses without mutating any input.
 	 */
 	private static Messages spliceLeafParent(Messages c, Messages newLeafParent) {
 		if (c.parent2 == null)

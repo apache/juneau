@@ -43,7 +43,7 @@ import org.junit.jupiter.api.*;
  * MockRest does not URL-normalize request paths the way a real servlet container does, so
  * the {@code @Path("/*") String path} parameter receives the raw {@code ..} segments — which
  * is what the handler-layer boundary check is designed to catch. (Real-container coverage is
- * deferred to the same TODO-97 integration matrix that lights up Jetty/Spring Boot end-to-end
+ * deferred to the same integration matrix that lights up Jetty/Spring Boot end-to-end
  * for the rest of the JSP module.)
  *
  * @since 9.5.0

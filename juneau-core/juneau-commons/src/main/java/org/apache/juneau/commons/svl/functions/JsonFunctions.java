@@ -36,7 +36,8 @@ public final class JsonFunctions {
 
 	/** All function classes in this category. */
 	@SuppressWarnings({
-		"unchecked" // Cast is safe: type verified by caller context.
+		"unchecked", // Cast is safe: type verified by caller context.
+		"java:S2386" // ALL is an immutable compile-time registry; exposed as an array for the cross-package/varargs functions(...) API, so visibility cannot be reduced.
 	})
 	public static final Class<? extends VarFunction>[] ALL = new Class[] {
 		JsonPath.class, Get.class, Keys.class, Values.class, Size.class

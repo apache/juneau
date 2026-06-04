@@ -141,7 +141,7 @@ public class FormDataArg implements RestOpArg {
 		schemaBuilder.applyAll(FormData.class, pi);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(pi).or(() -> Optional.ofNullable(classLevelFormData).filter(f -> ne(f.def())).map(FormData::def)).orElse(null);
+		this.def = findDef(pi).or(() -> opt(classLevelFormData).filter(f -> ne(f.def())).map(FormData::def)).orElse(null);
 		this.type = pi.getParameterType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

@@ -22,24 +22,9 @@ import org.apache.juneau.rest.staticfile.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates {@link StaticFilesMixin} deployed as a <em>standalone</em> resource (Path B
- * in TODO-75) &mdash; the user extends {@code StaticFilesMixin} directly and the
+ * Validates {@link StaticFilesMixin} deployed as a <em>standalone</em> resource the user extends {@code StaticFilesMixin} directly and the
  * inherited op-level {@code @RestGet(path="/${juneau.staticfiles.path:static}/*")} declares the
  * mount point without any additional configuration.
- *
- * <p>
- * Inner {@code @RestGet(path=...)} is the URL-path matcher used by Juneau's
- * {@code UrlPathMatcher} once a request lands on the servlet. Per FINISHED-101's "single path
- * per op" principle the historical dual default ({@code "/static/*"} + {@code "/htdocs/*"}) was
- * collapsed to a single SVL-configurable path; the {@code /htdocs/*} alias is reached via
- * {@code -Djuneau.staticfiles.path=htdocs} and is covered by
- * {@code StaticFilesMixin_SvlPathOverride_Test#a02}.
- *
- * <p>
- * {@code MockRest} dispatches directly to the inner matcher and does NOT model the
- * container-level servlet-mapping layer, so this test focuses on the standalone-extends-mixin
- * shape and the inner handler's behavior. The container-level mount is validated in the
- * real-Jetty parity test.
  *
  * @since 9.5.0
  */

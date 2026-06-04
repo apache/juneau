@@ -77,6 +77,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * BeanPropertyMeta builder class.
 	 */
+	@SuppressWarnings({
+		"java:S1104" // Public mutable fields are an intentional cross-module SPI seam: the marshalling-side post-processor (different package) reads/writes them after validate(), so they cannot be final or package-private.
+	})
 	public static class Builder {
 		BeanMeta<?> beanMeta;  // Package-private for BeanMeta access
 		BeanTypeResolver bc;  // The bean-modeling SPI seam to the marshalling-side type resolver.  Null when the owning BeanMeta was built via the commons-side path.

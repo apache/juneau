@@ -44,7 +44,8 @@ import org.junit.jupiter.api.*;
  * Lives in {@code org.apache.juneau} so it can use package-private MPP internals if needed.
  */
 @SuppressWarnings({
-	"java:S1186" // Annotation-presence-only fixtures don't need test body wiring beyond round-trip.
+	"java:S1186", // Annotation-presence-only fixtures don't need test body wiring beyond round-trip.
+	"java:S2699" // Several tests assert through the roundTripDefault helper (and the l01 no-op guard) that Sonar can't see as assertions.
 })
 class MarshalledPropertyPostProcessor_Test {
 

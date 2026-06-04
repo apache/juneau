@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.http;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.util.*;
 
 /**
@@ -46,7 +48,7 @@ public final class HeaderValueParser {
 		"java:S3776" // Cognitive complexity acceptable for parser logic
 	})
 	public static HeaderElement[] parseElements(String value) {
-		if (value == null || value.isEmpty())
+		if (isEmpty(value))
 			return new HeaderElement[0];
 
 		var elements = new ArrayList<HeaderElement>();

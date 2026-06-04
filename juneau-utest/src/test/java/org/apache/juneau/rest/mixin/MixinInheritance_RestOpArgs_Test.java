@@ -34,6 +34,9 @@ import org.junit.jupiter.api.*;
  * host's REST-op-arg chain via the {@link RestContext#getRestAnnotationsForProperty(String) annotation-property
  * walk}.
  */
+@SuppressWarnings({
+	"java:S1172" // 'pi' is required by the RestOpArg static-creator SPI contract (create(ParameterInfo)) even when unused.
+})
 class MixinInheritance_RestOpArgs_Test extends TestBase {
 
 	public static class HostArg implements RestOpArg {
@@ -81,7 +84,7 @@ class MixinInheritance_RestOpArgs_Test extends TestBase {
 
 	private static List<Class<?>> argsOf(RestContext c) { return Arrays.asList(c.getRestOpArgs()); }
 
-	@Test void a01_mixinInheritsHostRestOpArg() throws Exception {
+	@Test void a01_mixinInheritsHostRestOpArg() {
 		MockRestClient.buildLax(HostBasic.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostBasic.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
@@ -93,7 +96,7 @@ class MixinInheritance_RestOpArgs_Test extends TestBase {
 			"Mixin with no restOpArgs overrides must inherit the host's HostArg");
 	}
 
-	@Test void a02_mixinAppendsMixinArgOverInheritedHostSet() throws Exception {
+	@Test void a02_mixinAppendsMixinArgOverInheritedHostSet() {
 		MockRestClient.buildLax(HostWithMixinArg.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinArg.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinArg.class);
@@ -107,7 +110,7 @@ class MixinInheritance_RestOpArgs_Test extends TestBase {
 			"Mixin endpoint must still have the host's HostArg (inheritance walk)");
 	}
 
-	@Test void a03_noInheritBlocksParentRestOpArgsWalk() throws Exception {
+	@Test void a03_noInheritBlocksParentRestOpArgsWalk() {
 		MockRestClient.buildLax(HostWithNoInheritMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInheritMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritArg.class);

@@ -42,6 +42,9 @@ import org.apache.juneau.commons.bean.BeanPropertyMeta;
  */
 public class DelegateBeanMap<T> extends BeanMap<T> {
 
+	@SuppressWarnings({
+		"java:S2160" // BeanMapEntry's key/value-based equals/hashCode are intentionally inherited; the getValue() override feeds them the override value.
+	})
 	class BeanMapEntryOverride extends BeanMapEntry {
 		Object value;
 

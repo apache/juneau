@@ -503,7 +503,7 @@ public class Settings {
 		v = globalStore.get().get(name);
 		if (v.isPresent())
 			return v.value();
-		return Optional.empty();
+		return opte();
 	}
 
 	/**

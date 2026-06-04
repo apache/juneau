@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * Tests for {@link TestBeanStore}.
  *
  * <p>
- * Validates Phase 1 of TODO-35 — the overlay-builder side of the test-time bean injection
+ * Validates the overlay-builder side of the test-time bean injection
  * mechanism.  The framework wiring (Args.overridingParent, MockRestClient.overridingBeanStore)
  * is exercised by sibling tests; this test concentrates on the {@link TestBeanStore} surface.
  */

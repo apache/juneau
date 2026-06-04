@@ -69,7 +69,7 @@ class MockLogger_Test extends TestBase {
 
 	@Test void a08_assertLogged_failure() {
 		var logger = new MockLogger();
-		assertThrows(AssertionError.class, () -> logger.assertLogged());
+		assertThrows(AssertionError.class, logger::assertLogged);
 	}
 
 	@Test void a09_assertRecordCount() {
@@ -92,8 +92,8 @@ class MockLogger_Test extends TestBase {
 		var logger = new MockLogger();
 		logger.formatter(new Formatter() {
 			@Override
-			public String format(LogRecord record) {
-				return "CUSTOM:" + record.getMessage();
+			public String format(LogRecord r) {
+				return "CUSTOM:" + r.getMessage();
 			}
 		});
 		logger.log(new LogRecord(Level.INFO, "custom"));

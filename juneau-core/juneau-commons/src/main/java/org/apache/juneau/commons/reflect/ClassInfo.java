@@ -487,19 +487,6 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	}
 
 	/**
-	 * Finds the annotation of the specified type defined on this class or parent class/interface.
-	 *
-	 * <p>
-	 * If the annotation cannot be found on the immediate class, searches methods with the same signature on the parent classes or interfaces. <br>
-	 * The search is performed in child-to-parent order.
-	 *
-	 * @param <A> The annotation type to look for.
-	 * @param annotationProvider The annotation provider.
-	 * @param type The annotation to look for.
-	 * @return The annotation if found, or <jk>null</jk> if not.
-	 */
-
-	/**
 	 * Returns the component type of this class if it is an array type.
 	 *
 	 * <p>

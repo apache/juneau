@@ -18,6 +18,7 @@ package org.apache.juneau.rest.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -504,11 +505,26 @@ public class OidcRelyingParty {
 	private final Clock clock;
 	private final EphemeralStore ephemeralStore;
 
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in metadata(); the OidcMetadata payload is fully built before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile OidcMetadata metadataCache;
 	private final OidcMetadata explicitMetadata;
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in codeFlow(); the flow is fully built before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile OAuthAuthorizationCodeFlow codeFlowCache;
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in idTokenValidator(); the adapter is fully built before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile IdTokenValidatorAdapter idTokenValidatorCache;
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in jwkSource(); the source is fully built before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile JWKSource<SecurityContext> jwkSourceCache;
+	@SuppressWarnings({
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in logoutTokenValidator(); the validator is fully built before assignment, so volatile safe-publication is sufficient.
+	})
 	private volatile LogoutTokenValidator logoutTokenValidatorCache;
 
 	/**
@@ -630,7 +646,7 @@ public class OidcRelyingParty {
 			sid,
 			principal,
 			roles,
-			Optional.of(token),
+			opt(token),
 			now,
 			now.plus(sessionTtl));
 
@@ -655,17 +671,7 @@ public class OidcRelyingParty {
 		var cookieValue = readCookie(req);
 		JWT idTokenHint = null;
 		if (cookieValue != null) {
-			var session = sessionStore.lookup(cookieValue);
-			if (session.isPresent() && session.get().token().isPresent()) {
-				var idt = session.get().token().get().idToken();
-				if (idt.isPresent()) {
-					try {
-						idTokenHint = JWTParser.parse(idt.get());
-					} catch (java.text.ParseException e) {
-						idTokenHint = null;  // HTT - best-effort hint only
-					}
-				}
-			}
+			idTokenHint = idTokenHintFromSession(cookieValue);
 			sessionStore.invalidate(cookieValue);
 		}
 		noStore(res);
@@ -698,20 +704,24 @@ public class OidcRelyingParty {
 		assertArgNotNull("res", res);
 		var cookieValue = readCookie(req);
 		if (cookieValue == null)
-			return Optional.empty();
+			return opte();
 		var existing = sessionStore.lookup(cookieValue);
-		if (existing.isEmpty() || existing.get().token().isEmpty())
-			return Optional.empty();
-		var oldToken = existing.get().token().get();
-		if (oldToken.refreshToken().isEmpty())
-			return Optional.empty();
+		if (existing.isEmpty())
+			return opte();
+		var tokenOpt = existing.get().token();
+		if (tokenOpt.isEmpty())
+			return opte();
+		var oldToken = tokenOpt.get();
+		var refreshTokenOpt = oldToken.refreshToken();
+		if (refreshTokenOpt.isEmpty())
+			return opte();
 
 		OAuthToken refreshed;
 		try {
 			var flowBuilder = OAuthRefreshTokenFlow.create()
 				.tokenEndpoint(metadata().tokenEndpoint())
 				.clientId(clientId)
-				.refreshToken(oldToken.refreshToken().get());
+				.refreshToken(refreshTokenOpt.get());
 			if (clientSecretSupplier != null)
 				flowBuilder.clientSecretSupplier(clientSecretSupplier);
 			if (httpRequestConfigurator != null)
@@ -721,7 +731,7 @@ public class OidcRelyingParty {
 			// Rotating-refresh-token reuse / revocation -> invalidate the session (fail-closed).
 			sessionStore.invalidate(cookieValue);
 			res.addHeader("Set-Cookie", buildSetCookie("", 0));
-			return Optional.empty();
+			return opte();
 		}
 
 		var old = existing.get();
@@ -732,14 +742,14 @@ public class OidcRelyingParty {
 			old.sid(),
 			old.principal(),
 			old.roles(),
-			Optional.of(refreshed),
+			opt(refreshed),
 			old.createdAt(),
 			now.plus(sessionTtl));
 		sessionStore.invalidate(cookieValue);
 		var newCookie = sessionStore.createSessionCookieValue(newSession);
 		noStore(res);
 		res.addHeader("Set-Cookie", buildSetCookie(newCookie, sessionTtl.toSeconds()));
-		return Optional.of(newSession);
+		return opt(newSession);
 	}
 
 	/**
@@ -986,6 +996,28 @@ public class OidcRelyingParty {
 		return sb.toString();
 	}
 
+	/**
+	 * Best-effort extraction of the {@code id_token_hint} for the RP-initiated logout request from the
+	 * session referenced by the given cookie value.  Returns <jk>null</jk> when the session, its token,
+	 * or its id_token is absent, or when the id_token cannot be parsed.
+	 */
+	private JWT idTokenHintFromSession(String cookieValue) {
+		var session = sessionStore.lookup(cookieValue);
+		if (session.isEmpty())
+			return null;
+		var token = session.get().token();
+		if (token.isEmpty())
+			return null;
+		var idt = token.get().idToken();
+		if (idt.isEmpty())
+			return null;
+		try {
+			return JWTParser.parse(idt.get());
+		} catch (java.text.ParseException e) {
+			return null;  // HTT - best-effort hint only
+		}
+	}
+
 	private String readCookie(HttpServletRequest req) {
 		var cookies = req.getCookies();
 		if (cookies == null)
@@ -1002,7 +1034,7 @@ public class OidcRelyingParty {
 	}
 
 	private static URI fullRequestUri(HttpServletRequest req) {
-		var url = req.getRequestURL();
+		var url = new StringBuilder(req.getRequestURL());
 		var qs = req.getQueryString();
 		if (qs != null)
 			url.append('?').append(qs);

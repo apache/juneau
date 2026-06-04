@@ -49,7 +49,7 @@ class MixinInheritance_VarResolver_Test extends TestBase {
 		@RestGet(path="/h") public String h() { return "h"; }
 	}
 
-	@Test void a01_mixinVarResolverSeesHostLocalizedMessages() throws Exception {
+	@Test void a01_mixinVarResolverSeesHostLocalizedMessages() {
 		MockRestClient.buildLax(HostWithHostMessages.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithHostMessages.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoMessages.class);

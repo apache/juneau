@@ -55,6 +55,9 @@ public final class JettyHttpTransportProvider implements HttpTransportProvider {
 	}
 
 	@Override /* HttpTransportProvider */
+	@SuppressWarnings({
+		"java:S112" // Re-wrap as RuntimeException - JettyHttpTransport.create() throws generic Exception from Jetty HttpClient startup; no specific type fits and the HttpTransportProvider.create() SPI method cannot declare checked exceptions.
+	})
 	public HttpTransport create() {
 		try {
 			return JettyHttpTransport.create();

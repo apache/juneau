@@ -91,7 +91,10 @@ public class HealthAggregator {
 			return ComponentHealth.from(Health.down(name, e).detail("error", "Health check timed out after " + timeoutMillis + "ms").build());
 		} catch (ExecutionException e) {
 			return ComponentHealth.from(Health.down(name, e.getCause()).build());
-		} catch (Throwable e) {
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			return ComponentHealth.from(Health.down(name, e).build());
+		} catch (Exception e) {
 			return ComponentHealth.from(Health.down(name, e).build());
 		}
 	}

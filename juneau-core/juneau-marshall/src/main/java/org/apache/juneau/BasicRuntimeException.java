@@ -27,6 +27,9 @@ import java.text.*;
  *
  * @serial exclude
  */
+@SuppressWarnings({
+	"java:S2176" // Intentional same-named backward-compat re-export of org.apache.juneau.commons.BasicRuntimeException; renaming this public class would break the API.
+})
 public class BasicRuntimeException extends org.apache.juneau.commons.BasicRuntimeException {
 	private static final long serialVersionUID = 1L;
 

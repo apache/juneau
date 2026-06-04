@@ -527,6 +527,9 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @param session The current bean session (retained for API compatibility).
 	 * @return The builder swap associated with this class, or <jk>null</jk> if it doesn't exist.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // 'session' retained for public-API/binary compatibility; the builder swap is session-independent.
+	})
 	public BuilderSwap<T,?> getBuilderSwap(MarshallingSession session) {
 		return builderSwap.get();
 	}

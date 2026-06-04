@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 class StreamEntity_Test extends TestBase {
 
-	private static byte[] CONTENT = "hello world".getBytes(StandardCharsets.UTF_8);
+	private static final byte[] CONTENT = "hello world".getBytes(StandardCharsets.UTF_8);
 
 	private static InputStream stream() {
 		return new ByteArrayInputStream(CONTENT);
@@ -57,6 +57,9 @@ class StreamEntity_Test extends TestBase {
 		assertArrayEquals(CONTENT, x.asBytes());
 	}
 
+	@SuppressWarnings({
+		"java:S4144" // Distinct documented scenario (uncached asString) that coincidentally shares a01_basic's body.
+	})
 	@Test void a05_asString_uncached() throws Exception {
 		var x = new StreamEntity().setContent(stream());
 		assertEquals("hello world", x.asString());

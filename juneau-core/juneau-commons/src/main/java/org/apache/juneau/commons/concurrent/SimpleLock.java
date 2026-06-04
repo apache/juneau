@@ -135,20 +135,13 @@ public class SimpleLock implements AutoCloseable {
 	 *
 	 * @param lock The {@link Lock} being wrapped. Can be <jk>null</jk> to create a no-op lock.
 	 */
+	@SuppressWarnings({
+		"java:S2222" // Lock is intentionally held past constructor return and released in close() per the AutoCloseable contract.
+	})
 	public SimpleLock(Lock lock) {
-		if (nn(lock)) {
-			boolean acquired = false;
+		this.lock = lock;
+		if (nn(lock))
 			lock.lock();
-			try {
-				this.lock = lock;
-				acquired = true;
-			} finally {
-				if (!acquired)
-					lock.unlock();
-			}
-		} else {
-			this.lock = null;
-		}
 	}
 
 	/**

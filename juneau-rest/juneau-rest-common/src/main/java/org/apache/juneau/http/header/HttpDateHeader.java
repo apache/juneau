@@ -31,8 +31,8 @@ import java.util.function.*;
  * @since 9.2.1
  */
 @SuppressWarnings({
-	"java:S2160",
-	"unchecked"
+	"java:S2160", // equals() on HttpHeaderBean uses name + getValue(); typed state is reflected in getValue()
+	"unchecked" // Supplier<?> branches cast to typed suppliers after lazy-mode check
 })
 public class HttpDateHeader extends HttpHeaderBean {
 
@@ -84,7 +84,9 @@ public class HttpDateHeader extends HttpHeaderBean {
 			? ((Supplier<String>) supplier)::get
 			: () -> {
 				var z = ((Supplier<ZonedDateTime>) supplier).get();
-				return z == null ? null : RFC_1123_DATE_TIME.format(z);
+				if (z == null)
+					return null;
+				return RFC_1123_DATE_TIME.format(z);
 			});
 		this.cachedZdt = null;
 		this.lazySupplier = supplier;

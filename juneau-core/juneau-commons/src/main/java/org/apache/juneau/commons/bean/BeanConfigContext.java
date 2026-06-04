@@ -744,6 +744,9 @@ public final class BeanConfigContext {
 		 * @param values The classes.  May be <jk>null</jk> for an empty set.
 		 * @return This object.
 		 */
+		@SuppressWarnings({
+			"java:S4968" // '? extends Class<?>' is not redundant for the nested generic: it admits Collection<Class<X>> (e.g. List<Class<String>>); narrowing to Collection<Class<?>> would be a source-incompatible API reduction.
+		})
 		public Builder notBeanClasses(Collection<? extends Class<?>> values) {
 			notBeanClasses = new LinkedHashSet<>(values == null ? sete() : values);
 			return this;

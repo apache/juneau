@@ -35,6 +35,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
+	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
 	"java:S3740" // Raw ObjectMap/ClassMeta types propagated from parent serializer session hierarchy where type parameters are erased
 })
 public class HtmlStrippedDocSerializerSession extends HtmlSerializerSession {

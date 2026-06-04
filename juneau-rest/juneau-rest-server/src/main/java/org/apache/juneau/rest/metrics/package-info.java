@@ -39,16 +39,16 @@
  *
  * <p>
  * Every {@code @RestOp} invocation fires exactly one
- * {@link org.apache.juneau.rest.metrics.MetricsRecorder#record record(...)} call &mdash; happy path
+ * {@link org.apache.juneau.rest.metrics.MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record(...)} call &mdash; happy path
  * and exception path alike. The event carries the op name, the HTTP method, the {@code @RestOp} path
  * template (so consumers can use it as a bounded-cardinality {@code uri} tag), the response status
- * code, the wall-clock elapsed time, and the thrown {@link Throwable} (or {@code null} on success).
+ * code, the wall-clock elapsed time, and the thrown {@code Throwable} (or {@code null} on success).
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.metrics.MetricsRecorder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.metrics.NoOpMetricsRecorder}
- * 	<li class='jp'>{@link org.apache.juneau.rest.tracing}
+ * 	<li class='jp'>{@link org.apache.juneau.rest.tracing.TracerHook}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerObservability">REST Server &mdash; Observability (Micrometer + OpenTelemetry)</a>
  * </ul>
  *

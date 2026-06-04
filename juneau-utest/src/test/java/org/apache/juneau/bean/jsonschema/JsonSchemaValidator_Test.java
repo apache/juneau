@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests {@link JsonSchemaValidator} in isolation against {@link JsonSchema} beans.
  */
+@SuppressWarnings({
+	"java:S5778" // assertThrows lambdas intentionally build the schema/validator and supply the value inline; the throwing call is unambiguous (validate) and hoisting validator+argument locals across ~40 tests would bloat the file without clarity gain.
+})
 class JsonSchemaValidator_Test extends TestBase {
 
 	private static JsonSchemaValidator v(JsonSchema s) {

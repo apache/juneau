@@ -65,7 +65,7 @@ public class RrpcInterfaceMeta {
 		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::ne).forEach(x -> path2.set(trimSlashes(x)));
 
 		Map<Method,RrpcInterfaceMethodMeta> methods2 = map();
-		ci.getPublicMethods().stream().forEach(x -> methods2.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
+		ci.getPublicMethods().forEach(x -> methods2.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));
 
 		Map<String,RrpcInterfaceMethodMeta> methodsByPath2 = map();
 		methods2.values().forEach(x -> methodsByPath2.put(x.getPath(), x));

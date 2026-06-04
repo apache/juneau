@@ -172,14 +172,6 @@ class JsonParser_Test extends TestBase {
 		return new CloseableStringReader(in);
 	}
 
-	//====================================================================================================
-	// TODO-147: Empty JSON array/object into an abstract, currently-null collection property.
-	// Regression discovered downstream (IRS) on the 8.2.0 -> 9.1.0 upgrade: an empty array ([]) into an
-	// abstract, null Set<Enum> field threw BeanRuntimeException ("property type is abstract, and the
-	// property value is currently null").  FINISHED-127 hardened the abstract-collection materialization
-	// helper.  These tests pin the full empty-collection matrix as a permanent regression guard.
-	//====================================================================================================
-
 	public enum B_Enum { A, B, C }
 
 	public static class B01_Bean {
@@ -188,7 +180,7 @@ class JsonParser_Test extends TestBase {
 		public B01_Bean setV(Set<B_Enum> x) { v = x; return this; }
 	}
 
-	// Headline case, mirroring the exact repro from TODO-147 (abstract Set<Enum>, empty array, null field).
+	// Headline case, mirroring the exact repro from FINISHED-147 (abstract Set<Enum>, empty array, null field).
 	@Test void b01_emptyArrayIntoAbstractSetOfEnum() throws Exception {
 		var p2 = JsonParser.create().ignoreUnknownBeanProperties().build();
 		var x = p2.parse("{\"v\":[]}", B01_Bean.class);

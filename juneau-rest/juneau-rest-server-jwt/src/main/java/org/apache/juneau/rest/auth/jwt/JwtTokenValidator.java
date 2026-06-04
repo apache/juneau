@@ -245,7 +245,7 @@ public class JwtTokenValidator implements TokenValidator {
 			Set<JWSAlgorithm> next = new LinkedHashSet<>();
 			for (var a : values) {
 				assertArgNotNull("algorithm", a);
-				if (JWSAlgorithm.NONE.equals(a))
+				if (Algorithm.NONE.equals(a))
 					throw new IllegalArgumentException("\"none\" algorithm is permanently rejected (RFC 7518 §3.6 unsafe)");
 				next.add(a);
 			}
@@ -439,7 +439,7 @@ public class JwtTokenValidator implements TokenValidator {
 			throw new AuthenticationException("JWT must be signed (alg=none and unsigned JWTs are rejected)")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"unsigned JWT\"");
 		var alg = signed.getHeader().getAlgorithm();
-		if (alg == null || JWSAlgorithm.NONE.equals(alg))
+		if (alg == null || Algorithm.NONE.equals(alg))
 			throw new AuthenticationException("JWT alg \"none\" is not permitted")
 				.wwwAuthenticate("Bearer error=\"invalid_token\", error_description=\"alg=none rejected\"");
 		if (! algorithms.contains(alg))

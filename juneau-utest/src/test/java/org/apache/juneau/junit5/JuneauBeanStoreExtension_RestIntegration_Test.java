@@ -27,7 +27,7 @@ import org.junit.jupiter.api.extension.*;
 
 /**
  * End-to-end test of {@link JuneauBeanStoreExtension} + {@code @TestBean} flowing through a real
- * {@code MockRestClient} pipeline (Phase 2 of TODO-35).
+ * {@code MockRestClient} pipeline.
  *
  * <p>
  * Validates the canonical "Mode INJECT" wiring path:

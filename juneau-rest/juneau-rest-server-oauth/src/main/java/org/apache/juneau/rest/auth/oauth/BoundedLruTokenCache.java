@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth.oauth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.security.Principal;
 import java.time.*;
@@ -112,12 +113,12 @@ public class BoundedLruTokenCache implements TokenCache {
 		synchronized (lock) {
 			var v = entries.get(key);
 			if (!(v instanceof CachedPrincipal cp))
-				return Optional.empty();
+				return opte();
 			if (!Instant.now().isBefore(cp.expiresAt())) {
 				entries.remove(key);
-				return Optional.empty();
+				return opte();
 			}
-			return Optional.of(cp.principal());
+			return opt(cp.principal());
 		}
 	}
 
@@ -140,12 +141,12 @@ public class BoundedLruTokenCache implements TokenCache {
 		synchronized (lock) {
 			var v = entries.get(key);
 			if (!(v instanceof OAuthToken t))
-				return Optional.empty();
+				return opte();
 			if (t.isExpired(now, skew)) {
 				entries.remove(key);
-				return Optional.empty();
+				return opte();
 			}
-			return Optional.of(t);
+			return opt(t);
 		}
 	}
 

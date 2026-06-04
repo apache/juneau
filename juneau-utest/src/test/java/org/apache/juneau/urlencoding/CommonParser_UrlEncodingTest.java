@@ -39,7 +39,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 	//====================================================================================================
 	// testFromSerializer
 	//====================================================================================================
-	@Test void a01_fromSerializer() throws Exception {
+	@Test void a01_fromSerializer() {
 		var in = "a=1";
 
 		var m = (Map)p.parse(in, Object.class);
@@ -100,7 +100,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 	//====================================================================================================
 	// Correct handling of unknown properties.
 	//====================================================================================================
-	@Test void a02_correctHandlingOfUnknownProperties() throws Exception {
+	@Test void a02_correctHandlingOfUnknownProperties() {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().build();
 		var in = "a=1&unknown=3&b=2";
 		var t = p2.parse(in, B.class);
@@ -116,7 +116,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 	//====================================================================================================
 	// Writing to Collection properties with no setters.
 	//====================================================================================================
-	@Test void a03_collectionPropertiesWithNoSetters() throws Exception {
+	@Test void a03_collectionPropertiesWithNoSetters() {
 		var p2 = UrlEncodingParser.DEFAULT;
 		var json = "ints=@(1,2,3)&beans=@((a=1,b=2))";
 		var t = p2.parse(json, C.class);
@@ -135,7 +135,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 	//====================================================================================================
 	// Parser listeners.
 	//====================================================================================================
-	@Test void a04_parserListeners() throws Exception {
+	@Test void a04_parserListeners() {
 		var p2 = UrlEncodingParser.create().ignoreUnknownBeanProperties().listener(MyParserListener.class).build();
 		var in = "a=1&unknownProperty=foo&b=2";
 		p2.parse(in, B.class);
@@ -152,7 +152,7 @@ class CommonParser_UrlEncodingTest extends TestBase {
 		}
 	}
 
-	@Test void a05_collections() throws Exception {
+	@Test void a05_collections() {
 		var s = UrlEncodingSerializer.DEFAULT;
 		var p2 = UrlEncodingParser.DEFAULT;
 		var l = JsonList.of("foo","bar");

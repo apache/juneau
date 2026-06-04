@@ -61,6 +61,9 @@ class FileEntity_Test extends TestBase {
 		assertArrayEquals("hello world".getBytes(), x.asBytes());
 	}
 
+	@SuppressWarnings({
+		"java:S4144" // Distinct documented scenario (uncached asString) that coincidentally shares a01_basic's body.
+	})
 	@Test void a05_asString_uncached() throws Exception {
 		var x = new FileEntity().setContent(tempFile);
 		assertEquals("hello world", x.asString());

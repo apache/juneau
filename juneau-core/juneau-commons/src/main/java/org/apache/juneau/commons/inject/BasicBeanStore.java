@@ -108,6 +108,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	private final Set<Class<?>> registeredConfigurations;
 	private final BeanStore parent;
 	private final BeanStore overridingParent;
+	@SuppressWarnings({
+		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-created StackOverlay in pushOverlay(); the reference is publish-once and never compound-mutated.
+	})
 	private volatile StackOverlay overlayStack;
 	private volatile boolean closed;
 
@@ -369,6 +372,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	}
 
 	@Override
+	@SuppressWarnings({
+		"resource" // snapshot.owner() returns the owning store reference — an existing AutoCloseable, not a newly-created one
+	})
 	public void popOverlay(Snapshot snapshot) {
 		Objects.requireNonNull(snapshot, "snapshot must not be null");
 		checkOpen();

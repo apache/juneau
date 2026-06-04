@@ -22,7 +22,7 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage tests for BasicLongPart, BasicUriPart, BasicStringPart, BasicCsvArrayPart.
  */
-public class BasicPart_Coverage_Test {
+class BasicPart_Coverage_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// BasicLongPart

@@ -23,6 +23,8 @@ import org.apache.juneau.commons.annotation.*;
  */
 public class IniAnnotation {
 
+	private IniAnnotation() {}
+
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})

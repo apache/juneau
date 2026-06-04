@@ -78,6 +78,9 @@ public class FileUtils {
 	 * @return A newly-created temporary file.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings({
+		"java:S5443" // Controlled internal helper: uses JDK default temp dir, deleteOnExit; explicit POSIX perms aren't portable to Windows.
+	})
 	public static File createTempFile(String name) throws IOException {
 		var parts = name.split("\\.");
 		var f = File.createTempFile(parts[0], "." + parts[1]);
@@ -293,12 +296,12 @@ public class FileUtils {
 			throw illegalArg(MSG_pathEscape);
 		var f = target.toFile();
 		if (! f.exists())
-			return Optional.empty();
+			return opte();
 		try {
 			if (! target.toRealPath().startsWith(root))
 				throw illegalArg(MSG_pathEscape);
 		} catch (@SuppressWarnings("unused") NoSuchFileException e) {
-			return Optional.empty();
+			return opte();
 		} catch (IOException e) {
 			throw rex(e, "Could not canonicalize ''{0}''", target);
 		}
@@ -374,7 +377,8 @@ public class FileUtils {
 	 * Returns {@code null} if a {@code ..} segment would pop above the root.
 	 */
 	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
+		"java:S3776", // Cognitive complexity: small loop with three early-exit cases; splitting hurts readability.
+		"java:S135" // Multiple continue statements are intrinsic to this path-segment scan/normalization loop.
 	})
 	private static String normalizeVirtualPath(String path) {
 		if (path == null)
@@ -397,7 +401,7 @@ public class FileUtils {
 		if (startsWithSlash)
 			sb.append('/');
 		sb.append(String.join("/", segments));
-		if (endsWithSlash && (sb.length() == 0 || sb.charAt(sb.length() - 1) != '/'))
+		if (endsWithSlash && (sb.isEmpty() || sb.charAt(sb.length() - 1) != '/'))
 			sb.append('/');
 		return sb.toString();
 	}

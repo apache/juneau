@@ -26,6 +26,9 @@ import org.junit.jupiter.api.*;
 
 class SseHeartbeat_Test {
 
+	@SuppressWarnings({
+		"java:S2925" // Polling sleep waits for the scheduled heartbeat ping to be written.
+	})
 	@Test
 	void a01_heartbeatWritesPingAndCancels() throws Exception {
 		var a = Executors.newSingleThreadScheduledExecutor();

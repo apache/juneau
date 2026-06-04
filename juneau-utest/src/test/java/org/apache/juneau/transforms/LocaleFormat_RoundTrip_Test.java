@@ -75,20 +75,20 @@ import org.junit.jupiter.params.provider.*;
  */
 class LocaleFormat_RoundTrip_Test extends TestBase {
 
-	private static Locale ORIGINAL_LOCALE;
+	private static Locale originalLocale;
 
 	@BeforeAll
 	static void pinLocale() {
 		// Pin to Locale.US so any caller that incidentally consults the platform default locale during
 		// serialisation / parsing gets a deterministic answer.  The LocaleFormat helpers themselves use
 		// language-tag / underscore forms that are locale-independent, but pinning is cheap insurance.
-		ORIGINAL_LOCALE = Locale.getDefault();
+		originalLocale = Locale.getDefault();
 		Locale.setDefault(Locale.US);
 	}
 
 	@AfterAll
 	static void restoreLocale() {
-		Locale.setDefault(ORIGINAL_LOCALE);
+		Locale.setDefault(originalLocale);
 	}
 
 	@FunctionalInterface
@@ -294,6 +294,9 @@ class LocaleFormat_RoundTrip_Test extends TestBase {
 	 * Validation-only testers ({@link RoundTrip_Tester#isValidationOnly()} == {@code true}: Json schema,
 	 * CSV, Parquet) return the original object unchanged.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // 'fmt' is part of the shared expectedAfter(...) helper signature used across all *Format RoundTrip tests; kept for template symmetry even where this type's expected value is format-independent.
+	})
 	private static Locale expectedAfter(Locale original, RoundTrip_Tester t, LocaleFormat fmt) {
 		if (original == null)
 			return null;

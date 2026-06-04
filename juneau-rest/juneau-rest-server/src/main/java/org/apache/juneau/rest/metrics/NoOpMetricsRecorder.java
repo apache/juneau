@@ -33,6 +33,9 @@ import java.time.*;
  *
  * @since 9.5.0
  */
+@SuppressWarnings({
+	"java:S6548" // Intentional process-wide no-op singleton; the Singleton pattern is required to satisfy the MetricsRecorder SPI contract with zero allocation.
+})
 public final class NoOpMetricsRecorder implements MetricsRecorder {
 
 	/** Process-wide singleton instance. */
@@ -41,6 +44,9 @@ public final class NoOpMetricsRecorder implements MetricsRecorder {
 	private NoOpMetricsRecorder() {}
 
 	@Override /* MetricsRecorder */
+	@SuppressWarnings({
+		"java:S6213" // 'record' is the established MetricsRecorder SPI method name; renaming would break the public API.
+	})
 	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 		// Intentionally empty — the default off-by-default behaviour is to drop every event.
 	}

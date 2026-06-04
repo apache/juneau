@@ -116,8 +116,6 @@ final class VarRefSegment extends TemplateSegment {
 					replacement = session.resolve(replacement);
 				out.append(replacement);
 			}
-		} catch (RuntimeException e) {
-			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		} catch (Exception e) {
 			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		}
@@ -144,8 +142,6 @@ final class VarRefSegment extends TemplateSegment {
 			}
 		} catch (IOException e) {
 			throw e;
-		} catch (RuntimeException e) {
-			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		} catch (Exception e) {
 			throw wrapDispatchFailure(e, prefix, sourceFragment());
 		}

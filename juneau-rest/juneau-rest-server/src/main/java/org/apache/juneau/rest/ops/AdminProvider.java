@@ -96,6 +96,9 @@ public class AdminProvider {
 	 * @param res The current REST response.
 	 * @throws IOException If an I/O error occurs while writing the response.
 	 */
+	@SuppressWarnings({
+		"java:S1874" // Thread.getId() is not deprecated on the Java 17 baseline; its replacement Thread.threadId() was only added in Java 19, so getId() is the correct call here.
+	})
 	public void serveThreads(RestResponse res) throws IOException {
 		var allTraces = Thread.getAllStackTraces();
 		var out = new ArrayList<Map<String,Object>>();

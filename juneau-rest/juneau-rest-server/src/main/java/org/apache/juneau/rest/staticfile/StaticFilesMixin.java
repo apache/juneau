@@ -95,7 +95,7 @@ import org.apache.juneau.rest.annotation.*;
  * 		{@code @Bean StaticFiles}.
  * 	<li>Default classpath base searches both {@code static/} and {@code htdocs/} directories on
  * 		the importer's classpath (recursive walk via {@link BasicStaticFiles}'s built-in
- * 		{@link org.apache.juneau.cp.ResourceSupplier} hook).
+ * 		{@link ResourceSupplier} hook).
  * </ul>
  *
  * <h5 class='section'>Path matching:</h5>

@@ -30,7 +30,7 @@ import org.apache.juneau.rest.view.thymeleaf.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Marker-conformance and end-to-end ordering tests for {@link ViewRenderer} (TODO-96).
+ * Marker-conformance and end-to-end ordering tests for {@link ViewRenderer}.
  *
  * <p>
  * The marker-conformance assertions verify that all four built-in renderers implement

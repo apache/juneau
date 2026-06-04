@@ -147,9 +147,8 @@ public abstract class TypedFunction implements VarFunction {
 	private static Overload[] findInvokeOverloads(Class<? extends TypedFunction> cls) {
 		var found = new ArrayList<Overload>();
 		for (var m : cls.getMethods()) {
-			if (!"invoke".equals(m.getName()))
-				continue;
-			if (m.getDeclaringClass() == TypedFunction.class
+			if (!"invoke".equals(m.getName())
+				|| m.getDeclaringClass() == TypedFunction.class
 				|| m.getDeclaringClass() == Object.class
 				|| m.getDeclaringClass() == VarFunction.class)
 				continue;

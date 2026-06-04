@@ -153,6 +153,9 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	 */
 	public String getTimerName() { return timerName; }
 
+	@SuppressWarnings({
+		"java:S6213" // Method name 'record' is part of the established MetricsRecorder SPI; renaming this overriding method would be a breaking API change.
+	})
 	@Override /* MetricsRecorder */
 	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 		var effectiveName = (metricName != null && !metricName.isEmpty()) ? metricName : timerName;

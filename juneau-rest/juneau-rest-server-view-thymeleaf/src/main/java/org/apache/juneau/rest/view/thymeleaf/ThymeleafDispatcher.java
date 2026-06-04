@@ -72,6 +72,9 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 	// Lazy bridge-default engine. Built on first call to resolveTemplateEngine(...) when no
 	// TemplateEngine bean is registered in the request's BeanStore. Volatile so the
 	// double-checked-locking idiom is safe under concurrent first-request load.
+	@SuppressWarnings({
+		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-created defaultEngine in resolveTemplateEngine(); the reference is publish-once and never compound-mutated.
+	})
 	private volatile TemplateEngine defaultEngine;
 
 	/**
@@ -221,9 +224,7 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 			engine.process(safeTemplate, ctx, res.getWriter());
 		} catch (LinkageError ex) {
 			throw new InternalServerError(ex, ThymeleafViewRenderer.NO_ENGINE_DIAGNOSTIC);
-		} catch (IOException ex) {
-			throw ex;
-		} catch (BasicHttpException ex) {
+		} catch (IOException | BasicHttpException ex) {
 			throw ex;
 		} catch (Exception ex) {
 			throw new InternalServerError(ex, "Thymeleaf render failed for ''{0}''", safeTemplate);

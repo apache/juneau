@@ -79,7 +79,7 @@ import org.junit.jupiter.params.provider.*;
  * Unlike the {@link Float} sibling, this file has no Proto-skip helper — the Proto text-format tokenizer
  * bugs that forced those skips (Bug #4a — neg-flag discard on the Double return path of
  * {@code readDecimalOrFloat}; Bug #4b — {@code 0.x} mis-tokenisation in {@code lexNumber}'s `0`-prefix
- * branch) were both fixed before this file landed (see {@code TODO-57.md}). The {@code a04} non-finite
+ * branch) were both fixed before this file landed (see the work item 57 notes). The {@code a04} non-finite
  * test still skips Proto in the {@link Float} sibling because Bug #4c ({@code mightStartNumber}
  * {@code nan}/{@code inf} asymmetry) is still open — same predicate carried into this file for the same
  * reason.
@@ -310,6 +310,9 @@ class FloatFormat_Double_RoundTrip_Test extends TestBase {
 	 * testers ({@link RoundTrip_Tester#isValidationOnly()} == {@code true}: Json schema, CSV, Parquet) return
 	 * the original object unchanged.
 	 */
+	@SuppressWarnings({
+		"java:S1172" // 'fmt' is part of the shared expectedAfter(...) helper signature used across all *Format RoundTrip tests; kept for template symmetry even where this type's expected value is format-independent.
+	})
 	private static Double expectedAfter(Double original, RoundTrip_Tester t, FloatFormat fmt) {
 		if (original == null)
 			return null;

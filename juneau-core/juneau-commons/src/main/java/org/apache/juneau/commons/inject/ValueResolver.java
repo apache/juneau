@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -94,7 +96,7 @@ public final class ValueResolver {
 	 * @return The expression, or {@code null} if not a {@code @Value} site.
 	 */
 	public static String findValueExpression(List<? extends AnnotationInfo<?>> annotations) {
-		if (annotations == null || annotations.isEmpty())
+		if (isEmpty(annotations))
 			return null;
 		return annotations.stream()
 			.map(JsrSupport::valueExpression)
@@ -110,7 +112,7 @@ public final class ValueResolver {
 	 * @return {@code true} if at least one annotation matches {@link JsrSupport#isValueAnnotation(AnnotationInfo)}.
 	 */
 	public static boolean hasValueAnnotation(List<? extends AnnotationInfo<?>> annotations) {
-		if (annotations == null || annotations.isEmpty())
+		if (isEmpty(annotations))
 			return false;
 		return annotations.stream().anyMatch(JsrSupport::isValueAnnotation);
 	}
@@ -127,7 +129,7 @@ public final class ValueResolver {
 	 * @param siteDescription A human-readable description of the site (used in the error message).
 	 */
 	public static void checkInjectConflict(List<? extends AnnotationInfo<?>> annotations, String siteDescription) {
-		if (annotations == null || annotations.isEmpty())
+		if (isEmpty(annotations))
 			return;
 		var hasValue = annotations.stream().anyMatch(JsrSupport::isValueAnnotation);
 		if (! hasValue)
@@ -314,6 +316,9 @@ public final class ValueResolver {
 	 * beans before local beans before overriding-parent beans, then sorted by
 	 * {@code @Order/@Primary/@Bean.priority()}).
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Null is a meaningful "no scoped sources" signal that callers branch on to preserve the no-allocation / no-behavior-change contract; an empty array would alter behavior.
+	})
 	private static PropertySource[] scopedSources(BeanStore beanStore) {
 		if (beanStore == null)
 			return null;

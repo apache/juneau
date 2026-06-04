@@ -108,12 +108,15 @@ class KeywordSet_Test extends TestBase {
 		assertNotEquals(ks2, ks1);
 	}
 
+	@SuppressWarnings({
+		"java:S5785" // Intentionally exercises the equals(Object) contract against null; assertNotNull would not test equals().
+	})
 	@Test
 	void w08_equals_notAKeywordSet() {
 		var ks = new KeywordSet("apple", "banana");
 
-		assertFalse(ks.equals((Object)"not-a-keyword-set"));
-		assertFalse(ks.equals(null));
+		assertNotEquals("not-a-keyword-set", ks);
+		assertNotEquals(null, ks);
 	}
 
 	@Test

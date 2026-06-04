@@ -57,7 +57,8 @@ import org.apache.jena.riot.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S2176", // Inheritance depth exceeds 5; necessary to participate in the serializer session hierarchy
 	"java:S3776", // Cognitive complexity acceptable for RDF serializer session methods
-	"java:S6541"  // Brain Method complexity acceptable for core RDF serializer dispatch logic
+	"java:S6541", // Brain Method complexity acceptable for core RDF serializer dispatch logic
+	"java:S110" // Deep inheritance inherent to the RDF serializer session hierarchy.
 })
 public class RdfSerializerSession extends WriterSerializerSession {
 

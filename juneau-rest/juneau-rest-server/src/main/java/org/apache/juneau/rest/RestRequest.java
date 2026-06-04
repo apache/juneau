@@ -190,13 +190,17 @@ import jakarta.servlet.http.*;
 	"unchecked", // Type erasure requires unchecked casts in REST client operations
 	"unused", // Unused parameters in HttpServletRequest overrides and helper methods
 	"java:S6539", // Collection.toArray() usage intentional
-	"resource" // Streams returned to servlet container; lifecycle managed by the container
+	"resource", // Streams returned to servlet container; lifecycle managed by the container
+	"javabugs:S2259" // Null accesses are guarded by nn() checks; Sonar's flow analysis does not track nn() as a null guard
 })
 public class RestRequest extends HttpServletRequestWrapper {
 
 	/*
 	 * Converts an Accept-Language value entry to a Locale.
 	 */
+	@SuppressWarnings({
+		"java:S1874" // The new Locale(String,String) constructor is not deprecated on the Java 17 baseline; its replacement Locale.of(...) was only added in Java 19.
+	})
 	private static Locale toLocale(String lang) {
 		var country = "";
 		var i = lang.indexOf('-');
@@ -470,14 +474,14 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var ifMatch = getHeaderParam(IfMatch.NAME).orElse(null);
 		if (nn(ifMatch)) {
 			if (! matchesAnyStrong(EntityTags.of(ifMatch), resTag))
-				return Optional.of(preconditionFailed(IfMatch.NAME));
+				return opt(preconditionFailed(IfMatch.NAME));
 		} else {
 			// RFC 7232 §6 step 2: If-Unmodified-Since (only when If-Match absent).
 			var ius = getHeaderParam(IfUnmodifiedSince.NAME).orElse(null);
 			if (nn(ius)) {
 				var iusDate = parseHttpDate(ius);
 				if (nn(iusDate) && nn(resLastMod) && resLastMod.toInstant().isAfter(iusDate.toInstant()))
-					return Optional.of(preconditionFailed(IfUnmodifiedSince.NAME));
+					return opt(preconditionFailed(IfUnmodifiedSince.NAME));
 			}
 		}
 
@@ -485,7 +489,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var ifNoneMatch = getHeaderParam(IfNoneMatch.NAME).orElse(null);
 		if (nn(ifNoneMatch)) {
 			if (matchesAnyWeak(EntityTags.of(ifNoneMatch), resTag))
-				return Optional.of(notModified());
+				return opt(notModified());
 		} else {
 			// RFC 7232 §6 step 4: If-Modified-Since (only when If-None-Match absent; only for GET/HEAD).
 			if (isSafeMethod()) {
@@ -493,12 +497,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 				if (nn(ims)) {
 					var imsDate = parseHttpDate(ims);
 					if (nn(imsDate) && nn(resLastMod) && ! resLastMod.toInstant().isAfter(imsDate.toInstant()))
-						return Optional.of(notModified());
+						return opt(notModified());
 				}
 			}
 		}
 
-		return Optional.empty();
+		return opte();
 	}
 
 	private boolean isSafeMethod() {
@@ -1751,7 +1755,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	})
 	public Map<String,Object> getSerializerSessionPropertyMap() {
 		var allowlist = opContext.getAllowedSerializerOptions();
-		Map<String,Object> m1 = null, m2 = null;
+		Map<String,Object> m1 = null;
+		Map<String,Object> m2 = null;
 
 		var q = getQueryParams().get(QUERY_juneauSerializerOptions).asString().orElse(null);
 		if (q != null && !q.isBlank()) {
@@ -1795,7 +1800,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	})
 	public Map<String,Object> getParserSessionPropertyMap() {
 		var allowlist = opContext.getAllowedParserOptions();
-		Map<String,Object> m1 = null, m2 = null;
+		Map<String,Object> m1 = null;
+		Map<String,Object> m2 = null;
 
 		var q = getQueryParams().get(QUERY_juneauParserOptions).asString().orElse(null);
 		if (q != null && !q.isBlank()) {

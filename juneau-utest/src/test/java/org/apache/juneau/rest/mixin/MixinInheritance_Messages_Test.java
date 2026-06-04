@@ -88,7 +88,7 @@ class MixinInheritance_Messages_Test extends TestBase {
 		return (v == null || v.startsWith("{!")) ? null : v;
 	}
 
-	@Test void a01_mixinInheritsHostMessages() throws Exception {
+	@Test void a01_mixinInheritsHostMessages() {
 		MockRestClient.buildLax(HostInheritsToMixin.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostInheritsToMixin.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoMessages.class);
@@ -100,7 +100,7 @@ class MixinInheritance_Messages_Test extends TestBase {
 			"Mixin with no @Rest(messages=) must inherit host.key via the host's parent-chained bundle");
 	}
 
-	@Test void a02_mixinAppendsMessagesOverInheritedHost() throws Exception {
+	@Test void a02_mixinAppendsMessagesOverInheritedHost() {
 		MockRestClient.buildLax(HostWithMixinAppends.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithMixinAppends.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_WithMessages.class);
@@ -123,7 +123,7 @@ class MixinInheritance_Messages_Test extends TestBase {
 			"Host bundle's shared.key must remain the host's value");
 	}
 
-	@Test void a03_mixinNoInheritShadowsHostMessages() throws Exception {
+	@Test void a03_mixinNoInheritShadowsHostMessages() {
 		MockRestClient.buildLax(HostWithNoInherit.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostWithNoInherit.class);
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritMessages.class);

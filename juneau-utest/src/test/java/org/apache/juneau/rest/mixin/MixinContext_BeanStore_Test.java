@@ -70,7 +70,7 @@ class MixinContext_BeanStore_Test extends TestBase {
 			"Mixin's getBeansOfType must also surface host's named @Bean factories");
 	}
 
-	@Test void a02_mixinBeanNotResolvableFromHostBeanStore() throws Exception {
+	@Test void a02_mixinBeanNotResolvableFromHostBeanStore() {
 		MockRestClient.buildLax(HostBeanStore.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(HostBeanStore.class);
 
