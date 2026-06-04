@@ -51,7 +51,7 @@ import org.junit.jupiter.api.*;
  * 		{@code @OpSwagger(ignore=true)}) and itself.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class BasicOps_ParentChain_Test extends TestBase {
 

@@ -49,7 +49,7 @@ import java.util.Optional;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OidcRelyingParty">OIDC Relying Party</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public interface SessionStore {
 

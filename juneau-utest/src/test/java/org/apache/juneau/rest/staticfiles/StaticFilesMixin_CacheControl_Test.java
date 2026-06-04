@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * 	<li>The {@code MockRest} client receives the header verbatim.
  * </ol>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StaticFilesMixin_CacheControl_Test extends TestBase {
 

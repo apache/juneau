@@ -19,7 +19,7 @@ package org.apache.juneau.rest.health;
 /**
  * Status values returned by {@link HealthIndicator} checks.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public enum HealthStatus {
 	/** Component is healthy. */

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * resource class with a different system property would otherwise hit the cached resolution and
  * silently mask the override.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class SwaggerMixin_SvlPathOverride_Test extends TestBase {
 

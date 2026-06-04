@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  * getter on {@link RestServlet} / {@link RestResource}.
  *
  * <p>
- * Since 9.5.0 the {@code getPaths()} signature returns {@link Object}, accepting any of:
+ * Since 10.0.0 the {@code getPaths()} signature returns {@link Object}, accepting any of:
  * <ul>
  * 	<li>{@code null} &mdash; no override (falls through to {@code @Rest(paths=...)} annotation default).
  * 	<li>{@link String} &mdash; single path or comma-delimited list.
@@ -53,7 +53,7 @@ import org.junit.jupiter.api.*;
  * {@link RestPathsRuntimeOverride_Getter_Test} &mdash; this test focuses on the new shapes the
  * permissive contract enables.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 

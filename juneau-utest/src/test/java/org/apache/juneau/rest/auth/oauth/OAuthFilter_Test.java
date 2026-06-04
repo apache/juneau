@@ -32,7 +32,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * Tests for {@link OAuthFilter} &mdash; happy path, missing header, validator failure, and scope-claim
  * role extraction (whitespace-split per RFC 6749 &sect;3.3).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.

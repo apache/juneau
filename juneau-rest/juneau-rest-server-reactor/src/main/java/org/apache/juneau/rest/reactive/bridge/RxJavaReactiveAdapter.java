@@ -35,7 +35,7 @@ import io.reactivex.rxjava3.core.*;
  * 		{@link BackpressureStrategy#BUFFER} first, since {@code Observable} has no native backpressure).
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class RxJavaReactiveAdapter implements ReactiveStreamsAdapter {
 

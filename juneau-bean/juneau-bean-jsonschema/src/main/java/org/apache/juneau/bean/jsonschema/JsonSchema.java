@@ -1251,7 +1251,7 @@ public class JsonSchema {
 	 * This is a Juneau extension. It serializes as the JSON Schema keyword <c>"summary"</c>.
 	 *
 	 * @return The value of the <property>summary</property> property, or <jk>null</jk> if it is not set.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public String getSummary() { return summary; }
 
@@ -2056,7 +2056,7 @@ public class JsonSchema {
 	 *
 	 * @param value The new value for the <property>summary</property> property on this bean.
 	 * @return This object.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public JsonSchema setSummary(String value) {
 		this.summary = value;

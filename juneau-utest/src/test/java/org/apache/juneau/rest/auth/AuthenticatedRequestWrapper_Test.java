@@ -31,7 +31,7 @@ import jakarta.servlet.http.*;
 /**
  * Tests for {@link AuthenticatedRequestWrapper}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AuthenticatedRequestWrapper_Test extends TestBase {
 

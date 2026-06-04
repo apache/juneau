@@ -208,7 +208,7 @@ public @interface Rest {
 	 * Mixin methods are discovered the same way as local operation methods and surface under this resource's URL
 	 * namespace.  On path/method collisions, local methods on this resource win over mixin methods.
 	 *
-	 * <h5 class='section'>Per-mixin RestContext + host-to-mixin inheritance (since 9.5.0)</h5>
+	 * <h5 class='section'>Per-mixin RestContext + host-to-mixin inheritance (since 10.0.0)</h5>
 	 * <p>
 	 * Each mixin class is elevated to its own {@link RestContext} parent-linked to this host's {@link RestContext}.
 	 * The mixin's class-level {@code @Rest(...)} configuration applies to its own endpoints, with inheritance from
@@ -437,7 +437,7 @@ public @interface Rest {
 	 * Each entry is SVL-resolved then comma-split. Prevents the named property from inheriting values from
 	 * parent {@code @Rest} annotations (router hierarchy). The {@code noInherit} attribute itself is never inherited.
 	 *
-	 * <h5 class='section'>Mixin sub-contexts (since 9.5.0)</h5>
+	 * <h5 class='section'>Mixin sub-contexts (since 10.0.0)</h5>
 	 * <p>
 	 * On a class declared via {@link #mixins() @Rest(mixins=...)} on a host, {@code noInherit} also blocks the
 	 * host-to-mixin inheritance walk for the named property.  The token set extends to every contribution list
@@ -822,7 +822,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String observability() default "";
 
@@ -850,7 +850,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String asyncTimeoutMillis() default "";
 
@@ -903,7 +903,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String asyncCompletionExecutor() default "";
 
@@ -1254,7 +1254,7 @@ public @interface Rest {
 	 * This is primarily intended for built-in support endpoints such as health probes where multiple exact URLs
 	 * should be served by a single servlet instance.
 	 *
-	 * <h5 class='section'>Runtime substitution (since 9.5.0)</h5>
+	 * <h5 class='section'>Runtime substitution (since 10.0.0)</h5>
 	 * <p>
 	 * Each array element is treated as a template:
 	 * <ol>

@@ -45,7 +45,7 @@ import org.junit.jupiter.api.*;
  * a 500 from the renderer is categorically different from a 200 with Juneau-bean HTML content
  * that would appear if the catch-all serializer ran first.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class ViewRenderer_Test extends TestBase {
 

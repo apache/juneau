@@ -34,7 +34,7 @@ import org.apache.juneau.rest.*;
  * independent {@code @Rest} classes that each delegate to a {@code HealthAggregator}, so the two
  * deployment forms cannot drift.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class HealthAggregator {
 

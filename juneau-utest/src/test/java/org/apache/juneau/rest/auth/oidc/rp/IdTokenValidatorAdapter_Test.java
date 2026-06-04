@@ -31,7 +31,7 @@ import com.nimbusds.jose.jwk.RSAKey;
 /**
  * Tests for {@link IdTokenValidatorAdapter} &mdash; OIDC ID-token signature + claim validation via Nimbus.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class IdTokenValidatorAdapter_Test extends TestBase {

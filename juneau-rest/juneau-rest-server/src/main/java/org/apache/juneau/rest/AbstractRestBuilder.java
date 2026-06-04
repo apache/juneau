@@ -53,7 +53,7 @@ import org.apache.juneau.serializer.*;
  *
  * @param <R> The resource type produced by {@link #build()}.
  * @param <SELF> The concrete builder type (self type).
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"unchecked", // CRTP self-type cast in self() is safe by construction.

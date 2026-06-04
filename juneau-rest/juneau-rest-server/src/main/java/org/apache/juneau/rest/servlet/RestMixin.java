@@ -72,7 +72,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public abstract class RestMixin {
 
@@ -170,7 +170,7 @@ public abstract class RestMixin {
 	 * </ul>
 	 *
 	 * @return The host resource's {@link RestContext}, or {@code null} when this mixin is not composed into a host.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public RestContext getHostContext() {
 		var c = context.get();

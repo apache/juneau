@@ -31,7 +31,7 @@ import org.reactivestreams.*;
  * Registered <em>last</em> so library-specific single-value types (Reactor {@code Mono}, which also
  * implements {@code Publisher}) are matched by their own adapter first.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class ReactiveStreamsPublisherAdapter implements ReactiveStreamsAdapter {
 

@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Component health result returned from a {@link HealthIndicator}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class Health {
 

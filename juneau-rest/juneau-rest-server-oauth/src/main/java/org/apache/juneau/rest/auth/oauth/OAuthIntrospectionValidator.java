@@ -70,7 +70,7 @@ import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7662">RFC 7662 &mdash; OAuth 2.0 Token Introspection</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are OAuth introspection response field names; intentional

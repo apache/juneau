@@ -44,7 +44,7 @@ import jakarta.servlet.*;
  * configured bean-store hooks are all resolvable. Zero-argument variants are also supported.
  *
  * <p>
- * <b>Note (9.5):</b> two related Builder-injection protocols have been removed in this release. They had zero
+ * <b>Note (10.0):</b> two related Builder-injection protocols have been removed in this release. They had zero
  * real-world callers across the codebase before deletion:
  * <ul>
  * 	<li><b>Per-operation:</b> {@code @RestInit public void init(RestOpContext.Builder b)} (invoked once per

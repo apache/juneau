@@ -108,7 +108,7 @@ import org.apache.juneau.sse.*;
  *
  * @see ReactiveStreamsAdapter
  * @see AsyncResponseProcessor
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class ReactiveResponseProcessor implements ResponseProcessor {
 

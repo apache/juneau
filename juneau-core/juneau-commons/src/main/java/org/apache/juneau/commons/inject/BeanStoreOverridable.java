@@ -67,7 +67,7 @@ package org.apache.juneau.commons.inject;
  * </ul>
  *
  * @param <B> The implementing builder's self type.
- * @since 9.5.0
+ * @since 10.0.0
  */
 public interface BeanStoreOverridable<B extends BeanStoreOverridable<B>> {
 
@@ -80,7 +80,7 @@ public interface BeanStoreOverridable<B extends BeanStoreOverridable<B>> {
 	 *
 	 * @param store The override layer.  Can be <jk>null</jk> to clear a previously-set value.
 	 * @return This object.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	B overridingBeanStore(BeanStore store);
 }

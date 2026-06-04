@@ -104,7 +104,7 @@ import net.shibboleth.shared.resolver.ResolverException;
  * 	<li class='link'><a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-core-2.0-os.pdf">SAML 2.0 Core (OASIS)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192", // Duplicate string literals are SAML protocol claim names and JWT-style field keys; intentional

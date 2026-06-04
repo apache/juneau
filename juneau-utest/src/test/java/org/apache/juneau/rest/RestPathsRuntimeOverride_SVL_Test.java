@@ -39,7 +39,7 @@ import org.junit.jupiter.api.*;
  * 	<li>An unresolved SVL reference falls back to the literal element (no exception during construction).
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 

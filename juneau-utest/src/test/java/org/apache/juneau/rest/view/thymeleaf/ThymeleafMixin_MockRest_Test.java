@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  *   /templates/nested/inner.html ← validates multi-segment paths
  * </pre>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class ThymeleafMixin_MockRest_Test extends TestBase {
 

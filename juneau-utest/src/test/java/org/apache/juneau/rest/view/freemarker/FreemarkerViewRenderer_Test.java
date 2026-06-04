@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link FreemarkerViewRenderer}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class FreemarkerViewRenderer_Test extends TestBase {
 

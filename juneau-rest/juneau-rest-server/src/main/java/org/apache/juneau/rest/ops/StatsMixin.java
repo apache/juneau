@@ -31,7 +31,7 @@ import org.apache.juneau.rest.stats.*;
  * The per-method config travels with the op, while the host-wide navlinks/JSON-schema config
  * lives at the class level on {@link BasicRestServlet}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @Rest
 public class StatsMixin extends RestMixin {

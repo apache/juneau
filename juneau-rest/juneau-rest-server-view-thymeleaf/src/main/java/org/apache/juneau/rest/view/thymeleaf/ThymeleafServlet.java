@@ -42,7 +42,7 @@ import org.apache.juneau.rest.view.*;
  * </ul>
  *
  * @serial exclude
- * @since 9.5.0
+ * @since 10.0.0
  */
 @Rest(
 	paths="/thymeleaf/*",

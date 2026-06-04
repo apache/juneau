@@ -28,7 +28,7 @@ import java.util.function.*;
  * Mirrors the semantics of {@code BasicStringPart} from {@code juneau-rest-common-classic} without
  * the Apache HttpCore dependency.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class HttpStringPart extends HttpPartBean {
 

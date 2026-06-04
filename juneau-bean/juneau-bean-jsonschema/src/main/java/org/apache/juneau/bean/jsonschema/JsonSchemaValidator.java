@@ -104,7 +104,7 @@ import org.apache.juneau.json.*;
  *
  * @see PropertyValidator
  * @see JsonSchemaPropertyValidatorFactory
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class JsonSchemaValidator implements PropertyValidator {
 

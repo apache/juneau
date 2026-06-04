@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code /health/livez} and {@code /health/readyz} filter indicators by probe type.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class HealthResource_Test extends TestBase {
 

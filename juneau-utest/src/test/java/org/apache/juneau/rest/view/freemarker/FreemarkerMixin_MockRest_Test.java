@@ -58,7 +58,7 @@ import org.junit.jupiter.api.*;
  *   /freemarker-templates/nested/inner.ftlh ← validates multi-segment paths
  * </pre>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class FreemarkerMixin_MockRest_Test extends TestBase {
 

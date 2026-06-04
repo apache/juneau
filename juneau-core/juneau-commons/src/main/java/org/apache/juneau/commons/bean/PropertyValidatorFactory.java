@@ -35,7 +35,7 @@ import java.util.*;
  *
  * @see PropertyValidator
  * @see PropertyValidators
- * @since 9.5.0
+ * @since 10.0.0
  */
 @FunctionalInterface
 public interface PropertyValidatorFactory {

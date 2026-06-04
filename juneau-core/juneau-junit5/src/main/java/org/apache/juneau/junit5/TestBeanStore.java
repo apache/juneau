@@ -57,7 +57,7 @@ import org.apache.juneau.commons.inject.*;
  * 	<li class='jc'>{@link JuneauBeanStoreExtension} - Mode INJECT vs Mode OVERLAY contracts and the JUnit 5 lifecycle owner.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class TestBeanStore extends BasicBeanStore {
 
@@ -77,7 +77,7 @@ public class TestBeanStore extends BasicBeanStore {
 	 * overrides shadow class-scope overrides of the same {@code (type, name)} pair.
 	 *
 	 * @param parent The parent bean store.  Can be <jk>null</jk> for a standalone overlay.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public TestBeanStore(BeanStore parent) {
 		super(parent);

@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Trivial test that {@link SamlBinding} enumerates the two HTTP bindings v1 ships.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class SamlBinding_Test extends TestBase {
 

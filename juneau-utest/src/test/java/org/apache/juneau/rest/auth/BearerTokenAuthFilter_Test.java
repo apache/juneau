@@ -31,7 +31,7 @@ import jakarta.servlet.http.*;
  * Tests for {@link BearerTokenAuthFilter} — happy path, missing header, malformed header,
  * validator throws, and {@link ClaimsPrincipal} role extraction.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.

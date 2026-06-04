@@ -149,7 +149,7 @@ public class VarResolver {
 		 * The 11 transformation {@code Var}s previously listed here ({@code SwitchVar},
 		 * {@code IfVar}, {@code CoalesceVar}, {@code PatternMatchVar}, {@code PatternReplaceVar},
 		 * {@code PatternExtractVar}, {@code UpperCaseVar}, {@code LowerCaseVar},
-		 * {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were deleted in 9.5.0 and
+		 * {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were deleted in 10.0.0 and
 		 * replaced by the {@code #{...}} script syntax. Use {@link #defaultFunctions()} to
 		 * register the built-in catalog.
 		 *
@@ -334,7 +334,7 @@ public class VarResolver {
 	 * ({@code SwitchVar}, {@code IfVar}, {@code CoalesceVar}, {@code PatternMatchVar},
 	 * {@code PatternReplaceVar}, {@code PatternExtractVar}, {@code UpperCaseVar},
 	 * {@code LowerCaseVar}, {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were
-	 * deleted in 9.5.0; their behavior is now covered by the {@code #{...}} script syntax.
+	 * deleted in 10.0.0; their behavior is now covered by the {@code #{...}} script syntax.
 	 */
 	public static final VarResolver DEFAULT = create().defaultVars().defaultFunctions().build();
 

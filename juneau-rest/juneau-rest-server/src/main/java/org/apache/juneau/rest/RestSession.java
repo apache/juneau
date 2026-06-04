@@ -396,7 +396,7 @@ public class RestSession extends ContextSession {
 	 * a spurious 500 when 404/405/412 paths bypass operation creation entirely.
 	 *
 	 * @return The operation session, or {@code null} if one was never created (e.g. early routing failure).
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public RestOpSession getOpSessionOrNull() { return opSession; }
 

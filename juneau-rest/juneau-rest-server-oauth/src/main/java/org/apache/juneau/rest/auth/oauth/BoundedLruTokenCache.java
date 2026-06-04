@@ -37,7 +37,7 @@ import java.util.*;
  * 		the supplied {@code now} clock) is removed and treated as a miss.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class BoundedLruTokenCache implements TokenCache {
 

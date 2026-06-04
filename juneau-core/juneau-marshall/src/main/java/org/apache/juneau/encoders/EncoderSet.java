@@ -136,7 +136,7 @@ public class EncoderSet {
 		 *
 		 * @param store The override layer.  Can be <jk>null</jk>.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		@Override
 		@SuppressWarnings({

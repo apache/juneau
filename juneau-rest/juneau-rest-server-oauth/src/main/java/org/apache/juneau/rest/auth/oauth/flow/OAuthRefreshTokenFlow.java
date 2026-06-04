@@ -39,7 +39,7 @@ import com.nimbusds.oauth2.sdk.token.RefreshToken;
  * Wraps Nimbus's {@link RefreshTokenGrant}.  The IdP may return a rotated refresh token; callers should
  * persist the {@link OAuthToken#refreshToken()} value if present.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "refresh_token"); intentional

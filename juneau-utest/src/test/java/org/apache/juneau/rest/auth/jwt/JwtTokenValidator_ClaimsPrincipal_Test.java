@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * Verifies that a successful {@link JwtTokenValidator#validate(String) validation} produces a
  * {@link ClaimsPrincipal} whose claims are accessible via {@code getClaim(String, Class)}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JwtTokenValidator_ClaimsPrincipal_Test extends TestBase {
 

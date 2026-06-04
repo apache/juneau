@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * Uses fresh inner-class resources because {@link MockRestClient} caches {@link RestContext} per
  * resource class &mdash; SVL substitution is captured at context-construction time.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class ThymeleafMixin_SvlPathOverride_Test extends TestBase {
 

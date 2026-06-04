@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * Validates {@link RateLimitGuard.Storage#snapshot()} default-vs-override behavior and the
  * shape of the {@link BucketState} records the bundled in-memory storage emits.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class RateLimitGuard_Snapshot_Test extends TestBase {

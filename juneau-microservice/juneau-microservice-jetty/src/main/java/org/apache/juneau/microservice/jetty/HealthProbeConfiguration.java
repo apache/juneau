@@ -24,7 +24,7 @@ import jakarta.servlet.*;
 /**
  * Opt-in probe configuration that auto-mounts {@link HealthServlet}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @Configuration
 public class HealthProbeConfiguration {

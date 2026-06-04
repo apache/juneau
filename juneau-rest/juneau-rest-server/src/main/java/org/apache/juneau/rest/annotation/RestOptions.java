@@ -479,7 +479,7 @@ public @interface RestOptions {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String observability() default "";
 
@@ -497,7 +497,7 @@ public @interface RestOptions {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String asyncCompletionExecutor() default "";
 
@@ -509,7 +509,7 @@ public @interface RestOptions {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String metricName() default "";
 
@@ -522,7 +522,7 @@ public @interface RestOptions {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String metricTags() default "";
 

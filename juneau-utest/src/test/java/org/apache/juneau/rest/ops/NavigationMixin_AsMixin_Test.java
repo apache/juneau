@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * via {@link RestMixin#getHostContext()}. These tests confirm the {@code GET /} navigation page lists the
  * host's children rather than the mixin's own (empty) children.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class NavigationMixin_AsMixin_Test extends TestBase {
 

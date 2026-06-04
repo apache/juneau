@@ -34,7 +34,7 @@ import jakarta.servlet.http.*;
  * Validates {@link AuthArg} &mdash; resolves {@code @Auth Principal}, bare {@code Principal}
  * (no annotation, type-driven), and {@code ClaimsPrincipal} subtype parameters.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AuthArg_Test extends TestBase {
 

@@ -30,7 +30,7 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * Builder validation tests for the four flow helpers in {@link org.apache.juneau.rest.auth.oauth.flow}.
  * Network round-trips are not exercised here; those need a stub IdP fixture.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class OAuthFlowBuilder_Test extends TestBase {

@@ -47,6 +47,6 @@
  * <p>
  * Third-party renderers gain the same ordering guarantee by implementing {@link org.apache.juneau.rest.view.ViewRenderer}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 package org.apache.juneau.rest.view;

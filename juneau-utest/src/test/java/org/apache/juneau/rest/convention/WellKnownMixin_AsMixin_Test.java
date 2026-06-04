@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code Content-Type: text/plain; charset=UTF-8} when a body is configured.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class WellKnownMixin_AsMixin_Test extends TestBase {
 

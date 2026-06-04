@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  * {@code WWW-Authenticate: ApiKey realm="..."} challenge, principal stashing, store-throws path,
  * and builder validation.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class ApiKeyGuard_Test extends TestBase {

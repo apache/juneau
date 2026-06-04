@@ -63,10 +63,10 @@ import org.apache.juneau.rest.mock.classic.*;
  *
  * <p>
  * The {@link org.apache.juneau.rest.processor.ResponseProcessorList} partition pass (added in
- * 9.5.0) then automatically repositions the renderer before
+ * 10.0.0) then automatically repositions the renderer before
  * {@link org.apache.juneau.rest.processor.SerializedPojoProcessor} in the chain.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public abstract class ViewIntegrationTestBase extends TestBase {
 

@@ -36,7 +36,7 @@ import io.opentelemetry.context.propagation.*;
  * Header lookups are case-insensitive at the underlying {@code RequestHeaderList}, matching the
  * RFC 9110 contract.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S6548" // Singleton pattern is intentional; INSTANCE is a stateless, thread-safe TextMapGetter implementation.

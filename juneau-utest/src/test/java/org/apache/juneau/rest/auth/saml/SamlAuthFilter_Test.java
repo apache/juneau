@@ -35,7 +35,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * Tests for {@link SamlAuthFilter} &mdash; path matching, binding selection, request-parameter extraction,
  * and the REDIRECT-binding deflate path.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class SamlAuthFilter_Test extends TestBase {

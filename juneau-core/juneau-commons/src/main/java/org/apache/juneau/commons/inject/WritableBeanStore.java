@@ -266,7 +266,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @param overlay The bean store to layer on top.  Must not be <jk>null</jk>.
 	 * @return A {@link Snapshot} that must be passed back to {@link #popOverlay(Snapshot)} to remove the frame.
 	 * @throws NullPointerException If {@code overlay} is <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	Snapshot pushOverlay(BeanStore overlay);
 
@@ -284,7 +284,7 @@ public interface WritableBeanStore extends BeanStore, AutoCloseable {
 	 * @throws NullPointerException If {@code snapshot} is <jk>null</jk>.
 	 * @throws IllegalStateException If the snapshot was produced by a different store, the overlay stack is empty,
 	 * 	or the snapshot does not identify the top-of-stack frame (LIFO violation).
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	void popOverlay(Snapshot snapshot);
 

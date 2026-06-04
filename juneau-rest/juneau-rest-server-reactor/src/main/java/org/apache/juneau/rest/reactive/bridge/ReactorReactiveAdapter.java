@@ -35,7 +35,7 @@ import reactor.core.publisher.*;
  * Registered ahead of {@link ReactiveStreamsPublisherAdapter} so a {@code Mono} (which also implements
  * {@code org.reactivestreams.Publisher}) is treated as a single value rather than a one-element stream.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class ReactorReactiveAdapter implements ReactiveStreamsAdapter {
 

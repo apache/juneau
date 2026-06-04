@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * than a 404 (which would mean the op never installed). Real rendering is covered by the
  * container-backed tests.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JspServlet_MockRest_Test extends TestBase {
 

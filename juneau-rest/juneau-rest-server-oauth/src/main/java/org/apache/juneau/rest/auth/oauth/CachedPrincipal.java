@@ -25,6 +25,6 @@ import java.time.Instant;
  *
  * @param principal The cached principal.  Never {@code null}.
  * @param expiresAt The instant at which the entry expires.
- * @since 9.5.0
+ * @since 10.0.0
  */
 record CachedPrincipal(Principal principal, Instant expiresAt) {}

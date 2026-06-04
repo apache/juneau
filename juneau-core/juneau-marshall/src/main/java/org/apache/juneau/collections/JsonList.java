@@ -42,7 +42,7 @@ import org.apache.juneau.serializer.*;
  * various JSON dialects (JSON5, JSON Lines, canonical JSON, HJSON).
  *
  * <p>
- * <b>v9.5 behavioral break:</b> {@code toString()} now produces strict (RFC 8259) JSON (was JSON5),
+ * <b>v10.0 behavioral break:</b> {@code toString()} now produces strict (RFC 8259) JSON (was JSON5),
  * and the {@link CharSequence} / {@link Reader} constructors now default to {@link JsonParser#DEFAULT}
  * (was {@link Json5Parser#DEFAULT}). For the previous JSON5 behavior use {@link org.apache.juneau.json5.Json5List}.
  *

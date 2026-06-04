@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
  * Real JSP rendering is exercised by {@code JspMixin_JettyMicroservice_Test} and
  * {@code JspMixin_Springboot_Test}, which boot real servlet containers with a JSP engine.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JspMixin_MockRest_Test extends TestBase {
 

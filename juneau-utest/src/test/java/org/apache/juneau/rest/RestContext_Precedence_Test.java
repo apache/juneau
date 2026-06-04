@@ -30,7 +30,7 @@ import org.apache.juneau.rest.stats.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates the 9.5 bean-store precedence model on a {@link RestContext}.
+ * Validates the 10.0 bean-store precedence model on a {@link RestContext}.
  *
  * <p>
  * Resolution order, top-to-bottom:

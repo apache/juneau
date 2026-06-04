@@ -99,7 +99,7 @@ import com.nimbusds.jwt.proc.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are JWT claim names and algorithm identifiers; intentional
@@ -298,7 +298,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * Applies only to {@link #jwksUrl(java.net.URI) jwksUrl(...)}-backed caches. A
 		 * caller-supplied {@link #jwkSource(JWKSource) jwkSource(...)} is unaffected.
 		 *
-		 * @param value {@code true} to enable (default); {@code false} to restore pre-9.5.0 behavior.
+		 * @param value {@code true} to enable (default); {@code false} to restore pre-10.0.0 behavior.
 		 * @return This object.
 		 */
 		public Builder jwksEagerRefreshOnKidMiss(boolean value) {

@@ -51,7 +51,7 @@ import org.junit.jupiter.api.io.*;
  * an in-memory Config via {@link MockRestClient.Builder#overridingBeanStore(BeanStore)} so the
  * static state points at the per-test temp directory.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class LogsResource_PathTraversal_Test extends TestBase {
 

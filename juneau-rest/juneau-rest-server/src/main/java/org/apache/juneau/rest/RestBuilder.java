@@ -61,7 +61,7 @@ import org.apache.juneau.serializer.*;
  * </ul>
  *
  * @param <SELF> The concrete builder type (self type).
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.

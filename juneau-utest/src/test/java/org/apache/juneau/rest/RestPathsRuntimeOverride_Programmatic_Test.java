@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  * See {@link RestContext#getPaths()} for the full precedence order
  * (programmatic &gt; getter &gt; annotation default).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RestPathsRuntimeOverride_Programmatic_Test extends TestBase {
 

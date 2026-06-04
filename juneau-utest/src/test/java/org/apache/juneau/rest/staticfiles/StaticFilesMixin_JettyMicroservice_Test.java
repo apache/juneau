@@ -59,7 +59,7 @@ import jakarta.servlet.*;
  * 		main resources) so the URL routing flows end-to-end through the real network stack.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class StaticFilesMixin_JettyMicroservice_Test extends TestBase {

@@ -41,7 +41,7 @@ package org.apache.juneau.rest.auth.saml;
  * 	<li class='link'><a class="doclink" href="https://docs.oasis-open.org/security/saml/v2.0/saml-bindings-2.0-os.pdf">SAML 2.0 Bindings (OASIS)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public enum SamlBinding {
 

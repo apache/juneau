@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * of what the mixin emits. The generated spec must list the host's own {@code /items} endpoint
  * but NOT the static-file mounts contributed by the mixin.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StaticFilesMixin_OpenApiHidden_Test extends TestBase {
 

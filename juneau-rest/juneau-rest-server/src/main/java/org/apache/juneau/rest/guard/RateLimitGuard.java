@@ -92,7 +92,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerRateLimitAndRequestId">REST Server — Rate-Limiting and Request-Id Propagation</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are HTTP header names and rate-limit response field names; intentional
@@ -407,7 +407,7 @@ public class RateLimitGuard extends RestGuard {
 	 * 	({@code tokens < 1.0}).  Convenience flag for at-a-glance operator dashboards.
 	 * @param lastRequest The wall-clock {@link Instant} at which the bucket was last touched.
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public record BucketState(String key, double tokens, int remaining, boolean throttled, Instant lastRequest) {}
 
@@ -415,7 +415,7 @@ public class RateLimitGuard extends RestGuard {
 	 * Returns the bucket capacity (the maximum number of tokens a bucket can hold).
 	 *
 	 * @return The bucket capacity.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public int getCapacity() {
 		return capacity;
@@ -425,7 +425,7 @@ public class RateLimitGuard extends RestGuard {
 	 * Returns the steady-state refill rate in permits per second.
 	 *
 	 * @return The refill rate.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public double getPermitsPerSecond() {
 		return permitsPerSecond;
@@ -435,7 +435,7 @@ public class RateLimitGuard extends RestGuard {
 	 * Returns whether {@code X-Forwarded-For}-aware key resolution is enabled.
 	 *
 	 * @return <jk>true</jk> if {@code X-Forwarded-For} resolution is enabled.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public boolean isXForwardedForAware() {
 		return xForwardedForAware;
@@ -445,7 +445,7 @@ public class RateLimitGuard extends RestGuard {
 	 * Returns the set of request paths that bypass throttling.
 	 *
 	 * @return The exempt paths.  Never <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Set<String> getExemptPaths() {
 		return exemptPaths;
@@ -455,7 +455,7 @@ public class RateLimitGuard extends RestGuard {
 	 * Returns the bucket-state storage backend in use by this guard.
 	 *
 	 * @return The storage backend.  Never <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Storage getStorage() {
 		return storage;
@@ -470,7 +470,7 @@ public class RateLimitGuard extends RestGuard {
 	 * enumerate every bucket).
 	 *
 	 * @return A point-in-time map of per-key bucket state.  Never <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Map<String,BucketState> snapshot() {
 		return storage.snapshot();
@@ -484,7 +484,7 @@ public class RateLimitGuard extends RestGuard {
 	 * single-pod deployments.  Multi-pod deployments that share a single rate envelope should substitute a
 	 * distributed backend.
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public interface Storage {
 
@@ -531,7 +531,7 @@ public class RateLimitGuard extends RestGuard {
 		 * either filter client-side or use a paginated alternative if one is offered by the backend.
 		 *
 		 * @return A point-in-time map of per-key bucket state, keyed by per-request key.  Never <jk>null</jk>.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		default Map<String,BucketState> snapshot() {
 			return Map.of();

@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * fixed-token validator. The framework's {@code @Bean RestGuardList} override REPLACES the
  * annotation-derived deny-all on the mixin, so the admin paths gate on the bearer token instead.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AdminMixin_AuthIntegration_Test extends TestBase {
 

@@ -31,7 +31,7 @@ import com.nimbusds.jose.*;
  * Security-critical tests for {@link JwtTokenValidator}: algorithm-confusion attacks, the
  * "none" algorithm, and the HS256 opt-in path.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class JwtTokenValidator_Security_Test extends TestBase {

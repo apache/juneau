@@ -29,7 +29,7 @@ import java.util.*;
  * @param refreshToken The refresh token, if the IdP issued one.
  * @param scope The granted scopes, if the IdP returned a {@code scope} field.
  * @param idToken The OIDC ID token (a JWT), if the flow scope included {@code openid}.
- * @since 9.5.0
+ * @since 10.0.0
  */
 public record OAuthToken(
 		String accessToken,

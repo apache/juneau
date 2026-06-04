@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * rejection paths, validator-throws path, the {@code WWW-Authenticate: Bearer realm="..."} challenge,
  * principal stashing, and builder validation.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class BearerTokenGuard_Test extends TestBase {

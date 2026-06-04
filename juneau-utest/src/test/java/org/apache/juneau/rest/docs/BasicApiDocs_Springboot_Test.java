@@ -69,7 +69,7 @@ import org.springframework.test.annotation.*;
  * {@link BasicApiDocs_JettyMicroservice_Test} so the wire-level call shape is byte-identical
  * across both real-container tests.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SpringBootTest(classes = BasicApiDocs_Springboot_Test.TestApp.class,

@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code HEAD} mirrors GET headers with an empty body.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StaticFilesServlet_Test extends TestBase {
 

@@ -31,7 +31,7 @@ import java.time.*;
  * method does nothing, allocates nothing, and JIT-inlines to an empty method body, so the
  * off-by-default path has no observable runtime cost.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S6548" // Intentional process-wide no-op singleton; the Singleton pattern is required to satisfy the MetricsRecorder SPI contract with zero allocation.

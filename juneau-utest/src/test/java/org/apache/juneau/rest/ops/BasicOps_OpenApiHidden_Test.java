@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  * {@link OpenApiMixin} (the OpenAPI generator). The generated spec must list the host's
  * own {@code /items} endpoint but NOT the ops-pack paths.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class BasicOps_OpenApiHidden_Test extends TestBase {
 

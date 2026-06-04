@@ -111,7 +111,7 @@ import java.lang.annotation.*;
  * 		{@link Bean#methodScope()} annotation can be used to apply to method-level only (when applicable).
  * </ul>
  *
- * <h5 class='section'>Precedence (since 9.5.0):</h5>
+ * <h5 class='section'>Precedence (since 10.0.0):</h5>
  * <p>
  * 	{@code @Bean} acts as a <i>programmable default</i>, analogous to Spring's
  * 	<c>&#64;ConditionalOnMissingBean</c>.  When a REST context resolves a framework-managed bean
@@ -134,7 +134,7 @@ import java.lang.annotation.*;
  * 	{@code @Bean > default}.
  * </p>
  * <p>
- * 	Prior to 9.5 the order was {@code @Bean > Spring > default}.  See the 9.5.0 release notes for migration
+ * 	Prior to 10.0 the order was {@code @Bean > Spring > default}.  See the 10.0.0 release notes for migration
  * 	guidance if you need to keep that legacy behavior (typically by removing the Spring <c>&#64;Bean</c> or marking the
  * 	{@code @Bean} method's type with a Spring-native override such as <c>&#64;Primary</c>).
  * </p>

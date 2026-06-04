@@ -66,7 +66,7 @@ import org.apache.juneau.rest.view.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class ThymeleafView implements View {
 

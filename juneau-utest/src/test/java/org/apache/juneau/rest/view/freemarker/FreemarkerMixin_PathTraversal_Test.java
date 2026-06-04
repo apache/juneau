@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
  * {@code @Path("/*") String path} receives the raw {@code ..} segments &mdash; which is what the
  * handler-layer boundary check is designed to catch. (Real-container coverage is deferred to the
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class FreemarkerMixin_PathTraversal_Test extends TestBase {
 

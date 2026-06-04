@@ -40,12 +40,12 @@
  * 		{@code new JsonMap("{unquoted:'json5'}")} parsing JSON5.
  * 	<li>{@link org.apache.juneau.collections.ResolvingMarshalledMap}
  * 		&mdash; a {@code MarshalledMap} subclass that resolves SVL variables on every value lookup.
- * 		Renamed from {@code ResolvingJsonMap} and re-parented from {@code JsonMap} in 9.5 since
+ * 		Renamed from {@code ResolvingJsonMap} and re-parented from {@code JsonMap} in 10.0 since
  * 		SVL resolution is language-agnostic.
  * </ul>
  *
  * <p>Per-marshaller flavored {@code XMap} / {@code XList} pairs (e.g. {@code XmlMap}, {@code YamlMap},
- * {@code UonMap}) for the remaining languages are planned as a follow-on and are not delivered in 9.5;
+ * {@code UonMap}) for the remaining languages are planned as a follow-on and are not delivered in 10.0;
  * parser sessions other than {@link org.apache.juneau.json.JsonParserSession} and
  * {@link org.apache.juneau.json5.Json5ParserSession} currently produce the neutral
  * {@link org.apache.juneau.collections.MarshalledMap} / {@link org.apache.juneau.collections.MarshalledList}

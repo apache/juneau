@@ -33,7 +33,7 @@ import java.util.Optional;
  * <p>
  * Implementations must be thread-safe.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public interface TokenCache {
 

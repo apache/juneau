@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * a clickable link, while {@code application/json} / {@code text/xml} clients receive the same entries in their
  * requested format.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RouteIndexMixin_ContentNegotiation_Test extends TestBase {
 

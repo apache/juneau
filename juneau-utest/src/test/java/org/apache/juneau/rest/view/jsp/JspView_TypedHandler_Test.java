@@ -43,7 +43,7 @@ import org.junit.jupiter.api.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JspView_TypedHandler_Test extends ViewIntegrationTestBase {
 

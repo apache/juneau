@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  * Tests for the {@link ResponseProcessorList} partition pass that repositions
  * {@link ViewRenderer} processors before the first {@link CatchAllResponseProcessor}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class ResponseProcessorList_Test extends TestBase {
 

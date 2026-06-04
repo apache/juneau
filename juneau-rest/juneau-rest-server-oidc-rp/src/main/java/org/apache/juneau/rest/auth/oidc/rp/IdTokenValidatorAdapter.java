@@ -57,7 +57,7 @@ import com.nimbusds.openid.connect.sdk.validators.IDTokenValidator;
  * For tests / HSM-backed signers / multi-issuer setups, inject a {@link Builder#jwkSet(JWKSet)} or
  * {@link Builder#jwkSource(JWKSource)} directly.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are OIDC/JWT claim names (e.g. "iss", "aud", "exp"); intentional

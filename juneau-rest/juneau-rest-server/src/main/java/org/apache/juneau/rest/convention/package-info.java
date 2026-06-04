@@ -73,6 +73,6 @@
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Composition (mixins, paths)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 package org.apache.juneau.rest.convention;

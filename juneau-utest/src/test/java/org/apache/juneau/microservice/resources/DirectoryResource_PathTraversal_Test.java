@@ -45,7 +45,7 @@ import org.junit.jupiter.api.io.*;
  * is the private {@code getFile(String)} method, so the fix is applied once and verified across
  * each operation surface here.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class DirectoryResource_PathTraversal_Test extends TestBase {
 

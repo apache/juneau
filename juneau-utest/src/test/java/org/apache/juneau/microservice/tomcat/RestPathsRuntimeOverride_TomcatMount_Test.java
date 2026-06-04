@@ -46,7 +46,7 @@ import jakarta.servlet.*;
  * <p>
  * Mirrors {@code RestPathsRuntimeOverride_JettyMount_Test} for the embedded-Tomcat backend.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.TomcatMicroserviceTest
 class RestPathsRuntimeOverride_TomcatMount_Test extends TestBase {

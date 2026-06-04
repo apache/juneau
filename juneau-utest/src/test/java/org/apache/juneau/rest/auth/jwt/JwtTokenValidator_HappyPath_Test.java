@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * Happy-path validation for {@link JwtTokenValidator}: an RS256-signed JWT with all mandatory
  * claims is accepted and produces a populated {@link ClaimsPrincipal}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JwtTokenValidator_HappyPath_Test extends TestBase {
 

@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * 	<li>With an allow-all {@code @Bean RestGuardList} on the child, {@code /admin/threads} serves.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AdminResource_Test extends TestBase {
 

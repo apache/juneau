@@ -47,7 +47,7 @@ import jakarta.servlet.*;
  * sibling top-level mount + op-at-{@code /*} shape resolves correctly through a real servlet
  * container (which {@code MockRestClient} cannot fully model for {@code paths()}-based mounts).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class StandaloneServlets_JettyMicroservice_Test extends TestBase {

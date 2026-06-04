@@ -34,7 +34,7 @@ import org.junit.jupiter.api.Test;
  * If the validator hits the cache (it should), it returns the seeded principal without ever touching the
  * introspection endpoint (which is set to a bogus URI that would fail if dialed).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class OAuthIntrospectionValidator_Cache_Test extends TestBase {
 

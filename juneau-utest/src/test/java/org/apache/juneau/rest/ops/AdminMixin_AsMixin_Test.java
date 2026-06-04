@@ -47,7 +47,7 @@ import org.junit.jupiter.api.*;
  * 	<li>Builder-time validation rejects null/blank cache-flush names and null hooks.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class AdminMixin_AsMixin_Test extends TestBase {

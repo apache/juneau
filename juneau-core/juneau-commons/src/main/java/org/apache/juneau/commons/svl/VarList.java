@@ -99,7 +99,7 @@ public class VarList extends ArrayList<Object> {
 	 * ({@code SwitchVar}, {@code IfVar}, {@code CoalesceVar}, {@code PatternMatchVar},
 	 * {@code PatternReplaceVar}, {@code PatternExtractVar}, {@code UpperCaseVar},
 	 * {@code LowerCaseVar}, {@code NotEmptyVar}, {@code LenVar}, {@code SubstringVar}) were
-	 * deleted in 9.5.0 and replaced by the {@code #{...}} script syntax. The
+	 * deleted in 10.0.0 and replaced by the {@code #{...}} script syntax. The
 	 * built-in {@code VarFunction} catalog is registered separately via
 	 * {@link VarResolver.Builder#defaultFunctions()}.
 	 *

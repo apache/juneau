@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
  * convention mixins plus {@link OpenApiMixin} (the OpenAPI generator). The generated spec
  * must list the host's own {@code /items} endpoint but NOT the convention paths.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class BasicConvention_OpenApiHidden_Test extends TestBase {
 

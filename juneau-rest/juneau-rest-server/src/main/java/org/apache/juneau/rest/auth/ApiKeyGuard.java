@@ -72,7 +72,7 @@ import org.apache.juneau.rest.guard.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are HTTP header names and API key parameter names; intentional

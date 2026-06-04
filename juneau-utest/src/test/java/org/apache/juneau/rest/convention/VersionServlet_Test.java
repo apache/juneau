@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  * 	<li>A builder-configured delegate's programmatic entries surface through the servlet.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class VersionServlet_Test extends TestBase {
 

@@ -35,7 +35,7 @@ import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
  * Centralizes the Nimbus {@code TokenRequest}-to-{@code OAuthToken} round-trip plus the standard error
  * mapping.  All flow classes delegate here so the wire-shape handling lives in one place.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 final class Flows {
 

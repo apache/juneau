@@ -43,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * unencrypted assertions; encrypt-path full coverage is deferred to integration testing against a real IdP
  * once the integration-test harness lands (separate task).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class SamlAssertionValidator_EncryptedAssertion_Test extends TestBase {
 

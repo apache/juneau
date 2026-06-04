@@ -67,7 +67,7 @@ import com.nimbusds.openid.connect.sdk.Nonce;
  * The flow does NOT manage state / PKCE-verifier storage; that's the caller's responsibility per OIDC RP
  * charter (see {@code OidcDiscoveryClient} javadoc).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "code", "grant_type"); intentional

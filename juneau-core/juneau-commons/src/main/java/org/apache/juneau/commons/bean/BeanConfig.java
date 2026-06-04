@@ -475,7 +475,7 @@ public @interface BeanConfig {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String validateSchema() default "";
 

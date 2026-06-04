@@ -62,7 +62,7 @@ import jakarta.servlet.*;
  * 		lookup path rather than {@code MockRest}'s simplified mount.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class BasicApiDocs_JettyMicroservice_Test extends TestBase {

@@ -33,7 +33,7 @@ import com.github.mustachejava.*;
  * Mirrors the {@code JspMixin_Builder_Test} / {@code ThymeleafMixin_Builder_Test}
  * shape so sibling view modules can follow the same template.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class MustacheMixin_Builder_Test extends TestBase {
 

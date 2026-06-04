@@ -52,7 +52,7 @@ import com.nimbusds.jwt.*;
  * bits / 32 bytes).  Signature failures, expiry, and parse errors all resolve to
  * {@link Optional#empty()} on {@link #lookup(String)} (fail-closed).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are cookie attribute names and session field names; intentional

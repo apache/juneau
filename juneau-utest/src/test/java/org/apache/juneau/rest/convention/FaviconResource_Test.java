@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  * 	<li>The host's own endpoints are unaffected by the mounted child.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class FaviconResource_Test extends TestBase {
 

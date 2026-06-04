@@ -153,7 +153,7 @@ public class BeanPropAnnotation {
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder summary(String value) {
 			summary = value;

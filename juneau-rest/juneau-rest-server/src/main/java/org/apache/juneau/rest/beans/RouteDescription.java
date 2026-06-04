@@ -46,7 +46,7 @@ import org.apache.juneau.http.annotation.*;
  * </ul>
  *
  * @serial exclude
- * @since 9.5.0
+ * @since 10.0.0
  */
 @BeanType(properties = "path,methods,summary,description,deprecated", findFluentSetters = true)
 @Response(schema = @Schema(ignore = true))

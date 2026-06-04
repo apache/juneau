@@ -43,7 +43,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code /ratelimit} returns {@code 404} when no {@link RateLimitGuard} bean is registered.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AdminServlet_Test extends TestBase {
 

@@ -60,7 +60,7 @@ import org.apache.juneau.rest.servlet.*;
  * </ul>
  *
  * @serial exclude
- * @since 9.5.0
+ * @since 10.0.0
  */
 @Rest
 public abstract class ViewServlet extends RestServlet {

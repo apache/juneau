@@ -36,7 +36,7 @@ import java.util.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public interface HttpResource extends HttpBody {
 

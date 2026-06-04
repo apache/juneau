@@ -69,7 +69,7 @@ public @interface Response {
 	 * for the canonical definition.
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String summary() default "";
 

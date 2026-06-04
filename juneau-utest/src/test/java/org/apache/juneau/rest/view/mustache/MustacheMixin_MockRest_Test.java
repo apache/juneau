@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  *   /mustache-templates/nested/inner.mustache ← validates multi-segment paths
  * </pre>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class MustacheMixin_MockRest_Test extends TestBase {
 

@@ -108,7 +108,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * Returns the programmatic configuration builder stashed on this resource, or <jk>null</jk> if none.
 	 *
 	 * @return The stashed builder, or <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	@SuppressWarnings({
 		"java:S1452" // RestBuilder<?> wildcard return intentional; concrete builder type varies by REST resource class
@@ -126,7 +126,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * @param <R> The resource type.
 	 * @param type The resource type to build.  Must not be <jk>null</jk>.
 	 * @return A new builder.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static <R extends RestServlet> DefaultBuilder<R> builder(Class<R> type) {
 		return new DefaultBuilder<>(type);
@@ -230,7 +230,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @return The runtime-overridden mount paths in any accepted shape, or {@code null} to inherit the
 	 * 	annotation default.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Object getPaths() { return null; }
 
@@ -368,7 +368,7 @@ public abstract class RestServlet extends HttpServlet {
 	 *
 	 * @param <R> The resource type produced by {@link #build()}.
 	 * @param <SELF> The concrete builder type (self type).
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	@SuppressWarnings({
 		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
@@ -397,7 +397,7 @@ public abstract class RestServlet extends HttpServlet {
 	 * case, so callers are not forced to spell the {@code SELF} type parameter.
 	 *
 	 * @param <R> The resource type produced by {@link #build()}.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static final class DefaultBuilder<R extends RestServlet> extends Builder<R, DefaultBuilder<R>> {
 		DefaultBuilder(Class<R> type) {

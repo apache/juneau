@@ -64,7 +64,7 @@ import org.openjdk.jmh.runner.options.*;
  * 	      -Dexec.mainClass=org.apache.juneau.microbench.observability.ObservabilityNoopBenchmark
  * </pre>
  *
- * @since 9.5.0
+ * @since 10.0.0
  * @see MetricsRecorder
  * @see TracerHook
  * @see NoOpMetricsRecorder

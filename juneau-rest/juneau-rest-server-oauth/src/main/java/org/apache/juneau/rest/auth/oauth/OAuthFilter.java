@@ -63,7 +63,7 @@ import jakarta.servlet.http.HttpServletRequest;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthFilterFramework">AuthN Filter Framework</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are OAuth protocol header names and grant type values; intentional

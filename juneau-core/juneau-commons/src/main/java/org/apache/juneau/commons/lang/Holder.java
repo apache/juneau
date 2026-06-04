@@ -38,7 +38,7 @@ import org.apache.juneau.commons.reflect.ClassInfo;
  * with the wrapped value, including mapping, conditional execution, and default value handling.
  *
  * <p>
- * Renamed from {@code Value} in 9.5.0 to resolve an import-name collision with the {@code @Value} injection annotation.
+ * Renamed from {@code Value} in 10.0.0 to resolve an import-name collision with the {@code @Value} injection annotation.
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>

@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * {@code RestRequest.getStaticFiles()} at request time, which delegates to
  * {@code BeanStore.getBean(StaticFiles.class)}, so the importer's bean wins.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StaticFilesMixin_ImporterOverride_Test extends TestBase {
 

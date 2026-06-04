@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link InMemorySessionStore} &mdash; server-side indexing + back-channel revocation.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class InMemorySessionStore_Test extends TestBase {
 

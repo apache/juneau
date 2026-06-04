@@ -29,7 +29,7 @@ import org.junit.jupiter.api.Test;
 /**
  * End-to-end happy-path test for {@link SamlAssertionValidator} using a real OpenSAML-signed assertion.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class SamlAssertionValidator_HappyPath_Test extends TestBase {
 

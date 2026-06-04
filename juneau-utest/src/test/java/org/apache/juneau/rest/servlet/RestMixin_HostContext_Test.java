@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  * composed via {@code @Rest(mixins=...)}, returns {@code null} when the mixin is used standalone, and
  * resolves to the single flat top-level host under nested mixins (FINISHED-81 flat-inheritance rule).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RestMixin_HostContext_Test extends TestBase {
 

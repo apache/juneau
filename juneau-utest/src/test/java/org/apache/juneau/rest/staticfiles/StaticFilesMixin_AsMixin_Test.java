@@ -46,7 +46,7 @@ import org.junit.jupiter.api.*;
  * is now reached via {@code -Djuneau.staticfiles.path=htdocs}; that behavior is covered by
  * {@code StaticFilesMixin_SvlPathOverride_Test}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StaticFilesMixin_AsMixin_Test extends TestBase {
 

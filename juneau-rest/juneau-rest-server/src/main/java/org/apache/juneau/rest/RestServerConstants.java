@@ -270,7 +270,7 @@ public final class RestServerConstants {
 	 * 	String <jv>id</jv> = (String)<jv>req</jv>.getAttribute(RestServerConstants.<jsf>REQUEST_ID</jsf>);
 	 * </p>
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static final String REQUEST_ID = "requestId";
 
@@ -293,7 +293,7 @@ public final class RestServerConstants {
 	 * 	Principal <jv>p</jv> = (Principal)<jv>req</jv>.getAttribute(RestServerConstants.<jsf>PRINCIPAL_ATTR</jsf>);
 	 * </p>
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static final String PRINCIPAL_ATTR = "juneau.principal";
 
@@ -302,7 +302,7 @@ public final class RestServerConstants {
 	 * with the {@link org.apache.juneau.rest.auth.ApiKeyGuard.Source#HEADER HEADER} source and no
 	 * custom name is supplied.
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static final String API_KEY_HEADER = "X-API-Key";
 }

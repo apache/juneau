@@ -49,7 +49,7 @@ import org.junit.jupiter.api.*;
  * {@code -Djuneau.routeindex.path=routes}; that behavior is covered by
  * {@code RouteIndexMixin_SvlPathOverride_Test}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RouteIndexMixin_AsMixin_Test extends TestBase {
 

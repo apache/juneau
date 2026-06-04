@@ -33,7 +33,7 @@ import org.apache.juneau.rest.servlet.*;
  * Servlet chains often redirect to {@code /error} when an error condition occurs (such as failed
  * authentication) and set appropriate response parameters (such as a {@code WWW-Authenticate} header).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @Rest
 public class ErrorMixin extends RestMixin {

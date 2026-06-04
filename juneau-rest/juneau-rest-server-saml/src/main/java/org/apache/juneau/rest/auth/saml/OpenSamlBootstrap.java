@@ -27,7 +27,7 @@ import org.opensaml.core.config.InitializationService;
  * pattern is double-checked locking from a single shared entry point.  Every class in this package that
  * needs to unmarshal or build OpenSAML objects calls {@link #ensureInitialized()} in its constructor.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 final class OpenSamlBootstrap {
 

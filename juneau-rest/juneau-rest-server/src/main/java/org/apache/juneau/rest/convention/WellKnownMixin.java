@@ -100,7 +100,7 @@ import org.apache.juneau.rest.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 // @formatter:off
 @Rest

@@ -46,7 +46,7 @@ import org.junit.jupiter.api.*;
  * deferred to the same integration matrix that lights up Jetty/Spring Boot end-to-end
  * for the rest of the JSP module.)
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JspMixin_PathTraversal_Test extends TestBase {
 

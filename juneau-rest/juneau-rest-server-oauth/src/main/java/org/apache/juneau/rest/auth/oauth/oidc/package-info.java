@@ -21,6 +21,6 @@
  * Wraps Nimbus's {@code OIDCProviderMetadata.resolve(Issuer)} behind a Juneau-native facade that returns
  * an {@link org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata} record.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 package org.apache.juneau.rest.auth.oauth.oidc;

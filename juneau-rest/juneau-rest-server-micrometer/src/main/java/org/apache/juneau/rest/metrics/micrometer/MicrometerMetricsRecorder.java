@@ -95,7 +95,7 @@ import io.micrometer.core.instrument.*;
  * 	<li class='link'><a class="doclink" href="https://micrometer.io/docs/concepts">Micrometer Concepts</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S115" // TAG_xxx and ARG_xxx constants use camelCase after prefix intentionally (metric/arg key names, not enum-style constants)

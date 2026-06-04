@@ -229,7 +229,7 @@ public final class MockRestClient implements Closeable {
 		 * @param value The override layer. Can be <jk>null</jk> to clear a previously-set value.
 		 * @return This object.
 		 *
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		@Override
 		public Builder overridingBeanStore(BeanStore value) {

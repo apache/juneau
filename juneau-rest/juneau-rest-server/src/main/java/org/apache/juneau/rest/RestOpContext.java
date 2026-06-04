@@ -201,7 +201,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * whether the operation was contributed by a mixin (via {@link RestContext#isMixinContext()}).
 	 *
 	 * @return The owning {@link RestContext} for this operation.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public RestContext getContext() { return context; }
 
@@ -1610,7 +1610,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@code null} when neither the op nor the resource configures an executor (natural completion thread).
 	 *
 	 * @return The executor, or {@code null} if no async-completion executor is configured.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Executor getAsyncCompletionExecutor() { return asyncCompletionExecutor.get(); }
 

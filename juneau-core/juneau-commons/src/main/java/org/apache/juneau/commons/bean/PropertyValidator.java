@@ -38,7 +38,7 @@ import org.apache.juneau.commons.httppart.*;
  *
  * @see PropertyValidatorFactory
  * @see PropertyValidators
- * @since 9.5.0
+ * @since 10.0.0
  */
 @FunctionalInterface
 public interface PropertyValidator {

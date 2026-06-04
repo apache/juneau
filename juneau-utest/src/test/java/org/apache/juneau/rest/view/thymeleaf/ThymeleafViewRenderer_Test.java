@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ThymeleafViewRenderer}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class ThymeleafViewRenderer_Test extends TestBase {
 

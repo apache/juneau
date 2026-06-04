@@ -37,7 +37,7 @@ import java.util.*;
  * @param endSessionEndpoint The OIDC end-session endpoint URI.  May be {@code null}.
  * @param supportedScopes Scopes the IdP advertises support for.  May be empty.
  * @param extras Unknown / IdP-specific fields.  Read-only map.
- * @since 9.5.0
+ * @since 10.0.0
  */
 public record OidcMetadata(
 		URI issuer,

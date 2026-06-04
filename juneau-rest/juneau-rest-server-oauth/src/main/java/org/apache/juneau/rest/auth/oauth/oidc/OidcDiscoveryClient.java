@@ -45,7 +45,7 @@ import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
  * 		.discover();
  * </p>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class OidcDiscoveryClient {
 

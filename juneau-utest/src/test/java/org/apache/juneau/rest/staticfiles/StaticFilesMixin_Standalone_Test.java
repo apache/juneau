@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
  * inherited op-level {@code @RestGet(path="/${juneau.staticfiles.path:static}/*")} declares the
  * mount point without any additional configuration.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StaticFilesMixin_Standalone_Test extends TestBase {
 

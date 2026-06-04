@@ -51,7 +51,7 @@ import org.apache.juneau.rest.arg.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class AuthArg implements RestOpArg {
 

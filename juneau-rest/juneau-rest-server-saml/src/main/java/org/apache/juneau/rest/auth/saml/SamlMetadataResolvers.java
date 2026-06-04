@@ -56,7 +56,7 @@ import org.w3c.dom.Element;
  * that need periodic refresh should construct their own {@code HTTPMetadataResolver} (from
  * {@code opensaml-saml-impl}) with an Apache HttpClient + refresh policy.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class SamlMetadataResolvers {
 

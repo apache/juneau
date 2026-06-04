@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * 403, via {@link org.apache.juneau.commons.utils.FileUtils#resolveVirtualPathSafely
  * FileUtils.resolveVirtualPathSafely}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class MustacheMixin_PathTraversal_Test extends TestBase {
 

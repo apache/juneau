@@ -60,7 +60,7 @@ import org.springframework.test.annotation.*;
  * 		lookup would fail.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SpringBootTest(classes = StaticFilesMixin_Springboot_Test.TestApp.class,

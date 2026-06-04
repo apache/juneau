@@ -31,7 +31,7 @@ package org.apache.juneau.rest.tracing;
  * translate to span attribute / status writes; {@code close()} ends the span and closes the OTel
  * scope.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public interface Scope extends AutoCloseable {
 

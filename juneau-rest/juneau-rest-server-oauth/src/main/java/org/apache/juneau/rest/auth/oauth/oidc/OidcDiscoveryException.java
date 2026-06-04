@@ -19,7 +19,7 @@ package org.apache.juneau.rest.auth.oauth.oidc;
 /**
  * Thrown by {@link OidcDiscoveryClient#discover()} when the IdP returns metadata that cannot be parsed.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class OidcDiscoveryException extends Exception {
 

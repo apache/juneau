@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * 	<li>Content-Type pinning works for both endpoints.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class SeoMixin_AsMixin_Test extends TestBase {
 

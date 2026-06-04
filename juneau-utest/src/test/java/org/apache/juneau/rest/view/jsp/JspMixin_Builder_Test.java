@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * routing + JSP-engine integration end-to-end; these tests pin the builder API surface so
  * sibling view modules can mirror it.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JspMixin_Builder_Test extends TestBase {
 

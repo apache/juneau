@@ -65,7 +65,7 @@ import org.springframework.context.annotation.*;
  * within a single class. Both apps are configured {@link WebApplicationType#NONE non-web} so the
  * test stays fast and self-contained.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})

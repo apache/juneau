@@ -68,7 +68,7 @@ import org.springframework.context.annotation.Bean;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @AutoConfiguration
 @ConditionalOnProperty(name="juneau.rest.auto-register", havingValue="true", matchIfMissing=false)

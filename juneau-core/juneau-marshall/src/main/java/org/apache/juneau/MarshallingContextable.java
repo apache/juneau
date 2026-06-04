@@ -2010,7 +2010,7 @@ public abstract class MarshallingContextable extends Context {
 		 * </ul>
 		 *
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public SELF validateSchema() {
 			bcBuilder.validateSchema();
@@ -2022,7 +2022,7 @@ public abstract class MarshallingContextable extends Context {
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public SELF validateSchema(boolean value) {
 			bcBuilder.validateSchema(value);

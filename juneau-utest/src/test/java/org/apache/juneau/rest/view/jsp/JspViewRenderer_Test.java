@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * {@link JspViewRenderer#process process(...)} dispatch path is exercised end-to-end by the
  * Jetty- / Spring-Boot-flavored integration tests in this package.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JspViewRenderer_Test extends TestBase {
 

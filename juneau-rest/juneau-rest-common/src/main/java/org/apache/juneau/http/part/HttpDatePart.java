@@ -32,7 +32,7 @@ import java.util.function.*;
  * the Apache HttpCore dependency. Values are parsed/formatted via
  * {@link java.time.format.DateTimeFormatter#ISO_DATE_TIME}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S2160" // Equality is fully determined by name + getValue() in HttpPartBean; the typed fields are derived from the wire value and add no state to compare

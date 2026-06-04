@@ -48,7 +48,7 @@ package org.apache.juneau.commons.inject;
  * 	<li class='jc'>{@link StackOverlay} - The underlying stack-overlay primitive {@code BasicBeanStore} composes with.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"resource" // owner and frame are not owned by Snapshot; their lifecycle is managed externally.

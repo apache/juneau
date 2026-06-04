@@ -49,6 +49,6 @@
  * 	<li class='link'><a class="doclink" href="https://micrometer.io/">Micrometer</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 package org.apache.juneau.rest.metrics.micrometer;

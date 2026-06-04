@@ -25,7 +25,7 @@ import org.apache.juneau.commons.svl.*;
  *
  * <p>
  * These four functions replaced the legacy {@code IfVar}, {@code SwitchVar}, {@code CoalesceVar},
- * and {@code NotEmptyVar} classes when the {@code #{...}} script syntax landed in 9.5.0.
+ * and {@code NotEmptyVar} classes when the {@code #{...}} script syntax landed in 10.0.0.
  */
 public final class ConditionalFunctions {
 

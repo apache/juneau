@@ -95,7 +95,7 @@ import org.apache.juneau.rest.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ResponseProcessors">Response Processors</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class AsyncResponseProcessor implements ResponseProcessor {
 
@@ -108,7 +108,7 @@ public class AsyncResponseProcessor implements ResponseProcessor {
 	 * — the {@code AsyncContext.complete()} call inside the {@code whenComplete} callback is
 	 * responsible for committing the response.
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static final String ATTR_ASYNC_DISPATCH_OWNED = "org.apache.juneau.rest.async.dispatchOwned";
 

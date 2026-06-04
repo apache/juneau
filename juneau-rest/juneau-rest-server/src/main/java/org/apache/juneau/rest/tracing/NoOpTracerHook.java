@@ -33,7 +33,7 @@ import org.apache.juneau.rest.*;
  * {@link #startSpan(RestRequest)} method returns the same scope reference for every call and JIT-inlines
  * the no-op setters / close to empty method bodies.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S6548" // Intentional process-wide no-op singleton; the Singleton pattern is required to satisfy the TracerHook SPI contract with zero allocation.

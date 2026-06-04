@@ -50,7 +50,7 @@ import org.springframework.context.*;
  * 		SVL + comma-split pipeline as any other leaf.
  * </ul>
  * 
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SuppressWarnings({

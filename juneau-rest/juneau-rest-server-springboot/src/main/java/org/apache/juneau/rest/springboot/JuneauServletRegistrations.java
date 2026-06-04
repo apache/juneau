@@ -52,7 +52,7 @@ import org.springframework.boot.web.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class JuneauServletRegistrations {
 

@@ -210,7 +210,7 @@ public abstract class RestResource {
 	 *
 	 * @return The runtime-overridden mount paths in any accepted shape, or {@code null} to inherit the
 	 * 	annotation default.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Object getPaths() { return null; }
 

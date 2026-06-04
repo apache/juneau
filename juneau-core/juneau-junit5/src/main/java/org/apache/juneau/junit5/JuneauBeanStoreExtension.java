@@ -119,7 +119,7 @@ import org.junit.jupiter.api.extension.*;
  * 	<li class='je'>{@link Mode} - Mode INJECT (fresh instance) vs Mode OVERLAY (existing instance push/pop) selector.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S3011" // setAccessible(true) is required to read package-private/private @TestBean members on user test classes
@@ -145,7 +145,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * </p>
 	 *
 	 * @return A new extension instance.  Never <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static JuneauBeanStoreExtension create() {
 		return new JuneauBeanStoreExtension();
@@ -187,7 +187,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @param store The bean store to push/pop overlays against.  Must not be <jk>null</jk>.
 	 * @return This extension, for fluent chaining.
 	 * @throws NullPointerException If {@code store} is <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public JuneauBeanStoreExtension attach(WritableBeanStore store) {
 		Objects.requireNonNull(store, "store must not be null");
@@ -203,7 +203,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * if the extension is not currently attached.
 	 *
 	 * @return This extension, for fluent chaining.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public JuneauBeanStoreExtension detach() {
 		attached = null;
@@ -217,7 +217,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * Surface for diagnostic / testability purposes &mdash; the push/pop lifecycle uses the field directly.
 	 *
 	 * @return The attached store, or {@link Optional#empty()} if not currently attached.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Optional<WritableBeanStore> getAttachedStore() {
 		return opt(attached);
@@ -234,7 +234,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @return The current overlay.  Never <jk>null</jk>.
 	 * @throws IllegalStateException If no class-scope or method-scope overlay is currently active (e.g. the accessor
 	 * 	is called from a {@code @BeforeAll} body and the extension is not yet bound to a test class).
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public TestBeanStore getStore() {
 		var s = currentMethodStore();
@@ -256,7 +256,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 *
 	 * @param scope The lifecycle scope to query.  Must not be <jk>null</jk>.
 	 * @return The overlay for that scope, or {@link Optional#empty()} if no such overlay is active.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Optional<TestBeanStore> getStore(Scope scope) {
 		Objects.requireNonNull(scope, "scope must not be null");

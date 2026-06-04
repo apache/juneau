@@ -34,7 +34,7 @@ import jakarta.servlet.http.*;
  * Tests for {@link AuthFilterChain} — pattern matching, first-success principal, role aggregation,
  * all-failure aggregation, pass-through on no match, and pass-through when no filters apply.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AuthFilterChain_Test extends TestBase {
 

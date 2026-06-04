@@ -57,7 +57,7 @@ import org.apache.juneau.rest.annotation.*;
  * ({@code echo/}), or wildcard suffix ({@code /echo/*}) &mdash; all resolve to the same mount.
  *
  * <p>
- * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at both
+ * <b>Migration note (10.0.0):</b> Earlier development snapshots of this mixin mounted at both
  * {@code /echo/*} <i>and</i> {@code /debug/echo/*} as historical aliases on a single op. That
  * dual default has been collapsed to a single SVL-configurable mount as part of the
  * "single path per op" principle. Deployers who relied on the
@@ -150,7 +150,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 // @formatter:off
 @Rest

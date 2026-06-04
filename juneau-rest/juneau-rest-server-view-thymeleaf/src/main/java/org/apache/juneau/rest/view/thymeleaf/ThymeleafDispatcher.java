@@ -49,7 +49,7 @@ import org.thymeleaf.templateresolver.*;
  * 	<li class='jic'>{@link RawTemplateDispatcher}
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are Thymeleaf template attribute keys; intentional

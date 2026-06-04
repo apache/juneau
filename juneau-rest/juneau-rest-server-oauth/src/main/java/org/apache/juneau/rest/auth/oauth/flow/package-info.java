@@ -29,6 +29,6 @@
  * 	<li class='jc'>{@link org.apache.juneau.rest.auth.oauth.flow.OAuthResourceOwnerFlow} (discouraged)
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 package org.apache.juneau.rest.auth.oauth.flow;

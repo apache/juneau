@@ -43,7 +43,7 @@ import java.util.function.*;
  * @param major The major version number (e.g. {@code 1}).
  * @param minor The minor version number (e.g. {@code 1}).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public record HttpProtocolVersion(String protocol, int major, int minor) {
 

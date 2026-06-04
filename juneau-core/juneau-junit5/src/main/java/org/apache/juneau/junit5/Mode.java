@@ -28,7 +28,7 @@ package org.apache.juneau.junit5;
  * 	<li class='jc'>{@link JuneauBeanStoreExtension} - The JUnit 5 extension that honors this mode.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public enum Mode {
 

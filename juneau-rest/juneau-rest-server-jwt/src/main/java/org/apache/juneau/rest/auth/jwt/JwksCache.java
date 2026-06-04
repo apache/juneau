@@ -69,7 +69,7 @@ import com.nimbusds.jose.proc.*;
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7517">RFC 7517 — JSON Web Key</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 final class JwksCache implements JWKSource<SecurityContext> {
 
@@ -121,7 +121,7 @@ final class JwksCache implements JWKSource<SecurityContext> {
 				return hits;
 			return tryEagerRefresh(selector, ctx, now);
 		}
-		// Expired / cold path — unchanged from pre-9.5.0 behavior.
+		// Expired / cold path — unchanged from pre-10.0.0 behavior.
 		try {
 			var refreshed = fetchFromDelegate(ctx);
 			slot.set(new Entry(refreshed, now));

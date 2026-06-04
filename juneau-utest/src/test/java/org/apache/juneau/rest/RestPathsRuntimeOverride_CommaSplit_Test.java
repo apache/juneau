@@ -39,7 +39,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * The SVL + comma combination is covered separately by {@link RestPathsRuntimeOverride_SVL_Test}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RestPathsRuntimeOverride_CommaSplit_Test extends TestBase {
 

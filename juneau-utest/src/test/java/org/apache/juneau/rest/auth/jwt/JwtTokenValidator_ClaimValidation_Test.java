@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  * Mandatory-claim validation for {@link JwtTokenValidator}: {@code iss}, {@code aud},
  * {@code exp}, {@code nbf} are required by default; mismatches and absences are rejected.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JwtTokenValidator_ClaimValidation_Test extends TestBase {
 

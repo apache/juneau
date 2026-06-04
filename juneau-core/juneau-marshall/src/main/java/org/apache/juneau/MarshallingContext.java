@@ -2537,7 +2537,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * </ul>
 		 *
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder validateSchema() {
 			return validateSchema(true);
@@ -2548,7 +2548,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder validateSchema(boolean value) {
 			validateSchema = value;
@@ -4969,7 +4969,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @return
 	 * 	<jk>true</jk> if bean property values should be validated against their {@code @Schema}-declared constraints
 	 * 	during parsing and serialization.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public final boolean isValidateSchema() { return validateSchema; }
 

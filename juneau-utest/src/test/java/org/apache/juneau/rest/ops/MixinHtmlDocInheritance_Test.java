@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * These tests cover host-only config, mixin-only config (still wins), and host+mixin-both precedence /
  * list-merge semantics, plus the {@link StatsMixin#getStats} per-method regression guard.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"serial"})
 class MixinHtmlDocInheritance_Test extends TestBase {

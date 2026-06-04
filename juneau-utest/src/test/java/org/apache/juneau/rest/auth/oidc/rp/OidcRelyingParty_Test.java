@@ -37,7 +37,7 @@ import jakarta.servlet.http.Cookie;
  * End-to-end tests for {@link OidcRelyingParty} driving login &rarr; callback &rarr; authorized-request
  * &rarr; logout against an in-JVM {@link StubIdp}, plus refresh-token rotation and back-channel logout.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class OidcRelyingParty_Test extends TestBase {
 

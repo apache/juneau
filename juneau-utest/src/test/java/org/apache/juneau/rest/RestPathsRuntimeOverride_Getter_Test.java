@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * The programmatic Builder rung outranks this getter, so all tests here pass {@code null} into
  * {@code Args.paths()} to keep the highest rung neutral.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class RestPathsRuntimeOverride_Getter_Test extends TestBase {
 

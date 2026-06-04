@@ -55,7 +55,7 @@ import org.apache.juneau.rest.annotation.*;
  * 	<li class='ja'>{@link RestOp#guards()}
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class DenyAllGuard extends RestGuard {
 

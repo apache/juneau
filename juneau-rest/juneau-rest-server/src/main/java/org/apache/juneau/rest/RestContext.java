@@ -136,8 +136,8 @@ import jakarta.servlet.http.*;
  * <p>
  * The historical <c>public MyResource(RestContext.Builder builder)</c> constructor-injection pattern and the
  * <c>{@link RestInit @RestInit} public void init(RestContext.Builder builder)</c> method-injection pattern were both
- * removed in 9.5. {@code RestContext.Builder} itself is on the deletion path; new code should not depend on it.
- * See <a class="doclink" href="https://juneau.apache.org/docs/topics/V9.5MigrationGuide">v9.5 Migration Guide</a>
+ * removed in 10.0. {@code RestContext.Builder} itself is on the deletion path; new code should not depend on it.
+ * See <a class="doclink" href="https://juneau.apache.org/docs/topics/V10.0MigrationGuide">v10.0 Migration Guide</a>
  * for replacement recipes.
  *
  * <h5 class='section'>Notes:</h5><ul>
@@ -230,9 +230,9 @@ public class RestContext extends Context {
 	 * 	{@code restOperations} memoizer (parent-linked to the host's {@link RestContext} so that
 	 * 	{@link RestContext#getRestAnnotationsForProperty(String) annotation-property walks} prepend the host's
 	 * 	{@code @Rest} chain before the mixin's own).  {@code false} for top-level resources and for
-	 * 	{@link Rest#children() @Rest(children)} sub-resources (which retain pre-9.5.0 isolated resolution).
+	 * 	{@link Rest#children() @Rest(children)} sub-resources (which retain pre-10.0.0 isolated resolution).
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	@SuppressWarnings({
 		"java:S6218" // Args is a transient constructor-parameter holder; it is never compared for equality or used as a map key, so array-identity semantics on the paths[] component are irrelevant.
@@ -390,7 +390,7 @@ public class RestContext extends Context {
 		 *
 		 * @param value The new mount paths, or {@code null} to inherit. Empty array clears.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder paths(String...value) {
 			paths = value;
@@ -414,7 +414,7 @@ public class RestContext extends Context {
 		 *
 		 * @param value {@code false} to disable MDC propagation on this resource.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder mdcAsyncPropagation(boolean value) {
 			mdcAsyncPropagation = value;
@@ -433,7 +433,7 @@ public class RestContext extends Context {
 		 *
 		 * @param beanName The bean-store name of the {@link java.util.concurrent.Executor} to use, or {@code null} to clear.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder asyncCompletionExecutor(String beanName) {
 			asyncCompletionExecutorName = beanName;
@@ -455,7 +455,7 @@ public class RestContext extends Context {
 		 *
 		 * @param value {@code true} to defer child construction to first invocation.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder lazyChildInit(boolean value) {
 			lazyChildInit = value;
@@ -562,7 +562,7 @@ public class RestContext extends Context {
 	 * 	elements, and to back the resolver session for bean-driven SVL vars like {@code $C{key}}. May be
 	 * 	{@code null} (SVL is then skipped; literals pass through unchanged).
 	 * @return The resolved paths array (never {@code null}; possibly empty).
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public static String[] resolveTopLevelPaths(Class<?> resourceClass, Object resource, BeanStore store) {
 		var ap = AnnotationProvider.INSTANCE;
@@ -752,7 +752,7 @@ public class RestContext extends Context {
 	 * Creates the bean store for this context.
 	 *
 	 * <p>
-	 * The 9.5 precedence model places the parent (Spring or parent-resource bootstrap) as the
+	 * The 10.0 precedence model places the parent (Spring or parent-resource bootstrap) as the
 	 * overriding parent so it wins over local entries.  Memoizer-backed framework defaults are
 	 * registered later in the constructor via {@code addDefaultSupplier}, putting them at the
 	 * bottom of the resolution order.
@@ -801,13 +801,13 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * {@link Rest#children() @Rest(children)} sub-resources are <i>not</i> mixin contexts &mdash; they retain
-	 * pre-9.5.0 isolated resolution (no parent-context walk).  The mixin-vs-child divergence is intentional:
+	 * pre-10.0.0 isolated resolution (no parent-context walk).  The mixin-vs-child divergence is intentional:
 	 * mixins are inline composers that share the host's URL namespace; children are heavyweight independent
 	 * resources mounted at their own URL prefix.
 	 *
 	 * @return {@code true} if this is a mixin sub-context, {@code false} for top-level resources and child
 	 * 	resources.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public boolean isMixinContext() { return isMixinContext; }
 
@@ -820,7 +820,7 @@ public class RestContext extends Context {
 	 * {@link #getMessages()}, {@link #getVarResolver()}, {@code getFullPath()}, and the bean-store layering.
 	 *
 	 * @return The parent context, or {@code null} for top-level (host) resources.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public RestContext getParentContext() { return parentContext; }
 
@@ -1923,7 +1923,7 @@ public class RestContext extends Context {
 	 * {@link #getRestAnnotationsForProperty(String)} for serializers, parsers, encoders, converters, response
 	 * processors, REST op args, guards, callLogger, debugEnablement, messages, varResolver tokens, etc.
 	 *
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	private final Memoizer<Map<Class<?>,RestContext>> mixinContexts = memoizer(() -> {
 		if (isMixinContextField())
@@ -1982,7 +1982,7 @@ public class RestContext extends Context {
 	 * Returns an empty map when this context is itself a mixin sub-context, or when no mixins are declared.
 	 *
 	 * @return An unmodifiable map of mixin class to its sub-{@link RestContext}; never {@code null}.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Map<Class<?>,RestContext> getMixinContexts() { return mixinContexts.get(); }
 
@@ -2123,7 +2123,7 @@ public class RestContext extends Context {
 	 *
 	 * @param args The bootstrap arguments. Must not be <jk>null</jk>.
 	 * @throws Exception If any initialization problems were encountered.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public RestContext(Args args) throws Exception {
 		this(new Builder(args));
@@ -2179,7 +2179,7 @@ public class RestContext extends Context {
 				builderRestAnnotation = null;
 			}
 
-			// --- beanStore setup (May 2026 refactor; precedence-flipped 9.5) ---
+			// --- beanStore setup (May 2026 refactor; precedence-flipped 10.0) ---
 
 			// Determine the parent (bootstrap) store: inherited from parent resource if present.
 			//
@@ -2200,7 +2200,7 @@ public class RestContext extends Context {
 				parentBs = null;
 
 			// Build the initial beanStore; honor an optional @Bean WritableBeanStore override.
-			// In the new 9.5 precedence model, the parent (Spring or parent-resource bootstrap) is
+			// In the new 10.0 precedence model, the parent (Spring or parent-resource bootstrap) is
 			// installed as the overriding parent so it wins over local entries.
 			// Args.overridingParent threads into the per-resource (final beanStore) overridingParent
 			// slot so test-time overlays (TestBeanStore) resolve at tier 1 of the chain ahead of
@@ -2234,7 +2234,7 @@ public class RestContext extends Context {
 			// Force-build raw Config now (fail fast if @Rest(config) is misconfigured).  The unnamed
 			// Config slot in the bean store is intentionally left to the default supplier (the full
 			// runtime Config) — @RestInit hooks that take Config as a parameter will see the fully
-			// resolved instance instead of the raw bootstrap Config (9.5 behavior change).
+			// resolved instance instead of the raw bootstrap Config (10.0 behavior change).
 			rawConfig.get();
 			// Per-RestContext @Value resolution bridge: register the @Rest(config=...) Configs as
 			// PropertySource beans inside THIS resource's BeanStore (NOT on the process-wide
@@ -2310,7 +2310,7 @@ public class RestContext extends Context {
 			});
 
 			// Run @RestInit-annotated methods on the resource object (deduplicated by signature, top-down order).
-			// Note: pre-9.5 this filter also excluded `y.hasParameter(RestOpContext.Builder.class)` because the
+			// Note: pre-10.0 this filter also excluded `y.hasParameter(RestOpContext.Builder.class)` because the
 			// per-op `@RestInit(RestOpContext.Builder)` flow handled those separately. That flow was deleted in
 			// April 2026 refactor Route B (zero real-world callers), so the exclusion is gone too. Likewise, the
 			// class-level `@RestInit(RestContext.Builder)` injection protocol was deleted in the same refactor
@@ -3595,7 +3595,7 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * @return The resolved mount paths (never {@code null}; possibly empty).
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public String[] getPaths() { return paths; }
 
@@ -4082,7 +4082,7 @@ public class RestContext extends Context {
 	 * {@code null} when {@code @Rest(asyncCompletionExecutor)} is unset (natural completion thread).
 	 *
 	 * @return The executor, or {@code null} if no async-completion executor is configured.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public Executor getAsyncCompletionExecutor() { return asyncCompletionExecutor.get(); }
 
@@ -4115,7 +4115,7 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * @return <jk>true</jk> if lazy child initialization is enabled.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public boolean isLazyChildren() {
 		return builder.lazyChildInit != null ? builder.lazyChildInit : lazyChildrenAnnotation.get();
@@ -4637,7 +4637,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * For mixin-endpoint requests, fires the host's {@code @RestPostCall} methods first (via the host's
 	 * {@code localPostCallInvokers}), then the mixin's per-op invokers ({@link RestOpContext#getPostCallMethods()}).
-	 * Host-endpoint requests fire only the host's per-op invokers (the established path; unchanged from pre-9.5.0).
+	 * Host-endpoint requests fire only the host's per-op invokers (the established path; unchanged from pre-10.0.0).
 	 *
 	 * @param session The current request.
 	 * @throws Exception If thrown from call methods.
@@ -4657,7 +4657,7 @@ public class RestContext extends Context {
 	 * <p>
 	 * For mixin-endpoint requests, fires the host's {@code @RestPreCall} methods first (via the host's
 	 * {@code localPreCallInvokers}), then the mixin's per-op invokers ({@link RestOpContext#getPreCallMethods()}).
-	 * Host-endpoint requests fire only the host's per-op invokers (the established path; unchanged from pre-9.5.0).
+	 * Host-endpoint requests fire only the host's per-op invokers (the established path; unchanged from pre-10.0.0).
 	 *
 	 * @param session The current request.
 	 * @throws Exception If thrown from call methods.

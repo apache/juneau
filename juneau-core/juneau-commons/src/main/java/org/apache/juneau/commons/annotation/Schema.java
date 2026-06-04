@@ -78,7 +78,7 @@ import java.util.*;
  * 	)
  * </p>
  * <p class='bjava'>
- * 	<jc>// AI-friendly short summary paired with a longer description (since 9.5.0)</jc>
+ * 	<jc>// AI-friendly short summary paired with a longer description (since 10.0.0)</jc>
  * 	<ja>@Schema</ja>(
  * 		summary=<js>"A pet available for adoption"</js>,
  * 		description={
@@ -1563,7 +1563,7 @@ public @interface Schema {
 	 * </ul>
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String summary() default "";
 

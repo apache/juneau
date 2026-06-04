@@ -35,7 +35,7 @@ import org.junit.jupiter.api.*;
  * 	<li>A builder-configured delegate (custom bytes + cache-control) flows through the servlet.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class FaviconServlet_Test extends TestBase {
 

@@ -47,7 +47,7 @@ import org.junit.jupiter.api.*;
  * {@code -Djuneau.version.path=info} (or {@code about}); that behavior is covered by
  * {@code VersionMixin_SvlPathOverride_Test}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class VersionMixin_AsMixin_Test extends TestBase {
 

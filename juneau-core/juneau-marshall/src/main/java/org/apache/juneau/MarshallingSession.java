@@ -909,7 +909,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return
 	 * 	<jk>true</jk> if bean property values should be validated against their {@code @Schema}-declared constraints
 	 * 	during parsing and serialization.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public final boolean isValidateSchema() { return ctx.isValidateSchema(); }
 
@@ -1383,7 +1383,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 *
 	 * <p>
 	 * Uses {@link Json5Map} so that historic JSON5-form inputs (e.g. annotation default
-	 * values written as <c>{a:'b'}</c>) continue to parse — the strict-JSON {@link JsonMap} retargeting in v9.5
+	 * values written as <c>{a:'b'}</c>) continue to parse — the strict-JSON {@link JsonMap} retargeting in v10.0
 	 * would otherwise break those call sites.
 	 *
 	 * @param value The JSON-formatted character sequence to parse.

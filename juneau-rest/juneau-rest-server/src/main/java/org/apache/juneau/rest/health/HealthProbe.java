@@ -19,7 +19,7 @@ package org.apache.juneau.rest.health;
 /**
  * Probe categories supported by the built-in health probe resource.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public enum HealthProbe {
 	/** Liveness probe. */

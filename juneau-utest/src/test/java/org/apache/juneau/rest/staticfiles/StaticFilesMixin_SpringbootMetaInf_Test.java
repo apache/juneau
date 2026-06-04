@@ -59,7 +59,7 @@ import org.springframework.test.annotation.*;
  * Companion to {@link StaticFilesMixin_Springboot_Test} which exercises the default
  * classpath ({@code static/} + {@code htdocs/}) under the same Spring Boot wiring.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SpringBootTest(classes = StaticFilesMixin_SpringbootMetaInf_Test.TestApp.class,

@@ -53,7 +53,7 @@ import org.apache.juneau.rest.servlet.*;
  * slash ({@code version/}) &mdash; all resolve to the same mount.
  *
  * <p>
- * <b>Migration note (9.5.0):</b> Earlier development snapshots of this mixin mounted at three
+ * <b>Migration note (10.0.0):</b> Earlier development snapshots of this mixin mounted at three
  * historical aliases &mdash; {@code /version}, {@code /info}, and {@code /about} &mdash; on a
  * single op. That multi-path default has been collapsed to a single SVL-configurable mount as
  * part of the "single path per op" principle. Deployers who relied on the
@@ -132,7 +132,7 @@ import org.apache.juneau.rest.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 // @formatter:off
 @Rest

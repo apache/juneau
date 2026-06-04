@@ -77,7 +77,7 @@ import java.lang.annotation.*;
  * 	<li class='je'>{@link Scope} - Per-method vs per-class lifecycle selector.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @Documented
 @Retention(RUNTIME)
@@ -97,7 +97,7 @@ public @interface TestBean {
 	 * the same type but different names are both picked up &mdash; the qualifier is the disambiguator.
 	 *
 	 * @return The qualifier name.  Empty string means "unnamed".
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String name() default "";
 
@@ -115,7 +115,7 @@ public @interface TestBean {
 	 * factory method whose semantic type is {@code MyService}.
 	 *
 	 * @return The override target type.  {@code Object.class} means "use the member's declared type".
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	Class<?> type() default Object.class;
 
@@ -131,7 +131,7 @@ public @interface TestBean {
 	 * Instance members are not visible at {@code beforeAll} time and will be rejected with an error.
 	 *
 	 * @return The lifecycle scope.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	Scope scope() default Scope.METHOD;
 
@@ -150,7 +150,7 @@ public @interface TestBean {
 	 * time with a clear {@link IllegalStateException}.
 	 *
 	 * @return The wiring mode.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	Mode mode() default Mode.INJECT;
 }

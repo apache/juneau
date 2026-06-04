@@ -341,7 +341,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * to the call &mdash; later {@code addDefaultSupplier(...)} calls do not retroactively promote.
 	 *
 	 * @return This object.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public BasicBeanStore promoteDefaultsToLocalSuppliers() {
 		checkOpen();

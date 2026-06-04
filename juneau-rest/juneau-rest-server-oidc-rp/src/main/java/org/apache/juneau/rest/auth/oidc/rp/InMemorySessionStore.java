@@ -38,7 +38,7 @@ import java.util.*;
  * {@link #supportsServerSideRevocation() supports} {@link #invalidateBySubject(String)} and
  * {@link #invalidateBySessionId(String)}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class InMemorySessionStore implements SessionStore {
 

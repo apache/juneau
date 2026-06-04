@@ -65,7 +65,7 @@ import java.util.function.*;
  * 	<li class='jc'>{@link BasicBeanStore} - The bean store this overlay sits in front of.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class StackOverlay implements BeanStore {
 

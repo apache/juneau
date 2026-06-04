@@ -58,7 +58,7 @@ import jakarta.servlet.http.*;
  * 		FINISHED-69 op-level guard), which uses the same {@link RestServerConstants#PRINCIPAL_ATTR} stash key.
  * </ol>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AuthFilterChain_GuardIntegration_Test extends TestBase {
 

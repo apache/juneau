@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.*;
  *
  * @see PropertyValidator
  * @see PropertyValidatorFactory
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class PropertyValidators {
 

@@ -57,7 +57,7 @@ import com.nimbusds.oauth2.sdk.id.ClientID;
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6749#section-4.4">RFC 6749 &sect;4.4</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are OAuth protocol parameter names (e.g. "grant_type", "client_id"); intentional

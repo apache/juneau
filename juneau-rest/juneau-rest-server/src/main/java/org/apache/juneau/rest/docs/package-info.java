@@ -49,7 +49,7 @@
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { ... }
  *
  * 	<jc>// Everything — /api, /swagger, /openapi, /openapi.json, /openapi.yaml, /redoc.</jc>
- * 	<jc>// This is the post-9.5.0 default for BasicRestServlet / BasicRestResource subclasses.</jc>
+ * 	<jc>// This is the post-10.0.0 default for BasicRestServlet / BasicRestResource subclasses.</jc>
  * 	<ja>@Rest</ja>(path=<js>"/api"</js>, mixins={SwaggerUiMixin.<jk>class</jk>, RedocMixin.<jk>class</jk>})
  * 	<jk>public class</jk> ApiResource <jk>extends</jk> RestServlet { ... }
  * </p>
@@ -73,6 +73,6 @@
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server — Composition (mixins, paths)</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 package org.apache.juneau.rest.docs;

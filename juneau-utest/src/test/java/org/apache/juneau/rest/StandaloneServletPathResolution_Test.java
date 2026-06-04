@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * mixin {@code Basic*Resource} forms resolve to no top-level paths (they pin their mount at the op
  * level for composition under a host).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class StandaloneServletPathResolution_Test extends TestBase {
 

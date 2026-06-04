@@ -28,7 +28,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * Each public static nested class is a {@link TypedFunction} registered under the function name
  * shown in its {@link VarFunction#name()} method. The {@code Replaces} annotation in each
- * nested-class Javadoc names the legacy {@code Var} class that was retired in 9.5.0 in favor of
+ * nested-class Javadoc names the legacy {@code Var} class that was retired in 10.0.0 in favor of
  * the function form.
  */
 public final class StringFunctions {

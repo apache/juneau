@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Tests for {@link EphemeralStore} &mdash; single-use, TTL-bounded, size-bounded state/nonce storage.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class EphemeralStore_Test extends TestBase {

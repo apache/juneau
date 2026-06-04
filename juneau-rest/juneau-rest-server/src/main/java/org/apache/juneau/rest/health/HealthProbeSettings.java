@@ -21,7 +21,7 @@ import java.time.*;
 /**
  * Settings for the built-in health probe resource.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class HealthProbeSettings {
 

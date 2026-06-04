@@ -24,7 +24,7 @@ package org.apache.juneau.rest.auth.oauth.flow;
  * Unchecked because flow acquisition is typically called from startup or service-initialization code where
  * checked exceptions would bloat call sites.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public class OAuthFlowException extends RuntimeException {
 

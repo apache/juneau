@@ -539,7 +539,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder configurations(Class<?>... configurations) {
 			if (nn(configurations))
@@ -555,7 +555,7 @@ public class Microservice implements ConfigEventListener {
 		 * @param configurations The configuration classes.  Can be <jk>null</jk> or empty.
 		 * @return This object.
 		 * @see #configurations(Class...)
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder configurations(List<Class<?>> configurations) {
 			if (nn(configurations))
@@ -577,7 +577,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param beanStore The external bean store.  Can be <jk>null</jk> to use a fresh internal store.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		public Builder beanStore(WritableBeanStore beanStore) {
 			this.beanStore = beanStore;
@@ -605,7 +605,7 @@ public class Microservice implements ConfigEventListener {
 		 *
 		 * @param store The override layer.  Can be <jk>null</jk> to clear a previously-set value.
 		 * @return This object.
-		 * @since 9.5.0
+		 * @since 10.0.0
 		 */
 		@Override
 		public Builder overridingBeanStore(BeanStore store) {
@@ -1101,7 +1101,7 @@ public class Microservice implements ConfigEventListener {
 	 * beans.
 	 *
 	 * @return The microservice's bean store.  Never <jk>null</jk>.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	public WritableBeanStore getBeanStore() { return beanStore; }
 

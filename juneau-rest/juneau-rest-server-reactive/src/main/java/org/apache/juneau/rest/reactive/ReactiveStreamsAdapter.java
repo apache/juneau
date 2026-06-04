@@ -48,7 +48,7 @@ import java.util.concurrent.*;
  *
  * @see ReactiveResponseProcessor
  * @see Adaptation
- * @since 9.5.0
+ * @since 10.0.0
  */
 public interface ReactiveStreamsAdapter {
 

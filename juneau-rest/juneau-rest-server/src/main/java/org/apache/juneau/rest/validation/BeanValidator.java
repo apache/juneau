@@ -65,7 +65,7 @@ import jakarta.validation.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerValidation">REST Server &mdash; Jakarta Validation</a>
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 public final class BeanValidator {
 

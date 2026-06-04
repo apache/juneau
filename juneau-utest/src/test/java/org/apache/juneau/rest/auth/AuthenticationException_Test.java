@@ -24,7 +24,7 @@ import org.junit.jupiter.api.*;
  * {@link AuthenticationException#wwwAuthenticate(String)} setter, and inheritance from
  * {@link org.apache.juneau.http.response.Unauthorized}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AuthenticationException_Test extends TestBase {
 

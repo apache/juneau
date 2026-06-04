@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * helper that derives a {@code ServletRegistrationBean}'s URL mapping from a Juneau servlet's
  * self-declared top-level paths (no hard-coded path string).
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})

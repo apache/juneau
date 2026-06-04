@@ -50,7 +50,7 @@ import org.apache.juneau.rest.auth.oauth.OAuthToken;
  * @param createdAt The instant the session was created.  Never {@code null}.
  * @param expiresAt The instant the session expires (bounded independently of token lifetime).  Never
  * 	{@code null}.
- * @since 9.5.0
+ * @since 10.0.0
  */
 public record OidcSession(
 		String id,

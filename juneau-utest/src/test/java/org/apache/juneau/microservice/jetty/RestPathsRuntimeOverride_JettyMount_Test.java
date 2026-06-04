@@ -51,7 +51,7 @@ import jakarta.servlet.*;
  * not at mount time), so users substitute via {@code getPaths()} or by leaning on SVL inside
  * {@code @Rest(paths=...)} elements.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.JettyMicroserviceTest
 class RestPathsRuntimeOverride_JettyMount_Test extends TestBase {

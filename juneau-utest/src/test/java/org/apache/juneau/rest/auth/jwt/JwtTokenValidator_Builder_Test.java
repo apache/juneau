@@ -32,7 +32,7 @@ import com.nimbusds.jose.*;
  * getters &mdash; argument validation, mutual-exclusion of {@code jwksUrl(...)} / {@code jwkSource(...)},
  * and the configured-getters round-trip.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
 class JwtTokenValidator_Builder_Test extends TestBase {

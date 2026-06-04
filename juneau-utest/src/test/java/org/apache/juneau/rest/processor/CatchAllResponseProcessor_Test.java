@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 /**
  * Marker-conformance tests for {@link CatchAllResponseProcessor}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class CatchAllResponseProcessor_Test extends TestBase {
 

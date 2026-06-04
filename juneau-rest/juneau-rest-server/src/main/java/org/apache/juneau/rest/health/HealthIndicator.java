@@ -23,7 +23,7 @@ import java.util.*;
 /**
  * Functional SPI for reporting health of one component.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 @FunctionalInterface
 public interface HealthIndicator {

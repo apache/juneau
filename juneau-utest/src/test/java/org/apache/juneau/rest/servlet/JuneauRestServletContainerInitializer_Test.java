@@ -31,7 +31,7 @@ import jakarta.servlet.*;
  * {@code @Rest}-annotated servlets that self-declare top-level paths, but only when the webapp opts
  * in via the {@code juneau.rest.auto-register} context init parameter.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JuneauRestServletContainerInitializer_Test extends TestBase {
 

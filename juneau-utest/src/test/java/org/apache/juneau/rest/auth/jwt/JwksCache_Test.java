@@ -38,7 +38,7 @@ import com.nimbusds.jose.proc.*;
  * Cache + graceful-degradation behavior for {@link JwksCache}, exercised end-to-end via
  * {@link JwtTokenValidator}.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class JwksCache_Test extends TestBase {
 
@@ -187,7 +187,7 @@ class JwksCache_Test extends TestBase {
 			@Override public Instant instant() { return clockHolder.get().instant(); }
 		};
 
-		// Eager refresh disabled — preserves pre-9.5.0 behavior for regression coverage.
+		// Eager refresh disabled — preserves pre-10.0.0 behavior for regression coverage.
 		var validator = JwtTokenValidator.create()
 			.issuer(DEFAULT_ISSUER)
 			.audience(DEFAULT_AUDIENCE)

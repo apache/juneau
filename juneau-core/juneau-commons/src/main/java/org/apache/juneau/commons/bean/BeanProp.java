@@ -79,7 +79,7 @@ public @interface BeanProp {
 	 * for the canonical definition; this field is the bean-property-level counterpart.
 	 *
 	 * @return The annotation value.
-	 * @since 9.5.0
+	 * @since 10.0.0
 	 */
 	String summary() default "";
 

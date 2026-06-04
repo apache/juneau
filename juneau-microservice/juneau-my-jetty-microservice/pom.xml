@@ -30,7 +30,7 @@
 	<parent>
 		<groupId>org.apache.juneau</groupId>
 		<artifactId>juneau-microservice-parent</artifactId>
-		<version>9.5.0-SNAPSHOT</version>
+		<version>10.0.0-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>juneau-my-jetty-microservice</artifactId>

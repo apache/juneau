@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  * 	<li>Host's own {@code /items} endpoint is unaffected.
  * </ul>
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class BasicConvention_ParentChain_Test extends TestBase {
 
@@ -69,7 +69,7 @@ class BasicConvention_ParentChain_Test extends TestBase {
 		@Bean public VersionMixin version() {
 			return VersionMixin.create()
 				.entry("name", "convention-pack")
-				.entry("version", "9.5.0")
+				.entry("version", "10.0.0")
 				.fromJavaVersion()
 				.build();
 		}

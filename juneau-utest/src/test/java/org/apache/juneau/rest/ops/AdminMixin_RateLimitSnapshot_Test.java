@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * pattern; the snapshot coverage is the v1 follow-up that closes the {@code "buckets": []}
  * placeholder noted in the FINISHED-77 archive.
  *
- * @since 9.5.0
+ * @since 10.0.0
  */
 class AdminMixin_RateLimitSnapshot_Test extends TestBase {
 
