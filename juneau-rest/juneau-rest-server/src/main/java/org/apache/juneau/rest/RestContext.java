@@ -1970,7 +1970,7 @@ public class RestContext extends Context {
 		var args = new Args(mixinClass, this, builder.inner, () -> mixinResource, "", null, null, null, true);
 		var mixinCtx = new RestContext(args);
 		var setCtx = ClassInfo.of(mixinResource).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
-		if (nn(setCtx))
+		if (setCtx != null)
 			setCtx.accessible().invoke(mixinResource, mixinCtx);
 		return mixinCtx;
 	}

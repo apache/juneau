@@ -60,6 +60,7 @@ public class OAuthResourceOwnerFlow {
 	 *
 	 * @return A new builder.
 	 */
+	@Deprecated(since = "9.5.0", forRemoval = false)
 	public static Builder create() {
 		return new Builder();
 	}
@@ -67,6 +68,7 @@ public class OAuthResourceOwnerFlow {
 	/**
 	 * Builder.
 	 */
+	@Deprecated(since = "9.5.0", forRemoval = false)
 	public static class Builder {
 		private URI tokenEndpoint;
 		private String clientId;
@@ -77,6 +79,7 @@ public class OAuthResourceOwnerFlow {
 		private Consumer<HTTPRequest> httpRequestConfigurator;
 
 		/** Constructor. */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		protected Builder() {}
 
 		/**
@@ -85,6 +88,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The endpoint.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder tokenEndpoint(URI value) {
 			tokenEndpoint = assertArgNotNull("value", value);
 			return this;
@@ -96,6 +100,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The client ID.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder clientId(String value) {
 			clientId = assertArgNotNullOrBlank("value", value);
 			return this;
@@ -107,6 +112,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The secret.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder clientSecret(String value) {
 			assertArgNotNullOrBlank("value", value);
 			clientSecretSupplier = () -> value;
@@ -119,6 +125,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The supplier.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder clientSecretSupplier(Supplier<String> value) {
 			clientSecretSupplier = assertArgNotNull("value", value);
 			return this;
@@ -130,6 +137,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The username.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder username(String value) {
 			username = assertArgNotNullOrBlank("value", value);
 			return this;
@@ -141,6 +149,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The password.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder password(String value) {
 			assertArgNotNullOrBlank("value", value);
 			passwordSupplier = () -> value;
@@ -153,6 +162,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The supplier.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder passwordSupplier(Supplier<String> value) {
 			passwordSupplier = assertArgNotNull("value", value);
 			return this;
@@ -164,6 +174,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param values The scopes.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder scope(String... values) {
 			assertArgNotNull("values", values);
 			for (var v : values) {
@@ -179,6 +190,7 @@ public class OAuthResourceOwnerFlow {
 		 * @param value The callback.
 		 * @return This object.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public Builder httpRequestConfigurator(Consumer<HTTPRequest> value) {
 			httpRequestConfigurator = assertArgNotNull("value", value);
 			return this;
@@ -189,6 +201,7 @@ public class OAuthResourceOwnerFlow {
 		 *
 		 * @return A new {@link OAuthResourceOwnerFlow}.
 		 */
+		@Deprecated(since = "9.5.0", forRemoval = false)
 		public OAuthResourceOwnerFlow build() {
 			if (tokenEndpoint == null)
 				throw new IllegalStateException("OAuthResourceOwnerFlow requires tokenEndpoint(...)");
@@ -217,6 +230,7 @@ public class OAuthResourceOwnerFlow {
 	 *
 	 * @param b The builder.
 	 */
+	@Deprecated(since = "9.5.0", forRemoval = false)
 	protected OAuthResourceOwnerFlow(Builder b) {
 		this.tokenEndpoint = b.tokenEndpoint;
 		this.clientId = b.clientId;
@@ -232,6 +246,7 @@ public class OAuthResourceOwnerFlow {
 	 *
 	 * @return The acquired token.
 	 */
+	@Deprecated(since = "9.5.0", forRemoval = false)
 	public OAuthToken acquire() {
 		var clientAuth = new ClientSecretBasic(new ClientID(clientId), new Secret(clientSecretSupplier.get()));
 		var grant = new ResourceOwnerPasswordCredentialsGrant(username, new Secret(passwordSupplier.get()));

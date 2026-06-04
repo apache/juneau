@@ -98,7 +98,7 @@ public class JspDispatcher implements RawTemplateDispatcher {
 		String target;
 		try {
 			target = JspViewRenderer.joinPath(basePath, path);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			throw new Forbidden("Path escapes configured base path.");
 		}
 		try {

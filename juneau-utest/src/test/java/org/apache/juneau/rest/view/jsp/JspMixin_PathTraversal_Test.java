@@ -104,6 +104,7 @@ class JspMixin_PathTraversal_Test extends TestBase {
 	// URL-encoded traversal handling
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("java:S125") // Explanatory prose on URL-decoding behaviour; not dead code.
 	@Test void t05_urlEncodedTraversal_doesNotEscape() throws Exception {
 		// Behavior depends on whether HttpClient / MockRest URL-decodes %2e%2e before the
 		// handler sees the path:

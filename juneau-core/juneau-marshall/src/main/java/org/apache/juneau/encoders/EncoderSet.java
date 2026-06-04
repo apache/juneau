@@ -139,6 +139,9 @@ public class EncoderSet {
 		 * @since 9.5.0
 		 */
 		@Override
+		@SuppressWarnings({
+			"resource" // BasicBeanStore lifecycle is owned by the enclosing builder; closed externally when the builder is disposed.
+		})
 		public Builder overridingBeanStore(BeanStore store) {
 			if (store != null)
 				this.beanStore = new BasicBeanStore(this.beanStore, store);

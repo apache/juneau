@@ -221,7 +221,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		try {
 			var resolved = FileUtils.resolveVirtualPathSafely(basePath, template);
 			safeTemplate = stripBasePath(basePath, resolved);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			throw new Forbidden("Path escapes configured base path.");
 		}
 

@@ -110,6 +110,7 @@ class TestBeanStore_Test extends TestBase {
 	// c — supplier-based overrides
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("java:S125") // Explanatory prose on overload-resolution; not dead code.
 	@Test
 	void c01_supplier_invokedLazily() {
 		var calls = new AtomicInteger();

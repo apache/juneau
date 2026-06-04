@@ -338,10 +338,13 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @param pathSpec The context path of the servlet.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
+	})
 	public JettyServerComponent addServlet(Servlet servlet, String pathSpec) {
 		if (nn(pathSpec) && ! pathSpec.endsWith("/*"))
 			pathSpec = trimTrailingSlashes(pathSpec) + "/*";
-		return addServlet(servlet, new String[] {pathSpec});
+		return addServlet(servlet, new String[]{pathSpec});
 	}
 
 	/**
@@ -365,6 +368,9 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"java:S3878" // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
+	})
 	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {
 		return addFilter(filter, new String[]{urlPattern});
 	}

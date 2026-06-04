@@ -158,6 +158,7 @@ class StackOverlay_RestContext_Spike_Test extends TestBase {
 	// d — toString lifecycle / cycle safety on the production-shaped composition
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings("java:S125") // Explanatory prose describing the fixture shape; not dead code.
 	@Test
 	void d01_toString_doesNotStackOverflow_onProductionShapedComposition() {
 		// Production shape: outer BasicBeanStore holds StackOverlay in its overridingParent slot;

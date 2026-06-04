@@ -155,6 +155,7 @@ class RouteIndexMixin_AsMixin_Test extends TestBase {
 	@Rest(mixins=RouteIndexMixin.class)
 	public static class C extends RestServlet implements BasicUniversalConfig {
 		private static final long serialVersionUID = 1L;
+		@Deprecated
 		@RestGet(path="/c-item", summary="C item",
 			description={"line one", "line two"})
 		public String cItem() { return "c"; }

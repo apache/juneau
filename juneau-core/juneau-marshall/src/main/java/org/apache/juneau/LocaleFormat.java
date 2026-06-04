@@ -89,10 +89,9 @@ public enum LocaleFormat {
 
 	private static Locale parseUnderscore(String s) {
 		var parts = s.split("_", -1);
-		return switch (parts.length) {
-			case 1 -> new Locale(parts[0]);  // NOSONAR: legacy Locale constructor required for underscore form
-			case 2 -> new Locale(parts[0], parts[1]);  // NOSONAR: legacy Locale constructor required for underscore form
-			default -> new Locale(parts[0], parts[1], parts[2]);  // NOSONAR: legacy Locale constructor required for underscore form
-		};
+		var b = new Locale.Builder().setLanguage(parts[0]);
+		if (parts.length > 1) b.setRegion(parts[1]);
+		if (parts.length > 2) b.setVariant(parts[2]);
+		return b.build();
 	}
 }

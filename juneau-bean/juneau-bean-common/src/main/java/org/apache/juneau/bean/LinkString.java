@@ -142,8 +142,11 @@ public class LinkString implements Comparable<LinkString> {
 	 * 	<br>Can be <jk>null</jk> to unset the property.
 	 * @return This object.
 	 */
+	@SuppressWarnings({
+		"java:S1905" // Cast required to disambiguate varargs overload from this single-String overload; removing it causes infinite recursion.
+	})
 	public LinkString setUri(String value) {
-		setUri(value, new Object[0]);
+		setUri(value, (Object[])new Object[0]);
 		return this;
 	}
 

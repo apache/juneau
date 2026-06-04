@@ -124,7 +124,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				port = RANDOM.nextInt(32767 - ports[0] + 1) + ports[0];
 			try (var ss = new ServerSocket(port)) {
 				return port;
-			} catch (@SuppressWarnings("unused") IOException e) {
+			} catch (IOException e) {
 				// Port is in use, try next port in array
 			}
 		}
@@ -187,8 +187,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 
 	@Override /* Overridden from MicroserviceListener */
 	@SuppressWarnings({
-		"java:S3776", // Cognitive complexity acceptable for server creation logic
-		"resource"    // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
+		"java:S3776" // Cognitive complexity acceptable for server creation logic
 	})
 	public void onStart(Microservice ms) {
 		try {
@@ -285,7 +284,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 		t.start();
 		try {
 			t.join();
-		} catch (@SuppressWarnings("unused") InterruptedException e) {
+		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
 	}
@@ -302,8 +301,9 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * @param pathSpec The context path of the servlet.
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
 	public TomcatServerComponent addServlet(Servlet servlet, String pathSpec) {
-		return addServlet(servlet, new String[] {normalizePathSpec(pathSpec)});
+		return addServlet(servlet, new String[]{normalizePathSpec(pathSpec)});
 	}
 
 	/**
@@ -329,8 +329,9 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * @param urlPattern The URL pattern the filter applies to (e.g. {@code "/*"}, {@code "/api/*"}).
 	 * @return This object.
 	 */
+	@SuppressWarnings("java:S3878") // Array wrapper required to dispatch to varargs overload; without it the call recurses infinitely back to this single-String overload.
 	public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String urlPattern) {
-		return addFilter(filter, new String[] {urlPattern});
+		return addFilter(filter, new String[]{urlPattern});
 	}
 
 	/**
@@ -399,7 +400,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 		String hostname = "localhost";
 		try {
 			hostname = InetAddress.getLocalHost().getHostName();
-		} catch (@SuppressWarnings("unused") UnknownHostException e) {
+		} catch (UnknownHostException e) {
 			// Cannot determine hostname, use default "localhost"
 		}
 		return hostname;

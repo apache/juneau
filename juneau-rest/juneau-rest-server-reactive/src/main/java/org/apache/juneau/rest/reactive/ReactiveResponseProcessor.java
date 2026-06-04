@@ -273,7 +273,9 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	// Frame encoders.
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings({ "java:S2095", "resource" }) // Writer is response-owned; we never close it.
+	@SuppressWarnings({
+		"java:S2095" // Writer is response-owned; we never close it.
+	})
 	private static void writeSseFrame(FinishablePrintWriter w, Object element) throws IOException, SerializeException {
 		if (element == null)
 			return;
@@ -285,7 +287,9 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		SseSerializer.DEFAULT.serialize(new SseEvent(null, data), w);
 	}
 
-	@SuppressWarnings({ "java:S2095", "resource" }) // Writer is response-owned; we never close it.
+	@SuppressWarnings({
+		"java:S2095" // Writer is response-owned; we never close it.
+	})
 	private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws SerializeException {
 		if (element == null)
 			return;

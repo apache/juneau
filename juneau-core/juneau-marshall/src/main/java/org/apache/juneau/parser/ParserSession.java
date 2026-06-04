@@ -820,7 +820,7 @@ public class ParserSession extends MarshallingSession {
 			throw new ParseException(this, completeThrown, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(completeThrown), lm(completeThrown));
 	}
 
-	private <T> Exception drainToConsumer(BeanConsumer<T> consumer, List<T> list) {
+	private static <T> Exception drainToConsumer(BeanConsumer<T> consumer, List<T> list) {
 		try {
 			consumer.begin();
 			for (var element : list)

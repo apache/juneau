@@ -302,7 +302,7 @@ class JuneauBeanStoreExtension_Test extends TestBase {
 	}
 
 	@Test
-	void i04_resolveParameter_fallsBackToClassScope() throws Exception {
+	void i04_resolveParameter_fallsBackToClassScope() {
 		var ext = JuneauBeanStoreExtension.create();
 		var classCtx = org.apache.juneau.junit5.testsupport.StubExtensionContext.of(F02_NullableField.class, null);
 		ext.beforeAll(classCtx);
@@ -317,7 +317,7 @@ class JuneauBeanStoreExtension_Test extends TestBase {
 	}
 
 	@Test
-	void i05_getStore_returnsClassScope_whenNoMethodScope() throws Exception {
+	void i05_getStore_returnsClassScope_whenNoMethodScope() {
 		var ext = JuneauBeanStoreExtension.create();
 		var classCtx = org.apache.juneau.junit5.testsupport.StubExtensionContext.of(F02_NullableField.class, null);
 		ext.beforeAll(classCtx);
@@ -330,7 +330,7 @@ class JuneauBeanStoreExtension_Test extends TestBase {
 	}
 
 	@Test
-	void i06_readClassStore_returnsNull_whenNoParentChainHasIt() throws Exception {
+	void i06_readClassStore_returnsNull_whenNoParentChainHasIt() {
 		// Build a method context whose parent chain does NOT contain a class-scope store.
 		var ext = JuneauBeanStoreExtension.create();
 		var standaloneCtx = org.apache.juneau.junit5.testsupport.StubExtensionContext.of(F02_NullableField.class,
