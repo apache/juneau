@@ -613,6 +613,7 @@
 					</includes>
 					<systemPropertyVariables>
 						<java.locale.providers>JRE,COMPAT,SPI,CLDR</java.locale.providers>
+						<java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>
