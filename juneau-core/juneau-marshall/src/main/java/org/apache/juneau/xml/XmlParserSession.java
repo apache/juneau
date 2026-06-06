@@ -609,13 +609,12 @@ public class XmlParserSession extends ReaderParserSession {
 	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
 		var cm = getClassMeta(c.getClass(), elementType);
-		return parseIntoCollection(pipe, c, cm.getElementType());
+		return parseIntoCollection(getXmlReader(pipe), c, cm.getElementType(), null);
 	}
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		var cm = getClassMeta(m.getClass(), keyType, valueType);
-		return parseIntoMap(pipe, m, cm.getKeyType(), cm.getValueType());
+		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 	}
 
 	/**

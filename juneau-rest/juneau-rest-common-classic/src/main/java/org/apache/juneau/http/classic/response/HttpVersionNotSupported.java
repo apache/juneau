@@ -53,7 +53,7 @@ public class HttpVersionNotSupported extends BasicHttpException {
 	public static final int STATUS_CODE = 505;
 
 	/** Reason phrase */
-	public static final String REASON_PHRASE = "Http Version Not Supported";
+	public static final String REASON_PHRASE = "HTTP Version Not Supported";
 
 	/** Default status line */
 	private static final BasicStatusLine STATUS_LINE = BasicStatusLine.create(STATUS_CODE, REASON_PHRASE);

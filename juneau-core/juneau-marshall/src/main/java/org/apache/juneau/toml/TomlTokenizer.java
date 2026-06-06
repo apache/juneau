@@ -246,8 +246,6 @@ class TomlTokenizer {
 	}
 
 	String readMultiLineBasicString() throws IOException, ParseException {
-		if (read() != '"' || read() != '"' || read() != '"')
-			throw parseException("Expected '\"'\"'\"'\"");
 		var sb = new StringBuilder();
 		int c;
 		boolean trimmedFirstNewline = false;
@@ -306,8 +304,6 @@ class TomlTokenizer {
 	}
 
 	String readMultiLineLiteralString() throws IOException, ParseException {
-		if (read() != '\'' || read() != '\'' || read() != '\'')
-			throw parseException("Expected \"'''\"");
 		var sb = new StringBuilder();
 		int c;
 		boolean trimmedFirst = false;
@@ -353,6 +349,7 @@ class TomlTokenizer {
 			unread(quote);
 			return false;
 		}
+		read();
 		return true;
 	}
 

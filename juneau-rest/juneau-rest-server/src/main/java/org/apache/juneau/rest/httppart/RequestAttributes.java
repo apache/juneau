@@ -280,7 +280,7 @@ public class RequestAttributes {
 	public RequestAttributes set(NamedAttribute...attributes) {
 		assertArgNotNull(ARG_attributes, attributes);
 		for (var p : attributes)
-			set(p);
+			set(p.getName(), p.getValue());
 		return this;
 	}
 

@@ -935,7 +935,7 @@ public class Microservice implements ConfigEventListener {
 		for (var a : args)
 			l.add(s(a));
 		var args2 = new Args(l.toArray(new String[l.size()]));
-		try (var in = new Scanner(input); var out = new PrintWriter(sw)) {
+		try (var in = new Scanner(input == null ? "" : input); var out = new PrintWriter(sw)) {
 			executeCommand(args2, in, out);
 		}
 		return sw.toString();

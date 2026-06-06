@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.plaintext.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -80,5 +81,71 @@ class PlainTextAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// PlainTextApplyAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class E02_Class {}
+	public static class E04_Class {}
+
+	@Test void e01_applyAnnotationDefault() {
+		assertNotNull(PlainTextApplyAnnotation.DEFAULT);
+	}
+
+	@Test void e02_applyAnnotationEmpty() {
+		assertTrue(PlainTextApplyAnnotation.empty(null));
+		assertTrue(PlainTextApplyAnnotation.empty(PlainTextApplyAnnotation.DEFAULT));
+		assertFalse(PlainTextApplyAnnotation.empty(PlainTextApplyAnnotation.create(E02_Class.class).build()));
+	}
+
+	@Test void e03_applyAnnotationCreate() {
+		var a = PlainTextApplyAnnotation.create().build();
+		assertNotNull(a);
+	}
+
+	@Test void e04_applyAnnotationCreateWithClass() {
+		var a = PlainTextApplyAnnotation.create(E04_Class.class).build();
+		assertNotNull(a);
+	}
+
+	@Test void e05_applyAnnotationCreateWithString() {
+		var a = PlainTextApplyAnnotation.create("myClass").build();
+		assertNotNull(a);
+	}
+
+	@Test void e06_applyAnnotationBuilderValue() {
+		var pt = PlainTextAnnotation.create().description("test").build();
+		var a = PlainTextApplyAnnotation.create().value(pt).build();
+		assertNotNull(a);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// PlainTextBeanPropertyMeta + PlainTextClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_plainTextBeanPropertyMeta_default() {
+		assertNotNull(PlainTextBeanPropertyMeta.DEFAULT);
+	}
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f02_plainTextBeanPropertyMeta_lookup() {
+		var s = PlainTextSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var bm = bc.getBeanMeta(F02_Bean.class);
+		assertNotNull(bm);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(bpm);
+		assertNotNull(s.getPlainTextBeanPropertyMeta(bpm));
+		assertNotNull(s.getPlainTextBeanPropertyMeta(null));
+	}
+
+	@Test void f03_plainTextClassMeta_lookup() {
+		var s = PlainTextSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var cm = bc.getClassMeta(F02_Bean.class);
+		assertNotNull(s.getPlainTextClassMeta(cm));
 	}
 }

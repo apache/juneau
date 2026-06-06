@@ -384,7 +384,7 @@ public class DirectoryResource extends BasicRestServlet {
 		if (! allowUploads)
 			throw new MethodNotAllowed("PUT not enabled");
 
-		var f = getFile(path);
+		var f = getFileForUpload(path);
 
 		try (var os = new BufferedOutputStream(new FileOutputStream(f))) {
 			pipe(is, os);
@@ -454,6 +454,38 @@ public class DirectoryResource extends BasicRestServlet {
 		try {
 			return FileUtils.resolveSafely(rootDir, path)
 				.orElseThrow(() -> new NotFound("File not found."));
+		} catch (IllegalArgumentException e) {
+			throw new Forbidden(e.getMessage());
+		}
+	}
+
+	/**
+	 * Upload-path variant of {@link #getFile(String)} that allows the target file to not yet exist
+	 * (so {@code PUT /new-file.txt} can create a new file) while still enforcing the boundary check
+	 * by resolving the parent directory through {@link FileUtils#resolveSafely(File, String)}.
+	 *
+	 * <p>
+	 * If the target itself exists, returns it directly (overwrite path). Otherwise, resolves the
+	 * parent directory (which must exist and be inside the root), then appends the requested
+	 * filename. The parent's existence requirement prevents implicit directory creation via PUT.
+	 */
+	private File getFileForUpload(String path) throws NotFound {
+		try {
+			var existing = FileUtils.resolveSafely(rootDir, path);
+			if (existing.isPresent())
+				return existing.get();
+			var parentPath = "";
+			var name = path == null ? "" : path;
+			var slash = name.lastIndexOf('/');
+			if (slash >= 0) {
+				parentPath = name.substring(0, slash);
+				name = name.substring(slash + 1);
+			}
+			if (name.isEmpty())
+				throw new NotFound("File not found.");
+			var parent = FileUtils.resolveSafely(rootDir, parentPath)
+				.orElseThrow(() -> new NotFound("File not found."));
+			return new File(parent, name);
 		} catch (IllegalArgumentException e) {
 			throw new Forbidden(e.getMessage());
 		}

@@ -193,9 +193,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 				}
 			}
 
-		request.getContext().getDefaultResponseHeaders().forEach(x -> addHeader(x.getValue(), resolveUris(x.getValue())));  // Done this way to avoid list/array copy.
+		request.getContext().getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), maybeResolveUris(x.getName(), x.getValue())));  // Done this way to avoid list/array copy.
 
-		opContext.getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), resolveUris(x.getValue())));
+		opContext.getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), maybeResolveUris(x.getName(), x.getValue())));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeaderParam("Accept-Charset").orElse(null));
@@ -1027,5 +1027,17 @@ public class RestResponse extends HttpServletResponseWrapper {
 	private String resolveUris(Object value) {
 		var s = s(value);
 		return request.getUriResolver().resolve(s);
+	}
+
+	private String maybeResolveUris(String name, Object value) {
+		return isUriBearingHeader(name) ? resolveUris(value) : s(value);
+	}
+
+	private static boolean isUriBearingHeader(String name) {
+		if (name == null)
+			return false;
+		return name.equalsIgnoreCase("Location")
+			|| name.equalsIgnoreCase("Content-Location")
+			|| name.equalsIgnoreCase("Referer");
 	}
 }

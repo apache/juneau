@@ -104,7 +104,7 @@ class RestOp_Throws_Test extends TestBase {
 		a.get("/httpVersionNotSupported")
 			.run()
 			.assertStatus(505)
-			.assertContent("Http Version Not Supported");
+			.assertContent("HTTP Version Not Supported");
 		a.get("/insufficientStorage")
 			.run()
 			.assertStatus(507)

@@ -19,6 +19,7 @@ package org.apache.juneau.rest.debug;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
+import java.util.*;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -46,6 +47,7 @@ public class DebugConfig {
 	public static class Builder {
 
 		private final BeanStore beanStore;
+		private final Map<String,DebugRule> rules = new LinkedHashMap<>();
 		private Predicate<HttpServletRequest> conditional = x -> "true".equalsIgnoreCase(x.getHeader("Debug"));
 		private DebugFormat defaultFormat;
 		private Level defaultLevel = Level.INFO;
@@ -71,6 +73,7 @@ public class DebugConfig {
 		public Builder rule(String target, Consumer<DebugRule.Builder> value) {
 			var b = DebugRule.create();
 			value.accept(b);
+			rules.put(target, b.build());
 			return this;
 		}
 
@@ -143,6 +146,7 @@ public class DebugConfig {
 	private final DebugFormat defaultFormat;
 	private final Level defaultLevel;
 	private final boolean defaultCacheBodies;
+	private final Map<String,DebugRule> rules;
 
 	/**
 	 * Constructor.
@@ -164,6 +168,7 @@ public class DebugConfig {
 		defaultFormat = builder.defaultFormat;
 		defaultLevel = builder.defaultLevel;
 		defaultCacheBodies = builder.defaultCacheBodies;
+		rules = Map.copyOf(builder.rules);
 	}
 
 	/**
@@ -205,4 +210,14 @@ public class DebugConfig {
 
 	/** Returns bean store. */
 	protected BeanStore beanStore() { return beanStore; }
+
+	/**
+	 * Returns the configured rule for the specified target key, or <jk>null</jk> if none.
+	 *
+	 * @param target The target key.
+	 * @return The configured rule, or <jk>null</jk>.
+	 */
+	public DebugRule getRuleFor(String target) {
+		return rules.get(target);
+	}
 }

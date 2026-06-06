@@ -106,6 +106,103 @@ class BasicPart_Test extends TestBase {
 		x.assertName().is("X1").assertValue().is("1");
 	}
 
+	@Test void a06_getRawValue() {
+		var x = part("X1","1");
+		assertEquals("1", x.getRawValue());
+
+		var x2 = part("X2",(Supplier<?>)() -> "2");
+		assertEquals("2", x2.getRawValue());
+
+		var x3 = part("X3", null);
+		assertNull(x3.getRawValue());
+
+		// Nested supplier unwrapping
+		Supplier<String> inner = () -> "inner";
+		Supplier<Supplier<String>> outer = () -> inner;
+		var x4 = part("X4", outer);
+		assertEquals("inner", x4.getRawValue());
+		assertEquals("inner", x4.getValue());
+	}
+
+	@Test void a07_equals() {
+		var x1 = part("Foo","bar");
+		var x2 = part("Foo","bar");
+		var x3 = part("Foo","baz");
+		var x4 = part("Bar","bar");
+
+		// Reflexive (same reference short-circuit)
+		assertEquals(x1, x1);
+
+		// Equal by name+value
+		assertEquals(x1, x2);
+		assertEquals(x2, x1);
+
+		// Different value
+		assertNotEquals(x1, x3);
+
+		// Different name
+		assertNotEquals(x1, x4);
+
+		// Non-NameValuePair
+		assertNotEquals(x1, "Foo=bar");
+		assertNotEquals(x1, null);
+
+		// Equal to a different NameValuePair impl with same name/value
+		var other = new org.apache.http.message.BasicNameValuePair("Foo","bar");
+		assertEquals(x1, other);
+	}
+
+	@Test void a08_hashCode() {
+		var x1 = part("Foo","bar");
+		var x2 = part("Foo","bar");
+		var x3 = part("Foo","baz");
+
+		assertEquals(x1.hashCode(), x2.hashCode());
+		assertNotEquals(x1.hashCode(), x3.hashCode());
+
+		// hashCode includes the resolved value (supplier unwrapped via getValue())
+		var x4 = part("Foo",(Supplier<?>)() -> "bar");
+		assertEquals(x1.hashCode(), x4.hashCode());
+	}
+
+	@Test void a09_toString() {
+		var x = part("Foo","bar");
+		assertEquals("Foo=bar", x.toString());
+
+		var x2 = part("Empty",null);
+		assertEquals("Empty=null", x2.toString());
+
+		var x3 = part("Sup",(Supplier<?>)() -> "v");
+		assertEquals("Sup=v", x3.toString());
+	}
+
+	@Test void a10_copyCtor() {
+		// Exercise the protected copy constructor via a local subclass
+		var orig = new BasicPart("Foo","bar");
+		var copy = new BasicPartSub(orig);
+		assertEquals("Foo", copy.getName());
+		assertEquals("bar", copy.getValue());
+		assertEquals(orig, copy);
+
+		assertThrowsWithMessage(IllegalArgumentException.class, "Argument 'copyFrom' cannot be null", ()->new BasicPartSub((BasicPart)null));
+	}
+
+	@Test void a11_directCtorAndGetters() {
+		var x = new BasicPart("Foo","bar");
+		assertEquals("Foo", x.getName());
+		assertEquals("bar", x.getValue());
+
+		var nullVal = new BasicPart("Foo", null);
+		assertNull(nullVal.getValue());
+	}
+
+	// Local subclass to exercise the protected copy constructor.
+	private static class BasicPartSub extends BasicPart {
+		BasicPartSub(BasicPart copyFrom) {
+			super(copyFrom);
+		}
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Utility methods
 	//------------------------------------------------------------------------------------------------------------------

@@ -1700,6 +1700,8 @@ public class SchemaAnnotation {
 	private static JsonMap merge(JsonMap m, Items a) throws ParseException {
 		if (ItemsAnnotation.empty(a))
 			return m;
+		if (m == null)
+			m = new JsonMap();
 		Predicate<String> ne = Utils::ne;
 		Predicate<Collection<?>> nec = Utils::ne;
 		Predicate<Map<?,?>> nem = Utils::ne;

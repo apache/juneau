@@ -134,8 +134,9 @@ public abstract class RestServlet extends HttpServlet {
 
 	@Override /* Overridden from GenericServlet */
 	public synchronized void destroy() {
-		if (nn(context.get()))
-			context.get().destroy();
+		var c = context.getAndSet(null);
+		if (nn(c))
+			c.destroy();
 		super.destroy();
 	}
 

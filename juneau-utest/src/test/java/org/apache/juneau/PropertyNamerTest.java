@@ -56,4 +56,47 @@ class PropertyNamerTest extends TestBase {
 		assertEquals("a", n.getPropertyName("A"));
 		assertEquals("a", n.getPropertyName("A"));
 	}
+
+	//====================================================================================================
+	// test dashed-upper-case-start
+	//====================================================================================================
+	@Test void a03_dUCS() {
+		var n = new PropertyNamerDUCS();
+
+		// Examples from class javadoc.
+		assertEquals("Foo-Bar", n.getPropertyName("fooBar"));
+		assertEquals("Foo-Bar-Url", n.getPropertyName("fooBarURL"));
+		assertEquals("Foo-Bar-Url", n.getPropertyName("FooBarURL"));
+
+		// Single-character / single-word inputs.
+		assertEquals("A", n.getPropertyName("A"));
+		assertEquals("A", n.getPropertyName("a"));
+		assertEquals("Abc", n.getPropertyName("abc"));
+		assertEquals("Abc", n.getPropertyName("Abc"));
+
+		// All-caps acronym is normalized to a single capitalized word.
+		assertEquals("Abc", n.getPropertyName("ABC"));
+
+		// Multi-word camelCase / PascalCase.
+		assertEquals("Foo-Bar-Baz", n.getPropertyName("FooBarBaz"));
+		assertEquals("Foo-Bar-Baz", n.getPropertyName("fooBarBaz"));
+		assertEquals("Foo-Bar-Baz", n.getPropertyName("FooBarBAZ"));
+		assertEquals("Foo-Bar-Baz", n.getPropertyName("fooBarBAZ"));
+
+		// Empty / null are passed through unchanged.
+		assertEquals("", n.getPropertyName(""));
+		assertNull(n.getPropertyName(null));
+	}
+
+	//====================================================================================================
+	// test reusable INSTANCE constants
+	//====================================================================================================
+	@Test void a04_instances() {
+		assertNotNull(PropertyNamerDLC.INSTANCE);
+		assertNotNull(PropertyNamerULC.INSTANCE);
+		assertNotNull(PropertyNamerDUCS.INSTANCE);
+		assertEquals("foo-bar", PropertyNamerDLC.INSTANCE.getPropertyName("fooBar"));
+		assertEquals("foo_bar", PropertyNamerULC.INSTANCE.getPropertyName("fooBar"));
+		assertEquals("Foo-Bar", PropertyNamerDUCS.INSTANCE.getPropertyName("fooBar"));
+	}
 }

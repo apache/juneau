@@ -119,6 +119,7 @@ public class BasicSwaggerProviderSession {
 	private static final String SWAGGER_responses = "responses";
 	private static final String SWAGGER_schema = "schema";
 	private static final String SWAGGER_schemes = "schemes";
+	private static final String SWAGGER_siteName = "siteName";
 	private static final String SWAGGER_summary = "summary";
 	private static final String SWAGGER_tags = "tags";
 	private static final String SWAGGER_termsOfService = "termsOfService";
@@ -256,6 +257,12 @@ public class BasicSwaggerProviderSession {
 					firstNonEmpty(
 						sInfo.getString(SWAGGER_description),
 						resolve(rr.description())
+					)
+				)
+				.appendIf(ne, SWAGGER_siteName,
+					firstNonEmpty(
+						sInfo.getString(SWAGGER_siteName),
+						resolve(rr.siteName())
 					)
 				);
 

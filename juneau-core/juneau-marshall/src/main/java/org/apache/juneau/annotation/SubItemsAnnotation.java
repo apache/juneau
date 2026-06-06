@@ -792,6 +792,8 @@ public class SubItemsAnnotation {
 	public static JsonMap merge(JsonMap om, SubItems a) throws ParseException {
 		if (SubItemsAnnotation.empty(a))
 			return om;
+		if (om == null)
+			om = new JsonMap();
 		Predicate<String> ne = Utils::ne;
 		Predicate<Collection<?>> nec = Utils::ne;
 		Predicate<Boolean> nf = Utils::isTrue;

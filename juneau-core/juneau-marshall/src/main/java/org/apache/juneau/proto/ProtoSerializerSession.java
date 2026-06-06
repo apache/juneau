@@ -281,7 +281,7 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 							first = false;
 							out.w("{\n");
 							indent++;
-							serializeBeanMap(out, toBeanMap(item), null);
+							serializeBeanOrMapItem(out, item);
 							indent--;
 							out.i(indent).w('}');
 						}
@@ -290,7 +290,7 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 						for (var item : c) {
 							out.messageStart(key, ctx.useColonForMessages);
 							indent++;
-							serializeBeanMap(out, toBeanMap(item), null);
+							serializeBeanOrMapItem(out, item);
 							indent--;
 							out.messageEnd(indent);
 						}
@@ -352,6 +352,14 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 			serializeMap(out, (Map) item, aType);
 		else
 			serializeScalarValue(out, item, aType);
+	}
+
+	private void serializeBeanOrMapItem(ProtoWriter out, Object item) throws SerializeException {
+		var aType = getClassMetaForObject(item);
+		if (aType.isMap())
+			serializeMap(out, (Map) item, aType);
+		else
+			serializeBeanMap(out, toBeanMap(item), null);
 	}
 
 	private void serializeCollection(ProtoWriter out, Collection<?> c, ClassMeta<?> type, String fieldName) throws SerializeException {

@@ -483,7 +483,8 @@ public class Utils {
 	 * @see #env(String)
 	 */
 	public static <T> T env(String name, T def) {
-		return Settings.get().get(name, def);
+		var s = Settings.get();
+		return s != null ? s.get(name, def) : def;
 	}
 
 	/**

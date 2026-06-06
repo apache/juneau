@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.soap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -80,5 +81,71 @@ class SoapXmlAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// SoapXmlApplyAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class E02_Class {}
+	public static class E04_Class {}
+
+	@Test void e01_applyAnnotationDefault() {
+		assertNotNull(SoapXmlApplyAnnotation.DEFAULT);
+	}
+
+	@Test void e02_applyAnnotationEmpty() {
+		assertTrue(SoapXmlApplyAnnotation.empty(null));
+		assertTrue(SoapXmlApplyAnnotation.empty(SoapXmlApplyAnnotation.DEFAULT));
+		assertFalse(SoapXmlApplyAnnotation.empty(SoapXmlApplyAnnotation.create(E02_Class.class).build()));
+	}
+
+	@Test void e03_applyAnnotationCreate() {
+		var a = SoapXmlApplyAnnotation.create().build();
+		assertNotNull(a);
+	}
+
+	@Test void e04_applyAnnotationCreateWithClass() {
+		var a = SoapXmlApplyAnnotation.create(E04_Class.class).build();
+		assertNotNull(a);
+	}
+
+	@Test void e05_applyAnnotationCreateWithString() {
+		var a = SoapXmlApplyAnnotation.create("myClass").build();
+		assertNotNull(a);
+	}
+
+	@Test void e06_applyAnnotationBuilderValue() {
+		var sx = SoapXmlAnnotation.create().description("test").build();
+		var a = SoapXmlApplyAnnotation.create().value(sx).build();
+		assertNotNull(a);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// SoapXmlBeanPropertyMeta + SoapXmlClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_soapXmlBeanPropertyMeta_default() {
+		assertNotNull(SoapXmlBeanPropertyMeta.DEFAULT);
+	}
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f02_soapXmlBeanPropertyMeta_lookup() {
+		var s = SoapXmlSerializer.create().build();
+		var bc = s.getMarshallingContext();
+		var bm = bc.getBeanMeta(F02_Bean.class);
+		assertNotNull(bm);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(bpm);
+		assertNotNull(s.getSoapXmlBeanPropertyMeta(bpm));
+		assertNotNull(s.getSoapXmlBeanPropertyMeta(null));
+	}
+
+	@Test void f03_soapXmlClassMeta_lookup() {
+		var s = SoapXmlSerializer.create().build();
+		var bc = s.getMarshallingContext();
+		var cm = bc.getClassMeta(F02_Bean.class);
+		assertNotNull(s.getSoapXmlClassMeta(cm));
 	}
 }

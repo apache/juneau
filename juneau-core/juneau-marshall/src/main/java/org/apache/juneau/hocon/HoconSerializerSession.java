@@ -144,6 +144,8 @@ public class HoconSerializerSession extends WriterSerializerSession {
 				out.append(" ");
 				if (value instanceof BeanMap bm)
 					serializeBeanMap(out, bm, getBeanTypeName(this, cMeta, cMeta, pMeta), false);
+				else if (cMeta.isBean())
+					serializeBeanMap(out, toBeanMap(value), getBeanTypeName(this, cMeta, cMeta, pMeta), false);
 				else
 					serializeMap(out, (Map) value, cMeta, false);
 			} else {

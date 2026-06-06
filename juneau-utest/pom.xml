@@ -380,6 +380,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-sc-server</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-bct</artifactId>
 			<version>${project.version}</version>
 		</dependency>

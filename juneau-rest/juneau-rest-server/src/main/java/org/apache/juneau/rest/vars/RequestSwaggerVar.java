@@ -117,7 +117,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 					return methodSwagger.map(Operation::getDescription).orElse(null);
 				if ("operationSummary".equals(key))
 					return methodSwagger.map(Operation::getSummary).orElse(null);
-			} else if (c == 'r') {
+			} else if (c == 's') {
 				if ("siteName".equals(key))
 					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getSiteName()).orElse(null);
 			} else if (c == 't') {

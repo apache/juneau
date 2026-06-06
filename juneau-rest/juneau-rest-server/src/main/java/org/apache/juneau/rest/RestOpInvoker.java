@@ -214,9 +214,14 @@ public class RestOpInvoker extends MethodInvoker {
 			res.setContent(opSession.getRestContext().convertThrowable(e2));
 		} finally {
 			if (effectivelyObservable && ! observabilityDeferred) {
-				int status = res.getStatus();
-				if (status == 0)
-					status = (observed == null) ? 200 : 500;
+				int status;
+				if (observed != null)
+					status = deriveStatus(observed);
+				else {
+					status = res.getStatus();
+					if (status == 0)
+						status = 200;
+				}
 				try {
 					tracerScope.setStatusCode(status);
 					if (nn(observed))

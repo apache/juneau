@@ -77,13 +77,15 @@ class Rest_Debug_Test extends TestBase {
 		var c = MockRestClient.buildJson5(A.class);
 		c.get("/a").run().assertContent("true");
 		assertLogged();
-		c.get("/b").run().assertContent("true");
+		// Op-level @Debug("never") overrides class-level @Debug("always") for req.isDebug().
+		c.get("/b").run().assertContent("false");
 		assertLogged();
 	}
 
 	@Test void a02_typedConditionalRestOp() throws Exception {
 		var c = MockRestClient.buildJson5(A.class);
-		c.get("/c").run().assertContent("true");
+		// Op-level "conditional" overrides class-level "always": false without header, true with header.
+		c.get("/c").run().assertContent("false");
 		assertLogged();
 		c.get("/c").header("Debug", "true").run().assertContent("true");
 		assertLogged();
@@ -94,6 +96,56 @@ class Rest_Debug_Test extends TestBase {
 		c.get("/d").run().assertContent("false");
 		assertLogged();
 		c.get("/e").run().assertContent("true");
+		assertLogged();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// B - Class @Debug("never") with op-level overrides.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(callLogger=CaptureLogger.class, debug=@Debug("never"))
+	public static class B implements BasicUniversalConfig {
+		@RestOp(path="/always", debug=@Debug("always"))
+		public boolean always(RestRequest req) {
+			return req.isDebug();
+		}
+	}
+
+	@Test void a04_classNeverOpAlwaysWins() throws Exception {
+		// Op-level @Debug("always") overrides class-level @Debug("never").
+		var c = MockRestClient.buildJson5(B.class);
+		c.get("/always").run().assertContent("true");
+		assertLogged();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// C - Class @Debug("conditional") with op-level overrides.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Rest(callLogger=CaptureLogger.class, debug=@Debug("conditional"))
+	public static class C implements BasicUniversalConfig {
+		@RestOp(path="/always", debug=@Debug("always"))
+		public boolean always(RestRequest req) {
+			return req.isDebug();
+		}
+
+		@RestOp(path="/never", debug=@Debug("never"))
+		public boolean never(RestRequest req) {
+			return req.isDebug();
+		}
+	}
+
+	@Test void a05_classConditionalOpAlwaysWinsWithoutHeader() throws Exception {
+		// Class-level "conditional" without Debug header would yield false; op-level "always" forces true.
+		var c = MockRestClient.buildJson5(C.class);
+		c.get("/always").run().assertContent("true");
+		assertLogged();
+	}
+
+	@Test void a06_classConditionalOpNeverOverridesHeaderForReqIsDebug() throws Exception {
+		// Op-level "never" forces req.isDebug()=false even when Debug=true header would activate class-level conditional.
+		var c = MockRestClient.buildJson5(C.class);
+		c.get("/never").header("Debug", "true").run().assertContent("false");
 		assertLogged();
 	}
 }

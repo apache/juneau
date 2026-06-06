@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -80,5 +81,100 @@ class UonAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// UonApplyAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class E02_Class {}
+	public static class E04_Class {}
+
+	@Test void e01_applyAnnotationDefault() {
+		assertNotNull(UonApplyAnnotation.DEFAULT);
+	}
+
+	@Test void e02_applyAnnotationEmpty() {
+		assertTrue(UonApplyAnnotation.empty(null));
+		assertTrue(UonApplyAnnotation.empty(UonApplyAnnotation.DEFAULT));
+		assertFalse(UonApplyAnnotation.empty(UonApplyAnnotation.create(E02_Class.class).build()));
+	}
+
+	@Test void e03_applyAnnotationCreate() {
+		var a = UonApplyAnnotation.create().build();
+		assertNotNull(a);
+	}
+
+	@Test void e04_applyAnnotationCreateWithClass() {
+		var a = UonApplyAnnotation.create(E04_Class.class).build();
+		assertNotNull(a);
+	}
+
+	@Test void e05_applyAnnotationCreateWithString() {
+		var a = UonApplyAnnotation.create("myClass").build();
+		assertNotNull(a);
+	}
+
+	@Test void e06_applyAnnotationBuilderValue() {
+		var uon = UonAnnotation.create().description("test").build();
+		var a = UonApplyAnnotation.create().value(uon).build();
+		assertNotNull(a);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// UonBeanPropertyMeta + UonClassMeta lookup tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_uonBeanPropertyMeta_default() {
+		assertNotNull(UonBeanPropertyMeta.DEFAULT);
+	}
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f02_uonBeanPropertyMeta_lookup() {
+		var s = UonSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var bm = bc.getBeanMeta(F02_Bean.class);
+		assertNotNull(bm);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(bpm);
+		assertNotNull(s.getUonBeanPropertyMeta(bpm));
+		// null path
+		assertNotNull(s.getUonBeanPropertyMeta(null));
+	}
+
+	@Test void f03_uonClassMeta_lookup() {
+		var s = UonSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var cm = bc.getClassMeta(F02_Bean.class);
+		assertNotNull(s.getUonClassMeta(cm));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// UonConfigAnnotation tests (already covered elsewhere; included here for completeness).
+	//------------------------------------------------------------------------------------------------------------------
+
+	@UonConfig(addBeanTypes = "true")
+	public static class G01_Bean {}
+
+	@Test void g01_uonConfigAddBeanTypes() {
+		var s = UonSerializer.create().applyAnnotations(G01_Bean.class).build();
+		assertNotNull(s);
+	}
+
+	@UonConfig(encoding = "true")
+	public static class G02_Bean {}
+
+	@Test void g02_uonConfigEncoding() {
+		var s = UonSerializer.create().applyAnnotations(G02_Bean.class).build();
+		assertNotNull(s);
+	}
+
+	@UonConfig(decoding = "true", validateEnd = "true")
+	public static class G03_Bean {}
+
+	@Test void g03_uonConfigParserApply() {
+		var p = UonParser.create().applyAnnotations(G03_Bean.class).build();
+		assertNotNull(p);
 	}
 }

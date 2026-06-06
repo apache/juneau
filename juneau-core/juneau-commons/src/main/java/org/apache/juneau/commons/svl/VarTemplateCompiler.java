@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.svl;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -609,9 +609,22 @@ final class VarTemplateCompiler {
 		}
 
 		IllegalArgumentException parseError(String fmt, Object... args) {
-			var message = "Invalid script in template: " + fmt + " at script body offset {" + pos
-				+ "}; full script: \"" + sourceFragment() + "\"";
-			return illegalArg(message, args);
+			// Format the caller-supplied template first, then concatenate the position/source-fragment
+			// preamble as plain text. Routing the entire message through MessageFormat would interpret
+			// the literal "{<pos>}" as a placeholder. Fall back to plain concatenation if the caller's
+			// fmt is itself an invalid MessageFormat pattern (e.g. literal-brace escaping mismatches).
+			String formatted;
+			try {
+				formatted = f(fmt, args);
+			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+				var sb = new StringBuilder(fmt);
+				for (var a : args)
+					sb.append(' ').append(a);
+				formatted = sb.toString();
+			}
+			var message = "Invalid script in template: " + formatted + " at script body offset " + pos
+				+ "; full script: \"" + sourceFragment() + "\"";
+			return new IllegalArgumentException(message);
 		}
 
 		String sourceFragment() {

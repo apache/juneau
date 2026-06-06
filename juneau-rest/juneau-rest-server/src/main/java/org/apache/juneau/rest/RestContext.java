@@ -1298,7 +1298,7 @@ public class RestContext extends Context {
 
 			@Override
 			public DebugResult resolve(RestOpContext context, HttpServletRequest req) {
-				var opDebug = AnnotationProvider.INSTANCE.find(RestOp.class, ClassInfo.of(context.getJavaMethod())).stream().findFirst();
+				var opDebug = AnnotationProvider.INSTANCE.find(RestOp.class, MethodInfo.of(context.getJavaMethod())).stream().findFirst();
 				if (opDebug.isPresent()) {
 					var v = RestContext.this.resolve(opDebug.get().inner().debug().value());
 					if (StringUtils.isNotBlank(v)) {

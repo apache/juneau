@@ -470,4 +470,188 @@ class SchemaAnnotation_Test extends TestBase {
 		var a = SchemaAnnotation.create().summary("").su("").build();
 		assertFalse(SchemaAnnotation.asMap(a).containsKey("summary"));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Builder coverage for boolean setters not exercised by a1/a2 (aev, allowEmptyValue, sie, skipIfEmpty).
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_builder_aev() {
+		var a = SchemaAnnotation.create().aev(true).build();
+		assertTrue(a.aev());
+	}
+
+	@Test void h02_builder_allowEmptyValue() {
+		var a = SchemaAnnotation.create().allowEmptyValue(true).build();
+		assertTrue(a.allowEmptyValue());
+	}
+
+	@Test void h03_builder_sie() {
+		var a = SchemaAnnotation.create().sie(true).build();
+		assertTrue(a.sie());
+	}
+
+	@Test void h04_builder_skipIfEmpty() {
+		var a = SchemaAnnotation.create().skipIfEmpty(true).build();
+		assertTrue(a.skipIfEmpty());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// asMap() branches not exercised elsewhere.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_asMap_nullAnnotation_returnsEmptyMap() throws Exception {
+		var m = SchemaAnnotation.asMap(null);
+		assertNotNull(m);
+		assertTrue(m.isEmpty());
+	}
+
+	@Test void i02_asMap_ignoreTrue_includesIgnoreKey() throws Exception {
+		var a = SchemaAnnotation.create().ignore(true).build();
+		assertEquals("true", SchemaAnnotation.asMap(a).get("ignore"));
+	}
+
+	@Test void i03_asMap_exclusiveMaximumBooleanFallback() throws Exception {
+		// Forces the `else if (a.exclusiveMaximum() || a.emax())` short-circuit branch.
+		var a = SchemaAnnotation.create().exclusiveMaximum(true).build();
+		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMaximum"));
+	}
+
+	@Test void i04_asMap_exclusiveMaximumEmaxAlias() throws Exception {
+		// Triggers the second operand of `exclusiveMaximum() || emax()`.
+		var a = SchemaAnnotation.create().emax(true).build();
+		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMaximum"));
+	}
+
+	@Test void i05_asMap_exclusiveMinimumBooleanFallback() throws Exception {
+		var a = SchemaAnnotation.create().exclusiveMinimum(true).build();
+		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMinimum"));
+	}
+
+	@Test void i06_asMap_exclusiveMinimumEminAlias() throws Exception {
+		var a = SchemaAnnotation.create().emin(true).build();
+		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMinimum"));
+	}
+
+	@Test void i07_asMap_readOnlyTrue() throws Exception {
+		var a = SchemaAnnotation.create().readOnly(true).build();
+		assertEquals(true, SchemaAnnotation.asMap(a).get("readOnly"));
+	}
+
+	@Test void i08_asMap_roAliasTrue() throws Exception {
+		// Triggers `readOnly() || ro()` second operand.
+		var a = SchemaAnnotation.create().ro(true).build();
+		assertEquals(true, SchemaAnnotation.asMap(a).get("readOnly"));
+	}
+
+	@Test void i09_asMap_requiredTrue() throws Exception {
+		var a = SchemaAnnotation.create().required(true).build();
+		assertEquals(true, SchemaAnnotation.asMap(a).get("required"));
+	}
+
+	@Test void i10_asMap_rAliasTrue() throws Exception {
+		// Triggers `required() || r()` second operand.
+		var a = SchemaAnnotation.create().r(true).build();
+		assertEquals(true, SchemaAnnotation.asMap(a).get("required"));
+	}
+
+	@Test void i11_asMap_uniqueItemsTrue() throws Exception {
+		var a = SchemaAnnotation.create().uniqueItems(true).build();
+		assertEquals(true, SchemaAnnotation.asMap(a).get("uniqueItems"));
+	}
+
+	@Test void i12_asMap_uiAliasTrue() throws Exception {
+		// Triggers `uniqueItems() || ui()` second operand.
+		var a = SchemaAnnotation.create().ui(true).build();
+		assertEquals(true, SchemaAnnotation.asMap(a).get("uniqueItems"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// asMap() with Items: pre-existing production NPE bug (TODO-156) when items is non-default.
+	//
+	// SchemaAnnotation.asMap(...) calls merge(m.getMap(PROP_items), a.items()).  When the result
+	// map has no prior "items" entry, getMap(...) returns null and the private merge(JsonMap,Items)
+	// lazy-creates the inner map. Same lazy-create pattern lives in ExternalDocsAnnotation.merge
+	// and SubItemsAnnotation.merge.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_asMap_withFullyPopulatedItems() {
+		var items = ItemsAnnotation.create()
+			.$ref("#/items-ref")
+			.cf("csv")
+			.collectionFormat("multi")
+			.df("zero")
+			.default_("one")
+			.e("X")
+			.enum_("Y")
+			.emax(true)
+			.emin(true)
+			.exclusiveMaximum(true)
+			.exclusiveMinimum(true)
+			.f("int32")
+			.format("int64")
+			.items(SubItemsAnnotation.create().type("string").build())
+			.max("100")
+			.maxi(5)
+			.maximum("200")
+			.maxItems(6)
+			.maxl(7)
+			.maxLength(8)
+			.min("1")
+			.mini(2)
+			.minimum("3")
+			.minItems(4)
+			.minl(9)
+			.minLength(10)
+			.mo("2")
+			.multipleOf("3")
+			.p("[a-z]+")
+			.pattern("[A-Z]+")
+			.t("integer")
+			.type("number")
+			.ui(true)
+			.uniqueItems(true)
+			.build();
+		var a = SchemaAnnotation.create().items(items).build();
+		var m = SchemaAnnotation.asMap(a);
+		assertNotNull(m);
+		var itemsMap = m.getMap("items");
+		assertNotNull(itemsMap, "items map should be lazy-created when annotation is non-default");
+		assertEquals("#/items-ref", itemsMap.getString("$ref"));
+		assertEquals("number", itemsMap.getString("type"));
+	}
+
+	@Test void j02_asMap_withItemsShortFormOnly() {
+		// Same lazy-create path as j01, exercised via short-form alias setters only.
+		var items = ItemsAnnotation.create()
+			.$ref("#/r")
+			.cf("ssv")
+			.df("d")
+			.e("e")
+			.emax(true)
+			.emin(true)
+			.f("float")
+			.max("99")
+			.maxi(11)
+			.maxl(12)
+			.min("0")
+			.mini(13)
+			.minl(14)
+			.mo("5")
+			.p("p")
+			.t("string")
+			.ui(true)
+			.build();
+		var a = SchemaAnnotation.create().items(items).build();
+		var m = SchemaAnnotation.asMap(a);
+		var itemsMap = m.getMap("items");
+		assertNotNull(itemsMap);
+		assertEquals("#/r", itemsMap.getString("$ref"));
+		assertEquals("string", itemsMap.getString("type"));
+	}
+
+	@Test void j03_asMap_withDefaultItems_omitsItemsKey() throws Exception {
+		// merge(JsonMap, Items) returns early on default Items; no key should appear.
+		var a = SchemaAnnotation.create().items(ItemsAnnotation.DEFAULT).type("string").build();
+		assertFalse(SchemaAnnotation.asMap(a).containsKey("items"));
+	}
 }

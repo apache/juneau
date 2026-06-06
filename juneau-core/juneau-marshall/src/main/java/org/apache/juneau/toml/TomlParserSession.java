@@ -248,9 +248,13 @@ public class TomlParserSession extends ReaderParserSession {
 			String s = readUntilValueEnd(t);
 			if (isEmpty(s))
 				throw t.parseException("Expected value");
+			Number special = parseSpecialFloat(s);
+			if (special != null)
+				return special;
+			Number radix = parseRadixInteger(s, t);
+			if (radix != null)
+				return radix;
 			String noUnderscore = s.replace("_", "");
-			if (s.equals("inf") || s.equals("-inf") || s.equals("+inf") || s.toLowerCase().startsWith("nan"))
-				return Double.parseDouble(noUnderscore);
 			if (s.length() >= 10 && s.charAt(4) == '-' && (s.contains("T") || s.contains(":") || s.contains(" ")))
 				return TomlTokenizer.parseDateTimeString(s);
 			// Date-like patterns kept as string for convertValue to parse as LocalDate, YearMonth, Year
@@ -269,8 +273,9 @@ public class TomlParserSession extends ReaderParserSession {
 		}
 		if (c == 'i' || c == 'n') {
 			String s = readUntilValueEnd(t);
-			if (s != null && (s.equalsIgnoreCase("inf") || s.equals("-inf") || s.equals("+inf") || s.regionMatches(true, 0, "nan", 0, 3)))
-				return Double.parseDouble(s.replace("_", ""));
+			Number special = parseSpecialFloat(s);
+			if (special != null)
+				return special;
 			throw t.parseException("Expected inf or nan");
 		}
 		throw t.parseException("Unexpected character: " + (char)c);
@@ -281,9 +286,12 @@ public class TomlParserSession extends ReaderParserSession {
 		int c1 = t.read();
 		int c2 = t.read();
 		int c3 = t.peek();
-		if (c2 == q && c3 == q)
+		if (c2 == q && c3 == q) {
+			t.read();
 			return true;
-		t.unread(c2);
+		}
+		if (c2 >= 0)
+			t.unread(c2);
 		t.unread(c1);
 		return false;
 	}
@@ -303,6 +311,41 @@ public class TomlParserSession extends ReaderParserSession {
 			sb.append((char) t.read());
 		}
 		return sb.isEmpty() ? null : sb.toString().trim();
+	}
+
+	private static Number parseSpecialFloat(String s) {
+		if (s == null)
+			return null;
+		if (s.equals("inf") || s.equals("+inf"))
+			return Double.POSITIVE_INFINITY;
+		if (s.equals("-inf"))
+			return Double.NEGATIVE_INFINITY;
+		if (s.equals("nan") || s.equals("+nan") || s.equals("-nan"))
+			return Double.NaN;
+		return null;
+	}
+
+	private static Number parseRadixInteger(String s, TomlTokenizer t) throws ParseException {
+		if (s == null || s.length() < 3 || s.charAt(0) != '0')
+			return null;
+		char p = s.charAt(1);
+		int radix;
+		if (p == 'x' || p == 'X')
+			radix = 16;
+		else if (p == 'o' || p == 'O')
+			radix = 8;
+		else if (p == 'b' || p == 'B')
+			radix = 2;
+		else
+			return null;
+		String digits = s.substring(2).replace("_", "");
+		if (digits.isEmpty())
+			throw t.parseException("Invalid number: " + s);
+		try {
+			return Long.parseUnsignedLong(digits, radix);
+		} catch (@SuppressWarnings("unused") NumberFormatException e) {
+			throw t.parseException("Invalid number: " + s);
+		}
 	}
 
 	private static Object getOrCreateAt(Map<String, Object> root, String path) {

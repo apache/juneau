@@ -19,11 +19,13 @@ package org.apache.juneau.http.classic;
 import static org.apache.juneau.http.classic.HttpParts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.net.*;
 import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.part.*;
@@ -259,5 +261,257 @@ class HttpParts_Test extends TestBase {
 		var ctor = getConstructor(cm);
 		// May or may not be present depending on which constructors BasicPart has
 		assertNotNull(ctor);
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// b — Coverage for previously-unhit factory methods and branches.
+	// ------------------------------------------------------------------------------------------------------------------
+
+	// basicPart — ofPair / 2-arg / Supplier overloads (none of which were exercised before).
+
+	@Test void b01_basicPart_ofPair() {
+		var p = basicPart("Foo: bar");
+		assertEquals("Foo", p.getName());
+		assertEquals("bar", p.getValue());
+	}
+
+	@Test void b02_basicPart_nameValue() {
+		var p = basicPart("Foo", "bar");
+		assertEquals("Foo", p.getName());
+		assertEquals("bar", p.getValue());
+	}
+
+	@Test void b03_basicPart_supplier() {
+		Supplier<String> s = () -> "lazy";
+		var p = basicPart("Foo", s);
+		assertEquals("lazy", p.getValue());
+	}
+
+	// canCast — Headerable / NameValuePairable branches.
+
+	@Test void b04_canCast_headerable() {
+		Headerable h = () -> BasicHeader.of("Foo", "bar");
+		assertTrue(canCast(h));
+	}
+
+	@Test void b05_canCast_nameValuePairable() {
+		NameValuePairable n = () -> BasicPart.of("Foo", "bar");
+		assertTrue(canCast(n));
+	}
+
+	// cast — exercises the Headerable branch (BasicHeader is also a NameValuePair so it short-circuits there).
+
+	@Test void b06_cast_pureHeaderable() {
+		// A Headerable that is not itself a NameValuePair forces the second branch.
+		Headerable h = () -> BasicHeader.of("Foo", "bar");
+		var p = cast(h);
+		assertEquals("Foo", p.getName());
+		assertEquals("bar", p.getValue());
+	}
+
+	@Test void b07_cast_apacheBasicNameValuePair() {
+		// Apache BasicNameValuePair implements NameValuePair (returns same object back).
+		var src = new BasicNameValuePair("Foo", "bar");
+		var p = cast(src);
+		assertSame(src, p);
+	}
+
+	// csvArrayPart eager (String[]) factory was only exercised via raw call; ensure factory itself is hit.
+
+	@Test void b08_csvArrayPart_stringArray_factory() {
+		var p = csvArrayPart("Foo", "a", "b", "c");
+		assertNotNull(p);
+		assertEquals("a,b,c", p.getValue());
+	}
+
+	// integerPart (already partly covered) — no extra needed.
+
+	// longPart — both overloads.
+
+	@Test void b09_longPart_Long() {
+		var p = longPart("Foo", 7L);
+		assertEquals("7", p.getValue());
+	}
+
+	@Test void b10_longPart_Long_null() {
+		assertNull(longPart("Foo", (Long)null));
+	}
+
+	@Test void b11_longPart_Supplier() {
+		Supplier<Long> s = () -> 99L;
+		var p = longPart("Foo", s);
+		assertEquals("99", p.getValue());
+	}
+
+	@Test void b12_longPart_Supplier_null() {
+		assertNull(longPart("Foo", (Supplier<Long>)null));
+	}
+
+	// stringPart — both overloads.
+
+	@Test void b13_stringPart_String() {
+		var p = stringPart("Foo", "bar");
+		assertEquals("bar", p.getValue());
+	}
+
+	@Test void b14_stringPart_String_null() {
+		assertNull(stringPart("Foo", (String)null));
+	}
+
+	@Test void b15_stringPart_String_blank() {
+		var p = stringPart("Foo", "");
+		assertNotNull(p);
+	}
+
+	@Test void b16_stringPart_Supplier() {
+		Supplier<String> s = () -> "lazy";
+		var p = stringPart("Foo", s);
+		assertEquals("lazy", p.getValue());
+	}
+
+	@Test void b17_stringPart_Supplier_null() {
+		assertNull(stringPart("Foo", (Supplier<String>)null));
+	}
+
+	// uriPart — both overloads.
+
+	@Test void b18_uriPart_URI() {
+		var u = URI.create("https://example.com");
+		var p = uriPart("Foo", u);
+		assertEquals("https://example.com", p.getValue());
+	}
+
+	@Test void b19_uriPart_URI_null() {
+		assertNull(uriPart("Foo", (URI)null));
+	}
+
+	@Test void b20_uriPart_Supplier() {
+		Supplier<URI> s = () -> URI.create("https://example.com/x");
+		var p = uriPart("Foo", s);
+		assertNotNull(p);
+		assertNotNull(p.getValue());
+	}
+
+	@Test void b21_uriPart_Supplier_null() {
+		assertNull(uriPart("Foo", (Supplier<URI>)null));
+	}
+
+	// serializedPart — both overloads.
+
+	@Test void b22_serializedPart_value() {
+		var p = serializedPart("Foo", "bar");
+		assertEquals("Foo", p.getName());
+	}
+
+	@Test void b23_serializedPart_supplier() {
+		Supplier<Object> s = () -> "lazy";
+		var p = serializedPart("Foo", s);
+		assertEquals("Foo", p.getName());
+	}
+
+	// partList — every overload.
+
+	@Test void b24_partList_noArgs() {
+		var pl = partList();
+		assertNotNull(pl);
+		assertEquals(0, pl.size());
+	}
+
+	@Test void b25_partList_list() {
+		var pl = partList(List.<NameValuePair>of(BasicPart.of("a", "1"), BasicPart.of("b", "2")));
+		assertEquals(2, pl.size());
+	}
+
+	@Test void b26_partList_varargs() {
+		var pl = partList(BasicPart.of("a", "1"), BasicPart.of("b", "2"));
+		assertEquals(2, pl.size());
+	}
+
+	@Test void b27_partList_pairs() {
+		var pl = partList("a", "1", "b", "2");
+		assertEquals(2, pl.size());
+	}
+
+	// isHttpPart — every switch arm.
+
+	@Test void b28_isHttpPart_query_assignable() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(BasicPart.class);
+		assertTrue(isHttpPart(HttpPartType.QUERY, cm));
+	}
+
+	@Test void b29_isHttpPart_path_assignable() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(BasicPart.class);
+		assertTrue(isHttpPart(HttpPartType.PATH, cm));
+	}
+
+	@Test void b30_isHttpPart_formdata_assignable() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(BasicPart.class);
+		assertTrue(isHttpPart(HttpPartType.FORMDATA, cm));
+	}
+
+	@Test void b31_isHttpPart_query_notAssignable() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(String.class);
+		assertFalse(isHttpPart(HttpPartType.QUERY, cm));
+	}
+
+	@Test void b32_isHttpPart_header_assignable() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(BasicHeader.class);
+		assertTrue(isHttpPart(HttpPartType.HEADER, cm));
+	}
+
+	@Test void b33_isHttpPart_header_notAssignable() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(String.class);
+		assertFalse(isHttpPart(HttpPartType.HEADER, cm));
+	}
+
+	@Test void b34_isHttpPart_default() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(BasicPart.class);
+		assertFalse(isHttpPart(HttpPartType.BODY, cm));
+		assertFalse(isHttpPart(HttpPartType.RESPONSE_HEADER, cm));
+		assertFalse(isHttpPart(HttpPartType.ANY, cm));
+	}
+
+	// getName — exercises the @X(name=...) annotation paths (the existing tests cover @X(value=...)).
+
+	@org.apache.juneau.http.annotation.Header(name = "HName")
+	public static class B_HeaderNameBean { }
+
+	@org.apache.juneau.http.annotation.Query(name = "QName")
+	public static class B_QueryNameBean { }
+
+	@org.apache.juneau.http.annotation.FormData(name = "FName")
+	public static class B_FormDataNameBean { }
+
+	@org.apache.juneau.http.annotation.Path(name = "PName")
+	public static class B_PathNameBean { }
+
+	@Test void b35_getName_header_byName() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(B_HeaderNameBean.class);
+		assertEquals("HName", getName(HttpPartType.HEADER, cm).orElse(null));
+	}
+
+	@Test void b36_getName_query_byName() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(B_QueryNameBean.class);
+		assertEquals("QName", getName(HttpPartType.QUERY, cm).orElse(null));
+	}
+
+	@Test void b37_getName_formdata_byName() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(B_FormDataNameBean.class);
+		assertEquals("FName", getName(HttpPartType.FORMDATA, cm).orElse(null));
+	}
+
+	@Test void b38_getName_path_byName() {
+		var cm = MarshallingContext.DEFAULT.getClassMeta(B_PathNameBean.class);
+		assertEquals("PName", getName(HttpPartType.PATH, cm).orElse(null));
+	}
+
+	@Test void b39_getName_noAnnotation_returnsEmpty() {
+		// The classic-package version of HttpParts does NOT fall back to a NAME field —
+		// classes without an annotation produce an empty Optional.
+		var cm = MarshallingContext.DEFAULT.getClassMeta(String.class);
+		assertFalse(getName(HttpPartType.HEADER, cm).isPresent());
+		assertFalse(getName(HttpPartType.QUERY, cm).isPresent());
+		assertFalse(getName(HttpPartType.FORMDATA, cm).isPresent());
+		assertFalse(getName(HttpPartType.PATH, cm).isPresent());
 	}
 }

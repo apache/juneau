@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.annotation.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.annotation.SubItems;
 import org.junit.jupiter.api.*;
 
@@ -215,5 +216,101 @@ class SubItemsAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// merge() — exercises the JsonMap fan-out branch.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_merge_nullAnnotation_returnsMapUnchanged() throws Exception {
+		var om = JsonMap.create().append("preexisting", "value");
+		var result = SubItemsAnnotation.merge(om, null);
+		assertSame(om, result);
+		assertEquals("value", result.get("preexisting"));
+		assertFalse(result.containsKey("type"));
+	}
+
+	@Test void e02_merge_defaultAnnotation_returnsMapUnchanged() throws Exception {
+		var om = JsonMap.create();
+		var result = SubItemsAnnotation.merge(om, SubItemsAnnotation.DEFAULT);
+		assertSame(om, result);
+		assertTrue(result.isEmpty());
+	}
+
+	@Test void e03_merge_fullyPopulatedAnnotation_appendsAllProperties() throws Exception {
+		var om = JsonMap.create();
+		var result = SubItemsAnnotation.merge(om, a1);
+		assertSame(om, result);
+		assertEquals("e", result.get("collectionFormat"));
+		assertEquals("b", result.get("default"));
+		assertNotNull(result.get("enum"));
+		assertEquals(true, result.get("exclusiveMaximum"));
+		assertEquals(true, result.get("exclusiveMinimum"));
+		assertEquals("j", result.get("format"));
+		assertEquals("l", result.get("maximum"));
+		assertEquals(2L, result.get("maxItems"));
+		assertEquals(4L, result.get("maxLength"));
+		assertEquals("n", result.get("minimum"));
+		assertEquals(6L, result.get("minItems"));
+		assertEquals(8L, result.get("minLength"));
+		assertEquals("p", result.get("multipleOf"));
+		assertEquals("r", result.get("pattern"));
+		assertEquals("t", result.get("type"));
+		assertEquals(true, result.get("uniqueItems"));
+		assertEquals("a", result.get("$ref"));
+	}
+
+	@Test void e04a_merge_longFormBooleansOnly_coversShortCircuit() throws Exception {
+		// emax/emin/ui short-circuit branches: one side true (long form), other side false (short form).
+		var a = SubItemsAnnotation.create()
+			.exclusiveMaximum(true)
+			.exclusiveMinimum(true)
+			.uniqueItems(true)
+			.build();
+		var result = SubItemsAnnotation.merge(JsonMap.create(), a);
+		assertEquals(true, result.get("exclusiveMaximum"));
+		assertEquals(true, result.get("exclusiveMinimum"));
+		assertEquals(true, result.get("uniqueItems"));
+	}
+
+	@Test void e04_merge_shortFormFieldsOnly_appendsShortFormValues() throws Exception {
+		var a = SubItemsAnnotation.create()
+			.cf("csv")
+			.df("zero")
+			.e("X")
+			.emax(true)
+			.emin(true)
+			.f("int32")
+			.max("100")
+			.maxi(5)
+			.maxl(10)
+			.min("1")
+			.mini(1)
+			.minl(2)
+			.mo("3")
+			.p("[a-z]+")
+			.t("integer")
+			.ui(true)
+			.$ref("#/foo")
+			.build();
+		var om = JsonMap.create();
+		var result = SubItemsAnnotation.merge(om, a);
+		assertEquals("csv", result.get("collectionFormat"));
+		assertEquals("zero", result.get("default"));
+		assertNotNull(result.get("enum"));
+		assertEquals(true, result.get("exclusiveMaximum"));
+		assertEquals(true, result.get("exclusiveMinimum"));
+		assertEquals("int32", result.get("format"));
+		assertEquals("100", result.get("maximum"));
+		assertEquals(5L, result.get("maxItems"));
+		assertEquals(10L, result.get("maxLength"));
+		assertEquals("1", result.get("minimum"));
+		assertEquals(1L, result.get("minItems"));
+		assertEquals(2L, result.get("minLength"));
+		assertEquals("3", result.get("multipleOf"));
+		assertEquals("[a-z]+", result.get("pattern"));
+		assertEquals("integer", result.get("type"));
+		assertEquals(true, result.get("uniqueItems"));
+		assertEquals("#/foo", result.get("$ref"));
 	}
 }

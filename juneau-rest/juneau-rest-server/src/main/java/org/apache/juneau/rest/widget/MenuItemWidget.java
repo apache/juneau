@@ -142,7 +142,7 @@ public abstract class MenuItemWidget extends Widget {
 			}
 			if (nn(post)) {
 				sb.append("\n\t\tfunction onPostShow" + id + "() {");
-				sb.append("\n").append(pre);
+				sb.append("\n").append(post);
 				sb.append("\n\t\t}");
 			}
 			sb.append("\n\t</script>");

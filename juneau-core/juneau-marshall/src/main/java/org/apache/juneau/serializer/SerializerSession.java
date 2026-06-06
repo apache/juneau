@@ -412,13 +412,13 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @param causedBy The exception to cast or wrap.
 	 */
 	protected static <T extends Throwable> void handleThrown(T causedBy) {
+		if (causedBy instanceof StackOverflowError)
+			throw new SerializeException(
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		if (causedBy instanceof Error causedBy2)
 			throw causedBy2;
 		if (causedBy instanceof RuntimeException causedBy2)
 			throw causedBy2;
-		if (causedBy instanceof StackOverflowError)
-			throw new SerializeException(
-				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
 		if (causedBy instanceof SerializeException causedBy2)
 			throw causedBy2;
 		throw new SerializeException(causedBy);

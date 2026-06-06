@@ -148,6 +148,8 @@ public class ExternalDocsAnnotation {
 	public static JsonMap merge(JsonMap m, ExternalDocs a) throws ParseException {
 		if (ExternalDocsAnnotation.empty(a))
 			return m;
+		if (m == null)
+			m = new JsonMap();
 		Predicate<String> ne = Utils::ne;
 		// @formatter:off
 		return m

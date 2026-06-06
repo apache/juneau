@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.oapi.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -80,5 +81,71 @@ class OpenApiAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// OpenApiApplyAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class E02_Class {}
+	public static class E04_Class {}
+
+	@Test void e01_applyAnnotationDefault() {
+		assertNotNull(OpenApiApplyAnnotation.DEFAULT);
+	}
+
+	@Test void e02_applyAnnotationEmpty() {
+		assertTrue(OpenApiApplyAnnotation.empty(null));
+		assertTrue(OpenApiApplyAnnotation.empty(OpenApiApplyAnnotation.DEFAULT));
+		assertFalse(OpenApiApplyAnnotation.empty(OpenApiApplyAnnotation.create(E02_Class.class).build()));
+	}
+
+	@Test void e03_applyAnnotationCreate() {
+		var a = OpenApiApplyAnnotation.create().build();
+		assertNotNull(a);
+	}
+
+	@Test void e04_applyAnnotationCreateWithClass() {
+		var a = OpenApiApplyAnnotation.create(E04_Class.class).build();
+		assertNotNull(a);
+	}
+
+	@Test void e05_applyAnnotationCreateWithString() {
+		var a = OpenApiApplyAnnotation.create("myClass").build();
+		assertNotNull(a);
+	}
+
+	@Test void e06_applyAnnotationBuilderValue() {
+		var oapi = OpenApiAnnotation.create().description("test").build();
+		var a = OpenApiApplyAnnotation.create().value(oapi).build();
+		assertNotNull(a);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// OpenApiBeanPropertyMeta + OpenApiClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_openApiBeanPropertyMeta_default() {
+		assertNotNull(OpenApiBeanPropertyMeta.DEFAULT);
+	}
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f02_openApiBeanPropertyMeta_lookup() {
+		var s = OpenApiSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var bm = bc.getBeanMeta(F02_Bean.class);
+		assertNotNull(bm);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(bpm);
+		assertNotNull(s.getOpenApiBeanPropertyMeta(bpm));
+		assertNotNull(s.getOpenApiBeanPropertyMeta(null));
+	}
+
+	@Test void f03_openApiClassMeta_lookup() {
+		var s = OpenApiSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var cm = bc.getClassMeta(F02_Bean.class);
+		assertNotNull(s.getOpenApiClassMeta(cm));
 	}
 }

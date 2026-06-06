@@ -858,12 +858,16 @@ public class ObjectRest {
 			var n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
 				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+			if (n.o == null && n.cm.isObject())
+				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isMap())
 				return ((Map)o).put(childKey, convert(val, cm.getValueType()));
 			if (cm.isCollection() && o instanceof List o2)
 				return o2.set(parseInt(childKey), convert(val, cm.getElementType()));
+			if (cm.isCollection())
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot PUT to indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
 			if (cm.isArray()) {
 				o = setArrayEntry(n.o, parseInt(childKey), val, cm.getElementType());
 				var pct = n.parent.cm;
@@ -904,6 +908,8 @@ public class ObjectRest {
 			var n = getNode(url, root);
 			if (n == null)
 				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
+			if (n.o == null && n.cm.isObject())
+				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isArray()) {
@@ -938,12 +944,18 @@ public class ObjectRest {
 				return o;
 			}
 			var n = (parentUrl == null ? root : getNode(parentUrl, root));
+			if (n == null)
+				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+			if (n.o == null && n.cm.isObject())
+				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isMap())
 				return ((Map)o).remove(childKey);
 			if (cm.isCollection() && o instanceof List o2)
 				return o2.remove(parseInt(childKey));
+			if (cm.isCollection())
+				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot DELETE indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
 			if (cm.isArray()) {
 				int index = parseInt(childKey);
 				var old = ((Object[])o)[index];

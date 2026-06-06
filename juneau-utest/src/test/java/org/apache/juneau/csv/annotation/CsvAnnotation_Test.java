@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.csv.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -80,5 +81,103 @@ class CsvAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// CsvApplyAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class E02_Class {}
+	public static class E04_Class {}
+
+	@Test void e01_applyAnnotationDefault() {
+		assertNotNull(CsvApplyAnnotation.DEFAULT);
+	}
+
+	@Test void e02_applyAnnotationEmpty() {
+		assertTrue(CsvApplyAnnotation.empty(null));
+		assertTrue(CsvApplyAnnotation.empty(CsvApplyAnnotation.DEFAULT));
+		assertFalse(CsvApplyAnnotation.empty(CsvApplyAnnotation.create(E02_Class.class).build()));
+	}
+
+	@Test void e03_applyAnnotationCreate() {
+		var a = CsvApplyAnnotation.create().build();
+		assertNotNull(a);
+	}
+
+	@Test void e04_applyAnnotationCreateWithClass() {
+		var a = CsvApplyAnnotation.create(E04_Class.class).build();
+		assertNotNull(a);
+	}
+
+	@Test void e05_applyAnnotationCreateWithString() {
+		var a = CsvApplyAnnotation.create("myClass").build();
+		assertNotNull(a);
+	}
+
+	@Test void e06_applyAnnotationBuilderValue() {
+		var csv = CsvAnnotation.create().description("test").build();
+		var a = CsvApplyAnnotation.create().value(csv).build();
+		assertNotNull(a);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// CsvBeanPropertyMeta / CsvClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f01_csvBeanPropertyMeta_default() {
+		assertNotNull(CsvBeanPropertyMeta.DEFAULT);
+	}
+
+	@Test void f02_csvBeanPropertyMeta_lookup() {
+		var s = CsvSerializer.DEFAULT;
+		var bm = MarshallingContext.DEFAULT.getBeanMeta(F02_Bean.class);
+		var bpm = bm.getPropertyMeta("name");
+		var meta = s.getCsvBeanPropertyMeta(bpm);
+		assertNotNull(meta);
+	}
+
+	@Test void f03_csvBeanPropertyMeta_lookupNull() {
+		var s = CsvSerializer.DEFAULT;
+		var meta = s.getCsvBeanPropertyMeta(null);
+		assertNotNull(meta);
+		assertSame(CsvBeanPropertyMeta.DEFAULT, meta);
+	}
+
+	@Test void f04_csvClassMeta_lookup() {
+		var s = CsvSerializer.DEFAULT;
+		var cm = MarshallingContext.DEFAULT.getClassMeta(F02_Bean.class);
+		var meta = s.getCsvClassMeta(cm);
+		assertNotNull(meta);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// CsvConfigAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@CsvConfig
+	public static class G01_Bean {}
+
+	@Test void g01_csvConfigSerializerApply() {
+		var s = CsvSerializer.create().applyAnnotations(G01_Bean.class).build();
+		assertNotNull(s);
+	}
+
+	@CsvConfig(rank = 1)
+	public static class G02_Bean {}
+
+	@Test void g02_csvConfigSerializerApplyWithRank() {
+		var s = CsvSerializer.create().applyAnnotations(G02_Bean.class).build();
+		assertNotNull(s);
+	}
+
+	@CsvConfig
+	public static class G03_Bean {}
+
+	@Test void g03_csvConfigParserApply() {
+		var p = CsvParser.create().applyAnnotations(G03_Bean.class).build();
+		assertNotNull(p);
 	}
 }

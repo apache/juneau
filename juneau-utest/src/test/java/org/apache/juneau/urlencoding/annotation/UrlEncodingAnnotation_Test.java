@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -84,5 +85,33 @@ class UrlEncodingAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// UrlEncodingBeanPropertyMeta + UrlEncodingClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_urlEncodingBeanPropertyMeta_default() {
+		assertNotNull(UrlEncodingBeanPropertyMeta.DEFAULT);
+	}
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f02_urlEncodingBeanPropertyMeta_lookup() {
+		var s = UrlEncodingSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var bm = bc.getBeanMeta(F02_Bean.class);
+		assertNotNull(bm);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(bpm);
+		assertNotNull(s.getUrlEncodingBeanPropertyMeta(bpm));
+		assertNotNull(s.getUrlEncodingBeanPropertyMeta(null));
+	}
+
+	@Test void f03_urlEncodingClassMeta_lookup() {
+		var s = UrlEncodingSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var cm = bc.getClassMeta(F02_Bean.class);
+		assertNotNull(s.getUrlEncodingClassMeta(cm));
 	}
 }

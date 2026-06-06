@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -84,5 +85,33 @@ class JsonAnnotation_Test extends TestBase {
 		assertEqualsAll(a1, d1, d2);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// JsonBeanPropertyMeta + JsonClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_jsonBeanPropertyMeta_default() {
+		assertNotNull(JsonBeanPropertyMeta.DEFAULT);
+	}
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f02_jsonBeanPropertyMeta_lookup() {
+		var s = JsonSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var bm = bc.getBeanMeta(F02_Bean.class);
+		assertNotNull(bm);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(bpm);
+		assertNotNull(s.getJsonBeanPropertyMeta(bpm));
+		assertNotNull(s.getJsonBeanPropertyMeta(null));
+	}
+
+	@Test void f03_jsonClassMeta_lookup() {
+		var s = JsonSerializer.DEFAULT;
+		var bc = s.getMarshallingContext();
+		var cm = bc.getClassMeta(F02_Bean.class);
+		assertNotNull(s.getJsonClassMeta(cm));
 	}
 }

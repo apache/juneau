@@ -96,4 +96,69 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 		var d = parsed.get("d");
 		assertTrue(d instanceof String, "Date should be string when writeDatesAsDatetime=false, got: " + d.getClass().getName());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// BsonApplyAnnotation tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class E02_Class {}
+	public static class E04_Class {}
+
+	@Test void e01_applyAnnotationDefault() {
+		assertNotNull(BsonApplyAnnotation.DEFAULT);
+	}
+
+	@Test void e02_applyAnnotationEmpty() {
+		assertTrue(BsonApplyAnnotation.empty(null));
+		assertTrue(BsonApplyAnnotation.empty(BsonApplyAnnotation.DEFAULT));
+		assertFalse(BsonApplyAnnotation.empty(BsonApplyAnnotation.create(E02_Class.class).build()));
+	}
+
+	@Test void e03_applyAnnotationCreate() {
+		var a = BsonApplyAnnotation.create().build();
+		assertNotNull(a);
+	}
+
+	@Test void e04_applyAnnotationCreateWithClass() {
+		var a = BsonApplyAnnotation.create(E04_Class.class).build();
+		assertNotNull(a);
+	}
+
+	@Test void e05_applyAnnotationCreateWithString() {
+		var a = BsonApplyAnnotation.create("myClass").build();
+		assertNotNull(a);
+	}
+
+	@Test void e06_applyAnnotationBuilderValue() {
+		var bson = BsonAnnotation.create().description("test").build();
+		var a = BsonApplyAnnotation.create().value(bson).build();
+		assertNotNull(a);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// BsonBeanPropertyMeta + BsonClassMeta tests.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class F02_Bean { public String name; }
+
+	@Test void f01_bsonBeanPropertyMeta_default() {
+		assertNotNull(BsonBeanPropertyMeta.DEFAULT);
+	}
+
+	@Test void f02_bsonBeanPropertyMeta_lookup() {
+		var s = BsonSerializer.DEFAULT;
+		var bm = s.getMarshallingContext().getBeanMeta(F02_Bean.class);
+		var bpm = bm.getPropertyMeta("name");
+		assertNotNull(s.getBsonBeanPropertyMeta(bpm));
+	}
+
+	@Test void f03_bsonBeanPropertyMeta_lookupNull() {
+		assertNotNull(BsonSerializer.DEFAULT.getBsonBeanPropertyMeta(null));
+	}
+
+	@Test void f04_bsonClassMeta_lookup() {
+		var s = BsonSerializer.DEFAULT;
+		var cm = s.getMarshallingContext().getClassMeta(F02_Bean.class);
+		assertNotNull(s.getBsonClassMeta(cm));
+	}
 }

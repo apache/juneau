@@ -83,9 +83,6 @@ public class BasicPart implements NameValuePair, Headerable {
 			return o2;
 		if (o instanceof NameValuePairable o3)
 			return o3.asNameValuePair();
-		if (o instanceof NameValuePair o2) {
-			return BasicPart.of(o2.getName(), o2.getValue());
-		}
 		if (o instanceof Headerable o2) {
 			var x = o2.asHeader();
 			return BasicPart.of(x.getName(), x.getValue());

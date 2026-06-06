@@ -25,6 +25,7 @@ import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.mock.MockServletRequest;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.Test;
 
@@ -226,5 +227,155 @@ class AsyncResponseProcessor_Test extends TestBase {
 
 	@Test void f02_syncNull_unchanged() throws Exception {
 		CF.get("/null").run().assertStatus(200);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// G: Pre-cancelled CompletableFuture — sync fallback hits CancellationException catch.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(asyncTimeoutMillis = "5000")
+	public static class G {
+		@RestGet("/cancelled")
+		public CompletableFuture<String> cancelled() {
+			var f = new CompletableFuture<String>();
+			f.cancel(true);  // Pre-cancel — cf.get(timeout) throws CancellationException synchronously.
+			return f;
+		}
+	}
+
+	private static final MockRestClient CG = MockRestClient.buildLax(G.class);
+
+	@Test void g01_preCancelledFuture_returns500() throws Exception {
+		// Cancellation surfaces as a 500 (sync-fallback CancellationException catch).
+		CG.get("/cancelled").run().assertStatus(500);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// H: Default timeout fallback — neither @Rest nor @RestOp supplies asyncTimeoutMillis.
+	//    Exercises the DEFAULT_ASYNC_TIMEOUT_MILLIS branch of resolveTimeoutMillis (line 307 false-branch).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class H {
+		@RestGet("/quick")
+		public CompletableFuture<String> quick() {
+			return CompletableFuture.completedFuture("default-timeout-applied");
+		}
+	}
+
+	private static final MockRestClient CH = MockRestClient.buildLax(H.class);
+
+	@Test void h01_defaultTimeout_completesNormally() throws Exception {
+		// With no annotation timeout, resolveTimeoutMillis returns DEFAULT_ASYNC_TIMEOUT_MILLIS (30s).
+		// The completed future returns immediately under that 30s ceiling.
+		CH.get("/quick").run().assertStatus(200).assertContent().isContains("default-timeout-applied");
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// I: Static helper isAsyncDispatchOwned(...) overloads — exercised directly without a real container.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_isAsyncDispatchOwned_nullSession_false() {
+		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned((org.apache.juneau.rest.RestOpSession) null));
+	}
+
+	@Test void i02_isAsyncDispatchOwned_nullRequest_false() {
+		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned((jakarta.servlet.http.HttpServletRequest) null));
+	}
+
+	@Test void i03_isAsyncDispatchOwned_attributeMissing_false() {
+		var req = MockServletRequest.create();
+		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned(req));
+	}
+
+	@Test void i04_isAsyncDispatchOwned_attributeFalse_false() {
+		var req = MockServletRequest.create();
+		req.setAttribute(AsyncResponseProcessor.ATTR_ASYNC_DISPATCH_OWNED, Boolean.FALSE);
+		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned(req));
+	}
+
+	@Test void i05_isAsyncDispatchOwned_attributeNonBoolean_false() {
+		var req = MockServletRequest.create();
+		req.setAttribute(AsyncResponseProcessor.ATTR_ASYNC_DISPATCH_OWNED, "true");  // Non-Boolean value.
+		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned(req));
+	}
+
+	@Test void i06_isAsyncDispatchOwned_attributeBooleanTrue_true() {
+		var req = MockServletRequest.create();
+		req.setAttribute(AsyncResponseProcessor.ATTR_ASYNC_DISPATCH_OWNED, Boolean.TRUE);
+		assertTrue(AsyncResponseProcessor.isAsyncDispatchOwned(req));
+	}
+
+	@Test void i07_attrConstant_hasExpectedValue() {
+		assertEquals("org.apache.juneau.rest.async.dispatchOwned", AsyncResponseProcessor.ATTR_ASYNC_DISPATCH_OWNED);
+	}
+
+	@Test void i08_defaultTimeoutConstant_isThirtySeconds() {
+		assertEquals(30_000L, AsyncResponseProcessor.DEFAULT_ASYNC_TIMEOUT_MILLIS);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// J: ResponseProcessor return code — process(...) on a non-future returns NEXT (passes through).
+	//    Exercises the "content == null" and "non-future, non-Future" branches of process(...).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class J {
+		@RestGet("/string")
+		public String string() { return "passes-through"; }
+
+		@RestGet("/empty")
+		public CompletableFuture<String> empty() {
+			return CompletableFuture.completedFuture("");
+		}
+	}
+
+	private static final MockRestClient CJ = MockRestClient.buildLax(J.class);
+
+	@Test void j01_nonFutureContent_passesThrough() throws Exception {
+		// Verifies that AsyncResponseProcessor returns NEXT on non-future content,
+		// allowing the rest of the chain (SerializedPojoProcessor) to handle it.
+		CJ.get("/string").run().assertStatus(200).assertContent().isContains("passes-through");
+	}
+
+	@Test void j02_emptyStringFuture_completesNormally() throws Exception {
+		// Empty-string content unwrapped from the future and serialized normally.
+		CJ.get("/empty").run().assertStatus(200);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// K: Failed CompletableFuture chained through CompletionStage — failed-future propagation through
+	//    thenApply still surfaces as ExecutionException in the sync fallback.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest
+	public static class K {
+		@RestGet("/chained")
+		public CompletionStage<String> chained() {
+			return CompletableFuture.supplyAsync(() -> "step1")
+				.thenApply(s -> {
+					throw new IllegalStateException("downstream-failure");
+				});
+		}
+
+		@RestGet("/withCompletionException")
+		public CompletableFuture<String> withCompletionException() {
+			var f = new CompletableFuture<String>();
+			// Wrap directly in CompletionException — exercises the unwrap/cause chain.
+			f.completeExceptionally(new CompletionException(new IllegalArgumentException("inner")));
+			return f;
+		}
+	}
+
+	private static final MockRestClient CK = MockRestClient.buildLax(K.class);
+
+	@Test void k01_chainedFailedFuture_returns500() throws Exception {
+		CK.get("/chained").run().assertStatus(500);
+	}
+
+	@Test void k02_completionExceptionWrapping_returns500() throws Exception {
+		// In the sync-fallback path, ExecutionException.getCause() is the CompletionException;
+		// the existing convertThrowable pipeline maps it to a 500.
+		CK.get("/withCompletionException").run().assertStatus(500);
 	}
 }
