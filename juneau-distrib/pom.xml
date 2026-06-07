@@ -916,17 +916,6 @@
 									<destFileName>apache-juneau-examples-rest-springboot-${project.version}.zip</destFileName>
 								</artifactItem>
 
-								<!-- juneau-my-jetty-microservice -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-my-jetty-microservice</artifactId>
-									<classifier>bin</classifier>
-									<type>zip</type>
-									<version>${project.version}</version>
-									<destFileName>apache-juneau-my-jetty-microservice-${project.version}.zip</destFileName>
-								</artifactItem>
-
 								<!-- juneau-my-springboot-microservice -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>

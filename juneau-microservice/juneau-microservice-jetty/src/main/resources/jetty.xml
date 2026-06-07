@@ -17,63 +17,68 @@
   limitations under the License.
 -->
 
-<Configure id="ExampleServer" class="org.eclipse.jetty.server.Server">
+<!--
+  Default jetty.xml shipped by juneau-microservice-jetty.
+
+  - Plain HTTP localhost dev default; one ServerConnector on $S{availablePort,10000} (the value resolves
+    from the [Jetty] section of the bundled juneau.cfg, which defaults to 10000).
+  - No resourceBase / ResourceHandler / WebAppContext filesystem mount: no static-file serving by
+    default (TODO-126 SAFE classification).  Servlets are auto-mounted from @Bean Servlet
+    contributions; consumers who need static content register their own handler via a user-supplied
+    jetty.xml on the working directory or classpath.
+  - All defaults are overridable: a consumer-supplied jetty.xml on the working directory or earlier on
+    the classpath wins, as does a @Bean JettyServerFactory in the consumer's @Configuration.
+-->
+<Configure id="JuneauJettyServer" class="org.eclipse.jetty.server.Server">
 
 	<Set name="connectors">
 		<Array type="org.eclipse.jetty.server.Connector">
 			<Item>
 				<New class="org.eclipse.jetty.server.ServerConnector">
 					<Arg>
-						<Ref refid="ExampleServer" />
+						<Ref refid="JuneauJettyServer" />
 					</Arg>
-					<Set name="port">$S{availablePort,8080}</Set>
+					<Set name="port">$S{availablePort,10000}</Set>
 				</New>
 			</Item>
 		</Array>
 	</Set>
 
-    <!-- Juneau adds its servlets in this ServletContextHandler -->
-    <New id="context" class="org.eclipse.jetty.ee11.servlet.ServletContextHandler">
-      <Set name="contextPath">/</Set>
-      <!-- Optionally specify your servlets here -->
-      <!--Call name="addServlet">
-        <Arg>org.apache.juneau.microservice.jetty.template.RootResources</Arg>
-        <Arg>/*</Arg>
-      </Call-->
-      <Set name="sessionHandler">
-        <New class="org.eclipse.jetty.ee11.servlet.SessionHandler" />
-      </Set>
-    </New>
+	<!-- Juneau adds its servlets in this ServletContextHandler -->
+	<New id="context" class="org.eclipse.jetty.ee11.servlet.ServletContextHandler">
+		<Set name="contextPath">/</Set>
+		<Set name="sessionHandler">
+			<New class="org.eclipse.jetty.ee11.servlet.SessionHandler" />
+		</Set>
+	</New>
 
-    <!-- Save ServletContextHandler for Juneau -->  
-    <Call name="setAttribute">
-        <Arg>ServletContextHandler</Arg>
-        <Arg><Ref refid="context" /></Arg>
-    </Call>
+	<!-- Save ServletContextHandler for Juneau -->
+	<Call name="setAttribute">
+		<Arg>ServletContextHandler</Arg>
+		<Arg><Ref refid="context" /></Arg>
+	</Call>
 
 	<Set name="handler">
-        <New id="collection" class="org.eclipse.jetty.server.handler.ContextHandlerCollection">
-	     	<Arg>
+		<New id="collection" class="org.eclipse.jetty.server.handler.ContextHandlerCollection">
+			<Arg>
 				<Array type="org.eclipse.jetty.server.handler.ContextHandler">
-                    <Item>
-                        <New class="org.eclipse.jetty.server.handler.ContextHandler">
-                            <!-- This is setHandler(Supplier) -->
-                            <Set name="handler"><Ref refid="context" /></Set>    
-                        </New>
-                    </Item>
 					<Item>
 						<New class="org.eclipse.jetty.server.handler.ContextHandler">
-                        	<New class="org.eclipse.jetty.server.handler.DefaultHandler" />
-                        </New>
+							<Set name="handler"><Ref refid="context" /></Set>
+						</New>
 					</Item>
-                </Array>
+					<Item>
+						<New class="org.eclipse.jetty.server.handler.ContextHandler">
+							<New class="org.eclipse.jetty.server.handler.DefaultHandler" />
+						</New>
+					</Item>
+				</Array>
 			</Arg>
 		</New>
 	</Set>
 
 	<Set name="requestLog">
 		<New id="RequestLogImpl" class="org.eclipse.jetty.server.CustomRequestLog">
-			<!-- Param 0: org.eclipse.jetty.server.RequestLogWriter -->
 			<Arg>
 				<New class="org.eclipse.jetty.server.RequestLogWriter">
 					<Set name="append">false</Set>
@@ -83,7 +88,6 @@
 					<Set name="timeZone">GMT</Set>
 				</New>
 			</Arg>
-			<!-- Param 1: String -->
 			<Arg>
 				<Get class="org.eclipse.jetty.server.CustomRequestLog" name="EXTENDED_NCSA_FORMAT" />
 			</Arg>
