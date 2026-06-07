@@ -2148,21 +2148,21 @@ const sidebars: SidebarsConfig = {
 						},
 					],
 				},
+		{
+			type: 'category',
+			label: '23. V10.0 Migration Guide',
+			collapsed: true,
+			items: [
 				{
-					type: 'category',
-					label: '23. V9.5 Migration Guide',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/23.01.V9.5-migration-guide',
-							label: '23.1. V9.5 Migration Guide',
-						},
-					],
+					type: 'doc',
+					id: 'topics/24.01.V10.0-migration-guide',
+					label: '23.1. V10.0 Migration Guide',
 				},
 			],
 		},
-		// Developer Info section
+		],
+	},
+	// Developer Info section
 		{
 			type: 'category',
 			label: 'Developer Info',
