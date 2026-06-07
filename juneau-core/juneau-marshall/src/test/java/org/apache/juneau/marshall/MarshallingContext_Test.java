@@ -1,0 +1,178 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall;
+
+import static org.apache.juneau.TestUtils.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.settings.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.testutils.pojos.*;
+import org.junit.jupiter.api.*;
+
+class BeanContext_Test extends TestBase {
+
+	MarshallingContext bc = MarshallingContext.DEFAULT;
+	MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
+
+	@AfterEach
+	void tearDown() {
+		Settings.get().clearLocal();
+	}
+
+	public interface A1 {
+		int getF1();
+		void setF1(int f1);
+	}
+
+	@Test void a01_normalCachableBean() throws ExecutableException {
+		var cm1 = bc.getClassMeta(A1.class);
+		var cm2 = bc.getClassMeta(A1.class);
+		assertSame(cm1, cm2);
+	}
+
+	interface A2 {
+		void foo(int x);
+	}
+
+	@Test void a02_lambdaExpressionsNotCached() throws ExecutableException {
+		var bc2 = MarshallingContext.DEFAULT;
+		var fi = (A2)System.out::println;
+		var cm1 = bc2.getClassMeta(fi.getClass());
+		var cm2 = bc2.getClassMeta(fi.getClass());
+		assertNotSame(cm1, cm2);
+	}
+
+	@Test void a03_proxiesNotCached() throws ExecutableException {
+		var a1 = bs.getBeanMeta(A1.class).newBean(null);
+		var cm1 = bc.getClassMeta(a1.getClass());
+		var cm2 = bc.getClassMeta(a1.getClass());
+		assertNotSame(cm1, cm2);
+	}
+
+	@Test void b01_ignoreUnknownEnumValues() {
+		var p1 = Json5Parser.DEFAULT;
+		assertThrowsWithMessage(Exception.class, "Could not resolve enum value 'UNKNOWN' on class 'org.apache.juneau.testutils.pojos.TestEnum'", () -> p1.parse("'UNKNOWN'", TestEnum.class));
+
+		var p2 = Json5Parser.create().ignoreUnknownEnumValues().build();
+		assertNull(p2.parse("'UNKNOWN'", TestEnum.class));
+	}
+
+	//====================================================================================================
+	// MarshallingContext.Builder<?> locale, mediaType, and timeZone from Settings
+	//====================================================================================================
+
+	@Test void c01_locale_fromSettings() {
+		Settings.get().setLocal("MarshallingContext.locale", "fr-CA");
+		try {
+			var bc2 = MarshallingContext.create().build();
+			assertEquals(Locale.forLanguageTag("fr-CA"), bc2.getLocale());
+		} finally {
+			Settings.get().clearLocal();
+		}
+	}
+
+	@Test void c02_locale_defaultWhenNotSet() {
+		var bc2 = MarshallingContext.create().build();
+		assertEquals(Locale.getDefault(), bc2.getLocale());
+	}
+
+	@Test void c03_mediaType_fromSettings() {
+		Settings.get().setLocal("MarshallingContext.mediaType", "application/json");
+		try {
+			var bc2 = MarshallingContext.create().build();
+			assertEquals(MediaType.of("application/json"), bc2.getMediaType());
+		} finally {
+			Settings.get().clearLocal();
+		}
+	}
+
+	@Test void c04_mediaType_nullWhenNotSet() {
+		var bc2 = MarshallingContext.create().build();
+		assertNull(bc2.getMediaType());
+	}
+
+	@Test void c05_timeZone_fromSettings() {
+		Settings.get().setLocal("MarshallingContext.timeZone", "America/New_York");
+		try {
+			var bc2 = MarshallingContext.create().build();
+			assertEquals(TimeZone.getTimeZone("America/New_York"), bc2.getTimeZone());
+		} finally {
+			Settings.get().clearLocal();
+		}
+	}
+
+	@Test void c06_timeZone_nullWhenNotSet() {
+		var bc2 = MarshallingContext.create().build();
+		assertNull(bc2.getTimeZone());
+	}
+
+	//====================================================================================================
+	// MarshallingContext.copy() - Copy constructor coverage
+	//====================================================================================================
+
+	@Test void d01_copy() {
+		// Create a MarshallingContext with some properties set to exercise the copy constructor
+		var original = MarshallingContext.create()
+			.unsortedProperties()
+			.locale(Locale.CANADA)
+			.mediaType(MediaType.JSON)
+			.timeZone(TimeZone.getTimeZone("America/New_York"))
+			.build();
+
+		// Call copy() which uses the copy constructor Builder(MarshallingContext copyFrom)
+		// This exercises lines 273-277 which convert boolean fields from MarshallingContext to Builder disable flags
+		var builder = original.copy();
+
+		// Build a new context from the copied builder
+		var copied = builder.build();
+
+		// Verify the copied context has the same values
+		assertEquals(original.getBeanClassVisibility(), copied.getBeanClassVisibility());
+		assertEquals(original.getBeanConstructorVisibility(), copied.getBeanConstructorVisibility());
+		assertEquals(original.getBeanFieldVisibility(), copied.getBeanFieldVisibility());
+		assertEquals(original.getBeanMethodVisibility(), copied.getBeanMethodVisibility());
+		assertEquals(original.getBeanDictionary(), copied.getBeanDictionary());
+		assertEquals(original.getLocale(), copied.getLocale());
+		assertEquals(original.getMediaType(), copied.getMediaType());
+		assertEquals(original.getTimeZone(), copied.getTimeZone());
+	}
+
+	//====================================================================================================
+	// MarshallingContext.Builder.impl() - Line 2372 coverage
+	//====================================================================================================
+
+	@Test
+	void e01_impl() {
+		var impl = MarshallingContext.create()
+			.unsortedProperties()
+			.locale(Locale.CANADA)
+			.build();
+
+		var builder = MarshallingContext.create()
+			.impl(impl);
+
+		// Build should return the pre-instantiated context
+		var result = builder.build();
+		assertSame(impl, result);
+	}
+}

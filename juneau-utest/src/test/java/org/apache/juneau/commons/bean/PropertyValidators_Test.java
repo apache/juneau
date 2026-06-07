@@ -18,8 +18,8 @@ package org.apache.juneau.commons.bean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.apache.juneau.*;
 
 /**
  * Tests {@link PropertyValidators} — the SPI discovery helper for {@link PropertyValidatorFactory}.
