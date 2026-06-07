@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.validation;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Wire-friendly snapshot of a single Jakarta Bean Validation constraint violation, suitable for inclusion in an

@@ -19,7 +19,6 @@ package org.apache.juneau;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -18,16 +18,13 @@ package org.apache.juneau.hjson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.TreeMap;
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.hjson.annotation.Hjson;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
-import java.util.HashMap;
-import org.apache.juneau.swap.ObjectSwap;
+import org.apache.juneau.swap.*;
 
 /**
  * Serializes POJO models to Hjson (Human JSON).

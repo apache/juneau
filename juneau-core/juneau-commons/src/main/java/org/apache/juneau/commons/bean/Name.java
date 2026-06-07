@@ -20,7 +20,8 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
-import org.apache.juneau.commons.inject.BeanStore;
+
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Specifies the parameter name for bean property mapping.

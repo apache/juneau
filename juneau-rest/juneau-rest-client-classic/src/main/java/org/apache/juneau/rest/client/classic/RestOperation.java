@@ -20,7 +20,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.http.client.utils.*;
-import org.apache.juneau.http.HttpMethod;
+import org.apache.juneau.http.*;
 
 /**
  * Aggregates the HTTP method, URL, and optional body into a single bean.

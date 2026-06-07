@@ -16,20 +16,18 @@
  */
 package org.apache.juneau.rest.config;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.bean.BeanConfig;
+import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.jena.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.json5.Json5Parser;
-import org.apache.juneau.json5.Json5Serializer;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.soap.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;

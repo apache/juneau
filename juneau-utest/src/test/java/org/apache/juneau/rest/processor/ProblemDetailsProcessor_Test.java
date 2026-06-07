@@ -16,13 +16,11 @@
  */
 package org.apache.juneau.rest.processor;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.bean.rfc7807.Problem;
-import org.apache.juneau.bean.rfc7807.ProblemException;
-import org.apache.juneau.rest.annotation.Rest;
-import org.apache.juneau.rest.annotation.RestGet;
-import org.apache.juneau.rest.mock.classic.MockRestClient;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.apache.juneau.bean.rfc7807.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.mock.classic.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link ProblemDetailsProcessor} on the success (return-from-handler) path. Throw-path coverage lives in

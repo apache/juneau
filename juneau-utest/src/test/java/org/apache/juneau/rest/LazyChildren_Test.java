@@ -22,7 +22,6 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;

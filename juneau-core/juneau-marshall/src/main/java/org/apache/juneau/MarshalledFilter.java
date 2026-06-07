@@ -25,7 +25,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.beans.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;

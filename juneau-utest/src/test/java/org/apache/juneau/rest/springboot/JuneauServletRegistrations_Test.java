@@ -19,7 +19,7 @@ package org.apache.juneau.rest.springboot;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.convention.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;

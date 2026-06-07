@@ -19,7 +19,7 @@ package org.apache.juneau.httppart;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.conversion.BasicConverter;
+import org.apache.juneau.commons.conversion.*;
 
 /**
  * An implementation of {@link HttpPartSerializer} that simply serializes everything using {@link Object#toString()}.

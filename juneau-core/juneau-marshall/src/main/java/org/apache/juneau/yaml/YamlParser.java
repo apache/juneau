@@ -19,7 +19,7 @@ package org.apache.juneau.yaml;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json.JsonParser;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 
 /**

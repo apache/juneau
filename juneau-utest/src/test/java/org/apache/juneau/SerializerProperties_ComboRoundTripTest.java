@@ -21,10 +21,9 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.serializer.Serializer.Builder;
+import org.apache.juneau.serializer.Serializer.*;
 import org.apache.juneau.xml.*;
 
 /**

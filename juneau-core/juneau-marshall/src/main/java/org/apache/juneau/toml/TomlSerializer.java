@@ -19,7 +19,7 @@ package org.apache.juneau.toml;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**

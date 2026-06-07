@@ -19,10 +19,11 @@ package org.apache.juneau.microservice.jetty;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.logging.*;
+import java.util.logging.Logger;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
-import org.slf4j.Marker;
+import org.slf4j.*;
 
 /**
  * Tests for {@link JettyLogger}.

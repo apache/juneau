@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.jena;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -28,17 +27,17 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.xml.*;
-
 import org.apache.jena.datatypes.xsd.*;
 import org.apache.jena.rdf.model.*;
 import org.apache.jena.riot.*;
+import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Session for stream-based RDF serialization (binary formats like RDF/THRIFT, RDF/PROTO).

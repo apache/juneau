@@ -19,10 +19,10 @@ package org.apache.juneau.commons.settings;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.Optional;
+import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.function.*;
 
 /**
  * A memoizer that provides convenience methods for type conversion.

@@ -19,7 +19,7 @@ package org.apache.juneau.rest.mcp;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshaller.*;
 
 /**

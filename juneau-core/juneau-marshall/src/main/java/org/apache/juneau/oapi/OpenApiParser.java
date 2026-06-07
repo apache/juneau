@@ -20,11 +20,11 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.Schema;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * OpenAPI part parser.

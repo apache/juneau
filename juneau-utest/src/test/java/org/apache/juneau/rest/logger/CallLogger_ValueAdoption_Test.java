@@ -18,11 +18,10 @@ package org.apache.juneau.rest.logger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
+import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;

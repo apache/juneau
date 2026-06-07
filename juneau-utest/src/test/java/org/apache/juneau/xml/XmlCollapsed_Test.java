@@ -18,16 +18,14 @@ package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.annotation.*;
-import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"serial", // Serialization not relevant

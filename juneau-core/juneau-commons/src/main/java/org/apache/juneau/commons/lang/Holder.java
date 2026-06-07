@@ -23,7 +23,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.reflect.ClassInfo;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * A generic mutable value wrapper.

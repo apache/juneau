@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.auth.oauth;
 
-import java.security.Principal;
+import java.security.*;
 import java.time.*;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * SPI for caching the result of an OAuth introspection or token-acquisition call.

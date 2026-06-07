@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.junit.bct.annotations;
 
+import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctConfiguration.*;
-import static org.apache.juneau.commons.lang.TriState.*;
 
 import java.util.*;
 

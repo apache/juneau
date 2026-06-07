@@ -18,18 +18,16 @@ package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.net.URI;
+import java.net.*;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 
-import org.apache.juneau.rest.auth.oauth.OAuthToken;
+import org.apache.juneau.rest.auth.oauth.*;
 
 import com.nimbusds.oauth2.sdk.*;
-import com.nimbusds.oauth2.sdk.auth.ClientSecretBasic;
-import com.nimbusds.oauth2.sdk.auth.Secret;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
-import com.nimbusds.oauth2.sdk.id.ClientID;
+import com.nimbusds.oauth2.sdk.auth.*;
+import com.nimbusds.oauth2.sdk.http.*;
+import com.nimbusds.oauth2.sdk.id.*;
 
 /**
  * Resource-owner password-credentials grant (RFC 6749 &sect;4.3) flow helper.

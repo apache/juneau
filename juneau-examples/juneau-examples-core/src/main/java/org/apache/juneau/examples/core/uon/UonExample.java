@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.examples.core.uon;
 
-import org.apache.juneau.commons.logging.Logger;
-
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.uon.*;
 

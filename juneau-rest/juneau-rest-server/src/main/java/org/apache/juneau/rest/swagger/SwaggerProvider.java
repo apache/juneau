@@ -22,14 +22,12 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.commons.inject.BeanInstantiator;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Interface for retrieving Swagger on a REST resource.

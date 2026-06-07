@@ -24,7 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;

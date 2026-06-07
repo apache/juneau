@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.http.MediaType;
 import org.junit.jupiter.api.*;
 
 /**

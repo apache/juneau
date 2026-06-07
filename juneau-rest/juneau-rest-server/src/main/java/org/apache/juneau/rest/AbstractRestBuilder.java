@@ -23,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;
@@ -43,7 +42,7 @@ import org.apache.juneau.serializer.*;
  * {@code RestAnnotation.Builder} &mdash; the override bag.  At {@link RestContext} construction time the bag is
  * turned into a synthetic, highest-priority {@code @Rest} annotation that is prepended to the resource's
  * {@code @Rest} chain, so builder-supplied values <b>take precedence</b> over the class's own
- * {@link org.apache.juneau.rest.annotation.Rest @Rest} annotation values.
+ * {@link org.apache.juneau.rest.Rest @Rest} annotation values.
  *
  * <h5 class='section'>Self type (CRTP):</h5>
  *

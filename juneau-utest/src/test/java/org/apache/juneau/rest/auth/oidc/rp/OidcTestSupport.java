@@ -22,7 +22,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.rest.auth.oauth.oidc.OidcMetadata;
+import org.apache.juneau.rest.auth.oauth.oidc.*;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.*;

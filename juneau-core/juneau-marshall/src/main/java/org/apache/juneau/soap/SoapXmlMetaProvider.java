@@ -17,7 +17,7 @@
 package org.apache.juneau.soap;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Interface for providing access to {@link SoapXmlClassMeta} and {@link SoapXmlBeanPropertyMeta} objects.

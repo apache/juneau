@@ -27,7 +27,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;

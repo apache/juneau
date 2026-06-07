@@ -16,15 +16,14 @@
  */
 package org.apache.juneau.swap;
 
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;

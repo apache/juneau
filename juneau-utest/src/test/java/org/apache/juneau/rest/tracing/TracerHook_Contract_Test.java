@@ -24,7 +24,6 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
@@ -78,7 +77,7 @@ class TracerHook_Contract_Test extends TestBase {
 		public TracerHook tracer() { return A_HOOK; }
 
 		@RestGet("/users/{id}")
-		public String getUser(@org.apache.juneau.http.annotation.Path String id) { return "user:" + id; }
+		public String getUser(@org.apache.juneau.http.Path String id) { return "user:" + id; }
 	}
 
 	private static final MockRestClient CA = MockRestClient.buildLax(A.class);

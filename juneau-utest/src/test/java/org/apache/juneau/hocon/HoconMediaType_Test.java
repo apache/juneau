@@ -22,12 +22,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Tests for HOCON media type configuration.
  */
+// TODO - Clean up references to org.apache.juneau.marshaller through helpers.
 @SuppressWarnings("unchecked")
 class HoconMediaType_Test {
 
@@ -49,9 +49,9 @@ class HoconMediaType_Test {
 	@Test
 	void j03_contentNegotiation() throws Exception {
 		var a = JsonMap.of("name", "test", "count", 42);
-		var hocon = Hocon.of(a);
+		var hocon = org.apache.juneau.marshaller.Hocon.of(a);
 		assertNotNull(hocon);
-		var b = (Map<String, Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) org.apache.juneau.marshaller.Hocon.to(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
 	}
 }

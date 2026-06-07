@@ -21,10 +21,10 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
-import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 
 /**

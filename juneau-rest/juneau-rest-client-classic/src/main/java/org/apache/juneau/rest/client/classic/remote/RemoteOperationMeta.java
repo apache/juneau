@@ -17,11 +17,11 @@
 package org.apache.juneau.rest.client.classic.remote;
 
 import static org.apache.juneau.Constants.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
-import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -31,7 +31,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.rest.common.utils.*;

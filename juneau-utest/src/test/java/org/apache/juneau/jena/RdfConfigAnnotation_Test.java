@@ -20,9 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.XVar;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 

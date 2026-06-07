@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest;
 
-import org.apache.juneau.rest.metrics.MetricsRecorder;
+import org.apache.juneau.rest.metrics.*;
 
 /**
  * Static literals for {@code juneau-rest-server}: annotation attribute name constants used for
@@ -39,14 +39,14 @@ public final class RestServerConstants {
 	/**
 	 * The {@code "allowedParserOptions"} annotation attribute name — used in {@code noInherit} matching.
 	 *
-	 * @see org.apache.juneau.rest.annotation.Rest#allowedParserOptions()
+	 * @see org.apache.juneau.rest.Rest#allowedParserOptions()
 	 */
 	public static final String PROPERTY_allowedParserOptions = "allowedParserOptions";
 
 	/**
 	 * The {@code "allowedSerializerOptions"} annotation attribute name — used in {@code noInherit} matching.
 	 *
-	 * @see org.apache.juneau.rest.annotation.Rest#allowedSerializerOptions()
+	 * @see org.apache.juneau.rest.Rest#allowedSerializerOptions()
 	 */
 	public static final String PROPERTY_allowedSerializerOptions = "allowedSerializerOptions";
 
@@ -76,7 +76,7 @@ public final class RestServerConstants {
 	 * parent resource into deferred (first-invocation) construction of its {@code @Rest(children=...)} sub-resources
 	 * instead of the default eager construction at startup.
 	 *
-	 * @see org.apache.juneau.rest.annotation.Rest#lazyChildren()
+	 * @see org.apache.juneau.rest.Rest#lazyChildren()
 	 */
 	public static final String PROPERTY_lazyChildren = "lazyChildren";
 
@@ -236,8 +236,8 @@ public final class RestServerConstants {
 	 * {@code "true"} opts the resource in and requires a wired backend (startup-fail if missing); {@code "false"} short-circuits
 	 * the observability block entirely; {@code ""} (default) inherits / uses the existing silent-no-op behavior.
 	 *
-	 * @see org.apache.juneau.rest.annotation.Rest#observability()
-	 * @see org.apache.juneau.rest.annotation.RestOp#observability()
+	 * @see org.apache.juneau.rest.Rest#observability()
+	 * @see org.apache.juneau.rest.RestOp#observability()
 	 */
 	public static final String PROPERTY_observability = "observability";
 
@@ -246,7 +246,7 @@ public final class RestServerConstants {
 	 * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Empty string (default) uses
 	 * the recorder's own default name derivation.
 	 *
-	 * @see org.apache.juneau.rest.annotation.RestOp#metricName()
+	 * @see org.apache.juneau.rest.RestOp#metricName()
 	 */
 	public static final String PROPERTY_metricName = "metricName";
 
@@ -256,7 +256,7 @@ public final class RestServerConstants {
 	 * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means
 	 * no additional tags.
 	 *
-	 * @see org.apache.juneau.rest.annotation.RestOp#metricTags()
+	 * @see org.apache.juneau.rest.RestOp#metricTags()
 	 */
 	public static final String PROPERTY_metricTags = "metricTags";
 

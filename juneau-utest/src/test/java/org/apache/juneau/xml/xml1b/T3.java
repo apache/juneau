@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.xml.xml1b;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.*;
+import org.apache.juneau.xml.*;
 
 @Marshalled
 public class T3 {

@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.microservice.jetty;
 
-import jakarta.servlet.Servlet;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.microservice.*;
 
-import org.apache.juneau.commons.inject.BasicBeanStore;
-import org.apache.juneau.commons.inject.WritableBeanStore;
-import org.apache.juneau.microservice.Microservice;
+import jakarta.servlet.*;
 
 /**
  * Zero-config convenience launcher for a Jetty-backed Juneau microservice.
@@ -50,7 +49,7 @@ import org.apache.juneau.microservice.Microservice;
  * <p>
  * The supplied root servlet is registered as a {@code @Bean Servlet} in an external bean store and
  * auto-mounted by {@link org.apache.juneau.microservice.jetty.JettyServerComponent JettyServerComponent}
- * at the path declared by its {@link org.apache.juneau.rest.annotation.Rest @Rest} annotation.  Consumers
+ * at the path declared by its {@link org.apache.juneau.rest.Rest @Rest} annotation.  Consumers
  * who want full control over the bean store / configuration classes / listener wiring should call
  * {@link Microservice#create()} directly &mdash; this facade is a thin convenience over that builder.
  *
@@ -67,9 +66,9 @@ public final class JettyMicroservice {
 	 * <p>
 	 * Equivalent to calling {@link #run(String[], Servlet, boolean) run(args, rootServlet, true)}.
 	 *
-	 * @param args         The {@code main(String[])} arguments.  Forwarded to {@link Microservice.Builder#args(String...)}.
+	 * @param args         The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
 	 * @param rootServlet  The root REST servlet (typically annotated with
-	 *                     {@link org.apache.juneau.rest.annotation.Rest @Rest}).
+	 *                     {@link org.apache.juneau.rest.Rest @Rest}).
 	 * @return The started {@link Microservice} instance.  Callers typically chain {@link Microservice#join()}.
 	 * @throws Exception Error occurred during bootstrap.
 	 */
@@ -90,16 +89,17 @@ public final class JettyMicroservice {
 	 * returned microservice has not yet been {@link Microservice#join() joined}; callers wanting the
 	 * standard "start and block forever" loop should chain {@code .join()}.
 	 *
-	 * @param args          The {@code main(String[])} arguments.  Forwarded to {@link Microservice.Builder#args(String...)}.
+	 * @param args          The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
 	 * @param rootServlet   The root REST servlet (typically annotated with
-	 *                      {@link org.apache.juneau.rest.annotation.Rest @Rest}).
+	 *                      {@link org.apache.juneau.rest.Rest @Rest}).
 	 * @param startConsole  If <jk>true</jk>, also starts the interactive console thread via
 	 *                      {@link Microservice#startConsole()}.
 	 * @return The started {@link Microservice} instance.
 	 * @throws Exception Error occurred during bootstrap.
 	 */
 	@SuppressWarnings({
-		"java:S112" // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
+		"java:S112", // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
+		"resource"   // beanStore lifetime is managed by the returned Microservice; not an independent resource.
 	})
 	public static Microservice run(String[] args, Servlet rootServlet, boolean startConsole) throws Exception {
 		var beanStore = new BasicBeanStore();
@@ -117,7 +117,7 @@ public final class JettyMicroservice {
 	 * restrictive &mdash; e.g. multiple {@code @Bean Servlet} contributions, custom
 	 * {@code MicroserviceListener}s, or a parent bean store.
 	 *
-	 * @param args            The {@code main(String[])} arguments.  Forwarded to {@link Microservice.Builder#args(String...)}.
+	 * @param args            The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
 	 * @param beanStore       The bean store to use for dependency injection.  Pre-populated bean entries
 	 *                        ({@code @Bean Servlet}, {@code MicroserviceListener}, etc.) are picked up by
 	 *                        {@link JettyConfiguration} and the microservice runtime.

@@ -19,13 +19,12 @@ package org.apache.juneau.rest.processor;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.http.HttpPart;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link ResponseBeanProcessor} — the processor that handles {@link Response @Response}-annotated

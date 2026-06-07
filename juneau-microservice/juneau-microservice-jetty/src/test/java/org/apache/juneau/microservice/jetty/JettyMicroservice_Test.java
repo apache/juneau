@@ -18,22 +18,17 @@ package org.apache.juneau.microservice.jetty;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.stream.Collectors;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.stream.*;
 
-import org.apache.juneau.microservice.Microservice;
-import org.apache.juneau.rest.annotation.Rest;
-import org.apache.juneau.rest.annotation.RestGet;
-import org.apache.juneau.rest.servlet.BasicRestServlet;
-import org.eclipse.jetty.server.ServerConnector;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.microservice.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.servlet.*;
+import org.eclipse.jetty.server.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Boot-and-shutdown smoke test for {@link JettyMicroservice}.
@@ -71,6 +66,9 @@ class JettyMicroservice_Test {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // ms is a server-lifetime resource stopped in the finally block; try-with-resources is not applicable.
+	})
 	void runStartsServerServesRequestAndStops() throws Exception {
 		// Pre-create the working-dir logs/ that the bundled jetty.xml's CustomRequestLog writes to.
 		Files.createDirectories(Path.of("logs"));

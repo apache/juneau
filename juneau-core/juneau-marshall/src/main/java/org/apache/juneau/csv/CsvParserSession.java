@@ -16,15 +16,16 @@
  */
 package org.apache.juneau.csv;
 
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 

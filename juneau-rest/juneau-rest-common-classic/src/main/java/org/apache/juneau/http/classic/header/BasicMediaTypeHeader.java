@@ -16,15 +16,14 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.http.NameValuePair;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.json5.Json5Serializer;
+import org.apache.juneau.json5.*;
 
 /**
  * Category of headers that consist of a single parameterized string value.

@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json.JsonSerializer;
+import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;
 
 /**

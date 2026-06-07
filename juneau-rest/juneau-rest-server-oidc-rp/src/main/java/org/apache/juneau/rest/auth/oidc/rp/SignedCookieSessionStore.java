@@ -23,7 +23,7 @@ import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.rest.auth.ClaimsPrincipal;
+import org.apache.juneau.rest.auth.*;
 
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.*;

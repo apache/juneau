@@ -18,7 +18,7 @@ package org.apache.juneau.utest.utils;
 
 import java.time.*;
 
-import org.apache.juneau.commons.time.TimeProvider;
+import org.apache.juneau.commons.time.*;
 
 /**
  * A fake time provider for testing that always returns UTC timezone and a fixed time.

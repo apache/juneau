@@ -19,9 +19,7 @@ package org.apache.juneau.jena;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.jena.annotation.*;
-import org.apache.juneau.commons.bean.BeanMeta;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on beans specific to the RDF serializers and parsers pulled from the {@link Rdf @Rdf} annotation on the

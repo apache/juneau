@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -35,8 +35,7 @@ import org.junit.jupiter.api.*;
  *  - toArray / toCollection internal paths via different target types
  */
 @SuppressWarnings({
-	"unchecked", // Parser returns raw types; explicit casts required for typed assertions
-	"rawtypes",
+	"unchecked",   // Parser returns raw types; explicit casts required for typed assertions
 	"java:S5961"
 })
 class ParquetParserSession_Test extends TestBase {

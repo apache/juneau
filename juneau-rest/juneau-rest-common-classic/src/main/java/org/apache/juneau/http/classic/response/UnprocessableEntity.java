@@ -23,9 +23,9 @@ import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.Header;
-import org.apache.juneau.commons.annotation.Schema;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.classic.header.*;
 
 /**

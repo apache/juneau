@@ -17,11 +17,10 @@
 package org.apache.juneau.rest.vars;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Tag;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.Tag;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

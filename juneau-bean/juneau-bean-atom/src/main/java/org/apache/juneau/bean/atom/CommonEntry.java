@@ -18,12 +18,12 @@ package org.apache.juneau.bean.atom;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 
 import java.util.*;
 
 import org.apache.juneau.commons.time.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Base class for feed-level and entry-level Atom elements.

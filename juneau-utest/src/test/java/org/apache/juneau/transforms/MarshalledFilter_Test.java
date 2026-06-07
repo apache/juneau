@@ -20,8 +20,8 @@ import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
+import org.junit.jupiter.api.*;
 
 class MarshalledFilter_Test extends TestBase {
 

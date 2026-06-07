@@ -24,9 +24,9 @@ import java.util.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#timeZoneFormat(TimeZoneFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#timeZoneFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#timeZoneFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#timeZoneFormat()} to control how time-zone
+ * {@link org.apache.juneau.Marshalled#timeZoneFormat()},
+ * {@link org.apache.juneau.MarshalledProp#timeZoneFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#timeZoneFormat()} to control how time-zone
  * identifiers are written to and read from the wire.
  *
  * <p>

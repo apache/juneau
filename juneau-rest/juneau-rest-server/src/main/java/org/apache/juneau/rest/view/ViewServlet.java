@@ -18,9 +18,8 @@ package org.apache.juneau.rest.view;
 
 import java.io.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**

@@ -21,12 +21,11 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.function.Supplier;
+import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.json5.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 
 /**

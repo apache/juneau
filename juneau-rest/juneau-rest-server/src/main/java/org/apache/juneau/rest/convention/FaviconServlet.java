@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.convention;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**

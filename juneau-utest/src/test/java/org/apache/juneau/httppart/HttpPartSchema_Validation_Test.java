@@ -24,8 +24,8 @@ import java.math.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.BasicRuntimeException;
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.commons.httppart.SchemaValidationException;
 import org.junit.jupiter.api.*;
 
 /**

@@ -28,7 +28,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.commons.function.ThrowingSupplier;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
 

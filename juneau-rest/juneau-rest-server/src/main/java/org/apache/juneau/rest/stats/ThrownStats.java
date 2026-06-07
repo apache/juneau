@@ -23,8 +23,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.BeanInstantiator;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Represents an entry in {@link ThrownStore}.

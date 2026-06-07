@@ -35,4 +35,4 @@
 // @formatter:on
 package org.apache.juneau.bean.atom;
 
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.*;

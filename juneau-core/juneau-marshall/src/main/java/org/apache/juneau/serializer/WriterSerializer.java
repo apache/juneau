@@ -22,9 +22,10 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.nio.charset.*;
+
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.logging.Logger;
-import org.apache.juneau.json5.Json5Serializer;
+import org.apache.juneau.commons.logging.*;
+import org.apache.juneau.json5.*;
 
 /**
  * Subclass of {@link Serializer} for character-based serializers.

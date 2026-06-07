@@ -18,7 +18,7 @@ package org.apache.juneau.testutils.pojos;
 
 import static org.apache.juneau.utest.utils.Constants.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 @Marshalled(as=MarshalledAs.STRING)
 public class ImplicitSwappedObject {

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Server capability flags for tools.

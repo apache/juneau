@@ -24,13 +24,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
 
 import jakarta.servlet.http.*;

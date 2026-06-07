@@ -23,8 +23,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
@@ -56,7 +55,6 @@ import org.junit.jupiter.api.*;
  *    UON, or CSV parser sessions; all override and call their internal {@code parseAnything}.
  */
 @SuppressWarnings({
-	"rawtypes",
 	"unchecked",
 	"java:S5778", /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */
 	"java:S5961"  /* large coverage-driven test class is intentional */

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Base64 blob body for {@code resources/read} results or embedded resource content.

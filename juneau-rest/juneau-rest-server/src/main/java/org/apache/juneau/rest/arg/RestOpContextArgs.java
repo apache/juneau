@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.rest.arg;
 
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.parser.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.serializer.*;
 
 /**

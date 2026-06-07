@@ -452,7 +452,7 @@ public @interface BeanConfig {
 	 *
 	 * <p>
 	 * If <js>"true"</js>, bean property values are validated against the constraints declared by
-	 * {@link org.apache.juneau.commons.annotation.Schema @Schema} annotations on those properties.  Validation runs
+	 * {@link org.apache.juneau.commons.Schema @Schema} annotations on those properties.  Validation runs
 	 * during both <b>parsing</b> (value set on the bean) and <b>serialization</b> (value read from the bean).
 	 *
 	 * <p>

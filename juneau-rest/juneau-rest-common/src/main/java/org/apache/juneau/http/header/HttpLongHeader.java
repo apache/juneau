@@ -17,8 +17,8 @@
 package org.apache.juneau.http.header;
 
 
-import static org.apache.juneau.commons.utils.StringUtils.parseLong;
-import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;

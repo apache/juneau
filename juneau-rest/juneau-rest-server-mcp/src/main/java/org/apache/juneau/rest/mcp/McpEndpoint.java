@@ -17,11 +17,9 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BasicBeanStore;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.http.annotation.Content;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.http.Content;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Mixin interface that exposes an MCP JSON-RPC endpoint at {@code POST /mcp} on any Juneau REST resource.

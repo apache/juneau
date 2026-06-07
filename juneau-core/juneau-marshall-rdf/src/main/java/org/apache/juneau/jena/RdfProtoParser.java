@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.jena;
 
-import java.io.InputStream;
+import java.io.*;
 
 /**
  * Stream-based RDF parser for RDF/PROTO binary format.

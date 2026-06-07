@@ -22,9 +22,8 @@ import static org.apache.juneau.http.classic.header.ContentType.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.json5.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;

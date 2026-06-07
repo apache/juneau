@@ -21,15 +21,13 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.bean.openapi3.OpenApi;
-import org.apache.juneau.commons.inject.BeanInstantiator;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.bean.openapi3.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Interface for retrieving an {@link OpenApi} 3.1 document from a REST resource.

@@ -19,10 +19,8 @@ package org.apache.juneau.rest.staticfile;
 import java.util.*;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**

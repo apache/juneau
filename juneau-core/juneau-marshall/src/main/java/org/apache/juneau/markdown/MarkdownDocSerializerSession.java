@@ -21,10 +21,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * Session object for {@link MarkdownDocSerializer}.

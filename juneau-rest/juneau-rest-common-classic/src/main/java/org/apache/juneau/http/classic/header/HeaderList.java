@@ -27,11 +27,12 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.http.util.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.HttpHeaders;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * A simple list of HTTP headers with various convenience methods.
@@ -320,8 +321,8 @@ public class HeaderList extends ControlledArrayList<Header> {
 	 * Gets a header representing all of the header values with the given name.
 	 *
 	 * <p>
-	 * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name()} or
-	 * 	{@link org.apache.juneau.http.annotation.Header#value()} annotations.
+	 * Same as {@link #get(String, Class)} but the header name is pulled from the {@link org.apache.juneau.http.Header#name()} or
+	 * 	{@link org.apache.juneau.http.Header#value()} annotations.
 	 *
 	 * <h5 class='figure'>Example</h5>
 	 * <p class='bjava'>

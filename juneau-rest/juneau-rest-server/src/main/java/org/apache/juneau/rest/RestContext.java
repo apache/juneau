@@ -16,28 +16,22 @@
  */
 package org.apache.juneau.rest;
 
-import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.inject.BasicBeanStore;
-import org.apache.juneau.commons.inject.Bean;
-import org.apache.juneau.commons.inject.BeanAnnotation;
-import org.apache.juneau.commons.inject.BeanInstantiator;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.commons.inject.Value;
-import org.apache.juneau.commons.inject.WritableBeanStore;
-
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.PredicateUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
+import static org.apache.juneau.commons.utils.Utils.eq;
+import static org.apache.juneau.rest.RestOpAnnotation.*;
+import static org.apache.juneau.rest.RestServerConstants.*;
 import static org.apache.juneau.rest.processor.ResponseProcessor.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
@@ -48,40 +42,41 @@ import java.lang.reflect.Method;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bean.rfc7807.Problem;
-import org.apache.juneau.bean.rfc7807.adapter.ProblemAdapters;
 import org.apache.juneau.bean.openapi3.OpenApi;
+import org.apache.juneau.bean.rfc7807.*;
+import org.apache.juneau.bean.rfc7807.adapter.*;
 import org.apache.juneau.bean.swagger.Swagger;
-import org.apache.juneau.json.*;
-import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.ParameterInfo;
 import org.apache.juneau.commons.settings.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.Response;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.debug.*;
@@ -89,21 +84,19 @@ import org.apache.juneau.rest.debug.format.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.metrics.*;
-import org.apache.juneau.rest.servlet.RestMixin;
-import org.apache.juneau.rest.servlet.RestResource;
-import org.apache.juneau.rest.servlet.RestServlet;
+import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.rrpc.*;
+import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.stats.*;
-import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.tracing.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.rest.validation.*;
 import org.apache.juneau.rest.vars.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
@@ -1374,7 +1367,7 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestDestroy @RestDestroy} and their invokers.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestDestroy @RestDestroy} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1407,7 +1400,7 @@ public class RestContext extends Context {
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> encodersBuilder.get().build());
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestEndCall @RestEndCall} and their invokers.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestEndCall @RestEndCall} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1561,7 +1554,7 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostCall @RestPostCall}.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestPostCall @RestPostCall}.
 	 */
 	private final Memoizer<MethodList> postCallMethods = memoizer(() -> {
 		var bs = beanStore();
@@ -1593,7 +1586,7 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostInit @RestPostInit}{@code (childFirst=true)} and their invokers.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestPostInit @RestPostInit}{@code (childFirst=true)} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1605,7 +1598,7 @@ public class RestContext extends Context {
 	}));
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPostInit @RestPostInit} and their invokers.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestPostInit @RestPostInit} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1617,7 +1610,7 @@ public class RestContext extends Context {
 	}));
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestPreCall @RestPreCall}.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestPreCall @RestPreCall}.
 	 */
 	private final Memoizer<MethodList> preCallMethods = memoizer(() -> {
 		var bs = beanStore();
@@ -1802,7 +1795,7 @@ public class RestContext extends Context {
 	private final Memoizer<SerializerSet> serializers = memoizer(() -> serializersBuilder.get().build());
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.annotation.RestStartCall @RestStartCall} and their invokers.
+	 * Methods annotated with {@link org.apache.juneau.rest.RestStartCall @RestStartCall} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1988,7 +1981,7 @@ public class RestContext extends Context {
 
 	/**
 	 * The {@link RestOperations} for this resource — all {@link RestOpContext} instances built from
-	 * methods annotated with {@link org.apache.juneau.rest.annotation.RestOp @RestOp} (and related).
+	 * methods annotated with {@link org.apache.juneau.rest.RestOp @RestOp} (and related).
 	 *
 	 * <p>
 	 * Eagerly initialized in the constructor (via an explicit {@code .get()} call inside the try-catch block)
@@ -2950,9 +2943,9 @@ public class RestContext extends Context {
 	/**
 	 * For a {@linkplain #isMixinContext() mixin sub-context}, returns the <b>host</b> resource class's
 	 * class-level annotation infos (host class chain, in parent-to-child order) so a mixin operation can
-	 * inherit the host's class-level {@link org.apache.juneau.annotation.ContextApply @ContextApply} config
-	 * (e.g. {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig},
-	 * {@link org.apache.juneau.serializer.annotation.SerializerConfig @SerializerConfig}).
+	 * inherit the host's class-level {@link org.apache.juneau.ContextApply @ContextApply} config
+	 * (e.g. {@link org.apache.juneau.html.HtmlDocConfig @HtmlDocConfig},
+	 * {@link org.apache.juneau.serializer.SerializerConfig @SerializerConfig}).
 	 *
 	 * <p>
 	 * Used by {@link RestOpContext.Builder} to prepend the host's class-level config annotations <i>ahead of</i>
@@ -4008,7 +4001,7 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * <p>
-	 * Per-operation overrides from {@link org.apache.juneau.rest.annotation.RestOp#observability()} (and verb
+	 * Per-operation overrides from {@link org.apache.juneau.rest.RestOp#observability()} (and verb
 	 * annotations) take precedence over this value; they are resolved in {@link RestOpContext}.
 	 *
 	 * @return The resolved {@code @Rest(observability)} string, or {@code null} when not set.

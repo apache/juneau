@@ -19,8 +19,8 @@ package org.apache.juneau.rest.client.jetty;
 import java.io.*;
 import java.util.concurrent.*;
 
-import org.eclipse.jetty.client.*;
 import org.apache.juneau.rest.client.*;
+import org.eclipse.jetty.client.*;
 
 /**
  * {@link HttpTransport} implementation backed by Jetty 12 {@link HttpClient}.

@@ -17,7 +17,6 @@
 package org.apache.juneau.hocon;
 
 import java.io.*;
-
 import java.util.regex.*;
 
 /**

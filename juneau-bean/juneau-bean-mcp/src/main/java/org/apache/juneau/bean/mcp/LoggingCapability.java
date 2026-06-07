@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Server logging capability marker (structure may grow with the spec).

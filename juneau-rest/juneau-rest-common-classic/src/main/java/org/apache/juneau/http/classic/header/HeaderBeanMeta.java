@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.reflect.*;
@@ -30,7 +30,7 @@ import org.apache.juneau.httppart.*;
  * Holds metadata about header beans (POJOs that get serialized as HTTP headers).
  *
  * <p>
- * Header beans are typically annotated with {@link org.apache.juneau.http.annotation.Header @Header} although it's not an
+ * Header beans are typically annotated with {@link org.apache.juneau.http.Header @Header} although it's not an
  * absolute requirement.
  *
  * <p>
@@ -103,7 +103,7 @@ public class HeaderBeanMeta<T> {
 			.orElse(null);
 		// @formatter:on
 
-		this.schema = HttpPartSchema.create(org.apache.juneau.http.annotation.Header.class, type);
+		this.schema = HttpPartSchema.create(org.apache.juneau.http.Header.class, type);
 	}
 
 	/**
@@ -125,8 +125,8 @@ public class HeaderBeanMeta<T> {
 	 *
 	 * @param name
 	 * 	The header name.
-	 * 	<br>If <jk>null</jk>, uses the value pulled from the {@link org.apache.juneau.http.annotation.Header#name() @Header(name)} or
-	 * 	{@link org.apache.juneau.http.annotation.Header#value() @Header(value)} annotations.
+	 * 	<br>If <jk>null</jk>, uses the value pulled from the {@link org.apache.juneau.http.Header#name() @Header(name)} or
+	 * 	{@link org.apache.juneau.http.Header#value() @Header(value)} annotations.
 	 * @param value
 	 * 	The header value.
 	 * @return A newly constructed bean.
@@ -172,7 +172,7 @@ public class HeaderBeanMeta<T> {
 	 * Returns schema information about this header.
 	 *
 	 * <p>
-	 * This is information pulled from {@link org.apache.juneau.http.annotation.Header @Header} annotation on the class.
+	 * This is information pulled from {@link org.apache.juneau.http.Header @Header} annotation on the class.
 	 *
 	 * @return The schema information.
 	 */

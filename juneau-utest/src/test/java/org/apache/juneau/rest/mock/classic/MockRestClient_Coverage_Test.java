@@ -15,8 +15,7 @@ package org.apache.juneau.rest.mock.classic;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.annotation.RestDelete;
+import org.apache.juneau.rest.*;
 import org.junit.jupiter.api.*;
 
 /**

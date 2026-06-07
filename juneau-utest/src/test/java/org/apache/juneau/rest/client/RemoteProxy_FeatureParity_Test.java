@@ -21,14 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.HttpParts;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.header.HttpHeaderList;
-import org.apache.juneau.http.part.PartList;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

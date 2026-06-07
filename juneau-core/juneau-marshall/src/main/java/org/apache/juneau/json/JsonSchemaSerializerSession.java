@@ -17,10 +17,11 @@
 package org.apache.juneau.json;
 
 import java.io.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.

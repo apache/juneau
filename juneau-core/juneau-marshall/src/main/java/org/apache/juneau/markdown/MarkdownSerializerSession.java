@@ -21,16 +21,15 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.time.*;
-import java.time.temporal.TemporalAccessor;
+import java.time.temporal.*;
 import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanMapEntry;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object for {@link MarkdownSerializer}.

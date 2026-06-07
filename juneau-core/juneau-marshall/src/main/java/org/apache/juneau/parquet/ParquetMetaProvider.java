@@ -17,7 +17,7 @@
 package org.apache.juneau.parquet;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Interface for providing access to {@link ParquetClassMeta} and {@link ParquetBeanPropertyMeta} objects.

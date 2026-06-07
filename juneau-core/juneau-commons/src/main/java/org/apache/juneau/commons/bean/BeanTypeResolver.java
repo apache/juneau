@@ -16,10 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
-import org.apache.juneau.commons.reflect.AnnotationInfo;
-import org.apache.juneau.commons.reflect.AnnotationProvider;
-import org.apache.juneau.commons.reflect.ClassInfo;
-import org.apache.juneau.commons.reflect.TypeVariables;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Bean-modeling SPI seam that exposes the type-resolution operations the bean-property

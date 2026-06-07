@@ -33,11 +33,11 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.lang.Holder;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.commons.inject.*;
 
 /**
  * Encapsulates all access to the properties of a bean class (like a souped-up {@link BeanInfo}).

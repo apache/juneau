@@ -18,22 +18,20 @@ package org.apache.juneau.rest.auth.oauth;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.io.IOException;
-import java.net.URI;
-import java.security.Principal;
+import java.io.*;
+import java.net.*;
+import java.security.*;
 import java.time.*;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import org.apache.juneau.rest.auth.*;
 
 import com.nimbusds.oauth2.sdk.*;
-import com.nimbusds.oauth2.sdk.auth.ClientSecretBasic;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
-import com.nimbusds.oauth2.sdk.id.ClientID;
-import com.nimbusds.oauth2.sdk.token.AccessToken;
-import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
+import com.nimbusds.oauth2.sdk.auth.*;
+import com.nimbusds.oauth2.sdk.http.*;
+import com.nimbusds.oauth2.sdk.id.*;
+import com.nimbusds.oauth2.sdk.token.*;
 
 /**
  * {@link TokenValidator} that validates opaque OAuth 2.0 access tokens via the

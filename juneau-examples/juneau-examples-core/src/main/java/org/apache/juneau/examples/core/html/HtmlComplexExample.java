@@ -16,10 +16,9 @@
  */
 package org.apache.juneau.examples.core.html;
 
-import org.apache.juneau.commons.logging.Logger;
-
 import java.util.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.html.*;
 

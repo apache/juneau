@@ -17,7 +17,6 @@
 package org.apache.juneau.soap;
 
 import org.apache.juneau.*;
-import org.apache.juneau.soap.annotation.*;
 
 /**
  * Metadata on classes specific to the SOAP/XML serializers and parsers pulled from the {@link SoapXml @SoapXml} annotation on

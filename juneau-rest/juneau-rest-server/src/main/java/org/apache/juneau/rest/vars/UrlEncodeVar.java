@@ -18,8 +18,8 @@ package org.apache.juneau.rest.vars;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * URL-encoding variable resolver.

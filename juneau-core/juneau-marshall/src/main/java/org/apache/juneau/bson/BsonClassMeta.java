@@ -19,7 +19,7 @@ package org.apache.juneau.bson;
 import org.apache.juneau.*;
 
 /**
- * Metadata on classes specific to the BSON serializers and parsers pulled from the {@link org.apache.juneau.bson.annotation.Bson @Bson} annotation on
+ * Metadata on classes specific to the BSON serializers and parsers pulled from the {@link org.apache.juneau.bson.Bson @Bson} annotation on
  * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>

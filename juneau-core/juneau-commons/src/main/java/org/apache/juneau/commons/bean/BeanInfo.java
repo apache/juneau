@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.commons.bean;
 
-import java.lang.reflect.Type;
-import java.util.Optional;
+import java.lang.reflect.*;
+import java.util.*;
 
-import org.apache.juneau.commons.reflect.ClassInfoTyped;
-import org.apache.juneau.commons.reflect.ExecutableException;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Bean-modeling SPI seam that exposes the type-classification surface the bean-runtime types

@@ -16,11 +16,6 @@
  */
 package org.apache.juneau.http.classic;
 
-import org.apache.juneau.commons.http.MediaRanges;
-import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.http.StringRanges;
-import org.apache.juneau.http.header.EntityTag;
-import org.apache.juneau.http.header.EntityTags;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -30,11 +25,66 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
+import org.apache.http.NameValuePair;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.Accept;
+import org.apache.juneau.http.classic.header.AcceptCharset;
+import org.apache.juneau.http.classic.header.AcceptEncoding;
+import org.apache.juneau.http.classic.header.AcceptLanguage;
+import org.apache.juneau.http.classic.header.AcceptRanges;
+import org.apache.juneau.http.classic.header.Age;
+import org.apache.juneau.http.classic.header.Allow;
+import org.apache.juneau.http.classic.header.Authorization;
+import org.apache.juneau.http.classic.header.CacheControl;
+import org.apache.juneau.http.classic.header.ClientVersion;
+import org.apache.juneau.http.classic.header.Connection;
+import org.apache.juneau.http.classic.header.ContentDisposition;
+import org.apache.juneau.http.classic.header.ContentEncoding;
+import org.apache.juneau.http.classic.header.ContentLanguage;
+import org.apache.juneau.http.classic.header.ContentLength;
+import org.apache.juneau.http.classic.header.ContentLocation;
+import org.apache.juneau.http.classic.header.ContentRange;
+import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.header.Date;
+import org.apache.juneau.http.classic.header.Debug;
+import org.apache.juneau.http.classic.header.ETag;
+import org.apache.juneau.http.classic.header.Expect;
+import org.apache.juneau.http.classic.header.Expires;
+import org.apache.juneau.http.classic.header.Forwarded;
+import org.apache.juneau.http.classic.header.From;
+import org.apache.juneau.http.classic.header.Host;
+import org.apache.juneau.http.classic.header.IfMatch;
+import org.apache.juneau.http.classic.header.IfModifiedSince;
+import org.apache.juneau.http.classic.header.IfNoneMatch;
+import org.apache.juneau.http.classic.header.IfRange;
+import org.apache.juneau.http.classic.header.IfUnmodifiedSince;
+import org.apache.juneau.http.classic.header.LastModified;
+import org.apache.juneau.http.classic.header.Location;
+import org.apache.juneau.http.classic.header.MaxForwards;
+import org.apache.juneau.http.classic.header.NoTrace;
+import org.apache.juneau.http.classic.header.Origin;
+import org.apache.juneau.http.classic.header.Pragma;
+import org.apache.juneau.http.classic.header.ProxyAuthenticate;
+import org.apache.juneau.http.classic.header.ProxyAuthorization;
+import org.apache.juneau.http.classic.header.Range;
+import org.apache.juneau.http.classic.header.Referer;
+import org.apache.juneau.http.classic.header.RetryAfter;
+import org.apache.juneau.http.classic.header.Server;
+import org.apache.juneau.http.classic.header.TE;
+import org.apache.juneau.http.classic.header.Thrown;
+import org.apache.juneau.http.classic.header.Trailer;
+import org.apache.juneau.http.classic.header.TransferEncoding;
+import org.apache.juneau.http.classic.header.Upgrade;
+import org.apache.juneau.http.classic.header.UserAgent;
+import org.apache.juneau.http.classic.header.Vary;
+import org.apache.juneau.http.classic.header.Via;
+import org.apache.juneau.http.classic.header.Warning;
+import org.apache.juneau.http.classic.header.WwwAuthenticate;
 import org.apache.juneau.http.classic.part.*;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 
@@ -1332,8 +1382,8 @@ public class HttpHeaders {
 	 * Creates a new {@link Header} of the specified type.
 	 *
 	 * <p>
-	 * Same as {@link #header(Class, String, Object)} but the header name is pulled from the {@link org.apache.juneau.http.annotation.Header#name() @Header(name)} or
-	 * 	{@link org.apache.juneau.http.annotation.Header#value() @Header(value)} annotations.
+	 * Same as {@link #header(Class, String, Object)} but the header name is pulled from the {@link org.apache.juneau.http.Header#name() @Header(name)} or
+	 * 	{@link org.apache.juneau.http.Header#value() @Header(value)} annotations.
 	 *
 	 * @param <T> The header implementation class.
 	 * @param type The header implementation class.

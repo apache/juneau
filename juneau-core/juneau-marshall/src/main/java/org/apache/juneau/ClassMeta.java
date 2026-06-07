@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.ClassMeta.Category.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -31,18 +30,17 @@ import java.net.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
-import java.util.List;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.swap.*;
 

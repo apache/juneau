@@ -24,27 +24,24 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
+import java.time.*;
+import java.time.Duration;
 import java.time.temporal.*;
 import java.util.*;
-import java.util.ArrayDeque;
-import java.util.Deque;
+
 import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
-import java.time.Duration;
-import java.time.Period;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.utils.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Parser}.

@@ -26,9 +26,9 @@ import java.util.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#binaryFormat(BinaryFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#binaryFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#binaryFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#binaryFormat()} to control how
+ * {@link org.apache.juneau.Marshalled#binaryFormat()},
+ * {@link org.apache.juneau.MarshalledProp#binaryFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#binaryFormat()} to control how
  * <code><jk>byte</jk>[]</code> values are written to and read from the wire on text formats, as well as
  * the encoding used by stream-based serializers when converting their byte output to a string.
  *

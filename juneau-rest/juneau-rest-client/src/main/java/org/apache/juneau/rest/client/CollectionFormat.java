@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.assertArg;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 /**
  * Specifies how collection-valued query/form parameters are serialized to a single string.

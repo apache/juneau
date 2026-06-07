@@ -560,7 +560,7 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	public static class BeanWithCommentedProperty {
 		private String name;
-		@org.apache.juneau.proto.annotation.Proto(comment = "This is the name field")
+		@org.apache.juneau.proto.Proto(comment = "This is the name field")
 		public String getName() { return name; }
 		public void setName(String v) { name = v; }
 	}

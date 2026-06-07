@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;

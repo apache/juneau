@@ -25,7 +25,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 

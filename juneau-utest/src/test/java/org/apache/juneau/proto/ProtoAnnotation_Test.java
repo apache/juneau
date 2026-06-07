@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.proto.annotation.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

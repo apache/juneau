@@ -19,17 +19,17 @@ package org.apache.juneau.rest.auth.saml;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.nio.charset.StandardCharsets;
-import java.security.KeyPairGenerator;
+import java.nio.charset.*;
+import java.security.*;
 import java.util.*;
-import java.util.zip.Deflater;
+import java.util.zip.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.*;
-import org.junit.jupiter.api.Test;
-import org.opensaml.security.credential.BasicCredential;
+import org.junit.jupiter.api.*;
+import org.opensaml.security.credential.*;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 
 /**
  * Tests for {@link SamlAuthFilter} &mdash; path matching, binding selection, request-parameter extraction,

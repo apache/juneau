@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic;
 
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
@@ -23,12 +24,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
-import org.apache.juneau.http.classic.HttpHeaders;
-import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.rest.RestSharedConstants.HEADER_JuneauParserOptions;
-import static org.apache.juneau.rest.RestSharedConstants.HEADER_JuneauSerializerOptions;
-import static org.apache.juneau.rest.RestSharedConstants.QUERY_juneauParserOptions;
-import static org.apache.juneau.rest.RestSharedConstants.QUERY_juneauSerializerOptions;
+import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.rest.client.classic.RestOperation.*;
 
 import java.io.*;
@@ -51,22 +47,24 @@ import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.bson.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.classic.*;
+import org.apache.juneau.http.classic.HttpHeaders;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.bson.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
-import org.apache.juneau.jcs.*;
-import org.apache.juneau.marshaller.Json5;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.marshaller.Uon;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
@@ -76,7 +74,6 @@ import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Represents a request to a remote REST resource.

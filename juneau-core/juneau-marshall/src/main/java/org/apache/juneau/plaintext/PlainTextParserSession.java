@@ -19,6 +19,7 @@ package org.apache.juneau.plaintext;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 
 import java.io.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;

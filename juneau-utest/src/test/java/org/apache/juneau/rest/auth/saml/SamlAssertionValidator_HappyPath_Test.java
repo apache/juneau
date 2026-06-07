@@ -19,12 +19,11 @@ package org.apache.juneau.rest.auth.saml;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
-import java.util.Map;
+import java.util.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.rest.auth.AuthenticationException;
-import org.apache.juneau.rest.auth.ClaimsPrincipal;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.apache.juneau.rest.auth.*;
+import org.junit.jupiter.api.*;
 
 /**
  * End-to-end happy-path test for {@link SamlAssertionValidator} using a real OpenSAML-signed assertion.

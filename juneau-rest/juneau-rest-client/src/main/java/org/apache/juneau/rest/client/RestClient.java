@@ -25,9 +25,9 @@ import java.util.function.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.http.header.HttpHeaderBean;
+import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.http.remote.Remote;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.remote.*;
 
 /**

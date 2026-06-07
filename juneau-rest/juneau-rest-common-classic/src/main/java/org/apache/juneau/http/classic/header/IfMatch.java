@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.http.header.EntityTags;
-
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
 
 /**
  * Represents a parsed <l>If-Match</l> HTTP request header.

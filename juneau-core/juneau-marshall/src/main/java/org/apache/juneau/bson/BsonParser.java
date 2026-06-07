@@ -19,15 +19,15 @@ package org.apache.juneau.bson;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.math.BigDecimal;
-import java.time.Instant;
+import java.math.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses BSON (Binary JSON) into POJO models.

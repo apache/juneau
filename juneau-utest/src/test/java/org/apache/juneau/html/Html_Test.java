@@ -17,17 +17,16 @@
 package org.apache.juneau.html;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.html.annotation.HtmlFormat.*;
+import static org.apache.juneau.html.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"serial" // Serialization not relevant in test code

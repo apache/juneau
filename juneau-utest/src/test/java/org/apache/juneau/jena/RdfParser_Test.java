@@ -21,13 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.Nested;
-import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice.

@@ -30,7 +30,7 @@ import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.utest.utils.FakeTimeProvider;
+import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**

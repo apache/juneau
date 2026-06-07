@@ -18,6 +18,7 @@ package org.apache.juneau.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.toStringArray;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -28,7 +29,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;

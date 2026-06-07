@@ -18,10 +18,9 @@ package org.apache.juneau.rest.view.thymeleaf;
 
 import java.io.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.thymeleaf.*;
 import org.thymeleaf.templatemode.*;
 

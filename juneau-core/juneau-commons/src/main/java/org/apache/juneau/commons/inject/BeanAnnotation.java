@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
 
 /**
  * Utility classes and methods for the {@link Bean @Bean} annotation.

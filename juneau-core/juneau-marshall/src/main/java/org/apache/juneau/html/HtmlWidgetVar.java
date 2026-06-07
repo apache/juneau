@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.html;
 
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.commons.svl.*;
 
 /**

@@ -17,13 +17,13 @@
 package org.apache.juneau.commons.logging;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.formatNamed;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.text.SimpleDateFormat;
+import java.text.*;
 import java.util.*;
 import java.util.function.*;
-import java.util.logging.Level;
+import java.util.logging.*;
 
 import org.apache.juneau.commons.utils.*;
 

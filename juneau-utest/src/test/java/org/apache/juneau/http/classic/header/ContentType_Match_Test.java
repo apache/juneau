@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.json5.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

@@ -27,7 +27,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.httppart.SchemaValidationException;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.time.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.oapi.*;

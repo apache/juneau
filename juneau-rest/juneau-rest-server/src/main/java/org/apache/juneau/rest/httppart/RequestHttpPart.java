@@ -16,24 +16,23 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
-import java.util.Objects;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
 
 /**
@@ -491,7 +490,7 @@ public class RequestHttpPart {
 	 * Specifies the part parser to use for this part.
 	 *
 	 * <p>
-	 * If not specified, uses the part parser defined on the resource via {@link org.apache.juneau.rest.annotation.Rest#partParser() @Rest(partParser=...)}.
+	 * If not specified, uses the part parser defined on the resource via {@link org.apache.juneau.rest.Rest#partParser() @Rest(partParser=...)}.
 	 *
 	 * @param value
 	 * 	The new part parser to use for this part.

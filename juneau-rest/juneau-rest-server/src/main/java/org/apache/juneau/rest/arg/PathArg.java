@@ -26,10 +26,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.util.*;
 

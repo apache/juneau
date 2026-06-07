@@ -16,11 +16,9 @@
  */
 package org.apache.juneau.server.config.repository;
 
-import org.apache.juneau.commons.logging.Logger;
-
 import java.io.*;
-import java.util.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.eclipse.jgit.api.*;
 import org.eclipse.jgit.api.errors.*;
 import org.eclipse.jgit.internal.storage.file.*;

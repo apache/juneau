@@ -16,14 +16,12 @@
  */
 package org.apache.juneau.rest;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.bean.rfc7807.Problem;
-import org.apache.juneau.http.annotation.Path;
-import org.apache.juneau.http.response.NotFound;
-import org.apache.juneau.rest.annotation.Rest;
-import org.apache.juneau.rest.annotation.RestGet;
-import org.apache.juneau.rest.mock.classic.MockRestClient;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.apache.juneau.bean.rfc7807.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.mock.classic.*;
+import org.junit.jupiter.api.*;
 
 /**
  * End-to-end tests for the {@code @Rest(problemDetails="true")} opt-in:

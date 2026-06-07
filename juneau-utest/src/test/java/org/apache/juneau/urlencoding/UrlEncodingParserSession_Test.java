@@ -431,7 +431,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 	// m: Bean-type _type marker path (parseAnything object branch)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.annotation.Marshalled(typeName="b1")
+	@org.apache.juneau.Marshalled(typeName="b1")
 	public static class TypedBean {
 		public String x;
 	}

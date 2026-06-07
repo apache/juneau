@@ -40,7 +40,6 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.auth.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.tomcat.util.descriptor.web.*;

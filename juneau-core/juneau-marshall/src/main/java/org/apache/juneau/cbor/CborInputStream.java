@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.cbor;
 
+import static org.apache.juneau.cbor.DataType.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.cbor.DataType.*;
 
 import java.io.*;
 

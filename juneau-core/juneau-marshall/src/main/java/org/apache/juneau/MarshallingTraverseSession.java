@@ -25,9 +25,9 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * ContextSession that lives for the duration of a single use of {@link MarshallingTraverseContext}.

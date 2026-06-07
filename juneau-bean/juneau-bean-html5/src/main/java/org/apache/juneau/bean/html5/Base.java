@@ -19,7 +19,6 @@ package org.apache.juneau.bean.html5;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-base-element">&lt;base&gt;</a>

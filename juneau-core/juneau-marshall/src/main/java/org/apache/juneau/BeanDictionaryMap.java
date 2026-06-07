@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import org.apache.juneau.annotation.Marshalled;
 
 /**
  * Represents a map of dictionary type names to bean classes that make up a bean dictionary.

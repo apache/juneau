@@ -19,7 +19,7 @@ package org.apache.juneau.rest.tracing.otel;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.tracing.*;
@@ -93,7 +93,7 @@ class OtelTracerHook_Test extends TestBase {
 		public TracerHook tracer() { return new OtelTracerHook(OTEL_SDK); }
 
 		@RestGet("/users/{id}")
-		public String get(@org.apache.juneau.http.annotation.Path String id) { return "u:" + id; }
+		public String get(@org.apache.juneau.http.Path String id) { return "u:" + id; }
 	}
 
 	private static final MockRestClient CB = MockRestClient.buildLax(B.class);

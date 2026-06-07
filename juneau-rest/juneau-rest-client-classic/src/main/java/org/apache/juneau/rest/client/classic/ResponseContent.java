@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -34,6 +33,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.conversion.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.resource.*;

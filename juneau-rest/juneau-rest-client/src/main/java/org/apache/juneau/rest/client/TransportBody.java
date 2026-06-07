@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 

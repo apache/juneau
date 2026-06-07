@@ -17,17 +17,17 @@
 package org.apache.juneau.http.classic;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
 import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;

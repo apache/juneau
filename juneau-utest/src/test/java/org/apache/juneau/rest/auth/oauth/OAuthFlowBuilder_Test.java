@@ -18,11 +18,11 @@ package org.apache.juneau.rest.auth.oauth;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URI;
+import java.net.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.oauth.flow.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import com.nimbusds.oauth2.sdk.pkce.*;
 

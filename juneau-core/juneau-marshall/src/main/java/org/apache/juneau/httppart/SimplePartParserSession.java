@@ -17,9 +17,9 @@
 package org.apache.juneau.httppart;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.conversion.BasicConverter;
 
 /**
  * Session object that lives for the duration of a single use of {@link SimplePartParser}.

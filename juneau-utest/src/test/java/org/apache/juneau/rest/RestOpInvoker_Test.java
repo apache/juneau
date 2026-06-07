@@ -25,10 +25,9 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.metrics.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
@@ -279,8 +278,8 @@ class RestOpInvoker_Test extends TestBase {
 	}
 
 	/** Custom resolver — throws a generic RuntimeException (NOT a BasicHttpException) so the parameter-
-	 *  resolution catch in {@link RestOpInvoker#invoke(RestOpSession, boolean)} routes through the
-	 *  generic-exception branch (lines 160-161) rather than the BasicHttpException re-throw branch. */
+	 *  resolution catch in {@link RestOpInvoker#invoke(RestOpSession)} routes through the
+	 *  generic-exception branch rather than the BasicHttpException re-throw branch. */
 	public static class FailingArg implements org.apache.juneau.rest.arg.RestOpArg {
 		public static FailingArg create(org.apache.juneau.commons.reflect.ParameterInfo pi) {
 			if (pi.isType(FailingMarker.class))

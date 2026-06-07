@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.junit.bct;
 
-import static java.util.Collections.*;
+import static java.util.Collections.list;
 import static java.util.Spliterators.*;
-import static java.util.stream.StreamSupport.*;
+import static java.util.stream.StreamSupport.stream;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctConfiguration.*;

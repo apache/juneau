@@ -19,9 +19,9 @@ package org.apache.juneau.commons.runtime;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
-import java.util.Map;
+import java.util.*;
 import java.util.jar.*;
-import java.util.jar.Attributes.Name;
+import java.util.jar.Attributes.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

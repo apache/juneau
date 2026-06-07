@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -49,9 +48,9 @@ class HjsonMediaType_Test {
 	@Test
 	void g03_contentNegotiation() throws Exception {
 		var a = JsonMap.of("name", "test", "count", 42);
-		var hjson = Hjson.of(a);
+		var hjson = org.apache.juneau.marshaller.Hjson.of(a);
 		assertNotNull(hjson);
-		var b = (Map<String, Object>) Hjson.to(hjson, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) org.apache.juneau.marshaller.Hjson.to(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
 	}
 }

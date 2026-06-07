@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Represents a simple namespace mapping between a simple name and URI.

@@ -19,7 +19,7 @@ package org.apache.juneau.commons.logging;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.logging.Level;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

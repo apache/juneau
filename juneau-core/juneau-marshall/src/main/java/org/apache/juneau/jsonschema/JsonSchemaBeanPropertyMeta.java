@@ -19,11 +19,10 @@ package org.apache.juneau.jsonschema;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.annotation.Schema;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on bean properties specific to the JSON-Schema pulled from the {@link Schema @Schema} annotation

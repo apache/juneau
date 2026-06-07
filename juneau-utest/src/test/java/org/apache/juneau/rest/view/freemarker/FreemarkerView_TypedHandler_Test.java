@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.view.freemarker;
 
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.view.*;
 import org.apache.juneau.rest.view.thymeleaf.*;

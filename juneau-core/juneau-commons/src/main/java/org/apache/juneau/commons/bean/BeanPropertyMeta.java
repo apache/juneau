@@ -32,9 +32,9 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.inject.*;
 
 /**
  * Contains metadata about a bean property.

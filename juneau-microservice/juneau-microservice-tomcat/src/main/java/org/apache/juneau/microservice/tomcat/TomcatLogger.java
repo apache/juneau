@@ -20,7 +20,6 @@ import static java.util.logging.Level.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.logging.*;
-import java.util.logging.Logger;
 
 import org.apache.juli.logging.*;
 

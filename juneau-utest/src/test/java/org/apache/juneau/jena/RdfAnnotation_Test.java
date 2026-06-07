@@ -19,7 +19,6 @@ package org.apache.juneau.jena;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.jena.annotation.*;
 import org.junit.jupiter.api.*;
 
 class RdfAnnotation_Test extends TestBase {

@@ -19,8 +19,8 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import org.apache.juneau.bean.html5.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;

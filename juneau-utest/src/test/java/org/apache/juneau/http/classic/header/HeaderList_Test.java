@@ -122,7 +122,7 @@ class HeaderList_Test extends TestBase {
 		assertEmpty(x.get("Bar"));
 	}
 
-	@org.apache.juneau.http.annotation.Header("Foo")
+	@org.apache.juneau.http.Header("Foo")
 	static class Foo extends BasicStringHeader {
 		private static final long serialVersionUID = 1L;
 

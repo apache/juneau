@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic.remote;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.bean.*;
 
 /**

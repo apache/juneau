@@ -26,19 +26,17 @@ import static org.apache.juneau.html.HtmlTag.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
 import javax.xml.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanMapEntry;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * ContextSession object that lives for the duration of a single use of {@link HtmlParser}.

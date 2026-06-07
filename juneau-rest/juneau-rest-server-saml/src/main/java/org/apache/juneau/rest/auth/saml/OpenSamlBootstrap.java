@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.auth.saml;
 
-import org.opensaml.core.config.InitializationService;
+import org.opensaml.core.config.*;
 
 /**
  * One-shot OpenSAML bootstrap helper.

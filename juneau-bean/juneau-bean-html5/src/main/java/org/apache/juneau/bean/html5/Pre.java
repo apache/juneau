@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.bean.html5;
 
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-pre-element">&lt;pre&gt;</a>

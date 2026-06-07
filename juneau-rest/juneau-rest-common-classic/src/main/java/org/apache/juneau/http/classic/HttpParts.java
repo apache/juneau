@@ -26,11 +26,11 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.part.*;
 
 /**
  * Standard predefined HTTP parts.
@@ -51,29 +51,29 @@ public class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Header.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Query.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.FormData.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.annotation.Path.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ne(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ne(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
@@ -293,10 +293,10 @@ public class HttpParts {
 	 * <p>
 	 * Gets the name from one of the following annotations:
 	 * <ul class='javatreec'>
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Header}
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Query}
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.FormData}
-	 * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.Header}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.Query}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.FormData}
+	 * 	<li class='ja'>{@link org.apache.juneau.http.Path}
 	 * </ul>
 	 *
 	 * @param partType The part type.
@@ -357,8 +357,8 @@ public class HttpParts {
 	 *
 	 * <p>
 	 * A part type extends from either {@link org.apache.http.Header} or {@link org.apache.http.NameValuePair}
-	 * or is annotated with {@link org.apache.juneau.http.annotation.Header}, {@link org.apache.juneau.http.annotation.Query},
-	 * {@link org.apache.juneau.http.annotation.FormData}, or {@link org.apache.juneau.http.annotation.Path}.
+	 * or is annotated with {@link org.apache.juneau.http.Header}, {@link org.apache.juneau.http.Query},
+	 * {@link org.apache.juneau.http.FormData}, or {@link org.apache.juneau.http.Path}.
 	 *
 	 * @param partType The part type.
 	 * @param type The type to check.

@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.commons.bean;
 
-import java.util.Collection;
-import java.util.Map;
+import java.util.*;
 /**
  * Minimum runtime surface that the bean-modeling layer needs from a marshalling session.
  *

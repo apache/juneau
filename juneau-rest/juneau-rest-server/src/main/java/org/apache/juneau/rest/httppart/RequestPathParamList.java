@@ -16,26 +16,26 @@
  */
 package org.apache.juneau.rest.httppart;
 
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpPart;
-import org.apache.juneau.http.HttpParts;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Represents the path parameters in an HTTP request.
@@ -100,7 +100,7 @@ import org.apache.juneau.commons.svl.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestPathParam}
- * 	<li class='ja'>{@link org.apache.juneau.http.annotation.Path}
+ * 	<li class='ja'>{@link org.apache.juneau.http.Path}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
 */
@@ -311,7 +311,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * Returns the path parameter as the specified bean type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.annotation.Path} annotation
+	 * Type must have a name specified via the {@link org.apache.juneau.http.Path} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.

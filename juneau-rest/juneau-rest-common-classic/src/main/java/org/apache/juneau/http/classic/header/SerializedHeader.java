@@ -21,8 +21,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.serializer.*;
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -24,7 +24,7 @@ import java.nio.file.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.api.io.*;
 
 /**
  * Tests for {@link FileUtils}.

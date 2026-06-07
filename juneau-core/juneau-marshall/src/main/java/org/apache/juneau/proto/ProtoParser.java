@@ -22,10 +22,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses Protobuf Text Format into a POJO model.

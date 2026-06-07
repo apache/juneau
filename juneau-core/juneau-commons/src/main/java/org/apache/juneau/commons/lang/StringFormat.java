@@ -28,8 +28,6 @@ import java.util.stream.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.utils.*;
 
-import java.util.MissingFormatArgumentException;
-
 /**
  * Unified string formatter supporting both MessageFormat-style and printf-style formatting in the same pattern.
  *

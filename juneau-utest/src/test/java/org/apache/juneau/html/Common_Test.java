@@ -24,7 +24,6 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
 class Common_Test extends TestBase {

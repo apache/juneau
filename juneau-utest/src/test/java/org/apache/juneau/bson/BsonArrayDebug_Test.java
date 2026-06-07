@@ -19,8 +19,7 @@ package org.apache.juneau.bson;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 /** Debug test to inspect BSON output for arrays. Disabled to avoid stdout noise during normal test runs. */
 @Disabled("Debug test - prints hex dumps for manual inspection; run manually when needed")

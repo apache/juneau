@@ -22,8 +22,8 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.junit.jupiter.api.Test;
 import org.apache.juneau.commons.bean.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Round-trip tests for {@link IniSerializer} and {@link IniParser}.

@@ -16,9 +16,7 @@
  */
 package org.apache.juneau.bson;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.MathContext;
+import java.math.*;
 
 /**
  * IEEE 754-2008 Decimal128 BID (Binary Integer Decimal) encoding for BSON.

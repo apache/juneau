@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.*;
 import java.util.function.*;

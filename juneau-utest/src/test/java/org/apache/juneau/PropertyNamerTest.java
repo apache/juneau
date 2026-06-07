@@ -18,8 +18,8 @@ package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
+import org.junit.jupiter.api.*;
 
 class PropertyNamerTest extends TestBase {
 

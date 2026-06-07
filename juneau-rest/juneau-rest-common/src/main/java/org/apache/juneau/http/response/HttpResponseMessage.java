@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.commons.utils.Utils.eqic;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 

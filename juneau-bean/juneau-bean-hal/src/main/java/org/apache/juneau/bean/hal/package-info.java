@@ -16,7 +16,7 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.annotation.Marshalled @Marshalled} types for the
+ * Juneau {@link org.apache.juneau.Marshalled @Marshalled} types for the
  * <a href="https://stateless.group/hal_specification.html">HAL (Hypertext Application Language)</a>
  * hypermedia format, also covered by
  * <a href="https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08">draft-kelly-json-hal-08</a>.

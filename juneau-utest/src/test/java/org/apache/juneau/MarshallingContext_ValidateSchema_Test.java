@@ -20,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.serializer.*;

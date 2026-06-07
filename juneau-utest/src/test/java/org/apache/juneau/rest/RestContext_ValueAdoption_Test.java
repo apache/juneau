@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.settings.*;
-import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**

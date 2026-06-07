@@ -24,10 +24,10 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json5.Json5Parser;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses any valid RFC 8259 JSON text into a POJO model.

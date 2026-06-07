@@ -99,10 +99,10 @@ public interface MetricsRecorder {
 	 * @param error The exception thrown by the handler, or <jk>null</jk> if the call completed normally.
 	 * 	Bridges typically derive an {@code exception} tag from the throwable's simple class name, or
 	 * 	{@code "None"} when null (mirrors Spring Boot's {@code WebMvcMetricsFilter} convention).
-	 * @param metricName Per-op metric name override from {@link org.apache.juneau.rest.annotation.RestOp#metricName()}.
+	 * @param metricName Per-op metric name override from {@link org.apache.juneau.rest.RestOp#metricName()}.
 	 * 	Empty string (default) means the implementation should use its own default name derivation.
 	 * 	Never <jk>null</jk>.
-	 * @param metricTags Per-op additional metric tags from {@link org.apache.juneau.rest.annotation.RestOp#metricTags()}.
+	 * @param metricTags Per-op additional metric tags from {@link org.apache.juneau.rest.RestOp#metricTags()}.
 	 * 	Format: comma-separated {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}).
 	 * 	Empty string (default) means no additional tags. Never <jk>null</jk>.
 	 */

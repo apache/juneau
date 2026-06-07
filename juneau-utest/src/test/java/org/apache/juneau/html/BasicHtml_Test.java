@@ -18,19 +18,17 @@ package org.apache.juneau.html;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.html.annotation.HtmlFormat.*;
+import static org.apache.juneau.html.HtmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.xml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({"serial","rawtypes"})
 class BasicHtml_Test extends TestBase {

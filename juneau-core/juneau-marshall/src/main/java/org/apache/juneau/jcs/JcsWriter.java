@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.jcs;
 
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-
-import static org.apache.juneau.commons.utils.ThrowableUtils.rex;
 
 /**
  * JSON writer for JCS (RFC 8785) canonical output.

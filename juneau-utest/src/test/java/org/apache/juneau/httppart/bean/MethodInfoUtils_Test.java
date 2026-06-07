@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 /**

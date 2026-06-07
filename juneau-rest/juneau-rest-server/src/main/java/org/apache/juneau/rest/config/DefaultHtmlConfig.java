@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.config;
 
-import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.html.*;
 
 /**
  * Predefined REST configuration that defines common default values for HTML Doc serializers.

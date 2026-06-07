@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
 
 /**

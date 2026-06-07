@@ -23,7 +23,6 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Specialized writer for serializing XML.

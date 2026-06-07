@@ -16,17 +16,15 @@
  */
 package org.apache.juneau.http.remote;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
-import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
-import static org.apache.juneau.commons.utils.StringUtils.isOneOf;
-import static org.apache.juneau.commons.utils.StringUtils.trimSlashes;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.rest.common.utils.HttpUtils;
+import org.apache.juneau.rest.common.utils.*;
 
 /**
  * Holds resolved metadata for an interface annotated with {@link org.apache.juneau.http.remote.Remote @Remote}.

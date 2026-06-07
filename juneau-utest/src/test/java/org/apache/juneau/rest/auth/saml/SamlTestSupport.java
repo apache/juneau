@@ -16,25 +16,22 @@
  */
 package org.apache.juneau.rest.auth.saml;
 
-import java.io.StringWriter;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.time.Instant;
+import java.io.*;
+import java.security.*;
+import java.time.*;
 
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
 
-import org.opensaml.core.config.InitializationService;
-import org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport;
-import org.opensaml.core.xml.io.MarshallerFactory;
-import org.opensaml.saml.common.SAMLObjectBuilder;
+import org.opensaml.core.config.*;
+import org.opensaml.core.xml.config.*;
+import org.opensaml.core.xml.io.*;
+import org.opensaml.saml.common.*;
 import org.opensaml.saml.saml2.core.*;
-import org.opensaml.security.credential.BasicCredential;
-import org.opensaml.security.credential.UsageType;
-import org.opensaml.xmlsec.signature.impl.SignatureBuilder;
-import org.opensaml.xmlsec.signature.support.SignatureConstants;
+import org.opensaml.security.credential.*;
+import org.opensaml.xmlsec.signature.impl.*;
+import org.opensaml.xmlsec.signature.support.*;
 import org.opensaml.xmlsec.signature.support.Signer;
 
 /**

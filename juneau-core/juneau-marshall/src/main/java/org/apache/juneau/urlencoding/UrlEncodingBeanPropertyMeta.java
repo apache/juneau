@@ -17,8 +17,7 @@
 package org.apache.juneau.urlencoding;
 
 import org.apache.juneau.*;
-import org.apache.juneau.urlencoding.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding}

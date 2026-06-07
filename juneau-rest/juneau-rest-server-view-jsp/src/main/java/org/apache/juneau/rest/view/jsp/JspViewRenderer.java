@@ -34,11 +34,11 @@ import org.apache.juneau.rest.view.*;
  *
  * <p>
  * Auto-registered by {@link JspMixin} via
- * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() @Rest(responseProcessors=...)}
+ * {@link org.apache.juneau.rest.Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code JspView} returns <i>without</i> adopting the mixin (e.g. mounting their own
  * raw-JSP path) can add this class to their own
- * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() responseProcessors} list.
+ * {@link org.apache.juneau.rest.Rest#responseProcessors() responseProcessors} list.
  *
  * <h5 class='section'>Behavior:</h5>
  *
@@ -66,7 +66,7 @@ import org.apache.juneau.rest.view.*;
  *
  * <p>
  * {@link jakarta.servlet.RequestDispatcher#forward forward()} resets the response output stream.
- * If a {@link org.apache.juneau.rest.annotation.RestPreCall @RestPreCall} hook has already
+ * If a {@link org.apache.juneau.rest.RestPreCall @RestPreCall} hook has already
  * written response headers/body before the renderer runs, the forward may fail or produce
  * malformed output. The renderer runs at response-resolution time so this is rarely hit by
  * accident; document the constraint for any user relying on {@code RestPreCall}.

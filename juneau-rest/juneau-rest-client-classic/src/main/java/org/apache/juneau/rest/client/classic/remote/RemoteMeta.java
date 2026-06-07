@@ -22,13 +22,14 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Contains the meta-data about a REST proxy class.

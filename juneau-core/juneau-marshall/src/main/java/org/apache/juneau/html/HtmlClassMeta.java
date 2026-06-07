@@ -22,7 +22,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.html.annotation.*;
 
 /**
  * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on

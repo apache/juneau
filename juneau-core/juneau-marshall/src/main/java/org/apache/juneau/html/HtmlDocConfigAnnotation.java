@@ -1,0 +1,78 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.html;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
+
+/**
+ * Utility classes and methods for the {@link HtmlDocConfig @HtmlDocConfig} annotation.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * </ul>
+ */
+public class HtmlDocConfigAnnotation {
+
+	/**
+	 * Prevents instantiation.
+	 */
+	private HtmlDocConfigAnnotation() {}
+
+	/**
+	 * Applies {@link HtmlDocConfig} annotations to a {@link org.apache.juneau.html.HtmlDocSerializer.Builder}.
+	 */
+	@SuppressWarnings({
+		"rawtypes" // Raw types required for reflective annotation application.
+	})
+	public static class SerializerApply extends AnnotationApplier<HtmlDocConfig,HtmlDocSerializer.Builder> {
+
+		/**
+		 * Constructor.
+		 *
+		 * @param vr The resolver for resolving values in annotations.
+		 */
+		public SerializerApply(VarResolverSession vr) {
+			super(HtmlDocConfig.class, HtmlDocSerializer.Builder.class, vr);
+		}
+
+		@SuppressWarnings({
+			"unchecked" // Varargs method requires unchecked cast
+		})
+		@Override
+		public void apply(AnnotationInfo<HtmlDocConfig> ai, HtmlDocSerializer.Builder b) {
+			HtmlDocConfig a = ai.inner();
+
+			strings(a.aside()).ifPresent(b::aside);
+			strings(a.footer()).ifPresent(b::footer);
+			strings(a.head()).ifPresent(b::head);
+			strings(a.header()).ifPresent(b::header);
+			strings(a.nav()).ifPresent(b::nav);
+			strings(a.navlinks()).ifPresent(b::navlinks);
+			strings(a.script()).ifPresent(b::script);
+			strings(a.style()).ifPresent(b::style);
+			strings(a.stylesheet()).ifPresent(b::stylesheet);
+			string(a.asideFloat()).filter(x -> ! "DEFAULT".equalsIgnoreCase(x)).map(AsideFloat::valueOf).ifPresent(b::asideFloat);
+			string(a.noResultsMessage()).ifPresent(b::noResultsMessage);
+			bool(a.nowrap()).ifPresent(b::nowrap);
+			bool(a.resolveBodyVars()).ifPresent(b::resolveBodyVars);
+			type(a.template()).ifPresent(b::template);
+			classes(a.widgets()).ifPresent(b::widgets);
+		}
+	}
+}

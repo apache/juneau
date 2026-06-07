@@ -16,13 +16,12 @@
  */
 package org.apache.juneau.transforms;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.TestUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.swap.*;
 
 /**

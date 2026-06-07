@@ -17,7 +17,6 @@
 package org.apache.juneau.swaps;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.swap.*;
 
 /**

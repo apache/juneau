@@ -16,14 +16,13 @@
  */
 package org.apache.juneau.rest;
 
-import org.apache.juneau.commons.http.MediaType;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.RestServerConstants.*;
-import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.rest.util.RestUtils.*;
 
 import java.lang.annotation.*;
@@ -31,29 +30,28 @@ import java.lang.reflect.Method;
 import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
+import java.util.function.*;
 import java.util.stream.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.commons.lang.Holder;
+import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.http.response.InternalServerError;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.common.utils.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.debug.*;
@@ -63,7 +61,7 @@ import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.matcher.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 

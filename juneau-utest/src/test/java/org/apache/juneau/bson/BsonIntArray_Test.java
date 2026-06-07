@@ -19,10 +19,10 @@ package org.apache.juneau.bson;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.math.BigDecimal;
-import java.util.List;
+import java.math.*;
+import java.util.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 class BsonIntArray_Test {
 

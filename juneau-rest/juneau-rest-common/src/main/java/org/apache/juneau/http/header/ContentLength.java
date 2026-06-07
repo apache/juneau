@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 
-import java.util.function.Supplier;
+import java.util.function.*;
 
 /**
  * Represents an HTTP <c>Content-Length</c> header.

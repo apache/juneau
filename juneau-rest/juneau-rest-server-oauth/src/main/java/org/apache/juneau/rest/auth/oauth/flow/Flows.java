@@ -17,16 +17,17 @@
 package org.apache.juneau.rest.auth.oauth.flow;
 
 import static org.apache.juneau.commons.utils.Utils.*;
-import java.io.IOException;
-import java.time.Instant;
-import java.util.*;
-import java.util.function.Consumer;
 
-import org.apache.juneau.rest.auth.oauth.OAuthToken;
+import java.io.*;
+import java.time.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.rest.auth.oauth.*;
 
 import com.nimbusds.oauth2.sdk.*;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
-import com.nimbusds.oauth2.sdk.token.BearerAccessToken;
+import com.nimbusds.oauth2.sdk.http.*;
+import com.nimbusds.oauth2.sdk.token.*;
 
 /**
  * Package-private helpers shared across all flow types.

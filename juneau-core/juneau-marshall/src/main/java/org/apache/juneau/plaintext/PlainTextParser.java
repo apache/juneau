@@ -22,10 +22,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parsers HTTP plain text request bodies into Group 5 POJOs.

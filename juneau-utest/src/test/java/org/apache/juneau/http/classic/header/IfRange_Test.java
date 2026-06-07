@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.http.header.EntityTag;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.TestUtils.*;
@@ -29,9 +28,10 @@ import java.time.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;

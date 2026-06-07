@@ -18,16 +18,16 @@ package org.apache.juneau.rest.springboot;
 
 import java.util.*;
 
-import jakarta.servlet.*;
-
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
-import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.web.servlet.*;
-import org.springframework.context.ApplicationContext;
+import org.springframework.context.*;
 import org.springframework.context.annotation.Bean;
+
+import jakarta.servlet.*;
 
 /**
  * Opt-in Spring Boot auto-configuration that mounts every {@link RestServlet} bean at its

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -25,6 +24,7 @@ import static org.apache.juneau.internal.ConverterUtils.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.http.*;
 
 /**
  * Describes a single API operation on a path.

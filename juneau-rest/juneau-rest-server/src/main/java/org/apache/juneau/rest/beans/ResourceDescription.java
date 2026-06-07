@@ -18,10 +18,10 @@ package org.apache.juneau.rest.beans;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.http.*;
 
 /**
  * Shortcut label for child resources.

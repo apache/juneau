@@ -18,9 +18,9 @@ package org.apache.juneau.rest.auth.saml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.rest.auth.AuthenticationException;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.apache.juneau.rest.auth.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Encrypted-assertion handling tests for {@link SamlAssertionValidator} (per OQA Q5).

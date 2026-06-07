@@ -18,9 +18,8 @@ package org.apache.juneau.rest;
 
 import java.util.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

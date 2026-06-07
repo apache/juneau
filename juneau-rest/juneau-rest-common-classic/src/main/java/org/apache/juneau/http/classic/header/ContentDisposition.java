@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.commons.http.StringRanges;
-import static org.apache.juneau.commons.utils.StringUtils.isBlank;
-import static org.apache.juneau.commons.utils.ThrowableUtils.illegalArg;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a parsed <l>Content-Disposition</l> HTTP request header.

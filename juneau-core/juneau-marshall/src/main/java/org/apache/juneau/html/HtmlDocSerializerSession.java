@@ -19,9 +19,9 @@ package org.apache.juneau.html;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Context object that lives for the duration of a single serialization of {@link HtmlSerializer} and its subclasses.

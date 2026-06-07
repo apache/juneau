@@ -17,10 +17,11 @@
 package org.apache.juneau.microservice.springboot.template;
 
 import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 
 /**

@@ -27,12 +27,11 @@ import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Generates JSON-schema metadata about POJOs.

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.resource;
 
-import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;

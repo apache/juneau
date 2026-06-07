@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 
-import org.apache.juneau.collections.JsonMap;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.collections.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link Proto} marshaller.

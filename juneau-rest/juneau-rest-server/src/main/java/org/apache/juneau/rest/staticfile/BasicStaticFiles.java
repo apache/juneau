@@ -19,11 +19,12 @@ package org.apache.juneau.rest.staticfile;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;

@@ -20,31 +20,16 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.parquet.ParquetSchemaElement.*;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
 import java.time.*;
-import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.IdentityHashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
+import java.time.temporal.*;
+import java.util.*;
 
-import org.apache.juneau.ClassMeta;
-import org.apache.juneau.serializer.OutputStreamSerializerSession;
-import org.apache.juneau.serializer.SerializeException;
-import org.apache.juneau.serializer.SerializerPipe;
-import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Session for {@link ParquetSerializer}.

@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.lang.annotation.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;

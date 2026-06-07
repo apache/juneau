@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

@@ -19,7 +19,6 @@ package org.apache.juneau.rest.health;
 import java.util.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.health.HealthAggregator.*;
 import org.apache.juneau.rest.servlet.*;
 

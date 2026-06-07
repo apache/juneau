@@ -21,18 +21,17 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.time.*;
+import java.time.Duration;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
 import java.util.regex.*;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.swaps.DefaultingTemporalAccessor;
+import org.apache.juneau.swaps.*;
 
 /**
  * Centralized ISO 8601 formatting and parsing utility for date/time and Duration types.

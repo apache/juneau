@@ -18,9 +18,12 @@ package org.apache.juneau.assertions;
 
 import static java.util.regex.Pattern.*;
 import static org.apache.juneau.assertions.AssertionPredicates.*;
+import static org.apache.juneau.assertions.AssertionPredicates.and;
 import static org.apache.juneau.assertions.AssertionPredicates.eq;
 import static org.apache.juneau.assertions.AssertionPredicates.eqic;
 import static org.apache.juneau.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.assertions.AssertionPredicates.not;
+import static org.apache.juneau.assertions.AssertionPredicates.or;
 import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;

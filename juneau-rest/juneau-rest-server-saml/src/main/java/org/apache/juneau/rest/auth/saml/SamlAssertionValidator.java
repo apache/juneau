@@ -19,43 +19,35 @@ package org.apache.juneau.rest.auth.saml;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
-import java.security.Principal;
+import java.security.*;
 import java.time.*;
 import java.util.*;
 
-import javax.xml.namespace.QName;
+import javax.xml.namespace.*;
 import javax.xml.parsers.*;
 
 import org.apache.juneau.rest.auth.*;
-import org.opensaml.core.criterion.EntityIdCriterion;
-import org.opensaml.core.xml.io.UnmarshallingException;
-import org.opensaml.saml.common.assertion.ValidationContext;
-import org.opensaml.saml.common.xml.SAMLConstants;
-import org.opensaml.saml.criterion.EntityRoleCriterion;
-import org.opensaml.saml.metadata.resolver.MetadataResolver;
+import org.opensaml.core.criterion.*;
+import org.opensaml.core.xml.io.*;
+import org.opensaml.saml.common.assertion.*;
+import org.opensaml.saml.common.xml.*;
+import org.opensaml.saml.criterion.*;
+import org.opensaml.saml.metadata.resolver.*;
 import org.opensaml.saml.saml2.core.*;
 import org.opensaml.saml.saml2.encryption.Decrypter;
-import org.opensaml.saml.saml2.metadata.IDPSSODescriptor;
-import org.opensaml.saml.saml2.metadata.KeyDescriptor;
-import org.opensaml.security.credential.Credential;
-import org.opensaml.security.credential.UsageType;
-import org.opensaml.security.x509.BasicX509Credential;
-import org.opensaml.xmlsec.encryption.support.ChainingEncryptedKeyResolver;
-import org.opensaml.xmlsec.encryption.support.EncryptedKeyResolver;
-import org.opensaml.xmlsec.encryption.support.InlineEncryptedKeyResolver;
-import org.opensaml.xmlsec.encryption.support.SimpleRetrievalMethodEncryptedKeyResolver;
-import org.opensaml.xmlsec.keyinfo.KeyInfoCredentialResolver;
-import org.opensaml.xmlsec.keyinfo.impl.StaticKeyInfoCredentialResolver;
-import org.opensaml.xmlsec.signature.SignableXMLObject;
-import org.opensaml.xmlsec.signature.X509Data;
-import org.opensaml.xmlsec.signature.support.SignatureConstants;
+import org.opensaml.saml.saml2.metadata.*;
+import org.opensaml.saml.security.impl.*;
+import org.opensaml.security.credential.*;
+import org.opensaml.security.x509.*;
+import org.opensaml.xmlsec.encryption.support.*;
+import org.opensaml.xmlsec.keyinfo.*;
+import org.opensaml.xmlsec.keyinfo.impl.*;
+import org.opensaml.xmlsec.signature.*;
+import org.opensaml.xmlsec.signature.support.*;
 import org.opensaml.xmlsec.signature.support.SignatureException;
-import org.opensaml.xmlsec.signature.support.SignatureValidator;
-import org.opensaml.saml.security.impl.SAMLSignatureProfileValidator;
-import org.w3c.dom.Element;
+import org.w3c.dom.*;
 
-import net.shibboleth.shared.resolver.CriteriaSet;
-import net.shibboleth.shared.resolver.ResolverException;
+import net.shibboleth.shared.resolver.*;
 
 /**
  * Validates a SAML 2.0 {@code <samlp:Response>} document and produces a {@link ClaimsPrincipal} marked

@@ -24,17 +24,17 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonParser}.

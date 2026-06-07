@@ -23,12 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({"serial"})
 class BasicXml_Test extends TestBase {

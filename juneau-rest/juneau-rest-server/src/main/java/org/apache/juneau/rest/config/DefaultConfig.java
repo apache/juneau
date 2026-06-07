@@ -19,7 +19,7 @@ package org.apache.juneau.rest.config;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.auth.*;
 import org.apache.juneau.rest.logger.*;
@@ -27,7 +27,7 @@ import org.apache.juneau.rest.openapi.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.apache.juneau.rest.swagger.*;
-import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Predefined REST configuration that defines common default values for all configurations.

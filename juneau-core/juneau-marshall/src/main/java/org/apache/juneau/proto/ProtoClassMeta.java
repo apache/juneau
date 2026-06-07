@@ -17,7 +17,6 @@
 package org.apache.juneau.proto;
 
 import org.apache.juneau.*;
-import org.apache.juneau.proto.annotation.*;
 
 /**
  * Metadata on classes specific to the Proto serializers and parsers pulled from the {@link Proto @Proto} annotation on

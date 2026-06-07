@@ -20,6 +20,8 @@ import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;

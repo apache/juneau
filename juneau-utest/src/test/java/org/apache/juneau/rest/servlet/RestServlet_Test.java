@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.servlet;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
@@ -24,9 +25,8 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.MockServletRequest;
-import org.apache.juneau.rest.mock.MockServletResponse;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.junit.jupiter.api.*;
 

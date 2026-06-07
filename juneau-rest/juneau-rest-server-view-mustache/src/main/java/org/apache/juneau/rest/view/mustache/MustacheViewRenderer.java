@@ -18,12 +18,12 @@ package org.apache.juneau.rest.view.mustache;
 
 import java.io.*;
 
-import com.github.mustachejava.*;
-
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.view.*;
+
+import com.github.mustachejava.*;
 
 /**
  * {@link ResponseProcessor} that detects {@link MustacheView}-typed return values and asks the
@@ -31,11 +31,11 @@ import org.apache.juneau.rest.view.*;
  *
  * <p>
  * Auto-registered by {@link MustacheMixin} via
- * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() @Rest(responseProcessors=...)}
+ * {@link org.apache.juneau.rest.Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code MustacheView} returns <i>without</i> adopting the mixin can add this class to
  * their own
- * {@link org.apache.juneau.rest.annotation.Rest#responseProcessors() responseProcessors} list.
+ * {@link org.apache.juneau.rest.Rest#responseProcessors() responseProcessors} list.
  *
  * <h5 class='section'>Behavior:</h5>
  *

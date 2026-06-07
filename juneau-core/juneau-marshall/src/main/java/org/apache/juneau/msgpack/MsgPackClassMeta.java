@@ -17,7 +17,6 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
-import org.apache.juneau.msgpack.annotation.*;
 
 /**
  * Metadata on classes specific to the MessagePack serializers and parsers pulled from the {@link MsgPack @MsgPack} annotation on

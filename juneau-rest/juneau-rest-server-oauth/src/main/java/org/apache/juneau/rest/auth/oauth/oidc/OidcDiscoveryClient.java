@@ -18,15 +18,15 @@ package org.apache.juneau.rest.auth.oauth.oidc;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.io.IOException;
-import java.net.URI;
+import java.io.*;
+import java.net.*;
 import java.util.*;
-import java.util.function.Consumer;
+import java.util.function.*;
 
-import com.nimbusds.oauth2.sdk.GeneralException;
-import com.nimbusds.oauth2.sdk.http.HTTPRequest;
-import com.nimbusds.oauth2.sdk.id.Issuer;
-import com.nimbusds.openid.connect.sdk.op.OIDCProviderMetadata;
+import com.nimbusds.oauth2.sdk.*;
+import com.nimbusds.oauth2.sdk.http.*;
+import com.nimbusds.oauth2.sdk.id.*;
+import com.nimbusds.openid.connect.sdk.op.*;
 
 /**
  * Fetches a Juneau-native {@link OidcMetadata} record from an OpenID Connect provider's

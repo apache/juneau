@@ -16,15 +16,12 @@
  */
 package org.apache.juneau.rest;
 
-import org.apache.juneau.commons.http.StringRanges;
-import org.apache.juneau.commons.http.MediaType;
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.httppart.HttpPartType.*;
-
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -33,12 +30,13 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.http.HttpHeader;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.oapi.*;
@@ -614,7 +612,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='ja'>{@link org.apache.juneau.rest.annotation.Rest#responseProcessors()}
+	 * 	<li class='ja'>{@link org.apache.juneau.rest.Rest#responseProcessors()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
 	 * </ul>
 	 *

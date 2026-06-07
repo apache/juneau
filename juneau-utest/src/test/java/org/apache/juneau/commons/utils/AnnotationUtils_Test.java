@@ -16,12 +16,11 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.AnnotationUtils.hash;
-import static org.apache.juneau.commons.utils.AnnotationUtils.streamRepeated;
+import static org.apache.juneau.commons.utils.AnnotationUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
-import java.util.List;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
 

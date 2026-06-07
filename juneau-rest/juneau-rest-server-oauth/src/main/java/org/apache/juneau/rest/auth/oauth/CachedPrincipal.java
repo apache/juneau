@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.auth.oauth;
 
-import java.security.Principal;
-import java.time.Instant;
+import java.security.*;
+import java.time.*;
 
 /**
  * Wrapper holding a cached {@link Principal} and the instant at which the cache entry should be considered

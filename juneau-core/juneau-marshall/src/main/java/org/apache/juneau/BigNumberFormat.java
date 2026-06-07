@@ -25,9 +25,9 @@ import java.math.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#bigNumberFormat(BigNumberFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#bigNumberFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#bigNumberFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#bigNumberFormat()} to control how
+ * {@link org.apache.juneau.Marshalled#bigNumberFormat()},
+ * {@link org.apache.juneau.MarshalledProp#bigNumberFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#bigNumberFormat()} to control how
  * {@link BigInteger} / {@link BigDecimal} values are written to text-based wire formats.
  *
  * <p>
@@ -44,9 +44,9 @@ import java.math.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.annotation.MarshalledProp#bigNumberFormat() @MarshalledProp(bigNumberFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.annotation.Marshalled#bigNumberFormat() @Marshalled(bigNumberFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#bigNumberFormat() @MarshalledConfig(bigNumberFormat=…)} on
+ * 	<li>{@link org.apache.juneau.MarshalledProp#bigNumberFormat() @MarshalledProp(bigNumberFormat=…)} on the bean property.
+ * 	<li>{@link org.apache.juneau.Marshalled#bigNumberFormat() @Marshalled(bigNumberFormat=…)} on the bean class.
+ * 	<li>{@link org.apache.juneau.MarshalledConfig#bigNumberFormat() @MarshalledConfig(bigNumberFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#bigNumberFormat(BigNumberFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.bigNumberFormat</c>.

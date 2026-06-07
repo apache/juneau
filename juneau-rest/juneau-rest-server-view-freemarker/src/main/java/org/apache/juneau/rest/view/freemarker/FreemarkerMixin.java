@@ -18,12 +18,11 @@ package org.apache.juneau.rest.view.freemarker;
 
 import java.io.*;
 
-import freemarker.template.*;
-
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
+
+import freemarker.template.*;
 
 /**
  * Mixin that wires Apache FreeMarker view-rendering onto any Juneau REST resource.

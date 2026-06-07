@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.examples.rest.dto;
 
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
-import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Sample REST resource showing how to implement a nested "router" resource page.

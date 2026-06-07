@@ -22,10 +22,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.openapi3.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;

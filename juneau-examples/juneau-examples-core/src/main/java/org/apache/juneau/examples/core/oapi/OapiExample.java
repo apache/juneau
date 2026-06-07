@@ -16,10 +16,9 @@
  */
 package org.apache.juneau.examples.core.oapi;
 
-import org.apache.juneau.commons.logging.Logger;
-
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;

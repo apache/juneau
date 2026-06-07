@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.rfc7807.adapter;
 
-import org.apache.juneau.bean.rfc7807.Problem;
-import org.apache.juneau.http.response.BasicHttpException;
+import org.apache.juneau.bean.rfc7807.*;
+import org.apache.juneau.http.response.*;
 
 /**
  * Static adapters that convert Juneau HTTP error types into

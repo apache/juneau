@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/scripting-1.html#the-script-element">&lt;script&gt;</a>

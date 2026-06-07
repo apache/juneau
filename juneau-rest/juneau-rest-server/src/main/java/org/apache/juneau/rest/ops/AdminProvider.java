@@ -27,7 +27,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.guard.RateLimitGuard.BucketState;
+import org.apache.juneau.rest.guard.RateLimitGuard.*;
 
 /**
  * Flavor-neutral operational-introspection worker bean shared by the admin {@code @Rest} flavors.

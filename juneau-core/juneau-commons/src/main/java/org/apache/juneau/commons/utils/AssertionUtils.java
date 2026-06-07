@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.commons.utils;
 
-import java.util.Collection;
-
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
 
 /**
  * Utility methods for argument validation and assertion.

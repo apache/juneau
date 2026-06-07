@@ -22,9 +22,8 @@ import org.apache.juneau.commons.svl.*;
  * Boolean-logic and comparison functions for the {@code #{...}} script catalog.
  *
  * <p>
- * Boolean coercion is explicit (no implicit truthiness) — see {@link ArgCoercer} for the
- * truthiness table. Comparison functions ({@code lt}, {@code gt}, etc.) compare numerically;
- * {@code eq} / {@code neq} compare strings.
+ * Boolean coercion is explicit (no implicit truthiness). Comparison functions ({@code lt},
+ * {@code gt}, etc.) compare numerically; {@code eq} / {@code neq} compare strings.
  */
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are SVL operator names used in annotation/config keys; intentional

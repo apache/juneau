@@ -23,7 +23,6 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 

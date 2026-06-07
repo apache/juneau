@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.oapi;
 
-import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
 import static org.apache.juneau.commons.httppart.HttpPartFormat.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -29,10 +29,10 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utils.*;

@@ -18,11 +18,11 @@ package org.apache.juneau.http.classic.response;
 
 import static org.apache.juneau.http.classic.HttpResponses.*;
 import static org.apache.juneau.http.classic.response.LengthRequired.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.*;
 
 class LengthRequired_Test extends TestBase {

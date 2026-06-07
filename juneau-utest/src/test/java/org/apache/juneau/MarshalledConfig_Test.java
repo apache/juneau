@@ -27,14 +27,13 @@ import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({
 	"rawtypes", // Raw types necessary for test bean handling

@@ -19,8 +19,8 @@ package org.apache.juneau.a.rttests;
 import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.jena.*;
 import org.apache.juneau.bean.jsonschema.*;
+import org.apache.juneau.jena.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

@@ -27,14 +27,14 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.parser.*;
@@ -2312,7 +2312,7 @@ class ThirdPartyProxy_Test extends TestBase {
 		void setNullString(@Content String x) throws AssertionFailedError;
 
 		@RemoteOp(method="POST", path="/setInt3dArray")
-		String setInt3dArray(@Content int[][][] x, @org.apache.juneau.http.annotation.Query("I") int i);
+		String setInt3dArray(@Content int[][][] x, @org.apache.juneau.http.Query("I") int i);
 
 		@RemoteOp(method="POST", path="/setInteger3dArray")
 		void setInteger3dArray(@Content Integer[][][] x);

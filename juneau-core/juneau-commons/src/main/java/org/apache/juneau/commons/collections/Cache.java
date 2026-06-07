@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.commons.collections;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.collections.CacheMode.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static java.util.Collections.*;
 
 import java.util.*;
 import java.util.concurrent.*;

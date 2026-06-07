@@ -16,7 +16,7 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.annotation.Marshalled @Marshalled} types for
+ * Juneau {@link org.apache.juneau.Marshalled @Marshalled} types for
  * <a href="https://datatracker.ietf.org/doc/html/rfc6902">JSON Patch (RFC 6902)</a>.
  *
  * <h5 class='topic'>Overview</h5>

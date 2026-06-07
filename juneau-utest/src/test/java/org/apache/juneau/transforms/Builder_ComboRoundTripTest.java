@@ -285,7 +285,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	// @Builder annotation on POJO class.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.commons.annotation.Builder(DBuilder.class)
+	@org.apache.juneau.commons.Builder(DBuilder.class)
 	public static class D {
 		public int a;
 		boolean createdByBuilder;
@@ -311,7 +311,7 @@ class Builder_ComboRoundTripTest extends ComboRoundTripTest_Base {
 	// @Builder annotation on POJO class, but uses build() method on builder.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.commons.annotation.Builder(EBuilder.class)
+	@org.apache.juneau.commons.Builder(EBuilder.class)
 	public static class E {
 		public int a;
 		boolean createdByBuilder;

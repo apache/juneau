@@ -16,14 +16,13 @@
  */
 package org.apache.juneau.rest.docs;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.bean.openapi3.OpenApi;
+import org.apache.juneau.*;
+import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.bean.openapi3.ui.*;
-import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.jsonschema.annotation.*;
+import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Mixin that publishes the Redoc HTML view at {@code /redoc} for the OpenAPI 3.1 spec.

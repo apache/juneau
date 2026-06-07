@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.conversion.BasicConverter;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.utils.*;
 

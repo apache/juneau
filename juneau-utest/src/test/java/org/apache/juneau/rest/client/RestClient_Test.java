@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.http.HttpBody;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;

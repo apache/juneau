@@ -20,7 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
 import java.nio.charset.*;
-import org.apache.juneau.commons.collections.FluentMap;
+
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Subclass of parser session objects for character-based parsers.

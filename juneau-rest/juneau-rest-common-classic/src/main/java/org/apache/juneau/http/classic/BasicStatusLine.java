@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
-import java.util.Objects;
 
 import org.apache.http.*;
 import org.apache.http.impl.*;

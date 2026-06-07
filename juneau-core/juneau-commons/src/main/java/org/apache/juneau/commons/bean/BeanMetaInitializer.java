@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.bean;
 
-import java.util.List;
+import java.util.*;
 
-import org.apache.juneau.commons.reflect.ClassInfo;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Bean-modeling SPI seam that exposes marshalling-aware {@link BeanMeta} construction hooks.

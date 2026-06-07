@@ -20,13 +20,14 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.beans.Introspector;
-import java.io.Serializable;
+import java.beans.*;
+import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.Visibility;
 
 /**
  * Immutable runtime configuration for the bean-modeling layer.

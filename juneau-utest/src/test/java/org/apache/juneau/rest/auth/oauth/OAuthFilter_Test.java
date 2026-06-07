@@ -19,14 +19,14 @@ package org.apache.juneau.rest.auth.oauth;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.security.Principal;
+import java.security.*;
 import java.util.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 
 /**
  * Tests for {@link OAuthFilter} &mdash; happy path, missing header, validator failure, and scope-claim

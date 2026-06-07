@@ -19,7 +19,6 @@ package org.apache.juneau.rest.servlet;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Optional base class for <c>@Rest</c> mixin classes &mdash; the third sibling of {@link RestServlet}

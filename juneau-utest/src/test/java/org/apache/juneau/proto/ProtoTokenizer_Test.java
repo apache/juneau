@@ -18,9 +18,9 @@ package org.apache.juneau.proto;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.collections.JsonMap;
-import org.apache.juneau.parser.ParseException;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.parser.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests for {@link ProtoTokenizer} behavior, exercised through {@link ProtoParser}.

@@ -22,7 +22,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Metadata on classes specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the

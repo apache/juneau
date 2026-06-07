@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.auth;
 
 import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.*;
 
 /**

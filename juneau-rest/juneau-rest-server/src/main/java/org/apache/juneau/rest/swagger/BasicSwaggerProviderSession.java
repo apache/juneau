@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.swagger;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
+import static org.apache.juneau.rest.RestOpAnnotation.*;
 import static org.apache.juneau.rest.httppart.RestPartType.*;
 
 import java.lang.reflect.*;
@@ -29,31 +29,32 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.Items;
+import org.apache.juneau.commons.conversion.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.reflect.ParameterInfo;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Contact;
-import org.apache.juneau.http.annotation.License;
-import org.apache.juneau.http.annotation.Tag;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.Contact;
+import org.apache.juneau.http.License;
+import org.apache.juneau.http.Tag;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 
 import jakarta.servlet.*;
 

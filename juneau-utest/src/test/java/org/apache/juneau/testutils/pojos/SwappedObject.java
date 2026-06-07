@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 @Swap(SwappedObjectSwap.class)
 public class SwappedObject {

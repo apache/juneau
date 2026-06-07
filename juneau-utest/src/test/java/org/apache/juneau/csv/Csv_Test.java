@@ -22,7 +22,6 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
@@ -385,12 +384,12 @@ class Csv_Test extends TestBase {
 		assertEquals(10, parsed.radius);
 	}
 
-	@org.apache.juneau.annotation.Marshalled(dictionary = {Circle.class, Rectangle.class})
+	@org.apache.juneau.Marshalled(dictionary = {Circle.class, Rectangle.class})
 	public interface Shape {
 		String getName();
 	}
 
-	@org.apache.juneau.annotation.Marshalled(typeName = "Circle")
+	@org.apache.juneau.Marshalled(typeName = "Circle")
 	public static class Circle implements Shape {
 		public String name;
 		public int radius;
@@ -404,7 +403,7 @@ class Csv_Test extends TestBase {
 		public String getName() { return name; }
 	}
 
-	@org.apache.juneau.annotation.Marshalled(typeName = "Rectangle")
+	@org.apache.juneau.Marshalled(typeName = "Rectangle")
 	public static class Rectangle implements Shape {
 		public String name;
 		public int width;

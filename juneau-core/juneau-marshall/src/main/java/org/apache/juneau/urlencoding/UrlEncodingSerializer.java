@@ -22,9 +22,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.uon.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO models to URL-encoded notation with UON-encoded values (a notation for URL-encoded query paramter values).

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.TestUtils.assertThrowsWithMessage;
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
@@ -25,9 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.reflect.ClassInfo;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({"unused"})

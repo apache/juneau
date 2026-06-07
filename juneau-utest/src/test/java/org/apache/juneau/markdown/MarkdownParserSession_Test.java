@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.TestBase;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
@@ -329,7 +327,6 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
 	void h01_keyValueTypeResolution() throws Exception {
 		// _type row in a 2-column key/value table should resolve via bean dictionary.
 		var p = MarkdownParser.create().beanDictionary(HA.class, HB.class).build();

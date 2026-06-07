@@ -19,7 +19,7 @@ package org.apache.juneau.rest.httppart;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

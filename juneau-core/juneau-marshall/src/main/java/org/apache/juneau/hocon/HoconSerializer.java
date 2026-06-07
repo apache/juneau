@@ -18,15 +18,14 @@ package org.apache.juneau.hocon;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
+import java.net.*;
+import java.util.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
-import java.net.URI;
-import org.apache.juneau.swap.ObjectSwap;
+import org.apache.juneau.swap.*;
 
 /**
  * Serializes POJO models to HOCON (Human-Optimized Config Object Notation).

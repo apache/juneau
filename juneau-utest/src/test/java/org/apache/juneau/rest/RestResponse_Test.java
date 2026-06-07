@@ -21,7 +21,6 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

@@ -18,11 +18,11 @@ package org.apache.juneau.rest.auth.oauth;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URI;
-import java.time.Duration;
+import java.net.*;
+import java.time.*;
 
-import org.apache.juneau.TestBase;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Builder validation tests for {@link OAuthIntrospectionValidator}.

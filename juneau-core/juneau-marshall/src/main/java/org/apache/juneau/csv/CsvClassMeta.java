@@ -17,7 +17,6 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
-import org.apache.juneau.csv.annotation.*;
 
 /**
  * Metadata on classes specific to the CSV serializers and parsers pulled from the {@link Csv @Csv} annotation on

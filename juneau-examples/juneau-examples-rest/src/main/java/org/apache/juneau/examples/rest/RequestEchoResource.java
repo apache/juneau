@@ -16,20 +16,19 @@
  */
 package org.apache.juneau.examples.rest;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.annotation.ExternalDocs;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.html.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
-import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Sample REST resource for echoing HttpServletRequests back to the browser.

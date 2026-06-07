@@ -18,7 +18,7 @@ package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.Arrays;
+import java.util.*;
 
 import org.apache.juneau.commons.reflect.*;
 

@@ -18,7 +18,7 @@ package org.apache.juneau.rest.client.assertion;
 
 import java.io.*;
 
-import org.apache.juneau.commons.utils.StringUtils;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.client.*;
 
 /**

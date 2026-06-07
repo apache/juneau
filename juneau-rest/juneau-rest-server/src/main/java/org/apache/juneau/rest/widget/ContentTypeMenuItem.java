@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.rest.widget;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.bean.html5.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.rest.*;
 

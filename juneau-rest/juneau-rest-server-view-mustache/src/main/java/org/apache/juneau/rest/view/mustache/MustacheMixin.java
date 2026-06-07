@@ -18,12 +18,11 @@ package org.apache.juneau.rest.view.mustache;
 
 import java.io.*;
 
-import com.github.mustachejava.*;
-
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
+
+import com.github.mustachejava.*;
 
 /**
  * Mixin that wires Mustache view-rendering onto any Juneau REST resource.

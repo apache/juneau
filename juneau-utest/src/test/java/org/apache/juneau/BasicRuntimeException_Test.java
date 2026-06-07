@@ -18,12 +18,12 @@ package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.ops;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.servlet.*;
 
@@ -44,7 +43,7 @@ import org.apache.juneau.rest.servlet.*;
  *
  * <p>
  * Per the mixin sub-context inheritance model, the navigation page inherits the host's class-level
- * {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} page decoration (navigation links,
+ * {@link org.apache.juneau.html.HtmlDocConfig @HtmlDocConfig} page decoration (navigation links,
  * etc.), so the rendered HTML matches the host's other endpoints.
  *
  * <h5 class='figure'>Composition example:</h5>

@@ -20,9 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.inject.Value;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.test.context.*;

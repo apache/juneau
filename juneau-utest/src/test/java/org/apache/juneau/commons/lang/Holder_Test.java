@@ -19,7 +19,7 @@ package org.apache.juneau.commons.lang;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

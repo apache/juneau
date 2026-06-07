@@ -18,7 +18,7 @@ package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
 
 /**

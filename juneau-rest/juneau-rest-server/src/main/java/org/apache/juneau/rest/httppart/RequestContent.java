@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.httppart;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -29,12 +28,13 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.conversion.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;

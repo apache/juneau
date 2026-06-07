@@ -19,11 +19,11 @@ package org.apache.juneau.commons.settings;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.File;
-import java.net.URI;
-import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
+import java.nio.file.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;

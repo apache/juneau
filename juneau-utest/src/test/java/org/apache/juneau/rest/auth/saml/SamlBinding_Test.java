@@ -18,8 +18,8 @@ package org.apache.juneau.rest.auth.saml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.TestBase;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Trivial test that {@link SamlBinding} enumerates the two HTTP bindings v1 ships.

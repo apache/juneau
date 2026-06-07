@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.annotation.*;
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 
 /**
  * Abstract base class for all reflection wrapper objects providing common modifier checking functionality.

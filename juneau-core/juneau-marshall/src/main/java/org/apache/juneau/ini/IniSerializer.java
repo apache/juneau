@@ -18,12 +18,12 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
-import java.io.Reader;
+import java.io.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
-import java.io.InputStream;
 
 /**
  * Serializes POJO models to INI format.

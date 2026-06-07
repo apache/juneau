@@ -17,11 +17,11 @@
 package org.apache.juneau.bean.jsonapi;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.illegalState;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json.*;
 

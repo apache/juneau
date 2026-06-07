@@ -16,7 +16,7 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.annotation.Marshalled @Marshalled} types for the
+ * Juneau {@link org.apache.juneau.Marshalled @Marshalled} types for the
  * <a href="https://jsonapi.org/format/">JSON:API v1.1</a> wire format.
  *
  * <h5 class='topic'>Overview</h5>

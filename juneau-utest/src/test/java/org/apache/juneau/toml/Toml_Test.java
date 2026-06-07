@@ -22,7 +22,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.collections.*;
-import org.apache.juneau.marshaller.Toml;
+import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
 

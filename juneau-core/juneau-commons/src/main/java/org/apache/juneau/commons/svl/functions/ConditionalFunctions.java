@@ -44,9 +44,8 @@ public final class ConditionalFunctions {
 	 * {@code #{if(cond, then, else)}} — replacement for the legacy {@code $IF{...}}.
 	 *
 	 * <p>
-	 * Returns {@code then} if {@code cond} is truthy, {@code else} otherwise. Truthiness rules
-	 * match {@link ArgCoercer}'s boolean coercion table (explicit table, no
-	 * implicit truthiness).
+	 * Returns {@code then} if {@code cond} is truthy, {@code else} otherwise. Truthiness is
+	 * explicit (no implicit truthiness).
 	 */
 	public static class If extends TypedFunction {
 		@Override public String name() { return "if"; }

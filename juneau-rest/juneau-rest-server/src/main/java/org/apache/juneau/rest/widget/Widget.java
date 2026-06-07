@@ -21,11 +21,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.commons.svl.*;
 
 /**
  * Defines an interface for resolvers of <js>"$W{...}"</js> string variables.

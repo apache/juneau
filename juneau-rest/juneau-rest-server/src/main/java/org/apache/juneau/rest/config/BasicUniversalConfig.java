@@ -16,35 +16,34 @@
  */
 package org.apache.juneau.rest.config;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.bean.BeanConfig;
+import org.apache.juneau.*;
+import org.apache.juneau.bson.*;
+import org.apache.juneau.cbor.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.csv.*;
 import org.apache.juneau.hjson.*;
 import org.apache.juneau.hocon.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.ini.*;
+import org.apache.juneau.jcs.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
-import org.apache.juneau.jcs.*;
 import org.apache.juneau.jsonl.*;
-import org.apache.juneau.bson.*;
-import org.apache.juneau.cbor.*;
+import org.apache.juneau.markdown.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.serializer.annotation.*;
-import org.apache.juneau.soap.*;
-import org.apache.juneau.yaml.*;
-import org.apache.juneau.toml.*;
-import org.apache.juneau.ini.*;
 import org.apache.juneau.parquet.*;
+import org.apache.juneau.plaintext.*;
 import org.apache.juneau.proto.*;
-import org.apache.juneau.markdown.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.serializer.*;
+import org.apache.juneau.soap.*;
+import org.apache.juneau.toml.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.urlencoding.*;
 import org.apache.juneau.xml.*;
+import org.apache.juneau.yaml.*;
 
 /**
  * Predefined configuration for a REST resource that supports all languages

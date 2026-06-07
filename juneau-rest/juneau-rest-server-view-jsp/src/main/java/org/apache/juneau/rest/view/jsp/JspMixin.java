@@ -18,10 +18,9 @@ package org.apache.juneau.rest.view.jsp;
 
 import java.io.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Mixin that wires JSP view-rendering onto any Juneau REST resource.

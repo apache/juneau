@@ -27,10 +27,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.beans.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.classic.*;

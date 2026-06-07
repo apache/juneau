@@ -26,7 +26,7 @@ import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;
 import java.time.*;
-import java.time.temporal.TemporalAccessor;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
@@ -34,11 +34,9 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.html.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link HtmlSerializer}.

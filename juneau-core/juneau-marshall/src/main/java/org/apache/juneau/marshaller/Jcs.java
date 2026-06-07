@@ -21,8 +21,8 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
 import org.apache.juneau.jcs.*;
+import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 

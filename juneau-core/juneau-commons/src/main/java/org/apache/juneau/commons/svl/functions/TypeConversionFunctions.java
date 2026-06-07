@@ -24,8 +24,7 @@ import org.apache.juneau.commons.svl.*;
  * <p>
  * Useful as bridges between SVL's string-typed default and the native typed args expected by
  * other functions or by application code. All four functions return their typed value rendered
- * back as a String for SVL interop — the actual coercion happens via {@link ArgCoercer} on the
- * way in.
+ * back as a String for SVL interop.
  */
 public final class TypeConversionFunctions {
 

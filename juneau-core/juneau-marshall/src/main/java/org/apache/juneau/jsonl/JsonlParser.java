@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.jsonl;
 
-import java.util.Collection;
+import java.util.*;
 
-import org.apache.juneau.collections.JsonList;
-import org.apache.juneau.collections.JsonMap;
-import org.apache.juneau.json.JsonParser;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.json.*;
 
 /**
  * Parses JSONL (JSON Lines) input into POJO models.

@@ -19,19 +19,18 @@ package org.apache.juneau.rest.auth.oidc.rp;
 import static org.apache.juneau.rest.auth.oidc.rp.OidcTestSupport.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URI;
+import java.net.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.*;
-import org.apache.juneau.rest.auth.oidc.rp.OidcTestSupport.StubIdp;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
-import com.nimbusds.jose.jwk.RSAKey;
+import com.nimbusds.jose.jwk.*;
 
-import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.*;
 
 /**
  * End-to-end tests for {@link OidcRelyingParty} driving login &rarr; callback &rarr; authorized-request

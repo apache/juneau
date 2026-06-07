@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static java.util.stream.Collectors.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;

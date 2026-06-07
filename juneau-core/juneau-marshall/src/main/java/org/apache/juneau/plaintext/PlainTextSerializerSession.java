@@ -19,6 +19,7 @@ package org.apache.juneau.plaintext;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.io.*;
+
 import org.apache.juneau.serializer.*;
 
 /**

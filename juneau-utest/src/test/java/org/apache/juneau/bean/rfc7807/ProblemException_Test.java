@@ -18,8 +18,8 @@ package org.apache.juneau.bean.rfc7807;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.TestBase;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link ProblemException} — construction, factory, getter round-trip, and throw/catch behavior.

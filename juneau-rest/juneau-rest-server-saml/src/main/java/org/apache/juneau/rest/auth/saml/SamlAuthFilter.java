@@ -21,14 +21,14 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.security.Principal;
+import java.nio.charset.*;
+import java.security.*;
 import java.util.*;
 import java.util.zip.*;
 
 import org.apache.juneau.rest.auth.*;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 
 /**
  * {@link AuthFilter} that authenticates requests carrying a SAML 2.0 {@code <samlp:Response>} delivered via

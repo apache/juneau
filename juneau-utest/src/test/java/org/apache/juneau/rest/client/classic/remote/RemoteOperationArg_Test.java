@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -18,7 +18,7 @@ package org.apache.juneau.serializer;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Class for listening for serialize events during a serialization.

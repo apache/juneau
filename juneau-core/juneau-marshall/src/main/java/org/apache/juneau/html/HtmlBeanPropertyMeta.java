@@ -19,10 +19,9 @@ package org.apache.juneau.html;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.html.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Metadata on bean properties specific to the HTML serializers and parsers pulled from the {@link Html @Html}

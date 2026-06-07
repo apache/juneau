@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.response;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.net.*;
 import java.util.*;

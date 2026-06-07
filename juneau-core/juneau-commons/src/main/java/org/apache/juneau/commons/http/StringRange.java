@@ -18,12 +18,13 @@ package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.bean.BeanIgnore;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Represents a single value in a comma-delimited header value that optionally contains a quality metric for

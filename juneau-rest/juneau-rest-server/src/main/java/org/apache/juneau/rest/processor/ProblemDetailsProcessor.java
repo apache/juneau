@@ -18,22 +18,16 @@ package org.apache.juneau.rest.processor;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
-import org.apache.juneau.bean.rfc7807.Problem;
-import org.apache.juneau.bean.rfc7807.ProblemException;
-import org.apache.juneau.bean.rfc7807.ProblemLocalizationStrategy;
-import org.apache.juneau.bean.rfc7807.ProblemMapper;
-import org.apache.juneau.bean.rfc7807.ProblemMapperList;
-import org.apache.juneau.bean.rfc7807.adapter.ProblemAdapters;
-import org.apache.juneau.http.header.ContentType;
-import org.apache.juneau.http.response.BasicHttpException;
-import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.rest.RestOpContext;
-import org.apache.juneau.rest.RestOpSession;
-import org.apache.juneau.serializer.SerializeException;
+import org.apache.juneau.bean.rfc7807.*;
+import org.apache.juneau.bean.rfc7807.adapter.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.json.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Response processor that serializes

@@ -16,19 +16,13 @@
  */
 package org.apache.juneau.rest.swagger;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.commons.annotation.ExternalDocs;
-import org.apache.juneau.commons.annotation.Items;
-import org.apache.juneau.commons.annotation.SubItems;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

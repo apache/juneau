@@ -17,7 +17,7 @@
 package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.memoizer;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -26,8 +26,8 @@ import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;

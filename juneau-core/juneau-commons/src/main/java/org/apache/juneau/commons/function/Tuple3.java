@@ -18,7 +18,7 @@ package org.apache.juneau.commons.function;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.Optional;
+import java.util.*;
 
 import org.apache.juneau.commons.lang.*;
 

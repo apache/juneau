@@ -32,7 +32,6 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.plaintext.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;

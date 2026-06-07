@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Handler for a single MCP resource.

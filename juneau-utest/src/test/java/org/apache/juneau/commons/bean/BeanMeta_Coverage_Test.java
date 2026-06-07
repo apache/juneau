@@ -18,7 +18,6 @@ package org.apache.juneau.commons.bean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.beans.Transient;
 import java.util.*;
 
 import org.apache.juneau.*;

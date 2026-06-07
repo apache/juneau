@@ -21,12 +21,10 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 import java.util.*;
-import java.util.stream.Stream;
-import org.apache.juneau.commons.function.BeanChannel;
-import org.apache.juneau.commons.function.BeanConsumer;
-import org.apache.juneau.commons.function.BeanFactory;
-import org.apache.juneau.commons.function.BeanSupplier;
-import org.apache.juneau.commons.inject.BeanStore;
+import java.util.stream.*;
+
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Annotation that can be applied to bean fields, getter/setter methods, and constructor parameters
@@ -75,7 +73,7 @@ public @interface BeanProp {
 	 *
 	 * <p>
 	 * Intended as a brief, single-line description suitable for AI/LLM consumption, compact documentation,
-	 * or any context where brevity matters. See {@link org.apache.juneau.commons.annotation.Schema#summary()}
+	 * or any context where brevity matters. See {@link org.apache.juneau.commons.Schema#summary()}
 	 * for the canonical definition; this field is the bean-property-level counterpart.
 	 *
 	 * @return The annotation value.

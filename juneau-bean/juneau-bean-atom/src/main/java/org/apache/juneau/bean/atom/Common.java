@@ -17,12 +17,11 @@
 package org.apache.juneau.bean.atom;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 
 import java.net.*;
 
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Base class for all Atom elements, providing common attributes.

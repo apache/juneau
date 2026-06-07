@@ -23,11 +23,11 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
-
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Response processor that unwraps {@link CompletableFuture} / {@link CompletionStage} return values from

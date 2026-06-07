@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.svl.vars;
 
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.settings.*;
+import org.apache.juneau.commons.svl.*;
 
 /**
  * Environment variable variable resolver.

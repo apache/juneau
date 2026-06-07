@@ -20,9 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.html.AsideFloat.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;

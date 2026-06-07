@@ -18,10 +18,10 @@ package org.apache.juneau.rest.staticfile;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
-import java.nio.file.*;
+import java.nio.file.Path;
 import java.util.*;
 
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;

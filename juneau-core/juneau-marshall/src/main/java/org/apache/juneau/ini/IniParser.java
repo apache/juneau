@@ -18,11 +18,12 @@ package org.apache.juneau.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.time.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
-import java.time.Duration;
 
 /**
  * Parses INI-formatted text into POJO models.

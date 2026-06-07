@@ -20,26 +20,14 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.parquet.ParquetSchemaElement.*;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.lang.reflect.Array;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.io.*;
+import java.lang.reflect.*;
+import java.nio.charset.*;
+import java.util.*;
 
-import org.apache.juneau.collections.JsonMap;
-
-import org.apache.juneau.ClassMeta;
-import org.apache.juneau.parser.InputStreamParserSession;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.parser.ParserPipe;
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.parser.*;
 
 /**
  * Session for {@link ParquetParser}.

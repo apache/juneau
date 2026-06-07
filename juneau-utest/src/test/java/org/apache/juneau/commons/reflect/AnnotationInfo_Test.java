@@ -21,8 +21,9 @@ import static java.lang.annotation.RetentionPolicy.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

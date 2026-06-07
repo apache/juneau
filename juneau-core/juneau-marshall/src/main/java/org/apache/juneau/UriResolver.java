@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static org.apache.juneau.UriRelativity.*;
 import static org.apache.juneau.UriResolution.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 

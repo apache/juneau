@@ -84,9 +84,9 @@ import io.micrometer.core.instrument.*;
  * </p>
  *
  * <p>
- * Per-operation overrides are available via {@link org.apache.juneau.rest.annotation.RestOp#metricName()}.
+ * Per-operation overrides are available via {@link org.apache.juneau.rest.RestOp#metricName()}.
  * When a non-empty {@code metricName} is passed to {@code record(...)}, it takes precedence over the
- * recorder-level timer name. Per-op tags added via {@link org.apache.juneau.rest.annotation.RestOp#metricTags()}
+ * recorder-level timer name. Per-op tags added via {@link org.apache.juneau.rest.RestOp#metricTags()}
  * are merged into the standard tag set as additional {@code key=value} pairs.
  *
  * <h5 class='section'>See Also:</h5><ul>

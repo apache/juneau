@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.*;
 
 /**
  * A subclass of HTML elements that contain <a href="https://www.w3.org/TR/html51/syntax.html#raw-text">raw text</a>

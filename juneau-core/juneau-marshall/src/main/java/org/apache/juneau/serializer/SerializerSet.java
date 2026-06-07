@@ -16,12 +16,6 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.commons.http.MediaRanges;
-import org.apache.juneau.commons.http.MediaRange;
-import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.inject.BasicBeanStore;
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.commons.inject.BeanStoreOverridable;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -34,6 +28,8 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Represents a group of {@link Serializer Serializers} that can be looked up by media type.

@@ -22,11 +22,9 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.openapi3.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.mock.MockServletRequest;
-import org.apache.juneau.rest.mock.MockServletResponse;
+import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.yaml.*;

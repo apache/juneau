@@ -18,12 +18,12 @@ package org.apache.juneau.commons.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.bean.BeanIgnore;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 
 /**

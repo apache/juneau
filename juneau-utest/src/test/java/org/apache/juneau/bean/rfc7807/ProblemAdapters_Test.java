@@ -18,18 +18,10 @@ package org.apache.juneau.bean.rfc7807;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.bean.rfc7807.adapter.ProblemAdapters;
-import org.apache.juneau.http.response.BadRequest;
-import org.apache.juneau.http.response.BasicHttpException;
-import org.apache.juneau.http.response.Conflict;
-import org.apache.juneau.http.response.Forbidden;
-import org.apache.juneau.http.response.InternalServerError;
-import org.apache.juneau.http.response.NotFound;
-import org.apache.juneau.http.response.NotImplemented;
-import org.apache.juneau.http.response.ServiceUnavailable;
-import org.apache.juneau.http.response.Unauthorized;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.apache.juneau.bean.rfc7807.adapter.*;
+import org.apache.juneau.http.response.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link ProblemAdapters#fromException(BasicHttpException)} across the 8 most-common

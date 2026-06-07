@@ -17,10 +17,9 @@
 package org.apache.juneau.rest.mcp;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
-
 import java.util.*;
 
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Pagination strategy for MCP {@code list} dispatchers (tools / prompts / resources).

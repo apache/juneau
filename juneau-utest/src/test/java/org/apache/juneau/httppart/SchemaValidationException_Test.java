@@ -19,7 +19,7 @@ package org.apache.juneau.httppart;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.httppart.SchemaValidationException;
+import org.apache.juneau.commons.httppart.*;
 import org.junit.jupiter.api.*;
 
 class SchemaValidationException_Test extends TestBase {

@@ -20,12 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
 import java.time.*;
+import java.time.Duration;
 import java.util.*;
 
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;

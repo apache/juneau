@@ -18,7 +18,6 @@ package org.apache.juneau.urlencoding;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.urlencoding.annotation.*;
 
 /**
  * Metadata on classes specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding} annotation on the class.

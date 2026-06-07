@@ -17,6 +17,7 @@
 package org.apache.juneau.config.format;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;

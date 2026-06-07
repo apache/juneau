@@ -19,7 +19,7 @@ package org.apache.juneau.commons.collections;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.function.*;
 
 /**
  * A fluent wrapper around an arbitrary map that provides convenient methods for adding entries.

@@ -18,13 +18,13 @@ package org.apache.juneau.rest.auth.saml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.security.KeyPairGenerator;
-import java.time.Duration;
+import java.security.*;
+import java.time.*;
 
-import org.apache.juneau.TestBase;
-import org.junit.jupiter.api.Test;
-import org.opensaml.security.credential.BasicCredential;
-import org.opensaml.xmlsec.signature.support.SignatureConstants;
+import org.apache.juneau.*;
+import org.junit.jupiter.api.*;
+import org.opensaml.security.credential.*;
+import org.opensaml.xmlsec.signature.support.*;
 
 /**
  * Builder validation tests for {@link SamlAssertionValidator}.

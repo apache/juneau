@@ -18,7 +18,7 @@ package org.apache.juneau.bean.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * MCP prompt descriptor ({@code prompts/list} entry).

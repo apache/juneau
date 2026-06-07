@@ -23,7 +23,7 @@ package org.apache.juneau.commons.bean;
  * This class is intentionally a metadata-only placeholder in the bean-modeling layer.
  * The actual application logic that pushes {@link BeanConfig @BeanConfig} attributes into a
  * marshalling context builder lives in {@code juneau-marshall} (in the sibling
- * {@code org.apache.juneau.annotation.BeanConfigAnnotation.Applier} class), since
+ * {@code org.apache.juneau.BeanConfigAnnotation.Applier} class), since
  * {@code juneau-commons} cannot depend on {@code juneau-marshall}.
  *
  * <h5 class='section'>See Also:</h5><ul>

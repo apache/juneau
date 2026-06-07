@@ -17,7 +17,6 @@
 package org.apache.juneau.uon;
 
 import org.apache.juneau.*;
-import org.apache.juneau.uon.annotation.*;
 
 /**
  * Metadata on classes specific to the UON serializers and parsers pulled from the {@link Uon @Uon} annotation on

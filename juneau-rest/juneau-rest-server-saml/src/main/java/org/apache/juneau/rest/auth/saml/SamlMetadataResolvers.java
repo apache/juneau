@@ -17,21 +17,20 @@
 package org.apache.juneau.rest.auth.saml;
 
 import java.io.*;
-import java.net.URI;
+import java.net.*;
 import java.net.http.*;
 import java.nio.file.*;
-import java.time.Duration;
+import java.time.*;
 
 import javax.xml.parsers.*;
 
-import net.shibboleth.shared.component.ComponentInitializationException;
-import net.shibboleth.shared.resolver.ResolverException;
-import net.shibboleth.shared.xml.impl.BasicParserPool;
+import org.opensaml.saml.metadata.resolver.*;
+import org.opensaml.saml.metadata.resolver.impl.*;
+import org.w3c.dom.*;
 
-import org.opensaml.saml.metadata.resolver.MetadataResolver;
-import org.opensaml.saml.metadata.resolver.impl.DOMMetadataResolver;
-import org.opensaml.saml.metadata.resolver.impl.FilesystemMetadataResolver;
-import org.w3c.dom.Element;
+import net.shibboleth.shared.component.*;
+import net.shibboleth.shared.resolver.*;
+import net.shibboleth.shared.xml.impl.*;
 
 /**
  * Convenience factories for building {@link MetadataResolver} instances backed by an OpenSAML implementation.

@@ -28,7 +28,7 @@ import java.lang.annotation.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.collections.*;
 
 /**

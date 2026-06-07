@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.http.header.EntityTags;
-
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
+
+import org.apache.juneau.http.header.*;
 
 /**
  * Category of headers that consist of a comma-delimited list of entity validator values.

@@ -29,9 +29,9 @@ import java.util.stream.*;
 import org.apache.http.*;
 import org.apache.http.util.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.http.*;
 
 /**
  * An simple list of HTTP parts (form-data, query-parameters, path-parameters).

@@ -16,9 +16,6 @@
  */
 package org.apache.juneau.http;
 
-import org.apache.juneau.http.header.EntityTag;
-import org.apache.juneau.http.header.EntityTags;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -31,6 +28,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.http.*;
+import org.apache.juneau.http.header.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

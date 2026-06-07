@@ -17,8 +17,7 @@
 package org.apache.juneau.oapi;
 
 import org.apache.juneau.*;
-import org.apache.juneau.oapi.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to the OpenAPI serializers and parsers pulled from the {@link OpenApi @OpenApi}

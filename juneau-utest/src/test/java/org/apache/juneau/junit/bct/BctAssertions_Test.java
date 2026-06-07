@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.junit.bct;
 
+import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.apache.juneau.commons.lang.TriState.*;
 
 import java.util.*;
 import java.util.function.*;

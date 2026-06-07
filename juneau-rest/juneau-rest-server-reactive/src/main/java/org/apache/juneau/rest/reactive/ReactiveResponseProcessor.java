@@ -21,13 +21,9 @@ import static jakarta.servlet.http.HttpServletResponse.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
-
-import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshaller.*;
@@ -36,6 +32,9 @@ import org.apache.juneau.rest.processor.*;
 import org.apache.juneau.rest.util.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.sse.*;
+
+import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * Response processor that bridges <a class="doclink" href="https://www.reactive-streams.org/">Reactive Streams</a>

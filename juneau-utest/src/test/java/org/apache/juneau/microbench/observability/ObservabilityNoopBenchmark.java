@@ -24,7 +24,7 @@ import org.apache.juneau.rest.metrics.*;
 import org.apache.juneau.rest.tracing.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
-import org.openjdk.jmh.profile.GCProfiler;
+import org.openjdk.jmh.profile.*;
 import org.openjdk.jmh.results.format.*;
 import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;

@@ -19,7 +19,7 @@ package org.apache.juneau.toml;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.parser.*;
 
 /**
  * Internal tokenizer for TOML v1.0.0 parsing.

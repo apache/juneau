@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.matcher;
 
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 
 import jakarta.servlet.http.*;
 

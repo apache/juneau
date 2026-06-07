@@ -16,20 +16,18 @@
  */
 package org.apache.juneau.markdown;
 
-import org.apache.juneau.annotation.ParentProperty;
-import static org.apache.juneau.commons.utils.Utils.memoizer;
-import static org.apache.juneau.commons.utils.Utils.opt;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
-import org.apache.juneau.commons.function.Memoizer;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.swap.BuilderSwap;
-import org.apache.juneau.swap.ObjectSwap;
+import org.apache.juneau.swap.*;
 
 /**
  * Session object for {@link MarkdownParser}.

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.parser;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -30,6 +29,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.json.*;
@@ -810,7 +810,7 @@ public class Parser extends MarshallingContextable {
 	 *
 	 * <p>
 	 * The outer object is used when instantiating top-level non-static inner classes and when setting
-	 * {@link org.apache.juneau.annotation.ParentProperty @ParentProperty} fields on parsed beans.
+	 * {@link org.apache.juneau.ParentProperty @ParentProperty} fields on parsed beans.
 	 * This is important when a parser is used to parse inline content (e.g. JSON5 embedded in a Markdown
 	 * table cell) where the parent bean context must be preserved.
 	 *
@@ -819,7 +819,7 @@ public class Parser extends MarshallingContextable {
 	 * @param type The object type to create.
 	 * @param outer
 	 * 	The outer object to associate with this parse session.
-	 * 	Used for {@link org.apache.juneau.annotation.ParentProperty @ParentProperty} injection and
+	 * 	Used for {@link org.apache.juneau.ParentProperty @ParentProperty} injection and
 	 * 	non-static inner class construction.
 	 * 	Can be <jk>null</jk>.
 	 * @return The parsed object.

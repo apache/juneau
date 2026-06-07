@@ -28,7 +28,7 @@ import org.apache.juneau.json5.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.swagger.BasicSwaggerProviderSession;
+import org.apache.juneau.rest.swagger.*;
 
 /**
  * A single session of generating an OpenAPI 3.1 document.

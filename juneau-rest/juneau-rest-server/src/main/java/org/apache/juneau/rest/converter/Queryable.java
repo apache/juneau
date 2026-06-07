@@ -74,7 +74,7 @@ import org.apache.juneau.rest.httppart.*;
  * 	<li class='jc'>{@link ObjectViewer} - Additional information on filtering POJO models.
  * 	<li class='jc'>{@link ObjectSorter} - Additional information on sorting POJO models.
  * 	<li class='jc'>{@link ObjectPaginator} - Additional information on paginating POJO models.
- * 	<li class='ja'>{@link org.apache.juneau.rest.annotation.RestOp#converters()} - Registering converters with REST resources.
+ * 	<li class='ja'>{@link org.apache.juneau.rest.RestOp#converters()} - Registering converters with REST resources.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */

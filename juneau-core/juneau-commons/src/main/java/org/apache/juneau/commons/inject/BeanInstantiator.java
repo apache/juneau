@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.commons.inject;
 
+import static java.util.Collections.*;
+import static java.util.Comparator.*;
+import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static java.util.Comparator.*;
-import static org.apache.juneau.commons.reflect.ElementFlag.*;
-import static java.util.Collections.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -132,8 +132,8 @@ import org.apache.juneau.commons.reflect.*;
  * Builders are detected in the following priority order:
  * <ol class='spaced-list'>
  * 	<li>Explicitly set via {@link Builder#builder(Object)} or {@link Builder#builder(Class)}.
- * 	<li>{@link org.apache.juneau.commons.annotation.Builder @Builder} annotation on the bean subtype.
- * 	<li>{@link org.apache.juneau.commons.annotation.Builder @Builder} annotation on the bean type.
+ * 	<li>{@link org.apache.juneau.commons.Builder @Builder} annotation on the bean subtype.
+ * 	<li>{@link org.apache.juneau.commons.Builder @Builder} annotation on the bean type.
  * 	<li>Auto-detection:
  * 		<ul>
  * 			<li>Static <c>create()</c> or <c>builder()</c> method that returns a builder type
@@ -2116,8 +2116,8 @@ public class BeanInstantiator<T> {
 		// Priority 2: @Builder annotation on beanSubType
 		// Check declared annotations first to ensure child's annotation overrides parent's
 		var r = beanSubType.getDeclaredAnnotations().stream()
-			.filter(a -> a.isType(org.apache.juneau.commons.annotation.Builder.class))
-			.map(a -> (AnnotationInfo<org.apache.juneau.commons.annotation.Builder>)a)
+			.filter(a -> a.isType(org.apache.juneau.commons.Builder.class))
+			.map(a -> (AnnotationInfo<org.apache.juneau.commons.Builder>)a)
 			.map(x -> ClassInfo.class.cast(info(x.inner().value())))
 			.findFirst();
 		if (r.isPresent()) {
@@ -2125,7 +2125,7 @@ public class BeanInstantiator<T> {
 			return r.get();
 		}
 		// Fall back to inherited annotations if no declared annotation found
-		r = beanSubType.getAnnotations(org.apache.juneau.commons.annotation.Builder.class)
+		r = beanSubType.getAnnotations(org.apache.juneau.commons.Builder.class)
 			.map(x -> ClassInfo.class.cast(info(x.inner().value())))
 			.findFirst();
 		if (r.isPresent()) {

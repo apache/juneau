@@ -16,15 +16,11 @@
  */
 package org.apache.juneau.http;
 
-import org.apache.juneau.commons.http.MediaRanges;
-import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.http.StringRanges;
 import java.net.*;
 import java.time.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.header.EntityTag;
-import org.apache.juneau.http.header.EntityTags;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.http.header.*;
 
 /**

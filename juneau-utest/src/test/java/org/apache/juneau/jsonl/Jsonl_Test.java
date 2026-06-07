@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Tests for {@link JsonlSerializer}.

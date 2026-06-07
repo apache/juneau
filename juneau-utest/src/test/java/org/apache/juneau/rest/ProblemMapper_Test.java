@@ -16,24 +16,17 @@
  */
 package org.apache.juneau.rest;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URI;
-import java.util.Locale;
+import java.net.*;
+import java.util.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.bean.rfc7807.Problem;
-import org.apache.juneau.bean.rfc7807.ProblemLocalizationStrategy;
-import org.apache.juneau.bean.rfc7807.ProblemMapper;
-import org.apache.juneau.bean.rfc7807.ProblemMapperList;
-import org.apache.juneau.commons.inject.Bean;
-import org.apache.juneau.http.response.BasicHttpException;
-import org.apache.juneau.http.response.NotFound;
-import org.apache.juneau.rest.annotation.Rest;
-import org.apache.juneau.rest.annotation.RestGet;
-import org.apache.juneau.rest.mock.classic.MockRestClient;
-import org.junit.jupiter.api.Test;
+import org.apache.juneau.*;
+import org.apache.juneau.bean.rfc7807.*;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.http.response.*;
+import org.apache.juneau.rest.mock.classic.*;
+import org.junit.jupiter.api.*;
 
 /**
  * End-to-end tests for {@link ProblemMapper} bean-store discovery and the {@link ProblemLocalizationStrategy}
@@ -136,7 +129,7 @@ class ProblemMapper_Test extends TestBase {
 	public static class B {
 		@Bean public ProblemMapper<NotFound> nfMapper() { return new B_CustomNotFoundMapper(); }
 		@RestGet("/order/{id}")
-		public String order(@org.apache.juneau.http.annotation.Path("id") int id) {
+		public String order(@org.apache.juneau.http.Path("id") int id) {
 			throw new NotFound("Order {0} missing", id);
 		}
 	}
@@ -164,7 +157,7 @@ class ProblemMapper_Test extends TestBase {
 	@Rest(problemDetails="true")
 	public static class C {
 		@RestGet("/order/{id}")
-		public String order(@org.apache.juneau.http.annotation.Path("id") int id) {
+		public String order(@org.apache.juneau.http.Path("id") int id) {
 			throw new NotFound("Order {0} not found", id);
 		}
 	}
@@ -240,7 +233,7 @@ class ProblemMapper_Test extends TestBase {
 	public static class E {
 		@Bean public ProblemMapper<NotFound> abstain() { return new E_AlwaysAbstainMapper(); }
 		@RestGet("/order/{id}")
-		public String order(@org.apache.juneau.http.annotation.Path("id") int id) {
+		public String order(@org.apache.juneau.http.Path("id") int id) {
 			throw new NotFound("Order {0} not found", id);
 		}
 	}
@@ -298,7 +291,7 @@ class ProblemMapper_Test extends TestBase {
 	public static class F {
 		@Bean public ProblemLocalizationStrategy loc() { return new F_TaggingLocalizationStrategy(); }
 		@RestGet("/order/{id}")
-		public String order(@org.apache.juneau.http.annotation.Path("id") int id) {
+		public String order(@org.apache.juneau.http.Path("id") int id) {
 			throw new NotFound("Order {0} not found", id);
 		}
 	}
@@ -325,7 +318,7 @@ class ProblemMapper_Test extends TestBase {
 	@Rest(problemDetails="true")
 	public static class G {
 		@RestGet("/order/{id}")
-		public String order(@org.apache.juneau.http.annotation.Path("id") int id) {
+		public String order(@org.apache.juneau.http.Path("id") int id) {
 			throw new NotFound("Order {0} not found", id);
 		}
 	}

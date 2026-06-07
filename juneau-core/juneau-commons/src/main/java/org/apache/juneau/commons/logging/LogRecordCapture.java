@@ -16,10 +16,8 @@
  */
 package org.apache.juneau.commons.logging;
 
-import java.io.Closeable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.io.*;
+import java.util.*;
 
 /**
  * Captures log records for testing purposes.

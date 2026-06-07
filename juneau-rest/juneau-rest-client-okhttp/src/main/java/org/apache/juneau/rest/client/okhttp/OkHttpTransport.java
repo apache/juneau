@@ -18,10 +18,10 @@ package org.apache.juneau.rest.client.okhttp;
 
 import java.io.*;
 
+import org.apache.juneau.rest.client.*;
+
 import okhttp3.*;
 import okio.*;
-
-import org.apache.juneau.rest.client.*;
 
 /**
  * {@link HttpTransport} implementation backed by OkHttp 5.x.

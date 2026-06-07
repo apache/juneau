@@ -20,9 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Map.*;
 
-import org.apache.juneau.annotation.*;
-import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
+import org.junit.jupiter.api.*;
 
 /**
  * Tests various error conditions when defining beans.

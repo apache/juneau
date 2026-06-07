@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.math.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.junit.jupiter.api.*;
 
 /**

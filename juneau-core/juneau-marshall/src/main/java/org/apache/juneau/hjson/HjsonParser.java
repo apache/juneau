@@ -19,10 +19,9 @@ package org.apache.juneau.hjson;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.JsonList;
-import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses Hjson (Human JSON) text into POJO models.

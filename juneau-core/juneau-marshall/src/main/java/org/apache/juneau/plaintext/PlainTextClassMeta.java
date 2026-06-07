@@ -17,7 +17,6 @@
 package org.apache.juneau.plaintext;
 
 import org.apache.juneau.*;
-import org.apache.juneau.plaintext.annotation.*;
 
 /**
  * Metadata on classes specific to the PlainText serializers and parsers pulled from the {@link PlainText @PlainText} annotation on

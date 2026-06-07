@@ -23,20 +23,18 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.util.*;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import java.time.*;
+import java.time.Duration;
 import java.time.temporal.*;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+
+import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session object that lives for the duration of a single use of {@link CsvSerializer}.

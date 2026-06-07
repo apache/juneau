@@ -19,7 +19,6 @@ package org.apache.juneau.ini;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.ini.annotation.*;
 
 /**
  * Metadata on classes specific to INI serializers and parsers, from {@link Ini @Ini}.

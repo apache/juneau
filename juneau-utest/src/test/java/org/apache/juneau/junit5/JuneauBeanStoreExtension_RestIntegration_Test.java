@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;

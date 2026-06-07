@@ -24,33 +24,30 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.net.URI;
-import java.net.URL;
-import java.text.MessageFormat;
+import java.net.*;
+import java.text.*;
 import java.time.*;
-import java.time.temporal.Temporal;
-import java.time.temporal.TemporalAccessor;
+import java.time.Duration;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.datatype.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.DateFormat;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.collections.FluentMap;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.soap.*;
-import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.utils.Iso8601Utils;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanMeta;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
-import org.apache.juneau.commons.bean.BeanPropertyValue;
+import org.apache.juneau.utils.*;
 
 /**
  * Serializer session that lives for the duration of a single use of {@link Serializer}.

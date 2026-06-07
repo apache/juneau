@@ -22,7 +22,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.junit5.*;
-import org.apache.juneau.rest.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**

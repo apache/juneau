@@ -17,11 +17,12 @@
 package org.apache.juneau.bean.openapi3.ui;
 
 import static java.util.Collections.*;
-
-import static org.apache.juneau.commons.http.MediaType.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.a;
+import static org.apache.juneau.bean.html5.HtmlBuilder.tr;
+import static org.apache.juneau.commons.http.MediaType.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -31,11 +32,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.http.MediaType;
 
 /**
  * Generates an OpenAPI-UI interface from an OpenAPI document.

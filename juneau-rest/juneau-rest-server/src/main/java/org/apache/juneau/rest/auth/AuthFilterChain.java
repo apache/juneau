@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.auth;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 
 import java.io.*;
 import java.security.*;

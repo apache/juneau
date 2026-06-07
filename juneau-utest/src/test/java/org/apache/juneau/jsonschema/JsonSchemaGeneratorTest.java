@@ -22,10 +22,10 @@ import static org.apache.juneau.jsonschema.TypeCategory.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
+
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swap.*;
 import org.apache.juneau.testutils.pojos.*;

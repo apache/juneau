@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
+
 import java.lang.reflect.*;
 import java.text.*;
 import java.util.*;
@@ -29,7 +30,6 @@ import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
 

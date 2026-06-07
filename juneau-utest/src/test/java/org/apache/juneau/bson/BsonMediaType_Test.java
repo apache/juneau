@@ -18,7 +18,7 @@ package org.apache.juneau.bson;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**

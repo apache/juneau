@@ -26,7 +26,6 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

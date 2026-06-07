@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.swap;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Identifies a class as being a surrogate class.

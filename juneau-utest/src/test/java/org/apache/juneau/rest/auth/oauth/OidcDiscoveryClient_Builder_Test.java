@@ -18,12 +18,12 @@ package org.apache.juneau.rest.auth.oauth;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URI;
+import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.TestBase;
+import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.oauth.oidc.*;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 /**
  * Builder tests for {@link OidcDiscoveryClient} and the {@link OidcMetadata} record's defensive copies.

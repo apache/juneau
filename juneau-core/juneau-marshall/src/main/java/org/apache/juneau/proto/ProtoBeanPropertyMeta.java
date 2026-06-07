@@ -17,11 +17,11 @@
 package org.apache.juneau.proto;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.proto.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to the Proto serializers and parsers pulled from the {@link Proto @Proto}

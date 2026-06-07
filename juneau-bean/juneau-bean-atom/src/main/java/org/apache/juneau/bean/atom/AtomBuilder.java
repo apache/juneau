@@ -19,7 +19,7 @@ package org.apache.juneau.bean.atom;
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.UriResolver;
+import org.apache.juneau.*;
 
 
 /**

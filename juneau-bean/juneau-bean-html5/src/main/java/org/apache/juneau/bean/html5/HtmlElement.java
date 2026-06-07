@@ -19,8 +19,8 @@ package org.apache.juneau.bean.html5;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.html.annotation.HtmlFormat.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.html.HtmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 
 import java.net.*;
 
@@ -28,7 +28,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Superclass for all HTML elements.
@@ -41,7 +41,7 @@ import org.apache.juneau.xml.annotation.*;
 
  * </ul>
  */
-@org.apache.juneau.html.annotation.Html(format = XML)
+@org.apache.juneau.html.Html(format = XML)
 public abstract class HtmlElement {
 
 	private java.util.Map<String,Object> attrs;

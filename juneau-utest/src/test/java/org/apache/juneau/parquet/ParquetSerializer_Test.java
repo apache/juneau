@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.serializer.SerializeException;
+import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**

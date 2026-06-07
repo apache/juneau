@@ -19,8 +19,7 @@ package org.apache.juneau.commons.utils;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.util.*;
 import java.util.function.*;
 

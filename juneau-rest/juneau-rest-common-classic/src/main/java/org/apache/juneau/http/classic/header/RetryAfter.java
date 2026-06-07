@@ -25,7 +25,7 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a parsed <l>Retry-After</l> HTTP response header.

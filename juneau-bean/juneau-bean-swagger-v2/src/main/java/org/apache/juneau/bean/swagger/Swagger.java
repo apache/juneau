@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
@@ -27,6 +26,7 @@ import java.util.*;
 
 import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.objecttools.*;
 

@@ -20,11 +20,10 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.marshaller.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.*;
 
 class ReadWriteOnlyProperties_Test extends TestBase {
 

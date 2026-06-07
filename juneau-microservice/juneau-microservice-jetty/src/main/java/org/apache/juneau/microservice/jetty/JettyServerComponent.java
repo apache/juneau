@@ -27,19 +27,15 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
-import jakarta.servlet.DispatcherType;
-
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.commons.inject.Value;
-import org.apache.juneau.commons.reflect.ClassInfo;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.auth.*;
 import org.apache.juneau.rest.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;

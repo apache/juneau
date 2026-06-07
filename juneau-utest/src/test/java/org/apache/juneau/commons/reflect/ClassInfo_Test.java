@@ -24,6 +24,7 @@ import static org.apache.juneau.commons.reflect.ClassInfo.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -34,12 +35,11 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.*;
 
 @SuppressWarnings({
 	"java:S3008", // Static field naming follows test convention

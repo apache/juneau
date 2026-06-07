@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
 import java.util.jar.*;
 import java.util.logging.*;
 
@@ -122,7 +121,11 @@ class Microservice_Lifecycle_Test extends TestBase {
 		assertEquals("FromString", b.manifest.get("Main-Class").orElse(null));
 	}
 
-	@Test void a06_builder_vars_varargs() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends Var>[] varargs; generic array creation is safe here.
+	})
+	void a06_builder_vars_varargs() {
 		// vars(Class...) merely chains into the underlying VarResolver builder.  We just need to call it without
 		// throwing - subsequent build() should succeed.
 		var b = Microservice.create().vars(ArgsVar.class);

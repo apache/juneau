@@ -19,7 +19,7 @@ package org.apache.juneau.http.classic.header;
 import java.util.function.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a parsed <l>Connection</l> HTTP request header.

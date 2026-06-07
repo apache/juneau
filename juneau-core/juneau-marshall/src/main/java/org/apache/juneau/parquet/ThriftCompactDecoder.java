@@ -16,12 +16,9 @@
  */
 package org.apache.juneau.parquet;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.io.*;
+import java.nio.charset.*;
+import java.util.*;
 
 /**
  * Minimal Thrift Compact Protocol decoder for reading Parquet metadata.

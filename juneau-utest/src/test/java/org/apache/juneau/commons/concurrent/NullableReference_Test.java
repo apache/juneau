@@ -19,7 +19,7 @@ package org.apache.juneau.commons.concurrent;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

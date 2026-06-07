@@ -21,7 +21,7 @@ import java.io.*;
 
 import javax.imageio.*;
 
-import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.serializer.*;
 
 /**

@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.lang;
 
+import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static java.util.stream.Collectors.*;
 
 import java.math.*;
 import java.text.*;

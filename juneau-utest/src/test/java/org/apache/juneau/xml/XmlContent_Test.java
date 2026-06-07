@@ -17,14 +17,12 @@
 package org.apache.juneau.xml;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.xml.annotation.*;
 import org.junit.jupiter.api.*;
 
 class XmlContent_Test extends TestBase {

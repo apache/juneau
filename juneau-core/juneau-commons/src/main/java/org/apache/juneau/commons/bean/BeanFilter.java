@@ -16,11 +16,9 @@
  */
 package org.apache.juneau.commons.bean;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import org.apache.juneau.commons.reflect.ClassInfo;
-import org.apache.juneau.commons.reflect.ClassInfoTyped;
+import org.apache.juneau.commons.reflect.*;
 
 /**
  * Bean-modeling SPI seam that exposes the per-class filter surface the bean-runtime types

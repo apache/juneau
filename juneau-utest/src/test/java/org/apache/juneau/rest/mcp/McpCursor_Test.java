@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.BasicBeanStore;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.junit.jupiter.api.*;
 
 /**

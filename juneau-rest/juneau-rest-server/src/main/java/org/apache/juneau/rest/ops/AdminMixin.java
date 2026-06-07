@@ -21,9 +21,8 @@ import java.lang.management.*;
 import java.util.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.guard.*;
-import org.apache.juneau.rest.guard.RateLimitGuard.BucketState;
+import org.apache.juneau.rest.guard.RateLimitGuard.*;
 
 /**
  * Mixin that serves operational-introspection endpoints under {@code /admin/*}: thread dump,

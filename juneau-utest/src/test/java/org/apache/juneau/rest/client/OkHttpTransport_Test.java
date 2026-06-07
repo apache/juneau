@@ -22,13 +22,13 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 
-import okhttp3.*;
-
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.okhttp.*;
 import org.junit.jupiter.api.*;
 
 import com.sun.net.httpserver.*;
+
+import okhttp3.*;
 
 /**
  * Integration tests for {@link OkHttpTransport} against a real embedded HTTP server.

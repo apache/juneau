@@ -17,13 +17,12 @@
 package org.apache.juneau.http.header;
 
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.http.NameValuePair;
+import org.apache.juneau.commons.http.*;
 
 /**
  * Base type for headers whose value is a single {@link MediaType} (e.g. {@code Content-Type}).

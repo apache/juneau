@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.parquet;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.nio.charset.*;
 
 /**
  * Writes column values using PLAIN encoding for Parquet data pages.

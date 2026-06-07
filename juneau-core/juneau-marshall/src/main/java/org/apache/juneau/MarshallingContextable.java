@@ -16,7 +16,6 @@
  */
 package org.apache.juneau;
 
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -27,17 +26,17 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.reflect.Visibility;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.swap.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Context class for classes that use {@link MarshallingContext} objects.

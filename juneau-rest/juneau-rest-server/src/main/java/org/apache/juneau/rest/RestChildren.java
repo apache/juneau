@@ -28,7 +28,6 @@ import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.util.*;
 
 import jakarta.servlet.*;

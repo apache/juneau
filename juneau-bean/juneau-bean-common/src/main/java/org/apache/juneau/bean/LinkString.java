@@ -21,13 +21,12 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.objecttools.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.*;
 
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.

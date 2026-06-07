@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.servlet;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.ops.*;
 
@@ -39,7 +38,7 @@ import jakarta.servlet.http.*;
  * {@link Rest#mixins() @Rest(mixins=...)} on top of the residual op-mixins inherited from
  * {@link BasicRestResource}. The navigation op lives on the {@code NavigationMixin} sub-context (backed by
  * {@link RestMixin#getHostContext()}) but renders with the host's
- * {@link org.apache.juneau.html.annotation.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
+ * {@link org.apache.juneau.html.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
  * sub-contexts inherit the host's class-level {@code @HtmlDocConfig} (and other class-level config), so the
  * navigation page matches the host's other endpoints.
  *

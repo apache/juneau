@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.parquet;
 
-import java.io.IOException;
+import java.io.*;
 
 /**
  * A Parquet schema element representing a field in the Parquet schema.

@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.arg;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * REST java method parameter resolver.

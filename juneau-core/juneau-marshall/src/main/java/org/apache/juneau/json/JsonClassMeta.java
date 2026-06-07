@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.json.annotation.*;
 
 /**
  * Metadata on classes specific to the JSON serializers and parsers pulled from the {@link Json @Json} annotation on

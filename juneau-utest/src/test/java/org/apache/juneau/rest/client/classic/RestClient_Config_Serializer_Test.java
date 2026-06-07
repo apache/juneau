@@ -23,9 +23,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
@@ -69,7 +68,7 @@ class RestClient_Config_Serializer_Test extends TestBase {
 		client().addBeanTypes().build().post("/echoBody",l1).run().assertContent("{f1:{_type:'L',f2:1}}");
 	}
 
-	@org.apache.juneau.annotation.Marshalled(typeName="L")
+	@org.apache.juneau.Marshalled(typeName="L")
 	public static class A2 {
 		public int f2;
 		static A2 get() {

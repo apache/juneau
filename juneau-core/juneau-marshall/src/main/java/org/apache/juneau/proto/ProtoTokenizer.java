@@ -19,7 +19,7 @@ package org.apache.juneau.proto;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.parser.*;
 
 /**
  * Internal tokenizer for Protobuf Text Format parsing.

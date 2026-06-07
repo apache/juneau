@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
 
 import java.io.*;
 import java.sql.*;
-import java.sql.Timestamp;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.*;

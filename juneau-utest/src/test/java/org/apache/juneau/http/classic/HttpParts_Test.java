@@ -25,11 +25,12 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.message.*;
 import org.apache.juneau.*;
-import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.http.classic.header.BasicHeader;
+import org.apache.juneau.http.classic.part.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -186,25 +187,25 @@ class HttpParts_Test extends TestBase {
 	// getName - different HttpPartType values
 	// ------------------------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.http.annotation.Header("MyHeader")
+	@org.apache.juneau.http.Header("MyHeader")
 	public static class A24_HeaderBean {
 		@Override
 		public String toString() { return "value"; }
 	}
 
-	@org.apache.juneau.http.annotation.Query("MyQuery")
+	@org.apache.juneau.http.Query("MyQuery")
 	public static class A25_QueryBean {
 		@Override
 		public String toString() { return "value"; }
 	}
 
-	@org.apache.juneau.http.annotation.FormData("MyFormData")
+	@org.apache.juneau.http.FormData("MyFormData")
 	public static class A26_FormDataBean {
 		@Override
 		public String toString() { return "value"; }
 	}
 
-	@org.apache.juneau.http.annotation.Path("MyPath")
+	@org.apache.juneau.http.Path("MyPath")
 	public static class A27_PathBean {
 		@Override
 		public String toString() { return "value"; }
@@ -473,16 +474,16 @@ class HttpParts_Test extends TestBase {
 
 	// getName — exercises the @X(name=...) annotation paths (the existing tests cover @X(value=...)).
 
-	@org.apache.juneau.http.annotation.Header(name = "HName")
+	@org.apache.juneau.http.Header(name = "HName")
 	public static class B_HeaderNameBean { }
 
-	@org.apache.juneau.http.annotation.Query(name = "QName")
+	@org.apache.juneau.http.Query(name = "QName")
 	public static class B_QueryNameBean { }
 
-	@org.apache.juneau.http.annotation.FormData(name = "FName")
+	@org.apache.juneau.http.FormData(name = "FName")
 	public static class B_FormDataNameBean { }
 
-	@org.apache.juneau.http.annotation.Path(name = "PName")
+	@org.apache.juneau.http.Path(name = "PName")
 	public static class B_PathNameBean { }
 
 	@Test void b35_getName_header_byName() {

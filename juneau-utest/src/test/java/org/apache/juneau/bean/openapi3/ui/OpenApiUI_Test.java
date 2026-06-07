@@ -24,7 +24,6 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
-import org.apache.juneau.TestBase;
 import org.junit.jupiter.api.*;
 
 /**

@@ -18,9 +18,8 @@ package org.apache.juneau;
 
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
-import org.apache.juneau.annotation.*;
-import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.bean.*;
+import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"unused" // Test beans with intentionally unused private fields for visibility testing

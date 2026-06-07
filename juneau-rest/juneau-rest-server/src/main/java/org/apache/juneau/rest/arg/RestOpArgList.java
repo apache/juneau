@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * A list of {@link RestOpArg} classes.

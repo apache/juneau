@@ -25,9 +25,9 @@ import java.util.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#enumFormat(EnumFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#enumFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#enumFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#enumFormat()} to control how
+ * {@link org.apache.juneau.Marshalled#enumFormat()},
+ * {@link org.apache.juneau.MarshalledProp#enumFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#enumFormat()} to control how
  * {@link Enum} values are written to and read from the wire.
  *
  * <p>

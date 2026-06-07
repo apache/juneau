@@ -20,16 +20,15 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.lang.reflect.Array;
+import java.lang.reflect.*;
 import java.time.*;
-import java.time.temporal.TemporalAccessor;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.BeanMap;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Session for serializing objects to TOML format.

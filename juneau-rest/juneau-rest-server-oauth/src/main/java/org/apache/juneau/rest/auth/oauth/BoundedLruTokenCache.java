@@ -19,7 +19,7 @@ package org.apache.juneau.rest.auth.oauth;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.security.Principal;
+import java.security.*;
 import java.time.*;
 import java.util.*;
 

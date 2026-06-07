@@ -23,9 +23,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#classFormat(ClassFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#classFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#classFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#classFormat()} to control how {@link Class} values
+ * {@link org.apache.juneau.Marshalled#classFormat()},
+ * {@link org.apache.juneau.MarshalledProp#classFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#classFormat()} to control how {@link Class} values
  * are written to text-based wire formats.
  *
  * <p>
@@ -59,9 +59,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.annotation.MarshalledProp#classFormat() @MarshalledProp(classFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.annotation.Marshalled#classFormat() @Marshalled(classFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#classFormat() @MarshalledConfig(classFormat=…)} on
+ * 	<li>{@link org.apache.juneau.MarshalledProp#classFormat() @MarshalledProp(classFormat=…)} on the bean property.
+ * 	<li>{@link org.apache.juneau.Marshalled#classFormat() @Marshalled(classFormat=…)} on the bean class.
+ * 	<li>{@link org.apache.juneau.MarshalledConfig#classFormat() @MarshalledConfig(classFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#classFormat(ClassFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.classFormat</c>.

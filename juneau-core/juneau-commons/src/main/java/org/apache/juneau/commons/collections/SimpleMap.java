@@ -22,9 +22,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
-import org.apache.juneau.commons.utils.Utils;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * An unmodifiable, fixed-size map implementation backed by parallel key and value arrays.

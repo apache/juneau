@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.server.config.repository;
 
-import org.apache.juneau.json.annotation.*;
+import org.apache.juneau.json.*;
 
 /**
  * Configuration item representing a named value (e.g., a config file section).

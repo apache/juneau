@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.auth.oauth.oidc;
 
-import java.net.URI;
+import java.net.*;
 import java.util.*;
 
 /**

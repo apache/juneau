@@ -20,9 +20,9 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
+import java.util.stream.*;
 
-import org.apache.juneau.commons.utils.Utils;
-import java.util.stream.Collectors;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * A composite map that presents multiple maps as a single unified map.

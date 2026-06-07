@@ -17,7 +17,6 @@
 package org.apache.juneau.swaps;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.swap.*;
 
 /**
@@ -27,8 +26,7 @@ import org.apache.juneau.swap.*;
  * Replaces the legacy {@code ClassSwap} (deleted in 9.6) — provides format-aware {@link Class}
  * serialization for root-level / map-key / map-value / collection-element positions where no
  * per-property {@link MarshalledProp#classFormat() @MarshalledProp(classFormat=…)} or
- * {@link Marshalled#classFormat() @Marshalled(classFormat=…)} swap is installed by
- * {@link MarshalledPropertyPostProcessor}.
+ * {@link Marshalled#classFormat() @Marshalled(classFormat=…)} swap is installed.
  *
  * <p>
  * Reads the context's {@link MarshallingContext#getClassFormat()} at swap/unswap time so changes to the

@@ -20,7 +20,7 @@ import static org.apache.juneau.assertions.Assertions.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.function.Predicate;
+import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json5.*;

@@ -17,8 +17,8 @@
 package org.apache.juneau.proto;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 
 import java.io.*;
 import java.util.*;
@@ -26,10 +26,10 @@ import java.util.Map.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.utils.Iso8601Utils;
-import org.apache.juneau.commons.bean.BeanMap;
+import org.apache.juneau.utils.*;
 
 /**
  * Session for parsing Protobuf Text Format into POJOs.

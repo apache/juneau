@@ -24,9 +24,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#floatFormat(FloatFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#floatFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#floatFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#floatFormat()} to control how non-finite
+ * {@link org.apache.juneau.Marshalled#floatFormat()},
+ * {@link org.apache.juneau.MarshalledProp#floatFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#floatFormat()} to control how non-finite
  * floating-point values are written to text-based wire formats.  Finite values are unaffected and ride
  * the natural bare-numeric-token wire form for the underlying serializer.
  *
@@ -36,9 +36,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.annotation.MarshalledProp#floatFormat() @MarshalledProp(floatFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.annotation.Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#floatFormat() @MarshalledConfig(floatFormat=…)} on
+ * 	<li>{@link org.apache.juneau.MarshalledProp#floatFormat() @MarshalledProp(floatFormat=…)} on the bean property.
+ * 	<li>{@link org.apache.juneau.Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.
+ * 	<li>{@link org.apache.juneau.MarshalledConfig#floatFormat() @MarshalledConfig(floatFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#floatFormat(FloatFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.floatFormat</c>.

@@ -27,9 +27,9 @@ import org.apache.juneau.swaps.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#dateFormat(DateFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#dateFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#dateFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#dateFormat()} to control how {@link Date}
+ * {@link org.apache.juneau.Marshalled#dateFormat()},
+ * {@link org.apache.juneau.MarshalledProp#dateFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#dateFormat()} to control how {@link Date}
  * values are written to and read from the wire.
  *
  * <p>

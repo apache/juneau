@@ -20,7 +20,6 @@ import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestOpSession} object.

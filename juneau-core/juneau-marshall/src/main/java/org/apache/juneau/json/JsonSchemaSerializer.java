@@ -20,10 +20,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJO metadata to HTTP responses as JSON-Schema.

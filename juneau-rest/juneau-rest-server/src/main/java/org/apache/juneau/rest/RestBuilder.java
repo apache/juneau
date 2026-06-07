@@ -18,7 +18,6 @@ package org.apache.juneau.rest;
 
 import org.apache.juneau.encoders.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.arg.*;
 import org.apache.juneau.rest.converter.*;
 import org.apache.juneau.rest.guard.*;

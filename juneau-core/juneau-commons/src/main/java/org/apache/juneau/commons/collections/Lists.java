@@ -18,7 +18,7 @@ package org.apache.juneau.commons.collections;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 

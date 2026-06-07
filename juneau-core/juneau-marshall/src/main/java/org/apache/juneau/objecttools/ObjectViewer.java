@@ -22,8 +22,8 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.internal.*;
-import org.apache.juneau.commons.bean.BeanMap;
 
 /**
  * POJO model viewer.

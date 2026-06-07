@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.jsonpatch;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * The JSON Patch {@code "remove"} operation per

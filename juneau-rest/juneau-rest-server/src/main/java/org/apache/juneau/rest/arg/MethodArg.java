@@ -18,7 +18,6 @@ package org.apache.juneau.rest.arg;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Resolves method parameters annotated with {@link Method} on {@link RestOp}-annotated Java methods.

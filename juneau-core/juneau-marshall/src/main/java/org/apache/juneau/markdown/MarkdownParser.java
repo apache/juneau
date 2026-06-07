@@ -22,10 +22,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json5.Json5Parser;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses Markdown fragment-mode output (tables and lists) back to POJOs.

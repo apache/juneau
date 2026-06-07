@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Resolves method parameters on {@link RestOp}-annotated Java methods by retrieving them by type from the REST object bean store.

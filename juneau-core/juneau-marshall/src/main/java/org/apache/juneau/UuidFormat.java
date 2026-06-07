@@ -25,9 +25,9 @@ import java.util.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#uuidFormat(UuidFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#uuidFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#uuidFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#uuidFormat()} to control how {@link UUID} values
+ * {@link org.apache.juneau.Marshalled#uuidFormat()},
+ * {@link org.apache.juneau.MarshalledProp#uuidFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#uuidFormat()} to control how {@link UUID} values
  * are written to text-based wire formats.
  *
  * <p>
@@ -36,9 +36,9 @@ import java.util.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.annotation.MarshalledProp#uuidFormat() @MarshalledProp(uuidFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.annotation.Marshalled#uuidFormat() @Marshalled(uuidFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#uuidFormat() @MarshalledConfig(uuidFormat=…)} on
+ * 	<li>{@link org.apache.juneau.MarshalledProp#uuidFormat() @MarshalledProp(uuidFormat=…)} on the bean property.
+ * 	<li>{@link org.apache.juneau.Marshalled#uuidFormat() @Marshalled(uuidFormat=…)} on the bean class.
+ * 	<li>{@link org.apache.juneau.MarshalledConfig#uuidFormat() @MarshalledConfig(uuidFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#uuidFormat(UuidFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.uuidFormat</c>.

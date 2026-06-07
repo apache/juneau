@@ -17,10 +17,11 @@
 package org.apache.juneau.rest.matcher;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.rest.annotation.RestOpAnnotation.*;
+import static org.apache.juneau.rest.RestOpAnnotation.*;
 
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
+
 import jakarta.servlet.http.*;
 
 /**

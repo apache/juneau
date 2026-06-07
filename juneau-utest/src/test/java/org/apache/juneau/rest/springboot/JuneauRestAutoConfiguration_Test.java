@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.springboot;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.juneau.*;
@@ -24,10 +25,11 @@ import org.apache.juneau.rest.convention.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.test.context.runner.*;
-import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.boot.web.servlet.*;
 import org.springframework.context.annotation.*;
 
 import jakarta.servlet.*;
+import jakarta.servlet.ServletRegistration;
 
 /**
  * Validates the opt-in Spring Boot auto-configuration {@link JuneauRestAutoConfiguration}:

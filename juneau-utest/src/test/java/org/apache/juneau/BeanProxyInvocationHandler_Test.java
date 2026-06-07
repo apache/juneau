@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.bean.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.BeanProxyInvocationHandler;
 
 @SuppressWarnings({
 	"unchecked", // Cast from Object to T in proxy test

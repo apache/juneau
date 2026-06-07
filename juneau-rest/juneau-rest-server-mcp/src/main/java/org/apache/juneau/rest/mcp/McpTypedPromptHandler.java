@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Typed variant of {@link McpPromptHandler} where MCP {@code prompts/get} arguments bind into a Juneau bean.

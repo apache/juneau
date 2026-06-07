@@ -49,7 +49,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * @param opArgs The parameter resolvers.
 	 * @param stats The instrumentor.
 	 */
-	public RestOpInvoker(Method m, RestOpArg[] opArgs, MethodExecStats stats) {
+	public RestOpInvoker(java.lang.reflect.Method m, RestOpArg[] opArgs, MethodExecStats stats) {
 		this(m, opArgs, stats, null);
 	}
 
@@ -61,7 +61,7 @@ public class RestOpInvoker extends MethodInvoker {
 	 * @param stats The instrumentor.
 	 * @param resourceSupplier Optional resource supplier.  When <jk>null</jk>, falls back to {@link RestSession#getResource()}.
 	 */
-	public RestOpInvoker(Method m, RestOpArg[] opArgs, MethodExecStats stats, Supplier<Object> resourceSupplier) {
+	public RestOpInvoker(java.lang.reflect.Method m, RestOpArg[] opArgs, MethodExecStats stats, Supplier<Object> resourceSupplier) {
 		super(m, stats);
 		this.opArgs = opArgs;
 		this.resourceSupplier = resourceSupplier;

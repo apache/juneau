@@ -23,9 +23,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#booleanFormat(BooleanFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#booleanFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#booleanFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#booleanFormat()} to control how boolean values
+ * {@link org.apache.juneau.Marshalled#booleanFormat()},
+ * {@link org.apache.juneau.MarshalledProp#booleanFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#booleanFormat()} to control how boolean values
  * are written to text-based wire formats.
  *
  * <p>
@@ -34,9 +34,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.annotation.MarshalledProp#booleanFormat() @MarshalledProp(booleanFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.annotation.Marshalled#booleanFormat() @Marshalled(booleanFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.annotation.MarshalledConfig#booleanFormat() @MarshalledConfig(booleanFormat=…)} on
+ * 	<li>{@link org.apache.juneau.MarshalledProp#booleanFormat() @MarshalledProp(booleanFormat=…)} on the bean property.
+ * 	<li>{@link org.apache.juneau.Marshalled#booleanFormat() @Marshalled(booleanFormat=…)} on the bean class.
+ * 	<li>{@link org.apache.juneau.MarshalledConfig#booleanFormat() @MarshalledConfig(booleanFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#booleanFormat(BooleanFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.booleanFormat</c>.

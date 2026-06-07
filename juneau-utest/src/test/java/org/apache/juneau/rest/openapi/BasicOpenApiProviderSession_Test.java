@@ -21,13 +21,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.bean.openapi3.*;
-import org.apache.juneau.commons.annotation.Schema;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 

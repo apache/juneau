@@ -17,7 +17,6 @@
 package org.apache.juneau.html;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.jsonschema.*;

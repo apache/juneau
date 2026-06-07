@@ -20,13 +20,12 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.bean.openapi3.OpenApi;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.bean.openapi3.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.jsonschema.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Basic implementation of an {@link OpenApiProvider}.

@@ -1,0 +1,357 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
+import java.lang.annotation.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.*;
+
+/**
+ * Utility classes and methods for the {@link OpSwagger @OpSwagger} annotation.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanSwagger2">juneau-bean-swagger-v2</a>
+ * </ul>
+ */
+public class OpSwaggerAnnotation {
+
+	/**
+	 * Prevents instantiation.
+	 */
+	private OpSwaggerAnnotation() {}
+
+	/**
+	 * Builder class.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
+	 * </ul>
+	 */
+	public static class Builder extends AnnotationObject.Builder {
+
+		private String[] description = {};
+		private ExternalDocs externalDocs = ExternalDocsAnnotation.DEFAULT;
+		private String deprecated = "";
+		private boolean ignore;
+		private String operationId = "";
+		private String[] consumes = {};
+		private String[] parameters = {};
+		private String[] produces = {};
+		private String[] responses = {};
+		private String[] schemes = {};
+		private String[] summary = {};
+		private String[] tags = {};
+		private String[] value = {};
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(OpSwagger.class);
+		}
+
+		/**
+		 * Instantiates a new {@link OpSwagger @OpSwagger} object initialized with this builder.
+		 *
+		 * @return A new {@link OpSwagger @OpSwagger} object.
+		 */
+		public OpSwagger build() {
+			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			description = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#consumes()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder consumes(String...value) {
+			consumes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#deprecated()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder deprecated(String value) {
+			deprecated = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#externalDocs()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder externalDocs(ExternalDocs value) {
+			externalDocs = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#ignore()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder ignore(boolean value) {
+			ignore = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#operationId()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder operationId(String value) {
+			operationId = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#parameters()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder parameters(String...value) {
+			parameters = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#produces()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder produces(String...value) {
+			produces = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#responses()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder responses(String...value) {
+			responses = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#schemes()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder schemes(String...value) {
+			schemes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#summary()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder summary(String...value) {
+			summary = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#tags()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder tags(String...value) {
+			tags = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link OpSwagger#value()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder value(String...value) {
+			this.value = value;
+			return this;
+		}
+
+	}
+
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
+	private static class Object extends AnnotationObject implements OpSwagger {
+
+		private final String[] description;
+		private final ExternalDocs externalDocs;
+		private final String deprecated;
+		private final boolean ignore;
+		private final String operationId;
+		private final String[] consumes;
+		private final String[] parameters;
+		private final String[] produces;
+		private final String[] responses;
+		private final String[] schemes;
+		private final String[] summary;
+		private final String[] tags;
+		private final String[] value;
+
+		Object(OpSwaggerAnnotation.Builder b) {
+			super(b);
+			description = copyOf(b.description);
+			consumes = copyOf(b.consumes);
+			deprecated = b.deprecated;
+			externalDocs = b.externalDocs;
+			ignore = b.ignore;
+			operationId = b.operationId;
+			parameters = copyOf(b.parameters);
+			produces = copyOf(b.produces);
+			responses = copyOf(b.responses);
+			schemes = copyOf(b.schemes);
+			summary = copyOf(b.summary);
+			tags = copyOf(b.tags);
+			value = copyOf(b.value);
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] consumes() {
+			return consumes;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String deprecated() {
+			return deprecated;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public ExternalDocs externalDocs() {
+			return externalDocs;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public boolean ignore() {
+			return ignore;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String operationId() {
+			return operationId;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] parameters() {
+			return parameters;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] produces() {
+			return produces;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] responses() {
+			return responses;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] schemes() {
+			return schemes;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] summary() {
+			return summary;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] tags() {
+			return tags;
+		}
+
+		@Override /* Overridden from OpSwagger */
+		public String[] value() {
+			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
+		}
+	}
+
+	/** Default value */
+	public static final OpSwagger DEFAULT = create().build();
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>true</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean empty(OpSwagger a) {
+		return a == null || DEFAULT.equals(a);
+	}
+
+	/**
+	 * Returns <jk>false</jk> if the specified annotation contains all default values.
+	 *
+	 * @param a The annotation to check.
+	 * @return <jk>false</jk> if the specified annotation contains all default values.
+	 */
+	public static boolean notEmpty(OpSwagger a) {
+		return ! empty(a);
+	}
+}

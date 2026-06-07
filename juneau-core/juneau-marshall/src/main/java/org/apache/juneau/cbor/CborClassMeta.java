@@ -17,7 +17,6 @@
 package org.apache.juneau.cbor;
 
 import org.apache.juneau.*;
-import org.apache.juneau.cbor.annotation.*;
 
 /**
  * Metadata on classes specific to the CBOR serializers and parsers pulled from the {@link Cbor @Cbor} annotation on

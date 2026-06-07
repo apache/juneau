@@ -20,8 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.urlencoding.annotation.*;
+import org.apache.juneau.*;
 
 public class DTOs2 {
 

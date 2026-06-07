@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.jsonl;
 
-import org.apache.juneau.json.JsonSerializer;
-import org.apache.juneau.swap.ObjectSwap;
+import org.apache.juneau.json.*;
+import org.apache.juneau.swap.*;
 
 /**
  * Serializes POJO models to JSONL (JSON Lines).

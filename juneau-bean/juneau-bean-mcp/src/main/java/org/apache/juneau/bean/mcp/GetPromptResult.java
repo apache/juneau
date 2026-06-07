@@ -18,7 +18,7 @@ package org.apache.juneau.bean.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 
 /**
  * Result payload for {@value org.apache.juneau.bean.mcp.McpMethods#PROMPTS_GET}.

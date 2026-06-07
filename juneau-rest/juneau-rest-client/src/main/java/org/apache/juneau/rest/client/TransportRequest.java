@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.AssertionUtils.assertArgNotNull;
-import static org.apache.juneau.commons.utils.Utils.eqic;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.util.*;

@@ -17,8 +17,9 @@
 package org.apache.juneau.http.header;
 
 
-import org.apache.juneau.commons.http.StringRanges;
 import java.util.function.*;
+
+import org.apache.juneau.commons.http.*;
 
 
 /**

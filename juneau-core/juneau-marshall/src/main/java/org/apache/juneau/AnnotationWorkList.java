@@ -24,8 +24,7 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.stream.*;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.bean.BeanConfig;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
 

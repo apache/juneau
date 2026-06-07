@@ -17,6 +17,7 @@
 package org.apache.juneau.examples.rest;
 
 import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.time.*;
 import java.time.format.*;
@@ -25,9 +26,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.sse.*;
 import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.sse.*;
 import org.apache.juneau.sse.*;
 
 /**

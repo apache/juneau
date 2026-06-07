@@ -16,17 +16,15 @@
  */
 package org.apache.juneau.rest;
 
-import static org.apache.juneau.commons.utils.IoUtils.UTF8;
-import static org.apache.juneau.commons.utils.StringUtils.parseLongWithSuffix;
-import static org.apache.juneau.commons.utils.Utils.env;
+import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.*;
 
-import org.apache.juneau.TestBase;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.rest.servlet.BasicRestResource;
+import org.apache.juneau.*;
+import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
 
 class NoInherit_Test extends TestBase {

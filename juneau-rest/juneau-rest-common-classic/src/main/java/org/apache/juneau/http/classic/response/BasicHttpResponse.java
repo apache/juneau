@@ -21,13 +21,14 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
+
 import java.net.*;
 import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.params.*;
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
 

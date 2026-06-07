@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 /**
- * RFC2616 HTTP Headers
+ * HTTP Part Annotations
  */
 package org.apache.juneau.http;

@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.StringUtils.parseLong;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.annotation.Schema;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
 
 /**
  * Category of headers that consist of a single long value.

@@ -17,7 +17,7 @@
 package org.apache.juneau.hocon;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to HOCON serializers and parsers.

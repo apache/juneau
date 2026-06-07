@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
-import java.lang.reflect.Type;
+import java.lang.reflect.*;
 
 /**
  * Generic, typed variant of {@link ClassInfo}.

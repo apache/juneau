@@ -31,9 +31,9 @@ import org.apache.juneau.swaps.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#calendarFormat(CalendarFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#calendarFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#calendarFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#calendarFormat()} to control how
+ * {@link org.apache.juneau.Marshalled#calendarFormat()},
+ * {@link org.apache.juneau.MarshalledProp#calendarFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#calendarFormat()} to control how
  * {@link Calendar} values (including {@link GregorianCalendar}) are written to and read from the wire.
  *
  * <p>

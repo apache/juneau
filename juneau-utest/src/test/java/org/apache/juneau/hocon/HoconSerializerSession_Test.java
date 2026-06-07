@@ -24,7 +24,6 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -77,7 +76,7 @@ class HoconSerializerSession_Test extends TestBase {
 	}
 
 	public static class B_WithUri {
-		@org.apache.juneau.annotation.Uri
+		@org.apache.juneau.Uri
 		public String link;
 	}
 

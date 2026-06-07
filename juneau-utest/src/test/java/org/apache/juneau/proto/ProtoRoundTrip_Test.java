@@ -20,11 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.BinaryFormat;
-
-import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.*;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.marshaller.Proto;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 /**
  * Round-trip tests for ProtoSerializer and ProtoParser.

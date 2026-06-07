@@ -16,11 +16,8 @@
  */
 package org.apache.juneau.parquet;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
+import java.io.*;
+import java.util.zip.*;
 
 /**
  * Parquet compression codecs supported by this implementation.

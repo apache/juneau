@@ -22,11 +22,10 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Mixin that serves a request-echo / round-trip introspection endpoint at {@code /echo/*}

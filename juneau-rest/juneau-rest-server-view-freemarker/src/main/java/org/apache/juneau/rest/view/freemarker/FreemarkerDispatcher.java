@@ -22,13 +22,13 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
 import java.util.*;
 
-import freemarker.core.*;
-import freemarker.template.*;
-
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.view.*;
+
+import freemarker.core.*;
+import freemarker.template.*;
 
 /**
  * Flavor-neutral worker bean carrying the FreeMarker raw-template-dispatch logic shared by the

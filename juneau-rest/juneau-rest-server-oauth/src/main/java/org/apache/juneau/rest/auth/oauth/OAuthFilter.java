@@ -19,12 +19,12 @@ package org.apache.juneau.rest.auth.oauth;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.security.Principal;
+import java.security.*;
 import java.util.*;
 
 import org.apache.juneau.rest.auth.*;
 
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 
 /**
  * {@link AuthFilter} that authenticates requests carrying an OAuth 2.0 / OIDC access token via the

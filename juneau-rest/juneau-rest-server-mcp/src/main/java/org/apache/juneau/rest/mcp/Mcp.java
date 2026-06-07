@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mcp;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 
 /**
  * Static façade over {@link McpDispatcher} for embedders that want a single-line dispatch call.

@@ -24,13 +24,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
-import org.apache.juneau.commons.bean.BeanMeta;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Serializes POJOs to RDF.

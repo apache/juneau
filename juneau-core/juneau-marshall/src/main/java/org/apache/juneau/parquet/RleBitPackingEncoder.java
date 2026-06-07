@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.parquet;
 
-import java.io.ByteArrayOutputStream;
+import java.io.*;
 
 /**
  * RLE/Bit-Packing Hybrid encoder for definition/repetition levels and booleans.

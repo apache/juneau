@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.guard;
 
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Deny-all {@link RestGuard} &mdash; rejects every request with {@code 403 Forbidden}.

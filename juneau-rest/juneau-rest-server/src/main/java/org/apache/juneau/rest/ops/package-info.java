@@ -74,7 +74,7 @@
  *
  * <p>
  * All endpoints carry
- * {@link org.apache.juneau.rest.annotation.OpSwagger#ignore() @OpSwagger(ignore=true)} —
+ * {@link org.apache.juneau.rest.OpSwagger#ignore() @OpSwagger(ignore=true)} —
  * ops endpoints are not API-meaningful and are excluded from any generated Swagger / OpenAPI
  * spec.
  * </p>

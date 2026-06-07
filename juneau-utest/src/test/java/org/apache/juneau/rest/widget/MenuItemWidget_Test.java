@@ -23,7 +23,6 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

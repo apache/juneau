@@ -24,10 +24,9 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
-import org.apache.juneau.parser.annotation.*;
-import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
 
 /**

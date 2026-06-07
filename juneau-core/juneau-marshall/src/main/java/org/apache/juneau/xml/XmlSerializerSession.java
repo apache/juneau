@@ -20,14 +20,14 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 import static org.apache.juneau.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.xml.XmlSerializerSession.JsonType.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
 
 import java.io.*;
 import java.lang.reflect.*;
 import java.time.*;
-import java.time.temporal.TemporalAccessor;
+import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -35,7 +35,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.xml.annotation.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.

@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
 

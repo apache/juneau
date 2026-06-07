@@ -25,7 +25,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.urlencoding.*;
 import org.junit.jupiter.api.*;

@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;
@@ -127,7 +127,7 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 		}
 
 		@RestGet("/users/{id}")
-		public String get(@org.apache.juneau.http.annotation.Path String id) { return "u:" + id; }
+		public String get(@org.apache.juneau.http.Path String id) { return "u:" + id; }
 
 		@RestGet("/boom")
 		public String boom() { throw new IllegalStateException("kaboom"); }

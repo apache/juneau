@@ -16,8 +16,8 @@
  */
 package org.apache.juneau;
 
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Defines extended language-specific metadata associated with a bean property.

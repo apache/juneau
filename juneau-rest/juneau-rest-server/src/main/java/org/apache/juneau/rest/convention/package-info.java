@@ -65,7 +65,7 @@
  *
  * <p>
  * All four endpoints are excluded from generated Swagger / OpenAPI specs via
- * {@link org.apache.juneau.rest.annotation.OpSwagger#ignore() @OpSwagger(ignore=true)} —
+ * {@link org.apache.juneau.rest.OpSwagger#ignore() @OpSwagger(ignore=true)} —
  * convention endpoints are not API-meaningful.
  * </p>
  *

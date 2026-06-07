@@ -23,8 +23,8 @@ import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
 
-import org.apache.juneau.commons.inject.BeanStore;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.springboot.*;
 import org.apache.juneau.rest.staticfile.*;
 import org.junit.jupiter.api.*;
@@ -34,7 +34,7 @@ import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.context.SpringBootTest.*;
 import org.springframework.boot.test.web.server.*;
 import org.springframework.boot.web.servlet.*;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.annotation.*;
 
 /**

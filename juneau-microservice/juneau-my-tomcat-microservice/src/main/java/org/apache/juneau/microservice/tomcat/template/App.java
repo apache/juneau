@@ -62,7 +62,7 @@ public class App {
 
 		/**
 		 * Provides the top-level REST servlet, auto-mounted by {@link TomcatServerComponent} at
-		 * {@link org.apache.juneau.rest.annotation.Rest#path()}.
+		 * {@link org.apache.juneau.rest.Rest#path()}.
 		 *
 		 * @return The root servlet.
 		 */

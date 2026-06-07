@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.settings.*;
 
 /**

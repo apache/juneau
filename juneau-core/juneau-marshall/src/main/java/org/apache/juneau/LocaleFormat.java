@@ -23,9 +23,9 @@ import java.util.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#localeFormat(LocaleFormat)},
- * {@link org.apache.juneau.annotation.Marshalled#localeFormat()},
- * {@link org.apache.juneau.annotation.MarshalledProp#localeFormat()}, and
- * {@link org.apache.juneau.annotation.MarshalledConfig#localeFormat()} to control how {@link Locale}
+ * {@link org.apache.juneau.Marshalled#localeFormat()},
+ * {@link org.apache.juneau.MarshalledProp#localeFormat()}, and
+ * {@link org.apache.juneau.MarshalledConfig#localeFormat()} to control how {@link Locale}
  * values are written to and read from the wire.
  *
  * <p>

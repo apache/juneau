@@ -19,11 +19,10 @@ package org.apache.juneau.rest.servlet;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.rest.*;
+
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.*;
-
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 
 /**
  * Plain Servlet-spec {@link ServletContainerInitializer} that auto-mounts {@link RestServlet}

@@ -85,7 +85,11 @@ class AbstractRestBuilder_Test extends TestBase {
 	// Marshalling
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_serializers() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends Serializer>[] varargs; generic array creation is safe here.
+	})
+	void b01_serializers() {
 		var b = b().serializers(JsonSerializer.class);
 		assertArrayEquals(new Class<?>[]{JsonSerializer.class}, b.toRestAnnotation().serializers());
 	}
@@ -95,7 +99,11 @@ class AbstractRestBuilder_Test extends TestBase {
 		assertArrayEquals(new Class<?>[]{JsonParser.class}, b.toRestAnnotation().parsers());
 	}
 
-	@Test void b03_encoders() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends Encoder>[] varargs; generic array creation is safe here.
+	})
+	void b03_encoders() {
 		var b = b().encoders(IdentityEncoder.class);
 		assertArrayEquals(new Class<?>[]{IdentityEncoder.class}, b.toRestAnnotation().encoders());
 	}
@@ -120,7 +128,11 @@ class AbstractRestBuilder_Test extends TestBase {
 		assertArrayEquals(new String[]{"application/json"}, b.toRestAnnotation().produces());
 	}
 
-	@Test void b08_responseProcessors() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends ResponseProcessor>[] varargs; generic array creation is safe here.
+	})
+	void b08_responseProcessors() {
 		var b = b().responseProcessors();
 		assertEquals(0, b.toRestAnnotation().responseProcessors().length);
 	}
@@ -190,7 +202,11 @@ class AbstractRestBuilder_Test extends TestBase {
 		assertEquals("1M", b().maxInput("1M").toRestAnnotation().maxInput());
 	}
 
-	@Test void c13_restOpArgs() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends RestOpArg>[] varargs; generic array creation is safe here.
+	})
+	void c13_restOpArgs() {
 		var b = b().restOpArgs();
 		assertEquals(0, b.toRestAnnotation().restOpArgs().length);
 	}
@@ -199,7 +215,11 @@ class AbstractRestBuilder_Test extends TestBase {
 	// Security
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_guards() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends Guard>[] varargs; generic array creation is safe here.
+	})
+	void d01_guards() {
 		var b = b().guards();
 		assertEquals(0, b.toRestAnnotation().guards().length);
 	}
@@ -212,7 +232,11 @@ class AbstractRestBuilder_Test extends TestBase {
 		assertEquals("ADMIN,USER", b().rolesDeclared("ADMIN,USER").toRestAnnotation().rolesDeclared());
 	}
 
-	@Test void d04_converters() {
+	@Test
+	@SuppressWarnings({
+		"unchecked" // Class<? extends RestConverter>[] varargs; generic array creation is safe here.
+	})
+	void d04_converters() {
 		var b = b().converters();
 		assertEquals(0, b.toRestAnnotation().converters().length);
 	}

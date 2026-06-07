@@ -17,7 +17,7 @@
 package org.apache.juneau.proto;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Interface for providing access to {@link ProtoClassMeta} and {@link ProtoBeanPropertyMeta} objects.

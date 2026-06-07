@@ -21,9 +21,8 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
-import org.apache.juneau.commons.annotation.Schema;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.parser.*;
 
 /**

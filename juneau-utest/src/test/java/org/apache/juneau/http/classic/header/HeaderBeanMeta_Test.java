@@ -21,7 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;
 
 class HeaderBeanMeta_Test extends TestBase {

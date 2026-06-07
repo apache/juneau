@@ -185,28 +185,28 @@ class HttpParts_Test extends TestBase {
 	// getName — annotation-based and NAME-static-field fallback paths
 	// ------------------------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.http.annotation.Header(value = "MyHeader")
+	@org.apache.juneau.http.Header(value = "MyHeader")
 	public static class E_HeaderValueBean { }
 
-	@org.apache.juneau.http.annotation.Header(name = "MyHeaderName")
+	@org.apache.juneau.http.Header(name = "MyHeaderName")
 	public static class E_HeaderNameBean { }
 
-	@org.apache.juneau.http.annotation.Query(value = "MyQuery")
+	@org.apache.juneau.http.Query(value = "MyQuery")
 	public static class E_QueryValueBean { }
 
-	@org.apache.juneau.http.annotation.Query(name = "MyQueryName")
+	@org.apache.juneau.http.Query(name = "MyQueryName")
 	public static class E_QueryNameBean { }
 
-	@org.apache.juneau.http.annotation.FormData(value = "MyFormData")
+	@org.apache.juneau.http.FormData(value = "MyFormData")
 	public static class E_FormDataValueBean { }
 
-	@org.apache.juneau.http.annotation.FormData(name = "MyFormDataName")
+	@org.apache.juneau.http.FormData(name = "MyFormDataName")
 	public static class E_FormDataNameBean { }
 
-	@org.apache.juneau.http.annotation.Path(value = "MyPath")
+	@org.apache.juneau.http.Path(value = "MyPath")
 	public static class E_PathValueBean { }
 
-	@org.apache.juneau.http.annotation.Path(name = "MyPathName")
+	@org.apache.juneau.http.Path(name = "MyPathName")
 	public static class E_PathNameBean { }
 
 	/** No annotation, but a public static String NAME field — exercises readPublicStaticStringField. */

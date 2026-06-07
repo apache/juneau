@@ -16,7 +16,7 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.annotation.Marshalled @Marshalled} beans for
+ * Juneau {@link org.apache.juneau.Marshalled @Marshalled} beans for
  * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807 &mdash; Problem Details for HTTP APIs</a>
  * (media type {@code application/problem+json}).
  *

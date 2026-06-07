@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.list;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.JsonMap;
+import org.apache.juneau.collections.*;
 import org.apache.juneau.json.*;
 import org.junit.jupiter.api.*;
 

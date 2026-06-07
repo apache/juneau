@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 
 /**
  * A parsed path pattern constructed from a {@link RestOp#path() @RestOp(path)} value.

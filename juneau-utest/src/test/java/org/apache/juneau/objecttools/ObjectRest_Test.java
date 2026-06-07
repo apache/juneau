@@ -24,13 +24,12 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.bean.*;
 
 @SuppressWarnings({"rawtypes","serial","java:S5961"})
 class ObjectRest_Test extends TestBase {

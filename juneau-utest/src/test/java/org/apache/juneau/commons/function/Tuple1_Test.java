@@ -18,8 +18,7 @@ package org.apache.juneau.commons.function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

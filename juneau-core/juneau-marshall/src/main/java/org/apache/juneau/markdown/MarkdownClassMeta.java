@@ -19,7 +19,6 @@ package org.apache.juneau.markdown;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.markdown.annotation.*;
 
 /**
  * Metadata on classes specific to the Markdown serializers and parsers pulled from the {@link Markdown @Markdown}

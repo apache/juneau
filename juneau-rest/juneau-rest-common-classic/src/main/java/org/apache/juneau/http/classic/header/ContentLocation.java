@@ -19,7 +19,7 @@ package org.apache.juneau.http.classic.header;
 import java.net.*;
 import java.util.function.*;
 
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a parsed <l>Content-Location</l> HTTP response header.

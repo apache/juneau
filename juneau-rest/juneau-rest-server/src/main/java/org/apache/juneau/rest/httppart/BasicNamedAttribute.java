@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.annotation.*;
+import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 
 /**

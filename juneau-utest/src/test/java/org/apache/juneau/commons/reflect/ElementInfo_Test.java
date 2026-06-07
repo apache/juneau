@@ -19,7 +19,7 @@ package org.apache.juneau.commons.reflect;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.lang.reflect.Modifier;
+import java.lang.reflect.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;

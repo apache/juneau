@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import java.util.*;
-import org.apache.juneau.annotation.Marshalled;
 
 /**
  * Represents a collection of bean classes that make up a bean dictionary.

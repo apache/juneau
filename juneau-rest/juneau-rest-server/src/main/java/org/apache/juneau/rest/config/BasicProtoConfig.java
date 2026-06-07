@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.config;
 
 import org.apache.juneau.proto.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 
 /**
  * Basic configuration for a REST resource that supports Protobuf Text Format transport.

@@ -19,9 +19,9 @@ package org.apache.juneau.hocon;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Parses HOCON (Human-Optimized Config Object Notation) text into POJO models.

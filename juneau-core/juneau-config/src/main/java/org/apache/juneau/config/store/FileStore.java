@@ -32,7 +32,7 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.commons.collections.FluentMap;
+import org.apache.juneau.commons.collections.*;
 
 /**
  * Filesystem-based storage location for configuration files.

@@ -112,7 +112,7 @@ System.out.println(parsed.name); // Output: John
 ### 4. Create a REST API
 
 ```java
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 
 @Rest(
@@ -216,7 +216,7 @@ boolean enabled = config.get("features.enabled", Boolean.class);
 
 ```java
 import org.apache.juneau.rest.client.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 
 // Define REST interface
 @Remote("http://api.example.com")

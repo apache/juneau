@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.rrpc;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Method;
 import java.util.function.*;
 
-import org.apache.juneau.http.remote.RrpcInterfaceMeta;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.*;
 

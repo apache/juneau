@@ -17,8 +17,8 @@
 package org.apache.juneau.http.header;
 
 
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static java.time.temporal.ChronoUnit.SECONDS;
+import static java.time.format.DateTimeFormatter.*;
+import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;

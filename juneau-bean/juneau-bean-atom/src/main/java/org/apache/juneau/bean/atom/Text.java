@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.bean.atom;
 
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 
-import org.apache.juneau.xml.annotation.*;
+import org.apache.juneau.xml.*;
 
 /**
  * Represents human-readable text in an Atom document.

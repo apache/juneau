@@ -23,7 +23,7 @@ import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
 
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.springboot.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.*;

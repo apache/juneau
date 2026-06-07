@@ -25,13 +25,13 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
 
 import java.time.*;
-import java.util.Map;
+import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.httppart.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.classic.*;

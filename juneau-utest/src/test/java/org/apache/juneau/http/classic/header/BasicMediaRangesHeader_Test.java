@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import org.apache.juneau.commons.http.MediaRanges;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -28,10 +27,11 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;

@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.config;
 
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.commons.bean.BeanConfig;
+import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.json5.*;
-import org.apache.juneau.rest.annotation.*;
-import org.apache.juneau.serializer.annotation.*;
+import org.apache.juneau.rest.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Basic configuration for a REST resource that supports JSON 5 transport.

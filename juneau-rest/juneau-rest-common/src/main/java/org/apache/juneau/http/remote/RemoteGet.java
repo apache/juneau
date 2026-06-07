@@ -22,8 +22,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 import java.io.*;
 import java.lang.annotation.*;
 
-import org.apache.juneau.commons.annotation.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.commons.*;
+import org.apache.juneau.http.*;
 
 /**
  * Annotation applied to Java methods on REST proxy interface classes.

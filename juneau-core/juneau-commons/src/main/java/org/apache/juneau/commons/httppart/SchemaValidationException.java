@@ -18,7 +18,7 @@ package org.apache.juneau.commons.httppart;
 
 import java.text.*;
 
-import org.apache.juneau.commons.BasicRuntimeException;
+import org.apache.juneau.commons.*;
 
 /**
  * Exception thrown when an HTTP part fails schema validation.

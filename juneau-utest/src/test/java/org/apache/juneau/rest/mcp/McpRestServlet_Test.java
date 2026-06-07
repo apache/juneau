@@ -23,9 +23,9 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.commons.inject.BeanStore;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
@@ -110,7 +110,7 @@ class McpRestServlet_Test extends TestBase {
 	// -------- McpEndpoint mixin --------
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	@org.apache.juneau.serializer.annotation.SerializerConfig(addBeanTypes = "true")
+	@org.apache.juneau.serializer.SerializerConfig(addBeanTypes = "true")
 	public static class B extends org.apache.juneau.rest.servlet.BasicRestServlet implements McpEndpoint {
 		private static final long serialVersionUID = 1L;
 

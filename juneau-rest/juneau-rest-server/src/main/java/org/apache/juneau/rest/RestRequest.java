@@ -16,19 +16,15 @@
  */
 package org.apache.juneau.rest;
 
-import org.apache.juneau.commons.bean.BeanMeta;
-import org.apache.juneau.commons.http.MediaType;
-import org.apache.juneau.commons.http.StringRanges;
-import static java.time.format.DateTimeFormatter.RFC_1123_DATE_TIME;
-import static java.util.Optional.*;
+import static java.time.format.DateTimeFormatter.*;
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.rest.RestSharedConstants.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.httppart.HttpPartType.*;
+import static org.apache.juneau.rest.RestSharedConstants.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -44,36 +40,35 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.http.*;
-import org.apache.juneau.http.request.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.bean.openapi3.OpenApi;
+import org.apache.juneau.bean.swagger.Operation;
 import org.apache.juneau.bean.swagger.Swagger;
+import org.apache.juneau.collections.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
-import org.apache.juneau.http.annotation.*;
-import org.apache.juneau.http.annotation.Header;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.header.Date;
+import org.apache.juneau.http.request.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshaller.Uon;
+import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.rest.assertions.*;
 import org.apache.juneau.rest.debug.format.*;
 import org.apache.juneau.rest.guard.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.logger.*;
-import org.apache.juneau.rest.staticfile.*;
-import org.apache.juneau.rest.swagger.*;
 import org.apache.juneau.rest.util.*;
-import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.marshaller.*;
-import org.apache.juneau.parser.ParseException;
 import org.apache.juneau.uon.*;
 
 import jakarta.servlet.*;
@@ -856,7 +851,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The URL-encoded form data from the request.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws InternalServerError If query parameters could not be parsed.
-	 * @see org.apache.juneau.http.annotation.FormData
+	 * @see org.apache.juneau.http.FormData
 	 */
 	public RequestFormParamList getFormParams() throws InternalServerError {
 		try {

@@ -34,16 +34,16 @@ import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.commons.inject.BeanStoreOverridable;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.RestRequest;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
+
 import jakarta.servlet.http.*;
 
 /**

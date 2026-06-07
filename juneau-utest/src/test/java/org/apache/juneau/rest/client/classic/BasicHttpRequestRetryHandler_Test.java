@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.classic.HttpResponses.*;
+
 import java.io.*;
 import java.net.*;
 
@@ -25,7 +26,7 @@ import org.apache.http.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;
 import org.junit.jupiter.api.*;

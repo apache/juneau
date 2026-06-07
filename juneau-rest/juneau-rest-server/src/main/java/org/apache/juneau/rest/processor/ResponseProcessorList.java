@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.ConfigException;
+import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.view.*;

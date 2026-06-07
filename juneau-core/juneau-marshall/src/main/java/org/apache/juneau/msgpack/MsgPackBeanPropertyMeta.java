@@ -17,8 +17,7 @@
 package org.apache.juneau.msgpack;
 
 import org.apache.juneau.*;
-import org.apache.juneau.msgpack.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to the MessagePack serializers and parsers pulled from the {@link MsgPack @MsgPack}

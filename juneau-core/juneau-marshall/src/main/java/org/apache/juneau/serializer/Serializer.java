@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.serializer;
 
-import org.apache.juneau.commons.http.MediaRanges;
-import org.apache.juneau.commons.http.MediaType;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -25,15 +23,14 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
-import java.net.URI;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json5.Json5Serializer;
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.soap.*;
 
 /**

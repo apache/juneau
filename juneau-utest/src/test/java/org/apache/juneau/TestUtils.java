@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -28,12 +29,10 @@ import java.util.*;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.junit.bct.*;
-import static org.apache.juneau.marshaller.MarshallUtils.*;
-
 import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.serializer.*;

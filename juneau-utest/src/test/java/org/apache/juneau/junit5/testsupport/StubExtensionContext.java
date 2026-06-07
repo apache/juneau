@@ -22,7 +22,7 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 import org.junit.jupiter.api.extension.*;
-import org.junit.jupiter.api.extension.ExtensionContext.Store;
+import org.junit.jupiter.api.extension.ExtensionContext.*;
 
 /**
  * Minimal stub {@link ExtensionContext} used by extension-side unit tests that need to drive lifecycle

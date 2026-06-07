@@ -17,8 +17,7 @@
 package org.apache.juneau.cbor;
 
 import org.apache.juneau.*;
-import org.apache.juneau.cbor.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to the CBOR serializers and parsers pulled from the {@link Cbor @Cbor}

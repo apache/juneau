@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.httppart;
 
-import org.apache.juneau.commons.conversion.BasicConverter;
+import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.httppart.*;
 
 /**

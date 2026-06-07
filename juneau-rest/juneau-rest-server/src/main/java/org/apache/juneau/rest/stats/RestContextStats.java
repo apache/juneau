@@ -20,9 +20,8 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.annotation.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.rest.*;
 
 /**
  * A snapshot of execution statistics for REST resource classes.

@@ -19,16 +19,14 @@ package org.apache.juneau.xml;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.xml.annotation.XmlFormat.*;
+import static org.apache.juneau.xml.XmlFormat.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.xml.annotation.*;
-import org.apache.juneau.commons.bean.BeanMeta;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
 
 /**
  * Metadata on beans specific to the XML serializers and parsers pulled from the {@link Xml @Xml} annotation on the

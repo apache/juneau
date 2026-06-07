@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.microservice.tomcat.template;
 
-import org.apache.juneau.html.annotation.*;
+import org.apache.juneau.html.*;
 import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.servlet.*;
 import org.apache.juneau.rest.widget.*;
 

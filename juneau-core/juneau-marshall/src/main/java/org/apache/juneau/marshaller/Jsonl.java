@@ -18,12 +18,12 @@ package org.apache.juneau.marshaller;
 
 import java.io.*;
 import java.lang.reflect.*;
-import java.nio.charset.Charset;
+import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.ParseException;
-import org.apache.juneau.serializer.SerializeException;
 import org.apache.juneau.jsonl.*;
+import org.apache.juneau.parser.*;
+import org.apache.juneau.serializer.*;
 
 /**
  * Pairs {@link JsonlSerializer} and {@link JsonlParser} into a single class with convenience

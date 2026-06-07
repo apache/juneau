@@ -16,17 +16,14 @@
  */
 package org.apache.juneau.commons.logging;
 
-import static org.apache.juneau.commons.utils.Utils.*;
 import static java.util.logging.Level.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Handler;
-import java.util.logging.Level;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.logging.*;
 
-import org.apache.juneau.commons.utils.Utils;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Extended logger that provides convenience methods for logging formatted messages.

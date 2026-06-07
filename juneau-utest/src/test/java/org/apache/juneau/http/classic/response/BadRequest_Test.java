@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

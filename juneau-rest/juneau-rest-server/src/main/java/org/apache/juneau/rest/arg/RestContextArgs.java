@@ -19,13 +19,12 @@ package org.apache.juneau.rest.arg;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.encoders.*;
-import org.apache.juneau.commons.function.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.annotation.*;
 import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.staticfile.*;

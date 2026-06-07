@@ -28,16 +28,13 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.jena.annotation.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.xml.*;
-import org.apache.juneau.xml.annotation.*;
-
-import org.apache.jena.rdf.model.*;
-import org.apache.jena.riot.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link RdfSerializer}.

@@ -17,8 +17,7 @@
 package org.apache.juneau.csv;
 
 import org.apache.juneau.*;
-import org.apache.juneau.csv.annotation.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.commons.bean.*;
 
 /**
  * Metadata on bean properties specific to the CSV serializers and parsers pulled from the {@link Csv @Csv}

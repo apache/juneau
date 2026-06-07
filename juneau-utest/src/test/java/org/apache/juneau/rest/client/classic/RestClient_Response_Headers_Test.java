@@ -30,7 +30,7 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.rest.annotation.*;
+import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.servlet.*;

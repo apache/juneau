@@ -27,7 +27,6 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.annotation.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.swaps.*;
 

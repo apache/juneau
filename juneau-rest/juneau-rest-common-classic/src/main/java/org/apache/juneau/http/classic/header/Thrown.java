@@ -21,8 +21,9 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
+
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.http.annotation.*;
+import org.apache.juneau.http.*;
 
 /**
  * Represents a parsed <l>Thrown</l> HTTP response header.

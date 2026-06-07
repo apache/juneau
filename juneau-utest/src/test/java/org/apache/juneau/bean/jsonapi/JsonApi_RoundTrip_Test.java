@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.list;
-import static org.apache.juneau.commons.utils.CollectionUtils.map;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;

@@ -23,9 +23,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.http.HttpHeader;
+import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpPart;
-import org.apache.juneau.http.annotation.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.*;

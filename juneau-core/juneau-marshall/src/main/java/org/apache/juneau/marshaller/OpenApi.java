@@ -21,8 +21,8 @@ import java.lang.reflect.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.httppart.*;
 import org.apache.juneau.oapi.*;
 import org.apache.juneau.parser.*;
 import org.apache.juneau.serializer.*;

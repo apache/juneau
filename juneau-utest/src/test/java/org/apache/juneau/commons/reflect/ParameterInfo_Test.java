@@ -29,7 +29,7 @@ import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.bean.Name;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.Named;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;

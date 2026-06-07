@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.json;
 
-import org.apache.juneau.swap.ObjectSwap;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
@@ -25,10 +24,11 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json5.Json5Serializer;
+import org.apache.juneau.json5.*;
 import org.apache.juneau.serializer.*;
-import org.apache.juneau.commons.bean.BeanPropertyMeta;
+import org.apache.juneau.swap.*;
 
 /**
  * Serializes POJO models to RFC 8259 JSON.
