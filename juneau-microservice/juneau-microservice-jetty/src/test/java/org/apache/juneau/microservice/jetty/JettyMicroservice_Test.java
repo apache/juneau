@@ -25,8 +25,8 @@ import java.nio.file.*;
 import java.util.stream.*;
 
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
 

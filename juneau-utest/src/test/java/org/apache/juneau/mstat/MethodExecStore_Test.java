@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.stats.*;
+import org.apache.juneau.rest.server.stats.*;
 import org.junit.jupiter.api.*;
 
 class MethodExecStore_Test extends TestBase {

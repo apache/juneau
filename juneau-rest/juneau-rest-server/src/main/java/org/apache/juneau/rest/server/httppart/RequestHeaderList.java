@@ -1,0 +1,527 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server.httppart;
+
+import static org.apache.juneau.commons.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
+import java.util.stream.*;
+
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.http.*;
+import org.apache.juneau.http.header.*;
+import org.apache.juneau.httppart.*;
+import org.apache.juneau.rest.server.*;
+
+/**
+ * Represents the headers in an HTTP request.
+ *
+ * <p>
+ * 	The {@link RequestHeaderList} object is the API for accessing the headers of an HTTP request.
+ * 	It can be accessed by passing it as a parameter on your REST Java method:
+ * </p>
+ * <p class='bjava'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestHeaderList <jv>headers</jv>) {...}
+ * </p>
+ *
+ * <h5 class='figure'>Example:</h5>
+ * <p class='bjava'>
+ * 	<ja>@RestPost</ja>(...)
+ * 	<jk>public</jk> Object myMethod(RequestHeaderList <jv>headers</jv>) {
+ *
+ * 		<jc>// Add a default value.</jc>
+ * 		<jv>headers</jv>.addDefault(<js>"ETag"</js>, <jsf>DEFAULT_UUID</jsf>);
+ *
+ * 		<jc>// Get a header value as a POJO.</jc>
+ * 		UUID <jv>etag</jv> = <jv>headers</jv>.get(<js>"ETag"</js>).as(UUID.<jk>class</jk>).get();
+ *
+ * 		<jc>// Get a header as a standard HTTP part.</jc>
+ * 		ContentType <jv>contentType</jv> = <jv>headers</jv>.get(ContentType.<jk>class</jk>).orElse(ContentType.<jsf>TEXT_XML</jsf>);
+ * 	}
+ * </p>
+ *
+ * <p>
+ * 	Some important methods on this class are:
+ * </p>
+ * <ul class='javatree'>
+ * 	<li class='jc'>{@link RequestHeaderList}
+ * 	<ul class='spaced-list'>
+ * 		<li>Methods for retrieving headers:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeaderList#contains(String) contains(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#containsAny(String...) containsAny(String...)}
+ * 			<li class='jm'>{@link RequestHeaderList#get(Class) get(Class)}
+ * 			<li class='jm'>{@link RequestHeaderList#get(String) get(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#getAll(String) getAll(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#getFirst(String) getFirst(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#getLast(String) getLast(String)}
+ * 		</ul>
+ * 		<li>Methods overridding headers:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeaderList#add(HttpHeader...) add(HttpHeader...)}
+ * 			<li class='jm'>{@link RequestHeaderList#add(String, Object) add(String, Object)}
+ * 			<li class='jm'>{@link RequestHeaderList#addDefault(HttpHeader...) addDefault(HttpHeader...)}
+ * 			<li class='jm'>{@link RequestHeaderList#addDefault(List) addDefault(List)}
+ * 			<li class='jm'>{@link RequestHeaderList#addDefault(String,String) addDefault(String,String)}
+ * 			<li class='jm'>{@link RequestHeaderList#remove(String) remove(String)}
+ * 			<li class='jm'>{@link RequestHeaderList#set(HttpHeader...) set(HttpHeader...)}
+ * 			<li class='jm'>{@link RequestHeaderList#set(String,Object) set(String,Object)}
+ * 		</ul>
+ * 		<li>Other methods:
+ * 		<ul class='javatreec'>
+ * 			<li class='jm'>{@link RequestHeaderList#copy() copy()}
+ * 			<li class='jm'>{@link RequestHeaderList#isEmpty() isEmpty()}
+ * 			<li class='jm'>{@link RequestHeaderList#subset(String...) subset(String...)}
+ * 		</ul>
+ * 	</ul>
+ * </ul>
+ *
+ * <p>
+ * Entries are stored in a case-insensitive map unless overridden via the constructor.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link RequestHeader}
+ * 	<li class='ja'>{@link org.apache.juneau.http.Header}
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
+public class RequestHeaderList extends ArrayList<RequestHeader> {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_headers = "headers";
+	private static final String ARG_name = "name";
+	private static final String ARG_pairs = "pairs";
+	private static final String ARG_names = "names";
+
+	private static final long serialVersionUID = 1L;
+
+	private final transient RestRequest req;
+	private boolean caseSensitive;
+	private final transient VarResolverSession vs;
+
+	private transient HttpPartParserSession parser;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param req The request creating this bean.
+	 * @param query The query parameters on the request (used for overloaded header values).
+	 * @param caseSensitive Whether case-sensitive name matching is enabled.
+	 */
+	public RequestHeaderList(RestRequest req, RequestQueryParamList query, boolean caseSensitive) {
+		this.req = req;
+		this.caseSensitive = caseSensitive;
+		this.vs = req.getVarResolverSession();
+
+		for (var e = req.getHttpServletRequest().getHeaderNames(); e.hasMoreElements();) {
+			var name = e.nextElement();
+			for (var ve = req.getHttpServletRequest().getHeaders(name); ve.hasMoreElements();) {
+				add(new RequestHeader(req, name, ve.nextElement()));
+			}
+		}
+
+		// Parameters defined on the request URL are appended to any existing header values.
+		var allowedHeaderParams = req.getContext().getAllowedHeaderParams();
+		query.forEach(p -> {
+			var name = p.getName();
+			var key = key(name);
+			if (allowedHeaderParams.contains(key) || allowedHeaderParams.contains("*")) {
+				add(new RequestHeader(req, name, p.getValue()));
+			}
+		});
+	}
+
+	/**
+	 * Copy constructor.
+	 */
+	private RequestHeaderList(RequestHeaderList copyFrom) {
+		req = copyFrom.req;
+		caseSensitive = copyFrom.caseSensitive;
+		parser = copyFrom.parser;
+		addAll(copyFrom);
+		vs = copyFrom.vs;
+	}
+
+	/**
+	 * Subset constructor.
+	 */
+	private RequestHeaderList(RequestHeaderList copyFrom, String...names) {
+		this.req = copyFrom.req;
+		caseSensitive = copyFrom.caseSensitive;
+		parser = copyFrom.parser;
+		vs = copyFrom.vs;
+		for (var n : names)
+			copyFrom.stream().filter(x -> eq(x.getName(), n)).forEach(this::add);
+	}
+
+	/**
+	 * Adds request header values.
+	 *
+	 * <p>
+	 * Headers are added to the end.
+	 * <br>Existing headers with the same name are not changed.
+	 *
+	 * @param headers The header objects.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList add(HttpHeader...headers) {
+		assertArgNotNull(ARG_headers, headers);
+		for (var h : headers)
+			if (nn(h))
+				add(h.getName(), h.getValue());
+		return this;
+	}
+
+	/**
+	 * Adds a request header value.
+	 *
+	 * <p>
+	 * Header is added to the end.
+	 * <br>Existing headers with the same name are not changed.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param value The header value.  Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList add(String name, Object value) {
+		assertArgNotNull(ARG_name, name);
+		add(new RequestHeader(req, name, s(value)).parser(parser));
+		return this;
+	}
+
+	/**
+	 * Adds default entries to these headers.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs The default entries.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList addDefault(HttpHeader...pairs) {
+		return addDefault(l(pairs));
+	}
+
+	/**
+	 * Adds default entries to these headers.
+	 *
+	 * <p>
+	 * Similar to {@link #set(String, Object)} but doesn't override existing values.
+	 *
+	 * @param pairs The default entries.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList addDefault(List<HttpHeader> pairs) {
+		assertArgNotNull(ARG_pairs, pairs);
+		for (var p : pairs) {
+			var name = p.getName();
+			var l = stream(name);
+			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
+			if (hasAllBlanks) {
+				removeAll(getAll(name));
+				add(new RequestHeader(req, name, vs.resolve(p.getValue())));
+			}
+		}
+		return this;
+	}
+
+	/**
+	 * Adds a default entry to the request headers.
+	 *
+	 * @param name The name.
+	 * @param value The value.
+	 * @return This object.
+	 */
+	public RequestHeaderList addDefault(String name, String value) {
+		return addDefault(HttpStringHeader.of(name, value));
+	}
+
+	/**
+	 * Sets case sensitivity for names in this list.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object (for method chaining).
+	 */
+	public RequestHeaderList caseSensitive(boolean value) {
+		caseSensitive = value;
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the header with the specified name is present.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header with the specified name is present.
+	 */
+	public boolean contains(String name) {
+		return stream(name).findAny().isPresent();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the header with any of the specified names are present.
+	 *
+	 * @param names The header names.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header with any of the specified names are present.
+	 */
+	public boolean containsAny(String...names) {
+		assertArgNotNull(ARG_names, names);
+		for (var n : names)
+			if (stream(n).findAny().isPresent())
+				return true;
+		return false;
+	}
+
+	/**
+	 * Makes a copy of these parameters.
+	 *
+	 * @return A new parameters object.
+	 */
+	public RequestHeaderList copy() {
+		return new RequestHeaderList(this);
+	}
+
+	/**
+	 * Returns the header as the specified bean type.
+	 *
+	 * <p>
+	 * Type must have a name specified via the {@link org.apache.juneau.http.Header} annotation
+	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
+	 *
+	 * @param <T> The bean type to create.
+	 * @param type The bean type to create.
+	 * @return The bean, never <jk>null</jk>.
+	 */
+	public <T> Optional<T> get(Class<T> type) {
+		var cm = req.getMarshallingSession().getClassMeta(type);
+		var name = HttpParts.getName(HEADER, cm).orElseThrow(() -> rex("@Header(name) not found on class {0}", cn(type)));
+		return get(name).as(type);
+	}
+
+	/**
+	 * Returns the condensed header with the specified name.
+	 *
+	 * <p>
+	 * If multiple headers are present, they will be combined into a single comma-delimited list.
+	 *
+	 * @param name The header name.
+	 * @return The header, never <jk>null</jk>.
+	 */
+	public RequestHeader get(String name) {
+		List<RequestHeader> l = getAll(name);
+		if (l.isEmpty())
+			return new RequestHeader(req, name, null).parser(parser);
+		if (l.size() == 1)
+			return l.get(0);
+		var sb = new StringBuilder(128);
+		for (var i = 0; i < l.size(); i++) {
+			if (i > 0)
+				sb.append(", ");
+			sb.append(l.get(i).getValue());
+		}
+		return new RequestHeader(req, name, sb.toString()).parser(parser);
+	}
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The list of all headers with matching names.  Never <jk>null</jk>.
+	 * 	<br>List is unmodifiable.
+	 */
+	public List<RequestHeader> getAll(String name) {
+		return stream(name).toList();
+	}
+
+	/**
+	 * Returns the first header with the specified name.
+	 *
+	 * <p>
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
+	 * to test for the existence of the header.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getFirst(String name) {
+		assertArgNotNull(ARG_name, name);
+		return stream(name).findFirst().orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
+	}
+
+	/**
+	 * Returns the last header with the specified name.
+	 *
+	 * <p>
+	 * Note that this method never returns <jk>null</jk> and that {@link RequestHeader#isPresent()} can be used
+	 * to test for the existence of the header.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @return The header.  Never <jk>null</jk>.
+	 */
+	public RequestHeader getLast(String name) {
+		assertArgNotNull(ARG_name, name);
+		var v = Holder.<RequestHeader>empty();
+		stream(name).forEach(v::set);
+		return v.orElseGet(() -> new RequestHeader(req, name, null).parser(parser));
+	}
+
+	/**
+	 * Returns all the unique header names in this list.
+	 * @return The list of all unique header names in this list.
+	 * 	<br>List is unmodifiable.
+	 */
+	public List<String> getNames() { return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
+
+	/**
+	 * Returns all headers in sorted order.
+	 *
+	 * @return The stream of all headers in sorted order.
+	 */
+	public Stream<RequestHeader> getSorted() {
+		Comparator<RequestHeader> x;
+		if (caseSensitive)
+			x = Comparator.comparing(RequestHeader::getName);
+		else
+			x = (x1, x2) -> String.CASE_INSENSITIVE_ORDER.compare(x1.getName(), x2.getName());
+		return stream().sorted(x);
+	}
+
+	/**
+	 * Sets the parser to use for part values.
+	 *
+	 * @param value The new value for this setting.
+	 * @return This object.
+	 */
+	public RequestHeaderList parser(HttpPartParserSession value) {
+		parser = value;
+		forEach(x -> x.parser(parser));
+		return this;
+	}
+
+	/**
+	 * Remove header by name.
+	 *
+	 * @param name The header names.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList remove(String name) {
+		assertArgNotNull(ARG_name, name);
+		removeIf(x -> eq(x.getName(), name));
+		return this;
+	}
+
+	/**
+	 * Sets request header values.
+	 *
+	 * <p>
+	 * Headers are added to the end.
+	 * <br>Any previous headers with the same name are removed.
+	 *
+	 * @param headers The header to set.  Must not be <jk>null</jk> or contain <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList set(HttpHeader...headers) {
+		assertArgNotNull(ARG_headers, headers);
+		for (var h : headers)
+			remove(h.getName());
+		for (var h : headers)
+			add(h);
+		return this;
+	}
+
+	/**
+	 * Sets a request header value.
+	 *
+	 * <p>
+	 * Header is added to the end.
+	 * <br>Any previous headers with the same name are removed.
+	 *
+	 * @param name The header name.  Must not be <jk>null</jk>.
+	 * @param value
+	 * 	The header value.
+	 * 	<br>Converted to a string using {@link Object#toString()}.
+	 * 	<br>Can be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RequestHeaderList set(String name, Object value) {
+		assertArgNotNull(ARG_name, name);
+		set(new RequestHeader(req, name, s(value)).parser(parser));
+		return this;
+	}
+
+	/**
+	 * Returns all headers with the specified name.
+	 *
+	 * @param name The header name.
+	 * @return The stream of all headers with matching names.  Never <jk>null</jk>.
+	 */
+	public Stream<RequestHeader> stream(String name) {
+		return stream().filter(x -> eq(x.getName(), name));
+	}
+
+	/**
+	 * Returns a copy of this object but only with the specified header names copied.
+	 *
+	 * @param names The list to include in the copy.
+	 * @return A new list object.
+	 */
+	public RequestHeaderList subset(String...names) {
+		return new RequestHeaderList(this, names);
+	}
+
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		var m = filteredBeanPropertyMap();
+		for (var n : getNames())
+			m.a(n, get(n).asString().orElse(null));
+		return m;
+		// @formatter:on
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return this == o || (o instanceof RequestHeaderList other && super.equals(other));
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return r(properties());
+	}
+
+	private boolean eq(String s1, String s2) {
+		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+	}
+
+	private String key(String name) {
+		return caseSensitive ? name : name.toLowerCase();
+	}
+}

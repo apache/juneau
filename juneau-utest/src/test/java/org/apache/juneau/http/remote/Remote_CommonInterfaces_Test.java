@@ -30,10 +30,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.beans.*;
+import org.apache.juneau.rest.server.config.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

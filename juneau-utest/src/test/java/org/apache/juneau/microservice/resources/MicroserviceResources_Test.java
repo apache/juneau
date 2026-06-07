@@ -23,8 +23,8 @@ import java.nio.file.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
 

@@ -23,10 +23,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.metrics.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.metrics.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * ({@code metricName}, {@code metricTags}) are resolved lazily on first request.
  *
  * <p>
- * Note: {@code MockRestClient} caches the {@link org.apache.juneau.rest.RestContext} per resource class.
+ * Note: {@code MockRestClient} caches the {@link org.apache.juneau.rest.server.server.RestContext} per resource class.
  * Each scenario uses a distinct static inner class so the SVL state at build time is deterministic.
  */
 class RestObservabilitySvl_Test extends TestBase {

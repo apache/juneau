@@ -33,9 +33,9 @@ import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -125,7 +125,7 @@ class RestClient_Response_Test extends TestBase {
 	@Rest
 	public static class C extends BasicRestResource {
 		@RestGet(path="/")
-		public String getHeader(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
+		public String getHeader(org.apache.juneau.rest.server.RestRequest req, org.apache.juneau.rest.server.RestResponse res) {
 			var n = req.getHeaderParam("Check").orElse(null);
 			var v = req.getHeaderParam(n).orElse(null);
 			res.setHeader(n,v);

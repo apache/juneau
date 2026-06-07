@@ -41,10 +41,10 @@ import org.apache.juneau.json.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.marshaller.Json;
 import org.apache.juneau.marshaller.Xml;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.httppart.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.utest.utils.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
@@ -82,11 +82,11 @@ class RestClient_Config_RestClient_Test extends TestBase {
 			return b;
 		}
 		@RestOp(path="/echo/*")
-		public String getEcho(org.apache.juneau.rest.RestRequest req) {
+		public String getEcho(org.apache.juneau.rest.server.RestRequest req) {
 			return req.toString();
 		}
 		@RestOp(path="/echoBody")
-		public Reader postEchoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+		public Reader postEchoBody(org.apache.juneau.rest.server.RestRequest req) throws IOException {
 			return req.getContent().getReader();
 		}
 		@RestOp(path="/ok")
@@ -94,7 +94,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 			return OK;
 		}
 		@RestOp(path="/checkHeader")
-		public String[] getHeader(org.apache.juneau.rest.RestRequest req) {
+		public String[] getHeader(org.apache.juneau.rest.server.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 	}
@@ -414,7 +414,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 	@Rest(partSerializer=A12a.class,partParser=A12b.class)
 	public static class A12 extends BasicRestResource {
 		@RestGet(path="/")
-		public Ok get(@Header(name="Foo") @Schema(cf="multi") ABean[] foo,org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws Exception {
+		public Ok get(@Header(name="Foo") @Schema(cf="multi") ABean[] foo,org.apache.juneau.rest.server.RestRequest req,org.apache.juneau.rest.server.RestResponse res) throws Exception {
 			assertEquals(2,foo.length);
 			assertList(req.getHeaders().getAll("Foo").stream().map(RequestHeader::getValue).toList(), "x{f:1}", "x{f:1}");
 			assertEquals("{f:1}",foo[0].toString());

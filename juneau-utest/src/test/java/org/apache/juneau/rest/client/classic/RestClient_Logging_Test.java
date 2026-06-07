@@ -24,9 +24,9 @@ import java.util.logging.*;
 import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 class RestClient_Logging_Test extends TestBase {
@@ -49,7 +49,7 @@ class RestClient_Logging_Test extends TestBase {
 			return b;
 		}
 		@RestPost
-		public InputStream stream(@Content InputStream b, org.apache.juneau.rest.RestResponse res) {
+		public InputStream stream(@Content InputStream b, org.apache.juneau.rest.server.RestResponse res) {
 			res.setHeader("Content-Encoding", "identity");
 			return b;
 		}

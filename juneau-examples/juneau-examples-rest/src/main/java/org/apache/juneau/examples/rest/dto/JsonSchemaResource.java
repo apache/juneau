@@ -21,9 +21,9 @@ import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.widget.*;
 
 /**
  * Sample resource that shows how to serialize JSON-Schema documents.

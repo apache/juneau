@@ -26,9 +26,9 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 class Server_Test extends TestBase {

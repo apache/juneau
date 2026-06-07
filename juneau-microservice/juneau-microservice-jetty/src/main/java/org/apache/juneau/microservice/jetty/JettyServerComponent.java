@@ -35,9 +35,9 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.cp.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.auth.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.auth.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
 

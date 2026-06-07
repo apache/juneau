@@ -33,10 +33,10 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.httppart.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
@@ -66,7 +66,7 @@ class RestClient_BasicCalls_Test extends TestBase {
 		@RestOp(path="/bean") public ABean deleteBean() { return bean; }
 		@RestOp(path="/bean") public ABean optionsBean() { return bean; }
 		@RestOp(path="/bean") public ABean headBean() { return bean; }
-		@RestOp(path="/checkHeader") public String[] postHeader(org.apache.juneau.rest.RestRequest req) { return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new); }
+		@RestOp(path="/checkHeader") public String[] postHeader(org.apache.juneau.rest.server.RestRequest req) { return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new); }
 		@RestOp(path="/",method="*") public Reader echoMethod(@Method String method) { return reader(method); }
 	}
 

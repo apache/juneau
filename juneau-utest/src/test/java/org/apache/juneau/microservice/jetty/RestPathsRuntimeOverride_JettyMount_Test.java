@@ -25,8 +25,8 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
@@ -47,7 +47,7 @@ import jakarta.servlet.*;
  *
  * <p>
  * The programmatic {@code RestContext.Builder.paths(String...)} rung is N/A for Jetty auto-discovery
- * (the {@link org.apache.juneau.rest.RestContext RestContext} is constructed lazily on first request,
+ * (the {@link org.apache.juneau.rest.server.server.RestContext RestContext} is constructed lazily on first request,
  * not at mount time), so users substitute via {@code getPaths()} or by leaning on SVL inside
  * {@code @Rest(paths=...)} elements.
  *

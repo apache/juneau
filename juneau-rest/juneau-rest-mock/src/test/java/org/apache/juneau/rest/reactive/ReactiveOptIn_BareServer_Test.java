@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Verifies that a <b>bare</b> {@code juneau-rest-server} (no {@code juneau-rest-server-reactive} /
- * {@code juneau-rest-server-reactor} module on the classpath) has <b>zero</b> reactive behavior.
+ * {@code juneau-rest-server-reactive-reactor} module on the classpath) has <b>zero</b> reactive behavior.
  *
  * <p>
  * This module's test classpath intentionally has no reactive module, so {@code RestContext}'s

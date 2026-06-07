@@ -24,8 +24,8 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.slf4j.*;
@@ -35,7 +35,7 @@ import org.slf4j.*;
  *
  * <p>
  * The {@code MockRestClient} harness exercises the synchronous fallback path of
- * {@link org.apache.juneau.rest.processor.AsyncResponseProcessor} (since
+ * {@link org.apache.juneau.rest.server.server.processor.AsyncResponseProcessor} (since
  * {@code MockServletRequest.isAsyncSupported() == false}). The tests here therefore focus on:
  *
  * <ul>

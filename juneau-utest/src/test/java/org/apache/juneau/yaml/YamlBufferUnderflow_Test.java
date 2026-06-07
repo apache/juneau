@@ -23,9 +23,9 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**

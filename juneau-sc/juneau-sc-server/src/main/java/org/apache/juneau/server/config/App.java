@@ -55,7 +55,7 @@ public class App {
 
 		/**
 		 * Provides the {@link LoadConfigResource} REST servlet, auto-mounted by {@link JettyServerComponent} at
-		 * {@link org.apache.juneau.rest.Rest#path()}.
+		 * {@link org.apache.juneau.rest.server.Rest#path()}.
 		 *
 		 * @return The servlet.
 		 */

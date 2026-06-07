@@ -20,7 +20,7 @@ import static java.util.Collections.*;
 import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.rest.util.RestUtils.*;
+import static org.apache.juneau.rest.server.util.RestUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -38,11 +38,11 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.RestRequest;
-import org.apache.juneau.rest.logger.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.logger.*;
 
 import jakarta.servlet.http.*;
 

@@ -27,9 +27,9 @@ import java.io.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
@@ -42,7 +42,7 @@ class RestClient_Query_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestGet
-		public Reader query(org.apache.juneau.rest.RestRequest req) {
+		public Reader query(org.apache.juneau.rest.server.RestRequest req) {
 			return reader(req.getQueryParams().asQueryString());
 		}
 	}

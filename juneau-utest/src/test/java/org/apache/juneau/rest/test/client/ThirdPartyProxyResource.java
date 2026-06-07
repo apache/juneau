@@ -26,9 +26,9 @@ import java.util.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.logger.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
 

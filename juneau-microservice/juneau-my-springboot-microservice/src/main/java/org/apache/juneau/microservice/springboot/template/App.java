@@ -18,8 +18,8 @@ package org.apache.juneau.microservice.springboot.template;
 
 import java.util.*;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.springboot.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.springboot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.builder.*;
 import org.springframework.boot.web.servlet.*;

@@ -17,7 +17,7 @@
 package org.apache.juneau.microservice.jetty;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.health.*;
+import org.apache.juneau.rest.server.health.*;
 
 import jakarta.servlet.*;
 

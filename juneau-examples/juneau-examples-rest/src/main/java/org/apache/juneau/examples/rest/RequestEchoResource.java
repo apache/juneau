@@ -21,10 +21,10 @@ import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.converter.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.converter.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.widget.*;
 import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;

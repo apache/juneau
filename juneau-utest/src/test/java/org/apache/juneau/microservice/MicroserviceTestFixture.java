@@ -63,7 +63,7 @@ import org.junit.jupiter.api.extension.*;
  *
  * <p>
  * The fixture is intended to amortize Jetty-startup cost across a whole test class — combined with the dynamic
- * {@link org.apache.juneau.rest.RestChildren#addChild RestChildren.addChild} / {@code removeChild} API, individual
+ * {@link org.apache.juneau.rest.server.RestChildren#addChild RestChildren.addChild} / {@code removeChild} API, individual
  * test methods can mount and unmount their own child resources against a single long-running server.
  */
 public final class MicroserviceTestFixture implements BeforeAllCallback, AfterAllCallback {

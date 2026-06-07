@@ -18,10 +18,10 @@ package org.apache.juneau.rest.mixin;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.debug.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.debug.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /** Regression matrix for `@Debug(config=...)` inheritance on mixins. */
@@ -34,11 +34,11 @@ class MixinInheritance_DebugEnablement_Test extends TestBase {
 			this.enabled = enabled;
 		}
 		@Override
-		public DebugResult resolve(org.apache.juneau.rest.RestContext context, jakarta.servlet.http.HttpServletRequest req) {
+		public DebugResult resolve(org.apache.juneau.rest.server.RestContext context, jakarta.servlet.http.HttpServletRequest req) {
 			return new DebugResult(enabled, null, java.util.logging.Level.INFO, enabled);
 		}
 		@Override
-		public DebugResult resolve(org.apache.juneau.rest.RestOpContext context, jakarta.servlet.http.HttpServletRequest req) {
+		public DebugResult resolve(org.apache.juneau.rest.server.RestOpContext context, jakarta.servlet.http.HttpServletRequest req) {
 			return new DebugResult(enabled, null, java.util.logging.Level.INFO, enabled);
 		}
 	}
@@ -53,35 +53,35 @@ class MixinInheritance_DebugEnablement_Test extends TestBase {
 
 	@Rest
 	public static class M_NoDebugDeclared {
-		@RestGet(path="/me") public boolean me(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
+		@RestGet(path="/me") public boolean me(org.apache.juneau.rest.server.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Rest(debug=@Debug(config=MixinDebug.class))
 	public static class M_MixinDebug {
-		@RestGet(path="/my") public boolean my(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
+		@RestGet(path="/my") public boolean my(org.apache.juneau.rest.server.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Rest(noInherit="debug", debug=@Debug(config=MixinDebug.class))
 	public static class M_NoInheritDebug {
-		@RestGet(path="/my") public boolean my(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
+		@RestGet(path="/my") public boolean my(org.apache.juneau.rest.server.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Rest(debug=@Debug(config=HostDebug.class), mixins={M_NoDebugDeclared.class})
 	public static class HostInheritsToMixin extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
+		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.server.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Rest(debug=@Debug(config=HostDebug.class), mixins={M_MixinDebug.class})
 	public static class HostWithMixinOverride extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
+		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.server.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Rest(debug=@Debug(config=HostDebug.class), mixins={M_NoInheritDebug.class})
 	public static class HostWithNoInherit extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.RestRequest req) { return req.isDebug(); }
+		@RestGet(path="/h") public boolean h(org.apache.juneau.rest.server.RestRequest req) { return req.isDebug(); }
 	}
 
 	@Test void a01_mixinInheritsHostDebugEnablement() throws Exception {

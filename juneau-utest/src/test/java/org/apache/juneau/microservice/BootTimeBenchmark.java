@@ -20,8 +20,8 @@ import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.jetty.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;

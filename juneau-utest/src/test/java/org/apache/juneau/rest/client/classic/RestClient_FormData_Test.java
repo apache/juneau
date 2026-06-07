@@ -28,9 +28,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.collections.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.serializer.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.apache.juneau.uon.*;
@@ -42,7 +42,7 @@ class RestClient_FormData_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestPost
-		public Reader formData(org.apache.juneau.rest.RestRequest req) {
+		public Reader formData(org.apache.juneau.rest.server.RestRequest req) {
 			return reader(req.getFormParams().asQueryString());
 		}
 	}

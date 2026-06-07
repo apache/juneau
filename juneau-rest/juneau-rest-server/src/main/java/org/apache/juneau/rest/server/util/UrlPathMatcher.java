@@ -1,0 +1,273 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server.util;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
+import java.util.regex.*;
+
+import org.apache.juneau.rest.server.*;
+
+/**
+ * A parsed path pattern constructed from a {@link RestOp#path() @RestOp(path)} value.
+ *
+ * <p>
+ * Handles aspects of matching and precedence ordering.
+ *
+ */
+public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
+
+	/**
+	 * A file name pattern such as "favicon.ico" or "*.jsp".
+	 */
+	@SuppressWarnings({
+		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
+	})
+	private static class FileNameMatcher extends UrlPathMatcher {
+
+		private final String basePattern;
+		private final String extPattern;
+		private final String comparator;
+
+		FileNameMatcher(String pattern) {
+			super(pattern);
+			var base = getBaseName(pattern);
+			var ext = getFileExtension(pattern);
+			basePattern = base.equals("*") ? null : base;
+			extPattern = ext.equals("*") ? null : ext;
+			this.comparator = pattern.replaceAll("\\w+", "X").replace("*", "W");
+		}
+
+		@Override /* Overridden from UrlPathMatcher */
+		public String getComparator() { return comparator; }
+
+		@Override /* Overridden from UrlPathMatcher */
+		public UrlPathMatch match(UrlPath pathInfo) {
+			Optional<String> fileName = pathInfo.getFileName();
+			if (fileName.isPresent()) {
+				var base = getBaseName(fileName.get());
+				var ext = getFileExtension(fileName.get());
+				if ((basePattern == null || basePattern.equals(base)) && (extPattern == null || extPattern.equals(ext)))
+					return new UrlPathMatch(pathInfo.getPath(), pathInfo.getParts().length, new String[0], new String[0]);
+			}
+			return null;
+		}
+	}
+
+	/**
+	 * A dir name pattern such as "/foo" or "/*".
+	 */
+	@SuppressWarnings({
+		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
+	})
+	private static class PathMatcher extends UrlPathMatcher {
+		private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^\\}]+)\\}");
+
+		private final String pattern;
+		private final String comparator;
+		private final String[] parts;
+		private final String[] vars;
+		private final String[] varKeys;
+		private final boolean hasRemainder;
+
+		PathMatcher(String patternString) {
+			super(patternString);
+			if (e(patternString)) {
+				this.pattern = "/";
+			} else if (patternString.charAt(0) != '/') {
+				this.pattern = '/' + patternString;
+			} else {
+				this.pattern = patternString;
+			}
+
+			var c = patternString.replaceAll("\\{[^\\}]+\\}", ".").replaceAll("\\w+", "X").replace(".", "W");
+			if (c.isEmpty())
+				c = "+";
+			if (! c.endsWith("/*"))
+				c = c + "/W";
+			this.comparator = c;
+
+			String[] parts2 = new UrlPath(pattern).getParts();
+
+			this.hasRemainder = parts2.length > 0 && "*".equals(parts2[parts2.length - 1]);
+
+			parts2 = hasRemainder ? Arrays.copyOf(parts2, parts2.length - 1) : parts2;
+
+			this.parts = parts2;
+			this.vars = new String[parts2.length];
+			List<String> vars2 = list();
+
+			for (var i = 0; i < parts2.length; i++) {
+				Matcher m = VAR_PATTERN.matcher(parts2[i]);
+				if (m.matches()) {
+					this.vars[i] = m.group(1);
+					vars2.add(this.vars[i]);
+				}
+			}
+
+			this.varKeys = vars2.isEmpty() ? null : vars2.toArray(new String[vars2.size()]);
+		}
+
+		@Override
+		public String getComparator() { return comparator; }
+
+		@Override
+		public String[] getVars() { return varKeys == null ? new String[0] : Arrays.copyOf(varKeys, varKeys.length); }
+
+		@Override
+		public boolean hasVars() {
+			return nn(varKeys);
+		}
+
+		/**
+		 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
+		 *
+		 * @param urlPath The path to match against.
+		 * @return
+		 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
+		 */
+		@SuppressWarnings({
+			"null", // Null handling verified by context or framework
+			"java:S3776", // Cognitive complexity acceptable for this specific logic
+		})
+		@Override
+		public UrlPathMatch match(UrlPath urlPath) {
+
+			String[] pip = urlPath.getParts();
+
+			if (parts.length != pip.length) {
+				if (hasRemainder) {
+					if ((pip.length == parts.length - 1 && ! urlPath.isTrailingSlash()) || pip.length < parts.length)
+						return null;
+				} else {
+					if (pip.length != parts.length + 1 || ! urlPath.isTrailingSlash())
+						return null;
+				}
+			}
+
+			for (var i = 0; i < parts.length; i++)
+				if (vars[i] == null && (pip.length <= i || ! ("*".equals(parts[i]) || pip[i].equals(parts[i]))))
+					return null;
+
+			String[] vals = varKeys == null ? null : new String[varKeys.length];
+
+			var j = 0;
+			if (nn(vals))
+				for (var i = 0; i < parts.length; i++)
+					if (nn(vars[i]))
+						vals[j++] = pip[i];
+
+			return new UrlPathMatch(urlPath.getPath(), parts.length, varKeys, vals);
+		}
+	}
+
+	/**
+	 * Constructs a matcher from the specified pattern string.
+	 *
+	 * @param pattern The pattern string.
+	 * @return A new matcher.
+	 */
+	public static UrlPathMatcher of(String pattern) {
+		pattern = emptyIfNull(pattern);
+		boolean isFilePattern = pattern.matches("[^\\/]+\\.[^\\/]+");
+		return isFilePattern ? new FileNameMatcher(pattern) : new PathMatcher(pattern);
+
+	}
+
+	private final String pattern;
+
+	UrlPathMatcher(String pattern) {
+		this.pattern = pattern;
+	}
+
+	/**
+	 * Comparator for this object.
+	 *
+	 * <p>
+	 * The comparator is designed to order URL pattern from most-specific to least-specific.
+	 * For example, the following patterns would be ordered as follows:
+	 * <ol>
+	 * 	<li><c>foo.bar</c>
+	 * 	<li><c>*.bar</c>
+	 * 	<li><c>/foo/bar</c>
+	 * 	<li><c>/foo/bar/*</c>
+	 * 	<li><c>/foo/{id}/bar</c>
+	 * 	<li><c>/foo/{id}/bar/*</c>
+	 * 	<li><c>/foo/{id}</c>
+	 * 	<li><c>/foo/{id}/*</c>
+	 * 	<li><c>/foo</c>
+	 * 	<li><c>/foo/*</c>
+	 * </ol>
+	 */
+	@Override /* Overridden from Comparable */
+	public int compareTo(UrlPathMatcher o) {
+		return o.getComparator().compareTo(getComparator());
+	}
+
+	@Override /* Overridden from Object */
+	public boolean equals(Object o) {
+		return o instanceof UrlPathMatcher other && compareTo(other) == 0;
+	}
+
+	@Override /* Overridden from Object */
+	public int hashCode() {
+		return getComparator() != null ? getComparator().hashCode() : 0;
+	}
+
+	/**
+	 * Returns the variable names found in the pattern.
+	 *
+	 * @return
+	 * 	The variable names or an empty array if no variables found.
+	 *	<br>Modifying the returned array does not modify this object.
+	 */
+	public String[] getVars() { return new String[0]; }
+
+	/**
+	 * Returns <jk>true</jk> if this path pattern contains variables.
+	 *
+	 * @return <jk>true</jk> if this path pattern contains variables.
+	 */
+	public boolean hasVars() {
+		return false;
+	}
+
+	/**
+	 * Returns a non-<jk>null</jk> value if the specified path matches this pattern.
+	 *
+	 * @param pathInfo The path to match against.
+	 * @return
+	 * 	A pattern match object, or <jk>null</jk> if the path didn't match this pattern.
+	 */
+	public abstract UrlPathMatch match(UrlPath pathInfo);
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return pattern;
+	}
+
+	/**
+	 * Returns a string that can be used to compare this matcher with other matchers to provide the ability to
+	 * order URL patterns from most-specific to least-specific.
+	 *
+	 * @return A comparison string.
+	 */
+	protected abstract String getComparator();
+}

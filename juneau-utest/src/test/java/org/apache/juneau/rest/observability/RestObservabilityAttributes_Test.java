@@ -23,10 +23,10 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.metrics.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.metrics.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -27,8 +27,8 @@ import org.apache.juneau.commons.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 
 /**
  * Shows contents of the microservice configuration file.

@@ -1,0 +1,418 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server.logger;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.function.*;
+import java.util.logging.*;
+
+import org.apache.juneau.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.inject.*;
+
+import jakarta.servlet.http.*;
+
+/**
+ * Represents a logging rule used by {@link CallLogger}.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_codeFilter)
+})
+public class CallLoggerRule {
+
+	// Property name constants
+	private static final String PROP_codeFilter = "codeFilter";
+	private static final String PROP_enabled = "enabled";
+	private static final String PROP_enabledTest = "enabledTest";
+	private static final String PROP_exceptionFilter = "exceptionFilter";
+	private static final String PROP_level = "level";
+	private static final String PROP_requestDetail = "requestDetail";
+	private static final String PROP_requestFilter = "requestFilter";
+	private static final String PROP_responseDetail = "responseDetail";
+	private static final String PROP_responseFilter = "responseFilter";
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder {
+
+		@SuppressWarnings({
+			"unused" // BeanStore is injected for potential subclass use; not consumed in this builder.
+		})
+		private final BeanStore beanStore;
+		Predicate<Integer> statusFilter;
+		Predicate<HttpServletRequest> requestFilter;
+		Predicate<HttpServletResponse> responseFilter;
+		Predicate<Throwable> exceptionFilter;
+		Enablement enabled;
+		Predicate<HttpServletRequest> enabledTest;
+		Level level;
+		CallLoggingDetail requestDetail;
+		CallLoggingDetail responseDetail;
+		boolean logStackTrace;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
+		 */
+		protected Builder(BeanStore beanStore) {
+			this.beanStore = beanStore;
+		}
+
+		/**
+		 * Shortcut for calling <c>enabled(<jsf>NEVER</jsf>)</c>.
+		 *
+		 * @return This object.
+		 */
+		public Builder disabled() {
+			return this.enabled(Enablement.NEVER);
+		}
+
+		/**
+		 * Specifies whether logging is enabled when using this rule.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a logger rule where logging is only enabled if the query string contains "foobar".</jc>
+		 * 	RestLogger
+		 * 		.<jsm>createRule</jsm>()
+		 * 		.enabled(<jsf>CONDITIONALLY</jsf>)
+		 * 		.enabledPredicate(<jv>x</jv> -&gt; <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link Enablement#ALWAYS ALWAYS} - Logging is enabled.
+		 * 	<li>{@link Enablement#NEVER NEVER} - Logging is disabled.
+		 * 	<li>{@link Enablement#CONDITIONAL CONDITIONALLY} - Logging is enabled if it passes the {@link #enabledPredicate(Predicate)} test.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The enablement flag value, or <jk>null</jk> to inherit from the call logger whose default value is {@link Enablement#ALWAYS ALWAYS}
+		 * 	unless overridden via a <js>"juneau.restCallLogger.enabled"</js> system property or <js>"JUNEAU_RESTCALLLOGGER_ENABLED"</js> environment variable.
+		 * @return This object.
+		 */
+		public Builder enabled(Enablement value) {
+			enabled = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the predicate test to use when the enabled setting is set to {@link Enablement#CONDITIONAL CONDITIONALLY}.
+		 *
+		 * <p>
+		 * This setting has no effect if the enablement value is not {@link Enablement#CONDITIONAL CONDITIONALLY}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a logger rule where logging is only enabled if the query string contains "foobar".</jc>
+		 * 	RestLogger
+		 * 		.<jsm>createRule</jsm>()
+		 * 		.enabled(<jsf>CONDITIONALLY</jsf>)
+		 * 		.enabledPredicate(<jv>x</jv> -&gt; <jv>x</jv>.getQueryString().contains(<js>"foobar"</js>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The enablement predicate test, or <jk>null</jk> to inherit from the call logger whose default value is <c><jv>x</jv> -&gt; <jk>false</jk></c>.
+		 * @return This object.
+		 */
+		public Builder enabledPredicate(Predicate<HttpServletRequest> value) {
+			enabledTest = value;
+			return this;
+		}
+
+		/**
+		 * Apply a throwable-based predicate check for this rule to match against.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a logger rule that only matches if a NotFound exception was thrown.</jc>
+		 * 	RestLogger
+		 * 		.<jsm>createRule</jsm>()
+		 * 		.exceptionFilter(<jv>x</jv> -&gt; <jv>x</jv> <jk>instanceof</jk> NotFound)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * This check is only performed if an actual throwable was thrown.  Therefore it's not necessary to perform a
+		 * null check in the predicate.
+		 *
+		 * @param value
+		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on exceptions.
+		 * @return This object.
+		 */
+		public Builder exceptionFilter(Predicate<Throwable> value) {
+			exceptionFilter = value;
+			return this;
+		}
+
+
+		/**
+		 * The logging level to use for logging the request/response.
+		 *
+		 * <p>
+		 * The default value is {@link Level#INFO}.
+		 *
+		 * @param value
+		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
+		 * @return This object.
+		 */
+		public Builder level(Level value) {
+			level = value;
+			return this;
+		}
+
+		/**
+		 * Log a stack trace as part of the log entry.
+		 *
+		 * <p>
+		 * The default value is <jk>false</jk>.
+		 *
+		 * @return This object.
+		 */
+		public Builder logStackTrace() {
+			this.logStackTrace = true;
+			return this;
+		}
+
+		/**
+		 * The level of detail to log on a request.
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
+		 * @return This object.
+		 */
+		public Builder requestDetail(CallLoggingDetail value) {
+			requestDetail = value;
+			return this;
+		}
+
+		/**
+		 * Apply a request-based predicate check for this rule to match against.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a logger rule that only matches if the servlet path contains "foobar".</jc>
+		 * 	RestLogger
+		 * 		.<jsm>createRule</jsm>()
+		 * 		.requestFilter(<jv>x</jv> -&gt; <jv>x</jv>.getServletPath().contains(<js>"foobar"</js>))
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on the request.
+		 * @return This object.
+		 */
+		public Builder requestFilter(Predicate<HttpServletRequest> value) {
+			requestFilter = value;
+			return this;
+		}
+
+		/**
+		 * The level of detail to log on a response.
+		 *
+		 * <ul class='values'>
+		 * 	<li>{@link CallLoggingDetail#STATUS_LINE STATUS_LINE} - Log only the status line.
+		 * 	<li>{@link CallLoggingDetail#HEADER HEADER} - Log the status line and headers.
+		 * 	<li>{@link CallLoggingDetail#ENTITY ENTITY} - Log the status line and headers and content if available.
+		 * </ul>
+		 *
+		 * @param value
+		 * 	The new value for this property, or <jk>null</jk> to inherit from the call logger.
+		 * @return This object.
+		 */
+		public Builder responseDetail(CallLoggingDetail value) {
+			responseDetail = value;
+			return this;
+		}
+
+		/**
+		 * Apply a response-based predicate check for this rule to match against.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a logger rule that only matches if the servlet path contains "foobar".</jc>
+		 * 	RestLogger
+		 * 		.<jsm>createRule</jsm>()
+		 * 		.responseFilter(<jv>x</jv> -&gt; <jv>x</jv>.getStatus() &gt;= 500)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <p>
+		 * Note that the {@link #statusFilter(Predicate)} and {@link #exceptionFilter(Predicate)} methods are simply
+		 * convenience response filters.
+		 *
+		 * @param value
+		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on the response.
+		 * @return This object.
+		 */
+		public Builder responseFilter(Predicate<HttpServletResponse> value) {
+			responseFilter = value;
+			return this;
+		}
+
+		/**
+		 * Apply a status-based predicate check for this rule to match against.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a logger rule that only matches if the status code is greater than or equal to 500.</jc>
+		 * 	RestLogger
+		 * 		.<jsm>createRule</jsm>()
+		 * 		.statusFilter(<jv>x</jv> -&gt; <jv>x</jv> &gt;= 500)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value
+		 * 	The predicate check, or <jk>null</jk> to not use any filtering based on status code.
+		 * @return This object.
+		 */
+		public Builder statusFilter(Predicate<Integer> value) {
+			statusFilter = value;
+			return this;
+		}
+
+		/**
+		 * Builds the logger rule.
+		 *
+		 * @return A new {@link CallLoggerRule}.
+		 */
+		public CallLoggerRule build() {
+			return new CallLoggerRule(this);
+		}
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	private final Predicate<Integer> statusFilter;
+	private final Predicate<HttpServletRequest> requestFilter;
+	private final Predicate<HttpServletResponse> responseFilter;
+	private final Predicate<Throwable> exceptionFilter;
+	private final Level level;
+	private final Enablement enabled;
+	private final Predicate<HttpServletRequest> enabledTest;
+	private final CallLoggingDetail requestDetail;
+	private final CallLoggingDetail responseDetail;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param b Builder
+	 */
+	CallLoggerRule(Builder b) {
+		statusFilter = b.statusFilter;
+		exceptionFilter = b.exceptionFilter;
+		requestFilter = b.requestFilter;
+		responseFilter = b.responseFilter;
+		level = b.level;
+		enabled = b.enabled;
+		enabledTest = b.enabledTest;
+		requestDetail = b.requestDetail;
+		responseDetail = b.responseDetail;
+	}
+
+	/**
+	 * Returns the enablement flag value on this rule.
+	 *
+	 * @return The enablement flag value on this rule, or <jk>null</jk> if it's not set.
+	 */
+	public Enablement getEnabled() { return enabled; }
+
+	/**
+	 * Returns the enablement predicate test on this rule.
+	 *
+	 * @return The enablement predicate test on this rule, or <jk>null</jk> if it's not set.
+	 */
+	public Predicate<HttpServletRequest> getEnabledTest() { return enabledTest; }
+
+	/**
+	 * Returns the log level on this rule.
+	 *
+	 * @return The log level on this rule, or <jk>null</jk> if it's not set.
+	 */
+	public Level getLevel() { return level; }
+
+	/**
+	 * Returns the detail level for HTTP requests.
+	 *
+	 * @return the detail level for HTTP requests, or <jk>null</jk> if it's not set.
+	 */
+	public CallLoggingDetail getRequestDetail() { return requestDetail; }
+
+	/**
+	 * Returns the detail level for HTTP responses.
+	 *
+	 * @return the detail level for HTTP responses, or <jk>null</jk> if it's not set.
+	 */
+	public CallLoggingDetail getResponseDetail() { return responseDetail; }
+
+	/**
+	 * Returns <jk>true</jk> if this rule matches the specified parameters.
+	 *
+	 * @param req The HTTP request being logged.  Never <jk>null</jk>.
+	 * @param res The HTTP response being logged.  Never <jk>null</jk>.
+	 * @return <jk>true</jk> if this rule matches the specified parameters.
+	 */
+	public boolean matches(HttpServletRequest req, HttpServletResponse res) {
+		var e = (Throwable)req.getAttribute("Exception");
+		return !((nn(requestFilter) && ! requestFilter.test(req)) || (nn(responseFilter) && ! responseFilter.test(res)))
+			&& !(nn(statusFilter) && ! statusFilter.test(res.getStatus()))
+			&& !(nn(e) && nn(exceptionFilter) && ! exceptionFilter.test(e));
+	}
+
+	protected FluentMap<String,Object> properties() {
+		// @formatter:off
+		return filteredBeanPropertyMap()
+			.a(PROP_codeFilter, statusFilter)
+			.a(PROP_enabled, enabled)
+			.a(PROP_enabledTest, enabledTest)
+			.a(PROP_exceptionFilter, exceptionFilter)
+			.a(PROP_level, level)
+			.a(PROP_requestDetail, requestDetail)
+			.a(PROP_requestFilter, requestFilter)
+			.a(PROP_responseDetail, responseDetail)
+			.a(PROP_responseFilter, responseFilter);
+		// @formatter:on
+	}
+
+	@Override /* Overridden from Object */
+	public String toString() {
+		return r(properties());
+	}
+}

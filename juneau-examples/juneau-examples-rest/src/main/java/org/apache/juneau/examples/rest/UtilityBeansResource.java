@@ -18,10 +18,10 @@ package org.apache.juneau.examples.rest;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.beans.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.widget.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.
@@ -49,7 +49,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	aside={
 		"<div class='text'>",
-		"\t<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"\t<p>Examples of serialized beans in the org.apache.juneau.rest.server.utilitybeans package.</p>",
 		"</div>"
 	},
 	asideFloat="RIGHT"
@@ -93,7 +93,7 @@ public class UtilityBeansResource extends BasicRestResource {
 
 	/**
 	 * [HTTP GET /utilitybeans/BeanDescription]
-	 * @return Example of serialized org.apache.juneau.rest.utilitybeans.ResourceDescriptions bean.
+	 * @return Example of serialized org.apache.juneau.rest.server.utilitybeans.ResourceDescriptions bean.
 	 */
 	@RestGet("/BeanDescription")
 	@HtmlDocConfig(
@@ -109,7 +109,7 @@ public class UtilityBeansResource extends BasicRestResource {
 
 	/**
 	 * [HTTP GET /utilitybeans/Hyperlink]
-	 * @return Example of serialized org.apache.juneau.rest.utilitybeans.Hyperlink bean.
+	 * @return Example of serialized org.apache.juneau.rest.server.utilitybeans.Hyperlink bean.
 	 */
 	@RestGet("/Hyperlink")
 	@HtmlDocConfig(
@@ -132,7 +132,7 @@ public class UtilityBeansResource extends BasicRestResource {
 	@HtmlDocConfig(
 		aside={
 			"<div class='text'>",
-			"\t<p>Example of serialized org.apache.juneau.rest.utilitybeans.SeeOtherRoot bean.</p>",
+			"\t<p>Example of serialized org.apache.juneau.rest.server.utilitybeans.SeeOtherRoot bean.</p>",
 			"</div>"
 		}
 	)

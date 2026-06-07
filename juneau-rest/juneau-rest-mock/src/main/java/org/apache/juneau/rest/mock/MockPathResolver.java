@@ -27,7 +27,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.server.util.*;
 
 /**
  * Used to resolve incoming URLS to the various URL artifacts of <l>HttpServletRequest</l>.

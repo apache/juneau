@@ -21,8 +21,8 @@ import static org.apache.juneau.http.classic.response.HttpVersionNotSupported.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 class HttpVersionNotSupported_Test extends TestBase {

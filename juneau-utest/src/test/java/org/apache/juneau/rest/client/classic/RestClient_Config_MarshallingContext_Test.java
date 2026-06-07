@@ -30,10 +30,10 @@ import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.httppart.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
@@ -42,19 +42,19 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestPost
-		public Reader echoBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+		public Reader echoBody(org.apache.juneau.rest.server.RestRequest req) throws IOException {
 			return req.getContent().getReader();
 		}
 		@RestGet
-		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
+		public String[] checkHeader(org.apache.juneau.rest.server.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 		@RestGet
-		public Reader checkQuery(org.apache.juneau.rest.RestRequest req) {
+		public Reader checkQuery(org.apache.juneau.rest.server.RestRequest req) {
 			return reader(req.getQueryParams().asQueryString());
 		}
 		@RestPost
-		public Reader checkFormData(org.apache.juneau.rest.RestRequest req) {
+		public Reader checkFormData(org.apache.juneau.rest.server.RestRequest req) {
 			return reader(req.getFormParams().asQueryString());
 		}
 	}
@@ -93,7 +93,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 	@Rest
 	public static class A2b extends BasicRestResource {
 		@RestPost
-		public Reader test(org.apache.juneau.rest.RestRequest req,org.apache.juneau.rest.RestResponse res) throws IOException {
+		public Reader test(org.apache.juneau.rest.server.RestRequest req,org.apache.juneau.rest.server.RestResponse res) throws IOException {
 			res.setHeader("X",req.getHeaderParam("X").orElse(null));
 			return req.getContent().getReader();
 		}

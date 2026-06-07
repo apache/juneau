@@ -24,7 +24,7 @@ import java.time.*;
 import java.time.format.*;
 import java.util.*;
 
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.server.util.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

@@ -27,13 +27,13 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Remote-proxy <b>feature-parity</b> suite for the <b>next-generation</b> REST client engine
- * ({@link RestClient#remote(Class)} &rarr; {@link org.apache.juneau.rest.client.remote.RemoteClient}), exercised against
+ * ({@link RestClient#remote(Class)} &rarr; {@link org.apache.juneau.rest.server.server.client.remote.RemoteClient}), exercised against
  * a synthetic {@code @Remote} interface that reproduces a comprehensive remote-proxy feature matrix (F1&ndash;F24) plus
  * verb-completeness rows (PUT/DELETE/{@code @RemoteOp}).
  *
@@ -223,7 +223,7 @@ class RemoteProxy_FeatureParity_Test {
 		@RestPatch("/rest/count") public String count(@Content String body) { return "5"; }
 		@RestGet("/rest/object") public String object() { return "123"; }
 		@RestPost("/rest/ok")   public String ok(@Content String body) { return "OK"; }
-		@RestGet("/rest/notfound/{name}") public String notfound(@Path("name") String name, org.apache.juneau.rest.RestResponse res) { res.setStatus(404); return "not found:" + name; }
+		@RestGet("/rest/notfound/{name}") public String notfound(@Path("name") String name, org.apache.juneau.rest.server.RestResponse res) { res.setStatus(404); return "not found:" + name; }
 		@RestPost("/rest/form") public String form(@FormData("a") String a) { return "a=" + a; }
 		@RestGet("/rest/req")   public String req(@Query("rqA") String a) { return "a=" + a; }
 		@RestGet("/rest/dynq")  public String dynQ(@Query("a") String a, @Query("b") String b) { return "a=" + a + ",b=" + b; }

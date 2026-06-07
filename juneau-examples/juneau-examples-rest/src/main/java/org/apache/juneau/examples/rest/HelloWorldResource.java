@@ -17,8 +17,8 @@
 package org.apache.juneau.examples.rest;
 
 import org.apache.juneau.html.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 
 /**
  * Sample REST resource that prints out a simple "Hello world!" message.

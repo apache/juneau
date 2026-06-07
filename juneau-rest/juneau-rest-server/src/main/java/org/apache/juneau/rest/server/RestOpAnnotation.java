@@ -1,0 +1,826 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+
+import java.lang.annotation.*;
+import java.util.function.*;
+
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.encoders.*;
+import org.apache.juneau.rest.server.converter.*;
+import org.apache.juneau.rest.server.guard.*;
+import org.apache.juneau.rest.server.matcher.*;
+import org.apache.juneau.serializer.*;
+
+/**
+ * Utility classes and methods for the {@link RestOp @RestOp} annotation.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+ * </ul>
+ */
+public class RestOpAnnotation {
+
+	/**
+	 * Private constructor to prevent instantiation.
+	 */
+	private RestOpAnnotation() {
+		// Utility class - prevent instantiation
+	}
+
+	/**
+	 * Builder class.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
+	 * </ul>
+	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast for Builder inheritance
+	})
+	public static class Builder extends AnnotationObject.Builder {
+
+		private String[] description = {};
+		private Class<? extends RestConverter>[] converters = new Class[0];
+		private Class<? extends RestGuard>[] guards = new Class[0];
+		private Class<? extends RestMatcher>[] matchers = new Class[0];
+		private Class<? extends Encoder>[] encoders = new Class[0];
+		private Class<? extends Serializer>[] serializers = new Class[0];
+		private Class<?>[] parsers = {};
+		private OpSwagger swagger = OpSwaggerAnnotation.DEFAULT;
+		private String clientVersion = "";
+		private Debug debug = DebugAnnotation.DEFAULT;
+		private String defaultAccept = "";
+		private String defaultCharset = "";
+		private String defaultContentType = "";
+		private String maxInput = "";
+		private String method = "";
+		private String observability = "";
+		private String metricName = "";
+		private String metricTags = "";
+		private String problemDetails = "";
+		private String virtualThreads = "";
+		private String asyncTimeoutMillis = "";
+		private String asyncCompletionExecutor = "";
+		private String rolesDeclared = "";
+		private String roleGuard = "";
+		private String summary = "";
+		private String value = "";
+		private String[] consumes = {};
+		private String[] defaultRequestFormData = {};
+		private String[] defaultRequestQueryData = {};
+		private String[] defaultRequestAttributes = {};
+		private String[] defaultRequestHeaders = {};
+		private String[] defaultResponseHeaders = {};
+		private String[] path = {};
+		private String[] produces = {};
+		private String[] allowedSerializerOptions = {};
+		private String[] allowedParserOptions = {};
+		private String[] noInherit = {};
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {
+			super(RestOp.class);
+		}
+
+		/**
+		 * Instantiates a new {@link RestOp @RestOp} object initialized with this builder.
+		 *
+		 * @return A new {@link RestOp @RestOp} object.
+		 */
+		public RestOp build() {
+			return new Object(this);
+		}
+
+		/**
+		 * Sets the description property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder description(String...value) {
+			description = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#clientVersion()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder clientVersion(String value) {
+			clientVersion = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#consumes()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder consumes(String...value) {
+			consumes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#converters()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder converters(Class<? extends RestConverter>...value) {
+			converters = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#debug()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debug(String value) {
+			debug = DebugAnnotation.create().value(value).build();
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#debug()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder debug(Debug value) {
+			debug = value == null ? DebugAnnotation.DEFAULT : value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultAccept()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultAccept(String value) {
+			defaultAccept = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultCharset()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultCharset(String value) {
+			defaultCharset = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultContentType()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultContentType(String value) {
+			defaultContentType = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultRequestAttributes()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestAttributes(String...value) {
+			defaultRequestAttributes = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultRequestFormData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestFormData(String...value) {
+			defaultRequestFormData = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultRequestHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestHeaders(String...value) {
+			defaultRequestHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultRequestQueryData()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultRequestQueryData(String...value) {
+			defaultRequestQueryData = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#defaultResponseHeaders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder defaultResponseHeaders(String...value) {
+			defaultResponseHeaders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#encoders()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder encoders(Class<? extends Encoder>...value) {
+			encoders = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#guards()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder guards(Class<? extends RestGuard>...value) {
+			guards = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#matchers()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder matchers(Class<? extends RestMatcher>...value) {
+			matchers = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#maxInput()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder maxInput(String value) {
+			maxInput = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#method()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder method(String value) {
+			method = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#parsers()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder parsers(Class<?>...value) {
+			parsers = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#path()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder path(String...value) {
+			path = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#problemDetails()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder problemDetails(String value) {
+			problemDetails = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#observability()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder observability(String value) {
+			observability = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#metricName()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder metricName(String value) {
+			metricName = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#metricTags()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder metricTags(String value) {
+			metricTags = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#virtualThreads()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder virtualThreads(String value) {
+			virtualThreads = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#asyncTimeoutMillis()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncTimeoutMillis(String value) {
+			asyncTimeoutMillis = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#asyncCompletionExecutor()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder asyncCompletionExecutor(String value) {
+			asyncCompletionExecutor = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#produces()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder produces(String...value) {
+			produces = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#allowedSerializerOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedSerializerOptions(String...value) {
+			allowedSerializerOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#allowedParserOptions()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder allowedParserOptions(String...value) {
+			allowedParserOptions = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#noInherit()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder noInherit(String...value) {
+			noInherit = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#roleGuard()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder roleGuard(String value) {
+			roleGuard = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#rolesDeclared()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder rolesDeclared(String value) {
+			rolesDeclared = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#serializers()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		@SafeVarargs
+		public final Builder serializers(Class<? extends Serializer>...value) {
+			serializers = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#summary()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder summary(String value) {
+			summary = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#swagger()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder swagger(OpSwagger value) {
+			swagger = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link RestOp#value()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder value(String value) {
+			this.value = value;
+			return this;
+		}
+	}
+
+	@SuppressWarnings({
+		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
+	})
+	private static class Object extends AnnotationObject implements RestOp {
+
+		private final String[] description;
+		private final Class<? extends RestConverter>[] converters;
+		private final Class<? extends RestGuard>[] guards;
+		private final Class<? extends RestMatcher>[] matchers;
+		private final Class<? extends Encoder>[] encoders;
+		private final Class<? extends Serializer>[] serializers;
+		private final Class<?>[] parsers;
+		private final OpSwagger swagger;
+		private final String clientVersion;
+		private final Debug debug;
+		private final String defaultAccept;
+		private final String defaultCharset;
+		private final String defaultContentType;
+		private final String maxInput;
+		private final String method;
+		private final String observability;
+		private final String metricName;
+		private final String metricTags;
+		private final String problemDetails;
+		private final String virtualThreads;
+		private final String asyncTimeoutMillis;
+		private final String asyncCompletionExecutor;
+		private final String rolesDeclared;
+		private final String roleGuard;
+		private final String summary;
+		private final String value;
+		private final String[] consumes;
+		private final String[] defaultRequestFormData;
+		private final String[] defaultRequestQueryData;
+		private final String[] defaultRequestAttributes;
+		private final String[] defaultRequestHeaders;
+		private final String[] defaultResponseHeaders;
+		private final String[] path;
+		private final String[] produces;
+		private final String[] allowedSerializerOptions;
+		private final String[] allowedParserOptions;
+		private final String[] noInherit;
+
+		Object(RestOpAnnotation.Builder b) {
+			super(b);
+			description = copyOf(b.description);
+			clientVersion = b.clientVersion;
+			consumes = copyOf(b.consumes);
+			converters = copyOf(b.converters);
+			debug = b.debug;
+			defaultAccept = b.defaultAccept;
+			defaultCharset = b.defaultCharset;
+			defaultContentType = b.defaultContentType;
+			defaultRequestFormData = copyOf(b.defaultRequestFormData);
+			defaultRequestQueryData = copyOf(b.defaultRequestQueryData);
+			defaultRequestAttributes = copyOf(b.defaultRequestAttributes);
+			defaultRequestHeaders = copyOf(b.defaultRequestHeaders);
+			defaultResponseHeaders = copyOf(b.defaultResponseHeaders);
+			encoders = copyOf(b.encoders);
+			guards = copyOf(b.guards);
+			matchers = copyOf(b.matchers);
+			maxInput = b.maxInput;
+			method = b.method;
+			parsers = copyOf(b.parsers);
+			path = copyOf(b.path);
+			observability = b.observability;
+			metricName = b.metricName;
+			metricTags = b.metricTags;
+			problemDetails = b.problemDetails;
+			virtualThreads = b.virtualThreads;
+			asyncTimeoutMillis = b.asyncTimeoutMillis;
+			asyncCompletionExecutor = b.asyncCompletionExecutor;
+			produces = copyOf(b.produces);
+			allowedSerializerOptions = copyOf(b.allowedSerializerOptions);
+			allowedParserOptions = copyOf(b.allowedParserOptions);
+			noInherit = copyOf(b.noInherit);
+			roleGuard = b.roleGuard;
+			rolesDeclared = b.rolesDeclared;
+			serializers = copyOf(b.serializers);
+			summary = b.summary;
+			swagger = b.swagger;
+			value = b.value;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String clientVersion() {
+			return clientVersion;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] consumes() {
+			return consumes;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Class<? extends RestConverter>[] converters() {
+			return converters;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Debug debug() {
+			return debug;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String defaultAccept() {
+			return defaultAccept;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String defaultCharset() {
+			return defaultCharset;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String defaultContentType() {
+			return defaultContentType;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] defaultRequestAttributes() {
+			return defaultRequestAttributes;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] defaultRequestFormData() {
+			return defaultRequestFormData;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] defaultRequestHeaders() {
+			return defaultRequestHeaders;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] defaultRequestQueryData() {
+			return defaultRequestQueryData;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] defaultResponseHeaders() {
+			return defaultResponseHeaders;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Class<? extends Encoder>[] encoders() {
+			return encoders;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Class<? extends RestGuard>[] guards() {
+			return guards;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Class<? extends RestMatcher>[] matchers() {
+			return matchers;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String maxInput() {
+			return maxInput;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String method() {
+			return method;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Class<?>[] parsers() {
+			return parsers;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] path() {
+			return path;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String observability() {
+			return observability;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String metricName() {
+			return metricName;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String metricTags() {
+			return metricTags;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String problemDetails() {
+			return problemDetails;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String virtualThreads() {
+			return virtualThreads;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String asyncTimeoutMillis() {
+			return asyncTimeoutMillis;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String asyncCompletionExecutor() {
+			return asyncCompletionExecutor;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] produces() {
+			return produces;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] allowedSerializerOptions() {
+			return allowedSerializerOptions;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] allowedParserOptions() {
+			return allowedParserOptions;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String[] noInherit() {
+			return noInherit;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String roleGuard() {
+			return roleGuard;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String rolesDeclared() {
+			return rolesDeclared;
+		}
+
+		@Override /* Overridden from RestOp */
+		public Class<? extends Serializer>[] serializers() {
+			return serializers;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String summary() {
+			return summary;
+		}
+
+		@Override /* Overridden from RestOp */
+		public OpSwagger swagger() {
+			return swagger;
+		}
+
+		@Override /* Overridden from RestOp */
+		public String value() {
+			return value;
+		}
+
+		@Override /* Overridden from annotation */
+		public String[] description() {
+			return description;
+		}
+	}
+
+	/** Default value */
+	public static final RestOp DEFAULT = create().build();
+	/**
+	 * Predicate that can be used to filter annotation streams.
+	 *
+	 * <p>
+	 * Example: <c>classInfo.getAnnotations().stream().filter(REST_OP_GROUP)</c>
+	 */
+	public static final Predicate<AnnotationInfo<?>> REST_OP_GROUP = x -> x.isInGroup(RestOp.class);
+
+	/**
+	 * Instantiates a new builder for this class.
+	 *
+	 * @return A new builder object.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+}

@@ -25,9 +25,9 @@ import java.util.concurrent.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.config.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.config.*;
 import org.junit.jupiter.api.*;
 
 class Remote_RemoteOpAnnotation_Test extends TestBase {

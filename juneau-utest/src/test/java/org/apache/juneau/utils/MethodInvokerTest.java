@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.stats.*;
+import org.apache.juneau.rest.server.stats.*;
 import org.junit.jupiter.api.*;
 
 class MethodInvokerTest extends TestBase {

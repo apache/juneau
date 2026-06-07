@@ -21,9 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.metrics.micrometer.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 import io.micrometer.core.instrument.*;
@@ -122,7 +123,7 @@ class MicrometerMetricsRecorder_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 
 		@org.apache.juneau.commons.inject.Bean
-		public org.apache.juneau.rest.metrics.MetricsRecorder recorder() {
+		public org.apache.juneau.rest.server.metrics.MetricsRecorder recorder() {
 			return new MicrometerMetricsRecorder(B_REGISTRY);
 		}
 

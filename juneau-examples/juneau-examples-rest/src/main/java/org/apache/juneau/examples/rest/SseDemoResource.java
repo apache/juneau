@@ -25,9 +25,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.sse.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.sse.*;
 import org.apache.juneau.sse.*;
 
 /**

@@ -26,13 +26,13 @@ import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshaller.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.remote.*;
-import org.apache.juneau.rest.config.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.config.*;
+import org.apache.juneau.rest.server.httppart.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -379,11 +379,11 @@ class Remote_Test extends TestBase {
 	@Rest
 	public static class D1 implements BasicJson5Config {
 		@RestGet
-		public void r202(org.apache.juneau.rest.RestResponse res) {
+		public void r202(org.apache.juneau.rest.server.RestResponse res) {
 			res.setStatus(202);
 		}
 		@RestGet
-		public void r400(org.apache.juneau.rest.RestResponse res) {
+		public void r400(org.apache.juneau.rest.server.RestResponse res) {
 			res.setStatus(400);
 		}
 	}
@@ -531,7 +531,7 @@ class Remote_Test extends TestBase {
 	@Rest
 	public static class F extends BasicRestResource {
 		@RestGet
-		public String[] headers(org.apache.juneau.rest.RestRequest req) {
+		public String[] headers(org.apache.juneau.rest.server.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 	}

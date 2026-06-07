@@ -23,8 +23,9 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.reactive.reactor.*;
 import org.apache.juneau.sse.*;
 import org.junit.jupiter.api.*;
 
@@ -33,10 +34,10 @@ import io.reactivex.rxjava3.core.Observable;
 import reactor.core.publisher.*;
 
 /**
- * End-to-end tests for the {@code juneau-rest-server-reactor} bridge adapters
+ * End-to-end tests for the {@code juneau-rest-server-reactive-reactor} bridge adapters
  * ({@link ReactorReactiveAdapter}, {@link RxJavaReactiveAdapter},
  * {@link ReactiveStreamsPublisherAdapter}) wired through the core
- * {@link org.apache.juneau.rest.reactive.ReactiveResponseProcessor} via ServiceLoader.
+ * {@link org.apache.juneau.rest.server.server.reactive.ReactiveResponseProcessor} via ServiceLoader.
  */
 class ReactiveBridge_Test extends TestBase {
 

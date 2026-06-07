@@ -22,7 +22,7 @@ import java.io.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -62,7 +62,7 @@ class MockRestClient_Test {
 		}
 
 		@RestGet(path="/echo-header")
-		public String echoHeader(org.apache.juneau.rest.RestRequest req) {
+		public String echoHeader(org.apache.juneau.rest.server.RestRequest req) {
 			return req.getHeader("X-Custom");
 		}
 
@@ -93,7 +93,7 @@ class MockRestClient_Test {
 	@Rest
 	public static class NoContentResource {
 		@RestDelete
-		public void delete(org.apache.juneau.rest.RestResponse res) {
+		public void delete(org.apache.juneau.rest.server.RestResponse res) {
 			res.setStatus(204);
 		}
 	}

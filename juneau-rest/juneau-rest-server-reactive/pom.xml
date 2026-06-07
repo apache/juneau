@@ -40,7 +40,7 @@
 			response processor, the ReactiveStreamsAdapter SPI, and the Adaptation value type, plus
 			the META-INF/services/...ResponseProcessor file that auto-registers the processor when
 			this jar is on the classpath.  No third-party reactive library is referenced — the
-			Reactor / RxJava / Reactive-Streams adapters live in juneau-rest-server-reactor.
+			Reactor / RxJava / Reactive-Streams adapters live in juneau-rest-server-reactive-reactor.
 		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>

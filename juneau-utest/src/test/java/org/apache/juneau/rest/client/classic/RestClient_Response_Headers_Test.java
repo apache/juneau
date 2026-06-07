@@ -30,10 +30,10 @@ import java.util.regex.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.httppart.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -46,7 +46,7 @@ class RestClient_Response_Headers_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestGet
-		public String echo(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) {
+		public String echo(org.apache.juneau.rest.server.RestRequest req, org.apache.juneau.rest.server.RestResponse res) {
 			var c = req.getHeaderParam("Check").orElse(null);
 			var h = req.getHeaders().getAll(c).stream().map(RequestHeader::getValue).toArray(String[]::new);
 			if (h != null)

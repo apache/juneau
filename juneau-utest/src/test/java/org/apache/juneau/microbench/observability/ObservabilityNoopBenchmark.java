@@ -20,8 +20,8 @@ import java.nio.file.*;
 import java.time.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.rest.metrics.*;
-import org.apache.juneau.rest.tracing.*;
+import org.apache.juneau.rest.server.metrics.*;
+import org.apache.juneau.rest.server.tracing.*;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.*;
 import org.openjdk.jmh.profile.*;
@@ -30,7 +30,7 @@ import org.openjdk.jmh.runner.*;
 import org.openjdk.jmh.runner.options.*;
 
 /**
- * JMH micro-benchmark asserting the observability hot path in {@link org.apache.juneau.rest.RestOpInvoker}
+ * JMH micro-benchmark asserting the observability hot path in {@link org.apache.juneau.rest.server.RestOpInvoker}
  * is zero-allocation when both {@link MetricsRecorder} and {@link TracerHook} resolve to their
  * NoOp singletons.
  *
@@ -80,7 +80,7 @@ import org.openjdk.jmh.runner.options.*;
 @Fork(1)
 public class ObservabilityNoopBenchmark {
 
-	private static final String OP_NAME = "org.apache.juneau.rest.BenchResource.get()";
+	private static final String OP_NAME = "org.apache.juneau.rest.server.server.BenchResource.get()";
 	private static final String HTTP_METHOD = "GET";
 	private static final String URI_TEMPLATE = "/bench";
 	private static final int STATUS_CODE = 200;
@@ -104,7 +104,7 @@ public class ObservabilityNoopBenchmark {
 	 *
 	 * <p>
 	 * The {@link Blackhole} parameter prevents the JIT from discarding the scope reference after
-	 * {@link org.apache.juneau.rest.tracing.Scope#close()} — keeping the virtual-dispatch chain alive for accurate allocation
+	 * {@link org.apache.juneau.rest.server.tracing.Scope#close()} — keeping the virtual-dispatch chain alive for accurate allocation
 	 * measurement.
 	 *
 	 * @param bh JMH blackhole to prevent dead-code elimination.

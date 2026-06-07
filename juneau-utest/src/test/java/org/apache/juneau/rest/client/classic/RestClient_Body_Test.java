@@ -26,9 +26,9 @@ import java.io.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
@@ -37,7 +37,7 @@ class RestClient_Body_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestPost
-		public Reader post(org.apache.juneau.rest.RestRequest req, org.apache.juneau.rest.RestResponse res) throws IOException {
+		public Reader post(org.apache.juneau.rest.server.RestRequest req, org.apache.juneau.rest.server.RestResponse res) throws IOException {
 			for (var e : req.getHeaders())
 				res.addHeader("X-" + e.getName(), e.getValue());
 			return req.getReader();

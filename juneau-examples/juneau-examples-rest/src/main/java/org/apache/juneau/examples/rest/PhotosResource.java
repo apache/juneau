@@ -26,9 +26,9 @@ import org.apache.juneau.examples.serializer.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.widget.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.
@@ -57,7 +57,7 @@ import org.apache.juneau.rest.widget.*;
 	},
 	aside={
 		"<div class='text'>",
-		"\t<p>Examples of serialized beans in the org.apache.juneau.rest.utilitybeans package.</p>",
+		"\t<p>Examples of serialized beans in the org.apache.juneau.rest.server.utilitybeans package.</p>",
 		"</div>"
 	},
 	asideFloat="RIGHT"

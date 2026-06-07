@@ -36,14 +36,14 @@
 		<module>juneau-rest-server</module>
 		<module>juneau-rest-server-rdf</module>
 		<module>juneau-rest-server-mcp</module>
-		<module>juneau-rest-server-jwt</module>
-		<module>juneau-rest-server-saml</module>
-		<module>juneau-rest-server-oauth</module>
-		<module>juneau-rest-server-oidc-rp</module>
-		<module>juneau-rest-server-micrometer</module>
-		<module>juneau-rest-server-otel</module>
+		<module>juneau-rest-server-auth-jwt</module>
+		<module>juneau-rest-server-auth-saml</module>
+		<module>juneau-rest-server-auth-oauth</module>
+		<module>juneau-rest-server-auth-oidc-rp</module>
+		<module>juneau-rest-server-metrics-micrometer</module>
+		<module>juneau-rest-server-tracing-otel</module>
 		<module>juneau-rest-server-reactive</module>
-		<module>juneau-rest-server-reactor</module>
+		<module>juneau-rest-server-reactive-reactor</module>
 		<module>juneau-rest-server-view-jsp</module>
 		<module>juneau-rest-server-view-thymeleaf</module>
 		<module>juneau-rest-server-view-mustache</module>

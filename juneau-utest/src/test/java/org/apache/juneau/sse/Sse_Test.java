@@ -26,8 +26,8 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshaller.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 

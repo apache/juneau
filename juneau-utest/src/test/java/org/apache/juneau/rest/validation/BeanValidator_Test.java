@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.rest.server.validation.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.validation.constraints.*;

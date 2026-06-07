@@ -20,10 +20,10 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.html.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.beans.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.widget.*;
 
 /**
  * Sample resource that allows images to be uploaded and retrieved.

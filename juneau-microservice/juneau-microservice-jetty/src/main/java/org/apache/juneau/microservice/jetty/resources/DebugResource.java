@@ -22,9 +22,9 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.beans.*;
+import org.apache.juneau.rest.server.servlet.*;
 
 /**
  * Microservice debug utilities.

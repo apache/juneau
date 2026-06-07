@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.examples.rest;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.guard.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.guard.*;
 
 /**
  * Sample guard that only lets administrators through.

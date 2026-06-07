@@ -34,9 +34,9 @@ import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.beans.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.beans.*;
+import org.apache.juneau.rest.server.servlet.*;
 
 /**
  * REST resource that allows access to a file system directory.

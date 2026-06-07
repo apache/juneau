@@ -20,9 +20,9 @@ import org.apache.juneau.examples.rest.*;
 import org.apache.juneau.examples.rest.dto.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.springboot.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.springboot.*;
+import org.apache.juneau.rest.server.widget.*;
 import org.apache.juneau.serializer.*;
 
 /**

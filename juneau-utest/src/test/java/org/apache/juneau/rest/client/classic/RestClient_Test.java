@@ -39,9 +39,9 @@ import org.apache.http.protocol.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -69,7 +69,7 @@ class RestClient_Test extends TestBase {
 			return bean;
 		}
 		@RestGet(path="/echo/*")
-		public String echo(org.apache.juneau.rest.RestRequest req) {
+		public String echo(org.apache.juneau.rest.server.RestRequest req) {
 			return req.toString();
 		}
 	}
@@ -292,7 +292,7 @@ class RestClient_Test extends TestBase {
 	@Rest
 	public static class D extends BasicRestResource {
 		@RestGet
-		public String echo(@org.apache.juneau.http.Header("Authorization") String auth, org.apache.juneau.rest.RestResponse res) {
+		public String echo(@org.apache.juneau.http.Header("Authorization") String auth, org.apache.juneau.rest.server.RestResponse res) {
 			if (auth == null) {
 				throw unauthorized().setHeader2("WWW-Authenticate","BASIC realm=\"foo\"");
 			}

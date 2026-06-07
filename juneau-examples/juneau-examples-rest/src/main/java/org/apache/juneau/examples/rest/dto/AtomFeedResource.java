@@ -26,9 +26,9 @@ import org.apache.juneau.encoders.*;
 import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Content;
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
-import org.apache.juneau.rest.widget.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.widget.*;
 import org.apache.juneau.serializer.*;
 
 /**

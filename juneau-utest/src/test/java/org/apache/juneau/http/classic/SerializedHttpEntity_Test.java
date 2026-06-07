@@ -30,11 +30,11 @@ import org.apache.juneau.httppart.*;
 import org.apache.juneau.json.*;
 import org.apache.juneau.msgpack.*;
 import org.apache.juneau.oapi.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.client.classic.*;
-import org.apache.juneau.rest.httppart.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.httppart.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
@@ -43,11 +43,11 @@ class SerializedHttpEntity_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestPost
-		public String[] checkHeader(org.apache.juneau.rest.RestRequest req) {
+		public String[] checkHeader(org.apache.juneau.rest.server.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 		@RestPost
-		public Reader checkBody(org.apache.juneau.rest.RestRequest req) throws IOException {
+		public Reader checkBody(org.apache.juneau.rest.server.RestRequest req) throws IOException {
 			return req.getReader();
 		}
 	}

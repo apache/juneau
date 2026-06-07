@@ -24,9 +24,9 @@ import static org.apache.juneau.httppart.HttpPartSchema.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.httppart.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 class RestClient_Paths_Test extends TestBase {
@@ -34,7 +34,7 @@ class RestClient_Paths_Test extends TestBase {
 	@Rest
 	public static class A extends BasicRestResource {
 		@RestGet(path="/echo/*")
-		public String getEcho(org.apache.juneau.rest.RestRequest req) {
+		public String getEcho(org.apache.juneau.rest.server.RestRequest req) {
 			return req.toString();
 		}
 	}

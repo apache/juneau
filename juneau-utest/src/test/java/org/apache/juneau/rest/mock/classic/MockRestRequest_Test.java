@@ -22,7 +22,7 @@ import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;

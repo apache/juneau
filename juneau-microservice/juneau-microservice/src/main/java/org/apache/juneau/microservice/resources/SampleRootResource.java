@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.microservice.resources;
 
-import org.apache.juneau.rest.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 
 /**
  * Sample root REST resource.

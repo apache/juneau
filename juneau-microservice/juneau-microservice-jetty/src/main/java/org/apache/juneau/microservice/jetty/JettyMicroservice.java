@@ -49,7 +49,7 @@ import jakarta.servlet.*;
  * <p>
  * The supplied root servlet is registered as a {@code @Bean Servlet} in an external bean store and
  * auto-mounted by {@link org.apache.juneau.microservice.jetty.JettyServerComponent JettyServerComponent}
- * at the path declared by its {@link org.apache.juneau.rest.Rest @Rest} annotation.  Consumers
+ * at the path declared by its {@link org.apache.juneau.rest.server.Rest @Rest} annotation.  Consumers
  * who want full control over the bean store / configuration classes / listener wiring should call
  * {@link Microservice#create()} directly &mdash; this facade is a thin convenience over that builder.
  *
@@ -68,7 +68,7 @@ public final class JettyMicroservice {
 	 *
 	 * @param args         The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
 	 * @param rootServlet  The root REST servlet (typically annotated with
-	 *                     {@link org.apache.juneau.rest.Rest @Rest}).
+	 *                     {@link org.apache.juneau.rest.server.Rest @Rest}).
 	 * @return The started {@link Microservice} instance.  Callers typically chain {@link Microservice#join()}.
 	 * @throws Exception Error occurred during bootstrap.
 	 */
@@ -91,7 +91,7 @@ public final class JettyMicroservice {
 	 *
 	 * @param args          The {@code main(String[])} arguments.  Forwarded to {@link org.apache.juneau.microservice.Microservice.Builder#args(String...)}.
 	 * @param rootServlet   The root REST servlet (typically annotated with
-	 *                      {@link org.apache.juneau.rest.Rest @Rest}).
+	 *                      {@link org.apache.juneau.rest.server.Rest @Rest}).
 	 * @param startConsole  If <jk>true</jk>, also starts the interactive console thread via
 	 *                      {@link Microservice#startConsole()}.
 	 * @return The started {@link Microservice} instance.

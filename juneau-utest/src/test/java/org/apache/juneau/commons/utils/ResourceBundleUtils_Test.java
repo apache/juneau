@@ -38,7 +38,7 @@ class ResourceBundleUtils_Test extends TestBase {
 	@Test
 	void a01_findBundle_existingBundle_defaultLocale() {
 		var loader = getClass().getClassLoader();
-		var bundle = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader);
+		var bundle = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader);
 		assertNotNull(bundle);
 		assertEquals("value1", bundle.getString("key1"));
 		assertEquals("value2", bundle.getString("key2"));
@@ -47,7 +47,7 @@ class ResourceBundleUtils_Test extends TestBase {
 	@Test
 	void a02_findBundle_existingBundle_specificLocale() {
 		var loader = getClass().getClassLoader();
-		var bundle = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.ENGLISH, loader);
+		var bundle = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.ENGLISH, loader);
 		assertNotNull(bundle);
 		assertEquals("value1", bundle.getString("key1"));
 	}
@@ -77,7 +77,7 @@ class ResourceBundleUtils_Test extends TestBase {
 	void a05_findBundle_existingBundle_fallbackToDefault() {
 		var loader = getClass().getClassLoader();
 		// Request a locale that doesn't exist, should fallback to default
-		var bundle = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.FRENCH, loader);
+		var bundle = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.FRENCH, loader);
 		assertNotNull(bundle);
 		// Should return default bundle
 		assertEquals("value1", bundle.getString("key1"));
@@ -122,8 +122,8 @@ class ResourceBundleUtils_Test extends TestBase {
 		var loader1 = getClass().getClassLoader();
 		var loader2 = Thread.currentThread().getContextClassLoader();
 
-		var bundle1 = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader1);
-		var bundle2 = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader2);
+		var bundle1 = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader1);
+		var bundle2 = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader2);
 
 		// Both should find the bundle (assuming same classpath)
 		assertNotNull(bundle1);
@@ -137,7 +137,7 @@ class ResourceBundleUtils_Test extends TestBase {
 		// The code has assertArgNotNull, but if the test classpath uses an old compiled version,
 		// it may throw NullPointerException from ResourceBundle.getBundle instead
 		var ex = assertThrows(Exception.class, () -> {
-			ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), null);
+			ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), null);
 		});
 		// Should be IllegalArgumentException, but may be NullPointerException if using old compiled class
 		assertTrue(ex instanceof IllegalArgumentException || ex instanceof NullPointerException,
@@ -186,7 +186,7 @@ class ResourceBundleUtils_Test extends TestBase {
 		// null locale causes NullPointerException in ResourceBundle.getBundle
 		// which is not caught (only MissingResourceException is caught)
 		assertThrows(NullPointerException.class, () -> {
-			ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", null, loader);
+			ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", null, loader);
 		});
 	}
 
@@ -219,8 +219,8 @@ class ResourceBundleUtils_Test extends TestBase {
 		var loader = getClass().getClassLoader();
 		// Compare behavior with direct ResourceBundle.getBundle call
 		try {
-			var direct = ResourceBundle.getBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader);
-			var utils = ResourceBundleUtils.findBundle("org.apache.juneau.rest.NlsTest", Locale.getDefault(), loader);
+			var direct = ResourceBundle.getBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader);
+			var utils = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader);
 			assertNotNull(direct);
 			assertNotNull(utils);
 			assertEquals(direct.getString("key1"), utils.getString("key1"));

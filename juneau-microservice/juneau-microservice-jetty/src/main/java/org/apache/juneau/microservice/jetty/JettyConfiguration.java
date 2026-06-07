@@ -51,7 +51,7 @@ import org.apache.juneau.microservice.*;
  *
  * <p>
  * <c>@Bean Servlet</c> methods in user-supplied <c>@Configuration</c> classes are auto-mounted at
- * {@link org.apache.juneau.rest.Rest#path()} during start-up.  See {@link JettyServerComponent} for
+ * {@link org.apache.juneau.rest.server.Rest#path()} during start-up.  See {@link JettyServerComponent} for
  * full details.
  *
  * <h5 class='section'>See Also:</h5><ul>

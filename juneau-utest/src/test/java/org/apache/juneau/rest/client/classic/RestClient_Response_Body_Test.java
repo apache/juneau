@@ -37,9 +37,9 @@ import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.json5.*;
 import org.apache.juneau.parser.*;
-import org.apache.juneau.rest.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.rest.servlet.*;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 

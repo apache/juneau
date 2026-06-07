@@ -1,0 +1,3 @@
+org.apache.juneau.rest.server.reactive.reactor.ReactorReactiveAdapter
+org.apache.juneau.rest.server.reactive.reactor.RxJavaReactiveAdapter
+org.apache.juneau.rest.server.reactive.reactor.ReactiveStreamsPublisherAdapter

@@ -31,7 +31,7 @@ import java.security.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.rest.util.*;
+import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.urlencoding.*;
 
 import jakarta.servlet.*;
