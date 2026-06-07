@@ -22,11 +22,11 @@ import java.io.*;
 import java.util.Map;
 
 import org.apache.juneau.bean.html5.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 

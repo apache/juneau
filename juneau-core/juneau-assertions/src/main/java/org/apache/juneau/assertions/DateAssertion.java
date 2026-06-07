@@ -21,7 +21,7 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against {@link Date} objects.

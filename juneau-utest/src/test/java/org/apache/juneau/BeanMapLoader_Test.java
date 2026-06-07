@@ -19,7 +19,8 @@ package org.apache.juneau;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -27,8 +28,8 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Confirms that the load helpers are no-ops when given null input — a contract that became achievable
- * once {@link org.apache.juneau.collections.JsonMap#ofString(java.io.Reader)} and
- * {@link org.apache.juneau.json5.Json5Map#ofString(CharSequence)} switched to returning empty
+ * once {@link org.apache.juneau.marshall.collections.JsonMap#ofString(java.io.Reader)} and
+ * {@link org.apache.juneau.marshall.json5.Json5Map#ofString(CharSequence)} switched to returning empty
  * instances instead of {@code null}.
  */
 class BeanMapLoader_Test extends TestBase {

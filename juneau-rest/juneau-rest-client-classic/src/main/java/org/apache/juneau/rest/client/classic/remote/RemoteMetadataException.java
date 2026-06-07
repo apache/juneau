@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 import java.text.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Exceptions caused by invalid REST proxy classes.

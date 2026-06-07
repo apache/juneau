@@ -27,15 +27,16 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.uon.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -1565,28 +1566,28 @@ class Config_Test extends TestBase {
 
 	@Test void a22_entryAsBytes_hex() throws Exception {
 		MemoryStore.DEFAULT.update("Test.cfg", "a=48656C6C6F");
-		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.HEX).build().rollback();
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.marshall.BinaryFormat.HEX).build().rollback();
 		var bytes = c.get("a").asBytes().get();
 		assertEquals("Hello", new String(bytes));
 	}
 
 	@Test void a23_entryAsBytes_spacedHex() throws Exception {
 		MemoryStore.DEFAULT.update("Test.cfg", "a=48 65 6C 6C 6F");
-		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.SPACED_HEX).build().rollback();
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.marshall.BinaryFormat.SPACED_HEX).build().rollback();
 		var bytes = c.get("a").asBytes().get();
 		assertEquals("Hello", new String(bytes));
 	}
 
 	@Test void a24_entryAsBytes_base64() throws Exception {
 		MemoryStore.DEFAULT.update("Test.cfg", "a=SGVsbG8=");
-		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.BASE64).build().rollback();
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.marshall.BinaryFormat.BASE64).build().rollback();
 		var bytes = c.get("a").asBytes().get();
 		assertEquals("Hello", new String(bytes));
 	}
 
 	@Test void a25_entryAsBytes_withNewlines() throws Exception {
 		MemoryStore.DEFAULT.update("Test.cfg", "a=SGVs\n\tbG8=");
-		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.BinaryFormat.BASE64).build().rollback();
+		var c = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg").binaryFormat(org.apache.juneau.marshall.BinaryFormat.BASE64).build().rollback();
 		var bytes = c.get("a").asBytes().get();
 		assertEquals("Hello", new String(bytes));
 	}
@@ -1597,7 +1598,7 @@ class Config_Test extends TestBase {
 
 	@Test void a26_entryAs_simpleTypeViaParser() throws Exception {
 		var c = init("myEnum=ONE");
-		var result = c.get("myEnum").as(org.apache.juneau.uon.UonParser.DEFAULT, A26_MyEnum.class);
+		var result = c.get("myEnum").as(org.apache.juneau.marshall.uon.UonParser.DEFAULT, A26_MyEnum.class);
 		assertEquals(A26_MyEnum.ONE, result.get());
 	}
 

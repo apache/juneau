@@ -19,8 +19,8 @@ package org.apache.juneau.bean.rfc7807;
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7807">RFC 7807 &mdash; Problem Details for HTTP APIs</a>

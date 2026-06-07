@@ -22,10 +22,10 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.io.*;
 import java.util.regex.*;
 
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.xml.*;
 import org.junit.*;
 
 public class TestUtils {

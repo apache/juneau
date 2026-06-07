@@ -31,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 class AssertionPredicates_Test extends TestBase {

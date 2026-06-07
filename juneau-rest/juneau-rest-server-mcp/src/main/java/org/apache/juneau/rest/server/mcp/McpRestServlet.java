@@ -21,9 +21,9 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Content;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Drop-in {@link BasicRestServlet} subclass that exposes a single MCP JSON-RPC endpoint at {@code POST /}.

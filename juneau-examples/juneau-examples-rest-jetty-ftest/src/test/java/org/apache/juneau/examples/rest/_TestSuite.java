@@ -23,7 +23,7 @@ import org.junit.runners.Suite.*;
 
 /**
  * Runs all the testcases in this project.
- * Starts a REST service running org.apache.juneau.examples.rest.RootResources on port 10000.
+ * Starts a REST service running org.apache.juneau.marshall.examples.rest.RootResources on port 10000.
  * Stops the REST service after running the tests.
  */
 @RunWith(Suite.class)

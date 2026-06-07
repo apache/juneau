@@ -29,7 +29,7 @@ import org.apache.juli.logging.*;
  * <p>
  * Allows Tomcat to log to the Java Util logging framework (and thus to the main log file defined in the
  * <cc>[Logging]</cc> section), mirroring the role of
- * {@code org.apache.juneau.microservice.jetty.JettyLogger} in the Jetty module.
+ * {@code org.apache.juneau.marshall.microservice.jetty.JettyLogger} in the Jetty module.
  *
  * <p>
  * Tomcat log levels map to {@link Level} values as follows: <c>trace</c>&rarr;{@link Level#FINEST FINEST},
@@ -50,10 +50,10 @@ public class TomcatLogger implements Log {
 	 * Default constructor.
 	 *
 	 * <p>
-	 * Returns the logger with name <js>"org.apache.juneau.microservice.tomcat"</js>.
+	 * Returns the logger with name <js>"org.apache.juneau.marshall.microservice.tomcat"</js>.
 	 */
 	public TomcatLogger() {
-		this("org.apache.juneau.microservice.tomcat");
+		this("org.apache.juneau.marshall.microservice.tomcat");
 	}
 
 	/**

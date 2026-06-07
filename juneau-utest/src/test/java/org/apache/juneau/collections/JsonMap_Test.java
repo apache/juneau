@@ -22,7 +22,8 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 class JsonMap_Test extends TestBase {
@@ -189,6 +190,9 @@ class JsonMap_Test extends TestBase {
 		assertTrue(included.containsKey("c"));
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test void a26_unmodifiable() {
 		var m = JsonMap.of("a", 1).unmodifiable();
 		assertTrue(m.isUnmodifiable());

@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.contains;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
 

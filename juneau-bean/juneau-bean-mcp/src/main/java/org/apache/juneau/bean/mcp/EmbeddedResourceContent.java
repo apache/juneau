@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * MCP {@code resource} content block (inline resource body).

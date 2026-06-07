@@ -21,8 +21,8 @@ import java.io.*;
 
 import javax.imageio.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.parser.*;
 
 /**
  * Example parser that converts byte streams to {@link BufferedImage} objects.

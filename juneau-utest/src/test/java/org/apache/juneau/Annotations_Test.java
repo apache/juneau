@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

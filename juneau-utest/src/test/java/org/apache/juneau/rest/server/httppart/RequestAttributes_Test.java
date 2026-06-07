@@ -156,7 +156,7 @@ class RequestAttributes_Test extends TestBase {
 		public String tostr(RequestAttributes attrs) {
 			attrs.set("ts", "v");
 			var s = attrs.toString();
-			return "len=" + (s.length() > 0) + ",hasTs=" + s.contains("ts");
+			return "len=" + (!s.isEmpty()) + ",hasTs=" + s.contains("ts");
 		}
 	}
 

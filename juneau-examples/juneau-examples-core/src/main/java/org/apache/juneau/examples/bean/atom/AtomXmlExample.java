@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.examples.bean.atom;
 
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * Atom feed XML example.

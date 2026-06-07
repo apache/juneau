@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.ops;
 
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.stats.*;

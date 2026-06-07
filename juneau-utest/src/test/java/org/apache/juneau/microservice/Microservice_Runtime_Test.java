@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.event.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.console.*;
 import org.junit.jupiter.api.*;
 
@@ -117,7 +117,7 @@ class Microservice_Runtime_Test extends TestBase {
 	}
 
 	@Test void a07_getLogger_explicitLoggerWins() throws Exception {
-		var custom = Logger.getLogger("org.apache.juneau.microservice.test.runtime");
+		var custom = Logger.getLogger("org.apache.juneau.marshall.microservice.test.runtime");
 		var ms = Microservice.create().logger(custom).build();
 		try {
 			assertSame(custom, ms.getLogger());

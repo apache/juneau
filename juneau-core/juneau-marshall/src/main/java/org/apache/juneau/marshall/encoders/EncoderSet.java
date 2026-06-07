@@ -1,0 +1,411 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.encoders;
+
+import static java.util.stream.Collectors.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.util.*;
+import java.util.concurrent.*;
+
+import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.reflect.*;
+
+/**
+ * Represents the set of {@link Encoder encoders} keyed by codings.
+ *
+ * <h5 class='topic'>Description</h5>
+ *
+ * Maintains a set of encoders and the codings that they can handle.
+ *
+ * <p>
+ * The {@link #getEncoderMatch(String)} and {@link #getEncoder(String)} methods are then used to find appropriate
+ * encoders for specific <c>Accept-Encoding</c> and <c>Content-Encoding</c> header values.
+ *
+ * <h5 class='topic'>Match ordering</h5>
+ *
+ * Encoders are matched against <c>Accept-Encoding</c> strings in the order they exist in this group.
+ *
+ * <p>
+ * Encoders are tried in the order they appear in the set.  The {@link Builder#add(Class...)}/{@link Builder#add(Encoder...)}
+ * methods prepend the values to the list to allow them the opportunity to override encoders already in the list.
+ *
+ * <p>
+ * For example, calling <code>groupBuilder.add(E1.<jk>class</jk>,E2.<jk>class</jk>).add(E3.<jk>class</jk>,
+ * E4.<jk>class</jk>)</code> will result in the order <c>E3, E4, E1, E2</c>.
+ *
+ * <h5 class='section'>Example:</h5>
+ * <p class='bjava'>
+ * 	<jc>// Create an encoder group with support for gzip compression.</jc>
+ * 	EncoderSet <jv>encoders</jv> = EncoderSet
+ * 		.<jsm>create</jsm>()
+ * 		.add(GzipEncoder.<jk>class</jk>)
+ * 		.build();
+ *
+ * 	<jc>// Should return "gzip"</jc>
+ * 	String <jv>matchedCoding</jv> = <jv>encoders</jv>.findMatch(<js>"compress;q=1.0, gzip;q=0.8, identity;q=0.5, *;q=0"</js>);
+ *
+ * 	<jc>// Get the encoder</jc>
+ * 	Encoder <jv>encoder</jv> = <jv>encoders</jv>.getEncoder(<jv>matchedCoding</jv>);
+ * </p>
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerEncoders">Encoders</a>
+
+ * </ul>
+ */
+public class EncoderSet {
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder implements BeanStoreOverridable<Builder> {
+		private static String toString(Object o) {
+			if (o == null)
+				return "null";
+			if (o instanceof Class)
+				return "class:" + cns(o);
+			return "object:" + cns(o);
+		}
+
+		private BeanStore beanStore;
+		private EncoderSet impl;
+
+		List<Object> entries;
+
+		Builder inheritFrom;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param beanStore The bean store to use for creating beans.
+		 */
+		protected Builder(BeanStore beanStore) {
+			this.beanStore = beanStore;
+			entries = list();
+		}
+
+		/**
+		 * Copy constructor.
+		 *
+		 * @param copyFrom The builder being copied.
+		 */
+		protected Builder(Builder copyFrom) {
+			this.beanStore = copyFrom.beanStore;
+			this.impl = copyFrom.impl;
+			entries = copyOf(copyFrom.entries);
+		}
+
+		/**
+		 * Returns the bean store used by this builder.
+		 *
+		 * @return The bean store used by this builder.
+		 */
+		public BeanStore beanStore() {
+			return beanStore;
+		}
+
+		/**
+		 * Installs the supplied {@link BeanStore} as the {@code overridingParent} of this builder's bean store.
+		 *
+		 * <p>
+		 * Wraps the current {@link #beanStore()} in a fresh {@link BasicBeanStore} whose {@code overridingParent}
+		 * is the supplied store, so test-time overrides win over the builder's regular bean lookups during
+		 * construction-time reflective injection.  Passing {@code null} is a no-op.
+		 *
+		 * @param store The override layer.  Can be <jk>null</jk>.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		@Override
+		@SuppressWarnings({
+			"resource" // BasicBeanStore lifecycle is owned by the enclosing builder; closed externally when the builder is disposed.
+		})
+		public Builder overridingBeanStore(BeanStore store) {
+			if (store != null)
+				this.beanStore = new BasicBeanStore(this.beanStore, store);
+			return this;
+		}
+
+		/**
+		 * Registers the specified encoders with this group.
+		 *
+		 * <p>
+		 * Entries are added in-order to the beginning of the list.
+		 *
+		 * @param values The encoders to add to this group.
+		 * @return This object.
+		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
+		 */
+		public Builder add(Class<?>...values) {
+			List<Object> l = list();
+			for (var v : values)
+				if (cns(v).equals("NoInherit"))
+					clear();
+			for (var v : values) {
+				if (Encoder.class.isAssignableFrom(v)) {
+					l.add(v);
+				} else if (! cns(v).equals("NoInherit")) {
+					throw illegalArg("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));
+				}
+			}
+			entries.addAll(0, l);
+			return this;
+		}
+
+		/**
+		 * Registers the specified encoders with this group.
+		 *
+		 * <p>
+		 * Entries are added to the beginning of the list.
+		 *
+		 * @param values The encoders to add to this group.
+		 * @return This object.
+		 */
+		public Builder add(Encoder...values) {
+			prependAll(entries, (Object[])values);
+			return this;
+		}
+
+		/**
+		 * Clears out any existing encoders in this group.
+		 *
+		 * @return This object.
+		 */
+		public Builder clear() {
+			entries.clear();
+			return this;
+		}
+
+		/**
+		 * Makes a copy of this builder.
+		 *
+		 * @return A new copy of this builder.
+		 */
+		public Builder copy() {
+			return new Builder(this);
+		}
+
+		/**
+		 * Overrides the bean returned by the {@link #build()} method with a pre-built instance.
+		 *
+		 * @param value The pre-built instance.
+		 * @return This object.
+		 */
+		public Builder impl(Object value) {
+			impl = (EncoderSet) value;
+			return this;
+		}
+
+		/**
+		 * Returns direct access to the {@link Encoder} objects and classes in this builder.
+		 *
+		 * <p>
+		 * Provided to allow for any extraneous modifications to the list not accomplishable via other methods on this builder such
+		 * as re-ordering/adding/removing entries.
+		 *
+		 * <p>
+		 * Note that it is up to the user to ensure that the list only contains {@link Encoder} objects and classes.
+		 *
+		 * @return The inner list of entries in this builder.
+		 */
+		public List<Object> inner() {
+			return entries;
+		}
+
+		/**
+		 * Returns <jk>true</jk> if this builder is empty.
+		 *
+		 * @return <jk>true</jk> if this builder is empty.
+		 */
+		public boolean isEmpty() { return entries.isEmpty(); }
+
+		/**
+		 * Sets the encoders in this group.
+		 *
+		 * <p>
+		 * All encoders in this group are replaced with the specified values.
+		 *
+		 * <p>
+		 * If {@link Inherit} is specified (or any other class whose simple name is <js>"Inherit"</js>, the existing values are preserved
+		 * and inserted into the position in the values array.
+		 *
+		 * @param values The encoders to add to this group.
+		 * @return This object.
+		 * @throws IllegalArgumentException if any class does not extend from {@link Encoder}.
+		 */
+		public Builder set(Class<?>...values) {
+			List<Object> l = list();
+			for (var v : values) {
+				if (cns(v).equals("Inherit")) {
+					l.addAll(entries);
+				} else if (Encoder.class.isAssignableFrom(v)) {
+					l.add(v);
+				} else {
+					throw illegalArg("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));
+				}
+			}
+			entries = l;
+			return this;
+		}
+
+		@Override /* Overridden from Object */
+		public String toString() {
+			return entries.stream().map(Builder::toString).collect(joining(",", "[", "]"));
+		}
+
+		/**
+		 * Builds the encoder set.
+		 *
+		 * @return A new {@link EncoderSet}.
+		 */
+		public EncoderSet build() {
+			if (nn(impl))
+				return impl;
+			return new EncoderSet(this);
+		}
+	}
+
+	/**
+	 * An identifier that the previous encoders in this group should be inherited.
+	 * <p>
+	 * Used by {@link Builder#set(Class...)}
+	 */
+	public abstract static class Inherit extends Encoder {}
+
+	/**
+	 * An identifier that the previous encoders in this group should not be inherited.
+	 * <p>
+	 * Used by {@link Builder#add(Class...)}
+	 */
+	public abstract static class NoInherit extends Encoder {}
+
+	/**
+	 * Static creator.
+	 *
+	 * @return A new builder for this object.
+	 */
+	public static Builder create() {
+		return new Builder(BasicBeanStore.INSTANCE);
+	}
+
+	/**
+	 * Static creator.
+	 *
+	 * @param beanStore The bean store to use for creating beans.
+	 * @return A new builder for this object.
+	 */
+	public static Builder create(BeanStore beanStore) {
+		return new Builder(beanStore);
+	}
+
+	private static Encoder instantiate(BeanStore bs, Object o) {
+		if (o instanceof Encoder o2)
+			return o2;
+		try {
+			@SuppressWarnings({
+				"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site
+			})
+			var subType = (Class<? extends Encoder>) o;
+			return BeanInstantiator.of(Encoder.class, bs).type(subType).run();
+		} catch (ExecutableException e) {
+			throw toRex(e);
+		}
+	}
+
+	// Maps Accept-Encoding headers to matching encoders.
+	private final ConcurrentHashMap<String,EncoderMatch> cache = new ConcurrentHashMap<>();
+	private final List<String> encodings;
+	private final Encoder[] encodingsEncoders;
+
+	private final Encoder[] entries;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected EncoderSet(Builder builder) {
+		entries = builder.entries.stream().map(x -> instantiate(builder.beanStore(), x)).toArray(Encoder[]::new);
+
+		List<String> lc = list();
+		List<Encoder> l = list();
+		for (var e : entries) {
+			for (var c : e.getCodings()) {
+				lc.add(c);
+				l.add(e);
+			}
+		}
+
+		this.encodings = u(lc);
+		this.encodingsEncoders = l.toArray(new Encoder[l.size()]);
+	}
+
+	/**
+	 * Returns the encoder registered with the specified coding (e.g. <js>"gzip"</js>).
+	 *
+	 * @param encoding The coding string.
+	 * @return The encoder, or <jk>null</jk> if encoder isn't registered with that coding.
+	 */
+	public Encoder getEncoder(String encoding) {
+		EncoderMatch em = getEncoderMatch(encoding);
+		return (em == null ? null : em.getEncoder());
+	}
+
+	/**
+	 * Returns the coding string for the matching encoder that can handle the specified <c>Accept-Encoding</c>
+	 * or <c>Content-Encoding</c> header value.
+	 *
+	 * <p>
+	 * Returns <jk>null</jk> if no encoders can handle it.
+	 *
+	 * <p>
+	 * This method is fully compliant with the RFC2616/14.3 and 14.11 specifications.
+	 *
+	 * @param acceptEncoding The <c>Accept-Encoding</c> or <c>Content-Encoding</c> value.
+	 * @return The coding value (e.g. <js>"gzip"</js>).
+	 */
+	public EncoderMatch getEncoderMatch(String acceptEncoding) {
+		EncoderMatch em = cache.get(acceptEncoding);
+		if (nn(em))
+			return em;
+
+		var ae = StringRanges.of(acceptEncoding);
+		int match = ae.match(encodings);
+
+		if (match >= 0) {
+			em = new EncoderMatch(encodings.get(match), encodingsEncoders[match]);
+			cache.putIfAbsent(acceptEncoding, em);
+		}
+
+		return cache.get(acceptEncoding);
+	}
+
+	/**
+	 * Returns the set of codings supported by all encoders in this group.
+	 *
+	 * @return An unmodifiable list of codings supported by all encoders in this group.  Never <jk>null</jk>.
+	 */
+	public List<String> getSupportedEncodings() { return encodings; }
+}

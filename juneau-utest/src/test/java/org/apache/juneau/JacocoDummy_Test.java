@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.internal.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.internal.*;
+import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 class JacocoDummy_Test extends TestBase {

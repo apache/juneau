@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.swagger;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.parser.*;
 
 @SuppressWarnings({
 	"java:S110" // Inheritance depth acceptable for SwaggerException hierarchy

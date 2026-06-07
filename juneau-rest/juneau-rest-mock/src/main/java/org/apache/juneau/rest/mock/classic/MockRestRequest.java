@@ -27,10 +27,10 @@ import org.apache.http.*;
 import org.apache.http.client.config.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.client.classic.*;
-import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -711,7 +711,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestR
 	}
 
 	@Override /* Overridden from RestRequest */
-	public MockRestRequest parser(Class<? extends org.apache.juneau.parser.Parser> parser) {
+	public MockRestRequest parser(Class<? extends org.apache.juneau.marshall.parser.Parser> parser) {
 		super.parser(parser);
 		return this;
 	}
@@ -1078,7 +1078,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestR
 	}
 
 	@Override /* Overridden from RestRequest */
-	public MockRestRequest serializer(Class<? extends org.apache.juneau.serializer.Serializer> serializer) {
+	public MockRestRequest serializer(Class<? extends org.apache.juneau.marshall.serializer.Serializer> serializer) {
 		super.serializer(serializer);
 		return this;
 	}

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 public class ABean {
 	public int a;

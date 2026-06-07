@@ -20,16 +20,16 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
-import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.msgpack.*;
+import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;

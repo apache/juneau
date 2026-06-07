@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.rest.mock;
 
-import static org.apache.juneau.Enablement.*;
+import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.server.*;
@@ -59,7 +59,7 @@ import jakarta.servlet.*;
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
+ * ({@code org.apache.juneau.marshall.ng.*}).
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *

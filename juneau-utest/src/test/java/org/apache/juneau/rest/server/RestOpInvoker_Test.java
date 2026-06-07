@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.servlet.*;

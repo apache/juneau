@@ -24,6 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Tag;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 class SwaggerAnnotation_Test extends TestBase {

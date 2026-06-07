@@ -27,15 +27,15 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.swap.*;
 
 /**
  * Generates a Swagger-UI interface from a Swagger document.

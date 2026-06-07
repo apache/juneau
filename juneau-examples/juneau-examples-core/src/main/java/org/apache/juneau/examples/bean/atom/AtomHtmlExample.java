@@ -17,7 +17,7 @@
 package org.apache.juneau.examples.bean.atom;
 
 import org.apache.juneau.commons.logging.*;
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 
 /**
  * Atom feed HTML example.

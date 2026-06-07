@@ -22,12 +22,12 @@ import static org.apache.juneau.http.remote.RemoteUtils.*;
 import java.lang.reflect.*;
 import java.util.concurrent.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Represents the metadata about the returned object of a method on a remote proxy interface.

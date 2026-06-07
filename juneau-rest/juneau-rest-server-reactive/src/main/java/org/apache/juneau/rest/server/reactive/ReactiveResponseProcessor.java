@@ -26,12 +26,12 @@ import java.util.function.*;
 import java.util.logging.*;
 
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.util.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.sse.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

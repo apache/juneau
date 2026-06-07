@@ -24,7 +24,7 @@ import org.apache.catalina.startup.*;
  * Interface for creating embedded Tomcat servers.
  *
  * <p>
- * Mirrors {@code org.apache.juneau.microservice.jetty.JettyServerFactory} but uses the programmatic
+ * Mirrors {@code org.apache.juneau.marshall.microservice.jetty.JettyServerFactory} but uses the programmatic
  * {@link Tomcat} façade instead of a {@code jetty.xml} document.
  *
  * <h5 class='section'>See Also:</h5><ul>

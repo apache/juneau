@@ -26,10 +26,10 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.HttpPart;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 
 /**

@@ -22,9 +22,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;

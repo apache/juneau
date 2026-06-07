@@ -19,8 +19,8 @@ package org.apache.juneau.bean.jsonpatch;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 /**

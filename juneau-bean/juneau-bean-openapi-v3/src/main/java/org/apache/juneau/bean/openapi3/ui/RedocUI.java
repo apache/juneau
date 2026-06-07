@@ -20,13 +20,13 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.commons.http.MediaType.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.swap.*;
 
 /**
  * Generates a Redoc-style documentation interface from an OpenAPI 3.1 document.

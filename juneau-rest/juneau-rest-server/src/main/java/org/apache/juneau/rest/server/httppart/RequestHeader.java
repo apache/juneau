@@ -21,10 +21,10 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import java.lang.reflect.*;
 import java.util.regex.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 
 /**

@@ -28,11 +28,11 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Represents the metadata gathered from a parameter or class annotated with {@link Response}.

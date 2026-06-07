@@ -23,7 +23,7 @@ import java.text.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 
 /**
  * Wrapper around a {@link Predicate} that allows for an error message for when the predicate fails.

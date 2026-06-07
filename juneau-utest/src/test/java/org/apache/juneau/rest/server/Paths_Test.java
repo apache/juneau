@@ -18,8 +18,8 @@ package org.apache.juneau.rest.server;
 
 import org.apache.http.client.config.*;
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

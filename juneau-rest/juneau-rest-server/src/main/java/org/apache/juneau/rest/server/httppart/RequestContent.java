@@ -25,18 +25,18 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.io.*;
-import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.marshaller.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
 

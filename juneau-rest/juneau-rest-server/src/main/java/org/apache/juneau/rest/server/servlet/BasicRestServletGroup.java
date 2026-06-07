@@ -37,7 +37,7 @@ import jakarta.servlet.*;
  * {@link Rest#mixins() @Rest(mixins=...)} on top of the residual op-mixins inherited from
  * {@link BasicRestServlet}. The navigation op lives on the {@code NavigationMixin} sub-context (backed by
  * {@link RestMixin#getHostContext()}) but renders with the host's
- * {@link org.apache.juneau.html.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
+ * {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
  * sub-contexts inherit the host's class-level {@code @HtmlDocConfig} (and other class-level config), so the
  * navigation page matches the host's other endpoints.
  *

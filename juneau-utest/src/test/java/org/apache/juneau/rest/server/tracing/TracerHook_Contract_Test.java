@@ -94,8 +94,7 @@ class TracerHook_Contract_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// B: Exception path — span still opens; setStatusCode receives the framework-resolved 500;
-	//    setError receives the original throwable; close() still fires exactly once.
+	// B: Exception path — span still opens, status code 500, error set, scope closed exactly once.
 	// -----------------------------------------------------------------------------------------------------------------
 
 	private static final RecordingTracerHook B_HOOK = new RecordingTracerHook();

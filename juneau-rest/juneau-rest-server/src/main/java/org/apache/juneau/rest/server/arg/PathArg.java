@@ -16,18 +16,18 @@
  */
 package org.apache.juneau.rest.server.arg;
 
-import static org.apache.juneau.Constants.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.Constants.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.util.*;

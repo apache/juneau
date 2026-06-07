@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Polymorphic MCP content block (tool results, prompt messages).

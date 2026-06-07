@@ -18,10 +18,11 @@ package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 import org.junit.jupiter.api.*;
 
 class ObjectSwap_Test extends TestBase {

@@ -27,9 +27,9 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.uon.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.uon.*;
 
 import jakarta.servlet.http.*;
 

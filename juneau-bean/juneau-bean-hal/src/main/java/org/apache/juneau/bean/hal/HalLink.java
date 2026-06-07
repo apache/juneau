@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.hal;
 
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Represents a HAL Link Object as defined by

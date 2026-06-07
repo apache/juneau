@@ -18,9 +18,9 @@ package org.apache.juneau.bean.jsonapi;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Represents a JSON:API Relationship Object as defined by

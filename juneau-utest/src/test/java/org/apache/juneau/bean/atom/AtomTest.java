@@ -25,7 +25,7 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 class AtomTest extends TestBase {

@@ -27,8 +27,8 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
 import org.apache.juneau.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
 import org.junit.jupiter.api.*;
 
 /**

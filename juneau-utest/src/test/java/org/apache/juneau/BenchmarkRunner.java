@@ -31,7 +31,7 @@ import org.openjdk.jmh.runner.options.*;
  *
  * <p>To run this benchmark:
  * <pre>
- * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.BenchmarkRunner"
+ * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.marshall.BenchmarkRunner"
  * </pre>
  *
  * <p>Or from your IDE, run the main() method.
@@ -248,13 +248,13 @@ public class BenchmarkRunner {
 	 * <p>Alternative ways to run:
 	 * <pre>
 	 * # Run all benchmarks
-	 * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.IterationBenchmark"
+	 * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.marshall.IterationBenchmark"
 	 *
 	 * # Run only list benchmarks
-	 * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.IterationBenchmark" -Dexec.args=".*list.*"
+	 * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.marshall.IterationBenchmark" -Dexec.args=".*list.*"
 	 *
 	 * # Run with custom options
-	 * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.IterationBenchmark" -Dexec.args="-wi 5 -i 10 -f 3"
+	 * mvn test-compile exec:java -Dexec.mainClass="org.apache.juneau.marshall.IterationBenchmark" -Dexec.args="-wi 5 -i 10 -f 3"
 	 * </pre>
 	 */
 	public static void main(String[] args) throws RunnerException {

@@ -19,11 +19,11 @@ package org.apache.juneau.commons.inject;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
 import org.apache.juneau.junit5.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.mock.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**

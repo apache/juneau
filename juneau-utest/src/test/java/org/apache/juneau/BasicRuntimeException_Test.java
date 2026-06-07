@@ -20,10 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.objecttools.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.objecttools.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.client.classic.remote.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**

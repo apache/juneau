@@ -25,9 +25,9 @@ import java.beans.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.config.internal.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.parser.*;
 
 /**
  * A single section in a config file.

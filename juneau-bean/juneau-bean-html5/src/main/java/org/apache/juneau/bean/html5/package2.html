@@ -53,7 +53,7 @@
 			serializers, or to other languages such as JSON using the JSON serializers.
 		</p>
 		<p>
-			The {@link org.apache.juneau.bean.html5.HtmlBuilder} class is a utility class with predefined static methods
+			The {@link org.apache.juneau.marshall.bean.html5.HtmlBuilder} class is a utility class with predefined static methods
 			that allow you to easily construct DTO instances in a minimal amount of code. 
 		</p>
 		<p>
@@ -66,7 +66,7 @@
 			</tr>
 			<tr>
 				<td class='code'>
-	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+	<jk>import static</jk> org.apache.juneau.marshall.bean.html5.HtmlBuilder.*;
 	
 	Object mytable = 	
 		<jsm>table</jsm>(
@@ -91,7 +91,7 @@
 			</tr>
 			<tr>
 				<td class='code'>
-	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+	<jk>import static</jk> org.apache.juneau.marshall.bean.html5.HtmlBuilder.*;
 	
 	Object mytable = 	
 		<jsm>table</jsm>(
@@ -137,7 +137,7 @@
 			</tr>
 			<tr>
 				<td class='code'>
-	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+	<jk>import static</jk> org.apache.juneau.marshall.bean.html5.HtmlBuilder.*;
 		
 	Object mydiv = 	
 		<jsm>div</jsm>().align(<js>"center"</js>).onmouseover(<js>"alert(\"boo!\");"</js>)
@@ -155,7 +155,7 @@
 			</tr>
 			<tr>
 				<td class='code'>
-	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+	<jk>import static</jk> org.apache.juneau.marshall.bean.html5.HtmlBuilder.*;
 		
 	Object myform =
 		<jsm>form</jsm>().action(<js>"/submit"</js>).method(<js>"POST"</js>)
@@ -189,7 +189,7 @@
 	<h3 class='topic'>1.2 - Parsing HTML5</h3>
 	<div class='topic'>
 		<p>
-			Use the {@link org.apache.juneau.html.HtmlParser} to convert HTML5 documents back into their original POJOs:
+			Use the {@link org.apache.juneau.marshall.html.HtmlParser} to convert HTML5 documents back into their original POJOs:
 		</p>
 		<p class='bjava'>
 	<jc>// Get an HTML parser to convert our generated HTML5 documents back into POJOs.</jc>
@@ -217,7 +217,7 @@
 		</p>
 		<p>
 			The following example shows how an HTML5 form template object can be created that gets serialized as a 
-			populated HTML5 {@link org.apache.juneau.bean.html5.Form} bean.
+			populated HTML5 {@link org.apache.juneau.marshall.bean.html5.Form} bean.
 			It takes advantage of the special <code>swap(MarshallingSession)</code> method that serializers will use to 
 			convert the object to a serialized form before serialization.
 			The return type of this method can be any serializable type.
@@ -225,7 +225,7 @@
 			This gets serialized as an HTML form. 
 		</p>
 		<p class='bjava'>
-	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+	<jk>import static</jk> org.apache.juneau.marshall.bean.html5.HtmlBuilder.*;
 	
 	<jd>/**
 	 * A simple HTML form template whose serialized form is an HTML5 Form object.
@@ -267,7 +267,7 @@
 			constructor.
 		</p>
 		<p class='bjava'>
-	<jk>import static</jk> org.apache.juneau.bean.html5.HtmlBuilder.*;
+	<jk>import static</jk> org.apache.juneau.marshall.bean.html5.HtmlBuilder.*;
 	
 	<jd>/**
 	 * A simple HTML form template whose serialized form is an HTML5 Form object.

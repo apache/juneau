@@ -16,7 +16,7 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.Marshalled @Marshalled} types for the
+ * Juneau {@link org.apache.juneau.marshall.Marshalled @Marshalled} types for the
  * <a href="https://stateless.group/hal_specification.html">HAL (Hypertext Application Language)</a>
  * hypermedia format, also covered by
  * <a href="https://datatracker.ietf.org/doc/html/draft-kelly-json-hal-08">draft-kelly-json-hal-08</a>.
@@ -26,7 +26,7 @@
  * <p>
  * HAL is a JSON-based hypermedia format used by RESTful APIs to express links and embedded resources alongside the
  * payload itself. This module provides typed Juneau beans modeling the HAL wire format — no marshaller is needed; the
- * existing {@link org.apache.juneau.json.JsonSerializer} / {@link org.apache.juneau.json.JsonParser} already produce
+ * existing {@link org.apache.juneau.marshall.json.JsonSerializer} / {@link org.apache.juneau.marshall.json.JsonParser} already produce
  * and consume {@code application/hal+json}. The matching {@code ContentType} constant is
  * {@code org.apache.juneau.http.header.ContentType#APPLICATION_HAL_JSON} (in {@code juneau-rest-common}).
  *
@@ -39,7 +39,7 @@
  *     the multi-link branch inside an {@code _links} map.
  *   <li>{@link org.apache.juneau.bean.hal.HalResourceArray} - {@code LinkedList&lt;HalResource&gt;}
  *     used as the multi-resource branch inside an {@code _embedded} map.
- *   <li>{@link org.apache.juneau.bean.hal.HalLinkOrArraySwap} - {@link org.apache.juneau.swap.ObjectSwap}
+ *   <li>{@link org.apache.juneau.bean.hal.HalLinkOrArraySwap} - {@link org.apache.juneau.marshall.swap.ObjectSwap}
  *     that materializes each {@code _links} value as either a single {@link org.apache.juneau.bean.hal.HalLink}
  *     (JSON object) or a {@link org.apache.juneau.bean.hal.HalLinkArray} (JSON array) per spec.
  *   <li>{@link org.apache.juneau.bean.hal.HalResourceOrArraySwap} - The {@code _embedded} analogue.

@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.ops;
 
 import org.apache.juneau.*;
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.config.*;

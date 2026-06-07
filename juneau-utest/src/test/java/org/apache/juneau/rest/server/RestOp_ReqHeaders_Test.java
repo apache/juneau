@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.junit.jupiter.api.*;

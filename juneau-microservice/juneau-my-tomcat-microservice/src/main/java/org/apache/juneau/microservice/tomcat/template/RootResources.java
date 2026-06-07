@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.microservice.tomcat.template;
 
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.microservice.resources.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;

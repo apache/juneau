@@ -27,7 +27,7 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 
 /**
  * Predefined {@link AssertionPredicate} objects.

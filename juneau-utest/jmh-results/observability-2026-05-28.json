@@ -1,7 +1,7 @@
 [
     {
         "jmhVersion" : "1.37",
-        "benchmark" : "org.apache.juneau.microbench.observability.ObservabilityNoopBenchmark.observabilityNoopBlock",
+        "benchmark" : "org.apache.juneau.marshall.microbench.observability.ObservabilityNoopBenchmark.observabilityNoopBlock",
         "mode" : "avgt",
         "threads" : 1,
         "forks" : 0,

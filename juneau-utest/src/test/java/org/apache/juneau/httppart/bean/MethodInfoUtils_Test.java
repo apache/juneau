@@ -42,17 +42,17 @@ class MethodInfoUtils_Test extends TestBase {
 	@SuppressWarnings("unused")
 	static class Fixtures {
 		// One-arg matching methods
-		public void oneStringArg(String x) {}
-		public void oneIntArg(int x) {}
+		public void oneStringArg(String x) { /* no-op */ }
+		public void oneIntArg(int x) { /* no-op */ }
 
 		// Multi-arg method
-		public void twoArgs(String a, String b) {}
+		public void twoArgs(String a, String b) { /* no-op */ }
 
 		// No-arg method
-		public void noArgs() {}
+		public void noArgs() { /* no-op */ }
 
 		// Return-type methods
-		public void returnsVoid() {}
+		public void returnsVoid() { /* no-op */ }
 		public String returnsString() { return ""; }
 		public int returnsInt() { return 0; }
 	}
@@ -77,32 +77,44 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertArgType(m("oneIntArg", int.class), Query.class, String.class, int.class);
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void a03_assertArgType_wrongType_throws() throws Exception {
+	void a03_assertArgType_wrongType_throws() {
 		// Loop completes without match -> throws.
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertArgType(m("oneStringArg", String.class), Query.class, Integer.class, Long.class));
 		assertTrue(thrown.getMessage().contains("Invalid return type"));
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void a04_assertArgType_zeroParams_throws() throws Exception {
+	void a04_assertArgType_zeroParams_throws() {
 		// params.size() == 0 != 1 -> throws.
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertArgType(m("noArgs"), Query.class, String.class));
 		assertTrue(thrown.getMessage().contains("Only one parameter"));
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void a05_assertArgType_multipleParams_throws() throws Exception {
+	void a05_assertArgType_multipleParams_throws() {
 		// params.size() == 2 != 1 -> throws.
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertArgType(m("twoArgs", String.class, String.class), Header.class, String.class));
 		assertTrue(thrown.getMessage().contains("Only one parameter"));
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void a06_assertArgType_emptyAllowed_throws() throws Exception {
+	void a06_assertArgType_emptyAllowed_throws() {
 		// No allowed classes -> always throws.
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertArgType(m("oneStringArg", String.class), Query.class));
@@ -118,8 +130,11 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertNoArgs(m("noArgs"), Query.class);
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void b02_assertNoArgs_hasParams_throws() throws Exception {
+	void b02_assertNoArgs_hasParams_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertNoArgs(m("oneStringArg", String.class), Query.class));
 		assertTrue(thrown.getMessage().contains("cannot have arguments"));
@@ -134,8 +149,11 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertReturnNotVoid(m("returnsString"), Query.class);
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void c02_assertReturnNotVoid_void_throws() throws Exception {
+	void c02_assertReturnNotVoid_void_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertReturnNotVoid(m("returnsVoid"), Query.class));
 		assertTrue(thrown.getMessage().contains("Invalid return type"));
@@ -156,15 +174,21 @@ class MethodInfoUtils_Test extends TestBase {
 		MethodInfoUtils.assertReturnType(m("returnsInt"), Query.class, String.class, int.class);
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void d03_assertReturnType_noMatch_throws() throws Exception {
+	void d03_assertReturnType_noMatch_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertReturnType(m("returnsString"), Query.class, Integer.class, Long.class));
 		assertTrue(thrown.getMessage().contains("Invalid return type"));
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the primary call throws.
+	})
 	@Test
-	void d04_assertReturnType_emptyAllowed_throws() throws Exception {
+	void d04_assertReturnType_emptyAllowed_throws() {
 		var thrown = assertThrows(InvalidAnnotationException.class,
 			() -> MethodInfoUtils.assertReturnType(m("returnsString"), Query.class));
 		assertTrue(thrown.getMessage().contains("Invalid return type"));

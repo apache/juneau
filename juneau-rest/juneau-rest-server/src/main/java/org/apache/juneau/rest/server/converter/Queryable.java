@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.server.converter;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.objecttools.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 

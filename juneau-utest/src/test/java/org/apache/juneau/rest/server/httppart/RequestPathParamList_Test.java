@@ -44,7 +44,7 @@ class RequestPathParamList_Test extends TestBase {
 
 	public static class UnnamedPathBean {
 		public String value;
-		public UnnamedPathBean() {}
+		public UnnamedPathBean() { /* no-op */ }
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -156,6 +156,9 @@ class RequestPathParamList_Test extends TestBase {
 		}
 
 		// Exercises set(HttpPart...) and equals/hashCode and toString.
+		@SuppressWarnings({
+			"unlikely-arg-type" // Intentionally tests equals() returns false for a non-compatible argument type.
+		})
 		@RestGet(path="/equality/{a}")
 		public String equality(RequestPathParamList p) {
 			var c1 = p.copy();
@@ -182,7 +185,7 @@ class RequestPathParamList_Test extends TestBase {
 
 		// Exercises parser() setter.
 		@RestGet(path="/parser/{a}")
-		public String parser(RestRequest req) throws Exception {
+		public String parser(RestRequest req) {
 			var p = req.getPathParams();
 			p.parser(req.getPartParserSession());
 			return "parserNotNull=" + (p.get("a").asString().orElse(null) != null);

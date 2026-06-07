@@ -28,9 +28,9 @@ import java.util.*;
 import org.apache.http.*;
 import org.apache.http.impl.*;
 import org.apache.http.params.*;
-import org.apache.juneau.*;
 import org.apache.juneau.http.classic.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Basic implementation of the {@link HttpResponse} interface.

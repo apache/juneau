@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server.beans;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 class ResourceDescription_Test extends TestBase {

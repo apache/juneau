@@ -21,9 +21,9 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Represents the top-level JSON:API document as defined by

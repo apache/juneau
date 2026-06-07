@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.jsonpatch;
 
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Abstract base for a JSON Patch operation per

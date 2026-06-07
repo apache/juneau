@@ -20,11 +20,12 @@ import static org.apache.juneau.http.classic.header.ContentType.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 class MarshalledConfig_Swaps_Test extends TestBase {

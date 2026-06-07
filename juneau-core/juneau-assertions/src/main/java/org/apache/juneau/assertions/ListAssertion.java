@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against lists.

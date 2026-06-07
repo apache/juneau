@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 
-import org.apache.juneau.encoders.*;
+import org.apache.juneau.marshall.encoders.*;
 
 /**
  * A wrapped {@link PrintWriter} with an added <c>finish()</c> method.

@@ -24,7 +24,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Holds metadata about http part beans (POJOs that get serialized as HTTP parts such as form data or query parameters).

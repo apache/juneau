@@ -286,7 +286,7 @@ class ThrownStore_Test extends TestBase {
 		assertNotEquals(0L, stats.getFirstOccurrence());
 		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("bar", stats.getFirstMessage());
-		assertContains("org.apache.juneau", r(stats.getStackTrace()));
+		assertContains("org.apache.juneau.mstat", r(stats.getStackTrace()));
 		assertContains("bar", stats);
 
 		stats = ThrownStats.copy(stats);
@@ -295,7 +295,7 @@ class ThrownStore_Test extends TestBase {
 		assertNotEquals(0L, stats.getFirstOccurrence());
 		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("bar", stats.getFirstMessage());
-		assertContains("org.apache.juneau", r(stats.getStackTrace()));
+		assertContains("org.apache.juneau.mstat", r(stats.getStackTrace()));
 		assertContains("bar", stats);
 
 		stats = stats.getCausedBy().get();
@@ -304,7 +304,7 @@ class ThrownStore_Test extends TestBase {
 		assertNotEquals(0L, stats.getFirstOccurrence());
 		assertNotEquals(0L, stats.getLastOccurrence());
 		assertEquals("foo", stats.getFirstMessage());
-		assertContains("org.apache.juneau", r(stats.getStackTrace()));
+		assertContains("org.apache.juneau.mstat", r(stats.getStackTrace()));
 		assertContains("foo", stats);
 	}
 

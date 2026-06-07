@@ -18,9 +18,9 @@ package org.apache.juneau.rest.server;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.sse.*;
-import org.apache.juneau.sse.*;
 import org.junit.jupiter.api.*;
 
 class Rest_SseBroadcaster_IT_Test {

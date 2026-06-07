@@ -39,7 +39,7 @@ import org.slf4j.spi.*;
  * 	<cs>[SystemProperties]</cs>
  *
  * 	<cc># Configure Jetty to log using java-util logging</cc>
- * 	<ck>org.eclipse.jetty.util.log.class</ck> = org.apache.juneau.microservice.jetty.JettyLogger
+ * 	<ck>org.eclipse.jetty.util.log.class</ck> = org.apache.juneau.marshall.microservice.jetty.JettyLogger
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

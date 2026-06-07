@@ -23,11 +23,11 @@ import static org.apache.juneau.rest.server.RestOpAnnotation.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.*;
 
 /**

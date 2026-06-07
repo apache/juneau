@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.html5;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/embedded-content-0.html#the-param-element">&lt;param&gt;</a>

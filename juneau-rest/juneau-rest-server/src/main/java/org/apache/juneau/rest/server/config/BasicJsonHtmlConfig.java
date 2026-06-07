@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.rest.server.config;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Basic configuration for a REST resource that supports JSON and HTML transport.

@@ -26,7 +26,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

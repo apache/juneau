@@ -18,7 +18,7 @@ package org.apache.juneau.examples.core.uon;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.uon.*;
+import org.apache.juneau.marshall.uon.*;
 
 /**
  *	Sample class which shows the simple usage of UONSerializer.

@@ -23,9 +23,9 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**

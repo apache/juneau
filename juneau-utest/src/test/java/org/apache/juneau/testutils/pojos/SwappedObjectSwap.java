@@ -19,10 +19,10 @@ package org.apache.juneau.testutils.pojos;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 
 public class SwappedObjectSwap extends ObjectSwap<SwappedObject,String> {
 	@Override

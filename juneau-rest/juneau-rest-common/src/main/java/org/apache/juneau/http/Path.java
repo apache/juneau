@@ -18,7 +18,7 @@ package org.apache.juneau.http;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.Constants.*;
+import static org.apache.juneau.marshall.Constants.*;
 
 import java.lang.annotation.*;
 

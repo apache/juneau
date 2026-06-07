@@ -18,8 +18,8 @@ package org.apache.juneau.microservice.jetty.resources;
 
 import java.io.*;
 
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.server.*;

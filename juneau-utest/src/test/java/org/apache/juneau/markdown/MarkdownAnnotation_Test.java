@@ -19,6 +19,7 @@ package org.apache.juneau.markdown;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.markdown.*;
 import org.junit.jupiter.api.*;
 
 /**

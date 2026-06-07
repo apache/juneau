@@ -19,8 +19,8 @@ package org.apache.juneau.rest.server.stats;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.*;
 
 /**

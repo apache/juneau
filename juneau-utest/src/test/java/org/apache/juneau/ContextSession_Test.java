@@ -21,16 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.charset.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.csv.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.csv.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
 
 class ContextSession_Test extends TestBase {

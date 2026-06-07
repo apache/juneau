@@ -24,9 +24,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 class JsonList_Test extends TestBase {
@@ -151,7 +151,7 @@ class JsonList_Test extends TestBase {
 		assertString(l.toString(), l.toJson5());
 
 		// toString(WriterSerializer) — generalized
-		assertString("['b','a']", l.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));
+		assertString("['b','a']", l.toString(org.apache.juneau.marshall.json5.Json5Serializer.DEFAULT));
 	}
 
 	//====================================================================================================

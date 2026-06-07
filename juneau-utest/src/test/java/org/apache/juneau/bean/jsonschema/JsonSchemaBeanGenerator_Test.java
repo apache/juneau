@@ -23,11 +23,12 @@ import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.jsonschema.*;
 import org.junit.jupiter.api.*;
 
 class JsonSchemaBeanGenerator_Test extends TestBase {

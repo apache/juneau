@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.cp.test3.*;
 import org.apache.juneau.cp.test4.*;
+import org.apache.juneau.marshall.cp.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

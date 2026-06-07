@@ -1,0 +1,144 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.html;
+
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+
+import java.util.function.*;
+
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.marshall.*;
+
+/**
+ * Metadata on classes specific to the HTML serializers and parsers pulled from the {@link Html @Html} annotation on
+ * the class.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S1452"  // Wildcard required - HtmlRender<?> for render callback
+})
+public class HtmlClassMeta extends ExtendedClassMeta {
+
+	private final boolean noTables;
+	private final boolean noTableHeaders;
+	private final HtmlFormat format;
+	private final HtmlRender<?> render;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param cm The class that this annotation is defined on.
+	 * @param mp HTML metadata provider (for finding information about other artifacts).
+	 */
+	public HtmlClassMeta(ClassMeta<?> cm, HtmlMetaProvider mp) {
+		super(cm);
+
+		var noTables2 = Holder.<Boolean>empty();
+		var noTableHeaders2 = Holder.<Boolean>empty();
+		var format2 = Holder.<HtmlFormat>empty();
+		var render2 = Holder.<HtmlRender<?>>empty();
+
+		Consumer<Html> c = x -> {
+			if (x.noTables())
+				noTables2.set(true);
+			if (x.noTableHeaders())
+				noTableHeaders2.set(true);
+			if (x.format() != HtmlFormat.HTML)
+				format2.set(x.format());
+			if (x.render() != HtmlRender.class) {
+				try {
+					render2.set(x.render().getDeclaredConstructor().newInstance());
+				} catch (Exception e) {
+					throw toRex(e);
+				}
+			}
+		};
+		cm.forEachAnnotation(Html.class, x -> true, c);
+
+		this.noTables = noTables2.orElse(false);
+		this.noTableHeaders = noTableHeaders2.orElse(false);
+		this.render = render2.orElse(null);
+		this.format = format2.orElse(HtmlFormat.HTML);
+	}
+
+	/**
+	 * Returns the {@link Html#render() @Html(render)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation.
+	 */
+	public HtmlRender<?> getRender() { return render; }
+
+	/**
+	 * Returns the {@link Html#noTableHeaders() @Html(noTableHeaders)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation.
+	 */
+	public boolean isNoTableHeaders() { return noTableHeaders; }
+
+	/**
+	 * Returns the {@link Html#format() @Html(format)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation.
+	 */
+	protected HtmlFormat getFormat() { return format; }
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
+	 *
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML}.
+	 */
+	protected boolean isHtml() { return format == HtmlFormat.HTML; }
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
+	 *
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_CDC}.
+	 */
+	protected boolean isHtmlCdc() { return format == HtmlFormat.HTML_CDC; }
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
+	 *
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#HTML_SDC}.
+	 */
+	protected boolean isHtmlSdc() { return format == HtmlFormat.HTML_SDC; }
+
+	/**
+	 * Returns the {@link Html#noTables() @Html(noTables)} annotation defined on the class.
+	 *
+	 * @return The value of the annotation.
+	 */
+	protected boolean isNoTables() { return noTables; }
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
+	 *
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#PLAIN_TEXT}.
+	 */
+	protected boolean isPlainText() { return format == HtmlFormat.PLAIN_TEXT; }
+
+	/**
+	 * Returns <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
+	 *
+	 * @return <jk>true</jk> if {@link #getFormat()} returns {@link HtmlFormat#XML}.
+	 */
+	protected boolean isXml() { return format == HtmlFormat.XML; }
+}

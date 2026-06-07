@@ -27,8 +27,8 @@ import java.util.function.*;
 
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Utility class for creating mocked writer serializers.

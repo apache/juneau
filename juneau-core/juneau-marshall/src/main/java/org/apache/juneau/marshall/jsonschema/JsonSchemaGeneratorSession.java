@@ -1,0 +1,514 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.jsonschema;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.jsonschema.TypeCategory.*;
+
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.regex.*;
+
+import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+
+/**
+ * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSchemaDetails">JSON-Schema Support</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
+public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+	private static final String ARG_id = "id";
+	private static final String ARG_def = "def";
+
+	// JSON Schema property name constants
+	private static final String PROP_additionalProperties = "additionalProperties";
+	private static final String PROP_enum = "enum";
+	private static final String PROP_format = "format";
+	private static final String PROP_items = "items";
+	private static final String PROP_properties = "properties";
+	private static final String PROP_type = "type";
+	private static final String PROP_uniqueItems = "uniqueItems";
+
+	// JSON Schema type and format constants
+	private static final String TYPE_string = "string";
+	private static final String FORMAT_uri = "uri";
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends MarshallingTraverseSession.Builder<Builder> {
+
+		private JsonSchemaGenerator ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(JsonSchemaGenerator ctx) {
+			super(assertArgNotNull(ARG_ctx, ctx));
+			this.ctx = ctx;
+		}
+
+		@Override
+		public JsonSchemaGeneratorSession build() {
+			return new JsonSchemaGeneratorSession(this);
+		}
+
+	}
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return A new builder.
+	 */
+	public static Builder create(JsonSchemaGenerator ctx) {
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	}
+
+	private final JsonSchemaGenerator ctx;
+	private final Map<String,JsonMap> defs;
+	private JsonParserSession jpSession;
+	private JsonSerializerSession jsSession;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected JsonSchemaGeneratorSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		defs = isUseBeanDefs() ? new TreeMap<>() : null;
+	}
+
+	/**
+	 * Adds a schema definition to this session.
+	 *
+	 * @param id The definition ID.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @param def The definition schema.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public JsonSchemaGeneratorSession addBeanDef(String id, JsonMap def) {
+		if (nn(defs))
+			defs.put(assertArgNotNull(ARG_id, id), assertArgNotNull(ARG_def, def));
+		return this;
+	}
+
+	/**
+	 * Returns the definition ID for the specified class.
+	 *
+	 * @param cm The class to get the definition ID of.
+	 * @return The definition ID for the specified class.
+	 */
+	public String getBeanDefId(ClassMeta<?> cm) {
+		return getBeanDefMapper().getId(cm);
+	}
+
+	/**
+	 * Returns the definitions that were gathered during this session.
+	 *
+	 * <p>
+	 * This map is modifiable and affects the map in the session.
+	 *
+	 * @return
+	 * 	The definitions that were gathered during this session, or <jk>null</jk> if {@link JsonSchemaGenerator.Builder#useBeanDefs()} was not enabled.
+	 */
+	public Map<String,JsonMap> getBeanDefs() { return defs; }
+
+	/**
+	 * Returns the definition URI for the specified class.
+	 *
+	 * @param cm The class to get the definition URI of.
+	 * @return The definition URI for the specified class.
+	 */
+	public java.net.URI getBeanDefUri(ClassMeta<?> cm) {
+		return getBeanDefMapper().getURI(cm);
+	}
+
+	/**
+	 * Returns the definition URI for the specified class.
+	 *
+	 * @param id The definition ID to get the definition URI of.
+	 * @return The definition URI for the specified class.
+	 */
+	public java.net.URI getBeanDefUri(String id) {
+		return getBeanDefMapper().getURI(id);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	public JsonSchemaBeanPropertyMeta getJsonSchemaBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return ctx.getJsonSchemaBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	public JsonSchemaClassMeta getJsonSchemaClassMeta(ClassMeta<?> cm) {
+		return ctx.getJsonSchemaClassMeta(cm);
+	}
+
+	/**
+	 * Returns the JSON-schema for the specified type.
+	 *
+	 * @param cm The object type.
+	 * @return The schema for the type.
+	 * @throws MarshallingRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
+	 */
+	public JsonMap getSchema(ClassMeta<?> cm) throws MarshallingRecursionException, SerializeException {
+		return getSchema(cm, "root", false, false, null);
+	}
+
+	/**
+	 * Returns the JSON-schema for the specified object.
+	 *
+	 * @param o
+	 * 	The object.
+	 * 	<br>Can either be a POJO or a <c>Class</c>/<c>Type</c>.
+	 * @return The schema for the type.
+	 * @throws MarshallingRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
+	 */
+	public JsonMap getSchema(Object o) throws MarshallingRecursionException, SerializeException {
+		return getSchema(toClassMeta(o), "root", false, false, null);
+	}
+
+	/**
+	 * Returns the JSON-schema for the specified type.
+	 *
+	 * @param type The object type.
+	 * @return The schema for the type.
+	 * @throws MarshallingRecursionException Bean recursion occurred.
+	 * @throws SerializeException Error occurred.
+	 */
+	public JsonMap getSchema(Type type) throws MarshallingRecursionException, SerializeException {
+		return getSchema(getClassMeta(type), "root", false, false, null);
+	}
+
+	private Object getDescription(ClassMeta<?> sType, TypeCategory t, boolean descriptionAdded) {
+		var canAdd = isAllowNestedDescriptions() || ! descriptionAdded;
+		if (canAdd && (getAddDescriptionsTo().contains(t) || getAddDescriptionsTo().contains(ANY)))
+			return sType.toString();
+		return null;
+	}
+
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires cast to List<String> for enum extraction
+	})
+	private static List<String> getEnums(ClassMeta<?> cm) {
+		List<String> l = list();
+		for (var e : ((Class<Enum<?>>)cm.inner()).getEnumConstants())
+			l.add(cm.toString(e));
+		return l;
+	}
+
+	private Object getExample(ClassMeta<?> sType, TypeCategory t, boolean exampleAdded) throws SerializeException {
+		var canAdd = isAllowNestedExamples() || ! exampleAdded;
+		if (canAdd && (getAddExamplesTo().contains(t) || getAddExamplesTo().contains(ANY))) {
+			var example = sType.getExample(this, jpSession());
+			if (nn(example)) {
+				try {
+					return Json5Parser.DEFAULT.parse(toJson(example), Object.class);
+				} catch (ParseException e) {
+					throw new SerializeException(e);
+				}
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings({
+		"java:S1168",  // Intentional null when type is ignored — signals "no schema" to callers; null is filtered by JsonMap serialization
+		"java:S3776",  // Cognitive complexity acceptable for schema generation over type categories
+		"java:S6541",  // Brain Method — unified getSchema branching over serializers/types is intentional
+		"rawtypes",    // Raw types necessary for generic type handling
+		"unchecked"    // Type erasure requires unchecked casts
+	})
+	private JsonMap getSchema(ClassMeta<?> eType, String attrName, boolean exampleAdded, boolean descriptionAdded, JsonSchemaBeanPropertyMeta jsbpm)
+		throws MarshallingRecursionException, SerializeException {
+
+		if (ctx.isIgnoredType(eType))
+			return null;
+
+		var out = new JsonMap();
+
+		if (eType == null)
+			eType = object();
+
+		ClassMeta<?> aType = null;			// The actual type (will be null if recursion occurs)
+		ClassMeta<?> sType = null;			// The serialized type
+		var objectSwap = eType.getSwap(this);
+
+		aType = push(attrName, eType, null);
+
+		sType = eType.getSerializedClassMeta(this);
+
+		String type = null;
+		String format = null;
+		Object example = null;
+		Object description = null;
+
+		boolean useDef = isUseBeanDefs() && sType.isBean();
+
+		if (useDef) {
+			exampleAdded = false;
+			descriptionAdded = false;
+		}
+
+		if (useDef && defs.containsKey(getBeanDefId(sType))) {
+			pop();
+			return new JsonMap().append("$ref", getBeanDefUri(sType));
+		}
+
+		JsonSchemaClassMeta jscm = null;
+		var objectSwapCM = objectSwap == null ? null : getClassMeta(objectSwap.getClass());
+		if (nn(objectSwapCM) && getAnnotationProvider().has(Schema.class, objectSwapCM))
+			jscm = getJsonSchemaClassMeta(objectSwapCM);
+		if (jscm == null)
+			jscm = getJsonSchemaClassMeta(sType);
+
+		TypeCategory tc = null;
+
+		if (sType.isNumber()) {
+			tc = NUMBER;
+			if (sType.isDecimal()) {
+				type = "number";
+				if (sType.isFloat()) {
+					format = "float";
+				} else if (sType.isDouble()) {
+					format = "double";
+				}
+			} else {
+				type = "integer";
+				if (sType.isShort()) {
+					format = "int16";
+				} else if (sType.isInteger()) {
+					format = "int32";
+				} else if (sType.isLong()) {
+					format = "int64";
+				}
+			}
+		} else if (sType.isBoolean()) {
+			tc = BOOLEAN;
+			type = "boolean";
+		} else if (sType.isMap()) {
+			tc = MAP;
+			type = "object";
+		} else if (sType.isBean()) {
+			tc = BEAN;
+			type = "object";
+		} else if (sType.isCollection()) {
+			tc = COLLECTION;
+			type = "array";
+		} else if (sType.isArray()) {
+			tc = ARRAY;
+			type = "array";
+		} else if (sType.isEnum()) {
+			tc = ENUM;
+			type = TYPE_string;
+		} else {
+			tc = STRING;
+			type = TYPE_string;
+			if (sType.isUri())
+				format = FORMAT_uri;
+		}
+
+		// Add info from @Schema on bean property.
+		if (nn(jsbpm)) {
+			out.append(jsbpm.getSchema());
+		}
+
+		out.append(jscm.getSchema());
+
+		Predicate<String> ne = Utils::ne;
+		out.appendIfAbsentIf(ne, PROP_type, type);
+		out.appendIfAbsentIf(ne, PROP_format, format);
+
+		if (nn(aType)) {
+
+			example = getExample(sType, tc, exampleAdded);
+			description = getDescription(sType, tc, descriptionAdded);
+			exampleAdded |= nn(example);
+			descriptionAdded |= nn(description);
+
+			if (tc == BEAN) {
+				var properties = new JsonMap();
+				BeanMeta bm = getBeanMeta(sType.inner());
+				for (Iterator<BeanPropertyMeta> i = bm.getProperties().values().iterator(); i.hasNext();) {
+					BeanPropertyMeta p = i.next();
+					if (p.canRead())
+						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getBeanInfo(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
+				}
+				out.put(PROP_properties, properties);
+
+			} else if (tc == COLLECTION) {
+				ClassMeta et = sType.getElementType();
+				if (sType.isCollection() && sType.isAssignableTo(Set.class))
+					out.put(PROP_uniqueItems, true);
+				out.put(PROP_items, getSchema(et, PROP_items, exampleAdded, descriptionAdded, null));
+
+			} else if (tc == ARRAY) {
+				ClassMeta et = sType.getElementType();
+				if (sType.isCollection() && sType.isAssignableTo(Set.class))
+					out.put(PROP_uniqueItems, true);
+				out.put(PROP_items, getSchema(et, PROP_items, exampleAdded, descriptionAdded, null));
+
+			} else if (tc == ENUM) {
+				out.put(PROP_enum, getEnums(sType));
+
+			} else if (tc == MAP) {
+				var om = getSchema(sType.getValueType(), PROP_additionalProperties, exampleAdded, descriptionAdded, null);
+				if (om != null && ! om.isEmpty())
+					out.put(PROP_additionalProperties, om);
+
+			}
+		}
+
+		out.append(jscm.getSchema());
+
+		Predicate<Object> neo = Utils::ne;
+		out.appendIfAbsentIf(neo, "description", description);
+		out.appendIfAbsentIf(neo, "example", example);
+
+		if (useDef) {
+			defs.put(getBeanDefId(sType), out);
+			out = JsonMap.of("$ref", getBeanDefUri(sType));
+		}
+
+		pop();
+
+		return out;
+	}
+
+	private JsonParserSession jpSession() {
+		if (jpSession == null)
+			jpSession = ctx.getJsonParser().getSession();
+		return jpSession;
+	}
+
+	private ClassMeta<?> toClassMeta(Object o) {
+		if (o instanceof Type o2)
+			return getClassMeta(o2);
+		return getClassMetaForObject(o);
+	}
+
+	private String toJson(Object o) throws SerializeException {
+		if (jsSession == null)
+			jsSession = ctx.getJsonSerializer().getSession();
+		return jsSession.serializeToString(o);
+	}
+
+	/**
+	 * Add descriptions to types.
+	 *
+	 * @see JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)
+	 * @return
+	 * 	Set of categories of types that descriptions should be automatically added to generated schemas.
+	 */
+	protected final Set<TypeCategory> getAddDescriptionsTo() { return ctx.getAddDescriptionsTo(); }
+
+	/**
+	 * Add examples.
+	 *
+	 * @see JsonSchemaGenerator.Builder#addExamplesTo(TypeCategory...)
+	 * @return
+	 * 	Set of categories of types that examples should be automatically added to generated schemas.
+	 */
+	protected final Set<TypeCategory> getAddExamplesTo() { return ctx.getAddExamplesTo(); }
+
+	/**
+	 * Bean schema definition mapper.
+	 *
+	 * @see JsonSchemaGenerator.Builder#beanDefMapper(Class)
+	 * @return
+	 * 	Interface to use for converting Bean classes to definition IDs and URIs.
+	 */
+	protected final MarshallingDefMapper getBeanDefMapper() { return ctx.getBeanDefMapper(); }
+
+	/**
+	 * Ignore types from schema definitions.
+	 *
+	 * @see JsonSchemaGenerator.Builder#ignoreTypes(String...)
+	 * @return
+	 * 	Custom schema information for particular class types.
+	 */
+	protected final List<Pattern> getIgnoreTypes() { return ctx.getIgnoreTypes(); }
+
+	/**
+	 * Allow nested descriptions.
+	 *
+	 * @see JsonSchemaGenerator.Builder#allowNestedDescriptions()
+	 * @return
+	 * 	<jk>true</jk> if nested descriptions are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedDescriptions() { return ctx.isAllowNestedDescriptions(); }
+
+	/**
+	 * Allow nested examples.
+	 *
+	 * @see JsonSchemaGenerator.Builder#allowNestedExamples()
+	 * @return
+	 * 	<jk>true</jk> if nested examples are allowed in schema definitions.
+	 */
+	protected final boolean isAllowNestedExamples() { return ctx.isAllowNestedExamples(); }
+
+	/**
+	 * Use bean definitions.
+	 *
+	 * @see JsonSchemaGenerator.Builder#useBeanDefs()
+	 * @return
+	 * 	<jk>true</jk> if schemas on beans will be serialized with <js>'$ref'</js> tags.
+	 */
+	protected final boolean isUseBeanDefs() { return ctx.isUseBeanDefs(); }
+}

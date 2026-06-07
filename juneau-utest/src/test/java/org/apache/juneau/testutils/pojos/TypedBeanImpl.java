@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-@org.apache.juneau.Marshalled(typeName="TypedBeanImpl")
+@org.apache.juneau.marshall.Marshalled(typeName="TypedBeanImpl")
 public class TypedBeanImpl implements TypedBean {
 	public int a;
 	public String b;

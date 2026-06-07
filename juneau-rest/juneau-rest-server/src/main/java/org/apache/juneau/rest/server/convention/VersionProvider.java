@@ -24,7 +24,7 @@ import java.util.function.*;
 import java.util.jar.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
 
 /**

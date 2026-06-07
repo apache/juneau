@@ -34,11 +34,11 @@ import org.junit.jupiter.api.*;
 
 /**
  * Acceptance tests for per-{@code RestContext} {@code @Value} resolution against
- * {@code @Rest(config=...)} {@link org.apache.juneau.config.Config}s.
+ * {@code @Rest(config=...)} {@link org.apache.juneau.marshall.config.Config}s.
  *
  * <p>
  * The test writes its config fixtures to the cwd in {@link BeforeAll @BeforeAll} (because the
- * default {@link org.apache.juneau.config.store.FileStore#DEFAULT FileStore.DEFAULT} resolves
+ * default {@link org.apache.juneau.marshall.config.store.FileStore#DEFAULT FileStore.DEFAULT} resolves
  * names against the cwd; with Maven Surefire that is the module directory). The cwd-resident
  * files are removed in {@link AfterAll @AfterAll}. Names use a fixed {@code todo95-} prefix so
  * they are easy to spot and clean up by hand should a test crash partway through.

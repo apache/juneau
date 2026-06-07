@@ -22,7 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 class BooleanAssertion_Test extends TestBase {

@@ -20,9 +20,9 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.marshall.encoders.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

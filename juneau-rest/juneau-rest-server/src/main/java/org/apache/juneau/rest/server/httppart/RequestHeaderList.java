@@ -31,7 +31,7 @@ import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 
 /**

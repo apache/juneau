@@ -22,6 +22,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -511,6 +512,7 @@ class BasicSwaggerProviderSession_Coverage_Test extends TestBase {
 	@Rest
 	@Deprecated
 	public static class Z1 {
+		@Deprecated
 		@RestGet(path="/dep")
 		public X a() { return null; }
 	}

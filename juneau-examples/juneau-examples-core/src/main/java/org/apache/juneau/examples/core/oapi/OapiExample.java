@@ -20,8 +20,8 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
 
 /**
  * Sample class which shows the simple usage of OpenApiSerializer.

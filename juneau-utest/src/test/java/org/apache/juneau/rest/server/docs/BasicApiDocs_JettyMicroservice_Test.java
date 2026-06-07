@@ -34,8 +34,8 @@ import jakarta.servlet.*;
  * Real-Jetty deployment-parity assertion for the api-docs mixin pack.
  *
  * <p>
- * Boots a {@link org.apache.juneau.microservice.Microservice Microservice} backed by
- * {@link org.apache.juneau.microservice.jetty.JettyConfiguration JettyConfiguration} on an
+ * Boots a {@link org.apache.juneau.marshall.microservice.Microservice Microservice} backed by
+ * {@link org.apache.juneau.marshall.microservice.jetty.JettyConfiguration JettyConfiguration} on an
  * ephemeral port via {@link MicroserviceTestFixture}, mounts a {@link BasicRestServlet} host that
  * inherits the four-mixin pack
  * ({@link SwaggerUiMixin} + {@link RedocMixin} &mdash; transitively pulling in

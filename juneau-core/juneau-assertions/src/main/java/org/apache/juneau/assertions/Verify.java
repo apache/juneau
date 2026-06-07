@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 
 /**
  * Utility class for performing simple validations on objects.

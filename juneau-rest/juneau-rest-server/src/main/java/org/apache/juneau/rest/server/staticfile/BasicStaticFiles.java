@@ -26,12 +26,12 @@ import java.util.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.resource.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.rest.server.*;
 
 /**

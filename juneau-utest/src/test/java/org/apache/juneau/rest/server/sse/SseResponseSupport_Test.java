@@ -18,9 +18,9 @@ package org.apache.juneau.rest.server.sse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.sse.*;
 import org.junit.jupiter.api.*;
 
 class SseResponseSupport_Test {

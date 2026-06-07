@@ -16,23 +16,23 @@
  */
 package org.apache.juneau.rest.server.rdf.config;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.jena.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.plaintext.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.jena.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.msgpack.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.plaintext.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.soap.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.soap.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 
 /**
  * Identical to {@link BasicUniversalConfig} but includes RDF marshalling support.

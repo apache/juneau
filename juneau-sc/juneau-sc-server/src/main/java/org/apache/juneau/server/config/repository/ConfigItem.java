@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.server.config.repository;
 
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Configuration item representing a named value (e.g., a config file section).

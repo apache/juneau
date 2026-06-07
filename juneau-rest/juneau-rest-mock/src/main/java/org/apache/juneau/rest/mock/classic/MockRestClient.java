@@ -17,9 +17,9 @@
 package org.apache.juneau.rest.mock.classic;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
 import java.io.*;
@@ -33,11 +33,11 @@ import org.apache.http.client.methods.*;
 import org.apache.http.conn.*;
 import org.apache.http.entity.*;
 import org.apache.http.message.*;
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.RestRequest;
 import org.apache.juneau.rest.mock.*;
@@ -298,7 +298,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires cast for builder chain
 		})
-		public Builder parsers(java.lang.Class<? extends org.apache.juneau.parser.Parser>...value) {
+		public Builder parsers(java.lang.Class<? extends org.apache.juneau.marshall.parser.Parser>...value) {
 			super.parsers(value);
 			return this;
 		}
@@ -414,7 +414,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires cast for builder chain
 		})
-		public Builder serializers(java.lang.Class<? extends org.apache.juneau.serializer.Serializer>...value) {
+		public Builder serializers(java.lang.Class<? extends org.apache.juneau.marshall.serializer.Serializer>...value) {
 			super.serializers(value);
 			return this;
 		}

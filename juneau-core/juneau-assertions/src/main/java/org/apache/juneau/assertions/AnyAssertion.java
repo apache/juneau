@@ -19,7 +19,7 @@ package org.apache.juneau.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against generic POJOs.
@@ -30,7 +30,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
  *
  * 	List&lt;MyBean&gt; <jv>listOfBeans</jv> = ...;
  * 	<jsm>assertList</jsm>(<jv>listOfBeans</jv>)

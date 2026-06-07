@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.microservice.tomcat;
 
-import static org.apache.juneau.collections.JsonMap.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.collections.JsonMap.*;
 
 import java.io.*;
 import java.net.*;
@@ -37,7 +37,7 @@ import org.apache.catalina.startup.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.config.event.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.auth.*;

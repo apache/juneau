@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 class OpSwaggerAnnotation_Test extends TestBase {

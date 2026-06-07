@@ -22,9 +22,9 @@ import java.io.*;
 import java.time.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
-import org.apache.juneau.sse.*;
 
 /**
  * Fluent SSE response helper.

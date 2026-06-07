@@ -23,7 +23,7 @@ import java.time.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.sse.*;
+import org.apache.juneau.marshall.sse.*;
 
 /**
  * Scheduled SSE heartbeat.

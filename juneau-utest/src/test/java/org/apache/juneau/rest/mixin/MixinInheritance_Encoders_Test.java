@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
+import org.apache.juneau.marshall.encoders.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;

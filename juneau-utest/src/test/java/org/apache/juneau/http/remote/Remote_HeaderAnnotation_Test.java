@@ -29,12 +29,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.RestRequest;
-import org.apache.juneau.uon.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

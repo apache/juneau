@@ -22,6 +22,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Tests serialization of HTML5 templates.

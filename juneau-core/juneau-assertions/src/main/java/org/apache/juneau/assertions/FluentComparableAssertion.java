@@ -22,8 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.cp.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against comparable objects.

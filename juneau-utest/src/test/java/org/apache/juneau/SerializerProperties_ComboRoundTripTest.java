@@ -21,10 +21,11 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.serializer.Serializer.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.serializer.Serializer.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * Exhaustive serialization tests for MarshallingTraverseContext properties.
@@ -327,7 +328,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("_type=T11\n&f=@(\n\t(\n\t\tf=@(\n\t\t\t|+foo+|\n\t\t)\n\t)\n)")
 			.msgPack("82A55F74797065A3543131A1669181A16691A520666F6F20")
 			.msgPackT("82A174A3543131A1669181A16691A520666F6F20")
-			.apply(XmlSerializer.Builder.class, org.apache.juneau.xml.XmlSerializer.Builder::addNamespaceUrisToRoot)
+			.apply(XmlSerializer.Builder.class, org.apache.juneau.marshall.xml.XmlSerializer.Builder::addNamespaceUrisToRoot)
 			.apply(WriterSerializer.Builder.class, x -> x.quoteCharOverride('|'))
 			.apply(Serializer.Builder.class, x -> x.addBeanTypes().addRootType())
 			.skipTest(x -> x.contains("parse") || x.contains("verify"))

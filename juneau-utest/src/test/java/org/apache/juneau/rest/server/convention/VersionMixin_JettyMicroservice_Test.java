@@ -37,8 +37,8 @@ import jakarta.servlet.*;
  * Real-Jetty deployment-parity assertion for {@link VersionMixin}.
  *
  * <p>
- * Boots a {@link org.apache.juneau.microservice.Microservice Microservice} backed by
- * {@link org.apache.juneau.microservice.jetty.JettyConfiguration JettyConfiguration} on an
+ * Boots a {@link org.apache.juneau.marshall.microservice.Microservice Microservice} backed by
+ * {@link org.apache.juneau.marshall.microservice.jetty.JettyConfiguration JettyConfiguration} on an
  * ephemeral port via {@link MicroserviceTestFixture}, mounts a vanilla {@link RestServlet} host
  * with the version mixin and a {@code @Bean VersionMixin} factory configuring known
  * entries, and hits {@code /version}, {@code /info}, and {@code /about} over real HTTP.

@@ -20,15 +20,15 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.objecttools.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.objecttools.*;
 
 /**
  * This is the root document object for the Swagger 2.0 API specification.

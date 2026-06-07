@@ -23,7 +23,7 @@ import java.util.concurrent.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;

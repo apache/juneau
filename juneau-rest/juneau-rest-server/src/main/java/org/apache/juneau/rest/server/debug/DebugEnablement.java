@@ -16,17 +16,17 @@
  */
 package org.apache.juneau.rest.server.debug;
 
-import static org.apache.juneau.Enablement.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.Enablement.*;
 
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.*;
 
 import jakarta.servlet.http.*;

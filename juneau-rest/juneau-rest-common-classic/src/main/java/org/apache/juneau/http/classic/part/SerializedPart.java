@@ -24,10 +24,10 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.urlencoding.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.urlencoding.*;
 
 /**
  * Subclass of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries using the

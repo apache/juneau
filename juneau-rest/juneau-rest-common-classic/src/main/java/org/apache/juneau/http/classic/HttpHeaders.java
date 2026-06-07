@@ -85,8 +85,8 @@ import org.apache.juneau.http.classic.header.Warning;
 import org.apache.juneau.http.classic.header.WwwAuthenticate;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
 
 /**
  * Standard predefined HTTP headers.

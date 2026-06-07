@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Adapters that convert {@link McpTypedToolHandler} / {@link McpTypedPromptHandler} into the raw

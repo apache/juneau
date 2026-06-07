@@ -20,7 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.markdown.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -24,6 +24,7 @@ import java.util.logging.*;
 import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -212,7 +213,7 @@ class RestClient_Logging_Test extends TestBase {
 			"WARNING: Baz",
 			"WARNING: Qux",
 			"WARNING: Quux",
-			"at org.apache.juneau"
+			"at org.apache.juneau.rest.client.classic"
 		);
 	}
 

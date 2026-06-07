@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.examples.rest;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widget.*;
-import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;

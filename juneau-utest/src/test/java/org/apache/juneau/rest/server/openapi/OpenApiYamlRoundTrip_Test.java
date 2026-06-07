@@ -23,11 +23,11 @@ import java.net.*;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.yaml.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.yaml.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
 
 /**

@@ -21,7 +21,7 @@ import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.httppart.HttpPartSchema.*;
+import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
 
 import java.time.*;
@@ -29,15 +29,15 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 

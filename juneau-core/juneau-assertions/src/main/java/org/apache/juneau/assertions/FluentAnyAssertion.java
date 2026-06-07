@@ -25,9 +25,9 @@ import java.time.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against generic POJOs.
@@ -38,7 +38,7 @@ import org.apache.juneau.serializer.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
  *
  * 	List&lt;MyBean&gt; <jv>listOfBeans</jv> = ...;
  * 	<jsm>assertList</jsm>(<jv>listOfBeans</jv>)

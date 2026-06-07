@@ -25,7 +25,7 @@ import org.apache.juneau.commons.inject.*;
  * <p>
  * Implementations declare a typed argument class {@code A} and a typed return type {@code R}. The dispatcher
  * (via {@link McpTypedHandlers#adaptTool(McpTypedToolHandler)}) handles map-to-bean conversion using the
- * default {@link org.apache.juneau.json.JsonParser} and wraps non-{@link CallToolResult} returns in a
+ * default {@link org.apache.juneau.marshall.json.JsonParser} and wraps non-{@link CallToolResult} returns in a
  * single-{@link TextContent} {@link CallToolResult}.
  *
  * @param <A> Argument bean type.

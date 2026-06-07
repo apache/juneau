@@ -24,11 +24,11 @@ import java.lang.annotation.*;
 import java.util.*;
 import java.util.logging.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.matcher.*;
@@ -104,7 +104,7 @@ import jakarta.servlet.http.*;
  * 			<li>{@link RequestPathParamList}
  * 			<li>{@link Logger}
  * 			<li>{@link RestContext}
- * 			<li>{@link org.apache.juneau.parser.Parser}
+ * 			<li>{@link org.apache.juneau.marshall.parser.Parser}
  * 			<li>{@link Locale}
  * 			<li>{@link Swagger}
  * 			<li>{@link RequestContent}

@@ -21,13 +21,14 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.encoders.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
@@ -37,7 +38,6 @@ import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.swagger.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Used to denote that a class is a REST resource and to associate metadata on it.
@@ -221,7 +221,7 @@ public @interface Rest {
 	 * 		{@code partSerializer}, {@code partParser}) — the mixin's value wins over the host's for mixin endpoints
 	 * 		when declared; otherwise the host's value is inherited.
 	 * 	<li><b>{@code messages}</b> — the mixin's bundle is chained as a child of the host's via
-	 * 		{@link org.apache.juneau.cp.Messages#chain Messages.chain(child, parent)} so mixin keys win and missing
+	 * 		{@link org.apache.juneau.marshall.cp.Messages#chain Messages.chain(child, parent)} so mixin keys win and missing
 	 * 		keys fall through to the host.
 	 * 	<li><b>Lifecycle hooks</b> ({@code @RestStartCall}, {@code @RestEndCall}, {@code @RestPreCall},
 	 * 		{@code @RestPostCall}, {@code @RestDestroy}) — dual-fire host-then-mixin for mixin-endpoint requests;
@@ -916,7 +916,7 @@ public @interface Rest {
 	 * <p>
 	 * Encoders are automatically inherited from {@link Rest#encoders()} annotations on parent classes with the encoders on child classes
 	 * prepended to the encoder group.
-	 * The {@link org.apache.juneau.encoders.EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -935,7 +935,7 @@ public @interface Rest {
 	 * The encoders can also be tailored at the method level using {@link RestOp#encoders()} (and related annotations).
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute an {@link org.apache.juneau.encoders.EncoderSet} bean via
+	 * For programmatic equivalents, contribute an {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
@@ -1042,13 +1042,13 @@ public @interface Rest {
 	 * <p>
 	 * There are two possible formats:
 	 * <ul>
-	 * 	<li>A simple string - Represents the {@link org.apache.juneau.cp.Messages.Builder#name(String) name} of the resource bundle.
+	 * 	<li>A simple string - Represents the {@link org.apache.juneau.marshall.cp.Messages.Builder#name(String) name} of the resource bundle.
 	 * 		<br><br><i>Example:</i>
 	 * 		<p class='bjava'>
 	 * 	<jc>// Bundle name is Messages.properties.</jc>
 	 * 	<ja>@Rest</ja>(messages=<js>"Messages"</js>)
 	 * 		</p>
-	 * 	<li>Simplified JSON - Represents parameters for the {@link org.apache.juneau.cp.Messages.Builder} class.
+	 * 	<li>Simplified JSON - Represents parameters for the {@link org.apache.juneau.marshall.cp.Messages.Builder} class.
 	 * 		<br><br><i>Example:</i>
 	 * 		<p class='bjava'>
 	 * 	<jc>// Bundles can be found in two packages.</jc>
@@ -1084,7 +1084,7 @@ public @interface Rest {
 	 * <p>
 	 * Parsers are automatically inherited from {@link Rest#parsers()} annotations on parent classes with the parsers on child classes
 	 * prepended to the parser group.
-	 * The {@link org.apache.juneau.parser.ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.marshall.parser.ParserSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1104,14 +1104,14 @@ public @interface Rest {
 	 * The parsers can also be tailored at the method level using {@link RestOp#parsers()} (and related annotations).
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.parser.ParserSet} bean via
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.parser.ParserSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
 	 * 	<li>Parsers on child override those on parent class.
-	 * 	<li>{@link org.apache.juneau.parser.ParserSet.Inherit} class can be used to inherit and augment values from parent.
-	 * 	<li>{@link org.apache.juneau.parser.ParserSet.NoInherit} class can be used to suppress inheriting from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.Inherit} class can be used to inherit and augment values from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.parser.ParserSet.NoInherit} class can be used to suppress inheriting from parent.
 	 * 	<li>Parsers on methods take precedence over those on classes.
 	 * </ul>
 	 *
@@ -1513,7 +1513,7 @@ public @interface Rest {
 	 * <p>
 	 * Serializers are automatically inherited from {@link Rest#serializers()} annotations on parent classes with the serializers on child classes
 	 * prepended to the serializer group.
-	 * The {@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
+	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit} class can be used to prevent inheriting from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1533,14 +1533,14 @@ public @interface Rest {
 	 * The serializers can also be tailored at the method level using {@link RestOp#serializers()} (and related annotations).
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.serializer.SerializerSet} bean via
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
 	 * <ul>
 	 * 	<li>Serializers on child override those on parent class.
-	 * 	<li>{@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.
-	 * 	<li>{@link org.apache.juneau.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit} class can be used to inherit and augment values from parent.
+	 * 	<li>{@link org.apache.juneau.marshall.serializer.SerializerSet.NoInherit} class can be used to suppress inheriting from parent.
 	 * 	<li>Serializers on methods take precedence over those on classes.
 	 * </ul>
 	 *

@@ -21,11 +21,11 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.lang.annotation.*;
 
 import org.apache.juneau.commons.*;
-import org.apache.juneau.encoders.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.matcher.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Utility classes and methods for the {@link RestGet @RestGet} annotation.
@@ -47,7 +47,7 @@ public class RestGetAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	@SuppressWarnings({

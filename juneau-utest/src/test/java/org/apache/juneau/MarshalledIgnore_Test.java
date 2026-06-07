@@ -18,7 +18,8 @@ package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
 
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 class MarshalledIgnore_Test extends TestBase {

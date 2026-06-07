@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
@@ -404,7 +404,7 @@ class AbstractRestBuilder_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class NoArgCtor extends RestResource {
-		public NoArgCtor() {}
+		public NoArgCtor() { /* no-op */ }
 	}
 
 	@Test void j01_build_noArgCtor() {
@@ -430,6 +430,9 @@ class AbstractRestBuilder_Test extends TestBase {
 		public NoCtorResource(int x) { /* unused */ }
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // assertThrows lambda chains createResource() setup; only build() throws.
+	})
 	@Test void j03_build_noUsableCtor_throws() {
 		// Builder.build() invokes createResource(), which must throw IllegalStateException for a class with no
 		// no-arg or RestBuilder<?> ctor.

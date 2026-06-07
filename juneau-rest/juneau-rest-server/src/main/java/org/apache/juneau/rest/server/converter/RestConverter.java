@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.converter;
 
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * REST method response converter.

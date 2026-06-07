@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.marshaller.MarshallUtils.*;
+import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

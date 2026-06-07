@@ -22,7 +22,7 @@ import java.io.*;
 import javax.imageio.*;
 
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Example serializer that converts {@link BufferedImage} objects to byte streams.

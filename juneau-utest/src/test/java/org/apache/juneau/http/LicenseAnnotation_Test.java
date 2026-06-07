@@ -21,6 +21,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 class LicenseAnnotation_Test extends TestBase {

@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.httppart;
 
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Represents the information needed to serialize a response part such as a response header or content.

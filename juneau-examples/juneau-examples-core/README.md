@@ -24,7 +24,7 @@ To use any of the examples, you need to add Apache Juneau as a dependency
 
 ```xml
 <dependency>
-    <groupId>org.apache.juneau</groupId>
+    <groupId>org.apache.juneau.marshall</groupId>
     <artifactId>juneau-core</artifactId>
     <version>${juneau.version}</version>
 </dependency>

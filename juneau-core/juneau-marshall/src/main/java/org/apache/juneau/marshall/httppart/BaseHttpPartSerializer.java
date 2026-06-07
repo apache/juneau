@@ -1,0 +1,98 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.httppart;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
+import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.serializer.*;
+
+/**
+ * Base class for implementations of {@link HttpPartSerializer}
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>This class is thread safe and reusable.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpPartSerializersParsers">HTTP Part Serializers and Parsers</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
+public abstract class BaseHttpPartSerializer extends MarshallingContextable implements HttpPartSerializer {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_builder = "builder";
+
+	/**
+	 * Builder class.
+	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingContextable.Builder<SELF> {
+
+		/**
+		 * Constructor.
+		 */
+		protected Builder() {}
+
+		/**
+		 * Copy constructor.
+		 * @param builder The existing builder to copy.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(Builder<SELF> builder) {
+			super(assertArgNotNull(ARG_builder, builder));
+		}
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected BaseHttpPartSerializer(Builder<?> builder) {
+		super(builder);
+	}
+
+	/**
+	 * Converts the specified value to a string that can be used as an HTTP header value, query parameter value,
+	 * form-data parameter, or URI path variable.
+	 *
+	 * <p>
+	 * Returned values should NOT be URL-encoded.
+	 *
+	 * @param partType The category of value being serialized.
+	 * 	<br>Can be <jk>null</jk> (will default to {@link HttpPartType#OTHER}).
+	 * @param schema
+	 * 	Schema information about the part.
+	 * 	<br>Can be <jk>null</jk>.
+	 * 	<br>Not all part serializers use the schema information.
+	 * @param value The value being serialized.
+	 * 	<br>Can be <jk>null</jk> (will return <jk>null</jk>).
+	 * @return The serialized value.
+	 * @throws SerializeException If a problem occurred while trying to parse the input.
+	 * @throws SchemaValidationException If the output fails schema validation.
+	 */
+	public String serialize(HttpPartType partType, HttpPartSchema schema, Object value) throws SchemaValidationException, SerializeException {
+		return getPartSession().serialize(partType, schema, value);
+	}
+}

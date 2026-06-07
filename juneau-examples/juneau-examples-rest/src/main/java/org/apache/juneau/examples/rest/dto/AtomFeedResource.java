@@ -22,14 +22,14 @@ import java.net.*;
 
 import org.apache.juneau.bean.atom.*;
 import org.apache.juneau.commons.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Content;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widget.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Sample resource that shows how to generate ATOM feeds.

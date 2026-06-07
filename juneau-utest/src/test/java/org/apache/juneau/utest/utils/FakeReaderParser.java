@@ -20,12 +20,12 @@ package org.apache.juneau.utest.utils;
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.parser.*;
 
 /**
  * Utility class for creating mocked reader parsers.

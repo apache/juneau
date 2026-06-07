@@ -18,7 +18,7 @@ package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/document-metadata.html#the-style-element">&lt;style&gt;</a>

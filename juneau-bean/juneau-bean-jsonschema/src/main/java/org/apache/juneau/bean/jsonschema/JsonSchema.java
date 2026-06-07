@@ -26,13 +26,13 @@ import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 
 /**
  * Represents a top-level schema object bean in the JSON-Schema core specification.

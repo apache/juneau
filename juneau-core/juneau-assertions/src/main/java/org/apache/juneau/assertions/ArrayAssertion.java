@@ -20,14 +20,14 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against arrays.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
  *
  * 	String[] <jv>array</jv> = {<js>"foo"</js>};
  * 	<jsm>assertArray</jsm>(<jv>array</jv>).exists().isSize(1);

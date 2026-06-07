@@ -19,13 +19,13 @@ package org.apache.juneau.rest.server.arg;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.ParameterInfo;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 

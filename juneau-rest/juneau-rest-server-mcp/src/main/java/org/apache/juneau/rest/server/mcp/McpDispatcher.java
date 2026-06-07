@@ -21,8 +21,8 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.bean.mcp.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.collections.*;
 
 /**
  * Transport-agnostic JSON-RPC dispatcher for the MCP wire protocol.

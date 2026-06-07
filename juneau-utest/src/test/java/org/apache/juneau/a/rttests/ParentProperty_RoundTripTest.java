@@ -18,7 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

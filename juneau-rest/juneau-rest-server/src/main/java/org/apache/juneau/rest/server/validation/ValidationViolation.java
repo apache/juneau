@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.validation;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Wire-friendly snapshot of a single Jakarta Bean Validation constraint violation, suitable for inclusion in an

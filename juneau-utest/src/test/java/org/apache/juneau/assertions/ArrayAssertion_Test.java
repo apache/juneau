@@ -28,7 +28,8 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 public class ArrayAssertion_Test extends TestBase {

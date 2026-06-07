@@ -1,0 +1,612 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.jena;
+
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.jena.Constants.*;
+
+import java.io.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.jena.rdf.model.*;
+import org.apache.jena.riot.*;
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.xml.*;
+
+/**
+ * Session object that lives for the duration of a single use of {@link RdfSerializer}.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'>{doc jmr.RdfDetails}
+
+ * </ul>
+ */
+@SuppressWarnings({
+	"rawtypes",  // Raw types necessary for generic type handling
+	"unchecked", // Type erasure requires unchecked casts
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"java:S2176", // Inheritance depth exceeds 5; necessary to participate in the serializer session hierarchy
+	"java:S3776", // Cognitive complexity acceptable for RDF serializer session methods
+	"java:S6541", // Brain Method complexity acceptable for core RDF serializer dispatch logic
+	"java:S110" // Deep inheritance inherent to the RDF serializer session hierarchy.
+})
+public class RdfSerializerSession extends WriterSerializerSession {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_ctx = "ctx";
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends WriterSerializerSession.Builder<Builder> {
+
+		private RdfSerializer ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(RdfSerializer ctx) {
+			super(assertArgNotNull(ARG_ctx, ctx));
+			this.ctx = ctx;
+		}
+
+		@Override
+		public RdfSerializerSession build() {
+			return new RdfSerializerSession(this);
+		}
+
+	}
+
+	/**
+	 * Maps RDF writer names to property prefixes that apply to them.
+	 */
+	// @formatter:off
+	static final Map<String,String> LANG_PROP_MAP = mapb(String.class, String.class)
+		.unmodifiable()
+		.add("RDF/XML", "rdfXml.")
+		.add("RDF/XML-ABBREV", "rdfXml.")
+		.add("N3", "n3.")
+		.add("N3-PP", "n3.")
+		.add("N3-PLAIN", "n3.")
+		.add("N3-TRIPLES", "n3.")
+		.add("TURTLE", "n3.")
+		.add("N-TRIPLE", "ntriple.")
+		.add("JSON-LD", "jsonLd.")
+		.add("N-QUADS", "nquads.")
+		.add("TRIG", "trig.")
+		.add("TRIX", "trix.")
+		.add("RDF/JSON", "rdfJson.")
+		.build();
+	// @formatter:on
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return A new builder.
+	 */
+	public static Builder create(RdfSerializer ctx) {
+		return new Builder(assertArgNotNull(ARG_ctx, ctx));
+	}
+
+	private final Model model;
+	private final Property pRoot;
+	private final Property pValue;
+	private final Lang lang;
+	private final RdfSerializer ctx;
+	private final Namespace[] namespaces;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected RdfSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+
+		model = ModelFactory.createDefaultModel();
+		namespaces = ctx.namespaces;
+		addModelPrefix(ctx.getJuneauNs());
+		addModelPrefix(ctx.getJuneauBpNs());
+		for (var ns : this.namespaces)
+			addModelPrefix(ns);
+		pRoot = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_ROOT);
+		pValue = model.createProperty(ctx.getJuneauNs().getUri(), RDF_juneauNs_VALUE);
+
+		// Map legacy language names to RIOT Lang (e.g. "N-TRIPLE" -> NTRIPLES)
+		var langName = ctx.getLanguage();
+		lang = toLang(langName);
+		if (lang == null)
+			throw rex("Unknown RDF language encountered: ''{0}''", langName);
+	}
+
+	private static Lang toLang(String langName) {
+		var lang = RDFLanguages.nameToLang(langName);
+		if (lang != null)
+			return lang;
+		if ("RDF/PROTO".equals(langName)) // HTT - not registered in Jena's RDFLanguages
+			return Lang.RDFPROTO;
+		return null;
+	}
+
+	/*
+	 * Adds the specified namespace as a model prefix.
+	 */
+	private void addModelPrefix(Namespace ns) {
+		model.setNsPrefix(ns.getName(), ns.getUri());
+	}
+
+	/*
+	 * XML-encoded the specified element name using the {@link XmlUtils#encodeElementName(Object)} method.
+	 */
+	private String encodeElementName(Object o) {
+		return XmlUtils.encodeElementName(toString(o));
+	}
+
+	/*
+	 * XML-encodes the specified string using the {@link XmlUtils#escapeText(Object)} method.
+	 */
+	private String encodeTextInvalidChars(Object o) {
+		if (o == null)
+			return null;
+		var s = toString(o);
+		return XmlUtils.escapeText(s);
+	}
+
+	private String getUri(Object uri, Object uri2) {
+		String s = null;
+		if (nn(uri))
+			s = uri.toString();
+		if ((s == null || s.isEmpty()) && nn(uri2))
+			s = uri2.toString();
+		if (s == null)
+			return null;
+		return getUriResolver().resolve(s);
+	}
+
+	@SuppressWarnings({
+		"null" // Null analysis not applicable to RDF serialization
+	})
+	private RDFNode serializeAnything(Object o, boolean isURI, ClassMeta<?> eType, String attrName, BeanPropertyMeta bpm, Resource parentResource) throws SerializeException {
+		var m = model;
+
+		ClassMeta<?> wType = null;            // The wrapped type
+		ClassMeta<?> sType;                   // The serialized type
+
+		var aType = push2(attrName, o, eType);  // The actual type
+
+		if (eType == null)
+			eType = object();
+
+		// Handle recursion
+		if (aType == null) {
+			o = null;
+			aType = object();
+		}
+
+		// Handle Optional<X>
+		if (isOptional(aType)) {
+			o = getOptionalValue(o);
+			eType = getOptionalType(eType);
+			aType = getClassMetaForObject(o, object());
+		}
+
+		if (nn(o)) {
+
+			if (aType.isDelegate()) {
+				wType = aType;
+				aType = (ClassMeta)((Delegate)o).getBeanInfo();
+			}
+
+			sType = aType;
+
+			// Swap if necessary
+			var swap = aType.getSwap(this);
+			if (nn(swap)) {
+				o = swap(swap, o);
+				sType = swap.getSwapClassMeta(this);
+
+				// If the getSwapClass() method returns Object, we need to figure out
+				// the actual type now.
+				if (sType.isObject())
+					sType = getClassMetaForObject(o);
+			}
+		} else {
+			sType = eType.getSerializedClassMeta(this);
+		}
+
+		var typeName = getBeanTypeName(this, eType, aType, bpm);
+
+		RDFNode n = null;
+
+		if (o == null || sType.isChar() && ((Character)o).charValue() == 0) {
+			if (nn(bpm)) {
+				if (isKeepNullProperties()) {
+					n = m.createResource(RDF_NIL);
+				}
+			} else {
+				n = m.createResource(RDF_NIL);
+			}
+
+		} else if (sType.isUri() || isURI) {
+			// RDF URI gate must come before isBean/isMap/isCharSequence: @Uri-annotated values (where sType could be String or a bean) need to route through the Resource emission path.  RDF URIs must be absolute to be valid.
+			var uri = getUri(o, null);
+			if (isAbsoluteUri(uri))
+				n = m.createResource(uri);
+			else
+				n = m.createLiteral(encodeTextInvalidChars(uri));
+
+		} else if (sType.isBean()) {
+			var bm = toBeanMap(o);
+			Object uri = null;
+			RdfBeanMeta rbm = getRdfBeanMeta(bm.getMeta());
+			if (rbm.hasBeanUri())
+				uri = rbm.getBeanUriProperty().get(bm, null);
+			String uri2 = getUri(uri, null);
+			n = m.createResource(uri2);
+			serializeBeanMap(bm, (Resource)n, typeName);
+
+		} else if (sType.isMap() || (nn(wType) && wType.isMap())) {
+			if (o instanceof BeanMap o2) {
+				Object uri = null;
+				var rbm = getRdfBeanMeta(o2.getMeta());
+				if (rbm.hasBeanUri())
+					uri = rbm.getBeanUriProperty().get(o2, null);
+				var uri2 = getUri(uri, null);
+				n = m.createResource(uri2);
+				serializeBeanMap(o2, (Resource)n, typeName);
+			} else {
+				var m2 = (Map)o;
+				n = m.createResource();
+				serializeMap(m2, (Resource)n, sType);
+			}
+
+		} else if (sType.isCollectionOrArray() || (nn(wType) && wType.isCollection())) {
+
+			var c = sort(sType.isCollection() ? (Collection)o : toList(sType.inner(), o));
+			var f = getCollectionFormat();
+			var cRdf = getRdfClassMeta(sType);
+			var bpRdf = getRdfBeanPropertyMeta(bpm);
+
+			if (cRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
+				f = cRdf.getCollectionFormat();
+			if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
+				f = bpRdf.getCollectionFormat();
+
+			if (f == RdfCollectionFormat.MULTI_VALUED) {
+				serializeToMultiProperties(c, eType, bpm, attrName, parentResource);
+			} else {
+				n = switch (f) {
+					case BAG -> serializeToContainer(c, eType, m.createBag());
+					case LIST -> serializeToList(c, eType);
+					default -> serializeToContainer(c, eType, m.createSeq());
+				};
+			}
+
+		} else if (sType.isCharSequence() || sType.isChar()) {
+			n = m.createLiteral(encodeTextInvalidChars(o));
+
+		} else if (sType.isNumber() || sType.isBoolean()) {
+			if (! isAddLiteralTypes())
+				n = m.createLiteral(o.toString());
+			else
+				n = m.createTypedLiteral(o);
+
+		} else if (sType.isReader()) {
+			n = m.createLiteral(encodeTextInvalidChars(read((Reader)o, SerializerSession::handleThrown)));
+		} else if (sType.isInputStream()) {
+			n = m.createLiteral(encodeTextInvalidChars(read((InputStream)o, SerializerSession::handleThrown)));
+
+		} else {
+			n = m.createLiteral(encodeTextInvalidChars(toString(o)));
+		}
+
+		pop();
+
+		return n;
+	}
+
+	private void serializeBeanMap(BeanMap<?> m, Resource r, String typeName) throws SerializeException {
+		var l = new ArrayList<BeanPropertyValue>();
+
+		if (nn(typeName)) {
+			var pm = m.getMeta().getTypeProperty();
+			l.add(new BeanPropertyValue(pm, pm.getName(), typeName, null));
+		}
+
+		var checkNull = (Predicate<Object>)(x -> isKeepNullProperties() || nn(x));
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> l.add(new BeanPropertyValue(pMeta, key, value, thrown)));
+
+		Collections.reverse(l);
+		l.forEach(x -> {
+			var bpMeta = x.getMeta();
+			var cMeta = (ClassMeta<?>) bpMeta.getBeanInfo();
+			var bpRdf = getRdfBeanPropertyMeta(bpMeta);
+			var bpXml = getXmlBeanPropertyMeta(bpMeta);
+
+			if (bpRdf.isBeanUri())
+				return;
+
+			var key = x.getName();
+			var value = x.getValue();
+			var t = x.getThrown();
+			if (nn(t))
+				onBeanGetterException(bpMeta, t);
+
+			if (canIgnoreValue(cMeta, key, value))
+				return;
+
+			var ns = bpRdf.getNamespace();
+			if (ns == null && isUseXmlNamespaces())
+				ns = bpXml.getNamespace();
+			if (ns == null)
+				ns = getJuneauBpNs();
+			else if (isAutoDetectNamespaces())
+				addModelPrefix(ns);
+
+			var p = model.createProperty(ns.getUri(), encodeElementName(key));
+			var n = serializeAnything(value, bpMeta.isUri(), cMeta, key, bpMeta, r);
+			if (nn(n))
+				r.addProperty(p, n);
+		});
+	}
+
+	private void serializeMap(Map m, Resource r, ClassMeta<?> type) throws SerializeException {
+
+		m = sort(m);
+
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
+
+		List<Map.Entry<Object,Object>> l = CollectionUtils.toList(m.entrySet());
+		Collections.reverse(l);
+		l.forEach(x -> {
+			Object value = x.getValue();
+			Object key = generalize(x.getKey(), keyType);
+			Namespace ns = getJuneauBpNs();
+			Property p = model.createProperty(ns.getUri(), encodeElementName(toString(key)));
+			RDFNode n = serializeAnything(value, false, valueType, toString(key), null, r);
+			if (nn(n))
+				r.addProperty(p, n);
+		});
+	}
+
+	private Container serializeToContainer(Collection c, ClassMeta<?> type, Container list) throws SerializeException {
+		var elementType = type.getElementType();
+		c.forEach(x -> list.add(serializeAnything(x, false, elementType, null, null, null)));
+		return list;
+	}
+
+	private RDFList serializeToList(Collection c, ClassMeta<?> type) throws SerializeException {
+		var elementType = type.getElementType();
+		List<RDFNode> l = listOfSize(c.size());
+		c.forEach(x -> l.add(serializeAnything(x, false, elementType, null, null, null)));
+		return model.createList(l.iterator());
+	}
+
+	private void serializeToMultiProperties(Collection c, ClassMeta<?> sType, BeanPropertyMeta bpm, String attrName, Resource parentResource) throws SerializeException {
+
+		var elementType = sType.getElementType();
+		RdfBeanPropertyMeta bpRdf = getRdfBeanPropertyMeta(bpm);
+		XmlBeanPropertyMeta bpXml = getXmlBeanPropertyMeta(bpm);
+
+		c.forEach(x -> {
+			var ns = bpRdf.getNamespace();
+			if (ns == null && isUseXmlNamespaces())
+				ns = bpXml.getNamespace();
+			if (ns == null)
+				ns = getJuneauBpNs();
+			else if (isAutoDetectNamespaces())
+				addModelPrefix(ns);
+			RDFNode n2 = serializeAnything(x, false, elementType, null, null, null);
+			Property p = model.createProperty(ns.getUri(), encodeElementName(attrName));
+			parentResource.addProperty(p, n2);
+		});
+	}
+
+	@SuppressWarnings({
+		"deprecation", // RDFWriter.output(Writer) - RDF uses UTF-8
+		"resource" // Resource management handled by Serializer
+	})
+	@Override /* Overridden from Serializer */
+	protected void doSerialize(SerializerPipe out, Object o) throws SerializeException {
+
+		var cm = getClassMetaForObject(o);
+		if (isLooseCollections() && nn(cm) && cm.isCollectionOrArray()) {
+			Collection c = cm.isCollection() ? (Collection)o : toList(cm.inner(), o);
+			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
+		} else {
+			RDFNode n = serializeAnything(o, false, getExpectedRootType(o), "root", null, null);
+			Resource r;
+			if (n.isLiteral()) {
+				r = model.createResource();
+				r.addProperty(pValue, n);
+			} else {
+				r = n.asResource();
+			}
+
+			if (isAddRootProp())
+				r.addProperty(pRoot, "true");
+		}
+
+		// Use RDFWriter - build() returns RDFWriter which has output(Writer)
+		org.apache.jena.riot.RDFWriter.create()
+			.source(model)
+			.lang(lang)
+			.build()
+			.output(out.getWriter());
+	}
+
+	/**
+	 * RDF format for representing collections and arrays.
+	 *
+	 * @see RdfSerializer.Builder#collectionFormat(RdfCollectionFormat)
+	 * @return
+	 * 	RDF format for representing collections and arrays.
+	 */
+	protected final RdfCollectionFormat getCollectionFormat() { return ctx.getCollectionFormat(); }
+
+	/**
+	 * All Jena-related configuration properties.
+	 *
+	 * @return
+	 * 	A map of all Jena-related configuration properties.
+	 */
+	protected final Map<String,Object> getJenaSettings() { return ctx.getJenaSettings(); }
+
+	/**
+	 * Default XML namespace for bean properties.
+	 *
+	 * @see RdfSerializer.Builder#juneauBpNs(Namespace)
+	 * @return
+	 * 	The XML namespace to use for bean properties.
+	 */
+	protected final Namespace getJuneauBpNs() { return ctx.getJuneauBpNs(); }
+
+	/**
+	 * XML namespace for Juneau properties.
+	 *
+	 * @see RdfSerializer.Builder#juneauNs(Namespace)
+	 * @return
+	 * 	The XML namespace to use for Juneau properties.
+	 */
+	protected final Namespace getJuneauNs() { return ctx.getJuneauNs(); }
+
+	/**
+	 * RDF language.
+	 *
+	 * @see RdfSerializer.Builder#language(String)
+	 * @return
+	 * 	The RDF language to use.
+	 */
+	protected final String getLanguage() { return ctx.getLanguage(); }
+
+	/**
+	 * Default namespaces.
+	 *
+	 * @see RdfSerializer.Builder#namespaces(Namespace...)
+	 * @return
+	 * 	The default list of namespaces associated with this serializer.
+	 */
+	protected final Namespace[] getNamespaces() { return ctx.getNamespaces(); }
+
+	/**
+	 * Returns the language-specific metadata on the specified bean.
+	 *
+	 * @param bm The bean to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanMeta getRdfBeanMeta(BeanMeta<?> bm) {
+		return ctx.getRdfBeanMeta(bm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfBeanPropertyMeta getRdfBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? RdfBeanPropertyMeta.DEFAULT : ctx.getRdfBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected RdfClassMeta getRdfClassMeta(ClassMeta<?> cm) {
+		return ctx.getRdfClassMeta(cm);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified bean property.
+	 *
+	 * @param bpm The bean property to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected XmlBeanPropertyMeta getXmlBeanPropertyMeta(BeanPropertyMeta bpm) {
+		return bpm == null ? XmlBeanPropertyMeta.DEFAULT : ctx.getXmlBeanPropertyMeta(bpm);
+	}
+
+	/**
+	 * Add XSI data types to non-<c>String</c> literals.
+	 *
+	 * @see RdfSerializer.Builder#addLiteralTypes()
+	 * @return
+	 * 	<jk>true</jk> if XSI data types should be added to string literals.
+	 */
+	protected final boolean isAddLiteralTypes() { return ctx.isAddLiteralTypes(); }
+
+	/**
+	 * Add RDF root identifier property to root node.
+	 *
+	 * @see RdfSerializer.Builder#addRootProperty()
+	 * @return
+	 * 	<jk>true</jk> if RDF property <c>http://www.apache.org/juneau/root</c> is added with a value of <js>"true"</js>
+	 * 	to identify the root node in the graph.
+	 */
+	protected final boolean isAddRootProp() { return ctx.isAddRootProp(); }
+
+	/**
+	 * Auto-detect namespace usage.
+	 *
+	 * @see RdfSerializer.Builder#disableAutoDetectNamespaces()
+	 * @return
+	 * 	<jk>true</jk> if namespaces usage should be detected before serialization.
+	 */
+	protected final boolean isAutoDetectNamespaces() { return ctx.isAutoDetectNamespaces(); }
+
+	/**
+	 * Collections should be serialized and parsed as loose collections.
+	 *
+	 * @see RdfSerializer.Builder#looseCollections()
+	 * @return
+	 * 	<jk>true</jk> if collections of resources are handled as loose collections of resources in RDF instead of
+	 * 	resources that are children of an RDF collection (e.g. Sequence, Bag).
+	 */
+	protected final boolean isLooseCollections() { return ctx.isLooseCollections(); }
+
+	/**
+	 * Reuse XML namespaces when RDF namespaces not specified.
+	 *
+	 * @see RdfSerializer.Builder#disableUseXmlNamespaces()
+	 * @return
+	 * 	<jk>true</jk> if namespaces defined using {@link XmlNs @XmlNs} and {@link Xml @Xml} will be inherited by the RDF serializers.
+	 * 	<br>Otherwise, namespaces will be defined using {@link RdfNs @RdfNs} and {@link Rdf @Rdf}.
+	 */
+	protected final boolean isUseXmlNamespaces() { return ctx.isUseXmlNamespaces(); }
+}

@@ -23,8 +23,8 @@ import java.util.*;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
 
 /**
  * Sample class which shows the simple usage of JsonSerializer and JsonParser.

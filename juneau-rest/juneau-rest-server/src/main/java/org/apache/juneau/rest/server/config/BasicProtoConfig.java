@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.config;
 
-import org.apache.juneau.proto.*;
+import org.apache.juneau.marshall.proto.*;
 import org.apache.juneau.rest.server.*;
 
 /**

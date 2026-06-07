@@ -22,8 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

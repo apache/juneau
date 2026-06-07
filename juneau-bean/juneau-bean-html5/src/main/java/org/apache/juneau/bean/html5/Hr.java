@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.html5;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/grouping-content.html#the-hr-element">&lt;hr&gt;</a>

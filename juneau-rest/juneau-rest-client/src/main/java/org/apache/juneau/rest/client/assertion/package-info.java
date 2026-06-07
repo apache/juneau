@@ -16,11 +16,11 @@
  */
 
 /**
- * Fluent assertion classes for HTTP response validation in the {@code org.apache.juneau.ng} REST client.
+ * Fluent assertion classes for HTTP response validation in the {@code org.apache.juneau.marshall.ng} REST client.
  *
  * <p>
  * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
+ * ({@code org.apache.juneau.marshall.ng.*}).
  *
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.client.assertion.ResponseAssertion} — root assertion for status, headers, body

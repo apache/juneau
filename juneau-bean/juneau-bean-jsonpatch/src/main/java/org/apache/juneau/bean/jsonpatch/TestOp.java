@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.jsonpatch;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * The JSON Patch {@code "test"} operation per

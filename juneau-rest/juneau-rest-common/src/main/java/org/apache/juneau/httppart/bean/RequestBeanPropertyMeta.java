@@ -28,7 +28,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Represents the metadata gathered from a getter method of a class annotated with {@link Request}.

@@ -19,6 +19,7 @@ package org.apache.juneau;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 class BeanPropertyValue_Test extends TestBase {

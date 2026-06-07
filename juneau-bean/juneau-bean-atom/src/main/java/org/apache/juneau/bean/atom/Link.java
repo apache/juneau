@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.bean.atom;
 
-import static org.apache.juneau.xml.XmlFormat.*;
+import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * Represents a reference from an entry or feed to a Web resource.

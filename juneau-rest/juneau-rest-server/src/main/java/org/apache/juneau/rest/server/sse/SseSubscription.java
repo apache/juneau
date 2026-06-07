@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
-import org.apache.juneau.sse.*;
+import org.apache.juneau.marshall.sse.*;
 
 /**
  * Subscriber queue for an {@link SseBroadcaster}.

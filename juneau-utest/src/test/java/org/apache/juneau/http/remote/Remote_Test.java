@@ -25,7 +25,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.rest.mock.classic.*;

@@ -25,9 +25,9 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against primitive array objects (e.g. <c><jk>int</jk>[]</c>).

@@ -25,8 +25,9 @@ import java.util.*;
 import javax.xml.stream.*;
 
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * Used to validate that the syntax of XML documents are valid.

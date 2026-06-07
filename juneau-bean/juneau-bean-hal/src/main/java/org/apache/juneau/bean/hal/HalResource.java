@@ -22,9 +22,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Represents a HAL Resource Object as defined by

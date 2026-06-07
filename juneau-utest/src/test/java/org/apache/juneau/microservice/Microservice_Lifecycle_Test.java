@@ -31,7 +31,7 @@ import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.commons.svl.vars.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.console.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
@@ -368,7 +368,7 @@ class Microservice_Lifecycle_Test extends TestBase {
 	@Test void f02_consoleCommands_fromConfig_invalidClass_writesWarningToConsole() throws Exception {
 		var cfg = Config.create().memStore().build();
 		// Reference a class that does not exist - hits the catch path (line ~833).
-		cfg.set("Console/commands", "org.apache.juneau.microservice.DoesNotExist_$$_Bogus_$$");
+		cfg.set("Console/commands", "org.apache.juneau.marshall.microservice.DoesNotExist_$$_Bogus_$$");
 		var sw = new StringWriter();
 		var ms = Microservice.create()
 			.config(cfg)
@@ -413,10 +413,10 @@ class Microservice_Lifecycle_Test extends TestBase {
 			.limit(64 * 1024)
 			.fileLevel(Level.INFO)
 			.consoleLevel(Level.WARNING)
-			.level("org.apache.juneau.microservice.test.lifecycle.g02", Level.FINE);
+			.level("org.apache.juneau.marshall.microservice.test.lifecycle.g02", Level.FINE);
 		var cfg = Config.create().memStore().build();
 		// Logging/levels in the config to also cover the config-driven loop branch.
-		cfg.set("Logging/levels", "{'org.apache.juneau.microservice.test.lifecycle.g02_cfg':'INFO'}");
+		cfg.set("Logging/levels", "{'org.apache.juneau.marshall.microservice.test.lifecycle.g02_cfg':'INFO'}");
 		var ms = Microservice.create().config(cfg).logConfig(lc).build();
 		try {
 			// Verify the file got created (FileHandler attaches and creates the file lazily on first record;

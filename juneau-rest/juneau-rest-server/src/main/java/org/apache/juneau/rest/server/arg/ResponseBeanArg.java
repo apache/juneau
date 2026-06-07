@@ -18,11 +18,11 @@ package org.apache.juneau.rest.server.arg;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.*;
 
 /**

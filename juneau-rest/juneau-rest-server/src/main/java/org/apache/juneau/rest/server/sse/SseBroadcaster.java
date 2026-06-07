@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 
-import org.apache.juneau.sse.*;
+import org.apache.juneau.marshall.sse.*;
 
 /**
  * In-memory server-side SSE broadcaster.

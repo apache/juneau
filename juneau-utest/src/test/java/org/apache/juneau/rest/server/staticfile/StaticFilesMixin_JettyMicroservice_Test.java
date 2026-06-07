@@ -37,8 +37,8 @@ import jakarta.servlet.*;
  * Real-Jetty deployment-parity assertion for {@link StaticFilesMixin}.
  *
  * <p>
- * Boots a {@link org.apache.juneau.microservice.Microservice Microservice} backed by
- * {@link org.apache.juneau.microservice.jetty.JettyConfiguration JettyConfiguration} on an
+ * Boots a {@link org.apache.juneau.marshall.microservice.Microservice Microservice} backed by
+ * {@link org.apache.juneau.marshall.microservice.jetty.JettyConfiguration JettyConfiguration} on an
  * ephemeral port via {@link MicroserviceTestFixture}, mounts a {@link BasicRestServlet} host with
  * the static-files mixin, and hits the {@code /static/*} URL over real HTTP. The {@code /htdocs/*} mount has been removed from the mixin's default URL surface under
  * FINISHED-101 (single path per op), but the {@code Host} class extends {@link BasicRestServlet}

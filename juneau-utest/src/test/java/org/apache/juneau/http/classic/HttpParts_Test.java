@@ -31,6 +31,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.header.BasicHeader;
 import org.apache.juneau.http.classic.part.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**

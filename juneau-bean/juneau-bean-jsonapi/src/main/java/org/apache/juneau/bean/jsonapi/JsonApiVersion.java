@@ -18,8 +18,8 @@ package org.apache.juneau.bean.jsonapi;
 
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Represents the JSON:API top-level {@code jsonapi} member.

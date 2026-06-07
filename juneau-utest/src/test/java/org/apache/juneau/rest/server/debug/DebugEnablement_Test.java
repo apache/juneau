@@ -22,6 +22,7 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;

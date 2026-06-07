@@ -24,15 +24,15 @@ import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
 
 /**

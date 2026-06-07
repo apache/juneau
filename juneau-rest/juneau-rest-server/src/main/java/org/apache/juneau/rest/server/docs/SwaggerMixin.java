@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.server.docs;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.bean.swagger.ui.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.jsonschema.*;
 import org.apache.juneau.rest.server.*;
 
 /**

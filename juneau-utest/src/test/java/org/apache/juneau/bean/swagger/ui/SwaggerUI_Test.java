@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -392,10 +393,10 @@ class SwaggerUI_Test extends TestBase {
 	@Test void a26_swaggerWithDefinitions() throws Exception {
 		var swagger = swagger()
 			.setInfo(info("Test API", "1.0.0"))
-			.addDefinition("Pet", new org.apache.juneau.collections.JsonMap()
+			.addDefinition("Pet", new org.apache.juneau.marshall.collections.JsonMap()
 				.append("type", "object")
 				.append("description", "A pet"))
-			.addDefinition("Error", new org.apache.juneau.collections.JsonMap()
+			.addDefinition("Error", new org.apache.juneau.marshall.collections.JsonMap()
 				.append("type", "object"));
 		var result = new SwaggerUI().swap(bs, swagger);
 		assertNotNull(result);

@@ -19,10 +19,10 @@ package org.apache.juneau.rest.server;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 

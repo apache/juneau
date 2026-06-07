@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

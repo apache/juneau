@@ -21,9 +21,10 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Exhaustive serialization tests DynaBean support.

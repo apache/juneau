@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The mixin's {@link RestContext#getVarResolver() var resolver} is built from the bootstrap resolver plus the
- * mixin's own {@link org.apache.juneau.cp.Messages} bean.  Because the mixin's Messages bundle is now chained
+ * mixin's own {@link org.apache.juneau.marshall.cp.Messages} bean.  Because the mixin's Messages bundle is now chained
  * to the host's via {@code Messages.chain(...)}, {@code $L{host.key}} resolves through the inherited host
  * bundle from the mixin context.  This test is a smoke check on that end-to-end seam &mdash; the deeper
  * acceptance criteria are covered by {@code MixinInheritance_Messages_Test}.

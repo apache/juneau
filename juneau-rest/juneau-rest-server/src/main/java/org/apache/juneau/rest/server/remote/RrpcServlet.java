@@ -31,13 +31,13 @@ import org.apache.juneau.bean.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.conversion.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Header;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 

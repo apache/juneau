@@ -21,8 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.markdown.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.swap.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -31,7 +31,6 @@ import java.util.concurrent.atomic.*;
 import java.util.jar.*;
 import java.util.logging.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.runtime.*;
@@ -43,10 +42,11 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.store.FileStore;
 import org.apache.juneau.config.vars.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.microservice.console.*;
 import org.apache.juneau.microservice.resources.*;
-import org.apache.juneau.parser.ParseException;
 
 /**
  * Parent class for all microservices.

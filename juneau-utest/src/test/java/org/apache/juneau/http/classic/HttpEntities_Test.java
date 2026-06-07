@@ -25,8 +25,8 @@ import java.util.function.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -50,7 +50,7 @@ class HttpEntities_Test extends TestBase {
 		assertNull(e.getContentType());
 	}
 
-	@Test void a02_byteArrayEntity_bytes_null() throws Exception {
+	@Test void a02_byteArrayEntity_bytes_null() {
 		var e = byteArrayEntity((byte[])null);
 		assertNotNull(e);
 	}

@@ -47,7 +47,6 @@ import java.util.function.*;
 import java.util.logging.*;
 import java.util.stream.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.rfc7807.*;
 import org.apache.juneau.bean.rfc7807.adapter.*;
@@ -65,18 +64,20 @@ import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.config.vars.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Response;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.jsonschema.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.debug.*;
@@ -95,7 +96,6 @@ import org.apache.juneau.rest.server.tracing.*;
 import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.rest.server.validation.*;
 import org.apache.juneau.rest.server.vars.*;
-import org.apache.juneau.serializer.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -2943,9 +2943,9 @@ public class RestContext extends Context {
 	/**
 	 * For a {@linkplain #isMixinContext() mixin sub-context}, returns the <b>host</b> resource class's
 	 * class-level annotation infos (host class chain, in parent-to-child order) so a mixin operation can
-	 * inherit the host's class-level {@link org.apache.juneau.ContextApply @ContextApply} config
-	 * (e.g. {@link org.apache.juneau.html.HtmlDocConfig @HtmlDocConfig},
-	 * {@link org.apache.juneau.serializer.SerializerConfig @SerializerConfig}).
+	 * inherit the host's class-level {@link org.apache.juneau.marshall.ContextApply @ContextApply} config
+	 * (e.g. {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig},
+	 * {@link org.apache.juneau.marshall.serializer.SerializerConfig @SerializerConfig}).
 	 *
 	 * <p>
 	 * Used by {@link RestOpContext.Builder} to prepend the host's class-level config annotations <i>ahead of</i>

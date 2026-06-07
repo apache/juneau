@@ -21,8 +21,8 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

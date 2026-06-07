@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.function.*;
 import java.util.regex.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against string objects.

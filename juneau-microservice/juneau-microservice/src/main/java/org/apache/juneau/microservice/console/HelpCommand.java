@@ -22,7 +22,7 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.runtime.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.*;
 
 /**

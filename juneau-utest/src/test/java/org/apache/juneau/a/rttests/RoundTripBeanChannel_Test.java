@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assumptions.*;
 import java.util.*;
 
 import org.apache.juneau.commons.function.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -35,7 +35,7 @@ import org.junit.jupiter.params.provider.*;
  * Test strategy:
  * <ul>
  * 	<li><b>a01-a04</b>: Serialize a plain {@code List} (well-tested), parse back via
- * 	    {@link org.apache.juneau.parser.ParserSession#parseToBeanConsumer} — exercises the consumer
+ * 	    {@link org.apache.juneau.marshall.parser.ParserSession#parseToBeanConsumer} — exercises the consumer
  * 	    lifecycle across every format that has a parser.
  * 	<li><b>b01</b>: Full end-to-end lifecycle test using a custom {@link BeanSupplier} for
  * 	    serialization and a custom {@link BeanConsumer} for parsing. Skips RDF formats (known

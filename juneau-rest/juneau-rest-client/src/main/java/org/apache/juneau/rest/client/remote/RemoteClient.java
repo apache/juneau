@@ -28,17 +28,17 @@ import java.util.Date;
 import java.util.concurrent.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -63,7 +63,7 @@ import org.apache.juneau.rest.client.*;
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
+ * ({@code org.apache.juneau.marshall.ng.*}).
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *

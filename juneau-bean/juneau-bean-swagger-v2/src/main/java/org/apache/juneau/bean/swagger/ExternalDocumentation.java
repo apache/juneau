@@ -20,13 +20,13 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.net.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Allows referencing an external resource for extended documentation.

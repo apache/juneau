@@ -20,8 +20,8 @@ import java.util.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.html.*;
 
 /**
  * Describes a single route (an {@code @RestOp}-annotated method) in a route-index listing.

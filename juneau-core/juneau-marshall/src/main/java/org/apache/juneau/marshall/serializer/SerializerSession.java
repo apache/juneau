@@ -1,0 +1,1447 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.serializer;
+
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.net.*;
+import java.text.*;
+import java.time.*;
+import java.time.Duration;
+import java.time.temporal.*;
+import java.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
+import javax.xml.datatype.*;
+
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
+import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.DateFormat;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.soap.*;
+import org.apache.juneau.marshall.swap.*;
+import org.apache.juneau.marshall.utils.*;
+
+/**
+ * Serializer session that lives for the duration of a single use of {@link Serializer}.
+ *
+ * <p>
+ * Used by serializers for the following purposes:
+ * <ul class='spaced-list'>
+ * 	<li>
+ * 		Keeping track of how deep it is in a model for indentation purposes.
+ * 	<li>
+ * 		Ensuring infinite loops don't occur by setting a limit on how deep to traverse a model.
+ * 	<li>
+ * 		Ensuring infinite loops don't occur from loops in the model (when detectRecursions is enabled.
+ * 	<li>
+ * 		Allowing serializer properties to be overridden on method calls.
+ * </ul>
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
+
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S115",  // Constants use UPPER_snakeCase convention
+	"rawtypes",   // Raw types necessary for generic type handling throughout serializer session
+	"unchecked"   // Type erasure requires unchecked casts throughout serializer session
+})
+public class SerializerSession extends MarshallingTraverseSession {
+
+	// Property name constants
+	private static final String PROP_javaMethod = "javaMethod";
+	private static final String PROP_resolver = "resolver";
+	private static final String PROP_schema = "schema";
+	private static final String PROP_uriContext = "uriContext";
+	private static final String PROP_uriResolver = "uriResolver";
+	private static final String PROP_keepNullProperties = "keepNullProperties";
+	private static final String PROP_trimStrings = "trimStrings";
+	private static final String PROP_addBeanTypes = "addBeanTypes";
+	private static final String PROP_addRootType = "addRootType";
+	private static final String PROP_sortCollections = "sortCollections";
+	private static final String PROP_sortMaps = "sortMaps";
+	private static final String PROP_trimEmptyCollections = "trimEmptyCollections";
+	private static final String PROP_trimEmptyMaps = "trimEmptyMaps";
+	private static final String PROP_SerializerSession_javaMethod = "SerializerSession.javaMethod";
+	private static final String PROP_SerializerSession_resolver = "SerializerSession.resolver";
+	private static final String PROP_SerializerSession_schema = "SerializerSession.schema";
+	private static final String PROP_SerializerSession_uriContext = "SerializerSession.uriContext";
+	private static final String PROP_SerializerSession_keepNullProperties = "SerializerSession.keepNullProperties";
+	private static final String PROP_SerializerSession_trimStrings = "SerializerSession.trimStrings";
+	private static final String PROP_SerializerSession_addBeanTypes = "SerializerSession.addBeanTypes";
+	private static final String PROP_SerializerSession_addRootType = "SerializerSession.addRootType";
+	private static final String PROP_SerializerSession_sortCollections = "SerializerSession.sortCollections";
+	private static final String PROP_SerializerSession_sortMaps = "SerializerSession.sortMaps";
+	private static final String PROP_SerializerSession_trimEmptyCollections = "SerializerSession.trimEmptyCollections";
+	private static final String PROP_SerializerSession_trimEmptyMaps = "SerializerSession.trimEmptyMaps";
+
+	/**
+	 * Builder class.
+	 */
+	@SuppressWarnings({
+		"java:S119" // 'SELF' (CRTP self-type) is intentional and clearer than a single-letter name.
+	})
+	public abstract static class Builder<SELF extends Builder<SELF>> extends MarshallingTraverseSession.Builder<SELF> {
+
+		private static final String ARG_ctx = "ctx";
+
+		private HttpPartSchema schema;
+		private Method javaMethod;
+		private Serializer ctx;
+		private UriContext uriContext;
+		private VarResolverSession resolver;
+		private boolean keepNullProperties;
+		private boolean trimStrings;
+		private boolean addBeanTypes;
+		private boolean addRootType;
+		private boolean sortCollections;
+		private boolean sortMaps;
+		private boolean trimEmptyCollections;
+		private boolean trimEmptyMaps;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 * 	<br>Cannot be <jk>null</jk>.
+		 */
+		protected Builder(Serializer ctx) {
+			super(assertArgNotNull(ARG_ctx, ctx));
+			this.ctx = ctx;
+			mediaTypeDefault(ctx.getResponseContentType());
+			uriContext = ctx.getUriContext();
+			keepNullProperties = ctx.isKeepNullProperties();
+			trimStrings = ctx.isTrimStrings();
+			addBeanTypes = ctx.isAddBeanTypes();
+			addRootType = ctx.isAddRootType();
+			sortCollections = ctx.isSortCollections();
+			sortMaps = ctx.isSortMaps();
+			trimEmptyCollections = ctx.isTrimEmptyCollections();
+			trimEmptyMaps = ctx.isTrimEmptyMaps();
+		}
+
+		@Override
+		public SerializerSession build() {
+			return new SerializerSession(this);
+		}
+
+		/**
+		 * The java method that called this serializer, usually the method in a REST servlet.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value will be kept).
+		 * @return This object.
+		 */
+		public SELF javaMethod(Method value) {
+			if (nn(value))
+				javaMethod = value;
+			return self();
+		}
+
+		@Override /* Overridden from Builder */
+		public SELF property(String key, Object value) {
+			if (key == null) {
+				super.property(key, value);
+				return self();
+			}
+			switch (key) {
+				case PROP_javaMethod, PROP_SerializerSession_javaMethod:
+					return javaMethod(cvt(value, Method.class));
+				case PROP_resolver, PROP_SerializerSession_resolver:
+					return resolver(cvt(value, VarResolverSession.class));
+				case PROP_schema, PROP_SerializerSession_schema:
+					return schema(cvt(value, HttpPartSchema.class));
+				case PROP_uriContext, PROP_SerializerSession_uriContext:
+					return uriContext(cvt(value, UriContext.class));
+				case PROP_keepNullProperties, PROP_SerializerSession_keepNullProperties:
+					return keepNullProperties(cvt(value, Boolean.class));
+				case PROP_trimStrings, PROP_SerializerSession_trimStrings:
+					return trimStrings(cvt(value, Boolean.class));
+				case PROP_addBeanTypes, PROP_SerializerSession_addBeanTypes:
+					return addBeanTypes(cvt(value, Boolean.class));
+				case PROP_addRootType, PROP_SerializerSession_addRootType:
+					return addRootType(cvt(value, Boolean.class));
+				case PROP_sortCollections, PROP_SerializerSession_sortCollections:
+					return sortCollections(cvt(value, Boolean.class));
+				case PROP_sortMaps, PROP_SerializerSession_sortMaps:
+					return sortMaps(cvt(value, Boolean.class));
+				case PROP_trimEmptyCollections, PROP_SerializerSession_trimEmptyCollections:
+					return trimEmptyCollections(cvt(value, Boolean.class));
+				case PROP_trimEmptyMaps, PROP_SerializerSession_trimEmptyMaps:
+					return trimEmptyMaps(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return self();
+			}
+		}
+
+		/**
+		 * String variable resolver.
+		 *
+		 * <p>
+		 * If not specified, defaults to session created by {@link VarResolver#DEFAULT}.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to session created by {@link VarResolver#DEFAULT} when accessed).
+		 * @return This object.
+		 */
+		public SELF resolver(VarResolverSession value) {
+			if (nn(value))
+				resolver = value;
+			return self();
+		}
+
+		/**
+		 * HTTP-part schema.
+		 *
+		 * <p>
+		 * Used for schema-based serializers and parsers to define additional formatting.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, existing value will be kept).
+		 * @return This object.
+		 */
+		public SELF schema(HttpPartSchema value) {
+			if (nn(value))
+				schema = value;
+			return self();
+		}
+
+		/**
+		 * Same as {@link #schema(HttpPartSchema)} but doesn't overwrite the value if it is already set.
+		 *
+		 * @param value
+		 * 	The new value for this property.
+		 * 	<br>If <jk>null</jk>, then the locale defined on the context is used.
+		 * @return This object.
+		 */
+		public SELF schemaDefault(HttpPartSchema value) {
+			if (nn(value) && schema == null)
+				schema = value;
+			return self();
+		}
+
+		/**
+		 * URI context bean.
+		 *
+		 * <p>
+		 * Bean used for resolution of URIs to absolute or root-relative form.
+		 *
+		 * <p>
+		 * If not specified, defaults to {@link Serializer.Builder#uriContext(UriContext)}.
+		 *
+		 * @param value
+		 * 	The new property value.
+		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to {@link Serializer.Builder#uriContext(UriContext)} from context).
+		 * @return This object.
+		 */
+		public SELF uriContext(UriContext value) {
+			if (nn(value))
+				uriContext = value;
+			return self();
+		}
+
+		/**
+		 * Keep null bean property values.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF keepNullProperties(boolean value) {
+			keepNullProperties = value;
+			return self();
+		}
+
+		/**
+		 * Trim strings.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF trimStrings(boolean value) {
+			trimStrings = value;
+			return self();
+		}
+
+		/**
+		 * Add bean types.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF addBeanTypes(boolean value) {
+			addBeanTypes = value;
+			return self();
+		}
+
+		/**
+		 * Add root type.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF addRootType(boolean value) {
+			addRootType = value;
+			return self();
+		}
+
+		/**
+		 * Sort collections.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF sortCollections(boolean value) {
+			sortCollections = value;
+			return self();
+		}
+
+		/**
+		 * Sort maps.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF sortMaps(boolean value) {
+			sortMaps = value;
+			return self();
+		}
+
+		/**
+		 * Trim empty collections.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF trimEmptyCollections(boolean value) {
+			trimEmptyCollections = value;
+			return self();
+		}
+
+		/**
+		 * Trim empty maps.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF trimEmptyMaps(boolean value) {
+			trimEmptyMaps = value;
+			return self();
+		}
+	}
+
+	/**
+	 * Concrete default builder leaf for the non-subclassed {@code create()} path (CRTP terminal).
+	 */
+	public static final class DefaultBuilder extends Builder<DefaultBuilder> {
+
+		DefaultBuilder(Serializer ctx) {
+			super(ctx);
+		}
+	}
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * 	<br>Cannot be <jk>null</jk>.
+	 * @return A new builder.
+	 */
+	@SuppressWarnings({
+		"java:S1452" // Builder<?> wildcard return intentional; callers use it to construct session instances polymorphically
+	})
+	public static Builder<?> create(Serializer ctx) {
+		return new DefaultBuilder(assertArgNotNull("ctx", ctx));
+	}
+
+	/**
+	 * Create a "_type" property that contains the dictionary name of the bean.
+	 *
+	 * @param m The bean map to create a class property on.
+	 * @param typeName The type name of the bean.
+	 * @return A new bean property value.
+	 */
+	protected static final BeanPropertyValue createBeanTypeNameProperty(BeanMap<?> m, String typeName) {
+		BeanMeta<?> bm = m.getMeta();
+		return new BeanPropertyValue(bm.getTypeProperty(), bm.getTypeProperty().getName(), typeName, null);
+	}
+
+	/**
+	 * Converts the specified throwable to either a {@link RuntimeException} or {@link SerializeException}.
+	 *
+	 * @param <T> The throwable type.
+	 * @param causedBy The exception to cast or wrap.
+	 */
+	protected static <T extends Throwable> void handleThrown(T causedBy) {
+		if (causedBy instanceof StackOverflowError)
+			throw new SerializeException(
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		if (causedBy instanceof Error causedBy2)
+			throw causedBy2;
+		if (causedBy instanceof RuntimeException causedBy2)
+			throw causedBy2;
+		if (causedBy instanceof SerializeException causedBy2)
+			throw causedBy2;
+		throw new SerializeException(causedBy);
+	}
+
+	/**
+	 * Converts the contents of the specified object array to a list.
+	 *
+	 * <p>
+	 * Works on both object and primitive arrays.
+	 *
+	 * <p>
+	 * In the case of multi-dimensional arrays, the outgoing list will contain elements of type n-1 dimension.
+	 * i.e. if {@code type} is <code><jk>int</jk>[][]</code> then {@code list} will have entries of type
+	 * <code><jk>int</jk>[]</code>.
+	 *
+	 * @param type The type of array.
+	 * @param array The array being converted.
+	 * @return The array as a list.
+	 */
+	protected static final List<Object> toList(Class<?> type, Object array) {
+		var componentType = type.getComponentType();
+		if (componentType.isPrimitive()) {
+			var l = Array.getLength(array);
+			var list = new ArrayList<>(l);
+			for (var i = 0; i < l; i++)
+				list.add(Array.get(array, i));
+			return list;
+		}
+		return l((Object[])array);
+	}
+
+	private final HttpPartSchema schema;
+	private final Method javaMethod;                                                // Java method that invoked this serializer.
+	private final Serializer ctx;
+	private final SerializerListener listener;
+	private final UriResolver uriResolver;
+	private VarResolverSession vrs;
+	private final boolean keepNullProperties;
+	private final boolean trimStrings;
+	private final boolean addBeanTypes;
+	private final boolean addRootType;
+	private final boolean sortCollections;
+	private final boolean sortMaps;
+	private final boolean trimEmptyCollections;
+	private final boolean trimEmptyMaps;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected SerializerSession(Builder<?> builder) {
+		super(builder);
+		ctx = builder.ctx;
+		javaMethod = builder.javaMethod;
+		schema = builder.schema;
+		UriContext uriContext = builder.uriContext;
+		uriResolver = UriResolver.of(ctx.getUriResolution(), ctx.getUriRelativity(), uriContext);
+		vrs = builder.resolver;
+		listener = BeanInstantiator.createOrNull(ctx.getListener());
+		keepNullProperties = builder.keepNullProperties;
+		trimStrings = builder.trimStrings;
+		addBeanTypes = builder.addBeanTypes;
+		addRootType = builder.addRootType;
+		sortCollections = builder.sortCollections;
+		sortMaps = builder.sortMaps;
+		trimEmptyCollections = builder.trimEmptyCollections;
+		trimEmptyMaps = builder.trimEmptyMaps;
+	}
+
+	/**
+	 * Adds a session object to the {@link VarResolverSession} in this session.
+	 *
+	 * @param <T> The bean type.
+	 * @param c The bean type being added.
+	 * @param value The bean being added.
+	 * @return This object.
+	 */
+	public <T> SerializerSession addVarBean(Class<T> c, T value) {
+		getVarResolver().bean(c, value);
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified value should not be serialized.
+	 *
+	 * @param cm The class type of the object being serialized.
+	 * @param attrName The bean attribute name, or <jk>null</jk> if this isn't a bean attribute.
+	 * @param value The object being serialized.
+	 * @return <jk>true</jk> if the specified value should not be serialized.
+	 * @throws SerializeException If recursion occurred.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for value ignore logic with multiple conditions
+	})
+	public final boolean canIgnoreValue(ClassMeta<?> cm, String attrName, Object value) throws SerializeException {
+
+		if (value == null && ! isKeepNullProperties())
+			return true;
+
+		if (value == null)
+			return false;
+
+		if (cm == null)
+			cm = object();
+
+		if (isTrimEmptyCollections()) {
+			if ((cm.isArray() || (cm.isObject() && isArray(value))) && ((Object[])value).length == 0)
+				return true;
+			if ((cm.isCollection() || (cm.isObject() && info(value).isAssignableTo(Collection.class))) && ((Collection<?>)value).isEmpty())
+				return true;
+		}
+
+		if (isTrimEmptyMaps() && (cm.isMap() || (cm.isObject() && info(value).isAssignableTo(Map.class))) && ((Map<?,?>)value).isEmpty())
+			return true;
+
+		try {
+			if ((! isKeepNullProperties()) && (willRecurse(attrName, value, cm) || willExceedDepth()))
+				return true;
+		} catch (MarshallingRecursionException e) {
+			throw new SerializeException(e);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Consumes each entry in the list.
+	 *
+	 * @param <E> The element type.
+	 * @param c The collection being sorted.
+	 * @param consumer The entry consumer.
+	 */
+	public final <E> void forEachEntry(Collection<E> c, Consumer<E> consumer) {
+		if (isEmpty(c))
+			return;
+		if (isSortCollections() && !(c instanceof SortedSet) && isSortable(c))
+			c.stream().sorted().forEach(consumer);
+		else
+			c.forEach(consumer);
+	}
+
+	/**
+	 * Consumes each map entry in the map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param m The map being consumed.
+	 * @param consumer The map entry consumer.
+	 */
+	@SuppressWarnings({
+		"cast" // Cast required for generic type safety
+	})
+	public final <K,V> void forEachEntry(Map<K,V> m, Consumer<Map.Entry<K,V>> consumer) {
+		if (isEmpty(m))
+			return;
+		if (isSortMaps() && !(m instanceof SortedMap) && isSortable(m.keySet()))
+			((Map)m).entrySet().stream().sorted(Map.Entry.comparingByKey()).forEach(x -> consumer.accept((Map.Entry<K,V>)x));
+		else
+			m.entrySet().forEach(consumer);
+	}
+
+	/**
+	 * Iterates over a streamable object (Iterator, Iterable, or Stream), consuming each entry.
+	 *
+	 * <p>
+	 * For collections, delegates to {@link #forEachEntry(Collection, Consumer)} which supports sorting.
+	 * For other streamable types, iterates lazily without materializing into a List.
+	 *
+	 * @param o The streamable object.
+	 * @param type The class meta for the object.
+	 * @param consumer The entry consumer.
+	 * @since 9.2.1
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for streamable-entry dispatch logic
+	})
+	public final void forEachStreamableEntry(Object o, ClassMeta<?> type, Consumer consumer) {
+		if (o == null)
+			return;
+		if (type.isCollection()) {
+			forEachEntry((Collection)o, consumer);
+		} else if (type.isIterable()) {
+			if (o instanceof BeanSupplier bs) {
+				try {
+					drainBeanSupplier(bs, consumer);
+				} catch (RuntimeException e) {
+					throw e;
+				} catch (Exception e) {
+					throw new BasicRuntimeException(e);
+				}
+			} else {
+				((Iterable)o).forEach(consumer);
+			}
+		} else if (type.isIterator()) {
+			if (o instanceof Enumeration e)
+				e.asIterator().forEachRemaining(consumer);
+			else
+				((Iterator)o).forEachRemaining(consumer);
+		} else if (type.isStream()) {
+			try (var stream = (Stream)o) {
+				stream.forEach(consumer);
+			}
+		}
+	}
+
+	private static void drainBeanSupplier(BeanSupplier bs, Consumer consumer) throws Exception {
+		bs.begin();
+		try {
+			bs.iterator().forEachRemaining(consumer);
+		} catch (Exception e) {
+			bs.onError(e);
+		} finally {
+			bs.complete();
+		}
+	}
+
+	/**
+	 * Converts a streamable object (Iterator, Iterable, or Stream) to a List.
+	 *
+	 * <p>
+	 * Used by serializers that need to know the collection size or inspect elements before serializing
+	 * (e.g. MsgPack, HTML, CSV).
+	 *
+	 * @param o The streamable object.
+	 * @param type The class meta for the object.
+	 * @return A new list containing all elements.
+	 * @since 9.2.1
+	 */
+	public final List<Object> toListFromStreamable(Object o, ClassMeta<?> type) {
+		var list = new ArrayList<>();
+		forEachStreamableEntry(o, type, list::add);
+		return list;
+	}
+
+	/**
+	 * Returns the listener associated with this session.
+	 *
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	public SerializerListener getListener() { return listener; }
+
+	/**
+	 * Returns the listener associated with this session.
+	 *
+	 * @param <T> The listener type.
+	 * @param c The listener class to cast to.
+	 * @return The listener associated with this session, or <jk>null</jk> if there is no listener.
+	 */
+	public <T extends SerializerListener> T getListener(Class<T> c) {
+		return (T)listener;
+	}
+
+	/**
+	 * Optional method that specifies HTTP request headers for this serializer.
+	 *
+	 * <p>
+	 * For example, {@link SoapXmlSerializer} needs to set a <c>SOAPAction</c> header.
+	 *
+	 * <p>
+	 * This method is typically meaningless if the serializer is being used stand-alone (i.e. outside of a REST server
+	 * or client).
+	 *
+	 * <p>
+	 * The default implementation of this method simply calls {@link Serializer#getResponseHeaders(SerializerSession)}.
+	 *
+	 * @return
+	 * 	The HTTP headers to set on HTTP requests.
+	 * 	Never <jk>null</jk>.
+	 */
+	public Map<String,String> getResponseHeaders() { return ctx.getResponseHeaders(this); }
+
+	/**
+	 * HTTP part schema of object being serialized.
+	 *
+	 * @return HTTP part schema of object being serialized, or <jk>null</jk> if not specified.
+	 */
+	public final HttpPartSchema getSchema() { return schema; }
+
+	/**
+	 * Returns the variable resolver session.
+	 *
+	 * @return The variable resolver session.
+	 */
+	public VarResolverSession getVarResolver() {
+		if (vrs == null)
+			vrs = createDefaultVarResolverSession();
+		return vrs;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
+	 *
+	 * @return <jk>true</jk> if this serializer subclasses from {@link WriterSerializer}.
+	 */
+	public boolean isWriterSerializer() { return false; }
+
+	/**
+	 * Resolves any variables in the specified string.
+	 *
+	 * @param string The string to resolve values in.
+	 * @return The string with variables resolved.
+	 */
+	public String resolve(String string) {
+		return getVarResolver().resolve(string);
+	}
+
+	/**
+	 * Converts a String to an absolute URI based on the {@link UriContext} on this session.
+	 *
+	 * @param uri
+	 * 	The input URI.
+	 * 	Can be any of the following:
+	 * 	<ul>
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
+	 * 		<li>{@link CharSequence}
+	 * 	</ul>
+	 * 	URI can be any of the following forms:
+	 * 	<ul>
+	 * 		<li><js>"foo://foo"</js> - Absolute URI.
+	 * 		<li><js>"/foo"</js> - Root-relative URI.
+	 * 		<li><js>"/"</js> - Root URI.
+	 * 		<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 		<li><js>"context:/"</js> - Context-root URI.
+	 * 		<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 * 		<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 		<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 		<li><js>"request:/"</js> - Request-path URI.
+	 * 		<li><js>"foo"</js> - Path-info-relative URI.
+	 * 		<li><js>""</js> - Path-info URI.
+	 * 	</ul>
+	 * @return The resolved URI.
+	 */
+	public final String resolveUri(Object uri) {
+		return uriResolver.resolve(uri);
+	}
+
+	/**
+	 * Shortcut method for serializing objects directly to either a <c>String</c> or <code><jk>byte</jk>[]</code>
+	 * depending on the serializer type.
+	 *
+	 * @param o The object to serialize.
+	 * @return
+	 * 	The serialized object.
+	 * 	<br>Character-based serializers will return a <c>String</c>.
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code>.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public Object serialize(Object o) throws SerializeException {
+		throw unsupportedOp();
+	}
+
+	/**
+	 * Serialize the specified object using the specified session.
+	 *
+	 * @param out Where to send the output from the serializer.
+	 * @param o The object to serialize.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 * @throws IOException Thrown by the underlying stream.
+	 */
+	public final void serialize(Object o, Object out) throws SerializeException, IOException {
+		try (SerializerPipe pipe = createPipe(out)) {
+			var unwrapped = unwrapSupplier(o, 0);
+			if (unwrapped instanceof BeanConsumer && !(unwrapped instanceof BeanChannel))
+				throw new SerializeException(this,
+					"BeanConsumer cannot be used as a serializer source. Use BeanSupplier or BeanChannel for round-trip support.");
+			doSerialize(pipe, unwrapped);
+		} catch (SerializeException | IOException e) {
+			throw e;
+		} catch (@SuppressWarnings("unused") StackOverflowError e) {
+			throw new SerializeException(this,
+				"Stack overflow occurred.  This can occur when trying to serialize models containing loops.  It's recommended you use the MarshallingTraverseContext.BEANTRAVERSE_detectRecursions setting to help locate the loop.");
+		} catch (Exception e) {
+			throw new SerializeException(this, e);
+		} finally {
+			checkForWarnings();
+		}
+	}
+
+	/**
+	 * Recursively unwraps nested {@link Supplier} chains to their underlying value.
+	 *
+	 * <p>
+	 * Supports chains of the form {@code Supplier<Supplier<T>>} → {@code T} with a maximum depth of 10
+	 * to prevent infinite loops. Note that {@link BeanSupplier} instances are NOT unwrapped here —
+	 * they are treated as {@link Iterable} sequences by the serializer.
+	 *
+	 * @param o The object to unwrap.
+	 * @param depth The current recursion depth (must be 0 on initial call).
+	 * @return The unwrapped value, or the original object if it is not a {@code Supplier}.
+	 * @throws SerializeException If the {@link Supplier} chain exceeds 10 levels.
+	 */
+	protected final Object unwrapSupplier(Object o, int depth) throws SerializeException {
+		if (! (o instanceof Supplier<?>) || o instanceof BeanSupplier)
+			return o;
+		if (depth > 10)
+			throw new SerializeException(this, "Supplier chain exceeds maximum unwrap depth of 10.");
+		return unwrapSupplier(((Supplier<?>)o).get(), depth + 1);
+	}
+
+	/**
+	 * Shortcut method for serializing an object to a String.
+	 *
+	 * @param o The object to serialize.
+	 * @return
+	 * 	The serialized object.
+	 * 	<br>Character-based serializers will return a <c>String</c>
+	 * 	<br>Stream-based serializers will return a <code><jk>byte</jk>[]</code> converted to a string based on the {@link OutputStreamSerializer.Builder#binaryFormat(BinaryFormat)} setting.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public String serializeToString(Object o) throws SerializeException {
+		throw unsupportedOp();
+	}
+
+	/**
+	 * Sorts the specified collection if {@link SerializerSession#isSortCollections()} returns <jk>true</jk>.
+	 *
+	 * @param <E> The element type.
+	 * @param c The collection being sorted.
+	 * @return A new sorted {@link TreeSet}.
+	 */
+	public final <E> Collection<E> sort(Collection<E> c) {
+		if (isEmpty(c) || c instanceof SortedSet)
+			return c;
+		if (isSortCollections() && isSortable(c))
+			return c.stream().sorted().toList();
+		return c;
+	}
+
+	/**
+	 * Sorts the specified collection if {@link SerializerSession#isSortCollections()} returns <jk>true</jk>.
+	 *
+	 * @param <E> The element type.
+	 * @param c The collection being sorted.
+	 * @return A new sorted {@link TreeSet}.
+	 */
+	public final <E> List<E> sort(List<E> c) {
+		if (isEmpty(c))
+			return c;
+		if (isSortCollections() && isSortable(c))
+			return c.stream().sorted().toList();
+		return c;
+	}
+
+	/**
+	 * Sorts the specified map if {@link SerializerSession#isSortMaps()} returns <jk>true</jk>.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param m The map being sorted.
+	 * @return A new sorted {@link TreeMap}.
+	 */
+	public final <K,V> Map<K,V> sort(Map<K,V> m) {
+		if (isEmpty(m) || m instanceof SortedMap)
+			return m;
+		if (isSortMaps() && isSortable(m.keySet()))
+			return new TreeMap<>(m);
+		return m;
+	}
+
+	/**
+	 * Converts the specified object to a <c>String</c>.
+	 *
+	 * <p>
+	 * Also has the following effects:
+	 * <ul>
+	 * 	<li><c>Class</c> object is converted to a readable name.  See {@link ClassInfo#getNameFull()}.
+	 * 	<li>Whitespace is trimmed if the trim-strings setting is enabled.
+	 * </ul>
+	 *
+	 * @param o The object to convert to a <c>String</c>.
+	 * @return The object converted to a String, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public final String toString(Object o) {
+		if (o == null)
+			return null;
+		if (o.getClass() == Class.class)
+			return info((Class<?>)o).getNameFull();
+		if (o.getClass() == ClassInfo.class)
+			return ((ClassInfo)o).getNameFull();
+		if (o.getClass().isEnum())
+			return getClassMetaForObject(o).toString(o);
+		var cm = getClassMetaForObject(o);
+		if (cm.isDate())
+			return serializeDate((Date)o, cm);
+		if (cm.isCalendar())
+			return serializeCalendar(o, cm);
+		if (cm.isTemporal())
+			return serializeTemporal((TemporalAccessor)o, cm);
+		if (cm.isDuration())
+			return serializeDuration((Duration)o);
+		if (cm.isPeriod())
+			return serializePeriod((Period)o);
+		var s = o.toString();
+		if (isTrimStrings())
+			s = s.trim();
+		return s;
+	}
+
+	/**
+	 * Formats a {@link Duration} value using this session's configured
+	 * {@linkplain #getDurationFormat() duration format}.
+	 *
+	 * @param d The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @return The formatted value, or <jk>null</jk> if {@code d} is <jk>null</jk>.
+	 */
+	protected final String serializeDuration(Duration d) {
+		return Iso8601Utils.formatDuration(d, getDurationFormat());
+	}
+
+	/**
+	 * Formats a {@link Period} value using this session's configured
+	 * {@linkplain #getPeriodFormat() period format}.
+	 *
+	 * @param p The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @return The formatted value, or <jk>null</jk> if {@code p} is <jk>null</jk>.
+	 */
+	protected final String serializePeriod(Period p) {
+		return Iso8601Utils.formatPeriod(p, getPeriodFormat());
+	}
+
+	/**
+	 * Formats a {@link Date} value using this session's configured
+	 * {@linkplain #getDateFormat() date format} and {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param d The value to format. <jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatDate}).
+	 * @return The formatted value, or <jk>null</jk> if {@code d} is <jk>null</jk>.
+	 */
+	protected final String serializeDate(Date d, ClassMeta<?> cm) {
+		return Iso8601Utils.formatDate(d, cm, getDateFormat(), getTimeZone());
+	}
+
+	/**
+	 * Formats a {@link Calendar} or {@link XMLGregorianCalendar} value using this
+	 * session's configured {@linkplain #getCalendarFormat() calendar format} and
+	 * {@linkplain #getTimeZone() time zone}.
+	 *
+	 * <p>
+	 * {@link XMLGregorianCalendar} values always emit their
+	 * {@link XMLGregorianCalendar#toXMLFormat()} form regardless of the configured
+	 * format, mirroring the parse-side rule.
+	 *
+	 * @param c The value to format. Must be a {@link Calendar} or {@link XMLGregorianCalendar}.
+	 * 	<jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatCalendar}).
+	 * @return The formatted value, or <jk>null</jk> if {@code c} is <jk>null</jk>.
+	 */
+	protected final String serializeCalendar(Object c, ClassMeta<?> cm) {
+		return Iso8601Utils.formatCalendar(c, cm, getCalendarFormat(), getTimeZone());
+	}
+
+	/**
+	 * Formats a {@link TemporalAccessor} value using this session's configured
+	 * {@linkplain #getTemporalFormat() temporal format} and {@linkplain #getTimeZone() time zone}.
+	 *
+	 * @param t The value to format. Must be a {@link Temporal} subtype.
+	 * 	<jk>null</jk> returns <jk>null</jk>.
+	 * @param cm The class metadata for the value (kept for symmetry with {@link Iso8601Utils#formatTemporal}).
+	 * @return The formatted value, or <jk>null</jk> if {@code t} is <jk>null</jk>.
+	 */
+	protected final String serializeTemporal(TemporalAccessor t, ClassMeta<?> cm) {
+		return Iso8601Utils.formatTemporal(t, cm, getTemporalFormat(), getTimeZone());
+	}
+
+	/**
+	 * Trims the specified string if {@link SerializerSession#isTrimStrings()} returns <jk>true</jk>.
+	 *
+	 * @param o The input string to trim.
+	 * @return The trimmed string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 */
+	public final String trim(Object o) {
+		if (o == null)
+			return null;
+		var s = o.toString();
+		if (isTrimStrings())
+			s = s.trim();
+		return s;
+	}
+
+	private static boolean isSortable(Collection<?> c) {
+		if (c == null)
+			return false;
+		for (var o : c)
+			if (! (o instanceof Comparable))
+				return false;
+		return true;
+	}
+
+	/**
+	 * Adds a session object to the {@link VarResolverSession} in this session.
+	 *
+	 * @return This object.
+	 */
+	protected VarResolverSession createDefaultVarResolverSession() {
+		return VarResolver.DEFAULT.createSession();
+	}
+
+	/**
+	 * Wraps the specified input object into a {@link ParserPipe} object so that it can be easily converted into
+	 * a stream or reader.
+	 *
+	 * @param output
+	 * 	The output location.
+	 * 	<br>For character-based serializers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link Writer}
+	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
+	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
+	 * 		<li>{@link StringBuilder}
+	 * 	</ul>
+	 * 	<br>For byte-based serializers, this can be any of the following types:
+	 * 	<ul>
+	 * 		<li>{@link OutputStream}
+	 * 		<li>{@link File}
+	 * 	</ul>
+	 * @return
+	 * 	A new {@link ParserPipe} wrapper around the specified input object.
+	 */
+	protected SerializerPipe createPipe(Object output) {
+		return new SerializerPipe(output);
+	}
+
+	/**
+	 * Serializes a POJO to the specified pipe.
+	 *
+	 * <p>
+	 * This method should NOT close the context object.
+	 *
+	 * <p>
+	 * The default implementation of this method simply calls {@link Serializer#doSerialize(SerializerSession,SerializerPipe,Object)}.
+	 *
+	 * @param pipe Where to send the output from the serializer.
+	 * @param o The object to serialize.
+	 * @throws IOException Thrown by underlying stream.
+	 * @throws SerializeException Problem occurred trying to serialize object.
+	 */
+	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
+		ctx.doSerialize(this, pipe, o);
+	}
+
+	/**
+	 * Generalize the specified object if a POJO swap is associated with it.
+	 *
+	 * @param o The object to generalize.
+	 * @param type The type of object.
+	 * @return The generalized object, or <jk>null</jk> if the object is <jk>null</jk>.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	protected final Object generalize(Object o, ClassMeta<?> type) throws SerializeException {
+		try {
+			if (o == null)
+				return null;
+			ObjectSwap f = (type == null || type.isObject() || type.isString() ? getClassMeta(o.getClass()).getSwap(this) : type.getSwap(this));
+			if (f == null)
+				return o;
+			return f.swap(this, o);
+		} catch (SerializeException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new SerializeException(e);
+		}
+	}
+
+	/**
+	 * Resolves the dictionary name for the actual type.
+	 *
+	 * @param session The current serializer session.
+	 * @param eType The expected type of the bean property.
+	 * @param aType The actual type of the bean property.
+	 * @param pMeta The current bean property being serialized.
+	 * @return The bean dictionary name, or <jk>null</jk> if a name could not be found.
+	 */
+	@SuppressWarnings({
+		"null",       // Null analysis handled by runtime checks
+		"java:S3776"  // Cognitive complexity acceptable for type name resolution logic
+	})
+	protected final String getBeanTypeName(SerializerSession session, ClassMeta<?> eType, ClassMeta<?> aType, BeanPropertyMeta pMeta) {
+		if (eType == aType || ! (isAddBeanTypes() || (session.isRoot() && isAddRootType())))
+			return null;
+
+		String eTypeTn = eType.getBeanDictionaryName();
+
+		// First see if it's defined on the actual type.
+		String tn = aType.getBeanDictionaryName();
+		if (nn(tn) && ! tn.equals(eTypeTn)) {
+			return tn;
+		}
+
+		// Then see if it's defined on the expected type.
+		// The expected type might be an interface with mappings for implementation classes.
+		BeanRegistry br = eType.getBeanRegistry();
+		if (nn(br)) {
+			tn = br.getTypeName(aType);
+			if (nn(tn) && ! tn.equals(eTypeTn))
+				return tn;
+		}
+
+		// Then look on the bean property.
+		br = pMeta == null ? null : (BeanRegistry) pMeta.getBeanRegistry();
+		if (nn(br)) {
+			tn = br.getTypeName(aType);
+			if (nn(tn) && ! tn.equals(eTypeTn))
+				return tn;
+		}
+
+		// Finally look in the session.
+		br = getBeanRegistry();
+		if (nn(br)) {
+			tn = br.getTypeName(aType);
+			if (nn(tn) && ! tn.equals(eTypeTn))
+				return tn;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns the parser-side expected type for the object.
+	 *
+	 * <p>
+	 * The return value depends on the {@link Serializer.Builder#addRootType()} setting.
+	 * When disabled, the parser already knows the Java POJO type being parsed, so there is
+	 * no reason to add <js>"_type"</js> attributes to the root-level object.
+	 *
+	 * @param o The object to get the expected type on.
+	 * @return The expected type.
+	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for root type metadata
+	})
+	protected final ClassMeta<?> getExpectedRootType(Object o) {
+		if (isAddRootType())
+			return object();
+		var cm = getClassMetaForObject(o);
+		if (nn(cm) && cm.isOptional())
+			return cm.getElementType();
+		return cm;
+	}
+
+	/**
+	 * Returns the Java method that invoked this serializer.
+	 *
+	 * <p>
+	 * When using the REST API, this is the Java method invoked by the REST call.
+	 * Can be used to access annotations defined on the method or class.
+	 *
+	 * @return The Java method that invoked this serializer.
+	*/
+	protected final Method getJavaMethod() { return javaMethod; }
+
+	/**
+	 * URI context bean.
+	 *
+	 * @see Serializer.Builder#uriContext(UriContext)
+	 * @return
+	 * 	Bean used for resolution of URIs to absolute or root-relative form.
+	 */
+	protected final UriContext getUriContext() { return ctx.getUriContext(); }
+
+	/**
+	 * URI relativity.
+	 *
+	 * @see Serializer.Builder#uriRelativity(UriRelativity)
+	 * @return
+	 * 	Defines what relative URIs are relative to when serializing any of the following:
+	 */
+	protected final UriRelativity getUriRelativity() { return ctx.getUriRelativity(); }
+
+	/**
+	 * URI resolution.
+	 *
+	 * @see Serializer.Builder#uriResolution(UriResolution)
+	 * @return
+	 * 	Defines the resolution level for URIs when serializing URIs.
+	 */
+	protected final UriResolution getUriResolution() { return ctx.getUriResolution(); }
+
+	/**
+	 * Returns the configured default duration wire format.
+	 *
+	 * @return The configured default duration wire format.
+	 */
+	protected final DurationFormat getDurationFormat() { return ctx.getMarshallingContext().getDurationFormat(); }
+
+	/**
+	 * Returns the configured default period wire format.
+	 *
+	 * @return The configured default period wire format.
+	 */
+	protected final PeriodFormat getPeriodFormat() { return ctx.getMarshallingContext().getPeriodFormat(); }
+
+	/**
+	 * Returns the configured default calendar wire format.
+	 *
+	 * @return The configured default calendar wire format.
+	 */
+	protected final CalendarFormat getCalendarFormat() { return ctx.getMarshallingContext().getCalendarFormat(); }
+
+	/**
+	 * Returns the configured default date wire format.
+	 *
+	 * @return The configured default date wire format.
+	 */
+	protected final DateFormat getDateFormat() { return ctx.getMarshallingContext().getDateFormat(); }
+
+	/**
+	 * Returns the configured default temporal wire format.
+	 *
+	 * @return The configured default temporal wire format.
+	 */
+	protected final TemporalFormat getTemporalFormat() { return ctx.getMarshallingContext().getTemporalFormat(); }
+
+	/**
+	 * Returns the configured default time-zone wire format.
+	 *
+	 * @return The configured default time-zone wire format.
+	 */
+	protected final TimeZoneFormat getTimeZoneFormat() { return ctx.getMarshallingContext().getTimeZoneFormat(); }
+
+	/**
+	 * Returns the configured default locale wire format.
+	 *
+	 * @return The configured default locale wire format.
+	 */
+	protected final LocaleFormat getLocaleFormat() { return ctx.getMarshallingContext().getLocaleFormat(); }
+
+	/**
+	 * Returns the URI resolver.
+	 *
+	 * @return The URI resolver.
+	 */
+	protected final UriResolver getUriResolver() { return uriResolver; }
+
+	/**
+	 * Add <js>"_type"</js> properties when needed.
+	 *
+	 * @see Serializer.Builder#addBeanTypes()
+	 * @return
+	 * 	<jk>true</jk> if <js>"_type"</js> properties added to beans if their type cannot be inferred
+	 * 	through reflection.
+	 */
+	protected boolean isAddBeanTypes() { return addBeanTypes; }
+
+	/**
+	 * Add type attribute to root nodes.
+	 *
+	 * @see Serializer.Builder#addRootType()
+	 * @return
+	 * 	<jk>true</jk> if type property should be added to root node.
+	 */
+	protected final boolean isAddRootType() { return addRootType; }
+
+	/**
+	 * Don't trim null bean property values.
+	 *
+	 * @see Serializer.Builder#keepNullProperties()
+	 * @return
+	 * 	<jk>true</jk> if null bean values are serialized to the output.
+	 */
+	protected final boolean isKeepNullProperties() { return keepNullProperties; }
+
+	/**
+	 * Sort arrays and collections alphabetically.
+	 *
+	 * @see Serializer.Builder#sortCollections()
+	 * @return
+	 * 	<jk>true</jk> if arrays and collections are copied and sorted before serialization.
+	 */
+	protected final boolean isSortCollections() { return sortCollections; }
+
+	/**
+	 * Sort maps alphabetically.
+	 *
+	 * @see Serializer.Builder#sortMaps()
+	 * @return
+	 * 	<jk>true</jk> if maps are copied and sorted before serialization.
+	 */
+	protected final boolean isSortMaps() { return sortMaps; }
+
+	/**
+	 * Trim empty lists and arrays.
+	 *
+	 * @see Serializer.Builder#trimEmptyCollections()
+	 * @return
+	 * 	<jk>true</jk> if empty lists and arrays are not serialized to the output.
+	 */
+	protected final boolean isTrimEmptyCollections() { return trimEmptyCollections; }
+
+	/**
+	 * Trim empty maps.
+	 *
+	 * @see Serializer.Builder#trimEmptyMaps()
+	 * @return
+	 * 	<jk>true</jk> if empty map values are not serialized to the output.
+	 */
+	protected final boolean isTrimEmptyMaps() { return trimEmptyMaps; }
+
+	/**
+	 * Trim strings.
+	 *
+	 * @see Serializer.Builder#trimStrings()
+	 * @return
+	 * 	<jk>true</jk> if string values will be trimmed of whitespace using {@link String#trim()} before being serialized.
+	 */
+	protected boolean isTrimStrings() { return trimStrings; }
+
+	/**
+	 * Specialized warning when an exception is thrown while executing a bean getter.
+	 *
+	 * @param p The bean map entry representing the bean property.
+	 * @param t The throwable that the bean getter threw.
+	 * @throws SerializeException Thrown if ignoreInvocationExceptionOnGetters is false.
+	 */
+	protected final void onBeanGetterException(BeanPropertyMeta p, Throwable t) throws SerializeException {
+		// If it's a StackOverflowError, let it propagate so it can be caught by serialize() method
+		// and converted to a proper SerializeException with recursion detection message
+		if (t instanceof StackOverflowError t2)
+			throw t2;
+
+		if (nn(listener))
+			listener.onBeanGetterException(this, t, p);
+		String prefix = (isDebug() ? getStack(false) + ": " : "");
+		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t));
+		if (! isIgnoreInvocationExceptionsOnGetters())
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t))
+				.initCause(t);
+	}
+
+	/**
+	 * Logs a warning message.
+	 *
+	 * @param t The throwable that was thrown (if there was one).
+	 * @param msg The warning message.
+	 * @param args Optional {@link MessageFormat}-style arguments.
+	 */
+	@Override
+	protected void onError(Throwable t, String msg, Object...args) {
+		if (nn(listener))
+			listener.onError(this, t, f(msg, args));
+		super.onError(t, msg, args);
+	}
+
+	@Override /* Overridden from MarshallingTraverseSession */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a(PROP_uriResolver, uriResolver);
+	}
+
+	/**
+	 * Same as {@link #push(String, Object, ClassMeta)} but wraps {@link MarshallingRecursionException} inside {@link SerializeException}.
+	 *
+	 * @param attrName The attribute name.
+	 * @param o The current object being traversed.
+	 * @param eType The expected class type.
+	 * @return
+	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
+	 * 	once (since they can be expensive).
+	 * @throws SerializeException If recursion occurred.
+	 */
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard required - ClassMeta<?> for push stack metadata
+	})
+	protected final ClassMeta<?> push2(String attrName, Object o, ClassMeta<?> eType) throws SerializeException {
+		try {
+			return super.push(attrName, o, eType);
+		} catch (MarshallingRecursionException e) {
+			throw new SerializeException(e);
+		}
+	}
+
+	/**
+	 * Opposite of {@link #resolveUri(Object)}.
+	 *
+	 * <p>
+	 * Converts the URI to a value relative to the specified <c>relativeTo</c> parameter.
+	 *
+	 * <p>
+	 * Both parameters can be any of the following:
+	 * <ul>
+	 * 	<li>{@link URI}
+	 * 	<li>{@link URL}
+	 * 	<li>{@link CharSequence}
+	 * </ul>
+	 *
+	 * <p>
+	 * Both URIs can be any of the following forms:
+	 * <ul>
+	 * 	<li><js>"foo://foo"</js> - Absolute URI.
+	 * 	<li><js>"/foo"</js> - Root-relative URI.
+	 * 	<li><js>"/"</js> - Root URI.
+	 * 	<li><js>"context:/foo"</js> - Context-root-relative URI.
+	 * 	<li><js>"context:/"</js> - Context-root URI.
+	 * 	<li><js>"servlet:/foo"</js> - Servlet-path-relative URI.
+	 * 	<li><js>"servlet:/"</js> - Servlet-path URI.
+	 * 	<li><js>"request:/foo"</js> - Request-path-relative URI.
+	 * 	<li><js>"request:/"</js> - Request-path URI.
+	 * 	<li><js>"foo"</js> - Path-info-relative URI.
+	 * 	<li><js>""</js> - Path-info URI.
+	 * </ul>
+	 *
+	 * @param relativeTo The URI to relativize against.
+	 * @param uri The URI to relativize.
+	 * @return The relativized URI.
+	 */
+	protected final String relativizeUri(Object relativeTo, Object uri) {
+		return uriResolver.relativize(relativeTo, uri);
+	}
+
+	/**
+	 * Invokes the specified swap on the specified object if the swap is not null.
+	 *
+	 * @param swap The swap to invoke.  Can be <jk>null</jk>.
+	 * @param o The input object.
+	 * @return The swapped object.
+	 * @throws SerializeException If swap method threw an exception.
+	 */
+	protected Object swap(ObjectSwap swap, Object o) throws SerializeException {
+		try {
+			if (swap == null)
+				return o;
+			return swap.swap(this, o);
+		} catch (Exception e) {
+			throw new SerializeException(e);
+		}
+	}
+}

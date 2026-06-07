@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.debug;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * A reflection map for the {@link Enablement} setting.

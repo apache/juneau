@@ -19,8 +19,8 @@ package org.apache.juneau.rest.server.vars;
 import java.util.*;
 
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.rest.server.*;
 
 /**

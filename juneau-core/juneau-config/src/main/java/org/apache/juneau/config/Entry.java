@@ -16,21 +16,21 @@
  */
 package org.apache.juneau.config;
 
-import static org.apache.juneau.BinaryFormat.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.marshall.BinaryFormat.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.internal.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.parser.*;
 
 /**
  * A single entry in a {@link Config} file.

@@ -24,9 +24,9 @@ import java.util.function.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.jsonschema.*;
 import org.apache.juneau.rest.server.*;
 
 /**

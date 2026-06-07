@@ -23,8 +23,8 @@ import java.util.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
-import org.apache.juneau.cp.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.cp.*;
 
 /**
  * API for retrieving localized static files from either the classpath or file system.

@@ -18,15 +18,15 @@ package org.apache.juneau.rest.server.docs;
 
 import java.io.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.bean.openapi3.ui.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.jsonschema.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.jsonschema.*;
+import org.apache.juneau.marshall.yaml.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.yaml.*;
 
 /**
  * Mixin that publishes the OpenAPI 3.1 spec endpoints for a resource.

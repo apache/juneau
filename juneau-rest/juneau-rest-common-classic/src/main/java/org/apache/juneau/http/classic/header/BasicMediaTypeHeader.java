@@ -22,8 +22,8 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
 
 /**
  * Category of headers that consist of a single parameterized string value.

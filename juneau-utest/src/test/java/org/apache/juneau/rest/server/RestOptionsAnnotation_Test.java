@@ -21,11 +21,12 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.encoders.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.matcher.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

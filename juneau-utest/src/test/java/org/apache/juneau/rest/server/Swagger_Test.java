@@ -29,13 +29,14 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Tag;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.swagger.*;
-import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

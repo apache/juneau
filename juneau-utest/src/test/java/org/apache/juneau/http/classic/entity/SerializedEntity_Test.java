@@ -24,7 +24,7 @@ import java.nio.charset.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 class SerializedEntity_Test extends TestBase {

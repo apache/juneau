@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.ops.*;
  * {@link Rest#mixins() @Rest(mixins=...)} on top of the residual op-mixins inherited from
  * {@link BasicSpringRestServlet}. The navigation op lives on the {@code NavigationMixin} sub-context (backed
  * by {@link org.apache.juneau.rest.server.servlet.RestMixin#getHostContext()}) but renders with the host's
- * {@link org.apache.juneau.html.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
+ * {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig} page decoration &mdash; mixin
  * sub-contexts inherit the host's class-level {@code @HtmlDocConfig} (and other class-level config), so the
  * navigation page matches the host's other endpoints.
  *

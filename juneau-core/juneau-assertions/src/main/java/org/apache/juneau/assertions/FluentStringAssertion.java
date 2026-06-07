@@ -28,8 +28,8 @@ import java.util.function.*;
 import java.util.regex.*;
 
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against strings.

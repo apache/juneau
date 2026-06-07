@@ -46,7 +46,7 @@ class RequestFormParamList_Test extends TestBase {
 
 	public static class UnnamedFormBean {
 		public String value;
-		public UnnamedFormBean() {}
+		public UnnamedFormBean() { /* no-op */ }
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -151,6 +151,9 @@ class RequestFormParamList_Test extends TestBase {
 		}
 
 		// Exercises set(HttpPart...) and equals/hashCode and toString.
+		@SuppressWarnings({
+			"unlikely-arg-type" // Intentionally tests equals() returns false for a non-compatible argument type.
+		})
 		@RestPost(path="/equality")
 		public String equality(RequestFormParamList f) {
 			var c1 = f.copy();

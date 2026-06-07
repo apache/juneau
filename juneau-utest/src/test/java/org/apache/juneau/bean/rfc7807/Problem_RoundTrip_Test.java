@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 
 import org.apache.juneau.http.header.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -27,6 +27,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.store.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

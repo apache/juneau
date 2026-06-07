@@ -18,10 +18,9 @@ package org.apache.juneau.rest.validation;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.validation.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.validation.*;

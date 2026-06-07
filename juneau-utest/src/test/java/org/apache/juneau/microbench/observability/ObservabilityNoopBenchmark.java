@@ -61,7 +61,7 @@ import org.openjdk.jmh.runner.options.*;
  *
  * 	<jc># Or directly:</jc>
  * 	$ mvn -pl juneau-utest -Pmicrobench test-compile exec:java \
- * 	      -Dexec.mainClass=org.apache.juneau.microbench.observability.ObservabilityNoopBenchmark
+ * 	      -Dexec.mainClass=org.apache.juneau.marshall.microbench.observability.ObservabilityNoopBenchmark
  * </pre>
  *
  * @since 10.0.0

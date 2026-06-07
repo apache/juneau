@@ -18,7 +18,8 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
-import org.apache.juneau.MarshallingTraverseContext.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.MarshallingTraverseContext.*;
 
 /**
  * Exhaustive serialization tests for MarshallingTraverseContext properties.

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Parameters for {@value org.apache.juneau.bean.mcp.McpMethods#RESOURCES_READ}.

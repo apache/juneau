@@ -61,8 +61,8 @@ class LogConfig_Test extends TestBase {
 	}
 
 	@Test void a07_level() {
-		var x = LogConfig.create().level("org.apache.juneau", Level.FINE);
-		assertEquals(Level.FINE, x.levels.get("org.apache.juneau"));
+		var x = LogConfig.create().level("org.apache.juneau.marshall", Level.FINE);
+		assertEquals(Level.FINE, x.levels.get("org.apache.juneau.marshall"));
 	}
 
 	@Test void a08_levels_map() {

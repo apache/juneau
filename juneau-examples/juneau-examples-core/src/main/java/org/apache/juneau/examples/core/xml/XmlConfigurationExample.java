@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * Xml configuration example.

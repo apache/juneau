@@ -26,14 +26,14 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.rest.client.classic.assertion.*;
 
 /**

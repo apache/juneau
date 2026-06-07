@@ -28,8 +28,8 @@ import java.util.function.*;
 import org.apache.http.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * HttpEntity for serializing POJOs as the body of HTTP requests.

@@ -23,10 +23,10 @@ import java.text.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.objecttools.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.objecttools.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Simple bean that implements a hyperlink for the HTML serializer.

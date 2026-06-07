@@ -25,9 +25,9 @@ import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Rest info variable resolver.

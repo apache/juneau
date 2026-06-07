@@ -20,10 +20,10 @@ import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.parquet.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.parquet.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

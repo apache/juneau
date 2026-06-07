@@ -17,7 +17,7 @@
 package org.apache.juneau.server.config.rest;
 
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.server.config.repository.*;

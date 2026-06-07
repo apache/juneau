@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.config;
 
+import org.apache.juneau.marshall.yaml.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.yaml.*;
 
 /**
  * Basic configuration for a REST resource that supports YAML transport.

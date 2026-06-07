@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.jsonapi;
 
-import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Represents the {@code source} sub-object of a JSON:API Error Object.

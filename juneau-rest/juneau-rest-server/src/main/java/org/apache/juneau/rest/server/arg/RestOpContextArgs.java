@@ -18,10 +18,10 @@ package org.apache.juneau.rest.server.arg;
 
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.jsonschema.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Resolves method parameters on {@link RestOp}-annotated Java methods of types found on the {@link RestOpContext} object.

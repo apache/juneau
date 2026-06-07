@@ -21,8 +21,8 @@ import java.util.function.*;
 
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Standard predefined HTTP entities.

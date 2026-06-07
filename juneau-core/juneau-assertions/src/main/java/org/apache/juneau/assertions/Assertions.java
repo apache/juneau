@@ -34,7 +34,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
  *
  *	<jc>// Assert string is greater than 100 characters and contains "foo".</jc>
  * 	<jsm>assertString</jsm>(<jv>myString</jv>)
@@ -47,7 +47,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
  *
  *	<jc>// Assert that calling doBadCall() causes a RuntimeException.</jc>
  * 	<jsm>assertThrown</jsm>(() -&gt; <jv>myPojo</jv>.doBadCall())
@@ -60,7 +60,7 @@ import org.apache.juneau.commons.lang.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+ * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
  *
  *	<jk>public</jk> String getFoo(String <jv>bar</jv>) {
  *		<jsm>assertArgNotNull</jsm>(<js>"bar"</js>, <jv>bar</jv>);
@@ -88,7 +88,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that the property 'foo' of a bean is 'bar'.</jc>
 	 * 	<jsm>assertAny</jsm>(<jv>myPojo</jv>)  <jc>// Start with AnyAssertion.</jc>
@@ -116,7 +116,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts that an Integer array contains [1,2,3].</jc>
 	 * 	Integer[] <jv>array</jv> = {...};
@@ -144,7 +144,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts that the 'foo' and 'bar' properties of a bean are 1 and 2 respectively.</jc>
 	 * 	<jsm>assertBean</jsm>(<jv>myBean</jv>)
@@ -173,7 +173,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts that a bean list has 3 entries with 'foo' property values of 'bar','baz','qux'.</jc>
 	 * 	<jsm>assertBeanList</jsm>(<jv>myListOfBeans</jv>)
@@ -202,7 +202,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts that a Boolean is not null and TRUE.</jc>
 	 * 	<jsm>assertBoolean</jsm>(<jv>myBoolean</jv>)
@@ -228,7 +228,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts that a Boolean array has size of 3 and all entries are TRUE.</jc>
 	 * 	<jsm>assertBooleanArray</jsm>(<jv>myBooleanArray</jv>)
@@ -260,7 +260,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts that a byte array has size of 3 and all bytes are larger than 10.</jc>
 	 * 	<jsm>assertByteArray</jsm>(<jv>myByteArray</jv>)
@@ -292,7 +292,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that the byte array contains the string "foo".</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myBytes</jv>)
@@ -318,7 +318,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that the stream contains the string "foo".</jc>
 	 * 	<jsm>assertBytes</jsm>(<jv>myStream</jv>)
@@ -346,7 +346,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that the char array contains the string "foo".</jc>
 	 * 	<jsm>assertCharArray</jsm>(<jv>myCharArray</jv>)
@@ -372,7 +372,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that a collection of strings has only one entry of 'foo'.</jc>
 	 * 	<jsm>assertCollection</jsm>(<jv>myCollectionOfStrings</jv>)
@@ -404,7 +404,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts a comparable is less than another comparable.</jc>
 	 * 	<jsm>assertComparable</jsm>(<jv>myComparable</jv>)
@@ -431,7 +431,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts the specified date is after the current date.</jc>
 	 * 	<jsm>assertDate</jsm>(<jv>myDate</jv>)
@@ -457,7 +457,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that a double array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertDoubleArray</jsm>(<jv>myDoubleArray</jv>)
@@ -484,7 +484,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that a float array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertFloatArray</jsm>(<jv>myFloatArray</jv>)
@@ -511,7 +511,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that a double array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertIntArray</jsm>(<jv>myIntArray</jv>)
@@ -538,7 +538,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Assert that an HTTP response status code is 200 or 404.</jc>
 	 * 	<jsm>assertInteger</jsm>(<jv>httpReponse</jv>)
@@ -564,7 +564,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Assert that the first entry in a list is "{foo:'bar'}" when serialized to simplified JSON.</jc>
 	 * 	<jsm>assertList</jsm>(<jv>myList</jv>)
@@ -592,7 +592,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Assert that the first entry in a list is "{foo:'bar'}" when serialized to simplified JSON.</jc>
 	 * 	<jsm>assertList</jsm>(<jv>myStream</jv>)
@@ -620,7 +620,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Throw a BadReqest if an HTTP response length is greater than 100k.</jc>
 	 * 	<jsm>assertLong</jsm>(<jv>responseLength</jv>)
@@ -648,7 +648,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that a long array is at least size 100 and all values are greater than 1000.</jc>
 	 * 	<jsm>assertLongArray</jsm>(<jv>myLongArray</jv>)
@@ -675,7 +675,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Assert the specified map is a HashMap and contains the key "foo".</jc>
 	 * 	<jsm>assertMap</jsm>(<jv>myMap</jv>)
@@ -704,7 +704,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts the specified POJO is of type MyBean and is "{foo:'bar'}" </jc>
 	 * 	<jc>// when serialized to Simplified JSON.</jc>
@@ -733,7 +733,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts the specified POJO is of type MyBean and is "{foo:'bar'}" </jc>
 	 * 	<jc>// when serialized to Simplified JSON.</jc>
@@ -762,7 +762,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts the contents of the Reader contains "foo".</jc>
 	 * 	<jsm>assertReader</jsm>(<jv>myReader</jv>)
@@ -790,7 +790,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that a float array is at least size 10 and all values are greater than 100.</jc>
 	 * 	<jsm>assertShortArray</jsm>(<jv>myShortArray</jv>)
@@ -817,7 +817,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts a string is at least 100 characters long and contains "foo".</jc>
 	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
@@ -846,7 +846,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Asserts a list of strings contain "foo,bar,baz" after trimming all and joining.</jc>
 	 * 	<jsm>assertStringList</jsm>(<jv>myListOfStrings</jv>)
@@ -875,7 +875,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts a throwable is a RuntimeException containing 'foobar' in the message.</jc>
 	 * 	<jsm>assertThrowable</jsm>(<jv>throwable</jv>)
@@ -903,7 +903,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts that the specified method throws a RuntimeException containing "foobar" in the message. </jc>
 	 * 	<jsm>assertThrown</jsm>(()-&gt;<jv>foo</jv>.getBar())
@@ -931,7 +931,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts the specified major version is at least 2.</jc>
 	 * 	<jsm>assertVersion</jsm>(<jv>version</jv>)
@@ -957,7 +957,7 @@ public class Assertions {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 * 	<jc>// Asserts the specified date is after the current date.</jc>
 	 * 	<jsm>assertZonedDateTime</jsm>(<jv>myZonedDateTime</jv>)

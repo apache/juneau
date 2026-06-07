@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server.config;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Basic configuration for a REST resource that supports OpenAPI transport.

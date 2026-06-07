@@ -22,10 +22,10 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 import java.lang.reflect.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.cp.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.cp.*;
 
 /**
  * Base class for all assertion objects.
@@ -114,7 +114,7 @@ public class Assertion {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Throws an assertion with a custom message instead of the default "Value was null."</jc>
 	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)
@@ -181,7 +181,7 @@ public class Assertion {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jk>import static</jk> org.apache.juneau.assertions.Assertions.*;
+	 * 	<jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
 	 *
 	 *	<jc>// Throws a BadRequest instead of an AssertionError if the string is null.</jc>
 	 * 	<jsm>assertString</jsm>(<jv>myString</jv>)

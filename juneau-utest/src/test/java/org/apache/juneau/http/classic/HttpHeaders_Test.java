@@ -28,7 +28,7 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.part.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 class HttpHeaders_Test extends TestBase {

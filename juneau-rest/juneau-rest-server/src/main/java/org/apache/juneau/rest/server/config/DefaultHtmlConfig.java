@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.config;
 
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 
 /**
  * Predefined REST configuration that defines common default values for HTML Doc serializers.

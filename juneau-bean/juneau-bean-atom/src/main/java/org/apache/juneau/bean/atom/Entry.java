@@ -21,8 +21,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.time.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Represents an individual entry within an Atom feed or as a standalone Atom document.

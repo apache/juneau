@@ -36,17 +36,18 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Header;
 import org.apache.juneau.http.classic.response.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.marshaller.*;
-import org.apache.juneau.marshaller.Json;
-import org.apache.juneau.marshaller.Xml;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.marshaller.Json;
+import org.apache.juneau.marshall.marshaller.Xml;
+import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.utest.utils.*;
-import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

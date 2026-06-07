@@ -19,7 +19,7 @@ package org.apache.juneau.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against arrays.

@@ -1,0 +1,437 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.csv;
+
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.io.*;
+import java.util.*;
+
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.swap.*;
+
+/**
+ * Session object that lives for the duration of a single use of {@link CsvParser}.
+ *
+ * <p>
+ * Parses CSV (Comma Separated Values) input into Java objects.  The first row of the CSV
+ * is treated as a header row providing column names.  Subsequent rows are treated as data rows.
+ *
+ * <p>
+ * The following target type mappings are supported:
+ * <ul>
+ *   <li>{@code Collection<Bean>} / {@code Bean[]} — Header row provides property names; each data row becomes a bean.
+ *   <li>{@code Collection<Map>} / {@code Map[]} — Header row provides map keys; each data row becomes a map.
+ *   <li>{@code Collection<SimpleType>} / {@code SimpleType[]} — Single {@code value} column; each row's value is coerced to the element type.
+ *   <li>Single {@code Bean} — Header row + one data row → one bean.
+ *   <li>Single {@code Map} — Header row + one data row → one map.
+ *   <li>{@code Object} — Returns a {@link JsonList} of {@link JsonMap} entries.
+ * </ul>
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ */
+@SuppressWarnings({
+	"unchecked", // Type erasure requires unchecked casts in parse logic
+	"rawtypes",  // Raw types necessary for generic Map/List handling
+	"java:S3776", // Cognitive complexity acceptable for CSV parse logic; branching is inherent to format
+	"java:S6541"  // Brain method acceptable for doParse; CSV parse flow is inherently sequential
+})
+public class CsvParserSession extends ReaderParserSession {
+
+	private final CsvByteArrayCellFormat byteArrayFormat;
+	private final boolean allowNestedStructures;
+	private final String nullValue;
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends ReaderParserSession.Builder<Builder> {
+
+		private CsvByteArrayCellFormat byteArrayFormat;
+		private boolean allowNestedStructures;
+		private String nullValue;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(CsvParser ctx) {
+			super(ctx);
+			byteArrayFormat = ctx.getByteArrayFormat();
+			allowNestedStructures = ctx.isAllowNestedStructures();
+			nullValue = ctx.getNullValue();
+		}
+
+		@Override
+		public CsvParserSession build() {
+			return new CsvParserSession(this);
+		}
+
+	}
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(CsvParser ctx) {
+		return new Builder(ctx);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected CsvParserSession(Builder builder) {
+		super(builder);
+		byteArrayFormat = builder.byteArrayFormat;
+		allowNestedStructures = builder.allowNestedStructures;
+		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+	}
+
+	@Override /* Overridden from ParserSession */
+	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
+		try (var r = CsvReader.from(pipe, ',', '"', isTrimStrings())) {
+			if (r == null)
+				return null;
+			return parseAnything(type, r, getOuter(), null);
+		}
+	}
+
+	/**
+	 * Core parse dispatch.
+	 *
+	 * <p>
+	 * Reads the header row, then dispatches to the appropriate parsing strategy based on the
+	 * target type.
+	 */
+	private <T> T parseAnything(ClassMeta<T> eType, CsvReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException {
+		if (eType == null)
+			eType = (ClassMeta<T>) object();
+
+		var swap = (ObjectSwap<T,Object>) eType.getSwap(this);
+		var builder = (BuilderSwap<T,Object>) eType.getBuilderSwap(this);
+		ClassMeta<?> sType;
+		if (builder != null)
+			sType = builder.getBuilderClassMeta(this);
+		else if (swap != null)
+			sType = swap.getSwapClassMeta(this);
+		else
+			sType = eType;
+
+		if (sType.isOptional())
+			return (T) opt(parseAnything(eType.getElementType(), r, outer, pMeta));
+
+		// Read header row
+		var headers = r.readRow();
+		if (headers == null || headers.isEmpty())
+			return null;
+
+		Object o = null;
+
+		if (sType.isArray()) {
+			var elementType = sType.getElementType();
+			var list = list();
+			for (var row = r.readRow(); row != null; row = r.readRow())
+				list.add(parseRow(headers, row, elementType, list));
+			o = toArray(sType, list);
+
+		} else if (sType.isCollection()) {
+			var elementType = sType.getElementType();
+			Collection<Object> l = sType.canCreateNewInstance(outer) ? (Collection<Object>) sType.newInstance() : new ArrayList<>();
+			for (var row = r.readRow(); row != null; row = r.readRow())
+				l.add(parseRow(headers, row, elementType, l));
+			o = l;
+
+		} else if (sType.isBean()) {
+			var row = r.readRow();
+			if (row != null)
+				o = parseRowIntoBean(headers, row, sType, outer);
+
+		} else if (sType.isMap()) {
+			var row = r.readRow();
+			if (row != null)
+				o = parseRowIntoMap(headers, row, sType, outer);
+
+		} else if (sType.isObject()) {
+			// For Object target type: return a list of maps (or a single map if one row)
+			var results = newGenericList();
+			for (var row = r.readRow(); row != null; row = r.readRow()) {
+				var m = newGenericMap();
+				for (var i = 0; i < headers.size(); i++) {
+					var val = i < row.size() ? row.get(i) : null;
+					m.put(headers.get(i), parseCellValue(val, object()));
+				}
+				results.add(m);
+			}
+			if (!results.isEmpty()) {
+				if (results.size() == 1)
+					o = results.get(0);
+				else
+					o = results;
+			}
+		} else {
+			// For simple target types (String, Number, Boolean, etc.) that are not beans/maps/collections,
+			// treat CSV as a single "value" column.  Read the first data row's value column.
+			var valueColIdx = headers.indexOf("value");
+			if (valueColIdx < 0) valueColIdx = 0;
+			var row = r.readRow();
+			if (row != null && valueColIdx < row.size())
+				o = parseCellValue(row.get(valueColIdx), sType);
+		}
+
+		if (builder != null && o != null)
+			o = builder.build(this, o, eType);
+
+		if (swap != null && o != null)
+			o = unswap(swap, o, eType);
+
+		return (T) o;
+	}
+
+	/**
+	 * Parses a single data row into the appropriate element object.
+	 *
+	 * <p>
+	 * Matches JSON behavior: for polymorphic types (interface/abstract with dictionary), parse to map
+	 * first then use {@link #cast(JsonMap, BeanPropertyMeta, ClassMeta)} when <code>_type</code> is present.
+	 */
+	private Object parseRow(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
+		if (eType == null || eType.isObject()) {
+			var m = newGenericMap();
+			for (var i = 0; i < headers.size(); i++) {
+				var val = i < row.size() ? row.get(i) : null;
+				m.put(headers.get(i), parseCellValue(val, object()));
+			}
+			return m;
+		}
+		// Polymorphic (registry + _type column): parse to map then cast - matches JSON
+		var typeColName = getBeanTypePropertyName(eType);
+		if (eType.getBeanRegistry() != null && headers.contains(typeColName)) {
+			var m = newGenericMap();
+			for (var i = 0; i < headers.size(); i++) {
+				var val = i < row.size() ? row.get(i) : null;
+				m.put(headers.get(i), parseCellValue(val, object()));
+			}
+			if (m.containsKey(typeColName))
+				return cast(m, null, eType);
+			throw new ParseException(this, "Polymorphic type ''{0}'' requires _type column for resolution", eType);
+		}
+		if (eType.isBean()) {
+			return parseRowIntoBean(headers, row, eType, outer);
+		}
+		if (eType.isMap()) {
+			return parseRowIntoMap(headers, row, eType, outer);
+		}
+		// Simple type: use the "value" column (first column) or the only column present
+		var val = row.isEmpty() ? null : row.get(0);
+		return parseCellValue(val, eType);
+	}
+
+	/**
+	 * Parses a single data row into a bean of the specified type.
+	 *
+	 * <p>
+	 * When a <code>_type</code> column (or configured type property) is present with a non-empty
+	 * value, the type name is resolved to a concrete class for polymorphic bean creation.
+	 */
+	private <T> T parseRowIntoBean(List<String> headers, List<String> row, ClassMeta<T> eType, Object outer) throws ParseException {
+		var typeColName = getBeanTypePropertyName(eType);
+		var typeColIdx = headers.indexOf(typeColName);
+		ClassMeta<?> beanType = eType;
+		if (typeColIdx >= 0 && typeColIdx < row.size()) {
+			var typeVal = row.get(typeColIdx);
+			if (nn(typeVal) && ! typeVal.trim().isEmpty()) {
+				var resolved = getClassMeta(typeVal.trim(), null, eType);
+				if (resolved != null && resolved.isBean())
+					beanType = resolved;
+			}
+		}
+		var m = newBeanMap(outer, beanType.inner());
+		for (var i = 0; i < headers.size(); i++) {
+			if (i == typeColIdx)
+				continue;
+			var header = headers.get(i);
+			var val = i < row.size() ? row.get(i) : null;
+			var pm = m.getPropertyMeta(header);
+			if (pm != null) {
+				setCurrentProperty(pm);
+				var converted = parseCellValue(val, (ClassMeta<?>) pm.getBeanInfo());
+				pm.set(m, header, converted);
+				setCurrentProperty(null);
+			} else {
+				onUnknownProperty(header, m, val);
+			}
+		}
+		return (T) m.getBean();
+	}
+
+	/**
+	 * Parses a single data row into a map of the specified type.
+	 */
+	@SuppressWarnings({
+		"java:S3740" // Raw Map required for generic map from ClassMeta
+	})
+	private Object parseRowIntoMap(List<String> headers, List<String> row, ClassMeta<?> eType, Object outer) throws ParseException {
+		Map m;
+		if (eType.canCreateNewInstance(outer))
+			m = (Map) eType.newInstance(outer);
+		else
+			m = newGenericMap();
+		var keyType = eType.getKeyType() != null ? eType.getKeyType() : string();
+		var valueType = eType.getValueType() != null ? eType.getValueType() : object();
+		for (var i = 0; i < headers.size(); i++) {
+			var header = headers.get(i);
+			var val = i < row.size() ? row.get(i) : null;
+			var key = convertAttrToType(m, header, keyType);
+			var value = parseCellValue(val, valueType);
+			m.put(key, value);
+		}
+		return m;
+	}
+
+	/**
+	 * Converts a raw CSV cell string value to the target type.
+	 *
+	 * <p>
+	 * The unquoted literal {@code null} maps to Java {@code null}.
+	 * Handles {@code byte[]} (BASE64 or semicolon-delimited) and primitive arrays {@code [1;2;3]}.
+	 * All other values are converted via {@link #convertToType(Object, ClassMeta)}.
+	 */
+	private <T> T parseCellValue(String val, ClassMeta<T> eType) throws ParseException {
+		if (val == null)
+			return null;
+		// Apply trimStrings at the cell level (before type conversion)
+		if (isTrimStrings())
+			val = val.trim();
+		if (nullValue != null && val.equals(nullValue))
+			return null;
+		if (val.isEmpty() && eType.isCharSequence())
+			return null;
+		try {
+			if (allowNestedStructures && !val.isEmpty()) {
+				var trimmed = isTrimStrings() ? val.trim() : val;
+				if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
+					var parsed = CsvCellParser.parse(trimmed, nullValue);
+					if (parsed != null)
+						return convertToType(parsed, eType);
+				}
+			}
+			var csvParsed = parseCsvCellValue(val, eType);
+			if (csvParsed != null)
+				return (T) csvParsed;
+			return convertToType(val, eType);
+		} catch (InvalidDataConversionException e) {
+			throw new ParseException(e, "Could not convert CSV cell value ''{0}'' to type ''{1}''.", val, eType);
+		}
+	}
+
+	/**
+	 * CSV-specific parsing for byte[] and primitive arrays. Returns null if not applicable.
+	 */
+	private Object parseCsvCellValue(String val, ClassMeta<?> eType) throws ParseException {
+		if (val == null || val.isEmpty())
+			return null;
+		if (eType.isByteArray()) {
+			if (byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED) {
+				var parts = val.split(";");
+				var b = new byte[parts.length];
+				for (var i = 0; i < parts.length; i++) {
+					b[i] = (byte) Integer.parseInt(parts[i].trim());
+				}
+				return b;
+			}
+			return base64Decode(val);
+		}
+		if (eType.isArray() && eType.getElementType().isPrimitive()) {
+			if (!val.startsWith("[") || !val.endsWith("]"))
+				return null;
+			var inner = val.substring(1, val.length() - 1).trim();
+			if (inner.isEmpty()) {
+				return createEmptyPrimitiveArray(eType);
+			}
+			var parts = inner.split(";");
+			var et = eType.getElementType();
+			if (et.is(int.class)) {
+				var a = new int[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = Integer.parseInt(parts[i].trim());
+				return a;
+			}
+			if (et.is(long.class)) {
+				var a = new long[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = Long.parseLong(parts[i].trim());
+				return a;
+			}
+			if (et.is(double.class)) {
+				var a = new double[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = Double.parseDouble(parts[i].trim());
+				return a;
+			}
+			if (et.is(float.class)) {
+				var a = new float[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = Float.parseFloat(parts[i].trim());
+				return a;
+			}
+			if (et.is(short.class)) {
+				var a = new short[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = Short.parseShort(parts[i].trim());
+				return a;
+			}
+			if (et.is(boolean.class)) {
+				var a = new boolean[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = Boolean.parseBoolean(parts[i].trim());
+				return a;
+			}
+			if (et.is(char.class)) {
+				var a = new char[parts.length];
+				for (var i = 0; i < parts.length; i++)
+					a[i] = (char) Integer.parseInt(parts[i].trim());
+				return a;
+			}
+		}
+		return null;
+	}
+
+	private static Object createEmptyPrimitiveArray(ClassMeta<?> arrayType) throws ParseException {
+		var et = arrayType.getElementType();
+		if (et.is(int.class)) return new int[0];
+		if (et.is(long.class)) return new long[0];
+		if (et.is(double.class)) return new double[0];
+		if (et.is(float.class)) return new float[0];
+		if (et.is(short.class)) return new short[0];
+		if (et.is(boolean.class)) return new boolean[0];
+		if (et.is(char.class)) return new char[0];
+		if (et.is(byte.class)) return new byte[0];
+		return null;
+	}
+}

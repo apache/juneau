@@ -23,11 +23,11 @@ import java.util.*;
 
 import org.apache.http.client.config.*;
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.testutils.pojos.*;

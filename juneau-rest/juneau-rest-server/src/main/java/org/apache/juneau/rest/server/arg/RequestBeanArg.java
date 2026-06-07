@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.rest.server.arg;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.httppart.bean.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.validation.*;
 

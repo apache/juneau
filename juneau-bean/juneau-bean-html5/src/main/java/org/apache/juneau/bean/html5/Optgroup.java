@@ -18,7 +18,7 @@ package org.apache.juneau.bean.html5;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * DTO for an HTML <a class="doclink" href="https://www.w3.org/TR/html5/forms.html#the-optgroup-element">&lt;optgroup&gt;</a>

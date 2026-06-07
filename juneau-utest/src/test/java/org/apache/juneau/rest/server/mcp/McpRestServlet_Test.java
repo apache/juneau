@@ -24,7 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.mcp.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -91,7 +91,7 @@ class McpRestServlet_Test extends TestBase {
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
 			.setMethod(McpMethods.TOOLS_CALL)
-			.setParams(org.apache.juneau.collections.JsonMap.of("name", "echo", "arguments", org.apache.juneau.collections.JsonMap.of("text", "hello")));
+			.setParams(org.apache.juneau.marshall.collections.JsonMap.of("name", "echo", "arguments", org.apache.juneau.marshall.collections.JsonMap.of("text", "hello")));
 		var resp = client().post("/", req).run().assertStatus(200).getContent().asString();
 		assertContains("hello", resp);
 		assertContains("\"type\":\"text\"", resp);
@@ -110,7 +110,7 @@ class McpRestServlet_Test extends TestBase {
 	// -------- McpEndpoint mixin --------
 
 	@Rest(path = "/api", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
-	@org.apache.juneau.serializer.SerializerConfig(addBeanTypes = "true")
+	@org.apache.juneau.marshall.serializer.SerializerConfig(addBeanTypes = "true")
 	public static class B extends org.apache.juneau.rest.server.servlet.BasicRestServlet implements McpEndpoint {
 		private static final long serialVersionUID = 1L;
 
@@ -134,7 +134,7 @@ class McpRestServlet_Test extends TestBase {
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
 			.setId(1)
 			.setMethod(McpMethods.TOOLS_CALL)
-			.setParams(org.apache.juneau.collections.JsonMap.of("name", "ping"));
+			.setParams(org.apache.juneau.marshall.collections.JsonMap.of("name", "ping"));
 		var resp = c.post("/mcp", req).run().assertStatus(200).getContent().asString();
 		assertContains("pong", resp);
 	}

@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.openapi;
 
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.parser.*;
 
 /**
  * Exception thrown during OpenAPI generation. Internal to {@code juneau-rest-server} — wraps a parse

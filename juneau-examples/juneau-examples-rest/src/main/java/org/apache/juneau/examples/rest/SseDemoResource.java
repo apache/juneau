@@ -25,10 +25,10 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.sse.*;
-import org.apache.juneau.sse.*;
 
 /**
  * Sample REST resource that emits a stream of Server-Sent Events.

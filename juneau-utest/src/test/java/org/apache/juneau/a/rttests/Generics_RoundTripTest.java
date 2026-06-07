@@ -19,8 +19,8 @@ package org.apache.juneau.a.rttests;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

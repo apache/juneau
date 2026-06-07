@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Holds metadata about header beans (POJOs that get serialized as HTTP headers).

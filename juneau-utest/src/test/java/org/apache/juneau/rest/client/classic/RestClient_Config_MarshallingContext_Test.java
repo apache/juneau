@@ -24,17 +24,18 @@ import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.swap.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 class RestClient_Config_MarshallingContext_Test extends TestBase {
@@ -514,7 +515,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().debug().build().post("/echo",x).run());
 	}
 
-	@org.apache.juneau.Marshalled(typeName="foo")
+	@org.apache.juneau.marshall.Marshalled(typeName="foo")
 	public static class A15a {
 		public String foo;
 		static A15a get() {
@@ -524,7 +525,7 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		}
 	}
 
-	@org.apache.juneau.Marshalled(typeName="bar")
+	@org.apache.juneau.marshall.Marshalled(typeName="bar")
 	public static class A15b {
 		public String foo;
 		static A15b get() {

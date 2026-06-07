@@ -20,9 +20,9 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Utility classes and methods for the {@link Swagger @Swagger} annotation.
@@ -42,7 +42,7 @@ public class SwaggerAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AnnotationObject.Builder {

@@ -18,8 +18,8 @@ package org.apache.juneau.bean.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * JSON Schema subset used by MCP tool {@code inputSchema} objects.

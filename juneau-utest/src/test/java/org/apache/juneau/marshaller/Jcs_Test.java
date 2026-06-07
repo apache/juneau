@@ -19,7 +19,8 @@ package org.apache.juneau.marshaller;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 class Jcs_Test extends TestBase {

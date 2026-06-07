@@ -1,0 +1,386 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.marshall.urlencoding;
+
+import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
+
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.*;
+import java.util.function.*;
+
+import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.uon.*;
+
+/**
+ * Session object that lives for the duration of a single use of {@link UrlEncodingSerializer}.
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='warn'>This class is not thread safe and is typically discarded after one use.
+ * </ul>
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
+ * </ul>
+ */
+@SuppressWarnings({
+	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
+	"rawtypes",   // Raw types necessary for generic type handling
+	"unchecked",  // Type erasure requires unchecked casts
+	"resource",   // Resource management handled externally
+	"java:S110"   // Inheritance depth acceptable for this class hierarchy
+})
+public class UrlEncodingSerializerSession extends UonSerializerSession {
+
+	// Property name constants
+	private static final String PROP_expandedParams = "expandedParams";
+	private static final String PROP_UrlEncodingSerializerSession_expandedParams = "UrlEncodingSerializerSession.expandedParams";
+
+	/**
+	 * Builder class.
+	 */
+	public static class Builder extends UonSerializerSession.Builder<Builder> {
+
+		private boolean expandedParams;
+		private UrlEncodingSerializer ctx;
+
+		/**
+		 * Constructor
+		 *
+		 * @param ctx The context creating this session.
+		 */
+		protected Builder(UrlEncodingSerializer ctx) {
+			super(ctx);
+			this.ctx = ctx;
+			expandedParams = ctx.isExpandedParams();
+		}
+
+		@Override
+		public UrlEncodingSerializerSession build() {
+			return new UrlEncodingSerializerSession(this);
+		}
+
+		/**
+		 * Serialize bean property collections/arrays as separate key/value pairs.
+		 *
+		 * @param value The new value for this setting.
+		 * @return This object.
+		 */
+		public Builder expandedParams(boolean value) {
+			expandedParams = value;
+			return this;
+		}
+
+		@Override /* Overridden from Builder */
+		public Builder property(String key, Object value) {
+			if (key == null) { super.property(key, value); return this; }
+			switch (key) {
+				case PROP_expandedParams, PROP_UrlEncodingSerializerSession_expandedParams:
+					return expandedParams(cvt(value, Boolean.class));
+				default:
+					super.property(key, value);
+					return this;
+			}
+		}
+
+	}
+
+	/**
+	 * Creates a new builder for this object.
+	 *
+	 * @param ctx The context creating this session.
+	 * @return A new builder.
+	 */
+	public static Builder create(UrlEncodingSerializer ctx) {
+		return new Builder(ctx);
+	}
+
+	/*
+	 * Converts a Collection into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Collection<?> c) {
+		var m = new TreeMap<Integer,Object>();
+		var i = IntegerHolder.create();
+		c.forEach(o -> m.put(i.getAndIncrement(), o));
+		return m;
+	}
+
+	/*
+	 * Converts an array into an integer-indexed map.
+	 */
+	private static Map<Integer,Object> getCollectionMap(Object array) {
+		var m = new TreeMap<Integer,Object>();
+		for (var i = 0; i < Array.getLength(array); i++)
+			m.put(i, Array.get(array, i));
+		return m;
+	}
+
+	private final UrlEncodingSerializer ctx;
+	private final boolean expandedParams;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param builder The builder for this object.
+	 */
+	protected UrlEncodingSerializerSession(Builder builder) {
+		super(builder);
+		ctx = builder.ctx;
+		expandedParams = builder.expandedParams;
+	}
+
+	/*
+	 * Workhorse method. Determines the type of object, and then calls the appropriate type-specific serialization method.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for URL encoding serialization routing
+	})
+	private SerializerWriter serializeAnything(UonWriter out, Object o) throws IOException, SerializeException {
+
+		ClassMeta<?> aType = null;			// The actual type
+		ClassMeta<?> sType = null;			// The serialized type
+
+		var eType = getExpectedRootType(o);
+		aType = push2("root", o, eType);
+		indent--;
+		if (aType == null)
+			aType = object();
+
+		sType = aType;
+		var typeName = getBeanTypeName(this, eType, aType, null);
+
+		// Swap if necessary
+		var swap = aType.getSwap(this);
+		if (nn(swap)) {
+			o = swap(swap, o);
+			sType = swap.getSwapClassMeta(this);
+
+			// If the getSwapClass() method returns Object, we need to figure out
+			// the actual type now.
+			if (sType.isObject())
+				sType = getClassMetaForObject(o);
+		}
+
+		if (sType.isBean()) {
+			serializeBeanMap(out, toBeanMap(o), typeName);
+		} else if (sType.isMap()) {
+			if (o instanceof BeanMap o2)
+				serializeBeanMap(out, o2, typeName);
+			else
+				serializeMap(out, (Map)o, sType);
+		} else if (sType.isCollection() || sType.isArray()) {
+			var m = sType.isCollection() ? getCollectionMap((Collection)o) : getCollectionMap(o);
+			serializeCollectionMap(out, m, getClassMeta(Map.class, Integer.class, Object.class));
+		} else if (sType.isStreamable()) {
+			serializeStreamableAsCollectionMap(out, o, sType);
+		} else if (sType.isReader()) {
+			pipe((Reader)o, out);
+		} else if (sType.isInputStream()) {
+			pipe((InputStream)o, out);
+		} else {
+			// All other types can't be serialized as key/value pairs, so we create a
+			// mock key/value pair with a "_value" key.
+			out.append("_value=");
+			pop();
+			super.serializeAnything(out, o, null, null, null);
+			return out;
+		}
+
+		pop();
+		return out;
+	}
+
+	
+	@SuppressWarnings({
+		"java:S3776", // Cognitive complexity acceptable for expanded-params bean map serialization
+		"java:S2177", // Intentional: UrlEncodingSerializerSession provides its own private serializeBeanMap() with expanded-params logic
+	})
+	private SerializerWriter serializeBeanMap(UonWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+		var addAmp = Flag.create();
+
+		if (nn(typeName)) {
+			var pm = m.getMeta().getTypeProperty();
+			out.appendObject(pm.getName(), true).append('=').appendObject(typeName, false);
+			addAmp.set();
+		}
+
+		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
+		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
+			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
+			var sMeta = cMeta.getSerializedClassMeta(this);
+
+			if (nn(thrown))
+				onBeanGetterException(pMeta, thrown);
+
+			if (canIgnoreValue(sMeta, key, value))
+				return;
+
+			if (nn(value) && shouldUseExpandedParams(pMeta)) {
+				// Transformed object array bean properties may be transformed resulting in ArrayLists,
+				// so we need to check type if we think it's an array.
+				if (sMeta.isCollection() || value instanceof Collection) {
+					var c = (Collection<?>) value;
+					if (c.isEmpty()) {
+						// Empty expanded-params collection: emit a single "key=" segment so the
+						// parser can distinguish "non-null empty collection" from "null property"
+						// (both would otherwise produce no wire output, defeating round-trip).
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+					} else {
+						c.forEach(x -> {
+							addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+							out.appendObject(key, true).append('=');
+							super.serializeAnything(out, x, cMeta.getElementType(), key, pMeta);
+						});
+					}
+				} else /* array */ {
+					var len = Array.getLength(value);
+					if (len == 0) {
+						// Empty expanded-params array: emit a single "key=" segment so the parser
+						// can distinguish "non-null empty array" from "null property" (both would
+						// otherwise produce no wire output, defeating round-trip).
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+					} else {
+						for (var i = 0; i < len; i++) {
+							addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+							out.appendObject(key, true).append('=');
+							super.serializeAnything(out, Array.get(value, i), cMeta.getElementType(), key, pMeta);
+						}
+					}
+				}
+			} else {
+				addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+				out.appendObject(key, true).append('=');
+				super.serializeAnything(out, value, cMeta, key, pMeta);
+			}
+		});
+
+		return out;
+	}
+
+	private SerializerWriter serializeCollectionMap(UonWriter out, Map<?,?> m, ClassMeta<?> type) throws SerializeException {
+
+		var valueType = type.getValueType();
+
+		var addAmp = Flag.create();
+
+		m.forEach((k, v) -> {
+			addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+			out.append(k).append('=');
+			super.serializeAnything(out, v, valueType, null, null);
+		});
+
+		return out;
+	}
+
+	private SerializerWriter serializeStreamableAsCollectionMap(UonWriter out, Object o, ClassMeta<?> sType) throws SerializeException {
+		var addAmp = Flag.create();
+		var i = IntegerHolder.create();
+		forEachStreamableEntry(o, sType, v -> {
+			addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+			out.append(i.getAndIncrement()).append('=');
+			super.serializeAnything(out, v, null, null, null);
+		});
+		return out;
+	}
+
+	@SuppressWarnings({
+		"java:S2177" // Intentional: UrlEncodingSerializerSession provides its own private serializeMap() with expanded-params logic
+	})
+	private SerializerWriter serializeMap(UonWriter out, Map m, ClassMeta<?> type) throws SerializeException {
+
+		var keyType = type.getKeyType();
+		var valueType = type.getValueType();
+
+		var addAmp = Flag.create();
+
+		forEachEntry(m, e -> {
+			var key = generalize(e.getKey(), keyType);
+			var value = e.getValue();
+
+			if (shouldUseExpandedParams(value)) {
+				if (value instanceof Collection value2) {
+					value2.forEach(x -> {
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, x, null, s(key), null);
+					});
+				} else /* array */ {
+					for (var i = 0; i < Array.getLength(value); i++) {
+						addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+						out.appendObject(key, true).append('=');
+						super.serializeAnything(out, Array.get(value, i), null, s(key), null);
+					}
+				}
+			} else {
+				addAmp.ifSet(() -> out.cr(indent).append('&')).set();
+				out.appendObject(key, true).append('=');
+				super.serializeAnything(out, value, valueType, (key == null ? null : key.toString()), null);
+			}
+		});
+
+		return out;
+	}
+
+	/*
+	 * Returns <jk>true</jk> if the specified bean property should be expanded as multiple key-value pairs.
+	 */
+	private boolean shouldUseExpandedParams(BeanPropertyMeta pMeta) {
+		var cm = ((ClassMeta<?>) pMeta.getBeanInfo()).getSerializedClassMeta(this);
+		return cm.isCollectionOrArray() && (isExpandedParams() || getUrlEncodingClassMeta((ClassMeta<?>) pMeta.getBeanMeta().getBeanInfo()).isExpandedParams());
+	}
+
+	/*
+	 * Returns <jk>true</jk> if the specified value should be represented as an expanded parameter list.
+	 */
+	private boolean shouldUseExpandedParams(Object value) {
+		if (value == null || ! isExpandedParams())
+			return false;
+		var cm = getClassMetaForObject(value).getSerializedClassMeta(this);
+		return cm.isCollectionOrArray() && isExpandedParams();
+	}
+
+	@Override /* Overridden from SerializerSession */
+	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
+		serializeAnything(getUonWriter(out).i(getInitialDepth()), o);
+	}
+
+	/**
+	 * Returns the language-specific metadata on the specified class.
+	 *
+	 * @param cm The class to return the metadata on.
+	 * @return The metadata.
+	 */
+	protected UrlEncodingClassMeta getUrlEncodingClassMeta(ClassMeta<?> cm) {
+		return ctx.getUrlEncodingClassMeta(cm);
+	}
+
+	/**
+	 * Serialize bean property collections/arrays as separate key/value pairs.
+	 *
+	 * @see UrlEncodingSerializer.Builder#expandedParams()
+	 * @return
+	 * 	<jk>false</jk> if serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
+	 * 	<br><jk>true</jk> if serializing the same array results in <c>?key=1&amp;key=2&amp;key=3</c>.
+	 */
+	protected final boolean isExpandedParams() { return expandedParams; }
+}

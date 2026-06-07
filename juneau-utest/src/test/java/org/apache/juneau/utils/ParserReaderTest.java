@@ -19,7 +19,7 @@ package org.apache.juneau.utils;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 class ParserReaderTest extends TestBase {

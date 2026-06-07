@@ -29,12 +29,12 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.util.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.classic.header.*;
-import org.apache.juneau.httppart.*;
 import org.apache.juneau.httppart.bean.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
 
 /**

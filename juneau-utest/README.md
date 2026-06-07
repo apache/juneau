@@ -45,7 +45,7 @@ python3 scripts/microbench.py observability --threshold 0
 
 ```bash
 mvn -f juneau-utest/pom.xml -Pmicrobench test-compile exec:java \
-    -Dexec.mainClass=org.apache.juneau.microbench.observability.ObservabilityNoopBenchmark
+    -Dexec.mainClass=org.apache.juneau.marshall.microbench.observability.ObservabilityNoopBenchmark
 ```
 
 **JSON results** are written to `juneau-utest/jmh-results/observability-YYYY-MM-DD.json`.

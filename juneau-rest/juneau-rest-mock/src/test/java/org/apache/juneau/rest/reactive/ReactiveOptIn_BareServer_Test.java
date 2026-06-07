@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.*;
 
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;

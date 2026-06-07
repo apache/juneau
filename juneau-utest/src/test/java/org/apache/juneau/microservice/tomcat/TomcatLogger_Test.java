@@ -30,7 +30,7 @@ class TomcatLogger_Test extends TestBase {
 
 	@Test void a01_defaultConstructor() {
 		var l = new TomcatLogger();
-		assertEquals("org.apache.juneau.microservice.tomcat", l.getName());
+		assertEquals("org.apache.juneau.marshall.microservice.tomcat", l.getName());
 	}
 
 	@Test void a02_namedConstructor() {

@@ -29,8 +29,6 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.svl.*;
@@ -40,10 +38,12 @@ import org.apache.juneau.config.internal.*;
 import org.apache.juneau.config.mod.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.config.vars.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Main configuration API class.

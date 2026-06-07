@@ -38,7 +38,7 @@ import jakarta.servlet.*;
  * Real-Jetty deployment-parity assertion for the standalone {@code Basic*Servlet} companions.
  *
  * <p>
- * Boots a {@link org.apache.juneau.microservice.Microservice Microservice} on an ephemeral port and
+ * Boots a {@link org.apache.juneau.marshall.microservice.Microservice Microservice} on an ephemeral port and
  * mounts three standalone servlets as siblings &mdash; {@link VersionServlet} at
  * {@code /version/*}, {@link StaticFilesServlet} at {@code /static/*}, and
  * {@link AdminServlet} at {@code /admin/*} &mdash; relying on the {@code JettyServerComponent}

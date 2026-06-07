@@ -18,6 +18,7 @@ package org.apache.juneau;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

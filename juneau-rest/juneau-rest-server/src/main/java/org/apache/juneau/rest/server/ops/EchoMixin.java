@@ -24,7 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
 
 /**

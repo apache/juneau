@@ -16,18 +16,19 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import static org.apache.juneau.Context.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.marshall.Context.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.swap.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

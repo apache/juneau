@@ -20,7 +20,7 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 import org.junit.jupiter.api.*;
 
 class Audio_Test extends TestBase {

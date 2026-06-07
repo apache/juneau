@@ -24,10 +24,10 @@ import java.math.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
 
 /**
  * Validates values against a {@link JsonSchema} bean per the JSON Schema Draft 2020-12 specification.

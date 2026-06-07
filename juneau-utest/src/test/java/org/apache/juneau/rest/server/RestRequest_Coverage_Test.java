@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
@@ -189,7 +189,7 @@ class RestRequest_Coverage_Test extends TestBase {
 		@RestGet("/uriRes")
 		public String uriRes(RestRequest req) {
 			req.getUriResolver();
-			req.getUriResolver(org.apache.juneau.UriResolution.ROOT_RELATIVE, org.apache.juneau.UriRelativity.RESOURCE);
+			req.getUriResolver(org.apache.juneau.marshall.UriResolution.ROOT_RELATIVE, org.apache.juneau.marshall.UriRelativity.RESOURCE);
 			return "ok";
 		}
 	}

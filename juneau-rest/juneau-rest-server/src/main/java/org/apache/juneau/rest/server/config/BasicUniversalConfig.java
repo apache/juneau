@@ -16,34 +16,34 @@
  */
 package org.apache.juneau.rest.server.config;
 
-import org.apache.juneau.*;
-import org.apache.juneau.bson.*;
-import org.apache.juneau.cbor.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.csv.*;
-import org.apache.juneau.hjson.*;
-import org.apache.juneau.hocon.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.ini.*;
-import org.apache.juneau.jcs.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.jsonl.*;
-import org.apache.juneau.markdown.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.parquet.*;
-import org.apache.juneau.plaintext.*;
-import org.apache.juneau.proto.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.bson.*;
+import org.apache.juneau.marshall.cbor.*;
+import org.apache.juneau.marshall.csv.*;
+import org.apache.juneau.marshall.hjson.*;
+import org.apache.juneau.marshall.hocon.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.ini.*;
+import org.apache.juneau.marshall.jcs.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.jsonl.*;
+import org.apache.juneau.marshall.markdown.*;
+import org.apache.juneau.marshall.msgpack.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.parquet.*;
+import org.apache.juneau.marshall.plaintext.*;
+import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.soap.*;
+import org.apache.juneau.marshall.toml.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
+import org.apache.juneau.marshall.yaml.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.soap.*;
-import org.apache.juneau.toml.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
-import org.apache.juneau.yaml.*;
 
 /**
  * Predefined configuration for a REST resource that supports all languages

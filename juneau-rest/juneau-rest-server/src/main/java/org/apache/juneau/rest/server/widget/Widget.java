@@ -22,9 +22,9 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 
 /**

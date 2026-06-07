@@ -23,7 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
 

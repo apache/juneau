@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.sse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.sse.*;
+import org.apache.juneau.marshall.sse.*;
 import org.junit.jupiter.api.*;
 
 class SseBroadcaster_Test {

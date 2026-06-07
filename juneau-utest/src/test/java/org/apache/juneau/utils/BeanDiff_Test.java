@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.utils.*;
 import org.junit.jupiter.api.*;
 
 class BeanDiff_Test extends TestBase {

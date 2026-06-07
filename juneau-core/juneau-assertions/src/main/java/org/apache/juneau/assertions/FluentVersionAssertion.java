@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.lang.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link Version} objects.

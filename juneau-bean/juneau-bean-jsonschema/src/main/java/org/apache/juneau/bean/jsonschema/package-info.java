@@ -23,8 +23,8 @@
  * <p>
  * Juneau supports serializing and parsing of JSON Schema documents through the use of beans defined in the
  * <c>org.apache.juneau.bean.jsonschema</c> package.
- * These beans are used with the existing {@link org.apache.juneau.json.JsonSerializer} and
- * {@link org.apache.juneau.json.JsonParser} classes to produce and consume JSON Schema documents.
+ * These beans are used with the existing {@link org.apache.juneau.marshall.json.JsonSerializer} and
+ * {@link org.apache.juneau.marshall.json.JsonParser} classes to produce and consume JSON Schema documents.
  * </p>
  *
  * <p>
@@ -48,7 +48,7 @@
  * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonType} - An enum of possible JSON data types.
  * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonTypeArray} - An array of <c>JsonType</c> objects.
  * 	<li>{@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator} - Generates typed
- * 		<c>JsonSchema</c> beans from Java types via {@link org.apache.juneau.jsonschema.JsonSchemaGenerator}.
+ * 		<c>JsonSchema</c> beans from Java types via {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator}.
  * </ul>
 
  * <h5 class='topic'>Automatic Schema Generation</h5>
@@ -56,7 +56,7 @@
  * <p>
  * Use {@link org.apache.juneau.bean.jsonschema.JsonSchemaBeanGenerator} when you want typed DTO output from POJOs
  * without manually building schema trees.  It bridges the map-based output of
- * {@link org.apache.juneau.jsonschema.JsonSchemaGenerator} into <c>JsonSchema</c> beans.
+ * {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator} into <c>JsonSchema</c> beans.
  * </p>
  *
  * <h5 class='topic'>Creating JSON Schema Documents</h5>
@@ -198,7 +198,7 @@
  * <h5 class='topic'>Parsing JSON Schema Documents</h5>
  *
  * <p>
- * Use the {@link org.apache.juneau.json.JsonParser} to parse JSON Schema documents into DTOs:
+ * Use the {@link org.apache.juneau.marshall.json.JsonParser} to parse JSON Schema documents into DTOs:
  * </p>
  * <p class='bjava'>
  * 	<jc>// Use parser to load JSON Schema document into JSON Schema DTOs</jc>

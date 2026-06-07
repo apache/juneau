@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;

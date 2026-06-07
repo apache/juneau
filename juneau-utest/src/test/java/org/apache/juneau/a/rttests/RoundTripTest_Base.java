@@ -19,24 +19,24 @@ package org.apache.juneau.a.rttests;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.bson.*;
-import org.apache.juneau.cbor.*;
-import org.apache.juneau.collections.*;
-import org.apache.juneau.csv.*;
-import org.apache.juneau.hjson.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.jcs.*;
-import org.apache.juneau.jena.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.jsonl.*;
-import org.apache.juneau.markdown.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.parquet.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
-import org.apache.juneau.yaml.*;
+import org.apache.juneau.marshall.bson.*;
+import org.apache.juneau.marshall.cbor.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.csv.*;
+import org.apache.juneau.marshall.hjson.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.jcs.*;
+import org.apache.juneau.marshall.jena.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.jsonl.*;
+import org.apache.juneau.marshall.markdown.*;
+import org.apache.juneau.marshall.msgpack.*;
+import org.apache.juneau.marshall.parquet.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
+import org.apache.juneau.marshall.yaml.*;
 
 /**
  * Tests designed to serialize and parse objects to make sure we end up

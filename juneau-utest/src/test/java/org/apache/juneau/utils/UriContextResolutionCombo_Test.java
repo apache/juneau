@@ -16,13 +16,14 @@
  */
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.UriRelativity.*;
-import static org.apache.juneau.UriResolution.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.marshall.UriRelativity.*;
+import static org.apache.juneau.marshall.UriResolution.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

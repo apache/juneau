@@ -23,9 +23,9 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.examples.parser.*;
 import org.apache.juneau.examples.serializer.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widget.*;

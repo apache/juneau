@@ -18,7 +18,7 @@ package org.apache.juneau.examples.core.xml;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * Sample class which shows the simple usage of XmlSerializer.

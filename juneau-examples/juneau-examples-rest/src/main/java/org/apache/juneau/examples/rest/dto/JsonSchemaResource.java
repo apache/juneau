@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.examples.rest.dto;
 
-import org.apache.juneau.*;
 import org.apache.juneau.bean.jsonschema.*;
 import org.apache.juneau.commons.*;
-import org.apache.juneau.html.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.widget.*;

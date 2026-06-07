@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.widget;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.*;
 
 /**

@@ -28,14 +28,15 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.urlencoding.UrlEncoding;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.urlencoding.UrlEncoding;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

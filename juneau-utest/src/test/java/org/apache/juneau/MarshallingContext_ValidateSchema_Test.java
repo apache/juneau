@@ -22,9 +22,10 @@ import java.util.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -101,10 +102,10 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 
 	/** Pass-through string swap (wraps with @ markers) — combined with @Schema to chain through both transforms. */
 	public static class AtAtSwap extends StringSwap<String> {
-		@Override public String swap(org.apache.juneau.MarshallingSession session, String o) {
+		@Override public String swap(org.apache.juneau.marshall.MarshallingSession session, String o) {
 			return "@" + o + "@";
 		}
-		@Override public String unswap(org.apache.juneau.MarshallingSession session, String f, org.apache.juneau.ClassMeta<?> hint) throws SerializeException {
+		@Override public String unswap(org.apache.juneau.marshall.MarshallingSession session, String f, org.apache.juneau.marshall.ClassMeta<?> hint) throws SerializeException {
 			if (f.length() < 2 || ! f.startsWith("@") || ! f.endsWith("@"))
 				throw new SerializeException("invalid wrapper");
 			return f.substring(1, f.length() - 1);
@@ -232,22 +233,22 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 	@Test void d04_validateSchemaCovariantOnAllFormats() {
 		// Each format's Builder must override validateSchema() to preserve the fluent chain through format-specific
 		// methods. If any of these calls return the parent builder type, the test will fail to compile.
-		assertNotNull(org.apache.juneau.hjson.HjsonSerializer.create().validateSchema().useMultilineStrings(true).build());
-		assertNotNull(org.apache.juneau.hjson.HjsonParser.create().validateSchema(true).build());
-		assertNotNull(org.apache.juneau.toml.TomlSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.toml.TomlParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.proto.ProtoSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.proto.ProtoParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.cbor.CborSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.cbor.CborParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.bson.BsonSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.bson.BsonParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.parquet.ParquetSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.parquet.ParquetParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.ini.IniSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.ini.IniParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.hocon.HoconSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.hocon.HoconParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.hjson.HjsonSerializer.create().validateSchema().useMultilineStrings(true).build());
+		assertNotNull(org.apache.juneau.marshall.hjson.HjsonParser.create().validateSchema(true).build());
+		assertNotNull(org.apache.juneau.marshall.toml.TomlSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.toml.TomlParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.proto.ProtoSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.proto.ProtoParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.cbor.CborSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.cbor.CborParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.bson.BsonSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.bson.BsonParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.parquet.ParquetSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.parquet.ParquetParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.ini.IniSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.ini.IniParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.hocon.HoconSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.hocon.HoconParser.create().validateSchema().build());
 	}
 
 	// =================================================================================================================

@@ -24,9 +24,9 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import java.net.*;
 
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
 
 /**
  * Sample class which shows the usage of DTO module which is a

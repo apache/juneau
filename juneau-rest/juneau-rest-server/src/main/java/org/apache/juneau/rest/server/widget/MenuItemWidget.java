@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.io.*;
 
 import org.apache.juneau.commons.io.*;
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 
 /**

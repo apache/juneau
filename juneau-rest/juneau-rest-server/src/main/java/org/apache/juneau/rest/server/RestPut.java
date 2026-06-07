@@ -23,14 +23,14 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.*;
-import org.apache.juneau.encoders.*;
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.encoders.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.matcher.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.swagger.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Identifies a REST PUT operation Java method on a {@link RestServlet} implementation class.
@@ -401,7 +401,7 @@ public @interface RestPut {
 	 *
 	 * <p>
 	 * This value overrides encoders specified at the class level using {@link Rest#encoders()}.
-	 * The {@link org.apache.juneau.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.encoders.EncoderSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -426,7 +426,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.encoders.EncoderSet} bean via
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -508,7 +508,7 @@ public @interface RestPut {
 	 *
 	 * <p>
 	 * This value overrides parsers specified at the class level using {@link Rest#parsers()}.
-	 * The {@link org.apache.juneau.parser.ParserSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.parser.ParserSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -534,7 +534,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.parser.ParserSet} bean via
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.parser.ParserSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -841,7 +841,7 @@ public @interface RestPut {
 	 *
 	 * <p>
 	 * This value overrides serializers specified at the class level using {@link Rest#serializers()}.
-	 * The {@link org.apache.juneau.serializer.SerializerSet.Inherit} class can be used to include values from the parent class.
+	 * The {@link org.apache.juneau.marshall.serializer.SerializerSet.Inherit} class can be used to include values from the parent class.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -867,7 +867,7 @@ public @interface RestPut {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.serializer.SerializerSet} bean via
+	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

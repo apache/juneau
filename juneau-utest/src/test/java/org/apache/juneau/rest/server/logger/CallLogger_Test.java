@@ -24,6 +24,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.rest.server.stats.*;
 import org.junit.jupiter.api.*;
 import org.springframework.mock.web.*;

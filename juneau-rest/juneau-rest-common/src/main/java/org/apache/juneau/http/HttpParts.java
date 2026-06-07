@@ -21,11 +21,11 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Static factory methods for creating HTTP parts (query parameters, form fields, path variables).
@@ -43,7 +43,7 @@ import org.apache.juneau.http.part.*;
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
+ * ({@code org.apache.juneau.marshall.ng.*}).
  * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
  * (and possibly earlier).
  *

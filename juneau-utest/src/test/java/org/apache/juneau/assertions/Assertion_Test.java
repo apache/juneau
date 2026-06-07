@@ -19,6 +19,7 @@ package org.apache.juneau.assertions;
 import static org.apache.juneau.assertions.Assertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 

@@ -20,7 +20,7 @@
  *
  * <p>
  * <b>Beta — API subject to change:</b> This package is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
+ * ({@code org.apache.juneau.marshall.ng.*}).
  * Binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release (and possibly earlier).
  *
  * <p>

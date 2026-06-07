@@ -21,8 +21,8 @@ import static java.lang.annotation.RetentionPolicy.*;
 
 import java.lang.annotation.*;
 
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
 
 /**
  * REST request attribute annotation.

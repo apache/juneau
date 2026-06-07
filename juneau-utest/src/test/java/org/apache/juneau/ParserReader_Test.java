@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
-import org.apache.juneau.parser.*;
+import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 class ParserReader_Test extends TestBase {

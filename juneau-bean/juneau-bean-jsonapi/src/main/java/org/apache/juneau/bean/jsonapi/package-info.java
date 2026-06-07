@@ -16,7 +16,7 @@
  */
 
 /**
- * Juneau {@link org.apache.juneau.Marshalled @Marshalled} types for the
+ * Juneau {@link org.apache.juneau.marshall.Marshalled @Marshalled} types for the
  * <a href="https://jsonapi.org/format/">JSON:API v1.1</a> wire format.
  *
  * <h5 class='topic'>Overview</h5>
@@ -24,8 +24,8 @@
  * <p>
  * JSON:API is a media-type ({@code application/vnd.api+json}) for building APIs with shared conventions for
  * resources, relationships, links, errors, and metadata. This module provides typed Juneau beans modeling the
- * JSON:API wire format - no marshaller is needed; the existing {@link org.apache.juneau.json.JsonSerializer} /
- * {@link org.apache.juneau.json.JsonParser} already produce and consume the wire format. The matching
+ * JSON:API wire format - no marshaller is needed; the existing {@link org.apache.juneau.marshall.json.JsonSerializer} /
+ * {@link org.apache.juneau.marshall.json.JsonParser} already produce and consume the wire format. The matching
  * {@code ContentType} constant is {@code org.apache.juneau.http.header.ContentType#APPLICATION_VND_API_JSON}.
  *
  * <h5 class='topic'>Bean Classes</h5>
@@ -46,7 +46,7 @@
  *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiVersion} - The {@code jsonapi} member
  *     ({@code version}/{@code meta}).
  *   <li>{@link org.apache.juneau.bean.jsonapi.JsonApiLinkOrStringSwap} -
- *     {@link org.apache.juneau.swap.ObjectSwap} for {@code links} map values; each value can be either a JSON
+ *     {@link org.apache.juneau.marshall.swap.ObjectSwap} for {@code links} map values; each value can be either a JSON
  *     string URL or a {@link org.apache.juneau.bean.jsonapi.JsonApiLink} object per the spec.
  * </ul>
  *

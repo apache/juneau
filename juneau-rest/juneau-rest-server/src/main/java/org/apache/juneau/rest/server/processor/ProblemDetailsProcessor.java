@@ -25,9 +25,9 @@ import org.apache.juneau.bean.rfc7807.*;
 import org.apache.juneau.bean.rfc7807.adapter.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Response processor that serializes

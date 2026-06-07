@@ -23,7 +23,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.mock.classic.MockRestClient;
 import org.apache.juneau.rest.server.*;

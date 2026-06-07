@@ -34,7 +34,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
 

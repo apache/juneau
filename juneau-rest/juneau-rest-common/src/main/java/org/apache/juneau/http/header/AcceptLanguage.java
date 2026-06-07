@@ -30,7 +30,7 @@ import org.apache.juneau.commons.http.*;
  *
  * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
- * ({@code org.apache.juneau.ng.*}).
+ * ({@code org.apache.juneau.marshall.ng.*}).
  *
  * @since 9.2.1
  */

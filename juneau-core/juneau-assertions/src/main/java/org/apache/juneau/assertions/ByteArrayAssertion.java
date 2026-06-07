@@ -20,7 +20,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for assertion calls against byte arrays.

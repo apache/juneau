@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.html5;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Defines the Java classes that make up the HTML DTO type dictionary.

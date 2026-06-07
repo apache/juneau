@@ -27,12 +27,13 @@ import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({

@@ -18,10 +18,10 @@ package org.apache.juneau.bean.jsonapi;
 
 import java.util.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.swap.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 
 /**
  * Per-property {@link ObjectSwap} applied to JSON:API {@code links} maps so that each map entry round-trips

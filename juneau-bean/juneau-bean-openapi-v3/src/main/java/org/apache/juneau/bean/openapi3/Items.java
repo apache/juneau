@@ -22,14 +22,14 @@ import static org.apache.juneau.commons.utils.CollectionUtils.contains;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
 
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.json5.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json5.*;
 
 /**
  * A limited subset of JSON-Schema's items object.

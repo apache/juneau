@@ -29,19 +29,19 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.conn.*;
-import org.apache.juneau.*;
 import org.apache.juneau.assertions.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.resource.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.oapi.*;
-import org.apache.juneau.objecttools.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.parser.ParseException;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.objecttools.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.rest.client.classic.assertion.*;
 
 /**

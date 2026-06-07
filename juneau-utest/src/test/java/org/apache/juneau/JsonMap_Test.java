@@ -23,10 +23,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.collections.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.objecttools.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.objecttools.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -381,7 +381,7 @@ class JsonMap_Test extends TestBase {
 		assertNotNull(m.toReadableJson5());
 
 		// toString(WriterSerializer) — generalized
-		assertString("{b:'2',a:'1'}", m.toString(org.apache.juneau.json5.Json5Serializer.DEFAULT));
+		assertString("{b:'2',a:'1'}", m.toString(org.apache.juneau.marshall.json5.Json5Serializer.DEFAULT));
 	}
 
 	//====================================================================================================

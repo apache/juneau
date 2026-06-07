@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.mcp;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * Runtime exception carrying JSON-RPC error fields for mapping to {@link JsonRpcError}.

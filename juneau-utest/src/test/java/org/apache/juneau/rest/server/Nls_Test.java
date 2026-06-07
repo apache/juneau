@@ -19,8 +19,8 @@ package org.apache.juneau.rest.server;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.utils.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.serializer.*;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 

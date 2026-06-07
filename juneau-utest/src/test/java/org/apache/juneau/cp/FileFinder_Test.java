@@ -29,6 +29,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.io.*;
 import org.apache.juneau.cp.sub.*;
+import org.apache.juneau.marshall.cp.*;
 import org.junit.jupiter.api.*;
 
 

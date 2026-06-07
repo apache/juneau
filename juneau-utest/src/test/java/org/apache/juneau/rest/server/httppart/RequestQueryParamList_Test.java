@@ -44,7 +44,7 @@ class RequestQueryParamList_Test extends TestBase {
 
 	public static class UnnamedQueryBean {
 		public String value;
-		public UnnamedQueryBean() {}
+		public UnnamedQueryBean() { /* no-op */ }
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -149,6 +149,9 @@ class RequestQueryParamList_Test extends TestBase {
 		}
 
 		// Exercises set(HttpPart...) and equals/hashCode and toString.
+		@SuppressWarnings({
+			"unlikely-arg-type" // Intentionally tests equals() returns false for a non-compatible argument type.
+		})
 		@RestGet(path="/equality")
 		public String equality(RequestQueryParamList q) {
 			var c1 = q.copy();
@@ -172,7 +175,7 @@ class RequestQueryParamList_Test extends TestBase {
 
 		// Exercises parser() setter.
 		@RestGet(path="/parser")
-		public String parser(RestRequest req) throws Exception {
+		public String parser(RestRequest req) {
 			var q = req.getQueryParams();
 			q.parser(req.getPartParserSession());
 			return "parserNotNull=" + (q.get("a").asString().orElse(null) != null);

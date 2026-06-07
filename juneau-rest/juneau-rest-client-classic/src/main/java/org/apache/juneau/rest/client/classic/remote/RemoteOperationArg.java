@@ -24,7 +24,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.*;
-import org.apache.juneau.httppart.*;
+import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Represents the metadata about an annotated argument of a method on a REST proxy class.

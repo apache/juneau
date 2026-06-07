@@ -19,7 +19,7 @@ package org.apache.juneau;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.marshaller.MarshallUtils.*;
+import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -33,10 +33,10 @@ import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.junit.bct.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.xml.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -56,7 +56,7 @@ import org.junit.jupiter.api.*;
  *
  * <h5 class='section'>Primary BCT Assertion Methods:</h5>
  * These static methods are defined on {@link BctAssertions} and typically used via
- * {@code import static org.apache.juneau.junit.bct.BctAssertions.*;} (also re-exported through {@link TestBase}).
+ * {@code import static org.apache.juneau.marshall.junit.bct.BctAssertions.*;} (also re-exported through {@link TestBase}).
  * </p>
  * <dl>
  * 	<dt><b>{@link BctAssertions#assertBean(Object, String, String)}</b></dt>

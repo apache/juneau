@@ -20,12 +20,12 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.internal.ConverterUtils.*;
+import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
 
 import org.apache.juneau.commons.collections.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Describes a single operation parameter.

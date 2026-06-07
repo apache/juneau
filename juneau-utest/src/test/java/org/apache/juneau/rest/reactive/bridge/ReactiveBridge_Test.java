@@ -22,11 +22,11 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.reactive.reactor.*;
-import org.apache.juneau.sse.*;
 import org.junit.jupiter.api.*;
 
 import io.reactivex.rxjava3.core.*;

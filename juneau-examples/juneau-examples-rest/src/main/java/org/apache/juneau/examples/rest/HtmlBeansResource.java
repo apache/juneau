@@ -19,7 +19,7 @@ package org.apache.juneau.examples.rest;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
 
 import org.apache.juneau.bean.html5.*;
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.beans.*;
 import org.apache.juneau.rest.server.servlet.*;

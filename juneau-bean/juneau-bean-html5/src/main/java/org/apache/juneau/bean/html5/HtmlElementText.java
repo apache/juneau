@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * A subclass of HTML elements that contain text only.

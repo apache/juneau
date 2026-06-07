@@ -191,8 +191,7 @@ class BoundedServletInputStream_Test extends TestBase {
 	@Test void d05_close_propagates() throws Exception {
 		var underlying = new ByteArrayInputStream("abc".getBytes());
 		var in = new BoundedServletInputStream(underlying, 10);
-		in.close();
-		// After ByteArrayInputStream.close, reads still work (it's a no-op), so just confirm no-throw.
+		assertDoesNotThrow(in::close);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -233,22 +232,25 @@ class BoundedServletInputStream_Test extends TestBase {
 		var sis = new FakeServletInputStream("abc".getBytes());
 		try (var in = new BoundedServletInputStream(sis, 10)) {
 			ReadListener listener = new ReadListener() {
-				@Override public void onDataAvailable() {}
-				@Override public void onAllDataRead() {}
-				@Override public void onError(Throwable t) {}
+				@Override public void onDataAvailable() { /* no-op */ }
+				@Override public void onAllDataRead() { /* no-op */ }
+				@Override public void onError(Throwable t) { /* no-op */ }
 			};
 			in.setReadListener(listener);
 			assertSame(listener, sis.listener);
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S2699" // Tests that no exception is thrown.
+	})
 	@Test void e06_setReadListener_noopWhenNoSis() throws Exception {
 		try (var in = new BoundedServletInputStream(new ByteArrayInputStream("abc".getBytes()), 10)) {
 			// No SIS - the call should silently be ignored (not throw).
 			in.setReadListener(new ReadListener() {
-				@Override public void onDataAvailable() {}
-				@Override public void onAllDataRead() {}
-				@Override public void onError(Throwable t) {}
+				@Override public void onDataAvailable() { /* no-op */ }
+				@Override public void onAllDataRead() { /* no-op */ }
+				@Override public void onError(Throwable t) { /* no-op */ }
 			});
 		}
 	}

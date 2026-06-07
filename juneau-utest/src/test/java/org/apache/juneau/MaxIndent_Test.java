@@ -21,13 +21,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.html.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.testutils.pojos.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 

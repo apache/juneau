@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.uon.*;
+import org.apache.juneau.marshall.uon.*;
 
 /**
  * UON complex example.

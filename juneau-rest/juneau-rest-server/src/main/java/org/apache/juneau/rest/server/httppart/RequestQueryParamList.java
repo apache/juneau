@@ -33,8 +33,8 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.HttpPart;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.httppart.*;
-import org.apache.juneau.objecttools.*;
+import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.rest.server.*;
 
 /**

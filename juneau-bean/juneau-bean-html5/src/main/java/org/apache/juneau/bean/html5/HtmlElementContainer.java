@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.bean.html5;
 
-import static org.apache.juneau.xml.XmlFormat.*;
+import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.conversion.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * A subclass of HTML elements that contain only other elements, not text.

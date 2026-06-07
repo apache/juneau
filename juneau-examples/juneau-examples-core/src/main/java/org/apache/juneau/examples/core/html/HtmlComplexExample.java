@@ -20,7 +20,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.examples.core.pojo.*;
-import org.apache.juneau.html.*;
+import org.apache.juneau.marshall.html.*;
 
 /**
  * Sample class which shows the complex usage of HtmlSerializer and HtmlParser.

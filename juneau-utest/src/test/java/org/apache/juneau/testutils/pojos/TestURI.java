@@ -18,8 +18,8 @@ package org.apache.juneau.testutils.pojos;
 
 import java.net.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.xml.*;
 
 @Marshalled
 public class TestURI {

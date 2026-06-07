@@ -22,11 +22,11 @@ import java.util.*;
 
 import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.jsonschema.*;
-import org.apache.juneau.marshaller.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.jsonschema.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.swagger.*;
 

@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.bean.html5;
 
-import static org.apache.juneau.xml.XmlFormat.*;
+import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
-import org.apache.juneau.xml.*;
+import org.apache.juneau.marshall.xml.*;
 
 /**
  * An object that gets serialized as raw XML by the XML and HTML serializers.

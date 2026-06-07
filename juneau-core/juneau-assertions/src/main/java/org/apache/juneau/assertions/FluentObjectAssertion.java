@@ -27,10 +27,10 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.cp.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.json5.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against POJOs.

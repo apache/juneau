@@ -18,7 +18,7 @@ package org.apache.juneau.bean.mcp;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 
 /**
  * MCP server capability advertisement in {@link InitializeResult}.

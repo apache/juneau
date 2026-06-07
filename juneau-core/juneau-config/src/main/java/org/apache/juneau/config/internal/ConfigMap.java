@@ -29,13 +29,13 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
 
-import org.apache.juneau.*;
-import org.apache.juneau.collections.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.config.event.*;
 import org.apache.juneau.config.format.*;
 import org.apache.juneau.config.store.*;
+import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
 
 /**
  * Represents the parsed contents of a configuration.

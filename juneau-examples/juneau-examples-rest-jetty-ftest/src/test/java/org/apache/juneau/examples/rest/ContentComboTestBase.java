@@ -26,17 +26,17 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.csv.*;
-import org.apache.juneau.html.*;
-import org.apache.juneau.json.*;
-import org.apache.juneau.msgpack.*;
-import org.apache.juneau.parser.*;
-import org.apache.juneau.plaintext.*;
+import org.apache.juneau.marshall.csv.*;
+import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.msgpack.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.plaintext.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.client.classic.*;
-import org.apache.juneau.serializer.*;
-import org.apache.juneau.uon.*;
-import org.apache.juneau.urlencoding.*;
-import org.apache.juneau.xml.*;
 import org.junit.*;
 
 @FixMethodOrder(NAME_ASCENDING)

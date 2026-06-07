@@ -24,8 +24,8 @@ import java.util.regex.*;
 
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link RequestQueryParam} objects.

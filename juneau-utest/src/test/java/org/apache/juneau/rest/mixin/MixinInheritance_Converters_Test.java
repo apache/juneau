@@ -18,11 +18,11 @@ package org.apache.juneau.rest.mixin;
 
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**

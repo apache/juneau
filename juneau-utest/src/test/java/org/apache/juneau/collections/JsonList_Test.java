@@ -23,7 +23,8 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.json.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 class JsonList_Test extends TestBase {
@@ -162,6 +163,9 @@ class JsonList_Test extends TestBase {
 		assertEquals(2, got.size());
 	}
 
+	@SuppressWarnings({"java:S5961", // Test comprehensiveness requires more than 25 assertions.
+		"java:S5778" // assertThrows lambdas contain multiple calls; only the collection-mutating call throws in practice.
+	})
 	@Test void a22_unmodifiable() {
 		var l = JsonList.of(1, 2, 3).unmodifiable();
 		assertTrue(l.isUnmodifiable());

@@ -22,7 +22,7 @@ import java.util.function.*;
 import org.apache.juneau.assertions.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.serializer.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link HttpProtocolVersion} objects.

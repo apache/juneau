@@ -35,7 +35,7 @@ public class XorEncodeMod extends Mod {
 	/** Reusable XOR-ConfigEncoder instance. */
 	public static final XorEncodeMod INSTANCE = new XorEncodeMod();
 
-	private static final String KEY = env("org.apache.juneau.config.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
+	private static final String KEY = env("org.apache.juneau.marshall.config.XorEncoder.key", "nuy7og796Vh6G9O6bG230SHK0cc8QYkH");	// The super-duper-secret key
 
 	/**
 	 * Constructor.
