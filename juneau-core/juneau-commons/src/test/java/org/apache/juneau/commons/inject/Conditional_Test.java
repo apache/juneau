@@ -36,7 +36,8 @@ import org.apache.juneau.commons.TestBase;
  */
 @SuppressWarnings({
 	"java:S2094", // Empty fixture/config classes are intentional test fixtures.
-	"java:S2093" // BasicBeanStore is AutoCloseable, but these try/finally blocks restore global Settings state, not the store; converting to try-with-resources would invoke store.close() (triggering @PreDestroy lifecycle these registration-semantics tests don't exercise) and dislocate the Settings setup/teardown.
+	"java:S2093", // BasicBeanStore is AutoCloseable, but these try/finally blocks restore global Settings state, not the store; converting to try-with-resources would invoke store.close() (triggering @PreDestroy lifecycle these registration-semantics tests don't exercise) and dislocate the Settings setup/teardown.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class Conditional_Test extends TestBase {
 

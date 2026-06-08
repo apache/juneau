@@ -33,7 +33,10 @@ import org.apache.juneau.commons.TestBase;
  * (d) a subtype's own exact builder still wins even when a constructor exists; and (e) plain POJOs are
  * unaffected.
  */
-@SuppressWarnings("java:S2094") // Intentionally empty helper bean.
+@SuppressWarnings({
+	"java:S2094", // Intentionally empty helper bean.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class BeanInstantiator_OptionD_Test extends TestBase {
 
 	private BasicBeanStore beanStore;

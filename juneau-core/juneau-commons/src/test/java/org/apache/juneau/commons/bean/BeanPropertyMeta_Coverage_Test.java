@@ -35,7 +35,9 @@ import org.apache.juneau.commons.TestBase;
  * {@link BeanPropertyMeta#set}, {@link BeanPropertyMeta#getRaw}, {@link BeanPropertyMeta#getDynaMap} methods,
  * and the marshalling-only-path {@link UnsupportedOperationException} thrown by {@link BeanPropertyMeta#add}.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({
+	"unused"  // Unused in this context; kept for API consistency or future use.
+})
 class BeanPropertyMeta_Coverage_Test extends TestBase {
 
 	//====================================================================================================

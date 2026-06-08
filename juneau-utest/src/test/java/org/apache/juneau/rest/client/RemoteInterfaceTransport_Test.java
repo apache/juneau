@@ -182,7 +182,9 @@ class RemoteInterfaceTransport_Test extends TestBase {
 	}
 
 	/** Closeable holder so each parameterized scenario can clean up its transport and client. */
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	})
 	private static ClientHolder buildClient(TransportSupplier ts) throws Exception {
 		var transport = ts.get();
 		var client = RestClient.builder()

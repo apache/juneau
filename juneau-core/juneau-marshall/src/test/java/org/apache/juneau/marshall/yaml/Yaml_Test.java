@@ -25,6 +25,11 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"unused",    // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+	"java:S5778", // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
+	"java:S5976" // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+})
 class Yaml_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -990,7 +995,7 @@ class Yaml_Test extends TestBase {
 		assertTrue(o instanceof List);
 	}
 
-	@Test void o07_parseFlowMappingAsArray() throws Exception {
+	@Test void o07_parseFlowMappingAsArray() {
 		// '{' for array type → flow mapping route → cast to array (likely fails or empty)
 		// Test that no NPE thrown — exception is OK.
 		assertDoesNotThrow(() -> {
@@ -1119,7 +1124,7 @@ class Yaml_Test extends TestBase {
 		assertNotNull(m);
 	}
 
-	@Test void s02_blockMappingExitOnDashSibling() throws Exception {
+	@Test void s02_blockMappingExitOnDashSibling() {
 		// Block mapping ends when next line starts with '-' (sequence sibling).
 		String yaml = "outer:\n  k: v\n- list-item";
 		// Try parsing — top-level can't be both map and sequence.
@@ -1199,7 +1204,7 @@ class Yaml_Test extends TestBase {
 		assertEquals(3, m.getList("k").size());
 	}
 
-	@Test void u03_blockSeqInsideFlowMap() throws Exception {
+	@Test void u03_blockSeqInsideFlowMap() {
 		// This isn't valid YAML in strict spec, but parser likely fails gracefully.
 		assertDoesNotThrow(() -> {
 			try {
@@ -1208,7 +1213,7 @@ class Yaml_Test extends TestBase {
 		});
 	}
 
-	@Test void u04_emptyValueInFlowMap() throws Exception {
+	@Test void u04_emptyValueInFlowMap() {
 		// "{k: , k2: v}" — empty value treated as empty plain scalar.
 		// May or may not be valid; just make sure no infinite loop.
 		assertDoesNotThrow(() -> {
@@ -1346,7 +1351,7 @@ class Yaml_Test extends TestBase {
 		assertEquals("Alice", parsed[0].name);
 	}
 
-	@Test void x08_parseFlowMappingArrayCast() throws Exception {
+	@Test void x08_parseFlowMappingArrayCast() {
 		// '{' for an array type — exercises the "{" → newGenericMap → cast branch (line 192-195).
 		// "{0: a, 1: b}" → MarshalledMap → cast to String[] (juneau interprets numeric keys).
 		assertDoesNotThrow(() -> {
@@ -1545,18 +1550,18 @@ class Yaml_Test extends TestBase {
 		assertNull(YamlParser.DEFAULT.parse("   ", Object.class));
 	}
 
-	@Test void ff03_eofRightAtMark() throws Exception {
+	@Test void ff03_eofRightAtMark() {
 		// Cause EOF immediately after consuming an opening token.
 		assertThrows(ParseException.class, () ->
 			YamlParser.DEFAULT.parse("{", JsonMap.class));
 	}
 
-	@Test void ff04_eofInsideKey() throws Exception {
+	@Test void ff04_eofInsideKey() {
 		assertThrows(ParseException.class, () ->
 			YamlParser.DEFAULT.parse("{key", JsonMap.class));
 	}
 
-	@Test void ff05_eofAfterColon() throws Exception {
+	@Test void ff05_eofAfterColon() {
 		// "{key:" — colon then EOF → S4 break.
 		assertThrows(ParseException.class, () ->
 			YamlParser.DEFAULT.parse("{key:", JsonMap.class));

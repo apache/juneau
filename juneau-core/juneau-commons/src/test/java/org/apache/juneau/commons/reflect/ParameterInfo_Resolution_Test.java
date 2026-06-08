@@ -35,6 +35,10 @@ import org.apache.juneau.commons.TestBase;
  * 	<li>The {@code resolveValue(BeanStore, Object enclosingInstance, Object... otherBeans)} overload
  * </ul>
  */
+@SuppressWarnings({
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused"    // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class ParameterInfo_Resolution_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -348,7 +352,9 @@ class ParameterInfo_Resolution_Test extends TestBase {
 		var r = pi.resolveValue(bs);
 		assertTrue(r instanceof Provider);
 		// Calling get() resolves the bean.
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		var p = (Provider<MyService>) r;
 		assertSame(inst, p.get());
 	}

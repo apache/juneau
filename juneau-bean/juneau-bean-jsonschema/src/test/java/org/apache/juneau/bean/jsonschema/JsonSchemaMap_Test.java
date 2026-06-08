@@ -26,7 +26,8 @@ import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
 	"removal",  // Tests deprecated getId() / setId() for backward compatibility
-	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource"  // Reader fixtures returned by getReader() overrides are test stubs (null / throwing); no resource to close.
 })
 class JsonSchemaMap_Test extends TestBase {
 

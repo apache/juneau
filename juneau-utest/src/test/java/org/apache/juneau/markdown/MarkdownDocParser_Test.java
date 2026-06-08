@@ -156,7 +156,9 @@ class MarkdownDocParser_Test {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void d01_parseFlatDocToMap() throws Exception {
 		var md = """
 			# Data

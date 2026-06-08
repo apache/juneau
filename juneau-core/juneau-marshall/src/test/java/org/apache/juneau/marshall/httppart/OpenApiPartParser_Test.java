@@ -36,7 +36,8 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"resource"    // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
 })
 class OpenApiPartParser_Test extends TestBase {
 

@@ -31,7 +31,9 @@ import jakarta.servlet.*;
 /**
  * Utility class for starting up the examples microservice.
  */
-@SuppressWarnings("resource")
+@SuppressWarnings({
+	"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 public class SamplesMicroservice {
 	static volatile Microservice microservice;
 	static URI microserviceURI;

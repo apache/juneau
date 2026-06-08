@@ -275,6 +275,8 @@ class BctConfig_Test extends TestBase {
 		 * Converter without no-arg constructor (should fail).
 		 */
 		static class InvalidConverter extends BasicBeanConverter {
+			// 'arg' exists only to make this a non-no-arg constructor, which is the failure case under test.
+			@SuppressWarnings("unused")
 			public InvalidConverter(String arg) {
 				super(BasicBeanConverter.builder().defaultSettings());
 			}

@@ -34,9 +34,11 @@ import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S1186", // Field names use underscores for test data (e.g., a_m, c_a1); unused parameters in tests are typically intentional
-	"java:S116", // Field names use underscores for test data clarity
+	"java:S116",  // Field names use underscores for test data clarity
 	"java:S3008", // Static field names use underscore-separated test-group prefixes (e.g. a_m, c_a1, f_get) for test fixture organization
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class MethodInfo_Test extends TestBase {
 

@@ -38,7 +38,9 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void a01_bulletListAsterisk() throws Exception {
 		var md = "* alpha\n* beta\n* gamma";
 		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
@@ -46,7 +48,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void a02_bulletListPlus() throws Exception {
 		var md = "+ one\n+ two";
 		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
@@ -54,7 +58,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void a03_bulletListEmptyMarkers() throws Exception {
 		// Bare "-", "*", "+" markers should produce empty-string entries.
 		var md = "- a\n-\n- b";
@@ -73,14 +79,18 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void a05_bulletListToCustomCollection() throws Exception {
 		// Exercise the canCreateNewInstance(outer) branch in parseBulletList for a concrete List type.
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		var r = (LinkedList<String>) MarkdownParser.DEFAULT.parse("- a\n- b", LinkedList.class, String.class);
 		assertEquals(2, r.size());
 		assertEquals("a", r.getFirst());
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void a06_bulletListNullValues() throws Exception {
 		var md = "- foo\n- *null*\n- bar";
 		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
@@ -165,7 +175,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void c05_multiColumnAllNullRow() throws Exception {
 		// A row of all *null*/empty cells should yield a null entry in the list.
 		var md = "| name | age |\n|---|---|\n| *null* | *null* |\n| Alice | 30 |";
@@ -176,7 +188,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void c06_multiColumnToObject() throws Exception {
 		// Multi-column with isObject() target → ArrayList of MarshalledMaps.
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
@@ -228,7 +242,9 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void d04_emptyCellPreservedForString() throws Exception {
 		// Empty cell to a String-typed property → empty string.
 		var md = "| name | age |\n|---|---|\n|  | 1 |";
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		var r = (List<MarkdownParser_Test.B>) MarkdownParser.DEFAULT.parse(md, List.class, MarkdownParser_Test.B.class);
 		assertEquals(1, r.size());
 		assertEquals("", r.get(0).name);
@@ -251,7 +267,9 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void e01_parseOptionalString() throws Exception {
 		var md = "hello";
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		var r = (Optional<String>) MarkdownParser.DEFAULT.parse(md, Optional.class, String.class);
 		assertNotNull(r);
 		assertTrue(r.isPresent());
@@ -263,7 +281,9 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void f01_keyValueToTreeMap() throws Exception {
 		// Concrete Map type that canCreateNewInstance — exercises eType.newInstance() branch.
 		var md = "| Property | Value |\n|---|---|\n| b | 2 |\n| a | 1 |";
@@ -276,7 +296,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void f02_multiColumnToTreeMap() throws Exception {
 		// Single-row multi-column → Map element. Exercises parseRow's isMap() branch.
 		var md = "| k1 | k2 |\n|---|---|\n| v1 | v2 |";
@@ -340,7 +362,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void h02_multiColumnTypeColumn() throws Exception {
 		// _type column in multi-column table is recognized and skipped from output map keys.
 		var p = MarkdownParser.create().beanDictionary(HA.class, HB.class).build();
@@ -420,7 +444,9 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void i03_topLevelSwapMultiColumnTable() throws Exception {
 		// Same swap exercised through parseRow's needsJson5Path branch (rowToJson5).
 		var md = "| name | count |\n|---|---|\n| Alice | 3 |\n| Bob | 5 |";
@@ -487,7 +513,9 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void j01_customNullInBulletList() throws Exception {
 		var p = MarkdownParser.create().nullValue("NIL").build();
 		var md = "- a\n- NIL\n- b";
@@ -522,7 +550,9 @@ class MarkdownParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void l01_multiColumnToStringList() throws Exception {
 		// List<String> as multi-column target → parseRow's "simple type" fall-through is hit.
 		var md = "| col1 | col2 |\n|---|---|\n| value-a | ignored |\n| value-b | ignored |";

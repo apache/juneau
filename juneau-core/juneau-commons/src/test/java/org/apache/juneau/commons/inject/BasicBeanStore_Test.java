@@ -30,7 +30,8 @@ import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S4144", // Identical test methods intentional for testing different scenarios
-	"java:S114" // Snake_case fixture interface names (X_Iface, X_BasicIface) are intentional test-local naming.
+	"java:S114",  // Snake_case fixture interface names (X_Iface, X_BasicIface) are intentional test-local naming.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class BasicBeanStore_Test extends TestBase {
 
@@ -1587,7 +1588,10 @@ class BasicBeanStore_Test extends TestBase {
 		public Z03_MixedFieldConfig() { /* intentionally empty */ }
 		public String nonBeanField = "ignored";
 		@Bean public TestBean tb = new TestBean("z03");
-		@SuppressWarnings("unused") public String helperMethod() { return "not a bean"; }
+		@SuppressWarnings({
+			"unused"  // Unused in this context; kept for API consistency or future use.
+		})
+		public String helperMethod() { return "not a bean"; }
 		@Bean public AnotherBean ab() { return new AnotherBean(7); }
 	}
 
@@ -1635,4 +1639,3 @@ class BasicBeanStore_Test extends TestBase {
 			"Cause must reference the duplicate-bean condition; got: " + ex.getCause().getMessage());
 	}
 }
-

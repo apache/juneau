@@ -31,7 +31,10 @@ import org.apache.juneau.commons.TestBase;
  * happy-path lookup-shadow-then-restore semantics that the {@code JuneauBeanStoreExtension} Mode OVERLAY
  * machinery depends on.
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class BasicBeanStore_PushPopOverlay_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

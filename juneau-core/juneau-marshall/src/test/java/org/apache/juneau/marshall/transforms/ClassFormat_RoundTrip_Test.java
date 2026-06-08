@@ -67,6 +67,9 @@ import org.junit.jupiter.params.provider.*;
  * {@code org.apache.juneau.marshall.*} types).  {@link Object#equals} works as expected on {@link Class} — two
  * {@code Class<?>} references compare equal iff they refer to the same class loader's runtime class.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class ClassFormat_RoundTrip_Test extends TestBase {
 
 	/**

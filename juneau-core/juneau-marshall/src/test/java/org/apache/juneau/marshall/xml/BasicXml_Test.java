@@ -29,7 +29,9 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class BasicXml_Test extends TestBase {
 
 	private static final XmlSerializer

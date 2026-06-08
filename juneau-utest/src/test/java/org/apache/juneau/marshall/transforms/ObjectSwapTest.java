@@ -74,7 +74,9 @@ class ObjectSwapTest extends TestBase {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	@Test void doTest() throws Exception {
 
 		var s = SerializerSet.create()

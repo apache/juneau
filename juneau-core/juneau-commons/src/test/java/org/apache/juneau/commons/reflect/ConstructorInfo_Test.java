@@ -34,10 +34,12 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
-	"unchecked", // Cast from Object to List/Map/Set/Optional in constructor tests
+	"unchecked",  // Cast from Object to List/Map/Set/Optional in constructor tests
 	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S1186", // Empty method body intentional for callback testing
-	"java:S1172" // Unused parameters kept for API consistency or framework requirements
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ConstructorInfo_Test extends TestBase {
 

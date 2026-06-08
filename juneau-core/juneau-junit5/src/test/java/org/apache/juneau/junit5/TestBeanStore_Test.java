@@ -33,6 +33,7 @@ import org.junit.jupiter.api.*;
  * mechanism.  The framework wiring (Args.overridingParent, MockRestClient.overridingBeanStore)
  * is exercised by sibling tests; this test concentrates on the {@link TestBeanStore} surface.
  */
+@SuppressWarnings("resource")  // TestBeanStore instances are short-lived in-memory test fixtures; closing is irrelevant to these assertions.
 class TestBeanStore_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -110,7 +111,9 @@ class TestBeanStore_Test extends TestBase {
 	// c — supplier-based overrides
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("java:S125") // Explanatory prose on overload-resolution; not dead code.
+	@SuppressWarnings({
+		"java:S125"  // Explanatory prose on overload-resolution; not dead code.
+	})
 	@Test
 	void c01_supplier_invokedLazily() {
 		var calls = new AtomicInteger();

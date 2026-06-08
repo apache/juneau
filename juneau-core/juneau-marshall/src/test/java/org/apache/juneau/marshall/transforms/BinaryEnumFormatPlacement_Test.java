@@ -149,7 +149,7 @@ class BinaryEnumFormatPlacement_Test {
 
 	@Test void c01_marshalledConfig_applies() throws Exception {
 		var s = Json5Serializer.create().applyAnnotations(C01Config.class).build();
-		var json = (String) s.serialize(new C01Bean());
+		var json = s.serialize(new C01Bean());
 		assertTrue(json.contains("b:'48656C6C6F'"), "binary hex: " + json);
 		assertTrue(json.contains("e:'ALPHA_BETA'"), "enum name: " + json);
 	}
@@ -169,7 +169,7 @@ class BinaryEnumFormatPlacement_Test {
 			.binaryFormat(BinaryFormat.HEX)
 			.enumFormat(EnumFormat.NAME)
 			.build();
-		var json = (String) s.serialize(new D01());
+		var json = s.serialize(new D01());
 		assertTrue(json.contains("b:'48656C6C6F'"), "binary hex: " + json);
 		assertTrue(json.contains("e:'ALPHA_BETA'"), "enum name: " + json);
 	}

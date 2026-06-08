@@ -27,6 +27,9 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class FileReaderBuilder_Test extends TestBase {
 
 	private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");

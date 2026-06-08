@@ -43,6 +43,8 @@ class NestedTokenizer_Test extends TestBase {
 	// Basic tokenization tests
 	//------------------------------------------------------------------------------------------------------------------
 
+	// Intentionally exercises the default constructor for coverage; the instance is not otherwise needed.
+	@SuppressWarnings("unused")
 	@Test void a01_simpleTokens() {
 		new NestedTokenizer();
 

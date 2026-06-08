@@ -34,7 +34,9 @@ import org.apache.juneau.commons.TestBase;
  * the various construction paths (records, fluent setters, no-arg constructors, BeanCtor,
  * @BeanType properties/excludeProperties/unsorted), and newBean / hasConstructor.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({
+	"unused"  // Unused in this context; kept for API consistency or future use.
+})
 class BeanMeta_Coverage_Test extends TestBase {
 
 	//====================================================================================================

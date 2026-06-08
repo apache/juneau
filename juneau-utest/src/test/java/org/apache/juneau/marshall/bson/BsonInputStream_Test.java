@@ -31,7 +31,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link BsonInputStream}.
  */
-@SuppressWarnings({"resource"})
+@SuppressWarnings({
+	"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class BsonInputStream_Test extends TestBase {
 
 	// ====================================================================

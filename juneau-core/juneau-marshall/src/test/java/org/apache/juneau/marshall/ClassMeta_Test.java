@@ -292,6 +292,7 @@ class ClassMeta_Test extends TestBase {
 	@A(2) interface CI2 extends CI1 {}
 	@A(3) interface CI3 {}
 	@A(4) interface CI4 {}
+	@SuppressWarnings("unused")  // Explicit interface listed for documentation clarity even though already inherited via CI2.
 	@A(5) static class C1 implements CI1, CI2 {}
 	@A(6) static class C2 extends C1 implements CI3 {}
 	@A(7) static class C3 extends C2 {}

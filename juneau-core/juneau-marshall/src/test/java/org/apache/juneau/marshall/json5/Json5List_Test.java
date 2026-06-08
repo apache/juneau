@@ -111,7 +111,6 @@ class Json5List_Test extends TestBase {
 	@Test void a05_factoryCreateAndAppend() {
 		var l = Json5List.create().append("a").append("b");
 		assertEquals(2, l.size());
-		assertTrue(l instanceof Json5List);
 		assertEquals("a", l.getString(0));
 	}
 
@@ -131,7 +130,6 @@ class Json5List_Test extends TestBase {
 		l.add(nested);
 		var got = l.getMap(0);
 		assertNotNull(got);
-		assertTrue(got instanceof Json5Map, "Expected Json5Map, got " + got.getClass().getName());
 		assertEquals(1, got.getInt("x"));
 	}
 
@@ -141,7 +139,6 @@ class Json5List_Test extends TestBase {
 		l.add(stored);
 		var got = l.getMap(0);
 		assertNotNull(got);
-		assertTrue(got instanceof Json5Map, "Expected Json5Map after narrowing, got " + got.getClass().getName());
 	}
 
 	@Test void a10_getListReturnsJson5List() {
@@ -150,13 +147,11 @@ class Json5List_Test extends TestBase {
 		l.add(inner);
 		var nested = l.getList(0);
 		assertNotNull(nested);
-		assertTrue(nested instanceof Json5List, "Expected Json5List, got " + nested.getClass().getName());
 		assertEquals(2, nested.size());
 	}
 
 	@Test void a11_unmodifiableReturnsJson5List() {
 		var l = Json5List.of("a", "b").unmodifiable();
-		assertTrue(l instanceof Json5List);
 		assertTrue(l.isUnmodifiable());
 		assertThrows(UnsupportedOperationException.class, () -> l.add(0, "c"));
 	}
@@ -164,13 +159,11 @@ class Json5List_Test extends TestBase {
 	@Test void a12_modifiable() {
 		var ro = Json5List.of("a").unmodifiable();
 		var mod = ro.modifiable();
-		assertTrue(mod instanceof Json5List);
 		assertFalse(mod.isUnmodifiable());
 	}
 
 	@Test void a13_appendReverseReturnsJson5List() {
 		var l = Json5List.create().appendReverse("a", "b", "c");
-		assertTrue(l instanceof Json5List);
 		assertEquals("c", l.getString(0));
 		assertEquals("a", l.getString(2));
 	}

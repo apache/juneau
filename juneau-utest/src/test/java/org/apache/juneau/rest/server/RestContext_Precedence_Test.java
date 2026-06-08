@@ -72,7 +72,9 @@ class RestContext_Precedence_Test extends TestBase {
 	// memoizer-backed default suppliers \u2014 exactly where real Spring sits.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	public static class SpringLikeBeanStore extends BasicBeanStore {
 
 		private final Map<Class<?>, Object> springBindings = new HashMap<>();

@@ -437,6 +437,8 @@ class Swapper_Test extends TestBase {
 	// ====================================================================================================
 
 	static class SwapperMethods {
+		// 'converter' is required by the Swapper functional-interface signature (used as a method reference).
+		@SuppressWarnings("unused")
 		static String addPrefix(BeanConverter converter, String str) {
 			return "PREFIX:" + str;
 		}

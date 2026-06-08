@@ -67,6 +67,9 @@ import org.junit.jupiter.params.provider.*;
  * formatter (an ISO offset-time string) per {@link TemporalFormat#isMillisNumeric(Class)} — there is no
  * defensible epoch-millis interpretation for a time-without-date.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class TemporalFormat_OffsetTime_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

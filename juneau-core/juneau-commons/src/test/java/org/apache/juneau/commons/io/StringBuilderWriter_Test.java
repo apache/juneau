@@ -24,7 +24,8 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
-	"resource" // Writers intentionally not closed in unit tests
+	"resource", // Writers intentionally not closed in unit tests
+	"unused"    // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class StringBuilderWriter_Test extends TestBase {
 

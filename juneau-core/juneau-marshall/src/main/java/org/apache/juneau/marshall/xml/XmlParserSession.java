@@ -271,8 +271,9 @@ public class XmlParserSession extends ReaderParserSession {
 	}
 
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"null",        // Null handling verified by context or framework
+		"java:S3776",  // Cognitive complexity acceptable for this specific logic
+		"java:S6541",  // Brain Method — complex XML parsing logic; structural refactoring would reduce readability without meaningful benefit.
 	})
 	private Object getUnknown(XmlReader r) throws IOException, ParseException, ExecutableException, XMLStreamException {
 		if (r.getEventType() != START_ELEMENT) {
@@ -754,8 +755,9 @@ public class XmlParserSession extends ReaderParserSession {
 	 * @throws XMLStreamException Malformed XML encountered.
 	 */
 	@SuppressWarnings({
-		"null", // Null handling verified by context or framework
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
+		"null",        // Null handling verified by context or framework
+		"java:S3776",  // Cognitive complexity acceptable for this specific logic
+		"java:S6541",  // Brain Method — complex XML parsing logic; structural refactoring would reduce readability without meaningful benefit.
 	})
 	protected <T> T parseAnything(ClassMeta<T> eType, String currAttr, XmlReader r, Object outer, boolean isRoot, BeanPropertyMeta pMeta)
 		throws IOException, ParseException, ExecutableException, XMLStreamException {

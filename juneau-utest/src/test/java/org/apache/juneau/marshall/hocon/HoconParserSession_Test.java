@@ -643,6 +643,8 @@ class HoconParserSession_Test extends TestBase {
 		public byte[] data;
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	private static ParserPipe unused() { return null; } // keep import happy without ?-suppression
 }

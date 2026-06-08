@@ -32,6 +32,9 @@ import org.apache.juneau.commons.TestBase;
  * the helper methods (resolveVars, getProperty, getProperties, getRaw, getBean, load, forEachValue),
  * and the various ignore/error paths that the marshalling-side BeanMap_Test does not cover.
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class BeanMap_Coverage_Test extends TestBase {
 
 	//====================================================================================================

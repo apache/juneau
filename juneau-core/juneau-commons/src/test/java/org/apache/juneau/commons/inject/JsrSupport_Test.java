@@ -32,7 +32,9 @@ import org.apache.juneau.commons.TestBase;
  * bean-store / instantiator integration tests — namely {@code isSingletonAnnotation},
  * {@code isProviderType}, and the null / negative paths.
  */
-@SuppressWarnings({"java:S2094"})
+@SuppressWarnings({
+	"java:S2094"  // Intentionally empty bean class used as test fixture.
+})
 class JsrSupport_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------

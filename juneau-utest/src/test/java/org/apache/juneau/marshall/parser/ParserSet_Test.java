@@ -26,7 +26,9 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class ParserSet_Test extends TestBase {
 
 	//====================================================================================================

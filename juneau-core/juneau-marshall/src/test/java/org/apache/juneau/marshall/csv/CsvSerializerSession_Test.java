@@ -63,7 +63,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertTrue(csv.contains("<NULL>"), "Expected default null marker: " + csv);
 	}
 
-	@Test void a03_property_byteArrayFormat() throws Exception {
+	@Test void a03_property_byteArrayFormat() {
 		// Hits Builder.property() short property name dispatch for byteArrayFormat.
 		var session = CsvSerializer.DEFAULT
 			.createSession()
@@ -72,7 +72,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a04_property_byteArrayFormat_qualifiedName() throws Exception {
+	@Test void a04_property_byteArrayFormat_qualifiedName() {
 		// Hits Builder.property() qualified name dispatch.
 		var session = CsvSerializer.DEFAULT
 			.createSession()
@@ -81,7 +81,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a05_property_allowNestedStructures() throws Exception {
+	@Test void a05_property_allowNestedStructures() {
 		var session = CsvSerializer.DEFAULT
 			.createSession()
 			.property("allowNestedStructures", true)
@@ -89,7 +89,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a06_property_allowNestedStructures_qualifiedName() throws Exception {
+	@Test void a06_property_allowNestedStructures_qualifiedName() {
 		var session = CsvSerializer.DEFAULT
 			.createSession()
 			.property("CsvSerializerSession.allowNestedStructures", false)
@@ -97,7 +97,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a07_property_nullValue() throws Exception {
+	@Test void a07_property_nullValue() {
 		var session = CsvSerializer.DEFAULT
 			.createSession()
 			.property("nullValue", "NIL")
@@ -105,7 +105,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a08_property_nullValue_qualifiedName() throws Exception {
+	@Test void a08_property_nullValue_qualifiedName() {
 		var session = CsvSerializer.DEFAULT
 			.createSession()
 			.property("CsvSerializerSession.nullValue", "<EMPTY>")
@@ -113,7 +113,7 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a09_property_unknownKey_delegatesToSuper() throws Exception {
+	@Test void a09_property_unknownKey_delegatesToSuper() {
 		// Default branch in Builder.property() switch.
 		var session = CsvSerializer.DEFAULT
 			.createSession()
@@ -122,13 +122,13 @@ class CsvSerializerSession_Test extends TestBase {
 		assertNotNull(session);
 	}
 
-	@Test void a10_property_nullKey_throws() throws Exception {
+	@Test void a10_property_nullKey_throws() {
 		// Null key delegates to super (line 138-141), which throws.
 		var b = CsvSerializer.DEFAULT.createSession();
 		assertThrows(IllegalArgumentException.class, () -> b.property(null, "x"));
 	}
 
-	@Test void a11_create_nullCtx_throws() throws Exception {
+	@Test void a11_create_nullCtx_throws() {
 		// Static create(ctx) with null ctx -> assertArgNotNull throws.
 		CsvSerializer ctx = null;
 		assertThrows(IllegalArgumentException.class, () -> CsvSerializerSession.create(ctx));
@@ -501,7 +501,7 @@ class CsvSerializerSession_Test extends TestBase {
 	@Test void i01_mapPath_withNullKeys() throws Exception {
 		// Map path: null keys in header (line 334-335).
 		var l = new LinkedList<Map<Object,Object>>();
-		var m = new LinkedHashMap<Object,Object>();
+		var m = new LinkedHashMap<>();
 		m.put(null, "v1");
 		m.put("k", "v2");
 		l.add(m);

@@ -26,6 +26,9 @@ import org.apache.juneau.commons.TestBase;
 /**
  * Tests for {@link Snapshot}.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Snapshot_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

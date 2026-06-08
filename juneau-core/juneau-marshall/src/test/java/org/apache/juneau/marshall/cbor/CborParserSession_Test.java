@@ -34,6 +34,10 @@ import org.junit.jupiter.api.*;
  * float decoding, scalar conversion, type-mismatch error paths, proxy-bean
  * MAP loading, undefined/simple markers, and array/collection variants.
  */
+@SuppressWarnings({
+	"unused",   // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+	"java:S125" // Commented-out code is retained as historical reference / future re-enable candidate.
+})
 class CborParserSession_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------
@@ -66,9 +70,8 @@ class CborParserSession_Test extends TestBase {
 	@Test
 	void a04_tag22_base64() throws Exception {
 		// 0xD6 (tag 22) + text string "AAEC" (4 bytes -> 0x64) -- base64 encoded data
-		var b = fromHex("D6644141454325");  // "AAEC%" trailing garbage? Use shorter clean
-		// Re-do: just tag22 + "AAEC" length 4 = 0x64 + 41 41 45 43
-		b = fromHex("D6644141 45 43".replace(" ", ""));
+		// tag22 + "AAEC" length 4 = 0x64 + 41 41 45 43
+		var b = fromHex("D6644141 45 43".replace(" ", ""));
 		assertEquals("AAEC", CborParser.DEFAULT.parse(b, String.class));
 	}
 
@@ -192,28 +195,28 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
-	void e01_beanFromArrayThrows() throws Exception {
+	void e01_beanFromArrayThrows() {
 		// Bean expects MAP; give it an ARRAY (0x80 = empty array).
 		var b = fromHex("80");
 		assertThrows(ParseException.class, () -> CborParser.DEFAULT.parse(b, SimpleBean.class));
 	}
 
 	@Test
-	void e02_mapFromArrayThrows() throws Exception {
+	void e02_mapFromArrayThrows() {
 		// Map expects MAP; give it an ARRAY.
 		var b = fromHex("80");
 		assertThrows(ParseException.class, () -> CborParser.DEFAULT.parse(b, HashMap.class));
 	}
 
 	@Test
-	void e03_collectionFromIntegerThrows() throws Exception {
+	void e03_collectionFromIntegerThrows() {
 		// Collection expects MAP or ARRAY; give it an integer.
 		var b = fromHex("01");
 		assertThrows(ParseException.class, () -> CborParser.DEFAULT.parse(b, ArrayList.class));
 	}
 
 	@Test
-	void e04_arrayFromIntegerThrows() throws Exception {
+	void e04_arrayFromIntegerThrows() {
 		// int[] expects MAP or ARRAY; give it an integer.
 		var b = fromHex("01");
 		assertThrows(ParseException.class, () -> CborParser.DEFAULT.parse(b, int[].class));
@@ -249,6 +252,9 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
+	})
 	void f04_collectionFromMap() throws Exception {
 		// Collection target with MAP input -> falls into line 219, then cast(m, ...).
 		// Use a MAP that contains a _type discriminator so cast succeeds and returns a list.
@@ -263,6 +269,9 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S2699" // Test verifies no exception is thrown; assertDoesNotThrow wraps are implicit.
+	})
 	void f05_arrayFromMap() throws Exception {
 		// Object[] target with MAP input -> exercises line 233 array branch with MAP input.
 		var b = fromHex("A1616B01");
@@ -356,7 +365,7 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
-	void k02_indefiniteArrayThrows() throws Exception {
+	void k02_indefiniteArrayThrows() {
 		// 0x9F = indefinite-length array marker. Spec stop-byte is 0xFF.
 		// Per CborInputStream.readArgument, additionalInfo==31 throws "not supported".
 		var b = fromHex("9F0102FF");

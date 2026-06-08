@@ -34,11 +34,11 @@ import org.junit.jupiter.api.*;
 class CsvCellSerializer_Test extends TestBase {
 
 	private static CsvSerializerSession session() {
-		return (CsvSerializerSession) CsvSerializer.create().allowNestedStructures(true).build().getSession();
+		return CsvSerializer.create().allowNestedStructures(true).build().getSession();
 	}
 
 	private static CsvSerializerSession sessionSemicolonBytes() {
-		return (CsvSerializerSession) CsvSerializer.create()
+		return CsvSerializer.create()
 			.allowNestedStructures(true)
 			.byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED)
 			.build()

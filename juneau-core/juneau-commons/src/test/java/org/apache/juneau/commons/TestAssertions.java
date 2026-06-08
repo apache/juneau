@@ -38,7 +38,7 @@ import java.util.stream.*;
 @SuppressWarnings({
 	"java:S3011",  // Reflective access needed for assertBean/assertEmpty
 	"java:S1172",  // Consistent method signatures are intentional
-	"unchecked",
+	"unused"       // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 public class TestAssertions {
 
@@ -269,7 +269,9 @@ public class TestAssertions {
 		throw new AssertionError("assertEmpty: cannot determine if " + o.getClass().getName() + " is empty");
 	}
 
-	@SuppressWarnings("java:S1452")
+	@SuppressWarnings({
+		"java:S1452"  // Wildcard type parameter required for test utility generics.
+	})
 	private static Map<?, ?> toOrderedMap(Map<?, ?> actual) {
 		if (actual instanceof SortedMap || actual instanceof LinkedHashMap) return actual;
 		List<Map.Entry<?, ?>> entries = new ArrayList<>(actual.entrySet());

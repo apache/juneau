@@ -30,6 +30,9 @@ import org.apache.juneau.commons.TestBase;
 /**
  * Tests {@link PathReaderBuilder}.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class PathReaderBuilder_Test extends TestBase {
 
 	private static final Path PATH = Paths.get("src/test/resources/files/Test3.properties");

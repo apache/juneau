@@ -34,7 +34,8 @@ import org.junit.jupiter.params.provider.*;
  * Testcase for {@link SwaggerUI}.
  */
 @SuppressWarnings({
-	"java:S4144" // Identical test methods intentional for testing different scenarios
+	"java:S4144", // Identical test methods intentional for testing different scenarios
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class SwaggerUI_Test extends TestBase {
 

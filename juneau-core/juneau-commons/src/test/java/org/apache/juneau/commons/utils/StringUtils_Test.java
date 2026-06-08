@@ -40,8 +40,9 @@ import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S5961", // High assertion count acceptable in comprehensive test
-	"java:S125", // Commented code kept for test documentation
-	"serial" // Serialization not relevant in test code
+	"java:S125",  // Commented code kept for test documentation
+	"serial",     // Serialization not relevant in test code
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class StringUtils_Test extends TestBase {
 

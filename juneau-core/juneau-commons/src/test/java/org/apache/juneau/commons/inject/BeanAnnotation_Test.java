@@ -28,7 +28,9 @@ import org.apache.juneau.commons.TestBase;
  * <p>Asserts that the builder round-trips the basic attributes, including the
  * {@link Bean#priority()} attribute that was added as part of the JSR-330 / Spring-lite work.
  */
-@SuppressWarnings({"java:S2094"})
+@SuppressWarnings({
+	"java:S2094"  // Intentionally empty bean class used as test fixture.
+})
 class BeanAnnotation_Test extends TestBase {
 
 	@Test

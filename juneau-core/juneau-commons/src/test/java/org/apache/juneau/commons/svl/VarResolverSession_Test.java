@@ -35,6 +35,9 @@ import org.apache.juneau.commons.TestBase;
  * 	<li>{@link VarResolverSession#bean(Class, Object)} / {@link VarResolverSession#getBean(Class)} / fallback to context store
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class VarResolverSession_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

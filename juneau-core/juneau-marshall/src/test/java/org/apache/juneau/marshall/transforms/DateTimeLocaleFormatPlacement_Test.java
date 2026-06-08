@@ -140,7 +140,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void d01_timeZone_contextOverridesDefault() throws Exception {
 		var s = Json5Serializer.create().timeZoneFormat(TimeZoneFormat.OFFSET).build();
-		var json = (String) s.serialize(new D01());
+		var json = s.serialize(new D01());
 		assertTrue(json.startsWith("{z:'") && json.endsWith("'}"), "Unexpected: " + json);
 		assertFalse(json.contains("America/Los_Angeles"), "OFFSET should not emit IANA id: " + json);
 	}
@@ -150,7 +150,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void d02_timeZone_classOverridesContext() throws Exception {
 		var s = Json5Serializer.create().timeZoneFormat(TimeZoneFormat.ID).build();
-		var json = (String) s.serialize(new D02());
+		var json = s.serialize(new D02());
 		assertFalse(json.contains("America/Los_Angeles"), "Class-level OFFSET should win: " + json);
 	}
 
@@ -162,7 +162,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void d03_timeZone_propertyOverridesClass() throws Exception {
 		var s = Json5Serializer.create().build();
-		var json = (String) s.serialize(new D03());
+		var json = s.serialize(new D03());
 		assertFalse(json.contains("America/Los_Angeles"), "Property-level OFFSET should win: " + json);
 	}
 
@@ -218,7 +218,7 @@ class DateTimeLocaleFormatPlacement_Test {
 
 	@Test void f01_marshalledConfig_applies() throws Exception {
 		var s = Json5Serializer.create().applyAnnotations(F01Config.class).build();
-		var json = (String) s.serialize(new F01Bean());
+		var json = s.serialize(new F01Bean());
 		assertTrue(json.contains("c:" + T.toEpochMilli()), "calendar millis: " + json);
 		assertTrue(json.contains("d:" + T.toEpochMilli()), "date millis: " + json);
 		assertTrue(json.contains("i:'2012-12-21T12:34:56Z'"), "temporal iso instant: " + json);

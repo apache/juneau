@@ -25,7 +25,9 @@ import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class HtmlDocConfig_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

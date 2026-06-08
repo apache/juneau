@@ -33,8 +33,9 @@ import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"serial", // Serialization not relevant for test beans
-	"removal" // Tests precedence of new numeric style over deprecated boolean style
+	"serial",  // Serialization not relevant for test beans
+	"removal", // Tests precedence of new numeric style over deprecated boolean style
+	"unused"   // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class JsonSchemaGeneratorTest extends TestBase {
 

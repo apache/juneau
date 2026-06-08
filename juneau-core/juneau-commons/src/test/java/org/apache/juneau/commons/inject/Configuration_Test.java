@@ -36,7 +36,10 @@ import org.apache.juneau.commons.TestBase;
  * 	<li>Calling {@code registerConfiguration} on a non-{@code @Configuration} type fails fast.
  * </ul>
  */
-@SuppressWarnings({"java:S2094"})
+@SuppressWarnings({
+	"java:S2094", // Intentionally empty bean class used as test fixture.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Configuration_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------

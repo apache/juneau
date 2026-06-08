@@ -83,7 +83,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void a01_basicWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("true", ((SerializerSession)x).isAddBeanTypes());
+		check("true", x.isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("true", x.isDetectRecursions());
 		check("true", x.isIgnoreRecursions());
@@ -107,7 +107,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void a02_basicOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(a.getAnnotations()));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
-		check("true", ((SerializerSession)x).isAddBeanTypes());
+		check("true", x.isAddBeanTypes());
 		check("true", x.isAddRootType());
 		check("HEX", x.getBinaryFormat());
 		check("true", x.isDetectRecursions());
@@ -137,7 +137,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void b01_noValuesWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check(null, x.getListener());
 		check("100", x.getMaxIndent());
@@ -157,7 +157,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void b02_noValuesOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(b.getAnnotations()));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
-		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check("NOT_SET", x.getBinaryFormat());
 		check(null, x.getListener());
@@ -182,7 +182,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void c01_noAnnotationWriterSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check(null, x.getListener());
 		check("100", x.getMaxIndent());
@@ -202,7 +202,7 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void c02_noAnnotationOutputStreamSerializer() {
 		var al = AnnotationWorkList.of(sr, rstream(c.getAnnotations()));
 		var x = MsgPackSerializer.create().apply(al).build().getSession();
-		check("false", ((SerializerSession)x).isAddBeanTypes());
+		check("false", x.isAddBeanTypes());
 		check("false", x.isAddRootType());
 		check("NOT_SET", x.getBinaryFormat());
 		check(null, x.getListener());

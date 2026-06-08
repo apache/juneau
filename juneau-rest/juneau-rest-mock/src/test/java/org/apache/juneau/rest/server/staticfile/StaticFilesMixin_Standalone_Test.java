@@ -1,0 +1,73 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.apache.juneau.rest.server.staticfile;
+
+import org.apache.juneau.*;
+import org.apache.juneau.rest.mock.classic.*;
+import org.junit.jupiter.api.*;
+
+/**
+ * Validates {@link StaticFilesMixin} deployed as a <em>standalone</em> resource the user extends {@code StaticFilesMixin} directly and the
+ * inherited op-level {@code @RestGet(path="/${juneau.staticfiles.path:static}/*")} declares the
+ * mount point without any additional configuration.
+ *
+ * @since 10.0.0
+ */
+@SuppressWarnings({
+	"resource" // Static MockRestClient fields are a common test pattern; resources are managed by the mock framework.
+})
+class StaticFilesMixin_Standalone_Test extends TestBase {
+
+	public static class CdnResource extends StaticFilesMixin { }
+
+	private static final MockRestClient c = MockRestClient.buildLax(CdnResource.class);
+
+	@Test void a01_standaloneServesFromStaticMount() throws Exception {
+		c.get("/static/javadoc.css")
+			.run()
+			.assertStatus(200)
+			.assertContent().asString().isContains("Licensed to the Apache Software Foundation");
+	}
+
+	@Test void a02_legacyHtdocsAliasNotMountedByDefault() throws Exception {
+		// FINISHED-101: /htdocs/* is no longer a multi-path default. Migration covered by
+		// StaticFilesMixin_SvlPathOverride_Test#a02.
+		c.get("/htdocs/javadoc.css")
+			.run()
+			.assertStatus(404);
+	}
+
+	@Test void a03_standaloneMissingFileReturns404() throws Exception {
+		c.get("/static/does-not-exist.css")
+			.run()
+			.assertStatus(404);
+	}
+
+	@Test void a04_standaloneHeadProbe() throws Exception {
+		c.head("/static/javadoc.css")
+			.run()
+			.assertStatus(200)
+			.assertContent().is("");
+	}
+
+	@Test void a05_standaloneCacheControl() throws Exception {
+		c.get("/static/javadoc.css")
+			.run()
+			.assertStatus(200)
+			.assertHeader("Cache-Control").is("max-age=86400, public");
+	}
+}

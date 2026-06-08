@@ -147,7 +147,9 @@ class ObjectsAsStrings_RoundTripTest extends RoundTripTest_Base {
 		X2(2),
 		X3(3);
 
-		@SuppressWarnings("unused")
+		@SuppressWarnings({
+			"unused"  // Unused in this context; kept for API consistency or future use.
+		})
 		private int i;
 		B1(int i) {
 			this.i = i;

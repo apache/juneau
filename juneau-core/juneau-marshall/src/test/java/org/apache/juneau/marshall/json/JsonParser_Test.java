@@ -29,6 +29,9 @@ import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+})
 class JsonParser_Test extends TestBase {
 
 	private static final JsonParser p = JsonParser.DEFAULT;

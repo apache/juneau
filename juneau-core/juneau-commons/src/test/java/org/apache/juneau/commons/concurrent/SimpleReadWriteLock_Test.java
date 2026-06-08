@@ -24,6 +24,9 @@ import org.apache.juneau.commons.TestBase;
 /**
  * Tests for {@link SimpleReadWriteLock}.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class SimpleReadWriteLock_Test extends TestBase {
 
 	//====================================================================================================

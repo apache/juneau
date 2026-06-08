@@ -67,6 +67,9 @@ import org.junit.jupiter.params.provider.*;
  * formats fall back to system default offset on parse.  The {@code expectedAfter} helper canonicalizes
  * through the format's own {@code format/parse} cycle so the assertion reflects the lossy canonical form.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class TemporalFormat_OffsetDateTime_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

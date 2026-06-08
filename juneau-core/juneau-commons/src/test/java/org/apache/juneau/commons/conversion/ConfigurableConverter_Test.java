@@ -25,6 +25,9 @@ import org.junit.jupiter.api.*;
 /**
  * Unit tests for {@link ConfigurableConverter}.
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class ConfigurableConverter_Test {
 
 	// =================================================================================================================

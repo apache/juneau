@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link IniParser}.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class IniParser_Test extends TestBase {
 
 	//====================================================================================================

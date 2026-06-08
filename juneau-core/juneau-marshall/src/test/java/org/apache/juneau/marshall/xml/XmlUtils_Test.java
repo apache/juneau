@@ -32,6 +32,9 @@ import org.junit.jupiter.api.*;
  * {@code _xXXXX_} escape-sequence machinery, text-node collapsing, and the readable-event
  * label helper used for stream debugging.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class XmlUtils_Test extends TestBase {
 
 	private static String encodeAttrName(Object value) throws IOException {

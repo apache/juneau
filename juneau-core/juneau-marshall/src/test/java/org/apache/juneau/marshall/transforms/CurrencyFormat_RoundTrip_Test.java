@@ -71,6 +71,9 @@ import org.junit.jupiter.params.provider.*;
  * {@link Currency} uses cached singletons via {@link Currency#getInstance(String)}, so the default
  * {@link Object#equals} comparison works.  No equals helper needed.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class CurrencyFormat_RoundTrip_Test extends TestBase {
 
 	private static Locale originalLocale;
@@ -258,7 +261,7 @@ class CurrencyFormat_RoundTrip_Test extends TestBase {
 		var effective = fmt == null ? CurrencyFormat.ISO_CODE : fmt;
 		try {
 			return CurrencyFormat.parse(CurrencyFormat.format(original, effective, Locale.US), effective, Locale.US);
-		} catch (@SuppressWarnings("unused") IllegalArgumentException ignored) {
+		} catch (IllegalArgumentException ignored) {
 			return original;
 		}
 	}

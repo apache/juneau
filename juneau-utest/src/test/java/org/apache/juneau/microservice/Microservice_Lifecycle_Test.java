@@ -87,7 +87,9 @@ class Microservice_Lifecycle_Test extends TestBase {
 		@Override public boolean execute(Scanner in, PrintWriter out, Args a) { return false; }
 	}
 
-	@SuppressWarnings({"unchecked"})
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	@Test void a02_builder_consoleCommands_classes_throwsForNoNoargCtor() {
 		assertThrows(ExecutableException.class,
 			() -> Microservice.create().consoleCommands(NoNoargConsoleCommand.class));

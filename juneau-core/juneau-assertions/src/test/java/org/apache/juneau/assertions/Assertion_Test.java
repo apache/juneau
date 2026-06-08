@@ -41,6 +41,9 @@ class Assertion_Test extends TestBase {
 	}
 
 	public static class A3 extends RuntimeException {
+		@SuppressWarnings({
+			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
+		})
 		public A3(String msg) { throw new A2("fromA3", null); }
 	}
 

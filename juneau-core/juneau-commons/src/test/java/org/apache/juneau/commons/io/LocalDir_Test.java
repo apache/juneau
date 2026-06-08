@@ -26,6 +26,9 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.apache.juneau.commons.TestBase;
 
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class LocalDir_Test extends TestBase {
 
 	private static final Path TEST_DIR = Paths.get("src/test/resources/files");

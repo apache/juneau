@@ -36,6 +36,9 @@ import org.apache.juneau.commons.TestBase;
  * here exercise the shared semantic invariants directly so the per-resource regression suites
  * can focus on caller-layer behavior (HTTP status codes, response shape).
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class FileUtils_ResolveSafely_Test extends TestBase {
 
 	@TempDir

@@ -76,6 +76,9 @@ import org.junit.jupiter.params.provider.*;
  * through the default-swap dispatch ({@link org.apache.juneau.marshall.swaps.BinarySwap}) which short-circuits to
  * raw bytes for binary sessions — same lossless round-trip via the native path.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class BinaryFormat_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

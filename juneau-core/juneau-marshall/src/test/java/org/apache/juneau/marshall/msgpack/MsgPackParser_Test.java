@@ -29,6 +29,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests the {@link MsgPackParser} class.
  */
+@SuppressWarnings({
+	"resource" // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+})
 class MsgPackParser_Test extends TestBase {
 
 	//====================================================================================================

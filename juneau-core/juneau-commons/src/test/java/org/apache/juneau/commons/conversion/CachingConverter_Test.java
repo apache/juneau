@@ -57,7 +57,9 @@ class CachingConverter_Test extends TestBase {
 	}
 
 	// Helper to get a ParameterizedType for List<String> via reflection.
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	private List<String> listOfStringField;
 	private static final Type LIST_OF_STRING;
 	static {
@@ -92,7 +94,9 @@ class CachingConverter_Test extends TestBase {
 	}
 
 	// Helper field used to obtain a ParameterizedType for use as an arg.
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	private List<String> listArgField;
 	private static final Type LIST_ARG_TYPE;
 	static {
@@ -147,7 +151,9 @@ class CachingConverter_Test extends TestBase {
 		assertEquals("42", C.to(42, D_MEMBER_OF, (ConverterSession)null, (Type) String.class));
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	private List<String> d03_listField;
 	private static final Type D03_LIST_TYPE;
 	static {

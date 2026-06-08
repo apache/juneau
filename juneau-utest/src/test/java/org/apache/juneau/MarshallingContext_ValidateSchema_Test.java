@@ -338,7 +338,9 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		return msg == null ? "" : msg;
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	private static boolean isBeanRuntime(Throwable t) {
 		while (t != null) {
 			if (t instanceof BeanRuntimeException)

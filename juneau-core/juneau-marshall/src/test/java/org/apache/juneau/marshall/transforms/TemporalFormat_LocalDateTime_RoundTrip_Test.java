@@ -63,6 +63,9 @@ import org.junit.jupiter.params.provider.*;
  * Test combos = (tester templates) &times; ({@link TemporalFormat} values).  At the time of writing this
  * comes to 42 &times; 20 = 840 testers per test method.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class TemporalFormat_LocalDateTime_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

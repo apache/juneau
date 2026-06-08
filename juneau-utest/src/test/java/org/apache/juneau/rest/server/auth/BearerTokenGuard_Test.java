@@ -33,7 +33,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class BearerTokenGuard_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------

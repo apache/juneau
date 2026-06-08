@@ -126,7 +126,9 @@ public class ClassInfo_Test extends TestBase {
 	}
 
 	public static class AConfigApply extends AnnotationApplier<AConfig,Context.Builder<?>> {
-		@SuppressWarnings({"unchecked"})
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		protected AConfigApply(VarResolverSession vr) {
 			super(AConfig.class, (Class)Context.Builder.class, vr);
 		}
@@ -4304,4 +4306,3 @@ public class ClassInfo_Test extends TestBase {
 		assertFalse(ci.findSetter("nonExistent").isPresent());
 	}
 }
-

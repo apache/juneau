@@ -634,7 +634,10 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		public String getFoo() { return foo; }
 		public void setFoo(String v) { foo = v; }
 
-		@SuppressWarnings("unused") private String bar;
+		@SuppressWarnings({
+			"unused"  // Unused in this context; kept for API consistency or future use.
+		})
+		private String bar;
 		public String getBar() { throw new RuntimeException("xxx"); }
 
 		static A21 get() {

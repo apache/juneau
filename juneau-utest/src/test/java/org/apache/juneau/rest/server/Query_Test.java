@@ -30,7 +30,9 @@ import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S4144"})
+@SuppressWarnings({
+	"java:S4144"  // Identical method implementations intentional for test completeness.
+})
 class Query_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

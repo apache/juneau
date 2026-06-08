@@ -71,6 +71,9 @@ import org.junit.jupiter.params.provider.*;
  * {@link TimeZone} doesn't override {@link Object#equals}, so comparisons use {@link TimeZone#getID()}
  * rather than {@code equals}.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class TimeZoneFormat_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

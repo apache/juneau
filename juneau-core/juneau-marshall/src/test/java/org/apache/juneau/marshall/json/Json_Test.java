@@ -27,7 +27,9 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class Json_Test extends TestBase{
 
 	//====================================================================================================

@@ -74,6 +74,9 @@ import org.junit.jupiter.params.provider.*;
  * {@link BigInteger}; the binary format then decides how to encode it natively.  Values beyond a 64-bit
  * signed integer ({@code ±2^63 − 1}) may lose precision or fail in formats that lack a wide-integer wire type.
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class BigNumberFormat_BigInteger_RoundTrip_Test extends TestBase {
 
 	/**

@@ -39,7 +39,11 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"rawtypes",
-	"java:S5961"
+	"java:S5961",
+	"unused",      // Unused parameters/variables kept for consistent method signatures across test utilities.
+	"java:S125",   // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S5778",  // Lambda intentionally calls multiple throwing methods to test compound failure scenarios.
+	"java:S5976"   // Separate test methods preferred over parameterized for clarity and independent failure reporting.
 })
 class UrlEncodingParserSession_Test extends TestBase {
 
@@ -49,31 +53,31 @@ class UrlEncodingParserSession_Test extends TestBase {
 	// a01-a04: Builder property overrides
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_builderProperty_shortKey_true() throws Exception {
-		var session = (UrlEncodingParserSession) UrlEncodingParser.DEFAULT.createSession()
+	@Test void a01_builderProperty_shortKey_true() {
+		var session = UrlEncodingParser.DEFAULT.createSession()
 			.property("expandedParams", true)
 			.build();
 		assertTrue(session.isExpandedParams());
 	}
 
-	@Test void a02_builderProperty_shortKey_false() throws Exception {
+	@Test void a02_builderProperty_shortKey_false() {
 		var p = UrlEncodingParser.create().expandedParams().build();
-		var session = (UrlEncodingParserSession) p.createSession()
+		var session = p.createSession()
 			.property("expandedParams", false)
 			.build();
 		assertFalse(session.isExpandedParams());
 	}
 
-	@Test void a03_builderProperty_longKey() throws Exception {
-		var session = (UrlEncodingParserSession) UrlEncodingParser.DEFAULT.createSession()
+	@Test void a03_builderProperty_longKey() {
+		var session = UrlEncodingParser.DEFAULT.createSession()
 			.property("UrlEncodingParserSession.expandedParams", "true")
 			.build();
 		assertTrue(session.isExpandedParams());
 	}
 
-	@Test void a04_builderProperty_unknownKey_passesThrough() throws Exception {
+	@Test void a04_builderProperty_unknownKey_passesThrough() {
 		// Falls through to super.property() -> default branch.
-		var session = (UrlEncodingParserSession) UrlEncodingParser.DEFAULT.createSession()
+		var session = UrlEncodingParser.DEFAULT.createSession()
 			.property("someOtherKey", "value")
 			.build();
 		assertNotNull(session);
@@ -280,7 +284,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 		// parseIntoMap2: when valueType.isObject() and key seen twice, promote to JsonList.
 		var m = (Map) P.parse("?a=1&a=2&a=3", Map.class);
 		Object v = m.get("a");
-		assertTrue(v instanceof List, "Expected list, got: " + (v == null ? "null" : v.getClass()));
+		assertTrue(v instanceof List, "Expected list, got: " + v.getClass());
 		assertEquals(3, ((List)v).size());
 	}
 
@@ -416,13 +420,13 @@ class UrlEncodingParserSession_Test extends TestBase {
 	// l: shouldUseExpandedParams getter
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void l01_isExpandedParams_default_false() throws Exception {
-		var s = (UrlEncodingParserSession) UrlEncodingParser.DEFAULT.createSession().build();
+	@Test void l01_isExpandedParams_default_false() {
+		var s = UrlEncodingParser.DEFAULT.createSession().build();
 		assertFalse(s.isExpandedParams());
 	}
 
-	@Test void l02_isExpandedParams_set_true() throws Exception {
-		var s = (UrlEncodingParserSession) UrlEncodingParser.create().expandedParams().build()
+	@Test void l02_isExpandedParams_set_true() {
+		var s = UrlEncodingParser.create().expandedParams().build()
 			.createSession().build();
 		assertTrue(s.isExpandedParams());
 	}
@@ -441,7 +445,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 		// Use beanDictionary-aware parser.
 		var p = UrlEncodingParser.create().beanDictionary(TypedBean.class).build();
 		Object v = p.parse("?_type=b1&x=hello", Object.class);
-		assertTrue(v instanceof TypedBean, "got: " + (v == null ? "null" : v.getClass().getName()));
+		assertTrue(v instanceof TypedBean, "got: " + v.getClass().getName());
 		assertEquals("hello", ((TypedBean)v).x);
 	}
 

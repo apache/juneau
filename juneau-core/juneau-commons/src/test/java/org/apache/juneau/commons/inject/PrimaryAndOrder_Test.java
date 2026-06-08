@@ -33,7 +33,10 @@ import org.apache.juneau.commons.TestBase;
  * 	<li>{@code @Bean#priority()} provides ordering in the absence of {@code @Order}.
  * </ul>
  */
-@SuppressWarnings({"java:S2094"})
+@SuppressWarnings({
+	"java:S2094", // Intentionally empty bean class used as test fixture.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class PrimaryAndOrder_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------

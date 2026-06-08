@@ -32,7 +32,9 @@ import org.junit.jupiter.api.*;
  * Tests for RestCallInterceptor, RestLogger, RestLogEntry, RestLogLevelResolver,
  * BasicRestLogger, BodyConverter, and related RestClient features.
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class RestClientFeatures_Test {
 
 	// =================================================================================================================

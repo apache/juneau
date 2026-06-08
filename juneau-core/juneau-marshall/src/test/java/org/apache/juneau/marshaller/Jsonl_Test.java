@@ -28,7 +28,8 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"unchecked" // Parser returns Object; cast to Map/List<JsonMap> in tests
+	"unchecked", // Parser returns Object; cast to Map/List<JsonMap> in tests
+	"resource"   // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
 })
 class Jsonl_Test extends TestBase {
 

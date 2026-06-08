@@ -28,7 +28,9 @@ import java.util.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"unused"})
+@SuppressWarnings({
+	"unused"  // Unused in this context; kept for API consistency or future use.
+})
 class ClassUtils_Test {
 
 	//====================================================================================================
@@ -452,4 +454,3 @@ class ClassUtils_Test {
 		assertNull(result2);
 	}
 }
-

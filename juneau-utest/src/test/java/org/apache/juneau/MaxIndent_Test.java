@@ -34,7 +34,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Exhaustive serialization tests for maximum indentation.
  */
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class MaxIndent_Test extends TestBase {
 
 	private static Input input(int index, String label, Object bean, int maxDepth, String json, String xml, String html, String uon, String urlEnc) {

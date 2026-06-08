@@ -37,7 +37,8 @@ import org.junit.jupiter.api.*;
  * </ol>
  */
 @SuppressWarnings({
-	"java:S2094" // Test fixture / data class, no methods required.
+	"java:S2094", // Test fixture / data class, no methods required.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class ConfigPropertySourceProvider_Test extends TestBase {
 

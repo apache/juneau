@@ -34,6 +34,9 @@ import org.apache.juneau.commons.TestBase;
  * {@link IllegalArgumentException} at reflective invoke because {@link ParameterInfo#resolveValue}
  * returned the unwrapped scalar instead of an {@link Optional}.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class ParameterInfo_OptionalValue_Test extends TestBase {
 
 	private static final String KEY = "ParameterInfo_OptionalValue_Test.key";

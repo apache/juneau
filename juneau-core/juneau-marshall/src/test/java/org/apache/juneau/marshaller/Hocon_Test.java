@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link Hocon}.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class Hocon_Test {
 
 	@Test

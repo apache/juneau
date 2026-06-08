@@ -28,6 +28,9 @@ import org.junit.jupiter.api.*;
 /**
  * Validates aspects of config imports.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class ConfigImportsTest extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

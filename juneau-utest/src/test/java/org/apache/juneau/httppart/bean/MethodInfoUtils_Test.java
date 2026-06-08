@@ -39,7 +39,9 @@ class MethodInfoUtils_Test extends TestBase {
 	// Fixtures
 	// --------------------------------------------------------------------------------
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	static class Fixtures {
 		// One-arg matching methods
 		public void oneStringArg(String x) { /* no-op */ }

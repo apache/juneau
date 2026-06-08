@@ -82,6 +82,9 @@ class Html5Template_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			this.value2 = value2;
 		}
 
+		@SuppressWarnings({
+			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
+		})
 		public Form swap(MarshallingSession session) {
 			return form(action,
 				input("text").name("v1").value(value1),

@@ -37,7 +37,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class MixinHtmlDocInheritance_Test extends TestBase {
 
 	// A page-less mixin op: relies entirely on the host's class-level @HtmlDocConfig.

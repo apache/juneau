@@ -113,7 +113,9 @@ public class ObservabilityNoopBenchmark {
 	public void observabilityNoopBlock(Blackhole bh) {
 		long startNanos = System.nanoTime();
 		// NoOpTracerHook.startSpan() ignores the request arg; null is safe on the NoOp path.
-		@SuppressWarnings("java:S2637")
+		@SuppressWarnings({
+			"java:S2637"  // Suppression required for test context; see annotation for details.
+		})
 		var scope = tracer.startSpan(null);
 		try {
 			scope.setStatusCode(STATUS_CODE);

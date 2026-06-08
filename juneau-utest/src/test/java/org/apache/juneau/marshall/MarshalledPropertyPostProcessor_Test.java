@@ -492,7 +492,9 @@ class MarshalledPropertyPostProcessor_Test {
 	// Helpers
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	private static <T> T roundTripDefault(T bean, String propertyName, Object value) {
 		// Reflectively set the property so the helper stays generic across the per-type fixture classes.
 		try {

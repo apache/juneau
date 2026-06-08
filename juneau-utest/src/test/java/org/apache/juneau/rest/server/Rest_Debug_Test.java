@@ -37,7 +37,9 @@ class Rest_Debug_Test extends TestBase {
 		LOGGER.assertMessageAndReset().isExists();
 	}
 
-	@SuppressWarnings("unused")
+	@SuppressWarnings({
+		"unused"  // Unused in this context; kept for API consistency or future use.
+	})
 	private static void assertNotLogged() {
 		LOGGER.assertMessageAndReset().isNull();
 	}

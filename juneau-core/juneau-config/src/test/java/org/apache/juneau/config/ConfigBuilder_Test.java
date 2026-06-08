@@ -29,8 +29,9 @@ import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S116", // Field names use underscores for test data
-	"java:S3008" // Static field TEMP_DIR uses UPPER_CASE convention; non-constant semantics require suppression
+	"java:S116",  // Field names use underscores for test data
+	"java:S3008", // Static field TEMP_DIR uses UPPER_CASE convention; non-constant semantics require suppression
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class ConfigBuilder_Test extends TestBase {
 

@@ -32,7 +32,11 @@ import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"rawtypes","serial","java:S5961"})
+@SuppressWarnings({
+	"rawtypes",  // Raw types required for generic test utility.
+	"serial",  // serialVersionUID not required for test classes.
+	"java:S5961"  // Test comprehensiveness requires more than 25 assertions.
+})
 class ObjectRest_Test extends TestBase {
 
 	//====================================================================================================

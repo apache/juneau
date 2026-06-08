@@ -25,7 +25,9 @@ import org.junit.jupiter.api.*;
 /**
  * Object merging tests for {@link HoconParser}.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class HoconMerging_Test {
 
 	@Test

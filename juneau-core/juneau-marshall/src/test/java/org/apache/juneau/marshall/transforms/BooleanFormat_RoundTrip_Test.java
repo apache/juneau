@@ -81,6 +81,9 @@ import org.junit.jupiter.params.provider.*;
  * the textual shapes regardless of the parser-side setting, so the unswap path on the parser side is
  * format-agnostic.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class BooleanFormat_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

@@ -73,6 +73,9 @@ import org.junit.jupiter.params.provider.*;
  * {@code ORDINAL} format combine to emit a native numeric wire value on binary serializers and a bare
  * integer literal on text formats.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class EnumFormat_RoundTrip_Test extends TestBase {
 
 	public enum TestEnum { ALPHA, BETA, GAMMA }

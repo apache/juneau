@@ -46,7 +46,9 @@ import org.junit.jupiter.params.provider.*;
  * with the same objects for all serializers and parsers.
  */
 @Disabled
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class RoundTripLargeObjects_Test extends TestBase {
 
 	private static final int NUM_RUNS = 10;

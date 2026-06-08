@@ -22,6 +22,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class ConfigPropertySource_Test extends TestBase {
 
 	private Config build(String...lines) {

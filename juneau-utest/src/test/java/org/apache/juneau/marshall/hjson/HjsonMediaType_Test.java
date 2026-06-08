@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for Hjson media type configuration.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class HjsonMediaType_Test {
 
 	@Test

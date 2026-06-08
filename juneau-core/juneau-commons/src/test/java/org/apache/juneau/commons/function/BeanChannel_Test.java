@@ -27,7 +27,9 @@ import org.apache.juneau.commons.TestBase;
  * Unit tests for {@link BeanFactory}, {@link BeanConsumer}, {@link BeanSupplier},
  * {@link BeanChannel}, and {@link ListBeanChannel}.
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class BeanChannel_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -39,7 +41,10 @@ class BeanChannel_Test extends TestBase {
 		assertEquals("hello", a.create());
 	}
 
-	@Test @SuppressWarnings("rawtypes") void a02_beanFactory_void_throws() throws Exception {
+	@SuppressWarnings({
+		"rawtypes"  // Raw types required for generic test utility.
+	})
+	@Test void a02_beanFactory_void_throws() throws Exception {
 		var ctor = BeanFactory.Void.class.getDeclaredConstructor();
 		ctor.setAccessible(true);
 		var instance = (BeanFactory) ctor.newInstance();

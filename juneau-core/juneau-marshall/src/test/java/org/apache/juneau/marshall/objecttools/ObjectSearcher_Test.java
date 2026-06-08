@@ -38,7 +38,7 @@ public class ObjectSearcher_Test extends TestBase {
 
 	private static MarshallingSession bs = MarshallingContext.DEFAULT_SESSION;
 	private static ObjectSearcher os = ObjectSearcher.DEFAULT;
-	private static WriterSerializer ws = (WriterSerializer)Json5Serializer.create().calendarFormat(CalendarFormat.ISO_LOCAL_DATE_TIME).build();
+	private static WriterSerializer ws = Json5Serializer.create().calendarFormat(CalendarFormat.ISO_LOCAL_DATE_TIME).build();
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Utility

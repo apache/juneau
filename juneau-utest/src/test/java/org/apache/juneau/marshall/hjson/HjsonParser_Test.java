@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link HjsonParser}.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class HjsonParser_Test extends TestBase {
 
 	@Test

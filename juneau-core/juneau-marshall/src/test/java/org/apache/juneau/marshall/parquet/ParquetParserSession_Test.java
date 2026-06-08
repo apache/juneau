@@ -36,7 +36,8 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"unchecked",   // Parser returns raw types; explicit casts required for typed assertions
-	"java:S5961"
+	"java:S5961",  // High assertion count is acceptable in comprehensive data-driven test methods.
+	"java:S125"    // Commented-out code is retained as historical reference / future re-enable candidate.
 })
 class ParquetParserSession_Test extends TestBase {
 
@@ -350,7 +351,7 @@ class ParquetParserSession_Test extends TestBase {
 	@Test void m01_optionalOfList() throws Exception {
 		// Optional<List<SimpleBean>> - exercises type.isOptional unwrap with Collection inner.
 		var bytes = ParquetSerializer.DEFAULT.serialize(list(simple("a", 1)));
-		var opt = (Optional<?>) ParquetParser.DEFAULT.parse(bytes, Optional.class);
+		var opt = ParquetParser.DEFAULT.parse(bytes, Optional.class);
 		assertNotNull(opt);
 	}
 }

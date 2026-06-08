@@ -42,7 +42,10 @@ import org.apache.juneau.commons.TestBase;
  * 	<li>{@code Optional<Supplier<T>>} nesting is not specially handled.
  * </ul>
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Value_SupplierTypedFieldType_Test extends TestBase {
 
 	private static final String P_KEY = "Value_SupplierTypedFieldType_Test.key";
@@ -102,7 +105,9 @@ class Value_SupplierTypedFieldType_Test extends TestBase {
 		Supplier<String> value;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"rawtypes"  // Raw types required for generic test utility.
+	})
 	public static class RawSupplierBean {
 		@Value("${" + P_KEY + ":default}")
 		Supplier value;

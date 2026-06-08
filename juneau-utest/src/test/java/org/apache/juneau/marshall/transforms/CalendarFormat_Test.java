@@ -25,7 +25,9 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class CalendarFormat_Test {
 
 	private static final ZoneId Z = ZoneId.of("Z");

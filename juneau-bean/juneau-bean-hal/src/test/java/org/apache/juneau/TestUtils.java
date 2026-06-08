@@ -31,7 +31,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.junit.bct.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
@@ -92,7 +91,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Validates that the whitespace is correct in the specified XML.
 	 */
-	@SuppressWarnings("java:S112")
+	@SuppressWarnings({
+		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+	})
 	public static final void checkXmlWhitespace(String out) throws Exception {
 		if (out.indexOf('\u0000') != -1) {
 			for (var s : out.split("\u0000"))
@@ -265,7 +266,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Validates XML whitespace and namespace formatting on a serialized object.
 	 */
-	@SuppressWarnings("java:S112")
+	@SuppressWarnings({
+		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+	})
 	public static final void validateXml(Object o) throws Exception {
 		validateXml(o, XmlSerializer.DEFAULT_NS_SQ);
 	}
@@ -273,7 +276,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Validates XML whitespace and namespace formatting on a serialized object.
 	 */
-	@SuppressWarnings("java:S112")
+	@SuppressWarnings({
+		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+	})
 	public static final void validateXml(Object o, XmlSerializer s) throws Exception {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(o);
@@ -287,6 +292,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Extracts HTML/XML elements from a string based on element name and attributes.
 	 */
+	@SuppressWarnings({
+		"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
+	})
 	public static List<String> extractXml(String html, String elementName, Map<String,String> withAttributes) {
 		List<String> results = list();
 		if (html == null || elementName == null)

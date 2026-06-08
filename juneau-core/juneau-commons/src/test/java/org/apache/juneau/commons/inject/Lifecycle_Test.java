@@ -37,7 +37,11 @@ import org.apache.juneau.commons.TestBase;
  * 	<li>Suppressed-exception aggregation when multiple destroyers throw.
  * </ul>
  */
-@SuppressWarnings({"java:S2094"})
+@SuppressWarnings({
+	"java:S2094", // Intentionally empty bean class used as test fixture.
+	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class Lifecycle_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------

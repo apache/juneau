@@ -70,6 +70,10 @@ import org.junit.jupiter.params.provider.*;
  * If a tester is validation-only (no parser, schema-only, or CSV in serializer-only mode) the top-level
  * standalone-Duration test is skipped — there is no Duration round-trip semantics to assert in that case.
  */
+@SuppressWarnings({
+	"unused",   // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+	"java:S125" // Commented-out code is retained as historical reference / future re-enable candidate.
+})
 class DurationFormat_RoundTrip_Test extends TestBase {
 
 	/**

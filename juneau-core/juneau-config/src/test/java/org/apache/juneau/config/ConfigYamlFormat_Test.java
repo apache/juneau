@@ -27,7 +27,8 @@ import org.apache.juneau.config.store.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S1130" // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (IOException) is high-churn/low-value.
+	"java:S1130", // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (IOException) is high-churn/low-value.
+	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class ConfigYamlFormat_Test extends TestBase {
 

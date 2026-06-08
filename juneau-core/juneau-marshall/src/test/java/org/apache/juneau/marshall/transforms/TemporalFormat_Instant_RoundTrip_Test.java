@@ -71,6 +71,9 @@ import org.junit.jupiter.params.provider.*;
  * to a year (or year/month) only.  The {@code expectedAfter} helper canonicalizes through the format's
  * own {@code format / parse} cycle so the assertion reflects the lossy canonical form.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class TemporalFormat_Instant_RoundTrip_Test extends TestBase {
 
 	/**

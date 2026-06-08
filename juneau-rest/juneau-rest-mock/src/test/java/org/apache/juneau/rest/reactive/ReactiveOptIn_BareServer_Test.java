@@ -68,10 +68,14 @@ class ReactiveOptIn_BareServer_Test {
 		}
 	}
 
-	@SuppressWarnings("resource")  // Static test client; intentionally held for the test class lifetime.
+	@SuppressWarnings({
+		"resource"  // Static test client; intentionally held for the test class lifetime.
+	})
 	private static final MockRestClient CA = MockRestClient.buildLax(A.class);
 
-	@SuppressWarnings("resource")
+	@SuppressWarnings({
+		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	})
 	@Test void a01_bareServer_doesNotProcessFlowPublisherReactively() throws Exception {
 		String content;
 		try (var req = CA.get("/flux")) {

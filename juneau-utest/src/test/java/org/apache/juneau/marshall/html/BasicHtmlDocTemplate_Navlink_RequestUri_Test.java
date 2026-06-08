@@ -28,7 +28,9 @@ import org.junit.jupiter.api.*;
 /**
  * Verifies {@link BasicHtmlDocTemplate} navlink parsing for bare {@code request:/?query} and {@code request:?query}.
  */
-@SuppressWarnings("serial")
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class BasicHtmlDocTemplate_Navlink_RequestUri_Test extends TestBase {
 
 	@Rest

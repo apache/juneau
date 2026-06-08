@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.bean.*;
@@ -191,9 +192,9 @@ public class DirectoryResource extends BasicRestServlet {
 		/**
 		 * Returns the last modified date of the file.
 		 *
-		 * @return The last modified date.
+		 * @return The last modified date as an {@link Instant}.
 		 */
-		public Date getLastModified() { return new Date(f.lastModified()); }
+		public Instant getLastModified() { return Instant.ofEpochMilli(f.lastModified()); }
 
 		/**
 		 * Returns the file name as a link.

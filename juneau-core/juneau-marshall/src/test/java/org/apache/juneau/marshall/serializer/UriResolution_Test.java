@@ -37,7 +37,8 @@ import org.junit.jupiter.params.provider.*;
  * Superclass for tests that verify results against all supported content types.
  */
 @SuppressWarnings({
-	"java:S1172" // Unused parameters in tests are intentional
+	"java:S1172", // Unused parameters in tests are intentional
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class UriResolution_Test extends TestBase {
 

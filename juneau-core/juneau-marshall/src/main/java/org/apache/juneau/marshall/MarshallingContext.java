@@ -4231,7 +4231,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	@Override
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for comprehensive conversion dispatch
-		"java:S6541"  // Brain Method: conversion dispatch inherently requires handling many type pairs in one place
+		"java:S6541", // Brain Method: conversion dispatch inherently requires handling many type pairs in one place
+		"null"        // `builder` is guarded by `nn(builder)` before access; Eclipse doesn't recognise `nn()` as a null-check function.
 	})
 	public Conversion<?,?> findConversion(Class<?> inType, Class<?> outType) {
 		var toMeta = getClassMeta(outType);

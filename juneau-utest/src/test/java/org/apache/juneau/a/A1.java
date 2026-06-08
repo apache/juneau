@@ -19,7 +19,9 @@ package org.apache.juneau.a;
 import org.apache.juneau.commons.bean.*;
 
 // Default class
-@SuppressWarnings({"unused"})
+@SuppressWarnings({
+	"unused"  // Unused in this context; kept for API consistency or future use.
+})
 public class A1 {
 	public int f1;
 	protected int f2;

@@ -285,7 +285,10 @@ class BeanStreaming_Test extends TestBase {
 			assertEquals("from-factory", bean.name);
 		}
 
-		@Test @SuppressWarnings("rawtypes")
+		@SuppressWarnings({
+			"rawtypes"  // Raw types required for generic test utility.
+		})
+		@Test
 		void e02_beanFactory_void_sentinel() throws Exception {
 			var ctor = BeanFactory.Void.class.getDeclaredConstructor();
 			ctor.setAccessible(true);

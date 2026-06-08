@@ -30,7 +30,9 @@ import org.apache.juneau.commons.TestBase;
  * Drives {@link ArgCoercer} indirectly through {@link TypedFunction} subclasses so the integration
  * path (function dispatch → coercion → typed invoke) is exercised end-to-end.
  */
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class ArgCoercer_Test extends TestBase {
 
 	public static class IntFn extends TypedFunction {

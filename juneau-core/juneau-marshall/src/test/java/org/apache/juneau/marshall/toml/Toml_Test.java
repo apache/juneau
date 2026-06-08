@@ -167,12 +167,16 @@ class Toml_Test {
 		var config = parsed.get("config");
 		assertNotNull(config);
 		assertTrue(config instanceof Map, "Expected Map for config");
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		var configMap = (Map<String, Object>) config;
 		var db = configMap.get("db");
 		assertNotNull(db);
 		assertTrue(db instanceof Map, "Expected Map for db");
-		@SuppressWarnings("unchecked")
+		@SuppressWarnings({
+			"unchecked"  // Unchecked cast required for generic test utility.
+		})
 		var dbMap = (Map<String, Object>) db;
 		assertEquals("localhost", dbMap.get("host"));
 		assertEquals(5432L, dbMap.get("port"));

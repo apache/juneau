@@ -25,7 +25,8 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
-	"resource" // Streams intentionally not closed in unit tests
+	"resource", // Streams intentionally not closed in unit tests
+	"unused"    // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ReaderInputStream_Test extends TestBase {
 

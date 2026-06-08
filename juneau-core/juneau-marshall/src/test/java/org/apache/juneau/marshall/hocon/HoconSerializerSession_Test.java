@@ -333,7 +333,7 @@ class HoconSerializerSession_Test extends TestBase {
 
 	@Test void c05_mapWithNullKey() throws Exception {
 		// Map with null key — covers key == null branch in serializeMap (line 194).
-		var m = new LinkedHashMap<Object,Object>();
+		var m = new LinkedHashMap<>();
 		m.put(null, "v");
 		m.put("ok","y");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -344,7 +344,7 @@ class HoconSerializerSession_Test extends TestBase {
 
 	@Test void c06_mapWithIntegerKeys() throws Exception {
 		// Non-string keys exercise generalize() & toString() in serializeMap.
-		var m = new LinkedHashMap<Object,Object>();
+		var m = new LinkedHashMap<>();
 		m.put(1, "one");
 		m.put(2, "two");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);

@@ -196,7 +196,9 @@ class MarkdownSerializer_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void i02_roundTripBeanList() throws Exception {
 		var original = List.of(new B("Alice", 30), new B("Bob", 25));
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(original);
@@ -209,7 +211,9 @@ class MarkdownSerializer_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void i03_roundTripStringList() throws Exception {
 		var original = List.of("foo", "bar", "baz");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(original);
@@ -218,7 +222,9 @@ class MarkdownSerializer_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void i04_roundTripMap() throws Exception {
 		var original = new LinkedHashMap<String, String>();
 		original.put("k1", "v1");

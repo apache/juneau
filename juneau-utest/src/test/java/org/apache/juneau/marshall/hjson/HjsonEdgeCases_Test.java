@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Edge case tests for {@link HjsonSerializer} and {@link HjsonParser}.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class HjsonEdgeCases_Test extends TestBase {
 
 	@Test

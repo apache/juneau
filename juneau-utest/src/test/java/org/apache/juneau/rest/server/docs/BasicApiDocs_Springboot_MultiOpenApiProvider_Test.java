@@ -68,7 +68,9 @@ import org.springframework.context.annotation.*;
  * @since 10.0.0
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class BasicApiDocs_Springboot_MultiOpenApiProvider_Test {
 
 	/** Spring Boot app config with two {@link OpenApiProvider} beans, one {@code @Primary}. */

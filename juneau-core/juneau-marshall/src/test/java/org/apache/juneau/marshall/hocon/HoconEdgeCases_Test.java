@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Edge case tests for {@link HoconSerializer} and {@link HoconParser}.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class HoconEdgeCases_Test extends TestBase {
 
 	@Test

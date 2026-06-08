@@ -31,7 +31,10 @@ import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
-@SuppressWarnings({"serial","rawtypes"})
+@SuppressWarnings({
+	"serial",  // serialVersionUID not required for test classes.
+	"rawtypes"  // Raw types required for generic test utility.
+})
 class BasicHtml_Test extends TestBase {
 
 	private static final Class<?>[] ANNOTATED_CLASSES = {

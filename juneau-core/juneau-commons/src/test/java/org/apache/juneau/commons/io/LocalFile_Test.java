@@ -30,7 +30,8 @@ import org.junit.jupiter.params.provider.*;
 import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
-	"java:S4144" // Identical test methods intentional for testing different scenarios
+	"java:S4144", // Identical test methods intentional for testing different scenarios
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class LocalFile_Test extends TestBase {
 

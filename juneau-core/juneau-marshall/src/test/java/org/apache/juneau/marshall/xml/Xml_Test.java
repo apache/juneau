@@ -34,7 +34,9 @@ import org.apache.juneau.marshall.xml.xml1b.*;
 import org.apache.juneau.marshall.xml.xml1c.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class Xml_Test extends TestBase {
 
 	//====================================================================================================

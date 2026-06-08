@@ -27,10 +27,11 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
-	"unchecked", // Cast from Object to Map<String,Object> in annotation tests
+	"unchecked",  // Cast from Object to Map<String,Object> in annotation tests
 	"java:S5961", // S1874: Intentional use of deprecated classes/methods in tests to verify deprecated functionality
 	"java:S1186", // Empty method body intentional for REST/proxy interface testing
-	"java:S1874" // Intentional use of deprecated API to verify functionality
+	"java:S1874", // Intentional use of deprecated API to verify functionality
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class AnnotationInfo_Test extends TestBase {
 

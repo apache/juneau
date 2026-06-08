@@ -34,9 +34,10 @@ import org.apache.juneau.marshall.swap.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for test bean handling
+	"rawtypes",  // Raw types necessary for test bean handling
 	"unchecked", // ObjectSwap.swap/unswap raw type invocations in tests
-	"java:S1172" // Unused parameters kept for API consistency or framework requirements
+	"java:S1172", // Unused parameters kept for API consistency or framework requirements
+	"unused"     // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class AutoObjectSwapTest extends TestBase {
 

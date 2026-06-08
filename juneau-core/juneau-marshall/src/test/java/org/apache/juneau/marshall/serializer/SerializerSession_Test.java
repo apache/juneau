@@ -44,6 +44,9 @@ import org.junit.jupiter.api.*;
  * and {@link Json5Serializer} sessions where possible. Tests intentionally assert the <em>current</em>
  * behavior; any apparent bug is documented inline for follow-up.
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class SerializerSession_Test extends TestBase {
 
 	//====================================================================================================

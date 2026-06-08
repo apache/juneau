@@ -28,7 +28,8 @@ import org.junit.jupiter.params.provider.*;
  * Verifies that the correct error messages are displayed when you do something wrong with the @Xml annotation.
  */
 @SuppressWarnings({
-	"java:S1172" // Unused parameters in tests are intentional
+	"java:S1172", // Unused parameters in tests are intentional
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class InvalidXmlBeans_Test extends TestBase {
 

@@ -26,6 +26,9 @@ import org.apache.juneau.commons.TestBase;
 /**
  * Tests for {@link Console}.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Console_Test extends TestBase {
 
 	private PrintStream originalOut;

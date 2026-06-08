@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S117", // S5786: Must be public for cross-package subclass FileFinder_Test2
 	"java:S5961", // High assertion count acceptable in comprehensive tests
-	"java:S5786", // JUnit assertions preferred but not required in all test scenarios
+	"java:S5976", // JUnit assertions preferred but not required in all test scenarios
 })
 public class FileFinder_Test extends TestBase {
 

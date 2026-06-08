@@ -31,6 +31,10 @@ import org.junit.jupiter.api.*;
  * <p>Targets bean/nested-table serialization, root-level dispatch, array-of-tables,
  * key-quoting branches, swap/temporal/enum/date/duration paths, and inline-table heuristics.
  */
+@SuppressWarnings({
+	"java:S125",  // Commented-out code is retained as historical reference / future re-enable candidate.
+	"java:S5976"  // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+})
 class TomlSerializerSession_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -623,7 +627,7 @@ class TomlSerializerSession_Test extends TestBase {
 	@Test
 	void h02_mapWithIntegerKeys() throws Exception {
 		// Non-string keys go through toString() (line uses isMap branch)
-		var m = new LinkedHashMap<Object, Object>();
+		var m = new LinkedHashMap<>();
 		m.put(1, "one");
 		m.put(2, "two");
 		var toml = TomlSerializer.DEFAULT.serialize(m);

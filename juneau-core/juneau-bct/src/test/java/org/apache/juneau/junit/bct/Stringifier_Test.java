@@ -387,6 +387,8 @@ class Stringifier_Test extends TestBase {
 	// ====================================================================================================
 
 	static class StringifierMethods {
+		// 'converter' is required by the Stringifier functional-interface signature (used as a method reference).
+		@SuppressWarnings("unused")
 		static String addPrefix(BeanConverter converter, String str) {
 			return "PREFIX:" + str;
 		}

@@ -75,6 +75,9 @@ import org.junit.jupiter.params.provider.*;
  * ({@link #a04_floatProperty_nonFinite}) that skips {@link FloatFormat#NaN_AS_ERROR} (throws on swap) and
  * canonicalises against the format-specific wire shape via {@link #expectedAfterNonFinite}.
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class FloatFormat_Float_RoundTrip_Test extends TestBase {
 
 	/**

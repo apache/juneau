@@ -65,7 +65,9 @@ class MarkdownParser_Test {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void b01_parseMultiColumnTable_toBeanList() throws Exception {
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |";
 		var r = (List<B>) MarkdownParser.DEFAULT.parse(md, List.class, B.class);
@@ -77,7 +79,9 @@ class MarkdownParser_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void b02_parseMultiColumnTable_toMapList() throws Exception {
 		var md = "| key1 | key2 |\n|---|---|\n| v1 | v2 |";
 		var r = (List<Map<?,?>>) MarkdownParser.DEFAULT.parse(md, List.class, Map.class);
@@ -104,7 +108,9 @@ class MarkdownParser_Test {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void c01_parseBulletList_toStringList() throws Exception {
 		var md = "- alpha\n- beta\n- gamma";
 		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
@@ -112,7 +118,9 @@ class MarkdownParser_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void c02_parseBulletList_toIntList() throws Exception {
 		var md = "- 1\n- 2\n- 3";
 		var r = (List<Integer>) MarkdownParser.DEFAULT.parse(md, List.class, Integer.class);
@@ -202,7 +210,9 @@ class MarkdownParser_Test {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void g01_parseEnumValues() throws Exception {
 		var md = "| name | status |\n|---|---|\n| Task1 | PENDING |\n| Task2 | COMPLETED |";
 		var r = (List<E>) MarkdownParser.DEFAULT.parse(md, List.class, E.class);
@@ -263,7 +273,9 @@ class MarkdownParser_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void j02_roundTripBeanList() throws Exception {
 		var original = List.of(new G("Alice", 30, true), new G("Bob", 25, false));
 		var md = MarkdownSerializer.DEFAULT.serialize(original);
@@ -278,7 +290,9 @@ class MarkdownParser_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void j03_roundTripStringList() throws Exception {
 		var original = List.of("alpha", "beta", "gamma");
 		var md = MarkdownSerializer.DEFAULT.serialize(original);
@@ -287,7 +301,9 @@ class MarkdownParser_Test {
 	}
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void j04_roundTripStringToStringMap() throws Exception {
 		var original = new LinkedHashMap<String, String>();
 		original.put("k1", "v1");
@@ -335,7 +351,9 @@ class MarkdownParser_Test {
 	//====================================================================================================
 
 	@Test
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({
+		"unchecked"  // Unchecked cast required for generic test utility.
+	})
 	void m01_fewerCellsThanHeaders() throws Exception {
 		var md = "| name | age |\n|---|---|\n| Alice |";
 		var r = (List<B>) MarkdownParser.DEFAULT.parse(md, List.class, B.class);

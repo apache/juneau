@@ -75,6 +75,9 @@ import org.junit.jupiter.params.provider.*;
  * they downcast to {@code double} or equivalent and may lose precision past 64-bit float capacity.  The matrix
  * below stays inside double-precision-safe scales / magnitudes so binary round-trips remain lossless.
  */
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 
 	/**

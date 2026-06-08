@@ -31,7 +31,9 @@ import org.junit.jupiter.api.function.*;
  * Use {@code import static org.apache.juneau.commons.TestUtils.*;} to pull in
  * all utility methods from both this class and the inherited {@link Utils} methods.</p>
  */
-@SuppressWarnings("java:S1172") // Test utility methods may have unused parameters for consistent signatures
+@SuppressWarnings({
+	"java:S1172"  // Test utility methods may have unused parameters for consistent signatures
+})
 public class TestUtils extends Utils {
 
 	/**

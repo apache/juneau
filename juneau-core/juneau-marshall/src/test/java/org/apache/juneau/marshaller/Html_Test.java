@@ -28,6 +28,9 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+})
 class Html_Test extends TestBase {
 
 	@Test void a01_to() throws Exception {

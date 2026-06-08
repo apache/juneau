@@ -26,7 +26,10 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource"    // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
+})
 class SerializerSet_Test extends TestBase {
 
 	//====================================================================================================

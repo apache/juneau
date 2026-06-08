@@ -30,7 +30,9 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class Response_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

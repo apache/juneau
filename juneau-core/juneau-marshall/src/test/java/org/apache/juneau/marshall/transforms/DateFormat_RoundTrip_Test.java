@@ -73,6 +73,9 @@ import org.junit.jupiter.params.provider.*;
  * {@code expectedAfter} helper canonicalizes through the format's own {@code format / parse} cycle so the
  * assertion reflects the lossy canonical form, not the structural original.
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class DateFormat_RoundTrip_Test extends TestBase {
 
 	/**

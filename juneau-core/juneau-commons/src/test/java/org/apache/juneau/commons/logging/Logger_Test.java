@@ -27,7 +27,9 @@ import org.apache.juneau.commons.TestBase;
 /**
  * Tests for {@link Logger}.
  */
-@SuppressWarnings({"java:S117"})
+@SuppressWarnings({
+	"java:S117"  // Local variable name intentional for test readability.
+})
 class Logger_Test extends TestBase {
 
 	private static Logger getLogger(String name) {

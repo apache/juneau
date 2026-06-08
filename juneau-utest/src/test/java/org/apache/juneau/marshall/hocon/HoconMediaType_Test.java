@@ -27,7 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for HOCON media type configuration.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({
+	"unchecked"  // Unchecked cast required for generic test utility.
+})
 class HoconMediaType_Test {
 
 	@Test

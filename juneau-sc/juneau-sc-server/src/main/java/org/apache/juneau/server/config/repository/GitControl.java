@@ -33,10 +33,9 @@ import org.eclipse.jgit.transport.*;
  * Provides a simplified wrapper around JGit for server configuration repository management.
  * Used to fetch configuration files from a remote Git repository.
  */
-@SuppressWarnings({
-	"unused", // Example/demo class - some fields used only for JGit configuration
+@SuppressWarnings(
 	"resource" // localRepo and git are JGit resources opened in the constructor; lifecycle managed by this class's operations
-})
+)
 public class GitControl {
 
 	private String localPath;

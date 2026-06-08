@@ -25,6 +25,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class TomlWriter_Test extends TestBase {
 
 	@FunctionalInterface

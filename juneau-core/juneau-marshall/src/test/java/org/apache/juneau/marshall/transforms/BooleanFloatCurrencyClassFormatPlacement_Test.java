@@ -223,7 +223,7 @@ class BooleanFloatCurrencyClassFormatPlacement_Test {
 
 	@Test void e01_marshalledConfig_applies() throws Exception {
 		var s = Json5Serializer.create().locale(Locale.US).applyAnnotations(E01Config.class).build();
-		var json = (String) s.serialize(new E01Bean());
+		var json = s.serialize(new E01Bean());
 		assertTrue(json.contains("b:'yes'"), "boolean: " + json);
 		assertTrue(json.contains("n:'NaN'"), "float: " + json);
 		assertTrue(json.contains("c:'" + expectedUsdSymbolInUs() + "'"), "currency: " + json);
@@ -255,7 +255,7 @@ class BooleanFloatCurrencyClassFormatPlacement_Test {
 			.currencyFormat(CurrencyFormat.SYMBOL)
 			.classFormat(ClassFormat.SIMPLE_NAME)
 			.build();
-		var json = (String) s.serialize(new F01());
+		var json = s.serialize(new F01());
 		assertTrue(json.contains("b:'yes'"), "boolean: " + json);
 		assertTrue(json.contains("n:'NaN'"), "float: " + json);
 		assertTrue(json.contains("c:'" + expectedUsdSymbolInUs() + "'"), "currency: " + json);

@@ -143,7 +143,7 @@ class UuidBigNumberFormatPlacement_Test {
 
 	@Test void c01_marshalledConfig_applies() throws Exception {
 		var s = Json5Serializer.create().applyAnnotations(C01Config.class).build();
-		var json = (String) s.serialize(new C01Bean());
+		var json = s.serialize(new C01Bean());
 		assertTrue(json.contains("u:'550e8400e29b41d4a716446655440000'"), "uuid no-dashes: " + json);
 		assertTrue(json.contains("n:'" + HUGE + "'"), "bigNumber string: " + json);
 	}
@@ -163,7 +163,7 @@ class UuidBigNumberFormatPlacement_Test {
 			.uuidFormat(UuidFormat.NO_DASHES)
 			.bigNumberFormat(BigNumberFormat.STRING)
 			.build();
-		var json = (String) s.serialize(new D01());
+		var json = s.serialize(new D01());
 		assertTrue(json.contains("u:'550e8400e29b41d4a716446655440000'"), "uuid: " + json);
 		assertTrue(json.contains("n:'" + HUGE + "'"), "bigNumber: " + json);
 	}

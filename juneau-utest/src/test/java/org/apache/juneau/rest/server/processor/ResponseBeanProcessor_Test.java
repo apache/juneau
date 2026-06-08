@@ -40,7 +40,9 @@ import org.junit.jupiter.api.*;
  * {@code OutputStream}/{@code Writer} parameter overloads, response-bean-as-{@link Throwable}, and
  * pass-through (NEXT) for non-response output.
  */
-@SuppressWarnings({"serial"})
+@SuppressWarnings({
+	"serial"  // serialVersionUID not required for test classes.
+})
 class ResponseBeanProcessor_Test extends TestBase {
 
 	// -----------------------------------------------------------------------------------------------------------------

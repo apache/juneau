@@ -323,6 +323,8 @@ class Listifier_Test extends TestBase {
 	// ====================================================================================================
 
 	static class ListifierMethods {
+		// 'converter' is required by the Listifier functional-interface signature (used as a method reference).
+		@SuppressWarnings("unused")
 		static List<Object> splitToChars(BeanConverter converter, String str) {
 			return l((Object[])str.split(""));
 		}

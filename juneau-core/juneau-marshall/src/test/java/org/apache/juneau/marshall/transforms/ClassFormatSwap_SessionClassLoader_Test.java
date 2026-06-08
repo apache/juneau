@@ -42,6 +42,9 @@ import org.junit.jupiter.api.*;
  *       that does not have it.</li>
  * </ol>
  */
+@SuppressWarnings({
+	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+})
 class ClassFormatSwap_SessionClassLoader_Test extends TestBase {
 
 	/**
@@ -64,6 +67,7 @@ class ClassFormatSwap_SessionClassLoader_Test extends TestBase {
 	static void compileIsolatedBean() throws Exception {
 		var compiler = ToolProvider.getSystemJavaCompiler();
 		assumeTrue(compiler != null, "System Java compiler unavailable — skipping session-CL tests");
+		assertNotNull(compiler); // Null guard for static-analysis: assumeTrue above aborts the test if null.
 
 		tempDir = Files.createTempDirectory("juneau-cltest-");
 		var srcPkg = tempDir.resolve(Path.of("src", "org", "apache", "juneau", "test", "isolated"));

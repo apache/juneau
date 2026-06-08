@@ -34,6 +34,9 @@ import org.apache.juneau.commons.TestBase;
  * Covers Juneau's {@link Value @Value}, Spring's {@code @Value} (detected by FQN), and the negative
  * paths around primitive-null and {@code @Value} + {@code @Inject} mutual exclusion.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class Value_Test extends TestBase {
 
 	private static final String P_STRING = "Value_Test.string";

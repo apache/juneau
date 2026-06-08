@@ -35,12 +35,14 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
-	"java:S117", // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional
+	"java:S117",  // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional
 	"java:S5961", // High assertion count acceptable in comprehensive tests
 	"java:S1186", // Empty method body intentional for callback testing
-	"java:S116", // Field names use underscores for test data clarity
+	"java:S116",  // Field names use underscores for test data clarity
 	"java:S1172", // Unused parameters kept for API consistency or framework requirements
 	"java:S3008", // Static field names use underscores for test data clarity
+	"resource",   // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ParameterInfo_Test extends TestBase {
 

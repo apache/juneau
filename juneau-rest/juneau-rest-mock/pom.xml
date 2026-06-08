@@ -56,9 +56,68 @@
 			opt-in contract can be asserted from the absence side. See FINISHED-119/120.
 		-->
 		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+			<version>5.23.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-bct</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-junit5</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Test-only: Bean Validation tests exercise the @Valid integration (provided at runtime in juneau-rest-server). -->
+		<dependency>
+			<groupId>jakarta.validation</groupId>
+			<artifactId>jakarta.validation-api</artifactId>
+			<version>3.0.2</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Test-only: Hibernate Validator is the concrete Bean Validation provider; without it, constraints silently pass. -->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.3.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Test-only: Hibernate Validator requires an EL implementation for constraint message interpolation. -->
+		<dependency>
+			<groupId>org.glassfish.expressly</groupId>
+			<artifactId>expressly</artifactId>
+			<version>5.0.0</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Test-only: MDC bridge tests import org.slf4j.MDC directly (main code probes it reflectively). Version matches Jetty's transitive slf4j-api. -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>2.0.17</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Test-only: SLF4J binding required for MDC.put/get to work; slf4j-simple uses NOPMDCAdapter so logback-classic is needed for real MDC. -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.5.18</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

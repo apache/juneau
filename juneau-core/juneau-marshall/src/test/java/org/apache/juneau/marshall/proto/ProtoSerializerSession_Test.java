@@ -34,6 +34,7 @@ import org.junit.jupiter.api.*;
  * options, scalar value type dispatch (Date/Calendar/Temporal/Duration/Period/byte[]), and
  * bean property comments.
  */
+@SuppressWarnings("unchecked")
 class ProtoSerializerSession_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -179,7 +180,6 @@ class ProtoSerializerSession_Test extends TestBase {
 		c1.put("label", "x");
 		var c2 = new LinkedHashMap<String, Object>();
 		c2.put("label", "y");
-		@SuppressWarnings("unchecked")
 		Map<String, Object>[] arr = new Map[] { c1, c2 };
 		var root = new LinkedHashMap<String, Object>();
 		root.put("name", "parent");
@@ -476,8 +476,9 @@ class ProtoSerializerSession_Test extends TestBase {
 		c1.put("k", "alpha");
 		var c2 = new LinkedHashMap<String, Object>();
 		c2.put("k", "beta");
-		@SuppressWarnings("unchecked")
-		var arr = (Map<String, Object>[]) new Map[] { c1, c2 };
+		@SuppressWarnings({
+		})
+		var arr = new Map[] { c1, c2 };
 		bean.setItems(arr);
 		var proto = ProtoSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
@@ -492,8 +493,9 @@ class ProtoSerializerSession_Test extends TestBase {
 		c1.put("k", "alpha");
 		var c2 = new LinkedHashMap<String, Object>();
 		c2.put("k", "beta");
-		@SuppressWarnings("unchecked")
-		var arr = (Map<String, Object>[]) new Map[] { c1, c2 };
+		@SuppressWarnings({
+		})
+		var arr = new Map[] { c1, c2 };
 		bean.setItems(arr);
 		var ser = ProtoSerializer.create().useListSyntaxForBeans(true).build();
 		var proto = ser.serialize(bean);

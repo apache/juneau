@@ -29,8 +29,9 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"rawtypes", // Raw types necessary for test bean handling
+	"rawtypes",   // Raw types necessary for test bean handling
 	"java:S5961", // High assertion count acceptable in comprehensive tests
+	"resource"    // Stream/reader instances are intentional short-lived test fixtures; auto-close not required for these assertions.
 })
 class UonParser_Test extends TestBase {
 

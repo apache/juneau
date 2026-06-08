@@ -28,6 +28,9 @@ import org.junit.jupiter.api.*;
  * through to the builder's reflective bean lookups so test-time overrides win over the builder's
  * regular bean store entries.
  */
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class ParserSet_OverridingBeanStore_Test extends TestBase {
 
 	interface Marker {

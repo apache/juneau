@@ -31,7 +31,6 @@ import java.util.stream.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.junit.bct.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.xml.*;
 import org.junit.jupiter.api.*;
@@ -44,7 +43,8 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"unchecked",      // BeanTester cast and generic type handling in test utilities
-	"java:S1172"      // Parameters kept for consistent method signatures across test utilities
+	"java:S1172",     // Parameters kept for consistent method signatures across test utilities
+	"unused"          // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 public class TestUtils extends Utils {
 
@@ -92,7 +92,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Validates that the whitespace is correct in the specified XML.
 	 */
-	@SuppressWarnings("java:S112")
+	@SuppressWarnings({
+		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+	})
 	public static final void checkXmlWhitespace(String out) throws Exception {
 		if (out.indexOf('\u0000') != -1) {
 			for (var s : out.split("\u0000"))
@@ -265,7 +267,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Validates XML whitespace and namespace formatting on a serialized object.
 	 */
-	@SuppressWarnings("java:S112")
+	@SuppressWarnings({
+		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+	})
 	public static final void validateXml(Object o) throws Exception {
 		validateXml(o, XmlSerializer.DEFAULT_NS_SQ);
 	}
@@ -273,7 +277,9 @@ public class TestUtils extends Utils {
 	/**
 	 * Validates XML whitespace and namespace formatting on a serialized object.
 	 */
-	@SuppressWarnings("java:S112")
+	@SuppressWarnings({
+		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+	})
 	public static final void validateXml(Object o, XmlSerializer s) throws Exception {
 		s = s.copy().ws().ns().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(o);
@@ -302,10 +308,10 @@ public class TestUtils extends Utils {
 					var tagEnd = html.indexOf('>', i);
 					if (tagEnd == -1) break;
 					var tag = html.substring(i, tagEnd + 1);
-					var matches = withAttributes == null || withAttributes.isEmpty();
-					if (!matches) {
-						matches = true;
-						for (var entry : withAttributes.entrySet()) {
+				var matches = withAttributes == null || withAttributes.isEmpty();
+				if (!matches && withAttributes != null) {
+					matches = true;
+					for (var entry : withAttributes.entrySet()) {
 							if (!tag.contains(entry.getKey() + "=\"" + entry.getValue() + "\"") && !tag.contains(entry.getKey() + "='" + entry.getValue() + "'")) {
 								matches = false;
 								break;

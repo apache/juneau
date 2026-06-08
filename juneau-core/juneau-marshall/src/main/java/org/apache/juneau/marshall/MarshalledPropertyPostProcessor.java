@@ -203,7 +203,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Centralized swap-transform wiring; branching mirrors swap/no-swap and child-swap read/write paths.
-		"unchecked"   // Wildcard ObjectSwap captured from Object-typed builder fields for runtime polymorphic dispatch.
+		"unchecked",  // Wildcard ObjectSwap captured from Object-typed builder fields for runtime polymorphic dispatch.
+		"null"        // `sw` may be null but is guarded by `nn(sw)` before access; Eclipse doesn't recognise `nn()` as a null-check function.
 	})
 	static void installSwapAwareTransforms(BeanPropertyMeta.Builder p) {
 		ObjectSwap<?,?> sw = (ObjectSwap<?,?>) p.swap;

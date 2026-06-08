@@ -26,6 +26,9 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
+@SuppressWarnings({
+	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.
+})
 class SimpleMap_Test extends TestBase {
 
 	//====================================================================================================

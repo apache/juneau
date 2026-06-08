@@ -25,7 +25,8 @@ import java.util.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5961" // High assertion count acceptable in comprehensive test
+	"java:S5961", // High assertion count acceptable in comprehensive test
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class AnnotationUtils_Test {
 

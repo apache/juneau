@@ -1337,6 +1337,15 @@ public class Microservice implements ConfigEventListener {
 		stopped = true;
 		if (nn(settingsSource))
 			Settings.get().removeSource(settingsSource);
+		// Detach this microservice from JVM-global config state.  The config store (MemoryStore.DEFAULT) and
+		// the system-default config slot are process-wide shared statics; leaving a stopped microservice
+		// registered as a config-change listener there causes its onConfigChange() to fire against an
+		// already-closed bean store when an unrelated component later mutates the shared config.
+		if (nn(config)) {
+			config.removeListener(this);
+			if (Config.getSystemDefault() == config)
+				Config.setSystemDefault(null);
+		}
 		var listeners = new ArrayList<>(beanStore.getBeansOfType(MicroserviceListener.class).values());
 		Collections.reverse(listeners);
 		for (var l : listeners)

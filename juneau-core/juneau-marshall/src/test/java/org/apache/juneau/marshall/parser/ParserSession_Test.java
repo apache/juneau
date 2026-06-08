@@ -58,7 +58,8 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"unchecked",
 	"java:S5778", /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */
-	"java:S5961"  /* large coverage-driven test class is intentional */
+	"java:S5961", /* large coverage-driven test class is intentional */
+	"unused"      // Unused parameters/variables kept for consistent method signatures across test utilities.
 })
 class ParserSession_Test extends TestBase {
 

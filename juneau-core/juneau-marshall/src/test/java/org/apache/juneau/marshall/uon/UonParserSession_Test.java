@@ -473,31 +473,31 @@ class UonParserSession_Test extends TestBase {
 	@Test void j01_decoding_attrWithEncodedAmp() throws Exception {
 		// In encoded mode, '%26' (=&) inside an attribute name is escaped via '~'+AMP.
 		// Decode should preserve '&' in the attribute name.
-		var m = (Map<String, Object>) PE.parse("(a%26b=v)", Map.class);
+		var m = PE.parse("(a%26b=v)", Map.class);
 		assertTrue(m.containsKey("a&b"));
 		assertEquals("v", m.get("a&b"));
 	}
 
 	@Test void j02_decoding_attrWithEncodedEquals() throws Exception {
-		var m = (Map<String, Object>) PE.parse("(a%3Db=v)", Map.class);
+		var m = PE.parse("(a%3Db=v)", Map.class);
 		assertTrue(m.containsKey("a=b"));
 	}
 
 	@Test void j03_decoding_valueWithEncodedSpace() throws Exception {
 		// In decoding mode, '%20' decodes to a space char which terminates the value at "hello".
 		// (Whitespace is the value terminator in non-quoted strings.)
-		var m = (Map<String, Object>) PE.parse("(a=hello%20world)", Map.class);
+		var m = PE.parse("(a=hello%20world)", Map.class);
 		assertEquals("hello", m.get("a"));
 	}
 
 	@Test void j04_nonDecoding_passesThrough() throws Exception {
-		var m = (Map<String, Object>) P.parse("(a=hello%20world)", Map.class);
+		var m = P.parse("(a=hello%20world)", Map.class);
 		assertEquals("hello%20world", m.get("a"));
 	}
 
 	@Test void j05_decoding_nullAttrName() throws Exception {
 		// %00 decodes to a NUL char. The decoded key is the single NUL char (stored literally).
-		var m = (Map<String, Object>) PE.parse("(%00=v)", Map.class);
+		var m = PE.parse("(%00=v)", Map.class);
 		assertNotNull(m);
 		assertEquals(1, m.size());
 		assertTrue(m.containsValue("v"));

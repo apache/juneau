@@ -37,7 +37,9 @@ import org.junit.jupiter.api.*;
  * Unit tests for BasicBeanConverter.
  */
 @DisplayName("BasicBeanConverter")
-@SuppressWarnings({"java:S5778" /* assertThrows lambdas with chained calls; intermediate invocations do not throw in practice */})
+@SuppressWarnings({
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+})
 class BasicBeanConverter_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
