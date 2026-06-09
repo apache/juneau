@@ -59,14 +59,27 @@ def has_container_tag(content: str) -> bool:
     return any(marker in content for marker in TAG_MARKERS)
 
 
+def discover_test_roots(repo_root: Path) -> list[Path]:
+    # Discover every module's src/test/java tree across the reactor, skipping any
+    # copies under build output (target/) so we only scan real source.
+    roots: list[Path] = []
+    for path in repo_root.rglob("src/test/java"):
+        if not path.is_dir():
+            continue
+        if "target" in path.relative_to(repo_root).parts:
+            continue
+        roots.append(path)
+    return sorted(roots)
+
+
 def scan(repo_root: Path) -> list[Path]:
-    test_root = repo_root / "juneau-utest" / "src" / "test" / "java"
     offenders: list[Path] = []
-    for path in sorted(test_root.rglob("*Test.java")):
-        content = path.read_text(encoding="utf-8")
-        if should_require_tag(content) and not has_container_tag(content):
-            offenders.append(path)
-    return offenders
+    for test_root in discover_test_roots(repo_root):
+        for path in sorted(test_root.rglob("*Test.java")):
+            content = path.read_text(encoding="utf-8")
+            if should_require_tag(content) and not has_container_tag(content):
+                offenders.append(path)
+    return sorted(offenders)
 
 
 def main() -> int:

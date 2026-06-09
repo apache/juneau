@@ -36,7 +36,7 @@ JSON output is written to juneau-utest/jmh-results/observability-YYYY-MM-DD.json
 The gc.alloc.rate.norm secondary metric (bytes allocated per operation) is read from
 that file to assert the zero-allocation contract.
 
-To record the baseline in juneau-utest/perf-baseline.txt after a clean run:
+To record the baseline in perf-baseline.txt (project root) after a clean run:
     1. Run this script and note the reported alloc bytes/op.
     2. Update the [observability] section in perf-baseline.txt manually.
 """

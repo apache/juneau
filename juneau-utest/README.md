@@ -52,8 +52,10 @@ mvn -f juneau-utest/pom.xml -Pmicrobench test-compile exec:java \
 
 ### Performance baseline
 
-The recorded baseline lives in `juneau-utest/perf-baseline.txt` under the `[observability]`
-section.  To update after an intentional regression is accepted:
+The recorded baseline lives in `perf-baseline.txt` (project root) under the `[observability]`
+section.  (The file was relocated from `juneau-utest/perf-baseline.txt` to the project root by
+TODO-160 so the per-module test-perf guard can track every reactor module.)  To update after an
+intentional regression is accepted:
 
 1. Run `python3 scripts/microbench.py observability` and note the `gc.alloc.rate.norm` value.
 2. Edit the `[observability]` section in `perf-baseline.txt` manually.

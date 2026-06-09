@@ -1,0 +1,62 @@
+# ============================================================================
+# Apache Juneau — per-module test performance baselines.
+#
+# Relocated from juneau-utest/perf-baseline.txt to the project root by TODO-160
+# so the perf subsystem can track every reactor module, not just juneau-utest.
+#
+# FORMAT — one entry per line:
+#     <key> = <seconds>            # optional trailing comment
+#
+#   key = "suite"
+#       Overall reactor wall-clock baseline (subprocess time of `mvn test`).
+#       Compared against the measured wall-clock by scripts/test.py --enforce-perf.
+#
+#   key = "<module>/<bucket>"
+#       Per-module Surefire XML aggregate test-time baseline.
+#       <module> = module path relative to the repo root (e.g. "juneau-utest",
+#                  "juneau-core/juneau-junit5"); MAY contain '/'.
+#       <bucket> ∈ { core, container.springboot, container.jetty, container.tomcat }.
+#       The owning module is the parent of <module>/target/surefire-reports.
+#       Parsed by splitting the key on its LAST '/'.
+#
+# Tolerance: ±20% by default (env JUNEAU_CI_PERF_THRESHOLD, a decimal fraction),
+# applied per module AND to the suite total.
+#
+# New/unknown module handling: a module with NO entry here is treated as new —
+# the guard WARNS but does NOT hard-fail, so the baseline degrades gracefully as
+# TODO-160 migrates tests into co-located modules.
+#
+# Consumers: scripts/test.py (run_perf_guard / write_timing_log) and
+#            scripts/ci-perf-guard.py.
+#
+# To re-baseline: run `python3 scripts/test.py --full --timing-log /tmp/juneau-timing.jsonl`,
+# read the per-module wallclock values from the JSONL (or the run's surefire reports),
+# and update the entries below.
+#
+# Parsing note: blank lines, lines beginning with '#', the [observability] section
+# below, and any non-"suite" key without a '/' (e.g. the observability metric) are
+# ignored by the per-module perf-guard parser.
+# ============================================================================
+
+suite = 136                              # reactor wall-clock; carried from FINISHED-95 (re-measure post-migration).
+juneau-utest/core = 60                   # carried from FINISHED-139 single-module baseline.
+juneau-utest/container.springboot = 3    # carried from FINISHED-139.
+juneau-utest/container.jetty = 1         # carried from FINISHED-139.
+
+# ─── [observability] ──────────────────────────────────────────────────────────
+#
+# Consumed by scripts/microbench.py — NOT by the per-module perf guard.
+#
+# Baseline for the JMH ObservabilityNoopBenchmark (TODO-116).
+# Metric: gc.alloc.rate.norm = bytes allocated per benchmark invocation.
+# Assertion threshold: ≤ 8 bytes/op (see scripts/microbench.py --threshold).
+#
+# To re-baseline: run `python3 scripts/microbench.py observability`,
+# read the reported gc.alloc.rate.norm, and update the line below.
+#
+# Measured on: developer M1 Pro laptop (Apple M1 Pro, Zulu JDK 25, forks=0).
+# Note: forks=0 means the benchmark shares the JVM with Maven (exec:java).
+#       Numbers are still valid for allocation assertions since gc.alloc.rate.norm
+#       is deterministic per invocation modulo JIT warm-up.
+#
+observability-noop-alloc-bytes-per-op = 0.000  # as of 2026-05-28; set by FINISHED-116.

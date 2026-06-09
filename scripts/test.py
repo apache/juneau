@@ -23,18 +23,22 @@ Options:
     --full, -f               Clean build + run tests (default)
     --verbose, -v            Show full Maven output
     --no-container           Exclude @Tag("container") tests
-    --timing-log <path>      Append per-bucket timing JSONL records
+    --timing-log <path>      Append per-(module, bucket) timing JSONL records
     --enforce-perf           Hard-fail if wall-clock exceeds perf-baseline.txt ±20% tolerance
     --profile <module>       Run one-shot JFR profile for module tests
     --help, -h               Show this help message
 
-Perf guard:
-    --enforce-perf compares the actual tests-only wall-clock against the suite baseline in
-    juneau-utest/perf-baseline.txt (line 1).  Uses env-var JUNEAU_CI_PERF_THRESHOLD (default
-    0.20, i.e. ±20%) — separate from JUNEAU_PUSH_TIMING_THRESHOLD.
+Perf guard (per-module, TODO-160):
+    Timing/perf statistics are collected PER MODULE.  write_timing_log() discovers every
+    target/surefire-reports/ directory under the reactor (not just juneau-utest's), attributes
+    each Surefire XML to its OWNING module (the parent of target/surefire-reports), and buckets
+    each test class as core / container.springboot / container.jetty / container.tomcat.
 
-    When --timing-log is also passed the per-bucket Surefire XML totals are compared against
-    the core / container.springboot / container.jetty baselines (lines 2–4 of perf-baseline.txt).
+    --enforce-perf compares the measured tests-only wall-clock against the 'suite' baseline and
+    each module's Surefire test-time against its '<module>/<bucket>' baseline in the project-root
+    perf-baseline.txt.  Uses env-var JUNEAU_CI_PERF_THRESHOLD (default 0.20, i.e. ±20%) — separate
+    from JUNEAU_PUSH_TIMING_THRESHOLD.  Modules with no baseline entry are treated as new (warn,
+    not fail) so the guard degrades gracefully as TODO-160 migrates modules.
 
     Without --enforce-perf the check runs in warn-only mode (prints results, never exits non-zero
     for a perf breach).
@@ -88,54 +92,88 @@ def parse_test_results(output):
 	return None, None, None
 
 
-def parse_surefire_dir(directory: Path):
-	tests, seconds = 0, 0.0
-	if not directory.exists():
-		return tests, seconds
-	for xml_file in sorted(directory.glob("TEST-*.xml")):
-		root = ET.parse(xml_file).getroot()
-		tests += int(root.attrib.get("tests", 0))
-		seconds += float(root.attrib.get("time", 0.0))
-	return tests, seconds
+# ─── Per-module timing/perf subsystem (TODO-160) ────────────────────────────────
+#
+# After the TODO-160 migration, tests live in each module's own src/test/java and
+# report into that module's target/surefire-reports/.  The helpers below discover
+# ALL such report dirs under the reactor (not just juneau-utest's), attribute each
+# Surefire XML to its OWNING module (the parent of target/surefire-reports), and
+# bucket each test class.
+#
+# Module key = the module's path relative to the repo root (e.g. "juneau-utest",
+#              "juneau-core/juneau-junit5"; MAY contain '/').
+# Bucket     ∈ {core, container.springboot, container.jetty, container.tomcat}.
+#
+# juneau-utest additionally splits its reports into surefire-reports/{core,container}/
+# via two Surefire executions; the recursive XML scan below transparently handles
+# both that nested layout and the standard flat layout every migrated module uses.
+
+# Container annotation marker -> bucket.  Checked against the test class source.
+CONTAINER_MARKERS = (
+	("SpringbootTest", "container.springboot"),
+	("JettyMicroserviceTest", "container.jetty"),
+	("TomcatMicroserviceTest", "container.tomcat"),
+)
 
 
-def container_bucket(module_dir: Path, class_name: str):
+def classify_bucket(module_dir: Path, class_name: str) -> str:
+	"""Bucket a test class as core or a container.* flavor via source-annotation inspection."""
 	source = module_dir / "src" / "test" / "java" / Path("/".join(class_name.split("."))).with_suffix(".java")
 	if source.exists():
-		content = source.read_text(encoding="utf-8")
-		if "SpringbootTest" in content:
-			return "container.springboot"
-		if "JettyMicroserviceTest" in content:
-			return "container.jetty"
-	return "container.springboot" if "springboot" in class_name.lower() else "container.jetty"
+		try:
+			content = source.read_text(encoding="utf-8")
+			for marker, bucket in CONTAINER_MARKERS:
+				if marker in content:
+					return bucket
+			return "core"
+		except OSError:
+			pass
+	# Source unreadable (rare): fall back to a name-based heuristic, defaulting to core.
+	lowered = class_name.lower()
+	if "springboot" in lowered:
+		return "container.springboot"
+	if "tomcat" in lowered:
+		return "container.tomcat"
+	if "jetty" in lowered:
+		return "container.jetty"
+	return "core"
 
 
-def parse_container_subbuckets(module_dir: Path, directory: Path):
-	buckets = {
-		"container.springboot": {"tests": 0, "seconds": 0.0},
-		"container.jetty": {"tests": 0, "seconds": 0.0},
-	}
-	if not directory.exists():
-		return buckets
-	for xml_file in sorted(directory.glob("TEST-*.xml")):
-		root = ET.parse(xml_file).getroot()
-		bucket = container_bucket(module_dir, root.attrib.get("name", ""))
-		buckets[bucket]["tests"] += int(root.attrib.get("tests", 0))
-		buckets[bucket]["seconds"] += float(root.attrib.get("time", 0.0))
+def aggregate_module_reports(module_dir: Path, reports_dir: Path) -> dict:
+	"""Return {bucket: {'tests': int, 'seconds': float}} for one module's surefire-reports tree."""
+	buckets: dict = {}
+	for xml_file in sorted(reports_dir.rglob("TEST-*.xml")):
+		try:
+			root = ET.parse(xml_file).getroot()
+		except (ET.ParseError, OSError):
+			continue
+		bucket = classify_bucket(module_dir, root.attrib.get("name", ""))
+		stats = buckets.setdefault(bucket, {"tests": 0, "seconds": 0.0})
+		stats["tests"] += int(root.attrib.get("tests", 0))
+		stats["seconds"] += float(root.attrib.get("time", 0.0))
 	return buckets
 
 
-def write_timing_log(path: Path, passed: bool):
+def discover_module_stats(repo_root: Path) -> dict:
+	"""Map module-key -> {bucket -> {tests, seconds}} for every surefire-reports dir under the reactor."""
+	modules: dict = {}
+	for reports_dir in sorted(repo_root.rglob("target/surefire-reports")):
+		if not reports_dir.is_dir():
+			continue
+		module_dir = reports_dir.parent.parent
+		module_key = module_dir.relative_to(repo_root).as_posix()
+		buckets = aggregate_module_reports(module_dir, reports_dir)
+		if buckets:
+			modules[module_key] = buckets
+	return modules
+
+
+def write_timing_log(path: Path, passed: bool, test_elapsed: float):
+	"""Append one JSONL row per (module, bucket) plus a reactor/suite roll-up row."""
 	path = path.expanduser()
 	path.parent.mkdir(parents=True, exist_ok=True)
 	repo_root = Path(__file__).parent.parent
-	module = "juneau-utest"
-	module_dir = repo_root / module
-	reports_root = module_dir / "target" / "surefire-reports"
-
-	core_tests, core_seconds = parse_surefire_dir(reports_root / "core")
-	container_tests, container_seconds = parse_surefire_dir(reports_root / "container")
-	container_sub = parse_container_subbuckets(module_dir, reports_root / "container")
+	module_stats = discover_module_stats(repo_root)
 
 	run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{git_value(['rev-parse', '--short', 'HEAD'])}"
 	base = {
@@ -143,62 +181,73 @@ def write_timing_log(path: Path, passed: bool):
 		"run_id": run_id,
 		"branch": git_value(["rev-parse", "--abbrev-ref", "HEAD"]),
 		"commit": git_value(["rev-parse", "--short", "HEAD"]),
-		"module": module,
 		"passed": passed,
 	}
-	rows = [
-		{**base, "execution": "core", "wallclock_s": core_seconds, "test_count": core_tests},
-		{**base, "execution": "container", "wallclock_s": container_seconds, "test_count": container_tests},
-		{
-			**base,
-			"execution": "container.springboot",
-			"wallclock_s": container_sub["container.springboot"]["seconds"],
-			"test_count": container_sub["container.springboot"]["tests"],
-		},
-		{
-			**base,
-			"execution": "container.jetty",
-			"wallclock_s": container_sub["container.jetty"]["seconds"],
-			"test_count": container_sub["container.jetty"]["tests"],
-		},
-	]
+
+	rows = []
+	total_tests = 0
+	total_seconds = 0.0
+	for module_key in sorted(module_stats):
+		for bucket in sorted(module_stats[module_key]):
+			stats = module_stats[module_key][bucket]
+			total_tests += stats["tests"]
+			total_seconds += stats["seconds"]
+			rows.append({
+				**base,
+				"module": module_key,
+				"execution": bucket,
+				"wallclock_s": round(stats["seconds"], 3),
+				"test_count": stats["tests"],
+			})
+	# Roll-up: reactor wall-clock + total counts across all modules.
+	rows.append({
+		**base,
+		"module": "reactor",
+		"execution": "suite",
+		"wallclock_s": round(test_elapsed, 3),
+		"test_count": total_tests,
+		"surefire_total_s": round(total_seconds, 3),
+	})
+
 	with path.open("a", encoding="utf-8") as f:
 		for row in rows:
 			f.write(json.dumps(row) + "\n")
-	print(f"🕒 Timing metrics appended to {path}")
+	print(
+		f"🕒 Timing metrics appended to {path} "
+		f"({len(module_stats)} modules, {total_tests} tests, reactor {test_elapsed:.1f}s)"
+	)
 
 
 def read_baselines(baseline_file: Path) -> dict:
-	"""Read baselines from perf-baseline.txt.
+	"""Parse the per-module perf baseline file.
 
-	Returns a dict mapping label to float:
-	  'suite'               — line 1, suite wall-clock (used by --enforce-perf).
-	  'core'                — line 2, core Surefire XML total.
-	  'container.springboot'— line 3, springboot Surefire XML total.
-	  'container.jetty'     — line 4, jetty Surefire XML total.
+	Format (one entry per line):  <key> = <seconds>   # optional trailing comment
+	  'suite'             -> overall reactor wall-clock baseline.
+	  '<module>/<bucket>' -> per-module Surefire test-time baseline.
+
+	Blank lines, '#' comments, the [observability] section, and any non-'suite' key
+	without a '/' (e.g. the observability metric) are ignored.
 	"""
-	keys = ["suite", "core", "container.springboot", "container.jetty"]
-	result = {}
+	result: dict = {}
 	if not baseline_file.exists():
 		return result
-	idx = 0
 	for line in baseline_file.read_text(encoding="utf-8").splitlines():
-		stripped = line.strip()
-		if not stripped or stripped.startswith("#"):
+		stripped = line.split("#", 1)[0].strip()
+		if not stripped or "=" not in stripped:
 			continue
-		if idx >= len(keys):
-			break
+		key, _, value = stripped.partition("=")
+		key = key.strip()
+		if key != "suite" and "/" not in key:
+			continue
 		try:
-			value = float(stripped.split()[0])
-			result[keys[idx]] = value
-			idx += 1
+			result[key] = float(value.strip().split()[0])
 		except (ValueError, IndexError):
 			continue
 	return result
 
 
-def _read_latest_jsonl_run(log_path: Path) -> dict:
-	"""Return {execution: wallclock_s} for the latest run_id in the JSONL."""
+def _latest_run_actuals(log_path: Path) -> dict:
+	"""Return {'<module>/<bucket>': wallclock_s, ..., 'suite': wallclock_s} for the latest run_id."""
 	rows = []
 	for line in log_path.read_text(encoding="utf-8").splitlines():
 		stripped = line.strip()
@@ -211,60 +260,99 @@ def _read_latest_jsonl_run(log_path: Path) -> dict:
 	if not rows:
 		return {}
 	latest_run_id = rows[-1].get("run_id")
-	result = {}
+	result: dict = {}
 	for row in rows:
-		if row.get("run_id") == latest_run_id:
-			execution = row.get("execution", "")
-			result[execution] = float(row.get("wallclock_s", 0.0))
+		if row.get("run_id") != latest_run_id:
+			continue
+		module = row.get("module", "?")
+		execution = row.get("execution", "?")
+		wallclock = float(row.get("wallclock_s", 0.0))
+		if module == "reactor" and execution == "suite":
+			result["suite"] = wallclock
+		else:
+			result[f"{module}/{execution}"] = wallclock
 	return result
 
 
+def _actuals_from_surefire(repo_root: Path) -> dict:
+	"""Fallback per-module actuals straight from surefire reports: {'<module>/<bucket>': seconds}."""
+	actuals: dict = {}
+	for module_key, buckets in discover_module_stats(repo_root).items():
+		for bucket, stats in buckets.items():
+			actuals[f"{module_key}/{bucket}"] = stats["seconds"]
+	return actuals
+
+
 def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, enforce: bool) -> int:
-	"""Run the v1 (suite wall-clock) and v2 (per-bucket Surefire XML) perf guards.
+	"""Per-module perf guard: suite wall-clock + per-(module, bucket) Surefire test-time.
 
 	Returns exit code: 0 = pass or warn-only mode, 1 = threshold breached with enforce=True.
 	"""
 	tolerance = float(os.environ.get("JUNEAU_CI_PERF_THRESHOLD", "0.20"))
 	baselines = read_baselines(baseline_file)
 	if not baselines:
-		print(f"PERF-GUARD: baseline file not found ({baseline_file}); skipping check.")
+		print(f"PERF-GUARD: baseline file not found or empty ({baseline_file}); skipping check.")
 		return 0
 
 	pct = f"±{tolerance * 100:.0f}%"
 	perf_failed = False
 
+	# Source of per-module actuals: prefer the latest timing-log run, else discover from surefire.
+	actuals: dict = {}
+	if timing_log_path is not None:
+		log_path = Path(timing_log_path).expanduser()
+		if log_path.exists():
+			actuals = _latest_run_actuals(log_path)
+	if not any(k != "suite" for k in actuals):
+		actuals.update(_actuals_from_surefire(Path(__file__).parent.parent))
+	# Suite wall-clock always comes from the measured subprocess time.
+	actuals["suite"] = test_elapsed
+
+	# 1) Suite-level guard.
 	suite_baseline = baselines.get("suite")
 	if suite_baseline is not None:
 		threshold = suite_baseline * (1 + tolerance)
 		if test_elapsed > threshold:
 			print(
-				f"PERF-GUARD FAIL: tests took {test_elapsed:.1f}s "
+				f"PERF-GUARD FAIL [suite]: tests took {test_elapsed:.1f}s "
 				f"(baseline {suite_baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
-				f"If this is intentional, bump juneau-utest/perf-baseline.txt and the FINISHED archive's ## Perf block in the same PR."
+				f"  If intentional, bump the 'suite' entry in perf-baseline.txt (project root)."
 			)
 			perf_failed = True
 		else:
-			print(f"PERF-GUARD OK: tests took {test_elapsed:.1f}s (baseline {suite_baseline}s, tolerance {pct}).")
+			print(f"PERF-GUARD OK [suite]: tests took {test_elapsed:.1f}s (baseline {suite_baseline}s, tolerance {pct}).")
+	else:
+		print("PERF-GUARD WARN [suite]: no 'suite' baseline configured; skipping wall-clock check.")
 
-	if timing_log_path is not None:
-		log_path = Path(timing_log_path).expanduser()
-		if log_path.exists():
-			latest_run = _read_latest_jsonl_run(log_path)
-			for bucket in ("core", "container.springboot", "container.jetty"):
-				bucket_actual = latest_run.get(bucket)
-				bucket_baseline = baselines.get(bucket)
-				if bucket_actual is None or bucket_baseline is None:
-					continue
-				bucket_threshold = bucket_baseline * (1 + tolerance)
-				if bucket_actual > bucket_threshold:
-					print(
-						f"PERF-GUARD FAIL [{bucket}]: {bucket_actual:.1f}s "
-						f"(baseline {bucket_baseline}s, tolerance {pct}, threshold {bucket_threshold:.1f}s).\n"
-						f"If this is intentional, bump juneau-utest/perf-baseline.txt and the FINISHED archive's ## Perf block in the same PR."
-					)
-					perf_failed = True
-				else:
-					print(f"PERF-GUARD OK [{bucket}]: {bucket_actual:.1f}s (baseline {bucket_baseline}s, tolerance {pct}).")
+	# 2) Per-module guards.
+	module_keys = sorted(k for k in actuals if k != "suite")
+	checked = 0
+	regressions = 0
+	new_modules = []
+	for key in module_keys:
+		actual = actuals[key]
+		baseline = baselines.get(key)
+		if baseline is None:
+			new_modules.append(key)
+			continue
+		checked += 1
+		threshold = baseline * (1 + tolerance)
+		if actual > threshold:
+			print(
+				f"PERF-GUARD FAIL [{key}]: {actual:.1f}s "
+				f"(baseline {baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
+				f"  If intentional, bump '{key}' in perf-baseline.txt (project root)."
+			)
+			perf_failed = True
+			regressions += 1
+
+	for key in new_modules:
+		print(f"PERF-GUARD WARN [{key}]: {actuals[key]:.1f}s — no baseline entry yet (new/unknown module; not failing).")
+
+	print(
+		f"PERF-GUARD SUMMARY: {checked} module-bucket(s) checked, {regressions} regression(s), "
+		f"{len(new_modules)} new/unknown."
+	)
 
 	if perf_failed:
 		if not enforce:
@@ -357,10 +445,10 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 		else:
 			print("\n✅ Tests passed!")
 		if args.timing_log:
-			write_timing_log(Path(args.timing_log), passed=(exit_code == 0))
+			write_timing_log(Path(args.timing_log), passed=(exit_code == 0), test_elapsed=test_elapsed)
 		if exit_code != 0:
 			return exit_code
-		baseline_file = Path(__file__).parent.parent / "juneau-utest" / "perf-baseline.txt"
+		baseline_file = Path(__file__).parent.parent / "perf-baseline.txt"
 		perf_exit = run_perf_guard(test_elapsed, baseline_file, args.timing_log, enforce=args.enforce_perf)
 		if perf_exit != 0:
 			return perf_exit

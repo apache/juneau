@@ -12,20 +12,20 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-CI perf guard for Apache Juneau.
+CI perf guard for Apache Juneau (per-module, TODO-160).
 
-Reads per-bucket Surefire XML totals (or a --timing-log JSONL written by scripts/test.py)
-and compares them against the baselines in juneau-utest/perf-baseline.txt.  Intended to run
-in Jenkinsfile's post-build block after the main Maven build has already produced Surefire
-XML reports.
+Reads per-module Surefire XML totals (or a --timing-log JSONL written by scripts/test.py)
+and compares them against the per-module baselines in the project-root perf-baseline.txt.
+Intended to run in Jenkinsfile's post-build block after the main Maven build has already
+produced Surefire XML reports across the whole reactor.
 
 Usage:
     python3 scripts/ci-perf-guard.py [--timing-log <path>] [--dry-run]
 
 Options:
     --timing-log <path>   Read actual times from a JSONL written by scripts/test.py --timing-log.
-                          When omitted, reads Surefire XML directly from
-                          juneau-utest/target/surefire-reports/{core,container}/.
+                          When omitted, discovers and reads Surefire XML directly from every
+                          <module>/target/surefire-reports/ under the reactor.
     --dry-run             Print detected totals and baselines but do not exit non-zero on breach.
     --help                Show this help message.
 
@@ -33,14 +33,16 @@ Env vars:
     JUNEAU_CI_PERF_THRESHOLD   Tolerance as a decimal fraction (default 0.20 = ±20%).
                                Separate from JUNEAU_PUSH_TIMING_THRESHOLD.
 
-Baseline lines in perf-baseline.txt (lines 2–4, Surefire XML aggregate values):
-    line 2 — core bucket total
-    line 3 — container.springboot bucket total
-    line 4 — container.jetty bucket total
+Baseline format (perf-baseline.txt, project root):
+    <key> = <seconds>            # optional trailing comment
+      'suite'             -> overall reactor wall-clock baseline (not used here; ci-perf-guard
+                             works off Surefire XML test-time, not wall-clock).
+      '<module>/<bucket>' -> per-module Surefire test-time baseline; <bucket> ∈
+                             {core, container.springboot, container.jetty, container.tomcat}.
+    Modules with no baseline entry are treated as new (warn, not fail).
 
-NOTE: The per-bucket baselines were calibrated on a developer M1 Pro laptop.  The first
-Jenkins run after this guard is introduced will likely show different values; follow the
-first-CI-run calibration procedure in todo/PERF-BASELINE.md to set the canonical CI baseline.
+NOTE: Baselines were calibrated on a developer M1 Pro laptop.  The first Jenkins run after a
+re-baseline will likely show different values; recalibrate against the CI Linux numbers.
 """
 
 from __future__ import annotations
@@ -53,73 +55,71 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
-def parse_surefire_dir(directory: Path) -> float:
-	"""Return the sum of Surefire XML 'time' attributes under directory."""
-	total = 0.0
-	if not directory.exists():
-		return total
-	for xml_file in sorted(directory.glob("TEST-*.xml")):
-		try:
-			root = ET.parse(xml_file).getroot()
-			total += float(root.attrib.get("time", 0.0))
-		except Exception:
-			continue
-	return total
+# Container annotation marker -> bucket.  Checked against the test class source.
+CONTAINER_MARKERS = (
+	("SpringbootTest", "container.springboot"),
+	("JettyMicroserviceTest", "container.jetty"),
+	("TomcatMicroserviceTest", "container.tomcat"),
+)
 
 
-def container_bucket(module_dir: Path, class_name: str) -> str:
-	"""Classify a container test class as container.springboot or container.jetty."""
+def classify_bucket(module_dir: Path, class_name: str) -> str:
+	"""Bucket a test class as core or a container.* flavor via source-annotation inspection."""
 	source = module_dir / "src" / "test" / "java" / Path("/".join(class_name.split("."))).with_suffix(".java")
 	if source.exists():
 		try:
 			content = source.read_text(encoding="utf-8")
-			if "SpringbootTest" in content:
-				return "container.springboot"
-			if "JettyMicroserviceTest" in content:
-				return "container.jetty"
+			for marker, bucket in CONTAINER_MARKERS:
+				if marker in content:
+					return bucket
+			return "core"
 		except OSError:
 			pass
-	return "container.springboot" if "springboot" in class_name.lower() else "container.jetty"
+	lowered = class_name.lower()
+	if "springboot" in lowered:
+		return "container.springboot"
+	if "tomcat" in lowered:
+		return "container.tomcat"
+	if "jetty" in lowered:
+		return "container.jetty"
+	return "core"
 
 
-def parse_container_subbuckets(module_dir: Path, directory: Path) -> dict:
-	"""Return {'container.springboot': float, 'container.jetty': float} Surefire XML totals."""
-	buckets: dict[str, float] = {"container.springboot": 0.0, "container.jetty": 0.0}
-	if not directory.exists():
-		return buckets
-	for xml_file in sorted(directory.glob("TEST-*.xml")):
+def aggregate_module_reports(module_dir: Path, reports_dir: Path) -> dict:
+	"""Return {bucket: seconds} for one module's surefire-reports tree (flat or nested)."""
+	buckets: dict = {}
+	for xml_file in sorted(reports_dir.rglob("TEST-*.xml")):
 		try:
 			root = ET.parse(xml_file).getroot()
-			bucket = container_bucket(module_dir, root.attrib.get("name", ""))
-			buckets[bucket] += float(root.attrib.get("time", 0.0))
-		except Exception:
+		except (ET.ParseError, OSError):
 			continue
+		bucket = classify_bucket(module_dir, root.attrib.get("name", ""))
+		buckets[bucket] = buckets.get(bucket, 0.0) + float(root.attrib.get("time", 0.0))
 	return buckets
 
 
 def read_baselines_from_file(baseline_file: Path) -> dict:
-	"""Parse perf-baseline.txt; positions 2–4 (0-based indices 1–3) are the per-bucket baselines."""
-	keys = ["suite", "core", "container.springboot", "container.jetty"]
-	result: dict[str, float] = {}
+	"""Parse perf-baseline.txt: '<key> = <seconds>'.  Keeps 'suite' and '<module>/<bucket>' keys."""
+	result: dict = {}
 	if not baseline_file.exists():
 		return result
-	idx = 0
 	for line in baseline_file.read_text(encoding="utf-8").splitlines():
-		stripped = line.strip()
-		if not stripped or stripped.startswith("#"):
+		stripped = line.split("#", 1)[0].strip()
+		if not stripped or "=" not in stripped:
 			continue
-		if idx >= len(keys):
-			break
+		key, _, value = stripped.partition("=")
+		key = key.strip()
+		if key != "suite" and "/" not in key:
+			continue
 		try:
-			result[keys[idx]] = float(stripped.split()[0])
+			result[key] = float(value.strip().split()[0])
 		except (ValueError, IndexError):
-			pass
-		idx += 1
+			continue
 	return result
 
 
 def read_actuals_from_jsonl(log_path: Path) -> dict:
-	"""Return {execution: wallclock_s} for the latest run_id in the JSONL."""
+	"""Return {'<module>/<bucket>': seconds} for the latest run_id in the JSONL (skips the suite row)."""
 	rows: list[dict] = []
 	for line in log_path.read_text(encoding="utf-8").splitlines():
 		stripped = line.strip()
@@ -132,25 +132,29 @@ def read_actuals_from_jsonl(log_path: Path) -> dict:
 	if not rows:
 		return {}
 	latest_run_id = rows[-1].get("run_id")
-	result: dict[str, float] = {}
+	result: dict = {}
 	for row in rows:
-		if row.get("run_id") == latest_run_id:
-			execution = row.get("execution", "")
-			result[execution] = float(row.get("wallclock_s", 0.0))
+		if row.get("run_id") != latest_run_id:
+			continue
+		module = row.get("module", "?")
+		execution = row.get("execution", "?")
+		if module == "reactor" and execution == "suite":
+			continue
+		result[f"{module}/{execution}"] = float(row.get("wallclock_s", 0.0))
 	return result
 
 
 def read_actuals_from_surefire(repo_root: Path) -> dict:
-	"""Read per-bucket Surefire XML aggregate times directly from target/surefire-reports/."""
-	module_dir = repo_root / "juneau-utest"
-	reports_root = module_dir / "target" / "surefire-reports"
-	core = parse_surefire_dir(reports_root / "core")
-	sub = parse_container_subbuckets(module_dir, reports_root / "container")
-	return {
-		"core": core,
-		"container.springboot": sub["container.springboot"],
-		"container.jetty": sub["container.jetty"],
-	}
+	"""Discover every <module>/target/surefire-reports/ under the reactor: {'<module>/<bucket>': seconds}."""
+	actuals: dict = {}
+	for reports_dir in sorted(repo_root.rglob("target/surefire-reports")):
+		if not reports_dir.is_dir():
+			continue
+		module_dir = reports_dir.parent.parent
+		module_key = module_dir.relative_to(repo_root).as_posix()
+		for bucket, seconds in aggregate_module_reports(module_dir, reports_dir).items():
+			actuals[f"{module_key}/{bucket}"] = seconds
+	return actuals
 
 
 def main() -> int:
@@ -168,7 +172,7 @@ def main() -> int:
 		return 1
 
 	repo_root = Path(__file__).parent.parent
-	baseline_file = repo_root / "juneau-utest" / "perf-baseline.txt"
+	baseline_file = repo_root / "perf-baseline.txt"
 	baselines = read_baselines_from_file(baseline_file)
 	if not baselines:
 		print(f"PERF-GUARD: baseline file not found or empty ({baseline_file}); skipping.")
@@ -188,29 +192,36 @@ def main() -> int:
 	pct = f"±{tolerance * 100:.0f}%"
 	guard_failed = False
 
-	total_actual = actuals.get("core", 0.0) + actuals.get("container.springboot", 0.0) + actuals.get("container.jetty", 0.0)
-	print(f"PERF-GUARD CI: detected total {total_actual:.1f}s (core {actuals.get('core', 0.0):.1f}s + springboot {actuals.get('container.springboot', 0.0):.1f}s + jetty {actuals.get('container.jetty', 0.0):.1f}s)")
+	total_actual = sum(actuals.values())
+	print(f"PERF-GUARD CI: detected total {total_actual:.1f}s across {len(actuals)} module-bucket(s).")
 
-	for bucket in ("core", "container.springboot", "container.jetty"):
-		actual = actuals.get(bucket)
-		baseline = baselines.get(bucket)
-		if actual is None:
-			print(f"PERF-GUARD [{bucket}]: no data; skipping.")
-			continue
+	checked = 0
+	regressions = 0
+	new_keys = []
+	for key in sorted(actuals):
+		actual = actuals[key]
+		baseline = baselines.get(key)
 		if baseline is None:
-			print(f"PERF-GUARD [{bucket}]: no baseline configured; skipping.")
+			new_keys.append(key)
 			continue
+		checked += 1
 		threshold = baseline * (1 + tolerance)
 		if actual > threshold:
 			print(
-				f"PERF-GUARD FAIL [{bucket}]: {actual:.1f}s "
+				f"PERF-GUARD FAIL [{key}]: {actual:.1f}s "
 				f"(baseline {baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
-				f"  Follow the re-baseline procedure in todo/PERF-BASELINE.md if this is intentional.\n"
-				f"  NOTE: If this is the first CI run, the developer-machine baseline needs CI calibration."
+				f"  If intentional, bump '{key}' in perf-baseline.txt (project root)."
 			)
 			guard_failed = True
-		else:
-			print(f"PERF-GUARD OK [{bucket}]: {actual:.1f}s (baseline {baseline}s, tolerance {pct}).")
+			regressions += 1
+
+	for key in new_keys:
+		print(f"PERF-GUARD WARN [{key}]: {actuals[key]:.1f}s — no baseline entry yet (new/unknown; not failing).")
+
+	print(
+		f"PERF-GUARD SUMMARY: {checked} module-bucket(s) checked, {regressions} regression(s), "
+		f"{len(new_keys)} new/unknown."
+	)
 
 	if guard_failed and args.dry_run:
 		print("PERF-GUARD: dry-run mode; breach detected but not failing the build.")
