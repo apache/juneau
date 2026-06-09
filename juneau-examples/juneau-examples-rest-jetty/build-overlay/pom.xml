@@ -44,7 +44,6 @@
 		<springboot.version>${springboot.version}</springboot.version>
 		<juneau.version>${version}</juneau.version>
 		<junit.version>${junit.version}</junit.version>
-		<hibernate.version>${hibernate.version}</hibernate.version>
 		<xml.apis.version>${xml.apis.version}</xml.apis.version>
 	</properties>
 
@@ -69,16 +68,6 @@
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derby</artifactId>
 			<version>\${derby.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>\${hibernate.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>\${hibernate.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>xml-apis</groupId>
