@@ -24,7 +24,7 @@ all developers.
 
 There are two sets of preferences:
 - source-prefs: For main source modules
-- test-prefs: For test modules (juneau-utest and *-ftest modules)
+- test-prefs: For test modules (juneau-integration-tests and *-ftest modules)
 """
 
 import os
@@ -67,7 +67,7 @@ SOURCE_PROJECTS = [
 
 # Test modules
 TEST_PROJECTS = [
-    "juneau-utest",
+    "juneau-integration-tests",
     "juneau-examples/juneau-examples-rest-jetty-ftest",
 ]
 

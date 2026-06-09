@@ -63,7 +63,7 @@
 		<module>juneau-microservice</module>
 		<module>juneau-sc</module>
 		<module>juneau-examples</module>
-		<module>juneau-utest</module>
+		<module>juneau-integration-tests</module>
 		<module>juneau-bean</module>
 		<module>juneau-shaded</module>
 		<module>juneau-distrib</module>
@@ -346,7 +346,7 @@
 					<aggregate>true</aggregate>
 				</configuration>
 			</plugin>
-			<!-- JaCoCo aggregate report is generated in juneau-utest module -->
+			<!-- JaCoCo aggregate report is generated in juneau-integration-tests module -->
 		</plugins>
 	</reporting>
 

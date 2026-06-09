@@ -7,6 +7,16 @@
 /bin/
 derby.log
 
+# JVM crash / error logs
+hs_err_pid*.log
+replay_pid*.log
+
+# Runtime-generated Jetty request logs
+**/logs/jetty-requests.log*
+
+# push.py generated test-run history
+**/test-run-history.tsv
+
 # Temporary cursor assistant scripts
 cursor-*
 

@@ -114,7 +114,7 @@ import org.apache.juneau.rest.server.*;
  * A host with {@code /views/} JSPs and {@code /admin/views/} JSPs registers two
  * {@code JspMixin} beans, each mounted via a subclass declaring its own op-level
  * {@code @RestGet(path=...)} override and its own {@code basePath}. See the
- * {@code JspMixin_MultiBasePath_Test} test in {@code juneau-utest} for the canonical
+ * {@code JspMixin_MultiBasePath_Test} test in {@code juneau-integration-tests} for the canonical
  * pattern.
  *
  * <h5 class='section'>OpenAPI surface:</h5>

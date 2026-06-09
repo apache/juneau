@@ -134,7 +134,7 @@ import freemarker.template.*;
  * A host with {@code /templates/} and {@code /admin/templates/} template trees registers two
  * {@code FreemarkerMixin} beans, each mounted via a subclass declaring its own op-level
  * {@code @RestGet(path=...)} override and its own {@code basePath}. See the
- * {@code FreemarkerMixin_MockRest_Test} test in {@code juneau-utest} for the canonical
+ * {@code FreemarkerMixin_MockRest_Test} test in {@code juneau-integration-tests} for the canonical
  * pattern.
  *
  * <h5 class='section'>OpenAPI surface:</h5>

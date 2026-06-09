@@ -30,7 +30,7 @@ Options:
 
 Perf guard (per-module, TODO-160):
     Timing/perf statistics are collected PER MODULE.  write_timing_log() discovers every
-    target/surefire-reports/ directory under the reactor (not just juneau-utest's), attributes
+    target/surefire-reports/ directory under the reactor (not just juneau-integration-tests's), attributes
     each Surefire XML to its OWNING module (the parent of target/surefire-reports), and buckets
     each test class as core / container.springboot / container.jetty / container.tomcat.
 
@@ -96,15 +96,15 @@ def parse_test_results(output):
 #
 # After the TODO-160 migration, tests live in each module's own src/test/java and
 # report into that module's target/surefire-reports/.  The helpers below discover
-# ALL such report dirs under the reactor (not just juneau-utest's), attribute each
+# ALL such report dirs under the reactor (not just juneau-integration-tests's), attribute each
 # Surefire XML to its OWNING module (the parent of target/surefire-reports), and
 # bucket each test class.
 #
-# Module key = the module's path relative to the repo root (e.g. "juneau-utest",
+# Module key = the module's path relative to the repo root (e.g. "juneau-integration-tests",
 #              "juneau-core/juneau-junit5"; MAY contain '/').
 # Bucket     ∈ {core, container.springboot, container.jetty, container.tomcat}.
 #
-# juneau-utest additionally splits its reports into surefire-reports/{core,container}/
+# juneau-integration-tests additionally splits its reports into surefire-reports/{core,container}/
 # via two Surefire executions; the recursive XML scan below transparently handles
 # both that nested layout and the standard flat layout every migrated module uses.
 

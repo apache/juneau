@@ -39,7 +39,7 @@ import org.junit.jupiter.api.*;
  * Test utilities for the juneau-marshall module.
  *
  * <p>Contains a marshall-compatible subset of the methods available in the full {@code TestUtils}
- * in {@code juneau-utest}.  Methods that depend on {@code juneau-rest-*} modules are excluded.</p>
+ * in {@code juneau-integration-tests}.  Methods that depend on {@code juneau-rest-*} modules are excluded.</p>
  */
 @SuppressWarnings({
 	"unchecked"      // BeanTester cast and generic type handling in test utilities

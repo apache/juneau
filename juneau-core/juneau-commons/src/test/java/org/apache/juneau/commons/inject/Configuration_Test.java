@@ -48,7 +48,7 @@ class Configuration_Test extends TestBase {
 
 	// Fixture classes are intentionally declared with package-private visibility (and so are their
 	// constructors) to exercise the package-private constructor fallback path in BeanInstantiator.
-	// The juneau-utest module previously had to force these to `public static` because BeanInstantiator
+	// The juneau-integration-tests module (formerly juneau-utest) previously had to force these to `public static` because BeanInstantiator
 	// only considered public/protected constructors.
 	static class SvcA { final String tag; SvcA(String tag) { this.tag = tag; } }
 	static class SvcB { final SvcA dep; SvcB(SvcA dep) { this.dep = dep; } }

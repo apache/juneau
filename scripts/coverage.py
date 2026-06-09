@@ -40,8 +40,8 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-UTEST_MODULE = REPO_ROOT / "juneau-utest"
-UTEST_EXEC = UTEST_MODULE / "target" / "jacoco.exec"
+INTEGRATION_MODULE = REPO_ROOT / "juneau-integration-tests"
+INTEGRATION_EXEC = INTEGRATION_MODULE / "target" / "jacoco.exec"
 
 SRC_MARKERS = ["src/main/java", "src/test/java"]
 
@@ -87,7 +87,7 @@ def run_tests():
     """Re-run tests with upstream modules to refresh the .exec file."""
     print("Running tests to refresh coverage data...")
     result = subprocess.run(
-        ["mvn", "-pl", "juneau-utest", "-am", "test", "-Drat.skip=true", "-q"],
+        ["mvn", "-pl", "juneau-integration-tests", "-am", "test", "-Drat.skip=true", "-q"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True
@@ -102,7 +102,7 @@ def generate_report(module: Path) -> Path:
     """Generate JaCoCo XML report for the given module using the utest exec file."""
     xml_path = module / "target" / "site" / "jacoco" / "jacoco.xml"
     result = subprocess.run(
-        ["mvn", "jacoco:report", f"-Djacoco.dataFile={UTEST_EXEC}", "-q"],
+        ["mvn", "jacoco:report", f"-Djacoco.dataFile={INTEGRATION_EXEC}", "-q"],
         cwd=module,
         capture_output=True,
         text=True
@@ -267,8 +267,8 @@ def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code 
     if do_run:
         run_tests()
 
-    if not UTEST_EXEC.exists():
-        die(f"No exec file found at {UTEST_EXEC}. Run with --run first.")
+    if not INTEGRATION_EXEC.exists():
+        die(f"No exec file found at {INTEGRATION_EXEC}. Run with --run first.")
 
     print(f"Generating JaCoCo report for module: {module.relative_to(REPO_ROOT)}")
     xml_path = generate_report(module)

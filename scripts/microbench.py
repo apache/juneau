@@ -30,9 +30,9 @@ Exit codes:
     1   Benchmark failed (alloc rate exceeded threshold or Maven error).
 
 The benchmark compiles and runs via:
-    mvn -pl juneau-utest -Pmicrobench test-compile exec:java
+    mvn -pl juneau-integration-tests -Pmicrobench test-compile exec:java
 
-JSON output is written to juneau-utest/jmh-results/observability-YYYY-MM-DD.json.
+JSON output is written to juneau-integration-tests/jmh-results/observability-YYYY-MM-DD.json.
 The gc.alloc.rate.norm secondary metric (bytes allocated per operation) is read from
 that file to assert the zero-allocation contract.
 
@@ -52,8 +52,8 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).parent.parent
-UTEST_DIR = REPO_ROOT / "juneau-utest"
-JMH_RESULTS_DIR = UTEST_DIR / "jmh-results"
+INTEGRATION_DIR = REPO_ROOT / "juneau-integration-tests"
+JMH_RESULTS_DIR = INTEGRATION_DIR / "jmh-results"
 
 # Benchmark class name → subcommand mapping
 BENCHMARK_CLASSES = {
@@ -67,12 +67,12 @@ DEFAULT_THRESHOLD_BYTES = 8.0
 def run_benchmark(main_class: str, verbose: bool) -> tuple[int, str]:
     """Compile and run the benchmark via Maven, returning (exit_code, combined_output).
 
-    Uses ``-f juneau-utest/pom.xml`` instead of ``-pl juneau-utest`` to avoid the
+    Uses ``-f juneau-integration-tests/pom.xml`` instead of ``-pl juneau-integration-tests`` to avoid the
     ``--also-make`` in ``.mvn/maven.config`` causing exec:java to also run on the root project.
     Upstream deps are expected to be installed in ~/.m2 (i.e. ``mvn install`` was run recently).
     """
     cmd = (
-        f"mvn -f juneau-utest/pom.xml -Pmicrobench test-compile exec:java "
+        f"mvn -f juneau-integration-tests/pom.xml -Pmicrobench test-compile exec:java "
         f"-Dexec.mainClass={main_class}"
     )
     print(f"Running: {cmd}")

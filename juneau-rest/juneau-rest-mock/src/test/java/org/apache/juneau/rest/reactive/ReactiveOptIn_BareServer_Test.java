@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  * JSON array (the reactive buffer shape) and NOT streamed.
  *
  * <p>
- * The positive activation tests live in {@code juneau-utest} (where the reactive module IS on the
+ * The positive activation tests live in {@code juneau-integration-tests} (where the reactive module IS on the
  * classpath); this negative test cannot live there because the module's presence auto-activates the
  * processor for every resource. See {@code FINISHED-119}/{@code FINISHED-120} for the opt-in design.
  */

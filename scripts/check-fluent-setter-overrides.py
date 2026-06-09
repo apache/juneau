@@ -209,9 +209,9 @@ def find_java_files(source_dir):  # NOSONAR python:S3776 -- Cognitive complexity
         # Skip certain directories including test directories
         dirs[:] = [d for d in dirs if not d.startswith('.') and d not in {'target', 'node_modules', 'build', 'dist'}]
         
-        # Skip test directories (src/test, juneau-utest, etc.)
+        # Skip test directories (src/test, juneau-integration-tests, etc.)
         root_path = Path(root)
-        if any(part in ['test', 'juneau-utest'] for part in root_path.parts):
+        if any(part in ['test', 'juneau-integration-tests'] for part in root_path.parts):
             continue
         if 'src/test' in str(root_path) or '/test/' in str(root_path):
             continue

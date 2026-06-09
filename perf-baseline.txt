@@ -13,7 +13,7 @@
 #
 #   key = "<module>/<bucket>"
 #       Per-module Surefire XML aggregate test-time baseline.
-#       <module> = module path relative to the repo root (e.g. "juneau-utest",
+#       <module> = module path relative to the repo root (e.g. "juneau-integration-tests",
 #                  "juneau-core/juneau-junit5"); MAY contain '/'.
 #       <bucket> ∈ { core, container.springboot, container.jetty, container.tomcat }.
 #       The owning module is the parent of <module>/target/surefire-reports.
@@ -39,9 +39,9 @@
 # ============================================================================
 
 suite = 136                              # reactor wall-clock; carried from FINISHED-95 (re-measure post-migration).
-juneau-utest/core = 60                   # carried from FINISHED-139 single-module baseline.
-juneau-utest/container.springboot = 3    # carried from FINISHED-139.
-juneau-utest/container.jetty = 1         # carried from FINISHED-139.
+juneau-integration-tests/core = 60                   # carried from FINISHED-139 single-module baseline (was juneau-utest).
+juneau-integration-tests/container.springboot = 3    # carried from FINISHED-139.
+juneau-integration-tests/container.jetty = 1         # carried from FINISHED-139.
 
 # ─── [observability] ──────────────────────────────────────────────────────────
 #

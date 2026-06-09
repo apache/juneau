@@ -132,7 +132,7 @@ def bar(seconds: float, max_seconds: float, width: int = 20) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Aggregate Surefire reports by execution bucket.")
-    parser.add_argument("module", default="juneau-utest", nargs="?", help="Module path (default: juneau-utest)")
+    parser.add_argument("module", default="juneau-integration-tests", nargs="?", help="Module path (default: juneau-integration-tests)")
     args = parser.parse_args()
 
     repo_root = Path(__file__).resolve().parent.parent

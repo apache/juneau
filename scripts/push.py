@@ -385,8 +385,8 @@ def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is
 
 
 def _collect_surefire_stats(juneau_root: Path):
-    """Aggregate tests/failures/errors/skipped from all Surefire XML files under juneau-utest."""
-    reports = juneau_root / "juneau-utest" / "target" / "surefire-reports"
+    """Aggregate tests/failures/errors/skipped from all Surefire XML files under juneau-integration-tests."""
+    reports = juneau_root / "juneau-integration-tests" / "target" / "surefire-reports"
     totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
     found = False
     for xml_path in sorted(reports.rglob("TEST-*.xml")):
@@ -401,9 +401,9 @@ def _collect_surefire_stats(juneau_root: Path):
 
 
 def _append_test_run_history(juneau_root: Path, wall_sec: int) -> None:
-    """Append one row to juneau-utest/test-run-history.tsv; creates with header if absent. Never raises."""
+    """Append one row to juneau-integration-tests/test-run-history.tsv; creates with header if absent. Never raises."""
     try:
-        tsv_path = juneau_root / "juneau-utest" / "test-run-history.tsv"
+        tsv_path = juneau_root / "juneau-integration-tests" / "test-run-history.tsv"
         header = "timestamp\tgit_sha\tbranch\ttests_run\tfailures\terrors\tskipped\twall_sec"
         need_header = not tsv_path.exists() or tsv_path.stat().st_size == 0
 
@@ -431,7 +431,7 @@ def _append_test_run_history(juneau_root: Path, wall_sec: int) -> None:
                 f.write(header + "\n")
             f.write(row + "\n")
 
-        print(f"📊 Test metrics appended → juneau-utest/test-run-history.tsv ({tests_run} tests, {wall_sec}s)")
+        print(f"📊 Test metrics appended → juneau-integration-tests/test-run-history.tsv ({tests_run} tests, {wall_sec}s)")
     except Exception as exc:
         print(f"⚠ Warning: Could not append test metrics: {exc}")
 
