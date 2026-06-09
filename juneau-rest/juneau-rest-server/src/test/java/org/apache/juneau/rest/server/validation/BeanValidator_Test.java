@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.rest.validation;
+package org.apache.juneau.rest.server.validation;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,7 +23,6 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.rest.server.validation.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.validation.constraints.*;
@@ -33,7 +32,8 @@ import jakarta.validation.constraints.*;
  * REST argument-resolver wiring covered elsewhere.
  */
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
 })
 class BeanValidator_Test extends TestBase {
 

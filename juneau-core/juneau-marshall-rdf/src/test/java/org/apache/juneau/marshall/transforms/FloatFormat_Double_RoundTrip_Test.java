@@ -85,6 +85,9 @@ import org.junit.jupiter.params.provider.*;
  * {@code nan}/{@code inf} asymmetry) is still open — same predicate carried into this file for the same
  * reason.
  */
+@SuppressWarnings({
+	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
+})
 class FloatFormat_Double_RoundTrip_Test extends TestBase {
 
 	/**

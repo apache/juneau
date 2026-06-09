@@ -41,7 +41,8 @@ import org.junit.jupiter.api.*;
 	"unchecked", // Integer to T cast in generic test helpers
 	"serial",
 	"java:S5961",
-	"java:S1186"
+	"java:S1186",
+	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
 })
 class BeanMap_Test extends TestBase {
 
@@ -1804,7 +1805,7 @@ class BeanMap_Test extends TestBase {
 		var b = a.getBean();
 		assertEquals("v1", b.m.get(HEnum.ONE));
 		assertEquals("v2", b.m.get(HEnum.TWO));
-		assertFalse(((Map)b.m).containsKey("ONE"));
+		assertFalse(b.m.containsKey("ONE"));
 		assertTrue(b.m.keySet().stream().allMatch(HEnum.class::isInstance));
 	}
 
@@ -1819,7 +1820,7 @@ class BeanMap_Test extends TestBase {
 		var b = a.getBean();
 		assertEquals("v1", b.getM().get(HEnum.ONE));
 		assertEquals("v2", b.getM().get(HEnum.TWO));
-		assertFalse(((Map)b.getM()).containsKey("ONE"));
+		assertFalse(b.getM().containsKey("ONE"));
 		assertTrue(b.getM().keySet().stream().allMatch(HEnum.class::isInstance));
 	}
 

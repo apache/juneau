@@ -31,6 +31,9 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link ApacheHc5Transport} against a real embedded HTTP server.
  */
+@SuppressWarnings({
+	"resource" // Transport/client instances are short-lived test fixtures; closing is irrelevant to these assertions.
+})
 class ApacheHc5Transport_Test {
 
 	private static HttpServer server;

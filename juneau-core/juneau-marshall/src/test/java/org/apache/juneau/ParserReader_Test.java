@@ -23,6 +23,9 @@ import java.io.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // ParserReader instances are short-lived test fixtures; closing is irrelevant to these assertions.
+})
 class ParserReader_Test extends TestBase {
 
 	//====================================================================================================

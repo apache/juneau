@@ -31,6 +31,9 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link JavaHttpTransport} against a real embedded HTTP server.
  */
+@SuppressWarnings({
+	"resource" // Transport/client instances are short-lived test fixtures; closing is irrelevant to these assertions.
+})
 class JavaHttpTransport_Test {
 
 	private static HttpServer server;

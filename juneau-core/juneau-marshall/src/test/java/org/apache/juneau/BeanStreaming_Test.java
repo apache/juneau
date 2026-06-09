@@ -86,7 +86,7 @@ class BeanStreaming_Test extends TestBase {
 			var channel = new ListBeanChannel<String>();
 			channel.acceptThrows("a");
 			channel.acceptThrows("b");
-			var json = Json5Serializer.DEFAULT.serialize((BeanSupplier<String>) channel);
+			var json = Json5Serializer.DEFAULT.serialize(channel);
 			assertEquals("['a','b']", json);
 		}
 	}

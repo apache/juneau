@@ -37,7 +37,8 @@ import org.junit.jupiter.api.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S1130"        // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (ParseException/IOException/SerializeException) is high-churn/low-value.
+	"java:S1130", // Test methods use the project-standard broad 'throws Exception' signature; narrowing each to the specific checked type (ParseException/IOException/SerializeException) is high-churn/low-value.
+	"cast" // Tests intentionally exercise redundant casts on Json5Map/Json5List values; harmless "already an instance" warnings.
 })
 class Json5Map_Test extends TestBase {
 
@@ -105,6 +106,7 @@ class Json5Map_Test extends TestBase {
 		var m = Json5Map.create().append("a", 1).append("b", 2);
 		assertEquals(2, m.size());
 		assertEquals(1, m.getInt("a"));
+		assertTrue(m instanceof Json5Map);
 	}
 
 	@Test void a06_ctorCharSequenceUsesJson5Parser() throws Exception {
@@ -122,6 +124,7 @@ class Json5Map_Test extends TestBase {
 		var m = new Json5Map("nested", nested);
 		var got = m.getMap("nested");
 		assertNotNull(got);
+		assertTrue(got instanceof Json5Map, "Expected Json5Map, got " + got.getClass().getName());
 		assertEquals(1, got.getInt("x"));
 	}
 
@@ -131,6 +134,7 @@ class Json5Map_Test extends TestBase {
 		var m = new Json5Map("nested", stored);
 		var got = m.getMap("nested");
 		assertNotNull(got);
+		assertTrue(got instanceof Json5Map, "Expected Json5Map after narrowing, got " + got.getClass().getName());
 	}
 
 	@Test void a10_getListReturnsJson5List() {
@@ -139,6 +143,7 @@ class Json5Map_Test extends TestBase {
 		m.put("arr", inner);
 		var got = m.getList("arr");
 		assertNotNull(got);
+		assertTrue(got instanceof Json5List, "Expected Json5List, got " + got.getClass().getName());
 		assertEquals(2, got.size());
 	}
 
@@ -146,6 +151,7 @@ class Json5Map_Test extends TestBase {
 		var m = Json5Map.create();
 		var nested = m.getMap("nested", true);
 		assertNotNull(nested);
+		assertTrue(nested instanceof Json5Map);
 		assertSame(nested, m.getMap("nested"));
 	}
 
@@ -153,12 +159,14 @@ class Json5Map_Test extends TestBase {
 		var m = Json5Map.create();
 		var list = m.getList("items", true);
 		assertNotNull(list);
+		assertTrue(list instanceof Json5List);
 		assertSame(list, m.getList("items"));
 	}
 
 	@Test void a13_excludeReturnsJson5Map() {
 		var m = Json5Map.of("a", 1, "b", 2, "c", 3);
 		var excluded = m.exclude("b");
+		assertTrue(excluded instanceof Json5Map);
 		assertEquals(2, excluded.size());
 		assertFalse(excluded.containsKey("b"));
 	}
@@ -166,6 +174,7 @@ class Json5Map_Test extends TestBase {
 	@Test void a14_includeReturnsJson5Map() {
 		var m = Json5Map.of("a", 1, "b", 2, "c", 3);
 		var included = m.include("a", "c");
+		assertTrue(included instanceof Json5Map);
 		assertEquals(2, included.size());
 		assertTrue(included.containsKey("a"));
 		assertTrue(included.containsKey("c"));
@@ -173,13 +182,14 @@ class Json5Map_Test extends TestBase {
 
 	@Test void a15_unmodifiableReturnsJson5Map() {
 		var m = Json5Map.of("a", 1).unmodifiable();
+		assertTrue(m instanceof Json5Map);
 		assertTrue(m.isUnmodifiable());
 		assertThrows(UnsupportedOperationException.class, () -> m.put("b", 2));
 	}
 
 	@Test void a16_filteredReturnsJson5Map() {
 		var m = Json5Map.create().filtered();
-		assertNotNull(m);
+		assertTrue(m instanceof Json5Map);
 	}
 
 	@Test void a17_writeToUsesJson5Serializer() throws Exception {

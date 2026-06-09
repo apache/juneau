@@ -118,6 +118,24 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!--
+			Jakarta Bean Validation provider — test-only.
+			BeanValidator_Test exercises the default JVM-wide validator, so the test classpath
+			needs a concrete provider (Hibernate Validator) plus an EL implementation (Expressly).
+			Both are external artifacts, so no Maven reactor cycle is introduced.
+		-->
+		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>8.0.3.Final</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.glassfish.expressly</groupId>
+			<artifactId>expressly</artifactId>
+			<version>5.0.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

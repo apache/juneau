@@ -18,7 +18,7 @@ package org.apache.juneau.bean.rfc7807;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.junit.jupiter.api.*;
 
 /**

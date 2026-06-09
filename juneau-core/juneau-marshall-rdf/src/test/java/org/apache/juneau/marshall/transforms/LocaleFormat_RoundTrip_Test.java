@@ -74,6 +74,9 @@ import org.junit.jupiter.params.provider.*;
  * format helpers use {@link Locale#toLanguageTag()} / {@link Locale#toString()} (zone- and locale-agnostic),
  * not display-name conversions.
  */
+@SuppressWarnings({
+	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
+})
 class LocaleFormat_RoundTrip_Test extends TestBase {
 
 	private static Locale originalLocale;

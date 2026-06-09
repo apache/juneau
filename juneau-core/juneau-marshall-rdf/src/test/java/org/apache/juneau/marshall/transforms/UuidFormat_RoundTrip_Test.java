@@ -67,6 +67,9 @@ import org.junit.jupiter.params.provider.*;
  * (BSON / CBOR / MsgPack / Proto) bypass the format dispatch and emit a native 16-byte binary
  * representation; the round-trip is still lossless.
  */
+@SuppressWarnings({
+	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
+})
 class UuidFormat_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface
