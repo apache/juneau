@@ -865,12 +865,9 @@ public class ConfigMap implements ConfigStoreListener {
 						if (! (isEmpty(l3) || firstChar(l3) == '#'))
 							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
 						var importName = l2.trim();
-						try {
-							if (! imports2.containsKey(importName))
-								imports2.put(importName, store.getMap(importName, format));
-						} catch (@SuppressWarnings("unused") StackOverflowError e) {
-							throw ioex("Import loop detected in configuration ''{0}''->''{1}''", name, importName);
-						}
+						// Circular imports are detected in ConfigStore.getMap() which throws a clean ConfigException.
+						if (! imports2.containsKey(importName))
+							imports2.put(importName, store.getMap(importName, format));
 					}
 				}
 				lines.add(line);

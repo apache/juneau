@@ -84,6 +84,11 @@ public abstract class ConfigStore extends Context implements Closeable {
 	private final ConcurrentHashMap<String,ConfigMap> configMaps = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<String,Set<ConfigStoreListener>> listeners = new ConcurrentHashMap<>();
 
+	// Tracks the chain of configs currently being constructed on this thread so that a circular import
+	// (a config that directly or indirectly imports itself) can be detected and reported cleanly instead
+	// of recursing infinitely through getMap()->new ConfigMap()->load()->getMap() until the stack overflows.
+	private static final ThreadLocal<Set<String>> LOADING = ThreadLocal.withInitial(LinkedHashSet::new);
+
 	/**
 	 * Constructor.
 	 *
@@ -129,12 +134,31 @@ public abstract class ConfigStore extends Context implements Closeable {
 		var cm = configMaps.get(key);
 		if (nn(cm))
 			return cm;
-		cm = new ConfigMap(this, name, format2);
+
+		// Detect circular imports before recursing into ConfigMap construction.
+		var loading = LOADING.get();
+		if (! loading.add(key))
+			throw new ConfigException("Import loop detected in configuration:  {0}", importChain(loading, name));
+		try {
+			cm = new ConfigMap(this, name, format2);
+		} finally {
+			loading.remove(key);
+		}
+
 		var cm2 = configMaps.putIfAbsent(key, cm);
 		if (nn(cm2))
 			return cm2;
 		register(name, cm);
 		return cm;
+	}
+
+	// Renders the chain of configs currently being loaded (e.g. "B -> A2 -> A1 -> A2") for a circular-import error message.
+	// The entries in the loading set are cache keys of the form "<formatId>:<name>", so the format prefix is stripped.
+	private static String importChain(Set<String> loading, String reentry) {
+		var sb = new StringBuilder();
+		for (var key : loading)
+			sb.append(key.substring(key.indexOf(':') + 1)).append(" -> ");
+		return sb.append(reentry).toString();
 	}
 
 	/**
