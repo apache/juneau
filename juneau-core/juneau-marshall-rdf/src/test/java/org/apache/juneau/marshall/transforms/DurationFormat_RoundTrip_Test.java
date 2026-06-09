@@ -25,27 +25,7 @@ import java.util.stream.*;
 import org.apache.juneau.*;
 import org.apache.juneau.a.rttests.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.bson.*;
-import org.apache.juneau.marshall.cbor.*;
-import org.apache.juneau.marshall.csv.*;
-import org.apache.juneau.marshall.hjson.*;
-import org.apache.juneau.marshall.hocon.*;
-import org.apache.juneau.marshall.html.*;
-import org.apache.juneau.marshall.ini.*;
-import org.apache.juneau.marshall.jcs.*;
 import org.apache.juneau.marshall.jena.*;
-import org.apache.juneau.marshall.json.*;
-import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.jsonl.*;
-import org.apache.juneau.marshall.markdown.*;
-import org.apache.juneau.marshall.msgpack.*;
-import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.proto.*;
-import org.apache.juneau.marshall.toml.*;
-import org.apache.juneau.marshall.uon.*;
-import org.apache.juneau.marshall.urlencoding.*;
-import org.apache.juneau.marshall.xml.*;
-import org.apache.juneau.marshall.yaml.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -88,80 +68,6 @@ class DurationFormat_RoundTrip_Test extends TestBase {
 	}
 
 	private static final List<TesterBuilder> BUILDERS = List.of(
-		fmt -> RoundTrip_Tester.create(1, "Json - default | " + fmt)
-			.serializer(JsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(JsonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(2, "Json - readable | " + fmt)
-			.serializer(JsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(JsonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(3, "Json5 - default | " + fmt)
-			.serializer(Json5Serializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(Json5Parser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(4, "Json5 - readable | " + fmt)
-			.serializer(Json5Serializer.create().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(Json5Parser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(5, "Jsonl - default | " + fmt)
-			.serializer(JsonlSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(JsonlParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(6, "Xml - namespaces, validation, readable | " + fmt)
-			.serializer(XmlSerializer.create().ns().sq().keepNullProperties().addNamespaceUrisToRoot().useWhitespace().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(XmlParser.create().durationFormat(fmt))
-			.validateXmlWhitespace()
-			.validateXml()
-			.build(),
-		fmt -> RoundTrip_Tester.create(7, "Xml - no namespaces, validation | " + fmt)
-			.serializer(XmlSerializer.create().sq().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(XmlParser.create().durationFormat(fmt))
-			.validateXmlWhitespace()
-			.build(),
-		fmt -> RoundTrip_Tester.create(8, "Html - default | " + fmt)
-			.serializer(HtmlSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(HtmlParser.create().durationFormat(fmt))
-			.validateXmlWhitespace()
-			.build(),
-		fmt -> RoundTrip_Tester.create(9, "Html - readable | " + fmt)
-			.serializer(HtmlSerializer.create().sq().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(HtmlParser.create().durationFormat(fmt))
-			.validateXmlWhitespace()
-			.build(),
-		fmt -> RoundTrip_Tester.create(10, "Html - with key/value headers | " + fmt)
-			.serializer(HtmlSerializer.create().addKeyValueTableHeaders().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(HtmlParser.create().durationFormat(fmt))
-			.validateXmlWhitespace()
-			.build(),
-		fmt -> RoundTrip_Tester.create(11, "Uon - default | " + fmt)
-			.serializer(UonSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(UonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(12, "Uon - readable | " + fmt)
-			.serializer(UonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(UonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(13, "Uon - encoded | " + fmt)
-			.serializer(UonSerializer.create().encoding().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(UonParser.create().decoding().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(14, "UrlEncoding - default | " + fmt)
-			.serializer(UrlEncodingSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(UrlEncodingParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(15, "UrlEncoding - readable | " + fmt)
-			.serializer(UrlEncodingSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(UrlEncodingParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(16, "UrlEncoding - expanded params | " + fmt)
-			.serializer(UrlEncodingSerializer.create().expandedParams().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(UrlEncodingParser.create().expandedParams().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(17, "MsgPack | " + fmt)
-			.serializer(MsgPackSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(MsgPackParser.create().durationFormat(fmt))
-			.build(),
 		fmt -> RoundTrip_Tester.create(18, "RdfXml | " + fmt)
 			.serializer(RdfXmlSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
 			.parser(RdfXmlParser.create().durationFormat(fmt))
@@ -209,62 +115,6 @@ class DurationFormat_RoundTrip_Test extends TestBase {
 		fmt -> RoundTrip_Tester.create(29, "RdfTriX | " + fmt)
 			.serializer(TriXSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
 			.parser(TriXParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(30, "Json schema | " + fmt)
-			.serializer(JsonSchemaSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.returnOriginalObject()
-			.build(),
-		fmt -> RoundTrip_Tester.create(31, "Yaml - default | " + fmt)
-			.serializer(YamlSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(YamlParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(32, "Toml - default | " + fmt)
-			.serializer(TomlSerializer.create().durationFormat(fmt))
-			.parser(TomlParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(33, "Ini - default | " + fmt)
-			.serializer(IniSerializer.create().durationFormat(fmt))
-			.parser(IniParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(34, "Csv - default | " + fmt)
-			// CSV serializes top-level beans but its round-trip semantics are scoped to Collection-of-bean;
-			// match RoundTripDateTime_Test by serializing only and returning the original.
-			.serializer(CsvSerializer.create().keepNullProperties().durationFormat(fmt))
-			.skipIf(o -> o == null || (o.getClass().isArray() && o.getClass().getComponentType().isPrimitive()))
-			.returnOriginalObject()
-			.build(),
-		fmt -> RoundTrip_Tester.create(35, "Markdown - default | " + fmt)
-			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(MarkdownParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(36, "Proto - default | " + fmt)
-			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(ProtoParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(37, "Hjson - default | " + fmt)
-			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(HjsonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(38, "Jcs - default | " + fmt)
-			.serializer(JcsSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(JsonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(39, "Cbor - default | " + fmt)
-			.serializer(CborSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(CborParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(40, "Hocon - default | " + fmt)
-			.serializer(HoconSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(HoconParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(41, "Bson - default | " + fmt)
-			.serializer(BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().durationFormat(fmt))
-			.parser(BsonParser.create().durationFormat(fmt))
-			.build(),
-		fmt -> RoundTrip_Tester.create(42, "Parquet - default | " + fmt)
-			.serializer(ParquetSerializer.create().addBeanTypes().durationFormat(fmt))
-			.parser(ParquetParser.create().durationFormat(fmt))
-			.returnOriginalObject()
 			.build()
 	);
 
