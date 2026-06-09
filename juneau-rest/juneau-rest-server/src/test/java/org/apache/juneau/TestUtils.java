@@ -14,28 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.commons;
+package org.apache.juneau;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.stream.*;
 
-import org.junit.jupiter.api.*;
+import org.apache.juneau.commons.utils.Utils;
 
 /**
- * Base test class that provides common test configuration for all test classes.
+ * Minimal module-local test utilities for <c>juneau-rest-server</c>.
  *
- * <p>Configures test method ordering to use method names, ensuring consistent and predictable
- * test execution order.</p>
+ * <p>
+ * Provides only the {@code assertThrowsWithMessage} helpers required by the relocated
+ * {@link org.apache.juneau.mstat} tests, and inherits the shared object-rendering helpers
+ * (such as {@code r(Object)}) from {@link Utils}.
  *
- * <p>Also exposes a small set of assertion helpers (such as {@code assertThrowsWithMessage}) so that
- * module-local tests do not need to depend on the higher-level cross-module {@code TestUtils} (which
- * would introduce a Maven reactor cycle into {@code juneau-commons}).</p>
+ * <p>
+ * This class is intentionally self-contained: it must NOT reference
+ * {@code org.apache.juneau.rest.mock.*} or any type that would pull a higher module into
+ * <c>juneau-rest-server</c>'s test scope and introduce a Maven reactor cycle. It is deliberately
+ * NOT a copy of the full cross-module {@code TestUtils} that lives in the integration-test residual.
  */
-@TestMethodOrder(MethodOrderer.MethodName.class)
-@TestClassOrder(ClassOrderer.ClassName.class)
-public abstract class TestBase {
+public class TestUtils extends Utils {
 
 	/**
 	 * Asserts that the specified executable throws an exception whose chained messages contain the
