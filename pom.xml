@@ -63,6 +63,7 @@
 		<module>juneau-microservice</module>
 		<module>juneau-sc</module>
 		<module>juneau-examples</module>
+		<module>juneau-petstore</module>
 		<module>juneau-integration-tests</module>
 		<module>juneau-bean</module>
 		<module>juneau-shaded</module>

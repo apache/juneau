@@ -16,15 +16,30 @@
 # limitations under the License.
 
 """
-Applies Eclipse IDE preference files to all Juneau project modules.
+Applies Eclipse IDE preference files to every Juneau Maven module.
 
-This script copies Eclipse JDT preferences from the eclipse-preferences directory
-to each module's .settings folder, ensuring consistent IDE configuration across
-all developers.
+Walks the reactor under each REACTOR_GROUPS entry plus STANDALONE_PROJECTS,
+finds every leaf directory with a pom.xml that is NOT a packaging=pom aggregator,
+classifies each as source or test (test = name == 'juneau-integration-tests' or
+*-ftest suffix), and copies the matching .prefs files into each module's
+.settings/ directory.
 
-There are two sets of preferences:
-- source-prefs: For main source modules
-- test-prefs: For test modules (juneau-integration-tests and *-ftest modules)
+Two sets of preferences live under scripts/eclipse-preferences/:
+- source-prefs/ — main source modules (warnings on resource leaks, unused params, etc.)
+- test-prefs/  — test modules (those warnings relaxed to ignore)
+
+Each set contains:
+- org.eclipse.jdt.core.prefs — JDT compiler problem severities + warning-token settings
+- org.eclipse.jdt.ui.prefs   — JDT UI cleanup-on-save settings
+
+Run this whenever a new Maven module is added to the reactor, or whenever the
+canonical preference baseline is updated. Module discovery is automatic — the
+script does not need to be edited when modules are added or removed (only when
+a new top-level reactor group is introduced).
+
+The .settings/ directories are gitignored locally; this script's output is a
+developer-machine-only convenience and never enters version control. The
+canonical preference files under scripts/eclipse-preferences/ ARE tracked.
 """
 
 import os
@@ -33,43 +48,79 @@ import shutil
 from pathlib import Path
 
 
-# Source modules (main code)
-SOURCE_PROJECTS = [
-    "juneau-bean/juneau-bean-atom",
-    "juneau-bean/juneau-bean-common",
-    "juneau-bean/juneau-bean-html5",
-    "juneau-bean/juneau-bean-jsonschema",
-    "juneau-bean/juneau-bean-openapi-v3",
-    "juneau-bean/juneau-bean-swagger-v2",
-    "juneau-core/juneau-assertions",
-    "juneau-core/juneau-bct",
-    "juneau-core/juneau-commons",
-    "juneau-core/juneau-config",
-    "juneau-core/juneau-marshall",
-    "juneau-core/juneau-marshall-rdf",
-    "juneau-examples/juneau-examples-core",
-    "juneau-examples/juneau-examples-rest",
-    "juneau-examples/juneau-examples-rest-jetty",
-    "juneau-examples/juneau-examples-rest-springboot",
-    "juneau-microservice/juneau-microservice",
-    "juneau-microservice/juneau-microservice-jetty",
-    "juneau-microservice/juneau-my-jetty-microservice",
-    "juneau-microservice/juneau-my-springboot-microservice",
-    "juneau-rest/juneau-rest-client",
-    "juneau-rest/juneau-rest-common",
-    "juneau-rest/juneau-rest-mock",
-    "juneau-rest/juneau-rest-server",
-    "juneau-rest/juneau-rest-server-rdf",
-    "juneau-rest/juneau-rest-server-springboot",
-    "juneau-sc/juneau-sc-client",
-    "juneau-sc/juneau-sc-server",
+# Top-level reactor groups under which to scan for modules.
+# Each leaf directory containing a pom.xml that is NOT a packaging=pom aggregator
+# is treated as a project to apply preferences to.
+REACTOR_GROUPS = [
+    "juneau-bean",
+    "juneau-core",
+    "juneau-examples",
+    "juneau-microservice",
+    "juneau-petstore",
+    "juneau-rest",
+    "juneau-sc",
+    "juneau-shaded",
 ]
 
-# Test modules
-TEST_PROJECTS = [
+# Standalone (non-grouped) projects at the repo root.
+STANDALONE_PROJECTS = [
     "juneau-integration-tests",
-    "juneau-examples/juneau-examples-rest-jetty-ftest",
 ]
+
+
+def is_aggregator_pom(pom_path):
+    """Return True if the pom.xml has <packaging>pom</packaging>."""
+    try:
+        with open(pom_path, "r", encoding="utf-8") as f:
+            content = f.read()
+        return "<packaging>pom</packaging>" in content
+    except OSError:
+        return False
+
+
+def is_test_module(project_path):
+    """
+    Returns True if the project should get test-prefs applied (relaxed rules
+    around resource leaks, unused parameters, etc.) — typically integration-test
+    aggregators or *-ftest functional-test overlays.
+    """
+    name = Path(project_path).name
+    return name == "juneau-integration-tests" or name.endswith("-ftest")
+
+
+def discover_projects(root_dir):
+    """
+    Walk the reactor groups and standalone roots; return (source_projects, test_projects)
+    as lists of paths relative to root_dir.
+    """
+    source_projects = []
+    test_projects = []
+
+    candidates = []
+    for group in REACTOR_GROUPS:
+        group_dir = Path(root_dir) / group
+        if not group_dir.exists():
+            continue
+        for child in sorted(group_dir.iterdir()):
+            if not child.is_dir():
+                continue
+            if (child / "pom.xml").exists():
+                candidates.append(child)
+    for standalone in STANDALONE_PROJECTS:
+        standalone_dir = Path(root_dir) / standalone
+        if standalone_dir.exists() and (standalone_dir / "pom.xml").exists():
+            candidates.append(standalone_dir)
+
+    for project_dir in candidates:
+        if is_aggregator_pom(project_dir / "pom.xml"):
+            continue
+        relative = project_dir.relative_to(root_dir).as_posix()
+        if is_test_module(project_dir):
+            test_projects.append(relative)
+        else:
+            source_projects.append(relative)
+
+    return source_projects, test_projects
 
 
 def apply_preferences(root_dir, projects, prefs_type):
@@ -133,31 +184,35 @@ def main():
     # Determine root directory (parent of scripts directory)
     script_dir = Path(__file__).parent
     root_dir = script_dir.parent
-    
+
     if len(sys.argv) > 1:
         root_dir = Path(sys.argv[1])
-    
+
     print(f"Applying Eclipse preferences to Juneau modules in: {root_dir}\n")
-    
+
+    source_projects, test_projects = discover_projects(root_dir)
+
+    print(f"Discovered {len(source_projects)} source modules + {len(test_projects)} test modules.\n")
+
     # Apply source preferences
     print("Applying source preferences...")
-    src_success, src_failed = apply_preferences(root_dir, SOURCE_PROJECTS, "source-prefs")
-    
+    src_success, src_failed = apply_preferences(root_dir, source_projects, "source-prefs")
+
     print("\nApplying test preferences...")
-    test_success, test_failed = apply_preferences(root_dir, TEST_PROJECTS, "test-prefs")
-    
+    test_success, test_failed = apply_preferences(root_dir, test_projects, "test-prefs")
+
     # Summary
     total_success = src_success + test_success
     total_failed = src_failed + test_failed
-    total_projects = len(SOURCE_PROJECTS) + len(TEST_PROJECTS)
-    
+    total_projects = len(source_projects) + len(test_projects)
+
     print(f"\n{'='*60}")
     print("Summary:")
     print(f"  Total projects: {total_projects}")
     print(f"  Successfully updated: {total_success}")
     print(f"  Failed: {total_failed}")
     print(f"{'='*60}")
-    
+
     if total_failed > 0:
         sys.exit(1)
 

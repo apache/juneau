@@ -27,6 +27,9 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.stats.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+})
 class MethodExecStore_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

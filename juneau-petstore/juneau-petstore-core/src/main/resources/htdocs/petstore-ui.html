@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<!--
+  No-build single-page React demo for the Juneau petstore.
+
+  Demonstrates the "Juneau as a headless JSON backend + decoupled client-side SPA frontend" pattern
+  alongside the built-in server-rendered HTML-doc UI.
+
+  IMPORTANT: This v1 loads React from a CDN to keep the demo simple.  For ASF-release-quality, the React/
+  ReactDOM UMD bundles + Babel standalone should be vendored into a /static/vendor/ subdirectory and
+  served from the classpath, with appropriate NOTICE/LICENSE acknowledgements.  No Node/npm in the
+  Maven build either way.
+-->
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Juneau Petstore — React UI</title>
+	<style>
+		body { font-family: system-ui, -apple-system, sans-serif; padding: 2em; max-width: 60em; margin: 0 auto; }
+		h1 { border-bottom: 1px solid #ccc; padding-bottom: 0.3em; }
+		table { border-collapse: collapse; width: 100%; }
+		th, td { text-align: left; padding: 0.4em 0.8em; border-bottom: 1px solid #eee; }
+		th { background: #f4f4f4; }
+		.error { color: #b00; padding: 0.5em; background: #fee; border: 1px solid #fcc; border-radius: 3px; }
+		.muted { color: #666; }
+	</style>
+</head>
+<body>
+	<div id="root"></div>
+
+	<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+	<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+	<script type="text/babel">
+		const { useState, useEffect } = React;
+
+		function PetTable({ pets }) {
+			if (!pets.length) return <p className="muted">No pets.</p>;
+			return (
+				<table>
+					<thead>
+						<tr><th>ID</th><th>Name</th><th>Species</th><th>Price</th><th>Status</th></tr>
+					</thead>
+					<tbody>
+						{pets.map(p => (
+							<tr key={p.id}>
+								<td>{p.id}</td>
+								<td>{p.name}</td>
+								<td>{p.species}</td>
+								<td>{p.price?.toFixed?.(2) ?? p.price}</td>
+								<td>{p.status}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			);
+		}
+
+		function App() {
+			const [pets, setPets] = useState([]);
+			const [err, setErr] = useState(null);
+			const [loading, setLoading] = useState(true);
+
+			useEffect(() => {
+				fetch('/petstore/pets', { headers: { 'Accept': 'application/json' } })
+					.then(r => {
+						if (!r.ok) throw new Error('HTTP ' + r.status);
+						return r.json();
+					})
+					.then(data => { setPets(data); setLoading(false); })
+					.catch(e => { setErr(String(e)); setLoading(false); });
+			}, []);
+
+			return (
+				<div>
+					<h1>Juneau Petstore — React UI</h1>
+					<p className="muted">Headless Juneau backend at <code>/petstore/*</code>, rendered by a no-build React SPA.</p>
+					{loading && <p>Loading…</p>}
+					{err && <div className="error">Failed to load pets: {err}</div>}
+					{!loading && !err && <PetTable pets={pets} />}
+				</div>
+			);
+		}
+
+		ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+	</script>
+</body>
+</html>

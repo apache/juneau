@@ -76,7 +76,7 @@
 							<goal>single</goal>
 						</goals>
 						<configuration>
-							<finalName>juneau-examples-rest-jetty-${project.version}</finalName>
+							<finalName>juneau-sc-server-${project.version}</finalName>
 							<descriptors>
 								<descriptor>src/assembly/bin.xml</descriptor>
 							</descriptors>

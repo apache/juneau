@@ -894,26 +894,15 @@
 									<destFileName>apache-juneau-examples-core-${project.version}.zip</destFileName>
 								</artifactItem>
 
-								<!-- juneau-examples-rest-jetty -->
+								<!-- juneau-petstore-jetty -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-examples-rest-jetty</artifactId>
+									<artifactId>juneau-petstore-jetty</artifactId>
 									<classifier>bin</classifier>
 									<type>zip</type>
 									<version>${project.version}</version>
-									<destFileName>apache-juneau-examples-rest-jetty-${project.version}.zip</destFileName>
-								</artifactItem>
-
-								<!-- juneau-examples-springboot -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/projects</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-examples-rest-springboot</artifactId>
-									<classifier>bin</classifier>
-									<type>zip</type>
-									<version>${project.version}</version>
-									<destFileName>apache-juneau-examples-rest-springboot-${project.version}.zip</destFileName>
+									<destFileName>apache-juneau-petstore-jetty-${project.version}.zip</destFileName>
 								</artifactItem>
 
 								<!-- juneau-my-springboot-microservice -->

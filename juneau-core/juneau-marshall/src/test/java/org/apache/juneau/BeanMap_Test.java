@@ -42,7 +42,8 @@ import org.junit.jupiter.api.*;
 	"serial",
 	"java:S5961",
 	"java:S1186",
-	"unused" // Parameters retained for method-signature/functional-interface consistency in test fixtures.
+	"unused", // Parameters retained for method-signature/functional-interface consistency in test fixtures.
+	"unlikely-arg-type" // Intentionally tests containsKey() returns false for a wrong-typed key.
 })
 class BeanMap_Test extends TestBase {
 

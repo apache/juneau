@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;

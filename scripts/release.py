@@ -689,10 +689,8 @@ class ReleaseScript:
              'my-springboot-microservice'),
             ('juneau-examples/juneau-examples-core/target/juneau-examples-core-{}-bin.zip',
              'juneau-examples-core'),
-            ('juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-{}-bin.zip',
-             'juneau-examples-rest-jetty'),
-            ('juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-{}-bin.zip',
-             'juneau-examples-rest-springboot'),
+            ('juneau-petstore/juneau-petstore-jetty/target/juneau-petstore-jetty-{}-bin.zip',
+             'juneau-petstore-jetty'),
         ]
         
         for zip_src_pattern, zip_tgt_name in zip_files:

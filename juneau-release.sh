@@ -150,13 +150,8 @@ ZIP_TGT=$WORKSPACE/juneau-examples-core
 echo Unzipping $ZIP_SRC to $ZIP_TGT
 unzip -o $ZIP_SRC -d $ZIP_TGT
 
-ZIP_SRC=juneau-examples/juneau-examples-rest-jetty/target/juneau-examples-rest-jetty-$XV-bin.zip
-ZIP_TGT=$WORKSPACE/juneau-examples-rest-jetty
-echo Unzipping $ZIP_SRC to $ZIP_TGT
-unzip -o $ZIP_SRC -d $ZIP_TGT
-
-ZIP_SRC=juneau-examples/juneau-examples-rest-springboot/target/juneau-examples-rest-springboot-$XV-bin.zip
-ZIP_TGT=$WORKSPACE/juneau-examples-rest-springboot
+ZIP_SRC=juneau-petstore/juneau-petstore-jetty/target/juneau-petstore-jetty-$XV-bin.zip
+ZIP_TGT=$WORKSPACE/juneau-petstore-jetty
 echo Unzipping $ZIP_SRC to $ZIP_TGT
 unzip -o $ZIP_SRC -d $ZIP_TGT
 

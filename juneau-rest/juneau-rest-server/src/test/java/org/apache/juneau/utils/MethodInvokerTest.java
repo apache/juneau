@@ -37,6 +37,9 @@ class MethodInvokerTest extends TestBase {
 	public static class A {
 		public int foo() { return 0; }
 		public int bar() { throw new RuntimeException("bar"); }
+		@SuppressWarnings({
+			"unused" // Parameter is intentionally unused; exercises illegal-argument handling via reflection.
+		})
 		public void baz(int x) { /* no-op */ }
 	}
 

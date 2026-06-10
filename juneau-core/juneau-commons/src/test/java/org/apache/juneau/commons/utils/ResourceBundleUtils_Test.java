@@ -224,7 +224,7 @@ class ResourceBundleUtils_Test extends TestBase {
 			assertNotNull(direct);
 			assertNotNull(utils);
 			assertEquals(direct.getString("key1"), utils.getString("key1"));
-		} catch (MissingResourceException e) {
+		} catch (@SuppressWarnings("unused") MissingResourceException e) {
 			fail("Direct call should not throw for existing bundle");
 		}
 	}
