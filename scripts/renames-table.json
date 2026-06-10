@@ -1,0 +1,434 @@
+[
+  {
+    "comment": "Pattern A1 — 04.01.Scripts.md filename-with-prefix URL form: /docs/developer-info/04.02.01.ScriptTest → /docs/developer-info/ScriptTest (and all 16 siblings)",
+    "pattern": "/docs/developer-info/04\\.02\\.01\\.ScriptTest",
+    "replacement": "/docs/developer-info/ScriptTest",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptPush",
+    "pattern": "/docs/developer-info/04\\.02\\.02\\.ScriptPush",
+    "replacement": "/docs/developer-info/ScriptPush",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptRelease",
+    "pattern": "/docs/developer-info/04\\.02\\.03\\.ScriptRelease",
+    "replacement": "/docs/developer-info/ScriptRelease",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptPromptPgpPassphrase",
+    "pattern": "/docs/developer-info/04\\.02\\.04\\.ScriptPromptPgpPassphrase",
+    "replacement": "/docs/developer-info/ScriptPromptPgpPassphrase",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptCurrentRelease",
+    "pattern": "/docs/developer-info/04\\.02\\.05\\.ScriptCurrentRelease",
+    "replacement": "/docs/developer-info/ScriptCurrentRelease",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptMavenVersion",
+    "pattern": "/docs/developer-info/04\\.02\\.06\\.ScriptMavenVersion",
+    "replacement": "/docs/developer-info/ScriptMavenVersion",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptApplyEclipsePrefs",
+    "pattern": "/docs/developer-info/04\\.02\\.07\\.ScriptApplyEclipsePrefs",
+    "replacement": "/docs/developer-info/ScriptApplyEclipsePrefs",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptCleanupWhitespace",
+    "pattern": "/docs/developer-info/04\\.02\\.08\\.ScriptCleanupWhitespace",
+    "replacement": "/docs/developer-info/ScriptCleanupWhitespace",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptCheckFluentSetterOverrides",
+    "pattern": "/docs/developer-info/04\\.02\\.09\\.ScriptCheckFluentSetterOverrides",
+    "replacement": "/docs/developer-info/ScriptCheckFluentSetterOverrides",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptRevertStaged",
+    "pattern": "/docs/developer-info/04\\.02\\.10\\.ScriptRevertStaged",
+    "replacement": "/docs/developer-info/ScriptRevertStaged",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptRevertUnstaged",
+    "pattern": "/docs/developer-info/04\\.02\\.11\\.ScriptRevertUnstaged",
+    "replacement": "/docs/developer-info/ScriptRevertUnstaged",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptReleaseDocsStage",
+    "pattern": "/docs/developer-info/04\\.03\\.01\\.ScriptReleaseDocsStage",
+    "replacement": "/docs/developer-info/ScriptReleaseDocsStage",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptReleaseDocs",
+    "pattern": "/docs/developer-info/04\\.03\\.02\\.ScriptReleaseDocs",
+    "replacement": "/docs/developer-info/ScriptReleaseDocs",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptBuildDocs",
+    "pattern": "/docs/developer-info/04\\.03\\.03\\.ScriptBuildDocs",
+    "replacement": "/docs/developer-info/ScriptBuildDocs",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptCreateMvnSite",
+    "pattern": "/docs/developer-info/04\\.03\\.04\\.ScriptCreateMvnSite",
+    "replacement": "/docs/developer-info/ScriptCreateMvnSite",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptStartDocusaurus",
+    "pattern": "/docs/developer-info/04\\.03\\.05\\.ScriptStartDocusaurus",
+    "replacement": "/docs/developer-info/ScriptStartDocusaurus",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A1 — ScriptCheckTopicLinks",
+    "pattern": "/docs/developer-info/04\\.03\\.06\\.ScriptCheckTopicLinks",
+    "replacement": "/docs/developer-info/ScriptCheckTopicLinks",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A2 — V9.5 ghost refs: V9.5MigrationGuide → /docs/release-notes/9.5.0",
+    "pattern": "/docs/topics/V9\\.5MigrationGuide",
+    "replacement": "/docs/release-notes/9.5.0",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A2 — V9.5 ghost refs: V95MigrationGuide (no dot) → /docs/release-notes/9.5.0",
+    "pattern": "/docs/topics/V95MigrationGuide",
+    "replacement": "/docs/release-notes/9.5.0",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A2 — V9.5 ghost refs: V9.5-migration-guide (hyphen form) → /docs/release-notes/9.5.0",
+    "pattern": "/docs/topics/V9\\.5-migration-guide",
+    "replacement": "/docs/release-notes/9.5.0",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A3 — juneau-utest → juneau-integration-tests (module rename, FINISHED-160)",
+    "pattern": "juneau-utest",
+    "replacement": "juneau-integration-tests",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern A3 — apache/juneau/blob/main/ → apache/juneau/blob/master/ (wrong branch in 3 view-mixin pages)",
+    "pattern": "apache/juneau/blob/main/",
+    "replacement": "apache/juneau/blob/master/",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern A4 — /javadocs/ → /site/apidocs/ in juneau-commons pages (6 broken external URLs)",
+    "pattern": "https://juneau\\.apache\\.org/javadocs/",
+    "replacement": "https://juneau.apache.org/site/apidocs/",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A5 — bare relative-md link: ./ValueAnnotationBasics.md → /docs/topics/ValueAnnotationBasics",
+    "pattern": "\\(\\./ValueAnnotationBasics\\.md\\)",
+    "replacement": "(/docs/topics/ValueAnnotationBasics)",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A5 — bare relative-md link: ./VariableBasics.md → /docs/topics/VariableBasics",
+    "pattern": "\\(\\./VariableBasics\\.md\\)",
+    "replacement": "(/docs/topics/VariableBasics)",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A5 — bare relative-md link: ./SvlVariables.md → /docs/topics/SvlVariables",
+    "pattern": "\\(\\./SvlVariables\\.md\\)",
+    "replacement": "(/docs/topics/SvlVariables)",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A5 — bare relative-md link: ./SimpleVariableLanguageBasics.md → /docs/topics/SimpleVariableLanguageBasics",
+    "pattern": "\\(\\./SimpleVariableLanguageBasics\\.md\\)",
+    "replacement": "(/docs/topics/SimpleVariableLanguageBasics)",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern A5 — bare relative-md link: ./ValueFrameworkInternal.md → /docs/topics/ValueFrameworkInternal",
+    "pattern": "\\(\\./ValueFrameworkInternal\\.md\\)",
+    "replacement": "(/docs/topics/ValueFrameworkInternal)",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern D-A — Marshalled annotation: org/apache/juneau/annotation/Marshalled.html → org/apache/juneau/marshall/Marshalled.html",
+    "pattern": "org/apache/juneau/annotation/Marshalled\\.html",
+    "replacement": "org/apache/juneau/marshall/Marshalled.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledApply\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledAs annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledAs\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledAs.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledConfig annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledConfig\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledConfig.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledIgnore annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledIgnore\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledIgnore.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledIgnoreApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledIgnoreApply\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledIgnoreApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledProp annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledProp\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledProp.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — MarshalledPropApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/MarshalledPropApply\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshalledPropApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — Example annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/Example\\.html",
+    "replacement": "org/apache/juneau/marshall/Example.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — NameProperty annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/NameProperty\\.html",
+    "replacement": "org/apache/juneau/marshall/NameProperty.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — ParentProperty annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/ParentProperty\\.html",
+    "replacement": "org/apache/juneau/marshall/ParentProperty.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — Swap annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/Swap\\.html",
+    "replacement": "org/apache/juneau/marshall/Swap.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — BeanCtorApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/BeanCtorApply\\.html",
+    "replacement": "org/apache/juneau/marshall/BeanCtorApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — BeanIgnoreApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/BeanIgnoreApply\\.html",
+    "replacement": "org/apache/juneau/marshall/BeanIgnoreApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — BeanPropApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/BeanPropApply\\.html",
+    "replacement": "org/apache/juneau/marshall/BeanPropApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — BeanTypeApply annotation moved to marshall package",
+    "pattern": "org/apache/juneau/annotation/BeanTypeApply\\.html",
+    "replacement": "org/apache/juneau/marshall/BeanTypeApply.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — Name annotation moved to commons/bean package",
+    "pattern": "org/apache/juneau/annotation/Name\\.html",
+    "replacement": "org/apache/juneau/commons/bean/Name.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — Schema annotation moved to commons package (no subpackage)",
+    "pattern": "org/apache/juneau/annotation/Schema\\.html",
+    "replacement": "org/apache/juneau/commons/Schema.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-A — Also fix: org/apache/juneau/commons/annotation/Schema.html → org/apache/juneau/commons/Schema.html",
+    "pattern": "org/apache/juneau/commons/annotation/Schema\\.html",
+    "replacement": "org/apache/juneau/commons/Schema.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-B — HTTP annotations: drop /annotation/ segment. Path, Content, FormData, HasFormData, HasQuery, Header, Query, Request, Response, StatusCode, PathRemainder, Contact, License, Tag",
+    "pattern": "org/apache/juneau/http/annotation/(Path|Content|FormData|HasFormData|HasQuery|Header|Query|Request|Response|StatusCode|PathRemainder|Contact|License|Tag)\\.html",
+    "replacement": "org/apache/juneau/http/\\1.html",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern D-C — REST-server annotations: drop /annotation/ segment. Rest*, Attr, Method, OpSwagger, Swagger",
+    "pattern": "org/apache/juneau/rest/server/annotation/(Rest[A-Za-z]*|Attr|Method|OpSwagger|Swagger)\\.html",
+    "replacement": "org/apache/juneau/rest/server/\\1.html",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern D-C — root-level rest/annotation/Rest.html → rest/server/Rest.html (FINISHED-159 root rename)",
+    "pattern": "org/apache/juneau/rest/annotation/Rest\\.html",
+    "replacement": "org/apache/juneau/rest/server/Rest.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-D — Marshall format-config annotations: drop /annotation/ segment for all format subpackages",
+    "pattern": "org/apache/juneau/marshall/(csv|html|json|jsonschema|msgpack|oapi|parser|plaintext|serializer|soap|uon|urlencoding|xml|yaml)/annotation/",
+    "replacement": "org/apache/juneau/marshall/\\1/",
+    "is_regex": true
+  },
+  {
+    "comment": "Pattern D-E-dto — dto package moved to bean package: org/apache/juneau/dto/ → org/apache/juneau/bean/",
+    "pattern": "org/apache/juneau/dto/",
+    "replacement": "org/apache/juneau/bean/",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-F-marshall-root — Classes moved from org/apache/juneau/ root to org/apache/juneau/marshall/: MarshallingContext",
+    "pattern": "org/apache/juneau/MarshallingContext\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshallingContext.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-F-marshall-root — MarshallingContext.Builder",
+    "pattern": "org/apache/juneau/MarshallingContext\\.Builder\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshallingContext.Builder.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-F-marshall-root — MarshallingSession moved to marshall package",
+    "pattern": "org/apache/juneau/MarshallingSession\\.html",
+    "replacement": "org/apache/juneau/marshall/MarshallingSession.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-F-marshall-root — SerializerSet moved to marshall package",
+    "pattern": "org/apache/juneau/SerializerSet\\.html",
+    "replacement": "org/apache/juneau/marshall/SerializerSet.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-F-marshall-root — ParserSet moved to marshall package",
+    "pattern": "org/apache/juneau/ParserSet\\.html",
+    "replacement": "org/apache/juneau/marshall/ParserSet.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-F-marshall-root — ClassMeta moved to marshall package",
+    "pattern": "org/apache/juneau/ClassMeta\\.html",
+    "replacement": "org/apache/juneau/marshall/ClassMeta.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-G-classic — HttpEntities moved to http/classic package",
+    "pattern": "org/apache/juneau/http/HttpEntities\\.html",
+    "replacement": "org/apache/juneau/http/classic/HttpEntities.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern D-G-classic — HttpResources moved to http/classic package",
+    "pattern": "org/apache/juneau/http/HttpResources\\.html",
+    "replacement": "org/apache/juneau/http/classic/HttpResources.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicMustacheResource_PathTraversal_Test → MustacheMixin_PathTraversal_Test (FINISHED-145)",
+    "pattern": "BasicMustacheResource_PathTraversal_Test",
+    "replacement": "MustacheMixin_PathTraversal_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicFreemarkerResource_PathTraversal_Test → FreemarkerMixin_PathTraversal_Test (FINISHED-145)",
+    "pattern": "BasicFreemarkerResource_PathTraversal_Test",
+    "replacement": "FreemarkerMixin_PathTraversal_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicThymeleafResource_PathTraversal_Test → ThymeleafMixin_PathTraversal_Test (FINISHED-145)",
+    "pattern": "BasicThymeleafResource_PathTraversal_Test",
+    "replacement": "ThymeleafMixin_PathTraversal_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicVersionResource_JettyMicroservice_Test → VersionMixin_JettyMicroservice_Test (FINISHED-145)",
+    "pattern": "BasicVersionResource_JettyMicroservice_Test",
+    "replacement": "VersionMixin_JettyMicroservice_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicVersionResource_Springboot_Test → VersionMixin_Springboot_Test (FINISHED-145)",
+    "pattern": "BasicVersionResource_Springboot_Test",
+    "replacement": "VersionMixin_Springboot_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicEchoResource_JettyMicroservice_Test → EchoMixin_JettyMicroservice_Test (FINISHED-145)",
+    "pattern": "BasicEchoResource_JettyMicroservice_Test",
+    "replacement": "EchoMixin_JettyMicroservice_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicEchoResource_Springboot_Test → EchoMixin_Springboot_Test (FINISHED-145)",
+    "pattern": "BasicEchoResource_Springboot_Test",
+    "replacement": "EchoMixin_Springboot_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Pattern F-Basic — BasicStaticFilesResource_JettyMicroservice_Test → StaticFilesMixin_JettyMicroservice_Test (FINISHED-145)",
+    "pattern": "BasicStaticFilesResource_JettyMicroservice_Test",
+    "replacement": "StaticFilesMixin_JettyMicroservice_Test",
+    "is_regex": false
+  },
+  {
+    "comment": "Single fix — juneau-examples broken external link → in-tree path",
+    "pattern": "https://github.com/apache/juneau-examples",
+    "replacement": "https://github.com/apache/juneau/tree/master/juneau-examples",
+    "is_regex": false
+  },
+  {
+    "comment": "Single fix — mail-lists.html 404 → community.html",
+    "pattern": "https://juneau.apache.org/mail-lists.html",
+    "replacement": "https://juneau.apache.org/community.html",
+    "is_regex": false
+  },
+  {
+    "comment": "Single fix — README.md retired petstore link → in-tree topic page (match full md link expression to avoid nesting)",
+    "pattern": "\\[Pet Store App\\]\\(https://github\\.com/apache/juneau-petstore\\)",
+    "replacement": "[Pet Store App](/docs/topics/JuneauPetstoreOverview)",
+    "is_regex": true
+  },
+  {
+    "comment": "Single fix — NewReleaseGuidelines.md malformed URL: emphasis markers wrap the URL causing **.  at end; strip bold from URL only",
+    "pattern": "\\*\\*http://juneau\\.apache\\.org/proper/juneau\\*\\*\\.",
+    "replacement": "http://juneau.apache.org/proper/juneau.",
+    "is_regex": true
+  }
+]

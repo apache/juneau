@@ -124,7 +124,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.04.01.BeanContextBasics',
-									label: '2.4.1. Bean Context Basics',
+									label: '2.4.1. Marshalling Context Basics',
 								},
 							{
 								type: 'doc',
@@ -138,23 +138,23 @@ const sidebars: SidebarsConfig = {
 							},
 							{
 								type: 'doc',
-								id: 'topics/02.04.03.BeanAnnotation',
-								label: '2.4.3. @Bean Annotation',
+								id: 'topics/02.04.03.BeanTypeAnnotation',
+								label: '2.4.3. @BeanType Annotation',
 							},
 								{
 									type: 'doc',
-									id: 'topics/02.04.04.BeanpAnnotation',
-									label: '2.4.4. @Beanp Annotation',
+									id: 'topics/02.04.04.BeanPropAnnotation',
+									label: '2.4.4. @BeanProp Annotation',
 								},
 								{
 									type: 'doc',
-									id: 'topics/02.04.05.BeancAnnotation',
-									label: '2.4.5. @Beanc Annotation',
+									id: 'topics/02.04.05.BeanCtorAnnotation',
+									label: '2.4.5. @BeanCtor Annotation',
 								},
 								{
 									type: 'doc',
 									id: 'topics/02.04.06.BeanIgnoreAnnotation',
-									label: '2.4.6. @BeanIgnore Annotation',
+									label: '2.4.6. @MarshalledIgnore Annotation',
 								},
 								{
 									type: 'doc',
@@ -174,14 +174,14 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.04.10.BypassSerialization',
-									label: '2.4.10. Bypass Serialization',
+									label: '2.4.10. Bypass Serialization using `Readers` and `InputStreams`',
 								},
 							],
 						},
 						{
 							type: 'doc',
 							id: 'topics/02.05.HttpPartSerializersParsers',
-							label: '2.5. HTTP Part Serializers/Parsers',
+							label: '2.5. HTTP Part Serializers and Parsers',
 						},
 						{
 							type: 'doc',
@@ -196,7 +196,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/02.08.JsonMap',
-							label: '2.8. JsonMap',
+							label: '2.8. JsonMap and JsonList',
 						},
 						{
 							type: 'doc',
@@ -206,7 +206,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/02.10.SerializerSetsParserSets',
-							label: '2.10. Serializer/Parser Sets',
+							label: '2.10. SerializerSets and ParserSets',
 						},
 						{
 							type: 'category',
@@ -273,7 +273,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.13.02.BeanSubTypes',
-									label: '2.13.2. Bean Sub Types',
+									label: '2.13.2. Bean Subtypes',
 								},
 							],
 						},
@@ -285,7 +285,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/02.15.Recursion',
-							label: '2.15. Recursion',
+							label: '2.15. Non-Tree Models and Recursion Detection',
 						},
 						{
 							type: 'doc',
@@ -305,12 +305,12 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/02.18.MarshallingUris',
-							label: '2.18. Marshalling URIs',
+							label: '2.18. URIs',
 						},
 						{
 							type: 'doc',
 							id: 'topics/02.19.JacksonComparison',
-							label: '2.19. Jackson Comparison',
+							label: '2.19. Comparison with Jackson',
 						},
 						{
 							type: 'doc',
@@ -335,17 +335,17 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.21.03.VarResolvers',
-									label: '2.21.3. Var Resolvers',
+									label: '2.21.3. VarResolvers and VarResolverSessions',
 								},
 								{
 									type: 'doc',
 									id: 'topics/02.21.04.DefaultVarResolver',
-									label: '2.21.4. Default Var Resolver',
+									label: '2.21.4. VarResolver.DEFAULT',
 								},
 								{
 									type: 'doc',
 									id: 'topics/02.21.05.SvlOtherNotes',
-									label: '2.21.5. SVL Other Notes',
+									label: '2.21.5. Other Notes',
 								},
 								{
 									type: 'doc',
@@ -392,7 +392,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.24.04.Json5',
-									label: '2.24.4. JSON5',
+									label: '2.24.4. JSON 5',
 								},
 								{
 									type: 'doc',
@@ -409,7 +409,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/02.25.JsonSchemaDetails',
-							label: '2.25. JSON Schema Support',
+							label: '2.25. JSON-Schema Support',
 						},
 						{
 							type: 'category',
@@ -439,22 +439,22 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.26.05.XmlBeanTypeNameAnnotation',
-									label: '2.26.5. @XmlBeanTypeName Annotation',
+									label: '2.26.5. @Marshalled(typeName) Annotation',
 								},
 								{
 									type: 'doc',
 									id: 'topics/02.26.06.XmlChildNameAnnotation',
-									label: '2.26.6. @XmlChildName Annotation',
+									label: '2.26.6. @Xml(childName) Annotation',
 								},
 								{
 									type: 'doc',
 									id: 'topics/02.26.07.XmlFormatAnnotation',
-									label: '2.26.7. @XmlFormat Annotation',
+									label: '2.26.7. @Xml(format) Annotation',
 								},
 								{
 									type: 'doc',
 									id: 'topics/02.26.08.XmlNamespaces',
-									label: '2.26.8. XML Namespaces',
+									label: '2.26.8. Namespaces',
 								},
 							],
 						},
@@ -491,7 +491,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.27.06.HtmlRenderAnnotation',
-									label: '2.27.6. @HtmlRender Annotation',
+									label: '2.27.6. @Html(render) Annotation',
 								},
 								{
 									type: 'doc',
@@ -506,7 +506,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/02.27.09.HtmlCustomTemplates',
-									label: '2.27.9. HTML Custom Templates',
+									label: '2.27.9. Custom Templates',
 								},
 							],
 						},
@@ -645,6 +645,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.33.05.ProtobufBasics',
 									label: '2.33.5.1. Protobuf Text Format Basics',
 								},
+								{
+									type: 'doc',
+									id: 'topics/02.33.06.ParquetBasics',
+									label: '2.33.6. Parquet Basics',
+								},
 							],
 						},
 						{
@@ -717,6 +722,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.42.01.HoconBasics',
 									label: '2.42.1. HOCON Basics',
 								},
+								{
+									type: 'doc',
+									id: 'topics/02.42.02.IniBasics',
+									label: '2.42.2. INI Basics',
+								},
 							],
 						},
 						{
@@ -732,9 +742,39 @@ const sidebars: SidebarsConfig = {
 							],
 						},
 						{
+							type: 'category',
+							label: '2.34. YAML Support',
+							collapsed: true,
+							items: [
+								{ type: 'doc', id: 'topics/02.34.01.YamlBasics', label: '2.34.1. YAML Basics' },
+								{ type: 'doc', id: 'topics/02.34.02.YamlMethodology', label: '2.34.2. YAML Methodology' },
+								{ type: 'doc', id: 'topics/02.34.03.YamlSerializers', label: '2.34.3. YAML Serializers' },
+								{ type: 'doc', id: 'topics/02.34.04.YamlParsers', label: '2.34.4. YAML Parsers' },
+								{ type: 'doc', id: 'topics/02.34.05.YamlAnnotation', label: '2.34.5. @YamlConfig Annotation' },
+							],
+						},
+						{
+							type: 'category',
+							label: '2.35. CSV Support',
+							collapsed: true,
+							items: [
+								{ type: 'doc', id: 'topics/02.35.01.CsvBasics', label: '2.35.1. CSV Basics' },
+								{ type: 'doc', id: 'topics/02.35.02.CsvSerializers', label: '2.35.2. CSV Serializers' },
+								{ type: 'doc', id: 'topics/02.35.03.CsvParsers', label: '2.35.3. CSV Parsers' },
+							],
+						},
+						{
+							type: 'category',
+							label: '2.36. Markdown Support',
+							collapsed: true,
+							items: [
+								{ type: 'doc', id: 'topics/02.36.01.MarkdownBasics', label: '2.36.1. Markdown Basics' },
+							],
+						},
+						{
 							type: 'doc',
-							id: 'topics/02.34.BestPractices',
-							label: '2.34. Best Practices',
+							id: 'topics/02.50.BestPractices',
+							label: '2.50. Best Practices',
 						},
 					],
 				},
@@ -745,22 +785,22 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/03.Module-juneau-marshall-rdf',
-							label: '3.1. Module Overview',
+							id: 'topics/03.01.JuneauMarshallRdfOverview',
+							label: '3.1. juneau-marshall-rdf',
 						},
 						{
 							type: 'doc',
-							id: 'topics/03.01.RdfBasics',
+							id: 'topics/03.02.RdfBasics',
 							label: '3.2. RDF Basics',
 						},
 						{
 							type: 'doc',
-							id: 'topics/03.02.RdfSerializers',
+							id: 'topics/03.03.RdfSerializers',
 							label: '3.3. RDF Serializers',
 						},
 						{
 							type: 'doc',
-							id: 'topics/03.03.RdfParsers',
+							id: 'topics/03.04.RdfParsers',
 							label: '3.4. RDF Parsers',
 						},
 					],
@@ -906,6 +946,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/05.04.02.LogicVariables',
 									label: '5.4.2. Logic Variables',
 								},
+								{
+									type: 'doc',
+									id: 'topics/05.04.03.PropertySources',
+									label: '5.4.3. Property Sources',
+								},
 							],
 						},
 						{
@@ -941,7 +986,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/05.07.04.BulkSettingValues',
-									label: '5.7.4. Bulk Setting Values',
+									label: '5.7.4. Setting Values in Bulk',
 								},
 							],
 						},
@@ -953,7 +998,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/05.09.SerializingConfigs',
-							label: '5.9. Serializing Configs',
+							label: '5.9. Serializing',
 						},
 						{
 							type: 'doc',
@@ -973,22 +1018,22 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/05.11.02.MemoryStore',
-									label: '5.11.2. Memory Store',
+									label: '5.11.2. MemoryStore',
 								},
 								{
 									type: 'doc',
 									id: 'topics/05.11.03.FileStore',
-									label: '5.11.3. File Store',
+									label: '5.11.3. FileStore',
 								},
 								{
 									type: 'doc',
 									id: 'topics/05.11.04.CustomStores',
-									label: '5.11.4. Custom Stores',
+									label: '5.11.4. Custom ConfigStores',
 								},
 								{
 									type: 'doc',
 									id: 'topics/05.11.05.StoreListeners',
-									label: '5.11.5. Store Listeners',
+									label: '5.11.5. ConfigStore Listeners',
 								},
 							],
 						},
@@ -1058,6 +1103,11 @@ const sidebars: SidebarsConfig = {
 										type: 'doc',
 										id: 'topics/06.02.06.JuneauCommonsIO',
 										label: '6.2.6. I/O Package',
+									},
+									{
+										type: 'doc',
+										id: 'topics/06.02.07.JuneauCommonsInject',
+										label: '6.2.7. Inject Package',
 									},
 								],
 							},
@@ -1313,7 +1363,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/10.05.06.ResponseBeans',
-									label: '10.5.6. Response Beans',
+									label: '10.5.6. @Response Beans',
 								},
 								{
 									type: 'doc',
@@ -1335,27 +1385,37 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.07.HandlingFormPosts',
-							label: '10.7. Handling Form Posts',
+							label: '10.7. Form Posts',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.07a.RestServerComposition',
-							label: '10.7a. Mixins and Multi-Mount Paths',
+							label: '10.7a. REST Server — Mixins and Multi-Mount Paths',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.07b.RestServerMixinSubContexts',
+							label: '10.7b. REST Server — Mixin Sub-Contexts',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.07c.RestServerStandaloneVsMixin',
-							label: '10.7c. Standalone vs Mixin Resources',
+							label: '10.7c. REST Server — Standalone vs Mixin Resources',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.07d.RestServerSelfRegistration',
-							label: '10.7d. Servlet Self-Registration',
+							label: '10.7d. REST Server — Self-Registration',
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.08.RestServerSse',
-							label: '10.8. Server-Sent Events',
+							id: 'topics/10.07e.RestServerProgrammaticBuilder',
+							label: '10.7e. REST Server — Programmatic Fluent Builder',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.08a.RestServerSse',
+							label: '10.8a. Server-Sent Events',
 						},
 						{
 							type: 'doc',
@@ -1390,7 +1450,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.14.StaticFiles',
-							label: '10.14. Static Files',
+							label: '10.14. Static files',
 						},
 						{
 							type: 'doc',
@@ -1445,7 +1505,7 @@ const sidebars: SidebarsConfig = {
 							{
 								type: 'doc',
 								id: 'topics/10.16.02.BasicRestServletSwagger',
-								label: '10.16.2. Basic REST Servlet Swagger',
+								label: '10.16.2. BasicRestServlet/BasicRestObject Swagger and OpenAPI 3.1',
 							},
 							{
 								type: 'doc',
@@ -1485,7 +1545,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/10.16.09.SwaggerStylesheet',
-									label: '10.16.9. Swagger Stylesheet',
+									label: '10.16.9. SwaggerUI.css',
 								},
 							],
 						},
@@ -1507,34 +1567,34 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/10.18.02.HtmlUIvsDI',
-									label: '10.18.2. HTML UI vs DI',
+									label: '10.18.2. User Interfaces (UI) vs. Developer Interfaces (DI)',
 								},
 								{
 									type: 'doc',
 									id: 'topics/10.18.03.HtmlWidgets',
-									label: '10.18.3. HTML Widgets',
+									label: '10.18.3. Widgets',
 								},
 								{
 									type: 'doc',
 									id: 'topics/10.18.04.HtmlPredefinedWidgets',
-									label: '10.18.4. HTML Predefined Widgets',
+									label: '10.18.4. Predefined Widgets',
 								},
 								{
 									type: 'doc',
 									id: 'topics/10.18.05.HtmlUiCustomization',
-									label: '10.18.5. HTML UI Customization',
+									label: '10.18.5. UI Customization',
 								},
 								{
 									type: 'doc',
 									id: 'topics/10.18.06.HtmlStylesheets',
-									label: '10.18.6. HTML Stylesheets',
+									label: '10.18.6. Stylesheets',
 								},
 							],
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.19.LoggingAndDebugging',
-							label: '10.19. Logging and Debugging',
+							label: '10.19. Logging / Debugging',
 						},
 						{
 							type: 'doc',
@@ -1583,13 +1643,38 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.20i.AuthFilterFramework',
+							label: '10.20i. AuthN Filter Framework — Servlet-Layer Authentication',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.20j.SamlAuthSupport',
+							label: '10.20j. SAML 2.0 AuthN Support (juneau-rest-server-auth-saml)',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.20k.OAuthAuthSupport',
+							label: '10.20k. OAuth 2.0 / OIDC AuthN Support (juneau-rest-server-auth-oauth)',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.20l.OidcRelyingParty',
+							label: '10.20l. OIDC Relying Party Login (juneau-rest-server-auth-oidc-rp)',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.20m.RestServerReactive',
 							label: '10.20m. Reactive-Streams Returns',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.21.BuiltInParameters',
-							label: '10.21. Built-In Parameters',
+							label: '10.21. Built-in Parameters',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.21a.SessionOptions',
+							label: '10.21a. Session Options via HTTP',
 						},
 						{
 							type: 'doc',
@@ -1599,12 +1684,12 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.23.RestContext',
-							label: '10.23. REST Context',
+							label: '10.23. RestContext',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.24.RestOpContext',
-							label: '10.24. RestOp Context',
+							label: '10.24. RestOpContext',
 						},
 						{
 							type: 'doc',
@@ -1614,7 +1699,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.26.RestRpc',
-							label: '10.26. REST RPC',
+							label: '10.26. REST/RPC',
 						},
 						{
 							type: 'doc',
@@ -1629,7 +1714,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.29.HtmlBeans',
-							label: '10.29. HTML Beans',
+							label: '10.29. Using with HTML Beans',
 						},
 						{
 							type: 'doc',
@@ -1639,7 +1724,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.31.Log4j',
-							label: '10.31. Log4J',
+							label: '10.31. Using LOG4J for logging',
 						},
 					],
 				},
@@ -1740,7 +1825,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/12.10.03.RemoteMethod',
-									label: '12.10.3. @RemoteMethod',
+									label: '12.10.3. @RemoteOp',
 								},
 								{
 									type: 'doc',
@@ -1780,7 +1865,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/12.10.11.DualPurposeInterfaces',
-									label: '12.10.11. Dual-Purpose Interfaces',
+									label: '12.10.11. Dual-purpose (end-to-end) interfaces',
 								},
 							],
 						},
@@ -1792,12 +1877,12 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/12.12.CustomizingHttpClient',
-							label: '12.12. Customizing HTTP Client',
+							label: '12.12. Customizing HttpClient',
 						},
 						{
 							type: 'doc',
 							id: 'topics/12.13.ExtendingRestClient',
-							label: '12.13. Extending REST Client',
+							label: '12.13. Extending RestClient',
 						},
 						{
 							type: 'category',
@@ -1817,7 +1902,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'topics/12.14.03.AuthenticationForm',
-									label: '12.14.3. Form-Based Authentication',
+									label: '12.14.3. FORM-based Authentication',
 								},
 								{
 									type: 'doc',
@@ -1863,7 +1948,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/14.02.MicroserviceCoreOverview',
-							label: '14.2. Microservice Overview',
+							label: '14.2. Microservice Core Overview',
 						},
 						{
 							type: 'doc',
@@ -1878,12 +1963,12 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/14.05.SystemProperties',
-							label: '14.5. System Properties',
+							label: '14.5. System properties',
 						},
 						{
 							type: 'doc',
 							id: 'topics/14.06.VarResolver',
-							label: '14.6. Var Resolver',
+							label: '14.6. VarResolver',
 						},
 						{
 							type: 'doc',
@@ -1940,7 +2025,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/15.07.JettyXml',
-							label: '15.7. Jetty XML',
+							label: '15.7. Jetty.xml file',
 						},
 						{
 							type: 'doc',
@@ -1961,33 +2046,6 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'category',
-					label: '16. My Jetty Microservice',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/16.01.MyJettyMicroserviceBasics',
-							label: '16.1. My Jetty Microservice Basics',
-						},
-						{
-							type: 'doc',
-							id: 'topics/16.02.MyJettyMicroserviceInstalling',
-							label: '16.2. Installing',
-						},
-						{
-							type: 'doc',
-							id: 'topics/16.03.MyJettyMicroserviceRunning',
-							label: '16.3. Running',
-						},
-						{
-							type: 'doc',
-							id: 'topics/16.04.MyJettyMicroserviceBuilding',
-							label: '16.4. Building',
-						},
-					],
-				},
-				{
-					type: 'category',
 					label: '17. My SpringBoot Microservice',
 					collapsed: true,
 					items: [
@@ -1999,17 +2057,17 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/17.02.MySpringBootMicroserviceInstalling',
-							label: '17.2. Installing',
+							label: '17.2. Installing in Eclipse',
 						},
 						{
 							type: 'doc',
 							id: 'topics/17.03.MySpringBootMicroserviceRunning',
-							label: '17.3. Running',
+							label: '17.3. Running in Eclipse',
 						},
 						{
 							type: 'doc',
 							id: 'topics/17.04.MySpringBootMicroserviceBuilding',
-							label: '17.4. Building',
+							label: '17.4. Building and Running from Command-Line',
 						},
 					],
 				},
@@ -2020,7 +2078,7 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/JuneauPetstoreOverview',
+							id: 'topics/18.01.JuneauPetstoreOverview',
 							label: '18.1. juneau-petstore Overview',
 						},
 					],
@@ -2045,7 +2103,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/20.01.JuneauShadedOverview',
-							label: '20.1. Juneau Shaded Overview',
+							label: '20.1. Juneau Shaded Artifacts',
 						},
 						{
 							type: 'doc',
@@ -2108,8 +2166,8 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/22.01.V9.0-migration-guide',
-							label: '22.1. V9.0 Migration Guide',
+							id: 'topics/22.01.V9MigrationGuide',
+							label: '22.1. v9.0 Migration Guide',
 						},
 					],
 				},
@@ -2120,8 +2178,8 @@ const sidebars: SidebarsConfig = {
 			items: [
 				{
 					type: 'doc',
-					id: 'topics/24.01.V10.0-migration-guide',
-					label: '23.1. V10.0 Migration Guide',
+					id: 'topics/23.01.V10MigrationGuide',
+					label: '23.1. v10.0 Migration Guide',
 				},
 			],
 		},
@@ -2198,7 +2256,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'developer-info/04.01.Scripts',
-							label: '4.1. Scripts Overview',
+							label: '4.1. Scripts',
 						},
 						{
 							type: 'category',
@@ -2310,7 +2368,7 @@ const sidebars: SidebarsConfig = {
 								{
 									type: 'doc',
 									id: 'developer-info/04.03.07.ScriptAiArtifacts',
-									label: '4.3.7. AI artifact scripts',
+									label: '4.3.7. generate-ai-artifacts.py / check-ai-artifacts.py',
 								},
 							],
 						},

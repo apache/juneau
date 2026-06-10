@@ -29,7 +29,7 @@
 * **[Homepage](https://juneau.apache.org/)** - Official Apache Juneau website
 * **[Staged Website](https://juneau.staged.apache.org/)** - Preview of pending website changes
 * **[Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
-* **[Pet Store App](https://github.com/apache/juneau-petstore)** - Complete example application
+* **[Pet Store App](/docs/topics/JuneauPetstoreOverview)** - Complete example application
 
 ### Documentation
 * **[Javadocs](https://juneau.apache.org/site/apidocs/)** - Complete API documentation
