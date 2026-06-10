@@ -38,9 +38,7 @@
 * **[Framework Comparisons](https://juneau.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
 * **[Examples](https://juneau.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
   * [juneau-examples-core](https://juneau.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
-  * [juneau-examples-rest](https://juneau.apache.org/docs/topics/JuneauExamplesRest) - REST API examples
-  * [juneau-examples-rest-jetty](https://juneau.apache.org/docs/topics/JuneauExamplesRestJetty) - Jetty microservice examples
-  * [juneau-examples-rest-springboot](https://juneau.apache.org/docs/topics/JuneauExamplesRestSpringboot) - Spring Boot examples
+  * [juneau-petstore](https://juneau.apache.org/docs/topics/JuneauPetstoreOverview) - Canonical petstore showcase application (deployed under both Jetty/Microservice and Spring Boot)
 * **[Test Reports](https://juneau.apache.org/site/surefire.html)** - JUnit test execution results
 * **[Dependencies](https://juneau.apache.org/site/dependency-info.html)** - Project dependency analysis
 * **[Project Reports](https://juneau.apache.org/site/project-reports.html)** - Complete Maven site reports
@@ -288,10 +286,9 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of the following
 * **juneau-microservice** - Microservice API.
 * **juneau-microservice-jetty** - Jetty microservice API.
 * **juneau-examples-core** - Core code examples.
-* **juneau-examples-rest** - REST code examples.
-* **juneau-examples-rest-jetty** - Jetty microservice examples.
-* **juneau-examples-rest-springboot** - Spring Boot examples.
-* **juneau-petstore** - Complete REST application example.
+* **juneau-petstore-core** - Shared petstore domain + REST resources.
+* **juneau-petstore-jetty** - Jetty/Microservice deployment of the petstore.
+* **juneau-petstore-springboot** - Spring Boot deployment of the petstore.
 * **juneau-shaded** - Shaded (uber) JARs combining multiple Juneau modules for simplified dependency management, especially useful for Bazel builds. 
 
 Questions via email to dev@juneau.apache.org are always welcome.

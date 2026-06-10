@@ -2020,28 +2020,8 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/18.01.JuneauPetstoreBasics',
-							label: '18.1. juneau-petstore Basics',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.02.JuneauPetstoreRunning',
-							label: '18.2. Running the App',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.03.JuneauPetstoreApi',
-							label: '18.3. juneau-petstore-api',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.04.JuneauPetstoreClient',
-							label: '18.4. juneau-petstore-client',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.05.JuneauPetstoreServer',
-							label: '18.5. juneau-petstore-server',
+							id: 'topics/JuneauPetstoreOverview',
+							label: '18.1. juneau-petstore Overview',
 						},
 					],
 				},
@@ -2054,21 +2034,6 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/19.01.JuneauExamplesCore',
 							label: '19.1. juneau-examples-core',
-						},
-						{
-							type: 'doc',
-							id: 'topics/19.02.JuneauExamplesRest',
-							label: '19.2. juneau-examples-rest',
-						},
-						{
-							type: 'doc',
-							id: 'topics/19.03.JuneauExamplesRestJetty',
-							label: '19.3. juneau-examples-rest-jetty',
-						},
-						{
-							type: 'doc',
-							id: 'topics/19.04.JuneauExamplesRestSpringboot',
-							label: '19.4. juneau-examples-rest-springboot',
 						},
 					],
 				},
@@ -2297,13 +2262,13 @@ const sidebars: SidebarsConfig = {
 								},
 								{
 									type: 'doc',
-									id: 'developer-info/04.02.12.ScriptStartExamplesRestJetty',
-									label: '4.2.12. start-examples-rest-jetty.py',
+									id: 'developer-info/04.02.12.ScriptStartPetstoreJetty',
+									label: '4.2.12. start-petstore-jetty.py',
 								},
 								{
 									type: 'doc',
-									id: 'developer-info/04.02.13.ScriptStartExamplesRestSpringboot',
-									label: '4.2.13. start-examples-rest-springboot.py',
+									id: 'developer-info/04.02.13.ScriptStartPetstoreSpringboot',
+									label: '4.2.13. start-petstore-springboot.py',
 								},
 							],
 						},

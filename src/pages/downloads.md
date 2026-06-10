@@ -52,8 +52,7 @@
 - **`/projects`** - Eclipse Projects
   - `my-springboot-microservice.zip` - Microservice starter project using Spring Boot
   - `juneau-examples-core.zip` - Core libraries examples
-  - `juneau-examples-rest-jetty.zip` - REST libraries examples using Jetty
-  - `juneau-examples-rest-springboot.zip` - REST libraries examples using Spring Boot
+  - `juneau-petstore-jetty.zip` - Canonical petstore showcase application starter (Jetty/Microservice deployment)
 
 ### Maven
 
