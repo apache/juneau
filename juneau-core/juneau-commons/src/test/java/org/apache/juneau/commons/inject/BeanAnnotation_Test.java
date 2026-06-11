@@ -74,7 +74,7 @@ class BeanAnnotation_Test extends TestBase {
 	}
 
 	@Test
-	void a04_on_stringNames_propagatesToAppliedScope() throws Exception {
+	void a04_on_stringNames_propagatesToAppliedScope() {
 		// Exercises Builder.on(String...) — wraps super.on(String...) and returns the Bean builder.
 		var bean = BeanAnnotation.create()
 			.name("svc")

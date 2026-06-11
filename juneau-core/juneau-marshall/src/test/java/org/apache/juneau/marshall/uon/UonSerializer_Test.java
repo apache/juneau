@@ -299,7 +299,7 @@ class UonSerializer_Test {
 	//====================================================================================================
 	// Unicode characters test
 	//====================================================================================================
-	@Test void a02_unicodeChars() throws Exception {
+	@Test void a02_unicodeChars() {
 
 		// 2-byte UTF-8 character
 		// Top level

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 class HjsonSerializer_Test {
 
 	@Test
-	void a01_simpleBean() throws Exception {
+	void a01_simpleBean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
@@ -41,7 +41,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a02_nestedBean() throws Exception {
+	void a02_nestedBean() {
 		var address = new LinkedHashMap<String, Object>();
 		address.put("city", "Boston");
 		address.put("state", "MA");
@@ -55,7 +55,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a03_quotelessStrings() throws Exception {
+	void a03_quotelessStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "simple");
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
@@ -65,7 +65,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a04_compactMode() throws Exception {
+	void a04_compactMode() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
@@ -76,7 +76,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a05_nullValue() throws Exception {
+	void a05_nullValue() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("middle", null);
@@ -87,7 +87,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a06_arrayOfStrings() throws Exception {
+	void a06_arrayOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
@@ -96,7 +96,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a07_quotedStringRequired() throws Exception {
+	void a07_quotedStringRequired() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("special", "a{b}c:d\"e");
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
@@ -105,7 +105,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a08_multilineString() throws Exception {
+	void a08_multilineString() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("desc", "line1\nline2");
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
@@ -114,7 +114,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a09_emptyBean() throws Exception {
+	void a09_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
 		assertNotNull(hjson);
@@ -122,7 +122,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a10_emptyCollection() throws Exception {
+	void a10_emptyCollection() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of());
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
@@ -131,7 +131,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a11_stringLikeBoolean() throws Exception {
+	void a11_stringLikeBoolean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("s", "true");
 		var hjson = HjsonSerializer.DEFAULT.serialize(m);
@@ -140,7 +140,7 @@ class HjsonSerializer_Test {
 	}
 
 	@Test
-	void a12_omitRootBraces() throws Exception {
+	void a12_omitRootBraces() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "x");
 		var s = HjsonSerializer.create().omitRootBraces(true).build();

@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class Toml_Test {
 
 	@Test
-	void a01_of() throws Exception {
+	void a01_of() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("a", "1");
 		m.put("b", 2);
@@ -43,7 +43,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void a02_roundTripString() throws Exception {
+	void a02_roundTripString() {
 		var m = JsonMap.of("s", "hello");
 		String toml = Toml.of(m);
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
@@ -51,7 +51,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void a03_roundTripNumber() throws Exception {
+	void a03_roundTripNumber() {
 		var m = JsonMap.of("n", 42);
 		String toml = Toml.of(m);
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
@@ -59,7 +59,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void a04_roundTripBoolean() throws Exception {
+	void a04_roundTripBoolean() {
 		var m = JsonMap.of("b", true);
 		String toml = Toml.of(m);
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
@@ -67,7 +67,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void a05_roundTripList() throws Exception {
+	void a05_roundTripList() {
 		var m = JsonMap.of("tags", List.of("a", "b", "c"));
 		String toml = Toml.of(m);
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
@@ -79,7 +79,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void a06_roundTripNested() throws Exception {
+	void a06_roundTripNested() {
 		var db = new LinkedHashMap<String, Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
@@ -101,7 +101,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void b01_parseArrayOfTables() throws Exception {
+	void b01_parseArrayOfTables() {
 		var toml = """
 			[[products]]
 			name = "Hammer"
@@ -121,7 +121,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void b02_serializeAndParseArrayOfTables() throws Exception {
+	void b02_serializeAndParseArrayOfTables() {
 		// Verify serializer produces array-of-tables for map with list-of-maps value
 		// and that the round-trip parser produces the same structure
 		var toml = """
@@ -151,7 +151,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void c01_parseInlineTable() throws Exception {
+	void c01_parseInlineTable() {
 		var toml = "point = {x = 1, y = 2}\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		JsonMap point = parsed.getMap("point");
@@ -161,7 +161,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void c02_parseNestedInlineTable() throws Exception {
+	void c02_parseNestedInlineTable() {
 		var toml = "config = {db = {host = \"localhost\", port = 5432}}\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var config = parsed.get("config");
@@ -183,7 +183,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void c03_serializerUseInlineTables() throws Exception {
+	void c03_serializerUseInlineTables() {
 		var s = TomlSerializer.create().useInlineTables(true).inlineTableThreshold(5).build();
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("x", 1);
@@ -202,21 +202,21 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void d01_parseBasicStringWithEscapes() throws Exception {
+	void d01_parseBasicStringWithEscapes() {
 		var toml = "msg = \"line1\\nline2\\ttab\"\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("line1\nline2\ttab", parsed.getString("msg"));
 	}
 
 	@Test
-	void d02_parseBasicStringWithUnicode() throws Exception {
+	void d02_parseBasicStringWithUnicode() {
 		var toml = "emoji = \"\\u0041\"\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("A", parsed.getString("emoji"));
 	}
 
 	@Test
-	void d03_parseLiteralString() throws Exception {
+	void d03_parseLiteralString() {
 		var toml = "path = 'C:\\Users\\admin'\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		// Literal strings have no escape processing
@@ -228,14 +228,14 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void e01_parseLiteralStringNoEscapes() throws Exception {
+	void e01_parseLiteralStringNoEscapes() {
 		var toml = "regex = '\\d{2} apps'\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("\\d{2} apps", parsed.getString("regex"));
 	}
 
 	@Test
-	void e02_parseLiteralStringPreservesBackslash() throws Exception {
+	void e02_parseLiteralStringPreservesBackslash() {
 		var toml = "path = 'C:\\path\\to\\file'\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("C:\\path\\to\\file", parsed.getString("path"));
@@ -246,7 +246,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void f01_parseOffsetDateTime() throws Exception {
+	void f01_parseOffsetDateTime() {
 		var toml = "odt = 1979-05-27T07:32:00Z\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("odt");
@@ -259,7 +259,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void f02_parseLocalDateTime() throws Exception {
+	void f02_parseLocalDateTime() {
 		var toml = "ldt = 1979-05-27T07:32:00\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("ldt");
@@ -271,7 +271,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void f03_parseLocalDate() throws Exception {
+	void f03_parseLocalDate() {
 		var toml = "ld = 1979-05-27\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("ld");
@@ -285,7 +285,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void f04_parseLocalTime() throws Exception {
+	void f04_parseLocalTime() {
 		var toml = "lt = 07:32:00\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("lt");
@@ -300,7 +300,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void f05_parseOffsetDateTimeWithOffset() throws Exception {
+	void f05_parseOffsetDateTimeWithOffset() {
 		var toml = "odt = 1979-05-27T07:32:00+05:30\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("odt");
@@ -331,7 +331,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void h01_serializerCopy() throws Exception {
+	void h01_serializerCopy() {
 		var s = TomlSerializer.create().sortKeys(true).nullValue("NIL").build();
 		assertNotNull(s);
 		assertEquals("NIL", s.getNullValue());
@@ -341,7 +341,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void h02_nullValue() throws Exception {
+	void h02_nullValue() {
 		var s = TomlSerializer.create().keepNullProperties().nullValue("~NULL~").build();
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "test");
@@ -351,7 +351,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void h03_readableSerializer() throws Exception {
+	void h03_readableSerializer() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "test");
 		var db = new LinkedHashMap<String, Object>();
@@ -368,7 +368,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void i01_commentsAreIgnored() throws Exception {
+	void i01_commentsAreIgnored() {
 		var toml = """
 			# This is a comment
 			name = "test" # inline comment
@@ -381,7 +381,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void i02_dottedKeys() throws Exception {
+	void i02_dottedKeys() {
 		var toml = "physical.color = \"orange\"\nphysical.shape = \"round\"\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		JsonMap physical = parsed.getMap("physical");
@@ -391,7 +391,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void i03_floatValues() throws Exception {
+	void i03_floatValues() {
 		var toml = """
 			pi = 3.14159
 			neg = -0.5
@@ -404,7 +404,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void i04_negativeIntegers() throws Exception {
+	void i04_negativeIntegers() {
 		var toml = """
 			neg = -42
 			pos = +17
@@ -417,14 +417,14 @@ class Toml_Test {
 	}
 
 	@Test
-	void i05_underscoresInNumbers() throws Exception {
+	void i05_underscoresInNumbers() {
 		var toml = "big = 1_000_000\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(1000000L, parsed.get("big"));
 	}
 
 	@Test
-	void i06_emptyInput() throws Exception {
+	void i06_emptyInput() {
 		var toml = "";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		// Empty TOML produces null or empty map
@@ -432,7 +432,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void i07_quotedKeys() throws Exception {
+	void i07_quotedKeys() {
 		var toml = "\"key with spaces\" = \"value\"\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("value", parsed.get("key with spaces"));
@@ -443,7 +443,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void j01_serializeFloatSpecials() throws Exception {
+	void j01_serializeFloatSpecials() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("pos_inf", Double.POSITIVE_INFINITY);
 		m.put("neg_inf", Double.NEGATIVE_INFINITY);
@@ -455,7 +455,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void j02_serializeEscapedStrings() throws Exception {
+	void j02_serializeEscapedStrings() {
 		var m = JsonMap.of("msg", "hello\nworld\t\"quoted\"");
 		String toml = Toml.of(m);
 		assertTrue(toml.contains("\\n"), "Should contain escaped newline");
@@ -464,7 +464,7 @@ class Toml_Test {
 	}
 
 	@Test
-	void j03_roundTripEscapedStrings() throws Exception {
+	void j03_roundTripEscapedStrings() {
 		var m = JsonMap.of("msg", "line1\nline2\ttab");
 		String toml = Toml.of(m);
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
@@ -476,7 +476,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void k01_roundTripRootArrayOfTables() throws Exception {
+	void k01_roundTripRootArrayOfTables() {
 		// Parse array-of-tables and verify structure
 		var toml = """
 			[[servers]]
@@ -502,7 +502,7 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void l01_quotedKeyForSpecialChars() throws Exception {
+	void l01_quotedKeyForSpecialChars() {
 		var m = JsonMap.of("key.with.dots", "value1", "key with spaces", "value2");
 		String toml = Toml.of(m);
 		assertTrue(toml.contains("\"key.with.dots\"") || toml.contains("'key.with.dots'"),
@@ -516,24 +516,24 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void m01_parserBuilderNullValue() throws Exception {
+	void m01_parserBuilderNullValue() {
 		var p = TomlParser.create().nullValue("N/A").build();
 		assertEquals("N/A", p.getNullValue());
 	}
 
 	@Test
-	void m02_serializerBuilderNullValue() throws Exception {
+	void m02_serializerBuilderNullValue() {
 		var s = TomlSerializer.create().nullValue("N/A").build();
 		assertEquals("N/A", s.getNullValue());
 	}
 
 	@Test
-	void m03_parserDefaultNullValue() throws Exception {
+	void m03_parserDefaultNullValue() {
 		assertEquals("<NULL>", TomlParser.DEFAULT.getNullValue());
 	}
 
 	@Test
-	void m04_serializerDefaultNullValue() throws Exception {
+	void m04_serializerDefaultNullValue() {
 		assertEquals("<NULL>", TomlSerializer.DEFAULT.getNullValue());
 	}
 
@@ -542,21 +542,21 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void n01_parseMultiLineBasicString() throws Exception {
+	void n01_parseMultiLineBasicString() {
 		var toml = "msg = \"\"\"line1\nline2\"\"\"\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("line1\nline2", parsed.getString("msg"));
 	}
 
 	@Test
-	void n02_parseMultiLineLiteralString() throws Exception {
+	void n02_parseMultiLineLiteralString() {
 		var toml = "msg = '''line1\nline2'''\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("line1\nline2", parsed.getString("msg"));
 	}
 
 	@Test
-	void n03_parseMultiLineBasicStringWithEscapes() throws Exception {
+	void n03_parseMultiLineBasicStringWithEscapes() {
 		var toml = "msg = \"\"\"hello \\\"world\\\"\"\"\"\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals("hello \"world\"", parsed.getString("msg"));
@@ -567,35 +567,35 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void o01_parseHexInteger() throws Exception {
+	void o01_parseHexInteger() {
 		var toml = "n = 0xFF\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(255L, parsed.get("n"));
 	}
 
 	@Test
-	void o02_parseHexIntegerLowerCase() throws Exception {
+	void o02_parseHexIntegerLowerCase() {
 		var toml = "n = 0xdeadbeef\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(0xdeadbeefL, parsed.get("n"));
 	}
 
 	@Test
-	void o03_parseOctalInteger() throws Exception {
+	void o03_parseOctalInteger() {
 		var toml = "n = 0o755\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(0755L, parsed.get("n"));
 	}
 
 	@Test
-	void o04_parseBinaryInteger() throws Exception {
+	void o04_parseBinaryInteger() {
 		var toml = "n = 0b1010\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(10L, parsed.get("n"));
 	}
 
 	@Test
-	void o05_parseHexIntegerWithUnderscores() throws Exception {
+	void o05_parseHexIntegerWithUnderscores() {
 		var toml = "n = 0xFFFF_FFFF\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(0xFFFFFFFFL, parsed.get("n"));
@@ -606,28 +606,28 @@ class Toml_Test {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void p01_parsePositiveInfinity() throws Exception {
+	void p01_parsePositiveInfinity() {
 		var toml = "x = inf\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, (Double) parsed.get("x"));
 	}
 
 	@Test
-	void p02_parseExplicitPositiveInfinity() throws Exception {
+	void p02_parseExplicitPositiveInfinity() {
 		var toml = "x = +inf\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, (Double) parsed.get("x"));
 	}
 
 	@Test
-	void p03_parseNegativeInfinity() throws Exception {
+	void p03_parseNegativeInfinity() {
 		var toml = "x = -inf\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertEquals(Double.NEGATIVE_INFINITY, (Double) parsed.get("x"));
 	}
 
 	@Test
-	void p04_parseNan() throws Exception {
+	void p04_parseNan() {
 		var toml = "x = nan\n";
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		assertTrue(Double.isNaN((Double) parsed.get("x")));

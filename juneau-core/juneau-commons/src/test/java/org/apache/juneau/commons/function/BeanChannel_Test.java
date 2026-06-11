@@ -147,7 +147,7 @@ class BeanChannel_Test extends TestBase {
 	// ListBeanChannel tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_listBeanChannel_collectAndIterate() throws Exception {
+	@Test void e01_listBeanChannel_collectAndIterate() {
 		var a = new ListBeanChannel<String>();
 
 		a.acceptThrows("one");
@@ -161,7 +161,7 @@ class BeanChannel_Test extends TestBase {
 		assertEquals(List.of("one", "two", "three"), result);
 	}
 
-	@Test void e02_listBeanChannel_emptyChannel() throws Exception {
+	@Test void e02_listBeanChannel_emptyChannel() {
 		var a = new ListBeanChannel<String>();
 		assertTrue(a.getList().isEmpty());
 		assertFalse(a.iterator().hasNext());

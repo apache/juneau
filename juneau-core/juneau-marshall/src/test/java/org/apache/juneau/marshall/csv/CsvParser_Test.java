@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.*;
 class CsvParser_Test extends TestBase {
 
 	/** Convenience: parse CSV into List&lt;T&gt;. */
-	private static <T> List<T> parseList(String csv, Class<T> elementType) throws Exception {
+	private static <T> List<T> parseList(String csv, Class<T> elementType) {
 		return (List<T>) CsvParser.DEFAULT.parse(csv, List.class, elementType);
 	}
 

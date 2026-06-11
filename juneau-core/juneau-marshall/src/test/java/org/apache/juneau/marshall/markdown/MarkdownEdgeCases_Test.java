@@ -31,7 +31,7 @@ class MarkdownEdgeCases_Test {
 	// f01 - Very long values
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_veryLongValues() throws Exception {
+	@Test void f01_veryLongValues() {
 		var longVal = "x".repeat(500);
 		var bean = Map.of("key", longVal);
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
@@ -42,7 +42,7 @@ class MarkdownEdgeCases_Test {
 	// f02 - Multi-line strings (round-trippable via JSON5 escaping)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f02_multiLineStrings() throws Exception {
+	@Test void f02_multiLineStrings() {
 		var value = "line1\nline2\nline3";
 		var bean = new LinkedHashMap<String, String>();
 		bean.put("text", value);
@@ -58,7 +58,7 @@ class MarkdownEdgeCases_Test {
 	// f03 - Unicode content
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f03_unicodeContent() throws Exception {
+	@Test void f03_unicodeContent() {
 		var bean = Map.of("name", "日本語", "emoji", "😀");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
 		assertTrue(md.contains("日本語"), "Expected Japanese: " + md);
@@ -69,7 +69,7 @@ class MarkdownEdgeCases_Test {
 	// f04 - Empty strings
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f04_emptyStrings() throws Exception {
+	@Test void f04_emptyStrings() {
 		var bean = Map.of("key", "", "other", "value");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
 		assertTrue(md.contains("| key |") || md.contains("| other |"), "Expected both keys: " + md);
@@ -79,7 +79,7 @@ class MarkdownEdgeCases_Test {
 	// f05 - HTML in values (not interpreted as Markdown)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f05_htmlInValues() throws Exception {
+	@Test void f05_htmlInValues() {
 		var bean = Map.of("html", "<div>content</div>");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
 		assertTrue(md.contains("<div>"), "Expected literal HTML: " + md);
@@ -90,7 +90,7 @@ class MarkdownEdgeCases_Test {
 	// f06 - Markdown syntax in values (escaped)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f06_markdownInValues() throws Exception {
+	@Test void f06_markdownInValues() {
 		var bean = Map.of("desc", "**bold** and [link](url)");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
 		assertTrue(md.contains("**bold**") || md.contains("bold"), "Expected bold text: " + md);
@@ -101,7 +101,7 @@ class MarkdownEdgeCases_Test {
 	// f07 - Very wide table (many columns)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f07_veryWideTable() throws Exception {
+	@Test void f07_veryWideTable() {
 		var props = new LinkedHashMap<String, Integer>();
 		for (var i = 0; i < 20; i++)
 			props.put("col" + i, i);
@@ -115,7 +115,7 @@ class MarkdownEdgeCases_Test {
 	// f08 - Single element collection
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f08_singleElementCollection() throws Exception {
+	@Test void f08_singleElementCollection() {
 		var list = List.of(Map.of("name", "Alice", "age", 30));
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(list);
 		assertTrue(md.contains("| name |") || md.contains("| age |"), "Expected table: " + md);
@@ -131,7 +131,7 @@ class MarkdownEdgeCases_Test {
 		public List<String> items;
 	}
 
-	@Test void f09_nullCollection() throws Exception {
+	@Test void f09_nullCollection() {
 		var bean = new F09_Bean();
 		bean.name = "test";
 		bean.items = null;
@@ -148,7 +148,7 @@ class MarkdownEdgeCases_Test {
 		public F10_Bean child;
 	}
 
-	@Test void f10_cyclicReferences() throws Exception {
+	@Test void f10_cyclicReferences() {
 		var bean = new F10_Bean();
 		bean.name = "root";
 		bean.child = bean; // self-reference
@@ -161,7 +161,7 @@ class MarkdownEdgeCases_Test {
 	// f11 - Deep nesting (doc mode, heading cap at H6)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f11_deepNesting() throws Exception {
+	@Test void f11_deepNesting() {
 		// Deeply nested structure - Maps render nested maps as inline JSON5; beans get sub-headings
 		var s = MarkdownDocSerializer.create().title("L1").build();
 		var nested = Map.<String, Object>of("x", "deep");
@@ -180,7 +180,7 @@ class MarkdownEdgeCases_Test {
 		public Optional<String> name;
 	}
 
-	@Test void f12_optionalProperties() throws Exception {
+	@Test void f12_optionalProperties() {
 		var bean = new F12_Bean();
 		bean.name = Optional.of("Alice");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
@@ -191,7 +191,7 @@ class MarkdownEdgeCases_Test {
 	// f13 - Table structure (separator alignment)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f13_columnAlignment() throws Exception {
+	@Test void f13_columnAlignment() {
 		var bean = Map.of("a", "1", "ab", "2", "abc", "3");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.of(bean);
 		// Should have valid table structure: |---|---|---|

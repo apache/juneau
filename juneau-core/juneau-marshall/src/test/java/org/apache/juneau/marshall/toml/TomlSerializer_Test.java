@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 class TomlSerializer_Test {
 
 	@Test
-	void a01_simpleBean() throws Exception {
+	void a01_simpleBean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("host", "localhost");
 		m.put("port", 8080);
@@ -39,7 +39,7 @@ class TomlSerializer_Test {
 	}
 
 	@Test
-	void a02_collectionOfStrings() throws Exception {
+	void a02_collectionOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 
@@ -49,7 +49,7 @@ class TomlSerializer_Test {
 	}
 
 	@Test
-	void a03_nestedBean() throws Exception {
+	void a03_nestedBean() {
 		var db = new LinkedHashMap<String, Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);

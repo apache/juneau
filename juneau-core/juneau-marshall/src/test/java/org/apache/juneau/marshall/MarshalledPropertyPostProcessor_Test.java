@@ -98,7 +98,7 @@ class MarshalledPropertyPostProcessor_Test {
 		roundTripDefault(new A_MonthDay(),   "f", MonthDay.of(6, 15));
 	}
 
-	@Test void a02_marshalledProp_notSetShortCircuit_calendarField() throws Exception {
+	@Test void a02_marshalledProp_notSetShortCircuit_calendarField() {
 		var c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(0L);
 		var bean = new A_Calendar();
@@ -161,7 +161,7 @@ class MarshalledPropertyPostProcessor_Test {
 
 	public static class C_XmlGregorianCalendar { public XMLGregorianCalendar f; }
 
-	@Test void c01_xmlGregorianCalendar_nullValue_serialize() throws Exception {
+	@Test void c01_xmlGregorianCalendar_nullValue_serialize() {
 		var bean = new C_XmlGregorianCalendar();
 		bean.f = null;
 		var s = Json5Serializer.DEFAULT.serialize(bean);
@@ -169,13 +169,13 @@ class MarshalledPropertyPostProcessor_Test {
 		assertNull(b.f);
 	}
 
-	@Test void c02_xmlGregorianCalendar_emptyWire_parsesAsNull() throws Exception {
+	@Test void c02_xmlGregorianCalendar_emptyWire_parsesAsNull() {
 		// Empty string in wire — exercises the s.isEmpty() true branch in the unswap path.
 		var b = Json5Parser.DEFAULT.parse("{f:''}", C_XmlGregorianCalendar.class);
 		assertNull(b.f);
 	}
 
-	@Test void c03_xmlGregorianCalendar_nullWire_unswap() throws Exception {
+	@Test void c03_xmlGregorianCalendar_nullWire_unswap() {
 		// Explicit null wire — exercises the o == null true branch in the unswap path.
 		var b = Json5Parser.DEFAULT.parse("{f:null}", C_XmlGregorianCalendar.class);
 		assertNull(b.f);
@@ -201,7 +201,7 @@ class MarshalledPropertyPostProcessor_Test {
 
 	public static class D_MonthDay { public MonthDay f; }
 
-	@Test void d01_temporalAccessorSwap_millisFormatRoundTrips() throws Exception {
+	@Test void d01_temporalAccessorSwap_millisFormatRoundTrips() {
 		var s = Json5Serializer.create().temporalFormat(TemporalFormat.MILLIS).build();
 		var p = Json5Parser.create().temporalFormat(TemporalFormat.MILLIS).build();
 		var bean = new D_MonthDay();
@@ -346,13 +346,13 @@ class MarshalledPropertyPostProcessor_Test {
 		roundTripDefault(new H_PrimitiveDouble(), "f", 1.5d);
 	}
 
-	@Test void h02_floatSwap_blankStringParsesToZero() throws Exception {
+	@Test void h02_floatSwap_blankStringParsesToZero() {
 		var p = Json5Parser.create().build();
 		var b = p.parse("{f:''}", E_FloatFmt.class);
 		assertEquals(Float.valueOf(0.0f), b.f);
 	}
 
-	@Test void h03_floatSwap_blankStringDouble() throws Exception {
+	@Test void h03_floatSwap_blankStringDouble() {
 		var p = Json5Parser.create().build();
 		var b = p.parse("{f:''}", E_DoubleFmt.class);
 		assertEquals(Double.valueOf(0.0d), b.f);
@@ -413,7 +413,7 @@ class MarshalledPropertyPostProcessor_Test {
 		public List<byte[]> f;
 	}
 
-	@Test void j01_childSwap_listOfByteArrays_hex() throws Exception {
+	@Test void j01_childSwap_listOfByteArrays_hex() {
 		var bean = new J_ListOfBytes();
 		bean.f = new ArrayList<>();
 		bean.f.add(new byte[] { 1, 2, 3 });
@@ -450,7 +450,7 @@ class MarshalledPropertyPostProcessor_Test {
 		public Number f;
 	}
 
-	@Test void k01_childSwap_numberField_bigIntegerValue() throws Exception {
+	@Test void k01_childSwap_numberField_bigIntegerValue() {
 		var bean = new K_NumberField();
 		bean.f = BigInteger.valueOf(42);
 		var s = Json5Serializer.create().swaps(BigIntStringSwap.class).build();
@@ -461,7 +461,7 @@ class MarshalledPropertyPostProcessor_Test {
 		assertNotNull(back.f);
 	}
 
-	@Test void k02_childSwap_numberField_nullValue() throws Exception {
+	@Test void k02_childSwap_numberField_nullValue() {
 		// Null value on a Number field — exercises the o == null arms inside the child-swap
 		// read/write transforms (lines 224, 247) without the actual child-swap path firing.
 		var bean = new K_NumberField();

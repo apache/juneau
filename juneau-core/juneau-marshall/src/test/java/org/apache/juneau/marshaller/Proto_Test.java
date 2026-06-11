@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class Proto_Test {
 
 	@Test
-	void e01_of() throws Exception {
+	void e01_of() {
 		var bean = JsonMap.of("name", "Alice", "age", 30);
 		var proto = Proto.of(bean);
 		assertNotNull(proto);
@@ -41,7 +41,7 @@ class Proto_Test {
 	}
 
 	@Test
-	void e02_to() throws Exception {
+	void e02_to() {
 		var input = "name: \"Alice\"\nage: 30";
 		var bean = Proto.to(input, JsonMap.class);
 		assertNotNull(bean);
@@ -50,7 +50,7 @@ class Proto_Test {
 	}
 
 	@Test
-	void e03_roundTrip() throws Exception {
+	void e03_roundTrip() {
 		var original = JsonMap.of("s", "hello", "n", 42, "b", true);
 		var proto = Proto.of(original);
 		var roundTrip = Proto.to(proto, JsonMap.class);
@@ -60,7 +60,7 @@ class Proto_Test {
 	}
 
 	@Test
-	void e04_defaultInstance() throws Exception {
+	void e04_defaultInstance() {
 		var bean = JsonMap.of("x", 1);
 		var proto = Proto.DEFAULT.write(bean);
 		assertNotNull(proto);
@@ -76,7 +76,7 @@ class Proto_Test {
 	}
 
 	@Test
-	void e05_plainBeanRoundTrip() throws Exception {
+	void e05_plainBeanRoundTrip() {
 		var bean = new SimpleBean();
 		bean.name = "Bob";
 		bean.age = 25;
@@ -96,7 +96,7 @@ class Proto_Test {
 	}
 
 	@Test
-	void e06_dateTimeRoundTrip() throws Exception {
+	void e06_dateTimeRoundTrip() {
 		var bean = new DateTimeBean();
 		bean.instant = Instant.parse("2012-12-21T12:34:56Z");
 		bean.localDate = LocalDate.parse("2012-12-21");
@@ -111,7 +111,7 @@ class Proto_Test {
 	}
 
 	@Test
-	void e07_epochMillisToDate() throws Exception {
+	void e07_epochMillisToDate() {
 		var expected = Instant.parse("2012-12-21T12:34:56Z");
 		var input = "ts: " + expected.toEpochMilli();
 		var bean = Proto.to(input, EpochBean.class);

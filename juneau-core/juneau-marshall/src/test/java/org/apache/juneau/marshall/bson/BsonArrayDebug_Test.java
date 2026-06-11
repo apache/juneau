@@ -41,7 +41,7 @@ class BsonArrayDebug_Test {
 	}
 
 	@Test
-	void dumpJsonListBson() throws Exception {
+	void dumpJsonListBson() {
 		var s = BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var x = new org.apache.juneau.marshall.collections.JsonList("['abc',123]");
 		var bytes = s.serialize(x);

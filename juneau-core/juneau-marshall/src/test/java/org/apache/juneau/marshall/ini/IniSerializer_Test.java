@@ -33,7 +33,7 @@ class IniSerializer_Test {
 	//====================================================================================================
 
 	@Test
-	void a01_simpleBean() throws Exception {
+	void a01_simpleBean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("host", "localhost");
 		m.put("port", 8080);
@@ -46,7 +46,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a02_nestedBean() throws Exception {
+	void a02_nestedBean() {
 		var db = new LinkedHashMap<String, Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
@@ -62,7 +62,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a03_beanWithListOfStrings() throws Exception {
+	void a03_beanWithListOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 		var ini = IniSerializer.DEFAULT.serialize(m);
@@ -72,7 +72,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a04_nullValues() throws Exception {
+	void a04_nullValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("middle", null);
@@ -84,7 +84,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a05_stringQuoting() throws Exception {
+	void a05_stringQuoting() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "123");
 		m.put("flag", "true");
@@ -95,7 +95,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a06_emptyStrings() throws Exception {
+	void a06_emptyStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("empty", "");
 		var ini = IniSerializer.DEFAULT.serialize(m);
@@ -104,7 +104,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a07_beanWithMap() throws Exception {
+	void a07_beanWithMap() {
 		var settings = new LinkedHashMap<String, String>();
 		settings.put("timeout", "30");
 		settings.put("retries", "3");
@@ -119,7 +119,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a08_deeplyNestedBean() throws Exception {
+	void a08_deeplyNestedBean() {
 		var company = new LinkedHashMap<String, Object>();
 		company.put("name", "Acme");
 		company.put("ticker", "ACME");
@@ -137,7 +137,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a09_multipleNestedBeans() throws Exception {
+	void a09_multipleNestedBeans() {
 		var addr1 = new LinkedHashMap<String, Object>();
 		addr1.put("city", "Boston");
 		var addr2 = new LinkedHashMap<String, Object>();
@@ -169,7 +169,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a12_emptyBean() throws Exception {
+	void a12_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
 		var ini = IniSerializer.DEFAULT.serialize(m);
 		assertNotNull(ini);
@@ -177,7 +177,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a13_kvSeparator() throws Exception {
+	void a13_kvSeparator() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "value");
 		var s = IniSerializer.create().kvSeparator(':').build();
@@ -186,7 +186,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void a14_addBeanTypes() throws Exception {
+	void a14_addBeanTypes() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "test");
 		var s = IniSerializer.create().addBeanTypes().addRootType().build();
@@ -200,7 +200,7 @@ class IniSerializer_Test {
 	//====================================================================================================
 
 	@Test
-	void b01_dateValues() throws Exception {
+	void b01_dateValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("date", LocalDate.of(2024, 3, 15));
 		m.put("instant", Instant.parse("2024-03-15T12:00:00Z"));
@@ -210,7 +210,7 @@ class IniSerializer_Test {
 	}
 
 	@Test
-	void b02_enumValues() throws Exception {
+	void b02_enumValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("status", TestEnum.ACTIVE);
 		var ini = IniSerializer.DEFAULT.serialize(m);

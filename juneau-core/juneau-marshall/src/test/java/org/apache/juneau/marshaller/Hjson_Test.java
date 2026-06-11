@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 class Hjson_Test {
 
 	@Test
-	void a01_of() throws Exception {
+	void a01_of() {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "test");
 		a.put("count", 42);

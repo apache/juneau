@@ -31,35 +31,35 @@ import org.junit.jupiter.api.*;
 class HoconParser_Test {
 
 	@Test
-	void b01_equalsSignSeparator() throws Exception {
+	void b01_equalsSignSeparator() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("name = Alice", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("Alice", m.get("name"));
 	}
 
 	@Test
-	void b02_colonSeparator() throws Exception {
+	void b02_colonSeparator() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("name: Alice", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("Alice", m.get("name"));
 	}
 
 	@Test
-	void b03_unquotedValues() throws Exception {
+	void b03_unquotedValues() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("key = hello", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("hello", m.get("key"));
 	}
 
 	@Test
-	void b04_quotedValues() throws Exception {
+	void b04_quotedValues() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("key = \"hello world\"", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("hello world", m.get("key"));
 	}
 
 	@Test
-	void b05_pathExpressions() throws Exception {
+	void b05_pathExpressions() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.b.c = 10", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		var a = m.get("a");
@@ -73,7 +73,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b06_rootBraceless() throws Exception {
+	void b06_rootBraceless() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("name = myapp\nport = 8080", Map.class, String.class, Object.class);
 		assertNotNull(m);
 		assertEquals("myapp", m.get("name"));
@@ -81,7 +81,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b07_nestedObjects() throws Exception {
+	void b07_nestedObjects() {
 		var hocon = "database {\n  host = localhost\n  port = 5432\n}";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertNotNull(m);
@@ -93,7 +93,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b08_pathExpressions() throws Exception {
+	void b08_pathExpressions() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.b.c = 10", Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		var b = (Map<String, Object>) a.get("b");
@@ -101,7 +101,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b09_objectMerging() throws Exception {
+	void b09_objectMerging() {
 		var hocon = "a { x = 1 }\na { y = 2 }";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
@@ -110,28 +110,28 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b10_substitutions() throws Exception {
+	void b10_substitutions() {
 		var hocon = "x = hello\nval = ${x}";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals("hello", m.get("val"));
 	}
 
 	@Test
-	void b11_optionalSubstitutions() throws Exception {
+	void b11_optionalSubstitutions() {
 		var hocon = "val = ${?missing}";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertNull(m.get("val"));
 	}
 
 	@Test
-	void b12_tripleQuotedValues() throws Exception {
+	void b12_tripleQuotedValues() {
 		var hocon = "key = \"\"\"line1\nline2\"\"\"";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals("line1\nline2", m.get("key"));
 	}
 
 	@Test
-	void b13_hashComments() throws Exception {
+	void b13_hashComments() {
 		var hocon = "a = 1 # comment\nb = 2";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals(1, ((Number) m.get("a")).intValue());
@@ -139,7 +139,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b14_slashComments() throws Exception {
+	void b14_slashComments() {
 		var hocon = "a = 1\n// comment\nb = 2";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals(1, ((Number) m.get("a")).intValue());
@@ -147,7 +147,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b15_trailingCommas() throws Exception {
+	void b15_trailingCommas() {
 		var hocon = "arr = [1, 2, 3,]";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("arr");
@@ -158,7 +158,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b16_newlineSeparators() throws Exception {
+	void b16_newlineSeparators() {
 		var hocon = "a = 1\nb = 2\nc = 3";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals(1, ((Number) m.get("a")).intValue());
@@ -167,7 +167,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b17_nestedObjectsDeep() throws Exception {
+	void b17_nestedObjectsDeep() {
 		var hocon = "a { b { c = 42 } }";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
@@ -176,7 +176,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b18_arrays() throws Exception {
+	void b18_arrays() {
 		var hocon = "nums = [1, 2, 3]";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("nums");
@@ -187,7 +187,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b19_quotedPathComponent() throws Exception {
+	void b19_quotedPathComponent() {
 		var hocon = "\"a.b\".c = 1";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var ab = (Map<String, Object>) m.get("a.b");
@@ -195,7 +195,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b20_numberValues() throws Exception {
+	void b20_numberValues() {
 		var hocon = "int = 42\nfloat = 3.14";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals(42, ((Number) m.get("int")).intValue());
@@ -203,7 +203,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b21_booleanNullValues() throws Exception {
+	void b21_booleanNullValues() {
 		var hocon = "t = true\nf = false\nn = null";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals(true, m.get("t"));
@@ -212,7 +212,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b22_plusEquals() throws Exception {
+	void b22_plusEquals() {
 		var hocon = "list = [a, b]\nlist += c";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var list = (List<?>) m.get("list");
@@ -224,21 +224,21 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b23_selfReferentialSubstitution() throws Exception {
+	void b23_selfReferentialSubstitution() {
 		var hocon = "path = /usr\npath = ${path}\"/bin\"";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals("/usr/bin", m.get("path"));
 	}
 
 	@Test
-	void b24_valueConcatenation() throws Exception {
+	void b24_valueConcatenation() {
 		var hocon = "path = /usr \"/local\"";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		assertEquals("/usr/local", m.get("path"));
 	}
 
 	@Test
-	void b25_arrayConcatenation() throws Exception {
+	void b25_arrayConcatenation() {
 		var hocon = "nums = [1, 2] [3, 4]";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var arr = (List<?>) m.get("nums");
@@ -251,7 +251,7 @@ class HoconParser_Test {
 	}
 
 	@Test
-	void b26_objectConcatenation() throws Exception {
+	void b26_objectConcatenation() {
 		var hocon = "obj = { a = 1 } { b = 2 }";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var obj = (Map<String, Object>) m.get("obj");
@@ -266,7 +266,7 @@ class HoconParser_Test {
 	// past the closing ']' cached by parseValueOrConcat's peekNoSkip and ate the following newline,
 	// the two inner arrays would silently flatten via HOCON array-concatenation.
 	@Test
-	void b27_nestedArraysNewlineSeparatedStayNested() throws Exception {
+	void b27_nestedArraysNewlineSeparatedStayNested() {
 		var hocon = "outer = [\n  [1, 2]\n  [3, 4]\n]";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var outer = (List<?>) m.get("outer");
@@ -285,7 +285,7 @@ class HoconParser_Test {
 	// Companion to b25: space-separated inner arrays on the SAME line still concatenate per the
 	// HOCON array-concatenation rule.  Confirms the structural fix did not break that feature.
 	@Test
-	void b28_sameLineInnerArraysStillConcatenate() throws Exception {
+	void b28_sameLineInnerArraysStillConcatenate() {
 		var hocon = "outer = [\n  [1, 2] [3, 4]\n]";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var outer = (List<?>) m.get("outer");
@@ -301,7 +301,7 @@ class HoconParser_Test {
 	// cached as a peeked token, the newline that separates the next sibling key must survive so the
 	// sibling is parsed at the correct scope rather than being swallowed.
 	@Test
-	void b29_nestedObjectClosePreservesSiblingNewline() throws Exception {
+	void b29_nestedObjectClosePreservesSiblingNewline() {
 		var hocon = "a {\n  b = 1\n}\nc = 2";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
@@ -313,7 +313,7 @@ class HoconParser_Test {
 	// Newline-separated objects inside an array must remain distinct elements rather than merging
 	// via HOCON object-concatenation (which only applies to same-line adjacency).
 	@Test
-	void b30_arrayOfObjectsNewlineSeparatedStayDistinct() throws Exception {
+	void b30_arrayOfObjectsNewlineSeparatedStayDistinct() {
 		var hocon = "items = [\n  { id = 1 }\n  { id = 2 }\n]";
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse(hocon, Map.class, String.class, Object.class);
 		var items = (List<?>) m.get("items");

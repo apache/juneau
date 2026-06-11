@@ -31,7 +31,7 @@ class MarkdownDocParser_Test {
 	// a - Parse simple flat document to bean
 	//====================================================================================================
 
-	@Test void a01_parseSimpleFlatDoc_toBean() throws Exception {
+	@Test void a01_parseSimpleFlatDoc_toBean() {
 		var md = """
 			# Person
 
@@ -45,7 +45,7 @@ class MarkdownDocParser_Test {
 		assertEquals(30, r.age);
 	}
 
-	@Test void a02_parseFlatDocNoTitle_toBean() throws Exception {
+	@Test void a02_parseFlatDocNoTitle_toBean() {
 		// Document without a top-level heading should still parse the table
 		var md = "| Property | Value |\n|---|---|\n| name | Bob |\n| age | 25 |";
 		var r = MarkdownDocParser.DEFAULT.parse(md, A.class);
@@ -62,7 +62,7 @@ class MarkdownDocParser_Test {
 	// b - Parse nested bean via sub-heading
 	//====================================================================================================
 
-	@Test void b01_parseNestedBeanViaSubHeading() throws Exception {
+	@Test void b01_parseNestedBeanViaSubHeading() {
 		var md = """
 			# Person
 
@@ -101,7 +101,7 @@ class MarkdownDocParser_Test {
 	// c - Parse collection under sub-heading
 	//====================================================================================================
 
-	@Test void c01_parseListOfStringsViaSubHeading() throws Exception {
+	@Test void c01_parseListOfStringsViaSubHeading() {
 		var md = """
 			# Report
 
@@ -121,7 +121,7 @@ class MarkdownDocParser_Test {
 		assertEquals(List.of("alpha", "beta", "gamma"), r.tags);
 	}
 
-	@Test void c02_parseMultiColumnTableViaSubHeading() throws Exception {
+	@Test void c02_parseMultiColumnTableViaSubHeading() {
 		var md = """
 			# Container
 
@@ -158,7 +158,7 @@ class MarkdownDocParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void d01_parseFlatDocToMap() throws Exception {
+	void d01_parseFlatDocToMap() {
 		var md = """
 			# Data
 
@@ -176,7 +176,7 @@ class MarkdownDocParser_Test {
 	// e - Null handling
 	//====================================================================================================
 
-	@Test void e01_parseNullPropertyValue() throws Exception {
+	@Test void e01_parseNullPropertyValue() {
 		var md = """
 			# Data
 
@@ -199,7 +199,7 @@ class MarkdownDocParser_Test {
 	// f - Custom heading level
 	//====================================================================================================
 
-	@Test void f01_customHeadingLevel() throws Exception {
+	@Test void f01_customHeadingLevel() {
 		var md = """
 			## Person
 
@@ -218,7 +218,7 @@ class MarkdownDocParser_Test {
 	// g - Round-trip: serialize then parse
 	//====================================================================================================
 
-	@Test void g01_roundTripFlatBean() throws Exception {
+	@Test void g01_roundTripFlatBean() {
 		var original = new A();
 		original.name = "Alice";
 		original.age = 30;
@@ -228,7 +228,7 @@ class MarkdownDocParser_Test {
 		assertEquals(30, parsed.age);
 	}
 
-	@Test void g02_roundTripNestedBean() throws Exception {
+	@Test void g02_roundTripNestedBean() {
 		var original = new B();
 		original.name = "Alice";
 		original.age = 30;
@@ -244,7 +244,7 @@ class MarkdownDocParser_Test {
 		assertEquals("MA", parsed.address.state);
 	}
 
-	@Test void g03_roundTripNestedBeanWithTitle() throws Exception {
+	@Test void g03_roundTripNestedBeanWithTitle() {
 		var original = new B();
 		original.name = "Bob";
 		original.age = 25;

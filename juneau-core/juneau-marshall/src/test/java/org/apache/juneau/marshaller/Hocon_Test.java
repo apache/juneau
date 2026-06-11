@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 class Hocon_Test {
 
 	@Test
-	void h01_of() throws Exception {
+	void h01_of() {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "test");
 		a.put("count", 42);

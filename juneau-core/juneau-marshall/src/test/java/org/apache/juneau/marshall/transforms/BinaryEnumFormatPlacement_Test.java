@@ -36,13 +36,13 @@ class BinaryEnumFormatPlacement_Test {
 
 	public static class A01 { public byte[] b = BYTES; }
 
-	@Test void a01_binary_defaultIsNotSet() throws Exception {
+	@Test void a01_binary_defaultIsNotSet() {
 		// NOT_SET → no swap fires → byte[] falls back to the serializer's native array representation.
 		var s = Json5Serializer.create().build();
 		assertEquals("{b:[72,101,108,108,111]}", s.serialize(new A01()));
 	}
 
-	@Test void a02_binary_contextOverridesDefault() throws Exception {
+	@Test void a02_binary_contextOverridesDefault() {
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		assertEquals("{b:'SGVsbG8='}", s.serialize(new A01()));
 	}
@@ -50,7 +50,7 @@ class BinaryEnumFormatPlacement_Test {
 	@Marshalled(binaryFormat = BinaryFormat.BASE64)
 	public static class A03 { public byte[] b = BYTES; }
 
-	@Test void a03_binary_classOverridesContext() throws Exception {
+	@Test void a03_binary_classOverridesContext() {
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.HEX).build();
 		assertEquals("{b:'SGVsbG8='}", s.serialize(new A03()));
 	}
@@ -61,14 +61,14 @@ class BinaryEnumFormatPlacement_Test {
 		public byte[] b = BYTES;
 	}
 
-	@Test void a04_binary_propertyOverridesClass() throws Exception {
+	@Test void a04_binary_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
 		assertEquals("{b:'48 65 6C 6C 6F'}", s.serialize(new A04()));
 	}
 
 	public static class A05 { public byte[] b = BYTES; }
 
-	@Test void a05_binary_base64Url() throws Exception {
+	@Test void a05_binary_base64Url() {
 		var s = Json5Serializer.create().binaryFormat(BinaryFormat.BASE64_URL).build();
 		assertEquals("{b:'SGVsbG8'}", s.serialize(new A05()));
 	}
@@ -88,12 +88,12 @@ class BinaryEnumFormatPlacement_Test {
 
 	public static class B01 { public E e = E.ALPHA_BETA; }
 
-	@Test void b01_enum_defaultIsToString() throws Exception {
+	@Test void b01_enum_defaultIsToString() {
 		var s = Json5Serializer.create().build();
 		assertEquals("{e:'alpha beta'}", s.serialize(new B01()));
 	}
 
-	@Test void b02_enum_contextOverridesDefault() throws Exception {
+	@Test void b02_enum_contextOverridesDefault() {
 		var s = Json5Serializer.create().enumFormat(EnumFormat.NAME).build();
 		assertEquals("{e:'ALPHA_BETA'}", s.serialize(new B01()));
 	}
@@ -101,7 +101,7 @@ class BinaryEnumFormatPlacement_Test {
 	@Marshalled(enumFormat = EnumFormat.NAME)
 	public static class B03 { public E e = E.ALPHA_BETA; }
 
-	@Test void b03_enum_classOverridesContext() throws Exception {
+	@Test void b03_enum_classOverridesContext() {
 		var s = Json5Serializer.create().enumFormat(EnumFormat.LOWER_HYPHEN).build();
 		assertEquals("{e:'ALPHA_BETA'}", s.serialize(new B03()));
 	}
@@ -112,14 +112,14 @@ class BinaryEnumFormatPlacement_Test {
 		public E e = E.ALPHA_BETA;
 	}
 
-	@Test void b04_enum_propertyOverridesClass() throws Exception {
+	@Test void b04_enum_propertyOverridesClass() {
 		var s = Json5Serializer.create().build();
 		assertEquals("{e:'alpha-beta'}", s.serialize(new B04()));
 	}
 
 	public static class B05 { public E e = E.ALPHA_BETA; }
 
-	@Test void b05_enum_ordinal() throws Exception {
+	@Test void b05_enum_ordinal() {
 		var s = Json5Serializer.create().enumFormat(EnumFormat.ORDINAL).build();
 		assertEquals("{e:0}", s.serialize(new B05()));
 	}
@@ -127,7 +127,7 @@ class BinaryEnumFormatPlacement_Test {
 	@Marshalled(enumFormat = EnumFormat.ORDINAL)
 	public static class B06 { public E e = E.GAMMA; }
 
-	@Test void b06_enum_ordinalAtClass() throws Exception {
+	@Test void b06_enum_ordinalAtClass() {
 		var s = Json5Serializer.create().build();
 		assertEquals("{e:1}", s.serialize(new B06()));
 	}
@@ -147,7 +147,7 @@ class BinaryEnumFormatPlacement_Test {
 		public E e = E.ALPHA_BETA;
 	}
 
-	@Test void c01_marshalledConfig_applies() throws Exception {
+	@Test void c01_marshalledConfig_applies() {
 		var s = Json5Serializer.create().applyAnnotations(C01Config.class).build();
 		var json = s.serialize(new C01Bean());
 		assertTrue(json.contains("b:'48656C6C6F'"), "binary hex: " + json);
@@ -164,7 +164,7 @@ class BinaryEnumFormatPlacement_Test {
 		public E e = E.ALPHA_BETA;
 	}
 
-	@Test void d01_notSet_fallsThroughToContext() throws Exception {
+	@Test void d01_notSet_fallsThroughToContext() {
 		var s = Json5Serializer.create()
 			.binaryFormat(BinaryFormat.HEX)
 			.enumFormat(EnumFormat.NAME)

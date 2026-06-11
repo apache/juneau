@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class ProtoSerializer_Test {
 
 	@Test
-	void a01_simpleBean() throws Exception {
+	void a01_simpleBean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("host", "localhost");
 		m.put("port", 8080);
@@ -49,7 +49,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a02_nestedBean() throws Exception {
+	void a02_nestedBean() {
 		var db = new LinkedHashMap<String, Object>();
 		db.put("host", "localhost");
 		db.put("port", 5432);
@@ -66,7 +66,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a03_deeplyNestedBean() throws Exception {
+	void a03_deeplyNestedBean() {
 		var ssl = new LinkedHashMap<String, Object>();
 		ssl.put("enabled", true);
 		var server = new LinkedHashMap<String, Object>();
@@ -83,7 +83,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a04_collectionOfStrings() throws Exception {
+	void a04_collectionOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("a", "b", "c"));
 
@@ -94,7 +94,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a05_collectionOfIntegers() throws Exception {
+	void a05_collectionOfIntegers() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("ports", List.of(8080, 8443, 9090));
 
@@ -105,7 +105,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a06_collectionOfBeans() throws Exception {
+	void a06_collectionOfBeans() {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("host", "alpha");
 		a.put("port", 8080);
@@ -122,7 +122,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a07_mapProperty() throws Exception {
+	void a07_mapProperty() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("env", Map.of("PATH", "/usr/bin", "HOME", "/home/user"));
 
@@ -133,7 +133,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a08_nullValues() throws Exception {
+	void a08_nullValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("a", "x");
 		m.put("b", null);
@@ -147,7 +147,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a09_booleanValues() throws Exception {
+	void a09_booleanValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("t", true);
 		m.put("f", false);
@@ -158,7 +158,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a10_floatValues() throws Exception {
+	void a10_floatValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("x", 3.14);
 		m.put("inf", Double.POSITIVE_INFINITY);
@@ -172,7 +172,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a11_stringEscaping() throws Exception {
+	void a11_stringEscaping() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("s", "a\nb\tc\\d\"e");
 
@@ -182,7 +182,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a12_enumValues() throws Exception {
+	void a12_enumValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("level", LogLevel.WARN);
 
@@ -192,7 +192,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a13_emptyBean() throws Exception {
+	void a13_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
 
 		String proto = ProtoSerializer.DEFAULT.serialize(m);
@@ -201,7 +201,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a14_emptyCollections() throws Exception {
+	void a14_emptyCollections() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of());
 
@@ -210,7 +210,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a16_noColonBeforeMessages() throws Exception {
+	void a16_noColonBeforeMessages() {
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("x", 1);
 		var m = new LinkedHashMap<String, Object>();
@@ -222,7 +222,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a17_indentation() throws Exception {
+	void a17_indentation() {
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("x", 1);
 		var m = new LinkedHashMap<String, Object>();
@@ -233,7 +233,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a18_addBeanTypesAndRootType() throws Exception {
+	void a18_addBeanTypesAndRootType() {
 		var m = JsonMap.of("name", "test");
 		var serializer = ProtoSerializer.create().addBeanTypes().addRootType().build();
 		String proto = serializer.serialize(m);
@@ -243,7 +243,7 @@ class ProtoSerializer_Test {
 	}
 
 	@Test
-	void a20_binaryData() throws Exception {
+	void a20_binaryData() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("data", new byte[] { 0x0a, 0x05 });
 

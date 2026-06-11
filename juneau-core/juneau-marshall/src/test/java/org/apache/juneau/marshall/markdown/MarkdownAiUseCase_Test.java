@@ -31,7 +31,7 @@ class MarkdownAiUseCase_Test {
 	// h01 - Dataset metadata for LLM context
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void h01_datasetDescription() throws Exception {
+	@Test void h01_datasetDescription() {
 		var dataset = new DatasetMetadata();
 		dataset.name = "customer_sales_2024";
 		dataset.description = "Monthly sales by customer region";
@@ -64,7 +64,7 @@ class MarkdownAiUseCase_Test {
 	// h02 - API response for chat display
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void h02_apiResponse() throws Exception {
+	@Test void h02_apiResponse() {
 		var response = new ApiResponse<>();
 		response.status = 200;
 		response.message = "Success";
@@ -97,7 +97,7 @@ class MarkdownAiUseCase_Test {
 	// h03 - Configuration report (readable document)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void h03_configReport() throws Exception {
+	@Test void h03_configReport() {
 		var config = new AppConfig();
 		config.appName = "MyApp";
 		config.debug = false;
@@ -137,7 +137,7 @@ class MarkdownAiUseCase_Test {
 	// h04 - Error report for debugging
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void h04_errorReport() throws Exception {
+	@Test void h04_errorReport() {
 		var error = new ErrorReport();
 		error.code = "ERR_CONNECTION_TIMEOUT";
 		error.message = "Connection to database timed out after 30s";

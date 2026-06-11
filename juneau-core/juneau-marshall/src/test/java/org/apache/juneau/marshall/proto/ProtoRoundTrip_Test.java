@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 class ProtoRoundTrip_Test {
 
 	@Test
-	void a01_simpleBeanRoundTrip() throws Exception {
+	void a01_simpleBeanRoundTrip() {
 		var a = JsonMap.of("s", "hello", "n", 42, "b", true, "x", 3.14);
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -41,7 +41,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a02_nestedBeanRoundTrip() throws Exception {
+	void a02_nestedBeanRoundTrip() {
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("city", "Boston");
 		inner.put("state", "MA");
@@ -59,7 +59,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a03_collectionOfBeansRoundTrip() throws Exception {
+	void a03_collectionOfBeansRoundTrip() {
 		var a1 = new LinkedHashMap<String, Object>();
 		a1.put("host", "alpha");
 		a1.put("port", 8080);
@@ -78,7 +78,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a04_collectionOfStringsRoundTrip() throws Exception {
+	void a04_collectionOfStringsRoundTrip() {
 		var a = JsonMap.of("tags", List.of("a", "b", "c"));
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -86,7 +86,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a05_mapRoundTrip() throws Exception {
+	void a05_mapRoundTrip() {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("env", new LinkedHashMap<>(Map.of("PATH", "/usr/bin", "HOME", "/home")));
 
@@ -99,7 +99,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a06_enumRoundTrip() throws Exception {
+	void a06_enumRoundTrip() {
 		var a = JsonMap.of("level", "INFO");
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -107,7 +107,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a07_stringEscapingRoundTrip() throws Exception {
+	void a07_stringEscapingRoundTrip() {
 		var a = JsonMap.of("s", "a\nb\tc");
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -115,7 +115,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a08_booleanRoundTrip() throws Exception {
+	void a08_booleanRoundTrip() {
 		var a = JsonMap.of("t", true, "f", false);
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -124,7 +124,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a09_numericEdgeCases() throws Exception {
+	void a09_numericEdgeCases() {
 		var a = JsonMap.of("i", Integer.MAX_VALUE, "l", Long.MAX_VALUE, "d", 3.14159265358979);
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -134,7 +134,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a10_complexBeanRoundTrip() throws Exception {
+	void a10_complexBeanRoundTrip() {
 		var inner = JsonMap.of("x", 1);
 		var a = new JsonMap();
 		a.put("name", "test");
@@ -151,7 +151,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a11_objectSwapRoundTrip() throws Exception {
+	void a11_objectSwapRoundTrip() {
 		var ser = ProtoSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		var a = JsonMap.of("data", new byte[] { 0x0a, 0x05, (byte) 0xff });
 		var proto = ser.serialize(a);
@@ -160,7 +160,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a12_emptyCollectionsRoundTrip() throws Exception {
+	void a12_emptyCollectionsRoundTrip() {
 		var a = JsonMap.of("tags", List.of());
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
@@ -170,7 +170,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a13_nullableReferenceRoundTrip() throws Exception {
+	void a13_nullableReferenceRoundTrip() {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("s", "x");
 		a.put("n", 1);
@@ -186,7 +186,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a14_topLevelScalarLimitation() throws Exception {
+	void a14_topLevelScalarLimitation() {
 		var a = "bare";
 		var proto = org.apache.juneau.marshall.marshaller.Proto.of(a);
 		var b = org.apache.juneau.marshall.marshaller.Proto.to(proto, String.class);
@@ -194,7 +194,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a15_untypedJsonMapRoundTrip() throws Exception {
+	void a15_untypedJsonMapRoundTrip() {
 		var inner = JsonMap.of("k", "v");
 		var a = new JsonMap();
 		a.put("s", "hello");
@@ -213,7 +213,7 @@ class ProtoRoundTrip_Test {
 	}
 
 	@Test
-	void a16_dateTimeRoundTrip() throws Exception {
+	void a16_dateTimeRoundTrip() {
 		var a = JsonMap.of(
 			"instant", "2012-12-21T12:34:56Z",
 			"localDate", "2012-12-21",

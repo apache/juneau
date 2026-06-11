@@ -32,7 +32,7 @@ class StackTraceElementSwap_Test extends TestBase {
 		return Json5.of(ste);
 	}
 
-	private static StackTraceElement read(String in) throws Exception {
+	private static StackTraceElement read(String in) {
 		return Json5.DEFAULT.read(in, StackTraceElement.class);
 	}
 

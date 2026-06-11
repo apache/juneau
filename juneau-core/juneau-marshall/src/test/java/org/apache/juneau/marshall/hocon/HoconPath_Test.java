@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 class HoconPath_Test {
 
 	@Test
-	void d01_simplePath() throws Exception {
+	void d01_simplePath() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.b = 1", Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		assertNotNull(a);
@@ -39,7 +39,7 @@ class HoconPath_Test {
 	}
 
 	@Test
-	void d02_deepPath() throws Exception {
+	void d02_deepPath() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.b.c.d = 1", Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		var b = (Map<String, Object>) a.get("b");
@@ -48,7 +48,7 @@ class HoconPath_Test {
 	}
 
 	@Test
-	void d03_quotedPathComponent() throws Exception {
+	void d03_quotedPathComponent() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("\"a.b\".c = 1", Map.class, String.class, Object.class);
 		var ab = (Map<String, Object>) m.get("a.b");
 		assertNotNull(ab);
@@ -56,7 +56,7 @@ class HoconPath_Test {
 	}
 
 	@Test
-	void d04_mixedPathAndNested() throws Exception {
+	void d04_mixedPathAndNested() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.b { c = 1 }", Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		var b = (Map<String, Object>) a.get("b");
@@ -64,7 +64,7 @@ class HoconPath_Test {
 	}
 
 	@Test
-	void d05_pathMerging() throws Exception {
+	void d05_pathMerging() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.x = 1\na.y = 2", Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		assertEquals(1, ((Number) a.get("x")).intValue());
@@ -72,7 +72,7 @@ class HoconPath_Test {
 	}
 
 	@Test
-	void d06_pathOverwrite() throws Exception {
+	void d06_pathOverwrite() {
 		var m = (Map<String, Object>) HoconParser.DEFAULT.parse("a.b = 1\na.b = 2", Map.class, String.class, Object.class);
 		var a = (Map<String, Object>) m.get("a");
 		assertEquals(2, ((Number) a.get("b")).intValue());

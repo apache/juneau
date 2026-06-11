@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 class ProtoTokenizer_Test {
 
 	@Test
-	void a01_bareIdentifier() throws Exception {
+	void a01_bareIdentifier() {
 		var a = ProtoParser.DEFAULT.parse("field_name: 1", JsonMap.class);
 		assertEquals(1L, a.get("field_name"));
 
@@ -40,7 +40,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a02_quotedString() throws Exception {
+	void a02_quotedString() {
 		var a = ProtoParser.DEFAULT.parse("s: \"hello\"", JsonMap.class);
 		assertEquals("hello", a.get("s"));
 
@@ -49,13 +49,13 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a03_multiPartString() throws Exception {
+	void a03_multiPartString() {
 		var a = ProtoParser.DEFAULT.parse("s: \"hello\" \" world\"", JsonMap.class);
 		assertEquals("hello world", a.get("s"));
 	}
 
 	@Test
-	void a04_decimalInteger() throws Exception {
+	void a04_decimalInteger() {
 		var a = ProtoParser.DEFAULT.parse("n: 42", JsonMap.class);
 		assertEquals(42L, a.get("n"));
 
@@ -67,7 +67,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a05_hexInteger() throws Exception {
+	void a05_hexInteger() {
 		var a = ProtoParser.DEFAULT.parse("n: 0xDEAD", JsonMap.class);
 		assertEquals(0xDEADL, a.get("n"));
 
@@ -76,7 +76,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a06_octalInteger() throws Exception {
+	void a06_octalInteger() {
 		var a = ProtoParser.DEFAULT.parse("n: 0755", JsonMap.class);
 		assertEquals(0755L, a.get("n"));
 
@@ -85,7 +85,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a07_floatLiteral() throws Exception {
+	void a07_floatLiteral() {
 		var a = ProtoParser.DEFAULT.parse("x: 3.14", JsonMap.class);
 		assertEquals(3.14, a.get("x"));
 
@@ -97,7 +97,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a08_specialFloats() throws Exception {
+	void a08_specialFloats() {
 		var a = ProtoParser.DEFAULT.parse("x: inf", JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, a.get("x"));
 
@@ -109,7 +109,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a09_booleans() throws Exception {
+	void a09_booleans() {
 		var a = ProtoParser.DEFAULT.parse("b: true", JsonMap.class);
 		assertEquals(true, a.get("b"));
 
@@ -118,7 +118,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a10_comments() throws Exception {
+	void a10_comments() {
 		var a = ProtoParser.DEFAULT.parse("# comment\nname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 
@@ -127,7 +127,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a11_structuralTokens() throws Exception {
+	void a11_structuralTokens() {
 		var a = ProtoParser.DEFAULT.parse("m { k: 1 }", JsonMap.class);
 		var m = a.getMap("m");
 		assertNotNull(m);
@@ -148,7 +148,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a12_stringEscapes() throws Exception {
+	void a12_stringEscapes() {
 		var a = ProtoParser.DEFAULT.parse("s: \"\\n\"", JsonMap.class);
 		assertEquals("\n", a.get("s"));
 
@@ -169,7 +169,7 @@ class ProtoTokenizer_Test {
 	}
 
 	@Test
-	void a14_whitespaceHandling() throws Exception {
+	void a14_whitespaceHandling() {
 		var a = ProtoParser.DEFAULT.parse("  name  :  42  ", JsonMap.class);
 		assertEquals(42L, a.get("name"));
 
@@ -196,31 +196,31 @@ class ProtoTokenizer_Test {
 		assertEquals(ProtoToken.TokenType.EOF, t.peek().type());
 	}
 
-	@Test void b02_commentTerminatedByCRLF() throws Exception {
+	@Test void b02_commentTerminatedByCRLF() {
 		// Hits `\r\n` after `#` comment (lines 108-109).
 		var a = ProtoParser.DEFAULT.parse("# c1\r\nname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
-	@Test void b03_commentTerminatedByEOF() throws Exception {
+	@Test void b03_commentTerminatedByEOF() {
 		// Hits the EOF-terminator branch in skipWhitespaceAndComments (c < 0 in inner loop).
 		var a = ProtoParser.DEFAULT.parse("name: 1\n# trailing eof", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
-	@Test void b04_negativeHex() throws Exception {
+	@Test void b04_negativeHex() {
 		// Hits the neg-hex branch (line 230).
 		var a = ProtoParser.DEFAULT.parse("n: -0xFF", JsonMap.class);
 		assertEquals(-255L, a.get("n"));
 	}
 
-	@Test void b05_negativeOctal() throws Exception {
+	@Test void b05_negativeOctal() {
 		// Hits the neg-octal branch (line 234).
 		var a = ProtoParser.DEFAULT.parse("n: -0755", JsonMap.class);
 		assertEquals(-0755L, a.get("n"));
 	}
 
-	@Test void b06_zeroFloat() throws Exception {
+	@Test void b06_zeroFloat() {
 		// Hits the leading-0 with float-suffix branch (lines 236-238).
 		var a = ProtoParser.DEFAULT.parse("x: 0.5", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
@@ -232,13 +232,13 @@ class ProtoTokenizer_Test {
 		assertEquals(0.0, ((Number) c.get("x")).doubleValue(), 1e-12);
 	}
 
-	@Test void b07_zeroBare() throws Exception {
+	@Test void b07_zeroBare() {
 		// Hits the bare-0 returning DEC_INT(0) branch (line 240).
 		var a = ProtoParser.DEFAULT.parse("n: 0", JsonMap.class);
 		assertEquals(0L, a.get("n"));
 	}
 
-	@Test void b08_dotPrefixFloat() throws Exception {
+	@Test void b08_dotPrefixFloat() {
 		// Hits the `.5`-style leading-dot float branch (line 243).
 		var a = ProtoParser.DEFAULT.parse("x: .5", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
@@ -247,7 +247,7 @@ class ProtoTokenizer_Test {
 		assertEquals(-0.25, ((Number) b.get("x")).doubleValue(), 1e-12);
 	}
 
-	@Test void b09_floatWithUnderscores() throws Exception {
+	@Test void b09_floatWithUnderscores() {
 		// Hits underscore handling in readDecimalOrFloat (lines 280-292).
 		var a = ProtoParser.DEFAULT.parse("x: 1_000.5", JsonMap.class);
 		assertEquals(1000.5, ((Number) a.get("x")).doubleValue(), 1e-9);
@@ -256,7 +256,7 @@ class ProtoTokenizer_Test {
 		assertEquals(1.55, ((Number) b.get("x")).doubleValue(), 1e-9);
 	}
 
-	@Test void b10_floatExponent_signed() throws Exception {
+	@Test void b10_floatExponent_signed() {
 		// Hits the e+/e- branch in readDecimalOrFloat (lines 297-298).
 		var a = ProtoParser.DEFAULT.parse("x: 1.5e+2", JsonMap.class);
 		assertEquals(150.0, ((Number) a.get("x")).doubleValue(), 1e-9);
@@ -265,13 +265,13 @@ class ProtoTokenizer_Test {
 		assertEquals(0.015, ((Number) b.get("x")).doubleValue(), 1e-9);
 	}
 
-	@Test void b11_floatExponentWithUnderscores() throws Exception {
+	@Test void b11_floatExponentWithUnderscores() {
 		// Hits underscore handling in exponent loop (lines 299-302).
 		var a = ProtoParser.DEFAULT.parse("x: 1e1_0", JsonMap.class);
 		assertEquals(1e10, ((Number) a.get("x")).doubleValue(), 1e-3);
 	}
 
-	@Test void b12_floatWithFSuffixOnInt() throws Exception {
+	@Test void b12_floatWithFSuffixOnInt() {
 		// Hits the `f` after raw int branch in readDecimalOrFloat (line 315-316).
 		var a = ProtoParser.DEFAULT.parse("x: 5f", JsonMap.class);
 		assertEquals(5.0, ((Number) a.get("x")).doubleValue(), 1e-12);
@@ -280,13 +280,13 @@ class ProtoTokenizer_Test {
 		assertEquals(-5.0, ((Number) b.get("x")).doubleValue(), 1e-12);
 	}
 
-	@Test void b13_specialFloat_negInf() throws Exception {
+	@Test void b13_specialFloat_negInf() {
 		// Hits the special-float-with-neg branch (line 347).
 		var a = ProtoParser.DEFAULT.parse("x: -infinity", JsonMap.class);
 		assertEquals(Double.NEGATIVE_INFINITY, a.get("x"));
 	}
 
-	@Test void b14_specialFloatNanIdentifier() throws Exception {
+	@Test void b14_specialFloatNanIdentifier() {
 		// IDENT path returning name 'nano_seconds' (or anything starting with n + non-special).
 		// readSpecialFloatOrIdent must yield IDENT when not 'nan'/'inf'/'infinity' (line 352).
 		var a = ProtoParser.DEFAULT.parse("nan: 1", JsonMap.class);
@@ -296,7 +296,7 @@ class ProtoTokenizer_Test {
 		assertEquals(2L, b.get("infrastructure"));
 	}
 
-	@Test void b15_floatLiteral_underscores() throws Exception {
+	@Test void b15_floatLiteral_underscores() {
 		// Hits readFloatLiteral underscore-skip code paths (lines 373-377, 383-387).
 		var a = ProtoParser.DEFAULT.parse("x: 0.5_5", JsonMap.class);
 		assertEquals(0.55, ((Number) a.get("x")).doubleValue(), 1e-9);
@@ -305,7 +305,7 @@ class ProtoTokenizer_Test {
 		assertEquals(0.5e10, ((Number) b.get("x")).doubleValue(), 1e-3);
 	}
 
-	@Test void b16_floatLiteral_signedExponent() throws Exception {
+	@Test void b16_floatLiteral_signedExponent() {
 		// readFloatLiteral signed-exponent branch (lines 381-382).
 		var a = ProtoParser.DEFAULT.parse("x: 0.5e+2", JsonMap.class);
 		assertEquals(50.0, ((Number) a.get("x")).doubleValue(), 1e-9);
@@ -314,13 +314,13 @@ class ProtoTokenizer_Test {
 		assertEquals(0.005, ((Number) b.get("x")).doubleValue(), 1e-9);
 	}
 
-	@Test void b17_floatLiteral_fSuffix() throws Exception {
+	@Test void b17_floatLiteral_fSuffix() {
 		// readFloatLiteral `f`/`F` suffix branch (lines 389-390).
 		var a = ProtoParser.DEFAULT.parse("x: 0.5f", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);
 	}
 
-	@Test void b18_stringEscape_a_b_f_v() throws Exception {
+	@Test void b18_stringEscape_a_b_f_v() {
 		// Hits processEscape cases 'a','b','f','v' (lines 450-456).
 		var a = ProtoParser.DEFAULT.parse("s: \"\\a\"", JsonMap.class);
 		assertEquals("", a.get("s"));
@@ -332,12 +332,12 @@ class ProtoTokenizer_Test {
 		assertEquals("", d.get("s"));
 	}
 
-	@Test void b19_stringEscape_r() throws Exception {
+	@Test void b19_stringEscape_r() {
 		var a = ProtoParser.DEFAULT.parse("s: \"\\r\"", JsonMap.class);
 		assertEquals("\r", a.get("s"));
 	}
 
-	@Test void b20_stringEscape_questionAndQuote() throws Exception {
+	@Test void b20_stringEscape_questionAndQuote() {
 		// Hits processEscape cases '?', '\'', '"' (lines 457-460).
 		var a = ProtoParser.DEFAULT.parse("s: \"\\?\"", JsonMap.class);
 		assertEquals("?", a.get("s"));
@@ -345,7 +345,7 @@ class ProtoTokenizer_Test {
 		assertEquals("'", b.get("s"));
 	}
 
-	@Test void b21_stringEscape_hex() throws Exception {
+	@Test void b21_stringEscape_hex() {
 		// Hits processEscape '\\x'/'\\X' (line 461) and readHexEscape.
 		var a = ProtoParser.DEFAULT.parse("s: \"\\x41\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
@@ -354,7 +354,7 @@ class ProtoTokenizer_Test {
 		assertEquals("A", b.get("s"));
 	}
 
-	@Test void b22_stringEscape_octal() throws Exception {
+	@Test void b22_stringEscape_octal() {
 		// Hits processEscape octal-digit branch (lines 462-465) and readOctalEscape.
 		// Octal 101 = decimal 65 = 'A'.
 		var a = ProtoParser.DEFAULT.parse("s: \"\\101\"", JsonMap.class);
@@ -365,13 +365,13 @@ class ProtoTokenizer_Test {
 		assertEquals("", b.get("s"));
 	}
 
-	@Test void b23_stringEscape_unicode4() throws Exception {
+	@Test void b23_stringEscape_unicode4() {
 		// Hits processEscape backslash-u + readUnicodeEscape(4) (line 466).
 		var a = ProtoParser.DEFAULT.parse("s: \"\\u0041\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
 	}
 
-	@Test void b24_stringEscape_unicode8() throws Exception {
+	@Test void b24_stringEscape_unicode8() {
 		// Hits processEscape backslash-U + readUnicodeEscape(8) (line 467).
 		var a = ProtoParser.DEFAULT.parse("s: \"\\U00000041\"", JsonMap.class);
 		assertEquals("A", a.get("s"));
@@ -401,7 +401,7 @@ class ProtoTokenizer_Test {
 			ProtoParser.DEFAULT.parse("s: \"unterminated", JsonMap.class));
 	}
 
-	@Test void b29_singleQuotedStringWithEscape() throws Exception {
+	@Test void b29_singleQuotedStringWithEscape() {
 		// Exercises readSingleQuotedString + readStringContent.
 		var a = ProtoParser.DEFAULT.parse("s: 'hi\\nbye'", JsonMap.class);
 		assertEquals("hi\nbye", a.get("s"));
@@ -552,7 +552,7 @@ class ProtoTokenizer_Test {
 			ProtoParser.DEFAULT.parse("x: 1.0e", JsonMap.class));
 	}
 
-	@Test void b50_specialFloatLookaheadIdent() throws Exception {
+	@Test void b50_specialFloatLookaheadIdent() {
 		// The startsSpecialFloatLiteral lookahead returns false for `infrastructure` because
 		// the assembled token isn't a special-float; this exercises the unread/restore path
 		// (lines 203-209).
@@ -586,7 +586,7 @@ class ProtoTokenizer_Test {
 		assertThrows(ParseException.class, t::peek);
 	}
 
-	@Test void b54_skipMultipleWhitespaceTypes() throws Exception {
+	@Test void b54_skipMultipleWhitespaceTypes() {
 		// Hits each whitespace-type branch in skipWhitespaceAndComments (line 100): space/tab/newline/CR/0x0B/0x0C.
 		var a = ProtoParser.DEFAULT.parse(" \t\n\rname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
@@ -599,7 +599,7 @@ class ProtoTokenizer_Test {
 		assertEquals(ProtoToken.TokenType.EOF, t.peek().type());
 	}
 
-	@Test void b56_signedPlusFloat() throws Exception {
+	@Test void b56_signedPlusFloat() {
 		// `+0.5` exercises the c == '+' branch in lexNumber (lines 220-222).
 		var a = ProtoParser.DEFAULT.parse("x: +0.5", JsonMap.class);
 		assertEquals(0.5, ((Number) a.get("x")).doubleValue(), 1e-12);

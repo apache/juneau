@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 class HoconSerializer_Test {
 
 	@Test
-	void a01_simpleBean() throws Exception {
+	void a01_simpleBean() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
@@ -43,7 +43,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a02_nestedBean() throws Exception {
+	void a02_nestedBean() {
 		var address = new LinkedHashMap<String, Object>();
 		address.put("city", "Boston");
 		address.put("state", "MA");
@@ -57,7 +57,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a03_unquotedStrings() throws Exception {
+	void a03_unquotedStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "simple");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -67,7 +67,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a04_omitRootBraces() throws Exception {
+	void a04_omitRootBraces() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -76,7 +76,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a05_withRootBraces() throws Exception {
+	void a05_withRootBraces() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		var hocon = HoconSerializer.DEFAULT_BRACES.serialize(m);
@@ -85,7 +85,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a06_arrayOfStrings() throws Exception {
+	void a06_arrayOfStrings() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of("web", "api", "rest"));
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -94,7 +94,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a07_mapProperty() throws Exception {
+	void a07_mapProperty() {
 		var nested = new LinkedHashMap<String, Object>();
 		nested.put("host", "localhost");
 		nested.put("port", 8080);
@@ -107,7 +107,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a08_nullValues() throws Exception {
+	void a08_nullValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("middle", null);
@@ -118,7 +118,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a09_quotedStringRequired() throws Exception {
+	void a09_quotedStringRequired() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("special", "a{b}c:d\"e");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -127,7 +127,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a10_tripleQuotedString() throws Exception {
+	void a10_tripleQuotedString() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("desc", "line1\nline2");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -136,7 +136,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a11_equalsSignSeparator() throws Exception {
+	void a11_equalsSignSeparator() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "value");
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -145,7 +145,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a12_newlineSeparators() throws Exception {
+	void a12_newlineSeparators() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("a", 1);
 		m.put("b", 2);
@@ -154,7 +154,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a13_compactMode() throws Exception {
+	void a13_compactMode() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("name", "Alice");
 		m.put("age", 30);
@@ -164,7 +164,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a14_emptyBean() throws Exception {
+	void a14_emptyBean() {
 		var m = new LinkedHashMap<String, Object>();
 		var hocon = HoconSerializer.DEFAULT_BRACES.serialize(m);
 		assertNotNull(hocon);
@@ -172,7 +172,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a15_emptyCollection() throws Exception {
+	void a15_emptyCollection() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("tags", List.of());
 		var hocon = HoconSerializer.DEFAULT.serialize(m);
@@ -181,7 +181,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a16_enumValues() throws Exception {
+	void a16_enumValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("size", "LARGE");
 		m.put("status", "ACTIVE");
@@ -190,7 +190,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a17_stringLikeSpecialValues() throws Exception {
+	void a17_stringLikeSpecialValues() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("asBoolean", "true");
 		m.put("asNumber", "42");
@@ -200,7 +200,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a18_collectionOfBeans() throws Exception {
+	void a18_collectionOfBeans() {
 		var server1 = new LinkedHashMap<String, Object>();
 		server1.put("host", "a");
 		server1.put("port", 8080);
@@ -217,7 +217,7 @@ class HoconSerializer_Test {
 	}
 
 	@Test
-	void a19_indentation() throws Exception {
+	void a19_indentation() {
 		var nested = new LinkedHashMap<String, Object>();
 		nested.put("inner", "value");
 		var m = new LinkedHashMap<String, Object>();

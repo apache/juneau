@@ -92,7 +92,7 @@ class BasicPart_Coverage_Test {
 		assertNull(BasicUriPart.of(null, (Supplier<URI>)() -> URI.create("http://example.com")));
 	}
 
-	@Test void b02_basicUriPart_constructors() throws Exception {
+	@Test void b02_basicUriPart_constructors() {
 		var uri = URI.create("http://example.com");
 		var p1 = new BasicUriPart("Foo", uri);
 		assertEquals("http://example.com", p1.getValue());
