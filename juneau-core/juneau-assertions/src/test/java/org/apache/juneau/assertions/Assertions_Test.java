@@ -40,7 +40,7 @@ class Assertions_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_assertDate() {
-		assertDate(new Date()).isAfter(new Date(0));
+		assertDate(new Date(1000L)).isAfter(new Date(0));
 	}
 
 	@Test void a02_assertInteger() {
@@ -92,7 +92,7 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a14_assertZonedDateTime() {
-		assertZonedDateTime(ZonedDateTime.now()).isExists();
+		assertZonedDateTime(ZonedDateTime.of(2026, 1, 1, 0, 0, 0, 0, ZoneOffset.UTC)).isExists();
 	}
 
 	@Test void a15_assertBean() {

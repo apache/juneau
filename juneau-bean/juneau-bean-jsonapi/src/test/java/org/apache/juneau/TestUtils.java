@@ -67,7 +67,7 @@ public class TestUtils extends Utils {
 		assertEquals(expected, s.toString(actual));
 	}
 
-	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
+	public static <T extends Throwable> T assertThrowable(String expectedSubstring, T t) {
 		var messages = getMessages(t);
 		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
 		return t;

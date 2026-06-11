@@ -189,7 +189,7 @@ class OpenApiUI_Test extends TestBase {
 					.setExternalDocs(
 						externalDocumentation()
 							.setUrl(URI.create("https://example.com"))
-						// No description - covers the 'else if (nn(ed))' branch in tagBlockSummary
+						// No description - covers the 'else if (nn(ed))' branch in tagBlockSummary // NOSONAR
 					)
 			);
 		var result = UI.swap(SESSION, doc);

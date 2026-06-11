@@ -117,7 +117,7 @@ class Callback_Test extends TestBase {
 		}
 
 		@Test void a13_addCallbackTwice() {
-			// Calling addCallback twice covers the false branch of 'if (callbacks == null)'.
+			// Calling addCallback twice covers the false branch of 'if (callbacks == null)'. // NOSONAR
 			var x = bean()
 				.addCallback("a1", pathItem().setGet(operation().setSummary("a2")))
 				.addCallback("b1", pathItem().setPost(operation().setSummary("b2")));

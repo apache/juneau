@@ -398,33 +398,16 @@ class JsonParserEdgeCases_Test extends TestBase {
 
 		// 'n' tests should always fail.
 		} else if (input.expected == 'n') {
-			try {
-				p.parse(input.json, Object.class);
-				fail("ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable);
-			} catch (ParseException e) {
-				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
-			} catch (IOException e) {
-				if (input.errorText != null)
-					assertTrue(e.getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
-			} catch (AssertionError e) {
-				throw e;
-			} catch (Throwable t) {
-				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
-			}
+			var p2 = p;
+			assertParseError(input, assertThrows(Throwable.class, () -> p2.parse(input.json, Object.class), () -> "ParseException expected.  Test="+input.name+", Input=" + input.jsonReadable));
 
-		// 'i' tests may or may not fail, but should through a ParseException and not kill the JVM.
+		// 'i' tests may or may not fail, but should throw a ParseException and not kill the JVM.
 		} else if (input.expected == 'i') {
+			var p2 = p;
 			try {
-				p.parse(input.json, Object.class);
-			} catch (ParseException e) {
-				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
-			} catch (IOException e) {
-				if (input.errorText != null)
-					assertTrue(e.getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
+				p2.parse(input.json, Object.class);
 			} catch (Throwable t) {
-				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
+				assertParseError(input, t);
 			}
 		}
 	}
@@ -444,33 +427,37 @@ class JsonParserEdgeCases_Test extends TestBase {
 
 		// 'n' tests may or may not fail for lax parser.
 		} else if (input.expected == 'n') {
+			var p2 = p;
 			try {
-				p.parse(input.json, Object.class);
-			} catch (ParseException e) {
-				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
-			} catch (IOException e) {
-				if (input.errorText != null)
-					assertTrue(e.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
-			} catch (AssertionError e) {
-				throw e;
+				p2.parse(input.json, Object.class);
 			} catch (Throwable t) {
-				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
+				assertParseError(input, t);
 			}
 
-		// 'i' tests may or may not fail, but should through a ParseException and not kill the JVM.
+		// 'i' tests may or may not fail, but should throw a ParseException and not kill the JVM.
 		} else if (input.expected == 'i') {
+			var p2 = p;
 			try {
-				p.parse(input.json, Object.class);
-			} catch (ParseException e) {
-				if (input.errorText != null)
-					assertTrue(e.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getRootCause().getMessage()));
-			} catch (IOException e) {
-				if (input.errorText != null)
-					assertTrue(e.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, e.getMessage()));
+				p2.parse(input.json, Object.class);
 			} catch (Throwable t) {
-				fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," +t.getLocalizedMessage());
+				assertParseError(input, t);
 			}
+		}
+	}
+
+	/**
+	 * Verifies a Throwable caught while parsing a 'n'/'i' input is an expected {@link ParseException} or
+	 * {@link IOException} (optionally matching {@code input.errorText}), failing for any other type.
+	 */
+	private static void assertParseError(Input input, Throwable t) {
+		if (t instanceof ParseException t2) {
+			if (input.errorText != null)
+				assertTrue(t2.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, t2.getRootCause().getMessage()));
+		} else if (t instanceof IOException t2) {
+			if (input.errorText != null)
+				assertTrue(t2.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, t2.getMessage()));
+		} else {
+			fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + t.getClass().getName() + "," + t.getLocalizedMessage());
 		}
 	}
 }

@@ -54,6 +54,10 @@ final class SamlTestSupport {
 		}
 	}
 
+	// Fixed issue-instant: the response/assertion IssueInstant is informational (the validator checks
+	// only the explicit NotBefore/NotOnOrAfter window), so a constant replaces the system clock (java:S8692).
+	private static final Instant ISSUE_INSTANT = Instant.parse("2026-01-01T00:00:00Z");
+
 	private SamlTestSupport() {}
 
 	static KeyPair generateRsaKeyPair() throws Exception {
@@ -85,7 +89,7 @@ final class SamlTestSupport {
 		var responseBuilder = (SAMLObjectBuilder<Response>) bf.getBuilder(Response.DEFAULT_ELEMENT_NAME);
 		var response = responseBuilder.buildObject();
 		response.setID("_resp-" + System.nanoTime());
-		response.setIssueInstant(Instant.now());
+		response.setIssueInstant(ISSUE_INSTANT);
 		response.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
 
 		response.setIssuer(buildIssuer(bf, issuer));
@@ -142,7 +146,7 @@ final class SamlTestSupport {
 		var ab = (SAMLObjectBuilder<Assertion>) bf.getBuilder(Assertion.DEFAULT_ELEMENT_NAME);
 		var assertion = ab.buildObject();
 		assertion.setID("_a-" + System.nanoTime());
-		assertion.setIssueInstant(Instant.now());
+		assertion.setIssueInstant(ISSUE_INSTANT);
 		assertion.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
 		assertion.setIssuer(buildIssuer(bf, issuer));
 

@@ -35,10 +35,15 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 	private static final String ISSUER = "https://idp.example.com";
 	private static final String AUDIENCE = "https://sp.example.com";
 
+	// Deterministic validation time: assertions are minted relative to NOW and the validator is
+	// driven by a fixed Clock (its existing test seam), so no system clock is read (java:S8692).
+	private static final Instant NOW = Instant.parse("2026-01-01T00:00:00Z");
+	private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
+
 	@Test void a01_validResponse_returnsClaimsPrincipal() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
-		var now = Instant.now();
+		var now = NOW;
 		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of("dept", "engineering"));
 
@@ -46,6 +51,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
+			.clock(CLOCK)
 			.build();
 		var principal = validator.validate(xml);
 		assertEquals("alice", principal.getName());
@@ -59,7 +65,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 	@Test void b01_expiredAssertion_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
-		var past = Instant.now().minusSeconds(600);
+		var past = NOW.minusSeconds(600);
 		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, AUDIENCE, "alice",
 			past.minusSeconds(60), past, Map.of());
 
@@ -67,6 +73,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
+			.clock(CLOCK)
 			.build();
 		assertThrows(AuthenticationException.class, () -> validator.validate(xml));
 	}
@@ -74,7 +81,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 	@Test void b02_wrongAudience_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
-		var now = Instant.now();
+		var now = NOW;
 		var xml = SamlTestSupport.buildSignedResponse(cred, ISSUER, "https://other.example.com", "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 
@@ -82,6 +89,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
+			.clock(CLOCK)
 			.build();
 		assertThrows(AuthenticationException.class, () -> validator.validate(xml));
 	}
@@ -89,7 +97,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 	@Test void b03_wrongIssuer_rejected() throws Exception {
 		var pair = SamlTestSupport.generateRsaKeyPair();
 		var cred = SamlTestSupport.credential(pair);
-		var now = Instant.now();
+		var now = NOW;
 		var xml = SamlTestSupport.buildSignedResponse(cred, "https://malicious.example.com", AUDIENCE, "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 
@@ -97,6 +105,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
+			.clock(CLOCK)
 			.build();
 		assertThrows(AuthenticationException.class, () -> validator.validate(xml));
 	}
@@ -104,7 +113,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 	@Test void b04_wrongSignatureCredential_rejected() throws Exception {
 		var signing = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
 		var verifyingDifferent = SamlTestSupport.credential(SamlTestSupport.generateRsaKeyPair());
-		var now = Instant.now();
+		var now = NOW;
 		var xml = SamlTestSupport.buildSignedResponse(signing, ISSUER, AUDIENCE, "alice",
 			now.minusSeconds(60), now.plusSeconds(300), Map.of());
 
@@ -112,6 +121,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(verifyingDifferent)
+			.clock(CLOCK)
 			.build();
 		assertThrows(AuthenticationException.class, () -> validator.validate(xml));
 	}
@@ -122,6 +132,7 @@ class SamlAssertionValidator_HappyPath_Test extends TestBase {
 			.spEntityId(AUDIENCE)
 			.expectedIssuer(ISSUER)
 			.signingCredential(cred)
+			.clock(CLOCK)
 			.build();
 		assertThrows(AuthenticationException.class, () -> validator.validate("<not really saml>"));
 	}

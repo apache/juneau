@@ -29,6 +29,7 @@ import java.lang.reflect.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.function.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -380,7 +381,7 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			onBeanGetterException(pMeta, p.getThrown());
 		if (canIgnoreValue(cMeta, key, value))
 			return opte();
-		return opt(new AbstractMap.SimpleEntry<>(key, value));
+		return opt(new SimpleEntry<>(key, value));
 	}
 
 	@SuppressWarnings({

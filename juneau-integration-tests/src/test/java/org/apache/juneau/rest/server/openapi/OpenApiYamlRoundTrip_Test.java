@@ -86,7 +86,7 @@ class OpenApiYamlRoundTrip_Test extends TestBase {
 	}
 
 	// Inherits the FULL BasicRestServlet api-docs mixin surface — six api-docs URLs, full schema
-	// set, the works. Earlier this resource shipped with noInherit={"mixins"} + mixins={
+	// set, the works. Earlier this resource shipped with noInherit={"mixins"} + mixins={ // NOSONAR
 	// OpenApiMixin} because round-tripping the full doc through the YAML parser threw
 	// IOException: Buffer underflow; that latent ParserReader limitation was fixed by widening the
 	// reader's no-mark unread-lookback window (see ParserReader.UNMARKED_LOOKBACK_CHARS), so c01

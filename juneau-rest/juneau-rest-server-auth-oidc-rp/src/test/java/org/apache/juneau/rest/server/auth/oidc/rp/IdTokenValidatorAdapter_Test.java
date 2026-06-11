@@ -35,7 +35,8 @@ import com.nimbusds.jose.jwk.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S8692"  // Nimbus ID-token validation reads the real system clock with no injectable seam, so tokens must be minted at real "now"; converting would require a separate production Clock seam in the validator.
 })
 class IdTokenValidatorAdapter_Test extends TestBase {
 

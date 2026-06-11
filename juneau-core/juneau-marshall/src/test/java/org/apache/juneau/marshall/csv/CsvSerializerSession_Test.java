@@ -150,8 +150,7 @@ class CsvSerializerSession_Test extends TestBase {
 	@Test void b02_simpleValue_calendarElement() throws Exception {
 		// applySwap -> isCalendar() branch (line 205).
 		var l = new LinkedList<Calendar>();
-		var c = Calendar.getInstance();
-		c.setTimeInMillis(0);
+		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		l.add(c);
 		var csv = CsvSerializer.DEFAULT.serialize(l);
 		assertTrue(csv.startsWith("value\n"), "Expected value header: " + csv);
@@ -200,8 +199,7 @@ class CsvSerializerSession_Test extends TestBase {
 	@Test void c02_beanProperty_calendar() throws Exception {
 		// formatIfDateOrDuration on Calendar property (line 408).
 		var l = new LinkedList<>();
-		var c = Calendar.getInstance();
-		c.setTimeInMillis(0);
+		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		l.add(new CalendarBean("evt1", c));
 		var csv = CsvSerializer.DEFAULT.serialize(l);
 		assertTrue(csv.contains("evt1"));
@@ -457,8 +455,7 @@ class CsvSerializerSession_Test extends TestBase {
 	@Test void h03_inline_nestedListOfCalendars() throws Exception {
 		// prepareForInlineValue isCalendar (line 529).
 		var s = CsvSerializer.create().allowNestedStructures(true).build();
-		var c = Calendar.getInstance();
-		c.setTimeInMillis(0);
+		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var l = new LinkedList<>();
 		l.add(new CalListBean("p", List.of(c)));
 		var csv = s.serialize(l);

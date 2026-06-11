@@ -1526,7 +1526,7 @@ class BasicBeanStore_Test extends TestBase {
 
 	@Test
 	void y03_beanCreationException_messageAndCause_coveredByU02() {
-		// BeanCreationException(String, Throwable) is exercised by u02 above;
+		// BeanCreationException(String, Throwable) is exercised by u02 above; // NOSONAR
 		// verify direct construction too for completeness.
 		var cause = new IllegalStateException("boom");
 		var ex = new BeanCreationException("wrapper", cause);

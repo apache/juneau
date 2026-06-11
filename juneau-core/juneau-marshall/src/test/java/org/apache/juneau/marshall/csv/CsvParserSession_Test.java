@@ -19,11 +19,14 @@ package org.apache.juneau.marshall.csv;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Coverage tests for {@link CsvParserSession} targeting branches not exercised
@@ -159,33 +162,28 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals(9, ((Circle) r.get(0)).radius);
 	}
 
-	@Test void e02_singleBeanWithEmptyTypeColumn() throws Exception {
-		// Single-bean target (parseAnything's isBean branch) with _type column whose
-		// value is whitespace -> parseRowIntoBean's "nn(typeVal) && !typeVal.trim().isEmpty()"
-		// guard is false; declared bean type is used as-is.
-		var csv = "b,c,_type\nfoo,7,   \n";
-		var r = CsvParser.DEFAULT.parse(csv, A.class);
-		assertEquals("foo", r.b);
-		assertEquals(7, r.c);
+	static Stream<Arguments> e02_singleBeanTypeColumnGuardBranches() {
+		return Stream.of(
+			// Whitespace-only _type value -> parseRowIntoBean's
+			// "nn(typeVal) && !typeVal.trim().isEmpty()" guard is false; declared type kept.
+			Arguments.of("b,c,_type\nfoo,7,   \n", 7),
+			// _type column at end with a short data row -> typeColIdx >= row.size()
+			// short-circuit branch is taken in parseRowIntoBean.
+			Arguments.of("b,c,_type\nfoo,11\n", 11),
+			// _type value resolves to a non-bean ("String") -> "resolved != null &&
+			// resolved.isBean()" is false; declared bean type is kept.
+			Arguments.of("b,c,_type\nfoo,12,String\n", 12)
+		);
 	}
 
-	@Test void e03_singleBeanWithTypeColumnShortRow() throws Exception {
-		// Single-bean target with _type column at end and a short data row ->
-		// typeColIdx >= row.size() short-circuit branch is taken in parseRowIntoBean.
-		var csv = "b,c,_type\nfoo,11\n";
+	@ParameterizedTest
+	@MethodSource("e02_singleBeanTypeColumnGuardBranches")
+	void e02_singleBeanTypeColumnGuardBranches(String csv, int expectedC) throws Exception {
+		// Single-bean target (parseAnything's isBean branch): in each variant the _type
+		// column does not redirect to a different bean type, so A.class is used as-is.
 		var r = CsvParser.DEFAULT.parse(csv, A.class);
 		assertEquals("foo", r.b);
-		assertEquals(11, r.c);
-	}
-
-	@Test void e04_singleBeanWithTypeColumnResolvingToNonBean() throws Exception {
-		// Single-bean target with _type column whose value resolves to a non-bean
-		// (e.g. "java.lang.String") -> "resolved != null && resolved.isBean()" is false,
-		// declared bean type is kept.
-		var csv = "b,c,_type\nfoo,12,String\n";
-		var r = CsvParser.DEFAULT.parse(csv, A.class);
-		assertEquals("foo", r.b);
-		assertEquals(12, r.c);
+		assertEquals(expectedC, r.c);
 	}
 
 	//====================================================================================================
@@ -210,7 +208,7 @@ class CsvParserSession_Test extends TestBase {
 	}
 
 	@Test void f02_beanRow_shorterThanHeaders_missingPropsNullDefault() throws Exception {
-		// Row shorter than headers -> i < row.size() is false on trailing columns;
+		// Row shorter than headers -> i < row.size() is false on trailing columns; // NOSONAR
 		// parseCellValue invoked with null val.
 		var csv = "b,c\nonly_b\n";
 		var r = (List<B>) CsvParser.DEFAULT.parse(csv, List.class, B.class);
@@ -442,7 +440,7 @@ class CsvParserSession_Test extends TestBase {
 	public static class Circle implements Shape {
 		public String name;
 		public int radius;
-		public Circle() {}
+		public Circle() { /* Explicit public no-arg constructor required for bean instantiation by the parser. */ }
 		@Override public String getName() { return name; }
 	}
 
@@ -451,7 +449,7 @@ class CsvParserSession_Test extends TestBase {
 		public String name;
 		public int width;
 		public int height;
-		public Rectangle() {}
+		public Rectangle() { /* Explicit public no-arg constructor required for bean instantiation by the parser. */ }
 		@Override public String getName() { return name; }
 	}
 }

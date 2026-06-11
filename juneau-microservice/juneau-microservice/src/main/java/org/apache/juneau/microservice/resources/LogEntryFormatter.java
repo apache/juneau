@@ -47,6 +47,9 @@ import java.util.regex.*;
  * <p>
  * This class converts the format strings into a regular expression that can be used to parse the resulting log file.
  */
+@SuppressWarnings({
+	"java:S2143" // Public API built on java.text.SimpleDateFormat/java.util.Date for java.util.logging.Formatter compatibility; getDateFormat() returns java.text.DateFormat as a contract.
+})
 public class LogEntryFormatter extends Formatter {
 
 	private static String hashCode(Throwable t) {
@@ -184,7 +187,7 @@ public class LogEntryFormatter extends Formatter {
 							fieldIndexes.put("exception", index++);
 							re.append("(.*)");
 							break;
-						default: // HTT - group numbers > 8 would require a format placeholder beyond {exception}
+						default: // HTT - group numbers > 8 would require a format placeholder beyond {exception} // NOSONAR
 					}
 				} else {
 					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit$ followed by non-s which can't come from standard format placeholders

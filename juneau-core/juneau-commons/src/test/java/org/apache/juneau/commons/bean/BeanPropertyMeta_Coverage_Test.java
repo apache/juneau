@@ -74,7 +74,7 @@ class BeanPropertyMeta_Coverage_Test extends TestBase {
 		public String getX() {
 			throw new RuntimeException("boom");
 		}
-		public void setX(String value) {}
+		public void setX(String value) { /* No-op: present only so 'x' is a read/write bean property; the throwing getter is what's under test. */ }
 	}
 
 	public static class WithSetterThrows {
@@ -126,7 +126,7 @@ class BeanPropertyMeta_Coverage_Test extends TestBase {
 		var bm = BeanMeta.of(Plain.class);
 		var pm = bm.getPropertyMeta("x");
 		// Public field path: field is non-null when the property has a public field.
-		assertNotNull(pm.getInnerField());
+		assertNotNull(pm.getField());
 	}
 
 	@Test
@@ -392,7 +392,7 @@ class BeanPropertyMeta_Coverage_Test extends TestBase {
 
 	@Test
 	void d09_set_throwingSetter_propagatesOnCommonsPath() {
-		// ignoreInvocationExceptionsOnSetters is honored only on the marshalling-side path (in setPropertyValue);
+		// ignoreInvocationExceptionsOnSetters is honored only on the marshalling-side path (in setPropertyValue); // NOSONAR
 		// on the commons-side raw-reflection branch the exception still propagates.
 		var cfg = BeanConfigContext.create().ignoreInvocationExceptionsOnSetters(true).build();
 		var bm = BeanMeta.of(WithSetterThrows.class, cfg);

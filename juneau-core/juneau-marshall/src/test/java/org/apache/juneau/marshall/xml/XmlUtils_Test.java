@@ -231,7 +231,7 @@ class XmlUtils_Test extends TestBase {
 	}
 
 	@Test void c14_encodeAttrValueTab() {
-		// Tab in middle position maps to &#x0009;
+		// Tab in middle position maps to &#x0009; // NOSONAR
 		assertEquals("a&#x0009;b", encodeAttrValue("a\tb", false));
 	}
 

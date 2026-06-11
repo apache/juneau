@@ -207,7 +207,7 @@ class ThrownStore_Test extends TestBase {
 	}
 
 	@Test void b04_builder_implClass_bad() {
-		{ var _ex = assertThrows(Exception.class, ()->ThrownStore.create().type(B4.class).build()); assertTrue(_ex.getMessage().contains("foobar"), _ex.getMessage()); }
+		{ var ex = assertThrows(Exception.class, ()->ThrownStore.create().type(B4.class).build()); assertTrue(ex.getMessage().contains("foobar"), ex.getMessage()); }
 	}
 
 	public static class B5a {}
@@ -229,7 +229,7 @@ class ThrownStore_Test extends TestBase {
 	@Test void b05_builder_beanFactory() {
 		var bs = new BasicBeanStore();
 
-		{ var _ex = assertThrows(Exception.class, ()->ThrownStore.create(bs).type(B5b.class).build()); assertTrue(_ex.getMessage().contains("Could not instantiate class"), _ex.getMessage()); }
+		{ var ex = assertThrows(Exception.class, ()->ThrownStore.create(bs).type(B5b.class).build()); assertTrue(ex.getMessage().contains("Could not instantiate class"), ex.getMessage()); }
 		assertInstanceOf(B5c.class, ThrownStore.create(bs).type(B5c.class).build());
 
 		bs.addBean(B5a.class, new B5a());
@@ -261,7 +261,7 @@ class ThrownStore_Test extends TestBase {
 		var t1 = new Throwable();
 		t1.fillInStackTrace();
 
-		{ var _ex = assertThrows(Exception.class, ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1)); assertTrue(_ex.getMessage().contains("Could not instantiate class"), _ex.getMessage()); }
+		{ var ex = assertThrows(Exception.class, ()->ThrownStore.create(bs).statsImplClass(B6b.class).build().add(t1)); assertTrue(ex.getMessage().contains("Could not instantiate class"), ex.getMessage()); }
 		assertInstanceOf(B6c.class, ThrownStore.create(bs).statsImplClass(B6c.class).build().add(t1));
 
 		bs.addBean(B6a.class, new B6a());

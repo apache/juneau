@@ -40,8 +40,17 @@ import org.springframework.beans.factory.annotation.*;
 )
 public class HelloResource extends BasicRestResource {
 
+	private final HelloMessageProvider messageProvider;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param messageProvider The Spring-injected message provider bean.
+	 */
 	@Autowired
-	private HelloMessageProvider messageProvider;
+	public HelloResource(HelloMessageProvider messageProvider) {
+		this.messageProvider = messageProvider;
+	}
 
 	/**
 	 * GET /hello/* — returns the message provided by the injected Spring bean.

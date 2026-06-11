@@ -32,8 +32,17 @@ import org.junit.jupiter.api.*;
  */
 class InMemorySessionStore_Test extends TestBase {
 
+	// Fixed time seam: the store checks expiry against its Clock, so the session base and the
+	// store clock are both pinned to a constant instead of reading the system clock (java:S8692).
+	private static final Instant NOW = Instant.parse("2026-01-01T00:00:00Z");
+	private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
+
+	private static InMemorySessionStore store() {
+		return new InMemorySessionStore(100, CLOCK);
+	}
+
 	private static OidcSession session(String id, String subject, String sid) {
-		return session(id, subject, sid, Instant.now());
+		return session(id, subject, sid, NOW);
 	}
 
 	private static OidcSession session(String id, String subject, String sid, Instant base) {
@@ -43,7 +52,7 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	@Test void a01_createThenLookup_roundTrips() {
-		var store = InMemorySessionStore.create();
+		var store = store();
 		var cookie = store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
 		assertEquals("id-1", cookie);
 		assertTrue(store.lookup("id-1").isPresent());
@@ -55,7 +64,7 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	@Test void a03_invalidate_removesSession() {
-		var store = InMemorySessionStore.create();
+		var store = store();
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
 		store.invalidate("id-1");
 		assertTrue(store.lookup("id-1").isEmpty());
@@ -66,7 +75,7 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	@Test void b02_invalidateBySessionId_targetsSingleSession() {
-		var store = InMemorySessionStore.create();
+		var store = store();
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
 		store.createSessionCookieValue(session("id-2", "alice", "sess-2"));
 		assertEquals(1, store.invalidateBySessionId("sess-1"));
@@ -75,7 +84,7 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	@Test void b03_invalidateBySubject_targetsAllOfSubject() {
-		var store = InMemorySessionStore.create();
+		var store = store();
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
 		store.createSessionCookieValue(session("id-2", "alice", "sess-2"));
 		store.createSessionCookieValue(session("id-3", "bob", "sess-3"));
@@ -86,7 +95,7 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	@Test void b04_invalidateByUnknownSubjectOrSid_returnsZero() {
-		var store = InMemorySessionStore.create();
+		var store = store();
 		assertEquals(0, store.invalidateBySubject("ghost"));
 		assertEquals(0, store.invalidateBySessionId("ghost"));
 	}
@@ -102,7 +111,7 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	@Test void d01_sizeCap_evictsEldestAndUnindexes() {
-		var store = InMemorySessionStore.create(2);
+		var store = new InMemorySessionStore(2, CLOCK);
 		store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
 		store.createSessionCookieValue(session("id-2", "bob", "sess-2"));
 		store.createSessionCookieValue(session("id-3", "carol", "sess-3"));  // evicts id-1

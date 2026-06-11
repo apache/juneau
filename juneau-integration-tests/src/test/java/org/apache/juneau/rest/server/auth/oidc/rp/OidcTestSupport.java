@@ -42,6 +42,9 @@ import com.sun.net.httpserver.*;
  * Discovery and JWKS are short-circuited by injecting {@link OidcMetadata} and a public {@link JWKSet}
  * directly on the relying party (so no second listener is needed and the tests stay deterministic).
  */
+@SuppressWarnings({
+	"java:S8692" // signLogoutToken mints a JWT validated by Nimbus against the real system clock (no injectable seam); the issue/expiry instants must track real "now".
+})
 final class OidcTestSupport {
 
 	static final String EVENT_BACKCHANNEL_LOGOUT = "http://schemas.openid.net/event/backchannel-logout";

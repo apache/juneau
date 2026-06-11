@@ -55,6 +55,8 @@ public class TomlParserSession extends ReaderParserSession {
 
 	private static final String ARG_ctx = "ctx";
 
+	private static final String MSG_INVALID_NUMBER = "Invalid number: ";
+
 	/**
 	 * Builder for TOML parser session.
 	 */
@@ -267,7 +269,7 @@ public class TomlParserSession extends ReaderParserSession {
 				// May be date/time string that slipped through (e.g. LocalDate, LocalTime)
 				if (s.contains("-") || s.contains(":"))
 					return s;
-				throw t.parseException("Invalid number: " + s);
+				throw t.parseException(MSG_INVALID_NUMBER + s);
 			}
 		}
 		if (c == 'i' || c == 'n') {
@@ -339,11 +341,11 @@ public class TomlParserSession extends ReaderParserSession {
 			return null;
 		String digits = s.substring(2).replace("_", "");
 		if (digits.isEmpty())
-			throw t.parseException("Invalid number: " + s);
+			throw t.parseException(MSG_INVALID_NUMBER + s);
 		try {
 			return Long.parseUnsignedLong(digits, radix);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw t.parseException("Invalid number: " + s);
+			throw t.parseException(MSG_INVALID_NUMBER + s);
 		}
 	}
 

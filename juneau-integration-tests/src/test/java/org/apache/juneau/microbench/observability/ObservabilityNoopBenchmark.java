@@ -78,6 +78,9 @@ import org.openjdk.jmh.runner.options.*;
 // Class-level @Fork(0) is overridden by OptionsBuilder.forks() in main(); kept at 1 so IDE
 // runners that auto-discover benchmarks get proper fork isolation.
 @Fork(1)
+@SuppressWarnings({
+	"java:S8692" // Benchmark output filename intentionally stamps the real run date; fixing the clock would collide results.
+})
 public class ObservabilityNoopBenchmark {
 
 	private static final String OP_NAME = "org.apache.juneau.rest.server.server.BenchResource.get()";

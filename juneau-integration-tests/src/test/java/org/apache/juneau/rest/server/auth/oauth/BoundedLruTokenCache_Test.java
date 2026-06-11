@@ -39,6 +39,10 @@ class BoundedLruTokenCache_Test extends TestBase {
 	private static final Principal ALICE = () -> "alice";
 	private static final Principal BOB = () -> "bob";
 
+	// Fixed reference instant: the cache takes "now" as an explicit parameter, so anchoring
+	// both token expiry and the query time to a constant replaces the system clock (java:S8692).
+	private static final Instant NOW = Instant.parse("2026-01-01T00:00:00Z");
+
 	@Test void a01_create_defaultMaxEntries() {
 		var c = BoundedLruTokenCache.create();
 		assertEquals(BoundedLruTokenCache.DEFAULT_MAX_ENTRIES, c.getMaxEntries());
@@ -87,28 +91,28 @@ class BoundedLruTokenCache_Test extends TestBase {
 
 	@Test void d01_putGet_token_happyPath() {
 		var c = BoundedLruTokenCache.create();
-		var token = sampleToken(Instant.now().plusSeconds(60));
+		var token = sampleToken(NOW.plusSeconds(60));
 		c.putToken("k", token);
-		var got = c.getToken("k", Instant.now(), Duration.ZERO);
+		var got = c.getToken("k", NOW, Duration.ZERO);
 		assertTrue(got.isPresent());
 		assertEquals("access-1", got.get().accessToken());
 	}
 
 	@Test void d02_getToken_expired_evictsAndReturnsEmpty() {
 		var c = BoundedLruTokenCache.create();
-		var token = sampleToken(Instant.now().minusSeconds(10));
+		var token = sampleToken(NOW.minusSeconds(10));
 		c.putToken("k", token);
-		var got = c.getToken("k", Instant.now(), Duration.ZERO);
+		var got = c.getToken("k", NOW, Duration.ZERO);
 		assertTrue(got.isEmpty());
 		assertEquals(0, c.size());
 	}
 
 	@Test void d03_getToken_skewSubtractedFromExpiry() {
 		var c = BoundedLruTokenCache.create();
-		var token = sampleToken(Instant.now().plusSeconds(10));
+		var token = sampleToken(NOW.plusSeconds(10));
 		c.putToken("k", token);
 		var skew = Duration.ofSeconds(30);
-		assertTrue(c.getToken("k", Instant.now(), skew).isEmpty());
+		assertTrue(c.getToken("k", NOW, skew).isEmpty());
 	}
 
 	@Test void e01_invalidate_removesEntry() {
@@ -122,7 +126,7 @@ class BoundedLruTokenCache_Test extends TestBase {
 	@Test void e02_typeMismatch_returnsEmpty() {
 		var c = BoundedLruTokenCache.create();
 		c.putPrincipal("a", ALICE, Duration.ofMinutes(5));
-		Optional<OAuthToken> mismatch = c.getToken("a", Instant.now(), Duration.ZERO);
+		Optional<OAuthToken> mismatch = c.getToken("a", NOW, Duration.ZERO);
 		assertTrue(mismatch.isEmpty());
 	}
 

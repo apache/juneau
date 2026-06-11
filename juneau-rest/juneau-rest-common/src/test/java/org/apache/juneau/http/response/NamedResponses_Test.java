@@ -88,7 +88,7 @@ class NamedResponses_Test extends TestBase {
 		}
 
 		// 4) (Throwable) and (String, Throwable) constructors for exception responses.
-		// Pass both a non-null cause and a null cause so the {@code cause != null ? ... : null}
+		// Pass both a non-null cause and a null cause so the {@code cause != null ? ... : null} // NOSONAR
 		// ternary inside the constructor body covers both branches.
 		var throwableCtor = findCtor(cls, Throwable.class);
 		if (throwableCtor != null) {

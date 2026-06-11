@@ -48,7 +48,7 @@ class RrpcServlet_Test extends TestBase {
 	public static class TestInterfaceImpl implements TestInterface {
 		@Override public String echo(String input) { return input; }
 		@Override public int add(int a, int b) { return a + b; }
-		@Override public void doNothing() {}
+		@Override public void doNothing() { /* Intentionally empty: exercises RPC invocation of a void no-op interface method. */ }
 		@Override public String throwException() throws Exception { throw new RuntimeException("test error"); }
 	}
 

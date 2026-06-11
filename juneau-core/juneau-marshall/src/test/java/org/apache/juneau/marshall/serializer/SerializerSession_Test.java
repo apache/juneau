@@ -562,8 +562,7 @@ class SerializerSession_Test extends TestBase {
 
 	@Test void f09_toString_calendar() {
 		var s = (SerializerSession) JsonSerializer.DEFAULT.createSession().build();
-		var cal = Calendar.getInstance();
-		cal.setTimeInMillis(0);
+		var cal = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var result = s.toString(cal);
 		assertNotNull(result);
 	}

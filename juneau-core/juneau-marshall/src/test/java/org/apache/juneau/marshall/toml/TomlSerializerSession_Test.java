@@ -487,8 +487,7 @@ class TomlSerializerSession_Test extends TestBase {
 
 	@Test
 	void e06_calendarValue() throws Exception {
-		var c = Calendar.getInstance();
-		c.setTimeInMillis(0L);
+		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var m = new LinkedHashMap<String, Object>();
 		m.put("when", c);
 		var toml = TomlSerializer.DEFAULT.serialize(m);

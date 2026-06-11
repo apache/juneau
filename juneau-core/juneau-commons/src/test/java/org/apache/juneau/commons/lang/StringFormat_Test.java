@@ -159,7 +159,7 @@ class StringFormat_Test extends TestBase {
 		assertMessageFormat("Unicode: {0} 中文", "Test");
 		assertMessageFormat("{0}{1}", "A", "B");
 		assertMessageFormat("{0} and {0} again", "Hello");
-		assertMessageFormat("Price: {0,number,currency}, Count: {1,number,integer}, Date: {2,date,short}", 19.99, 42, new java.util.Date());
+		assertMessageFormat("Price: {0,number,currency}, Count: {1,number,integer}, Date: {2,date,short}", 19.99, 42, new java.util.Date(0L));
 		assertMessageFormat("Price: {0,number,currency}", Locale.US, 19.99);
 		assertMessageFormat("Price: {0,number,currency}", Locale.FRANCE, 19.99);
 		assertMessageFormat("a '{0}' b");

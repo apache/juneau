@@ -27,6 +27,9 @@ import org.apache.juneau.commons.TestBase;
 /**
  * Tests for {@link TimeProvider}.
  */
+@SuppressWarnings({
+	"java:S8692" // c02/d03 deliberately bracket TimeProvider.now() with ZonedDateTime.now() to prove it tracks the real system clock; a fixed clock would defeat the test's purpose.
+})
 class TimeProvider_Test extends TestBase {
 
 	//====================================================================================================

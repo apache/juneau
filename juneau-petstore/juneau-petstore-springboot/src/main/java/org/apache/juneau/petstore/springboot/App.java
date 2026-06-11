@@ -66,13 +66,14 @@ public class App {
 	}
 
 	/**
-	 * Returns {@link HelloResource} as a Spring bean so {@code @Autowired} fields resolve.
+	 * Returns {@link HelloResource} as a Spring bean with its dependency injected via constructor.
 	 *
+	 * @param helloMessageProvider The Spring-managed message provider bean.
 	 * @return The hello-world REST resource.
 	 */
 	@Bean
-	public HelloResource helloResource() {
-		return new HelloResource();
+	public HelloResource helloResource(HelloMessageProvider helloMessageProvider) {
+		return new HelloResource(helloMessageProvider);
 	}
 
 	/**

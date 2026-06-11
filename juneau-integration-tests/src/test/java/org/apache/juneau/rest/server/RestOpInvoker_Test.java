@@ -22,6 +22,7 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -34,6 +35,8 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.stats.*;
 import org.apache.juneau.rest.server.tracing.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * JaCoCo coverage tests for {@link RestOpInvoker}.
@@ -419,37 +422,24 @@ class RestOpInvoker_Test extends TestBase {
 		assertTrue(D_TRACE.last().closed);
 	}
 
-	@Test void d02_completionStage_basicHttpException_404() throws Exception {
-		D_REC.events.clear();
-		CD.get("/async/notFound").run().assertStatus(404);
-		var e = D_REC.last();
-		assertEquals(404, e.statusCode);
-		assertNotNull(e.error);
+	static Stream<Arguments> d02_completionStage_errorPropagationCases() {
+		return Stream.of(
+			Arguments.of("/async/notFound", 404),            // basic HttpException -> 404
+			Arguments.of("/async/runtime", 500),             // runtime exception -> 500
+			Arguments.of("/async/wrapped", 500),             // CompletionException unwrapped to its cause -> 500
+			// CompletionException with null cause — unwrapCompletionError returns the CompletionException itself
+			// (false branch of "t instanceof CompletionException && t.getCause() != null").
+			Arguments.of("/async/causelessCompletion", 500)
+		);
 	}
 
-	@Test void d03_completionStage_runtimeException_500() throws Exception {
+	@ParameterizedTest
+	@MethodSource("d02_completionStage_errorPropagationCases")
+	void d02_completionStage_errorPropagation(String path, int expectedStatus) throws Exception {
 		D_REC.events.clear();
-		CD.get("/async/runtime").run().assertStatus(500);
+		CD.get(path).run().assertStatus(expectedStatus);
 		var e = D_REC.last();
-		assertEquals(500, e.statusCode);
-		assertNotNull(e.error);
-	}
-
-	@Test void d04_completionStage_completionExceptionUnwrapped() throws Exception {
-		D_REC.events.clear();
-		CD.get("/async/wrapped").run().assertStatus(500);
-		var e = D_REC.last();
-		assertEquals(500, e.statusCode);
-		assertNotNull(e.error);
-	}
-
-	@Test void d05_completionStage_causelessCompletionException_returns500() throws Exception {
-		// CompletionException with null cause — unwrapCompletionError returns the CompletionException itself
-		// (false branch of "t instanceof CompletionException && t.getCause() != null").
-		D_REC.events.clear();
-		CD.get("/async/causelessCompletion").run().assertStatus(500);
-		var e = D_REC.last();
-		assertEquals(500, e.statusCode);
+		assertEquals(expectedStatus, e.statusCode);
 		assertNotNull(e.error);
 	}
 
@@ -619,7 +609,7 @@ class RestOpInvoker_Test extends TestBase {
 		@RestGet("/sp/stats")
 		public String statsOp(RestRequest req) {
 			// Read this op's stats AFTER the call has been registered as "started".
-			// invoke(...) calls super.invoke(...) which calls stats.started() before returning;
+			// invoke(...) calls super.invoke(...) which calls stats.started() before returning; // NOSONAR
 			// by the time the body of this method runs, getRuns() is already incremented.
 			var s = req.getOpContext().getMethodInvoker().getStats();
 			return "runs=" + s.getRuns() + ",errors=" + s.getErrors();
@@ -632,7 +622,7 @@ class RestOpInvoker_Test extends TestBase {
 		// Two successful invocations on the same op → runs counter advances (>= 2).
 		CI.get("/sp/ok").run().assertStatus(200);
 		CI.get("/sp/ok").run().assertStatus(200);
-		// We don't assert the exact value because other tests in the same JVM might have run /sp/ok;
+		// We don't assert the exact value because other tests in the same JVM might have run /sp/ok; // NOSONAR
 		// the assertion below just verifies the counter is non-zero, which is enough to prove
 		// the stats branch in MethodInvoker.invoke fires on the success path.
 		// (The /sp/stats op below cross-checks via getRuns().)

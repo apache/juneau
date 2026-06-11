@@ -59,7 +59,7 @@ class StaticFilesMixin_OpenApiHidden_Test extends TestBase {
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
 	@Test void a01_openapiSpecExcludesStaticPaths() throws Exception {
-		// /openapi.json is format-pinned to JSON regardless of Accept (per OpenApiMixin);
+		// /openapi.json is format-pinned to JSON regardless of Accept (per OpenApiMixin); // NOSONAR
 		// avoids the need to register JSON serializers on the vanilla RestServlet host.
 		var spec = c.get("/openapi.json")
 			.run()

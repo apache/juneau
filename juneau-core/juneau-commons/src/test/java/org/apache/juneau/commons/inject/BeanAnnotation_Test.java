@@ -107,7 +107,7 @@ class BeanAnnotation_Test extends TestBase {
 	@Test
 	void a07_defaultBuilder_omitsOptionalAttributes() {
 		// Default builder (no description / methodScope / name / value set) should yield empty arrays
-		// and empty strings from the runtime annotation — drives the {@code b.description == null}
+		// and empty strings from the runtime annotation — drives the {@code b.description == null} // NOSONAR
 		// false-branch in BeanAnnotation.Object().
 		var bean = BeanAnnotation.create().build();
 		assertEquals("", bean.name());

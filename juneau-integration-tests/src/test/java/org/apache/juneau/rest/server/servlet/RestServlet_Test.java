@@ -153,7 +153,7 @@ class RestServlet_Test extends TestBase {
 	@Test void a05_initWithFailingPostInitCatchesExceptionPath() throws Exception {
 		// @RestPostInit throws RuntimeException -> wrapped path: ServletException is thrown by postInit()
 		// because RestContext.postInit catches and rethrows as ServletException. That falls into the
-		// catch(ServletException) branch (line 260-263) which sets initException AND re-throws.
+		// catch(ServletException) branch (line 260-263) which sets initException AND re-throws. // NOSONAR
 		var s = new E_PostInitThrows();
 		assertThrows(ServletException.class, () -> s.init(mockServletConfig()));
 		// initException is now set; subsequent service() should re-throw it through the catch-and-sendError.
@@ -165,10 +165,10 @@ class RestServlet_Test extends TestBase {
 
 	@Test void a06_initWithBasicHttpExceptionFromPostInit() throws Exception {
 		// If postInit throws a BasicHttpException directly (without ServletException wrapping), the
-		// catch(BasicHttpException) branch (line 264-266) executes and the init returns NORMALLY (no rethrow).
+		// catch(BasicHttpException) branch (line 264-266) executes and the init returns NORMALLY (no rethrow). // NOSONAR
 		// In practice RestContext wraps everything as ServletException, but we still try to exercise the path.
 		var s = new F_PostInitThrowsHttp();
-		// Either path: ServletException catch (rethrow) or BasicHttpException catch (no rethrow).  Exercise it.
+		// Either path: ServletException catch (rethrow) or BasicHttpException catch (no rethrow).  Exercise it. // NOSONAR
 		try {
 			s.init(mockServletConfig());
 		} catch (ServletException ignored) {

@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * The test writes its config fixtures to the cwd in {@link BeforeAll @BeforeAll} (because the
  * default {@link org.apache.juneau.marshall.config.store.FileStore#DEFAULT FileStore.DEFAULT} resolves
  * names against the cwd; with Maven Surefire that is the module directory). The cwd-resident
- * files are removed in {@link AfterAll @AfterAll}. Names use a fixed {@code todo95-} prefix so
+ * files are removed in {@link AfterAll @AfterAll}. Names use a fixed {@code valcfg-} prefix so
  * they are easy to spot and clean up by hand should a test crash partway through.
  *
  * <p>
@@ -56,12 +56,12 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 	// Fixture management — write cfg files to cwd before tests, delete them after.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static final String CFG_A = "todo95-rcvac-a.cfg";
-	private static final String CFG_B = "todo95-rcvac-b.cfg";
-	private static final String CFG_PARENT = "todo95-rcvac-parent.cfg";
-	private static final String CFG_CHILD = "todo95-rcvac-child.cfg";
-	private static final String CFG_OVERRIDE = "todo95-rcvac-override.cfg";
-	private static final String CFG_ASYNC = "todo95-rcvac-async.cfg";
+	private static final String CFG_A = "valcfg-rcvac-a.cfg";
+	private static final String CFG_B = "valcfg-rcvac-b.cfg";
+	private static final String CFG_PARENT = "valcfg-rcvac-parent.cfg";
+	private static final String CFG_CHILD = "valcfg-rcvac-child.cfg";
+	private static final String CFG_OVERRIDE = "valcfg-rcvac-override.cfg";
+	private static final String CFG_ASYNC = "valcfg-rcvac-async.cfg";
 
 	@BeforeAll
 	static void writeFixtures() throws IOException {
@@ -127,24 +127,24 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 
 	@Rest(config=CFG_A)
 	public static class FallThroughResource extends BasicRestServlet {
-		// "api.key" is in the Config; "todo95.absent.key" is not — should hit the default branch.
-		@Value("${todo95.absent.key:default-fallback}")
+		// "api.key" is in the Config; "valcfg.absent.key" is not — should hit the default branch.
+		@Value("${valcfg.absent.key:default-fallback}")
 		String absentDefault;
 
 		// Use a Settings.setGlobal key during the test to prove Settings sources still resolve.
-		@Value("${todo95.absent.from.settings}")
+		@Value("${valcfg.absent.from.settings}")
 		String fromSettings;
 	}
 
 	@Test void a02_fallThrough_defaultBranch_andSettings() throws Exception {
-		Settings.get().setGlobal("todo95.absent.from.settings", "from-settings");
+		Settings.get().setGlobal("valcfg.absent.from.settings", "from-settings");
 		try {
 			var rc = build(FallThroughResource.class);
 			var bean = (FallThroughResource) rc.getResource();
 			assertEquals("default-fallback", bean.absentDefault);
 			assertEquals("from-settings", bean.fromSettings);
 		} finally {
-			Settings.get().unsetGlobal("todo95.absent.from.settings");
+			Settings.get().unsetGlobal("valcfg.absent.from.settings");
 		}
 	}
 
@@ -178,22 +178,22 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 
 	@Rest
 	public static class NoConfigResource extends BasicRestServlet {
-		@Value("${todo95.noconfig.key:noconfig-default}")
+		@Value("${valcfg.noconfig.key:noconfig-default}")
 		String value;
 
-		@Value("${todo95.noconfig.fromSettings}")
+		@Value("${valcfg.noconfig.fromSettings}")
 		String fromSettings;
 	}
 
 	@Test void a04_noConfig_falls_through_to_settings_only() throws Exception {
-		Settings.get().setGlobal("todo95.noconfig.fromSettings", "settings-value");
+		Settings.get().setGlobal("valcfg.noconfig.fromSettings", "settings-value");
 		try {
 			var rc = build(NoConfigResource.class);
 			var bean = (NoConfigResource) rc.getResource();
 			assertEquals("noconfig-default", bean.value);
 			assertEquals("settings-value", bean.fromSettings);
 		} finally {
-			Settings.get().unsetGlobal("todo95.noconfig.fromSettings");
+			Settings.get().unsetGlobal("valcfg.noconfig.fromSettings");
 		}
 	}
 

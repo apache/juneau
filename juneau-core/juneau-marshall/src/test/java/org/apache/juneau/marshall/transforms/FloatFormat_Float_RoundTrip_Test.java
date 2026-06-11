@@ -384,7 +384,7 @@ class FloatFormat_Float_RoundTrip_Test extends TestBase {
 	//
 	// <p>
 	// The swap install logic in {@code MarshalledPropertyPostProcessor.requiresFloatSwap} only installs
-	// the float swap when {@code format == NaN_AS_NULL || NaN_AS_STRING || NaN_AS_ERROR}.  For
+	// the float swap when {@code format == NaN_AS_NULL || NaN_AS_STRING || NaN_AS_ERROR}.  For // NOSONAR
 	// {@code NOT_SET} and {@code NaN_AS_NUMBER}, no swap is installed and the round-trip rides each
 	// serializer's native non-finite handling, which varies widely across formats (JSON rejects bare
 	// {@code NaN}; Toml/Ini have no NaN grammar; JCS rejects per RFC 8785; XML/HTML/RDF preserve

@@ -49,6 +49,9 @@ import org.junit.jupiter.params.provider.*;
  * The {@code expectedAfter} helper canonicalizes through the format's own {@code format/parse} cycle so
  * the assertion reflects the lossy canonical form.
  */
+@SuppressWarnings({
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+})
 class TemporalFormat_LocalDate_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

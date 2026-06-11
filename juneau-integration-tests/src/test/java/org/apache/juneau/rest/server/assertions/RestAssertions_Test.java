@@ -38,6 +38,11 @@ class RestAssertions_Test extends TestBase {
 		public String get(RestRequest req) {
 			req.assertRequestLine().asMethod().is("GET");
 			req.assertRequestLine().asUri().isContains("/");
+			return "ok";
+		}
+
+		@RestGet("/protocolVersion")
+		public String protocolVersion(RestRequest req) {
 			req.assertRequestLine().asProtocolVersion().asMajor().is(1);
 			req.assertRequestLine().asProtocolVersion().asMinor().is(1);
 			req.assertRequestLine().asProtocolVersion().asProtocol().is("HTTP");
@@ -54,7 +59,7 @@ class RestAssertions_Test extends TestBase {
 	@Test
 	void a02_requestLine_protocolVersion() throws Exception {
 		var a = MockRestClient.buildLax(A.class);
-		a.get("/").run().assertStatus(200).assertContent().is("ok");
+		a.get("/protocolVersion").run().assertStatus(200).assertContent().is("ok");
 	}
 
 	// =================================================================================================================

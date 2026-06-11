@@ -24,6 +24,8 @@ import java.time.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 class TomlTokenizer_Test extends TestBase {
 
@@ -174,23 +176,11 @@ class TomlTokenizer_Test extends TestBase {
 		assertEquals('f', tok.peek());
 	}
 
-	@Test
-	void d06_skipToNextLineCRLF() throws Exception {
-		var tok = t("abc\r\nrest");
-		tok.skipToNextLine();
-		assertEquals('r', tok.peek());
-	}
-
-	@Test
-	void d07_skipToNextLineLF() throws Exception {
-		var tok = t("abc\nrest");
-		tok.skipToNextLine();
-		assertEquals('r', tok.peek());
-	}
-
-	@Test
-	void d08_skipToNextLineCROnly() throws Exception {
-		var tok = t("abc\rrest");
+	@ParameterizedTest
+	@ValueSource(strings = {"abc\r\nrest", "abc\nrest", "abc\rrest"})
+	void d06_skipToNextLineStopsAtStartOfNextLine(String input) throws Exception {
+		// CRLF, LF and CR-only line endings all advance to the first char of the next line.
+		var tok = t(input);
 		tok.skipToNextLine();
 		assertEquals('r', tok.peek());
 	}
@@ -269,12 +259,6 @@ class TomlTokenizer_Test extends TestBase {
 	}
 
 	@Test
-	void f02_readBasicStringMissingOpenQuoteThrows() {
-		var tok = t("hello");
-		assertThrows(ParseException.class, tok::readBasicString);
-	}
-
-	@Test
 	void f03_readBasicStringAllEscapes() throws Exception {
 		var tok = t("\"\\b\\t\\n\\f\\r\\\"\\\\\"");
 		assertEquals("\b\t\n\f\r\"\\", tok.readBasicString());
@@ -292,41 +276,18 @@ class TomlTokenizer_Test extends TestBase {
 		assertEquals("A", tok.readBasicString());
 	}
 
-	@Test
-	void f06_readBasicStringInvalidEscape() {
-		var tok = t("\"\\q\"");
-		assertThrows(ParseException.class, tok::readBasicString);
-	}
-
-	@Test
-	void f07_readBasicStringUnterminated() {
-		var tok = t("\"hello");
-		assertThrows(ParseException.class, tok::readBasicString);
-	}
-
-	@Test
-	void f08_readBasicStringEofAfterBackslash() {
-		var tok = t("\"\\");
-		assertThrows(ParseException.class, tok::readBasicString);
-	}
-
-	@Test
-	void f09_readBasicStringInvalidUnicodeHex() {
-		var tok = t("\"\\uXYZW\"");
-		assertThrows(ParseException.class, tok::readBasicString);
-	}
-
-	@Test
-	void f10_readBasicStringInvalidUnicodeShortEof() {
-		var tok = t("\"\\u00\"");
-		assertThrows(ParseException.class, tok::readBasicString);
-	}
-
-	@Test
-	void f11_readBasicStringInvalidLongUnicodeCodePoint() {
-		// \U with code point > 0x10FFFF is invalid (out of valid Unicode range)
-		var tok = t("\"\\U00200000\"");
-		assertThrows(ParseException.class, tok::readBasicString);
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"hello",          // f02: missing opening quote
+		"\"\\q\"",        // f06: invalid escape
+		"\"hello",        // f07: unterminated
+		"\"\\",           // f08: EOF after backslash
+		"\"\\uXYZW\"",    // f09: invalid \\u unicode hex
+		"\"\\u00\"",      // f10: short \\u unicode escape hits EOF
+		"\"\\U00200000\"" // f11: \\U code point > 0x10FFFF (out of valid Unicode range)
+	})
+	void f02_readBasicStringInvalidInputsThrow(String input) {
+		assertThrows(ParseException.class, t(input)::readBasicString);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -708,7 +669,7 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void l02_specialPosInfNotSupported() {
-		// readSpecialFloat does not accept +inf (only "inf" without sign or "-inf");
+		// readSpecialFloat does not accept +inf (only "inf" without sign or "-inf"); // NOSONAR
 		// note: the parser session has its own parseSpecialFloat that does accept "+inf".
 		assertThrows(ParseException.class, () -> t("+inf").readSpecialFloat());
 	}
@@ -841,31 +802,12 @@ class TomlTokenizer_Test extends TestBase {
 		assertThrows(ParseException.class, () -> t("").readDateTime());
 	}
 
-	@Test
-	void o09_readDateTimeStopsAtNewline() throws Exception {
-		var tok = t("1979-05-27\nrest");
-		var v = tok.readDateTime();
-		assertTrue(v instanceof LocalDate);
-	}
-
-	@Test
-	void o10_readDateTimeStopsAtHash() throws Exception {
-		var tok = t("1979-05-27 # comment");
-		var v = tok.readDateTime();
-		assertTrue(v instanceof LocalDate);
-	}
-
-	@Test
-	void o11_readDateTimeStopsAtCloseBracket() throws Exception {
-		var tok = t("1979-05-27]");
-		var v = tok.readDateTime();
-		assertTrue(v instanceof LocalDate);
-	}
-
-	@Test
-	void o12_readDateTimeStopsAtCloseBrace() throws Exception {
-		var tok = t("1979-05-27}");
-		var v = tok.readDateTime();
+	@ParameterizedTest
+	@ValueSource(strings = {"1979-05-27\nrest", "1979-05-27 # comment", "1979-05-27]", "1979-05-27}"})
+	void o09_readDateTimeStopsAtDelimiter(String input) throws Exception {
+		// readDateTime terminates the date token at a newline, '#', ']' or '}' delimiter,
+		// yielding a LocalDate for the leading date.
+		var v = t(input).readDateTime();
 		assertTrue(v instanceof LocalDate);
 	}
 

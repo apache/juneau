@@ -33,12 +33,16 @@ import org.junit.jupiter.api.*;
 })
 class EphemeralStore_Test extends TestBase {
 
+	// Fixed clock seam: these cases don't depend on wall-clock time, so a deterministic clock
+	// replaces the system clock (java:S8692) without changing behavior.
+	private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-01-01T00:00:00Z"), ZoneOffset.UTC);
+
 	private static EphemeralStore store(Clock clock) {
 		return new EphemeralStore(Duration.ofMinutes(5), 100, clock);
 	}
 
 	@Test void a01_storeThenConsume_roundTrips() {
-		var s = store(Clock.systemUTC());
+		var s = store(CLOCK);
 		s.store("state-1", "nonce-1", "verifier-1", "/dashboard");
 		var p = s.consume("state-1");
 		assertTrue(p.isPresent());
@@ -48,19 +52,19 @@ class EphemeralStore_Test extends TestBase {
 	}
 
 	@Test void a02_consume_isSingleUse() {
-		var s = store(Clock.systemUTC());
+		var s = store(CLOCK);
 		s.store("state-1", "nonce-1", "verifier-1", null);
 		assertTrue(s.consume("state-1").isPresent());
 		assertTrue(s.consume("state-1").isEmpty(), "second consume of same state must miss (replay defense)");
 	}
 
 	@Test void a03_consume_unknownState_isEmpty() {
-		var s = store(Clock.systemUTC());
+		var s = store(CLOCK);
 		assertTrue(s.consume("never-stored").isEmpty());
 	}
 
 	@Test void a04_consume_nullState_isEmpty() {
-		var s = store(Clock.systemUTC());
+		var s = store(CLOCK);
 		assertTrue(s.consume(null).isEmpty());
 	}
 
@@ -83,7 +87,7 @@ class EphemeralStore_Test extends TestBase {
 	}
 
 	@Test void c01_sizeCap_evictsEldest() {
-		var s = new EphemeralStore(Duration.ofMinutes(5), 3, Clock.systemUTC());
+		var s = new EphemeralStore(Duration.ofMinutes(5), 3, CLOCK);
 		s.store("s1", "n", "v", null);
 		s.store("s2", "n", "v", null);
 		s.store("s3", "n", "v", null);
@@ -94,19 +98,19 @@ class EphemeralStore_Test extends TestBase {
 	}
 
 	@Test void d01_rejectsNonPositiveTtl() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ZERO, 100, Clock.systemUTC()));
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ZERO, 100, CLOCK));
 	}
 
 	@Test void d02_rejectsTtlAbove30Minutes() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(31), 100, Clock.systemUTC()));
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(31), 100, CLOCK));
 	}
 
 	@Test void d03_rejectsNonPositiveMaxEntries() {
-		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(5), 0, Clock.systemUTC()));
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(5), 0, CLOCK));
 	}
 
 	@Test void d04_rejectsBlankStateOnStore() {
-		var s = store(Clock.systemUTC());
+		var s = store(CLOCK);
 		assertThrows(IllegalArgumentException.class, () -> s.store("", "n", "v", null));
 	}
 

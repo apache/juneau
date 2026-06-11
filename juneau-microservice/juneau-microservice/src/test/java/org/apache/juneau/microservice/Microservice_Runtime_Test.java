@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
@@ -202,14 +203,12 @@ class Microservice_Runtime_Test extends TestBase {
 	@Test void b03_executeCommand_byArgs_returnsCommandReturnValue() throws Exception {
 		var fake = new FakeCommand(true);
 		var ms = Microservice.create().consoleEnabled(true).consoleCommands(fake).build();
-		try {
+		try (AutoCloseable c = ms::stop) {
 			var sw = new StringWriter();
 			try (var in = new Scanner(""); var out = new PrintWriter(sw)) {
 				assertTrue(ms.executeCommand(new Args(new String[]{"fake"}), in, out));
 			}
 			assertTrue(sw.toString().contains("hello-from-fake"));
-		} finally {
-			ms.stop();
 		}
 	}
 
@@ -221,7 +220,7 @@ class Microservice_Runtime_Test extends TestBase {
 			}
 		};
 		var ms = Microservice.create().consoleEnabled(true).consoleCommands(throwing).build();
-		try {
+		try (AutoCloseable c = ms::stop) {
 			var sw = new StringWriter();
 			try (var in = new Scanner(""); var out = new PrintWriter(sw)) {
 				// Throwing command must not propagate; executeCommand swallows and returns false.
@@ -229,8 +228,6 @@ class Microservice_Runtime_Test extends TestBase {
 			}
 			assertTrue(sw.toString().contains("boom-msg"),
 				() -> "stack trace must be written to the output writer; got=" + sw);
-		} finally {
-			ms.stop();
 		}
 	}
 
@@ -351,8 +348,12 @@ class Microservice_Runtime_Test extends TestBase {
 			.build();
 		try {
 			assertSame(ms, ms.startConsole());
-			// Give the thread a moment to start.
-			Thread.sleep(50);
+			// Deterministically wait for the console thread to become alive (named "ConsoleThread" in Microservice)
+			// instead of sleeping a fixed interval, so the stopConsole() interrupt-alive-thread branch is exercised.
+			var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+			while (! consoleThreadAlive() && System.nanoTime() < deadline)
+				Thread.onSpinWait();
+			assertTrue(consoleThreadAlive(), "Console thread did not start within timeout.");
 			assertSame(ms, ms.stopConsole());
 			// Closing the pipe lets the scanner exit cleanly.
 			pout.close();
@@ -360,6 +361,11 @@ class Microservice_Runtime_Test extends TestBase {
 		} finally {
 			ms.stop();
 		}
+	}
+
+	/** Returns <jk>true</jk> if a live thread named "ConsoleThread" (the Microservice console thread) currently exists. */
+	private static boolean consoleThreadAlive() {
+		return Thread.getAllStackTraces().keySet().stream().anyMatch(t -> t.isAlive() && "ConsoleThread".equals(t.getName()));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

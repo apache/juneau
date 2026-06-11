@@ -116,7 +116,8 @@ import org.apache.juneau.marshall.serializer.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S8688" // isAfterNow()/isBeforeNow() compare against the current instant by design; ZonedDateTime.now() is the intended system-clock seam and a ZoneId would not change the instant comparison.
 })
 public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<ZonedDateTime,R> {
 

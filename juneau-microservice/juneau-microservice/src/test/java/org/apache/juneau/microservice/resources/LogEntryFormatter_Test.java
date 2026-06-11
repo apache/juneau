@@ -153,7 +153,7 @@ class LogEntryFormatter_Test extends TestBase {
 		var df = f.getDateFormat();
 		assertNotNull(df);
 		// Verify it can format a date
-		assertNotNull(df.format(new java.util.Date()));
+		assertNotNull(df.format(new java.util.Date(0L)));
 	}
 
 	@Test void a13_format_noException() {

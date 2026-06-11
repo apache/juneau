@@ -512,13 +512,13 @@ class RdfSerializer_Test extends TestBase {
 	@Nested class G_streamClasses extends TestBase {
 
 		@Test void g01_streamSerializer_rdfthrift_no_produces() {
-			// Build without setting produces() to trigger switch(LANG_RDFTHRIFT) in getProduces()
+			// Build without setting produces() to trigger switch(LANG_RDFTHRIFT) in getProduces() // NOSONAR
 			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
 			assertNotNull(s);
 		}
 
 		@Test void g02_streamSerializer_rdfproto_no_produces() {
-			// Build without setting produces() to trigger switch(LANG_RDFPROTO) in getProduces()
+			// Build without setting produces() to trigger switch(LANG_RDFPROTO) in getProduces() // NOSONAR
 			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFPROTO).build();
 			assertNotNull(s);
 		}
@@ -555,13 +555,13 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void g06_streamParser_rdfthrift_no_consumes() {
-			// Build without setting consumes() to trigger switch(LANG_RDFTHRIFT) in getConsumes()
+			// Build without setting consumes() to trigger switch(LANG_RDFTHRIFT) in getConsumes() // NOSONAR
 			var p = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build();
 			assertNotNull(p);
 		}
 
 		@Test void g07_streamParser_rdfproto_no_consumes() {
-			// Build without setting consumes() to trigger switch(LANG_RDFPROTO) in getConsumes()
+			// Build without setting consumes() to trigger switch(LANG_RDFPROTO) in getConsumes() // NOSONAR
 			var p = RdfStreamParser.create().language(Constants.LANG_RDFPROTO).build();
 			assertNotNull(p);
 		}

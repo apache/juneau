@@ -45,7 +45,8 @@ import org.apache.juneau.marshall.*;
  * @serial exclude
  */
 @SuppressWarnings({
-	"java:S110" // Deep inheritance inherent to the exception hierarchy
+	"java:S110", // Deep inheritance inherent to the exception hierarchy
+	"java:S2166" // False positive: this IS an exception (BasicRuntimeException -> RuntimeException); name is correct public API.
 })
 public class ObjectRestException extends BasicRuntimeException {
 

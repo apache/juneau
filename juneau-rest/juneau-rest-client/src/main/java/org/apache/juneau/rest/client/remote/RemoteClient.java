@@ -119,7 +119,8 @@ public final class RemoteClient {
 
 	@SuppressWarnings({
 		"resource", // resp is closed within this method or returned to caller (RESPONSE mode)
-		"java:S112" // Reflective remote-proxy dispatch intentionally propagates arbitrary exceptions (target-method, parse, transport, and user-declared @Remote exception types) to the caller; narrowing the throws clauses would break that contract.
+		"java:S112", // Reflective remote-proxy dispatch intentionally propagates arbitrary exceptions (target-method, parse, transport, and user-declared @Remote exception types) to the caller; narrowing the throws clauses would break that contract.
+		"java:S2143" // java.util.Date 'instanceof' check classifies simple-typed @Request args (a type test, not date arithmetic); no behavior-preserving java.time equivalent.
 	})
 	private static final class RemoteInvocationHandler implements InvocationHandler {
 
@@ -339,28 +340,35 @@ public final class RemoteClient {
 			for (var m : bean.getClass().getMethods()) {
 				if (m.getParameterCount() != 0 || m.getDeclaringClass() == Object.class)
 					continue;
-				var q = m.getAnnotation(Query.class);
-				var h = m.getAnnotation(Header.class);
-				var f = m.getAnnotation(FormData.class);
-				var p = m.getAnnotation(Path.class);
-				if (q != null || h != null || f != null || p != null) {
-					Object value;
-					try {
-						value = m.invoke(bean);
-					} catch (ReflectiveOperationException e) {
-						throw rex(e, "Could not read @Request bean property via {0}", m.getName());
-					}
-					var prop = propertyName(m.getName());
-					if (q != null)
-						bindParts(HttpPartType.QUERY, HttpPartSchema.create(q, null), q.value(), q.name(), q.def(), value, prop, req::queryData);
-					else if (h != null)
-						bindParts(HttpPartType.HEADER, HttpPartSchema.create(h, null), h.value(), h.name(), h.def(), value, prop, req::header);
-					else if (f != null)
-						bindParts(HttpPartType.FORMDATA, HttpPartSchema.create(f, null), f.value(), f.name(), f.def(), value, prop, req::formData);
-					else if (value != null)
-						req.pathData(firstNonEmpty(p.value(), p.name(), prop), serializePart(HttpPartType.PATH, HttpPartSchema.create(p, null), value));
-				}
+				bindRequestBeanMethod(req, bean, m);
 			}
+		}
+
+		/**
+		 * Binds a single HTTP-part-annotated getter of a {@code @Request} bean as a discrete request part.
+		 */
+		private static void bindRequestBeanMethod(RestRequest req, Object bean, Method m) {
+			var q = m.getAnnotation(Query.class);
+			var h = m.getAnnotation(Header.class);
+			var f = m.getAnnotation(FormData.class);
+			var p = m.getAnnotation(Path.class);
+			if (q == null && h == null && f == null && p == null)
+				return;
+			Object value;
+			try {
+				value = m.invoke(bean);
+			} catch (ReflectiveOperationException e) {
+				throw rex(e, "Could not read @Request bean property via {0}", m.getName());
+			}
+			var prop = propertyName(m.getName());
+			if (q != null)
+				bindParts(HttpPartType.QUERY, HttpPartSchema.create(q, null), q.value(), q.name(), q.def(), value, prop, req::queryData);
+			else if (h != null)
+				bindParts(HttpPartType.HEADER, HttpPartSchema.create(h, null), h.value(), h.name(), h.def(), value, prop, req::header);
+			else if (f != null)
+				bindParts(HttpPartType.FORMDATA, HttpPartSchema.create(f, null), f.value(), f.name(), f.def(), value, prop, req::formData);
+			else if (value != null)
+				req.pathData(firstNonEmpty(p.value(), p.name(), prop), serializePart(HttpPartType.PATH, HttpPartSchema.create(p, null), value));
 		}
 
 		/**

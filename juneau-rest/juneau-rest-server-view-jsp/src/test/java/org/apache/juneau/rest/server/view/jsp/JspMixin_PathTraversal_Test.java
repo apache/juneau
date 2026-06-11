@@ -108,7 +108,7 @@ class JspMixin_PathTraversal_Test extends TestBase {
 		// Behavior depends on whether HttpClient / MockRest URL-decodes %2e%2e before the
 		// handler sees the path:
 		//   - If decoded: the boundary check sees ".." and returns 403.
-		//   - If NOT decoded: the boundary check sees the literal "%2e%2e" segment and passes;
+		//   - If NOT decoded: the boundary check sees the literal "%2e%2e" segment and passes; // NOSONAR
 		//     joinPath returns /WEB-INF/views/%2e%2e/web.xml; the dispatcher won't resolve to a
 		//     real resource → 500 (no engine) or 404. Either way: not 200, not the outside file.
 		var status = c.get("/jsp/%2e%2e/web.xml").run().getStatusCode();

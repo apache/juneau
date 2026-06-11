@@ -379,7 +379,7 @@ class LogParser_Test extends TestBase {
 
 	@Test void a25_closeAfterLoad(@TempDir Path tempDir) throws Exception {
 		// After load() is called (via hasNext()), br is set to null.
-		// Calling close() again should hit the false branch of if(nn(br)).
+		// Calling close() again should hit the false branch of if(nn(br)). // NOSONAR
 		var r = new LogRecord(Level.INFO, "test");
 		var f = createLogFile(tempDir, formatter.format(r));
 		var p = new LogParser(formatter, f, null, null, null, null, null);

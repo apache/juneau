@@ -119,7 +119,7 @@ class ThymeleafMixin_Builder_Test extends TestBase {
 
 	@Test void a13_defaultEngineIsLazyButReused() {
 		// resolveTemplateEngine builds the default engine on first call; second call must
-		// return the cached instance. (Calls go through a request-scoped lookup in the renderer;
+		// return the cached instance. (Calls go through a request-scoped lookup in the renderer; // NOSONAR
 		// the helper here exercises only the lazy-construction branch.)
 		var r = ThymeleafDispatcher.create().build();
 		var e1 = r.buildDefaultEngine();

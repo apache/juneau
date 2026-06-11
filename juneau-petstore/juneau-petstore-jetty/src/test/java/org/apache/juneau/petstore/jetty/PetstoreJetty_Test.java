@@ -38,6 +38,10 @@ import org.junit.jupiter.api.extension.*;
  * skips under {@code scripts/test.py --no-container}.
  */
 @JettyMicroserviceTest
+@SuppressWarnings({
+	"java:S8692", // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.
+	"java:S2925" // warmUpServer() readiness loop needs a back-off between retries; without it a ConnectException would busy-spin. No event/latch to await and Awaitility isn't on the test classpath.
+})
 class PetstoreJetty_Test extends TestBase {
 
 	@RegisterExtension

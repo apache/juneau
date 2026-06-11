@@ -228,7 +228,7 @@ class XmlParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_nilTrueReturnsNull() throws Exception {
-		// "_type=null" or "nil=true" path: <object nil='true'/> when target is bean produces null/empty;
+		// "_type=null" or "nil=true" path: <object nil='true'/> when target is bean produces null/empty; // NOSONAR
 		// _type='null' returns null directly.
 		var o = P.parse("<x _type='null'/>", Object.class);
 		assertNull(o);

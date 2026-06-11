@@ -20,10 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.time.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 @SuppressWarnings({
 	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -368,25 +371,20 @@ class TomlWriter_Test extends TestBase {
 	// escapeBasicString
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void k01_escapeBasicStringNull() throws Exception {
-		var sw = new StringWriter();
-		var w = newWriter(sw, false);
-		assertEquals("", w.escapeBasicString(null));
+	static Stream<Arguments> k01_escapeBasicStringCases() {
+		return Stream.of(
+			Arguments.of(null, ""),                                              // null input -> empty string
+			Arguments.of("hello", "hello"),                                      // plain text passes through unchanged
+			Arguments.of("\\\"\b\t\n\f\r", "\\\\\\\"\\b\\t\\n\\f\\r")             // all escapable control chars
+		);
 	}
 
-	@Test
-	void k02_escapeBasicStringPlain() throws Exception {
+	@ParameterizedTest
+	@MethodSource("k01_escapeBasicStringCases")
+	void k01_escapeBasicString(String input, String expected) throws Exception {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
-		assertEquals("hello", w.escapeBasicString("hello"));
-	}
-
-	@Test
-	void k03_escapeBasicStringAllControlChars() throws Exception {
-		var sw = new StringWriter();
-		var w = newWriter(sw, false);
-		assertEquals("\\\\\\\"\\b\\t\\n\\f\\r", w.escapeBasicString("\\\"\b\t\n\f\r"));
+		assertEquals(expected, w.escapeBasicString(input));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

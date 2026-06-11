@@ -181,9 +181,8 @@ class AuthFilter_Test extends TestBase {
 	@Test void d03_doFilter_authException_nullMessage_stillWrites401() throws Exception {
 		// Even when constructed with a null message, BasicHttpException#getMessage() falls back
 		// to the status reason phrase ("Unauthorized") — so the {@code msg != null} branch in
-		// AuthFilter#sendChallenge is effectively unreachable through public API.
-		// TODO-156 candidate: the `if (msg != null)` else-branch in AuthFilter.sendChallenge is
-		// dead code given BasicHttpException#getMessage() never returns null.
+		// AuthFilter#sendChallenge is effectively unreachable through public API (the else-branch
+		// is dead code given BasicHttpException#getMessage() never returns null). // NOSONAR
 		var f = new TestFilter(req -> { throw new AuthenticationException((String) null); });
 		var req = MockServletRequest.create("GET", "/x");
 		var resp = MockServletResponse.create();

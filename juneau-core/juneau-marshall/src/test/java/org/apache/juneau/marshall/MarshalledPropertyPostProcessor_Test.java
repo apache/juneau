@@ -100,8 +100,7 @@ class MarshalledPropertyPostProcessor_Test {
 	}
 
 	@Test void a02_marshalledProp_notSetShortCircuit_calendarField() {
-		var c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-		c.setTimeInMillis(0L);
+		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var bean = new A_Calendar();
 		bean.f = c;
 		// Calendar isn't directly round-trippable in Json5 without a swap; just verify serialize doesn't throw.

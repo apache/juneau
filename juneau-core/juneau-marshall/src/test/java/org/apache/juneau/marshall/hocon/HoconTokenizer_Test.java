@@ -443,7 +443,7 @@ class HoconTokenizer_Test extends TestBase {
 
 	@Test
 	void h05_tripleQuotedDropsLoneCR() throws Exception {
-		// Lone CR (not followed by LF) is dropped — the loop's "else if (c != '\r')" branch is the only path
+		// Lone CR (not followed by LF) is dropped — the loop's "else if (c != '\r')" branch is the only path // NOSONAR
 		// that emits chars, and it skips '\r'. The post-return replace("\r","\n") has nothing to operate on.
 		var t = tokenizer("\"\"\"a\rb\"\"\"");
 		var tok = t.read();
@@ -556,7 +556,7 @@ class HoconTokenizer_Test extends TestBase {
 		var tok = t.read();
 		// The space breaks out of the loop; then we see if c == '}' but we have ' ' so it falls through to the malformed path
 		// Actually: the loop reads chars until '}', space, tab, \n, \r. On encountering ' ' we break. c is still ' '.
-		// Then the check `if (c == '}')` is false, so it returns Token.string("${" + path).
+		// Then the check `if (c == '}')` is false, so it returns Token.string("${" + path). // NOSONAR
 		// So the result is an UNQUOTED_STRING token, not a substitution.
 		assertEquals(UNQUOTED_STRING, tok.type());
 	}

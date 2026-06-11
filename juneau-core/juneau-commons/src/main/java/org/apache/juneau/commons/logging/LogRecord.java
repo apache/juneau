@@ -52,7 +52,8 @@ import org.apache.juneau.commons.utils.*;
 	"java:S115",  // Constants use UPPER_snakeCase convention
 	"java:S100",  // Method names match java.util.logging.LogRecord for API compatibility
 	"java:S1192", // String literals intentionally duplicated for clarity
-	"java:S2176"  // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields
+	"java:S2176", // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields
+	"java:S2143"  // java.util.Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.
 })
 public class LogRecord extends java.util.logging.LogRecord {
 

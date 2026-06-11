@@ -334,8 +334,7 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	@Test void f02_calendarProperty() throws Exception {
 		// type.isCalendar() branch.
-		var cal = Calendar.getInstance();
-		cal.setTimeInMillis(0L);
+		var cal = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var root = new LinkedHashMap<String, Object>();
 		root.put("when", cal);
 		var proto = ProtoSerializer.DEFAULT.serialize(root);

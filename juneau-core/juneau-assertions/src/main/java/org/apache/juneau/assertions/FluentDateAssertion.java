@@ -121,7 +121,8 @@ import org.apache.juneau.marshall.serializer.*;
  * @param <R> The return type.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"java:S2143" // Public assertion API is built on java.util.Date by design (all method signatures take/return Date); cannot swap to java.time without breaking API.
 })
 public class FluentDateAssertion<R> extends FluentComparableAssertion<Date,R> {
 

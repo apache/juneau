@@ -22,6 +22,8 @@ import java.util.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.apache.juneau.commons.TestBase;
 
 /**
@@ -103,24 +105,15 @@ class BeanMap_Coverage_Test extends TestBase {
 		assertTrue(bm.containsKey("y"));
 	}
 
-	@Test
-	void b02_containsKey_nonExistentProperty_returnsFalse() {
+	@ParameterizedTest
+	@NullSource
+	@ValueSource(strings = {"nonExistent", "*"})
+	void b02_containsKey_absentKeys_returnFalse(String key) {
+		// null -> emptyIfNull(null) yields "" which is not in the property map;
+		// "nonExistent" -> not a declared property;
+		// "*" -> excluded from containsKey (JUNEAU-248).
 		var bm = BeanMap.of(new A_Pojo());
-		assertFalse(bm.containsKey("nonExistent"));
-	}
-
-	@Test
-	void b03_containsKey_nullKey_returnsFalse() {
-		var bm = BeanMap.of(new A_Pojo());
-		// emptyIfNull(null) -> "" — not in the property map.
-		assertFalse(bm.containsKey(null));
-	}
-
-	@Test
-	void b04_containsKey_starKey_returnsFalse() {
-		// "*" is excluded from containsKey (JUNEAU-248).
-		var bm = BeanMap.of(new A_Pojo());
-		assertFalse(bm.containsKey("*"));
+		assertFalse(bm.containsKey(key));
 	}
 
 	//====================================================================================================

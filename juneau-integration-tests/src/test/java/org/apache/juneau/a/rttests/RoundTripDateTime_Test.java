@@ -50,6 +50,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Round-trip tests for built-in date/time and Duration serialization across all serializer/parser combinations.
  */
+@SuppressWarnings({
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+})
 class RoundTripDateTime_Test extends TestBase {
 
 	private static final RoundTrip_Tester[] TESTERS = {

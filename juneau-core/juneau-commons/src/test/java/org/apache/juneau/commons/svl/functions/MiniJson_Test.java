@@ -19,8 +19,11 @@ package org.apache.juneau.commons.svl.functions;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.apache.juneau.commons.TestBase;
 
 /** Tests for {@link MiniJson}. */
@@ -325,10 +328,20 @@ class MiniJson_Test extends TestBase {
 		assertEquals("{}", MiniJson.render(new LinkedHashMap<String, Object>()));
 	}
 
-	@Test void h02_render_simpleMap() {
+	static Stream<Arguments> h02_render_singleEntryMapCases() {
+		return Stream.of(
+			Arguments.of(1L, "{\"a\":1}"),                  // numeric value
+			Arguments.of(null, "{\"a\":null}"),             // null value
+			Arguments.of(List.of(1L, 2L), "{\"a\":[1,2]}")  // nested list value
+		);
+	}
+
+	@ParameterizedTest
+	@MethodSource("h02_render_singleEntryMapCases")
+	void h02_render_singleEntryMap(Object value, String expected) {
 		var m = new LinkedHashMap<String, Object>();
-		m.put("a", 1L);
-		assertEquals("{\"a\":1}", MiniJson.render(m));
+		m.put("a", value);
+		assertEquals(expected, MiniJson.render(m));
 	}
 
 	@Test void h03_render_mapMultipleEntries() {
@@ -338,24 +351,12 @@ class MiniJson_Test extends TestBase {
 		assertEquals("{\"a\":1,\"b\":\"two\"}", MiniJson.render(m));
 	}
 
-	@Test void h04_render_mapWithNullValue() {
-		var m = new LinkedHashMap<String, Object>();
-		m.put("a", null);
-		assertEquals("{\"a\":null}", MiniJson.render(m));
-	}
-
 	@Test void h05_render_mapWithNestedMap() {
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("b", "c");
 		var outer = new LinkedHashMap<String, Object>();
 		outer.put("a", inner);
 		assertEquals("{\"a\":{\"b\":\"c\"}}", MiniJson.render(outer));
-	}
-
-	@Test void h06_render_mapWithNestedList() {
-		var m = new LinkedHashMap<String, Object>();
-		m.put("a", List.of(1L, 2L));
-		assertEquals("{\"a\":[1,2]}", MiniJson.render(m));
 	}
 
 	@Test void h07_render_mapWithBooleanAndNumber() {

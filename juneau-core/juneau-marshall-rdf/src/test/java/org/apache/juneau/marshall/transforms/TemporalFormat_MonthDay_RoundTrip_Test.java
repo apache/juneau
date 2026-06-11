@@ -50,6 +50,9 @@ import org.junit.jupiter.params.provider.*;
  * Test combos = (tester templates) &times; ({@link TemporalFormat} values) = 12 &times; 20 = 240 testers
  * per test method.
  */
+@SuppressWarnings({
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+})
 class TemporalFormat_MonthDay_RoundTrip_Test extends TestBase {
 
 	@FunctionalInterface

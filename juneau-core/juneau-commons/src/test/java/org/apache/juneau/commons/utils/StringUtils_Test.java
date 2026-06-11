@@ -6232,8 +6232,7 @@ class StringUtils_Test extends TestBase {
 		assertNull(toIsoDate(null));
 
 		// Create a calendar for a specific date
-		var cal = Calendar.getInstance();
-		cal.set(2023, Calendar.DECEMBER, 25, 10, 30, 0);
+		var cal = new GregorianCalendar(2023, Calendar.DECEMBER, 25, 10, 30, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
 
@@ -6249,8 +6248,7 @@ class StringUtils_Test extends TestBase {
 		assertNull(toIsoDateTime(null));
 
 		// Create a calendar for a specific date-time
-		var cal = Calendar.getInstance();
-		cal.set(2023, Calendar.DECEMBER, 25, 10, 30, 0);
+		var cal = new GregorianCalendar(2023, Calendar.DECEMBER, 25, 10, 30, 0);
 		cal.set(Calendar.MILLISECOND, 0);
 		cal.setTimeZone(TimeZone.getTimeZone("UTC"));
 

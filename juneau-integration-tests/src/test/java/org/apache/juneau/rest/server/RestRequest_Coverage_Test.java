@@ -21,6 +21,8 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Coverage tests for {@link RestRequest} accessor and helper methods.
@@ -196,19 +198,13 @@ class RestRequest_Coverage_Test extends TestBase {
 		}
 	}
 
-	@Test void c01_authorityPath() throws Exception {
+	// /auth (authorityPath), /ctx (contextPath), /sp (servletPath) and /uriCtx (uriContext)
+	// each exercise a distinct RestRequest accessor in C and just need a 200 status.
+	@ParameterizedTest
+	@ValueSource(strings = {"/auth", "/ctx", "/sp", "/uriCtx"})
+	void c01_accessorEndpointsReturn200(String path) throws Exception {
 		var c = MockRestClient.create(C.class).plainText().build();
-		c.get("/auth").run().assertStatus(200);
-	}
-
-	@Test void c02_contextPath() throws Exception {
-		var c = MockRestClient.create(C.class).plainText().build();
-		c.get("/ctx").run().assertStatus(200);
-	}
-
-	@Test void c03_servletPath() throws Exception {
-		var c = MockRestClient.create(C.class).plainText().build();
-		c.get("/sp").run().assertStatus(200);
+		c.get(path).run().assertStatus(200);
 	}
 
 	@Test void c04_requestLine_andProtocolVersion() throws Exception {
@@ -225,11 +221,6 @@ class RestRequest_Coverage_Test extends TestBase {
 	@Test void c06_uri_excludeQuery() throws Exception {
 		var c = MockRestClient.create(C.class).plainText().build();
 		c.get("/uriNoQuery?a=1").run().assertStatus(200).assertContent().asString().isContains("/uriNoQuery");
-	}
-
-	@Test void c07_uriContext() throws Exception {
-		var c = MockRestClient.create(C.class).plainText().build();
-		c.get("/uriCtx").run().assertStatus(200);
 	}
 
 	@Test void c08_uriResolver_bothOverloads() throws Exception {
@@ -263,19 +254,13 @@ class RestRequest_Coverage_Test extends TestBase {
 		}
 	}
 
-	@Test void d01_config() throws Exception {
+	// /config (getConfig), /swagger (getSwagger + getOperationSwagger) and /openapi (getOpenApi)
+	// each return the "ok" sentinel after exercising their accessor.
+	@ParameterizedTest
+	@ValueSource(strings = {"/config", "/swagger", "/openapi"})
+	void d01_metadataAccessorEndpointsReturnOk(String path) throws Exception {
 		var c = MockRestClient.create(D.class).plainText().build();
-		c.get("/config").run().assertContent("ok");
-	}
-
-	@Test void d02_swagger_andOperationSwagger() throws Exception {
-		var c = MockRestClient.create(D.class).plainText().build();
-		c.get("/swagger").run().assertContent("ok");
-	}
-
-	@Test void d03_openApi() throws Exception {
-		var c = MockRestClient.create(D.class).plainText().build();
-		c.get("/openapi").run().assertContent("ok");
+		c.get(path).run().assertContent("ok");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

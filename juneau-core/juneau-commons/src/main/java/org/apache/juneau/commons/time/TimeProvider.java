@@ -70,6 +70,9 @@ public class TimeProvider {
 	 *
 	 * @return The current {@link ZonedDateTime} in the system default timezone.
 	 */
+	@SuppressWarnings({
+		"java:S8688" // This IS the project's intentional system-clock seam; ZonedDateTime.now() (system default zone) is by design. Use now(ZoneId) for an explicit zone.
+	})
 	public ZonedDateTime now() {
 		return ZonedDateTime.now();
 	}

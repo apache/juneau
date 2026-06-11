@@ -108,7 +108,7 @@ class FaviconMixin_AsMixin_Test extends TestBase {
 	public static class C extends RestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public FaviconMixin favicon() {
-			// /juneau-favicon.ico is the framework's default-shipping classpath resource;
+			// /juneau-favicon.ico is the framework's default-shipping classpath resource; // NOSONAR
 			// loading it explicitly via classpath(...) verifies the classpath path works.
 			return FaviconMixin.create()
 				.classpath("/juneau-favicon.ico")

@@ -56,7 +56,7 @@ class MethodExecStore_Test extends TestBase {
 	}
 
 	@Test void a04_builder_implClass_bad() {
-		{ var _ex = assertThrows(Exception.class, ()->MethodExecStore.create().type(A4.class).build()); assertTrue(_ex.getMessage().contains("foobar"), _ex.getMessage()); }
+		{ var ex = assertThrows(Exception.class, ()->MethodExecStore.create().type(A4.class).build()); assertTrue(ex.getMessage().contains("foobar"), ex.getMessage()); }
 	}
 
 	public static class A5a {}
@@ -80,7 +80,7 @@ class MethodExecStore_Test extends TestBase {
 	@Test void a05_builder_beanFactory() {
 		var bs = new BasicBeanStore();
 
-		{ var _ex = assertThrows(Exception.class, ()->MethodExecStore.create(bs).type(A5b.class).build()); assertTrue(_ex.getMessage().contains("Could not instantiate class"), _ex.getMessage()); }
+		{ var ex = assertThrows(Exception.class, ()->MethodExecStore.create(bs).type(A5b.class).build()); assertTrue(ex.getMessage().contains("Could not instantiate class"), ex.getMessage()); }
 		assertInstanceOf(A5c.class, MethodExecStore.create(bs).type(A5c.class).build());
 
 		bs.addBean(A5a.class, new A5a());
@@ -110,7 +110,7 @@ class MethodExecStore_Test extends TestBase {
 		var bs = new BasicBeanStore();
 		var m = MethodExecStore_Test.class.getDeclaredMethod("a06_builder_statsImplClass");
 
-		{ var _ex = assertThrows(Exception.class, ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m)); assertTrue(_ex.getMessage().contains("Could not instantiate class"), _ex.getMessage()); }
+		{ var ex = assertThrows(Exception.class, ()->MethodExecStore.create(bs).statsImplClass(A6b.class).build().getStats(m)); assertTrue(ex.getMessage().contains("Could not instantiate class"), ex.getMessage()); }
 		assertInstanceOf(A6c.class, MethodExecStore.create(bs).statsImplClass(A6c.class).build().getStats(m));
 
 		bs.addBean(A6a.class, new A6a());

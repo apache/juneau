@@ -142,7 +142,7 @@ class FileUtils_ResolveSafely_Test extends TestBase {
 		// so the result is Optional.empty rather than a leak.
 		var root = Files.createDirectories(tempDir.resolve("r")).toFile();
 		var r = FileUtils.resolveSafely(root, "%2e%2e/outside.txt");
-		// On platforms that reject "%2e%2e" as an invalid path char this throws IAE;
+		// On platforms that reject "%2e%2e" as an invalid path char this throws IAE; // NOSONAR
 		// elsewhere it resolves to a non-existent file → Optional.empty. Either way
 		// it does not leak.
 		if (r.isPresent())

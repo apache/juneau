@@ -166,7 +166,7 @@ class Microservice_Lifecycle_Test extends TestBase {
 
 	@Test void b02_explicitConfigStore_miss_fallsThroughToEmptyConfig() throws Exception {
 		var store = MemoryStore.create().build();
-		// Store is empty: store.exists("missing.cfg") is false, so the loop body's `if (store.exists(name))` branch
+		// Store is empty: store.exists("missing.cfg") is false, so the loop body's `if (store.exists(name))` branch // NOSONAR
 		// returns false and the configBuilder builds without binding to the store.
 		var ms = Microservice.create()
 			.configStore(store)
@@ -425,7 +425,7 @@ class Microservice_Lifecycle_Test extends TestBase {
 		cfg.set("Logging/levels", "{'org.apache.juneau.marshall.microservice.test.lifecycle.g02_cfg':'INFO'}");
 		var ms = Microservice.create().config(cfg).logConfig(lc).build();
 		try {
-			// Verify the file got created (FileHandler attaches and creates the file lazily on first record;
+			// Verify the file got created (FileHandler attaches and creates the file lazily on first record; // NOSONAR
 			// initialization itself is the path under test).
 			assertTrue(Files.exists(tmp.resolve("test.log")) || Files.list(tmp).findAny().isPresent(),
 				"FileHandler should have either created test.log or a rotated companion file");

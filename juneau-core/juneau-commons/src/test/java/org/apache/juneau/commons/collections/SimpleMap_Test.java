@@ -390,8 +390,8 @@ class SimpleMap_Test extends TestBase {
 		Object[] values = { "value1" };
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
-		assertNotEquals(map, "not-a-map");
-		assertNotEquals(map, null);
+		assertNotEquals("not-a-map", map);
+		assertNotEquals(null, map);
 	}
 
 	@Test
@@ -401,8 +401,8 @@ class SimpleMap_Test extends TestBase {
 		SimpleMap<String,Object> map = new SimpleMap<>(keys, values);
 
 		var entry = map.entrySet().iterator().next();
-		assertNotEquals(entry, "not-an-entry");
-		assertNotEquals(entry, null);
+		assertNotEquals("not-an-entry", entry);
+		assertNotEquals(null, entry);
 	}
 
 	@Test

@@ -46,6 +46,7 @@ import jakarta.servlet.http.*;
 	"serial", // Serialization not relevant
 	"java:S4144", // Identical methods intentional for different test scenarios
 	"java:S1186", // Empty method body intentional for REST/proxy interface testing
+	"java:S8692" // Diagnostic log lines intentionally record the real wall-clock time of each request.
 })
 public class ThirdPartyProxyResource extends BasicRestServlet {
 

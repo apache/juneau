@@ -22,10 +22,12 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.apache.juneau.commons.TestBase;
 
 /**
- * Coverage-targeted tests for {@link VarTemplateCompiler} (TODO-155 H1).
+ * Coverage-targeted tests for {@link VarTemplateCompiler}.
  *
  * <p>
  * Focuses on tokenizer edge cases (malformed templates, escapes, multi-var, nested vars,
@@ -35,8 +37,7 @@ import org.apache.juneau.commons.TestBase;
  *
  * <p>
  * Tests-only: where the current behavior is surprising (e.g. {@code ${a${b}}} parses with
- * the inner brace as part of the body), the test asserts the observed legacy behavior and
- * cites it as a candidate observation for a future TODO-156 follow-up.
+ * the inner brace as part of the body), the test asserts the observed legacy behavior.
  */
 @SuppressWarnings({
 	"java:S5778", // Multi-statement assertThrows lambdas — intentional for compile/resolve flow.
@@ -135,7 +136,7 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void a05_trailingBackslashAtEnd() {
 		var vr = vr();
-		// Bare trailing '\\' at EOF — line 290 ("if (isInEscape)") appends '\\' to literal.
+		// Bare trailing '\\' at EOF — line 290 ("if (isInEscape)") appends '\\' to literal. // NOSONAR
 		assertEquals("abc\\", vr.compile("abc\\").resolve(vr.createSession()));
 	}
 
@@ -269,8 +270,6 @@ class VarTemplateCompiler_Test extends TestBase {
 		// "x", and since varType has no registered Var, the dispatch becomes a fallthrough
 		// emitting the original substring with AS2 unescaping. Observed legacy behavior:
 		// the literal output preserves the backslash sequence as "$\\E{x}".
-		// (Candidate observation for TODO-156: doc the AS2 unescape semantics for inner-escape
-		// prefix sequences.)
 		assertEquals("$\\E{x}", vr.compile("$\\E{x}").resolve(vr.createSession()));
 	}
 
@@ -300,29 +299,16 @@ class VarTemplateCompiler_Test extends TestBase {
 	// e. translateDollarBraceDefault — brace-depth and missing colon paths
 	// =========================================================================
 
-	@Test void e01_dollarBraceDefaultNoColon() {
+	@ParameterizedTest
+	@ValueSource(strings = {"${user.home}", "${missing.key{a:b}}", "${{a}:fallback}"})
+	void e01_dollarBraceDefaultBraceDepthPaths(String template) {
+		// Exercises translateDollarBraceDefault brace-depth / colon handling:
+		//   "${user.home}"        -> body has no ':' -> returned unchanged (line 332);
+		//   "${missing.key{a:b}}" -> ':' nested inside braces (depth>0) -> not translated (lines 327, 329);
+		//   "${{a}:fallback}"     -> brace opens then closes before ':' (line 327 decrement) -> ':' fires at depth 0.
+		// In every case we assert the resolver does not crash and produces a value.
 		var vr = VarResolver.create().defaultVars().build();
-		// Body has no ':' — translateDollarBraceDefault returns body unchanged (line 332).
-		var tpl = vr.compile("${user.home}");
-		assertNotNull(tpl.resolve(vr.createSession()));
-	}
-
-	@Test void e02_dollarBraceDefaultColonInsideBraces() {
-		var vr = VarResolver.create().defaultVars().build();
-		// Inner braces around the ':' — depth>0, so the ':' is NOT translated (lines 327, 329 hit).
-		// Outer body becomes "missing.key,fallback" only when the FIRST top-level ':' is found.
-		// Here the only ':' is inside braces, so no translation; body resolves with depth fully
-		// closed and unchanged source. We assert the resolver doesn't crash and produces a string.
-		var tpl = vr.compile("${missing.key{a:b}}");
-		assertNotNull(tpl.resolve(vr.createSession()));
-	}
-
-	@Test void e03_dollarBraceDefaultBalancedBraces() {
-		var vr = VarResolver.create().defaultVars().build();
-		// Brace depth opens then closes before the ':' — '}' decrements depth (line 327 path).
-		// The ':' fires translation at depth==0.
-		var tpl = vr.compile("${{a}:fallback}");
-		// Whatever PropertyVar does with the rewritten body, this exercises the depth-decrement path.
+		var tpl = vr.compile(template);
 		assertNotNull(tpl.resolve(vr.createSession()));
 	}
 
@@ -385,6 +371,9 @@ class VarTemplateCompiler_Test extends TestBase {
 	// g. Recursive-descent parser — function name
 	// =========================================================================
 
+	@SuppressWarnings({
+		"java:S5976" // Group of 8 IAE+message coverage probes deliberately split across distinct parser-feature sections (function-name/arg-list/quoted-string/bare-token/nested-marker), each documenting a specific error path/line; a single parameterized test would erase that organization and per-path documentation.
+	})
 	@Test void g01_emptyFunctionName() {
 		var vr = vr();
 		// "#{()}" — parseFunctionName: pos==start at line 447 -> "Expected function name".
@@ -453,6 +442,9 @@ class VarTemplateCompiler_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("Invalid script in template"), ex.getMessage());
 	}
 
+	@SuppressWarnings({
+		"java:S5976" // Group of 5 compile-throws coverage probes deliberately split across distinct parser-feature sections (arg-list and nested-marker), each documenting a specific error path/line; a single parameterized test would erase that organization and per-path documentation.
+	})
 	@Test void h03_trailingContentAfterCloseParen() {
 		var vr = vr();
 		// "#{upper(x)trailing}" — expectEnd fails (line 592-593).
@@ -524,7 +516,7 @@ class VarTemplateCompiler_Test extends TestBase {
 		// '\\' as the last char before quote - pos+1 < length is false (line 501),
 		// fallthrough appends '\\' then increments. Then closing quote closes string.
 		// Use single backslash followed by another char then close quote: "x\\y".
-		// Combined Java escapes: "#{id(\"x\\\\\")}" -> actual template: #{id("x\\")}
+		// Combined Java escapes: "#{id(\"x\\\\\")}" -> actual template: #{id("x\\")} // NOSONAR
 		// which has a final '\\' before close quote. Inside parser:
 		//   pos at '\\' -> pos+1 is '"' -> next==quote so escape branch consumes both.
 		// Need a case where pos+1 is past end while in quoted string... but that means
@@ -615,7 +607,7 @@ class VarTemplateCompiler_Test extends TestBase {
 
 	@Test void k04_nestedMarkerMissingBrace() {
 		var vr = vr();
-		// "#{id($E)}" — first char '$' begins parseNestedMarker; consumes 'E' as prefix;
+		// "#{id($E)}" — first char '$' begins parseNestedMarker; consumes 'E' as prefix; // NOSONAR
 		// next char is ')' which fails the '{' expectation (line 540-541).
 		var ex = assertThrows(IllegalArgumentException.class, () -> vr.compile("#{id($E)}"));
 		assertTrue(ex.getMessage().contains("Invalid script in template"), ex.getMessage());
@@ -709,10 +701,10 @@ class VarTemplateCompiler_Test extends TestBase {
 			close.append("}");
 		}
 		// Each layer wraps with [...]
-		var expected = "x";
+		var expected = new StringBuilder("x");
 		for (var i = 0; i < 5; i++)
-			expected = "[" + expected + "]";
-		assertEquals(expected, vr.resolve(open.toString() + s + close.toString()));
+			expected.insert(0, '[').append(']');
+		assertEquals(expected.toString(), vr.resolve(open.toString() + s + close.toString()));
 	}
 
 	// =========================================================================
@@ -796,7 +788,7 @@ class VarTemplateCompiler_Test extends TestBase {
 		// A compiled multi-segment template exposes its segment count via segments().
 		var vr = vr();
 		var tpl = vr.compile("hello $E{a} world $E{b}");
-		// 4 segments: "hello ", $E{a}, " world ", $E{b}
+		// 4 segments: "hello ", $E{a}, " world ", $E{b} // NOSONAR
 		assertEquals(4, tpl.segments().length);
 	}
 }

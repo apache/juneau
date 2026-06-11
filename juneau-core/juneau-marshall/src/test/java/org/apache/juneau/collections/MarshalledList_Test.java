@@ -128,9 +128,14 @@ class MarshalledList_Test extends TestBase {
 		assertEquals("a", l.getString(2));
 	}
 
-	@Test void a11_unmodifiable() {
+	@Test void a11_unmodifiable_state() {
 		var l = MarshalledList.of("a", "b", "c").unmodifiable();
 		assertTrue(l.isUnmodifiable());
+		assertEquals(3, l.size());
+	}
+
+	@Test void a11b_unmodifiable_listMutators() {
+		var l = MarshalledList.of("a", "b", "c").unmodifiable();
 		var listX = List.of("x");
 		var listA = List.of("a");
 		assertThrows(UnsupportedOperationException.class, () -> l.add(0, "x"));
@@ -143,6 +148,10 @@ class MarshalledList_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, () -> l.removeAll(listA));
 		assertThrows(UnsupportedOperationException.class, () -> l.retainAll(listA));
 		assertThrows(UnsupportedOperationException.class, l::clear);
+	}
+
+	@Test void a11c_unmodifiable_dequeMutators() {
+		var l = MarshalledList.of("a", "b", "c").unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> l.addFirst("x"));
 		assertThrows(UnsupportedOperationException.class, () -> l.addLast("x"));
 		assertThrows(UnsupportedOperationException.class, l::removeFirst);
@@ -157,9 +166,17 @@ class MarshalledList_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, l::pollLast);
 		assertThrows(UnsupportedOperationException.class, l::pop);
 		assertThrows(UnsupportedOperationException.class, () -> l.push("x"));
+	}
+
+	@Test void a11d_unmodifiable_functionalMutators() {
+		var l = MarshalledList.of("a", "b", "c").unmodifiable();
 		assertThrows(UnsupportedOperationException.class, () -> l.removeIf(o -> true));
 		assertThrows(UnsupportedOperationException.class, () -> l.replaceAll(o -> "x"));
 		assertThrows(UnsupportedOperationException.class, () -> l.sort((a, b) -> 0));
+	}
+
+	@Test void a11e_unmodifiable_iteratorMutators() {
+		var l = MarshalledList.of("a", "b", "c").unmodifiable();
 		var it = l.iterator();
 		it.next();
 		assertThrows(UnsupportedOperationException.class, it::remove);
@@ -168,7 +185,6 @@ class MarshalledList_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, lit::remove);
 		assertThrows(UnsupportedOperationException.class, () -> lit.add("x"));
 		assertThrows(UnsupportedOperationException.class, () -> lit.set("x"));
-		assertEquals(3, l.size());
 	}
 
 	@Test void a12_modifiable() {

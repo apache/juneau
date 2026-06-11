@@ -38,6 +38,9 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S8692" // ID/logout tokens flow through Nimbus JWT validation, which reads the real system clock with no injectable seam; tokens must be minted at real "now" and converting would require a separate production Clock seam in the validator.
+})
 class OidcRelyingParty_Test extends TestBase {
 
 	private static final String CID = "web-app";

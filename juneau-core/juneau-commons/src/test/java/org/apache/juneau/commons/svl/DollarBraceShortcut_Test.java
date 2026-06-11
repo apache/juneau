@@ -73,7 +73,7 @@ class DollarBraceShortcut_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Default-value syntax: ${key:default}
+	// Default-value syntax: ${key:default} // NOSONAR
 	//====================================================================================================
 
 	@Test
@@ -102,7 +102,7 @@ class DollarBraceShortcut_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Nested resolution: ${foo.${env}.url}
+	// Nested resolution: ${foo.${env}.url} // NOSONAR
 	//====================================================================================================
 
 	@Test
@@ -115,7 +115,7 @@ class DollarBraceShortcut_Test extends TestBase {
 
 	@Test
 	void c02_dollarBrace_innerColonIsInnerDefault() {
-		// Inner ${innerKey:inner-default} provides "inner-default" because innerKey is unset;
+		// Inner ${innerKey:inner-default} provides "inner-default" because innerKey is unset; // NOSONAR
 		// outer ${k1:<inner>} sees k1 missing, falls back to "inner-default".
 		assertEquals("inner-default",
 			VarResolver.DEFAULT.resolve("${" + K1 + ":${" + K3 + ":inner-default}}"));

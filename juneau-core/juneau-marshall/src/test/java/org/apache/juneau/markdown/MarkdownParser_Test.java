@@ -34,14 +34,14 @@ class MarkdownParser_Test {
 	// a - Parse key/value table to bean
 	//====================================================================================================
 
-	@Test void a01_parseKeyValueTable_toBean() throws Exception {
+	@Test void a01_parseKeyValueTable_toBean() {
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| age | 30 |";
 		var r = MarkdownParser.DEFAULT.parse(md, A.class);
 		assertEquals("Alice", r.name);
 		assertEquals(30, r.age);
 	}
 
-	@Test void a02_parseKeyValueTable_toMap() throws Exception {
+	@Test void a02_parseKeyValueTable_toMap() {
 		var md = "| Property | Value |\n|---|---|\n| city | Boston |\n| state | MA |";
 		var r = MarkdownParser.DEFAULT.parse(md, Map.class);
 		assertEquals("Boston", r.get("city"));
@@ -49,7 +49,7 @@ class MarkdownParser_Test {
 	}
 
 	@Test
-	void a03_parseKeyValueTable_toObject() throws Exception {
+	void a03_parseKeyValueTable_toObject() {
 		var md = "| Key | Value |\n|---|---|\n| foo | bar |";
 		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertEquals("bar", r.get("foo"));
@@ -68,7 +68,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void b01_parseMultiColumnTable_toBeanList() throws Exception {
+	void b01_parseMultiColumnTable_toBeanList() {
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |";
 		var r = (List<B>) MarkdownParser.DEFAULT.parse(md, List.class, B.class);
 		assertEquals(2, r.size());
@@ -82,7 +82,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void b02_parseMultiColumnTable_toMapList() throws Exception {
+	void b02_parseMultiColumnTable_toMapList() {
 		var md = "| key1 | key2 |\n|---|---|\n| v1 | v2 |";
 		var r = (List<Map<?,?>>) MarkdownParser.DEFAULT.parse(md, List.class, Map.class);
 		assertEquals(1, r.size());
@@ -90,7 +90,7 @@ class MarkdownParser_Test {
 		assertEquals("v2", r.get(0).get("key2"));
 	}
 
-	@Test void b03_parseMultiColumnTable_toArray() throws Exception {
+	@Test void b03_parseMultiColumnTable_toArray() {
 		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
 		var r = MarkdownParser.DEFAULT.parse(md, B[].class);
 		assertEquals(1, r.length);
@@ -111,7 +111,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void c01_parseBulletList_toStringList() throws Exception {
+	void c01_parseBulletList_toStringList() {
 		var md = "- alpha\n- beta\n- gamma";
 		var r = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
 		assertEquals(List.of("alpha", "beta", "gamma"), r);
@@ -121,13 +121,13 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void c02_parseBulletList_toIntList() throws Exception {
+	void c02_parseBulletList_toIntList() {
 		var md = "- 1\n- 2\n- 3";
 		var r = (List<Integer>) MarkdownParser.DEFAULT.parse(md, List.class, Integer.class);
 		assertEquals(List.of(1, 2, 3), r);
 	}
 
-	@Test void c03_parseBulletList_toStringArray() throws Exception {
+	@Test void c03_parseBulletList_toStringArray() {
 		var md = "- foo\n- bar";
 		var r = MarkdownParser.DEFAULT.parse(md, String[].class);
 		assertArrayEquals(new String[]{"foo", "bar"}, r);
@@ -137,14 +137,14 @@ class MarkdownParser_Test {
 	// d - Null value handling
 	//====================================================================================================
 
-	@Test void d01_parseNullValue_defaultMarker() throws Exception {
+	@Test void d01_parseNullValue_defaultMarker() {
 		var md = "| Property | Value |\n|---|---|\n| name | *null* |\n| age | 30 |";
 		var r = MarkdownParser.DEFAULT.parse(md, C.class);
 		assertNull(r.name);
 		assertEquals(30, r.age);
 	}
 
-	@Test void d02_parseNullValue_customMarker() throws Exception {
+	@Test void d02_parseNullValue_customMarker() {
 		var p = MarkdownParser.create().nullValue("N/A").build();
 		var md = "| Property | Value |\n|---|---|\n| name | N/A |\n| age | 30 |";
 		var r = p.parse(md, C.class);
@@ -152,7 +152,7 @@ class MarkdownParser_Test {
 		assertEquals(30, r.age);
 	}
 
-	@Test void d03_parseEmptyInput() throws Exception {
+	@Test void d03_parseEmptyInput() {
 		var r = MarkdownParser.DEFAULT.parse("", A.class);
 		assertNull(r);
 	}
@@ -166,7 +166,7 @@ class MarkdownParser_Test {
 	// e - Inline JSON5 cell values
 	//====================================================================================================
 
-	@Test void e01_parseInlineJson5_nestedBean() throws Exception {
+	@Test void e01_parseInlineJson5_nestedBean() {
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| address | `{city:'Boston',state:'MA'}` |";
 		var r = MarkdownParser.DEFAULT.parse(md, D.class);
 		assertEquals("Alice", r.name);
@@ -184,21 +184,21 @@ class MarkdownParser_Test {
 	// f - Type auto-detection (Object target)
 	//====================================================================================================
 
-	@Test void f01_autoDetect_integer() throws Exception {
+	@Test void f01_autoDetect_integer() {
 		var md = "| Property | Value |\n|---|---|\n| count | 42 |";
 		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertInstanceOf(Integer.class, r.get("count"));
 		assertEquals(42, r.get("count"));
 	}
 
-	@Test void f02_autoDetect_boolean() throws Exception {
+	@Test void f02_autoDetect_boolean() {
 		var md = "| Property | Value |\n|---|---|\n| flag | true |";
 		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertInstanceOf(Boolean.class, r.get("flag"));
 		assertEquals(Boolean.TRUE, r.get("flag"));
 	}
 
-	@Test void f03_autoDetect_string() throws Exception {
+	@Test void f03_autoDetect_string() {
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |";
 		var r = (MarshalledMap) MarkdownParser.DEFAULT.parse(md, Object.class);
 		assertInstanceOf(String.class, r.get("name"));
@@ -213,7 +213,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void g01_parseEnumValues() throws Exception {
+	void g01_parseEnumValues() {
 		var md = "| name | status |\n|---|---|\n| Task1 | PENDING |\n| Task2 | COMPLETED |";
 		var r = (List<E>) MarkdownParser.DEFAULT.parse(md, List.class, E.class);
 		assertEquals(2, r.size());
@@ -234,7 +234,7 @@ class MarkdownParser_Test {
 	// h - Bean property annotations
 	//====================================================================================================
 
-	@Test void h01_parseMarshalledAnnotations() throws Exception {
+	@Test void h01_parseMarshalledAnnotations() {
 		var md = "| Property | Value |\n|---|---|\n| full_name | Alice |\n| years | 30 |";
 		var r = MarkdownParser.DEFAULT.parse(md, F.class);
 		assertEquals("Alice", r.name);
@@ -253,7 +253,7 @@ class MarkdownParser_Test {
 	// i - Pipe character escaping
 	//====================================================================================================
 
-	@Test void i01_parsePipeEscaping() throws Exception {
+	@Test void i01_parsePipeEscaping() {
 		var md = "| Property | Value |\n|---|---|\n| desc | hello \\| world |";
 		var r = MarkdownParser.DEFAULT.parse(md, Map.class);
 		assertEquals("hello | world", r.get("desc"));
@@ -263,7 +263,7 @@ class MarkdownParser_Test {
 	// j - Round-trip: serialize then parse
 	//====================================================================================================
 
-	@Test void j01_roundTripBean() throws Exception {
+	@Test void j01_roundTripBean() {
 		var original = new G("Alice", 30, true);
 		var md = MarkdownSerializer.DEFAULT.serialize(original);
 		var parsed = MarkdownParser.DEFAULT.parse(md, G.class);
@@ -276,7 +276,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void j02_roundTripBeanList() throws Exception {
+	void j02_roundTripBeanList() {
 		var original = List.of(new G("Alice", 30, true), new G("Bob", 25, false));
 		var md = MarkdownSerializer.DEFAULT.serialize(original);
 		var parsed = (List<G>) MarkdownParser.DEFAULT.parse(md, List.class, G.class);
@@ -293,7 +293,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void j03_roundTripStringList() throws Exception {
+	void j03_roundTripStringList() {
 		var original = List.of("alpha", "beta", "gamma");
 		var md = MarkdownSerializer.DEFAULT.serialize(original);
 		var parsed = (List<String>) MarkdownParser.DEFAULT.parse(md, List.class, String.class);
@@ -304,7 +304,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void j04_roundTripStringToStringMap() throws Exception {
+	void j04_roundTripStringToStringMap() {
 		var original = new LinkedHashMap<String, String>();
 		original.put("k1", "v1");
 		original.put("k2", "v2");
@@ -329,7 +329,7 @@ class MarkdownParser_Test {
 	// k - Separator row variants
 	//====================================================================================================
 
-	@Test void k01_parseSeparatorWithColons() throws Exception {
+	@Test void k01_parseSeparatorWithColons() {
 		// Some Markdown flavors use |:---|:---| for alignment
 		var md = "| Property | Value |\n|:---|:---|\n| name | Alice |";
 		var r = MarkdownParser.DEFAULT.parse(md, Map.class);
@@ -340,7 +340,7 @@ class MarkdownParser_Test {
 	// l - Whitespace handling
 	//====================================================================================================
 
-	@Test void l01_parseWithExtraWhitespace() throws Exception {
+	@Test void l01_parseWithExtraWhitespace() {
 		var md = "  | Property | Value |\n  |---|---|\n  | name |   Alice   |";
 		var r = MarkdownParser.DEFAULT.parse(md, A.class);
 		assertEquals("Alice", r.name);
@@ -354,7 +354,7 @@ class MarkdownParser_Test {
 	@SuppressWarnings({
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
-	void m01_fewerCellsThanHeaders() throws Exception {
+	void m01_fewerCellsThanHeaders() {
 		var md = "| name | age |\n|---|---|\n| Alice |";
 		var r = (List<B>) MarkdownParser.DEFAULT.parse(md, List.class, B.class);
 		assertEquals(1, r.size());

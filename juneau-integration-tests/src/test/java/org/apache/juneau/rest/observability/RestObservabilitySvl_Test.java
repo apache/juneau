@@ -96,7 +96,7 @@ class RestObservabilitySvl_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 	// B: SVL variable in @Rest(observability) is resolved at RestContext build time.
 	//    When the system property resolves to "false", metrics are suppressed for the entire resource.
-	//    The static initializer sets the property before building the client and then clears it;
+	//    The static initializer sets the property before building the client and then clears it; // NOSONAR
 	//    this works because the resource-level observability attribute IS resolved eagerly (the
 	//    startup-fail check pre-warms it inside the RestContext constructor).
 	// -----------------------------------------------------------------------------------------------------------------

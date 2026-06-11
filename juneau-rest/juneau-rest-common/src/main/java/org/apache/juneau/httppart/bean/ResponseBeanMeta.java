@@ -195,10 +195,16 @@ public class ResponseBeanMeta {
 		contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
 		statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
 
-		if (nn(contentMethod))
-			properties2.put(contentMethod.getGetter().getName(), contentMethod);
-		if (nn(statusMethod))
-			properties2.put(statusMethod.getGetter().getName(), statusMethod);
+		if (nn(contentMethod)) {
+			var getter = contentMethod.getGetter();
+			if (nn(getter))
+				properties2.put(getter.getName(), contentMethod);
+		}
+		if (nn(statusMethod)) {
+			var getter = statusMethod.getGetter();
+			if (nn(getter))
+				properties2.put(getter.getName(), statusMethod);
+		}
 
 		this.properties = u(properties2);
 	}

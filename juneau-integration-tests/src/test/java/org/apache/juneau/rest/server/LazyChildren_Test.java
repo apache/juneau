@@ -56,7 +56,7 @@ class LazyChildren_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a01: HappyPath — annotation enables lazy; routing works immediately; first request triggers materialization;
+	// a01: HappyPath — annotation enables lazy; routing works immediately; first request triggers materialization; // NOSONAR
 	//      subsequent requests reuse the context.
 	//------------------------------------------------------------------------------------------------------------------
 

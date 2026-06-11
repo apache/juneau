@@ -346,7 +346,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 */
 	public MarshalledMap(Object...keyValuePairs) {
 		assertArg(keyValuePairs.length % 2 == 0, "Odd number of parameters passed into MarshalledMap(Object...)");
-		for (var i = 0; i < keyValuePairs.length; i += 2)
+		for (var i = 0; i + 1 < keyValuePairs.length; i += 2)
 			put(s(keyValuePairs[i]), keyValuePairs[i + 1]);
 	}
 

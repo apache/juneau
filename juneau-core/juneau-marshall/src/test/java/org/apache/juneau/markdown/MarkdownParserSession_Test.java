@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Coverage tests for {@link MarkdownParserSession} branches not exercised by the higher-level
- * {@link MarkdownParser_Test} suite (TODO-155 Tier E3).
+ * {@link MarkdownParser_Test} suite.
  */
 class MarkdownParserSession_Test extends TestBase {
 

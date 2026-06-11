@@ -266,7 +266,7 @@ class ClassFormat_Test {
 	}
 
 	@Test void g03_parse_fqcnPrimitive_defaultArmReturnsNull() {
-		// Non-primitive leaf — exercises the 'default -> null' arm of the primitiveByName switch;
+		// Non-primitive leaf — exercises the 'default -> null' arm of the primitiveByName switch; // NOSONAR
 		// resolveLeaf then falls through to Class.forName which resolves the class normally.
 		assertEquals(String.class, ClassFormat.parse("java.lang.String", ClassFormat.FQCN, null));
 	}

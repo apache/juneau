@@ -33,8 +33,6 @@ import org.springframework.mock.web.*;
  * Coverage tests for {@link CallLogger} targeting Builder mutators, log() rendering branches
  * (HEADER/ENTITY), debug-rule selection, ThrownStore integration, and builder helpers
  * (logger by name, loggerOnce, thrownStoreOnce, rules, etc.).
- *
- * <p>Closes the gaps tracked under TODO-155 Tier F4.
  */
 class CallLogger_Test extends TestBase {
 

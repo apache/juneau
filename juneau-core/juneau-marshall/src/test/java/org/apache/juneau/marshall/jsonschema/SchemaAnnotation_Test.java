@@ -509,7 +509,7 @@ class SchemaAnnotation_Test extends TestBase {
 	}
 
 	@Test void i03_asMap_exclusiveMaximumBooleanFallback() throws Exception {
-		// Forces the `else if (a.exclusiveMaximum() || a.emax())` short-circuit branch.
+		// Forces the `else if (a.exclusiveMaximum() || a.emax())` short-circuit branch. // NOSONAR
 		var a = SchemaAnnotation.create().exclusiveMaximum(true).build();
 		assertEquals("true", SchemaAnnotation.asMap(a).get("exclusiveMaximum"));
 	}
@@ -564,7 +564,7 @@ class SchemaAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// asMap() with Items: pre-existing production NPE bug (TODO-156) when items is non-default.
+	// asMap() with non-default Items.
 	//
 	// SchemaAnnotation.asMap(...) calls merge(m.getMap(PROP_items), a.items()).  When the result
 	// map has no prior "items" entry, getMap(...) returns null and the private merge(JsonMap,Items)

@@ -23,6 +23,9 @@ import org.junit.jupiter.api.*;
 import org.apache.juneau.commons.TestBase;
 
 /** Tests for {@link DateFunctions}. */
+@SuppressWarnings({
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+})
 class DateFunctions_Test extends TestBase {
 
 	private final VarResolver vr = VarResolver.create().functions(DateFunctions.ALL).build();

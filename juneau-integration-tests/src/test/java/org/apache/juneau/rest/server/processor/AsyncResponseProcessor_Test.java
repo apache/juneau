@@ -374,7 +374,7 @@ class AsyncResponseProcessor_Test extends TestBase {
 	}
 
 	@Test void k02_completionExceptionWrapping_returns500() throws Exception {
-		// In the sync-fallback path, ExecutionException.getCause() is the CompletionException;
+		// In the sync-fallback path, ExecutionException.getCause() is the CompletionException; // NOSONAR
 		// the existing convertThrowable pipeline maps it to a 500.
 		CK.get("/withCompletionException").run().assertStatus(500);
 	}

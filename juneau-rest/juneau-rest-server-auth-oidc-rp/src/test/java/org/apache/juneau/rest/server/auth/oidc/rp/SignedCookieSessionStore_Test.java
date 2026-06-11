@@ -38,6 +38,11 @@ class SignedCookieSessionStore_Test extends TestBase {
 
 	private static final String KEY = "0123456789abcdef0123456789abcdef";  // 32 bytes
 
+	// Fixed time seam: session timestamps are anchored to a constant and the round-trip store is
+	// driven by a matching fixed Clock, instead of reading the system clock (java:S8692).
+	private static final Instant NOW = Instant.parse("2026-01-01T00:00:00Z");
+	private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
+
 	private static OidcSession session(Instant now, String sid) {
 		return new OidcSession("id-1", "alice", Optional.ofNullable(sid),
 			new ClaimsPrincipal("alice", Map.of("sub", "alice", "email", "alice@example.com")),
@@ -46,8 +51,8 @@ class SignedCookieSessionStore_Test extends TestBase {
 	}
 
 	@Test void a01_roundTrip_recoversClaimsAndRoles() {
-		var store = SignedCookieSessionStore.create().signingKey(KEY).build();
-		var now = Instant.now();
+		var store = SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build();
+		var now = NOW;
 		var cookie = store.createSessionCookieValue(session(now, "sess-1"));
 		var s = store.lookup(cookie);
 		assertTrue(s.isPresent());
@@ -61,14 +66,14 @@ class SignedCookieSessionStore_Test extends TestBase {
 
 	@Test void b01_tamperedCookie_isRejected() {
 		var store = SignedCookieSessionStore.create().signingKey(KEY).build();
-		var cookie = store.createSessionCookieValue(session(Instant.now(), null));
+		var cookie = store.createSessionCookieValue(session(NOW, null));
 		var tampered = cookie.substring(0, cookie.length() - 3) + "AAA";
 		assertTrue(store.lookup(tampered).isEmpty());
 	}
 
 	@Test void b02_wrongKey_isRejected() {
 		var signer = SignedCookieSessionStore.create().signingKey(KEY).build();
-		var cookie = signer.createSessionCookieValue(session(Instant.now(), null));
+		var cookie = signer.createSessionCookieValue(session(NOW, null));
 		var other = SignedCookieSessionStore.create().signingKey("ffffffffffffffffffffffffffffffff").build();
 		assertTrue(other.lookup(cookie).isEmpty());
 	}
@@ -97,7 +102,7 @@ class SignedCookieSessionStore_Test extends TestBase {
 	@Test void e01_overCapPayload_throws() {
 		var store = SignedCookieSessionStore.create().signingKey(KEY).maxCookieBytes(128).build();
 		assertThrows(IllegalStateException.class,
-			() -> store.createSessionCookieValue(session(Instant.now(), "sess-1")));
+			() -> store.createSessionCookieValue(session(NOW, "sess-1")));
 	}
 
 	@Test void f01_shortKey_rejected() {

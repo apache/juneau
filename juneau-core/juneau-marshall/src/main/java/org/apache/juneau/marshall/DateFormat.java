@@ -42,6 +42,9 @@ import org.apache.juneau.marshall.swaps.*;
  * (BSON / CBOR / MsgPack) and bare numbers on text formats. Text formats emit a quoted ISO 8601 string for
  * every other constant.
  */
+@SuppressWarnings({
+	"java:S2143" // Public API formats/parses java.util.Date by design (it's the Date marshalling-format enum); internals already use java.time.
+})
 public enum DateFormat {
 
 	/** Sentinel meaning "no value configured" — falls through to the next-higher precedence level. */

@@ -228,6 +228,9 @@ public class Json5ParserSession extends JsonParserSession {
 		return true;
 	}
 
+	@SuppressWarnings({
+		"java:S6466" // False positive: new Json5Map(this) resolves to Json5Map(MarshallingSession), not Json5Map(Object...), since Json5ParserSession IS-A MarshallingSession.
+	})
 	@Override /* Overridden from JsonParserSession */
 	protected MarshalledMap newGenericMap() {
 		return new Json5Map(this);

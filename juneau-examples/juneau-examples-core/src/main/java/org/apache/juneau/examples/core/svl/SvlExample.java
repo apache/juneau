@@ -30,6 +30,9 @@ public class SvlExample {
 	 *
 	 * @param args Unused.
 	 */
+	@SuppressWarnings({
+		"java:S106" // Example/demo code: printing resolved values to stdout is the intended pedagogical behavior; a logger would obscure the demonstration.
+	})
 	public static void main(String[] args) {
 
 		var vr = VarResolver.DEFAULT;
@@ -40,11 +43,11 @@ public class SvlExample {
 		// $S{key[,default]} for getting system properties (uses System.getProperty() )
 		Logger.getLogger(SvlExample.class).info(vr.resolve("os.name=$S{os.name, not defined}"));
 
-		// #{if(cond, then, else)} general if or if-else condition
+		// #{if(cond, then, else)} general if or if-else condition // NOSONAR
 		// #{notEmpty(s)} returns true if not empty
 		Logger.getLogger(SvlExample.class).info(vr.resolve("TEST_VAR is #{if(#{notEmpty($E{TEST_VAR})}, not empty, empty)}"));
 
-		// #{switch(value, pattern1, val1, ..., default)} glob-pattern switch-case
+		// #{switch(value, pattern1, val1, ..., default)} glob-pattern switch-case // NOSONAR
 		System.out.println(vr.resolve("#{switch(Carrot, *Ap*, Fruit, *Car*, Veg, *, N/A)}"));
 
 		// #{replaceRegex(s, regex, replacement)} pattern replace

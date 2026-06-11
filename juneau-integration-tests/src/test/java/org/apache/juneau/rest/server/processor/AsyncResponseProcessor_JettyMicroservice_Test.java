@@ -31,6 +31,8 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import jakarta.servlet.*;
 
@@ -134,19 +136,20 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// A: Happy-path async — CompletableFuture and CompletionStage.
+	// A: 200 responses — happy-path async (CompletableFuture, CompletionStage) and the synchronous pass-through
+	// (backward-compat smoke test that non-future content is returned unchanged on the real container).
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_completableFuture_unwrapped() throws Exception {
-		var resp = get("/async/ok");
+	@ParameterizedTest
+	@CsvSource({
+		"/async/ok,      async-ok",        // CompletableFuture unwrapped
+		"/async/okStage, async-stage-ok",  // CompletionStage unwrapped
+		"/async/sync,    still-sync"        // synchronous handler passed through unchanged
+	})
+	void a01_successResponses_return200WithBody(String path, String expected) throws Exception {
+		var resp = get(path);
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().contains("async-ok"), "body: " + resp.body());
-	}
-
-	@Test void a02_completionStage_unwrapped() throws Exception {
-		var resp = get("/async/okStage");
-		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().contains("async-stage-ok"), "body: " + resp.body());
+		assertTrue(resp.body().contains(expected), "body: " + resp.body());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -154,24 +157,19 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 	// (supplyAsync wraps the thrown exception in CompletionException) AND the direct-completeExceptionally case.
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_failedFutureViaSupplyAsync_returns500() throws Exception {
-		// supplyAsync → exception thrown in the supplier is wrapped in CompletionException
-		// — exercises the unwrap branch that strips the CompletionException layer.
-		var resp = get("/async/failed");
-		assertEquals(500, resp.statusCode(), "body: " + resp.body());
-	}
-
-	@Test void b02_failedFutureViaCompleteExceptionally_returns500() throws Exception {
-		// completeExceptionally with a plain throwable — exercises the "no CompletionException
-		// wrapping" branch of unwrap (which falls through to return the throwable as-is).
-		var resp = get("/async/failedDirect");
-		assertEquals(500, resp.statusCode(), "body: " + resp.body());
-	}
-
-	@Test void b03_failedFutureViaExecutionException_returns500() throws Exception {
-		// completeExceptionally(ExecutionException) — exercises the unwrap branch that
-		// strips an ExecutionException wrapper (line 297-298 of AsyncResponseProcessor).
-		var resp = get("/async/failedExecutionException");
+	@ParameterizedTest
+	@ValueSource(strings = {
+		// supplyAsync → exception thrown in supplier wrapped in CompletionException — unwrap strips that layer.
+		"/async/failed",
+		// completeExceptionally with a plain throwable — unwrap's "no CompletionException wrapping" fall-through.
+		"/async/failedDirect",
+		// completeExceptionally(ExecutionException) — unwrap strips the ExecutionException wrapper (line 297-298).
+		"/async/failedExecutionException",
+		// Bare Future that is not a CompletionStage — rejected outright (category D).
+		"/async/bareFuture"
+	})
+	void b01_errorResponses_return500(String path) throws Exception {
+		var resp = get(path);
 		assertEquals(500, resp.statusCode(), "body: " + resp.body());
 	}
 
@@ -185,26 +183,6 @@ class AsyncResponseProcessor_JettyMicroservice_Test extends TestBase {
 		var elapsed = System.currentTimeMillis() - before;
 		assertEquals(504, resp.statusCode(), "body: " + resp.body());
 		assertTrue(elapsed < 5_000, "200ms timeout should fire well before the 5s client timeout — actual " + elapsed + "ms");
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------
-	// D: Bare Future rejection — anything that is a Future but not a CompletionStage is rejected with 500.
-	// -----------------------------------------------------------------------------------------------------------------
-
-	@Test void d01_bareFuture_returns500() throws Exception {
-		var resp = get("/async/bareFuture");
-		assertEquals(500, resp.statusCode(), "body: " + resp.body());
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------
-	// E: Synchronous handler in the same servlet — backward-compat smoke test that the processor passes through
-	// non-future content unchanged on the real container.
-	// -----------------------------------------------------------------------------------------------------------------
-
-	@Test void e01_syncHandler_unchanged() throws Exception {
-		var resp = get("/async/sync");
-		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().contains("still-sync"), "body: " + resp.body());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

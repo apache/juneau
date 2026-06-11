@@ -479,8 +479,7 @@ class HoconSerializerSession_Test extends TestBase {
 
 	@Test void f03_calendarProperty() throws Exception {
 		// sType.isCalendar() branch (lines 288-289).
-		var c = Calendar.getInstance();
-		c.setTimeInMillis(0L);
+		var c = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var x = new B_WithCalendar();
 		x.when = c;
 		var hocon = HoconSerializer.DEFAULT.serialize(x);
