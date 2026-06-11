@@ -59,6 +59,8 @@
 		<!-- Aggregate report (cross-module integration-test coverage) via reactor-root path, per-module report via basedir fallback. -->
 		<sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/juneau-integration-tests/target/site/jacoco-aggregate/jacoco.xml,${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.exclusions>**/target/**,**/doc/**,**/examples/**,**/src/main/resources/**,**/src/test/resources/**,**/generated/**,**/build/**</sonar.exclusions>
+		<!-- Exclude by-design parallel annotation families from copy-paste detection: one @RestX annotation + companion *Annotation impl per HTTP verb / lifecycle hook, near-verbatim clones by design (not debt). Unique classes (RestContext/RestRequest/RestResponse/RestSession/...) keep full CPD coverage. -->
+		<sonar.cpd.exclusions>**/rest/server/Rest*Annotation.java,**/rest/server/RestOp.java,**/rest/server/RestGet.java,**/rest/server/RestPut.java,**/rest/server/RestPost.java,**/rest/server/RestDelete.java,**/rest/server/RestPatch.java,**/rest/server/RestOptions.java,**/rest/server/RestPreCall.java,**/rest/server/RestPostCall.java,**/rest/server/RestStartCall.java,**/rest/server/RestEndCall.java,**/rest/server/RestInit.java,**/rest/server/RestDestroy.java,**/rest/server/RestPostInit.java</sonar.cpd.exclusions>
 		<sonar.coverage.exclusions>**/juneau-examples/**,**/juneau-petstore/**,**/*-microservice/**,**/juneau-sc-server/**,**/juneau-core/juneau-test-utils/**</sonar.coverage.exclusions>
 		<jena.version>5.6.0</jena.version>
 	</properties>

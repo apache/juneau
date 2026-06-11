@@ -196,15 +196,15 @@ public class ResponseBeanMeta {
 		statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
 
 		var cMethod = contentMethod;
-		if (nn(cMethod)) {
+		if (cMethod != null) {
 			var getter = cMethod.getGetter();
-			if (nn(getter))
+			if (getter != null)
 				properties2.put(getter.getName(), cMethod);
 		}
 		var sMethod = statusMethod;
-		if (nn(sMethod)) {
+		if (sMethod != null) {
 			var getter = sMethod.getGetter();
-			if (nn(getter))
+			if (getter != null)
 				properties2.put(getter.getName(), sMethod);
 		}
 

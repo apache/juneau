@@ -943,11 +943,11 @@ public class OidcRelyingParty {
 				? new LinkedHashSet<>(Arrays.asList(idTokenAlgorithms))
 				: new LinkedHashSet<>(Arrays.asList(JWSAlgorithm.RS256, JWSAlgorithm.ES256));
 			var keySelector = new JWSVerificationKeySelector<SecurityContext>(algs, jwkSource());
-			var issuer = new Issuer(metadata().issuer().toString());
+			var expectedIssuer = new Issuer(metadata().issuer().toString());
 			var processor = new DefaultJWTProcessor<SecurityContext>();
 			processor.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(LogoutTokenValidator.TYPE, JOSEObjectType.JWT, null));
 			processor.setJWSKeySelector(keySelector);
-			processor.setJWTClaimsSetVerifier(new ClockAwareLogoutTokenClaimsVerifier(issuer, new ClientID(clientId), clock));
+			processor.setJWTClaimsSetVerifier(new ClockAwareLogoutTokenClaimsVerifier(expectedIssuer, new ClientID(clientId), clock));
 			logoutTokenProcessorCache = processor;
 			return logoutTokenProcessorCache;
 		}
