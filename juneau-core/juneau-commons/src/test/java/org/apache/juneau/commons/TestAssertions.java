@@ -76,7 +76,7 @@ public class TestAssertions {
 		Map<?, ?> ordered = toOrderedMap(actual);
 		List<String> entries = ordered.entrySet().stream()
 			.map(e -> stringifyKey(e.getKey()) + "=" + stringify(e.getValue()))
-			.collect(Collectors.toList());
+			.toList();
 		assertList(entries, expected);
 	}
 
@@ -165,7 +165,7 @@ public class TestAssertions {
 	private static List<?> toList(Object actual) {
 		if (actual instanceof List<?> l) return l;
 		if (actual instanceof Collection<?> c) return new ArrayList<>(c);
-		if (actual instanceof Stream<?> s) return s.collect(Collectors.toList());
+		if (actual instanceof Stream<?> s) return s.toList();
 		if (actual instanceof Enumeration<?> e) {
 			List<Object> result = new ArrayList<>();
 			while (e.hasMoreElements()) result.add(e.nextElement());

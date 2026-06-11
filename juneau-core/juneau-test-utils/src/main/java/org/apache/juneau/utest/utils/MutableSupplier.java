@@ -21,6 +21,9 @@ import java.util.function.*;
 /**
  * A simple supplier of objects.
  */
+@SuppressWarnings({
+	"java:S1104" // Intentional public mutable field accessed directly by tests.
+})
 public class MutableSupplier<T> implements Supplier<T> {
 	public T value;
 

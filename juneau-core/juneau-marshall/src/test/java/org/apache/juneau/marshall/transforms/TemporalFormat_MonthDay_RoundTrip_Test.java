@@ -70,7 +70,8 @@ import org.junit.jupiter.params.provider.*;
  * per test method.
  */
 @SuppressWarnings({
-	"unused" // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+	"unused", // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
 })
 class TemporalFormat_MonthDay_RoundTrip_Test extends TestBase {
 

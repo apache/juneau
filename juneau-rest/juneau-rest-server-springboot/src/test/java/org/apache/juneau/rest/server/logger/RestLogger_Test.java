@@ -125,7 +125,7 @@ class RestLogger_Test extends TestBase {
 
 	@Test void d01_exceptionFilter_matchesWhenExceptionPresent() throws Exception {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
-			.exceptionFilter(x -> x instanceof IllegalArgumentException)
+			.exceptionFilter(IllegalArgumentException.class::isInstance)
 			.build();
 		var req = new org.springframework.mock.web.MockHttpServletRequest();
 		req.setAttribute("Exception", new IllegalArgumentException("test"));
@@ -135,7 +135,7 @@ class RestLogger_Test extends TestBase {
 
 	@Test void d02_exceptionFilter_doesNotMatchWrongType() throws Exception {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
-			.exceptionFilter(x -> x instanceof IllegalArgumentException)
+			.exceptionFilter(IllegalArgumentException.class::isInstance)
 			.build();
 		var req = new org.springframework.mock.web.MockHttpServletRequest();
 		req.setAttribute("Exception", new RuntimeException("test"));
@@ -146,7 +146,7 @@ class RestLogger_Test extends TestBase {
 	@Test void d03_exceptionFilter_matchesWhenNoException() throws Exception {
 		// When no exception is present, the exception filter is not evaluated; the rule still matches.
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
-			.exceptionFilter(x -> x instanceof IllegalArgumentException)
+			.exceptionFilter(IllegalArgumentException.class::isInstance)
 			.build();
 		var req = new org.springframework.mock.web.MockHttpServletRequest();
 		var res = new org.springframework.mock.web.MockHttpServletResponse();

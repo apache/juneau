@@ -285,8 +285,10 @@ class CsvParserSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void j01_primitiveArrays_longFloatShortBooleanChar() throws Exception {
-		var csv = "name,longs,floats,shorts,bools,chars\n"
-			+ "row1,[1;2;3],[1.5;2.5],[10;20],[true;false],[65;66;67]\n";
+		var csv = """
+			name,longs,floats,shorts,bools,chars
+			row1,[1;2;3],[1.5;2.5],[10;20],[true;false],[65;66;67]
+			""";
 		var r = (List<P>) CsvParser.DEFAULT.parse(csv, List.class, P.class);
 		assertEquals(1, r.size());
 		assertArrayEquals(new long[]{1L, 2L, 3L}, r.get(0).longs);
@@ -298,8 +300,10 @@ class CsvParserSession_Test extends TestBase {
 
 	@Test void j02_primitiveArrays_emptyVariants() throws Exception {
 		// "[]" -> createEmptyPrimitiveArray; exercises long/float/short/bool/char empty branches.
-		var csv = "name,longs,floats,shorts,bools,chars\n"
-			+ "row1,[],[],[],[],[]\n";
+		var csv = """
+			name,longs,floats,shorts,bools,chars
+			row1,[],[],[],[],[]
+			""";
 		var r = (List<P>) CsvParser.DEFAULT.parse(csv, List.class, P.class);
 		assertEquals(0, r.get(0).longs.length);
 		assertEquals(0, r.get(0).floats.length);
@@ -311,8 +315,10 @@ class CsvParserSession_Test extends TestBase {
 	@Test void j03_primitiveArray_missingBracketsTreatedAsString() throws Exception {
 		// Array cell without [..] markers -> parseCsvCellValue returns null and
 		// convertToType(string,int[]) is attempted; throws ParseException.
-		var csv = "name,longs,floats,shorts,bools,chars\n"
-			+ "row1,1;2;3,[],[],[],[]\n";
+		var csv = """
+			name,longs,floats,shorts,bools,chars
+			row1,1;2;3,[],[],[],[]
+			""";
 		assertThrows(ParseException.class, () -> CsvParser.DEFAULT.parse(csv, List.class, P.class));
 	}
 

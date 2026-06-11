@@ -44,7 +44,8 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"java:S1186", // Annotation-presence-only fixtures don't need test body wiring beyond round-trip.
-	"java:S2699" // Several tests assert through the roundTripDefault helper (and the l01 no-op guard) that Sonar can't see as assertions.
+	"java:S2699", // Several tests assert through the roundTripDefault helper (and the l01 no-op guard) that Sonar can't see as assertions.
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
 })
 class MarshalledPropertyPostProcessor_Test {
 

@@ -21,7 +21,9 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.math.*;
 import java.util.*;
 
-@SuppressWarnings({})
+@SuppressWarnings({
+	"java:S1104" // Intentional public-field marshalling fixture; getters/setters would defeat the bean's purpose.
+})
 public class PrimitiveObjectsBean {
 
 	// primitive objects

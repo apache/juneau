@@ -271,7 +271,7 @@ class TomlTokenizer_Test extends TestBase {
 	@Test
 	void f02_readBasicStringMissingOpenQuoteThrows() {
 		var tok = t("hello");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	@Test
@@ -295,38 +295,38 @@ class TomlTokenizer_Test extends TestBase {
 	@Test
 	void f06_readBasicStringInvalidEscape() {
 		var tok = t("\"\\q\"");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	@Test
 	void f07_readBasicStringUnterminated() {
 		var tok = t("\"hello");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	@Test
 	void f08_readBasicStringEofAfterBackslash() {
 		var tok = t("\"\\");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	@Test
 	void f09_readBasicStringInvalidUnicodeHex() {
 		var tok = t("\"\\uXYZW\"");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	@Test
 	void f10_readBasicStringInvalidUnicodeShortEof() {
 		var tok = t("\"\\u00\"");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	@Test
 	void f11_readBasicStringInvalidLongUnicodeCodePoint() {
 		// \U with code point > 0x10FFFF is invalid (out of valid Unicode range)
 		var tok = t("\"\\U00200000\"");
-		assertThrows(ParseException.class, () -> tok.readBasicString());
+		assertThrows(ParseException.class, tok::readBasicString);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -342,13 +342,13 @@ class TomlTokenizer_Test extends TestBase {
 	@Test
 	void g02_readLiteralStringMissingOpenQuoteThrows() {
 		var tok = t("hello");
-		assertThrows(ParseException.class, () -> tok.readLiteralString());
+		assertThrows(ParseException.class, tok::readLiteralString);
 	}
 
 	@Test
 	void g03_readLiteralStringUnterminated() {
 		var tok = t("'hello");
-		assertThrows(ParseException.class, () -> tok.readLiteralString());
+		assertThrows(ParseException.class, tok::readLiteralString);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -415,13 +415,13 @@ class TomlTokenizer_Test extends TestBase {
 	@Test
 	void h10_readMultiLineBasicStringUnterminated() {
 		var tok = t("foo");
-		assertThrows(ParseException.class, () -> tok.readMultiLineBasicString());
+		assertThrows(ParseException.class, tok::readMultiLineBasicString);
 	}
 
 	@Test
 	void h11_readMultiLineBasicStringInvalidEscape() {
 		var tok = t("\\q\"\"\"");
-		assertThrows(ParseException.class, () -> tok.readMultiLineBasicString());
+		assertThrows(ParseException.class, tok::readMultiLineBasicString);
 	}
 
 	@Test
@@ -480,7 +480,7 @@ class TomlTokenizer_Test extends TestBase {
 	@Test
 	void i07_readMultiLineLiteralStringUnterminated() {
 		var tok = t("foo");
-		assertThrows(ParseException.class, () -> tok.readMultiLineLiteralString());
+		assertThrows(ParseException.class, tok::readMultiLineLiteralString);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -26,7 +26,8 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"resource", // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
 })
 class TomlWriter_Test extends TestBase {
 

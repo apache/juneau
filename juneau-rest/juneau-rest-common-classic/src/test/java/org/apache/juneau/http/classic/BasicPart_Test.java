@@ -147,8 +147,8 @@ class BasicPart_Test extends TestBase {
 		assertNotEquals(x1, "Foo=bar");
 		assertNotEquals(x1, null);
 
-		// Equal to a different NameValuePair impl with same name/value
-		var other = new org.apache.http.message.BasicNameValuePair("Foo","bar");
+		// Equal to a different NameValuePair impl with same name/value (cross-impl equality via the shared interface)
+		NameValuePair other = new org.apache.http.message.BasicNameValuePair("Foo","bar");
 		assertEquals(x1, other);
 	}
 

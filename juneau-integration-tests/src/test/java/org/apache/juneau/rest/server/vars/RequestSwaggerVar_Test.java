@@ -71,6 +71,8 @@ class RequestSwaggerVar_Test extends TestBase {
 	@BeforeAll
 	static void beforeAll() {
 		clientA = MockRestClient.build(A.class);
+		beforeAllC();
+		beforeAllE();
 	}
 
 	@Test void a01_title() throws Exception {
@@ -228,7 +230,6 @@ class RequestSwaggerVar_Test extends TestBase {
 
 	private static MockRestClient clientC;
 
-	@BeforeAll
 	static void beforeAllC() {
 		clientC = MockRestClient.build(C.class);
 	}
@@ -305,7 +306,6 @@ class RequestSwaggerVar_Test extends TestBase {
 
 	private static MockRestClient clientE;
 
-	@BeforeAll
 	static void beforeAllE() {
 		clientE = MockRestClient.build(E.class);
 	}

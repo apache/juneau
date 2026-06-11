@@ -316,7 +316,7 @@ class MarshalledMap_Test extends TestBase {
 	}
 
 	@Test void b13_appendIfPredicateTrue() {
-		var m = MarshalledMap.create().appendIf(s -> ((String)s).length() > 0, "k", "value");
+		var m = MarshalledMap.create().appendIf(s -> !((String)s).isEmpty(), "k", "value");
 		assertEquals("value", m.getString("k"));
 	}
 

@@ -1491,13 +1491,14 @@ class Utils_Test extends TestBase {
 		assertEquals(5.0f, abs(-5.0f));
 		assertEquals((short)5, abs((short)-5));
 		assertEquals((byte)5, abs((byte)-5));
-		// Custom Number type falls through to double calculation
-		assertEquals(42.0, abs(new Number() {
+		// Custom Number type falls through to double calculation (returns a Double at runtime)
+		Number a = abs(new Number() {
 			@Override public int intValue() { return -42; }
 			@Override public long longValue() { return -42L; }
 			@Override public float floatValue() { return -42.0f; }
 			@Override public double doubleValue() { return -42.0; }
-		}));
+		});
+		assertEquals(42.0, a.doubleValue());
 		assertNull(abs(null));
 	}
 

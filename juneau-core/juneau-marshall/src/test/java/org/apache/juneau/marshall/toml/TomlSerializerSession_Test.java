@@ -33,7 +33,8 @@ import org.junit.jupiter.api.*;
  */
 @SuppressWarnings({
 	"java:S125",  // Commented-out code is retained as historical reference / future re-enable candidate.
-	"java:S5976"  // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S5976",  // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
 })
 class TomlSerializerSession_Test extends TestBase {
 

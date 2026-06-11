@@ -25,7 +25,9 @@ import java.util.concurrent.atomic.*;
  * Test bean fields of type AtomicInteger and AtomicLong.
  * Note that Jena parsers cannot handle these types, so we only test non-Jena parsers.
  */
-@SuppressWarnings({})
+@SuppressWarnings({
+	"java:S1104" // Intentional public-field marshalling fixture; getters/setters would defeat the bean's purpose.
+})
 public class PrimitiveAtomicObjectsBean {
 
 	// primitive objects

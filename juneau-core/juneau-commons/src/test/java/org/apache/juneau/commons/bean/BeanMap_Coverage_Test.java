@@ -313,7 +313,7 @@ class BeanMap_Coverage_Test extends TestBase {
 		p.setY(10);
 		var bm = BeanMap.of(p);
 		Map<String,Object> seen = new HashMap<>();
-		bm.forEachValue(v -> v instanceof String, (pm, name, val, t) -> seen.put(name, val));
+		bm.forEachValue(String.class::isInstance, (pm, name, val, t) -> seen.put(name, val));
 		assertEquals(Set.of("x"), seen.keySet());
 	}
 

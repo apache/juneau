@@ -26,6 +26,9 @@ import org.apache.juneau.commons.TestBase;
  * Expanded edge-case tests for all SVL function categories to increase instruction coverage.
  * Supplements the per-category *_Test files with null/empty/boundary inputs.
  */
+@SuppressWarnings({
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+})
 class SvlFunctions_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

@@ -48,6 +48,11 @@ class MicroserviceResources_Test extends TestBase {
 	static Path dirRoot;
 
 	@BeforeAll
+	static void setup() throws Exception {
+		setupDir();
+		setupLogs();
+	}
+
 	static void setupDir() throws Exception {
 		dirRoot = dirTempDir.resolve("dir-root");
 		Files.createDirectories(dirRoot);
@@ -147,7 +152,6 @@ class MicroserviceResources_Test extends TestBase {
 
 	static Path logsRoot;
 
-	@BeforeAll
 	static void setupLogs() throws Exception {
 		logsRoot = logsTempDir.resolve("logs-root");
 		Files.createDirectories(logsRoot);

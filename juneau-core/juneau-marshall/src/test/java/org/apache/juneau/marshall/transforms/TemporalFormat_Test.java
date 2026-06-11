@@ -26,7 +26,8 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
 })
 class TemporalFormat_Test {
 
