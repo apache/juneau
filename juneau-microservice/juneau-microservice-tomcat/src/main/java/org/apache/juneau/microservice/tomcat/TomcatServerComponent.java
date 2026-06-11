@@ -314,7 +314,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 */
 	public TomcatServerComponent addServlet(Servlet servlet, String...pathSpecs) {
 		var context = getContext();
-		var servletName = servlet.getClass().getName() + "#" + UUID.randomUUID();
+		var servletName = cn(servlet) + "#" + UUID.randomUUID();
 		Tomcat.addServlet(context, servletName, servlet);
 		for (var pathSpec : pathSpecs)
 			context.addServletMappingDecoded(pathSpec, servletName);
@@ -342,7 +342,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 */
 	public TomcatServerComponent addFilter(jakarta.servlet.Filter filter, String...urlPatterns) {
 		var context = getContext();
-		var filterName = filter.getClass().getName() + "#" + UUID.randomUUID();
+		var filterName = cn(filter) + "#" + UUID.randomUUID();
 		var fd = new FilterDef();
 		fd.setFilter(filter);
 		fd.setFilterName(filterName);

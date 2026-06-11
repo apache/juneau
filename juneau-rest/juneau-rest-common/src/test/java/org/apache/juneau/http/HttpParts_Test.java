@@ -217,6 +217,9 @@ class HttpParts_Test extends TestBase {
 
 	/** No annotation, NAME field is non-static — exercises the modifier guard. */
 	public static class E_NonStaticName {
+		@SuppressWarnings({
+			"java:S116" // Field must be literally named 'NAME' to exercise the reflective NAME-field lookup (modifier/type/null guards) in readPublicStaticStringField; renaming defeats the test.
+		})
 		public final String NAME = "instance";
 	}
 

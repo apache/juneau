@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.toml;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -251,7 +252,7 @@ class Toml_Test {
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("odt");
 		assertNotNull(value);
-		assertTrue(value instanceof OffsetDateTime, "Expected OffsetDateTime, got " + value.getClass().getName());
+		assertTrue(value instanceof OffsetDateTime, "Expected OffsetDateTime, got " + cn(value));
 		var odt = (OffsetDateTime) value;
 		assertEquals(1979, odt.getYear());
 		assertEquals(5, odt.getMonthValue());
@@ -264,7 +265,7 @@ class Toml_Test {
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("ldt");
 		assertNotNull(value);
-		assertTrue(value instanceof LocalDateTime, "Expected LocalDateTime, got " + value.getClass().getName());
+		assertTrue(value instanceof LocalDateTime, "Expected LocalDateTime, got " + cn(value));
 		var ldt = (LocalDateTime) value;
 		assertEquals(1979, ldt.getYear());
 		assertEquals(7, ldt.getHour());
@@ -305,7 +306,7 @@ class Toml_Test {
 		JsonMap parsed = Toml.to(toml, JsonMap.class);
 		var value = parsed.get("odt");
 		assertNotNull(value);
-		assertTrue(value instanceof OffsetDateTime, "Expected OffsetDateTime, got " + value.getClass().getName());
+		assertTrue(value instanceof OffsetDateTime, "Expected OffsetDateTime, got " + cn(value));
 		var odt = (OffsetDateTime) value;
 		assertEquals(ZoneOffset.ofHoursMinutes(5, 30), odt.getOffset());
 	}

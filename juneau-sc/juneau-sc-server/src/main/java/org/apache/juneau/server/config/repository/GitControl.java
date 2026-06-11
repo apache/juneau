@@ -126,7 +126,7 @@ public class GitControl {
 				Logger.getLogger(GitControl.class).info("{}", it.next().toString());
 			}
 		} catch (InvalidRemoteException e) {
-			e.printStackTrace();
+			Logger.getLogger(GitControl.class).warning(e, "Error pushing to remote repository.");
 		}
 	}
 }

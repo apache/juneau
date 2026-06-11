@@ -38,7 +38,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 
 	private static boolean isRdf(RoundTrip_Tester t) {
 		var p = t.getParser();
-		return p != null && p.getClass().getName().contains(".jena.Rdf");
+		return p != null && cn(p).contains(".jena.Rdf");
 	}
 
 	private static boolean isHjson(RoundTrip_Tester t) {

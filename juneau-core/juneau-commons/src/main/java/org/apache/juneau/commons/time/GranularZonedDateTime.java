@@ -179,49 +179,49 @@ public class GranularZonedDateTime {
 	}
 
 	/**
-	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a custom time provider.
+	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a custom clock.
 	 *
 	 * <p>
 	 * This method is similar to {@link #of(String)}, but allows you to specify a custom
-	 * {@link TimeProvider} to use for obtaining the system default timezone and current time.
+	 * {@link Clock} to use for obtaining the time zone and current time.
 	 * This is useful for testing or when you need deterministic time behavior.
 	 *
 	 * <p>
-	 * The time provider is used when:
+	 * The clock is used when:
 	 * <ul>
-	 * 	<li>No timezone is specified in the string - uses {@link TimeProvider#getSystemDefaultZoneId()}
-	 * 	<li>Time-only formats (starting with "T") - uses {@link TimeProvider#now(ZoneId)} to get the current date
+	 * 	<li>No timezone is specified in the string - uses {@link Clock#getZone()}
+	 * 	<li>Time-only formats (starting with "T") - uses the clock's instant to get the current date
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Parse with custom time provider for testing</jc>
-	 * 	<jk>var</jk> <jv>timeProvider</jv> = <jk>new</jk> FakeTimeProvider();
+	 * 	<jc>// Parse with a fixed clock for deterministic testing</jc>
+	 * 	<jk>var</jk> <jv>clock</jv> = Clock.<jsm>fixed</jsm>(Instant.<jsm>parse</jsm>(<js>"2000-01-01T12:00:00Z"</js>), ZoneOffset.<jsf>UTC</jsf>);
 	 * 	GranularZonedDateTime <jv>gdt</jv> = GranularZonedDateTime.<jsm>of</jsm>(
 	 * 		<js>"T12:30:45"</js>,
-	 * 		<jv>timeProvider</jv>
+	 * 		<jv>clock</jv>
 	 * 	);
-	 * 	<jc>// Result uses the time provider's current date and timezone</jc>
+	 * 	<jc>// Result uses the clock's current date and timezone</jc>
 	 * </p>
 	 *
 	 * @param value The ISO8601 timestamp string to parse.
-	 * @param timeProvider The time provider to use for system default timezone and current time.
-	 * 	If null, {@link TimeProvider#INSTANCE} is used.
+	 * @param clock The clock to use for time zone and current time.
+	 * 	If null, {@link Clock#systemDefaultZone()} is used.
 	 * @return A new GranularZonedDateTime instance.
 	 * @throws IllegalArgumentException if value is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
 	 */
-	public static GranularZonedDateTime of(String value, TimeProvider timeProvider) {
-		return of(value, null, timeProvider);
+	public static GranularZonedDateTime of(String value, Clock clock) {
+		return of(value, null, clock);
 	}
 
 
 	/**
-	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a default timezone and custom time provider.
+	 * Parses an ISO8601 timestamp string into a GranularZonedDateTime with a default timezone and custom clock.
 	 *
 	 * <p>
 	 * This method is similar to {@link #of(String)}, but allows you to specify both a default
-	 * timezone and a custom {@link TimeProvider} to use when no timezone is present in the timestamp string.
+	 * timezone and a custom {@link Clock} to use when no timezone is present in the timestamp string.
 	 *
 	 * <p>
 	 * If the timestamp string contains a timezone (Z, +HH:mm, -HH:mm, etc.), that timezone
@@ -229,20 +229,20 @@ public class GranularZonedDateTime {
 	 * no timezone is specified in the string.
 	 *
 	 * <p>
-	 * The time provider is used when:
+	 * The clock is used when:
 	 * <ul>
-	 * 	<li>No timezone is specified and defaultZoneId is null - uses {@link TimeProvider#getSystemDefaultZoneId()}
-	 * 	<li>Time-only formats (starting with "T") - uses {@link TimeProvider#now(ZoneId)} to get the current date
+	 * 	<li>No timezone is specified and defaultZoneId is null - uses {@link Clock#getZone()}
+	 * 	<li>Time-only formats (starting with "T") - uses the clock's instant to get the current date
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jc>// Parse with default timezone and custom time provider</jc>
-	 * 	<jk>var</jk> <jv>timeProvider</jv> = <jk>new</jk> FakeTimeProvider();
+	 * 	<jc>// Parse with default timezone and a fixed clock</jc>
+	 * 	<jk>var</jk> <jv>clock</jv> = Clock.<jsm>fixed</jsm>(Instant.<jsm>parse</jsm>(<js>"2000-01-01T12:00:00Z"</js>), ZoneOffset.<jsf>UTC</jsf>);
 	 * 	GranularZonedDateTime <jv>gdt1</jv> = GranularZonedDateTime.<jsm>of</jsm>(
 	 * 		<js>"2011-01-15T12:30:45"</js>,
 	 * 		<jv>ZoneId</jv>.<jsm>of</jsm>(<js>"America/New_York"</js>),
-	 * 		<jv>timeProvider</jv>
+	 * 		<jv>clock</jv>
 	 * 	);
 	 * 	<jc>// Result uses America/New_York timezone</jc>
 	 *
@@ -250,16 +250,16 @@ public class GranularZonedDateTime {
 	 * 	GranularZonedDateTime <jv>gdt2</jv> = GranularZonedDateTime.<jsm>of</jsm>(
 	 * 		<js>"2011-01-15T12:30:45Z"</js>,
 	 * 		<jv>ZoneId</jv>.<jsm>of</jsm>(<js>"America/New_York"</js>),
-	 * 		<jv>timeProvider</jv>
+	 * 		<jv>clock</jv>
 	 * 	);
 	 * 	<jc>// Result uses UTC (Z), not America/New_York</jc>
 	 * </p>
 	 *
 	 * @param value The ISO8601 timestamp string to parse.
 	 * @param defaultZoneId The default timezone to use if no timezone is specified in the string.
-	 * 	If null, the time provider's system default timezone is used.
-	 * @param timeProvider The time provider to use for system default timezone and current time.
-	 * 	If null, {@link TimeProvider#INSTANCE} is used.
+	 * 	If null, the clock's time zone is used.
+	 * @param clock The clock to use for time zone and current time.
+	 * 	If null, {@link Clock#systemDefaultZone()} is used.
 	 * @return A new GranularZonedDateTime instance.
 	 * @throws IllegalArgumentException if value is null.
 	 * @throws DateTimeParseException if the timestamp format is invalid.
@@ -269,10 +269,10 @@ public class GranularZonedDateTime {
 		"java:S6541", // Single-threaded context; synchronization unnecessary
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 	})
-	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, TimeProvider timeProvider) {
+	public static GranularZonedDateTime of(String value, ZoneId defaultZoneId, Clock clock) {
 		assertArgNotNull(ARG_value, value);
 		var digit = StringUtils.DIGIT;
-		timeProvider = timeProvider == null ? TimeProvider.INSTANCE : timeProvider;
+		clock = clock == null ? Clock.systemDefaultZone() : clock;
 
 		// States:
 		// S01: Looking for Y(S02) or T(S07).
@@ -678,9 +678,9 @@ public class GranularZonedDateTime {
 			}
 		}
 
-		// Use provided default zone if no zone specified, otherwise use system default
+		// Use provided default zone if no zone specified, otherwise use the clock's zone
 		if (zoneId == null) {
-			zoneId = defaultZoneId != null ? defaultZoneId : timeProvider.getSystemDefaultZoneId();
+			zoneId = defaultZoneId != null ? defaultZoneId : clock.getZone();
 		}
 
 		// Construct ZonedDateTime from parsed values
@@ -688,8 +688,8 @@ public class GranularZonedDateTime {
 		// For time-only formats (started with "T"), use current date
 		// For date formats, default to 1/1/1
 		if (timeOnly) {
-			// Time-only format: use current year/month/day
-			var now = timeProvider.now(zoneId);
+			// Time-only format: use current year/month/day as read from the clock in the resolved zone
+			var now = ZonedDateTime.now(clock.withZone(zoneId));
 			year = now.getYear();
 			month = now.getMonthValue();
 			day = now.getDayOfMonth();

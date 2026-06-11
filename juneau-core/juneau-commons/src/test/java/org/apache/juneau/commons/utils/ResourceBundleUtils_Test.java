@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -141,7 +142,7 @@ class ResourceBundleUtils_Test extends TestBase {
 		});
 		// Should be IllegalArgumentException, but may be NullPointerException if using old compiled class
 		assertTrue(ex instanceof IllegalArgumentException || ex instanceof NullPointerException,
-			"Expected IllegalArgumentException or NullPointerException, got: " + ex.getClass().getName());
+			"Expected IllegalArgumentException or NullPointerException, got: " + cn(ex));
 	}
 
 	@Test
@@ -200,7 +201,7 @@ class ResourceBundleUtils_Test extends TestBase {
 		});
 		// Should be IllegalArgumentException, but may be NullPointerException if using old compiled class
 		assertTrue(ex instanceof IllegalArgumentException || ex instanceof NullPointerException,
-			"Expected IllegalArgumentException or NullPointerException, got: " + ex.getClass().getName());
+			"Expected IllegalArgumentException or NullPointerException, got: " + cn(ex));
 	}
 
 	@Test

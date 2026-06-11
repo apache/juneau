@@ -950,7 +950,7 @@ public class Microservice implements ConfigEventListener {
 		try {
 			stopConsole();
 		} catch (Exception e) {
-			e.printStackTrace();
+			getLogger().log(Level.WARNING, "Error occurred while stopping the console.", e);
 		}
 		System.exit(0);
 	}
@@ -1280,9 +1280,9 @@ public class Microservice implements ConfigEventListener {
 	public synchronized Microservice start() throws Exception {
 
 		if (config.getName() == null)
-			err(messages, "RunningClassWithoutConfig", getClass().getSimpleName());
+			err(messages, "RunningClassWithoutConfig", cns(this));
 		else
-			out(messages, "RunningClassWithConfig", getClass().getSimpleName(), config.getName());
+			out(messages, "RunningClassWithConfig", cns(this), config.getName());
 
 		Runtime.getRuntime().addShutdownHook(new Thread("ShutdownHookThread") {
 			@Override /* Overridden from Thread */
@@ -1291,7 +1291,7 @@ public class Microservice implements ConfigEventListener {
 					Microservice.this.stop();
 					Microservice.this.stopConsole();
 				} catch (Exception e) {
-					e.printStackTrace();
+					getLogger().log(Level.WARNING, "Error occurred during microservice shutdown.", e);
 				}
 			}
 		});
@@ -1413,7 +1413,7 @@ public class Microservice implements ConfigEventListener {
 	protected PrintWriter getConsoleWriter() { return consoleWriter; }
 
 	private PrintWriter createLoggerConsoleWriter() {
-		var fallbackLogger = firstNonNull(getLogger(), Logger.getLogger(getClass().getName()));
+		var fallbackLogger = firstNonNull(getLogger(), Logger.getLogger(cn(this)));
 		return new PrintWriter(new Writer() {
 			private final StringBuilder buffer = new StringBuilder();
 			@Override

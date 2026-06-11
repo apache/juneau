@@ -31,6 +31,7 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -71,6 +72,8 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options");
 
+	private static final Logger LOG = Logger.getLogger(SwaggerUI.class);
+
 	private static Div examples(Session s, ParameterInfo pi) {
 		// @formatter:off
 		var isBody = "body".equals(pi.getIn());
@@ -92,7 +95,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			}
 
 		} catch (Exception e) { // HTT - requires resolveRefs to throw
-			e.printStackTrace();
+			LOG.warning(e, "Could not resolve schema references while rendering examples.");
 		}
 
 		if (m.isEmpty()) // HTT - body param without schema returns null before calling examplesDiv
@@ -116,7 +119,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 			if (nn(examples))
 				examples.forEach(m::put);
 		} catch (Exception e) { // HTT - requires resolveRefs to throw
-			e.printStackTrace();
+			LOG.warning(e, "Could not resolve schema references while rendering examples.");
 		}
 
 		if (m.isEmpty())

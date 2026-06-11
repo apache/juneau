@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.*;
 import org.springframework.boot.web.servlet.*;
@@ -79,13 +81,13 @@ public class JuneauServletRegistrations {
 		var resolved = RestContext.resolveTopLevelPaths(servlet.getClass(), servlet, beanStore);
 		if (resolved.length == 0)
 			throw new IllegalArgumentException("Servlet "
-				+ servlet.getClass().getName()
+				+ cn(servlet)
 				+ " resolves to no top-level paths; declare @Rest(paths=...) or override getPaths().");
 		var mappings = new String[resolved.length];
 		for (var i = 0; i < resolved.length; i++)
 			mappings[i] = toUrlMapping(resolved[i]);
 		var bean = new ServletRegistrationBean<>(servlet, mappings);
-		bean.setName(servlet.getClass().getName());
+		bean.setName(cn(servlet));
 		return bean;
 	}
 

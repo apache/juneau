@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -125,7 +126,7 @@ class IniParser_Test extends TestBase {
 		var ex = assertThrows(Exception.class, () ->
 			IniParser.DEFAULT.parse("[]", List.class, String.class));
 		assertTrue(ex.getMessage().contains("not supported") || ex.getMessage().contains("bean")
-			|| ex.getClass().getSimpleName().contains("Parse"));
+			|| cns(ex).contains("Parse"));
 	}
 
 }

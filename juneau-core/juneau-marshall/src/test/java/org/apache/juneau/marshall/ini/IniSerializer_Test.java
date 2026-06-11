@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -161,14 +162,14 @@ class IniSerializer_Test {
 		var list = List.of("a", "b", "c");
 		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.serialize(list));
 		assertTrue(ex.getMessage().contains("Collection") || ex.getMessage().contains("not supported")
-			|| ex.getClass().getSimpleName().contains("Serialize"));
+			|| cns(ex).contains("Serialize"));
 	}
 
 	@Test
 	void a11_topLevelScalarThrows() {
 		var ex = assertThrows(Exception.class, () -> IniSerializer.DEFAULT.serialize("hello"));
 		assertTrue(ex.getMessage().contains("not supported") || ex.getMessage().contains("bean")
-			|| ex.getClass().getSimpleName().contains("Serialize"));
+			|| cns(ex).contains("Serialize"));
 	}
 
 	@Test

@@ -39,7 +39,7 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S8692" // ID/logout tokens flow through Nimbus JWT validation, which reads the real system clock with no injectable seam; tokens must be minted at real "now" and converting would require a separate production Clock seam in the validator.
+	"java:S8692" // Nimbus oauth2-oidc-sdk 11.37.2 exposes no clock hook on the ID-token path (IDTokenClaimsVerifier reads new Date() internally), so injecting a clock there would require cloning Nimbus internals; the logout-token path IS clock-injectable and is tested deterministically.
 })
 class OidcRelyingParty_Test extends TestBase {
 
@@ -47,6 +47,11 @@ class OidcRelyingParty_Test extends TestBase {
 	private static final URI REDIRECT_URI = URI.create("https://app.example.com/auth/callback");
 	private static final URI AUTHZ = URI.create("https://stub-idp.example.com/authorize");
 	private static final URI END_SESSION = URI.create("https://stub-idp.example.com/logout");
+
+	// Fixed clock for the logout-token path, which IS clock-injectable; the matching store clock keeps
+	// session-expiry deterministic so the login() preamble survives the back-dated instant.
+	private static final Instant FIXED_NOW = Instant.parse("2024-06-01T12:00:00Z");
+	private static final Clock FIXED_CLOCK = Clock.fixed(FIXED_NOW, ZoneOffset.UTC);
 
 	private StubIdp idp;
 	private RSAKey key;
@@ -62,6 +67,10 @@ class OidcRelyingParty_Test extends TestBase {
 	}
 
 	private OidcRelyingParty rp(SessionStore store) {
+		return rp(store, Clock.systemUTC());
+	}
+
+	private OidcRelyingParty rp(SessionStore store, Clock clock) {
 		return OidcRelyingParty.create()
 			.metadata(idp.metadata(AUTHZ, END_SESSION))
 			.clientId(CID)
@@ -70,6 +79,7 @@ class OidcRelyingParty_Test extends TestBase {
 			.scope("openid", "profile")
 			.sessionStore(store)
 			.jwkSet(publicJwks(key))
+			.clock(clock)
 			.build();
 	}
 
@@ -261,35 +271,35 @@ class OidcRelyingParty_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_backChannelLogout_bySid_invalidatesSession() throws Exception {
-		var rp = rp(InMemorySessionStore.create());
+		var rp = rp(new InMemorySessionStore(InMemorySessionStore.DEFAULT_MAX_ENTRIES, FIXED_CLOCK), FIXED_CLOCK);
 		var cookie = login(rp, "alice", "sess-1", null);
 		assertTrue(authn(rp, cookie).isPresent());
-		var logoutToken = signLogoutToken(key, idp.issuer, CID, null, "sess-1");
+		var logoutToken = signLogoutToken(key, idp.issuer, CID, null, "sess-1", FIXED_NOW);
 		assertEquals(1, rp.backChannelLogout(logoutToken));
 		assertTrue(authn(rp, cookie).isEmpty());
 	}
 
 	@Test void e02_backChannelLogout_bySub_invalidatesAllSessions() throws Exception {
-		var rp = rp(InMemorySessionStore.create());
+		var rp = rp(new InMemorySessionStore(InMemorySessionStore.DEFAULT_MAX_ENTRIES, FIXED_CLOCK), FIXED_CLOCK);
 		var cookie1 = login(rp, "alice", "sess-1", null);
 		var cookie2 = login(rp, "alice", "sess-2", null);
-		var logoutToken = signLogoutToken(key, idp.issuer, CID, "alice", null);
+		var logoutToken = signLogoutToken(key, idp.issuer, CID, "alice", null, FIXED_NOW);
 		assertEquals(2, rp.backChannelLogout(logoutToken));
 		assertTrue(authn(rp, cookie1).isEmpty());
 		assertTrue(authn(rp, cookie2).isEmpty());
 	}
 
 	@Test void e03_backChannelLogout_badSignature_isRejected() throws Exception {
-		var rp = rp(InMemorySessionStore.create());
+		var rp = rp(new InMemorySessionStore(InMemorySessionStore.DEFAULT_MAX_ENTRIES, FIXED_CLOCK), FIXED_CLOCK);
 		login(rp, "alice", "sess-1", null);
 		var attacker = generateRsa("k1");
-		var forged = signLogoutToken(attacker, idp.issuer, CID, null, "sess-1");
+		var forged = signLogoutToken(attacker, idp.issuer, CID, null, "sess-1", FIXED_NOW);
 		assertThrows(AuthenticationException.class, () -> rp.backChannelLogout(forged));
 	}
 
 	@Test void e04_backChannelLogout_signedCookieStore_throws() throws Exception {
-		var rp = rp(SignedCookieSessionStore.create().signingKey("0123456789abcdef0123456789abcdef").build());
-		var logoutToken = signLogoutToken(key, idp.issuer, CID, null, "sess-1");
+		var rp = rp(SignedCookieSessionStore.create().signingKey("0123456789abcdef0123456789abcdef").build(), FIXED_CLOCK);
+		var logoutToken = signLogoutToken(key, idp.issuer, CID, null, "sess-1", FIXED_NOW);
 		assertThrows(IllegalStateException.class, () -> rp.backChannelLogout(logoutToken));
 	}
 }

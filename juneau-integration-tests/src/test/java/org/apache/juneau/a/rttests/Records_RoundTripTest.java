@@ -17,6 +17,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -32,7 +33,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 
 	private static boolean isRdf(RoundTrip_Tester t) {
 		var p = t.getParser();
-		return p != null && p.getClass().getName().contains(".jena.Rdf");
+		return p != null && cn(p).contains(".jena.Rdf");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -217,7 +218,7 @@ class RestOpInvoker_Test extends TestBase {
 		// rather than the placeholder 500 set on the response prior to serialization.
 		assertEquals(404, e.statusCode);
 		assertNotNull(e.error);
-		assertEquals("NotFound", e.error.getClass().getSimpleName());
+		assertEquals("NotFound", cns(e.error));
 		var s = B_TRACE.last();
 		assertEquals(Integer.valueOf(404), s.status);
 		assertNotNull(s.error);
@@ -228,14 +229,14 @@ class RestOpInvoker_Test extends TestBase {
 		B_REC.events.clear();
 		CB.get("/badRequest").run().assertStatus(400);
 		assertEquals(400, B_REC.last().statusCode);
-		assertEquals("BadRequest", B_REC.last().error.getClass().getSimpleName());
+		assertEquals("BadRequest", cns(B_REC.last().error));
 	}
 
 	@Test void b03_basicHttpException_forbiddenPropagates() throws Exception {
 		B_REC.events.clear();
 		CB.get("/forbidden").run().assertStatus(403);
 		assertEquals(403, B_REC.last().statusCode);
-		assertEquals("Forbidden", B_REC.last().error.getClass().getSimpleName());
+		assertEquals("Forbidden", cns(B_REC.last().error));
 	}
 
 	@Test void b04_runtimeException_wrappedAs500() throws Exception {
@@ -246,7 +247,7 @@ class RestOpInvoker_Test extends TestBase {
 		assertEquals(500, e.statusCode);
 		assertNotNull(e.error);
 		// The InvocationTargetException catch block records the underlying cause.
-		assertEquals("IllegalStateException", e.error.getClass().getSimpleName());
+		assertEquals("IllegalStateException", cns(e.error));
 		var s = B_TRACE.last();
 		assertEquals(Integer.valueOf(500), s.status);
 		assertNotNull(s.error);
@@ -258,7 +259,7 @@ class RestOpInvoker_Test extends TestBase {
 		var e = B_REC.last();
 		assertEquals(500, e.statusCode);
 		assertNotNull(e.error);
-		assertEquals("IOException", e.error.getClass().getSimpleName());
+		assertEquals("IOException", cns(e.error));
 	}
 
 	@Test void b06_explicitInternalServerError_propagates() throws Exception {
@@ -267,7 +268,7 @@ class RestOpInvoker_Test extends TestBase {
 		var e = B_REC.last();
 		assertEquals(500, e.statusCode);
 		assertNotNull(e.error);
-		assertEquals("InternalServerError", e.error.getClass().getSimpleName());
+		assertEquals("InternalServerError", cns(e.error));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

@@ -329,7 +329,7 @@ public final class RemoteClient {
 			try {
 				return OpenApiSerializer.DEFAULT.getPartSession().serialize(partType, schema, value);
 			} catch (Exception e) {
-				throw rex(e, "Could not serialize HTTP {0} part value of type {1}", partType, value == null ? "null" : value.getClass().getName());
+				throw rex(e, "Could not serialize HTTP {0} part value of type {1}", partType, value == null ? "null" : cn(value));
 			}
 		}
 

@@ -37,6 +37,7 @@ import com.nimbusds.jose.jwk.*;
 import com.nimbusds.jose.jwk.source.*;
 import com.nimbusds.jose.proc.*;
 import com.nimbusds.jwt.*;
+import com.nimbusds.jwt.proc.*;
 import com.nimbusds.oauth2.sdk.http.*;
 import com.nimbusds.oauth2.sdk.id.*;
 import com.nimbusds.oauth2.sdk.pkce.*;
@@ -522,9 +523,9 @@ public class OidcRelyingParty {
 	})
 	private volatile JWKSource<SecurityContext> jwkSourceCache;
 	@SuppressWarnings({
-		"java:S3077" // Publish-once cache: assigned once under double-checked locking in logoutTokenValidator(); the validator is fully built before assignment, so volatile safe-publication is sufficient.
+		"java:S3077" // Publish-once cache: assigned once under double-checked locking in logoutTokenProcessor(); the processor is fully built before assignment, so volatile safe-publication is sufficient.
 	})
-	private volatile LogoutTokenValidator logoutTokenValidatorCache;
+	private volatile ConfigurableJWTProcessor<SecurityContext> logoutTokenProcessorCache;
 
 	/**
 	 * Constructor.
@@ -785,9 +786,12 @@ public class OidcRelyingParty {
 		}
 		LogoutTokenClaimsSet claims;
 		try {
-			claims = logoutTokenValidator().validate(jwt);
+			var verified = logoutTokenProcessor().process(jwt, null);
+			claims = new LogoutTokenClaimsSet(verified);
 		} catch (com.nimbusds.jose.proc.BadJOSEException | com.nimbusds.jose.JOSEException e) {
 			throw new AuthenticationException(e, "Logout token validation failed: {0}", e.getMessage());
+		} catch (com.nimbusds.oauth2.sdk.ParseException e) {
+			throw new AuthenticationException(e, "Logout token claims could not be parsed");
 		}
 		var sid = claims.getSessionID();
 		if (sid != null)
@@ -917,23 +921,35 @@ public class OidcRelyingParty {
 		}
 	}
 
-	@SuppressWarnings({
-		"deprecation" // LogoutTokenValidator(Issuer, ClientID, JWSKeySelector, JWEKeySelector) is deprecated; no alternative in current Nimbus version.
-	})
-	private LogoutTokenValidator logoutTokenValidator() {
-		var v = logoutTokenValidatorCache;
-		if (v != null)
-			return v;
+	/**
+	 * Builds (and caches) the JWT processor used to validate back-channel logout tokens.
+	 *
+	 * <p>
+	 * Nimbus's {@link LogoutTokenValidator} hardcodes a {@link LogoutTokenClaimsVerifier} internally and
+	 * exposes no clock hook, so we drive an equivalent {@link DefaultJWTProcessor} directly: the JWS type
+	 * verifier replicates {@code LogoutTokenValidator}'s default (accept untyped, {@code logout+jwt}, or
+	 * {@code JWT}), and the claims verifier is a {@link ClockAwareLogoutTokenClaimsVerifier} that sources
+	 * "now" from {@link #clock}.  With {@link Clock#systemUTC()} the behavior is identical to stock
+	 * {@code LogoutTokenValidator}.
+	 */
+	private ConfigurableJWTProcessor<SecurityContext> logoutTokenProcessor() {
+		var p = logoutTokenProcessorCache;
+		if (p != null)
+			return p;
 		synchronized (this) {
-			if (logoutTokenValidatorCache != null)
-				return logoutTokenValidatorCache;
+			if (logoutTokenProcessorCache != null)
+				return logoutTokenProcessorCache;
 			Set<JWSAlgorithm> algs = idTokenAlgorithms != null
 				? new LinkedHashSet<>(Arrays.asList(idTokenAlgorithms))
 				: new LinkedHashSet<>(Arrays.asList(JWSAlgorithm.RS256, JWSAlgorithm.ES256));
 			var keySelector = new JWSVerificationKeySelector<SecurityContext>(algs, jwkSource());
-			logoutTokenValidatorCache = new LogoutTokenValidator(
-				new Issuer(metadata().issuer().toString()), new ClientID(clientId), keySelector, null);
-			return logoutTokenValidatorCache;
+			var issuer = new Issuer(metadata().issuer().toString());
+			var processor = new DefaultJWTProcessor<SecurityContext>();
+			processor.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(LogoutTokenValidator.TYPE, JOSEObjectType.JWT, null));
+			processor.setJWSKeySelector(keySelector);
+			processor.setJWTClaimsSetVerifier(new ClockAwareLogoutTokenClaimsVerifier(issuer, new ClientID(clientId), clock));
+			logoutTokenProcessorCache = processor;
+			return logoutTokenProcessorCache;
 		}
 	}
 
@@ -1052,5 +1068,30 @@ public class OidcRelyingParty {
 		if (value.startsWith("//") || value.contains("\\") || value.contains("://"))
 			return null;
 		return value;
+	}
+
+	/**
+	 * A {@link LogoutTokenClaimsVerifier} whose {@code exp} window is evaluated against an injected
+	 * {@link Clock} instead of {@code new Date()}.
+	 *
+	 * <p>
+	 * {@link LogoutTokenClaimsVerifier} extends Nimbus's {@link DefaultJWTClaimsVerifier}, which exposes
+	 * an overridable {@link DefaultJWTClaimsVerifier#currentTime() currentTime()} hook &mdash; so this is
+	 * a one-method override that injects the clock without cloning any Nimbus claim-checking logic.  With
+	 * {@link Clock#systemUTC()} the behavior is identical to stock Nimbus.
+	 */
+	private static final class ClockAwareLogoutTokenClaimsVerifier extends LogoutTokenClaimsVerifier {
+
+		private final Clock clock;
+
+		ClockAwareLogoutTokenClaimsVerifier(Issuer issuer, ClientID clientId, Clock clock) {
+			super(issuer, clientId);
+			this.clock = clock;
+		}
+
+		@Override /* DefaultJWTClaimsVerifier */
+		protected Date currentTime() {
+			return Date.from(clock.instant());
+		}
 	}
 }

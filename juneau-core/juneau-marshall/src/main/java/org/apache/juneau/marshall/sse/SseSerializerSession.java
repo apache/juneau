@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.sse;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -108,7 +109,7 @@ public class SseSerializerSession extends WriterSerializerSession {
 			for (var item : arr)
 				writeIfEvent(w, item);
 		} else {
-			throw new SerializeException("SseSerializer cannot serialize objects of type ''{0}''.", o.getClass().getName());
+			throw new SerializeException("SseSerializer cannot serialize objects of type ''{0}''.", cn(o));
 		}
 	}
 
@@ -116,7 +117,7 @@ public class SseSerializerSession extends WriterSerializerSession {
 		if (item == null)
 			return;
 		if (!(item instanceof SseEvent e))
-			throw new SerializeException("SseSerializer encountered non-SseEvent element of type ''{0}''.", item.getClass().getName());
+			throw new SerializeException("SseSerializer encountered non-SseEvent element of type ''{0}''.", cn(item));
 		writeEvent(w, e);
 	}
 

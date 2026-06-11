@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -102,7 +103,7 @@ class BeanConverter_Test extends TestBase {
 			assertEquals(bean.toString(), converter.getNested(bean, tokenize("toString").get(0)));
 
 			// Test class access
-			assertEquals("{"+bean.getClass().getSimpleName()+"}", converter.getNested(bean, tokenize("class{simpleName}").get(0)));
+			assertEquals("{"+cns(bean)+"}", converter.getNested(bean, tokenize("class{simpleName}").get(0)));
 		}
 	}
 

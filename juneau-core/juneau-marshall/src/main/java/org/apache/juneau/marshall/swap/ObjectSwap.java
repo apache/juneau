@@ -341,7 +341,7 @@ public abstract class ObjectSwap<T,S> {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return getClass().getSimpleName() + '<' + getNormalClass().getNameSimple() + "," + getSwapClass().getNameSimple() + '>';
+		return cns(this) + '<' + getNormalClass().getNameSimple() + "," + getSwapClass().getNameSimple() + '>';
 	}
 
 	/**

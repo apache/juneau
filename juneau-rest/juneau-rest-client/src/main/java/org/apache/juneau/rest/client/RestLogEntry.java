@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.time.*;
 
 /**
@@ -176,7 +178,7 @@ public final class RestLogEntry {
 		var elapsedMs = elapsed.toMillis() + "ms";
 		var errorMsg = "";
 		if (error != null)
-			errorMsg = error.getMessage() != null ? error.getMessage() : error.getClass().getSimpleName();
+			errorMsg = error.getMessage() != null ? error.getMessage() : cns(error);
 
 		return template
 			.replace("{method}", method)

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.debug;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -171,6 +173,6 @@ public class DebugRule {
 
 	@Override
 	public String toString() {
-		return "enabled=" + enabled + ",level=" + level + ",format=" + (format == null ? null : format.getClass().getName()) + ",cacheBodies=" + cacheBodies;
+		return "enabled=" + enabled + ",level=" + level + ",format=" + (format == null ? null : cn(format)) + ",cacheBodies=" + cacheBodies;
 	}
 }

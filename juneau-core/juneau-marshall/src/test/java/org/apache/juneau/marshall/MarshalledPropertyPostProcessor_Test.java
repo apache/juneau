@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -501,12 +502,12 @@ class MarshalledPropertyPostProcessor_Test {
 			bean.getClass().getField(propertyName).set(bean, value);
 			var s = Json5Serializer.DEFAULT.serialize(bean);
 			var b = (T) Json5Parser.DEFAULT.parse(s, bean.getClass());
-			assertNotNull(b, "parsed bean was null for " + bean.getClass().getSimpleName());
+			assertNotNull(b, "parsed bean was null for " + cns(bean));
 			return b;
 		} catch (ReflectiveOperationException e) {
 			throw new AssertionError(e);
 		} catch (Exception e) {
-			throw new AssertionError("round-trip failed for " + bean.getClass().getSimpleName(), e);
+			throw new AssertionError("round-trip failed for " + cns(bean), e);
 		}
 	}
 }

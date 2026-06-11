@@ -152,23 +152,23 @@ public class Utils {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular classes</jc>
-	 * 	scn(String.<jk>class</jk>);            <jc>// "String"</jc>
-	 * 	scn(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
+	 * 	cns(String.<jk>class</jk>);            <jc>// "String"</jc>
+	 * 	cns(<jk>new</jk> HashMap&lt;&gt;());          <jc>// "HashMap"</jc>
 	 *
 	 * 	<jc>// Inner classes</jc>
-	 * 	scn(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
+	 * 	cns(Map.Entry.<jk>class</jk>);         <jc>// "Entry"</jc>
 	 *
 	 * 	<jc>// Primitives</jc>
-	 * 	scn(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
-	 * 	scn(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
+	 * 	cns(<jk>int</jk>.<jk>class</jk>);                <jc>// "int"</jc>
+	 * 	cns(<jk>boolean</jk>.<jk>class</jk>);            <jc>// "boolean"</jc>
 	 *
 	 * 	<jc>// Arrays</jc>
-	 * 	scn(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
-	 * 	scn(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
-	 * 	scn(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
+	 * 	cns(String[].<jk>class</jk>);          <jc>// "String[]"</jc>
+	 * 	cns(<jk>int</jk>[].<jk>class</jk>);              <jc>// "int[]"</jc>
+	 * 	cns(String[][].<jk>class</jk>);        <jc>// "String[][]"</jc>
 	 *
 	 * 	<jc>// Null</jc>
-	 * 	scn(<jk>null</jk>);                    <jc>// null</jc>
+	 * 	cns(<jk>null</jk>);                    <jc>// null</jc>
 	 * </p>
 	 *
 	 * @param value The object to get the simple class name for.
@@ -189,28 +189,28 @@ public class Utils {
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Regular classes</jc>
-	 * 	sqcn(String.<jk>class</jk>);                     <jc>// "String"</jc>
-	 * 	sqcn(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
+	 * 	cnsq(String.<jk>class</jk>);                     <jc>// "String"</jc>
+	 * 	cnsq(<jk>new</jk> HashMap&lt;&gt;());                   <jc>// "HashMap"</jc>
 	 *
 	 * 	<jc>// Inner classes</jc>
-	 * 	sqcn(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
-	 * 	sqcn(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
+	 * 	cnsq(Map.Entry.<jk>class</jk>);                  <jc>// "Map.Entry"</jc>
+	 * 	cnsq(Outer.Inner.Deep.<jk>class</jk>);           <jc>// "Outer.Inner.Deep"</jc>
 	 *
 	 * 	<jc>// Primitives</jc>
-	 * 	sqcn(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
-	 * 	sqcn(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
+	 * 	cnsq(<jk>int</jk>.<jk>class</jk>);                         <jc>// "int"</jc>
+	 * 	cnsq(<jk>boolean</jk>.<jk>class</jk>);                     <jc>// "boolean"</jc>
 	 *
 	 * 	<jc>// Object arrays</jc>
-	 * 	sqcn(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
-	 * 	sqcn(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
-	 * 	sqcn(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
+	 * 	cnsq(String[].<jk>class</jk>);                   <jc>// "String[]"</jc>
+	 * 	cnsq(Map.Entry[].<jk>class</jk>);                <jc>// "Map.Entry[]"</jc>
+	 * 	cnsq(String[][].<jk>class</jk>);                 <jc>// "String[][]"</jc>
 	 *
 	 * 	<jc>// Primitive arrays</jc>
-	 * 	sqcn(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
-	 * 	sqcn(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
+	 * 	cnsq(<jk>int</jk>[].<jk>class</jk>);                       <jc>// "int[]"</jc>
+	 * 	cnsq(<jk>boolean</jk>[][].<jk>class</jk>);                 <jc>// "boolean[][]"</jc>
 	 *
 	 * 	<jc>// Null</jc>
-	 * 	sqcn(<jk>null</jk>);                             <jc>// null</jc>
+	 * 	cnsq(<jk>null</jk>);                             <jc>// null</jc>
 	 * </p>
 	 *
 	 * @param value The object to get the simple qualified class name for.
@@ -1713,14 +1713,6 @@ public class Utils {
 	public static String r(Object o) {
 		return readable(o);
 	}
-
-	// TODO: Look for cases of getClass().getName() and getClass().getSimpleName() in the code and replace with cn() and scn().
-	// These utility methods provide cleaner, more concise syntax and null-safe handling.
-	// Search patterns:
-	//   - Replace: getClass().getName() -> cn(this) or cn(object)
-	//   - Replace: getClass().getSimpleName() -> scn(this) or scn(object)
-	//   - Replace: obj.getClass().getName() -> cn(obj)
-	//   - Replace: obj.getClass().getSimpleName() -> scn(obj)
 
 	/**
 	 * Shortcut for converting an object to a string.

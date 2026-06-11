@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.json5;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -134,7 +135,7 @@ class Json5List_Test extends TestBase {
 		l.add(nested);
 		var got = l.getMap(0);
 		assertNotNull(got);
-		assertTrue(got instanceof Json5Map, "Expected Json5Map, got " + got.getClass().getName());
+		assertTrue(got instanceof Json5Map, "Expected Json5Map, got " + cn(got));
 		assertEquals(1, got.getInt("x"));
 	}
 
@@ -144,7 +145,7 @@ class Json5List_Test extends TestBase {
 		l.add(stored);
 		var got = l.getMap(0);
 		assertNotNull(got);
-		assertTrue(got instanceof Json5Map, "Expected Json5Map after narrowing, got " + got.getClass().getName());
+		assertTrue(got instanceof Json5Map, "Expected Json5Map after narrowing, got " + cn(got));
 	}
 
 	@Test void a10_getListReturnsJson5List() {
@@ -153,7 +154,7 @@ class Json5List_Test extends TestBase {
 		l.add(inner);
 		var nested = l.getList(0);
 		assertNotNull(nested);
-		assertTrue(nested instanceof Json5List, "Expected Json5List, got " + nested.getClass().getName());
+		assertTrue(nested instanceof Json5List, "Expected Json5List, got " + cn(nested));
 		assertEquals(2, nested.size());
 	}
 

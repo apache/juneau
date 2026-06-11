@@ -333,7 +333,7 @@ public class ComboRoundTrip_Tester<T> {
 
 			// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 			if (eq(exp, "xxx")) {
-				System.out.println(getClass().getName() + ": " + label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
+				System.out.println(cn(this) + ": " + label + "/" + testName + "=\n" + r.replaceAll("\n", "\\\\n").replaceAll("\t", "\\\\t")); // NOT DEBUG
 				System.out.println(r);
 			}
 

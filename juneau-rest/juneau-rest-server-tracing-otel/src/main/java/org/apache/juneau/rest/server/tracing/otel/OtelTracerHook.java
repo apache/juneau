@@ -259,7 +259,7 @@ public class OtelTracerHook implements TracerHook {
 		public void setError(Throwable error) {
 			if (nn(error)) {
 				span.recordException(error);
-				span.setAttribute(ATTR_EXCEPTION_TYPE, error.getClass().getSimpleName());
+				span.setAttribute(ATTR_EXCEPTION_TYPE, cns(error));
 				span.setStatus(StatusCode.ERROR);
 			}
 		}

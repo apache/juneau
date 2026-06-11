@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.jsonschema;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -45,7 +46,7 @@ class JsonSchemaConfigAnnotationTest extends TestBase {
 				.map(JsonSchemaConfigAnnotationTest.TO_STRING)
 				.collect(Collectors.joining(","));
 		if (t instanceof MarshallingDefMapper)
-			return t.getClass().getSimpleName();
+			return cns(t);
 		return t.toString();
 	};
 

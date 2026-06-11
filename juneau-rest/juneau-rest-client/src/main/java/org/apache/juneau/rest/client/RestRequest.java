@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
@@ -243,7 +245,7 @@ public final class RestRequest {
 				return this;
 			}
 		}
-		throw new IllegalArgumentException("No BodyConverter found for type: " + value.getClass().getName());
+		throw new IllegalArgumentException("No BodyConverter found for type: " + cn(value));
 	}
 
 	/**

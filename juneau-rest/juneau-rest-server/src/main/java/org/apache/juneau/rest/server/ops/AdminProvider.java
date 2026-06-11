@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.ops;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.management.*;
@@ -254,7 +255,7 @@ public class AdminProvider {
 
 	private static Map<String,Object> describeRateLimitGuard(RateLimitGuard g) {
 		var m = new LinkedHashMap<String,Object>();
-		m.put("class", g.getClass().getName());
+		m.put("class", cn(g));
 		m.put("limit", g.getCapacity());
 		m.put("permitsPerSecond", g.getPermitsPerSecond());
 		m.put("xForwardedForAware", g.isXForwardedForAware());

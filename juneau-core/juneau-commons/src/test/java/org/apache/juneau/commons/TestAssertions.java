@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -244,7 +245,7 @@ public class TestAssertions {
 			if (m.getReturnType() == int.class || m.getReturnType() == Integer.class)
 				return (int) m.invoke(o);
 		} catch (ReflectiveOperationException ignored) { /* try next */ }
-		throw new AssertionError("assertSize: cannot determine size of " + o.getClass().getName());
+		throw new AssertionError("assertSize: cannot determine size of " + cn(o));
 	}
 
 	private static boolean isEmptyLike(Object o) {
@@ -266,7 +267,7 @@ public class TestAssertions {
 			if (m.getReturnType() == boolean.class || m.getReturnType() == Boolean.class)
 				return !(boolean) m.invoke(o);
 		} catch (ReflectiveOperationException ignored) { /* fall through */ }
-		throw new AssertionError("assertEmpty: cannot determine if " + o.getClass().getName() + " is empty");
+		throw new AssertionError("assertEmpty: cannot determine if " + cn(o) + " is empty");
 	}
 
 	@SuppressWarnings({
@@ -322,7 +323,7 @@ public class TestAssertions {
 		} catch (ReflectiveOperationException e) {
 			throw new AssertionError("getProperty('" + name + "'): field access failed", e);
 		}
-		throw new AssertionError("getProperty: no property '" + name + "' on " + obj.getClass().getName());
+		throw new AssertionError("getProperty: no property '" + name + "' on " + cn(obj));
 	}
 
 	/** Split a string by top-level commas, respecting nesting inside [] and {}. */

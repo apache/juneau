@@ -1692,7 +1692,7 @@ public class BeanInstantiator<T> {
 
 		boolean builderAttempted = false;
 		if (builder2 != null) {
-			log("Builder detected: %s", builder2.getClass().getName());
+			log("Builder detected: %s", cn(builder2));
 
 			// Initialization hooks: builder initializers, then optional inject, then optional auto-wire.
 			for (var init : builderInitializers)
@@ -1721,7 +1721,7 @@ public class BeanInstantiator<T> {
 				var method = buildMethod.get();
 				log("Found build method: %s", method.getNameFull());
 				log("Method declaring class: %s", method.getDeclaringClass().getName());
-				log("Builder class: %s", builder2.getClass().getName());
+				log("Builder class: %s", cn(builder2));
 				var returnType = method.getReturnType();
 				log("Method return type: %s", returnType.getName());
 				log("Expected beanSubType: %s", beanSubType.getName());
@@ -1749,7 +1749,7 @@ public class BeanInstantiator<T> {
 				if (returnType.is(beanSubType.inner()) || (builtBean != null && beanSubType.inner().isInstance(builtBean))) {
 					bean = (T)beanType.cast(builtBean);
 				} else {
-					log("Builder method %s returned %s but expected %s; falling through to factory methods/constructors", method.getNameFull(), builtBean == null ? "null" : builtBean.getClass().getName(), beanSubType.getName());
+					log("Builder method %s returned %s but expected %s; falling through to factory methods/constructors", method.getNameFull(), builtBean == null ? "null" : cn(builtBean), beanSubType.getName());
 				}
 			}
 
@@ -1812,17 +1812,17 @@ public class BeanInstantiator<T> {
 
 			if (hasAnyMethodWithRightReturnType && !hasBuildMethodWithRightReturnType) {
 				// Builder has a method returning the right type but not with the expected name
-				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder2.getClass().getName(), buildMethodNames);
+				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", cn(builder2), buildMethodNames);
 				// Fall through to factory methods/constructors
 			} else if (builderAttempted) {
 				// We tried the builder's build method but it produced a runtime instance that wasn't the expected
 				// beanSubType (loose-builder fallthrough above).  Don't throw; fall through to factory-method /
 				// constructor resolution on beanSubType so subclasses with their own constructor/factory still resolve.
-				log("Builder %s build method produced wrong runtime type; falling through to factory methods/constructors", builder2.getClass().getName());
+				log("Builder %s build method produced wrong runtime type; falling through to factory methods/constructors", cn(builder2));
 			} else if (hasBuildMethodWithRightReturnType || isExplicitBuilder || isValidBuilder) {
 				// Builder has a build method with right return type (even if can't be called) or was explicitly set
 				// Throw exception unless fallback exists
-				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", builder2.getClass().getName(), buildMethodNames);
+				log("Builder detected but no appropriate build method found. Builder type: %s. Expected method names: %s", cn(builder2), buildMethodNames);
 
 				if (fallbackSupplier != null) {
 					log(CONST_usingFallbackSupplier);
@@ -1832,10 +1832,10 @@ public class BeanInstantiator<T> {
 				}
 
 				log("Failed to create bean using builder");
-				throw exex("Could not instantiate class {0} using builder type {1}. Builder must have a build(), create(), or get() method that returns {0}. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : builder2.getClass().getName());
+				throw exex("Could not instantiate class {0} using builder type {1}. Builder must have a build(), create(), or get() method that returns {0}. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : cn(builder2));
 			} else {
 				// Builder type is invalid and was auto-detected - fall through to factory methods/constructors
-				log("Builder detected but builder type is invalid. Builder type: %s. Falling back to factory methods/constructors.", builder2.getClass().getName());
+				log("Builder detected but builder type is invalid. Builder type: %s. Falling back to factory methods/constructors.", cn(builder2));
 			}
 		}
 

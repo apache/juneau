@@ -379,7 +379,7 @@ class ObjectRest_Test extends TestBase {
 			try {
 				return r.getMap(p);
 			} catch (Exception e) {
-				return e.getClass().getSimpleName();
+				return cns(e);
 			}
 		};
 
@@ -403,7 +403,7 @@ class ObjectRest_Test extends TestBase {
 			try {
 				return r.getMap(p, m);
 			} catch (Exception e) {
-				return e.getClass().getSimpleName();
+				return cns(e);
 			}
 		};
 
@@ -415,7 +415,7 @@ class ObjectRest_Test extends TestBase {
 			try {
 				return r.getJsonMap(p);
 			} catch (Exception e) {
-				return e.getClass().getSimpleName();
+				return cns(e);
 			}
 		};
 
@@ -427,7 +427,7 @@ class ObjectRest_Test extends TestBase {
 			try {
 				return r.getJsonMap(p, jm);
 			} catch (Exception e) {
-				return e.getClass().getSimpleName();
+				return cns(e);
 			}
 		};
 

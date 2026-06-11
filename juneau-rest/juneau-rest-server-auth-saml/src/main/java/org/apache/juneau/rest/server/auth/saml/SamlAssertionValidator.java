@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.auth.saml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.security.*;
@@ -377,7 +378,7 @@ public class SamlAssertionValidator {
 					.wwwAuthenticate("SAML error=\"invalid_response\"");
 			var obj = unmarshaller.unmarshall(root);
 			if (!(obj instanceof Response r))
-				throw new AuthenticationException("SAML envelope is not a <Response>: " + obj.getClass().getSimpleName())
+				throw new AuthenticationException("SAML envelope is not a <Response>: " + cns(obj))
 					.wwwAuthenticate("SAML error=\"invalid_response\"");
 			return r;
 		} catch (UnmarshallingException | ParserConfigurationException | java.io.IOException | org.xml.sax.SAXException e) {

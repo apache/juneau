@@ -192,7 +192,7 @@ class Common_UonTest extends TestBase {
 			try {
 				s.build().serialize(r1);
 			} catch (Throwable t) {
-				System.out.println("DEBUG: Exception type: " + t.getClass().getName());
+				System.out.println("DEBUG: Exception type: " + cn(t));
 				System.out.println("DEBUG: Exception class: " + t.getClass());
 				System.out.println("DEBUG: Is StackOverflowError? " + (t instanceof StackOverflowError));
 				System.out.println("DEBUG: Is SerializeException? " + (t instanceof org.apache.juneau.marshall.serializer.SerializeException));

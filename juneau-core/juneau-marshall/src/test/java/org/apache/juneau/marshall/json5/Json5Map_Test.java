@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.json5;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -124,7 +125,7 @@ class Json5Map_Test extends TestBase {
 		var m = new Json5Map("nested", nested);
 		var got = m.getMap("nested");
 		assertNotNull(got);
-		assertTrue(got instanceof Json5Map, "Expected Json5Map, got " + got.getClass().getName());
+		assertTrue(got instanceof Json5Map, "Expected Json5Map, got " + cn(got));
 		assertEquals(1, got.getInt("x"));
 	}
 
@@ -134,7 +135,7 @@ class Json5Map_Test extends TestBase {
 		var m = new Json5Map("nested", stored);
 		var got = m.getMap("nested");
 		assertNotNull(got);
-		assertTrue(got instanceof Json5Map, "Expected Json5Map after narrowing, got " + got.getClass().getName());
+		assertTrue(got instanceof Json5Map, "Expected Json5Map after narrowing, got " + cn(got));
 	}
 
 	@Test void a10_getListReturnsJson5List() {
@@ -143,7 +144,7 @@ class Json5Map_Test extends TestBase {
 		m.put("arr", inner);
 		var got = m.getList("arr");
 		assertNotNull(got);
-		assertTrue(got instanceof Json5List, "Expected Json5List, got " + got.getClass().getName());
+		assertTrue(got instanceof Json5List, "Expected Json5List, got " + cn(got));
 		assertEquals(2, got.size());
 	}
 
@@ -230,8 +231,8 @@ class Json5Map_Test extends TestBase {
 
 	@Test void a22_parserProducesJson5Map() throws Exception {
 		Object o = Json5Parser.DEFAULT.parse("{a:1,b:[1,2,3]}", Object.class);
-		assertTrue(o instanceof Json5Map, "Expected Json5Map, got " + o.getClass().getName());
+		assertTrue(o instanceof Json5Map, "Expected Json5Map, got " + cn(o));
 		Object inner = ((Json5Map)o).get("b");
-		assertTrue(inner instanceof Json5List, "Expected Json5List for nested array, got " + inner.getClass().getName());
+		assertTrue(inner instanceof Json5List, "Expected Json5List for nested array, got " + cn(inner));
 	}
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.widget;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -169,7 +170,7 @@ class MenuItemWidget_Test extends TestBase {
 				new ThrowingReaderWidget().getHtml(req, res);
 				return "NO_EXCEPTION";
 			} catch (RuntimeException e) {
-				return "EX:" + e.getClass().getSimpleName() + ":" + (e.getMessage() == null ? "" : e.getMessage());
+				return "EX:" + cns(e) + ":" + (e.getMessage() == null ? "" : e.getMessage());
 			}
 		}
 
@@ -180,7 +181,7 @@ class MenuItemWidget_Test extends TestBase {
 				new ThrowingBeanWidget().getHtml(req, res);
 				return "NO_EXCEPTION";
 			} catch (RuntimeException e) {
-				return "EX:" + e.getClass().getSimpleName();
+				return "EX:" + cns(e);
 			}
 		}
 

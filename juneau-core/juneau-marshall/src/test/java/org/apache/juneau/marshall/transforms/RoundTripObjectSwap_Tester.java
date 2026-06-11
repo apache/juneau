@@ -103,7 +103,7 @@ public class RoundTripObjectSwap_Tester<T,S> {
 			var o2 = swap.unswap(marshallingSession, s, marshallingSession.getClassMetaForObject(o));
 			var s2 = swap.swap(marshallingSession, o2);
 			if (neq(s, s2)) {
-				System.err.println("s=["+s+"], o=["+o+"], o.type=["+o.getClass().getName()+"], o2=["+o2+"], o2.type=["+o2.getClass().getName()+"]");  // NOT DEBUG
+				System.err.println("s=["+s+"], o=["+o+"], o.type=["+cn(o)+"], o2=["+o2+"], o2.type=["+cn(o2)+"]");  // NOT DEBUG
 				fail("Test [" + label + " unswap] failed. Expected=[" + s + "], Actual=[" + s2 + "]");
 			}
 		} catch (AssertionError e) {

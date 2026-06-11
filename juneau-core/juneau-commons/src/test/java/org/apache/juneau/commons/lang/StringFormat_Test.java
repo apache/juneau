@@ -42,7 +42,7 @@ class StringFormat_Test extends TestBase {
 		try {
 			return supplier.get();
 		} catch (Throwable t) {
-			return t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
+			return cns(t) + ": " + t.getLocalizedMessage();
 		}
 	}
 
@@ -55,7 +55,7 @@ class StringFormat_Test extends TestBase {
 			fmt = fmt2;
 			actual = stringify(()->fmt2.format(locale, args));
 		} catch (Throwable t) {
-			actual = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
+			actual = cns(t) + ": " + t.getLocalizedMessage();
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
@@ -74,7 +74,7 @@ class StringFormat_Test extends TestBase {
 			fmt = fmt2;
 			actual = stringify(()->fmt2.format(args));
 		} catch (Throwable t) {
-			actual = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
+			actual = cns(t) + ": " + t.getLocalizedMessage();
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
@@ -93,7 +93,7 @@ class StringFormat_Test extends TestBase {
 			fmt = fmt2;
 			actual = stringify(()->fmt2.format(locale, args));
 		} catch (Throwable t) {
-			actual = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
+			actual = cns(t) + ": " + t.getLocalizedMessage();
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
@@ -112,7 +112,7 @@ class StringFormat_Test extends TestBase {
 			fmt = fmt2;
 			actual = stringify(()->fmt2.format(args));
 		} catch (Throwable t) {
-			actual = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
+			actual = cns(t) + ": " + t.getLocalizedMessage();
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
@@ -130,7 +130,7 @@ class StringFormat_Test extends TestBase {
 			fmt = fmt2;
 			actual = stringify(()->fmt2.format(args));
 		} catch (Throwable t) {
-			actual = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
+			actual = cns(t) + ": " + t.getLocalizedMessage();
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpMethod.*;
 
 import java.io.*;
@@ -104,7 +105,7 @@ class RestOp_Params_Test extends TestBase {
 		}
 		@RestOp(method=GET,parsers={JsonParser.class})
 		public String o(Parser t) {
-			return t.getClass().getName();
+			return cn(t);
 		}
 		@RestGet
 		public String p(Locale t) {

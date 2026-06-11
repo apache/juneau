@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.health;
 
 import static java.util.concurrent.TimeUnit.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;
@@ -72,7 +73,7 @@ public class HealthAggregator {
 			var indicator = e.getValue();
 			if (probe != null && !indicator.probes().contains(probe))
 				continue;
-			var componentName = firstNonEmpty(e.getKey(), indicator.getClass().getSimpleName());
+			var componentName = firstNonEmpty(e.getKey(), cns(indicator));
 			out.put(componentName, runIndicator(componentName, indicator, timeoutMillis));
 		}
 

@@ -107,6 +107,9 @@ public class RequestContent {
 	private final RestRequest req;
 	private EncoderSet encoders;
 	private Encoder encoder;
+	@SuppressWarnings({
+		"java:S1450" // Field backs the public fluent parsers(ParserSet) setter; the value is set externally and consumed later in getParserMatch(), so it cannot be a local variable.
+	})
 	private ParserSet parsers;
 	private long maxInput;
 	private int contentLength;

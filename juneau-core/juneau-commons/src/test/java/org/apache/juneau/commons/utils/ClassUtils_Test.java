@@ -53,7 +53,7 @@ class ClassUtils_Test {
 		assertFalse(canAddTo(Arrays.asList("a", "b"))); // Arrays$ArrayList
 
 		// Java 9+ immutable collections
-		if (List.of("a").getClass().getName().contains("Immutable")) {
+		if (cn(List.of("a")).contains("Immutable")) {
 			assertFalse(canAddTo(List.of("a")));
 			assertFalse(canAddTo(Set.of("a")));
 		}
@@ -79,7 +79,7 @@ class ClassUtils_Test {
 		assertFalse(canPutTo(Collections.unmodifiableMap(new HashMap<>())));
 
 		// Java 9+ immutable maps
-		if (Map.of("a", "b").getClass().getName().contains("Immutable")) {
+		if (cn(Map.of("a", "b")).contains("Immutable")) {
 			assertFalse(canPutTo(Map.of("a", "b")));
 		}
 

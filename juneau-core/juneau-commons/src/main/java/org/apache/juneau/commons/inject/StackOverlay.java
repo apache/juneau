@@ -200,7 +200,7 @@ public final class StackOverlay implements BeanStore {
 			if (!first)
 				sb.append(", ");
 			first = false;
-			sb.append(f.getClass().getSimpleName())
+			sb.append(cns(f))
 				.append('@')
 				.append(Integer.toHexString(System.identityHashCode(f)));
 		}

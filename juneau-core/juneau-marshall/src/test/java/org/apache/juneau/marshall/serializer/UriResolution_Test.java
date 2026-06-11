@@ -59,17 +59,17 @@ class UriResolution_Test extends TestBase {
 
 				// Specifying "xxx" in the expected results will spit out what we should populate the field with.
 				if (expected.equals("xxx")) {
-					System.out.println(label + "/" + s.getClass().getSimpleName() + "=\n" + r.replaceAll("\t", "\\\\t").replaceAll("\\\\", "\\\\\\\\").replaceAll("\\\"", "\\\\\\\"").replaceAll("\n", "\\\\n")); // NOT DEBUG
+					System.out.println(label + "/" + cns(s) + "=\n" + r.replaceAll("\t", "\\\\t").replaceAll("\\\\", "\\\\\\\\").replaceAll("\\\"", "\\\\\\\"").replaceAll("\n", "\\\\n")); // NOT DEBUG
 					System.out.println(r);
 				}
 
-				assertEquals(expected, r, fs("{0}/{1} serialize-normal failed", label, s.getClass().getSimpleName()));
+				assertEquals(expected, r, fs("{0}/{1} serialize-normal failed", label, cns(s)));
 
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new AssertionError(label + "/" + s.getClass().getSimpleName() + " failed.  exception=" + e.getLocalizedMessage());
+				throw new AssertionError(label + "/" + cns(s) + " failed.  exception=" + e.getLocalizedMessage());
 			}
 		}
 
@@ -80,13 +80,13 @@ class UriResolution_Test extends TestBase {
 				var m = p.parse(r, TreeMap.class, String.class, String.class);
 
 				var r2 = Json5Serializer.DEFAULT.toString(m);
-				assertEquals(r2, results.json, fs("{0}/{1} parse failed", label, s.getClass().getSimpleName()));
+				assertEquals(r2, results.json, fs("{0}/{1} parse failed", label, cns(s)));
 
 			} catch (AssertionError e) {
 				throw e;
 			} catch (Exception e) {
 				e.printStackTrace();
-				throw new AssertionError(label + "/" + s.getClass().getSimpleName() + " failed.  exception=" + e.getLocalizedMessage());
+				throw new AssertionError(label + "/" + cns(s) + " failed.  exception=" + e.getLocalizedMessage());
 			}
 		}
 	}

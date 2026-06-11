@@ -1346,7 +1346,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return convertToType(value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToType(value, c);
-		throw illegalArg("Unsupported targetType for convertToType: {0}", targetType.getClass().getName());
+		throw illegalArg("Unsupported targetType for convertToType: {0}", cn(targetType));
 	}
 
 	/**
@@ -1368,7 +1368,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return convertToMemberType(outer, value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToMemberType(outer, value, c);
-		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", targetType.getClass().getName());
+		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", cn(targetType));
 	}
 
 	/**

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -136,7 +138,7 @@ final class LegacyHttpResponseAdapter {
 			var m = target.getClass().getMethod(method, argTypes);
 			return m.invoke(target, args);
 		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			throw new IllegalStateException("Failed to invoke " + method + " on " + target.getClass().getName(), e);
+			throw new IllegalStateException("Failed to invoke " + method + " on " + cn(target), e);
 		}
 	}
 

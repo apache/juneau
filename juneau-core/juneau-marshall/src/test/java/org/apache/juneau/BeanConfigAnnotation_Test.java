@@ -85,7 +85,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 			if (t instanceof ClassInfo)
 				return ((ClassInfo)t).getNameSimple();
 			if (t instanceof PropertyNamer)
-				return t.getClass().getSimpleName();
+				return cns(t);
 			if (t instanceof TimeZone)
 				return ((TimeZone)t).getID();
 			return t.toString();

@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.svl;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -138,7 +139,7 @@ public abstract class TypedFunction implements VarFunction {
 			var cause = e.getTargetException();
 			if (cause instanceof RuntimeException re)
 				throw re;
-			throw illegalArg("Function ''{0}'' threw {1}: {2}", name(), cause.getClass().getSimpleName(), cause.getMessage());
+			throw illegalArg("Function ''{0}'' threw {1}: {2}", name(), cns(cause), cause.getMessage());
 		} catch (IllegalAccessException e) {
 			throw illegalArg("Function ''{0}'' invoke method must be public: {1}", name(), e.getMessage());
 		}

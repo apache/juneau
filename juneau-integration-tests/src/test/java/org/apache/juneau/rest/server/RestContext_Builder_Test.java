@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -40,7 +41,7 @@ class RestContext_Builder_Test extends TestBase {
 
 	@Test void a01_createBeanStore_default() {
 		MockRestClient.buildLax(A1.class);
-		assertEquals("BasicBeanStore", A1.beanStore.getClass().getSimpleName());
+		assertEquals("BasicBeanStore", cns(A1.beanStore));
 	}
 
 	@Rest

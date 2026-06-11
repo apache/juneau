@@ -17,6 +17,7 @@
 package org.apache.juneau.junit.bct;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.junit.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -75,7 +76,7 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					return o.getClass().getSimpleName() + "." + key;
+					return cns(o) + "." + key;
 				}
 			};
 
@@ -190,7 +191,7 @@ class PropertyExtractor_Test extends TestBase {
 						return switch (key) {
 							case "doubled" -> o2.doubleValue() * 2;
 							case "string" -> o.toString();
-							case "type" -> o.getClass().getSimpleName();
+							case "type" -> cns(o);
 							default -> "UNKNOWN_PROP:" + key;
 						};
 					}
@@ -319,7 +320,7 @@ class PropertyExtractor_Test extends TestBase {
 
 				@Override
 				public Object extract(BeanConverter converter, Object o, String key) {
-					return "CUSTOM[" + o.getClass().getSimpleName() + "." + key + "]";
+					return "CUSTOM[" + cns(o) + "." + key + "]";
 				}
 			};
 

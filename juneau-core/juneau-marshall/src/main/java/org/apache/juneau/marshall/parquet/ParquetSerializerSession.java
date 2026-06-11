@@ -205,7 +205,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		}
 		if (sType.isCollection() || sType.isArray()) {
 			Collection<?> list = sType.isArray() ? toList(sType.inner(), o) : (Collection<?>)o;
-			if (list.getClass().getName().startsWith("java.util.ImmutableCollections"))
+			if (cn(list).startsWith("java.util.ImmutableCollections"))
 				list = new ArrayList<>(list);
 			var result = new ArrayList<BeanMap<?>>(list.size());
 			for (var e : list) {

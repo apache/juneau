@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.urlencoding;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -445,7 +446,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 		// Use beanDictionary-aware parser.
 		var p = UrlEncodingParser.create().beanDictionary(TypedBean.class).build();
 		Object v = p.parse("?_type=b1&x=hello", Object.class);
-		assertTrue(v instanceof TypedBean, "got: " + v.getClass().getName());
+		assertTrue(v instanceof TypedBean, "got: " + cn(v));
 		assertEquals("hello", ((TypedBean)v).x);
 	}
 

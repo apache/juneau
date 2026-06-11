@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -2411,7 +2412,7 @@ class BeanInstantiator_Test extends TestBase {
 			// Test Optional-like methods inherited from NullableSupplier
 			assertTrue(supplier.isPresent());
 
-			var mapped = supplier.map(b -> b.getClass().getSimpleName());
+			var mapped = supplier.map(b -> cns(b));
 			assertEquals("SimpleBean", mapped.orElse(null));
 		}
 	}
@@ -3269,7 +3270,7 @@ class BeanInstantiator_Test extends TestBase {
 		void m15_asOptionalMap() {
 			var result = bc(SimpleBean.class)
 				.asOptional()
-				.map(bean -> bean.getClass().getSimpleName());
+				.map(bean -> cns(bean));
 
 			assertEquals("SimpleBean", result.get());
 		}

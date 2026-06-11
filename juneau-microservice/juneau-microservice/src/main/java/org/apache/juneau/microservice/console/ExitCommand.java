@@ -39,7 +39,7 @@ public class ExitCommand extends ConsoleCommand {
 		try {
 			Microservice.getInstance().stop().exit();
 		} catch (Exception e) {
-			e.printStackTrace();
+			e.printStackTrace(out);
 		}
 		return true;
 	}

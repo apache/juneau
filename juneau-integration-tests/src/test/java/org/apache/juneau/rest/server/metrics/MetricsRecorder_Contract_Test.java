@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.metrics;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -141,7 +142,7 @@ class MetricsRecorder_Contract_Test extends TestBase {
 		var e = B_REC.last();
 		assertEquals(500, e.statusCode);
 		assertNotNull(e.error);
-		assertEquals("IllegalStateException", e.error.getClass().getSimpleName());
+		assertEquals("IllegalStateException", cns(e.error));
 		assertEquals("/boom", e.uriTemplate);
 	}
 

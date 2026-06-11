@@ -35,7 +35,7 @@
 	</properties>
 
 	<dependencies>
-		<!-- juneau-commons provides SVL, time, and other utilities used by XVar and FakeTimeProvider -->
+		<!-- juneau-commons provides SVL, time, and other utilities used by XVar -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-commons</artifactId>

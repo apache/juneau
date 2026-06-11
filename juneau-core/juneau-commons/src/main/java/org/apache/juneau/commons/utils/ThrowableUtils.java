@@ -370,7 +370,7 @@ public class ThrowableUtils {
 	}
 
 	private static <T extends Throwable> T log(T exception) {
-		if (Boolean.TRUE.equals(VERBOSE.orElse(false))) exception.printStackTrace();
+		if (Boolean.TRUE.equals(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));
 		return exception;
 	}
 

@@ -49,7 +49,7 @@ class HtmlDocConfigAnnotation_Test extends TestBase {
 				.map(HtmlDocConfigAnnotation_Test.TO_STRING)
 				.collect(Collectors.joining(","));
 		if (t instanceof HtmlDocTemplate)
-			return t.getClass().getSimpleName();
+			return cns(t);
 		return t.toString();
 	};
 

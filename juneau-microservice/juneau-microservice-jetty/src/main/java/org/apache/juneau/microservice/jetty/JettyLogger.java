@@ -527,7 +527,7 @@ public class JettyLogger implements LocationAwareLogger {
 		if (SHOW_SOURCE) { // HTT - SHOW_SOURCE is a static final set at class load time from system property; false branch requires property set before JVM start
 			StackTraceElement[] stack = new Throwable().getStackTrace();
 			for (var e : stack) {
-				if (! e.getClassName().equals(getClass().getName())) {
+				if (! e.getClassName().equals(cn(this))) {
 					r.setSourceClassName(e.getClassName());
 					r.setSourceMethodName(e.getMethodName());
 					break;

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.collections;
 
+import static org.apache.juneau.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -99,7 +100,7 @@ class MarshalledMap_Test extends TestBase {
 		var nested = new MarshalledMap("x", 1);
 		var m = new MarshalledMap("nested", nested);
 		var got = m.getMap("nested");
-		assertTrue(got instanceof MarshalledMap, "Expected MarshalledMap, got " + got.getClass().getName());
+		assertTrue(got instanceof MarshalledMap, "Expected MarshalledMap, got " + cn(got));
 		assertFalse(got instanceof JsonMap, "Stored MarshalledMap should not be returned as a JsonMap");
 		assertEquals(1, got.getInt("x"));
 	}
@@ -108,7 +109,7 @@ class MarshalledMap_Test extends TestBase {
 		var list = MarshalledList.of(1, 2, 3);
 		var m = new MarshalledMap("arr", list);
 		var got = m.getList("arr");
-		assertTrue(got instanceof MarshalledList, "Expected MarshalledList, got " + got.getClass().getName());
+		assertTrue(got instanceof MarshalledList, "Expected MarshalledList, got " + cn(got));
 		assertFalse(got instanceof JsonList, "Stored MarshalledList should not be returned as a JsonList");
 		assertEquals(3, got.size());
 	}

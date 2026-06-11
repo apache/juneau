@@ -192,7 +192,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h01_rollAndof() {
-		var gdt1 = GranularZonedDateTime.of("2011", FAKE_TIME_PROVIDER);
+		var gdt1 = GranularZonedDateTime.of("2011", FIXED_CLOCK);
 		var gdt2 = gdt1.roll(1);
 		assertEquals(2012, gdt2.zdt.getYear());
 		assertEquals(ChronoField.YEAR, gdt2.precision);
@@ -200,7 +200,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h02_rollMultipleTimes() {
-		var gdt = GranularZonedDateTime.of("2011-01-15", FAKE_TIME_PROVIDER);
+		var gdt = GranularZonedDateTime.of("2011-01-15", FIXED_CLOCK);
 		var rolled1 = gdt.roll(1);
 		var rolled2 = rolled1.roll(1);
 		assertEquals(17, rolled2.zdt.getDayOfMonth());
@@ -208,7 +208,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h03_rollWithDifferentField() {
-		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z", FAKE_TIME_PROVIDER);
+		var gdt = GranularZonedDateTime.of("2011-01-15T12:30Z", FIXED_CLOCK);
 		// Roll by hours even though precision is minutes
 		var rolled = gdt.roll(ChronoField.HOUR_OF_DAY, 2);
 		assertEquals(14, rolled.zdt.getHour());
@@ -218,7 +218,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 	@Test
 	void h04_copyAndRoll() {
-		var gdt1 = GranularZonedDateTime.of("2011-01-15", FAKE_TIME_PROVIDER);
+		var gdt1 = GranularZonedDateTime.of("2011-01-15", FIXED_CLOCK);
 		var gdt2 = gdt1.copy();
 		var rolled = gdt2.roll(1);
 		// Original should be unchanged
@@ -230,7 +230,7 @@ class GranularZonedDateTime_Test extends TestBase {
 	// of(String) and of(String, ZoneId) tests - see J_parserTests nested class below
 	//====================================================================================================
 
-	private static final FakeTimeProvider FAKE_TIME_PROVIDER = new FakeTimeProvider();
+	private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2000-01-01T12:00:00Z"), ZoneOffset.UTC);
 
 	@Nested class J_parserTests extends TestBase {
 
@@ -452,7 +452,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 		private void testParse(String expected, String in) {
 			try {
-				var x = GranularZonedDateTime.of(in, FAKE_TIME_PROVIDER);
+				var x = GranularZonedDateTime.of(in, FIXED_CLOCK);
 				assertEquals(expected, x.toString(), "Failed for input: " + in);
 			} catch (Exception e) {
 				assertEquals(expected, e.getLocalizedMessage(), "Failed for input: " + in);
@@ -461,7 +461,7 @@ class GranularZonedDateTime_Test extends TestBase {
 
 		private void testParse(String expected, String in, ZoneId zoneId) {
 			try {
-				var x = GranularZonedDateTime.of(in, zoneId, FAKE_TIME_PROVIDER);
+				var x = GranularZonedDateTime.of(in, zoneId, FIXED_CLOCK);
 				assertEquals(expected, x.toString(), "Failed for input: " + in + " with zoneId: " + zoneId);
 			} catch (Exception e) {
 				assertEquals(expected, e.getLocalizedMessage(), "Failed for input: " + in + " with zoneId: " + zoneId);

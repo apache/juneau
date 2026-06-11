@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.mcp;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -89,8 +90,8 @@ public class McpDispatcher {
 		} catch (Exception e) {
 			if (notification(id))
 				return null;
-			var message = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
-			return errorResponse(id, CODE_INTERNAL_ERROR, message, JsonMap.of("type", e.getClass().getName()));
+			var message = e.getMessage() == null ? cns(e) : e.getMessage();
+			return errorResponse(id, CODE_INTERNAL_ERROR, message, JsonMap.of("type", cn(e)));
 		}
 	}
 

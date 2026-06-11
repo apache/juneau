@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.processor;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -217,7 +218,7 @@ class ResponseProcessorList_Test extends TestBase {
 		for (var i = 0; i < chain.length; i++) {
 			if (chain[i] instanceof ViewRenderer)
 				assertTrue(i < catchAllIdx,
-					chain[i].getClass().getSimpleName() + " at index " + i + " must be before catch-all at " + catchAllIdx);
+					cns(chain[i]) + " at index " + i + " must be before catch-all at " + catchAllIdx);
 		}
 
 		// The four built-in renderers must all be present.

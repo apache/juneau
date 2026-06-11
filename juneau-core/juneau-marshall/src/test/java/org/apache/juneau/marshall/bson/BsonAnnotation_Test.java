@@ -93,7 +93,7 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 		var p = BsonParser.create().build();
 		var parsed = p.parse(bytes, JsonMap.class);
 		var d = parsed.get("d");
-		assertTrue(d instanceof String, "Date should be string when writeDatesAsDatetime=false, got: " + d.getClass().getName());
+		assertTrue(d instanceof String, "Date should be string when writeDatesAsDatetime=false, got: " + cn(d));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

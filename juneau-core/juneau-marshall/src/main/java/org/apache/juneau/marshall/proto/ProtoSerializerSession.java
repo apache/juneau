@@ -99,7 +99,7 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
-		if (debugTrace) traceLog.add("[Proto] doSerialize: o=" + o.getClass().getName() + ", getExpectedRootType=" + getExpectedRootType(o).inner().getName());
+		if (debugTrace) traceLog.add("[Proto] doSerialize: o=" + cn(o) + ", getExpectedRootType=" + getExpectedRootType(o).inner().getName());
 		var w = getProtoWriter(out);
 		var eType = getExpectedRootType(o);
 		var cm = getClassMetaForObject(o);

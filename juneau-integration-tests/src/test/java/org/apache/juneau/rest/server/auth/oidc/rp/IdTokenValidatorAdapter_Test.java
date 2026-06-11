@@ -35,8 +35,7 @@ import com.nimbusds.jose.jwk.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
-	"java:S8692"  // Nimbus ID-token validation reads the real system clock with no injectable seam, so tokens must be minted at real "now"; converting would require a separate production Clock seam in the validator.
+	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class IdTokenValidatorAdapter_Test extends TestBase {
 
@@ -46,6 +45,9 @@ class IdTokenValidatorAdapter_Test extends TestBase {
 	private RSAKey key;
 	private Instant now;
 
+	@SuppressWarnings({
+		"java:S8692" // Nimbus oauth2-oidc-sdk 11.37.2 exposes no clock hook on the ID-token path (IDTokenClaimsVerifier reads new Date() internally), so injecting a clock there would require cloning Nimbus internals; tokens are minted at real "now" and validated against the real system clock.
+	})
 	@BeforeEach void setup() throws Exception {
 		key = generateRsa("k1");
 		now = Instant.now();  // validation uses the real system clock, so anchor tokens to "now"

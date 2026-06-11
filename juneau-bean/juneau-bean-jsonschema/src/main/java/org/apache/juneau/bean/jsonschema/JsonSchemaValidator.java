@@ -275,7 +275,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 	}
 
 	private static String typeName(Object value) {
-		return value == null ? "null" : value.getClass().getSimpleName();
+		return value == null ? "null" : cns(value);
 	}
 
 	// =================================================================================================================

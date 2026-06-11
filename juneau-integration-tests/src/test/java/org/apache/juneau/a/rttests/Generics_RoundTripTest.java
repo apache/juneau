@@ -17,6 +17,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -47,15 +48,15 @@ class Generics_RoundTripTest extends RoundTripTest_Base {
 		var x = new Pair<Object,Object>(new Source().init(), new Target().init());
 		x = t.roundTrip(x);
 		assertBean(x, "s{s1},t{t1}", "{a1},{b1}");
-		assertTrue(x.getS() instanceof MarshalledMap, "Expected MarshalledMap subclass for s, got " + x.getS().getClass().getSimpleName());
-		assertTrue(x.getT() instanceof MarshalledMap, "Expected MarshalledMap subclass for t, got " + x.getT().getClass().getSimpleName());
+		assertTrue(x.getS() instanceof MarshalledMap, "Expected MarshalledMap subclass for s, got " + cns(x.getS()));
+		assertTrue(x.getT() instanceof MarshalledMap, "Expected MarshalledMap subclass for t, got " + cns(x.getT()));
 
 		// If you specify a concrete class, the type variables become bound and
 		// the property types correctly resolve.
 		x = t.roundTrip(x, RealPair.class);
 		assertBean(x, "s{s1},t{t1}", "{a1},{b1}");
-		assertEquals("Source", x.getS().getClass().getSimpleName());
-		assertEquals("Target", x.getT().getClass().getSimpleName());
+		assertEquals("Source", cns(x.getS()));
+		assertEquals("Target", cns(x.getT()));
 	}
 
 	// Class with unbound type variables.

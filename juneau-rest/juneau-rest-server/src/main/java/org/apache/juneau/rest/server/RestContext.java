@@ -4453,7 +4453,7 @@ public class RestContext extends Context {
 		session.exception(e);
 
 		if (session.isDebug())
-			e.printStackTrace();
+			getLogger().log(Level.WARNING, e, () -> "Error occurred during REST call.");
 
 		int code = 500;
 

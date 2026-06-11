@@ -23,6 +23,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -30,7 +31,6 @@ import org.apache.juneau.commons.time.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -38,7 +38,7 @@ import org.junit.jupiter.api.*;
  */
 public class OpenApi_Test extends TestBase {
 
-	private static final FakeTimeProvider FAKE_TIME_PROVIDER = new FakeTimeProvider();
+	private static final Clock FIXED_CLOCK = Clock.fixed(Instant.parse("2000-01-01T12:00:00Z"), ZoneOffset.UTC);
 
 	public static final OpenApiSerializer DS = OpenApiSerializer.DEFAULT;
 	public static final OpenApiParser DP = OpenApiParser.DEFAULT;
@@ -864,6 +864,6 @@ public class OpenApi_Test extends TestBase {
 	//---------------------------------------------------------------------------------------------
 
 	private static Calendar cal(String in) {
-		return opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in, FAKE_TIME_PROVIDER).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
+		return opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in, FIXED_CLOCK).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 	}
 }

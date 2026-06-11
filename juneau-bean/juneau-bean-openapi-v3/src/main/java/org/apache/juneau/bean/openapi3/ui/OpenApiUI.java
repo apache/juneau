@@ -32,6 +32,7 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.openapi3.*;
 import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -72,6 +73,8 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 
 	private static final Set<String> STANDARD_METHODS = set("get", "put", "post", "delete", "options", "head", "patch", "trace");
 
+	private static final Logger LOG = Logger.getLogger(OpenApiUI.class);
+
 	@SuppressWarnings({
 		"null" // Null analysis not applicable for optional values
 	})
@@ -89,7 +92,7 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 			if (nn(si))
 				m.put("model", si.copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth));
 		} catch (Exception e) { // HTT - requires resolveRefs to throw during schema resolution
-			e.printStackTrace(); // HTT
+			LOG.warning(e, "Could not resolve schema references while rendering examples."); // HTT
 		}
 
 		if (m.isEmpty())
@@ -110,13 +113,13 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 						var schema = mediaTypeObj.getSchema().copy().resolveRefs(s.openApi, new ArrayDeque<>(), s.resolveRefsMaxDepth);
 						m.put(mediaType, schema);
 					} catch (Exception e) { // HTT - requires resolveRefs to throw
-						e.printStackTrace(); // HTT
+						LOG.warning(e, "Could not resolve schema references while rendering examples."); // HTT
 					}
 				}
 			});
 		}
 	} catch (Exception e) { // HTT - requires content.forEach to throw
-		e.printStackTrace(); // HTT
+		LOG.warning(e, "Could not resolve schema references while rendering examples."); // HTT
 	}
 
 		if (m.isEmpty())

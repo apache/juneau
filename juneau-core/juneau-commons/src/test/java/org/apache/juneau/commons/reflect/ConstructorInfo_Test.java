@@ -1252,7 +1252,7 @@ class ConstructorInfo_Test extends TestBase {
 		constructor.accessible(); // Make constructor accessible
 		var result = constructor.inject(beanStore, outer);
 		assertNotNull(result);
-		assertTrue(result.getClass().getName().contains("InnerClass"));
+		assertTrue(cn(result).contains("InnerClass"));
 	}
 
 	//====================================================================================================

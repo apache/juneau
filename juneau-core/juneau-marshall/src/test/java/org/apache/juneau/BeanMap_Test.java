@@ -571,18 +571,18 @@ class BeanMap_Test extends TestBase {
 		m.put("m3", "[{a:'a',i:1}]");
 		m.put("m4", "[{a:'a',i:1}]");
 
-		assertMapped(m, (map,prop) -> map.get(prop).getClass().getSimpleName(),
+		assertMapped(m, (map,prop) -> cns(map.get(prop)),
 			"l2,l3,l4,m2,m3,m4",
 			"LinkedList,ArrayList,LinkedList,LinkedList,ArrayList,LinkedList");
 
-		assertMapped(m, (map,prop) -> ((List)map.get(prop)).get(0).getClass().getSimpleName(),
+		assertMapped(m, (map,prop) -> cns(((List)map.get(prop)).get(0)),
 			"l2,l3,l4,m2,m3,m4",
 			"G,G,G,G,G,G");
 
 		m.put("m5", "[{a:'a',i:1}]");
-		assertMapped(m, (map,prop) -> map.get(prop).getClass().getSimpleName(),
+		assertMapped(m, (map,prop) -> cns(map.get(prop)),
 			"m5", "LinkedList");
-		assertMapped(m, (map,prop) -> ((List)map.get(prop)).get(0).getClass().getSimpleName(),
+		assertMapped(m, (map,prop) -> cns(((List)map.get(prop)).get(0)),
 			"m5", "G");
 	}
 

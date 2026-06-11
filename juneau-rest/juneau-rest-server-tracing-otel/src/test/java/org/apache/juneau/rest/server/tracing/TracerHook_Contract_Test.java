@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -119,7 +120,7 @@ class TracerHook_Contract_Test extends TestBase {
 		var s = B_HOOK.last();
 		assertEquals(500, s.statusCode.get());
 		assertNotNull(s.error.get());
-		assertEquals("IllegalStateException", s.error.get().getClass().getSimpleName());
+		assertEquals("IllegalStateException", cns(s.error.get()));
 		assertEquals(1, s.closeCount.get(), "close() called exactly once even on exception path");
 	}
 
