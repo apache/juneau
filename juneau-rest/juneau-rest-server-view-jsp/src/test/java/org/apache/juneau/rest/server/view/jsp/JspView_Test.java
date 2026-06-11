@@ -101,26 +101,30 @@ class JspView_Test extends TestBase {
 		// Servlet spec: setAttribute(name, null) removes the binding. JspView mirrors that at
 		// build-time so the renderer never has to short-circuit a request-attribute write at
 		// dispatch time.
+		var v = JspView.of("hello.jsp");
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").attr("missing", null));
+			() -> v.attr("missing", null));
 	}
 
 	@Test void b05_attrRejectsNullKey() {
+		var v = JspView.of("hello.jsp");
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").attr(null, "v"));
+			() -> v.attr(null, "v"));
 	}
 
 	@Test void b06_attrRejectsBlankKey() {
+		var v = JspView.of("hello.jsp");
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").attr("", "v"));
+			() -> v.attr("", "v"));
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").attr("   ", "v"));
+			() -> v.attr("   ", "v"));
 	}
 
 	@Test void b07_attributesMapIsImmutable() {
 		var v = JspView.of("hello.jsp").attr("name", "Bob");
+		var attrs = v.getAttributes();
 		assertThrows(UnsupportedOperationException.class,
-			() -> v.getAttributes().put("name", "Alice"));
+			() -> attrs.put("name", "Alice"));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *
@@ -150,8 +154,9 @@ class JspView_Test extends TestBase {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("ok", 1);
 		m.put("", 2);
+		var v = JspView.of("hello.jsp");
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").attrs(m));
+			() -> v.attrs(m));
 	}
 
 	@Test void c05_attrsOverridesExistingBindings() {
@@ -180,16 +185,18 @@ class JspView_Test extends TestBase {
 	}
 
 	@Test void d03_headerRejectsBlankName() {
+		var v = JspView.of("hello.jsp");
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").header("", "v"));
+			() -> v.header("", "v"));
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").header(null, "v"));
+			() -> v.header(null, "v"));
 	}
 
 	@Test void d04_headerRejectsNullValue() {
 		// null header value is rejected (unlike attribute values).
+		var v = JspView.of("hello.jsp");
 		assertThrows(IllegalArgumentException.class,
-			() -> JspView.of("hello.jsp").header("X", null));
+			() -> v.header("X", null));
 	}
 
 	@Test void d05_headerReturnsNewInstance() {
@@ -201,8 +208,9 @@ class JspView_Test extends TestBase {
 
 	@Test void d06_responseHeadersMapIsImmutable() {
 		var v = JspView.of("hello.jsp").header("X", "1");
+		var headers = v.getResponseHeaders();
 		assertThrows(UnsupportedOperationException.class,
-			() -> v.getResponseHeaders().put("Y", "2"));
+			() -> headers.put("Y", "2"));
 	}
 
 	/* ---------------------------------------------------------------------------------------- *

@@ -198,7 +198,11 @@ class ListAssertion_Test extends TestBase {
 		test(nil).asSublist(1,3).isNull();
 	}
 
-	@Test void bd01_create_wStream() {
+	@Test
+	@SuppressWarnings({
+		"java:S2699" // Uses Juneau's custom fluent assertions (isHas/isNull), which Sonar doesn't recognize as assertions.
+	})
+	void bd01_create_wStream() {
 		ListAssertion.create(Stream.of("a","b")).setSilent().isHas("a","b");
 		ListAssertion.create((Stream<String>)null).setSilent().isNull();
 	}

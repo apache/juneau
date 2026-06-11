@@ -124,7 +124,11 @@ class BasicPart_Test extends TestBase {
 		assertEquals("inner", x4.getValue());
 	}
 
-	@Test void a07_equals() {
+	@Test
+	@SuppressWarnings({
+		"java:S3415" // Argument order is intentional: assertNotEquals(x1, ...) exercises BasicPart.equals() with a non-matching arg/null, so x1 must be the receiver.
+	})
+	void a07_equals() {
 		var x1 = part("Foo","bar");
 		var x2 = part("Foo","bar");
 		var x3 = part("Foo","baz");

@@ -71,16 +71,14 @@ class LogsResource_Action_Test extends TestBase {
 		// Test setUri(java.net.URI) returns correct type
 		var x = new Action("view", "/logs/test.log");
 
-		try {
+		assertDoesNotThrow(() -> {
 			Action result = x.setUri(new java.net.URI("http://example.com/logs/test.log"));
 
 			// Verify fluent chaining
 			assertSame(x, result);
 			assertInstanceOf(Action.class, result);
 			assertTrue(x.getUri().toString().contains("example.com"));
-		} catch (Exception e) {
-			fail("URI creation failed: " + e.getMessage());
-		}
+		});
 	}
 
 	@Test void a06_setUri_withArgs() {

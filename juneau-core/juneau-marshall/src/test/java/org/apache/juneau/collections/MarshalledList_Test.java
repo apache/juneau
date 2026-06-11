@@ -131,15 +131,17 @@ class MarshalledList_Test extends TestBase {
 	@Test void a11_unmodifiable() {
 		var l = MarshalledList.of("a", "b", "c").unmodifiable();
 		assertTrue(l.isUnmodifiable());
+		var listX = List.of("x");
+		var listA = List.of("a");
 		assertThrows(UnsupportedOperationException.class, () -> l.add(0, "x"));
 		assertThrows(UnsupportedOperationException.class, () -> l.add("x"));
 		assertThrows(UnsupportedOperationException.class, () -> l.remove(0));
 		assertThrows(UnsupportedOperationException.class, () -> l.remove("a"));
 		assertThrows(UnsupportedOperationException.class, () -> l.set(0, "x"));
-		assertThrows(UnsupportedOperationException.class, () -> l.addAll(List.of("x")));
-		assertThrows(UnsupportedOperationException.class, () -> l.addAll(0, List.of("x")));
-		assertThrows(UnsupportedOperationException.class, () -> l.removeAll(List.of("a")));
-		assertThrows(UnsupportedOperationException.class, () -> l.retainAll(List.of("a")));
+		assertThrows(UnsupportedOperationException.class, () -> l.addAll(listX));
+		assertThrows(UnsupportedOperationException.class, () -> l.addAll(0, listX));
+		assertThrows(UnsupportedOperationException.class, () -> l.removeAll(listA));
+		assertThrows(UnsupportedOperationException.class, () -> l.retainAll(listA));
 		assertThrows(UnsupportedOperationException.class, l::clear);
 		assertThrows(UnsupportedOperationException.class, () -> l.addFirst("x"));
 		assertThrows(UnsupportedOperationException.class, () -> l.addLast("x"));

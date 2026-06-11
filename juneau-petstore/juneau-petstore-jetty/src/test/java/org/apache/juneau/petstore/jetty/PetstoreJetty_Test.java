@@ -49,6 +49,38 @@ class PetstoreJetty_Test extends TestBase {
 		.followRedirects(HttpClient.Redirect.NEVER)
 		.build();
 
+	/**
+	 * Primes the root endpoint before the timed test methods run.
+	 *
+	 * <p>
+	 * The fixture's {@code beforeAll} only waits for the Jetty connector to bind — not for the REST servlet to
+	 * initialize. The first request to a Juneau REST resource triggers one-time {@code RestContext} setup
+	 * (serializer/parser metadata, {@code HtmlDocSerializer} construction) which, under a loaded CI agent, can
+	 * exceed the tight 10s per-request timeout the test methods use. Absorbing that cold-start here (with a
+	 * generous budget + retry) removes the startup race from {@code a01} while keeping the per-test timeouts tight.
+	 */
+	@BeforeAll
+	static void warmUpServer() throws Exception {
+		var deadline = Instant.now().plusSeconds(30);
+		Exception last = null;
+		while (Instant.now().isBefore(deadline)) {
+			try {
+				var req = HttpRequest.newBuilder()
+					.uri(URI.create(fixture.getRootUrl() + "/"))
+					.timeout(Duration.ofSeconds(20))
+					.header("Accept", "text/html")
+					.GET()
+					.build();
+				if (HTTP.send(req, BodyHandlers.ofString()).statusCode() == 200)
+					return;
+			} catch (HttpTimeoutException | ConnectException e) {
+				last = e;
+			}
+			Thread.sleep(250);
+		}
+		throw new IllegalStateException("Petstore Jetty server did not become ready within 30s", last);
+	}
+
 	private static HttpResponse<String> get(String path, String accept) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create(fixture.getRootUrl() + path))

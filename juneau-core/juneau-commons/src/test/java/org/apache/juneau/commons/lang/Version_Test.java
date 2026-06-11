@@ -131,15 +131,8 @@ class Version_Test extends TestBase {
 	void b02_equalsObject(String version1, String version2, boolean expectedEqual, boolean checkNull) {
 		var v1 = of(version1);
 		if (checkNull) {
-			// equals(Object) should return false for null
-			// The instanceof check should prevent any null access
-			try {
-				assertNotEquals(v1, (Object)null);
-			} catch (NullPointerException e) {
-				// If there's a bug in the implementation, we'll catch it here
-				// But ideally this should not throw
-				fail("equals(Object) should handle null without throwing NullPointerException");
-			}
+			// equals(Object) should return false for null without throwing.
+			assertDoesNotThrow(() -> assertNotEquals(v1, (Object)null));
 		} else {
 			var v2 = of(version2);
 			if (expectedEqual) {

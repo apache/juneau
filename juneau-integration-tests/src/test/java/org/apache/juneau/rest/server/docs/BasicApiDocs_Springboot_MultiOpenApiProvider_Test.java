@@ -151,16 +151,13 @@ class BasicApiDocs_Springboot_MultiOpenApiProvider_Test {
 
 	@Test
 	void a02_collidingProvidersFailContextLoadWithBeanDefinitionOverrideException() {
-		var ex = assertThrows(BeanDefinitionOverrideException.class, () -> {
-			try (var ctx = new SpringApplicationBuilder(CollidingApp.class)
+		var ex = assertThrows(BeanDefinitionOverrideException.class, () ->
+			new SpringApplicationBuilder(CollidingApp.class)
 				.web(WebApplicationType.NONE)
 				.run(
 					"--spring.main.banner-mode=off",
 					"--spring.main.allow-bean-definition-overriding=false"
-				)) {
-				fail("Expected context load to fail with BeanDefinitionOverrideException, but it loaded: " + ctx);
-			}
-		});
+				).close());
 
 		// Spring's exact message text drifts across versions, so we only assert the bean id appears
 		// in the message — enough to confirm Spring caught the collision on the expected bean.

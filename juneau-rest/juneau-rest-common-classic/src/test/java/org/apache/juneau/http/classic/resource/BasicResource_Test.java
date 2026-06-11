@@ -225,10 +225,10 @@ class BasicResource_Test extends TestBase {
 		assertEquals("writeMe", out.toString("UTF-8"));
 	}
 
-	@Test void d06_consumeContent() throws Exception {
+	@Test void d06_consumeContent() {
 		var x = new BasicResource(new StringEntity(null, "foo"));
-		// No-op
-		x.consumeContent();
+		// consumeContent() is a no-op that must complete without throwing.
+		assertDoesNotThrow(x::consumeContent);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

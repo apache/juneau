@@ -31,22 +31,18 @@ class RrpcRestOpSession_Test extends TestBase {
 		// The actual functionality is tested through integration tests.
 
 		// Verify the method exists with correct return type via reflection
-		try {
+		assertDoesNotThrow(() -> {
 			var method = RrpcRestOpSession.class.getMethod("status", HttpStatusLine.class);
 			assertEquals(RrpcRestOpSession.class, method.getReturnType());
-		} catch (Exception e) {
-			fail("Method status(HttpStatusLine) should exist and return RrpcRestOpSession");
-		}
+		});
 	}
 
 	@Test void a02_finish_fluentChaining() {
 		// Test that finish() returns RrpcRestOpSession for fluent chaining
 		// Verify the method exists with correct return type via reflection
-		try {
+		assertDoesNotThrow(() -> {
 			var method = RrpcRestOpSession.class.getMethod("finish");
 			assertEquals(RrpcRestOpSession.class, method.getReturnType());
-		} catch (Exception e) {
-			fail("Method finish() should exist and return RrpcRestOpSession");
-		}
+		});
 	}
 }

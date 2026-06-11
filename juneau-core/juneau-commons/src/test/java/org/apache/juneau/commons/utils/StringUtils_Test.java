@@ -4987,38 +4987,32 @@ class StringUtils_Test extends TestBase {
 		assertTrue(classStr.contains("String"));
 
 		// Test Executable (Method) - triggers code path
-		try {
+		assertDoesNotThrow(() -> {
 			var method = String.class.getMethod("length");
 			var methodStr = readable(method);
 			assertNotNull(methodStr);
 			assertTrue(methodStr.contains("length"));
 			assertTrue(methodStr.contains("()"));
-		} catch (NoSuchMethodException e) {
-			fail("Method not found");
-		}
+		});
 
 		// Test Executable (Constructor) - triggers code path
-		try {
+		assertDoesNotThrow(() -> {
 			var constructor = String.class.getConstructor(String.class);
 			var constructorStr = readable(constructor);
 			assertNotNull(constructorStr);
 			assertTrue(constructorStr.contains("String"));
 			assertTrue(constructorStr.contains("("));
-		} catch (NoSuchMethodException e) {
-			fail("Constructor not found");
-		}
+		});
 
 		// Test Executable with parameters - triggers code path
-		try {
+		assertDoesNotThrow(() -> {
 			var method = String.class.getMethod("substring", int.class, int.class);
 			var methodStr = readable(method);
 			assertNotNull(methodStr);
 			assertTrue(methodStr.contains("substring"));
 			assertTrue(methodStr.contains("int"));
 			assertTrue(methodStr.contains(",")); // Multiple parameters
-		} catch (NoSuchMethodException e) {
-			fail("Method not found");
-		}
+		});
 
 		// Test ClassInfo - triggers new ClassInfo case
 		var classInfo = org.apache.juneau.commons.reflect.ClassInfo.of(String.class);
@@ -5073,7 +5067,7 @@ class StringUtils_Test extends TestBase {
 		}
 
 		// Test Parameter (java.lang.reflect.Parameter) - triggers new Parameter case
-		try {
+		assertDoesNotThrow(() -> {
 			var method = String.class.getMethod("substring", int.class, int.class);
 			var parameters = method.getParameters();
 			if (parameters.length > 0) {
@@ -5083,9 +5077,7 @@ class StringUtils_Test extends TestBase {
 				// Just verify it's not empty and contains a bracket
 				assertFalse(paramStr.isEmpty());
 			}
-		} catch (NoSuchMethodException e) {
-			fail("Method not found");
-		}
+		});
 	}
 
 	//====================================================================================================

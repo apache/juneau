@@ -69,24 +69,20 @@ class McpHandlerDefaults_Test {
 	void typedHandlers_constructor_isPrivate() {
 		// Sanity: the static façade class should not be instantiable. Reflection trick used to bump coverage on the
 		// implicit private no-arg constructor.
-		try {
+		assertDoesNotThrow(() -> {
 			var ctor = McpTypedHandlers.class.getDeclaredConstructor();
 			ctor.setAccessible(true);
 			assertNotNull(ctor.newInstance());
-		} catch (Exception e) {
-			fail(e);
-		}
+		});
 	}
 
 	@Test
 	void mcp_facade_constructor_isPrivate() {
-		try {
+		assertDoesNotThrow(() -> {
 			var ctor = Mcp.class.getDeclaredConstructor();
 			ctor.setAccessible(true);
 			assertNotNull(ctor.newInstance());
-		} catch (Exception e) {
-			fail(e);
-		}
+		});
 	}
 
 	@Test

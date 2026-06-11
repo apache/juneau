@@ -257,12 +257,15 @@ class BeanMap_Coverage_Test extends TestBase {
 		var c = new C_DynaPojo();
 		var bm = BeanMap.of(c);
 		// "unknownProp" is not a declared field.  If WithDynaField recognizes the dyna property, this should
-		// route to the dyna setter.  If not, it throws.  Either way, exercise that code path.
-		try {
-			bm.put("unknownDynaKey", "value");
-		} catch (BeanRuntimeException expected) {
-			// Either the dyna property is not recognized on the commons path (throws) or it is (no throw).
-		}
+		// route to the dyna setter.  If not, it throws BeanRuntimeException.  Either outcome is acceptable;
+		// assert that no other exception type escapes the put() dyna branch.
+		assertDoesNotThrow(() -> {
+			try {
+				bm.put("unknownDynaKey", "value");
+			} catch (BeanRuntimeException expected) {
+				// Either the dyna property is not recognized on the commons path (throws) or it is (no throw).
+			}
+		});
 	}
 
 	@Test
@@ -415,6 +418,9 @@ class BeanMap_Coverage_Test extends TestBase {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S3415" // Argument order is intentional: this test exercises BeanMap.equals() with a non-matching type, so the bean must be the receiver (first arg of assertNotEquals).
+	})
 	void h03_equals_nonMap_returnsFalse() {
 		var bm = BeanMap.of(new A_Pojo());
 		assertNotEquals(bm, "not-a-map");

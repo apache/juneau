@@ -164,9 +164,10 @@ class MarshalledMap_Test extends TestBase {
 	@Test void a14_unmodifiable() {
 		var m = MarshalledMap.of("a", 1).unmodifiable();
 		assertTrue(m.isUnmodifiable());
+		var mapB = Map.of("b", 2);
 		assertThrows(UnsupportedOperationException.class, () -> m.put("b", 2));
 		assertThrows(UnsupportedOperationException.class, () -> m.remove("a"));
-		assertThrows(UnsupportedOperationException.class, () -> m.putAll(Map.of("b", 2)));
+		assertThrows(UnsupportedOperationException.class, () -> m.putAll(mapB));
 		assertThrows(UnsupportedOperationException.class, m::clear);
 		assertThrows(UnsupportedOperationException.class, () -> m.putIfAbsent("b", 2));
 		assertThrows(UnsupportedOperationException.class, () -> m.remove("a", 1));

@@ -218,15 +218,13 @@ class ResourceBundleUtils_Test extends TestBase {
 	void a19_findBundle_comparesWithDirectCall() {
 		var loader = getClass().getClassLoader();
 		// Compare behavior with direct ResourceBundle.getBundle call
-		try {
+		assertDoesNotThrow(() -> {
 			var direct = ResourceBundle.getBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader);
 			var utils = ResourceBundleUtils.findBundle("org.apache.juneau.rest.server.NlsTest", Locale.getDefault(), loader);
 			assertNotNull(direct);
 			assertNotNull(utils);
 			assertEquals(direct.getString("key1"), utils.getString("key1"));
-		} catch (@SuppressWarnings("unused") MissingResourceException e) {
-			fail("Direct call should not throw for existing bundle");
-		}
+		});
 	}
 
 	@Test

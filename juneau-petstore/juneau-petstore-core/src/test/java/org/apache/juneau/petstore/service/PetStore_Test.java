@@ -132,8 +132,8 @@ class PetStore_Test extends TestBase {
 
 	@Test void d02_createUser_duplicate_throws() {
 		var s = new PetStore();
-		assertThrows(IllegalArgumentException.class,
-			() -> s.createUser(new User().setUsername("mwatson").setUserStatus(UserStatus.ACTIVE)));
+		var u = new User().setUsername("mwatson").setUserStatus(UserStatus.ACTIVE);
+		assertThrows(IllegalArgumentException.class, () -> s.createUser(u));
 	}
 
 	@Test void d03_updateUser_replacesContent() {

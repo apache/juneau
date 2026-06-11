@@ -1324,21 +1324,14 @@ class RrpcInterface_Test extends TestBase {
 	@ParameterizedTest
 	@MethodSource("input")
 	void g01_throwException1(Input input) {
-		try {
-			input.proxy.throwException1();
-			fail();
-		} catch (InterfaceProxy.InterfaceProxyException1 e) {
-			assertEquals("foo",e.getMessage());
-		}
+		var e = assertThrows(InterfaceProxy.InterfaceProxyException1.class, () -> input.proxy.throwException1());
+		assertEquals("foo",e.getMessage());
 	}
 
 	@ParameterizedTest
 	@MethodSource("input")
 	void g02_throwException2(Input input) {
-		try {
-			input.proxy.throwException2();
-			fail();
-		} catch (InterfaceProxy.InterfaceProxyException2 e) {/*no-op*/}
+		assertThrows(InterfaceProxy.InterfaceProxyException2.class, () -> input.proxy.throwException2());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

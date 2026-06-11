@@ -114,11 +114,7 @@ class BasicConvention_Builders_Test extends TestBase {
 			"daily",
 			1.0);
 		var sw = new java.io.StringWriter();
-		try {
-			e.write(sw);
-		} catch (IOException ex) {
-			fail(ex);
-		}
+		assertDoesNotThrow(() -> e.write(sw));
 		var xml = sw.toString();
 		assertTrue(xml.contains("<lastmod>"), "lastmod present");
 		assertTrue(xml.contains("<changefreq>daily</changefreq>"), "changefreq present");

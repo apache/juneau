@@ -117,14 +117,10 @@ class OAuthFilter_Test extends TestBase {
 	@Test void d02_builder_realmCustomization() throws Exception {
 		TokenValidator v = token -> { throw new AuthenticationException("bad"); };
 		var f = OAuthFilter.create().validator(v).realm("api2").build();
-		try {
-			f.authenticate(req("Bearer x"));
-			fail();
-		} catch (AuthenticationException e) {
-			var hdr = e.getHeaders().stream()
-				.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
-				.findFirst().orElseThrow();
-			assertTrue(hdr.getValue().contains("api2"));
-		}
+		var e = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer x")));
+		var hdr = e.getHeaders().stream()
+			.filter(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName()))
+			.findFirst().orElseThrow();
+		assertTrue(hdr.getValue().contains("api2"));
 	}
 }

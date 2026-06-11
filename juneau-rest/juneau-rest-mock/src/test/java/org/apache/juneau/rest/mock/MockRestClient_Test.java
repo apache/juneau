@@ -228,11 +228,11 @@ class MockRestClient_Test {
 
 	@Test
 	void c04_getClient_returnsNgRestClient() {
-		try (var client = MockRestClient.create(RootResource.class)) {
-			assertNotNull(client.getClient());
-		} catch (IOException e) {
-			fail("Unexpected exception: " + e.getMessage());
-		}
+		assertDoesNotThrow(() -> {
+			try (var client = MockRestClient.create(RootResource.class)) {
+				assertNotNull(client.getClient());
+			}
+		});
 	}
 
 	// =================================================================================================================

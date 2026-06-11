@@ -242,6 +242,9 @@ class BeanPropertyMeta_Coverage_Test extends TestBase {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S3415" // Argument order is intentional: this test exercises BeanPropertyMeta.equals() with a non-matching type, so the bean must be the receiver (first arg of assertNotEquals).
+	})
 	void b03_equals_nonPropertyMeta_returnsFalse() {
 		var bm = BeanMeta.of(Plain.class);
 		var pm = bm.getPropertyMeta("x");

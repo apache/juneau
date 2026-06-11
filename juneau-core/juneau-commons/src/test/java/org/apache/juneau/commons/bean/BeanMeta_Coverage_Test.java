@@ -140,6 +140,9 @@ class BeanMeta_Coverage_Test extends TestBase {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S3415" // Argument order is intentional: this test exercises BeanMeta.equals() with a non-matching type, so the bean must be the receiver (first arg of assertNotEquals).
+	})
 	void a03_equals_nonBeanMeta_returnsFalse() {
 		var b = BeanMeta.of(Plain.class);
 		assertNotEquals(b, "not-a-bean-meta");
