@@ -1,18 +1,18 @@
 notifications:
-  commits:      commits@juneau.apache.org
-  issues:       dev@juneau.apache.org
+  commits: commits@juneau.apache.org
+  issues: dev@juneau.apache.org
   pullrequests: dev@juneau.apache.org
   jira_options: link label worklog
-  jobs:         dev@juneau.apache.org
-  discussions:  dev@juneau.apache.org
+  jobs: dev@juneau.apache.org
+  discussions: dev@juneau.apache.org
 
 # Configure staging website (safe testing)
 staging:
-  profile: ~
+  profile:
   whoami: asf-staging
 
 publish:
-  whoami: asf-site  
+  whoami: asf-site
 
 github:
   description: "Apache Juneau"
@@ -44,3 +44,16 @@ github:
     issues: true
     projects: true
     discussions: true
+  rulesets:
+    - name: "Default Branch Protection"
+      type: branch
+      branches:
+        includes:
+          - "~DEFAULT_BRANCH"
+          - "release/*"
+          - "rel/*"
+        excludes: []
+      bypass_teams:
+        - root
+      restrict_deletion: true
+      restrict_force_push: true
