@@ -38,7 +38,7 @@ import org.apache.juneau.rest.server.view.*;
  * 	<li class='jc'>{@link FreemarkerMixin}
  * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  * </ul>
  *
  * @serial exclude

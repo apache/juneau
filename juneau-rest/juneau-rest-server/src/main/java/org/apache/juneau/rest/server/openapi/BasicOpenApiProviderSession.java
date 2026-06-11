@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * touching the underlying annotation-walker.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerOpenApi">OpenAPI 3.1 Server Emission</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">OpenAPI 3.1 Server Emission</a>
  * </ul>
  */
 @SuppressWarnings({

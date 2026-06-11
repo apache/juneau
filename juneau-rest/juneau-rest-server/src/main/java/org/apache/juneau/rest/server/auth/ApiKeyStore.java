@@ -53,7 +53,7 @@ import java.util.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ApiKeyGuard}
  * 	<li class='jc'>{@link AuthenticationException}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
  * </ul>
  *
  * @since 10.0.0

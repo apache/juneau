@@ -51,7 +51,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<li class='jc'>{@link AdminProvider}
  * 	<li class='jc'>{@link DenyAllGuard}
  * 	<li class='jc'>{@link RestGuardList}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
  * @since 10.0.0

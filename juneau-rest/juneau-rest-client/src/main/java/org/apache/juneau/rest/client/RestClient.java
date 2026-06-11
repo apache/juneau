@@ -55,7 +55,7 @@ import org.apache.juneau.rest.client.remote.*;
  * over automatically.  An explicit {@link Builder#transport(HttpTransport)} call always wins.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * </ul>
  *
  * @since 9.2.1

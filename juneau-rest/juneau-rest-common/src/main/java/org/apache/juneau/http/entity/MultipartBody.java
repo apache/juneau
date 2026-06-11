@@ -53,7 +53,7 @@ import org.apache.juneau.http.*;
  * {@code juneau-rest-client} and {@code juneau-rest-common} APIs until the {@code ng} stack is declared stable.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/juneau-ng-rest-client">juneau-ng REST client</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/NextGenRestClient">juneau-ng REST client</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc7578">RFC 7578 — Returning Values from Forms: multipart/form-data</a>
  * </ul>
  *

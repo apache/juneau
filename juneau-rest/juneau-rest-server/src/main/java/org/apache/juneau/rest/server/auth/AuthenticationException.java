@@ -45,7 +45,7 @@ import org.apache.juneau.http.response.*;
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link ApiKeyGuard}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7235#section-4.1">RFC 7235 &sect;4.1 &mdash; WWW-Authenticate</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
  * </ul>
  *
  * @since 10.0.0

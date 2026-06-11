@@ -96,7 +96,7 @@ import com.nimbusds.jwt.proc.*;
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.ClaimsPrincipal}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7519">RFC 7519 — JSON Web Token</a>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7517">RFC 7517 — JSON Web Key</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
  * </ul>
  *
  * @since 10.0.0

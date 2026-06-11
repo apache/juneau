@@ -96,7 +96,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8615">RFC 8615 &mdash; Well-Known URIs</a>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc9116">RFC 9116 &mdash; security.txt</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
  * @since 10.0.0

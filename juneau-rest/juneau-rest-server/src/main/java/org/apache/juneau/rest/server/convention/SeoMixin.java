@@ -99,7 +99,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<li class='jc'>{@link WellKnownMixin}
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc9309">RFC 9309 &mdash; Robots Exclusion Protocol</a>
  * 	<li class='link'><a class="doclink" href="https://www.sitemaps.org/protocol.html">sitemaps.org &mdash; Sitemap protocol</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
  * @since 10.0.0

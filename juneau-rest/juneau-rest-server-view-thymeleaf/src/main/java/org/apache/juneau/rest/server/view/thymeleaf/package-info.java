@@ -83,7 +83,7 @@
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.view.View}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  * </ul>
  *
  * @since 10.0.0

@@ -63,7 +63,7 @@ import java.security.*;
  * 	<li class='jc'>{@link BearerTokenGuard}
  * 	<li class='jc'>{@link ApiKeyGuard}
  * 	<li class='jc'>{@link ClaimsPrincipal}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
  * </ul>
  *
  * @since 10.0.0

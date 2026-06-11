@@ -1434,7 +1434,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#openApiProvider()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerOpenApi">OpenAPI 3.1 Server Emission</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ApiDocsMixins">OpenAPI 3.1 Server Emission</a>
 	 * </ul>
 	 *
 	 * @return The OpenAPI 3.1 document associated with the resource. Never <jk>null</jk>.

@@ -56,7 +56,7 @@ import java.lang.annotation.*;
  * to provide default values for certain components.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeancAnnotation">@BeanCtor Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanCtorAnnotation">@BeanCtor Annotation</a>
  * </ul>
  */
 @Documented

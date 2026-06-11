@@ -78,7 +78,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 	<li class='jc'>{@link AuthenticationException}
  * 	<li class='jc'>{@link Auth}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6750">RFC 6750 &mdash; Bearer Token Usage</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/AuthGuards">AuthN Guards</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
  * </ul>
  *
  * @since 10.0.0

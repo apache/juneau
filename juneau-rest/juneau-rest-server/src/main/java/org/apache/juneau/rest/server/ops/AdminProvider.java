@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.guard.RateLimitGuard.*;
  * 	<li class='jc'>{@link AdminMixin}
  * 	<li class='jc'>{@link AdminResource}
  * 	<li class='jc'>{@link AdminServlet}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
  * @since 10.0.0

@@ -51,7 +51,7 @@ import org.apache.juneau.commons.inject.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanpAnnotation">@BeanProp Annotation</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanPropAnnotation">@BeanProp Annotation</a>
  * </ul>
  */
 @Documented
