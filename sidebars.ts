@@ -2042,6 +2042,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/16.10.HealthProbes',
 							label: '16.10. Health / Readiness / Liveness Probes',
 						},
+						{
+							type: 'doc',
+							id: 'topics/16.11.GracefulShutdown',
+							label: '16.11. Graceful Shutdown & Readiness Gating',
+						},
 					],
 				},
 				{
