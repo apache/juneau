@@ -28,6 +28,10 @@
     jetty.xml on the working directory or classpath.
   - All defaults are overridable: a consumer-supplied jetty.xml on the working directory or earlier on
     the classpath wins, as does a @Bean JettyServerFactory in the consumer's @Configuration.
+  - Graceful shutdown: stopTimeout is intentionally NOT set here.  JettyServerComponent applies a sensible
+    default (30s) at startup so server.stop() drains in-flight requests, and lets the [Jetty]/stopTimeout
+    config or a @Bean JettySettings override it.  Setting <Set name="stopTimeout"> here would take effect only
+    when neither of those overrides is supplied.
 -->
 <Configure id="JuneauJettyServer" class="org.eclipse.jetty.server.Server">
 

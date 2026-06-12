@@ -28,7 +28,9 @@ import java.io.*;
 import java.net.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.time.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
@@ -41,6 +43,7 @@ import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.auth.*;
+import org.apache.juneau.rest.server.health.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.tomcat.util.descriptor.web.*;
 
@@ -87,11 +90,16 @@ public class TomcatServerComponent implements MicroserviceListener {
 	private static final String ROOT_CONTEXT_PATH = "";
 	private static final String ROOT_DOC_BASE = ".";
 
+	/** Default bounded graceful-shutdown drain timeout applied when none is configured. */
+	static final Duration DEFAULT_STOP_TIMEOUT = Duration.ofSeconds(30);
+
 	private final Messages messages = Messages.of(TomcatServerComponent.class);
 	private final AtomicReference<Tomcat> tomcat = new AtomicReference<>();
 	private final AtomicReference<Microservice> microservice = new AtomicReference<>();
 	private final AtomicReference<File> baseDir = new AtomicReference<>();
 	private final AtomicBoolean ownsBaseDir = new AtomicBoolean(false);
+	private final AtomicReference<Duration> stopTimeout = new AtomicReference<>(DEFAULT_STOP_TIMEOUT);
+	private final AtomicReference<Duration> shutdownSettleDelay = new AtomicReference<>(Duration.ZERO);
 
 	/**
 	 * Env-driven sentinel for {@code availablePort}; {@link Optional#empty()} when unset (in which case
@@ -221,6 +229,15 @@ public class TomcatServerComponent implements MicroserviceListener {
 			// Publish back to the store for downstream beans / lookups.
 			store.addBean(Tomcat.class, tomcat.get());
 
+			// Graceful-shutdown wiring (zero-downtime k8s rollouts), kept identical to the Jetty contract:
+			//  - Resolve the bounded drain timeout (TomcatSettings > Tomcat/stopTimeout config > 30s default) so
+			//    onStop() can wait for in-flight requests to complete before the server stops.
+			//  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.
+			//  - Mark readiness ready so a freshly-(re)started service serves traffic.
+			stopTimeout.set(firstNonNull(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));
+			shutdownSettleDelay.set(firstNonNull(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
+			ReadinessState.resolve(store).markReady();
+
 			// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
 			var mountedPaths = new LinkedHashMap<String,String>();
 
@@ -260,8 +277,17 @@ public class TomcatServerComponent implements MicroserviceListener {
 	}
 
 	@Override /* Overridden from MicroserviceListener */
+	@SuppressWarnings({
+		"resource" // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
+	})
 	public void onStop(Microservice ms) {
 		final Logger logger = ms.getLogger();
+		// Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /
+		// Kubernetes stops routing new traffic while in-flight requests drain.  /livez stays healthy so the pod is
+		// not killed mid-drain.  The settle delay (default 0) gives the LB a window to observe the 503.
+		ReadinessState.resolve(ms.getBeanStore()).markOutOfService();
+		ms.out(messages, "DrainingRequests");
+		sleepQuietly(shutdownSettleDelay.get());
 		var t = new Thread("TomcatServerComponentStop") {
 			@Override /* Overridden from Thread */
 			public void run() {
@@ -269,6 +295,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 					var t2 = tomcat.get();
 					if (t2 == null)
 						return;
+					drainConnector(t2, stopTimeout.get(), logger);
 					ms.out(messages, "StoppingServer");
 					t2.stop();
 					t2.destroy();
@@ -284,6 +311,43 @@ public class TomcatServerComponent implements MicroserviceListener {
 		try {
 			t.join();
 		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	/**
+	 * Pauses the connector (stops accepting new connections) and waits up to {@code timeout} for in-flight requests
+	 * to drain before the caller stops the server.  Best-effort: never throws out of the shutdown sequence.
+	 */
+	private static void drainConnector(Tomcat t2, Duration timeout, Logger logger) {
+		try {
+			var connector = t2.getConnector();
+			if (connector == null)
+				return;
+			connector.pause();
+			var executor = connector.getProtocolHandler() == null ? null : connector.getProtocolHandler().getExecutor();
+			if (executor instanceof ThreadPoolExecutor tpe) {
+				var deadline = System.nanoTime() + Math.max(0L, timeout.toNanos());
+				while (tpe.getActiveCount() > 0 && System.nanoTime() < deadline) {
+					try {
+						Thread.sleep(50L);
+					} catch (@SuppressWarnings("unused") InterruptedException e) {
+						Thread.currentThread().interrupt();
+						return;
+					}
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, lm(e), e);
+		}
+	}
+
+	private static void sleepQuietly(Duration d) {
+		if (d == null || d.isZero() || d.isNegative())
+			return;
+		try {
+			Thread.sleep(d.toMillis());
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}
 	}

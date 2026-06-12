@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.microservice.tomcat;
 
+import java.time.*;
+
 /**
  * Programmatic settings for the embedded Tomcat server contributed by {@link TomcatConfiguration}.
  *
@@ -53,6 +55,8 @@ public class TomcatSettings {
 
 		int[] ports;
 		String baseDir;
+		Duration stopTimeout;
+		Duration shutdownSettleDelay;
 
 		Builder() {}
 
@@ -97,6 +101,43 @@ public class TomcatSettings {
 			baseDir = value;
 			return this;
 		}
+
+		/**
+		 * Specifies the bounded graceful-shutdown drain timeout for the Tomcat server.
+		 *
+		 * <p>
+		 * On stop, the connector is paused (stops accepting new requests) and the component waits up to this
+		 * duration for in-flight requests to complete before the server stops.  When set, this value takes
+		 * precedence over the <c>Tomcat/stopTimeout</c> config-file entry (in milliseconds).  When neither is set,
+		 * a default of {@code 30s} is applied.
+		 *
+		 * @param value The drain timeout.  Can be <jk>null</jk> to defer to config, then to the default.
+		 * @return This object.
+		 */
+		public Builder stopTimeout(Duration value) {
+			stopTimeout = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the settle delay applied between flipping the readiness probe out of service and stopping the
+		 * connector.
+		 *
+		 * <p>
+		 * On stop, the readiness probe ({@code /readyz}) flips to {@code 503} <i>before</i> the connector is paused
+		 * so a load balancer / Kubernetes stops routing new traffic.  This brief delay gives the load balancer time
+		 * to observe the {@code 503} before in-flight requests are drained.  When set, this value takes precedence
+		 * over the <c>Tomcat/shutdownSettleDelay</c> config-file entry (in milliseconds).  When neither is set, no
+		 * settle delay is applied (defaults to {@code 0}) &mdash; the recommended Kubernetes pattern is a
+		 * {@code preStop} hook sleep instead.
+		 *
+		 * @param value The settle delay.  Can be <jk>null</jk> to defer to config, then to the default.
+		 * @return This object.
+		 */
+		public Builder shutdownSettleDelay(Duration value) {
+			shutdownSettleDelay = value;
+			return this;
+		}
 	}
 
 	/**
@@ -110,10 +151,14 @@ public class TomcatSettings {
 
 	private final int[] ports;
 	private final String baseDir;
+	private final Duration stopTimeout;
+	private final Duration shutdownSettleDelay;
 
 	TomcatSettings(Builder b) {
 		ports = b.ports;
 		baseDir = b.baseDir;
+		stopTimeout = b.stopTimeout;
+		shutdownSettleDelay = b.shutdownSettleDelay;
 	}
 
 	/**
@@ -132,5 +177,23 @@ public class TomcatSettings {
 	 */
 	public String getBaseDir() {
 		return baseDir;
+	}
+
+	/**
+	 * Returns the bounded graceful-shutdown drain timeout for the Tomcat server.
+	 *
+	 * @return The drain timeout, or <jk>null</jk> if not set.
+	 */
+	public Duration getStopTimeout() {
+		return stopTimeout;
+	}
+
+	/**
+	 * Returns the settle delay applied between flipping the readiness probe out of service and stopping the connector.
+	 *
+	 * @return The settle delay, or <jk>null</jk> if not set.
+	 */
+	public Duration getShutdownSettleDelay() {
+		return shutdownSettleDelay;
 	}
 }

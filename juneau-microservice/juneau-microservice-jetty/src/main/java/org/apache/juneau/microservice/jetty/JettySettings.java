@@ -22,6 +22,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.time.*;
 
 /**
  * Programmatic settings for the Jetty server contributed by {@link JettyConfiguration}.
@@ -61,6 +62,8 @@ public class JettySettings {
 		int[] ports;
 		String jettyXml;
 		Boolean jettyXmlResolveVars;
+		Duration stopTimeout;
+		Duration shutdownSettleDelay;
 
 		Builder() {}
 
@@ -127,6 +130,43 @@ public class JettySettings {
 			jettyXmlResolveVars = resolveVars;
 			return this;
 		}
+
+		/**
+		 * Specifies the bounded graceful-shutdown drain timeout for the Jetty server.
+		 *
+		 * <p>
+		 * On stop, the server stops accepting new connections and waits up to this duration for in-flight requests
+		 * to complete before the connector closes (Jetty's <c>stopTimeout</c>).  When set, this value takes
+		 * precedence over the <c>Jetty/stopTimeout</c> config-file entry (in milliseconds).  When neither is set,
+		 * a default of {@code 30s} is applied.
+		 *
+		 * @param value The drain timeout.  Can be <jk>null</jk> to defer to config, then to the default.
+		 * @return This object.
+		 */
+		public Builder stopTimeout(Duration value) {
+			stopTimeout = value;
+			return this;
+		}
+
+		/**
+		 * Specifies the settle delay applied between flipping the readiness probe out of service and stopping the
+		 * connector.
+		 *
+		 * <p>
+		 * On stop, the readiness probe ({@code /readyz}) flips to {@code 503} <i>before</i> the connector closes so a
+		 * load balancer / Kubernetes stops routing new traffic.  This brief delay gives the load balancer time to
+		 * observe the {@code 503} before in-flight requests are drained.  When set, this value takes precedence over
+		 * the <c>Jetty/shutdownSettleDelay</c> config-file entry (in milliseconds).  When neither is set, no settle
+		 * delay is applied (defaults to {@code 0}) &mdash; the recommended Kubernetes pattern is a {@code preStop}
+		 * hook sleep instead.
+		 *
+		 * @param value The settle delay.  Can be <jk>null</jk> to defer to config, then to the default.
+		 * @return This object.
+		 */
+		public Builder shutdownSettleDelay(Duration value) {
+			shutdownSettleDelay = value;
+			return this;
+		}
 	}
 
 	/**
@@ -141,11 +181,15 @@ public class JettySettings {
 	private final int[] ports;
 	private final String jettyXml;
 	private final Boolean jettyXmlResolveVars;
+	private final Duration stopTimeout;
+	private final Duration shutdownSettleDelay;
 
 	JettySettings(Builder b) {
 		ports = b.ports;
 		jettyXml = b.jettyXml;
 		jettyXmlResolveVars = b.jettyXmlResolveVars;
+		stopTimeout = b.stopTimeout;
+		shutdownSettleDelay = b.shutdownSettleDelay;
 	}
 
 	/**
@@ -173,5 +217,23 @@ public class JettySettings {
 	 */
 	public Boolean getJettyXmlResolveVars() {
 		return jettyXmlResolveVars;
+	}
+
+	/**
+	 * Returns the bounded graceful-shutdown drain timeout for the Jetty server.
+	 *
+	 * @return The drain timeout, or <jk>null</jk> if not set.
+	 */
+	public Duration getStopTimeout() {
+		return stopTimeout;
+	}
+
+	/**
+	 * Returns the settle delay applied between flipping the readiness probe out of service and stopping the connector.
+	 *
+	 * @return The settle delay, or <jk>null</jk> if not set.
+	 */
+	public Duration getShutdownSettleDelay() {
+		return shutdownSettleDelay;
 	}
 }

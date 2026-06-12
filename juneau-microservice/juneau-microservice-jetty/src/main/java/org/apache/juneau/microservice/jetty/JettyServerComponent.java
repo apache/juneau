@@ -26,6 +26,7 @@ import static org.apache.juneau.marshall.collections.JsonMap.*;
 
 import java.io.*;
 import java.net.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
@@ -37,6 +38,7 @@ import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.auth.*;
+import org.apache.juneau.rest.server.health.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
@@ -82,9 +84,13 @@ public class JettyServerComponent implements MicroserviceListener {
 	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
 	private static final Random RANDOM = new Random();
 
+	/** Default bounded graceful-shutdown drain timeout applied to the Jetty server when none is configured. */
+	static final Duration DEFAULT_STOP_TIMEOUT = Duration.ofSeconds(30);
+
 	private final Messages messages = Messages.of(JettyServerComponent.class);
 	private final AtomicReference<Server> server = new AtomicReference<>();
 	private final AtomicReference<Microservice> microservice = new AtomicReference<>();
+	private final AtomicReference<Duration> shutdownSettleDelay = new AtomicReference<>(Duration.ZERO);
 
 	/**
 	 * Env-driven sentinel for {@code availablePort}; {@link Optional#empty()} when unset (in which case
@@ -235,6 +241,21 @@ public class JettyServerComponent implements MicroserviceListener {
 			// Publish back to the store for downstream beans / lookups.
 			store.addBean(Server.class, server.get());
 
+			// Graceful-shutdown wiring (zero-downtime k8s rollouts):
+			//  - Apply a bounded stopTimeout so server.stop() drains in-flight requests before the connector closes.
+			//    Precedence: JettySettings > Jetty/stopTimeout config > jetty.xml value (if any) > 30s default.
+			//  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.
+			//  - Mark readiness ready so a freshly-(re)started service serves traffic.
+			var stopTimeoutOverride = settings.getStopTimeout() != null
+				? settings.getStopTimeout()
+				: cf.get("Jetty/stopTimeout").asLong().map(Duration::ofMillis).orElse(null);
+			if (stopTimeoutOverride != null)
+				server.get().setStopTimeout(Math.max(0L, stopTimeoutOverride.toMillis()));
+			else if (server.get().getStopTimeout() <= 0L)
+				server.get().setStopTimeout(DEFAULT_STOP_TIMEOUT.toMillis());
+			shutdownSettleDelay.set(firstNonNull(settings.getShutdownSettleDelay(), cf.get("Jetty/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
+			ReadinessState.resolve(store).markReady();
+
 			// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
 			var mountedPaths = new LinkedHashMap<String,String>();
 
@@ -297,8 +318,17 @@ public class JettyServerComponent implements MicroserviceListener {
 	}
 
 	@Override /* Overridden from MicroserviceListener */
+	@SuppressWarnings({
+		"resource" // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
+	})
 	public void onStop(Microservice ms) {
 		final Logger logger = ms.getLogger();
+		// Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /
+		// Kubernetes stops routing new traffic while in-flight requests drain.  /livez stays healthy so the pod is
+		// not killed mid-drain.  The settle delay (default 0) gives the LB a window to observe the 503.
+		ReadinessState.resolve(ms.getBeanStore()).markOutOfService();
+		ms.out(messages, "DrainingRequests");
+		sleepQuietly(shutdownSettleDelay.get());
 		var t = new Thread("JettyServerComponentStop") {
 			@Override /* Overridden from Thread */
 			public void run() {
@@ -317,6 +347,16 @@ public class JettyServerComponent implements MicroserviceListener {
 		t.start();
 		try {
 			t.join();
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+	}
+
+	private static void sleepQuietly(Duration d) {
+		if (d == null || d.isZero() || d.isNegative())
+			return;
+		try {
+			Thread.sleep(d.toMillis());
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			Thread.currentThread().interrupt();
 		}

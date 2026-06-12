@@ -78,6 +78,14 @@ public class HealthAggregator {
 		}
 
 		var status = summarize(out.values());
+
+		// Readiness gate: when shutdown has flipped the readiness state out of service, force the READY probe
+		// down so /readyz returns 503 before the connector closes.  /livez (LIVE) and /healthz (null) are unaffected.
+		if (probe == HealthProbe.READY && ! ReadinessState.resolve(context.getBeanStore()).isReady()) {
+			status = HealthStatus.DOWN;
+			out.put("readiness", new ComponentHealth(HealthStatus.DOWN, Map.of("state", "OUT_OF_SERVICE")));
+		}
+
 		res.setStatus(status == HealthStatus.DOWN ? 503 : 200);
 		return new HealthResponse(status, out);
 	}
