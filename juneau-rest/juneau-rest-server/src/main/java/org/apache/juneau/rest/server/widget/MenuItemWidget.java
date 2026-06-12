@@ -134,7 +134,8 @@ public abstract class MenuItemWidget extends Widget {
 		if (nn(pre) || nn(post)) {
 			id = getId(req);
 
-			sb.append("\n\t<script>");
+			var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
+			sb.append(nonce != null ? "\n\t<script nonce='" + nonce + "'>" : "\n\t<script>");
 			if (nn(pre)) {
 				sb.append("\n\t\tfunction onPreShow" + id + "() {");
 				sb.append("\n").append(pre);

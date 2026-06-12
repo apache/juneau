@@ -190,6 +190,16 @@ import jakarta.servlet.http.*;
 })
 public class RestRequest extends HttpServletRequestWrapper {
 
+	/**
+	 * Request-attribute name under which the per-response Content-Security-Policy nonce is cached.
+	 *
+	 * <p>
+	 * Set by {@link RestResponse} when an emitted CSP header contains a nonce placeholder, and read by the
+	 * serialization layer (to stamp the matching {@code nonce="..."} on inline {@code <script>}/{@code <style>} tags)
+	 * so the header and the markup share the same nonce.
+	 */
+	public static final String CSP_NONCE_ATTR = "CspNonce";
+
 	/*
 	 * Converts an Accept-Language value entry to a Locale.
 	 */

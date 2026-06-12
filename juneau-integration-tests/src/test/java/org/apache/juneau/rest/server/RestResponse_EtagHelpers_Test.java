@@ -172,19 +172,19 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 
 		@RestGet("/fromBuilder")
 		public String fromBuilder(RestResponse res) {
-			res.cacheControl(CacheControlBuilder.create().publicCache().maxAge(3600).mustRevalidate());
+			res.cacheControl(CacheControl.create().publicCache().maxAge(3600).mustRevalidate());
 			return "ok";
 		}
 
 		@RestGet("/privateNoStore")
 		public String privateNoStore(RestResponse res) {
-			res.cacheControl(CacheControlBuilder.create().privateCache().noStore());
+			res.cacheControl(CacheControl.create().privateCache().noStore());
 			return "ok";
 		}
 
 		@RestGet("/immutable")
 		public String immutable(RestResponse res) {
-			res.cacheControl(CacheControlBuilder.create().publicCache().maxAge(31536000L).immutable());
+			res.cacheControl(CacheControl.create().publicCache().maxAge(31536000L).immutable());
 			return "ok";
 		}
 	}
@@ -215,26 +215,26 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// D: CacheControlBuilder unit checks — directives, ordering, error paths
+	// D: CacheControl.Builder unit checks — directives, ordering, error paths
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_emptyBuilderEmitsEmptyString() {
-		assertEquals("", CacheControlBuilder.create().build());
+		assertEquals("", CacheControl.create().build());
 	}
 
 	@Test void d02_publicOverridesPrivate() {
-		var s = CacheControlBuilder.create().privateCache().publicCache().build();
+		var s = CacheControl.create().privateCache().publicCache().build();
 		assertEquals("public", s);
 	}
 
 	@Test void d03_privateOverridesPublic() {
-		var s = CacheControlBuilder.create().publicCache().privateCache().build();
+		var s = CacheControl.create().publicCache().privateCache().build();
 		assertEquals("private", s);
 	}
 
 	@Test void d04_allBooleanDirectives() {
 		// Stable emission order: public/private, then boolean directives in source order.
-		var s = CacheControlBuilder.create()
+		var s = CacheControl.create()
 			.publicCache()
 			.noCache().noStore().noTransform()
 			.mustRevalidate().proxyRevalidate()
@@ -244,7 +244,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	@Test void d05_maxAgeAndSMaxAge() {
-		var s = CacheControlBuilder.create()
+		var s = CacheControl.create()
 			.maxAge(60)
 			.sMaxAge(120)
 			.build();
@@ -252,7 +252,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	@Test void d06_maxAgeFromDuration() {
-		var s = CacheControlBuilder.create()
+		var s = CacheControl.create()
 			.maxAge(Duration.ofMinutes(10))
 			.sMaxAge(Duration.ofMinutes(15))
 			.build();
@@ -260,7 +260,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	@Test void d07_staleWhileRevalidateAndStaleIfError() {
-		var s = CacheControlBuilder.create()
+		var s = CacheControl.create()
 			.staleWhileRevalidate(30)
 			.staleIfError(60)
 			.build();
@@ -268,7 +268,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	@Test void d08_extensionAppendedAtEnd() {
-		var s = CacheControlBuilder.create()
+		var s = CacheControl.create()
 			.publicCache().maxAge(3600)
 			.extension("community=\"UCI\"")
 			.build();
@@ -276,35 +276,35 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 	}
 
 	@Test void d09_extensionRejectsBlank() {
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().extension(""));
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().extension("   "));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().extension(""));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().extension("   "));
 	}
 
 	@Test void d10_extensionRejectsNull() {
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().extension(null));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().extension(null));
 	}
 
 	@Test void d11_negativeMaxAgeRejected() {
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().maxAge(-1));
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().sMaxAge(-1));
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().staleWhileRevalidate(-1));
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().staleIfError(-1));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().maxAge(-1));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().sMaxAge(-1));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().staleWhileRevalidate(-1));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().staleIfError(-1));
 	}
 
 	@Test void d12_nullDurationRejected() {
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().maxAge((Duration)null));
-		assertThrows(IllegalArgumentException.class, () -> CacheControlBuilder.create().sMaxAge((Duration)null));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().maxAge((Duration)null));
+		assertThrows(IllegalArgumentException.class, () -> CacheControl.create().sMaxAge((Duration)null));
 	}
 
 	@Test void d13_toHeaderReturnsCacheControlBean() {
-		var h = CacheControlBuilder.create().publicCache().maxAge(60).toHeader();
+		var h = CacheControl.create().publicCache().maxAge(60).toHeader();
 		assertNotNull(h);
 		assertEquals("Cache-Control", h.getName());
 		assertEquals("public, max-age=60", h.getValue());
 	}
 
 	@Test void d14_toStringMatchesBuild() {
-		var b = CacheControlBuilder.create().publicCache().maxAge(60);
+		var b = CacheControl.create().publicCache().maxAge(60);
 		assertEquals(b.build(), b.toString());
 	}
 
@@ -330,7 +330,7 @@ class RestResponse_EtagHelpers_Test extends TestBase {
 			res.cacheControl((String)null); return "ok";
 		}
 		@RestGet("/ccNullBuilder") public String ccNullBuilder(RestResponse res) {
-			res.cacheControl((CacheControlBuilder)null); return "ok";
+			res.cacheControl((CacheControl.Builder)null); return "ok";
 		}
 	}
 

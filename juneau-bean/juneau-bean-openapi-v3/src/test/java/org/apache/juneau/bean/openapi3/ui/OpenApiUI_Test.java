@@ -25,6 +25,7 @@ import java.net.*;
 import org.apache.juneau.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -170,6 +171,24 @@ class OpenApiUI_Test extends TestBase {
 		var html = result.toString();
 		assertNotNull(html);
 		assertTrue(html.contains("openapi-ui"));
+	}
+
+	// Tests that a per-response Content-Security-Policy nonce on the HtmlDocSerializerSession is stamped onto the
+	// inline <style>/<script> tags emitted by the UI.
+	@Test void a02b_cspNonceStampedOnInlineStyleAndScript() throws Exception {
+		var session = HtmlDocSerializer.create().build().createSession().nonce("T3stN0nce").build();
+		var doc = openApi().setOpenapi("3.0.0");
+		var html = UI.swap(session, doc).toString();
+		assertTrue(html.contains("<style nonce='T3stN0nce'>"), () -> "Style tag missing nonce: " + html);
+		assertTrue(html.contains("<script type='text/javascript' nonce='T3stN0nce'>"), () -> "Script tag missing nonce: " + html);
+	}
+
+	// Tests that without a nonce-bearing session the inline tags stay plain (no nonce attribute leaks).
+	@Test void a02c_noCspNonceLeavesPlainTags() throws Exception {
+		var session = HtmlDocSerializer.create().build().createSession().build();
+		var doc = openApi().setOpenapi("3.0.0");
+		var html = UI.swap(session, doc).toString();
+		assertFalse(html.contains("nonce="), () -> "Did not expect nonce attribute: " + html);
 	}
 
 	// Tests forMediaTypes() to cover the method branch

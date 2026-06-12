@@ -24,6 +24,7 @@ import java.io.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
@@ -83,6 +84,7 @@ public class SerializedPojoProcessor implements CatchAllResponseProcessor {
 					.debug(req.isDebug() ? true : null)
 					.uriContext(req.getUriContext())
 					.resolver(req.getVarResolverSession())
+					.apply(HtmlDocSerializerSession.Builder.class, x -> req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).ifPresent(x::nonce))
 					.build();
 				// @formatter:on
 

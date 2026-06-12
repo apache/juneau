@@ -285,13 +285,20 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 		for (var i = 0; i < head.length; i++)
 			w.sIf(i > 0).appendln(2, session.resolve(head[i]));
 
+		var nonce = session.getNonce();
 		if (hasStyle(session)) {
-			w.sTag(2, "style").nl(2);
+			if (nonce != null)
+				w.oTag(2, "style").attr("nonce", nonce).cTag().nl(2);
+			else
+				w.sTag(2, "style").nl(2);
 			style(session, w, o);
 			w.ie(2).eTag("style").nl(2);
 		}
 		if (hasScript(session)) {
-			w.sTag(2, "script").nl(2);
+			if (nonce != null)
+				w.oTag(2, "script").attr("nonce", nonce).cTag().nl(2);
+			else
+				w.sTag(2, "script").nl(2);
 			script(session, w, o);
 			w.ie(2).eTag("script").nl(2);
 		}

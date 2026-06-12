@@ -37,6 +37,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -391,7 +392,18 @@ public class OpenApiUI extends ObjectSwap<OpenApi,Div> {
 		if (css == null) // HTT - primary CSS file path succeeds in normal test environments
 			css = RESOURCES.getString("OpenApiUI.css", null).orElse(null);
 
-		var outer = div(style(css), script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null)), header(s)).class_("openapi-ui");
+		// Stamp the per-response Content-Security-Policy nonce onto the inline <style>/<script> when present so the UI
+		// satisfies a nonce-based CSP (the same nonce the REST layer emits in the Content-Security-Policy header).
+		var nonce = (marshallingSession instanceof HtmlDocSerializerSession marshallingSession2) ? marshallingSession2.getNonce() : null;
+
+		var style = style(css);
+		var script = script("text/javascript", RESOURCES.getString("OpenApiUI.js", null).orElse(null));
+		if (nonce != null) {
+			style.attr("nonce", nonce);
+			script.attr("nonce", nonce);
+		}
+
+		var outer = div(style, script, header(s)).class_("openapi-ui");
 
 		// Operations without tags are rendered first.
 		outer.child(div().class_("tag-block tag-block-open").children(tagBlockContents(s, null)));

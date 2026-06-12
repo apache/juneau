@@ -57,6 +57,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	public abstract static class Builder<SELF extends Builder<SELF>> extends HtmlStrippedDocSerializerSession.Builder<SELF> {
 
 		private HtmlDocSerializer ctx;
+		private String nonce;
 
 		/**
 		 * Constructor
@@ -66,6 +67,22 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 		protected Builder(HtmlDocSerializer ctx) {
 			super(ctx);
 			this.ctx = ctx;
+		}
+
+		/**
+		 * Sets the per-response Content-Security-Policy nonce stamped onto inline {@code <script>}/{@code <style>}
+		 * tags emitted during this render.
+		 *
+		 * <p>
+		 * This is a per-render (session-scoped) value — it intentionally does NOT participate in the serializer
+		 * cache key, since a per-request nonce would otherwise force a cache miss on every request.
+		 *
+		 * @param value The nonce token. May be <jk>null</jk> to disable nonce stamping.
+		 * @return This object.
+		 */
+		public SELF nonce(String value) {
+			nonce = value;
+			return self();
 		}
 
 		@Override
@@ -101,6 +118,7 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	}
 
 	private final HtmlDocSerializer ctx;
+	private final String nonce;
 
 	/**
 	 * Constructor.
@@ -110,8 +128,21 @@ public class HtmlDocSerializerSession extends HtmlStrippedDocSerializerSession {
 	protected HtmlDocSerializerSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
+		nonce = builder.nonce;
 		addVarBean(HtmlWidgetMap.class, ctx.getWidgets());
 	}
+
+	/**
+	 * The per-response Content-Security-Policy nonce for this render.
+	 *
+	 * <p>
+	 * When non-<jk>null</jk>, inline {@code <script>}/{@code <style>} tags emitted by the HtmlDoc template are
+	 * stamped with a matching {@code nonce="..."} attribute so they satisfy a nonce-based CSP.
+	 *
+	 * @see HtmlDocSerializerSession.Builder#nonce(String)
+	 * @return The nonce token, or <jk>null</jk> if nonce stamping is disabled.
+	 */
+	public final String getNonce() { return nonce; }
 
 	/**
 	 * Returns the {@link HtmlDocSerializer.Builder#navlinks(String...)} setting value in this context.

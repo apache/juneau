@@ -135,16 +135,6 @@ XV=${X_VERSION}-SNAPSHOT
 rm -Rf $WORKSPACE
 mkdir -p $WORKSPACE
 
-ZIP_SRC=juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-$XV-bin.zip
-ZIP_TGT=$WORKSPACE/my-jetty-microservice
-echo Unzipping $ZIP_SRC to $ZIP_TGT
-unzip -o $ZIP_SRC -d $ZIP_TGT
-
-ZIP_SRC=juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-$XV-bin.zip
-ZIP_TGT=$WORKSPACE/my-springboot-microservice
-echo Unzipping $ZIP_SRC to $ZIP_TGT
-unzip -o $ZIP_SRC -d $ZIP_TGT
-
 ZIP_SRC=juneau-examples/juneau-examples-core/target/juneau-examples-core-$XV-bin.zip
 ZIP_TGT=$WORKSPACE/juneau-examples-core
 echo Unzipping $ZIP_SRC to $ZIP_TGT

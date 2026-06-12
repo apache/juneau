@@ -16,7 +16,11 @@
  */
 package org.apache.juneau.http.header;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
+import java.nio.charset.*;
+import java.util.*;
 import java.util.function.*;
 
 /**
@@ -78,5 +82,338 @@ public class Authorization extends HttpStringHeader {
 	 */
 	public static Authorization of(Supplier<String> valueSupplier) {
 		return new Authorization(valueSupplier);
+	}
+
+	/**
+	 * Creates a new empty {@link Builder}.
+	 *
+	 * @return A new builder. Never <jk>null</jk>.
+	 */
+	public static Builder create() {
+		return new Builder();
+	}
+
+	/**
+	 * Creates a {@link Builder} pre-populated with <c>Basic</c> credentials (base64 of <c>user:password</c>).
+	 *
+	 * @param user The username. Must not be <jk>null</jk>.
+	 * @param password The password. Must not be <jk>null</jk>.
+	 * @return A new builder. Never <jk>null</jk>.
+	 */
+	public static Builder basic(String user, String password) {
+		return create().basic(user, password);
+	}
+
+	/**
+	 * Creates a {@link Builder} pre-populated with <c>Bearer</c> credentials.
+	 *
+	 * @param token The bearer token. Must not be <jk>null</jk>.
+	 * @return A new builder. Never <jk>null</jk>.
+	 */
+	public static Builder bearer(String token) {
+		return create().bearer(token);
+	}
+
+	/**
+	 * Creates a {@link Builder} pre-populated with a <c>Digest</c> scheme.
+	 *
+	 * @return A new builder. Never <jk>null</jk>.
+	 */
+	public static Builder digest() {
+		return create().digest();
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Inner types
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Fluent builder for assembling an HTTP <c>Authorization</c> credentials value.
+	 *
+	 * <p>
+	 * Composes the <c>scheme 1*SP ( token68 / #auth-param )</c> credentials form defined by
+	 * <a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7235#section-4.2'>RFC 7235 §4.2</a>.  The
+	 * {@link #basic(String, String)} and {@link #bearer(String)} presets render the opaque <c>token68</c> form; the
+	 * {@link #digest()} preset enables the typed Digest auth-params, which apply the correct quoting (quoted-string vs
+	 * token).  {@link #param(String, String)} is a generic escape hatch so new params never require an API change.
+	 * Setting a scheme preset or {@link #token(String)} clears any previously-registered auth-params and vice versa, so
+	 * a built value carries either a token68 or an auth-param list, never both.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>value</jv> = Authorization.<jsm>create</jsm>()
+	 * 		.digest()
+	 * 		.username(<js>"Mufasa"</js>)
+	 * 		.realm(<js>"http-auth@example.org"</js>)
+	 * 		.uri(<js>"/dir/index.html"</js>)
+	 * 		.qop(<js>"auth"</js>)
+	 * 		.nc(<js>"00000001"</js>)
+	 * 		.response(<js>"8ca523f5e9506fed4657c9700eebdbec"</js>)
+	 * 		.build();
+	 * 	<jc>// =&gt; "Digest username=\"Mufasa\", realm=\"...\", uri=\"/dir/index.html\", qop=auth, nc=00000001, response=\"...\""</jc>
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jc'>{@link Authorization}
+	 * 	<li class='extlink'><a class='doclink' href='https://www.rfc-editor.org/rfc/rfc7235'>RFC 7235 - HTTP/1.1 Authentication</a>
+	 * </ul>
+	 *
+	 * @since 10.0.0
+	 */
+	public static class Builder {
+
+		private String scheme;
+		private String token68;
+		private final Map<String,String> params = new LinkedHashMap<>();
+
+		/**
+		 * Sets the authentication scheme (e.g. <js>"Basic"</js>, <js>"Bearer"</js>, <js>"Digest"</js>).
+		 *
+		 * @param value The scheme name. Must not be <jk>null</jk> or blank.
+		 * @return This object.
+		 * @throws IllegalArgumentException If {@code value} is <jk>null</jk> or blank.
+		 */
+		public Builder scheme(String value) {
+			assertArgNotNull("value", value);
+			var v = value.trim();
+			if (v.isEmpty())
+				throw illegalArg("scheme must not be blank");
+			scheme = v;
+			return this;
+		}
+
+		/**
+		 * Sets <c>Basic</c> credentials by base64-encoding <c>user:password</c> as the token68 form.
+		 *
+		 * @param user The username. Must not be <jk>null</jk>.
+		 * @param password The password. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder basic(String user, String password) {
+			assertArgNotNull("user", user);
+			assertArgNotNull("password", password);
+			var encoded = Base64.getEncoder().encodeToString((user + ":" + password).getBytes(StandardCharsets.UTF_8));
+			return scheme("Basic").token(encoded);
+		}
+
+		/**
+		 * Sets <c>Bearer</c> credentials with the supplied token as the token68 form.
+		 *
+		 * @param token The bearer token. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder bearer(String token) {
+			return scheme("Bearer").token(token);
+		}
+
+		/**
+		 * Sets the scheme to <c>Digest</c> (typed Digest auth-params can then be chained).
+		 *
+		 * @return This object.
+		 */
+		public Builder digest() {
+			return scheme("Digest");
+		}
+
+		/**
+		 * Sets the opaque <c>token68</c> credentials form, clearing any auth-params.
+		 *
+		 * @param value The token68 value. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder token(String value) {
+			assertArgNotNull("value", value);
+			params.clear();
+			token68 = value;
+			return this;
+		}
+
+		/**
+		 * Sets the <c>username</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The username. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder username(String value) {
+			return quotedParam("username", value);
+		}
+
+		/**
+		 * Sets the <c>realm</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The realm. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder realm(String value) {
+			return quotedParam("realm", value);
+		}
+
+		/**
+		 * Sets the <c>nonce</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The server nonce echoed back from the challenge. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder nonce(String value) {
+			return quotedParam("nonce", value);
+		}
+
+		/**
+		 * Sets the <c>uri</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The effective request URI. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder uri(String value) {
+			return quotedParam("uri", value);
+		}
+
+		/**
+		 * Sets the <c>response</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The computed digest response. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder response(String value) {
+			return quotedParam("response", value);
+		}
+
+		/**
+		 * Sets the <c>cnonce</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The client nonce. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder cnonce(String value) {
+			return quotedParam("cnonce", value);
+		}
+
+		/**
+		 * Sets the <c>opaque</c> auth-param (rendered as a quoted-string).
+		 *
+		 * @param value The opaque value echoed back from the challenge. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder opaque(String value) {
+			return quotedParam("opaque", value);
+		}
+
+		/**
+		 * Sets the <c>algorithm</c> auth-param (rendered as a bare token, unquoted).
+		 *
+		 * @param value The algorithm (e.g. <js>"MD5"</js>, <js>"SHA-256"</js>). Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder algorithm(String value) {
+			return tokenParam("algorithm", value);
+		}
+
+		/**
+		 * Sets the <c>qop</c> auth-param (rendered as a bare token, unquoted; a single value in credentials).
+		 *
+		 * @param value The quality-of-protection token (e.g. <js>"auth"</js>). Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder qop(String value) {
+			return tokenParam("qop", value);
+		}
+
+		/**
+		 * Sets the <c>nc</c> (nonce-count) auth-param (rendered as a bare token, unquoted).
+		 *
+		 * @param value The 8-digit hex nonce-count (e.g. <js>"00000001"</js>). Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder nc(String value) {
+			return tokenParam("nc", value);
+		}
+
+		/**
+		 * Generic escape hatch for setting any auth-param by name, rendered as a quoted-string.
+		 *
+		 * <p>
+		 * Replaces any previously-registered value for the same param while preserving its original position, and
+		 * clears any previously-set {@link #token(String) token68}.
+		 *
+		 * @param name The auth-param name. Must not be <jk>null</jk> or blank.
+		 * @param value The auth-param value (quoted automatically). Must not be <jk>null</jk>.
+		 * @return This object.
+		 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank.
+		 */
+		public Builder param(String name, String value) {
+			return quotedParam(name, value);
+		}
+
+		private Builder quotedParam(String name, String value) {
+			assertArgNotNull("value", value);
+			token68 = null;
+			params.put(cleanName(name), q(value));
+			return this;
+		}
+
+		private Builder tokenParam(String name, String value) {
+			assertArgNotNull("value", value);
+			token68 = null;
+			params.put(cleanName(name), value);
+			return this;
+		}
+
+		private static String cleanName(String name) {
+			assertArgNotNull("name", name);
+			var n = name.trim();
+			if (n.isEmpty())
+				throw illegalArg("auth-param name must not be blank");
+			return n;
+		}
+
+		private static String q(String value) {
+			var sb = new StringBuilder(value.length() + 2);
+			sb.append('"');
+			for (var i = 0; i < value.length(); i++) {
+				var c = value.charAt(i);
+				if (c == '\\' || c == '"')
+					sb.append('\\');
+				sb.append(c);
+			}
+			sb.append('"');
+			return sb.toString();
+		}
+
+		/**
+		 * Builds the rendered <c>Authorization</c> credentials value.
+		 *
+		 * <p>
+		 * Returns an empty string when no scheme has been registered.
+		 *
+		 * @return The header value. Never <jk>null</jk>.
+		 */
+		public String build() {
+			if (scheme == null)
+				return "";
+			var sb = new StringBuilder(scheme);
+			if (token68 != null) {
+				sb.append(' ').append(token68);
+			} else if (! params.isEmpty()) {
+				sb.append(' ');
+				var parts = new ArrayList<String>(params.size());
+				params.forEach((k, v) -> parts.add(k + "=" + v));
+				sb.append(String.join(", ", parts));
+			}
+			return sb.toString();
+		}
+
+		/**
+		 * Builds an {@link Authorization} header bean directly from this builder.
+		 *
+		 * @return An {@link Authorization} carrying {@link #build()}. Never <jk>null</jk>.
+		 */
+		public Authorization toHeader() {
+			return Authorization.of(build());
+		}
+
+		@Override
+		public String toString() {
+			return build();
+		}
 	}
 }

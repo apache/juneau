@@ -89,7 +89,7 @@ import jakarta.servlet.http.*;
  * 			<li class='jm'>{@link RestResponse#lastModified(Instant) lastModified(Instant)}
  * 			<li class='jm'>{@link RestResponse#lastModified(ZonedDateTime) lastModified(ZonedDateTime)}
  * 			<li class='jm'>{@link RestResponse#cacheControl(String) cacheControl(String)}
- * 			<li class='jm'>{@link RestResponse#cacheControl(CacheControlBuilder) cacheControl(CacheControlBuilder)}
+ * 			<li class='jm'>{@link RestResponse#cacheControl(CacheControl.Builder) cacheControl(CacheControl.Builder)}
  * 		</ul>
  * 		<li>Methods for setting response bodies:
  * 		<ul class='javatreec'>
@@ -191,9 +191,9 @@ public class RestResponse extends HttpServletResponseWrapper {
 				}
 			}
 
-		request.getContext().getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), maybeResolveUris(x.getName(), x.getValue())));  // Done this way to avoid list/array copy.
+		request.getContext().getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), resolveCspNonce(maybeResolveUris(x.getName(), x.getValue()))));  // Done this way to avoid list/array copy.
 
-		opContext.getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), maybeResolveUris(x.getName(), x.getValue())));
+		opContext.getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), resolveCspNonce(maybeResolveUris(x.getName(), x.getValue()))));
 
 		if (charset == null)
 			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeaderParam("Accept-Charset").orElse(null));
@@ -843,7 +843,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @param value The directive list (e.g. <js>"public, max-age=3600"</js>). Must not be <jk>null</jk>.
 	 * @return This object.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
-	 * @see #cacheControl(CacheControlBuilder)
+	 * @see #cacheControl(CacheControl.Builder)
 	 */
 	public RestResponse cacheControl(String value) {
 		assertArgNotNull(ARG_VALUE, value);
@@ -851,11 +851,11 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets the <c>Cache-Control</c> response header from a {@link CacheControlBuilder}.
+	 * Sets the <c>Cache-Control</c> response header from a {@link CacheControl.Builder}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<jv>res</jv>.cacheControl(CacheControlBuilder.<jsm>create</jsm>().publicCache().maxAge(3600));
+	 * 	<jv>res</jv>.cacheControl(CacheControl.<jsm>create</jsm>().publicCache().maxAge(3600));
 	 * 	<jc>// Cache-Control: public, max-age=3600</jc>
 	 * </p>
 	 *
@@ -863,7 +863,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
-	public RestResponse cacheControl(CacheControlBuilder value) {
+	public RestResponse cacheControl(CacheControl.Builder value) {
 		assertArgNotNull(ARG_VALUE, value);
 		return cacheControl(value.build());
 	}
@@ -1029,6 +1029,26 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 	private String maybeResolveUris(String name, Object value) {
 		return isUriBearingHeader(name) ? resolveUris(value) : s(value);
+	}
+
+	/**
+	 * If a (Content-Security-Policy) header value contains a nonce placeholder, mints a single per-response nonce
+	 * (cached as a request attribute so the serializer stamps the SAME value onto inline {@code <script>}/{@code <style>}
+	 * tags) and substitutes it into the value.  Returns the value unchanged when no placeholder is present, so this is
+	 * a no-op for every non-CSP header and for CSP headers that don't use a nonce.
+	 *
+	 * @param value The already-URI-resolved header value. May be <jk>null</jk>.
+	 * @return The header value with any nonce placeholder resolved.
+	 */
+	private String resolveCspNonce(String value) {
+		if (value == null || ! value.contains(ContentSecurityPolicy.Builder.NONCE_PLACEHOLDER))
+			return value;
+		var nonce = request.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
+		if (nonce == null) {
+			nonce = ContentSecurityPolicy.Builder.generateNonce();
+			request.setAttribute(RestRequest.CSP_NONCE_ATTR, nonce);
+		}
+		return ContentSecurityPolicy.Builder.resolveNonce(value, nonce);
 	}
 
 	private static boolean isUriBearingHeader(String name) {

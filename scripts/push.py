@@ -45,6 +45,22 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
+# ----------------------------------------------------------------------------------------------------------------------
+# External Juneau starter repos (TODO-158).
+#
+# After this script builds + installs the local 10.0.0-SNAPSHOT into ~/.m2, it builds each of these external
+# starter repos against that local install to recover the downstream-consumer compile/test guard that
+# externalizing the starters would otherwise lose.  Edit this list to match your local checkout locations.
+# A path that does not exist is SKIPPED WITH A WARNING (not a failure).  Any PRESENT starter that fails to
+# build fails the push.  Docker / Docusaurus validation is left to each repo's own GitHub Actions CI.
+# ----------------------------------------------------------------------------------------------------------------------
+STARTER_REPO_PATHS = [
+    Path.home() / "git" / "jamesbognar" / "juneau-microservice-jetty-starter",
+    Path.home() / "git" / "jamesbognar" / "juneau-microservice-springboot-starter",
+    Path.home() / "git" / "jamesbognar" / "juneau-microservice-tomcat-starter",
+]
+
+
 def run_command(cmd, description, cwd=None):
     """
     Run a shell command and handle errors.
@@ -436,6 +452,34 @@ def _append_test_run_history(juneau_root: Path, wall_sec: int) -> None:
         print(f"⚠ Warning: Could not append test metrics: {exc}")
 
 
+def verify_starter_repos(step_num):
+    """
+    Build each PRESENT external starter repo against the freshly-installed local SNAPSHOT.
+
+    Args:
+        step_num: The current step number (for output formatting).
+
+    Returns:
+        True if every present starter built successfully (or none are present); False if any
+        present starter failed to build.
+    """
+    print(f"\n🌱 Step {step_num}: Verifying external starter repos against local SNAPSHOT...")
+    any_present = False
+    for repo in STARTER_REPO_PATHS:
+        if not repo.exists():
+            print(f"  ⏭️  Skipping missing starter repo: {repo}")
+            continue
+        any_present = True
+        wrapper = repo / ("mvnw.cmd" if platform.system() == "Windows" else "mvnw")
+        cmd = [str(wrapper), "-q", "verify"] if wrapper.exists() else ["mvn", "-q", "verify"]
+        if not run_command(cmd, f"  Building starter: {repo.name}", cwd=repo):
+            print(f"\n❌ Starter repo build FAILED: {repo}")
+            return False
+    if not any_present:
+        print("  ⚠ No starter repos found locally — nothing to verify.")
+    return True
+
+
 def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
@@ -495,6 +539,8 @@ Examples:
             print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --log ~/.cache/juneau-push-timings/<branch>.jsonl")
             step_num += 1
         print(f"  {step_num}. Build and install: mvn clean package install -DskipTests")
+        step_num += 1
+        print(f"  {step_num}. Verify external starter repos against local SNAPSHOT (./mvnw -q verify; missing paths skipped)")
         step_num += 1
         print(f"  {step_num}. Commit changes: git add . && git commit -m \"{args.message}\"")
         step_num += 1
@@ -584,6 +630,13 @@ Examples:
         juneau_root
     ):
         print("\n❌ Build process aborted due to build failure.")
+        play_sound(success=False)
+        return 1
+    step_num += 1
+
+    # Step 3 (TODO-158): Build external starter repos against the freshly-installed local SNAPSHOT (blocking gate)
+    if not verify_starter_repos(step_num):
+        print("\n❌ Build process aborted due to external starter repo verification failure.")
         play_sound(success=False)
         return 1
     step_num += 1

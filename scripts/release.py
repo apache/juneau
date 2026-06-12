@@ -683,10 +683,6 @@ class ReleaseScript:
         workspace.mkdir(parents=True)
         
         zip_files = [
-            ('juneau-microservice/juneau-my-jetty-microservice/target/my-jetty-microservice-{}-bin.zip',
-             'my-jetty-microservice'),
-            ('juneau-microservice/juneau-my-springboot-microservice/target/my-springboot-microservice-{}-bin.zip',
-             'my-springboot-microservice'),
             ('juneau-examples/juneau-examples-core/target/juneau-examples-core-{}-bin.zip',
              'juneau-examples-core'),
             ('juneau-petstore/juneau-petstore-jetty/target/juneau-petstore-jetty-{}-bin.zip',

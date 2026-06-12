@@ -26,6 +26,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.html.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -583,5 +584,23 @@ class SwaggerUI_Test extends TestBase {
 			));
 		var result = new SwaggerUI().swap(bs, swagger);
 		assertNotNull(result);
+	}
+
+	// Tests that a per-response Content-Security-Policy nonce on the HtmlDocSerializerSession is stamped onto the
+	// inline <style>/<script> tags emitted by the UI.
+	@Test void a40_cspNonceStampedOnInlineStyleAndScript() throws Exception {
+		var session = HtmlDocSerializer.create().build().createSession().nonce("T3stN0nce").build();
+		var swagger = swagger().setInfo(info("Test API", "1.0.0"));
+		var html = new SwaggerUI().swap(session, swagger).toString();
+		assertTrue(html.contains("<style nonce='T3stN0nce'>"), () -> "Style tag missing nonce: " + html);
+		assertTrue(html.contains("<script type='text/javascript' nonce='T3stN0nce'>"), () -> "Script tag missing nonce: " + html);
+	}
+
+	// Tests that without a nonce-bearing session the inline tags stay plain (no nonce attribute leaks).
+	@Test void a41_noCspNonceLeavesPlainTags() throws Exception {
+		var session = HtmlDocSerializer.create().build().createSession().build();
+		var swagger = swagger().setInfo(info("Test API", "1.0.0"));
+		var html = new SwaggerUI().swap(session, swagger).toString();
+		assertFalse(html.contains("nonce="), () -> "Did not expect nonce attribute: " + html);
 	}
 }
