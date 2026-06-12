@@ -2046,28 +2046,13 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'category',
-					label: '18. My SpringBoot Microservice',
+					label: '18. Starter Projects',
 					collapsed: true,
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/18.01.MySpringBootMicroserviceBasics',
-							label: '18.1. My SpringBoot Microservice Basics',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.02.MySpringBootMicroserviceInstalling',
-							label: '18.2. Installing in Eclipse',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.03.MySpringBootMicroserviceRunning',
-							label: '18.3. Running in Eclipse',
-						},
-						{
-							type: 'doc',
-							id: 'topics/18.04.MySpringBootMicroserviceBuilding',
-							label: '18.4. Building and Running from Command-Line',
+							id: 'topics/18.01.StarterProjects',
+							label: '18.1. Starter Projects',
 						},
 					],
 				},
@@ -2156,6 +2141,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/22.04.RestSecurity',
 							label: '22.4. REST Security',
+						},
+						{
+							type: 'doc',
+							id: 'topics/22.05.ContentSecurityPolicy',
+							label: '22.5. Content Security Policy',
 						},
 					],
 				},

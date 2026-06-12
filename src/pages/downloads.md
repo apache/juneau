@@ -50,7 +50,6 @@
   - `org.apache.juneau.rest.mock.jar` - REST mock testing API
 
 - **`/projects`** - Eclipse Projects
-  - `my-springboot-microservice.zip` - Microservice starter project using Spring Boot
   - `juneau-examples-core.zip` - Core libraries examples
   - `juneau-petstore-jetty.zip` - Canonical petstore showcase application starter (Jetty/Microservice deployment)
 
