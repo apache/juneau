@@ -32,6 +32,9 @@ import com.sun.net.httpserver.*;
 /**
  * Integration tests for {@link JettyHttpTransport} against a real embedded HTTP server.
  */
+@SuppressWarnings({
+	"resource" // Transport/response Closeables are exercised inline; lifecycle is managed by the test/framework, not a real leak.
+})
 class JettyHttpTransport_Test {
 
 	private static HttpServer server;

@@ -42,6 +42,7 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.parser.ParseException;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
 
 /**
@@ -241,6 +242,9 @@ public class ResponseContent implements HttpEntity {
 			if (type.is(InputStream.class))
 				return (T)asInputStream();
 
+			if (type.isChildOf(RecordReader.class) || type.is(RecordReader.class))
+				return (T) asCursor(type);
+
 			if (type.is(HttpResponse.class))
 				return (T)response;
 
@@ -302,6 +306,63 @@ public class ResponseContent implements HttpEntity {
 		} catch (ParseException | IOException e) {
 			response.close();
 			throw new RestCallException(response, e, "Could not parse response body.");
+		}
+	}
+
+	/**
+	 * Resolves a cursor return type ({@link RecordReader} / {@link TokenReader} or any subtype)
+	 * by negotiating the response Content-Type to a parser and calling its
+	 * {@code parseRecords(...)} / {@code parseTokens(...)} factory.
+	 *
+	 * <p>
+	 * Implements two-layer resolution: the declared type filters eligible parsers (a concrete
+	 * subtype like {@code JsonlTokenReader} is only assignable from a parser that produces it);
+	 * the response's Content-Type negotiates within that filter.  Capability is detected via
+	 * {@code instanceof} against the {@link RecordReadable} / {@link TokenReadable} role interfaces.
+	 *
+	 * <p>
+	 * The caller owns the returned cursor's lifecycle — wrap it in try-with-resources.
+	 *
+	 * @param type The declared parameter / return type (must be {@link RecordReader} or a subtype).
+	 * @return A new cursor.
+	 * @throws RestCallException If no parser produces a cursor assignable to the declared type
+	 * 	for the response's Content-Type, or if the matched parser does not implement the requested
+	 * 	cursor role interface.
+	 */
+	private Object asCursor(ClassMeta<?> type) throws RestCallException {
+		try {
+			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse("text/plain"));
+			var matchedParser = parser != null ? parser : client.getMatchingParser(ct);
+			if (matchedParser == null)
+				throw new RestCallException(response, null,
+					"No registered parser matches Content-Type ''{0}'' for cursor return type ''{1}''.",
+					ct, type.inner().getName());
+
+			var isToken = type.isChildOf(TokenReader.class) || type.is(TokenReader.class);
+			var supported = isToken ? matchedParser instanceof TokenReadable : matchedParser instanceof RecordReadable;
+			if (!supported)
+				throw new RestCallException(response, null,
+					"Parser ''{0}'' does not support the {1} surface.",
+					matchedParser.getClass().getName(),
+					isToken ? "token-reader" : "record-reader");
+
+			Object input = matchedParser.isReaderParser() ? asReader() : asInputStream();
+			Object cursor = isToken
+				? ((TokenReadable) matchedParser).parseTokens(input)
+				: ((RecordReadable) matchedParser).parseRecords(input);
+
+			if (!type.inner().isInstance(cursor))
+				throw new RestCallException(response, null,
+					"Parser ''{0}'' produced cursor type ''{1}'' which is not assignable to the declared type ''{2}''.",
+					matchedParser.getClass().getName(),
+					cursor == null ? "null" : cursor.getClass().getName(),
+					type.inner().getName());
+
+			return cursor;
+		} catch (RestCallException e) {
+			throw e;
+		} catch (IOException e) {
+			throw new RestCallException(response, e, "Could not open cursor over response body.");
 		}
 	}
 

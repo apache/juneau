@@ -256,9 +256,6 @@ public class Listifiers {
 	 * @return A {@link Listifier} for {@link Iterator} objects
 	 * @see Iterator
 	 */
-	@SuppressWarnings({
-		"unchecked" // Type erasure requires cast to Listifier<Iterator>
-	})
 	public static Listifier<Iterator> iteratorListifier() {
 		return (bc, iterator) -> stream(spliteratorUnknownSize(iterator, 0), false).toList();
 	}

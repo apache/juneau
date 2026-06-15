@@ -32,6 +32,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -55,7 +56,7 @@ import org.apache.juneau.marshall.swap.*;
 	"rawtypes", // Raw types necessary for generic type handling
 	"resource" // ParserReader is managed by caller
 })
-public class JsonParserSession extends ReaderParserSession {
+public class JsonParserSession extends ReaderParserSession implements TokenReadable, ArrayRecordReadable {
 
 	// Property name constants
 	private static final String PROP_validateEnd = "validateEnd";
@@ -155,7 +156,7 @@ public class JsonParserSession extends ReaderParserSession {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for parser state machine
 	})
-	private <T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	<T> T parseAnything(ClassMeta<?> eType, ParserReader r, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -813,6 +814,62 @@ public class JsonParserSession extends ReaderParserSession {
 			T o = parseAnything(type, r, getOuter(), null);
 			validateEnd(r);
 			return o;
+		}
+	}
+
+	/**
+	 * Opens a low-level pull-parser cursor over a JSON document, bound to this session's live
+	 * {@link org.apache.juneau.commons.bean.BeanSession}/{@link org.apache.juneau.marshall.MarshallingContext}.
+	 *
+	 * <p>
+	 * The cursor is purely structural &mdash; object swaps and {@code @Schema} annotations are not
+	 * applied at this layer.  See {@link TokenReader} for the contract.
+	 *
+	 * <h5 class='section'>Builder properties honored:</h5>
+	 * The structurally-applicable subset flows through to the cursor: <c>autoCloseStreams</c>,
+	 * <c>unbuffered</c>, <c>trimStrings</c> (applied to {@link TokenType#VALUE_STRING} and
+	 * {@link TokenType#FIELD_NAME} values), and the {@code ReaderParser} stream/file charsets.
+	 *
+	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <c>validateEnd()</c> (the cursor leaves end-of-input checking to the caller),
+	 * <c>listener(...)</c>/<c>debugOutputLines(...)</c>, <c>consumes(...)</c>, object swaps, and
+	 * {@code @Schema} annotations (only applied on the POJO databind path).
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
+	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new {@link JsonTokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@SuppressWarnings({
+		"java:S2095" // ParserPipe lifecycle is transferred to the returned JsonTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
+	})
+	@Override /* TokenReadable */
+	public TokenReader parseTokens(Object input) throws IOException {
+		var pipe = new ParserPipe(
+			input,
+			isDebug(),
+			false /* strict */,
+			isAutoCloseStreams(),
+			isUnbuffered(),
+			getStreamCharset(),
+			getFileCharset());
+		return new JsonTokenReader(pipe, new JsonTokenReader.Settings(isTrimStrings()), this);
+	}
+
+	/**
+	 * Streaming array-element {@link RecordReader} backed by {@link JsonTokenReader}.
+	 * Memory is O(1) in the array length &mdash; elements are bound on demand using this live session.
+	 *
+	 * @param input The input.
+	 * @return A new element-streamed {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		try {
+			return StreamingArrayRecord.reader(parseTokens(input));
+		} catch (ParseException e) {
+			throw new IOException(e);
 		}
 	}
 

@@ -18,9 +18,12 @@ package org.apache.juneau.marshall.jcs;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
+
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes POJO models to canonical JSON per RFC 8785 (JCS).
@@ -99,6 +102,7 @@ import org.apache.juneau.marshall.serializer.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class JcsSerializer extends JsonSerializer {
 
@@ -181,4 +185,42 @@ public class JcsSerializer extends JsonSerializer {
 	public JcsSerializerSession.Builder createSession() {
 		return JcsSerializerSession.create(this);
 	}
+
+	/**
+	 * Convenience delegator (default session args) for the raw-JSON token writer.  Real impl on
+	 * {@link JcsSerializerSession#serializeTokens(Object)}.
+	 *
+	 * <p>
+	 * <b>Note:</b> the cursor's structural methods ({@link TokenWriter#startObject() startObject},
+	 * {@link TokenWriter#fieldName(String) fieldName}, {@link TokenWriter#string(String) string}, ...)
+	 * produce ordinary JSON; they do <em>not</em> apply the JCS canonicalization rules (sorted
+	 * keys, normalized number formatting, etc.) that {@link #serialize(Object)} produces.  The
+	 * {@link TokenWriter#object(Object) object(Object)} bridge is <b>disabled</b> on this writer.
+	 * Use {@link #serialize(Object)} for canonical output.
+	 *
+	 * @param output The output.
+	 * @return A new {@link JsonTokenWriter} with {@code object(...)} disabled.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		return getSession().serializeTokens(output);
+	}
+
+	/**
+	 * Convenience delegator (default session args) for a record writer that emits canonical JCS
+	 * for the value passed to {@link RecordWriter#write(Object) write(...)}.  Real impl on
+	 * {@link JcsSerializerSession#serializeRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return getSession().serializeRecords(output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
 }

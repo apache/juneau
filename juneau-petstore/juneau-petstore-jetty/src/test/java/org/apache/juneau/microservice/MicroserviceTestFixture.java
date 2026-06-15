@@ -66,6 +66,9 @@ import org.junit.jupiter.api.extension.*;
  * {@link org.apache.juneau.rest.server.RestChildren#addChild RestChildren.addChild} / {@code removeChild} API, individual
  * test methods can mount and unmount their own child resources against a single long-running server.
  */
+@SuppressWarnings({
+	"resource" // Bean-store lookups return Closeables whose lifecycle is owned by the microservice; Eclipse JDT @Owning warning is by design.
+})
 public final class MicroserviceTestFixture implements BeforeAllCallback, AfterAllCallback {
 
 	private final List<Class<?>> configurations = new ArrayList<>();

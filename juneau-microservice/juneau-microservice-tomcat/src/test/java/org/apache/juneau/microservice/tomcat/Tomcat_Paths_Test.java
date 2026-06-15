@@ -30,6 +30,9 @@ import org.junit.jupiter.api.*;
 import jakarta.servlet.*;
 
 @org.apache.juneau.testing.annotations.TomcatMicroserviceTest
+@SuppressWarnings({
+	"resource" // Microservice/bean-store lookups return Closeables whose lifecycle is owned by the test; Eclipse JDT @Owning warning is by design.
+})
 class Tomcat_Paths_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {

@@ -55,13 +55,12 @@ import java.util.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S6541" // Brain method acceptable for readLine / nextEvent — they encode the SSE lexical state machine
+	"java:S6541", // Brain method acceptable for readLine / nextEvent — they encode the SSE lexical state machine
+	"java:S115", // Match AssertionUtils arg-name style used throughout Juneau.
+	"resource" // in is the caller-owned Reader (see class Javadoc); this iterator reads from it but does not own its lifecycle.
 })
 public class SseEventReader implements Iterator<SseEvent>, Closeable {
 
-	@SuppressWarnings({
-		"java:S115" // Match AssertionUtils arg-name style used throughout Juneau.
-	})
 	private static final String ARG_in = "in";
 
 	/** UTF-8 BOM character that must be stripped exactly once from the start of an SSE stream. */
@@ -87,7 +86,9 @@ public class SseEventReader implements Iterator<SseEvent>, Closeable {
 	 * @param in The reader to consume events from. Must not be <jk>null</jk>. Caller retains ownership;
 	 * 	{@link #close()} closes this reader.
 	 */
-	@SuppressWarnings({ "java:S2095", "resource" }) // Reader ownership is transferred to this Closeable and released by close().
+	@SuppressWarnings({
+		"java:S2095" // Reader ownership is transferred to this Closeable and released by close().
+	})
 	public SseEventReader(Reader in) {
 		this.in = assertArgNotNull(ARG_in, in);
 	}

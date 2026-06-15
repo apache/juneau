@@ -32,7 +32,8 @@ import java.util.regex.*;
  */
 @SuppressWarnings({
 	"java:S135",  // Multiple break/continue necessary for tokenizer state machine loops
-	"java:S3776" // Cognitive complexity acceptable for HOCON grammar
+	"java:S3776", // Cognitive complexity acceptable for HOCON grammar
+	"resource" // Reader field wraps the caller's reader (BufferedReader/PushbackReader hold only in-memory buffers); the underlying reader is caller-owned.
 })
 public class HoconTokenizer {
 
@@ -158,9 +159,6 @@ public class HoconTokenizer {
 	 *
 	 * @param reader The reader to tokenize.
 	 */
-	@SuppressWarnings({
-		"resource" // BufferedReader is owned by PushbackReader; PushbackReader constructor never throws
-	})
 	public HoconTokenizer(Reader reader) {
 		var in = reader instanceof BufferedReader br ? br : new BufferedReader(reader);
 		this.reader = new PushbackReader(in, 8);

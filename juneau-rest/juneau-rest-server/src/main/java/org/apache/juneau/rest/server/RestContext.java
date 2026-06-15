@@ -4511,9 +4511,6 @@ public class RestContext extends Context {
 	 * @return {@code true} if the body was written (response committed). {@code false} on serialization failure so
 	 * 	the caller can fall back to the legacy {@code text/plain} writer.
 	 */
-	@SuppressWarnings({
-		"resource"  // output stream owned by the servlet response; closed by the container
-	})
 	private static boolean writeProblemDetailsBody(HttpServletResponse res, BasicHttpException e, int statusCode) {
 		try {
 			var problem = ProblemAdapters.fromException(e);
@@ -4550,9 +4547,6 @@ public class RestContext extends Context {
 	 * @return {@code true} if the body was written (response committed). {@code false} on serialization
 	 * 	failure so the caller can fall back to the legacy {@code text/plain} writer.
 	 */
-	@SuppressWarnings({
-		"resource"  // output stream owned by the servlet response; closed by the container
-	})
 	private static boolean writeValidationErrorBody(HttpServletResponse res, ValidationException ve, int statusCode, boolean problemDetails) {
 		try {
 			res.setStatus(statusCode);

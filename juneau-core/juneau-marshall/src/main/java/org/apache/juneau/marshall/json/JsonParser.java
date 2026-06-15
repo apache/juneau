@@ -25,9 +25,12 @@ import java.util.concurrent.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
+import java.io.*;
+
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses any valid RFC 8259 JSON text into a POJO model.
@@ -121,9 +124,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource"   // parseTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
-public class JsonParser extends ReaderParser implements JsonMetaProvider {
+public class JsonParser extends ReaderParser implements JsonMetaProvider, TokenReadable, ArrayRecordReadable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -214,6 +218,10 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 		 * 	MyBean <jv>myBean</jv> =<jv>parser</jv>.parse(<jv>json</jv>, MyBean.<jk>class</jk>);
 		 * </p>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link #parseTokens(Object) parseTokens}
+		 * &mdash; the cursor leaves end-of-input checking to the caller.
+		 *
 		 * @return This object.
 		 */
 		public SELF validateEnd() {
@@ -289,6 +297,26 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	public JsonParserSession getSession() { return createSession().build(); }
 
 	/**
+	 * Convenience delegator that opens a {@link JsonTokenReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link JsonParserSession#parseTokens(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link JsonParserSession#parseTokens(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
+	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new {@link JsonTokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* TokenReadable */
+	public TokenReader parseTokens(Object input) throws IOException {
+		return getSession().parseTokens(input);
+	}
+
+	/**
 	 * Validate end.
 	 *
 	 * @see Builder#validateEnd()
@@ -297,4 +325,18 @@ public class JsonParser extends ReaderParser implements JsonMetaProvider {
 	 * 	the stream consists of only comments or whitespace.
 	 */
 	protected final boolean isValidateEnd() { return validateEnd; }
+
+	/**
+	 * Convenience delegator for the streaming array-element {@link RecordReader} (uses default
+	 * session args; see {@link #parseTokens(Object)}).  Real impl on
+	 * {@link JsonParserSession#parseArrayRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A new element-streamed {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return getSession().parseArrayRecords(input);
+	}
 }

@@ -18,9 +18,12 @@ package org.apache.juneau.marshall.yaml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
+
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses YAML text into a POJO model.
@@ -82,9 +85,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class YamlParser extends ReaderParser {
+public class YamlParser extends ReaderParser implements RecordReadable, ArrayRecordReadable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -173,4 +177,47 @@ public class YamlParser extends ReaderParser {
 
 	@Override /* Overridden from Context */
 	public YamlParserSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator for the whole-value {@link RecordReader} using <b>default session
+	 * arguments</b>.  The real implementation lives on {@link YamlParserSession#parseRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	/**
+	 * Convenience delegator for the buffered array-element {@link RecordReader} using <b>default
+	 * session arguments</b>.  The real implementation lives on
+	 * {@link YamlParserSession#parseArrayRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+	}
+
+	/**
+	 * The YAML record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The YAML array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 }

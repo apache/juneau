@@ -80,6 +80,8 @@ import org.apache.juneau.rest.server.swagger.*;
 		PathRemainderArg.class,
 		QueryArg.class,
 		ReaderParserArg.class,
+		RecordReaderArg.class,
+		RecordWriterArg.class,
 		RequestBeanArg.class,
 		ResponseBeanArg.class,
 		ResponseHeaderArg.class,
@@ -92,6 +94,8 @@ import org.apache.juneau.rest.server.swagger.*;
 		RestResponseArgs.class,
 		SseBroadcasterArg.class,
 		SseSubscriptionArg.class,
+		TokenReaderArg.class,
+		TokenWriterArg.class,
 		DefaultArg.class
 	},
 	serializers={},

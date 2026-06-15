@@ -71,6 +71,7 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.plaintext.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
 import org.apache.juneau.marshall.xml.*;
@@ -2131,6 +2132,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 					entity = readerEntity(input3, getRequestContentType(TEXT_PLAIN));
 				else if (input2 instanceof InputStream input3)
 					entity = streamEntity(input3, -1, getRequestContentType(ContentType.APPLICATION_OCTET_STREAM));
+				else if (input2 instanceof RecordStreamBody body)
+					entity = streamBodyEntity(body, serializer2);
 				else if (nn(serializer2))
 					entity = serializedEntity(input2, serializer2, contentSchema).setContentType(contentType);
 				else {
@@ -2831,5 +2834,48 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		queryData.append(l);
 
 		return this;
+	}
+
+	/**
+	 * Resolves a {@link RecordStreamBody} body by invoking the caller's consumer against a
+	 * cursor opened over a temporary buffer, then sending the buffered bytes as the request
+	 * body.
+	 */
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {
+		if (serializer == null)
+			throw new RuntimeException("No serializer registered for cursor-streamed request body.");
+		try {
+			var consumer = body.getConsumer();
+			var writerKind = body.getWriterKind();
+
+			if (writerKind == TokenWriter.class && !(serializer instanceof TokenWritable))
+				throw new RuntimeException(
+					"Serializer '" + serializer.getClass().getName() + "' does not support the token-writer surface.");
+			if (writerKind == RecordWriter.class && !(serializer instanceof RecordWritable))
+				throw new RuntimeException(
+					"Serializer '" + serializer.getClass().getName() + "' does not support the record-writer surface.");
+
+			var buf = new ByteArrayOutputStream();
+			Object output = serializer.isWriterSerializer()
+				? new OutputStreamWriter(buf, java.nio.charset.StandardCharsets.UTF_8)
+				: buf;
+
+			try (var w = (writerKind == TokenWriter.class)
+					? ((TokenWritable) serializer).serializeTokens(output)
+					: ((RecordWritable) serializer).serializeRecords(output)) {
+				((Consumer) consumer).accept(w);
+				w.flush();
+			}
+			if (output instanceof java.io.Writer ow)
+				ow.flush();
+
+			// Use the serializer's primary produces() media type if no explicit Content-Type set.
+			var ct = serializer.getPrimaryMediaType();
+			var contentType2 = ct != null ? ContentType.of(ct.toString()) : ContentType.APPLICATION_OCTET_STREAM;
+			return byteArrayEntity(buf.toByteArray(), getRequestContentType(contentType2));
+		} catch (IOException e) {
+			throw new RuntimeException("I/O error streaming request body.", e);
+		}
 	}
 }

@@ -35,6 +35,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -54,8 +55,9 @@ import org.apache.juneau.marshall.swap.*;
 	"java:S115",  // PROP_xxx constants use camelCase after prefix intentionally (property keys, not enum-style constants)
 	"unchecked", // Type erasure requires unchecked casts
 	"rawtypes", // Raw types necessary for generic type handling
+	"resource" // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
-public class XmlParserSession extends ReaderParserSession {
+public class XmlParserSession extends ReaderParserSession implements RecordReadable, ArrayRecordReadable {
 
 	// Property name constants
 	private static final String PROP_preserveRootElement = "preserveRootElement";
@@ -616,6 +618,133 @@ public class XmlParserSession extends ReaderParserSession {
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
 		return parseIntoMap(getXmlReader(pipe), m, (ClassMeta<K>)getClassMeta(keyType), (ClassMeta<V>)getClassMeta(valueType), null);
 	}
+
+	/**
+	 * Opens a whole-value pull-parser cursor over an XML document, bound to this live session.
+	 *
+	 * <p>
+	 * Because XML's wire format (attributes, namespaces, mixed content) is non-trivial to expose
+	 * as a fine-grained token cursor, this implementation supports only the cursor-level POJO
+	 * bridge &mdash; {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
+	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordReader} for XML, bound to this live session.  Calls
+	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
+	 *
+	 * <p>
+	 * For caller-specified-root semantics use {@link #parseArrayRecords(Object, String)}.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return RecordAdapter.arrayReader(this, input);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordReader} that honors the caller-specified root element
+	 * name.
+	 *
+	 * <p>
+	 * The document is parsed once into a generic structure and the records to yield are selected by
+	 * the supplied {@code rootElementName}:
+	 * <ul>
+	 * 	<li>If the document root is a <b>wrapper element</b> (parses to a {@link Map}) that contains a
+	 * 		child named {@code rootElementName}, that child's value supplies the records (a repeated
+	 * 		child element parses to a {@link List}; a single occurrence yields one record).  Sibling
+	 * 		elements with other names are ignored.
+	 * 	<li>If the document root is an <b>array wrapper</b> (parses to a {@link List}, e.g. Juneau's
+	 * 		{@code <array>} envelope), its already-unwrapped elements are the records and the hint is a
+	 * 		no-op.
+	 * 	<li>A scalar root yields a single record.
+	 * </ul>
+	 *
+	 * <p>
+	 * A <jk>null</jk> {@code rootElementName} is equivalent to {@link #parseArrayRecords(Object)}.
+	 * The cursor is buffered ({@link RecordReader#isStreaming()} == <jk>false</jk>); see
+	 * {@code TODO-175ab} Item 3 for why true element-at-a-time XML streaming is left for a
+	 * demand-driven StAX cursor.
+	 *
+	 * @param input The input.
+	 * @param rootElementName The name of the wrapping/child element whose occurrences are the
+	 * 	records.  <jk>null</jk> defers to {@link #parseArrayRecords(Object)}.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input, String rootElementName) throws IOException {
+		if (rootElementName == null)
+			return parseArrayRecords(input);
+		Object parsed;
+		try {
+			parsed = parse(input, Object.class);
+		} catch (ParseException e) {
+			throw new IOException(e);
+		}
+		var records = selectRootElements(parsed, rootElementName);
+		var iter = records.iterator();
+		return new RecordReader() {
+			@Override public boolean canRead() { return iter.hasNext(); }
+			@Override public <T> T read(Class<T> type) { return convertToType(nextElement(), type); }
+			@Override public <T> T read(ClassMeta<T> type) { return convertToType(nextElement(), type); }
+			@Override public <T> T read(Type type, Type... args) { return XmlParserSession.this.<T>convertToType(nextElement(), type, args); }
+			@Override public boolean isStreaming() { return false; }
+			@Override public void close() throws IOException {
+				if (input instanceof Closeable c)
+					c.close();
+			}
+			private Object nextElement() {
+				if (! iter.hasNext())
+					throw new IllegalStateException("Array stream is exhausted.");
+				return iter.next();
+			}
+		};
+	}
+
+	/** Selects the records to yield from a generically-parsed XML document, honoring the root-element hint. */
+	private static List<Object> selectRootElements(Object parsed, String rootElementName) {
+		if (parsed == null)
+			return Collections.emptyList();
+		if (parsed instanceof Map<?,?> m) {
+			var v = m.get(rootElementName);
+			if (v == null)
+				return Collections.emptyList();
+			if (v instanceof List<?> l)
+				return new ArrayList<>(l);
+			return new ArrayList<>(Collections.singletonList(v));
+		}
+		if (parsed instanceof List<?> l)
+			return new ArrayList<>(l);
+		return new ArrayList<>(Collections.singletonList(parsed));
+	}
+
+	/**
+	 * The XML record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The XML array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 
 	/**
 	 * Returns the text content of the current XML element.

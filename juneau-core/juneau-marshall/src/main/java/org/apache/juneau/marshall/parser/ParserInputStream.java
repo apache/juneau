@@ -33,7 +33,8 @@ import java.io.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S4929" // read(byte[],int,int) is intentionally omitted; ParserInputStream reads one byte at a time to maintain accurate position tracking for parse error reporting
+	"java:S4929", // read(byte[],int,int) is intentionally omitted; ParserInputStream reads one byte at a time to maintain accurate position tracking for parse error reporting
+	"resource" // is field is owned by the ParserPipe; its lifetime is managed by the caller's session.
 })
 public class ParserInputStream extends InputStream implements Positionable {
 
@@ -46,9 +47,6 @@ public class ParserInputStream extends InputStream implements Positionable {
 	 * @param pipe The parser input.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	@SuppressWarnings({
-		"resource" // is is owned by the pipe; lifetime managed by the caller's session
-	})
 	protected ParserInputStream(ParserPipe pipe) throws IOException {
 		this.is = pipe.getInputStream();
 		pipe.setPositionable(this);

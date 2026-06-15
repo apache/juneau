@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.msgpack;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -25,6 +26,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses a MessagePack stream into a POJO model.
@@ -63,9 +65,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider {
+public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvider, TokenReadable, ArrayRecordReadable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -196,4 +199,37 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 	@Override /* Overridden from Context */
 	public MsgPackParserSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator that opens a {@link MsgPackTokenReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link MsgPackParserSession#parseTokens(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link MsgPackParserSession#parseTokens(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link MsgPackTokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* TokenReadable */
+	public TokenReader parseTokens(Object input) throws IOException {
+		return getSession().parseTokens(input);
+	}
+
+	/**
+	 * Convenience delegator for the array-element {@link RecordReader} (uses default session args;
+	 * see {@link #parseTokens(Object)}).  Real impl on
+	 * {@link MsgPackParserSession#parseArrayRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A new array-element {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return getSession().parseArrayRecords(input);
+	}
 }

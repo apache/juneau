@@ -59,6 +59,9 @@ import org.apache.juneau.commons.inject.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Fluent override(...) methods return this (a Closeable BeanStore) owned by the caller/SUT; Eclipse JDT @Owning warning is by design.
+})
 public class TestBeanStore extends BasicBeanStore {
 
 	/**

@@ -27,6 +27,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -46,9 +47,10 @@ import org.apache.juneau.marshall.swap.*;
 	"java:S115",
 	"java:S125",  // Explanatory comments contain BSON/JSON syntax (e.g. {"value":x}) that Sonar misreads as commented-out code
 	"java:S3776",
-	"java:S6541"
+	"java:S6541",
+	"resource"    // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
-public class BsonParserSession extends InputStreamParserSession {
+public class BsonParserSession extends InputStreamParserSession implements RecordReadable, ArrayRecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 	private static final String BSON_VALUE_KEY = "value";
@@ -121,9 +123,6 @@ public class BsonParserSession extends InputStreamParserSession {
 		return o;
 	}
 
-	@SuppressWarnings({
-		"resource" // is is caller-owned; this method does not close it
-	})
 	private <T> T parseDocument(BsonInputStream is, ClassMeta<?> eType, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		is.readDocumentSize();
 		if (eType == null)
@@ -294,4 +293,47 @@ public class BsonParserSession extends InputStreamParserSession {
 			return (T)parseDocument(is, type, getOuter(), null);
 		}
 	}
+
+	/**
+	 * Opens a whole-value pull-parser cursor over a BSON document, bound to this live session.
+	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
+	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordReader} for BSON, bound to this live session.  Calls
+	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return RecordAdapter.arrayReader(this, input);
+	}
+
+	/**
+	 * The BSON record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The BSON array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 }

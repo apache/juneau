@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.parquet;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -26,6 +27,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses Apache Parquet binary data into bean collections.
@@ -39,9 +41,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110",
-	"java:S115"
+	"java:S115",
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class ParquetParser extends InputStreamParser implements ParquetMetaProvider {
+public class ParquetParser extends InputStreamParser implements ParquetMetaProvider, RecordReadable, ArrayRecordReadable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -149,4 +152,48 @@ public class ParquetParser extends InputStreamParser implements ParquetMetaProvi
 	public ParquetClassMeta getParquetClassMeta(ClassMeta<?> cm) {
 		return parquetClassMetas.computeIfAbsent(cm, k -> new ParquetClassMeta(k, this));
 	}
+
+	/**
+	 * Convenience delegator for the whole-value {@link RecordReader} using <b>default session
+	 * arguments</b>.  The real implementation lives on
+	 * {@link ParquetParserSession#parseRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	/**
+	 * Convenience delegator for the buffered array-element {@link RecordReader} using <b>default
+	 * session arguments</b>.  The real implementation lives on
+	 * {@link ParquetParserSession#parseArrayRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+	}
+
+	/**
+	 * The Parquet record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The Parquet array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 }

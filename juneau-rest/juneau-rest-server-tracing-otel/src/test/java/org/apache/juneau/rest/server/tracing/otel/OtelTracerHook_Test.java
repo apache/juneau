@@ -40,7 +40,8 @@ import io.opentelemetry.sdk.trace.export.*;
  * produced by the bridge during {@code @RestOp} invocations.
  */
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class OtelTracerHook_Test extends TestBase {
 

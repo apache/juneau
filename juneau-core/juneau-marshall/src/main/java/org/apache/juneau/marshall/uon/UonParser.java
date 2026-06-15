@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.uon;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -29,6 +30,7 @@ import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses UON (a notation for URL-encoded query parameter values) text into POJO models.
@@ -61,9 +63,10 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider {
+public class UonParser extends ReaderParser implements HttpPartParser, UonMetaProvider, RecordReadable {
 
 	// Property name constants
 	private static final String PROP_decoding = "decoding";
@@ -311,6 +314,30 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 
 	@Override /* Overridden from Context */
 	public UonParserSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator that opens a whole-value {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link UonParserSession#parseRecords(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link UonParserSession#parseRecords(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
 
 	@Override /* Overridden from UonMetaProvider */
 	public UonBeanPropertyMeta getUonBeanPropertyMeta(BeanPropertyMeta bpm) {

@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.io.*;
 
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link PlainTextSerializer}.
@@ -35,7 +36,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115" // Constants use UPPER_snakeCase naming convention
 })
-public class PlainTextSerializerSession extends WriterSerializerSession {
+public class PlainTextSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -80,6 +81,16 @@ public class PlainTextSerializerSession extends WriterSerializerSession {
 	 */
 	protected PlainTextSerializerSession(Builder builder) {
 		super(builder);
+	}
+
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override /* Overridden from SerializerSession */

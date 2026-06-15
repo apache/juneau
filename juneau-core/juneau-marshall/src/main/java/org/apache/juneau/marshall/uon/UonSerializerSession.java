@@ -34,6 +34,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link UonSerializer}.
@@ -52,7 +53,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115" // Constants use UPPER_snakeCase naming convention
 })
-public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession {
+public class UonSerializerSession extends WriterSerializerSession implements HttpPartSerializerSession, RecordWritable {
 
 	// Property name constants
 	private static final String PROP_encoding = "encoding";
@@ -167,6 +168,16 @@ public class UonSerializerSession extends WriterSerializerSession implements Htt
 		encoding = builder.encoding;
 		paramFormat = builder.paramFormat;
 		plainTextParams = paramFormat == ParamFormat.PLAINTEXT;
+	}
+
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override /* Overridden from HttpPartSerializer */

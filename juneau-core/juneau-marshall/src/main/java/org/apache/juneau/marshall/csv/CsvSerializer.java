@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.csv;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -25,6 +26,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes POJO models to CSV (Comma Separated Values) format.
@@ -76,8 +78,9 @@ import org.apache.juneau.marshall.serializer.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
+public class CsvSerializer extends WriterSerializer implements CsvMetaProvider, RecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -266,4 +269,32 @@ public class CsvSerializer extends WriterSerializer implements CsvMetaProvider {
 
 	@Override /* Overridden from Context */
 	public CsvSerializerSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator that opens a {@link RecordWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 *
+	 * <p>
+	 * CSV is naturally row-oriented &mdash; each {@link RecordWriter#write(Object) write(...)} call appends
+	 * one row &mdash; but the current cursor is buffered (the full list is materialized at close); a streaming
+	 * implementation is a Phase 3b deferred item, so {@link #isRecordStreaming()} returns <jk>false</jk>.
+	 *
+	 * <p>
+	 * The real implementation lives on {@link CsvSerializerSession#serializeRecords(Object)}.  Callers that
+	 * need request-derived configuration should call {@link #createSession()} and invoke
+	 * {@link CsvSerializerSession#serializeRecords(Object)} on the built session instead.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
 }

@@ -39,6 +39,9 @@ import reactor.core.publisher.*;
  * {@link ReactiveStreamsPublisherAdapter}) wired through the core
  * {@link org.apache.juneau.rest.server.server.reactive.ReactiveResponseProcessor} via ServiceLoader.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class ReactiveBridge_Test extends TestBase {
 
 	public static final class Pojo {

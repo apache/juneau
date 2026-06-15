@@ -22,9 +22,12 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
+import java.io.*;
+
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes POJO models to Protobuf Text Format.
@@ -122,9 +125,10 @@ import org.apache.juneau.marshall.serializer.*;
  */
 @SuppressWarnings({
 	"java:S110", // Builder pattern requires many parameters
-	"java:S115"   // PROP_/ARG_ prefix follows framework convention
+	"java:S115",  // PROP_/ARG_ prefix follows framework convention
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvider {
+public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvider, RecordWritable {
 
 	private static final String PROP_useListSyntaxForBeans = "useListSyntaxForBeans";
 	private static final String PROP_useColonForMessages = "useColonForMessages";
@@ -282,5 +286,28 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 	@Override /* ProtoMetaProvider */
 	public ProtoClassMeta getProtoClassMeta(ClassMeta<?> cm) {
 		return protoClassMetas.computeIfAbsent(cm, k -> new ProtoClassMeta(k, this));
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link ProtoSerializerSession#serializeRecords(Object)}.
+	 * Callers that need request-derived configuration should call {@link #createSession()} and
+	 * invoke {@link ProtoSerializerSession#serializeRecords(Object)} on the built session instead.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

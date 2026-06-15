@@ -36,6 +36,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link XmlSerializer}.
@@ -56,7 +57,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"resource",  // Writer/Closeable resources managed by try-with-resources; analyzer FP in lambdas
 	"java:S115"  // Constants use naming conventions that embed type info or config keys (e.g. PROP_addNamespaceUrisToRoot)
 })
-public class XmlSerializerSession extends WriterSerializerSession {
+public class XmlSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	// Property name constants
 	private static final String PROP_addNamespaceUrisToRoot = "addNamespaceUrisToRoot";
@@ -629,6 +630,32 @@ public class XmlSerializerSession extends WriterSerializerSession {
 			findNsfMappings(o);
 		serializeAnything(getXmlWriter(out), o, getExpectedRootType(o), null, null, null, isEnableNamespaces() && isAddNamespaceUrisToRoot(), XmlFormat.DEFAULT, false, false, null);
 	}
+
+	/**
+	 * Opens a whole-value push generator targeting XML output, bound to this live session.
+	 *
+	 * <p>
+	 * Because XML's wire format (attributes, namespaces, mixed content) is non-trivial to expose
+	 * as a fine-grained token writer, this implementation supports only the cursor-level POJO
+	 * bridge &mdash; {@link RecordWriter#write(Object) write(Object)} delegates to
+	 * {@link SerializerSession#serialize(Object, Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	/**
+	 * The XML record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
 
 	/**
 	 * Recursively searches for the XML namespaces on the specified POJO and adds them to the serializer context object.

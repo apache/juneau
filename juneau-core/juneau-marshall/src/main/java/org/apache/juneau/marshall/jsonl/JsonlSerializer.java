@@ -129,4 +129,5 @@ public class JsonlSerializer extends JsonSerializer {
 	public JsonlSerializerSession.Builder createSession() {
 		return JsonlSerializerSession.create(this);
 	}
+
 }

@@ -58,7 +58,8 @@ import org.apache.juneau.marshall.utils.*;
 @SuppressWarnings({
 	"java:S115",  // Constants use UPPER_snakeCase convention
 	"rawtypes",   // Raw types necessary for generic type handling throughout parser session
-	"unchecked"   // Type erasure requires unchecked casts throughout parser session
+	"unchecked",  // Type erasure requires unchecked casts throughout parser session
+	"resource" // pipe field holds the per-parse ParserPipe whose lifecycle is managed by the session, not owned as a standalone field.
 })
 public class ParserSession extends MarshallingSession {
 

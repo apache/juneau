@@ -32,6 +32,9 @@ import org.apache.juneau.marshall.swap.*;
 
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // unswap(...) returns a Closeable owned by the caller (the swap consumer); Eclipse JDT @Owning warning is by design.
+})
 public abstract class InputStreamSwap extends StringSwap<InputStream> {
 
 	/**

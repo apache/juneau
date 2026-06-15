@@ -20,6 +20,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class PetstoreUiResource_Test extends TestBase {
 
 	private static final MockRestClient CLIENT = MockRestClient.buildLax(PetstoreUiResource.class);

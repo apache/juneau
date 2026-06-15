@@ -23,6 +23,9 @@ import java.util.*;
 /**
  * Minimal Thrift Compact Protocol decoder for reading Parquet metadata.
  */
+@SuppressWarnings({
+	"resource" // Reads from an in-memory/caller-owned stream; the decoder does not own the stream's lifecycle.
+})
 final class ThriftCompactDecoder {
 
 	static final class FieldHeader {

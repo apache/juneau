@@ -22,10 +22,13 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
+import java.io.*;
+
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses Protobuf Text Format into a POJO model.
@@ -92,9 +95,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110", // Builder pattern requires many parameters
-	"java:S115"   // ARG_ prefix follows framework convention
+	"java:S115",  // ARG_ prefix follows framework convention
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class ProtoParser extends ReaderParser implements ProtoMetaProvider {
+public class ProtoParser extends ReaderParser implements ProtoMetaProvider, RecordReadable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -173,5 +177,29 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider {
 	@Override /* ProtoMetaProvider */
 	public ProtoClassMeta getProtoClassMeta(ClassMeta<?> cm) {
 		return protoClassMetas.computeIfAbsent(cm, k -> new ProtoClassMeta(k, this));
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link ProtoParserSession#parseRecords(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link ProtoParserSession#parseRecords(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

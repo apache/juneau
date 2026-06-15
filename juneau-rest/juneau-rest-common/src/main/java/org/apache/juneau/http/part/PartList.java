@@ -58,6 +58,9 @@ import org.apache.juneau.http.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // OutputStream is owned by caller per HttpBody.writeTo contract; must not be closed here
+})
 public final class PartList implements HttpBody, Iterable<HttpPart> {
 
 	private static final Charset UTF_8 = StandardCharsets.UTF_8;
@@ -182,9 +185,6 @@ public final class PartList implements HttpBody, Iterable<HttpPart> {
 	}
 
 	@Override /* HttpBody */
-	@SuppressWarnings({
-		"resource" // OutputStream is owned by caller per HttpBody.writeTo contract; must not be closed here
-	})
 	public void writeTo(OutputStream out) throws IOException {
 		assertArgNotNull("out", out);
 		var sb = new StringBuilder();

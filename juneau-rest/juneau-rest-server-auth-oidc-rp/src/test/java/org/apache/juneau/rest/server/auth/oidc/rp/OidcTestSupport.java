@@ -42,6 +42,9 @@ import com.sun.net.httpserver.*;
  * Discovery and JWKS are short-circuited by injecting {@link OidcMetadata} and a public {@link JWKSet}
  * directly on the relying party (so no second listener is needed and the tests stay deterministic).
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 final class OidcTestSupport {
 
 	static final String EVENT_BACKCHANNEL_LOGOUT = "http://schemas.openid.net/event/backchannel-logout";

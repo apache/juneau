@@ -65,6 +65,9 @@ import java.util.function.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // 'out' and 'session' are caller-owned; this method must not close them.
+})
 public final class VarTemplate {
 
 	/**
@@ -330,9 +333,6 @@ public final class VarTemplate {
 	 * @param out The writer to append to.
 	 * @return {@code out}.
 	 */
-	@SuppressWarnings({
-		"resource" // 'out' and 'session' are caller-owned; this method must not close them.
-	})
 	public Writer resolveToUnchecked(VarResolverSession session, Writer out) {
 		try {
 			return resolveTo(session, out);

@@ -18,8 +18,11 @@ package org.apache.juneau.marshall.sse;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
+
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses <c>text/event-stream</c> input (WHATWG Server-Sent Events) into Java objects.
@@ -42,9 +45,10 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for parser hierarchy
+	"java:S110", // Inheritance depth acceptable for parser hierarchy
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class SseParser extends ReaderParser {
+public class SseParser extends ReaderParser implements RecordReadable {
 
 	/** Default parser, all default settings. */
 	public static final SseParser DEFAULT = new SseParser(create());
@@ -129,5 +133,29 @@ public class SseParser extends ReaderParser {
 	@Override /* Overridden from Context */
 	public SseParserSession getSession() {
 		return createSession().build();
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link SseParserSession#parseRecords(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link SseParserSession#parseRecords(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

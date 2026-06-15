@@ -82,6 +82,9 @@ public class Json5SerializerSession extends JsonSerializerSession {
 		super(builder);
 	}
 
+	@Override /* Overridden from JsonSerializerSession */
+	protected boolean isSimpleAttrs() { return true; }
+
 	@Override
 	protected JsonWriter getJsonWriter(SerializerPipe out) {
 		var output = out.getRawOutput();

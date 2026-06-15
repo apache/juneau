@@ -947,7 +947,9 @@ public class OidcRelyingParty {
 			var processor = new DefaultJWTProcessor<SecurityContext>();
 			processor.setJWSTypeVerifier(new DefaultJOSEObjectTypeVerifier<>(LogoutTokenValidator.TYPE, JOSEObjectType.JWT, null));
 			processor.setJWSKeySelector(keySelector);
-			processor.setJWTClaimsSetVerifier(new ClockAwareLogoutTokenClaimsVerifier(expectedIssuer, new ClientID(clientId), clock));
+			@SuppressWarnings("unchecked") // ClockAwareLogoutTokenClaimsVerifier conforms to JWTClaimsSetVerifier<SecurityContext>; Nimbus's raw type forces an unchecked conversion here.
+			JWTClaimsSetVerifier<SecurityContext> claimsVerifier = new ClockAwareLogoutTokenClaimsVerifier(expectedIssuer, new ClientID(clientId), clock);
+			processor.setJWTClaimsSetVerifier(claimsVerifier);
 			logoutTokenProcessorCache = processor;
 			return logoutTokenProcessorCache;
 		}

@@ -74,6 +74,9 @@ import java.util.concurrent.locks.*;
  * 	<li class='jc'>{@link Lock} - The underlying lock interface
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Intentional singleton; wraps a null lock so close() is a no-op
+})
 public class SimpleLock implements AutoCloseable {
 
 	/**
@@ -100,9 +103,6 @@ public class SimpleLock implements AutoCloseable {
 	 * 	<li class='note'>This instance wraps a <jk>null</jk> lock, so no actual locking occurs.
 	 * </ul>
 	 */
-	@SuppressWarnings({
-		"resource" // Intentional singleton; wraps a null lock so close() is a no-op
-	})
 	public static final SimpleLock NO_OP = new SimpleLock(null);
 
 	private final Lock lock;

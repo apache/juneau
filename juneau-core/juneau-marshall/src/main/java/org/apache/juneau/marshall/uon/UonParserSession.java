@@ -34,6 +34,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -56,7 +57,7 @@ import org.apache.juneau.marshall.swap.*;
 	"resource",    // UonReader is managed by caller
 	"unchecked"    // Type erasure requires unchecked casts
 })
-public class UonParserSession extends ReaderParserSession implements HttpPartParserSession {
+public class UonParserSession extends ReaderParserSession implements HttpPartParserSession, RecordReadable {
 
 	// Property name constants
 	private static final String PROP_decoding = "decoding";
@@ -195,6 +196,16 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		super(builder);
 		decoding = builder.decoding;
 		validateEnd = builder.validateEnd;
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	/**

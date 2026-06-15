@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
  * method, path template, status code, elapsed time, and the exception (or {@code null}) the handler
  * threw, and the default off-by-default {@link NoOpMetricsRecorder} drops events on the floor.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class MetricsRecorder_Contract_Test extends TestBase {
 
 	/** Recording {@link MetricsRecorder} that captures every event in declaration order. */

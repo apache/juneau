@@ -32,6 +32,9 @@ import org.junit.jupiter.api.*;
 /**
  * End-to-end coverage for {@link McpRestServlet} via {@link MockRestClient}.
  */
+@SuppressWarnings({
+	"resource" // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
+})
 class McpRestServlet_Test extends TestBase {
 
 	private static final JsonParser PAR = JsonParser.create()

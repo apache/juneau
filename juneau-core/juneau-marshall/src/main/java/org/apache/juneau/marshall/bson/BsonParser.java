@@ -27,7 +27,10 @@ import java.util.concurrent.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
+import java.io.*;
+
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses BSON (Binary JSON) into POJO models.
@@ -76,8 +79,9 @@ import org.apache.juneau.marshall.parser.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class BsonParser extends InputStreamParser implements BsonMetaProvider {
+public class BsonParser extends InputStreamParser implements BsonMetaProvider, RecordReadable, ArrayRecordReadable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -260,4 +264,47 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider {
 	public String getNullKeyString() {
 		return nullKeyString;
 	}
+
+	/**
+	 * Convenience delegator for the whole-value {@link RecordReader} using <b>default session
+	 * arguments</b>.  The real implementation lives on {@link BsonParserSession#parseRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	/**
+	 * Convenience delegator for the buffered array-element {@link RecordReader} using <b>default
+	 * session arguments</b>.  The real implementation lives on
+	 * {@link BsonParserSession#parseArrayRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+	}
+
+	/**
+	 * The BSON record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The BSON array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 }

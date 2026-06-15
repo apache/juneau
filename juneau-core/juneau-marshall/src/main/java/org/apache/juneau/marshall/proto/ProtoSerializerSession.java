@@ -30,6 +30,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for serializing objects to Protobuf Text Format.
@@ -42,7 +43,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S3776", // Cognitive complexity acceptable for serialize dispatch
 	"java:S6541"  // Brain method acceptable for serializeAnything
 })
-public class ProtoSerializerSession extends WriterSerializerSession {
+public class ProtoSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	private static final String ARG_ctx = "ctx";
 	private static final String CONST_value = "_value";
@@ -93,6 +94,16 @@ public class ProtoSerializerSession extends WriterSerializerSession {
 	protected ProtoSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+	}
+
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override

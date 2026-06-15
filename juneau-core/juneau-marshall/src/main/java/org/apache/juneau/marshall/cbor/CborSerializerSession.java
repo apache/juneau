@@ -30,6 +30,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link CborSerializer}.
@@ -47,7 +48,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
 	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 })
-public class CborSerializerSession extends OutputStreamSerializerSession {
+public class CborSerializerSession extends OutputStreamSerializerSession implements TokenWritable, ArrayRecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -114,6 +115,57 @@ public class CborSerializerSession extends OutputStreamSerializerSession {
 	 */
 	protected CborSerializerSession(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * Opens a low-level push generator that emits CBOR (RFC 8949) one structural event at a time,
+	 * bound to this live session.
+	 *
+	 * <p>
+	 * Containers ({@code startObject} / {@code startArray}) are emitted as CBOR
+	 * <b>indefinite-length</b> markers (<c>0xBF</c> / <c>0x9F</c>) so the caller doesn't have to
+	 * know element counts up front; matching {@code endXxx} calls emit the BREAK byte
+	 * (<c>0xFF</c>).  Resulting bytes are valid RFC-8949 CBOR.
+	 *
+	 * <h5 class='section'>Builder properties honored:</h5>
+	 * Databind-level settings flow through to {@link TokenWriter#object(Object) object(Object)}:
+	 * <c>keepNullProperties</c>, <c>trimEmptyMaps</c>, <c>trimEmptyCollections</c>,
+	 * <c>sortMaps</c>, <c>sortCollections</c>, <c>trimStrings</c>.
+	 *
+	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <c>useWhitespace</c>, <c>maxIndent</c>, <c>quoteChar</c>, <c>escapeSolidus</c> (binary
+	 * format &mdash; no text-formatting concepts apply); <c>uriContext</c>,
+	 * <c>uriResolution</c>, <c>uriRelativity</c>, <c>listener</c>.
+	 *
+	 * @param output The output.  Accepts {@link OutputStream} or {@link File}.
+	 * @return A new {@link CborTokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		var walk = new PojoWalker.Options(
+			isKeepNullProperties(),
+			isTrimEmptyMaps(),
+			isTrimEmptyCollections(),
+			isSortMaps(),
+			isSortCollections(),
+			isTrimStrings(),
+			getMarshallingContext());
+		return CborTokenWriter.forOutput(output, new CborTokenWriter.Settings(walk));
+	}
+
+	/**
+	 * Streaming array-element {@link RecordWriter} backed by {@link CborTokenWriter}.
+	 * Memory is O(1) &mdash; CBOR's writer always uses indefinite-length arrays
+	 * (0x9F .. 0xFF) so element count is not required up front.
+	 *
+	 * @param output The output.
+	 * @return A new element-streamed {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return StreamingArrayRecord.writer(serializeTokens(output));
 	}
 
 	/*

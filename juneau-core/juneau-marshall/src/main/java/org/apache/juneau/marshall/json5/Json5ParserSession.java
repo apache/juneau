@@ -23,6 +23,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link Json5Parser}.
@@ -90,6 +91,35 @@ public class Json5ParserSession extends JsonParserSession {
 	 */
 	protected Json5ParserSession(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * Opens a low-level pull-parser cursor over a JSON5 document, bound to this live session.
+	 *
+	 * <p>
+	 * Same honored/ignored builder properties as {@link JsonParserSession#parseTokens(Object)};
+	 * the JSON5 dialect relaxations (single-quoted strings, bare identifiers, trailing commas,
+	 * missing values) are applied unconditionally as part of the format.
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
+	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new {@link Json5TokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@SuppressWarnings({
+		"java:S2095" // ParserPipe lifecycle is transferred to the returned Json5TokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
+	})
+	@Override /* JsonParserSession */
+	public TokenReader parseTokens(Object input) throws IOException {
+		var pipe = new ParserPipe(
+			input,
+			isDebug(),
+			false /* strict */,
+			isAutoCloseStreams(),
+			isUnbuffered(),
+			getStreamCharset(),
+			getFileCharset());
+		return new Json5TokenReader(pipe, new JsonTokenReader.Settings(isTrimStrings()), this);
 	}
 
 	@Override

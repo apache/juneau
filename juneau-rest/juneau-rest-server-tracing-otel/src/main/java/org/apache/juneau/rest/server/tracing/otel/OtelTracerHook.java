@@ -94,7 +94,8 @@ import io.opentelemetry.context.propagation.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
+	"java:S115", // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
+	"resource"   // Span / Scope returned to caller for try-with-resources management; Eclipse JDT @Owning warning is by design.
 })
 public class OtelTracerHook implements TracerHook {
 

@@ -40,6 +40,9 @@ import org.junit.jupiter.api.extension.*;
  */
 @TestMethodOrder(MethodOrderer.MethodName.class)
 @ExtendWith(JuneauBeanStoreExtension.class)
+@SuppressWarnings({
+	"resource" // Bean stores/overlays are Closeables whose lifecycle is owned by the extension/test; Eclipse JDT @Owning warning is by design.
+})
 class JuneauBeanStoreExtension_ClassScope_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

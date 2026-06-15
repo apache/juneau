@@ -39,6 +39,9 @@ import jakarta.servlet.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview">juneau-petstore</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // ApplicationContext is owned by Spring; not a leak.
+})
 @SpringBootApplication
 @Controller
 public class App {
@@ -48,9 +51,6 @@ public class App {
 	 *
 	 * @param args Command-line arguments forwarded to Spring Boot.
 	 */
-	@SuppressWarnings({
-		"resource" // ApplicationContext is owned by Spring; not a leak.
-	})
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(App.class).run(args);
 	}

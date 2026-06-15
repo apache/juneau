@@ -82,7 +82,8 @@ import jakarta.servlet.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_SNAKE_CASE convention (e.g., ROOT_CONTEXT_PATH)
+	"java:S115", // Constants use UPPER_SNAKE_CASE convention (e.g., ROOT_CONTEXT_PATH)
+	"resource" // The Tomcat server is held by this component and closed in onStop(); its lifecycle spans onStart/onStop, so it cannot be try-with-resources. Eclipse JDT @Owning warning is by design.
 })
 public class TomcatServerComponent implements MicroserviceListener {
 
@@ -277,9 +278,6 @@ public class TomcatServerComponent implements MicroserviceListener {
 	}
 
 	@Override /* Overridden from MicroserviceListener */
-	@SuppressWarnings({
-		"resource" // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
-	})
 	public void onStop(Microservice ms) {
 		final Logger logger = ms.getLogger();
 		// Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /
@@ -329,12 +327,8 @@ public class TomcatServerComponent implements MicroserviceListener {
 			if (executor instanceof ThreadPoolExecutor tpe) {
 				var deadline = System.nanoTime() + Math.max(0L, timeout.toNanos());
 				while (tpe.getActiveCount() > 0 && System.nanoTime() < deadline) {
-					try {
-						Thread.sleep(50L);
-					} catch (@SuppressWarnings("unused") InterruptedException e) {
-						Thread.currentThread().interrupt();
+					if (sleepInterruptibly(50L))
 						return;
-					}
 				}
 			}
 		} catch (Exception e) {
@@ -349,6 +343,16 @@ public class TomcatServerComponent implements MicroserviceListener {
 			Thread.sleep(d.toMillis());
 		} catch (@SuppressWarnings("unused") InterruptedException e) {
 			Thread.currentThread().interrupt();
+		}
+	}
+
+	private static boolean sleepInterruptibly(long millis) {
+		try {
+			Thread.sleep(millis);
+			return false;
+		} catch (@SuppressWarnings("unused") InterruptedException e) {
+			Thread.currentThread().interrupt();
+			return true;
 		}
 	}
 

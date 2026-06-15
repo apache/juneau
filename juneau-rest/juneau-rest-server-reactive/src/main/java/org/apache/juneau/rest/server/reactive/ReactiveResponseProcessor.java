@@ -109,6 +109,9 @@ import jakarta.servlet.http.*;
  * @see AsyncResponseProcessor
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
+})
 public class ReactiveResponseProcessor implements ResponseProcessor {
 
 	private static final Logger LOG = Logger.getLogger(ReactiveResponseProcessor.class.getName());

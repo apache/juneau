@@ -39,11 +39,11 @@ import org.apache.juneau.rest.client.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Eclipse resource analysis: response is borrowed; caller closes it
+})
 public final class ResponseBodyAssertion {
 
-	@SuppressWarnings({
-		"resource" // Eclipse resource analysis: response is borrowed; caller closes it
-	})
 	private final RestResponse response;
 	private final ResponseAssertion parent;
 

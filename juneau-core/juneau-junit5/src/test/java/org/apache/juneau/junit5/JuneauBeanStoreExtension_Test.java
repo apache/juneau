@@ -39,7 +39,8 @@ import org.junit.jupiter.api.extension.*;
  */
 @ExtendWith(JuneauBeanStoreExtension.class)
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778",  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"resource" // Bean stores/overlays are Closeables whose lifecycle is owned by the extension/test; Eclipse JDT @Owning warning is by design.
 })
 class JuneauBeanStoreExtension_Test extends TestBase {
 
@@ -222,6 +223,9 @@ class JuneauBeanStoreExtension_Test extends TestBase {
 	}
 
 	static class G03_BadFactoryWithParameters {
+		@SuppressWarnings({
+			"unused" // Param intentionally present to make this @TestBean factory non-parameterless for the negative test.
+		})
 		@TestBean Svc factoryWithArgs(String unused) { return new Svc("unreachable"); }
 	}
 
@@ -262,6 +266,11 @@ class JuneauBeanStoreExtension_Test extends TestBase {
 
 	@Test
 	void h01_getStore_scope_method_isPopulatedDuringTestMethod(TestBeanStore store) {
+		// The injected store is the method-scope store, which must be populated with the host class's
+		// @TestBean beans during the test method.
+		assertNotNull(store, "Injected method-scope store should be populated during the test method.");
+		assertTrue(store.hasBean(Svc.class), "Method-scope store should contain the @TestBean Svc bean during the test method.");
+
 		// The extension is registered on this host class; calling create() yields a new, unbound extension.
 		// Asking for either scope on the unbound extension must be empty.
 		var unbound = JuneauBeanStoreExtension.create();

@@ -25,6 +25,9 @@ import org.apache.juneau.petstore.dto.Order;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // Test helpers return Closeables; Eclipse JDT @Owning warning is by design.
+})
 class PetStoreResource_Test extends TestBase {
 
 	/**

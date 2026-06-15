@@ -40,13 +40,13 @@ import java.time.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Eclipse resource analysis: response is borrowed for logging snapshot only
+})
 public final class RestLogEntry {
 
 	private final RestRequest request;
 
-	@SuppressWarnings({
-		"resource" // Eclipse resource analysis: response is borrowed for logging snapshot only
-	})
 	private final RestResponse response;
 	private final Throwable error;
 	private final Duration elapsed;
@@ -212,9 +212,6 @@ public final class RestLogEntry {
 
 		RestRequest request;
 
-		@SuppressWarnings({
-			"resource" // Eclipse resource analysis: builder holds reference only; entry does not own response lifecycle
-		})
 		RestResponse response;
 		Throwable error;
 		Duration elapsed = Duration.ZERO;

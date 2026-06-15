@@ -91,9 +91,6 @@ public final class RestResponse implements Closeable {
 	 * @return The body as a string, possibly <jk>null</jk>.
 	 * @throws IOException If an I/O error occurs reading the body.
 	 */
-	@SuppressWarnings({
-		"resource" // body stream is owned by TransportResponse; caller must close RestResponse
-	})
 	public String getBodyAsString() throws IOException {
 		var body = response.getBody();
 		if (body == null)

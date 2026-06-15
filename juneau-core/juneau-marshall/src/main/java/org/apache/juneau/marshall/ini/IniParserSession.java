@@ -32,6 +32,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for parsing INI format into POJOs.
@@ -39,9 +40,10 @@ import org.apache.juneau.marshall.parser.*;
 @SuppressWarnings({
 	"unchecked",
 	"java:S115", // ARG_ctx follows project assertion-param naming convention (ARG_<param>)
-	"java:S3776", "java:S6541", "java:S135"
+	"java:S3776", "java:S6541", "java:S135",
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class IniParserSession extends ReaderParserSession {
+public class IniParserSession extends ReaderParserSession implements RecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -82,6 +84,16 @@ public class IniParserSession extends ReaderParserSession {
 
 	protected IniParserSession(Builder builder) {
 		super(builder);
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override

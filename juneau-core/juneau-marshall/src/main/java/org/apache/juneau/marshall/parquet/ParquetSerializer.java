@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.parquet;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -26,6 +27,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes bean collections to Apache Parquet binary format.
@@ -40,9 +42,10 @@ import org.apache.juneau.marshall.serializer.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115"  // Constants use UPPER_snakeCase naming convention
+	"java:S115",  // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class ParquetSerializer extends OutputStreamSerializer implements ParquetMetaProvider {
+public class ParquetSerializer extends OutputStreamSerializer implements ParquetMetaProvider, RecordWritable, ArrayRecordWritable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -289,4 +292,48 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 	public ParquetClassMeta getParquetClassMeta(ClassMeta<?> cm) {
 		return parquetClassMetas.computeIfAbsent(cm, k -> new ParquetClassMeta(k, this));
 	}
+
+	/**
+	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
+	 * arguments</b>.  The real implementation lives on
+	 * {@link ParquetSerializerSession#serializeRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	/**
+	 * Convenience delegator for the buffered array-element {@link RecordWriter} using <b>default
+	 * session arguments</b>.  The real implementation lives on
+	 * {@link ParquetSerializerSession#serializeArrayRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return ((ArrayRecordWritable) getSession()).serializeArrayRecords(output);
+	}
+
+	/**
+	 * The Parquet record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The Parquet array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordWritable */
+	public boolean isArrayRecordStreaming() { return false; }
 }

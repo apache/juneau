@@ -30,6 +30,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSerializer}.
@@ -49,7 +50,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S110",  // Inheritance depth acceptable for this class hierarchy
 	"java:S115"   // Constants use UPPER_snakeCase naming convention
 })
-public class JsonSerializerSession extends WriterSerializerSession {
+public class JsonSerializerSession extends WriterSerializerSession implements TokenWritable, ArrayRecordWritable {
 
 	// Property name constants
 	private static final String PROP_escapeSolidus = "escapeSolidus";
@@ -278,6 +279,64 @@ public class JsonSerializerSession extends WriterSerializerSession {
 	 * 	<jk>true</jk> if solidus (e.g. slash) characters should be escaped.
 	 */
 	protected final boolean isEscapeSolidus() { return escapeSolidus; }
+
+	/**
+	 * Whether the token writer emits unquoted (simple) attribute names.
+	 *
+	 * @return <jk>false</jk> for RFC-8259 strict JSON; JSON5 overrides to <jk>true</jk>.
+	 */
+	protected boolean isSimpleAttrs() { return false; }
+
+	/**
+	 * Opens a low-level push generator that emits JSON one structural event at a time, bound to
+	 * this session's live config.
+	 *
+	 * <p>
+	 * The writer is purely structural &mdash; object swaps and {@code @Schema} annotations are not
+	 * applied at this layer.  See {@link TokenWriter} for the contract.  The higher-level
+	 * {@link TokenWriter#object(Object)} bridge walks an arbitrary POJO via {@link PojoWalker} and
+	 * DOES honor the databind settings (<c>keepNullProperties</c>, <c>trimEmptyMaps</c>,
+	 * <c>trimEmptyCollections</c>, <c>sortMaps</c>, <c>sortCollections</c>, <c>trimStrings</c>).
+	 *
+	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
+	 * 	{@link StringBuilder}.
+	 * @return A new {@link JsonTokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		var walk = new PojoWalker.Options(
+			isKeepNullProperties(),
+			isTrimEmptyMaps(),
+			isTrimEmptyCollections(),
+			isSortMaps(),
+			isSortCollections(),
+			isTrimStrings(),
+			getMarshallingContext());
+		var settings = new JsonTokenWriter.Settings(
+			isUseWhitespace(),
+			getMaxIndent(),
+			getQuoteChar(),
+			isEscapeSolidus(),
+			isTrimStrings(),
+			isSimpleAttrs(),
+			walk,
+			false /* disableObject */);
+		return JsonTokenWriter.forOutput(output, settings);
+	}
+
+	/**
+	 * Streaming array-element {@link RecordWriter} backed by {@link JsonTokenWriter}.
+	 * Memory is O(1) in the array length &mdash; elements are emitted as they arrive.
+	 *
+	 * @param output The output.
+	 * @return A new element-streamed {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return StreamingArrayRecord.writer(serializeTokens(output));
+	}
 
 	/**
 	 * Workhorse method.

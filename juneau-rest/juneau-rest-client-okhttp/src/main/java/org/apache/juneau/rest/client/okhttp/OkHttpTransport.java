@@ -56,6 +56,9 @@ import okio.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Transport methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
+})
 public final class OkHttpTransport implements HttpTransport {
 
 	private final OkHttpClient httpClient;

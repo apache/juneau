@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class JspServlet_MockRest_Test extends TestBase {
 
 	private static final MockRestClient c = MockRestClient.buildLax(JspServlet.class);

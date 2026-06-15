@@ -34,7 +34,8 @@ import org.apache.juneau.marshall.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource" // Resource management handled by ParserPipe
 })
 public class InputStreamParserSession extends ParserSession {
 
@@ -122,9 +123,6 @@ public class InputStreamParserSession extends ParserSession {
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */
-	@SuppressWarnings({
-		"resource" // Resource management handled by ParserPipe
-	})
 	@Override /* Overridden from ParserSession */
 	public final ParserPipe createPipe(Object input) {
 		return setPipe(new ParserPipe(input, isDebug(), ctx.isAutoCloseStreams(), ctx.isUnbuffered(), getBinaryFormat()));

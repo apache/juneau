@@ -25,9 +25,12 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
+import java.io.*;
+
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes POJO models to BSON (Binary JSON).
@@ -90,8 +93,9 @@ import org.apache.juneau.marshall.serializer.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class BsonSerializer extends OutputStreamSerializer implements BsonMetaProvider {
+public class BsonSerializer extends OutputStreamSerializer implements BsonMetaProvider, RecordWritable, ArrayRecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_builder = "builder";
@@ -333,4 +337,49 @@ public class BsonSerializer extends OutputStreamSerializer implements BsonMetaPr
 			.a(PROP_nullKeyString, nullKeyString)
 			.a(PROP_writeDatesAsDatetime, writeDatesAsDatetime);
 	}
+
+	/**
+	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
+	 * arguments</b>.  The real implementation lives on
+	 * {@link BsonSerializerSession#serializeRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	/**
+	 * Convenience delegator for the buffered array-element {@link RecordWriter} using <b>default
+	 * session arguments</b>.  BSON's wire format requires the entire document byte-length up front
+	 * (length prefix at every nesting level), so streaming without buffering is not possible.  The
+	 * real implementation lives on {@link BsonSerializerSession#serializeArrayRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A buffered {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return ((ArrayRecordWritable) getSession()).serializeArrayRecords(output);
+	}
+
+	/**
+	 * The BSON record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The BSON array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordWritable */
+	public boolean isArrayRecordStreaming() { return false; }
 }

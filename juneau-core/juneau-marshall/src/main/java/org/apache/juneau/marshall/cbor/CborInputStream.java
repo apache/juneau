@@ -46,6 +46,9 @@ public class CborInputStream extends ParserInputStream {
 	private long length;
 	private int lastInitialByte;
 	private DataType lastDataType;
+	// Single-byte pushback for indefinite-length container loops that need to peek for BREAK
+	// without consuming the next data item.  -1 means no pushback present.
+	private int pushedBackByte = -1;
 
 	/**
 	 * Constructor.
@@ -55,6 +58,40 @@ public class CborInputStream extends ParserInputStream {
 	 */
 	protected CborInputStream(ParserPipe pipe) throws IOException {
 		super(pipe);
+	}
+
+	@Override /* InputStream */
+	public int read() throws IOException {
+		if (pushedBackByte != -1) {
+			int b = pushedBackByte;
+			pushedBackByte = -1;
+			return b;
+		}
+		return super.read();
+	}
+
+	/**
+	 * Peeks one byte and returns whether it is the CBOR BREAK marker (0xFF).  Non-BREAK bytes
+	 * are pushed back so the next {@link #read()} sees them.
+	 *
+	 * <p>
+	 * Used by definite/indefinite-length container loops to detect the end of an indefinite
+	 * container without consuming the next data item.
+	 *
+	 * @return <jk>true</jk> if the next byte is BREAK; <jk>false</jk> otherwise (or at EOF).
+	 * @throws IOException If the underlying stream fails.
+	 */
+	boolean peekBreak() throws IOException {
+		int b = read();
+		if (b == -1)
+			return false;
+		if (b == 0xFF) {
+			lastDataType = BREAK;
+			length = 0;
+			return true;
+		}
+		pushedBackByte = b;
+		return false;
 	}
 
 	/**
@@ -207,6 +244,12 @@ public class CborInputStream extends ParserInputStream {
 				length = 4;
 			else
 				length = 8;
+		} else if ((dt == ARRAY || dt == MAP || dt == STRING || dt == BINARY) && additionalInfo == 31) {
+			// Indefinite-length container or string.  Sentinel: length = -1.  Used by the public
+			// token-streaming surface (CborTokenReader); the legacy POJO databind path
+			// (CborParserSession.parseAnything) doesn't currently support indefinite-length and
+			// surfaces an error there.
+			length = -1;
 		} else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK)
 			length = readArgument(additionalInfo);
 		else

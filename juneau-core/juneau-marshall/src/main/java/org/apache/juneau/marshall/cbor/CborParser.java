@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.math.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -26,6 +27,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses CBOR streams (RFC 8949) into POJO models.
@@ -68,9 +70,10 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
-	"java:S115" // Constants use UPPER_snakeCase naming convention
+	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class CborParser extends InputStreamParser implements CborMetaProvider {
+public class CborParser extends InputStreamParser implements CborMetaProvider, TokenReadable, ArrayRecordReadable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -197,5 +200,38 @@ public class CborParser extends InputStreamParser implements CborMetaProvider {
 	@Override /* Overridden from Context */
 	public CborParserSession getSession() {
 		return createSession().build();
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link CborTokenReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link CborParserSession#parseTokens(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link CborParserSession#parseTokens(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link CborTokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* TokenReadable */
+	public TokenReader parseTokens(Object input) throws IOException {
+		return getSession().parseTokens(input);
+	}
+
+	/**
+	 * Convenience delegator for the streaming array-element {@link RecordReader} (uses default
+	 * session args; see {@link #parseTokens(Object)}).  Real impl on
+	 * {@link CborParserSession#parseArrayRecords(Object)}.
+	 *
+	 * @param input The input.
+	 * @return A new element-streamed {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return getSession().parseArrayRecords(input);
 	}
 }

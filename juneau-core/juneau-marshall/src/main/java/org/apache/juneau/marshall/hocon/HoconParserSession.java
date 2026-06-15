@@ -27,15 +27,17 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for parsing HOCON format into POJOs.
  */
 @SuppressWarnings({
-	"java:S110", "java:S115", "java:S135", "java:S3776", "java:S6541", "unchecked"
+	"java:S110", "java:S115", "java:S135", "java:S3776", "java:S6541", "unchecked",
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 	// java:S135: parseValueOrConcat uses two distinct breaks — one for standard HOCON terminators, one for unquoted keys after arrays/objects; merging them would obscure intent
 })
-public class HoconParserSession extends ReaderParserSession {
+public class HoconParserSession extends ReaderParserSession implements RecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 	private static final String[] EMPTY_PATH = new String[0];
@@ -73,6 +75,16 @@ public class HoconParserSession extends ReaderParserSession {
 	protected HoconParserSession(Builder builder) {
 		super(builder);
 		hoconParser = builder.hoconParser;
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override

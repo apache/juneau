@@ -39,7 +39,8 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S8692" // Nimbus oauth2-oidc-sdk 11.37.2 exposes no clock hook on the ID-token path (IDTokenClaimsVerifier reads new Date() internally), so injecting a clock there would require cloning Nimbus internals; the logout-token path IS clock-injectable and is tested deterministically.
+	"java:S8692", // Nimbus oauth2-oidc-sdk 11.37.2 exposes no clock hook on the ID-token path (IDTokenClaimsVerifier reads new Date() internally), so injecting a clock there would require cloning Nimbus internals; the logout-token path IS clock-injectable and is tested deterministically.
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
 class OidcRelyingParty_Test extends TestBase {
 

@@ -150,4 +150,5 @@ public class Json5Parser extends JsonParser {
 
 	@Override /* Overridden from Context */
 	public Json5ParserSession getSession() { return createSession().build(); }
+
 }

@@ -31,6 +31,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for serializing objects to INI format.
@@ -42,7 +43,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S3776", // Cognitive complexity acceptable for serialization logic
 	"java:S6541"  // Acceptable for session implementation
 })
-public class IniSerializerSession extends WriterSerializerSession {
+public class IniSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	private static final String ARG_ctx = "ctx";
 	private static final String SECTION_PATH_DELIMITER = "/";
@@ -80,6 +81,16 @@ public class IniSerializerSession extends WriterSerializerSession {
 	protected IniSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+	}
+
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override

@@ -24,6 +24,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonlParser}.
@@ -39,7 +40,8 @@ import org.apache.juneau.marshall.parser.*;
 @SuppressWarnings({
 	"unchecked", // Type erasure: elementType is ClassMeta<?>; toArray/convertToType return Object
 	"java:S110", // Inheritance depth acceptable
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class JsonlParserSession extends JsonParserSession {
 
@@ -90,6 +92,54 @@ public class JsonlParserSession extends JsonParserSession {
 	 */
 	protected JsonlParserSession(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * Opens a low-level pull-parser cursor over a JSONL document, bound to this live session.
+	 *
+	 * <p>
+	 * Each top-level JSON value (one per line) is emitted as a flat sequence at depth 0; there
+	 * is no virtual root container.  See {@link JsonlTokenReader} for the contract.  Same
+	 * honored/ignored builder properties as {@link JsonParserSession#parseTokens(Object)}.
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence},
+	 * 	{@link InputStream}, <code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new {@link JsonlTokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@SuppressWarnings({
+		"java:S2095" // ParserPipe lifecycle is transferred to the returned JsonlTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
+	})
+	@Override /* JsonParserSession */
+	public TokenReader parseTokens(Object input) throws IOException {
+		var pipe = new ParserPipe(
+			input,
+			isDebug(),
+			false /* strict */,
+			isAutoCloseStreams(),
+			isUnbuffered(),
+			getStreamCharset(),
+			getFileCharset());
+		return new JsonlTokenReader(pipe, new JsonTokenReader.Settings(isTrimStrings()), this);
+	}
+
+	/**
+	 * Streaming array-element {@link RecordReader} for JSONL.
+	 *
+	 * <p>
+	 * Unlike the inherited {@link JsonParserSession#parseArrayRecords(Object)} &mdash; which expects a
+	 * bracketed top-level <c>[...]</c> array and is invalid for line-delimited JSONL &mdash; this aliases
+	 * the JSONL line record stream: the {@link JsonlTokenReader} returned by {@link #parseTokens(Object)}
+	 * is itself a {@link RecordReader} that yields one record per top-level line at depth 0.  Memory is
+	 * O(1) in the number of lines.
+	 *
+	 * @param input The input.
+	 * @return A new line-delimited {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return parseTokens(input);
 	}
 
 	@Override /* Overridden from JsonParserSession */

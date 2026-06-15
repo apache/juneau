@@ -171,4 +171,5 @@ public class Json5Serializer extends JsonSerializer {
 
 	@Override /* Overridden from Context */
 	public Json5SerializerSession getSession() { return createSession().build(); }
+
 }

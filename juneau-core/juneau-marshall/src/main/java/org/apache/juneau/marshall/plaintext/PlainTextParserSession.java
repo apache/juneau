@@ -23,6 +23,7 @@ import java.io.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link PlainTextParser}.
@@ -35,7 +36,7 @@ import org.apache.juneau.marshall.parser.*;
 @SuppressWarnings({
 	"resource" // Reader resource managed by calling code
 })
-public class PlainTextParserSession extends ReaderParserSession {
+public class PlainTextParserSession extends ReaderParserSession implements RecordReadable {
 
 	/**
 	 * Builder class.
@@ -75,6 +76,16 @@ public class PlainTextParserSession extends ReaderParserSession {
 	 */
 	protected PlainTextParserSession(Builder builder) {
 		super(builder);
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override /* Overridden from ParserSession */

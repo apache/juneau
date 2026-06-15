@@ -851,7 +851,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	}
 
 	/**
-	 * Sets the <c>Cache-Control</c> response header from a {@link CacheControl.Builder}.
+	 * Sets the <c>Cache-Control</c> response header from a {@link org.apache.juneau.http.header.CacheControl.Builder}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

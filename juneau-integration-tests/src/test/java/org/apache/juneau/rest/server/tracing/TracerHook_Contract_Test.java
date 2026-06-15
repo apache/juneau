@@ -35,6 +35,9 @@ import org.junit.jupiter.api.*;
  * resolved status code, the error path receives the thrown throwable, and the framework always
  * closes the scope (in a {@code finally} block).
  */
+@SuppressWarnings({
+	"resource" // Test helpers return Closeables (Scope, MockRestClient); Eclipse JDT @Owning warning is by design.
+})
 class TracerHook_Contract_Test extends TestBase {
 
 	/** Recording {@link TracerHook} that captures every span open / close transition. */

@@ -24,6 +24,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes POJO models to INI format.
@@ -93,9 +94,10 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115"
+	"java:S110", "java:S115",
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class IniSerializer extends WriterSerializer implements IniMetaProvider {
+public class IniSerializer extends WriterSerializer implements IniMetaProvider, RecordWritable {
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
@@ -275,5 +277,28 @@ public class IniSerializer extends WriterSerializer implements IniMetaProvider {
 			.a(PROP_kvSeparator, String.valueOf(kvSeparator))
 			.a(PROP_spacedSeparator, spacedSeparator)
 			.a(PROP_useComments, useComments);
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link IniSerializerSession#serializeRecords(Object)}.
+	 * Callers that need request-derived configuration should call {@link #createSession()} and
+	 * invoke {@link IniSerializerSession#serializeRecords(Object)} on the built session instead.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

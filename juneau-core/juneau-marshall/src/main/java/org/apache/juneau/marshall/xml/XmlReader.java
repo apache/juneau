@@ -38,6 +38,9 @@ import org.apache.juneau.marshall.parser.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // pipe field is owned by the caller's parser session; the Reader it supplies is consumed by XMLInputFactory and not owned here.
+})
 public class XmlReader implements XMLStreamReader, Positionable {
 
 	private final ParserPipe pipe;
@@ -54,9 +57,6 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	 * @throws IOException Thrown by underling
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
-	@SuppressWarnings({
-		"resource" // Reader from pipe; consumed by XMLInputFactory
-	})
 	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {
 		this.pipe = pipe;
 		try {

@@ -23,6 +23,7 @@ import java.nio.charset.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Top-level class for a pairing of a {@link Serializer} and {@link Parser} into a single class with convenience read/write methods.
@@ -47,6 +48,9 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Cursor shortcut methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
+})
 public abstract class Marshaller {
 	private final Serializer s;
 	private final Parser p;
@@ -243,5 +247,134 @@ public abstract class Marshaller {
 	 */
 	public final void write(Object object, Object output) throws SerializeException, IOException {
 		s.serialize(object, output);
+	}
+
+	/**
+	 * Opens a low-level {@link TokenReader} cursor over the specified input.
+	 *
+	 * <p>
+	 * Shortcut for <c>((TokenReadable)getParser()).parseTokens(<jv>input</jv>)</c>.  See
+	 * {@link TokenReader} for the cursor contract.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
+	 * 		does not implement {@link TokenReadable} (the structural-token role) yield a
+	 * 		{@link ClassCastException}.
+	 * </ul>
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
+	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new {@link TokenReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	public TokenReader readTokens(Object input) throws IOException {
+		return ((TokenReadable) getParser()).parseTokens(input);
+	}
+
+	/**
+	 * Opens a low-level push generator that emits structural events one at a time.
+	 *
+	 * <p>
+	 * Shortcut for <c>((TokenWritable)getSerializer()).serializeTokens(<jv>output</jv>)</c>.  See
+	 * {@link TokenWriter} for the generator contract.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
+	 * 		serializer does not implement {@link TokenWritable} (the structural-token role) yield a
+	 * 		{@link ClassCastException}.
+	 * </ul>
+	 *
+	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
+	 * 	{@link StringBuilder}.
+	 * @return A new {@link TokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	public TokenWriter writeTokens(Object output) throws IOException {
+		return ((TokenWritable) getSerializer()).serializeTokens(output);
+	}
+
+	/**
+	 * Opens a low-level {@link RecordReader} cursor that yields each top-level value as a record.
+	 *
+	 * <p>
+	 * Shortcut for <c>((RecordReadable)getParser()).parseRecords(<jv>input</jv>)</c>.  See
+	 * {@link RecordReader} for the cursor contract.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
+	 * 		does not implement {@link RecordReadable} yield a {@link ClassCastException}.
+	 * </ul>
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
+	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	public RecordReader readRecords(Object input) throws IOException {
+		return ((RecordReadable) getParser()).parseRecords(input);
+	}
+
+	/**
+	 * Opens a low-level {@link RecordWriter} cursor that emits each whole value as a record.
+	 *
+	 * <p>
+	 * Shortcut for <c>((RecordWritable)getSerializer()).serializeRecords(<jv>output</jv>)</c>.  See
+	 * {@link RecordWriter} for the cursor contract.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
+	 * 		serializer does not implement {@link RecordWritable} yield a {@link ClassCastException}.
+	 * </ul>
+	 *
+	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
+	 * 	{@link StringBuilder}.
+	 * @return A new {@link RecordWriter} cursor.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	public RecordWriter writeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSerializer()).serializeRecords(output);
+	}
+
+	/**
+	 * Opens a {@link RecordReader} that yields each element of a top-level wire array as a
+	 * separate record.
+	 *
+	 * <p>
+	 * Shortcut for <c>((ArrayRecordReadable)getParser()).parseArrayRecords(<jv>input</jv>)</c>.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This capability depends on the underlying parser.  Formats whose parser
+	 * 		does not implement {@link ArrayRecordReadable} yield a {@link ClassCastException}.
+	 * </ul>
+	 *
+	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
+	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * @return A new element-streamed {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	public RecordReader readArrayRecords(Object input) throws IOException {
+		return ((ArrayRecordReadable) getParser()).parseArrayRecords(input);
+	}
+
+	/**
+	 * Opens a {@link RecordWriter} that wraps each written value as one element of a top-level
+	 * wire array.
+	 *
+	 * <p>
+	 * Shortcut for <c>((ArrayRecordWritable)getSerializer()).serializeArrayRecords(<jv>output</jv>)</c>.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>This capability depends on the underlying serializer.  Formats whose
+	 * 		serializer does not implement {@link ArrayRecordWritable} yield a
+	 * 		{@link ClassCastException}.
+	 * </ul>
+	 *
+	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
+	 * 	{@link StringBuilder}.
+	 * @return A new element-streamed {@link RecordWriter} cursor.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
+		return ((ArrayRecordWritable) getSerializer()).serializeArrayRecords(output);
 	}
 }

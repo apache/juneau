@@ -26,6 +26,9 @@ import org.apache.juneau.rest.server.sse.*;
 /**
  * Resolves {@link SseSubscription} method parameters.
  */
+@SuppressWarnings({
+	"resource" // Subscription is caller-owned and closed by SSE response handling.
+})
 public class SseSubscriptionArg extends SimpleRestOperationArg {
 
 	/**
@@ -43,9 +46,6 @@ public class SseSubscriptionArg extends SimpleRestOperationArg {
 	/**
 	 * Constructor.
 	 */
-	@SuppressWarnings({
-		"resource" // Subscription is caller-owned and closed by SSE response handling.
-	})
 	protected SseSubscriptionArg() {
 		super(opSession -> {
 			var broadcaster = opSession.getBeanStore().getBean(SseBroadcaster.class).orElseGet(() -> opSession.getBeanStore().add(SseBroadcaster.class, SseBroadcaster.create()));

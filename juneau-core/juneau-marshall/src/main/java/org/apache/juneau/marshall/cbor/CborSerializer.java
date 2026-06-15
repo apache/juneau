@@ -26,8 +26,11 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
+import java.io.*;
+
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -91,8 +94,9 @@ import org.apache.juneau.marshall.swap.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource"   // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class CborSerializer extends OutputStreamSerializer implements CborMetaProvider {
+public class CborSerializer extends OutputStreamSerializer implements CborMetaProvider, TokenWritable, ArrayRecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_builder = "builder";
@@ -285,6 +289,25 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 		return createSession().build();
 	}
 
+	/**
+	 * Convenience delegator that opens a {@link CborTokenWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link CborSerializerSession#serializeTokens(Object)}.
+	 * Callers that need request-derived configuration (locale, timezone, schema, swaps) should
+	 * call {@link #createSession()} and invoke
+	 * {@link CborSerializerSession#serializeTokens(Object)} on the built session instead.
+	 *
+	 * @param output The output.  Accepts {@link OutputStream} or {@link File}.
+	 * @return A new {@link CborTokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		return getSession().serializeTokens(output);
+	}
+
 	@Override
 	protected final boolean isAddBeanTypes() {
 		return addBeanTypesCbor || super.isAddBeanTypes();
@@ -295,5 +318,19 @@ public class CborSerializer extends OutputStreamSerializer implements CborMetaPr
 		return super.properties()
 			.a(PROP_addBeanTypesCbor, addBeanTypesCbor)
 			.a(PROP_useTags, useTags);
+	}
+
+	/**
+	 * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default
+	 * session args; see {@link #serializeTokens(Object)}).  Real impl on
+	 * {@link CborSerializerSession#serializeArrayRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new element-streamed {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return getSession().serializeArrayRecords(output);
 	}
 }

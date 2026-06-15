@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonlSerializer}.
@@ -89,6 +90,61 @@ public class JsonlSerializerSession extends JsonSerializerSession {
 	 */
 	protected JsonlSerializerSession(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * Opens a low-level push generator that emits JSONL one structural event at a time, with a
+	 * trailing newline after every top-level value, bound to this live session.
+	 *
+	 * <p>
+	 * Same honored/ignored builder properties as {@link JsonSerializerSession#serializeTokens(Object)}
+	 * except that <c>useWhitespace</c> is forced to <jk>false</jk> &mdash; pretty-printed JSONL is
+	 * not standard.
+	 *
+	 * @param output The output.
+	 * @return A new {@link JsonlTokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* JsonSerializerSession */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		var walk = new PojoWalker.Options(
+			isKeepNullProperties(),
+			isTrimEmptyMaps(),
+			isTrimEmptyCollections(),
+			isSortMaps(),
+			isSortCollections(),
+			isTrimStrings(),
+			getMarshallingContext());
+		var settings = new JsonTokenWriter.Settings(
+			false /* useWhitespace — JSONL is one-record-per-line, no pretty-print */,
+			getMaxIndent(),
+			getQuoteChar(),
+			isEscapeSolidus(),
+			isTrimStrings(),
+			false /* simpleAttrs — JSONL uses RFC-8259 strict per line */,
+			walk,
+			false /* disableObject */);
+		return JsonlTokenWriter.forOutput(output, settings);
+	}
+
+	/**
+	 * Streaming array-element {@link RecordWriter} for JSONL.
+	 *
+	 * <p>
+	 * Unlike the inherited {@link JsonSerializerSession#serializeArrayRecords(Object)} &mdash; which wraps
+	 * the writes in a bracketed top-level <c>[...]</c> array and is invalid for line-delimited JSONL &mdash;
+	 * this aliases the JSONL line record stream: the {@link JsonlTokenWriter} returned by
+	 * {@link #serializeTokens(Object)} is itself a {@link RecordWriter} whose
+	 * {@link RecordWriter#write(Object) write(...)} emits one top-level value per line (no surrounding
+	 * brackets).  Memory is O(1) in the number of records.
+	 *
+	 * @param output The output.
+	 * @return A new line-delimited {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return serializeTokens(output);
 	}
 
 	@Override /* Overridden from JsonSerializerSession */

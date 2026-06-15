@@ -30,6 +30,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link BsonSerializer}.
@@ -49,7 +50,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S115",  // Constants use UPPER_snakeCase convention
 	"java:S3776"  // Cognitive complexity acceptable for serialization dispatch logic
 })
-public class BsonSerializerSession extends OutputStreamSerializerSession {
+public class BsonSerializerSession extends OutputStreamSerializerSession implements RecordWritable, ArrayRecordWritable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -101,6 +102,50 @@ public class BsonSerializerSession extends OutputStreamSerializerSession {
 		super(builder);
 		ctx = builder.ctx;
 	}
+
+	/**
+	 * Opens a whole-value push generator targeting BSON output, bound to this live session.
+	 * {@link RecordWriter#write(Object) write(Object)} delegates to
+	 * {@link SerializerSession#serialize(Object, Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordWriter} for BSON, bound to this live session.  BSON's wire
+	 * format requires the entire document byte-length up front (length prefix at every nesting
+	 * level), so streaming without buffering is not possible.
+	 *
+	 * @param output The output.
+	 * @return A buffered {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return RecordAdapter.arrayWriter(this, output);
+	}
+
+	/**
+	 * The BSON record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The BSON array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordWritable */
+	public boolean isArrayRecordStreaming() { return false; }
 
 	private void writeElement(BsonOutputStream out, String name, Object o, ClassMeta<?> eType, BeanPropertyMeta pMeta) throws SerializeException {
 		if (o == null) {

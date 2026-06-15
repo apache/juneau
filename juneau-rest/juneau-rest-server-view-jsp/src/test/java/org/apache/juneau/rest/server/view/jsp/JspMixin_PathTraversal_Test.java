@@ -48,6 +48,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class JspMixin_PathTraversal_Test extends TestBase {
 
 	@Rest(mixins=JspMixin.class)

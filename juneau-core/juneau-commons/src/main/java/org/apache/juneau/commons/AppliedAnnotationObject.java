@@ -465,9 +465,6 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast to BuilderT
-		})
 		public BuilderT onClass(Class<?>...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)
@@ -481,9 +478,6 @@ public class AppliedAnnotationObject extends AnnotationObject {
 		 * @param value The values to append.
 		 * @return This object.
 		 */
-		@SuppressWarnings({
-			"unchecked" // Type erasure requires cast to BuilderT
-		})
 		public BuilderT onClass(ClassInfo...value) {
 			assertArgNoNulls(ARG_value, value);
 			for (var v : value)

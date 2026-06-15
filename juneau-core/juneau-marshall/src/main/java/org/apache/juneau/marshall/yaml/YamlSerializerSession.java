@@ -28,6 +28,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link YamlSerializer}.
@@ -46,7 +47,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S3776" // Cognitive complexity acceptable for YAML serializer session methods
 })
-public class YamlSerializerSession extends WriterSerializerSession {
+public class YamlSerializerSession extends WriterSerializerSession implements RecordWritable, ArrayRecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -97,6 +98,49 @@ public class YamlSerializerSession extends WriterSerializerSession {
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		serializeAnything(getYamlWriter(out), o, getExpectedRootType(o), "root", null, true);
 	}
+
+	/**
+	 * Opens a whole-value push generator targeting YAML output, bound to this live session.
+	 * {@link RecordWriter#write(Object) write(Object)} delegates to
+	 * {@link SerializerSession#serialize(Object, Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordWriter} for YAML, bound to this live session.  Buffers
+	 * each {@code write(...)} and emits the whole list on {@code close()}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return RecordAdapter.arrayWriter(this, output);
+	}
+
+	/**
+	 * The YAML record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The YAML array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordWritable */
+	public boolean isArrayRecordStreaming() { return false; }
 
 	/**
 	 * Converts the specified output target object to a {@link YamlWriter}.

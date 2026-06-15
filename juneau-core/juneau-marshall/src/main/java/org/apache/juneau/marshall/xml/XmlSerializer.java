@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -28,6 +29,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes POJO models to XML.
@@ -134,8 +136,9 @@ import org.apache.juneau.marshall.serializer.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
+public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, RecordWritable {
 
 	// Property name constants
 	private static final String PROP_addBeanTypes = "addBeanTypes";
@@ -659,6 +662,28 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider {
 
 	@Override /* Overridden from Context */
 	public XmlSerializerSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator for the whole-value {@link RecordWriter} using <b>default session
+	 * arguments</b>.  The real implementation lives on
+	 * {@link XmlSerializerSession#serializeRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	/**
+	 * The XML record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
 
 	@Override /* Overridden from XmlMetaProvider */
 	public XmlBeanMeta getXmlBeanMeta(BeanMeta<?> bm) {

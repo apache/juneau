@@ -29,6 +29,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -48,7 +49,7 @@ import org.apache.juneau.marshall.swap.*;
 	"resource",   // MarkdownWriter/Writer lifecycle managed by SerializerPipe
 	"rawtypes",
 })
-public class MarkdownSerializerSession extends WriterSerializerSession {
+public class MarkdownSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -119,6 +120,16 @@ public class MarkdownSerializerSession extends WriterSerializerSession {
 		super(builder);
 		nullValue = builder.nullValue != null ? builder.nullValue : "*null*";
 		showHeaders = builder.showHeaders;
+	}
+
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override /* Overridden from SerializerSession */

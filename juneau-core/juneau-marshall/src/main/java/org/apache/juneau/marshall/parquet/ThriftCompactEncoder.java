@@ -28,6 +28,9 @@ import java.util.*;
  * <a class="doclink" href="https://github.com/apache/thrift/blob/master/doc/specs/thrift-compact-protocol.md">Thrift Compact Protocol</a>
  * specification. Used by Parquet to encode FileMetaData, PageHeader, SchemaElement, etc.
  */
+@SuppressWarnings({
+	"resource" // Writes to a caller-owned OutputStream; the encoder does not own the stream's lifecycle.
+})
 final class ThriftCompactEncoder {
 
 	/** Thrift Compact Protocol type codes. */

@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.markdown;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -26,6 +27,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses Markdown fragment-mode output (tables and lists) back to POJOs.
@@ -72,8 +74,9 @@ import org.apache.juneau.marshall.parser.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider {
+public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider, RecordReadable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 	private static final String CONST_null = "*null*";
@@ -235,4 +238,28 @@ public class MarkdownParser extends ReaderParser implements MarkdownMetaProvider
 
 	@Override /* Overridden from Context */
 	public MarkdownParserSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator that opens a {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link MarkdownParserSession#parseRecords(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link MarkdownParserSession#parseRecords(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
 }

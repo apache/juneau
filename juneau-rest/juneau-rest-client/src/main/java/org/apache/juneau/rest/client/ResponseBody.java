@@ -41,11 +41,11 @@ import java.nio.charset.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Eclipse resource analysis: response is borrowed; caller closes it after reading body
+})
 public final class ResponseBody {
 
-	@SuppressWarnings({
-		"resource" // Eclipse resource analysis: response is borrowed; caller closes it after reading body
-	})
 	private final RestResponse response;
 
 	ResponseBody(RestResponse response) {
@@ -69,9 +69,6 @@ public final class ResponseBody {
 	 * @return The body string, or <jk>null</jk> if the response has no body.
 	 * @throws IOException If an I/O error occurs reading the body.
 	 */
-	@SuppressWarnings({
-		"resource" // Body stream owned by transport; release by closing RestResponse, not the stream
-	})
 	public String asString(Charset charset) throws IOException {
 		var stream = response.getBodyStream();
 		if (stream == null)
@@ -86,7 +83,6 @@ public final class ResponseBody {
 	 * @throws IOException If an I/O error occurs reading the body.
 	 */
 	@SuppressWarnings({
-		"resource", // Body stream owned by transport; release by closing RestResponse, not the stream
 		"java:S1168" // 'null' is a documented sentinel distinguishing 'no response body' (e.g. HTTP 204) from an empty body; callers rely on it (see RestClientFeatures_Test.l04_responseBody_nullBody).
 	})
 	public byte[] asBytes() throws IOException {
@@ -104,9 +100,6 @@ public final class ResponseBody {
 	 *
 	 * @return The body stream, or <jk>null</jk> if the response has no body.
 	 */
-	@SuppressWarnings({
-		"resource" // Stream owned by transport; close parent RestResponse instead (see Javadoc)
-	})
 	public InputStream asStream() {
 		return response.getBodyStream();
 	}

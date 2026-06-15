@@ -27,6 +27,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -47,8 +48,9 @@ import org.apache.juneau.marshall.swap.*;
 	"java:S6541", // Brain method acceptable for parseAnything
 	"unchecked",
 	"rawtypes",
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class MarkdownParserSession extends ReaderParserSession {
+public class MarkdownParserSession extends ReaderParserSession implements RecordReadable {
 
 	private static final String CONST_type = "_type";
 
@@ -118,6 +120,16 @@ public class MarkdownParserSession extends ReaderParserSession {
 	protected MarkdownParserSession(Builder<?> builder) {
 		super(builder);
 		nullValue = builder.nullValue != null ? builder.nullValue : "*null*";
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override /* Overridden from ParserSession */

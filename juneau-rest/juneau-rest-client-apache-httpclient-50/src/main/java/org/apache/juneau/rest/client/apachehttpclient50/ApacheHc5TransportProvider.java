@@ -37,6 +37,9 @@ import org.apache.juneau.rest.client.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Provider methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
+})
 public final class ApacheHc5TransportProvider implements HttpTransportProvider {
 
 	@Override /* HttpTransportProvider */

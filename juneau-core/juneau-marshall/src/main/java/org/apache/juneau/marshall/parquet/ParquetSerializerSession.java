@@ -30,6 +30,7 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for {@link ParquetSerializer}.
@@ -42,7 +43,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S6541", // Brain Method: Parquet bean collection and list flattening are inherently branchy
 	"java:S1192"  // Duplicated "value" is ValueHolder/Optional schema key; constant would obscure
 })
-public class ParquetSerializerSession extends OutputStreamSerializerSession {
+public class ParquetSerializerSession extends OutputStreamSerializerSession implements RecordWritable, ArrayRecordWritable {
 
 	private static final byte[] MAGIC = "PAR1".getBytes(StandardCharsets.UTF_8);
 	private static final String ARG_ctx = "ctx";
@@ -81,6 +82,49 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession {
 		super(builder);
 		ctx = builder.ctx;
 	}
+
+	/**
+	 * Opens a whole-value push generator targeting Parquet output, bound to this live session.
+	 * {@link RecordWriter#write(Object) write(Object)} delegates to
+	 * {@link SerializerSession#serialize(Object, Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordWriter} for Parquet, bound to this live session.  Buffers
+	 * each {@code write(...)} and emits the whole list on {@code close()}.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return RecordAdapter.arrayWriter(this, output);
+	}
+
+	/**
+	 * The Parquet record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The Parquet array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordWritable */
+	public boolean isArrayRecordStreaming() { return false; }
 
 	@Override /* OutputStreamSerializerSession */
 	public boolean hasNativeBytes() {

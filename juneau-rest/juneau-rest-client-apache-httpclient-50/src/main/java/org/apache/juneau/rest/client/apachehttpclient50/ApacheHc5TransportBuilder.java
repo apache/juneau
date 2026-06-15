@@ -36,6 +36,9 @@ import org.apache.hc.client5.http.impl.classic.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Builder methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
+})
 public final class ApacheHc5TransportBuilder {
 
 	CloseableHttpClient httpClient;

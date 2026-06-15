@@ -42,13 +42,13 @@ import java.util.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Eclipse resource analysis: response is borrowed; caller closes it
+})
 public final class ResponseHeader {
 
 	private final String name;
 
-	@SuppressWarnings({
-		"resource" // Eclipse resource analysis: response is borrowed; caller closes it
-	})
 	private final RestResponse response;
 
 	ResponseHeader(String name, RestResponse response) {

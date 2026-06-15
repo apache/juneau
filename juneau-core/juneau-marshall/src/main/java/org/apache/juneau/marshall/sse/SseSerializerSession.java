@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link SseSerializer}.
@@ -38,13 +39,12 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for session hierarchy
+	"java:S110", // Inheritance depth acceptable for session hierarchy
+	"java:S115", // Match AssertionUtils arg-name style used throughout Juneau.
+	"resource"   // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class SseSerializerSession extends WriterSerializerSession {
+public class SseSerializerSession extends WriterSerializerSession implements RecordWritable {
 
-	@SuppressWarnings({
-		"java:S115" // Match AssertionUtils arg-name style used throughout Juneau.
-	})
 	private static final String ARG_ctx = "ctx";
 
 	/**
@@ -86,8 +86,20 @@ public class SseSerializerSession extends WriterSerializerSession {
 		super(builder);
 	}
 
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.arrayWriter(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
+
 	@Override /* Overridden from SerializerSession */
-	@SuppressWarnings({ "java:S2095", "resource" }) // Writer is owned by SerializerPipe/caller and must not be closed by this session.
+	@SuppressWarnings({
+		"java:S2095" // Writer is owned by SerializerPipe/caller and must not be closed by this session.
+	})
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		var w = pipe.getWriter();
 		if (o == null)

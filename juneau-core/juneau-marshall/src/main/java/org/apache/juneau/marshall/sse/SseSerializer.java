@@ -22,6 +22,7 @@ import java.io.*;
 
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Serializes {@link SseEvent} objects to the <c>text/event-stream</c> wire format defined by the
@@ -56,13 +57,12 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for serializer hierarchy
+	"java:S110", // Inheritance depth acceptable for serializer hierarchy
+	"java:S115", // Match AssertionUtils arg-name style used throughout Juneau.
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class SseSerializer extends WriterSerializer {
+public class SseSerializer extends WriterSerializer implements RecordWritable {
 
-	@SuppressWarnings({
-		"java:S115" // Match AssertionUtils arg-name style used throughout Juneau.
-	})
 	private static final String ARG_w = "w";
 
 	/**
@@ -162,7 +162,9 @@ public class SseSerializer extends WriterSerializer {
 	 * @param comment The comment text. {@code null} is treated as an empty string.
 	 * @throws IOException If a problem occurred writing to the underlying stream.
 	 */
-	@SuppressWarnings({ "java:S2095", "resource" }) // Writer ownership is the caller's; we only write/flush.
+	@SuppressWarnings({
+		"java:S2095" // Writer ownership is the caller's; we only write/flush.
+	})
 	public static void writeComment(Writer w, String comment) throws IOException {
 		assertArgNotNull(ARG_w, w);
 		var c = comment == null ? "" : comment;
@@ -170,5 +172,28 @@ public class SseSerializer extends WriterSerializer {
 			w.write(": " + line + "\n");
 		w.write("\n");
 		w.flush();
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link SseSerializerSession#serializeRecords(Object)}.
+	 * Callers that need request-derived configuration should call {@link #createSession()} and
+	 * invoke {@link SseSerializerSession#serializeRecords(Object)} on the built session instead.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

@@ -71,6 +71,9 @@ class PartBeanMeta_Test extends TestBase {
 	public static class A5 {}
 
 	public static class A6 {
+		@SuppressWarnings({
+			"unused" // Throwing fixture constructor must keep the (name, value) signature; args are intentionally unused.
+		})
 		public A6(String name, Object value) {
 			throw new RuntimeException("oops");
 		}

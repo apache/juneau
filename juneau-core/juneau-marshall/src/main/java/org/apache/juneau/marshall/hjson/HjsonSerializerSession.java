@@ -30,6 +30,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for serializing objects to Hjson format.
@@ -38,7 +39,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"resource", "java:S110", "java:S115", "java:S3776", "java:S6541",
 	"rawtypes", "unchecked"
 })
-public class HjsonSerializerSession extends WriterSerializerSession {
+public class HjsonSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -75,6 +76,16 @@ public class HjsonSerializerSession extends WriterSerializerSession {
 	protected HjsonSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
+	}
+
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	protected final HjsonWriter getHjsonWriter(SerializerPipe out) {

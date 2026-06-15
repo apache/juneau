@@ -123,7 +123,8 @@ import org.junit.jupiter.api.extension.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S3011" // setAccessible(true) is required to read package-private/private @TestBean members on user test classes
+	"java:S3011", // setAccessible(true) is required to read package-private/private @TestBean members on user test classes
+	"resource"   // BeanStore lookups return Closeables owned by the JUnit lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCallback, BeforeEachCallback,
 		AfterEachCallback, ParameterResolver {

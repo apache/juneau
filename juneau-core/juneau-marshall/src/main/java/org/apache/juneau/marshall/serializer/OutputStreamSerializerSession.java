@@ -43,7 +43,8 @@ import org.apache.juneau.marshall.*;
  */
 @SuppressWarnings({
 	"java:S110", // Deep inheritance inherent to the serializer/parser session hierarchy
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class OutputStreamSerializerSession extends SerializerSession {
 

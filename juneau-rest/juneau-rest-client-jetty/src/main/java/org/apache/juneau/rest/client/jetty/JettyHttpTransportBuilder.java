@@ -36,6 +36,9 @@ import org.eclipse.jetty.client.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Builder methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
+})
 public final class JettyHttpTransportBuilder {
 
 	HttpClient httpClient;

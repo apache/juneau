@@ -55,6 +55,9 @@ import jakarta.servlet.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // beanStore lifetime is managed by the returned Microservice; not an independent resource.
+})
 public final class JettyMicroservice {
 
 	private JettyMicroservice() {}
@@ -98,8 +101,7 @@ public final class JettyMicroservice {
 	 * @throws Exception Error occurred during bootstrap.
 	 */
 	@SuppressWarnings({
-		"java:S112", // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
-		"resource"   // beanStore lifetime is managed by the returned Microservice; not an independent resource.
+		"java:S112" // throws Exception intentional - mirrors Microservice.start() lifecycle contract.
 	})
 	public static Microservice run(String[] args, Servlet rootServlet, boolean startConsole) throws Exception {
 		var beanStore = new BasicBeanStore();

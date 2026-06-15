@@ -38,6 +38,9 @@ import org.junit.jupiter.api.*;
  * 		{@code beforeEach}/{@code afterEach} lifecycle.
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Bean stores/overlays are Closeables whose lifecycle is owned by the extension/test; Eclipse JDT @Owning warning is by design.
+})
 class JuneauBeanStoreExtension_OverlayMode_Test extends TestBase {
 
 	interface Svc {

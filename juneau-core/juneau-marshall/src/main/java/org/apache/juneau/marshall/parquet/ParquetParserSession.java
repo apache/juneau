@@ -28,6 +28,7 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for {@link ParquetParser}.
@@ -38,9 +39,10 @@ import org.apache.juneau.marshall.parser.*;
 	"java:S2583", // parquetDebug() is runtime-configurable via setDebugEnabled/-Djuneau.parquet.debug
 	"java:S3776",
 	"java:S6541", // Brain Method: Parquet parsing/serialization flows are inherently branchy
-	"java:S1192"  // Duplicated literals (.list.element, root.list.element., value) are schema keys; constants would obscure
+	"java:S1192", // Duplicated literals (.list.element, root.list.element., value) are schema keys; constants would obscure
+	"resource"    // RecordReader returned by RecordAdapter is a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
-public class ParquetParserSession extends InputStreamParserSession {
+public class ParquetParserSession extends InputStreamParserSession implements RecordReadable, ArrayRecordReadable {
 
 	private static final byte[] MAGIC = "PAR1".getBytes(StandardCharsets.UTF_8);
 	private static final String ARG_ctx = "ctx";
@@ -110,6 +112,65 @@ public class ParquetParserSession extends InputStreamParserSession {
 		super(builder);
 		ctx = builder.ctx;
 	}
+
+	/**
+	 * Opens a whole-value pull-parser cursor over a Parquet document, bound to this live session.
+	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
+	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordReader} for Parquet, bound to this live session.  Calls
+	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
+	 *
+	 * <h5 class='section'>Why this stays buffered (not O(1) streaming):</h5>
+	 * <p>
+	 * Although a Parquet file is logically row-shaped, it is <b>not</b> a forward, element-at-a-time
+	 * wire format.  Its metadata footer (schema + row-group/column-chunk offsets) lives at the
+	 * <b>end</b> of the file, so a reader must seek to the tail before it can interpret any row, and
+	 * values are stored <b>column-major</b> &mdash; reconstructing one logical record requires
+	 * reading one page from every column chunk.  Both properties force whole-file (or at minimum
+	 * whole-row-group) buffering; a true O(1)-in-rows cursor is not achievable over the current
+	 * single-row-group in-memory decoder.  Left buffered by design &mdash; see {@code TODO-175ab}
+	 * Item 3.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return RecordAdapter.arrayReader(this, input);
+	}
+
+	/**
+	 * The Parquet record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The Parquet array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * <p>
+	 * Parquet's end-of-file metadata footer and column-major value layout require whole-file
+	 * buffering before any record can be reconstructed, so genuine element-at-a-time streaming is
+	 * not feasible here; see {@link #parseArrayRecords(Object)} for the full rationale.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 
 	@Override /* InputStreamParserSession */
 	public boolean hasNativeBytes() {

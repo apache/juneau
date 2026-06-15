@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.csv;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -25,6 +26,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses CSV (Comma Separated Values) input into Java objects.
@@ -74,9 +76,10 @@ import org.apache.juneau.marshall.parser.*;
  *
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class CsvParser extends ReaderParser implements CsvMetaProvider {
+public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordReadable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
@@ -262,4 +265,32 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider {
 
 	@Override /* Overridden from Context */
 	public CsvParserSession getSession() { return createSession().build(); }
+
+	/**
+	 * Convenience delegator that opens a {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * CSV is naturally row-oriented &mdash; each row becomes one record &mdash; but the current cursor
+	 * is buffered (the full row list is materialized at parse); a streaming implementation is a Phase 3b
+	 * deferred item, so {@link #isRecordStreaming()} returns <jk>false</jk>.
+	 *
+	 * <p>
+	 * The real implementation lives on {@link CsvParserSession#parseRecords(Object)}.  Callers that need
+	 * request-derived configuration (locale, timezone, schema, swaps) should call {@link #createSession()}
+	 * and invoke {@link CsvParserSession#parseRecords(Object)} on the built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
 }

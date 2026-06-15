@@ -37,7 +37,8 @@ import org.junit.jupiter.api.*;
 	"unchecked", // Parser returns Object; cast to Map/List in tests
 	"unused",    // Exception parameter intentionally unused in catch block; only the fact of the exception matters.
 	"java:S125", // Commented-out code is retained as historical reference / future re-enable candidate.
-	"java:S5976" // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"java:S5976", // Separate test methods preferred over parameterized for clarity and independent failure reporting.
+	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
 class HoconParserSession_Test extends TestBase {
 
@@ -60,7 +61,6 @@ class HoconParserSession_Test extends TestBase {
 		assertNull(m);
 	}
 
-	@SuppressWarnings("resource")
 	@Test
 	void a03_ioExceptionFromReader() {
 		// Triggers the catch (IOException e) in doParse → wraps in ParseException.

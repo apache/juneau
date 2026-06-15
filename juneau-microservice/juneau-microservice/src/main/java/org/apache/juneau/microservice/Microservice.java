@@ -703,7 +703,6 @@ public class Microservice implements ConfigEventListener {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	@SuppressWarnings({
-		"resource", // Resources are managed by caller
 		"java:S3776" // Cognitive complexity acceptable for microservice initialization
 	})
 	protected Microservice(Builder builder) throws IOException, ParseException {
@@ -1254,9 +1253,6 @@ public class Microservice implements ConfigEventListener {
 	 * @param messageKey The message key.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	@SuppressWarnings({
-		"resource" // Resource is managed by caller
-	})
 	public void out(Messages mb, String messageKey, Object...args) {
 		var msg = mb.getString(messageKey, args);
 		if (consoleEnabled)

@@ -118,4 +118,5 @@ public class JsonlParser extends JsonParser {
 	public JsonlParserSession.Builder createSession() {
 		return JsonlParserSession.create(this);
 	}
+
 }

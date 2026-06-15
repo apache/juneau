@@ -34,6 +34,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -49,8 +50,9 @@ import org.apache.juneau.marshall.swap.*;
 	"java:S115", // Constants use UPPER_snakeCase convention (e.g., ARG_ctx)
 	"java:S3776", // Cognitive complexity acceptable for doSerialize, formatForCsvCell
 	"java:S6541", // Brain method acceptable for doSerialize, formatForCsvCell
+	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
-public class CsvSerializerSession extends WriterSerializerSession {
+public class CsvSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	// Property name constants
 	private static final String PROP_byteArrayFormat = "byteArrayFormat";
@@ -175,6 +177,16 @@ public class CsvSerializerSession extends WriterSerializerSession {
 		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
 	}
 
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.arrayWriter(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
+
 	/**
 	 * Applies any registered object swap to the specified value.
 	 *
@@ -216,8 +228,7 @@ public class CsvSerializerSession extends WriterSerializerSession {
 
 	@SuppressWarnings({
 		"rawtypes", // Raw types necessary for generic type handling
-		"unchecked", // Type erasure requires unchecked casts
-		"resource", // w is closed by try-with-resources; lambdas capture it
+		"unchecked" // Type erasure requires unchecked casts
 	})
 	@Override /* Overridden from SerializerSession */
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {

@@ -40,6 +40,9 @@ import jakarta.servlet.http.*;
  * mount paths fail fast.
  */
 @org.apache.juneau.testing.annotations.TomcatMicroserviceTest
+@SuppressWarnings({
+	"resource" // Microservice/bean-store lookups return Closeables whose lifecycle is owned by the test; Eclipse JDT @Owning warning is by design.
+})
 class TomcatConfiguration_Test extends TestBase {
 
 	private static Microservice create(Class<?>... configurations) throws Exception {

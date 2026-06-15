@@ -32,6 +32,7 @@ import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.soap.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parent class for all Juneau serializers.
@@ -71,7 +72,8 @@ import org.apache.juneau.marshall.soap.*;
  */
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase convention
-	"rawtypes"
+	"rawtypes",
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class Serializer extends MarshallingTraverseContext {
 
@@ -247,6 +249,12 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
 		 * </p>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods do not emit <c>"_type"</c>;
+		 * however this setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * when walking a bean.
+		 *
 		 * @return This object.
 		 */
 		public SELF addBeanTypes() {
@@ -302,6 +310,12 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<jc>// Will contain:  {"_type":"mybean","foo":"bar"}</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods do not emit <c>"_type"</c>;
+		 * however this setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * for the root value.
 		 *
 		 * @return This object.
 		 */
@@ -392,6 +406,12 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods always emit what the caller
+		 * asks for; however this setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * during a bean walk.
+		 *
 		 * @return This object.
 		 */
 		public SELF keepNullProperties() {
@@ -451,6 +471,10 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	}
 		 * </p>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * &mdash; listeners are POJO-level observers with no token-layer analog.
+		 *
 		 * @param value
 		 * 	The new value for this property.
 		 * 	<br>Can be <jk>null</jk> (no listener will be used, listener methods will not be called).
@@ -497,6 +521,12 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myArray</jv>);
 		 * </p>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods emit elements in the order the
+		 * caller emits them.  This setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * when walking a {@link Collection} or array.
+		 *
 		 * @return This object.
 		 */
 		public SELF sortCollections() {
@@ -537,6 +567,12 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<jc>// Produces {"bar":2,"baz":3,"foo":1}</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jv>myMap</jv>);
 		 * </p>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods emit map / bean entries in the
+		 * order the caller emits them.  This setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * when walking a {@link Map} or bean.
 		 *
 		 * @return This object.
 		 */
@@ -587,6 +623,13 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods emit what the caller asks for.
+		 * This setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * during a bean walk &mdash; bean / map fields whose value is an empty collection or array
+		 * are skipped.
+		 *
 		 * @return This object.
 		 */
 		public SELF trimEmptyCollections() {
@@ -633,6 +676,12 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<jc>// Produces {}</jc>
 		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
 		 * </p>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods emit what the caller asks for.
+		 * This setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * during a bean walk &mdash; bean / map fields whose value is an empty map are skipped.
 		 *
 		 * @return This object.
 		 */
@@ -725,6 +774,10 @@ public class Serializer extends MarshallingTraverseContext {
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
 		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * &mdash; URI rewriting is a databind concern; the token layer emits string values verbatim.
+		 *
 		 * @param value The new value for this property.
 		 * 	<br>Can be <jk>null</jk> (defaults to <c>UriContext.DEFAULT</c>).
 		 * @return This object.
@@ -758,6 +811,10 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * &mdash; URI rewriting is a databind concern.
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -796,6 +853,10 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <h5 class='section'>See Also:</h5><ul>
 		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallingUris">URIs</a>
 		 * </ul>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenWritable#serializeTokens(Object) serializeTokens}
+		 * &mdash; URI rewriting is a databind concern.
 		 *
 		 * @param value
 		 * 	The new value for this property.

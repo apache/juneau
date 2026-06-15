@@ -27,6 +27,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -45,8 +46,9 @@ import org.apache.juneau.marshall.swap.*;
 	"rawtypes", // Raw types necessary for generic type handling
 	"unchecked", // Type erasure requires unchecked casts
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource"  // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class MsgPackParserSession extends InputStreamParserSession {
+public class MsgPackParserSession extends InputStreamParserSession implements TokenReadable, ArrayRecordReadable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -93,15 +95,57 @@ public class MsgPackParserSession extends InputStreamParserSession {
 		super(builder);
 	}
 
+	/**
+	 * Opens a low-level pull-parser cursor over a MessagePack document, bound to this live session.
+	 *
+	 * <h5 class='section'>Builder properties honored:</h5>
+	 * <c>autoCloseStreams</c>, <c>unbuffered</c>.
+	 *
+	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <c>listener</c>, <c>debugOutputLines</c>, <c>consumes</c>, swaps, {@code @Schema}.
+	 *
+	 * @param input The input.
+	 * @return A new {@link MsgPackTokenReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@SuppressWarnings({
+		"java:S2095" // ParserPipe lifecycle is transferred to the returned MsgPackTokenReader, which closes it via its own close(); the caller owns the cursor via try-with-resources.
+	})
+	@Override /* TokenReadable */
+	public TokenReader parseTokens(Object input) throws IOException {
+		var pipe = new ParserPipe(input, isDebug(), isAutoCloseStreams(), isUnbuffered(), null);
+		return new MsgPackTokenReader(pipe, this);
+	}
+
+	/**
+	 * Streaming array-element {@link RecordReader} backed by {@link MsgPackTokenReader}.
+	 *
+	 * <p>
+	 * Memory is O(1) in the array length &mdash; the wrapper opens the outer MessagePack array via
+	 * the token cursor and binds one element at a time, exactly mirroring the CBOR cursor.  The
+	 * returned cursor reports {@link RecordReader#isStreaming()} == <jk>true</jk>.
+	 *
+	 * @param input The input.
+	 * @return A new element-streamed {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		try {
+			return StreamingArrayRecord.reader(parseTokens(input));
+		} catch (ParseException e) {
+			throw new IOException(e);
+		}
+	}
+
 	/*
 	 * Workhorse method.
 	 */
 	@SuppressWarnings({
-		"resource",   // is is caller-owned; this method does not close it
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541"  // Single-threaded session contexts do not require synchronization
 	})
-	private <T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	<T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();

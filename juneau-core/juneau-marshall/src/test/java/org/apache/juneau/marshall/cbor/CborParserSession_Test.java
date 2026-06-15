@@ -365,10 +365,14 @@ class CborParserSession_Test extends TestBase {
 	}
 
 	@Test
-	void k02_indefiniteArrayThrows() {
-		// 0x9F = indefinite-length array marker. Spec stop-byte is 0xFF.
-		// Per CborInputStream.readArgument, additionalInfo==31 throws "not supported".
+	void k02_indefiniteArrayParses() throws Exception {
+		// 0x9F = indefinite-length array marker, 0xFF = BREAK (stop) byte.
+		// Indefinite-length encoding is supported via the BREAK-aware container loop in
+		// CborParserSession.shouldContinueContainer (added with the public token-streaming surface).
 		var b = fromHex("9F0102FF");
-		assertThrows(Exception.class, () -> CborParser.DEFAULT.parse(b, JsonList.class));
+		var list = CborParser.DEFAULT.parse(b, JsonList.class);
+		assertEquals(2, list.size());
+		assertEquals(1L, ((Number) list.get(0)).longValue());
+		assertEquals(2L, ((Number) list.get(1)).longValue());
 	}
 }

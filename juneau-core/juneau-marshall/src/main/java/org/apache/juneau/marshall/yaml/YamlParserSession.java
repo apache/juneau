@@ -31,6 +31,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -48,9 +49,9 @@ import org.apache.juneau.marshall.swap.*;
 	"java:S3626", // Redundant jump acceptable for state machine clarity
 	"unchecked",
 	"rawtypes",
-	"resource"
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class YamlParserSession extends ReaderParserSession {
+public class YamlParserSession extends ReaderParserSession implements RecordReadable, ArrayRecordReadable {
 
 	/**
 	 * Builder class.
@@ -109,6 +110,63 @@ public class YamlParserSession extends ReaderParserSession {
 			return parseAnything(type, r, getOuter(), null);
 		}
 	}
+
+	/**
+	 * Opens a whole-value pull-parser cursor over a YAML document, bound to this live session.
+	 * {@link RecordReader#read(Class) read(...)} delegates to the polymorphic
+	 * {@link ParserSession#parse(Object, Class)} entry point.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	/**
+	 * Buffered array-element {@link RecordReader} for YAML, bound to this live session.  Calls
+	 * {@code parse(input, List.class, Object.class)} once and iterates the result.
+	 *
+	 * <h5 class='section'>Streaming status:</h5>
+	 * <p>
+	 * A top-level YAML block sequence ({@code - elem} per line) <i>is</i> forward-readable in
+	 * principle, so true element-at-a-time streaming is <b>feasible</b> here (unlike Parquet/BSON).
+	 * It is left buffered for now: Juneau's YAML reader is a single hand-written indentation state
+	 * machine ({@code parseBlockSequence}/{@code parseFlowSequence}) whose per-element advance and
+	 * dedent bookkeeping are not currently exposed as a pull cursor, and extracting that safely is a
+	 * non-trivial parser refactor with real regression surface.  Per {@code TODO-175ab} Item 3 this
+	 * is demand-driven &mdash; convert when a large-YAML-array use case justifies the refactor.
+	 *
+	 * @param input The input.
+	 * @return A buffered {@link RecordReader}.
+	 * @throws IOException If a problem occurred reading the input.
+	 */
+	@Override /* ArrayRecordReadable */
+	public RecordReader parseArrayRecords(Object input) throws IOException {
+		return RecordAdapter.arrayReader(this, input);
+	}
+
+	/**
+	 * The YAML record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() { return false; }
+
+	/**
+	 * The YAML array-record cursor is buffered/{@link RecordAdapter}-backed, not O(1) streaming.
+	 *
+	 * <p>
+	 * Genuine streaming is feasible for YAML block sequences but deferred (demand-driven) pending a
+	 * pull-cursor refactor of the indentation state machine; see {@link #parseArrayRecords(Object)}.
+	 *
+	 * @return Always <jk>false</jk>.
+	 */
+	@Override /* ArrayRecordReadable */
+	public boolean isArrayRecordStreaming() { return false; }
 
 	@Override /* Overridden from ReaderParserSession */
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws IOException, ParseException, ExecutableException {

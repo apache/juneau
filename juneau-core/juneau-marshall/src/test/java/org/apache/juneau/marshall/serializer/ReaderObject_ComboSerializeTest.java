@@ -29,6 +29,9 @@ import org.apache.juneau.*;
  * Verifies that Reader and InputStream objects are serialized correctly.
  * Note that these are one-way serializations and you're not guaranteed to produce parsable output.
  */
+@SuppressWarnings({
+	"resource" // Reader/InputStream test fixtures are intentionally not closed; they wrap in-memory buffers with no OS resources.
+})
 public class ReaderObject_ComboSerializeTest extends ComboSerializeTest_Base {
 
 	private static <T> ComboSerialize_Tester.Builder<T> tester(int index, String label, Supplier<T> bean) {

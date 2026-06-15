@@ -42,6 +42,9 @@ import org.junit.jupiter.api.*;
  * classpath); this negative test cannot live there because the module's presence auto-activates the
  * processor for every resource. See {@code FINISHED-119}/{@code FINISHED-120} for the opt-in design.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures are intentionally held/unassigned; lifecycle is managed by the test framework.
+})
 class ReactiveOptIn_BareServer_Test {
 
 	public static final class Pojo {
@@ -68,14 +71,8 @@ class ReactiveOptIn_BareServer_Test {
 		}
 	}
 
-	@SuppressWarnings({
-		"resource"  // Static test client; intentionally held for the test class lifetime.
-	})
 	private static final MockRestClient CA = MockRestClient.buildLax(A.class);
 
-	@SuppressWarnings({
-		"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
-	})
 	@Test void a01_bareServer_doesNotProcessFlowPublisherReactively() throws Exception {
 		String content;
 		try (var req = CA.get("/flux")) {

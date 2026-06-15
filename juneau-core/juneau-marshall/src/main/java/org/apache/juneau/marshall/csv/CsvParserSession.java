@@ -27,6 +27,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -55,9 +56,10 @@ import org.apache.juneau.marshall.swap.*;
 	"unchecked", // Type erasure requires unchecked casts in parse logic
 	"rawtypes",  // Raw types necessary for generic Map/List handling
 	"java:S3776", // Cognitive complexity acceptable for CSV parse logic; branching is inherent to format
-	"java:S6541"  // Brain method acceptable for doParse; CSV parse flow is inherently sequential
+	"java:S6541", // Brain method acceptable for doParse; CSV parse flow is inherently sequential
+	"resource"    // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class CsvParserSession extends ReaderParserSession {
+public class CsvParserSession extends ReaderParserSession implements RecordReadable {
 
 	private final CsvByteArrayCellFormat byteArrayFormat;
 	private final boolean allowNestedStructures;
@@ -111,6 +113,16 @@ public class CsvParserSession extends ReaderParserSession {
 		byteArrayFormat = builder.byteArrayFormat;
 		allowNestedStructures = builder.allowNestedStructures;
 		nullValue = builder.nullValue != null ? builder.nullValue : "<NULL>";
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.arrayReader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override /* Overridden from ParserSession */

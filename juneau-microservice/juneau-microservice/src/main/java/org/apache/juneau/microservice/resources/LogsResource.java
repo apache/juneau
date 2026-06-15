@@ -338,9 +338,8 @@ public class LogsResource extends BasicRestServlet {
 		description="View the contents of a log file."
 	)
 	@SuppressWarnings({
-		"resource", // Resource management handled externally
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S107", // Method has many parameters; acceptable for builder/configuration methods
+		"java:S107" // Method has many parameters; acceptable for builder/configuration methods
 	})
 	public void viewFile(
 			RestResponse res,

@@ -73,11 +73,11 @@ import org.apache.juneau.rest.client.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Eclipse resource analysis: client is caller-owned, not closed by this holder
+})
 public final class RemoteClient {
 
-	@SuppressWarnings({
-		"resource" // Eclipse resource analysis: client is caller-owned, not closed by this holder
-	})
 	private final RestClient client;
 
 	/**
@@ -85,9 +85,6 @@ public final class RemoteClient {
 	 *
 	 * @param client The underlying REST client. Must not be <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // RestClient is owned by caller; this holder must not close it
-	})
 	public RemoteClient(RestClient client) {
 		this.client = assertArgNotNull("client", client);
 	}

@@ -77,7 +77,8 @@ import jakarta.servlet.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., KEY_SERVLET_CONTEXT_HANDLER)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., KEY_SERVLET_CONTEXT_HANDLER)
+	"resource" // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
 })
 public class JettyServerComponent implements MicroserviceListener {
 
@@ -187,8 +188,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for server creation logic
 		"java:S1141", // Nested try blocks scope checked-exception translation tightly to single call sites
-		"java:S6541", // Brain Method acceptable for server startup wiring logic
-		"resource"    // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
+		"java:S6541"  // Brain Method acceptable for server startup wiring logic
 	})
 	public void onStart(Microservice ms) {
 		try {
@@ -318,9 +318,6 @@ public class JettyServerComponent implements MicroserviceListener {
 	}
 
 	@Override /* Overridden from MicroserviceListener */
-	@SuppressWarnings({
-		"resource" // ms.getBeanStore() is owned by the microservice lifecycle; do not close here.
-	})
 	public void onStop(Microservice ms) {
 		final Logger logger = ms.getLogger();
 		// Flip readiness out of service BEFORE the connector stops so /readyz returns 503 and the load balancer /

@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link SseParser}.
@@ -37,13 +38,12 @@ import org.apache.juneau.marshall.parser.*;
  */
 @SuppressWarnings({
 	"java:S110",   // Inheritance depth acceptable for session hierarchy
-	"unchecked"    // Type erasure: SseEvent/List<SseEvent> returned via Object cast
+	"java:S115",   // Match AssertionUtils arg-name style used throughout Juneau.
+	"unchecked",   // Type erasure: SseEvent/List<SseEvent> returned via Object cast
+	"resource"     // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class SseParserSession extends ReaderParserSession {
+public class SseParserSession extends ReaderParserSession implements RecordReadable {
 
-	@SuppressWarnings({
-		"java:S115" // Match AssertionUtils arg-name style used throughout Juneau.
-	})
 	private static final String ARG_ctx = "ctx";
 
 	/**
@@ -85,8 +85,20 @@ public class SseParserSession extends ReaderParserSession {
 		super(builder);
 	}
 
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.arrayReader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
+	}
+
 	@Override /* Overridden from ParserSession */
-	@SuppressWarnings({ "java:S2095", "resource" }) // Reader is owned by ParserPipe and closed via SseEventReader in try-with-resources.
+	@SuppressWarnings({
+		"java:S2095" // Reader is owned by ParserPipe and closed via SseEventReader in try-with-resources.
+	})
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		var r = pipe.getReader();
 		if (r == null)

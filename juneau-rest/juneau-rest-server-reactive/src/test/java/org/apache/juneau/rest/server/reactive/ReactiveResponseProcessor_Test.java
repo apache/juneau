@@ -41,6 +41,9 @@ import org.junit.jupiter.api.*;
  * and block until the publisher terminates, writing frames as they arrive) and buffering exercises the
  * {@code AsyncResponseProcessor} synchronous fallback.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class ReactiveResponseProcessor_Test extends TestBase {
 
 	public static final class Pojo {

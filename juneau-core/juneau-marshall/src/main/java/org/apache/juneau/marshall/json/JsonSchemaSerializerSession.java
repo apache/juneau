@@ -22,6 +22,7 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.jsonschema.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link JsonSchemaSerializer}.
@@ -35,7 +36,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for JsonSchemaSerializerSession hierarchy
+	"java:S110", // Inheritance depth acceptable for JsonSchemaSerializerSession hierarchy
+	"resource"   // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
 public class JsonSchemaSerializerSession extends JsonSerializerSession {
 
@@ -95,6 +97,55 @@ public class JsonSchemaSerializerSession extends JsonSerializerSession {
 			throw new SerializeException(e);
 		}
 	}
+
+	/**
+	 * Opens a low-level push generator that emits raw JSON (NOT schema) one structural event at a
+	 * time, with the {@link TokenWriter#object(Object)} POJO bridge disabled (the walker would
+	 * emit the bean's own JSON, not its JSON Schema).  Use {@link #serializeRecords(Object)} or
+	 * {@link #serialize(Object, Object)} for schema generation.
+	 *
+	 * @param output The output.
+	 * @return A new {@link JsonTokenWriter} with {@code object(...)} disabled.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		var walk = new PojoWalker.Options(
+			isKeepNullProperties(),
+			isTrimEmptyMaps(),
+			isTrimEmptyCollections(),
+			isSortMaps(),
+			isSortCollections(),
+			isTrimStrings(),
+			getMarshallingContext());
+		var settings = new JsonTokenWriter.Settings(
+			isUseWhitespace(),
+			getMaxIndent(),
+			getQuoteChar(),
+			isEscapeSolidus(),
+			isTrimStrings(),
+			false /* simpleAttrs */,
+			walk,
+			true /* disableObject — schema-generation can't be expressed via the POJO walker */);
+		return JsonTokenWriter.forOutput(output, settings);
+	}
+
+	/**
+	 * Returns a record writer that emits the JSON Schema for each value passed to
+	 * {@link RecordWriter#write(Object) write(...)} (delegates to this session's
+	 * {@link #serialize(Object, Object)}).
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return RecordAdapter.writer(this, output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() { return false; }
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.

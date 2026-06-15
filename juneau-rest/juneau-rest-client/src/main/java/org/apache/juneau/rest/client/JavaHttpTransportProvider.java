@@ -31,6 +31,9 @@ package org.apache.juneau.rest.client;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Not owned here; lifecycle is managed by the surrounding context
+})
 public final class JavaHttpTransportProvider implements HttpTransportProvider {
 
 	@Override /* HttpTransportProvider */
@@ -49,9 +52,6 @@ public final class JavaHttpTransportProvider implements HttpTransportProvider {
 	}
 
 	@Override /* HttpTransportProvider */
-	@SuppressWarnings({
-		"resource" // Not owned here; lifecycle is managed by the surrounding context
-	})
 	public HttpTransport create() {
 		return JavaHttpTransport.create();
 	}

@@ -80,6 +80,9 @@ import org.apache.juneau.rest.server.view.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
+})
 public class JspViewRenderer implements ViewRenderer {
 
 	/**

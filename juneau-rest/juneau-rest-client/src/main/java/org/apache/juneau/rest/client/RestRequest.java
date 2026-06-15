@@ -323,7 +323,6 @@ public final class RestRequest {
 	 * @throws RestCallException If the response could not be processed.
 	 */
 	@SuppressWarnings({
-		"resource", // response is returned to caller who must close it; transport is owned by client
 		"java:S1130" // RestCallException retained for public-API/source stability: interceptors declare 'throws Exception', so a RestCallException they raise is caught by the precise-rethrow multi-catch below and propagated unchanged; Sonar's flow analysis misses this path. Removing the throws would break callers that catch RestCallException (a sibling checked exception of TransportException).
 	})
 	public RestResponse run() throws TransportException, RestCallException {

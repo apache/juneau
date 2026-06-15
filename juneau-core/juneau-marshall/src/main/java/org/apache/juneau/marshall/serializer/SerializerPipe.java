@@ -49,6 +49,9 @@ import org.apache.juneau.commons.utils.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // outputStream/writer wrap the caller-supplied output; their lifecycle is managed here via close() honoring the autoClose flag.
+})
 public class SerializerPipe implements Closeable {
 
 	private final Object output;
@@ -117,9 +120,6 @@ public class SerializerPipe implements Closeable {
 	 * 	the underlying stream.
 	 * @throws IOException If object could not be converted to an output stream.
 	 */
-	@SuppressWarnings({
-		"resource" // FileOutputStream is owned by BufferedOutputStream; BufferedOutputStream constructor never throws
-	})
 	public OutputStream getOutputStream() throws IOException {
 		if (output == null)
 			throw ioex("Output cannot be null.");
@@ -161,9 +161,6 @@ public class SerializerPipe implements Closeable {
 	 * 	the underlying writer.
 	 * @throws SerializeException If object could not be converted to a writer.
 	 */
-	@SuppressWarnings({
-		"resource" // FileOutputStream and BufferedOutputStream are owned by OutputStreamWriter; neither wrapping constructor throws
-	})
 	public Writer getWriter() throws SerializeException {
 		if (output == null)
 			throw new SerializeException("Output cannot be null.");

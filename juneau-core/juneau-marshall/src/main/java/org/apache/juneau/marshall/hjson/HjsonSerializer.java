@@ -18,12 +18,14 @@ package org.apache.juneau.marshall.hjson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -112,9 +114,10 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115"
+	"java:S110", "java:S115",
+	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvider {
+public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvider, RecordWritable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -329,5 +332,28 @@ public class HjsonSerializer extends WriterSerializer implements HjsonMetaProvid
 			.a("useQuotelessKeys", useQuotelessKeys)
 			.a("omitRootBraces", omitRootBraces)
 			.a("useNewlineSeparators", useNewlineSeparators);
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link HjsonSerializerSession#serializeRecords(Object)}.
+	 * Callers that need request-derived configuration should call {@link #createSession()} and
+	 * invoke {@link HjsonSerializerSession#serializeRecords(Object)} on the built session instead.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* RecordWritable */
+	public RecordWriter serializeRecords(Object output) throws IOException {
+		return ((RecordWritable) getSession()).serializeRecords(output);
+	}
+
+	@Override /* RecordWritable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

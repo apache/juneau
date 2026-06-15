@@ -187,7 +187,8 @@ import org.apache.juneau.commons.reflect.*;
  * @param <T> The bean type being created.
  */
 @SuppressWarnings({
-	"java:S115" // Constants use UPPER_snakeCase convention
+	"java:S115", // Constants use UPPER_snakeCase convention
+	"resource" // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
 })
 public class BeanInstantiator<T> {
 
@@ -471,9 +472,6 @@ public class BeanInstantiator<T> {
 	public static class Builder<T> {
 
 	final BeanStore parentStore;
-	@SuppressWarnings({
-		"resource" // transient build-time scratch store; lifetime is bounded by the Builder itself, no foreign resources are captured
-	})
 	final BasicBeanStore store;
 	final ClassInfoTyped<T> beanType;
 	final NullableReference<List<String>> debug = NullableReference.empty();

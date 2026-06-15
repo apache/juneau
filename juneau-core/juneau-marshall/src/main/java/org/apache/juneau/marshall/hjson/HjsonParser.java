@@ -18,10 +18,13 @@ package org.apache.juneau.marshall.hjson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
+
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses Hjson (Human JSON) text into POJO models.
@@ -116,9 +119,10 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115"
+	"java:S110", "java:S115",
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class HjsonParser extends ReaderParser implements HjsonMetaProvider {
+public class HjsonParser extends ReaderParser implements HjsonMetaProvider, RecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -195,5 +199,29 @@ public class HjsonParser extends ReaderParser implements HjsonMetaProvider {
 	@Override
 	public HjsonClassMeta getHjsonClassMeta(ClassMeta<?> cm) {
 		return hjsonClassMetas.computeIfAbsent(cm, k -> new HjsonClassMeta(k, this));
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link HjsonParserSession#parseRecords(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link HjsonParserSession#parseRecords(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

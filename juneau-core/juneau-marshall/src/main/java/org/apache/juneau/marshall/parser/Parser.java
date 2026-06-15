@@ -35,6 +35,7 @@ import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.objecttools.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.xml.*;
@@ -138,7 +139,8 @@ import org.apache.juneau.marshall.xml.*;
  */
 @SuppressWarnings({
 	"rawtypes",
-	"java:S115" // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
+	"java:S115", // Constants use UPPER_snakeCase convention (e.g., PROP_autoCloseStreams)
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
 public class Parser extends MarshallingContextable {
 
@@ -252,6 +254,10 @@ public class Parser extends MarshallingContextable {
 		/**
 		 * Specifies the media type that this parser consumes.
 		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#parseTokens(Object) parseTokens}
+		 * &mdash; media-type metadata is informational, not behavioral.
+		 *
 		 * @param value The value for this setting.
 		 * 	<br>Can be <jk>null</jk> (treated as empty string, no media types will be specified).
 		 * @return This object.
@@ -287,6 +293,11 @@ public class Parser extends MarshallingContextable {
 		 * 		System.<jsf>err</jsf>.println(<jv>e</jv>.getMessage());  <jc>// Will display 200 lines of the output.</jc>
 		 * 	}
 		 * </p>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#parseTokens(Object) parseTokens}
+		 * &mdash; it controls error-message formatting on the POJO databind path; the cursor uses its own
+		 * exception text.
 		 *
 		 * @param value
 		 * 	The new value for this property.
@@ -362,6 +373,10 @@ public class Parser extends MarshallingContextable {
 		 * 		Json5.<jsf>DEFAULT</jsf>.println(<jv>listener</jv>.<jf>events</jf>);
 		 * 	}
 		 * </p>
+		 *
+		 * <p>
+		 * <b>Token streams:</b> this setting is not honored by {@link TokenReadable#parseTokens(Object) parseTokens}
+		 * &mdash; listeners are POJO-level observers with no token-layer analog.
 		 *
 		 * @param value The new value for this property.
 		 * 	<br>Can be <jk>null</jk>.

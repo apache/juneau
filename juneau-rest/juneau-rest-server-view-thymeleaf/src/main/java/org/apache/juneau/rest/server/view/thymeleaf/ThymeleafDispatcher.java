@@ -52,7 +52,8 @@ import org.thymeleaf.templateresolver.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are Thymeleaf template attribute keys; intentional
+	"java:S1192", // Duplicate string literals are Thymeleaf template attribute keys; intentional
+	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
 })
 public class ThymeleafDispatcher implements RawTemplateDispatcher {
 

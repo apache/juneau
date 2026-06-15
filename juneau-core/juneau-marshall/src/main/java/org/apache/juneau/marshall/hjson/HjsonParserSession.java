@@ -27,6 +27,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session for parsing Hjson format into POJOs.
@@ -36,9 +37,10 @@ import org.apache.juneau.marshall.parser.*;
 	"java:S115",  // ARG_ctx follows project assertion-param naming convention
 	"java:S3776", // Cognitive complexity acceptable for Hjson parse logic
 	"java:S6541", // Acceptable for session implementation
-	"unchecked"   // (T) casts in doParse for generic return type
+	"unchecked",  // (T) casts in doParse for generic return type
+	"resource"    // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class HjsonParserSession extends ReaderParserSession {
+public class HjsonParserSession extends ReaderParserSession implements RecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -69,6 +71,16 @@ public class HjsonParserSession extends ReaderParserSession {
 
 	protected HjsonParserSession(Builder builder) {
 		super(builder);
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override

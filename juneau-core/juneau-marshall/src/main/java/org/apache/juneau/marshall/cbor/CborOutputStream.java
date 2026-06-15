@@ -42,6 +42,9 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // appendXxx(...) methods return this stream for chaining; Eclipse JDT @Owning warning is by design.
+})
 public class CborOutputStream extends OutputStream {
 
 	private final OutputStream os;

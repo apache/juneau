@@ -21,6 +21,9 @@ import java.io.*;
 /**
  * RLE/Bit-Packing Hybrid decoder for definition/repetition levels and booleans.
  */
+@SuppressWarnings({
+	"resource" // in is an in-memory ByteArrayInputStream over level bytes; there is no OS resource to close.
+})
 final class RleBitPackingDecoder {
 
 	private final InputStream in;

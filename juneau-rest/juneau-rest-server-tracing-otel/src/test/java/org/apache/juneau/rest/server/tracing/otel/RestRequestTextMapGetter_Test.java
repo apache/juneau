@@ -31,6 +31,9 @@ import org.junit.jupiter.api.*;
  * {@code @RestOp} handler so that header names, present/absent semantics, and the OpenTelemetry
  * {@code TextMapGetter} contract are all validated against the real request shape.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class RestRequestTextMapGetter_Test extends TestBase {
 
 	private static final AtomicReference<RestRequest> CAPTURED = new AtomicReference<>();

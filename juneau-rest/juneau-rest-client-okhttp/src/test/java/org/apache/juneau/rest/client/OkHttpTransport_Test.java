@@ -33,6 +33,9 @@ import okhttp3.*;
 /**
  * Integration tests for {@link OkHttpTransport} against a real embedded HTTP server.
  */
+@SuppressWarnings({
+	"resource" // Transport/response Closeables are exercised inline; lifecycle is managed by the test/framework, not a real leak.
+})
 class OkHttpTransport_Test {
 
 	private static HttpServer server;

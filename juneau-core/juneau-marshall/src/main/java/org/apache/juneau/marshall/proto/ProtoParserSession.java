@@ -29,6 +29,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.utils.*;
 
 /**
@@ -40,9 +41,10 @@ import org.apache.juneau.marshall.utils.*;
 	"java:S3776", // Cognitive complexity acceptable for parseMessage
 	"java:S6541", // Brain method acceptable for parseMessage
 	"java:S135", // Multiple breaks acceptable in parse loop
-	"java:S115"   // ARG_ prefix follows framework convention
+	"java:S115", // ARG_ prefix follows framework convention
+	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class ProtoParserSession extends ReaderParserSession {
+public class ProtoParserSession extends ReaderParserSession implements RecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 
@@ -73,6 +75,16 @@ public class ProtoParserSession extends ReaderParserSession {
 
 	protected ProtoParserSession(Builder builder) {
 		super(builder);
+	}
+
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return RecordAdapter.reader(this, input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 
 	@Override

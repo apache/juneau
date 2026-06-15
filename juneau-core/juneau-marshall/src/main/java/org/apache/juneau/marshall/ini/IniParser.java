@@ -18,12 +18,14 @@ package org.apache.juneau.marshall.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.time.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Parses INI-formatted text into POJO models.
@@ -87,9 +89,10 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110", "java:S115"
+	"java:S110", "java:S115",
+	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class IniParser extends ReaderParser implements IniMetaProvider {
+public class IniParser extends ReaderParser implements IniMetaProvider, RecordReadable {
 
 	private final java.util.concurrent.ConcurrentHashMap<ClassMeta<?>, IniClassMeta> iniClassMetas = new java.util.concurrent.ConcurrentHashMap<>();
 	private final java.util.concurrent.ConcurrentHashMap<BeanPropertyMeta, IniBeanPropertyMeta> iniBeanPropertyMetas = new java.util.concurrent.ConcurrentHashMap<>();
@@ -167,5 +170,29 @@ public class IniParser extends ReaderParser implements IniMetaProvider {
 	@Override
 	public Builder copy() {
 		return new Builder(this);
+	}
+
+	/**
+	 * Convenience delegator that opens a {@link RecordReader} over the input using
+	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link IniParserSession#parseRecords(Object)}.  Callers
+	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
+	 * {@link #createSession()} and invoke {@link IniParserSession#parseRecords(Object)} on the
+	 * built session instead.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader} cursor.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	@Override /* RecordReadable */
+	public RecordReader parseRecords(Object input) throws IOException {
+		return ((RecordReadable) getSession()).parseRecords(input);
+	}
+
+	@Override /* RecordReadable */
+	public boolean isRecordStreaming() {
+		return false;
 	}
 }

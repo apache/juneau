@@ -30,6 +30,9 @@ import java.net.http.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"resource" // Not owned here; lifecycle is managed by the surrounding context
+})
 public final class JavaHttpTransportBuilder {
 
 	HttpClient httpClient;
@@ -55,9 +58,6 @@ public final class JavaHttpTransportBuilder {
 	 *
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
-	@SuppressWarnings({
-		"resource" // Not owned here; lifecycle is managed by the surrounding context
-	})
 	public JavaHttpTransport build() {
 		return new JavaHttpTransport(this);
 	}

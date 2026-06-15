@@ -51,6 +51,9 @@ import io.opentelemetry.sdk.trace.export.*;
  * {@link MockRestClient}s so the {@link OtelTracerHook} bridge captures the server-started span's
  * context and stashes the rendered headers for the response processor to write.
  */
+@SuppressWarnings({
+	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
+})
 class TraceContextResponseProcessor_Test extends TestBase {
 
 	/** W3C {@code traceparent} value format: {@code version-traceId-spanId-flags}. */

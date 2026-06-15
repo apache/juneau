@@ -66,6 +66,9 @@ import org.thymeleaf.context.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
+})
 public class ThymeleafViewRenderer implements ViewRenderer {
 
 	/** Default {@code Content-Type} applied when the view does not specify one explicitly. */

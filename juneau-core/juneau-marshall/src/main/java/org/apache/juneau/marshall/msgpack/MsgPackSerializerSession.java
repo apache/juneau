@@ -30,6 +30,7 @@ import java.util.function.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * Session object that lives for the duration of a single use of {@link MsgPackSerializer}.
@@ -48,7 +49,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S110",  // Inheritance depth acceptable for serializer session hierarchy
 	"java:S115"   // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 })
-public class MsgPackSerializerSession extends OutputStreamSerializerSession {
+public class MsgPackSerializerSession extends OutputStreamSerializerSession implements TokenWritable, ArrayRecordWritable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -115,6 +116,112 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession {
 	 */
 	protected MsgPackSerializerSession(Builder builder) {
 		super(builder);
+	}
+
+	/**
+	 * Opens a low-level push generator that emits MessagePack one structural event at a time,
+	 * bound to this live session.
+	 *
+	 * <p>
+	 * MsgPack containers are length-prefixed with no indefinite-length encoding, so the writer
+	 * <b>buffers</b> each open container's body bytes until the matching {@code endXxx} call;
+	 * memory cost is O(largest open container).
+	 *
+	 * <h5 class='section'>Builder properties honored:</h5>
+	 * <c>keepNullProperties</c>, <c>trimEmptyMaps</c>, <c>trimEmptyCollections</c>, <c>sortMaps</c>,
+	 * <c>sortCollections</c>, <c>trimStrings</c> &mdash; all flow through to
+	 * {@link TokenWriter#object(Object) object(Object)}.
+	 *
+	 * <h5 class='section'>Builder properties NOT honored:</h5>
+	 * <c>useWhitespace</c>, <c>maxIndent</c>, <c>quoteChar</c>, <c>escapeSolidus</c> (binary
+	 * format); <c>uriContext</c>, <c>uriResolution</c>, <c>uriRelativity</c>, <c>listener</c>.
+	 *
+	 * @param output The output.
+	 * @return A new {@link MsgPackTokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		var walk = new PojoWalker.Options(
+			isKeepNullProperties(),
+			isTrimEmptyMaps(),
+			isTrimEmptyCollections(),
+			isSortMaps(),
+			isSortCollections(),
+			isTrimStrings(),
+			getMarshallingContext());
+		return MsgPackTokenWriter.forOutput(output, new MsgPackTokenWriter.Settings(walk));
+	}
+
+	/**
+	 * Buffered array-element {@link RecordWriter}.  MsgPack's array wire format is
+	 * length-prefixed, so streaming without a known element count requires either buffering
+	 * (this method) or the {@link #serializeArrayRecords(Object, int)} overload that takes a count.
+	 *
+	 * @param output The output.
+	 * @return A buffered {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return RecordAdapter.arrayWriter(this, output);
+	}
+
+	@Override /* ArrayRecordWritable */
+	public boolean isArrayRecordStreaming() { return false; }
+
+	/**
+	 * Streaming array-element {@link RecordWriter} that pre-declares the element count and
+	 * writes each element directly to the output stream &mdash; no per-element buffering.
+	 * The caller must pass exactly {@code expectedCount} {@link RecordWriter#write(Object)}
+	 * calls before {@link RecordWriter#close()}; mismatch throws on close.
+	 *
+	 * @param output The output (must be an {@link OutputStream}).
+	 * @param expectedCount The number of elements that will be written.
+	 * @return A streaming {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output, int expectedCount) throws IOException {
+		if (!(output instanceof OutputStream))
+			throw new IOException("MsgPack streaming arrayRecordWriter requires an OutputStream");
+		var os = (OutputStream) output;
+		var mpos = new MsgPackOutputStream(os);
+		mpos.startArray(expectedCount);
+		return new RecordWriter() {
+			private int written;
+			private boolean closed;
+
+			@Override public RecordWriter write(Object value) throws IOException {
+				if (closed)
+					throw new IllegalStateException("Array stream is closed.");
+				if (written >= expectedCount)
+					throw new IllegalStateException(
+						"Array stream is full; declared " + expectedCount + " elements, attempted to write more.");
+				try {
+					MsgPackSerializerSession.this.serialize(value, os);
+				} catch (SerializeException e) {
+					throw new IOException(e);
+				}
+				written++;
+				return this;
+			}
+			@Override public boolean isStreaming() {
+				return true;
+			}
+			@Override public void flush() throws IOException {
+				os.flush();
+			}
+			@Override public void close() throws IOException {
+				if (closed)
+					return;
+				closed = true;
+				if (written != expectedCount)
+					throw new IOException(
+						"Array stream count mismatch: declared " + expectedCount + " but wrote " + written);
+				os.close();
+			}
+		};
 	}
 
 	/*

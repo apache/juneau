@@ -51,6 +51,9 @@ import com.github.mustachejava.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
+})
 public class MustacheDispatcher implements RawTemplateDispatcher {
 
 	/** Default base path applied when no {@link Builder#basePath(String)} call has been made. */

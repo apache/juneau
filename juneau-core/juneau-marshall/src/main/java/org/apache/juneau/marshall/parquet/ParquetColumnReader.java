@@ -26,6 +26,9 @@ import java.nio.charset.*;
  * Page data layout: 4-byte LE definition levels length, RLE-encoded definition levels, then PLAIN-encoded values.
  * For REQUIRED columns there are no definition levels.
  */
+@SuppressWarnings({
+	"resource" // valueStream is an in-memory ByteArrayInputStream over page bytes; there is no OS resource to close.
+})
 final class ParquetColumnReader {
 
 	private final RleBitPackingDecoder defLevelDecoder;

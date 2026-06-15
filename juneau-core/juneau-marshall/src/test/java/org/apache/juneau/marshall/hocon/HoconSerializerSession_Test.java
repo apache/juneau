@@ -37,7 +37,8 @@ import org.junit.jupiter.api.*;
  * and null-policy variations.
  */
 @SuppressWarnings({
-	"java:S8694" // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+	"java:S8694", // Test data uses literal month ints for date construction; Month enum constants add noise without value.
+	"resource" // Reader/InputStream test fixtures are intentionally not closed; they wrap in-memory buffers with no OS resources.
 })
 class HoconSerializerSession_Test extends TestBase {
 

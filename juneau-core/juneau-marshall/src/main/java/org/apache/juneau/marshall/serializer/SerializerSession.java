@@ -77,7 +77,8 @@ import org.apache.juneau.marshall.utils.*;
 @SuppressWarnings({
 	"java:S115",  // Constants use UPPER_snakeCase convention
 	"rawtypes",   // Raw types necessary for generic type handling throughout serializer session
-	"unchecked"   // Type erasure requires unchecked casts throughout serializer session
+	"unchecked", // Type erasure requires unchecked casts throughout serializer session
+	"resource"   // Internal helpers return Closeables wired into pipe lifecycle; Eclipse JDT @Owning warning is by design.
 })
 public class SerializerSession extends MarshallingTraverseSession {
 

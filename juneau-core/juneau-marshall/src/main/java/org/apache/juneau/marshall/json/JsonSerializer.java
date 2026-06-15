@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.json;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -28,6 +29,7 @@ import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.marshall.swap.*;
 
 /**
@@ -125,8 +127,9 @@ import org.apache.juneau.marshall.swap.*;
 @SuppressWarnings({
 	"java:S110", // Inheritance depth acceptable for this class hierarchy
 	"java:S115", // Constants use UPPER_snakeCase naming convention
+	"resource"   // serializeTokens(...) returns a Closeable owned by the caller; Eclipse JDT @Owning warning is by design.
 })
-public class JsonSerializer extends WriterSerializer implements JsonMetaProvider {
+public class JsonSerializer extends WriterSerializer implements JsonMetaProvider, TokenWritable, ArrayRecordWritable {
 
 	// Property name constants
 	private static final String PROP_addBeanTypesJson = "addBeanTypesJson";
@@ -192,6 +195,12 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		 * <p>
 		 * When present, this value overrides the {@link org.apache.juneau.marshall.serializer.Serializer.Builder#addBeanTypes()} setting and is
 		 * provided to customize the behavior of specific serializers in a {@link SerializerSet}.
+		 *
+		 * <p>
+		 * <b>Token streams:</b> the cursor's raw structural methods do not emit <c>"_type"</c>;
+		 * however this setting IS honored by
+		 * {@link TokenWriter#object(Object) TokenWriter.object(Object)}
+		 * when walking a bean.
 		 *
 		 * @return This object.
 		 */
@@ -393,6 +402,25 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 	public JsonSerializerSession getSession() { return createSession().build(); }
 
 	/**
+	 * Convenience delegator that opens a {@link JsonTokenWriter} over the output using
+	 * <b>default session arguments</b> (mirrors {@link #serialize(Object, Object)}).
+	 *
+	 * <p>
+	 * The real implementation lives on {@link JsonSerializerSession#serializeTokens(Object)}.
+	 * Callers that need request-derived configuration should call {@link #createSession()} and
+	 * invoke {@link JsonSerializerSession#serializeTokens(Object)} on the built session instead.
+	 *
+	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
+	 * 	{@link StringBuilder}.
+	 * @return A new {@link JsonTokenWriter}.
+	 * @throws IOException If the output type is not supported or could not be opened.
+	 */
+	@Override /* TokenWritable */
+	public TokenWriter serializeTokens(Object output) throws IOException {
+		return getSession().serializeTokens(output);
+	}
+
+	/**
 	 * Add <js>"_type"</js> properties when needed.
 	 *
 	 * @see Builder#addBeanTypesJson()
@@ -417,5 +445,19 @@ public class JsonSerializer extends WriterSerializer implements JsonMetaProvider
 		return super.properties()
 			.a(PROP_addBeanTypesJson, addBeanTypesJson)
 			.a(PROP_escapeSolidus, escapeSolidus);
+	}
+
+	/**
+	 * Convenience delegator for the streaming array-element {@link RecordWriter} (uses default
+	 * session args; see {@link #serializeTokens(Object)}).  Real impl on
+	 * {@link JsonSerializerSession#serializeArrayRecords(Object)}.
+	 *
+	 * @param output The output.
+	 * @return A new element-streamed {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	@Override /* ArrayRecordWritable */
+	public RecordWriter serializeArrayRecords(Object output) throws IOException {
+		return getSession().serializeArrayRecords(output);
 	}
 }
