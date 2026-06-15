@@ -772,6 +772,18 @@ const sidebars: SidebarsConfig = {
 							],
 						},
 						{
+							type: 'category',
+							label: '2.50. Token / Record Streaming',
+							collapsed: true,
+							items: [
+								{ type: 'doc', id: 'topics/02.50.01.TokenStreamingBasics', label: '2.50.1. Token-Streaming Basics' },
+								{ type: 'doc', id: 'topics/02.50.02.RecordStreaming', label: '2.50.2. Record Streaming' },
+								{ type: 'doc', id: 'topics/02.50.03.TokenStreaming', label: '2.50.3. Token Streaming' },
+								{ type: 'doc', id: 'topics/02.50.04.ArrayRecordStreaming', label: '2.50.4. Array-Record Streaming' },
+								{ type: 'doc', id: 'topics/02.50.05.RestStreamingIntegration', label: '2.50.5. REST Streaming Integration' },
+							],
+						},
+						{
 							type: 'doc',
 							id: 'topics/02.51.BestPractices',
 							label: '2.51. Best Practices',
