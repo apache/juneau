@@ -275,7 +275,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 	 */
 	@Override /* RecordReadable */
 	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+		return getSession().parseRecords(input);
 	}
 
 	/**
@@ -289,7 +289,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 	 */
 	@Override /* ArrayRecordReadable */
 	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+		return getSession().parseArrayRecords(input);
 	}
 
 	/**

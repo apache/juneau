@@ -166,7 +166,7 @@ class RemoteCursorBinding_Test {
 	void b01_recordStreamBody_record() throws Exception {
 		try (var client = org.apache.juneau.rest.mock.classic.MockRestClient.buildJson(JsonServer.class)) {
 			var api = client.getRemote(JsonClientApi.class);
-			Bean got = api.echo(RecordStreamBody.record(w -> {
+			Bean got = api.echo(RecordStreamBody.records(w -> {
 				try {
 					w.write(new Bean("dave", 99));
 				} catch (Exception e) {

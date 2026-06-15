@@ -381,7 +381,7 @@ class TomlWriter_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("k01_escapeBasicStringCases")
-	void k01_escapeBasicString(String input, String expected) throws Exception {
+	void k01_escapeBasicString(String input, String expected) {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertEquals(expected, w.escapeBasicString(input));
@@ -392,7 +392,7 @@ class TomlWriter_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test
-	void l01_isBareKeyValid() throws Exception {
+	void l01_isBareKeyValid() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertTrue(w.isBareKey("simple"));
@@ -403,7 +403,7 @@ class TomlWriter_Test extends TestBase {
 	}
 
 	@Test
-	void l02_isBareKeyInvalid() throws Exception {
+	void l02_isBareKeyInvalid() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertFalse(w.isBareKey(null));
@@ -531,42 +531,42 @@ class TomlWriter_Test extends TestBase {
 	}
 
 	@Test
-	void m12_chainCr() throws Exception {
+	void m12_chainCr() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.cr(2));
 	}
 
 	@Test
-	void m13_chainCre() throws Exception {
+	void m13_chainCre() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.cre(2));
 	}
 
 	@Test
-	void m14_chainI() throws Exception {
+	void m14_chainI() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.i(2));
 	}
 
 	@Test
-	void m15_chainIe() throws Exception {
+	void m15_chainIe() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.ie(2));
 	}
 
 	@Test
-	void m16_chainNl() throws Exception {
+	void m16_chainNl() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.nl(0));
 	}
 
 	@Test
-	void m17_chainNlIf() throws Exception {
+	void m17_chainNlIf() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.nlIf(true, 0));
@@ -574,21 +574,21 @@ class TomlWriter_Test extends TestBase {
 	}
 
 	@Test
-	void m18_chainQ() throws Exception {
+	void m18_chainQ() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.q());
 	}
 
 	@Test
-	void m19_chainS() throws Exception {
+	void m19_chainS() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.s());
 	}
 
 	@Test
-	void m20_chainSIf() throws Exception {
+	void m20_chainSIf() {
 		var sw = new StringWriter();
 		var w = newWriter(sw, false);
 		assertSame(w, w.sIf(true));

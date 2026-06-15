@@ -543,7 +543,7 @@ public class UonSerializer extends WriterSerializer implements HttpPartSerialize
 	 */
 	@Override /* RecordWritable */
 	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+		return getSession().serializeRecords(output);
 	}
 
 	@Override /* RecordWritable */

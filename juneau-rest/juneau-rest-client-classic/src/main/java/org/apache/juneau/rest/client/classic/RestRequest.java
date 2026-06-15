@@ -2844,17 +2844,15 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {
 		if (serializer == null)
-			throw new RuntimeException("No serializer registered for cursor-streamed request body.");
+			throw illegalArg("No serializer registered for cursor-streamed request body.");
 		try {
 			var consumer = body.getConsumer();
 			var writerKind = body.getWriterKind();
 
 			if (writerKind == TokenWriter.class && !(serializer instanceof TokenWritable))
-				throw new RuntimeException(
-					"Serializer '" + serializer.getClass().getName() + "' does not support the token-writer surface.");
+				throw illegalArg("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
 			if (writerKind == RecordWriter.class && !(serializer instanceof RecordWritable))
-				throw new RuntimeException(
-					"Serializer '" + serializer.getClass().getName() + "' does not support the record-writer surface.");
+				throw illegalArg("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
 
 			var buf = new ByteArrayOutputStream();
 			Object output = serializer.isWriterSerializer()
@@ -2875,7 +2873,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			var contentType2 = ct != null ? ContentType.of(ct.toString()) : ContentType.APPLICATION_OCTET_STREAM;
 			return byteArrayEntity(buf.toByteArray(), getRequestContentType(contentType2));
 		} catch (IOException e) {
-			throw new RuntimeException("I/O error streaming request body.", e);
+			throw rex(e, "I/O error streaming request body.");
 		}
 	}
 }

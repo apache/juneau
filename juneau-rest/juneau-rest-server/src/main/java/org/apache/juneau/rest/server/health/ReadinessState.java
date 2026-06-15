@@ -86,7 +86,9 @@ public final class ReadinessState {
 	 * <p>
 	 * The new state starts {@link #isReady() ready}.
 	 */
-	public ReadinessState() {}
+	public ReadinessState() {
+		// Intentionally empty — the volatile `ready` field defaults to true.
+	}
 
 	/**
 	 * Returns whether this service is currently ready to receive traffic.

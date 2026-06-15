@@ -143,6 +143,8 @@ public abstract class ConfigStore extends Context implements Closeable {
 			cm = new ConfigMap(this, name, format2);
 		} finally {
 			loading.remove(key);
+			if (loading.isEmpty())
+				LOADING.remove();
 		}
 
 		var cm2 = configMaps.putIfAbsent(key, cm);

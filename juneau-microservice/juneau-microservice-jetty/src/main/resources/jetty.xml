@@ -23,7 +23,7 @@
   - Plain HTTP localhost dev default; one ServerConnector on $S{availablePort,10000} (the value resolves
     from the [Jetty] section of the bundled juneau.cfg, which defaults to 10000).
   - No resourceBase / ResourceHandler / WebAppContext filesystem mount: no static-file serving by
-    default (TODO-126 SAFE classification).  Servlets are auto-mounted from @Bean Servlet
+    default (path-traversal-safe by construction).  Servlets are auto-mounted from @Bean Servlet
     contributions; consumers who need static content register their own handler via a user-supplied
     jetty.xml on the working directory or classpath.
   - All defaults are overridable: a consumer-supplied jetty.xml on the working directory or earlier on

@@ -80,6 +80,9 @@ class RemoteCursorBinding_NextGen_Test {
 	// ==========================================================================
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
+	})
 	void a01_recordReaderReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class)) {
 			var api = client.getClient().remote(JsonClientApi.class);
@@ -92,6 +95,9 @@ class RemoteCursorBinding_NextGen_Test {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
+	})
 	void a02_tokenReaderReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class)) {
 			var api = client.getClient().remote(JsonClientApi.class);
@@ -104,6 +110,9 @@ class RemoteCursorBinding_NextGen_Test {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
+	})
 	void a03_concreteCursorReturnType() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class)) {
 			var api = client.getClient().remote(JsonClientApi.class);
@@ -125,7 +134,7 @@ class RemoteCursorBinding_NextGen_Test {
 	void b01_recordStreamBody_record() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class)) {
 			var api = client.getClient().remote(JsonClientApi.class);
-			Bean got = api.echo(RecordStreamBody.record(w -> {
+			Bean got = api.echo(RecordStreamBody.records(w -> {
 				try {
 					w.write(new Bean("dave", 99));
 				} catch (IOException e) {
@@ -171,7 +180,7 @@ class RemoteCursorBinding_NextGen_Test {
 	})
 	void c01_streamBodyEntity_direct() throws Exception {
 		try (var client = MockRestClient.create(JsonServer.class)) {
-			try (var resp = client.post("/echo").streamBodyEntity(RecordStreamBody.record(w -> {
+			try (var resp = client.post("/echo").streamBodyEntity(RecordStreamBody.records(w -> {
 				try {
 					w.write(new Bean("frank", 12));
 				} catch (IOException e) {

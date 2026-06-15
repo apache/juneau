@@ -37,6 +37,9 @@ class ResponseBody_Cursor_Test {
 		public Bean() {}
 	}
 
+	@SuppressWarnings({
+		"resource" // Returned RestResponse owns the inner RestClient; caller closes via try-with-resources at the call site.
+	})
 	private static RestResponse response(String json) {
 		var tr = TransportResponse.builder()
 			.statusCode(200)

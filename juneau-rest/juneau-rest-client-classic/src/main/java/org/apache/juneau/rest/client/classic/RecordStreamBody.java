@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	}
  *
  * 	<jc>// Caller</jc>
- * 	<jv>api</jv>.upload(RecordStreamBody.<jsm>record</jsm>(<jv>w</jv> -&gt; {
+ * 	<jv>api</jv>.upload(RecordStreamBody.<jsm>records</jsm>(<jv>w</jv> -&gt; {
  * 		<jk>for</jk> (Bean <jv>b</jv> : <jv>source</jv>())
  * 			<jv>w</jv>.write(<jv>b</jv>);
  * 	}));
@@ -53,7 +53,7 @@ public final class RecordStreamBody {
 	 * @param consumer The callback that emits records.  Must not be <jk>null</jk>.
 	 * @return A new body wrapper.
 	 */
-	public static RecordStreamBody record(Consumer<RecordWriter> consumer) {
+	public static RecordStreamBody records(Consumer<RecordWriter> consumer) {
 		return new RecordStreamBody(consumer, RecordWriter.class);
 	}
 

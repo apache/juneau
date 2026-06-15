@@ -40,6 +40,9 @@ import java.util.function.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated "value" literals are HTTP header component keys; a constant would obscure the header grammar.
+})
 public class WwwAuthenticate extends HttpStringHeader {
 
 	/** The header name */

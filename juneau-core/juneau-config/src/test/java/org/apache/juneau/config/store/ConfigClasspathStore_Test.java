@@ -145,23 +145,23 @@ class ConfigClasspathStore_Test extends TestBase {
 		assertNotNull(b.build());
 	}
 
-	@Test void b09_builder_annotations() throws Exception {
+	@Test void b09_builder_annotations() {
 		var fs = ClasspathStore.create().annotations().build();
 		assertNotNull(fs);
 	}
 
-	@Test void b10_builder_cache() throws Exception {
+	@Test void b10_builder_cache() {
 		var fs = ClasspathStore.create().cache(null).build();
 		assertNotNull(fs);
 	}
 
-	@Test void b11_builder_impl() throws Exception {
+	@Test void b11_builder_impl() {
 		var impl = ClasspathStore.DEFAULT;
 		var fs = ClasspathStore.create().impl(impl).build();
 		assertNotNull(fs);
 	}
 
-	@Test void b12_close() throws Exception {
+	@Test void b12_close() {
 		var fs = ClasspathStore.create().build();
 		assertDoesNotThrow(fs::close);
 	}
@@ -171,7 +171,7 @@ class ConfigClasspathStore_Test extends TestBase {
 		assertNull(fs.write("same.cfg", "same", "same"));
 	}
 
-	@Test void b14_unregister_noListener() throws Exception {
+	@Test void b14_unregister_noListener() {
 		var fs = ClasspathStore.create().build();
 		assertDoesNotThrow(() -> fs.unregister("nonexistent.cfg", s -> {}));
 	}

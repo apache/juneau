@@ -78,13 +78,13 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 		assertTrue(v.getAlgorithms().contains(SignatureConstants.ALGO_ID_SIGNATURE_ECDSA_SHA256));
 	}
 
-	@Test void b01_clockSkew_negativeRejected() throws Exception {
+	@Test void b01_clockSkew_negativeRejected() {
 		assertThrows(IllegalArgumentException.class, () -> SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.clockSkew(Duration.ofSeconds(-1)));
 	}
 
-	@Test void b02_clockSkew_overFiveMinutesRejected() throws Exception {
+	@Test void b02_clockSkew_overFiveMinutesRejected() {
 		assertThrows(IllegalArgumentException.class, () -> SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.clockSkew(Duration.ofMinutes(6)));
@@ -98,13 +98,13 @@ class SamlAssertionValidator_Builder_Test extends TestBase {
 		assertEquals(Duration.ofMinutes(5), v.getClockSkew());
 	}
 
-	@Test void c01_algorithms_sha1Rejected() throws Exception {
+	@Test void c01_algorithms_sha1Rejected() {
 		assertThrows(IllegalArgumentException.class, () -> SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.algorithms(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA1));
 	}
 
-	@Test void c02_algorithms_emptyRejected() throws Exception {
+	@Test void c02_algorithms_emptyRejected() {
 		assertThrows(IllegalArgumentException.class, () -> SamlAssertionValidator.create()
 			.spEntityId("sp").expectedIssuer("idp").signingCredential(dummyCredential())
 			.algorithms());

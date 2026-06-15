@@ -311,7 +311,7 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 	 */
 	@Override /* RecordWritable */
 	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+		return getSession().serializeRecords(output);
 	}
 
 	/**
@@ -325,7 +325,7 @@ public class YamlSerializer extends WriterSerializer implements RecordWritable, 
 	 */
 	@Override /* ArrayRecordWritable */
 	public RecordWriter serializeArrayRecords(Object output) throws IOException {
-		return ((ArrayRecordWritable) getSession()).serializeArrayRecords(output);
+		return getSession().serializeArrayRecords(output);
 	}
 
 	/**

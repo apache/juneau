@@ -285,7 +285,7 @@ public final class RestRequest {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jv>client</jv>.post(<js>"/bulk-upload"</js>)
-	 * 		.streamBodyEntity(RecordStreamBody.<jsm>record</jsm>(<jv>w</jv> -&gt; {
+	 * 		.streamBodyEntity(RecordStreamBody.<jsm>records</jsm>(<jv>w</jv> -&gt; {
 	 * 			<jk>for</jk> (Bean <jv>b</jv> : <jv>source</jv>())
 	 * 				<jv>w</jv>.write(<jv>b</jv>);
 	 * 		}))
@@ -296,7 +296,7 @@ public final class RestRequest {
 	 * @return This object.
 	 */
 	public RestRequest streamBodyEntity(RecordStreamBody value) {
-		return body((HttpBody) value);
+		return body(value);
 	}
 
 	/**

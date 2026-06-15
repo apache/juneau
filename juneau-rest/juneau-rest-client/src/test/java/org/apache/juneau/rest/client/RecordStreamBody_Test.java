@@ -52,7 +52,7 @@ class RecordStreamBody_Test {
 		"resource" // Fluent writer is caller-owned; nothing new to close.
 	})
 	void a01_record_defaultJson() throws Exception {
-		var body = RecordStreamBody.record(w -> {
+		var body = RecordStreamBody.records(w -> {
 			try {
 				w.write(new Bean("dave", 99));
 			} catch (IOException e) {
@@ -65,7 +65,7 @@ class RecordStreamBody_Test {
 
 	@Test
 	void a02_record_metadata() {
-		var body = RecordStreamBody.record(w -> {});
+		var body = RecordStreamBody.records(w -> {});
 		assertEquals("application/json", body.getContentType());
 		assertEquals(-1, body.getContentLength());
 		assertFalse(body.isRepeatable());
@@ -76,7 +76,7 @@ class RecordStreamBody_Test {
 		"resource" // Fluent writer is caller-owned; nothing new to close.
 	})
 	void a03_record_explicitSerializer() throws Exception {
-		var body = RecordStreamBody.record(JsonSerializer.DEFAULT, w -> {
+		var body = RecordStreamBody.records(JsonSerializer.DEFAULT, w -> {
 			try {
 				w.write(new Bean("amy", 7));
 			} catch (IOException e) {
@@ -116,13 +116,16 @@ class RecordStreamBody_Test {
 
 	@Test
 	void c01_repeatable_optIn() {
-		var body = RecordStreamBody.record(w -> {}).repeatable();
+		var body = RecordStreamBody.records(w -> {}).repeatable();
 		assertTrue(body.isRepeatable());
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Fluent writer is caller-owned; nothing new to close.
+	})
 	void c02_repeatable_isReusable() throws Exception {
-		var body = RecordStreamBody.record(w -> {
+		var body = RecordStreamBody.records(w -> {
 			try {
 				w.write(new Bean("x", 1));
 			} catch (IOException e) {
@@ -134,8 +137,11 @@ class RecordStreamBody_Test {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Fluent writer is caller-owned; nothing new to close.
+	})
 	void c03_nonRepeatable_failsFastOnResend() throws Exception {
-		var body = RecordStreamBody.record(w -> {
+		var body = RecordStreamBody.records(w -> {
 			try {
 				w.write(new Bean("x", 1));
 			} catch (IOException e) {

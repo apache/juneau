@@ -45,7 +45,7 @@ class CsvParser_Test extends TestBase {
 	// a - Parse into collection of beans
 	//====================================================================================================
 
-	@Test void a01_parseBeanCollection() throws Exception {
+	@Test void a01_parseBeanCollection() {
 		var csv = "b,c\nb1,1\nb2,2\n";
 		var r = parseList(csv, A.class);
 		assertEquals(2, r.size());
@@ -55,14 +55,14 @@ class CsvParser_Test extends TestBase {
 		assertEquals(2, r.get(1).c);
 	}
 
-	@Test void a02_parseSingleBean() throws Exception {
+	@Test void a02_parseSingleBean() {
 		var csv = "b,c\nhello,42\n";
 		var r = CsvParser.DEFAULT.parse(csv, A.class);
 		assertEquals("hello", r.b);
 		assertEquals(42, r.c);
 	}
 
-	@Test void a03_parseBeanArray() throws Exception {
+	@Test void a03_parseBeanArray() {
 		var csv = "b,c\nfoo,10\nbar,20\n";
 		var r = CsvParser.DEFAULT.parse(csv, A[].class);
 		assertEquals(2, r.length);
@@ -81,7 +81,7 @@ class CsvParser_Test extends TestBase {
 	// b - Parse into collection of maps
 	//====================================================================================================
 
-	@Test void b01_parseMapCollection() throws Exception {
+	@Test void b01_parseMapCollection() {
 		var csv = "name,value\nfoo,1\nbar,2\n";
 		var r = parseList(csv, Map.class);
 		assertEquals(2, r.size());
@@ -91,7 +91,7 @@ class CsvParser_Test extends TestBase {
 		assertEquals("2", r.get(1).get("value"));
 	}
 
-	@Test void b02_parseSingleMap() throws Exception {
+	@Test void b02_parseSingleMap() {
 		var csv = "k1,k2\nv1,v2\n";
 		var r = CsvParser.DEFAULT.parse(csv, Map.class);
 		assertEquals("v1", r.get("k1"));
@@ -102,19 +102,19 @@ class CsvParser_Test extends TestBase {
 	// c - Parse simple value collections (single "value" column)
 	//====================================================================================================
 
-	@Test void c01_parseStringList() throws Exception {
+	@Test void c01_parseStringList() {
 		var csv = "value\nalpha\nbeta\ngamma\n";
 		var r = parseList(csv, String.class);
 		assertEquals(List.of("alpha", "beta", "gamma"), r);
 	}
 
-	@Test void c02_parseIntegerList() throws Exception {
+	@Test void c02_parseIntegerList() {
 		var csv = "value\n1\n2\n3\n";
 		var r = parseList(csv, Integer.class);
 		assertEquals(List.of(1, 2, 3), r);
 	}
 
-	@Test void c03_parseBooleanList() throws Exception {
+	@Test void c03_parseBooleanList() {
 		var csv = "value\ntrue\nfalse\ntrue\n";
 		var r = parseList(csv, Boolean.class);
 		assertEquals(List.of(true, false, true), r);
@@ -124,7 +124,7 @@ class CsvParser_Test extends TestBase {
 	// d - Null and empty value handling
 	//====================================================================================================
 
-	@Test void d01_parseNullValues() throws Exception {
+	@Test void d01_parseNullValues() {
 		var csv = "b,c\n<NULL>,1\nb2,<NULL>\n";
 		var r = parseList(csv, B.class);
 		assertEquals(2, r.size());
@@ -139,12 +139,12 @@ class CsvParser_Test extends TestBase {
 		public Integer c;
 	}
 
-	@Test void d02_parseEmptyInput() throws Exception {
+	@Test void d02_parseEmptyInput() {
 		var r1 = CsvParser.DEFAULT.parse("", A.class);
 		assertNull(r1);
 	}
 
-	@Test void d03_parseHeaderOnly() throws Exception {
+	@Test void d03_parseHeaderOnly() {
 		var csv = "b,c\n";
 		var r = parseList(csv, A.class);
 		assertTrue(r.isEmpty());
@@ -164,7 +164,7 @@ class CsvParser_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("quotedFieldCases")
-	void e01_parseQuotedFields(String csv, String expected) throws Exception {
+	void e01_parseQuotedFields(String csv, String expected) {
 		var r = parseList(csv, String.class);
 		assertEquals(expected, r.get(0));
 	}
@@ -173,7 +173,7 @@ class CsvParser_Test extends TestBase {
 	// f - Enum values
 	//====================================================================================================
 
-	@Test void f01_parseEnumValues() throws Exception {
+	@Test void f01_parseEnumValues() {
 		var csv = "name,status\nTask1,PENDING\nTask2,COMPLETED\n";
 		var r = parseList(csv, C.class);
 		assertEquals(2, r.size());
@@ -194,14 +194,14 @@ class CsvParser_Test extends TestBase {
 	// g - Object (untyped) parsing
 	//====================================================================================================
 
-	@Test void g01_parseAsObject_multipleRows() throws Exception {
+	@Test void g01_parseAsObject_multipleRows() {
 		var csv = "a,b\n1,2\n3,4\n";
 		var r = CsvParser.DEFAULT.parse(csv, Object.class);
 		assertInstanceOf(MarshalledList.class, r);
 		assertEquals(2, ((MarshalledList) r).size());
 	}
 
-	@Test void g02_parseAsObject_singleRow() throws Exception {
+	@Test void g02_parseAsObject_singleRow() {
 		var csv = "a,b\n1,2\n";
 		var r = CsvParser.DEFAULT.parse(csv, Object.class);
 		assertInstanceOf(MarshalledMap.class, r);
@@ -214,7 +214,7 @@ class CsvParser_Test extends TestBase {
 	// h - Mismatch: fewer fields than headers
 	//====================================================================================================
 
-	@Test void h01_fewerFieldsThanHeaders() throws Exception {
+	@Test void h01_fewerFieldsThanHeaders() {
 		// Row has fewer columns than header; missing fields are treated as null/default.
 		var csv = "b,c\nhello\n";
 		var r = parseList(csv, A.class);
@@ -227,7 +227,7 @@ class CsvParser_Test extends TestBase {
 	// i - Round-trip: serialize then parse
 	//====================================================================================================
 
-	@Test void i01_roundTripBeanList() throws Exception {
+	@Test void i01_roundTripBeanList() {
 		var original = List.of(new D("alice", 30), new D("bob", 25));
 		var csv = CsvSerializer.DEFAULT.serialize(original);
 		var parsed = parseList(csv, D.class);
@@ -238,14 +238,14 @@ class CsvParser_Test extends TestBase {
 		assertEquals(25, parsed.get(1).age);
 	}
 
-	@Test void i02_roundTripStringList() throws Exception {
+	@Test void i02_roundTripStringList() {
 		var original = List.of("foo", "bar", "baz");
 		var csv = CsvSerializer.DEFAULT.serialize(original);
 		var parsed = parseList(csv, String.class);
 		assertEquals(original, parsed);
 	}
 
-	@Test void i03_roundTripIntList() throws Exception {
+	@Test void i03_roundTripIntList() {
 		var original = List.of(1, 2, 3);
 		var csv = CsvSerializer.DEFAULT.serialize(original);
 		var parsed = parseList(csv, Integer.class);
@@ -263,7 +263,7 @@ class CsvParser_Test extends TestBase {
 	// j - Bean annotations
 	//====================================================================================================
 
-	@Test void j01_parseWithMarshalledAnnotations() throws Exception {
+	@Test void j01_parseWithMarshalledAnnotations() {
 		var csv = "full_name,years\nJohn,35\n";
 		var r = parseList(csv, E.class);
 		assertEquals(1, r.size());
@@ -283,7 +283,7 @@ class CsvParser_Test extends TestBase {
 	// k - CRLF line endings
 	//====================================================================================================
 
-	@Test void k01_parseCrlfLineEndings() throws Exception {
+	@Test void k01_parseCrlfLineEndings() {
 		var csv = "b,c\r\nhello,1\r\nworld,2\r\n";
 		var r = parseList(csv, A.class);
 		assertEquals(2, r.size());

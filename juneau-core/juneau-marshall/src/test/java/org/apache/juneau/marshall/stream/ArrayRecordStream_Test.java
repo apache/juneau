@@ -331,13 +331,11 @@ class ArrayRecordStream_Test extends TestBase {
 	@Test
 	void g02_msgpackCountMismatchThrows() throws Exception {
 		var baos = new ByteArrayOutputStream();
-		assertThrows(IOException.class, () -> {
-			try (var w = MsgPackSerializer.DEFAULT.serializeArrayRecords(baos, 3)) {
-				w.write(new Bean("a", 1));
-				w.write(new Bean("b", 2));
-				// declared 3, only wrote 2 → close should throw
-			}
-		});
+		var w = MsgPackSerializer.DEFAULT.serializeArrayRecords(baos, 3);
+		w.write(new Bean("a", 1));
+		w.write(new Bean("b", 2));
+		// declared 3, only wrote 2 → close should throw
+		assertThrows(IOException.class, w::close);
 	}
 
 	@Test
@@ -350,8 +348,8 @@ class ArrayRecordStream_Test extends TestBase {
 	}
 
 	// =====================================================================================
-	// Very-deeply-nested array elements (5+ levels) through the true-streaming binary cursors —
-	// TODO-175ab Item 2.  Exercises element-at-a-time streaming over non-trivial element shapes.
+	// Very-deeply-nested array elements (5+ levels) through the true-streaming binary cursors.
+	// Exercises element-at-a-time streaming over non-trivial element shapes.
 	// =====================================================================================
 
 	@ParameterizedTest

@@ -141,6 +141,9 @@ public class CborTokenReader implements TokenReader {
 	// counting elements.
 	// ==============================================================================================
 	@Override /* TokenReader */
+	@SuppressWarnings({
+		"java:S3776" // Token-reader state machine; complexity is inherent to the format decode loop.
+	})
 	public TokenType next() throws IOException, ParseException {
 		if (ended) {
 			currentToken = TokenType.END_OF_STREAM;
@@ -262,8 +265,7 @@ public class CborTokenReader implements TokenReader {
 	private String readScalarAsString(DataType dt) throws IOException, ParseException {
 		switch (dt) {
 			case STRING:    return is.readString();
-			case UINT:
-			case NINT:      return Long.toString(is.readSignedLong());
+			case UINT, NINT: return Long.toString(is.readSignedLong());
 			case BINARY: {
 				var b = is.readBinary();
 				return new String(b, java.nio.charset.StandardCharsets.UTF_8);

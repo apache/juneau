@@ -69,7 +69,7 @@ public class PetStoreResource extends BasicRestServlet {
 	private static final long serialVersionUID = 1L;
 
 	/** Backing store.  Singleton servlet → singleton store, shared across requests. */
-	private final PetStore store = new PetStore();
+	private final transient PetStore store = new PetStore();
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Pets

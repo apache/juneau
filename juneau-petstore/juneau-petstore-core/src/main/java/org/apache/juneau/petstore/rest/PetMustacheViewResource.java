@@ -57,7 +57,7 @@ public class PetMustacheViewResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final PetStore store = new PetStore();
+	private final transient PetStore store = new PetStore();
 
 	/**
 	 * Provides a {@link MustacheMixin} configured to resolve templates under {@code petstore-templates/} with

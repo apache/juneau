@@ -136,6 +136,8 @@ public interface RecordReader extends Closeable {
 				}
 			}
 			@Override public T next() {
+				if (! hasNext())
+					throw new java.util.NoSuchElementException();
 				try {
 					return read(type);
 				} catch (IOException | ParseException e) {

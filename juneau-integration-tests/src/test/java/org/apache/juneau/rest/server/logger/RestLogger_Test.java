@@ -35,7 +35,7 @@ class RestLogger_Test extends TestBase {
 	// a - CallLoggerRule.matches() with status filters
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_ruleMatchesStatusFilter_ge500() throws Exception {
+	@Test void a01_ruleMatchesStatusFilter_ge500() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.statusFilter(x -> x >= 500)
 			.build();
@@ -45,7 +45,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(rule.matches(req, res));
 	}
 
-	@Test void a02_ruleDoesNotMatchStatusFilter_below500() throws Exception {
+	@Test void a02_ruleDoesNotMatchStatusFilter_below500() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.statusFilter(x -> x >= 500)
 			.build();
@@ -55,7 +55,7 @@ class RestLogger_Test extends TestBase {
 		assertFalse(rule.matches(req, res));
 	}
 
-	@Test void a03_ruleMatchesStatusFilter_ge400() throws Exception {
+	@Test void a03_ruleMatchesStatusFilter_ge400() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.statusFilter(x -> x >= 400)
 			.build();
@@ -65,7 +65,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(rule.matches(req, res));
 	}
 
-	@Test void a04_ruleNoFilter_matchesEverything() throws Exception {
+	@Test void a04_ruleNoFilter_matchesEverything() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE).build();
 		var req = new org.springframework.mock.web.MockHttpServletRequest();
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
@@ -77,7 +77,7 @@ class RestLogger_Test extends TestBase {
 	// b - CallLoggerRule.matches() with request filters
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_requestFilter_matches() throws Exception {
+	@Test void b01_requestFilter_matches() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.requestFilter(x -> "GET".equals(x.getMethod()))
 			.build();
@@ -86,7 +86,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(rule.matches(req, res));
 	}
 
-	@Test void b02_requestFilter_doesNotMatch() throws Exception {
+	@Test void b02_requestFilter_doesNotMatch() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.requestFilter(x -> "GET".equals(x.getMethod()))
 			.build();
@@ -99,7 +99,7 @@ class RestLogger_Test extends TestBase {
 	// c - CallLoggerRule.matches() with response filters
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_responseFilter_matches() throws Exception {
+	@Test void c01_responseFilter_matches() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.responseFilter(x -> x.getStatus() >= 500)
 			.build();
@@ -109,7 +109,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(rule.matches(req, res));
 	}
 
-	@Test void c02_responseFilter_doesNotMatch() throws Exception {
+	@Test void c02_responseFilter_doesNotMatch() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.responseFilter(x -> x.getStatus() >= 500)
 			.build();
@@ -123,7 +123,7 @@ class RestLogger_Test extends TestBase {
 	// d - CallLoggerRule.matches() with exception filter
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_exceptionFilter_matchesWhenExceptionPresent() throws Exception {
+	@Test void d01_exceptionFilter_matchesWhenExceptionPresent() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.exceptionFilter(IllegalArgumentException.class::isInstance)
 			.build();
@@ -133,7 +133,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(rule.matches(req, res));
 	}
 
-	@Test void d02_exceptionFilter_doesNotMatchWrongType() throws Exception {
+	@Test void d02_exceptionFilter_doesNotMatchWrongType() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.exceptionFilter(IllegalArgumentException.class::isInstance)
 			.build();
@@ -143,7 +143,7 @@ class RestLogger_Test extends TestBase {
 		assertFalse(rule.matches(req, res));
 	}
 
-	@Test void d03_exceptionFilter_matchesWhenNoException() throws Exception {
+	@Test void d03_exceptionFilter_matchesWhenNoException() {
 		// When no exception is present, the exception filter is not evaluated; the rule still matches.
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.exceptionFilter(IllegalArgumentException.class::isInstance)
@@ -157,7 +157,7 @@ class RestLogger_Test extends TestBase {
 	// e - CallLoggerRule.matches() with combined filters
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_combinedFilters_allMatch() throws Exception {
+	@Test void e01_combinedFilters_allMatch() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.statusFilter(x -> x >= 500)
 			.requestFilter(x -> "GET".equals(x.getMethod()))
@@ -168,7 +168,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(rule.matches(req, res));
 	}
 
-	@Test void e02_combinedFilters_statusMissesRequestMatches() throws Exception {
+	@Test void e02_combinedFilters_statusMissesRequestMatches() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.statusFilter(x -> x >= 500)
 			.requestFilter(x -> "GET".equals(x.getMethod()))
@@ -183,33 +183,33 @@ class RestLogger_Test extends TestBase {
 	// f - CallLoggerRule getter methods
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_getLevel() throws Exception {
+	@Test void f01_getLevel() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.level(Level.SEVERE)
 			.build();
 		assertEquals(Level.SEVERE, rule.getLevel());
 	}
 
-	@Test void f02_getLevel_null() throws Exception {
+	@Test void f02_getLevel_null() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE).build();
 		assertNull(rule.getLevel());
 	}
 
-	@Test void f03_getRequestDetail() throws Exception {
+	@Test void f03_getRequestDetail() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.requestDetail(CallLoggingDetail.ENTITY)
 			.build();
 		assertEquals(CallLoggingDetail.ENTITY, rule.getRequestDetail());
 	}
 
-	@Test void f04_getResponseDetail() throws Exception {
+	@Test void f04_getResponseDetail() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.responseDetail(CallLoggingDetail.HEADER)
 			.build();
 		assertEquals(CallLoggingDetail.HEADER, rule.getResponseDetail());
 	}
 
-	@Test void f05_getEnabled() throws Exception {
+	@Test void f05_getEnabled() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.enabled(Enablement.NEVER)
 			.build();
@@ -220,7 +220,7 @@ class RestLogger_Test extends TestBase {
 	// g - BasicTestCaptureCallLogger captures log messages
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void g01_captureLogger_logs500() throws Exception {
+	@Test void g01_captureLogger_logs500() {
 		var logger = new BasicTestCaptureCallLogger();
 		// Simulate a log call directly
 		var req = new org.springframework.mock.web.MockHttpServletRequest("GET", "/error");
@@ -233,7 +233,7 @@ class RestLogger_Test extends TestBase {
 		assertEquals(Level.SEVERE, logger.getLevel());
 	}
 
-	@Test void g02_captureLogger_noLog200() throws Exception {
+	@Test void g02_captureLogger_noLog200() {
 		var logger = new BasicTestCaptureCallLogger();
 		var req = new org.springframework.mock.web.MockHttpServletRequest("GET", "/ok");
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
@@ -243,7 +243,7 @@ class RestLogger_Test extends TestBase {
 		assertNull(logger.getMessage());
 	}
 
-	@Test void g03_captureLogger_logs400AsWarning() throws Exception {
+	@Test void g03_captureLogger_logs400AsWarning() {
 		var logger = new BasicTestCaptureCallLogger();
 		var req = new org.springframework.mock.web.MockHttpServletRequest("POST", "/bad");
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
@@ -254,7 +254,7 @@ class RestLogger_Test extends TestBase {
 		assertEquals(Level.WARNING, logger.getLevel());
 	}
 
-	@Test void g04_captureLogger_reset() throws Exception {
+	@Test void g04_captureLogger_reset() {
 		var logger = new BasicTestCaptureCallLogger();
 		var req = new org.springframework.mock.web.MockHttpServletRequest("GET", "/error");
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
@@ -265,7 +265,7 @@ class RestLogger_Test extends TestBase {
 		assertNull(logger.getMessage());
 	}
 
-	@Test void g05_captureLogger_getMessageAndReset() throws Exception {
+	@Test void g05_captureLogger_getMessageAndReset() {
 		var logger = new BasicTestCaptureCallLogger();
 		var req = new org.springframework.mock.web.MockHttpServletRequest("GET", "/error");
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
@@ -281,7 +281,7 @@ class RestLogger_Test extends TestBase {
 	// h - BasicDisabledCallLogger never logs
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void h01_disabledLogger_neverLogs() throws Exception {
+	@Test void h01_disabledLogger_neverLogs() {
 		var logger = new BasicDisabledCallLogger(BasicBeanStore.INSTANCE);
 		var req = new org.springframework.mock.web.MockHttpServletRequest("GET", "/error");
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
@@ -296,23 +296,23 @@ class RestLogger_Test extends TestBase {
 	// i - CallLoggingDetail.fromString
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void i01_fromString_statusLine() throws Exception {
+	@Test void i01_fromString_statusLine() {
 		assertEquals(CallLoggingDetail.STATUS_LINE, CallLoggingDetail.fromString("STATUS_LINE"));
 	}
 
-	@Test void i02_fromString_caseInsensitive() throws Exception {
+	@Test void i02_fromString_caseInsensitive() {
 		assertEquals(CallLoggingDetail.HEADER, CallLoggingDetail.fromString("header"));
 	}
 
-	@Test void i03_fromString_null() throws Exception {
+	@Test void i03_fromString_null() {
 		assertNull(CallLoggingDetail.fromString(null));
 	}
 
-	@Test void i04_fromString_invalid() throws Exception {
+	@Test void i04_fromString_invalid() {
 		assertNull(CallLoggingDetail.fromString("INVALID"));
 	}
 
-	@Test void i05_fromString_entity() throws Exception {
+	@Test void i05_fromString_entity() {
 		assertEquals(CallLoggingDetail.ENTITY, CallLoggingDetail.fromString("ENTITY"));
 	}
 
@@ -320,7 +320,7 @@ class RestLogger_Test extends TestBase {
 	// j - CallLoggerRule.toString and CallLogger.toString
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void j01_ruleToString_includesLevel() throws Exception {
+	@Test void j01_ruleToString_includesLevel() {
 		var rule = CallLoggerRule.create(BasicBeanStore.INSTANCE)
 			.level(Level.WARNING)
 			.requestDetail(CallLoggingDetail.HEADER)
@@ -330,7 +330,7 @@ class RestLogger_Test extends TestBase {
 		assertTrue(s.contains("WARNING"));
 	}
 
-	@Test void j02_loggerToString_includesEnabled() throws Exception {
+	@Test void j02_loggerToString_includesEnabled() {
 		var logger = CallLogger.create(BasicBeanStore.INSTANCE).build();
 		var s = logger.toString();
 		assertNotNull(s);
@@ -341,11 +341,11 @@ class RestLogger_Test extends TestBase {
 	// k - CallLoggingDetail.isOneOf
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void k01_isOneOf_matches() throws Exception {
+	@Test void k01_isOneOf_matches() {
 		assertTrue(CallLoggingDetail.HEADER.isOneOf(CallLoggingDetail.STATUS_LINE, CallLoggingDetail.HEADER));
 	}
 
-	@Test void k02_isOneOf_noMatch() throws Exception {
+	@Test void k02_isOneOf_noMatch() {
 		assertFalse(CallLoggingDetail.ENTITY.isOneOf(CallLoggingDetail.STATUS_LINE, CallLoggingDetail.HEADER));
 	}
 }

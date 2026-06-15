@@ -286,7 +286,7 @@ public class CsvParser extends ReaderParser implements CsvMetaProvider, RecordRe
 	 */
 	@Override /* RecordReadable */
 	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+		return getSession().parseRecords(input);
 	}
 
 	@Override /* RecordReadable */

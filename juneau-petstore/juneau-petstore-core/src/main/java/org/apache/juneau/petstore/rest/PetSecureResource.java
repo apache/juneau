@@ -76,7 +76,7 @@ public class PetSecureResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final PetStore store = new PetStore();
+	private final transient PetStore store = new PetStore();
 
 	/**
 	 * Provides the {@link RestGuardList} that gates every op on this resource with a

@@ -38,6 +38,9 @@ import org.apache.juneau.commons.http.*;
  *
  * @since 9.2.1
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated "value" literals are HTTP header component keys; a constant would obscure the header grammar.
+})
 public class ContentDisposition extends HttpStringRangesHeader {
 
 	public static final String NAME = "Content-Disposition";

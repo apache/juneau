@@ -88,26 +88,26 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 			assertThrowsWithMessage(ParseException.class, "Invalid JSON number", () -> drain("1.e0"));
 		}
 
-		@Test void b06_validDecimal() throws Exception {
-			drain("1.5");
+		@Test void b06_validDecimal() {
+			assertDoesNotThrow(() -> drain("1.5"));
 		}
 	}
 
 	@Nested class C_comments extends TestBase {
 
-		@Test void c01_blockComment() throws Exception {
+		@Test void c01_blockComment() {
 			// '*' that does not immediately precede '/' stays inside the block.
-			drain("/* a * b */ 1");
+			assertDoesNotThrow(() -> drain("/* a * b */ 1"));
 		}
 
-		@Test void c02_lineCommentTerminatedByNewline() throws Exception {
-			drain("// comment\n1");
+		@Test void c02_lineCommentTerminatedByNewline() {
+			assertDoesNotThrow(() -> drain("// comment\n1"));
 		}
 
-		@Test void c03_lineCommentTerminatedByEof() throws Exception {
+		@Test void c03_lineCommentTerminatedByEof() {
 			// A whole-document line comment is scanned through to EOF (the c == -1 branch of the
 			// line-comment loop) and the document is then a valid empty input.
-			drain("// just a comment, no newline");
+			assertDoesNotThrow(() -> drain("// just a comment, no newline"));
 		}
 
 		@Test void c04_unterminatedBlockComment() {

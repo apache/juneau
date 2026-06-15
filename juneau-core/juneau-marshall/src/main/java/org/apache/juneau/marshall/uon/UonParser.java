@@ -331,7 +331,7 @@ public class UonParser extends ReaderParser implements HttpPartParser, UonMetaPr
 	 */
 	@Override /* RecordReadable */
 	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+		return getSession().parseRecords(input);
 	}
 
 	@Override /* RecordReadable */

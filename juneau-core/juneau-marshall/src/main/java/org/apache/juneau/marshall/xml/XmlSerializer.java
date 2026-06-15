@@ -674,7 +674,7 @@ public class XmlSerializer extends WriterSerializer implements XmlMetaProvider, 
 	 */
 	@Override /* RecordWritable */
 	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+		return getSession().serializeRecords(output);
 	}
 
 	/**

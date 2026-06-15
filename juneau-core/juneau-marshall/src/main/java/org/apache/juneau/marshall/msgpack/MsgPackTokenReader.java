@@ -309,11 +309,7 @@ public class MsgPackTokenReader implements TokenReader {
 
 	@Override /* TokenReader */
 	public boolean canRead() throws IOException, ParseException {
-		if (ended)
-			return false;
-		if (depth > 0 && stackRemaining[depth - 1] == 0)
-			return false;
-		return true;
+		return !ended && !(depth > 0 && stackRemaining[depth - 1] == 0);
 	}
 
 	@Override /* TokenReader */

@@ -51,7 +51,7 @@ public class PetFreemarkerViewResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final PetStore store = new PetStore();
+	private final transient PetStore store = new PetStore();
 
 	/**
 	 * Provides a {@link FreemarkerMixin} configured to resolve templates under {@code petstore-templates/}.

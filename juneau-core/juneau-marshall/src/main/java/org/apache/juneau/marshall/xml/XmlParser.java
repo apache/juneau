@@ -389,7 +389,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	 */
 	@Override /* RecordReadable */
 	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+		return getSession().parseRecords(input);
 	}
 
 	/**
@@ -403,7 +403,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	 */
 	@Override /* ArrayRecordReadable */
 	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+		return getSession().parseArrayRecords(input);
 	}
 
 	/**
@@ -418,7 +418,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	 */
 	@Override /* ArrayRecordReadable */
 	public RecordReader parseArrayRecords(Object input, String rootElementName) throws IOException {
-		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input, rootElementName);
+		return getSession().parseArrayRecords(input, rootElementName);
 	}
 
 	/**

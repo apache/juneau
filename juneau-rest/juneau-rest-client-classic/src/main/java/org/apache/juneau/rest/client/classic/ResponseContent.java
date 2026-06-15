@@ -64,6 +64,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
 public class ResponseContent implements HttpEntity {
 
 	private static final String HEADER_ContentType = "Content-Type";
+	private static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
 	private static final HttpEntity NULL_ENTITY = new HttpEntity() {
 
@@ -255,14 +256,14 @@ public class ResponseContent implements HttpEntity {
 			if (result.isPresent())
 				return result.get();
 
-			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse("text/plain"));
+			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse(CONTENT_TYPE_TEXT_PLAIN));
 
 			if (parser == null)
 				parser = client.getMatchingParser(ct);
 
 			var mt = MediaType.of(ct);
 
-			if ((parser == null || (mt.toString().contains("text/plain") && ! parser.canHandle(ct))) && type.hasStringMutater())
+			if ((parser == null || (mt.toString().contains(CONTENT_TYPE_TEXT_PLAIN) && ! parser.canHandle(ct))) && type.hasStringMutater())
 				return BasicConverter.INSTANCE.to(asString(), type.inner());
 
 			if (nn(parser)) {
@@ -331,7 +332,7 @@ public class ResponseContent implements HttpEntity {
 	 */
 	private Object asCursor(ClassMeta<?> type) throws RestCallException {
 		try {
-			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse("text/plain"));
+			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse(CONTENT_TYPE_TEXT_PLAIN));
 			var matchedParser = parser != null ? parser : client.getMatchingParser(ct);
 			if (matchedParser == null)
 				throw new RestCallException(response, null,

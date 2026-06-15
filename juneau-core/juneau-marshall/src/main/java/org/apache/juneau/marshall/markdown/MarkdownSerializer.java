@@ -291,7 +291,7 @@ public class MarkdownSerializer extends WriterSerializer implements MarkdownMeta
 	 */
 	@Override /* RecordWritable */
 	public RecordWriter serializeRecords(Object output) throws IOException {
-		return ((RecordWritable) getSession()).serializeRecords(output);
+		return getSession().serializeRecords(output);
 	}
 
 	@Override /* RecordWritable */

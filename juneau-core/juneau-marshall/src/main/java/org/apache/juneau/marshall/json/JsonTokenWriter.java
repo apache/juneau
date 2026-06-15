@@ -446,7 +446,7 @@ public class JsonTokenWriter implements TokenWriter {
 	private void pushContext(int kind) {
 		if (depth < 32) {
 			// Two bits per level: 00 = root, 01 = object, 10 = array.
-			ctxBits |= ((long) kind & 0x3L) << (depth * 2);
+			ctxBits |= (kind & 0x3L) << (depth * 2);
 		} else {
 			if (ctxOverflow == null || depth - 32 >= ctxOverflow.length)
 				growOverflow();

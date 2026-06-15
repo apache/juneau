@@ -188,7 +188,7 @@ public class YamlParser extends ReaderParser implements RecordReadable, ArrayRec
 	 */
 	@Override /* RecordReadable */
 	public RecordReader parseRecords(Object input) throws IOException {
-		return ((RecordReadable) getSession()).parseRecords(input);
+		return getSession().parseRecords(input);
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class YamlParser extends ReaderParser implements RecordReadable, ArrayRec
 	 */
 	@Override /* ArrayRecordReadable */
 	public RecordReader parseArrayRecords(Object input) throws IOException {
-		return ((ArrayRecordReadable) getSession()).parseArrayRecords(input);
+		return getSession().parseArrayRecords(input);
 	}
 
 	/**

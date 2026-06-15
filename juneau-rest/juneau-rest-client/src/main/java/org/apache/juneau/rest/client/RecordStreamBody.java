@@ -59,7 +59,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	}
  *
  * 	<jc>// Caller</jc>
- * 	<jv>api</jv>.upload(RecordStreamBody.<jsm>record</jsm>(<jv>w</jv> -&gt; {
+ * 	<jv>api</jv>.upload(RecordStreamBody.<jsm>records</jsm>(<jv>w</jv> -&gt; {
  * 		<jk>for</jk> (Bean <jv>b</jv> : <jv>source</jv>())
  * 			<jv>w</jv>.write(<jv>b</jv>);
  * 	}));
@@ -85,8 +85,8 @@ public final class RecordStreamBody implements HttpBody {
 	 * @param consumer The callback that emits records. Must not be <jk>null</jk>.
 	 * @return A new body. Never <jk>null</jk>.
 	 */
-	public static RecordStreamBody record(Consumer<RecordWriter> consumer) {
-		return record(JsonSerializer.DEFAULT, consumer);
+	public static RecordStreamBody records(Consumer<RecordWriter> consumer) {
+		return records(JsonSerializer.DEFAULT, consumer);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public final class RecordStreamBody implements HttpBody {
 	 * @return A new body. Never <jk>null</jk>.
 	 * @throws IllegalArgumentException If the serializer does not support the record-writer surface.
 	 */
-	public static RecordStreamBody record(Serializer serializer, Consumer<RecordWriter> consumer) {
+	public static RecordStreamBody records(Serializer serializer, Consumer<RecordWriter> consumer) {
 		assertArgNotNull("serializer", serializer);
 		assertArgNotNull("consumer", consumer);
 		if (! (serializer instanceof RecordWritable))
