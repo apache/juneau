@@ -43,9 +43,26 @@ import org.apache.juneau.rest.client.assertion.*;
 public final class RestResponse implements Closeable {
 
 	private final TransportResponse response;
+	private final RestClient client;
 
-	RestResponse(TransportResponse response) {
+	RestResponse(TransportResponse response, RestClient client) {
 		this.response = response;
+		this.client = client;
+	}
+
+	/**
+	 * Returns the client that produced this response.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+	 * (and possibly earlier).
+	 *
+	 * @return The client that produced this response. Never <jk>null</jk>.
+	 */
+	public RestClient getClient() {
+		return client;
 	}
 
 	/**

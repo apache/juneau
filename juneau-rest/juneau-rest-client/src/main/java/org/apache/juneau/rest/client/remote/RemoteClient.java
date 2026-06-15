@@ -36,9 +36,9 @@ import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
-import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -440,6 +440,9 @@ public final class RemoteClient {
 
 		/** Runs the request and materializes a single (unwrapped) body value. */
 		private Object processBodyValue(RestRequest req, Class<?> returnType, Type genericReturnType, Method method) throws Exception {
+			// Cursor return types stream over the live response body; the caller owns the cursor (and the response it holds).
+			if (RecordReader.class.isAssignableFrom(returnType))
+				return processCursor(req, returnType, method);
 			try (var resp = req.run()) { // HTT - exception during close() branch
 				throwIfError(resp, method);
 				if (returnType == void.class || returnType == Void.class)
@@ -530,15 +533,52 @@ public final class RemoteClient {
 				return req.bodyString(s);
 			if (arg instanceof Reader r)
 				return req.bodyString(readReader(r));
-			return req.bodyString(JsonSerializer.DEFAULT.serialize(arg));
+			return req.body(arg);
 		}
 
+		/**
+		 * Runs the request and opens a token/record-streaming cursor over the (live) response body.
+		 *
+		 * <p>
+		 * Unlike the buffered body paths, the response is <b>not</b> closed here on success: the returned cursor reads
+		 * directly from the response stream and the caller owns it (close the cursor when done).  On any failure before
+		 * the cursor is handed back, the response is closed.
+		 */
+		@SuppressWarnings({
+			"resource" // On success the response is owned by the returned cursor (caller closes it); on failure it is closed in the finally block.
+		})
+		private Object processCursor(RestRequest req, Class<?> returnType, Method method) throws Exception {
+			var resp = req.run();
+			var ok = false;
+			try {
+				throwIfError(resp, method);
+				var cursor = resp.body().asCursor(returnType);
+				ok = true;
+				return cursor;
+			} finally {
+				if (! ok)
+					resp.close();
+			}
+		}
+
+		/**
+		 * Parses a response body for an {@code @Remote}-proxy method return value.
+		 *
+		 * <p>
+		 * Unlike {@link org.apache.juneau.rest.client.ResponseBody#as(org.apache.juneau.marshall.parser.Parser, Class)},
+		 * which always surfaces a parse failure as an {@code IOException}, this method applies a deliberate proxy-only
+		 * leniency: when the declared return type is {@code Object}, a {@link ParseException} is swallowed and the raw
+		 * response body string is returned as-is. For any other declared return type the {@code ParseException}
+		 * propagates unchanged.
+		 */
 		private static Object parseBody(RestResponse resp, Type returnType) throws Exception {
 			var body = resp.getBodyAsString();
 			if (body == null)
 				return null;
+			var h = resp.getFirstHeader("Content-Type");
+			var parser = resp.getClient().getMatchingParser(h == null ? null : h.value());
 			try {
-				return JsonParser.DEFAULT.parse(body, returnType);
+				return parser.parse(body, returnType);
 			} catch (ParseException e) {
 				if (returnType == Object.class)
 					return body;

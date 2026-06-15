@@ -758,15 +758,26 @@ class RestClientFeatures_Test {
 	}
 
 	@Test
-	void f07_body_noConverter_throws() throws Exception {
-		var transport = MockHttpTransport.of(200, "ok");
+	void f07_body_noConverter_fallsBackToDefaultSerializer() throws Exception {
+		var transport = MockHttpTransport.builder()
+			.recordRequests()
+			.fallback(req -> TransportResponse.builder().statusCode(200).build())
+			.build();
+		// No converter handles String, so the POJO is serialized with the client's default (JSON) serializer.
 		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.bodyConverters() // empty converter list
 				.build()) {
-			assertThrows(IllegalArgumentException.class, () -> client.post("/").body("no-converter").run());
+			try (var r = client.post("/").body("no-converter").run()) {
+				assertEquals(200, r.getStatusCode());
+			}
 		}
+		var req = transport.getRecordedRequests().get(0);
+		var baos = new ByteArrayOutputStream();
+		req.getBody().writeTo(baos);
+		assertEquals("\"no-converter\"", baos.toString(StandardCharsets.UTF_8));
+		assertEquals("application/json", req.getFirstHeader("Content-Type").value());
 	}
 
 	@Test
@@ -795,16 +806,26 @@ class RestClientFeatures_Test {
 
 	@Test
 	void f09_bodyConverters_replacesDefaults() throws Exception {
-		var transport = MockHttpTransport.of(200, "ok");
-		// Replace all converters — InputStream no longer handled
+		var transport = MockHttpTransport.builder()
+			.recordRequests()
+			.fallback(req -> TransportResponse.builder().statusCode(200).build())
+			.build();
+		// Replace all converters — InputStream is no longer converter-handled and falls back to the default serializer.
 		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
 				.bodyConverters() // no converters
 				.build()) {
-			assertThrows(IllegalArgumentException.class,
-				() -> client.post("/").body(new ByteArrayInputStream(new byte[0])).run());
+			try (var r = client.post("/").body(new ByteArrayInputStream(new byte[0])).run()) {
+				assertEquals(200, r.getStatusCode());
+			}
 		}
+		var req = transport.getRecordedRequests().get(0);
+		var baos = new ByteArrayOutputStream();
+		req.getBody().writeTo(baos);
+		// The JSON serializer streams the InputStream content directly; an empty stream yields an empty body.
+		assertEquals("", baos.toString(StandardCharsets.UTF_8));
+		assertEquals("application/json", req.getFirstHeader("Content-Type").value());
 	}
 
 	// =================================================================================================================

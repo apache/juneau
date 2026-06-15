@@ -29,6 +29,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Fluent builder for a single HTTP request.
@@ -221,16 +222,23 @@ public final class RestRequest {
 	}
 
 	/**
-	 * Sets the request body from an arbitrary Java object, converting it via the client's body converter chain.
+	 * Sets the request body from an arbitrary Java object.
 	 *
 	 * <p>
-	 * The default converters handle: {@link HttpBody} (passthrough), {@link InputStream},
-	 * {@code byte[]}, and {@link java.io.File}. Custom converters can be registered on the builder.
+	 * The object is first run through the client's body converter chain. The default converters handle:
+	 * {@link HttpBody} (passthrough), {@link InputStream}, {@code byte[]}, and {@link java.io.File}.
+	 * Custom converters can be registered on the builder.
+	 *
+	 * <p>
+	 * If no converter matches, the object is serialized with the client's default serializer
+	 * ({@link RestClient#getDefaultSerializer()}) and sent as a string body using the serializer's content type.
 	 *
 	 * @param value The body object. May be <jk>null</jk> to clear the body.
 	 * @return This object.
-	 * @throws IOException If a converter fails.
-	 * @throws IllegalArgumentException If no converter can handle the given type.
+	 * @throws IOException If a converter fails or the default serializer fails.
+	 * @throws IllegalArgumentException If the default serializer produces output that is neither text nor {@code byte[]}.
+	 * 	Binary ({@code byte[]}) serializer output is sent as a binary body using the serializer's media type
+	 * 	(falling back to {@code application/octet-stream} when the media type is <jk>null</jk>).
 	 */
 	public RestRequest body(Object value) throws IOException {
 		if (value == null) {
@@ -245,7 +253,50 @@ public final class RestRequest {
 				return this;
 			}
 		}
-		throw new IllegalArgumentException("No BodyConverter found for type: " + cn(value));
+		// No converter matched: serialize the POJO with the client's default serializer.
+		var s = client.getDefaultSerializer();
+		Object out;
+		try {
+			out = s.serialize(value);
+		} catch (SerializeException e) {
+			throw new IOException(e);
+		}
+		var mt = s.getResponseContentType();
+		if (out instanceof byte[]) {
+			body = ByteArrayBody.of((byte[]) out, mt != null ? mt.toString() : "application/octet-stream");
+			convertedBody = null;
+			return this;
+		}
+		if (! (out instanceof CharSequence))
+			throw new IllegalArgumentException("Default serializer '" + cn(s) + "' produced output that is neither text nor byte[] for type: " + cn(value));
+		body = StringBody.of(out.toString(), mt != null ? mt.toString() : "application/json");
+		convertedBody = null;
+		return this;
+	}
+
+	/**
+	 * Sets the request body to a token/record-streaming cursor body.
+	 *
+	 * <p>
+	 * Convenience for {@link #body(HttpBody) body(streamBody)} that documents streaming intent and avoids a cast.
+	 * The {@link RecordStreamBody} writes directly to the transport output stream during {@link #run()}, so large
+	 * payloads are streamed to the wire without being buffered in memory.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jv>client</jv>.post(<js>"/bulk-upload"</js>)
+	 * 		.streamBodyEntity(RecordStreamBody.<jsm>record</jsm>(<jv>w</jv> -&gt; {
+	 * 			<jk>for</jk> (Bean <jv>b</jv> : <jv>source</jv>())
+	 * 				<jv>w</jv>.write(<jv>b</jv>);
+	 * 		}))
+	 * 		.run();
+	 * </p>
+	 *
+	 * @param value The streaming body. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RestRequest streamBodyEntity(RecordStreamBody value) {
+		return body((HttpBody) value);
 	}
 
 	/**
@@ -335,7 +386,7 @@ public final class RestRequest {
 
 			var transportRequest = buildTransportRequest();
 			var transportResponse = client.transport.execute(transportRequest);
-			response = new RestResponse(transportResponse);
+			response = new RestResponse(transportResponse, client);
 
 			for (var interceptor : client.interceptors)
 				interceptor.onConnect(this, response);
@@ -383,6 +434,15 @@ public final class RestRequest {
 			var v = h.getValue();
 			if (v != null)
 				builder.header(h.getName(), v);
+		}
+
+		if (client.parsers != null || client.defaultParser != null) {
+			var hasAccept = headers.stream().anyMatch(h -> "Accept".equalsIgnoreCase(h.getName()));
+			if (! hasAccept) {
+				var accept = client.getDefaultAccept();
+				if (accept != null)
+					builder.header("Accept", accept);
+			}
 		}
 
 		// Pre-converted body from body(Object) takes priority

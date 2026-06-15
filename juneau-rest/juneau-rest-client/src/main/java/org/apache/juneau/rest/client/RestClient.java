@@ -22,12 +22,17 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;
+import java.util.stream.*;
 
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.client.remote.*;
 
 /**
@@ -86,6 +91,10 @@ public final class RestClient implements Closeable {
 	final List<RestCallInterceptor> interceptors;
 	final RestLogger logger;
 	final List<BodyConverter<?>> bodyConverters;
+	final SerializerSet serializers;
+	final ParserSet parsers;
+	final Serializer defaultSerializer;
+	final Parser defaultParser;
 
 	private RestClient(Builder builder) {
 		this.transport = assertArgNotNull("transport",
@@ -96,6 +105,10 @@ public final class RestClient implements Closeable {
 		this.interceptors = List.copyOf(builder.interceptors);
 		this.logger = builder.logger;
 		this.bodyConverters = List.copyOf(builder.bodyConverters);
+		this.serializers = builder.serializers;
+		this.parsers = builder.parsers;
+		this.defaultSerializer = builder.defaultSerializer;
+		this.defaultParser = builder.defaultParser;
 	}
 
 	private static HttpTransport discoverTransport() {
@@ -205,6 +218,75 @@ public final class RestClient implements Closeable {
 	}
 
 	/**
+	 * Returns the serializer used for outbound bodies when the format is not otherwise discernable.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+	 * (and possibly earlier).
+	 *
+	 * @return The default serializer. Never <jk>null</jk>.
+	 */
+	public Serializer getDefaultSerializer() {
+		if (defaultSerializer != null)
+			return defaultSerializer;
+		if (serializers != null && ! serializers.isEmpty())
+			return serializers.getSerializers().get(0);
+		return JsonSerializer.DEFAULT;
+	}
+
+	/**
+	 * Returns the parser matching the given response {@code Content-Type}, falling back to the default/JSON.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+	 * (and possibly earlier).
+	 *
+	 * @param contentType The response {@code Content-Type} header value. May be <jk>null</jk>.
+	 * @return The matching parser. Never <jk>null</jk>.
+	 */
+	public Parser getMatchingParser(String contentType) {
+		if (parsers != null && contentType != null) {
+			var p = parsers.getParser(contentType);
+			if (p != null)
+				return p;
+		}
+		if (defaultParser != null)
+			return defaultParser;
+		if (parsers != null && ! parsers.isEmpty())
+			return parsers.getParsers().get(0);
+		return JsonParser.DEFAULT;
+	}
+
+	/**
+	 * Returns the default {@code Accept} header value advertising what this client can read.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
+	 * (and possibly earlier).
+	 *
+	 * @return The default {@code Accept} header value. Never <jk>null</jk>.
+	 */
+	public String getDefaultAccept() {
+		if (parsers != null) {
+			var mts = parsers.getSupportedMediaTypes();
+			if (! mts.isEmpty())
+				return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));
+		}
+		if (defaultParser != null) {
+			var mts = defaultParser.getMediaTypes();
+			if (! mts.isEmpty())
+				return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));
+		}
+		return "application/json";
+	}
+
+	/**
 	 * Creates a Java proxy for the given {@link Remote}-annotated interface.
 	 *
 	 * <p>
@@ -250,6 +332,12 @@ public final class RestClient implements Closeable {
 		final List<RestCallInterceptor> interceptors = new ArrayList<>();
 		RestLogger logger;
 		List<BodyConverter<?>> bodyConverters = new ArrayList<>(DEFAULT_BODY_CONVERTERS);
+		SerializerSet serializers;
+		ParserSet parsers;
+		Serializer defaultSerializer;
+		Parser defaultParser;
+		final List<Serializer> serializerList = new ArrayList<>();
+		final List<Parser> parserList = new ArrayList<>();
 
 		private Builder() {}
 
@@ -391,11 +479,81 @@ public final class RestClient implements Closeable {
 		}
 
 		/**
+		 * Sets the serializer registry used for outbound bodies.
+		 *
+		 * @param value The serializer set. May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder serializers(SerializerSet value) {
+			serializers = value;
+			return this;
+		}
+
+		/**
+		 * Sets the parser registry used for inbound bodies.
+		 *
+		 * @param value The parser set. May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder parsers(ParserSet value) {
+			parsers = value;
+			return this;
+		}
+
+		/**
+		 * Appends serializers (built into a {@link SerializerSet} at build time if no set was supplied).
+		 *
+		 * @param value The serializers to append. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder serializer(Serializer... value) {
+			serializerList.addAll(Arrays.asList(value));
+			return this;
+		}
+
+		/**
+		 * Appends parsers (built into a {@link ParserSet} at build time if no set was supplied).
+		 *
+		 * @param value The parsers to append. Must not be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder parser(Parser... value) {
+			parserList.addAll(Arrays.asList(value));
+			return this;
+		}
+
+		/**
+		 * Designates the default serializer used when the outbound format is not otherwise discernable.
+		 *
+		 * @param value The default serializer. May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder defaultSerializer(Serializer value) {
+			defaultSerializer = value;
+			return this;
+		}
+
+		/**
+		 * Designates the default parser used when the response {@code Content-Type} is absent or unmatched.
+		 *
+		 * @param value The default parser. May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder defaultParser(Parser value) {
+			defaultParser = value;
+			return this;
+		}
+
+		/**
 		 * Builds and returns the {@link RestClient}.
 		 *
 		 * @return A new instance. Never <jk>null</jk>.
 		 */
 		public RestClient build() {
+			if (serializers == null && ! serializerList.isEmpty())
+				serializers = SerializerSet.create().add(serializerList.toArray(new Serializer[0])).build();
+			if (parsers == null && ! parserList.isEmpty())
+				parsers = ParserSet.create().add(parserList.toArray(new Parser[0])).build();
 			return new RestClient(this);
 		}
 	}

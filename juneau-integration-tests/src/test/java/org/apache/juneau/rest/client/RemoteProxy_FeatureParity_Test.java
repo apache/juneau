@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -214,8 +215,10 @@ class RemoteProxy_FeatureParity_Test {
 		}
 
 		// Gap endpoints — return plain strings so the fixture needs no server-side serializer config.
-		@RestPost("/rest/beanContent") public String beanContent(@Content String body) { return body; }
-		@RestPost("/rest/listContent") public String listContent(@Content String body) { return body; }
+		// @Content POJO bodies arrive as serializer-negotiated JSON (Content-Type: application/json); read the raw
+		// stream via @Content Reader so the echo faithfully returns the posted bytes without server-side parsing.
+		@RestPost("/rest/beanContent") public String beanContent(@Content Reader body) throws IOException { return read(body); }
+		@RestPost("/rest/listContent") public String listContent(@Content Reader body) throws IOException { return read(body); }
 		@RestPost("/rest/readerContent") public String readerContent(@Content String body) { return body; }
 		@RestGet("/rest/bean")  public String bean() { return "{\"name\":\"na44\"}"; }
 		@RestGet("/rest/list")  public String list() { return "[{\"name\":\"na44\"}]"; }
