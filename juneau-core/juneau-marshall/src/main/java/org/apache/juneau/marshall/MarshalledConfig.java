@@ -297,6 +297,13 @@ public @interface MarshalledConfig {
 	UuidFormat uuidFormat() default UuidFormat.NOT_SET;
 
 	/**
+	 * BitSet wire format.
+	 *
+	 * @return The annotation value.
+	 */
+	BitSetFormat bitSetFormat() default BitSetFormat.NOT_SET;
+
+	/**
 	 * Big-number wire format for {@link BigInteger} / {@link BigDecimal} values.
 	 *
 	 * @return The annotation value.

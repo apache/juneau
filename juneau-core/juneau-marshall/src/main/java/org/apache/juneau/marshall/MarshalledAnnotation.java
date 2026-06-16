@@ -62,6 +62,7 @@ public class MarshalledAnnotation {
 		private BinaryFormat binaryFormat = BinaryFormat.NOT_SET;
 		private EnumFormat enumFormat = EnumFormat.NOT_SET;
 		private UuidFormat uuidFormat = UuidFormat.NOT_SET;
+		private BitSetFormat bitSetFormat = BitSetFormat.NOT_SET;
 		private BigNumberFormat bigNumberFormat = BigNumberFormat.NOT_SET;
 		private BooleanFormat booleanFormat = BooleanFormat.NOT_SET;
 		private FloatFormat floatFormat = FloatFormat.NOT_SET;
@@ -239,6 +240,17 @@ public class MarshalledAnnotation {
 		}
 
 		/**
+		 * Sets the {@link Marshalled#bitSetFormat()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder bitSetFormat(BitSetFormat value) {
+			bitSetFormat = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link Marshalled#bigNumberFormat()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -374,6 +386,7 @@ public class MarshalledAnnotation {
 		private final BinaryFormat binaryFormat;
 		private final EnumFormat enumFormat;
 		private final UuidFormat uuidFormat;
+		private final BitSetFormat bitSetFormat;
 		private final BigNumberFormat bigNumberFormat;
 		private final BooleanFormat booleanFormat;
 		private final FloatFormat floatFormat;
@@ -401,6 +414,7 @@ public class MarshalledAnnotation {
 			binaryFormat = b.binaryFormat;
 			enumFormat = b.enumFormat;
 			uuidFormat = b.uuidFormat;
+			bitSetFormat = b.bitSetFormat;
 			bigNumberFormat = b.bigNumberFormat;
 			booleanFormat = b.booleanFormat;
 			floatFormat = b.floatFormat;
@@ -471,6 +485,11 @@ public class MarshalledAnnotation {
 		@Override /* Overridden from Marshalled */
 		public UuidFormat uuidFormat() {
 			return uuidFormat;
+		}
+
+		@Override /* Overridden from Marshalled */
+		public BitSetFormat bitSetFormat() {
+			return bitSetFormat;
 		}
 
 		@Override /* Overridden from Marshalled */

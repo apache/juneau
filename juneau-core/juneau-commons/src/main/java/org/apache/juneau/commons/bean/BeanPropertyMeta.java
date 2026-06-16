@@ -60,6 +60,20 @@ import org.apache.juneau.commons.reflect.*;
 })
 public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
+	/**
+	 * Sentinel value that, when returned from {@link BeanPropertyMeta.Builder#writeTransform} during
+	 * {@link #set(BeanMap, String, Object)}, causes the set to be skipped entirely — neither the configured setter
+	 * is invoked nor the property cache updated.
+	 *
+	 * <p>
+	 * Provided as a generic SPI hook so the marshalling layer (or any other transform-installing extension) can
+	 * implement "leave the bean's pre-existing value in place" semantics — used by the per-property null-coercion
+	 * {@code SKIP} mode added to the marshalling layer in 10.0.0.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final Object SKIP_VALUE = new Object();
+
 	// Property name constants
 	private static final String PROP_field = "field";
 	private static final String PROP_getter = "getter";
@@ -1092,6 +1106,12 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 
 			// Apply the install-time write transform (identity by default; swap-aware in the marshalling layer).
 			value1 = writeTransform.apply(session, value1);
+
+			// Generic SPI hook: a transform that returns SKIP_VALUE causes the set to be skipped entirely so the
+			// bean's pre-existing value (typically a field-initializer) is preserved.  Used by the marshalling
+			// layer's per-property null-coercion SKIP mode.
+			if (value1 == SKIP_VALUE)
+				return null;
 
 			if (m.bean == null) {
 

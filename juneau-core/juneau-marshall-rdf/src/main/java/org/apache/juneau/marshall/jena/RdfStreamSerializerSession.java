@@ -409,7 +409,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			var t = x.getThrown();
 			if (nn(t))
 				onBeanGetterException(bpMeta, t);
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(bpMeta, key, value))
 				return;
 			var ns = bpRdf.getNamespace();
 			if (ns == null && ctx.isUseXmlNamespaces())

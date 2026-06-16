@@ -168,7 +168,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 
 			addComma.ifSet(() -> out.append(',').smi(i)).set();

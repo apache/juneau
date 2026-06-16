@@ -375,12 +375,12 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		return xcm.getFormat() == XMLTEXT;
 	}
 
-	private Optional<Map.Entry<String,Object>> getPropertyKeyValueIfNotIgnored(BeanPropertyValue p, BeanPropertyMeta pMeta, ClassMeta<?> cMeta) {
+	private Optional<Map.Entry<String,Object>> getPropertyKeyValueIfNotIgnored(BeanPropertyValue p, BeanPropertyMeta pMeta) {
 		var key = p.getName();
 		var value = p.getValue();
 		if (nn(p.getThrown()))
 			onBeanGetterException(pMeta, p.getThrown());
-		if (canIgnoreValue(cMeta, key, value))
+		if (canIgnoreValue(pMeta, key, value))
 			return opte();
 		return opt(new SimpleEntry<>(key, value));
 	}
@@ -418,7 +418,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 			if (attrs.contains(n) || attrs.contains("*") || n.equals(attrsProperty)) {
 				var pMeta = p.getMeta();
 				if (pMeta.canRead()) {
-					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, (ClassMeta<?>) p.getBeanInfo());
+					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta);
 					if (kv.isEmpty())
 						continue;
 					var key = kv.get().getKey();
@@ -469,7 +469,7 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 					if ((contentType.isCollection() && ((Collection)content).isEmpty()) || (contentType.isArray() && Array.getLength(content) == 0))
 						hasContent = false;
 				} else if (elements.contains(n) || collapsedElements.contains(n) || elements.contains("*") || collapsedElements.contains("*")) {
-					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta, cMeta);
+					var kv = getPropertyKeyValueIfNotIgnored(p, pMeta);
 					if (kv.isEmpty())
 						continue;
 					var key = kv.get().getKey();

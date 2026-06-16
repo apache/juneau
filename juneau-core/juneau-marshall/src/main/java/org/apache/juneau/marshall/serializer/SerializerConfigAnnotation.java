@@ -84,6 +84,7 @@ public class SerializerConfigAnnotation {
 			bool(a.addBeanTypes()).ifPresent(b::addBeanTypes);
 			bool(a.addRootType()).ifPresent(b::addRootType);
 			bool(a.keepNullProperties()).ifPresent(b::keepNullProperties);
+			bool(a.nonDefault()).ifPresent(b::nonDefault);
 			type(a.listener()).ifPresent(b::listener);
 			bool(a.sortCollections()).ifPresent(b::sortCollections);
 			bool(a.sortMaps()).ifPresent(b::sortMaps);

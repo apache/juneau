@@ -234,6 +234,13 @@ public @interface MarshalledProp {
 	UuidFormat uuidFormat() default UuidFormat.NOT_SET;
 
 	/**
+	 * BitSet wire format override for {@link BitSet} property values.
+	 *
+	 * @return The annotation value.
+	 */
+	BitSetFormat bitSetFormat() default BitSetFormat.NOT_SET;
+
+	/**
 	 * Big-number wire format override for {@link BigInteger} / {@link BigDecimal} property values.
 	 *
 	 * @return The annotation value.
@@ -267,4 +274,36 @@ public @interface MarshalledProp {
 	 * @return The annotation value.
 	 */
 	ClassFormat classFormat() default ClassFormat.NOT_SET;
+
+	/**
+	 * Per-property null-coercion policy applied when a {@code null} JSON-equivalent value reaches this property during
+	 * parsing.
+	 *
+	 * <p>
+	 * Juneau's analog of Jackson's {@code @JsonSetter(nulls=…)}.  When the parser encounters an explicit {@code null}
+	 * (or an absent {@link Optional}) for this property, the configured policy decides whether to:
+	 * <ul>
+	 * 	<li>{@link Nulls#LEAVE LEAVE} (default) — set the property to {@code null} (or, for an {@link Optional}-typed
+	 * 		property, to {@link Optional#empty()}).
+	 * 	<li>{@link Nulls#EMPTY EMPTY} — substitute the type's "empty" value (empty {@link String}/{@link java.util.Collection}/
+	 * 		{@link java.util.Map}, primitive default for primitives, {@code Optional.empty()} for {@link Optional}).
+	 * 	<li>{@link Nulls#DEFAULT DEFAULT} — substitute the bean-constructed default for the property (i.e. the value the
+	 * 		property holds on a fresh no-arg-constructed instance of the bean).  When no reference instance can be built,
+	 * 		falls back to {@link Nulls#LEAVE LEAVE}.
+	 * 	<li>{@link Nulls#SKIP SKIP} — do not call the setter at all, leaving any pre-existing value in place.
+	 * </ul>
+	 *
+	 * <p>
+	 * For an {@link Optional}-typed property, {@code EMPTY}/{@code DEFAULT} resolve to {@link Optional#empty()} —
+	 * never a bare {@code null} inside an {@link Optional}.  The same contract applies to {@link java.util.OptionalInt},
+	 * {@link java.util.OptionalLong}, and {@link java.util.OptionalDouble}.
+	 *
+	 * <p>
+	 * When this member is {@link Nulls#NOT_SET NOT_SET} (the default), the context-level default configured on
+	 * {@link org.apache.juneau.marshall.parser.Parser.Builder#nulls(Nulls)} applies.
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	Nulls nulls() default Nulls.NOT_SET;
 }

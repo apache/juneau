@@ -67,6 +67,7 @@ public class MarshalledConfigAnnotation {
 			if (a.binaryFormat() != BinaryFormat.NOT_SET) b.binaryFormat(a.binaryFormat());
 			if (a.enumFormat() != EnumFormat.NOT_SET) b.enumFormat(a.enumFormat());
 			if (a.uuidFormat() != UuidFormat.NOT_SET) b.uuidFormat(a.uuidFormat());
+			if (a.bitSetFormat() != BitSetFormat.NOT_SET) b.bitSetFormat(a.bitSetFormat());
 			if (a.bigNumberFormat() != BigNumberFormat.NOT_SET) b.bigNumberFormat(a.bigNumberFormat());
 			if (a.booleanFormat() != BooleanFormat.NOT_SET) b.booleanFormat(a.booleanFormat());
 			if (a.floatFormat() != FloatFormat.NOT_SET) b.floatFormat(a.floatFormat());

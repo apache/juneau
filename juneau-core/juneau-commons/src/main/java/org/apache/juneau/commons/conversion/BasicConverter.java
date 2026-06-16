@@ -208,6 +208,9 @@ public class BasicConverter extends CachingConverter {
 
 		if (out == Optional.class && (c = findOptionalConversion()) != null) return c;
 
+		if ((out == OptionalInt.class || out == OptionalLong.class || out == OptionalDouble.class)
+				&& (c = findPrimitiveOptionalConversion(out)) != null) return c;
+
 		if (Collection.class.isAssignableFrom(out) && (c = findCollectionConversion(inType, out)) != null) return c;
 
 		if (Map.class.isAssignableFrom(out) && (c = findMapConversion(inType, out)) != null) return c;
@@ -353,6 +356,56 @@ public class BasicConverter extends CachingConverter {
 				return opt(in);
 			return opt(to(in, memberOf, session, args[0]));
 		};
+	}
+
+	/**
+	 * Conversion to a primitive {@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}.
+	 *
+	 * <p>
+	 * Mirrors the {@link Optional} contract: a {@code null} input (or an empty optional of any flavor)
+	 * yields the matching empty primitive optional; any other value is unwrapped (if it is itself an
+	 * optional) and coerced to the matching boxed number before wrapping.
+	 *
+	 * @param out The target primitive-optional class.
+	 * @return The conversion, never <jk>null</jk>.
+	 */
+	private <I, O> Conversion<I, O> findPrimitiveOptionalConversion(Class<O> out) {
+		final Class<? extends Number> elementType;
+		if (out == OptionalInt.class)
+			elementType = Integer.class;
+		else if (out == OptionalLong.class)
+			elementType = Long.class;
+		else
+			elementType = Double.class;
+		return (Conversion<I, O>) (Conversion<Object, Object>) (in, memberOf, session, args) -> {
+			Object v = in;
+			if (v instanceof Optional<?> opt)
+				v = opt.orElse(null);
+			else if (v instanceof OptionalInt oi)
+				v = oi.isPresent() ? Integer.valueOf(oi.getAsInt()) : null;
+			else if (v instanceof OptionalLong ol)
+				v = ol.isPresent() ? Long.valueOf(ol.getAsLong()) : null;
+			else if (v instanceof OptionalDouble od)
+				v = od.isPresent() ? Double.valueOf(od.getAsDouble()) : null;
+			if (v == null)
+				return emptyPrimitiveOptional(out);
+			var n = (Number) to(v, memberOf, session, elementType);
+			if (n == null)
+				return emptyPrimitiveOptional(out);
+			if (out == OptionalInt.class)
+				return OptionalInt.of(n.intValue());
+			if (out == OptionalLong.class)
+				return OptionalLong.of(n.longValue());
+			return OptionalDouble.of(n.doubleValue());
+		};
+	}
+
+	private static Object emptyPrimitiveOptional(Class<?> out) {
+		if (out == OptionalInt.class)
+			return OptionalInt.empty();
+		if (out == OptionalLong.class)
+			return OptionalLong.empty();
+		return OptionalDouble.empty();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

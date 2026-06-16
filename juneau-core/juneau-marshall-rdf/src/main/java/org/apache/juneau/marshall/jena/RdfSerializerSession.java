@@ -365,7 +365,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 			if (nn(t))
 				onBeanGetterException(bpMeta, t);
 
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(bpMeta, key, value))
 				return;
 
 			var ns = bpRdf.getNamespace();

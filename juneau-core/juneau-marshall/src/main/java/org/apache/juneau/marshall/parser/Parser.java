@@ -148,6 +148,7 @@ public class Parser extends MarshallingContextable {
 	private static final String PROP_autoCloseStreams = "autoCloseStreams";
 	private static final String PROP_debugOutputLines = "debugOutputLines";
 	private static final String PROP_listener = "listener";
+	private static final String PROP_nulls = "nulls";
 	private static final String PROP_trimStrings = "trimStrings";
 	private static final String PROP_unbuffered = "unbuffered";
 
@@ -165,6 +166,7 @@ public class Parser extends MarshallingContextable {
 		private Class<? extends ParserListener> listener;
 		private int debugOutputLines;
 		private String consumes;
+		private Nulls nulls;
 
 		/**
 		 * Constructor, default settings.
@@ -176,6 +178,7 @@ public class Parser extends MarshallingContextable {
 			debugOutputLines = env("Parser.debugOutputLines", 5);
 			listener = null;
 			consumes = null;
+			nulls = Nulls.NOT_SET;
 		}
 
 		/**
@@ -191,6 +194,7 @@ public class Parser extends MarshallingContextable {
 			debugOutputLines = copyFrom.debugOutputLines;
 			listener = copyFrom.listener;
 			consumes = copyFrom.consumes;
+			nulls = copyFrom.nulls;
 		}
 
 		/**
@@ -206,6 +210,7 @@ public class Parser extends MarshallingContextable {
 			debugOutputLines = copyFrom.debugOutputLines;
 			listener = copyFrom.listener;
 			consumes = copyFrom.consumes;
+			nulls = copyFrom.nulls;
 		}
 
 		/**
@@ -326,7 +331,8 @@ public class Parser extends MarshallingContextable {
 				unbuffered,
 				debugOutputLines,
 				listener,
-				consumes
+				consumes,
+				nulls
 			);
 			// @formatter:on
 		}
@@ -386,6 +392,43 @@ public class Parser extends MarshallingContextable {
 			listener = value;
 			return self();
 		}
+
+		/**
+		 * Sets the default per-property null-coercion policy applied during parsing.
+		 *
+		 * <p>
+		 * Juneau's analog of Jackson's
+		 * <c>ObjectMapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(...))</c>.
+		 * Applied as the fallback when no per-property
+		 * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Substitute the empty value for any property whose wire value is null.</jc>
+		 * 	ReaderParser <jv>parser</jv> = JsonParser
+		 * 		.<jsm>create</jsm>()
+		 * 		.nulls(Nulls.<jsf>EMPTY</jsf>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * @param value The new value for this property.
+		 * 	<br>{@code null} or {@link Nulls#NOT_SET} disables the default (each property falls back to
+		 * 	{@link Nulls#LEAVE}).
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF nulls(Nulls value) {
+			nulls = value == null ? Nulls.NOT_SET : value;
+			return self();
+		}
+
+		/**
+		 * Returns the current context-level {@link Nulls} default configured on this builder.
+		 *
+		 * @return The current value (never <jk>null</jk>; {@link Nulls#NOT_SET} when unconfigured).
+		 * @since 10.0.0
+		 */
+		public Nulls getNulls() { return nulls == null ? Nulls.NOT_SET : nulls; }
 
 		/**
 		 * Trim parsed strings.
@@ -556,6 +599,7 @@ public class Parser extends MarshallingContextable {
 	protected final int debugOutputLines;
 	protected final Class<? extends ParserListener> listener;
 	protected final String consumes;
+	protected final Nulls nulls;
 	private final List<MediaType> consumesArray;
 
 	/**
@@ -572,6 +616,7 @@ public class Parser extends MarshallingContextable {
 		listener = builder.listener;
 		trimStrings = builder.trimStrings;
 		unbuffered = builder.unbuffered;
+		nulls = builder.nulls == null ? Nulls.NOT_SET : builder.nulls;
 
 	String[] consumesParts = splita(nn(consumes) ? consumes : "");
 	List<MediaType> consumesList = new ArrayList<>();
@@ -981,6 +1026,16 @@ public class Parser extends MarshallingContextable {
 	protected final boolean isTrimStrings() { return trimStrings; }
 
 	/**
+	 * Returns the context-level {@link Nulls} default consulted at parse-time when no per-property
+	 * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
+	 *
+	 * @return The current value (never <jk>null</jk>; {@link Nulls#NOT_SET} when unconfigured).
+	 * @see Parser.Builder#nulls(Nulls)
+	 * @since 10.0.0
+	 */
+	public final Nulls getNulls() { return nulls; }
+
+	/**
 	 * Unbuffered.
 	 *
 	 * @see Parser.Builder#unbuffered()
@@ -995,6 +1050,7 @@ public class Parser extends MarshallingContextable {
 			.a(PROP_autoCloseStreams, autoCloseStreams)
 			.a(PROP_debugOutputLines, debugOutputLines)
 			.a(PROP_listener, listener)
+			.a(PROP_nulls, nulls)
 			.a(PROP_trimStrings, trimStrings)
 			.a(PROP_unbuffered, unbuffered);
 	}

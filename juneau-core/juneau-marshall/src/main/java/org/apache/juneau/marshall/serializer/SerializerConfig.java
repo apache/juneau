@@ -361,6 +361,37 @@ public @interface SerializerConfig {
 	String maxIndent() default "";
 
 	/**
+	 * Don't serialize properties whose value equals the type default.
+	 *
+	 * <p>
+	 * If <js>"true"</js>, bean properties whose current value equals the corresponding default — the Java type default
+	 * for primitives/boxed types, or the value returned by the bean's own no-arg constructor for bean properties — will
+	 * be omitted from the output.  This is Juneau's analog of Jackson's
+	 * <c>JsonInclude.Include.NON_DEFAULT</c>.
+	 *
+	 * <p>
+	 * Numeric values are compared by value (<c>1.0</c> equals <c>1</c>; <c>0.0</c> equals <c>-0.0</c>).
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"true"</js>
+	 * 	<li><js>"false"</js> (default)
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.serializer.Serializer.Builder#nonDefault()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	String nonDefault() default "";
+
+	/**
 	 * Quote character.
 	 *
 	 * <p>

@@ -83,6 +83,12 @@ public abstract class CachingConverter implements Converter {
 				return (T) opt(nullDefault(args[0], Arrays.copyOfRange(args, 1, args.length)));
 			return (T) opte();
 		}
+		if (type == OptionalInt.class)
+			return (T) OptionalInt.empty();
+		if (type == OptionalLong.class)
+			return (T) OptionalLong.empty();
+		if (type == OptionalDouble.class)
+			return (T) OptionalDouble.empty();
 		return type.isPrimitive() ? primitiveDefault(type) : null;
 	}
 

@@ -675,9 +675,42 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	})
 	@Override
 	public Optional<?> getOptionalDefault() {
+		if (isPrimitiveOptional())
+			return Optional.empty();
 		if (isOptional())
 			return opt(getElementType().getOptionalDefault());
 		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this is one of the primitive {@link Optional} cousins
+	 * ({@link OptionalInt}, {@link OptionalLong}, or {@link OptionalDouble}).
+	 *
+	 * <p>
+	 * These types carry no generic element type but are treated as first-class optional types by the
+	 * marshallers (mirroring the {@link Optional} contract — empty ≡ null/absent, present unwraps to the
+	 * primitive number).  See {@link #getElementType()} which synthesizes the matching boxed element type.
+	 *
+	 * @return <jk>true</jk> if this is {@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}.
+	 */
+	public boolean isPrimitiveOptional() {
+		return is(OptionalInt.class) || is(OptionalLong.class) || is(OptionalDouble.class);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this class is {@link Optional} or one of its primitive cousins
+	 * ({@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}).
+	 *
+	 * <p>
+	 * Overrides {@link org.apache.juneau.commons.reflect.ClassInfo#isOptional()} so the marshalling layer
+	 * treats the three primitive optional types as first-class optionals (synthetic boxed element type,
+	 * empty-as-null contract) without registering swaps for them.
+	 *
+	 * @return <jk>true</jk> if this is an optional-like type.
+	 */
+	@Override
+	public boolean isOptional() {
+		return super.isOptional() || isPrimitiveOptional();
 	}
 
 	/**
@@ -1495,6 +1528,14 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	private ClassMeta<?> findElementType() {
 		if (marshallingContext == null)
 			return null;
+		// Primitive optional types carry no generic parameter — synthesize the matching boxed element type so
+		// the first-class optional path (serialize unwrap / parse element-typed wrap) has a target type.
+		if (is(OptionalInt.class))
+			return marshallingContext.getClassMeta(Integer.class);
+		if (is(OptionalLong.class))
+			return marshallingContext.getClassMeta(Long.class);
+		if (is(OptionalDouble.class))
+			return marshallingContext.getClassMeta(Double.class);
 		if (cat.is(ARRAY)) {
 			return marshallingContext.getClassMeta(inner().getComponentType());
 		} else if (cat.is(COLLECTION) || cat.is(ITERABLE) || cat.is(ITERATOR) || cat.is(STREAM) || is(Optional.class)) {

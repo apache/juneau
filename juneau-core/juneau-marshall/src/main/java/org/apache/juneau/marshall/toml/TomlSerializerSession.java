@@ -170,7 +170,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			ClassMeta<?> cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 			ClassMeta<?> aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
 			if (isSimpleOrInlineTable(aType, value, pMeta)) {

@@ -24,6 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
+import java.math.*;
 import java.net.*;
 import java.text.*;
 import java.time.*;
@@ -89,6 +90,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	private static final String PROP_uriContext = "uriContext";
 	private static final String PROP_uriResolver = "uriResolver";
 	private static final String PROP_keepNullProperties = "keepNullProperties";
+	private static final String PROP_nonDefault = "nonDefault";
 	private static final String PROP_trimStrings = "trimStrings";
 	private static final String PROP_addBeanTypes = "addBeanTypes";
 	private static final String PROP_addRootType = "addRootType";
@@ -101,6 +103,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	private static final String PROP_SerializerSession_schema = "SerializerSession.schema";
 	private static final String PROP_SerializerSession_uriContext = "SerializerSession.uriContext";
 	private static final String PROP_SerializerSession_keepNullProperties = "SerializerSession.keepNullProperties";
+	private static final String PROP_SerializerSession_nonDefault = "SerializerSession.nonDefault";
 	private static final String PROP_SerializerSession_trimStrings = "SerializerSession.trimStrings";
 	private static final String PROP_SerializerSession_addBeanTypes = "SerializerSession.addBeanTypes";
 	private static final String PROP_SerializerSession_addRootType = "SerializerSession.addRootType";
@@ -125,6 +128,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 		private UriContext uriContext;
 		private VarResolverSession resolver;
 		private boolean keepNullProperties;
+		private boolean nonDefault;
 		private boolean trimStrings;
 		private boolean addBeanTypes;
 		private boolean addRootType;
@@ -145,6 +149,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 			mediaTypeDefault(ctx.getResponseContentType());
 			uriContext = ctx.getUriContext();
 			keepNullProperties = ctx.isKeepNullProperties();
+			nonDefault = ctx.isNonDefault();
 			trimStrings = ctx.isTrimStrings();
 			addBeanTypes = ctx.isAddBeanTypes();
 			addRootType = ctx.isAddRootType();
@@ -190,6 +195,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 					return uriContext(cvt(value, UriContext.class));
 				case PROP_keepNullProperties, PROP_SerializerSession_keepNullProperties:
 					return keepNullProperties(cvt(value, Boolean.class));
+				case PROP_nonDefault, PROP_SerializerSession_nonDefault:
+					return nonDefault(cvt(value, Boolean.class));
 				case PROP_trimStrings, PROP_SerializerSession_trimStrings:
 					return trimStrings(cvt(value, Boolean.class));
 				case PROP_addBeanTypes, PROP_SerializerSession_addBeanTypes:
@@ -286,6 +293,18 @@ public class SerializerSession extends MarshallingTraverseSession {
 		 */
 		public SELF keepNullProperties(boolean value) {
 			keepNullProperties = value;
+			return self();
+		}
+
+		/**
+		 * Non-default inclusion.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF nonDefault(boolean value) {
+			nonDefault = value;
 			return self();
 		}
 
@@ -456,6 +475,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	private final UriResolver uriResolver;
 	private VarResolverSession vrs;
 	private final boolean keepNullProperties;
+	private final boolean nonDefault;
 	private final boolean trimStrings;
 	private final boolean addBeanTypes;
 	private final boolean addRootType;
@@ -479,6 +499,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 		vrs = builder.resolver;
 		listener = BeanInstantiator.createOrNull(ctx.getListener());
 		keepNullProperties = builder.keepNullProperties;
+		nonDefault = builder.nonDefault;
 		trimStrings = builder.trimStrings;
 		addBeanTypes = builder.addBeanTypes;
 		addRootType = builder.addRootType;
@@ -543,6 +564,157 @@ public class SerializerSession extends MarshallingTraverseSession {
 
 		return false;
 	}
+
+	/**
+	 * Per-bean-property variant of {@link #canIgnoreValue(ClassMeta, String, Object)}.
+	 *
+	 * <p>
+	 * Applies the same standard inclusion rules ({@link Serializer.Builder#keepNullProperties() keepNullProperties},
+	 * {@link Serializer.Builder#trimEmptyCollections() trimEmptyCollections} /
+	 * {@link Serializer.Builder#trimEmptyMaps() trimEmptyMaps},
+	 * recursion detection), then additionally:
+	 * <ul>
+	 * 	<li>Treats {@link java.util.Optional#empty()} (and its primitive cousins
+	 * 		{@link java.util.OptionalInt}/{@link java.util.OptionalLong}/{@link java.util.OptionalDouble}) as a
+	 * 		<jk>null</jk> property value for inclusion purposes — the shared Optional/absent contract.
+	 * 	<li>Applies {@link Serializer.Builder#nonDefault() nonDefault} by comparing the surviving value against a
+	 * 		cached <i>reference instance</i> of the property's containing bean.  When no reference instance can be
+	 * 		built (no accessible no-arg ctor / instantiation throws), {@code nonDefault} is silently skipped for
+	 * 		that bean — the property is emitted normally rather than failing.
+	 * </ul>
+	 *
+	 * <p>
+	 * Precedence (first "omit" wins): (1) <jk>null</jk> / empty Optional, (2) trimEmpty*, (3) value-equals-default.
+	 *
+	 * @param pMeta The bean property meta for the value being considered.  Must not be <jk>null</jk>.
+	 * @param attrName The bean attribute name.  Must not be <jk>null</jk>.
+	 * @param value The current property value.
+	 * @return <jk>true</jk> if the property should be omitted from the output.
+	 * @throws SerializeException If recursion occurred.
+	 * @since 10.0.0
+	 */
+	public final boolean canIgnoreValue(BeanPropertyMeta pMeta, String attrName, Object value) throws SerializeException {
+		var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
+		// Resolve Optional<empty> / OptionalInt/Long/Double.isPresent()==false to null for the inclusion check.
+		var resolved = unwrapEmptyOptional(value);
+		if (canIgnoreValue(cMeta, attrName, resolved))
+			return true;
+		if (isNonDefault() && resolved != null)
+			return equalsBeanPropertyDefault(pMeta, attrName, resolved);
+		return false;
+	}
+
+	/**
+	 * Resolves an {@link Optional#empty()} (or the empty form of an {@link OptionalInt}/{@link OptionalLong}/
+	 * {@link OptionalDouble}) to <jk>null</jk>, leaving all other values unchanged.
+	 *
+	 * <p>
+	 * Nested {@code Optional<Optional<X>>} values are unwrapped recursively.
+	 *
+	 * @param value The value to resolve.
+	 * @return The resolved value (may be <jk>null</jk>).
+	 */
+	private static Object unwrapEmptyOptional(Object value) {
+		if (value == null)
+			return null;
+		if (value instanceof Optional<?> o)
+			return o.isEmpty() ? null : unwrapEmptyOptional(o.orElse(null));
+		if (value instanceof OptionalInt oi)
+			return oi.isEmpty() ? null : Integer.valueOf(oi.getAsInt());
+		if (value instanceof OptionalLong ol)
+			return ol.isEmpty() ? null : Long.valueOf(ol.getAsLong());
+		if (value instanceof OptionalDouble od)
+			return od.isEmpty() ? null : Double.valueOf(od.getAsDouble());
+		return value;
+	}
+
+	/**
+	 * Returns <jk>true</jk> when {@code value} equals the property's bean-constructed default per the
+	 * {@code nonDefault} contract.
+	 *
+	 * <p>
+	 * Resolves (and caches per-{@link ClassMeta}) the containing bean's reference instance.  Returns
+	 * <jk>false</jk> when no reference instance can be built (which signals "skip nonDefault for this bean" per
+	 * the documented contract).
+	 *
+	 * @param pMeta The bean-property meta.
+	 * @param attrName The bean attribute name.
+	 * @param value The surviving property value (non-null).
+	 * @return <jk>true</jk> if the value equals the property's default.
+	 */
+	private boolean equalsBeanPropertyDefault(BeanPropertyMeta pMeta, String attrName, Object value) {
+		var owning = pMeta.getBeanMeta();
+		if (owning == null)
+			return false;
+		var ownerClass = owning.getClassInfo();
+		if (ownerClass == null)
+			return false;
+		var ownerMeta = getClassMeta(ownerClass.inner());
+		var refValueHolder = ownerMeta.getProperty(NON_DEFAULT_PROPERTY_CACHE_KEY, cm -> {
+			var instance = BeanInstantiator.createOrNull(cm.inner());
+			return instance == null ? NO_REFERENCE_INSTANCE : instance;
+		});
+		var ref = refValueHolder.orElse(null);
+		if (ref == null || ref == NO_REFERENCE_INSTANCE)
+			return false;
+		// Resolve the default value via the bean's accessor surface so it composes with @MarshalledProp
+		// transforms.  Wrap any throw in a guard — a bean whose getter throws on a fresh instance is just
+		// treated as "no default available", which is safer than aborting the serialize.
+		Object defaultValue;
+		try {
+			defaultValue = pMeta.get(toBeanMap(ref), attrName);
+		} catch (RuntimeException e) {  // HTT — defensive: getter on reference instance throws.
+			return false;
+		}
+		var resolvedDefault = unwrapEmptyOptional(defaultValue);
+		return defaultEquals(value, resolvedDefault);
+	}
+
+	/**
+	 * {@code Objects.equals} with a numeric-value shortcut so {@code 1.0} equals {@code 1},
+	 * {@code BigDecimal("1.0")} equals {@code BigDecimal("1")}, and {@code 0.0}/{@code -0.0} equal each other.
+	 *
+	 * @param a First value.
+	 * @param b Second value.
+	 * @return <jk>true</jk> if the values are equal under the {@code nonDefault} contract.
+	 */
+	@SuppressWarnings({
+		"java:S1244" // Float equality is intentional: caller has already narrowed to numeric short-circuit; BigDecimal compareTo handles the value-equality semantics.
+	})
+	private static boolean defaultEquals(Object a, Object b) {
+		if (a == b)
+			return true;
+		if (a == null || b == null)
+			return false;
+		if (a instanceof Number an && b instanceof Number bn) {
+			// Treat NaN as equal to NaN (Objects.equals semantics) so two NaN-typed defaults match.
+			var anan = (an instanceof Double d && Double.isNaN(d)) || (an instanceof Float f && Float.isNaN(f));
+			var bnan = (bn instanceof Double d && Double.isNaN(d)) || (bn instanceof Float f && Float.isNaN(f));
+			if (anan || bnan)
+				return anan && bnan;
+			try {
+				return toBigDecimal(an).compareTo(toBigDecimal(bn)) == 0;
+			} catch (NumberFormatException e) {  // HTT — defensive: a Number subclass whose toString() isn't a valid decimal.
+				return Objects.equals(a, b);
+			}
+		}
+		return Objects.equals(a, b);
+	}
+
+	private static BigDecimal toBigDecimal(Number n) {
+		if (n instanceof BigDecimal bd)
+			return bd;
+		if (n instanceof BigInteger bi)
+			return new BigDecimal(bi);
+		if (n instanceof Float || n instanceof Double)
+			return BigDecimal.valueOf(n.doubleValue());
+		return BigDecimal.valueOf(n.longValue());
+	}
+
+	/** Cache key under which the per-{@link ClassMeta} reference instance is memoized for {@code nonDefault}. */
+	private static final String NON_DEFAULT_PROPERTY_CACHE_KEY = "SerializerSession.nonDefault.referenceInstance";
+	/** Sentinel stored when a reference instance could not be built (cached so we don't retry on every call). */
+	private static final Object NO_REFERENCE_INSTANCE = new Object();
 
 	/**
 	 * Consumes each entry in the list.
@@ -1280,6 +1452,16 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<jk>true</jk> if null bean values are serialized to the output.
 	 */
 	protected final boolean isKeepNullProperties() { return keepNullProperties; }
+
+	/**
+	 * Don't serialize bean properties whose values equal the default for their type.
+	 *
+	 * @see Serializer.Builder#nonDefault()
+	 * @return
+	 * 	<jk>true</jk> if bean properties whose value equals the type / bean-constructed default are omitted.
+	 * @since 10.0.0
+	 */
+	protected final boolean isNonDefault() { return nonDefault; }
 
 	/**
 	 * Sort arrays and collections alphabetically.

@@ -86,6 +86,7 @@ public class ParserConfigAnnotation {
 			type(a.listener()).ifPresent(b::listener);
 			bool(a.trimStrings()).ifPresent(b::trimStrings);
 			bool(a.unbuffered()).ifPresent(b::unbuffered);
+			string(a.nulls()).map(Nulls::valueOf).ifPresent(b::nulls);
 		}
 	}
 

@@ -2961,6 +2961,17 @@ public abstract class MarshallingContextable extends Context {
 		}
 
 		/**
+		 * BitSet wire format.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public SELF bitSetFormat(BitSetFormat value) {
+			bcBuilder.bitSetFormat(value);
+			return self();
+		}
+
+		/**
 		 * Big-number wire format.
 		 *
 		 * @param value The new value for this property.

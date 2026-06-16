@@ -277,7 +277,7 @@ public class YamlSerializerSession extends WriterSerializerSession implements Re
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 
 			addAtt.ifSet(() -> out.yamlIndent(i)).set();

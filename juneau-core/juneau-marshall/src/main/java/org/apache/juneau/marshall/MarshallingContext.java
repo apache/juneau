@@ -213,6 +213,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private static final String PROP_binaryFormat = "binaryFormat";
 	private static final String PROP_enumFormat = "enumFormat";
 	private static final String PROP_uuidFormat = "uuidFormat";
+	private static final String PROP_bitSetFormat = "bitSetFormat";
 	private static final String PROP_bigNumberFormat = "bigNumberFormat";
 	private static final String PROP_booleanFormat = "booleanFormat";
 	private static final String PROP_floatFormat = "floatFormat";
@@ -290,6 +291,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private BinaryFormat binaryFormat;
 		private EnumFormat enumFormat;
 		private UuidFormat uuidFormat;
+		private BitSetFormat bitSetFormat;
 		private BigNumberFormat bigNumberFormat;
 		private BooleanFormat booleanFormat;
 		private FloatFormat floatFormat;
@@ -348,6 +350,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			binaryFormat = env("MarshallingContext.binaryFormat", BinaryFormat.NOT_SET);
 			enumFormat = env("MarshallingContext.enumFormat", EnumFormat.TO_STRING);
 			uuidFormat = env("MarshallingContext.uuidFormat", UuidFormat.STANDARD);
+			bitSetFormat = env("MarshallingContext.bitSetFormat", BitSetFormat.INDICES);
 			bigNumberFormat = env("MarshallingContext.bigNumberFormat", BigNumberFormat.NUMBER);
 			booleanFormat = env("MarshallingContext.booleanFormat", BooleanFormat.TRUE_FALSE);
 			floatFormat = env("MarshallingContext.floatFormat", FloatFormat.NaN_AS_NULL);
@@ -403,6 +406,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			binaryFormat = copyFrom.binaryFormat;
 			enumFormat = copyFrom.enumFormat;
 			uuidFormat = copyFrom.uuidFormat;
+			bitSetFormat = copyFrom.bitSetFormat;
 			bigNumberFormat = copyFrom.bigNumberFormat;
 			booleanFormat = copyFrom.booleanFormat;
 			floatFormat = copyFrom.floatFormat;
@@ -461,6 +465,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			binaryFormat = copyFrom.binaryFormat;
 			enumFormat = copyFrom.enumFormat;
 			uuidFormat = copyFrom.uuidFormat;
+			bitSetFormat = copyFrom.bitSetFormat;
 			bigNumberFormat = copyFrom.bigNumberFormat;
 			booleanFormat = copyFrom.booleanFormat;
 			floatFormat = copyFrom.floatFormat;
@@ -2355,6 +2360,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				binaryFormat,
 				enumFormat,
 				uuidFormat,
+				bitSetFormat,
 				bigNumberFormat,
 				booleanFormat,
 				floatFormat,
@@ -3636,6 +3642,20 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		}
 
 		/**
+		 * BitSet wire format.
+		 *
+		 * <p>
+		 * Controls how {@link BitSet} values are written to text-based wire formats.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder bitSetFormat(BitSetFormat value) {
+			bitSetFormat = value == null ? BitSetFormat.INDICES : value;
+			return this;
+		}
+
+		/**
 		 * Big-number wire format.
 		 *
 		 * <p>
@@ -4045,6 +4065,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final BinaryFormat binaryFormat;
 	private final EnumFormat enumFormat;
 	private final UuidFormat uuidFormat;
+	private final BitSetFormat bitSetFormat;
 	private final BigNumberFormat bigNumberFormat;
 	private final BooleanFormat booleanFormat;
 	private final FloatFormat floatFormat;
@@ -4103,6 +4124,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		binaryFormat = builder.binaryFormat;
 		enumFormat = builder.enumFormat;
 		uuidFormat = builder.uuidFormat;
+		bitSetFormat = builder.bitSetFormat;
 		bigNumberFormat = builder.bigNumberFormat;
 		booleanFormat = builder.booleanFormat;
 		floatFormat = builder.floatFormat;
@@ -5310,6 +5332,13 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final UuidFormat getUuidFormat() { return uuidFormat; }
 
 	/**
+	 * BitSet wire format.
+	 *
+	 * @return The BitSet wire format.
+	 */
+	public final BitSetFormat getBitSetFormat() { return bitSetFormat; }
+
+	/**
 	 * Big-number wire format.
 	 *
 	 * @return The big-number wire format.
@@ -5457,13 +5486,14 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			.a(PROP_binaryFormat, binaryFormat)
 			.a(PROP_enumFormat, enumFormat)
 			.a(PROP_uuidFormat, uuidFormat)
+			.a(PROP_bitSetFormat, bitSetFormat)
 			.a(PROP_bigNumberFormat, bigNumberFormat)
 			.a(PROP_booleanFormat, booleanFormat)
 			.a(PROP_floatFormat, floatFormat)
 			.a(PROP_currencyFormat, currencyFormat)
-		.a(PROP_classFormat, classFormat)
-		.a(PROP_classLoader, classLoader)
-		.a(PROP_useInterfaceProxies, useInterfaceProxies)
+			.a(PROP_classFormat, classFormat)
+			.a(PROP_classLoader, classLoader)
+			.a(PROP_useInterfaceProxies, useInterfaceProxies)
 			.a(PROP_useJavaBeanIntrospector, useJavaBeanIntrospector)
 			.a(PROP_validateSchema, validateSchema);
 	}

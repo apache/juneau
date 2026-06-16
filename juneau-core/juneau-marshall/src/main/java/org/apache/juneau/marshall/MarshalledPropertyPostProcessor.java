@@ -107,6 +107,10 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		var bdClasses = new ArrayList<Class<?>>();
 		Set<String> viewNames = null;
 		var propertyClass = propertyClass(b);
+		// Per-property null-coercion mode discovered across innerField/getter/setter (last-seen-wins, matching the
+		// existing format-override loop semantics).  Stays Nulls.NOT_SET when no @MarshalledProp annotation
+		// declares it, in which case only the context-level Parser.Builder#nulls(Nulls) default applies.
+		var perPropertyNulls = Nulls.NOT_SET;
 
 		// XMLGregorianCalendar always uses XML format regardless of any CalendarFormat setting.
 		if (b.swap == null && XMLGregorianCalendar.class.equals(propertyClass))
@@ -123,8 +127,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			});
 			ap.find(Swap.class, b.innerField).stream().findFirst().ifPresent(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.innerField);
-			for (var ai : ap.find(MarshalledProp.class, b.innerField))
+			for (var ai : ap.find(MarshalledProp.class, b.innerField)) {
 				viewNames = addViews(viewNames, ai.inner().view());
+				if (ai.inner().nulls() != Nulls.NOT_SET)
+					perPropertyNulls = ai.inner().nulls();
+			}
 		}
 
 		if (nn(b.getter)) {
@@ -137,8 +144,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			});
 			ap.find(Swap.class, b.getter).forEach(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.getter);
-			for (var ai : ap.find(MarshalledProp.class, b.getter))
+			for (var ai : ap.find(MarshalledProp.class, b.getter)) {
 				viewNames = addViews(viewNames, ai.inner().view());
+				if (ai.inner().nulls() != Nulls.NOT_SET)
+					perPropertyNulls = ai.inner().nulls();
+			}
 		}
 
 		if (nn(b.setter)) {
@@ -151,8 +161,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			});
 			ap.find(Swap.class, b.setter).forEach(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.setter);
-			for (var ai : ap.find(MarshalledProp.class, b.setter))
+			for (var ai : ap.find(MarshalledProp.class, b.setter)) {
 				viewNames = addViews(viewNames, ai.inner().view());
+				if (ai.inner().nulls() != Nulls.NOT_SET)
+					perPropertyNulls = ai.inner().nulls();
+			}
 		}
 
 		if (viewNames != null)
@@ -191,6 +204,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		// Install schema-validation transforms (wraps any existing readTransform/writeTransform) when a
 		// PropertyValidatorFactory is on the classpath and the property carries at least one @Schema annotation.
 		installSchemaValidationTransforms(bc, b);
+
+		// Install null-coercion writeTransform (wraps any existing writeTransform).  Always installed so the
+		// context-level Parser.Builder#nulls(Nulls) default can take effect at runtime even when no per-property
+		// annotation is configured.  The wrap is a no-op for non-null values and the LEAVE policy.
+		installNullCoercionTransform(b, perPropertyNulls, propertyClass);
 	}
 
 	/**
@@ -267,6 +285,182 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				}
 			};
 		}
+	}
+
+	/** Sentinel marker used to cache "no reference instance could be built" for the {@link Nulls#DEFAULT} mode. */
+	private static final Object NO_DEFAULT_REFERENCE = new Object();
+	/** Cache key under which the per-{@link ClassMeta} reference instance is memoized for {@link Nulls#DEFAULT}. */
+	private static final String NULLS_DEFAULT_REFERENCE_CACHE_KEY = "MarshalledPropertyPostProcessor.nullsDefault.referenceInstance";
+
+	/**
+	 * Installs a null-coercion {@code writeTransform} on a {@link BeanPropertyMeta.Builder}.
+	 *
+	 * <p>
+	 * The installed wrap is invoked on every {@code BeanPropertyMeta.set} call but is a near-zero-cost no-op when the
+	 * post-swap value is non-null (the common case).  When the value is {@code null} (or {@link Optional#empty()} /
+	 * {@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble} in their empty form), the wrap consults the
+	 * effective {@link Nulls} mode (per-property &gt; session-level &gt; context-level &gt; {@link Nulls#LEAVE
+	 * LEAVE}) and substitutes one of the documented coerced values, or returns {@link BeanPropertyMeta#SKIP_VALUE} to
+	 * signal the bean-modeling layer to skip the set entirely.
+	 *
+	 * @param b The bean-property builder.
+	 * @param perPropertyNulls The per-property {@link Nulls} mode discovered on {@code @MarshalledProp}.
+	 * 	{@link Nulls#NOT_SET} means "no per-property override; fall through to the session/context default".
+	 * @param propertyClass The raw property class — used to compute {@link Nulls#EMPTY} / {@link Nulls#DEFAULT}
+	 * 	substitutes.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity is acceptable; switch-over-modes is the clearest expression of the contract.
+	})
+	static void installNullCoercionTransform(BeanPropertyMeta.Builder b, Nulls perPropertyNulls, Class<?> propertyClass) {
+		var inner = b.writeTransform;
+		// Capture the full property ClassMeta so the Optional empty-default is nesting-aware (e.g.
+		// Optional<Optional<X>> → Optional.of(Optional.empty()) rather than a collapsed single-level
+		// Optional.empty()).  The raw propertyClass alone cannot express the nesting depth.
+		var propertyMeta = (b.rawTypeMeta instanceof ClassMeta<?> cm) ? cm : null;
+		b.writeTransform = (session, value) -> {
+			Object resolved = nn(inner) ? inner.apply(session, value) : value;
+			// Fast path — non-null, non-empty-Optional values bypass the policy lookup entirely.
+			if (resolved != null && ! isEmptyOptional(resolved))
+				return resolved;
+			var effective = resolveEffectiveNulls(perPropertyNulls, session);
+			return switch (effective) {
+				case LEAVE, NOT_SET -> coerceLeave(resolved, propertyClass, propertyMeta);
+				case EMPTY -> emptyValueFor(propertyClass, propertyMeta);
+				case DEFAULT -> defaultValueFor(b, propertyClass, propertyMeta, session);
+				case SKIP -> BeanPropertyMeta.SKIP_VALUE;
+			};
+		};
+	}
+
+	/**
+	 * Resolves the effective {@link Nulls} mode for a null-valued set.
+	 *
+	 * <p>
+	 * Precedence: per-property annotation &gt; session-level override &gt; parser-context default &gt;
+	 * {@link Nulls#LEAVE}.
+	 *
+	 * @param perPropertyNulls The per-property mode (may be {@link Nulls#NOT_SET}).
+	 * @param session The bean session — narrowed to {@link ParserSession} to read the session/context defaults.
+	 * @return The effective mode (never {@code null}; falls back to {@link Nulls#LEAVE}).
+	 */
+	private static Nulls resolveEffectiveNulls(Nulls perPropertyNulls, BeanSession session) {
+		if (perPropertyNulls != null && perPropertyNulls != Nulls.NOT_SET)
+			return perPropertyNulls;
+		if (session instanceof ParserSession ps) {
+			var ctx = ps.getNulls();
+			if (ctx != null && ctx != Nulls.NOT_SET)
+				return ctx;
+		}
+		return Nulls.LEAVE;
+	}
+
+	/**
+	 * {@link Nulls#LEAVE} coercion — passes through unchanged for non-Optional properties, but resolves
+	 * {@code null}/empty-Optional to {@link Optional#empty()} (or the matching primitive-Optional empty sentinel)
+	 * for {@link Optional}-typed properties so the shared Optional contract holds.
+	 */
+	private static Object coerceLeave(Object resolved, Class<?> propertyClass, ClassMeta<?> propertyMeta) {
+		var empty = emptyOptional(propertyClass, propertyMeta);
+		return empty != null ? empty : resolved;
+	}
+
+	/**
+	 * Returns the empty form for an {@link Optional}-flavored property, or {@code null} if the property is not an
+	 * optional type.
+	 *
+	 * <p>
+	 * For a regular {@link Optional}, this is nesting-aware: it delegates to {@link ClassMeta#getOptionalDefault()}
+	 * so {@code Optional<Optional<X>>} resolves to {@code Optional.of(Optional.empty())} (the shared contract:
+	 * present outer, empty inner) rather than a structure-collapsing single-level {@code Optional.empty()}.  When
+	 * the property metadata is unavailable, falls back to a single-level {@code Optional.empty()}.
+	 */
+	private static Object emptyOptional(Class<?> propertyClass, ClassMeta<?> propertyMeta) {
+		if (Optional.class.equals(propertyClass))
+			return (propertyMeta != null && propertyMeta.isOptional()) ? propertyMeta.getOptionalDefault() : Optional.empty();
+		if (OptionalInt.class.equals(propertyClass))
+			return OptionalInt.empty();
+		if (OptionalLong.class.equals(propertyClass))
+			return OptionalLong.empty();
+		if (OptionalDouble.class.equals(propertyClass))
+			return OptionalDouble.empty();
+		return null;
+	}
+
+	@SuppressWarnings({
+		"java:S3776" // Type-dispatch chain; splitting into per-type helpers would obscure the single-purpose intent.
+	})
+	private static Object emptyValueFor(Class<?> propertyClass, ClassMeta<?> propertyMeta) {
+		if (propertyClass == null || propertyClass == Object.class)
+			return null;
+		var emptyOpt = emptyOptional(propertyClass, propertyMeta);
+		if (emptyOpt != null)
+			return emptyOpt;
+		if (String.class.equals(propertyClass) || CharSequence.class.equals(propertyClass))
+			return "";
+		if (propertyClass.isArray())
+			return java.lang.reflect.Array.newInstance(propertyClass.getComponentType(), 0);
+		if (List.class.isAssignableFrom(propertyClass) || Collection.class.equals(propertyClass)
+				|| Iterable.class.equals(propertyClass))
+			return new ArrayList<>();
+		if (Set.class.isAssignableFrom(propertyClass))
+			return new LinkedHashSet<>();
+		if (Map.class.isAssignableFrom(propertyClass))
+			return new LinkedHashMap<>();
+		// Primitive defaults — Java auto-unbox handles boxed-type assignment.
+		if (propertyClass.isPrimitive()) {
+			if (boolean.class.equals(propertyClass)) return Boolean.FALSE;
+			if (byte.class.equals(propertyClass))    return Byte.valueOf((byte) 0);
+			if (short.class.equals(propertyClass))   return Short.valueOf((short) 0);
+			if (char.class.equals(propertyClass))    return Character.valueOf((char) 0);
+			if (int.class.equals(propertyClass))     return Integer.valueOf(0);
+			if (long.class.equals(propertyClass))    return Long.valueOf(0L);
+			if (float.class.equals(propertyClass))   return Float.valueOf(0f);
+			if (double.class.equals(propertyClass))  return Double.valueOf(0d);
+		}
+		// Other reference types — no canonical empty sentinel; fall back to null (the LEAVE behavior).
+		return null;
+	}
+
+	/**
+	 * {@link Nulls#DEFAULT} coercion — returns the property's value on a fresh no-arg-constructed reference
+	 * instance of the owning bean.  When no reference instance can be built (no accessible no-arg ctor, ctor
+	 * throws), falls back to {@link Nulls#LEAVE} behavior.
+	 */
+	@SuppressWarnings({
+		"java:S1166" // RuntimeException intentionally swallowed; the documented contract is "fall back to LEAVE".
+	})
+	private static Object defaultValueFor(BeanPropertyMeta.Builder b, Class<?> propertyClass, ClassMeta<?> propertyMeta, BeanSession session) {
+		if (! (session instanceof MarshallingSession ms))
+			return coerceLeave(null, propertyClass, propertyMeta);
+		var ownerInfo = owningClass(b);
+		if (ownerInfo == null)
+			return coerceLeave(null, propertyClass, propertyMeta);
+		var ownerMeta = ms.getClassMeta(ownerInfo.inner());
+		Optional<?> ref = ownerMeta.getProperty(NULLS_DEFAULT_REFERENCE_CACHE_KEY, cm -> {
+			var instance = BeanInstantiator.createOrNull(cm.inner());
+			return instance == null ? NO_DEFAULT_REFERENCE : instance;
+		});
+		var owner = ref.orElse(null);
+		if (owner == null || owner == NO_DEFAULT_REFERENCE)
+			return coerceLeave(null, propertyClass, propertyMeta);
+		try {
+			var beanMap = ms.toBeanMap(owner);
+			var prop = beanMap.getMeta().getPropertyMeta(b.name);
+			if (prop == null)
+				return coerceLeave(null, propertyClass, propertyMeta);
+			return prop.get(beanMap, b.name);
+		} catch (RuntimeException e) {
+			return coerceLeave(null, propertyClass, propertyMeta);
+		}
+	}
+
+	private static boolean isEmptyOptional(Object o) {
+		if (o instanceof Optional<?> opt) return opt.isEmpty();
+		if (o instanceof OptionalInt oi)  return oi.isEmpty();
+		if (o instanceof OptionalLong ol) return ol.isEmpty();
+		if (o instanceof OptionalDouble od) return od.isEmpty();
+		return false;
 	}
 
 	/**
@@ -453,6 +647,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = enumSwap(mp.enumFormat(), propertyClass);
 		if (UUID.class.equals(propertyClass) && mp.uuidFormat() != UuidFormat.NOT_SET)
 			b.swap = uuidSwap(mp.uuidFormat());
+		if (BitSet.class.equals(propertyClass) && mp.bitSetFormat() != BitSetFormat.NOT_SET)
+			b.swap = bitSetSwap(mp.bitSetFormat());
 		if (isBigNumberType(propertyClass) && mp.bigNumberFormat() != BigNumberFormat.NOT_SET)
 			b.swap = bigNumberSwap(mp.bigNumberFormat(), propertyClass);
 		if (isBooleanType(propertyClass) && mp.booleanFormat() != BooleanFormat.NOT_SET)
@@ -493,6 +689,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			b.swap = enumSwap(m.enumFormat(), propertyClass);
 		else if (UUID.class.equals(propertyClass) && m.uuidFormat() != UuidFormat.NOT_SET)
 			b.swap = uuidSwap(m.uuidFormat());
+		else if (BitSet.class.equals(propertyClass) && m.bitSetFormat() != BitSetFormat.NOT_SET)
+			b.swap = bitSetSwap(m.bitSetFormat());
 		else if (isBigNumberType(propertyClass) && m.bigNumberFormat() != BigNumberFormat.NOT_SET)
 			b.swap = bigNumberSwap(m.bigNumberFormat(), propertyClass);
 		else if (isBooleanType(propertyClass) && m.booleanFormat() != BooleanFormat.NOT_SET)
@@ -542,6 +740,11 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			// default — UUID.toString()).  At STANDARD / NOT_SET, the serializer's natural String-conversion
 			// path already produces the right wire form.
 			b.swap = uuidSwap(bc.getUuidFormat());
+		else if (BitSet.class.equals(propertyClass))
+			// BitSet has no natural String round-trip (BitSet.toString() is not parseable), so install the
+			// context-level swap unconditionally — every configured format (INDICES default included)
+			// produces a parseable textual wire form.
+			b.swap = bitSetSwap(bc.getBitSetFormat());
 		else if (isBigNumberType(propertyClass) && bc.getBigNumberFormat() != BigNumberFormat.NUMBER && bc.getBigNumberFormat() != BigNumberFormat.NOT_SET)
 			// Install context-level swap only for STRING / AUTO.  At NUMBER / NOT_SET, BigInteger /
 			// BigDecimal are already emitted as bare numeric tokens by every text serializer.
@@ -873,6 +1076,20 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			@Override /* ObjectSwap */
 			public UUID unswap(MarshallingSession session, String o, ClassMeta<?> hint) {
 				return UuidFormat.parse(o, format);
+			}
+		};
+	}
+
+	private static ObjectSwap<?,?> bitSetSwap(BitSetFormat format) {
+		return new ObjectSwap<BitSet,String>(BitSet.class, String.class) {
+			@Override /* ObjectSwap */
+			public String swap(MarshallingSession session, BitSet o) {
+				return BitSetFormat.format(o, format);
+			}
+
+			@Override /* ObjectSwap */
+			public BitSet unswap(MarshallingSession session, String o, ClassMeta<?> hint) {
+				return BitSetFormat.parse(o, format);
 			}
 		};
 	}

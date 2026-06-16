@@ -143,7 +143,7 @@ public interface BeanSession {
 	 * <p>
 	 * Default-view-inclusion policy (configurable): an untagged property — one whose view set is empty — is
 	 * considered in-view under every active view unless the
-	 * {@link org.apache.juneau.marshall.MarshallingContext.Builder#disableDefaultViewInclusion()} flag is set.
+	 * {@code MarshallingContext.Builder.disableDefaultViewInclusion()} flag is set.
 	 *
 	 * @param pMeta The property metadata. Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the property should be included under the current active view.

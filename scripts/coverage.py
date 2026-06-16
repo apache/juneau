@@ -16,6 +16,15 @@ Coverage reporter for Apache Juneau.
 
 Shows JaCoCo branch and instruction coverage for a source file or folder.
 
+Coverage data is aggregated across ALL modules' unit tests (plus the
+integration-test suite), not just juneau-integration-tests.  JaCoCo writes a
+separate target/jacoco.exec per Maven module, so a class exercised only by
+unit tests in its own module (e.g. juneau-core/juneau-marshall) used to read
+0% because only the integration exec was consulted.  This script discovers
+every module's target/jacoco.exec and feeds them all -- together with each
+owning module's target/classes -- to the JaCoCo CLI to produce one combined,
+repo-wide report.
+
 Usage:
     ./scripts/coverage.py <path> [options]
 
@@ -24,26 +33,47 @@ Arguments:
             Paths can be absolute or relative to the repo root.
 
 Options:
-    --run, -r       Re-run tests before reporting (updates the .exec data).
+    --run, -r       Re-run the owning module's tests before reporting
+                    (refreshes that module's .exec; other modules' existing
+                    execs are still merged in).
     --branches, -b  Show only lines with missed branches (default: show all uncovered).
     --help, -h      Show this help message.
 
 Examples:
     ./scripts/coverage.py juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/conversion/
-    ./scripts/coverage.py juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/conversion/BasicConverter.java
-    ./scripts/coverage.py juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/conversion/ --run
+    ./scripts/coverage.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshall/BitSetFormat.java
+    ./scripts/coverage.py juneau-core/juneau-marshall/src/main/java/org/apache/juneau/marshall/BitSetFormat.java --run
 """
 
+import os
+import re
 import subprocess
 import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-INTEGRATION_MODULE = REPO_ROOT / "juneau-integration-tests"
-INTEGRATION_EXEC = INTEGRATION_MODULE / "target" / "jacoco.exec"
 
 SRC_MARKERS = ["src/main/java", "src/test/java"]
+
+# Combined, repo-wide JaCoCo XML report assembled from every module's exec file.
+# Lives under target/ (git-ignored); regenerated on every run.
+COMBINED_XML = REPO_ROOT / "target" / "coverage" / "jacoco.xml"
+
+# Modules excluded from the combined report:
+#  - juneau-shaded / juneau-distrib repackage classes from other modules, which would
+#    introduce duplicate-class entries into the JaCoCo report.
+#  - examples / petstore / microservice / sc / test-utils are outside the coverage
+#    scope (mirrors <sonar.coverage.exclusions> in the root pom.xml).
+EXCLUDED_MODULE_MARKERS = (
+    "juneau-shaded",
+    "juneau-distrib",
+    "juneau-examples",
+    "juneau-petstore",
+    "juneau-microservice",
+    "juneau-sc",
+    "juneau-test-utils",
+)
 
 
 def die(msg):
@@ -83,11 +113,102 @@ def path_to_jacoco_package(path: Path) -> tuple[str | None, str | None]:
     return None, None
 
 
-def run_tests():
-    """Re-run tests with upstream modules to refresh the .exec file."""
-    print("Running tests to refresh coverage data...")
+def discover_modules() -> list[Path]:
+    """Return all build modules (dirs with a pom.xml) excluding the reactor root and excluded markers."""
+    poms = list(REPO_ROOT.glob("*/pom.xml")) + list(REPO_ROOT.glob("*/*/pom.xml"))
+    modules = []
+    for pom in poms:
+        m = pom.parent
+        if m == REPO_ROOT:
+            continue
+        rel = str(m.relative_to(REPO_ROOT))
+        if any(marker in rel for marker in EXCLUDED_MODULE_MARKERS):
+            continue
+        modules.append(m)
+    return sorted(modules)
+
+
+def collect_jacoco_inputs() -> tuple[list[Path], list[Path], list[Path]]:
+    """
+    Scan every active module and collect:
+      - exec files     (target/jacoco.exec)        -- execution data to merge
+      - class dirs      (target/classes)            -- bytecode to analyze
+      - source dirs     (src/main/java)             -- for source attribution
+    A module contributes its classes/sources whenever it has been compiled, and its
+    exec whenever its tests have run.  Coverage of a class is the union of every exec
+    that touched it (its own module's unit tests + the integration suite + any other).
+    """
+    execfiles, classdirs, srcdirs = [], [], []
+    for m in discover_modules():
+        classes = m / "target" / "classes"
+        execf = m / "target" / "jacoco.exec"
+        src = m / "src" / "main" / "java"
+        if classes.is_dir() and any(classes.rglob("*.class")):
+            classdirs.append(classes)
+            if src.is_dir():
+                srcdirs.append(src)
+        if execf.is_file():
+            execfiles.append(execf)
+    return execfiles, classdirs, srcdirs
+
+
+def jacoco_version() -> str:
+    """Read <jacoco.plugin.version> from the root pom (fallback to a known-good default)."""
+    pom = (REPO_ROOT / "pom.xml").read_text(encoding="utf-8")
+    m = re.search(r"<jacoco\.plugin\.version>([^<]+)</jacoco\.plugin\.version>", pom)
+    return m.group(1).strip() if m else "0.8.14"
+
+
+def maven_local_repo() -> Path:
+    """Best-effort resolution of the Maven local repository."""
+    for env in ("MAVEN_REPO", "M2_REPO"):
+        v = os.environ.get(env)
+        if v and Path(v).is_dir():
+            return Path(v)
+    return Path.home() / ".m2" / "repository"
+
+
+def java_binary() -> str:
+    """Resolve a Java launcher, honoring JAVA_HOME, then ~/jdk/default, then PATH."""
+    jh = os.environ.get("JAVA_HOME")
+    if jh and (Path(jh) / "bin" / "java").exists():
+        return str(Path(jh) / "bin" / "java")
+    default_jdk = Path.home() / "jdk" / "default" / "bin" / "java"
+    if default_jdk.exists():
+        return str(default_jdk)
+    return "java"
+
+
+def jacoco_cli_jar() -> Path:
+    """Locate (resolving via Maven if needed) the JaCoCo CLI 'nodeps' jar."""
+    ver = jacoco_version()
+    jar = maven_local_repo() / "org" / "jacoco" / "org.jacoco.cli" / ver / f"org.jacoco.cli-{ver}-nodeps.jar"
+    if jar.exists():
+        return jar
+    print(f"Fetching JaCoCo CLI {ver}...")
     result = subprocess.run(
-        ["mvn", "-pl", "juneau-integration-tests", "-am", "test", "-Drat.skip=true", "-q"],
+        ["mvn", "-q", "org.apache.maven.plugins:maven-dependency-plugin:3.6.1:get",
+         f"-Dartifact=org.jacoco:org.jacoco.cli:{ver}:jar:nodeps"],
+        cwd=REPO_ROOT, capture_output=True, text=True
+    )
+    if result.returncode != 0 or not jar.exists():
+        print(result.stderr[-2000:], file=sys.stderr)
+        die(f"Could not resolve JaCoCo CLI jar ({jar}).")
+    return jar
+
+
+def run_tests(module: Path):
+    """Re-run a single module's tests to refresh its .exec file.
+
+    Scoped to the owning module so single-file/class queries stay fast.  Other
+    modules' existing execs are still merged in when the report is generated.
+    Requires upstream module artifacts to be available in the local repo (from a
+    prior full build, e.g. `mvn install -DskipTests`).
+    """
+    rel = module.relative_to(REPO_ROOT)
+    print(f"Running tests for module {rel} to refresh coverage data...")
+    result = subprocess.run(
+        ["mvn", "-pl", str(rel), "test", "-Drat.skip=true", "-q"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True
@@ -98,19 +219,30 @@ def run_tests():
     print("Tests passed.\n")
 
 
-def generate_report(module: Path) -> Path:
-    """Generate JaCoCo XML report for the given module using the utest exec file."""
-    xml_path = module / "target" / "site" / "jacoco" / "jacoco.xml"
-    result = subprocess.run(
-        ["mvn", "jacoco:report", f"-Djacoco.dataFile={INTEGRATION_EXEC}", "-q"],
-        cwd=module,
-        capture_output=True,
-        text=True
-    )
+def generate_combined_report() -> Path:
+    """Build the combined, repo-wide JaCoCo XML report from all module execs + classes."""
+    execfiles, classdirs, srcdirs = collect_jacoco_inputs()
+    if not execfiles:
+        die("No jacoco.exec files found in any module. Run with --run, or build the "
+            "project first (e.g. `mvn -pl juneau-integration-tests -am test`).")
+    if not classdirs:
+        die("No compiled classes (target/classes) found. Build the project first.")
+
+    COMBINED_XML.parent.mkdir(parents=True, exist_ok=True)
+    cmd = [java_binary(), "-jar", str(jacoco_cli_jar()), "report"]
+    cmd += [str(e) for e in execfiles]
+    for c in classdirs:
+        cmd += ["--classfiles", str(c)]
+    for s in srcdirs:
+        cmd += ["--sourcefiles", str(s)]
+    cmd += ["--xml", str(COMBINED_XML), "--name", "Juneau combined coverage", "--quiet"]
+
+    print(f"Aggregating coverage from {len(execfiles)} module exec file(s)...")
+    result = subprocess.run(cmd, cwd=REPO_ROOT, capture_output=True, text=True)
     if result.returncode != 0:
-        print(result.stderr[-2000:], file=sys.stderr)
-        die(f"Failed to generate JaCoCo report for {module}.")
-    return xml_path
+        print(result.stderr[-3000:], file=sys.stderr)
+        die("Failed to generate combined JaCoCo report.")
+    return COMBINED_XML
 
 
 def bar(covered, total, width=20):
@@ -145,7 +277,7 @@ def report(xml_path: Path, pkg_filter: str, file_filter: str | None, branches_on
 
     if not matched_packages:
         die(f"No JaCoCo data found for package '{pkg_filter}'.\n"
-            "Make sure the module is built and the exec file is up to date.")
+            "Make sure the module is built and the exec file is up to date (use --run).")
 
     # Collect per-file data
     files_data = []  # list of (pkg_name, fname, lines_with_issues)
@@ -265,13 +397,9 @@ def main():  # NOSONAR: always returns 0 by design — standard POSIX exit code 
         die(f"Path does not appear to be under src/main/java or src/test/java: {path}")
 
     if do_run:
-        run_tests()
+        run_tests(module)
 
-    if not INTEGRATION_EXEC.exists():
-        die(f"No exec file found at {INTEGRATION_EXEC}. Run with --run first.")
-
-    print(f"Generating JaCoCo report for module: {module.relative_to(REPO_ROOT)}")
-    xml_path = generate_report(module)
+    xml_path = generate_combined_report()
 
     report(xml_path, pkg_filter, file_filter, branches_only)
     return 0

@@ -245,6 +245,12 @@ public class MarshallingTraverseSession extends MarshallingSession {
 			return null;
 		if (o instanceof Optional<?> o2)
 			return getOptionalValue(o2.orElse(null));
+		if (o instanceof OptionalInt o2)
+			return o2.isPresent() ? Integer.valueOf(o2.getAsInt()) : null;
+		if (o instanceof OptionalLong o2)
+			return o2.isPresent() ? Long.valueOf(o2.getAsLong()) : null;
+		if (o instanceof OptionalDouble o2)
+			return o2.isPresent() ? Double.valueOf(o2.getAsDouble()) : null;
 		return o;
 	}
 

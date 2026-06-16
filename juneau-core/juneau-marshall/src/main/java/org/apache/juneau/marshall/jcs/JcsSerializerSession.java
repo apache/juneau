@@ -333,10 +333,9 @@ public class JcsSerializerSession extends JsonSerializerSession {
 		Predicate<Object> checkNull = x -> isKeepNullProperties() || nn(x);
 
 		m.forEachValue(checkNull, (pMeta, key, value, thrown) -> {
-			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 			entries.add(new BeanProp(pMeta, key, value));
 		});

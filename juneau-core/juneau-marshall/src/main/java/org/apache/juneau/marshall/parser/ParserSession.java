@@ -69,10 +69,12 @@ public class ParserSession extends MarshallingSession {
 	private static final String PROP_outer = "outer";
 	private static final String PROP_schema = "schema";
 	private static final String PROP_trimStrings = "trimStrings";
+	private static final String PROP_nulls = "nulls";
 	private static final String PROP_ParserSession_javaMethod = "ParserSession.javaMethod";
 	private static final String PROP_ParserSession_outer = "ParserSession.outer";
 	private static final String PROP_ParserSession_schema = "ParserSession.schema";
 	private static final String PROP_ParserSession_trimStrings = "ParserSession.trimStrings";
+	private static final String PROP_ParserSession_nulls = "ParserSession.nulls";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -89,6 +91,7 @@ public class ParserSession extends MarshallingSession {
 		private Method javaMethod;
 		private Object outer;
 		private boolean trimStrings;
+		private Nulls nulls;
 		private Parser ctx;
 
 		/**
@@ -102,6 +105,7 @@ public class ParserSession extends MarshallingSession {
 			this.ctx = ctx;
 			mediaTypeDefault(ctx.getPrimaryMediaType());
 			trimStrings = ctx.isTrimStrings();
+			nulls = ctx.getNulls();
 		}
 
 		@Override
@@ -151,6 +155,8 @@ public class ParserSession extends MarshallingSession {
 					return schema(cvt(value, HttpPartSchema.class));
 				case PROP_trimStrings, PROP_ParserSession_trimStrings:
 					return trimStrings(cvt(value, Boolean.class));
+				case PROP_nulls, PROP_ParserSession_nulls:
+					return nulls(cvt(value, Nulls.class));
 				default:
 					super.property(key, value);
 					return self();
@@ -165,6 +171,19 @@ public class ParserSession extends MarshallingSession {
 		 */
 		public SELF trimStrings(boolean value) {
 			trimStrings = value;
+			return self();
+		}
+
+		/**
+		 * Per-session override for the parser's null-coercion policy.
+		 *
+		 * @param value The new value for this setting.  {@code null} is treated as {@link Nulls#NOT_SET}.
+		 * @return This object.
+		 * @see Parser.Builder#nulls(Nulls)
+		 * @since 10.0.0
+		 */
+		public SELF nulls(Nulls value) {
+			nulls = value == null ? Nulls.NOT_SET : value;
 			return self();
 		}
 
@@ -262,6 +281,7 @@ public class ParserSession extends MarshallingSession {
 	private final Method javaMethod;
 	private final Object outer;
 	private final boolean trimStrings;
+	private final Nulls nulls;
 	private final Parser ctx;
 	private final ParserListener listener;
 	private final Deque<StringBuilder> sbStack;
@@ -282,6 +302,7 @@ public class ParserSession extends MarshallingSession {
 		outer = builder.outer;
 		schema = builder.schema;
 		trimStrings = builder.trimStrings;
+		nulls = builder.nulls == null ? Nulls.NOT_SET : builder.nulls;
 		listener = BeanInstantiator.createOrNull(ctx.getListener());
 		sbStack = new ArrayDeque<>();
 	}
@@ -737,7 +758,13 @@ public class ParserSession extends MarshallingSession {
 		if (BeanSupplier.class.isAssignableFrom(type.inner()) && !BeanChannel.class.isAssignableFrom(type.inner()))
 			throw new ParseException(this, "BeanSupplier cannot be used as a parser target. Use BeanConsumer or BeanChannel for round-trip support.");
 		try {
-			return doParse(pipe, type);
+			var r = doParse(pipe, type);
+			// Primitive optionals (OptionalInt/Long/Double) are parsed as first-class optionals — the format
+			// parsers wrap the element in a generic Optional, so coerce the top-level result to the matching
+			// primitive-optional type (mirrors the Optional<T> contract; absent/null already resolved to empty).
+			if (type.isPrimitiveOptional() && ! type.inner().isInstance(r))
+				return convertToType(r, type);
+			return r;
 		} catch (ParseException | IOException e) {
 			throw e;
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
@@ -1146,6 +1173,16 @@ public class ParserSession extends MarshallingSession {
 	protected final boolean isTrimStrings() { return trimStrings; }
 
 	/**
+	 * Returns the effective {@link Nulls} default for this session — the per-session override (set via
+	 * {@link ParserSession.Builder#nulls(Nulls)}) when present, otherwise the parser context's
+	 * {@link Parser#getNulls()} value.
+	 *
+	 * @return The current session-level value (never <jk>null</jk>; {@link Nulls#NOT_SET} when unconfigured).
+	 * @since 10.0.0
+	 */
+	public final Nulls getNulls() { return nulls; }
+
+	/**
 	 * Unbuffered.
 	 *
 	 * @see Parser.Builder#unbuffered()
@@ -1322,7 +1359,8 @@ public class ParserSession extends MarshallingSession {
 			.a(PROP_javaMethod, javaMethod)
 			.a(PROP_listener, listener)
 			.a(PROP_outer, outer)
-			.a(PROP_trimStrings, trimStrings);
+			.a(PROP_trimStrings, trimStrings)
+			.a(PROP_nulls, nulls);
 	}
 
 	/**

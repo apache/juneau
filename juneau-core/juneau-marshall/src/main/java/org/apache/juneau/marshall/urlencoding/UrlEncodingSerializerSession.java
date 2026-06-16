@@ -230,7 +230,7 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
-			if (canIgnoreValue(sMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 
 			if (nn(value) && shouldUseExpandedParams(pMeta)) {

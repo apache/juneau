@@ -68,7 +68,8 @@ class VersionAssertion_Test extends TestBase {
 		var x = of("1");
 		var nil = no(Version.class);
 		var s = Json5Serializer.DEFAULT;
-		test(x).asString(s).is("{maintenance:null,major:1,minor:null}");
+		// 10.0: Optional.empty() ≡ null under the shared Optional contract — omitted unless keepNullProperties().
+		test(x).asString(s).is("{major:1}");
 		test(nil).asString(s).is("null");
 	}
 
@@ -80,14 +81,14 @@ class VersionAssertion_Test extends TestBase {
 	@Test void ba02_asJson() {
 		var x = of("1");
 		var nil = no(Version.class);
-		test(x).asJson().is("{maintenance:null,major:1,minor:null}");
+		test(x).asJson().is("{major:1}");
 		test(nil).asJson().is("null");
 	}
 
 	@Test void ba03_asJsonSorted() {
 		var x = of("1");
 		var nil = no(Version.class);
-		test(x).asJsonSorted().is("{maintenance:null,major:1,minor:null}");
+		test(x).asJsonSorted().is("{major:1}");
 		test(nil).asJsonSorted().is("null");
 	}
 
@@ -230,9 +231,9 @@ class VersionAssertion_Test extends TestBase {
 		var nil = no(Version.class);
 		test(x1).isSameJsonAs(x1a);
 		test(nil).isSameJsonAs(nil);
-		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='{maintenance:null,major:1,minor:null}'.");
-		assertThrown(()->test(nil).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='null'.");
-		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='{maintenance:null,major:1,minor:null}'.");
+		assertThrown(()->test(x1a).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{major:2}'.  Actual='{major:1}'.");
+		assertThrown(()->test(nil).isSameJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{major:2}'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='{major:1}'.");
 	}
 
 	@Test void ca10_isSameSortedJsonAs() {
@@ -242,9 +243,9 @@ class VersionAssertion_Test extends TestBase {
 		var nil = no(Version.class);
 		test(x1).isSameSortedJsonAs(x1a);
 		test(nil).isSameSortedJsonAs(nil);
-		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='{maintenance:null,major:1,minor:null}'.");
-		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='{maintenance:null,major:1,minor:null}'.");
+		assertThrown(()->test(x1a).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{major:2}'.  Actual='{major:1}'.");
+		assertThrown(()->test(nil).isSameSortedJsonAs(x2)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{major:2}'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSortedJsonAs(nil)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='{major:1}'.");
 	}
 
 	@Test void ca11_isSameSerializedAs() {
@@ -255,9 +256,9 @@ class VersionAssertion_Test extends TestBase {
 		var s = Json5Serializer.DEFAULT;
 		test(x1).isSameSerializedAs(x1a, s);
 		test(nil).isSameSerializedAs(nil, s);
-		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='{maintenance:null,major:1,minor:null}'.");
-		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{maintenance:null,major:2,minor:null}'.  Actual='null'.");
-		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='{maintenance:null,major:1,minor:null}'.");
+		assertThrown(()->test(x1a).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{major:2}'.  Actual='{major:1}'.");
+		assertThrown(()->test(nil).isSameSerializedAs(x2, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='{major:2}'.  Actual='null'.");
+		assertThrown(()->test(x1).isSameSerializedAs(nil, s)).asMessage().asOneLine().is("Unexpected comparison.  Expect='null'.  Actual='{major:1}'.");
 	}
 
 	@Test void ca12_isType() {
@@ -293,10 +294,10 @@ class VersionAssertion_Test extends TestBase {
 	@Test void ca15_isJson() {
 		var x = of("1");
 		var nil = no(Version.class);
-		test(x).isJson("{maintenance:null,major:1,minor:null}");
+		test(x).isJson("{major:1}");
 		test(nil).isJson("null");
-		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{maintenance:null,major:1,minor:null}'.");
-		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='{maintenance:null,major:1,minor:null}'.");
+		assertThrown(()->test(x).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{major:1}'.");
+		assertThrown(()->test(x).isJson(null)).asMessage().asOneLine().is("String differed at position 0.  Expect='null'.  Actual='{major:1}'.");
 		assertThrown(()->test(nil).isJson("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 

@@ -456,7 +456,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 
 			String link = null;

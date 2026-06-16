@@ -218,6 +218,36 @@ public @interface ParserConfig {
 	String trimStrings() default "";
 
 	/**
+	 * Default per-property null-coercion policy applied during parsing.
+	 *
+	 * <p>
+	 * Juneau's analog of Jackson's <c>JsonSetter.Value.forValueNulls(...)</c> at the
+	 * <c>ObjectMapper</c> level.  Applied as the fallback when no per-property
+	 * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
+	 *
+	 * <ul class='values'>
+	 * 	<li><js>"LEAVE"</js> (default) — pass {@code null} through unchanged.
+	 * 	<li><js>"EMPTY"</js> — substitute the type's empty value (empty {@link String}/{@link java.util.Collection}/
+	 * 		{@link java.util.Map}, primitive default for primitives, {@code Optional.empty()} for {@link java.util.Optional}).
+	 * 	<li><js>"DEFAULT"</js> — substitute the bean-constructed default for the property.
+	 * 	<li><js>"SKIP"</js> — do not call the setter at all.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.parser.Parser.Builder#nulls(org.apache.juneau.marshall.Nulls)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	String nulls() default "";
+
+	/**
 	 * Unbuffered.
 	 *
 	 * <p>

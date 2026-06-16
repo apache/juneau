@@ -134,7 +134,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 			var aType = value == null ? cMeta : getClassMetaForObject(value, cMeta);
 			var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);

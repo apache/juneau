@@ -82,6 +82,7 @@ public class Serializer extends MarshallingTraverseContext {
 	private static final String PROP_addRootType = "addRootType";
 	private static final String PROP_keepNullProperties = "keepNullProperties";
 	private static final String PROP_listener = "listener";
+	private static final String PROP_nonDefault = "nonDefault";
 	private static final String PROP_sortCollections = "sortCollections";
 	private static final String PROP_sortMaps = "sortMaps";
 	private static final String PROP_trimEmptyCollections = "trimEmptyCollections";
@@ -105,6 +106,7 @@ public class Serializer extends MarshallingTraverseContext {
 		private boolean addBeanTypes;
 		private boolean addRootType;
 		private boolean keepNullProperties;
+		private boolean nonDefault;
 		private boolean sortCollections;
 		private boolean sortMaps;
 		private boolean trimEmptyCollections;
@@ -126,6 +128,7 @@ public class Serializer extends MarshallingTraverseContext {
 			addBeanTypes = env("Serializer.addBeanTypes", false);
 			addRootType = env("Serializer.addRootType", false);
 			keepNullProperties = env("Serializer.keepNullProperties", false);
+			nonDefault = env("Serializer.nonDefault", false);
 			sortCollections = env("Serializer.sortCollections", false);
 			sortMaps = env("Serializer.sortMaps", false);
 			trimEmptyCollections = env("Serializer.trimEmptyCollections", false);
@@ -150,6 +153,7 @@ public class Serializer extends MarshallingTraverseContext {
 			addBeanTypes = copyFrom.addBeanTypes;
 			addRootType = copyFrom.addRootType;
 			keepNullProperties = copyFrom.keepNullProperties;
+			nonDefault = copyFrom.nonDefault;
 			sortCollections = copyFrom.sortCollections;
 			sortMaps = copyFrom.sortMaps;
 			trimEmptyCollections = copyFrom.trimEmptyCollections;
@@ -174,6 +178,7 @@ public class Serializer extends MarshallingTraverseContext {
 			addBeanTypes = copyFrom.addBeanTypes;
 			addRootType = copyFrom.addRootType;
 			keepNullProperties = copyFrom.keepNullProperties;
+			nonDefault = copyFrom.nonDefault;
 			sortCollections = copyFrom.sortCollections;
 			sortMaps = copyFrom.sortMaps;
 			trimEmptyCollections = copyFrom.trimEmptyCollections;
@@ -366,6 +371,7 @@ public class Serializer extends MarshallingTraverseContext {
 				addBeanTypes,
 				addRootType,
 				keepNullProperties,
+				nonDefault,
 				sortCollections,
 				sortMaps,
 				trimEmptyCollections,
@@ -426,6 +432,87 @@ public class Serializer extends MarshallingTraverseContext {
 		 */
 		public SELF keepNullProperties(boolean value) {
 			keepNullProperties = value;
+			return self();
+		}
+
+		/**
+		 * Don't serialize bean properties whose values equal the default for their type.
+		 *
+		 * <p>
+		 * When enabled, bean properties whose current value equals the type's natural default are omitted from
+		 * the serialized output. This is the Juneau analog of Jackson's <c>JsonInclude.Include.NON_DEFAULT</c>
+		 * inclusion mode.
+		 *
+		 * <p>
+		 * The notion of "default" depends on the property type:
+		 * <ul class='spaced-list'>
+		 * 	<li>Primitives and primitive wrappers (<code><jk>int</jk></code>, <code>Integer</code>,
+		 * 		<code><jk>boolean</jk></code>, <code>Boolean</code>, etc.) use the Java type default
+		 * 		(<c>0</c>, <c>false</c>, <code>'\0'</code>, <jk>null</jk>).
+		 * 	<li>Bean properties on bean-typed property values use a <i>reference instance</i> of the bean type —
+		 * 		instantiated once via the no-arg constructor and cached on the {@link ClassMeta} — and the
+		 * 		property is omitted when its current value equals that reference's value.
+		 * 	<li>When no reference instance can be built (no accessible no-arg constructor, or instantiation
+		 * 		throws), <c>nonDefault</c> is silently skipped for that bean — the property is emitted normally
+		 * 		rather than failing the serialize.
+		 * </ul>
+		 *
+		 * <p>
+		 * <b>Equality semantics:</b> value-equals-default uses {@link Objects#equals}, with numeric values
+		 * compared by mathematical value (BigDecimal.compareTo-style) so <c>1.0</c> equals <c>1</c>,
+		 * <c>0.0</c> equals <c>-0.0</c>, and <code>BigDecimal(<js>"1.0"</js>)</code> equals
+		 * <code>BigDecimal(<js>"1"</js>)</code>.
+		 *
+		 * <p>
+		 * <b>Precedence:</b> the serialize-side inclusion knobs short-circuit in a fixed order — first "omit" wins:
+		 * <ol>
+		 * 	<li><jk>null</jk> values (including {@link java.util.Optional#empty()}) are governed by
+		 * 		{@link #keepNullProperties()}.
+		 * 	<li>Non-<jk>null</jk> string values are normalized by {@link #trimStrings()}.
+		 * 	<li>Empty collections / arrays / maps are omitted by {@link #trimEmptyCollections()} /
+		 * 		{@link #trimEmptyMaps()}.
+		 * 	<li>Surviving values that equal their type's default are omitted by <c>nonDefault</c>.
+		 * </ol>
+		 * <jk>null</jk> is resolved by <c>keepNullProperties</c>, not treated as a <c>nonDefault</c> case.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jc>// Create a serializer that omits default-valued properties.</jc>
+		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
+		 * 		.<jsm>create</jsm>()
+		 * 		.nonDefault()
+		 * 		.build();
+		 *
+		 * 	<jc>// Our bean to serialize.</jc>
+		 * 	<jk>public class</jk> MyBean {
+		 * 		<jk>public int</jk> <jf>count</jf>;            <jc>// Default 0; omitted unless set to non-zero.</jc>
+		 * 		<jk>public</jk> String <jf>name</jf> = <js>"x"</js>; <jc>// Bean-default is "x"; only omitted when value equals "x".</jc>
+		 * 	}
+		 *
+		 * 	<jc>// Produces "{}" because both fields equal their defaults.</jc>
+		 * 	String <jv>json</jv> = <jv>serializer</jv>.serialize(<jk>new</jk> MyBean());
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/InclusionAndNullHandling">Inclusion and null handling</a>
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF nonDefault() {
+			return nonDefault(true);
+		}
+
+		/**
+		 * Same as {@link #nonDefault()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF nonDefault(boolean value) {
+			nonDefault = value;
 			return self();
 		}
 
@@ -934,6 +1021,7 @@ public class Serializer extends MarshallingTraverseContext {
 	protected final boolean addBeanTypes;
 	protected final boolean addRootType;
 	protected final boolean keepNullProperties;
+	protected final boolean nonDefault;
 	protected final boolean sortCollections;
 	protected final boolean sortMaps;
 	protected final boolean trimEmptyCollections;
@@ -962,6 +1050,7 @@ public class Serializer extends MarshallingTraverseContext {
 		addRootType = builder.addRootType;
 		keepNullProperties = builder.keepNullProperties;
 		listener = builder.listener;
+		nonDefault = builder.nonDefault;
 		produces = builder.produces;
 		sortCollections = builder.sortCollections;
 		sortMaps = builder.sortMaps;
@@ -1206,6 +1295,16 @@ public class Serializer extends MarshallingTraverseContext {
 	protected final boolean isKeepNullProperties() { return keepNullProperties; }
 
 	/**
+	 * Don't serialize bean properties whose values equal the default for their type.
+	 *
+	 * @see Serializer.Builder#nonDefault()
+	 * @return
+	 * 	<jk>true</jk> if bean properties whose value equals the type / bean-constructed default are omitted.
+	 * @since 10.0.0
+	 */
+	protected final boolean isNonDefault() { return nonDefault; }
+
+	/**
 	 * Sort arrays and collections alphabetically.
 	 *
 	 * @see Serializer.Builder#sortCollections()
@@ -1257,6 +1356,7 @@ public class Serializer extends MarshallingTraverseContext {
 			.a(PROP_addRootType, addRootType)
 			.a(PROP_keepNullProperties, keepNullProperties)
 			.a(PROP_listener, listener)
+			.a(PROP_nonDefault, nonDefault)
 			.a(PROP_sortCollections, sortCollections)
 			.a(PROP_sortMaps, sortMaps)
 			.a(PROP_trimEmptyCollections, trimEmptyCollections)

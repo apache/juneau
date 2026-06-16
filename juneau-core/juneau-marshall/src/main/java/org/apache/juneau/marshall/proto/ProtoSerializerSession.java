@@ -261,7 +261,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 			if (value == null)
 				return;
 			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 			var protoPMeta = ctx.getProtoBeanPropertyMeta(pMeta);
 			if (nn(protoPMeta) && !protoPMeta.getComment().isEmpty())

@@ -144,7 +144,7 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
-			if (canIgnoreValue(cMeta, key, value))
+			if (canIgnoreValue(pMeta, key, value))
 				return;
 			writeKey(out, key, i, first);
 			serializeAnything(out, value, cMeta, key, pMeta);
