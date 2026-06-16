@@ -204,6 +204,39 @@ class JsonPointer_Test extends TestBase {
 		assertEquals("v", JsonPointer.of("").set(JsonMap.of("a", 1), "v"));
 	}
 
+	@Test void e06_setIndexOutOfRangeThrows() {
+		// Setting at an index beyond the end of an existing list (not the append slot) is an error.
+		var root = JsonMap.of("a", JsonList.of(1, 2));
+		assertThrows(IllegalArgumentException.class, () -> JsonPointer.of("/a/5").set(root, 9));
+	}
+
+	@Test void e07_setReplaceAtExistingIndex() {
+		var root = JsonMap.of("a", JsonList.of(1, 2, 3));
+		JsonPointer.of("/a/1").set(root, 9);
+		assertEquals("{\"a\":[1,9,3]}", Json.of(root));
+	}
+
+	@Test void e08_vivifyListViaDashToken() {
+		// A '-' next token makes the auto-vivified intermediate container a list, and appends to it.
+		var root = new JsonMap();
+		JsonPointer.of("/a/-").set(root, "x");
+		assertEquals("{\"a\":[\"x\"]}", Json.of(root));
+		assertInstanceOf(JsonList.class, root.get("a"));
+	}
+
+	@Test void e09_descendThroughExistingObject() {
+		// navigateToParent descends through an already-present intermediate map without re-vivifying it.
+		var root = JsonMap.of("a", new JsonMap());
+		JsonPointer.of("/a/b").set(root, 1);
+		assertEquals("{\"a\":{\"b\":1}}", Json.of(root));
+	}
+
+	@Test void e10_setNonNumericListTokenThrows() {
+		// A non-numeric, non-'-' token on a list is an invalid array index on write.
+		var root = JsonMap.of("a", JsonList.of(1, 2));
+		assertThrows(IllegalArgumentException.class, () -> JsonPointer.of("/a/foo").set(root, 9));
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// f - Remove
 	// -----------------------------------------------------------------------------------------------------------------
@@ -223,5 +256,53 @@ class JsonPointer_Test extends TestBase {
 	@Test void f03_removeAbsentReturnsNull() {
 		assertNull(JsonPointer.of("/missing").remove(JsonMap.of("a", 1)));
 		assertNull(JsonPointer.of("/a/5").remove(JsonMap.of("a", JsonList.of("x"))));
+	}
+
+	@Test void f04_removeRootReturnsNull() {
+		// The root pointer addresses the whole document, which cannot be removed in place.
+		assertNull(JsonPointer.of("").remove(JsonMap.of("a", 1)));
+	}
+
+	@Test void f05_removeMissingIntermediateReturnsNull() {
+		assertNull(JsonPointer.of("/a/b/c").remove(new JsonMap()));
+	}
+
+	@Test void f06_removeNonNumericListTokenReturnsNull() {
+		var root = JsonMap.of("a", JsonList.of("x", "y"));
+		assertNull(JsonPointer.of("/a/-").remove(root));
+		assertNull(JsonPointer.of("/a/foo").remove(root));
+		// The list is left unchanged.
+		assertEquals("{\"a\":[\"x\",\"y\"]}", Json.of(root));
+	}
+
+	@Test void f07_removeThroughScalarReturnsNull() {
+		assertNull(JsonPointer.of("/a/b").remove(JsonMap.of("a", "scalar")));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// g - Array index token parsing
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_emptyTokenOnArrayMisses() {
+		// An empty reference token is not a valid array index, so it resolves to a miss.
+		assertNull(JsonPointer.of("/").eval(JsonList.of("x")));
+	}
+
+	@Test void g02_leadingZeroIndexRejected() {
+		// RFC 6901 forbids leading zeros in array indices, so they resolve to a miss.
+		assertNull(JsonPointer.of("/01").eval(JsonList.of("a", "b")));
+		assertNull(JsonPointer.of("/00").eval(JsonList.of("a", "b")));
+	}
+
+	@Test void g03_multiDigitIndex() {
+		var l = new JsonList();
+		for (var i = 0; i < 12; i++)
+			l.add(i);
+		assertEquals(10, JsonPointer.of("/10").eval(l));
+	}
+
+	@Test void g04_overflowingIndexMisses() {
+		// An all-digit token too large to fit in an int is treated as a non-index (miss), not an error.
+		assertNull(JsonPointer.of("/99999999999999999999").eval(JsonList.of("x")));
 	}
 }

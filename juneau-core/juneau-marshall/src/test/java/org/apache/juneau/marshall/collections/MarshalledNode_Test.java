@@ -142,6 +142,15 @@ class MarshalledNode_Test extends TestBase {
 		assertNull(MarshalledNode.of(null).value());
 	}
 
+	@Test void b09_asNullAndConversionFailureReturnNull() {
+		// as(Class) on a null node short-circuits to null (no conversion attempted).
+		assertNull(MarshalledNode.of(null).as(B06_Bean.class));
+		// as(Class) swallows InvalidDataConversionException and returns null for a non-convertible scalar...
+		assertNull(MarshalledNode.of("notanumber").as(Integer.class));
+		// ...and for a container that cannot convert to the requested scalar type.
+		assertNull(MarshalledNode.of(JsonList.of(1, 2)).as(Integer.class));
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// c - Navigation
 	// -----------------------------------------------------------------------------------------------------------------

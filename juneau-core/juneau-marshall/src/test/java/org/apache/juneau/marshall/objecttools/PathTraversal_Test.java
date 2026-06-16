@@ -896,6 +896,14 @@ class PathTraversal_Test extends TestBase {
 		assertEquals("C2", p.addresses[0].city);
 	}
 
+	@Test void h12_put_intoArray_parentNotMapOrBean_throws() {
+		// Array nested directly inside a List: the array's parent is a Collection (not Map/Bean) -> PUT error.
+		var root = new Json5List();
+		root.add(new String[]{"a","b"});
+		var model = PathTraversal.create(root);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform PUT on '0/1' with parent node type", ()->model.put("0/1", "B"));
+	}
+
 	//====================================================================================================
 	// i - POST operations
 	//====================================================================================================
@@ -976,6 +984,22 @@ class PathTraversal_Test extends TestBase {
 		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform POST on", ()->model.post("name", "v"));
 	}
 
+	@Test void i09_post_toArray_parentNotMapOrBean_throws() {
+		// Array nested directly inside a List: the array's parent is a Collection (not Map/Bean) -> POST error.
+		var root = new Json5List();
+		root.add(new String[]{"a","b"});
+		var model = PathTraversal.create(root);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform POST on '0' with parent node type", ()->model.post("0", "c"));
+	}
+
+	@Test void i10_post_nodeNotFound_404() {
+		// POST where the target URL resolves through a null intermediate -> getNode returns null -> 404.
+		var m = new HashMap<String,Object>();
+		m.put("a", null);
+		var model = PathTraversal.create(m);
+		assertThrowsWithMessage(PathTraversalException.class, "Node at URL 'a/b' not found.", ()->model.post("a/b", "v"));
+	}
+
 	//====================================================================================================
 	// j - DELETE operations
 	//====================================================================================================
@@ -1053,6 +1077,28 @@ class PathTraversal_Test extends TestBase {
 		// DELETE on a leaf node whose parent type isn't map/list/array/bean
 		var model = PathTraversal.create(Json5Map.ofString("{name:'foo'}"));
 		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform PUT on", ()->model.delete("name/x"));
+	}
+
+	@Test void j10_delete_fromArray_parentNotMapOrBean_throws() {
+		// Array nested directly inside a List: the array's parent is a Collection (not Map/Bean) -> DELETE error.
+		var root = new Json5List();
+		root.add(new String[]{"a","b"});
+		var model = PathTraversal.create(root);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform POST on '0/1' with parent node type", ()->model.delete("0/1"));
+	}
+
+	@Test void j11_delete_parentMissing_404() {
+		// DELETE where the parent URL resolves to a missing key (o==null, Object meta) -> 404.
+		var model = PathTraversal.create(new Json5Map());
+		assertThrowsWithMessage(PathTraversalException.class, "Node at URL 'missing' not found.", ()->model.delete("missing/x"));
+	}
+
+	@Test void j12_delete_parentNotFound_404() {
+		// DELETE where the parent URL resolves through a null intermediate -> getNode returns null -> 404.
+		var m = new HashMap<String,Object>();
+		m.put("a", null);
+		var model = PathTraversal.create(m);
+		assertThrowsWithMessage(PathTraversalException.class, "Node at URL 'a/b' not found.", ()->model.delete("a/b/c"));
 	}
 
 	//====================================================================================================
@@ -1179,5 +1225,28 @@ class PathTraversal_Test extends TestBase {
 		assertEquals(2, roles.size());
 		assertEquals("editor", roles.get(0));
 		assertEquals("viewer", roles.get(1));
+	}
+
+	//====================================================================================================
+	// p - PathTraversalException
+	//====================================================================================================
+	@Test void p01_getStatus() {
+		assertEquals(404, new PathTraversalException(404, "msg").getStatus());
+	}
+
+	@Test void p02_causeConstructor() {
+		var cause = new RuntimeException("boom");
+		var x = new PathTraversalException(cause, 500, "Failed {0}", "x");
+		assertSame(cause, x.getCause());
+		assertEquals(500, x.getStatus());
+		assertEquals("Failed x", x.getMessage());
+	}
+
+	@Test void p03_covariantSetMessage() {
+		var x = new PathTraversalException(400, "orig");
+		// setMessage is covariantly typed to return PathTraversalException and returns the same instance.
+		PathTraversalException y = x.setMessage("new {0}", "msg");
+		assertSame(x, y);
+		assertEquals("new msg", x.getMessage());
 	}
 }
