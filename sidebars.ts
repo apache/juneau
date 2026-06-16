@@ -200,6 +200,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/02.08.01.MarshalledNodeAndJsonPointer',
+							label: '2.8.1. Tree Model & RFC 6901 JSON-Pointer',
+						},
+						{
+							type: 'doc',
 							id: 'topics/02.09.ComplexDataTypes',
 							label: '2.9. Complex Data Types',
 						},
