@@ -266,13 +266,30 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Performs an action on each property in this bean map.
 	 *
+	 * <p>
+	 * If a {@link BeanSession} is attached and has an active view, only properties that are visible under
+	 * that view (as determined by {@link BeanSession#isPropertyInActiveView(BeanPropertyMeta)}) are visited.
+	 *
 	 * @param filter The filter to apply to properties.
 	 * @param action The action.
 	 * @return This object.
 	 */
 	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		meta.getProperties().values().stream().filter(filter).forEach(action);
+		meta.getProperties().values().stream().filter(filter).filter(this::isInActiveView).forEach(action);
 		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the property is visible under the active view on this bean map's session.
+	 *
+	 * <p>
+	 * When no session is attached, or no active view is set, all properties are visible.
+	 *
+	 * @param pMeta The property to test.
+	 * @return <jk>true</jk> if the property is in-view.
+	 */
+	protected boolean isInActiveView(BeanPropertyMeta pMeta) {
+		return session == null || session.isPropertyInActiveView(pMeta);
 	}
 
 	/**
@@ -599,11 +616,20 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	/**
 	 * Returns the metadata on the specified property.
 	 *
+	 * <p>
+	 * Returns <jk>null</jk> if the property does not exist on the bean <em>or</em> if the property exists but is
+	 * excluded by the current active view.  The latter allows the caller (e.g. {@link #put(String, Object)}) to
+	 * route out-of-view input through the existing unknown/ignored-property path governed by
+	 * {@link org.apache.juneau.commons.bean.BeanConfigContext#isIgnoreUnknownBeanProperties()}.
+	 *
 	 * @param propertyName The name of the bean property.
-	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist.
+	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist or is out of view.
 	 */
 	public BeanPropertyMeta getPropertyMeta(String propertyName) {
-		return meta.getPropertyMeta(propertyName);
+		var p = meta.getPropertyMeta(propertyName);
+		if (p != null && ! isInActiveView(p))
+			return null;
+		return p;
 	}
 
 	/**

@@ -402,7 +402,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 			var encoders = request.getOpContext().getEncoders();
 
 			var ae = request.getHeaderParam("Accept-Encoding").orElse(null);
-			if (! (ae == null || ae.isEmpty())) {
+			if (ne(ae)) {
 				var match = encoders.getEncoderMatch(ae);
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.

@@ -117,7 +117,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	Optional<String> serverPortEnv = opte();
 
 	private static int[] parseIntArray(String csv) {
-		if (csv == null || csv.isEmpty())
+		if (e(csv))
 			return new int[0];
 		var parts = csv.split(",");
 		var out = new int[parts.length];
@@ -509,7 +509,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	public URI getURI() {
 		var cp = getContextPath();
 		try {
-			return new URI(getProtocol(), null, getHostName(), getPort(), (cp == null || cp.isEmpty()) ? null : cp, null, null);
+			return new URI(getProtocol(), null, getHostName(), getPort(), e(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
 			throw toRex(e);
 		}

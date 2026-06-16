@@ -341,12 +341,12 @@ public class VersionProvider {
 
 		private static void ifNotEmpty(Map<String,String> attrs, String key, Consumer<String> sink) {
 			var v = attrs.get(key);
-			if (v != null && !v.isEmpty())
+			if (ne(v))
 				sink.accept(v);
 		}
 
 		private static void ifNotEmptyValue(String v, Consumer<String> sink) {
-			if (v != null && !v.isEmpty())
+			if (ne(v))
 				sink.accept(v);
 		}
 	}

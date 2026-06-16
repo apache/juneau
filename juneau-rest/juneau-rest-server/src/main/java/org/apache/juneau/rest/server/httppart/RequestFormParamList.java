@@ -165,7 +165,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 			}
 		} else {
 			c = req.getHttpServletRequest().getParts();
-			if (c == null || c.isEmpty())
+			if (e(c))
 				m = req.getHttpServletRequest().getParameterMap();
 		}
 

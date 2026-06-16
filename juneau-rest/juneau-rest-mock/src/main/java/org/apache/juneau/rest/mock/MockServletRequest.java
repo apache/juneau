@@ -375,7 +375,7 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* Overridden from HttpServletRequest */
 	public int getIntHeader(String name) {
 		var s = getHeader(name);
-		return s == null || s.isEmpty() ? 0 : Integer.parseInt(s);
+		return e(s) ? 0 : Integer.parseInt(s);
 	}
 
 	@Override /* Overridden from HttpServletRequest */

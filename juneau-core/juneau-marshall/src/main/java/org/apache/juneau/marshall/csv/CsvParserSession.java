@@ -160,7 +160,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 
 		// Read header row
 		var headers = r.readRow();
-		if (headers == null || headers.isEmpty())
+		if (e(headers))
 			return null;
 
 		Object o = null;
@@ -366,7 +366,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 * CSV-specific parsing for byte[] and primitive arrays. Returns null if not applicable.
 	 */
 	private Object parseCsvCellValue(String val, ClassMeta<?> eType) throws ParseException {
-		if (val == null || val.isEmpty())
+		if (e(val))
 			return null;
 		if (eType.isByteArray()) {
 			if (byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED) {

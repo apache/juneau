@@ -138,7 +138,7 @@ public class Args {
 	 */
 	public Optional<String> get(String key) {
 		var v = options.get(normalize(key));
-		if (v == null || v.isEmpty())
+		if (e(v))
 			return opte();
 		return opt(v.get(0));
 	}
@@ -379,7 +379,7 @@ public class Args {
 				if (allowShortFlags)
 					p.add("-");
 			}
-			p.removeIf(x -> x == null || x.isEmpty());
+			p.removeIf(x -> e(x));
 			p.sort((a,b) -> Integer.compare(b.length(), a.length()));
 			return p;
 		}

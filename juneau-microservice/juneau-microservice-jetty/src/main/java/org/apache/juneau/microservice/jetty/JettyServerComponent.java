@@ -108,7 +108,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	Optional<String> serverPortEnv = opte();
 
 	private static int[] parseIntArray(String csv) {
-		if (csv == null || csv.isEmpty())
+		if (e(csv))
 			return new int[0];
 		var parts = csv.split(",");
 		var out = new int[parts.length];

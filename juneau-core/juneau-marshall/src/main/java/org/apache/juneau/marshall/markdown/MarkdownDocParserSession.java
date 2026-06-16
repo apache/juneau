@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.markdown;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -176,7 +178,7 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 
 		// The "root" section (before any sub-heading) holds the key/value table
 		var rootLines = sections.get("");
-		if (rootLines != null && !rootLines.isEmpty()) {
+		if (ne(rootLines)) {
 			// Filter out the top-level heading (level)
 			var tableLines = rootLines.stream()
 				.filter(l -> !isHeadingLine(l, level))

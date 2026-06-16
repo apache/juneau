@@ -1714,7 +1714,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return This object.
 	 */
 	public RestRequest setSerializerSessionProperties(Map<String,Object> values) {
-		if (values != null && !values.isEmpty()) {
+		if (ne(values)) {
 			if (serializerSessionProperties == null)
 				serializerSessionProperties = new LinkedHashMap<>();
 			serializerSessionProperties.putAll(values);
@@ -1729,7 +1729,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return This object.
 	 */
 	public RestRequest setParserSessionProperties(Map<String,Object> values) {
-		if (values != null && !values.isEmpty()) {
+		if (ne(values)) {
 			if (parserSessionProperties == null)
 				parserSessionProperties = new LinkedHashMap<>();
 			parserSessionProperties.putAll(values);
@@ -1831,7 +1831,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private static Map<String,Object> mergeSessionMaps(Map<String,Object>...maps) {
 		Map<String,Object> result = null;
 		for (var map : maps) {
-			if (map != null && !map.isEmpty()) {
+			if (ne(map)) {
 				if (result == null)
 					result = new LinkedHashMap<>(map);
 				else

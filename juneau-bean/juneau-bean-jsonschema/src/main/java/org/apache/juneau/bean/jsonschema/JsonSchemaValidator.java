@@ -192,7 +192,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 
 	private static void validateEnum(JsonSchema s, Object value) {
 		var enums = s.getEnum();
-		if (enums == null || enums.isEmpty())
+		if (e(enums))
 			return;
 		for (var e : enums) {
 			if (jsonEquals(e, value))
@@ -217,7 +217,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			return;
 		}
 		var arr = s.getTypeAsJsonTypeArray();
-		if (arr == null || arr.isEmpty())
+		if (e(arr))
 			return;
 		for (var t : arr) {
 			if (matchesType(t, value))

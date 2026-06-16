@@ -610,7 +610,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	/** Returns true if rows are key-value pairs (Map with non-String keys format). */
 	private static boolean isKeyValuePairFormat(List<?> rows) {
-		if (rows == null || rows.isEmpty())
+		if (e(rows))
 			return false;
 		var first = rows.get(0);
 		if (!(first instanceof Map<?, ?> m))

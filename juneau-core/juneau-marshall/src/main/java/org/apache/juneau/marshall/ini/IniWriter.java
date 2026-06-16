@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.ini;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.io.*;
 
 import org.apache.juneau.marshall.*;
@@ -84,7 +86,7 @@ public class IniWriter extends SerializerWriter {
 	 */
 	public IniWriter comment(String text) {
 		w("# ");
-		if (text != null && !text.isEmpty()) {
+		if (ne(text)) {
 			var lines = text.split("\n");
 			for (var i = 0; i < lines.length; i++) {
 				if (i > 0)

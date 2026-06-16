@@ -95,6 +95,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		public BiFunction<BeanSession,Object,Object> readTransform;  // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam; marshalling-side installers cast the session argument back to {@code MarshallingSession} where needed (see {@code MarshalledPropertyPostProcessor#installSwapAwareTransforms}).
 		public BiFunction<BeanSession,Object,Object> writeTransform; // Package-private; defaults to identity if null.  Typed against the commons.bean SPI seam (see readTransform note).
 		public List<ClassInfo> dictionaryClasses;  // Package-private for BeanMeta access; @MarshalledProp(dictionary={}) classes scanned during validate().
+		public Set<String> views;  // Named views this property belongs to; null = untagged (in all views when defaultViewInclusion is enabled). Set via MarshalledPropertyPostProcessor.
 		private boolean isConstructorArg;
 		public boolean isUri;  // Package-private so MarshalledPropertyPostProcessor can set @Uri-derived flag.  Mirrors rawTypeMeta.isUri() plus @Uri annotation reads on field/getter/setter.
 		private boolean isDyna;
@@ -520,6 +521,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final BeanInfo<?> typeMeta;                              // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 	private final BiFunction<BeanSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.  Typed against the commons.bean SPI seam.
 	private final boolean writeOnly;                                 // True if this property is write-only.
+	private final Set<String> views;                                 // Named views this property belongs to; null = untagged (included in all views when defaultViewInclusion is enabled).
 
 	/**
 	 * Creates a new BeanPropertyMeta using the contents of the specified builder.
@@ -548,6 +550,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 		setter = b.setter;
 		typeMeta = b.typeMeta;
 		writeOnly = b.writeOnly;
+		views = b.views != null ? Collections.unmodifiableSet(b.views) : null;
 		readTransform = b.readTransform != null ? b.readTransform : (session, o) -> o;
 		writeTransform = b.writeTransform != null ? b.writeTransform : (session, o) -> o;
 
@@ -1043,6 +1046,21 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return <jk>true</jk> if this bean property is a URI.
 	 */
 	public boolean isUri() { return isUri; }
+
+	/**
+	 * Returns the set of named views this property belongs to, or <jk>null</jk> if the property is untagged.
+	 *
+	 * <p>
+	 * An untagged property (one with no {@code @MarshalledProp(view=...)} annotation) follows the
+	 * default-view-inclusion policy: it is included under every active view when the policy is enabled
+	 * (the default behavior), or excluded from all views when the policy is disabled.
+	 *
+	 * <p>
+	 * A tagged property is included only when the active view name is contained in this set.
+	 *
+	 * @return The set of named views, or <jk>null</jk> if no view membership was declared.
+	 */
+	public Set<String> getViews() { return views; }
 
 	/**
 	 * Equivalent to calling {@link BeanMap#put(String, Object)}, but is faster since it avoids looking up the property

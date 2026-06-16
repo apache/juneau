@@ -60,9 +60,11 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	private static final String PROP_locale = "locale";
 	private static final String PROP_mediaType = "mediaType";
 	private static final String PROP_timeZone = "timeZone";
+	private static final String PROP_activeView = "activeView";
 	private static final String PROP_BeanSession_locale = "MarshallingSession.locale";
 	private static final String PROP_BeanSession_mediaType = "MarshallingSession.mediaType";
 	private static final String PROP_BeanSession_timeZone = "MarshallingSession.timeZone";
+	private static final String PROP_BeanSession_activeView = "MarshallingSession.activeView";
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_ctx = "ctx";
@@ -82,6 +84,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		private Locale locale;
 		private MediaType mediaType;
 		private TimeZone timeZone;
+		private String activeView;
 
 		/**
 		 * Constructor
@@ -94,6 +97,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			this.ctx = ctx;
 			mediaType = ctx.getMediaType();
 			timeZone = ctx.getTimeZone();
+			activeView = ctx.getActiveView();
 		}
 
 		/**
@@ -168,6 +172,32 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return self();
 		}
 
+		/**
+		 * Overrides the active view for this session.
+		 *
+		 * <p>
+		 * When set, only bean properties whose declared {@link MarshalledProp#view()} set contains this view name
+		 * will be included during serialization.  On the parse side, out-of-view properties are routed through
+		 * the existing unknown/ignored-property mechanism.
+		 *
+		 * <p>
+		 * This is a per-call override.  If not set, the value from
+		 * {@link MarshallingContext.Builder#activeView(String)} is used.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link MarshalledProp#view()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#activeView(String)}
+		 * </ul>
+		 *
+		 * @param value The active view name.  Use <jk>null</jk> to disable view filtering for this call.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF activeView(String value) {
+			activeView = value;
+			return self();
+		}
+
 		@Override /* Overridden from Builder */
 		public SELF property(String key, Object value) {
 			if (key == null) {
@@ -181,6 +211,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 					return mediaType(cvt(value, MediaType.class));
 				case PROP_timeZone, PROP_BeanSession_timeZone:
 					return timeZone(cvt(value, TimeZone.class));
+				case PROP_activeView, PROP_BeanSession_activeView:
+					return activeView(cvt(value, String.class));
 				default:
 					super.property(key, value);
 					return self();
@@ -261,8 +293,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	private final MarshallingContext ctx;
 	private final Locale locale;
 	private final MediaType mediaType;
-
 	private final TimeZone timeZone;
+	private final String activeView;
 
 	/**
 	 * Constructor.
@@ -275,6 +307,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		locale = opt(builder.locale).orElse(ctx.getLocale());
 		mediaType = opt(builder.mediaType).orElse(builder.mediaType);
 		timeZone = opt(builder.timeZone).orElse(builder.timeZone);
+		activeView = builder.activeView;
 	}
 
 	@Override /* ConverterSession */
@@ -685,6 +718,34 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 * @return The session locale.
 	 */
 	public Locale getLocale() { return locale; }
+
+	/**
+	 * Active view.
+	 *
+	 * <p>
+	 * Returns the active view name for this session.  When non-<jk>null</jk>, only bean properties whose
+	 * declared {@link MarshalledProp#view()} set contains this name are included during serialization, and
+	 * out-of-view properties encountered during parsing are treated as unknown.
+	 *
+	 * <p>
+	 * This is the per-call override value, which defaults to {@link MarshallingContext#getActiveView()}.
+	 *
+	 * @see MarshallingContext.Builder#activeView(String)
+	 * @see MarshallingSession.Builder#activeView(String)
+	 * @return The active view for this session, or <jk>null</jk> if view filtering is not active.
+	 * @since 10.0.0
+	 */
+	public final String getActiveView() { return activeView; }
+
+	@Override /* BeanSession */
+	public boolean isPropertyInActiveView(BeanPropertyMeta pMeta) {
+		if (activeView == null)
+			return true;
+		var views = pMeta.getViews();
+		if (e(views))
+			return ctx.isDefaultViewInclusion();
+		return views.contains(activeView);
+	}
 
 	/**
 	 * Media type.
@@ -1281,7 +1342,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		return super.properties()
 			.a(PROP_locale, locale)
 			.a(PROP_mediaType, mediaType)
-			.a(PROP_timeZone, timeZone);
+			.a(PROP_timeZone, timeZone)
+			.a(PROP_activeView, activeView);
 	}
 
 	/**

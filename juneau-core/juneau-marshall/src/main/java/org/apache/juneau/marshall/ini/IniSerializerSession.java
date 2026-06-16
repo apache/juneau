@@ -302,7 +302,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	private static boolean needsQuoting(String s) {
-		if (s == null || s.isEmpty())
+		if (e(s))
 			return true;
 		if (s.equals("null") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))
 			return true;

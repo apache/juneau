@@ -275,7 +275,7 @@ public class CharHolder extends Holder<Character> {
 	 * @return <jk>true</jk> if the current value matches any character in the string.
 	 */
 	public boolean isAny(String values) {
-		if (values == null || values.isEmpty())
+		if (e(values))
 			return false;
 		var current = get();
 		if (current == null)

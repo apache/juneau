@@ -1656,6 +1656,57 @@ public abstract class MarshallingContextable extends Context {
 		}
 
 		/**
+		 * Sets the default active view name for serializer/parser sessions created from this context.
+		 *
+		 * <p>
+		 * When set, only bean properties whose declared {@link MarshalledProp#view()} set contains this view name
+		 * will be included during serialization.  On the parse side, out-of-view properties are routed through
+		 * the existing unknown/ignored-property mechanism governed by {@link #ignoreUnknownBeanProperties()}.
+		 *
+		 * <p>
+		 * Untagged properties follow the default-view-inclusion policy: included under every active view unless
+		 * {@link #disableDefaultViewInclusion()} has been called.
+		 *
+		 * <p>
+		 * This value can be overridden per call via {@link MarshallingSession.Builder#activeView(String)}.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link MarshalledProp#view()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#activeView(String)}
+		 * 	<li class='jm'>{@link MarshallingSession.Builder#activeView(String)}
+		 * </ul>
+		 *
+		 * @param value The active view name.  Use <jk>null</jk> to disable view filtering.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF activeView(String value) {
+			bcBuilder.activeView(value);
+			return self();
+		}
+
+		/**
+		 * Disables the default-view-inclusion policy.
+		 *
+		 * <p>
+		 * By default, bean properties that carry no {@link MarshalledProp#view()} declaration are included under
+		 * every active view.  Calling this method reverses the policy: untagged properties are <em>excluded</em>
+		 * when any active view is set.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link MarshalledProp#view()}
+		 * 	<li class='jm'>{@link MarshallingContext.Builder#disableDefaultViewInclusion()}
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public SELF disableDefaultViewInclusion() {
+			bcBuilder.disableDefaultViewInclusion();
+			return self();
+		}
+
+		/**
 		 * POJO example.
 		 *
 		 * <p>

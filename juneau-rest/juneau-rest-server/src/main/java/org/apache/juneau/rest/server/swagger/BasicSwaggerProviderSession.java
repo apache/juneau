@@ -163,11 +163,11 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static MarshalledList nullIfEmpty(MarshalledList l) {
-		return (l == null || l.isEmpty() ? null : l);
+		return e(l) ? null : l;
 	}
 
 	private static MarshalledMap nullIfEmpty(MarshalledMap m) {
-		return (m == null || m.isEmpty() ? null : m);
+		return e(m) ? null : m;
 	}
 
 	static String joinnl(String[]...s) {

@@ -145,7 +145,7 @@ public class Microservice implements ConfigEventListener {
 		 */
 		@Inject
 		public void initWorkingDirFromEnv(@Value("${juneau.workingDir}") String workingDirEnv) {
-			if (workingDir == null && workingDirEnv != null && !workingDirEnv.isEmpty())
+			if (workingDir == null && ne(workingDirEnv))
 				workingDir = new File(workingDirEnv);
 		}
 

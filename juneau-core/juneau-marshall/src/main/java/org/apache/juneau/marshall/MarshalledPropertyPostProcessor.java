@@ -105,6 +105,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	static void process(MarshallingContext bc, BeanPropertyMeta.Builder b) {
 		var ap = bc.getAnnotationProvider();
 		var bdClasses = new ArrayList<Class<?>>();
+		Set<String> viewNames = null;
 		var propertyClass = propertyClass(b);
 
 		// XMLGregorianCalendar always uses XML format regardless of any CalendarFormat setting.
@@ -122,6 +123,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			});
 			ap.find(Swap.class, b.innerField).stream().findFirst().ifPresent(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.innerField);
+			for (var ai : ap.find(MarshalledProp.class, b.innerField))
+				viewNames = addViews(viewNames, ai.inner().view());
 		}
 
 		if (nn(b.getter)) {
@@ -134,6 +137,8 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			});
 			ap.find(Swap.class, b.getter).forEach(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.getter);
+			for (var ai : ap.find(MarshalledProp.class, b.getter))
+				viewNames = addViews(viewNames, ai.inner().view());
 		}
 
 		if (nn(b.setter)) {
@@ -146,7 +151,12 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			});
 			ap.find(Swap.class, b.setter).forEach(x -> b.swap = swapSwap(x));
 			b.isUri |= ap.has(Uri.class, b.setter);
+			for (var ai : ap.find(MarshalledProp.class, b.setter))
+				viewNames = addViews(viewNames, ai.inner().view());
 		}
+
+		if (viewNames != null)
+			b.views = viewNames;
 
 		ClassInfo ownerClass = owningClass(b);
 		if (nn(ownerClass)) {
@@ -311,7 +321,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		if (nn(b.setter))
 			for (var ai : ap.find(Schema.class, b.setter))
 				merged = applyToMap(merged, ai.inner());
-		if (merged == null || merged.isEmpty())
+		if (e(merged))
 			return;
 		var validator = factory.create(merged, propertyClass(b));
 		if (validator == null)
@@ -353,7 +363,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-		if (m == null || m.isEmpty())
+		if (e(m))
 			return acc;
 		if (acc == null)
 			return new JsonMap(m);
@@ -1052,6 +1062,26 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	})
 	private static Class<Class<?>> asClassWildcard() {
 		return (Class) Class.class;
+	}
+
+	/**
+	 * Accumulates non-empty view names into a set, creating it lazily on first use.
+	 *
+	 * @param acc The current accumulator (may be null on first call).
+	 * @param views The view names to add (may be empty array).
+	 * @return The updated accumulator (non-null if any names were added).
+	 */
+	private static Set<String> addViews(Set<String> acc, String[] views) {
+		if (views == null || views.length == 0) // HTT — views==null branch: annotation arrays are never null in Java; defensive guard only.
+			return acc;
+		for (var v : views) {
+			if (v != null && ! v.isEmpty()) { // HTT — v==null branch: annotation String[] elements are never null in Java; defensive guard only.
+				if (acc == null)
+					acc = new LinkedHashSet<>();
+				acc.add(v);
+			}
+		}
+		return acc;
 	}
 
 	@SuppressWarnings({

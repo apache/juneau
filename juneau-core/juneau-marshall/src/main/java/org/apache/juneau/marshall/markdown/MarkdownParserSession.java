@@ -421,7 +421,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		int typeColIndex = headers.indexOf(CONST_type);
 		if (typeColIndex >= 0 && typeColIndex < cells.size()) {
 			var typeName = cells.get(typeColIndex);
-			if (typeName != null && !typeName.isEmpty()) {
+			if (ne(typeName)) {
 				var registry = eType != null ? eType.getBeanRegistry() : null;
 				var resolved = registry != null ? registry.getClassMeta(typeName) : null;
 				if (resolved != null)

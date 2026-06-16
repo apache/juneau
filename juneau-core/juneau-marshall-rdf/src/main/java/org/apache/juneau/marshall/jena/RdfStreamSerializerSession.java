@@ -264,7 +264,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		String s = null;
 		if (nn(uri))
 			s = uri.toString();
-		if ((s == null || s.isEmpty()) && nn(uri2))
+		if (e(s) && nn(uri2))
 			s = uri2.toString();
 		if (s == null)
 			return null;

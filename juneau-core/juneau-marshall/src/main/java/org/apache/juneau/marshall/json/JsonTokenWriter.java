@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.json;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.math.*;
@@ -230,7 +231,7 @@ public class JsonTokenWriter implements TokenWriter {
 	 * and must not be one of a small set of JavaScript reserved words.
 	 */
 	private static boolean isSafeBareIdentifier(String s) {
-		if (s == null || s.isEmpty())
+		if (e(s))
 			return false;
 		var first = s.charAt(0);
 		if (!(Character.isLetter(first) || first == '_'))

@@ -159,13 +159,13 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	})
 	@Override /* MetricsRecorder */
 	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
-		var effectiveName = (metricName != null && !metricName.isEmpty()) ? metricName : timerName;
+		var effectiveName = ne(metricName) ? metricName : timerName;
 		var builder = Timer.builder(effectiveName)
 			.tag(TAG_METHOD, defaultIfBlank(httpMethod, ""))
 			.tag(TAG_URI, defaultIfBlank(uriTemplate, ""))
 			.tag(TAG_STATUS, Integer.toString(statusCode))
 			.tag(TAG_EXCEPTION, exceptionTag(error));
-		if (metricTags != null && !metricTags.isEmpty())
+		if (ne(metricTags))
 			for (var pair : metricTags.split(",")) {
 				var kv = pair.split("=", 2);
 				if (kv.length == 2)

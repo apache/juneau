@@ -296,7 +296,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return Charset.forName(v.get());
 		if (isInherited(PROPERTY_defaultCharset)) {
 			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_defaultCharset, null);
-			if (rv != null && !rv.isEmpty())
+			if (ne(rv))
 				return Charset.forName(rv);
 		}
 		return Charset.forName(defaultCharsetName);
@@ -558,7 +558,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
 			var v = httpMethodFromAnnotation(ai.inner(), vr);
-			if (v != null && !v.isEmpty())
+			if (ne(v))
 				return normalizeHttpMethod(v);
 		}
 		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method(), true, "GET"));
@@ -627,7 +627,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return parseLongWithSuffix(v.get());
 		if (isInherited(PROPERTY_maxInput)) {
 			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_maxInput, null);
-			if (rv != null && !rv.isEmpty())
+			if (ne(rv))
 				return parseLongWithSuffix(rv);
 		}
 		return parseLongWithSuffix(defaultMaxInputString);
@@ -1240,7 +1240,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return "options";
 		if (a instanceof RestOp r) {
 			var m = vr.resolve(r.method());
-			if (m != null && !m.isEmpty())
+			if (ne(m))
 				return m;
 			var s = vr.resolve(r.value());
 			if (s != null) {

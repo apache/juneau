@@ -138,10 +138,10 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 			if (isCollection) {
 				if (cen.isEmpty() && nn(xmlMetaProvider))
 					cen = xmlMetaProvider.getXmlClassMeta(cmProperty).getChildName();
-				if (cen == null || cen.isEmpty())
-					cen = cmProperty.getElementType().getBeanDictionaryName();
-				if (cen == null || cen.isEmpty())
-					cen = name;
+			if (e(cen))
+				cen = cmProperty.getElementType().getBeanDictionaryName();
+			if (e(cen))
+				cen = name;
 			} else {
 				throw bex(cmBean.inner(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}

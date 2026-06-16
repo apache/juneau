@@ -62,6 +62,51 @@ public @interface MarshalledProp {
 	String[] description() default {};
 
 	/**
+	 * Declares the named views this property belongs to.
+	 *
+	 * <p>
+	 * When an active view is selected (via
+	 * {@link org.apache.juneau.marshall.MarshallingContext.Builder#activeView(String)} or the per-call session
+	 * override), this property is included only when its declared view set contains the active view name.
+	 *
+	 * <p>
+	 * If this member is empty (the default), the property follows the default-view-inclusion policy:
+	 * by default an untagged property is included under every active view (matching Jackson's
+	 * {@code DEFAULT_VIEW_INCLUSION} behavior). The policy can be flipped via
+	 * {@link org.apache.juneau.marshall.MarshallingContext.Builder#disableDefaultViewInclusion()}.
+	 *
+	 * <p>
+	 * Multiple view names are supported — a property tagged {@code view={"summary","detail"}} is included
+	 * when <em>either</em> {@code "summary"} or {@code "detail"} is the active view (union semantics).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jk>public class</jk> MyBean {
+	 *
+	 * 		<jc>// Included in all views (untagged = default inclusion)</jc>
+	 * 		<jk>public</jk> String <jf>id</jf>;
+	 *
+	 * 		<jc>// Included only in the "summary" and "detail" views</jc>
+	 * 		<ja>@MarshalledProp</ja>(view={<js>"summary"</js>, <js>"detail"</js>})
+	 * 		<jk>public</jk> String <jf>name</jf>;
+	 *
+	 * 		<jc>// Included only in the "detail" view</jc>
+	 * 		<ja>@MarshalledProp</ja>(view=<js>"detail"</js>)
+	 * 		<jk>public</jk> String <jf>description</jf>;
+	 * 	}
+	 * </p>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#activeView(String)}
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ViewProjection">View-based Projection</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	String[] view() default {};
+
+	/**
 	 * Bean dictionary.
 	 *
 	 * <p>

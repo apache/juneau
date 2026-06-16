@@ -45,6 +45,7 @@ public class MarshalledPropAnnotation {
 		private String[] description = {};
 		private Class<?>[] dictionary = new Class[0];
 		private String format = "";
+		private String[] view = {};
 		private DurationFormat durationFormat = DurationFormat.NOT_SET;
 		private PeriodFormat periodFormat = PeriodFormat.NOT_SET;
 		private CalendarFormat calendarFormat = CalendarFormat.NOT_SET;
@@ -275,6 +276,17 @@ public class MarshalledPropAnnotation {
 			return this;
 		}
 
+		/**
+		 * Sets the {@link MarshalledProp#view()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder view(String...value) {
+			view = value;
+			return this;
+		}
+
 	}
 
 	@SuppressWarnings({
@@ -285,6 +297,7 @@ public class MarshalledPropAnnotation {
 		private final String[] description;
 		private final Class<?>[] dictionary;
 		private final String format;
+		private final String[] view;
 		private final DurationFormat durationFormat;
 		private final PeriodFormat periodFormat;
 		private final CalendarFormat calendarFormat;
@@ -306,6 +319,7 @@ public class MarshalledPropAnnotation {
 			description = copyOf(b.description);
 			dictionary = copyOf(b.dictionary);
 			format = b.format;
+			view = copyOf(b.view);
 			durationFormat = b.durationFormat;
 			periodFormat = b.periodFormat;
 			calendarFormat = b.calendarFormat;
@@ -411,6 +425,11 @@ public class MarshalledPropAnnotation {
 		@Override /* Overridden from annotation */
 		public String[] description() {
 			return description;
+		}
+
+		@Override /* Overridden from MarshalledProp */
+		public String[] view() {
+			return view;
 		}
 	}
 

@@ -302,7 +302,9 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		private Set<ClassInfo> notBeanClasses;
 		private Set<String> notBeanPackages;
 		private BeanStore beanStore;
-		
+		private String activeView;
+		private boolean disableDefaultViewInclusion;
+
 		/**
 		 * Constructor.
 		 *
@@ -411,6 +413,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
+			activeView = copyFrom.activeView;
+			disableDefaultViewInclusion = ! copyFrom.defaultViewInclusion;
 		}
 
 		/**
@@ -467,6 +471,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			useJavaBeanIntrospector = copyFrom.useJavaBeanIntrospector;
 			validateSchema = copyFrom.validateSchema;
 			beanStore = copyFrom.beanStore;
+			activeView = copyFrom.activeView;
+			disableDefaultViewInclusion = copyFrom.disableDefaultViewInclusion;
 		}
 
 		/**
@@ -2315,25 +2321,27 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				swaps,
 				notBeanClasses,
 				notBeanPackages,
-				integer(
-					disableBeansRequireSomeProperties,
-					beanMapPutReturnsOldValue,
-					beansRequireDefaultConstructor,
-					beansRequireSerializable,
-					beansRequireSettersForGetters,
-					disableIgnoreTransientFields,
-					disableIgnoreUnknownNullBeanProperties,
-					disableIgnoreMissingSetters,
-					disableInterfaceProxies,
-					findFluentSetters,
-					ignoreInvocationExceptionsOnGetters,
-					ignoreInvocationExceptionsOnSetters,
-					ignoreUnknownBeanProperties,
-					ignoreUnknownEnumValues,
-					unsortedProperties,
-					useJavaBeanIntrospector,
-					validateSchema
-				),
+			integer(
+				disableBeansRequireSomeProperties,
+				beanMapPutReturnsOldValue,
+				beansRequireDefaultConstructor,
+				beansRequireSerializable,
+				beansRequireSettersForGetters,
+				disableIgnoreTransientFields,
+				disableIgnoreUnknownNullBeanProperties,
+				disableIgnoreMissingSetters,
+				disableInterfaceProxies,
+				findFluentSetters,
+				ignoreInvocationExceptionsOnGetters,
+				ignoreInvocationExceptionsOnSetters,
+				ignoreUnknownBeanProperties,
+				ignoreUnknownEnumValues,
+				unsortedProperties,
+				useJavaBeanIntrospector,
+				validateSchema,
+				disableDefaultViewInclusion
+			),
+			activeView,
 				typePropertyName,
 				mediaType,
 				timeZone,
@@ -2358,6 +2366,77 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				System.identityHashCode(classLoader)
 			);
 			// @formatter:on
+		}
+
+		/**
+		 * Sets the default active view name for all sessions created from this context.
+		 *
+		 * <p>
+		 * When set, only bean properties whose declared {@link MarshalledProp#view()} set contains this view name
+		 * will be included during serialization.  On the parse side, properties outside the active view are routed
+		 * through the existing unknown/ignored-property mechanism governed by
+		 * {@link #ignoreUnknownBeanProperties()}.
+		 *
+		 * <p>
+		 * Untagged properties (those whose declared view set is empty) follow the default-view-inclusion policy:
+		 * included under every active view unless {@link #disableDefaultViewInclusion()} has been called.
+		 *
+		 * <p>
+		 * This value can be overridden per serialization or parse call via the session builder (e.g.
+		 * {@link MarshallingSession.Builder#activeView(String)}).
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	JsonSerializer <jv>serializer</jv> = JsonSerializer.<jsm>create</jsm>()
+		 * 		.activeView(<js>"summary"</js>)
+		 * 		.build();
+		 * </p>
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link MarshalledProp#view()}
+		 * 	<li class='jm'>{@link MarshallingSession.Builder#activeView(String)}
+		 * </ul>
+		 *
+		 * @param value The active view name.  Use <jk>null</jk> to disable view filtering.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public Builder activeView(String value) {
+			activeView = value;
+			return this;
+		}
+
+		/**
+		 * Disables the default-view-inclusion policy.
+		 *
+		 * <p>
+		 * By default, bean properties that carry no {@link MarshalledProp#view()} declaration are included under
+		 * every active view (matching Jackson's {@code DEFAULT_VIEW_INCLUSION} behavior).
+		 * Calling this method reverses the policy: untagged properties are <em>excluded</em> when any active view
+		 * is set.
+		 *
+		 * <h5 class='section'>See Also:</h5><ul>
+		 * 	<li class='ja'>{@link MarshalledProp#view()}
+		 * 	<li class='jm'>{@link #activeView(String)}
+		 * </ul>
+		 *
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public Builder disableDefaultViewInclusion() {
+			return disableDefaultViewInclusion(true);
+		}
+
+		/**
+		 * Same as {@link #disableDefaultViewInclusion()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public Builder disableDefaultViewInclusion(boolean value) {
+			disableDefaultViewInclusion = value;
+			return this;
 		}
 
 		/**
@@ -3977,6 +4056,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	private final Visibility beanFieldVisibility;
 	private final Visibility beanMethodVisibility;
 	private final BeanStore beanStore;
+	private final String activeView;
+	private final boolean defaultViewInclusion;
 
 	/**
 	 * Constructor.
@@ -4033,6 +4114,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		validateSchema = builder.validateSchema;
 		beanStore = builder.beanStore;
+		activeView = builder.activeView;
+		defaultViewInclusion = ! builder.disableDefaultViewInclusion;
 
 		var builderNotBeanClasses = new ArrayList<>(builder.notBeanClasses);
 		notBeanClasses = builderNotBeanClasses.isEmpty() ? DEFAULT_NOTBEAN_CLASSES : Stream.concat(builderNotBeanClasses.stream(), DEFAULT_NOTBEAN_CLASSES.stream()).distinct().toList();
@@ -5104,6 +5187,32 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	 * @return The locale.
 	 */
 	protected final Locale getLocale() { return locale; }
+
+	/**
+	 * The default active view for sessions created from this context.
+	 *
+	 * <p>
+	 * Returns the view name set via {@link Builder#activeView(String)}, or <jk>null</jk> if no default
+	 * active view has been configured (all properties visible).
+	 *
+	 * @return The default active view, or <jk>null</jk>.
+	 * @since 10.0.0
+	 */
+	public final String getActiveView() { return activeView; }
+
+	/**
+	 * Default-view-inclusion policy.
+	 *
+	 * <p>
+	 * Returns <jk>true</jk> (the default) when untagged properties — those carrying no
+	 * {@link MarshalledProp#view()} declaration — are included under every active view.
+	 * Returns <jk>false</jk> when {@link Builder#disableDefaultViewInclusion()} has been called,
+	 * in which case untagged properties are excluded when any active view is in effect.
+	 *
+	 * @return <jk>true</jk> if untagged properties are included under every active view.
+	 * @since 10.0.0
+	 */
+	public final boolean isDefaultViewInclusion() { return defaultViewInclusion; }
 
 	/**
 	 * Media type.

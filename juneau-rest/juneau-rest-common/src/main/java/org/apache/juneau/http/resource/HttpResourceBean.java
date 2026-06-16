@@ -134,7 +134,7 @@ public final class HttpResourceBean implements HttpResource {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public HttpResourceBean withHeaders(List<HttpHeader> toAdd) {
-		if (toAdd == null || toAdd.isEmpty())
+		if (e(toAdd))
 			return this;
 		var newHeaders = new ArrayList<>(headers);
 		for (var h : toAdd)

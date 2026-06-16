@@ -131,4 +131,24 @@ public interface BeanSession {
 	 * @return A new bean map (typically a {@code BeanMap}) wrapping the supplied bean.
 	 */
 	<T> Object toBeanMap(T bean);
+
+	/**
+	 * Returns <jk>true</jk> if the specified bean property is visible under the current active view.
+	 *
+	 * <p>
+	 * When no active view is set on the session, this method always returns <jk>true</jk> (all properties visible).
+	 * The marshalling-side {@code MarshallingSession} overrides this to implement the actual view-membership check
+	 * using the property's declared view set and the active view name.
+	 *
+	 * <p>
+	 * Default-view-inclusion policy (configurable): an untagged property — one whose view set is empty — is
+	 * considered in-view under every active view unless the
+	 * {@link org.apache.juneau.marshall.MarshallingContext.Builder#disableDefaultViewInclusion()} flag is set.
+	 *
+	 * @param pMeta The property metadata. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the property should be included under the current active view.
+	 */
+	default boolean isPropertyInActiveView(BeanPropertyMeta pMeta) {
+		return true; // HTT — default SPI method; MarshallingSession always overrides, so this body is unreachable in practice.
+	}
 }

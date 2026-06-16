@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
 import java.util.*;
@@ -232,7 +233,7 @@ public final class ParquetSchemaBuilder {
 		// Resolve element type from sample when generics are erased (et is Object) for proper list-of-bean
 		// expansion into leaf columns (e.g. members.list.element.name, members.list.element.age)
 		var sampleCollection = extractSampleCollection(sampleBean);
-		if (sampleCollection != null && !sampleCollection.isEmpty()) {
+		if (ne(sampleCollection)) {
 			var first = sampleCollection.iterator().next();
 			if (first != null)
 				et = marshallingContext.getClassMeta(first.getClass());
@@ -241,7 +242,7 @@ public final class ParquetSchemaBuilder {
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, CONVERTED_LIST, null, null, null, null));
 		elements.add(new ParquetSchemaElement("list", null, null, REPEATED, 1, null, null, null, null, null));
 		Object elementSample = null;
-		if (sampleCollection != null && !sampleCollection.isEmpty())
+		if (ne(sampleCollection))
 			elementSample = sampleCollection.iterator().next();
 		addSchemaElements(elements, et, "element", listPath + ".list", false, elementSample, typesInProgress);
 	}
