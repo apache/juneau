@@ -26,7 +26,6 @@ import java.util.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.objecttools.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -244,13 +243,11 @@ class JsonMap_Test extends TestBase {
 	}
 
 	private static String getDeepString(Json5Map m, String url) {
-		var r = ObjectRest.create(m);
-		return (String)r.get(url);
+		return m.getAt(url, String.class);
 	}
 
 	private static Boolean getDeepBoolean(Json5Map m, String url) {
-		var r = ObjectRest.create(m);
-		return (Boolean)r.get(url);
+		return m.getAt(url, Boolean.class);
 	}
 
 	private static void checkStep(int step, String input, String output, String expectedValue) {

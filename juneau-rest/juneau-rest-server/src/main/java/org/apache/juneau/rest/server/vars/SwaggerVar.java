@@ -67,7 +67,7 @@ public class SwaggerVar extends MultipartResolvingVar {
 	@Override /* Overridden from Var */
 	public String resolve(VarResolverSession session, String key) {
 		RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
-		return new ObjectRest(req.getSwagger()).getString(key);
+		return new PathTraversal(req.getSwagger()).getString(key);
 	}
 
 	@Override /* Overridden from Var */

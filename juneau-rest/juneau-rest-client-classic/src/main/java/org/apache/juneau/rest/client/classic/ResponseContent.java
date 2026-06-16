@@ -39,7 +39,6 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
-import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.stream.*;
@@ -51,6 +50,11 @@ import org.apache.juneau.rest.client.classic.assertion.*;
  * <p>
  * An extension of an HttpClient {@link HttpEntity} that provides various support for converting the body to POJOs and
  * other convenience methods.
+ *
+ * <p>
+ * To quickly retrieve a single value from inside a larger JSON document, parse the body into a {@link JsonMap} and use
+ * its path-addressing methods &mdash; e.g. <c>getContent().as(JsonMap.<jk>class</jk>).getAt(<jv>path</jv>, <jv>type</jv>)</c>
+ * or the RFC 6901 form <c>getContent().as(JsonMap.<jk>class</jk>).at(<jv>pointer</jv>)</c>.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
@@ -759,41 +763,6 @@ public class ResponseContent implements HttpEntity {
 	 */
 	public Matcher asMatcher(String regex, int flags) throws RestCallException {
 		return asMatcher(Pattern.compile(regex, flags));
-	}
-
-	/**
-	 * Converts the output from the connection into an {@link JsonMap} and then wraps that in a {@link ObjectRest}.
-	 *
-	 * <p>
-	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
-	 *
-	 * @return The parsed output wrapped in a {@link ObjectRest}.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public ObjectRest asObjectRest() throws RestCallException {
-		return asObjectRest(JsonMap.class);
-	}
-
-	/**
-	 * Parses the output from the body into the specified type and then wraps that in a {@link ObjectRest}.
-	 *
-	 * <p>
-	 * Useful if you want to quickly retrieve a single value from inside of a larger JSON document.
-	 *
-	 * @param innerType The class type of the POJO being wrapped.
-	 * @return The parsed output wrapped in a {@link ObjectRest}.
-	 * @throws RestCallException
-	 * 	<ul>
-	 * 		<li>If the input contains a syntax error or is malformed, or is not valid for the specified type.
-	 * 		<li>If a connection error occurred.
-	 * 	</ul>
-	 */
-	public ObjectRest asObjectRest(Class<?> innerType) throws RestCallException {
-		return new ObjectRest(as(innerType));
 	}
 
 	/**

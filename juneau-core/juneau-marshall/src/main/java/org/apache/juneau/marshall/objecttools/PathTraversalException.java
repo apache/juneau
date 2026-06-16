@@ -22,7 +22,7 @@ import java.text.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Generic exception thrown from the {@link ObjectRest} class.
+ * Generic exception thrown from the {@link PathTraversal} class.
  *
  * <p>
  * Typically, this is a user-error, such as trying to address a non-existent node in the tree.
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.*;
 	"java:S110", // Deep inheritance inherent to the exception hierarchy
 	"java:S2166" // False positive: this IS an exception (BasicRuntimeException -> RuntimeException); name is correct public API.
 })
-public class ObjectRestException extends BasicRuntimeException {
+public class PathTraversalException extends BasicRuntimeException {
 
 	private static final long serialVersionUID = 1L;
 
@@ -61,7 +61,7 @@ public class ObjectRestException extends BasicRuntimeException {
 	 * @param message The detailed message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ObjectRestException(int status, String message, Object...args) {
+	public PathTraversalException(int status, String message, Object...args) {
 		this(null, status, message, args);
 	}
 
@@ -73,7 +73,7 @@ public class ObjectRestException extends BasicRuntimeException {
 	 * @param message The {@link MessageFormat}-style message.
 	 * @param args Optional {@link MessageFormat}-style arguments.
 	 */
-	public ObjectRestException(Throwable cause, int status, String message, Object...args) {
+	public PathTraversalException(Throwable cause, int status, String message, Object...args) {
 		super(cause, message, args);
 		this.status = status;
 	}
@@ -89,7 +89,7 @@ public class ObjectRestException extends BasicRuntimeException {
 	public int getStatus() { return status; }
 
 	@Override /* Overridden from BasicRuntimeException */
-	public ObjectRestException setMessage(String message, Object...args) {
+	public PathTraversalException setMessage(String message, Object...args) {
 		super.setMessage(message, args);
 		return this;
 	}

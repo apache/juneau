@@ -101,7 +101,6 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.marshaller.Uon;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.oapi.*;
-import org.apache.juneau.marshall.objecttools.*;
 import org.apache.juneau.marshall.parquet.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.parser.ParseException;
@@ -701,8 +700,6 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * 		<li class='jm'><c>{@link ResponseContent#asString() asString()} <jk>returns</jk> String</c>
  * 		<li class='jm'><c>{@link ResponseContent#asStringFuture() asStringFuture()} <jk>returns</jk> Future&lt;String&gt;</c>
  * 		<li class='jm'><c>{@link ResponseContent#asAbbreviatedString(int) asAbbreviatedString(int)} <jk>returns</jk> String</c>
- * 		<li class='jm'><c>{@link ResponseContent#asObjectRest(Class) asObjectRest(Class&lt;?&gt;)} <jk>returns</jk> {@link ObjectRest}</c>
- * 		<li class='jm'><c>{@link ResponseContent#asObjectRest() asObjectRest()} <jk>returns</jk> {@link ObjectRest}</c>
  * 		<li class='jm'><c>{@link ResponseContent#asMatcher(Pattern) asMatcher(Pattern)} <jk>returns</jk> {@link Matcher}</c>
  * 		<li class='jm'><c>{@link ResponseContent#asMatcher(String) asMatcher(String)} <jk>returns</jk> {@link Matcher}</c>
  * 	</ul>

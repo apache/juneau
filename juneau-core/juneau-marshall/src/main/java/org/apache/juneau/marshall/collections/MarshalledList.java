@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * This class is the base for {@link JsonList} and the per-marshaller {@code XList} variants. It carries
  * all marshaller-neutral functionality such as typed accessors, fluent setters, bean integration,
- * and {@link ObjectRest}-based path navigation. The default {@link #toString()} comes from
+ * and {@link PathTraversal}-based path navigation. The default {@link #toString()} comes from
  * {@link LinkedList}; subclasses should override it to produce the appropriate marshalled form.
  *
  * <p>
@@ -384,7 +384,7 @@ public class MarshalledList extends LinkedList<Object> {
 
 	transient MarshallingSession session = null;
 
-	private transient ObjectRest objectRest;
+	private transient PathTraversal pathTraversal;
 
 	/**
 	 * Construct an empty list.
@@ -541,6 +541,25 @@ public class MarshalledList extends LinkedList<Object> {
 	}
 
 	/**
+	 * Returns the node addressed by the specified <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a>
+	 * JSON Pointer relative to this list.
+	 *
+	 * <p>
+	 * Convenience for <c>MarshalledNode.<jsm>of</jsm>(<jk>this</jk>).at(<jv>pointer</jv>)</c>. A read-miss returns
+	 * <jk>null</jk>; an addressed JSON <jk>null</jk> value returns a null node.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This method is part of the next-generation typed tree model layered over the
+	 * {@code Marshalled*} collections and may change incompatibly in a future release.
+	 *
+	 * @param pointer The RFC 6901 JSON Pointer.
+	 * @return A node wrapping the addressed value, or <jk>null</jk> if the addressed value is absent.
+	 */
+	public MarshalledNode at(String pointer) {
+		return MarshalledNode.of(this).at(pointer);
+	}
+
+	/**
 	 * Serializes this list to a string using the specified serializer.
 	 *
 	 * @param serializer The serializer to use to convert this object to a string.
@@ -555,14 +574,14 @@ public class MarshalledList extends LinkedList<Object> {
 	 * this POJO.
 	 *
 	 * <p>
-	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PathTraversal} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PathTraversal} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public Object deleteAt(String path) {
-		return getObjectRest().delete(path);
+		return getPathTraversal().delete(path);
 	}
 
 	/**
@@ -646,7 +665,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public <T> T getAt(String path, Class<T> type) {
-		return getObjectRest().get(path, type);
+		return getPathTraversal().get(path, type);
 	}
 
 	/**
@@ -660,7 +679,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return The value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public <T> T getAt(String path, Type type, Type...args) {
-		return getObjectRest().get(path, type, args);
+		return getPathTraversal().get(path, type, args);
 	}
 
 	/**
@@ -798,15 +817,15 @@ public class MarshalledList extends LinkedList<Object> {
 	 * Similar to {@link #putAt(String,Object) putAt(String,Object)}, but used to append to collections and arrays.
 	 *
 	 * <p>
-	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PathTraversal} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PathTraversal} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public Object postAt(String path, Object o) {
-		return getObjectRest().post(path, o);
+		return getPathTraversal().post(path, o);
 	}
 
 	/**
@@ -814,15 +833,15 @@ public class MarshalledList extends LinkedList<Object> {
 	 * in this POJO.
 	 *
 	 * <p>
-	 * This method uses the {@link ObjectRest} class to perform the lookup, so the map can contain any of the various
-	 * class types that the {@link ObjectRest} class supports (e.g. beans, collections, arrays).
+	 * This method uses the {@link PathTraversal} class to perform the lookup, so the map can contain any of the various
+	 * class types that the {@link PathTraversal} class supports (e.g. beans, collections, arrays).
 	 *
 	 * @param path The path to the entry.
 	 * @param o The new value.
 	 * @return The previous value, or <jk>null</jk> if the entry doesn't exist.
 	 */
 	public Object putAt(String path, Object o) {
-		return getObjectRest().put(path, o);
+		return getPathTraversal().put(path, o);
 	}
 
 	/**
@@ -864,10 +883,10 @@ public class MarshalledList extends LinkedList<Object> {
 		return new UnmodifiableMarshalledList(this);
 	}
 
-	private ObjectRest getObjectRest() {
-		if (objectRest == null)
-			objectRest = new ObjectRest(this);
-		return objectRest;
+	private PathTraversal getPathTraversal() {
+		if (pathTraversal == null)
+			pathTraversal = new PathTraversal(this);
+		return pathTraversal;
 	}
 
 	/**

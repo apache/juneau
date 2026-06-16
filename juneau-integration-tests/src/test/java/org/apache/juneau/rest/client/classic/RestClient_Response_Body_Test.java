@@ -36,6 +36,7 @@ import org.apache.http.entity.*;
 import org.apache.http.message.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.xml.*;
@@ -247,11 +248,11 @@ class RestClient_Response_Body_Test extends TestBase {
 		var x18 = testClient().entity(stringEntity("12345")).get().run().getContent().asAbbreviatedString(4);
 		assertEquals("1...", x18);
 
-		var x20 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest(ABean.class);
-		assertString("1", x20.get("f"));
+		var x20 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(JsonMap.class).getAt("f", String.class);
+		assertString("1", x20);
 
-		var x22 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().asObjectRest();
-		assertString("1", x22.get("f"));
+		var x22 = testClient().entity(stringEntity("{f:1}")).get().run().getContent().as(JsonMap.class).getAt("f", String.class);
+		assertString("1", x22);
 
 		var x24 = testClient().entity(stringEntity("foo=123")).get().run().getContent().asMatcher(Pattern.compile("foo=(.*)"));
 		assertTrue(x24.matches());

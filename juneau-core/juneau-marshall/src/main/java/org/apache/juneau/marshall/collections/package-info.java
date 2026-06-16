@@ -21,7 +21,7 @@
  * <ul>
  * 	<li>{@link org.apache.juneau.marshall.collections.MarshalledMap} / {@link org.apache.juneau.marshall.collections.MarshalledList}
  * 		&mdash; neutral, marshaller-agnostic base classes carrying typed accessors, fluent setters,
- * 		bean integration, and {@link org.apache.juneau.marshall.objecttools.ObjectRest}-based path navigation.
+ * 		bean integration, and {@link org.apache.juneau.marshall.objecttools.PathTraversal}-based path navigation.
  * 		Their default {@link java.lang.Object#toString()} is the inherited {@link java.util.LinkedHashMap}
  * 		/ {@link java.util.LinkedList} form.
  * 	<li>{@link org.apache.juneau.marshall.collections.JsonMap} / {@link org.apache.juneau.marshall.collections.JsonList}

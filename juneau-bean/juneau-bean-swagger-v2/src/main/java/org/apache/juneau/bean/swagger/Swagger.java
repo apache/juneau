@@ -514,7 +514,7 @@ public class Swagger extends SwaggerElement {
 		if (! ref.startsWith("#/"))
 			throw rex("Unsupported reference:  ''{0}''", ref);
 		try {
-			return new ObjectRest(this).get(ref.substring(1), c);
+			return new PathTraversal(this).get(ref.substring(1), c);
 		} catch (Exception e) {
 			throw bex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
 		}

@@ -20,21 +20,22 @@ import static java.net.HttpURLConnection.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
-import java.io.*;
 import java.lang.reflect.*;
 import java.util.*;
 
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 
 /**
- * POJO REST API.
+ * Traversal engine for performing standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
  *
  * <p>
- * Provides the ability to perform standard REST operations (GET, PUT, POST, DELETE) against nodes in a POJO model.
+ * <b>Internal API:</b> This class is the relocated traversal engine behind the {@code Marshalled*} path-addressing
+ * methods and the Swagger/OpenApi {@code $ref} resolver. It is public only for cross-module access and is <b>not</b> a
+ * supported public API &mdash; do not use it directly.
+ *
+ * <p>
  * Nodes in the POJO model are addressed using URLs.
  *
  * <p>
@@ -84,8 +85,8 @@ import org.apache.juneau.marshall.parser.*;
  * 		+ <js>"} "</js>
  * 	);
  *
- * 	<jc>// Wrap Map inside an ObjectRest object</jc>
- * 	ObjectRest <jv>johnSmith</jv> = ObjectRest.<jsm>create</jsm>(<jv>map</jv>);
+ * 	<jc>// Wrap Map inside a PathTraversal object</jc>
+ * 	PathTraversal <jv>johnSmith</jv> = PathTraversal.<jsm>create</jsm>(<jv>map</jv>);
  *
  * 	<jc>// Get a simple value at the top level</jc>
  * 	<jc>// "John Smith"</jc>
@@ -130,14 +131,14 @@ import org.apache.juneau.marshall.parser.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Get map/bean with name attribute value of 'foo' from a list of items</jc>
- * 	Map <jv>map</jv> = <jv>objectRest</jv>.getMap(<js>"/items/@name=foo"</js>);
+ * 	Map <jv>map</jv> = <jv>pathTraversal</jv>.getMap(<js>"/items/@name=foo"</js>);
  * </p>
  */
 @SuppressWarnings({
 	"unchecked", // Type erasure requires unchecked operations for generic collections
 	"rawtypes"   // Raw types necessary for generic type handling
 })
-public class ObjectRest {
+public class PathTraversal {
 	class JsonNode {
 		Object o;
 		ClassMeta cm;
@@ -167,20 +168,20 @@ public class ObjectRest {
 	/**
 	 * Static creator.
 	 * @param o The object being wrapped.
-	 * @return A new {@link ObjectRest} object.
+	 * @return A new {@link PathTraversal} object.
 	 */
-	public static ObjectRest create(Object o) {
-		return new ObjectRest(o);
+	public static PathTraversal create(Object o) {
+		return new PathTraversal(o);
 	}
 
 	/**
 	 * Static creator.
 	 * @param o The object being wrapped.
 	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
-	 * @return A new {@link ObjectRest} object.
+	 * @return A new {@link PathTraversal} object.
 	 */
-	public static ObjectRest create(Object o, ReaderParser parser) {
-		return new ObjectRest(o, parser);
+	public static PathTraversal create(Object o, ReaderParser parser) {
+		return new PathTraversal(o, parser);
 	}
 
 	/** Handle nulls and strip off leading '/' char. */
@@ -201,7 +202,7 @@ public class ObjectRest {
 		try {
 			return Integer.parseInt(key);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot address an item in an array with a non-integer key ''{0}''", key);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot address an item in an array with a non-integer key ''{0}''", key);
 		}
 	}
 
@@ -213,8 +214,6 @@ public class ObjectRest {
 		System.arraycopy(a, index + 1, a2, index, a.length - index - 1);
 		return a2;
 	}
-
-	private ReaderParser parser = Json5Parser.DEFAULT;
 
 	final MarshallingSession session;
 
@@ -232,7 +231,7 @@ public class ObjectRest {
 	 *
 	 * @param o The object to be wrapped.
 	 */
-	public ObjectRest(Object o) {
+	public PathTraversal(Object o) {
 		this(o, null);
 	}
 
@@ -245,11 +244,8 @@ public class ObjectRest {
 	 * @param o The object to be wrapped.
 	 * @param parser The parser to use for parsing arguments and converting objects to the correct data type.
 	 */
-	public ObjectRest(Object o, ReaderParser parser) {
+	public PathTraversal(Object o, ReaderParser parser) {
 		this.session = parser == null ? MarshallingContext.DEFAULT_SESSION : parser.getMarshallingContext().getSession();
-		if (parser == null)
-			parser = Json5Parser.DEFAULT;
-		this.parser = parser;
 		this.root = new JsonNode(null, null, o, session.object());
 	}
 
@@ -288,22 +284,22 @@ public class ObjectRest {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	ObjectRest <jv>objectRest</jv> = <jk>new</jk> ObjectRest(<jv>object</jv>);
+	 * 	PathTraversal <jv>pathTraversal</jv> = <jk>new</jk> PathTraversal(<jv>object</jv>);
 	 *
 	 * 	<jc>// Value converted to a string.</jc>
-	 * 	String <jv>string</jv> = <jv>objectRest</jv>.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/string"</js>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>objectRest</jv>.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/bean"</js>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>objectRest</jv>.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/beanarray"</js>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>objectRest</jv>.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/list"</js>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>objectRest</jv>.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/map"</js>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param url
@@ -329,22 +325,22 @@ public class ObjectRest {
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
-	 * 	ObjectRest <jv>objectRest</jv> = <jk>new</jk> ObjectRest(<jv>object</jv>);
+	 * 	PathTraversal <jv>pathTraversal</jv> = <jk>new</jk> PathTraversal(<jv>object</jv>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of strings.</jc>
-	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>objectRest</jv>.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;String&gt; <jv>list1</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/list1"</js>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of beans.</jc>
-	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>objectRest</jv>.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List&lt;MyBean&gt; <jv>list2</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/list2"</js>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a linked-list of linked-lists of strings.</jc>
-	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>objectRest</jv>.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List&lt;List&lt;String&gt;&gt; <jv>list3</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/list3"</js>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map of string keys/values.</jc>
-	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>objectRest</jv>.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map&lt;String,String&gt; <jv>map1</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/map1"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Value converted to a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>objectRest</jv>.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map&lt;String,List&lt;MyBean&gt;&gt; <jv>map2</jv> = <jv>pathTraversal</jv>.get(<js>"path/to/map2"</js>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -603,28 +599,6 @@ public class ObjectRest {
 	}
 
 	/**
-	 * Returns the list of available methods that can be passed to the {@link #invokeMethod(String, String, String)}
-	 * for the object addressed by the specified URL.
-	 *
-	 * @param url The URL.
-	 * @return The list of methods.
-	 */
-	@SuppressWarnings({
-		"java:S1168"     // null when object not found at URL.
-	})
-	public Collection<String> getPublicMethods(String url) {
-		var o = get(url);
-		if (o == null)
-			return null;
-		return session
-			.getClassMeta(o.getClass())
-			.getPublicMethods()
-			.stream()
-			.map(x -> x.getSignature())
-			.toList();
-	}
-
-	/**
 	 * The root object that was passed into the constructor of this method.
 	 *
 	 * @return The root object.
@@ -712,41 +686,6 @@ public class ObjectRest {
 	}
 
 	/**
-	 * Executes the specified method with the specified parameters on the specified object.
-	 *
-	 * @param url The URL of the element to retrieve.
-	 * @param method
-	 * 	The method signature.
-	 * 	<p>
-	 * 	Can be any of the following formats:
-	 * 	<ul class='spaced-list'>
-	 * 		<li>
-	 * 			Method name only.  e.g. <js>"myMethod"</js>.
-	 * 		<li>
-	 * 			Method name with class names.  e.g. <js>"myMethod(String,int)"</js>.
-	 * 		<li>
-	 * 			Method name with fully-qualified class names.  e.g. <js>"myMethod(java.util.String,int)"</js>.
-	 * 	</ul>
-	 * 	<p>
-	 * 	As a rule, use the simplest format needed to uniquely resolve a method.
-	 * @param args
-	 * 	The arguments to pass as parameters to the method.
-	 * 	These will automatically be converted to the appropriate object type if possible.
-	 * 	This must be an array, like a JSON array.
-	 * @return The returned object from the method call.
-	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public Object invokeMethod(String url, String method, String args) throws ExecutableException, ParseException, IOException {
-		try {
-			return new ObjectIntrospector(get(url), parser).invokeMethod(method, args);
-		} catch (NoSuchMethodException | IllegalArgumentException | InvocationTargetException | IllegalAccessException e) {
-			throw new ExecutableException(e);
-		}
-	}
-
-	/**
 	 * Adds a value to a list element in a POJO model.
 	 *
 	 * <p>
@@ -799,7 +738,7 @@ public class ObjectRest {
 	 *
 	 * @return This object.
 	 */
-	public ObjectRest setRootLocked() {
+	public PathTraversal setRootLocked() {
 		this.rootLocked = true;
 		return this;
 	}
@@ -833,7 +772,7 @@ public class ObjectRest {
 		"java:S3776", // Cognitive complexity acceptable for REST operation routing logic
 		"java:S6541" // Cognitive complexity acceptable for REST operation routing logic
 	})
-	private Object service(int method, String url, Object val) throws ObjectRestException {
+	private Object service(int method, String url, Object val) throws PathTraversalException {
 
 		url = normalizeUrl(url);
 
@@ -850,16 +789,16 @@ public class ObjectRest {
 		if (method == PUT) {
 			if (url.isEmpty()) {
 				if (rootLocked)
-					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
+					throw new PathTraversalException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				var o = root.o;
 				root = new JsonNode(null, null, val, session.object());
 				return o;
 			}
 			var n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
-				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			if (n.o == null && n.cm.isObject())
-				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isMap())
@@ -867,7 +806,7 @@ public class ObjectRest {
 			if (cm.isCollection() && o instanceof List o2)
 				return o2.set(parseInt(childKey), convert(val, cm.getElementType()));
 			if (cm.isCollection())
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot PUT to indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot PUT to indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
 			if (cm.isArray()) {
 				o = setArrayEntry(n.o, parseInt(childKey), val, cm.getElementType());
 				var pct = n.parent.cm;
@@ -881,11 +820,11 @@ public class ObjectRest {
 					m.put(n.keyName, o);
 					return url;
 				}
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isBean())
 				return session.toBeanMap(o).put(childKey, val);
-			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
 		}
 
 		if (method == POST) {
@@ -903,13 +842,13 @@ public class ObjectRest {
 					root = new JsonNode(null, null, o2, null);
 					return url + "/" + (o2.length - 1);
 				}
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 			}
 			var n = getNode(url, root);
 			if (n == null)
-				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
 			if (n.o == null && n.cm.isObject())
-				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isArray()) {
@@ -925,29 +864,29 @@ public class ObjectRest {
 					m.put(childKey, o2);
 					return url + "/" + (o2.length - 1);
 				}
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isCollection()) {
 				var c = (Collection)o;
 				c.add(convert(val, cm.getElementType()));
 				return (c instanceof List c2 ? url + "/" + (c2.size() - 1) : null);
 			}
-			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
 		}
 
 		if (method == DELETE) {
 			if (url.isEmpty()) {
 				if (rootLocked)
-					throw new ObjectRestException(HTTP_FORBIDDEN, "Cannot overwrite root object");
+					throw new PathTraversalException(HTTP_FORBIDDEN, "Cannot overwrite root object");
 				var o = root.o;
 				root = new JsonNode(null, null, null, session.object());
 				return o;
 			}
 			var n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
-				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			if (n.o == null && n.cm.isObject())
-				throw new ObjectRestException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isMap())
@@ -955,7 +894,7 @@ public class ObjectRest {
 			if (cm.isCollection() && o instanceof List o2)
 				return o2.remove(parseInt(childKey));
 			if (cm.isCollection())
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot DELETE indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot DELETE indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
 			if (cm.isArray()) {
 				int index = parseInt(childKey);
 				var old = ((Object[])o)[index];
@@ -971,11 +910,11 @@ public class ObjectRest {
 					m.put(n.keyName, o2);
 					return old;
 				}
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
 			}
 			if (cm.isBean())
 				return session.toBeanMap(o).put(childKey, null);
-			throw new ObjectRestException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
 		}
 
 		return null;	// Never gets here.
@@ -1039,7 +978,7 @@ public class ObjectRest {
 			o2 = m.get(parentKey);
 			var pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
-				throw new ObjectRestException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getBeanInfo());
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getBeanInfo());
 			ct2 = (ClassMeta) pMeta.getBeanInfo();
 		}
 

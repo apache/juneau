@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
 
 /**
- * Converter for enabling of {@link ObjectRest} support on response objects returned by a <c>@RestOp</c>-annotated method.
+ * Converter for enabling path-addressing support on response objects returned by a <c>@RestOp</c>-annotated method.
  *
  * <p>
  * When enabled, objects in a POJO tree returned by the REST method can be addressed through additional URL path
@@ -40,7 +40,6 @@ import org.apache.juneau.rest.server.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link ObjectRest} - Additional information on addressing elements in a POJO tree using URL notation.
  * 	<li class='ja'>{@link org.apache.juneau.rest.server.RestOp#converters()} - Registering converters with REST resources.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
@@ -61,9 +60,9 @@ public class Traversable implements RestConverter {
 				if (nn(swap))
 					o = swap.swap(bs, o);
 				ReaderParser rp = req.getContent().getParserMatch().map(ParserMatch::getParser).filter(ReaderParser.class::isInstance).map(ReaderParser.class::cast).orElse(null);
-				var or = ObjectRest.create(o, rp);
+				var or = PathTraversal.create(o, rp);
 				o = or.get(pathRemainder);
-			} catch (ObjectRestException e) {
+			} catch (PathTraversalException e) {
 				throw new BasicHttpException(e.getStatus(), null, e);
 			} catch (Exception t) {
 				throw new InternalServerError(t);

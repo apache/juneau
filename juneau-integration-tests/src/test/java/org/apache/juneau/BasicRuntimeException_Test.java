@@ -92,8 +92,8 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("Message arg1", x.getMessage());
 	}
 
-	@Test void a08_ObjectRestException_fluentSetters() {
-		var x = new ObjectRestException(404, "Original message");
+	@Test void a08_PathTraversalException_fluentSetters() {
+		var x = new PathTraversalException(404, "Original message");
 
 		// Test setMessage returns same instance for fluent chaining
 		assertSame(x, x.setMessage("New message"));

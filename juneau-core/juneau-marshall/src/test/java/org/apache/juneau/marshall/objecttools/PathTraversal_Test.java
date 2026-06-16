@@ -25,7 +25,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
@@ -37,14 +36,14 @@ import org.junit.jupiter.api.*;
 	"serial",  // serialVersionUID not required for test classes.
 	"java:S5961"  // Test comprehensiveness requires more than 25 assertions.
 })
-class ObjectRest_Test extends TestBase {
+class PathTraversal_Test extends TestBase {
 
 	//====================================================================================================
 	// testBasic
 	//====================================================================================================
 	@Test void a01_basic() {
 
-		var model = ObjectRest.create(new Json5Map()); // An empty model.
+		var model = PathTraversal.create(new Json5Map()); // An empty model.
 
 		// Do a PUT
 		model.put("A", new Json5Map());
@@ -70,7 +69,7 @@ class ObjectRest_Test extends TestBase {
 	// testBeans
 	//====================================================================================================
 	@Test void b01_beans() throws Exception {
-		var model = ObjectRest.create(new Json5Map());
+		var model = PathTraversal.create(new Json5Map());
 
 		// Java beans.
 		var p = new Person("some name", 123,
@@ -114,7 +113,7 @@ class ObjectRest_Test extends TestBase {
 		assertEquals(expectedValue, s);
 
 		// Try adding an address
-		model = ObjectRest.create(p);
+		model = PathTraversal.create(p);
 		model.post("addresses", new Address("street C", "city C", "state C", 12345, true));
 		s = ((Address)model.get("addresses/2")).toString();
 		expectedValue = "Address(street=street C,city=city C,state=state C,zip=12345,isCurrent=true)";
@@ -168,7 +167,7 @@ class ObjectRest_Test extends TestBase {
 
 		// Make sure we can get non-existent branches without throwing any exceptions.
 		// get() method should just return null.
-		model = ObjectRest.create(new Json5Map());
+		model = PathTraversal.create(new Json5Map());
 		var o = model.get("xxx");
 		assertEquals("null", (""+o));
 
@@ -189,7 +188,7 @@ class ObjectRest_Test extends TestBase {
 		assertEquals("{x:2}", s);
 
 		// Make sure doing a POST against "" or "/" adds to the root object.
-		model = ObjectRest.create(new Json5List());
+		model = PathTraversal.create(new Json5List());
 		model.post("", Integer.valueOf(1));
 		model.post("/", Integer.valueOf(2));
 		s = model.get("").toString();
@@ -200,7 +199,7 @@ class ObjectRest_Test extends TestBase {
 	// testAddressBook
 	//====================================================================================================
 	@Test void b02_addressBook() {
-		var model = ObjectRest.create(new AddressBook());
+		var model = PathTraversal.create(new AddressBook());
 
 		// Try adding a person to the address book.
 		var billClinton = new Person("Bill Clinton", 65,
@@ -270,10 +269,10 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// PojoRest(Object,ReaderParser)
+	// PathTraversal(Object,ReaderParser)
 	//====================================================================================================
 	@Test void c01_constructors() {
-		var model = ObjectRest.create(new AddressBook(), Json5Parser.DEFAULT);
+		var model = PathTraversal.create(new AddressBook(), Json5Parser.DEFAULT);
 
 		// Try adding a person to the address book.
 		var billClinton = new Person("Bill Clinton", 65,
@@ -290,17 +289,17 @@ class ObjectRest_Test extends TestBase {
 	// setRootLocked()
 	//====================================================================================================
 	@Test void d01_rootLocked() {
-		var model = ObjectRest.create(new AddressBook()).setRootLocked();
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put("", new AddressBook()));
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put(null, new AddressBook()));
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.put("/", new AddressBook()));
+		var model = PathTraversal.create(new AddressBook()).setRootLocked();
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot overwrite root object", ()->model.put("", new AddressBook()));
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot overwrite root object", ()->model.put(null, new AddressBook()));
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot overwrite root object", ()->model.put("/", new AddressBook()));
 	}
 
 	//====================================================================================================
 	// getRootObject()
 	//====================================================================================================
 	@Test void e01_getRootObject() {
-		var model = ObjectRest.create(new AddressBook());
+		var model = PathTraversal.create(new AddressBook());
 		assertTrue(model.getRootObject() instanceof AddressBook);
 		model.put("", "foobar");
 		assertTrue(model.getRootObject() instanceof String);
@@ -329,13 +328,13 @@ class ObjectRest_Test extends TestBase {
 	// getJsonList(String url, JsonList defVal)
 	//====================================================================================================
 	@Test void f01_getMethods() throws Exception {
-		var model = ObjectRest.create(new A());
+		var model = PathTraversal.create(new A());
 		var l = Json5List.ofString("[{a:'b'}]");
 		var m = Json5Map.ofString("{a:'b'}");
 		var jm = new JsonMap(m);
 		var jl = new JsonList(l);
 
-		assertMapped(model, ObjectRest::get,
+		assertMapped(model, PathTraversal::get,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,0,0,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
@@ -343,7 +342,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
 
-		assertMapped(model, ObjectRest::getString,
+		assertMapped(model, PathTraversal::getString,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,0,0,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
@@ -351,7 +350,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"foo,0,0,false,foo,foo,foo,foo,foo,foo,foo");
 
-		assertMapped(model, ObjectRest::getInt,
+		assertMapped(model, PathTraversal::getInt,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,0,0,0,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
@@ -359,7 +358,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"1,0,0,0,1,1,1,1,1,1,1");
 
-		assertMapped(model, ObjectRest::getLong,
+		assertMapped(model, PathTraversal::getLong,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,0,0,0,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
@@ -367,7 +366,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"1,0,0,0,1,1,1,1,1,1,1");
 
-		assertMapped(model, ObjectRest::getBoolean,
+		assertMapped(model, PathTraversal::getBoolean,
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,false,false,false,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
@@ -375,7 +374,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"true,false,false,false,true,true,true,true,true,true,true");
 
-		BiFunction<ObjectRest,String,Object> f1 = (r,p) -> {
+		BiFunction<PathTraversal,String,Object> f1 = (r,p) -> {
 			try {
 				return r.getMap(p);
 			} catch (Exception e) {
@@ -399,7 +398,7 @@ class ObjectRest_Test extends TestBase {
 		assertEquals("{a:'b'}", model.getMap("f7", m).toString());
 		assertEquals("{a:'b'}", model.getMap("f8", m).toString());
 
-		BiFunction<ObjectRest,String,Object> f2 = (r,p) -> {
+		BiFunction<PathTraversal,String,Object> f2 = (r,p) -> {
 			try {
 				return r.getMap(p, m);
 			} catch (Exception e) {
@@ -411,7 +410,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f2a,f3,f3a,f4,f4a,f5,f6,f7,f8",
 			"{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},InvalidDataConversionException,{a=b},{a=b},{a=b},{a=b},{a=b}");
 
-		BiFunction<ObjectRest,String,Object> f3 = (r,p) -> {
+		BiFunction<PathTraversal,String,Object> f3 = (r,p) -> {
 			try {
 				return r.getJsonMap(p);
 			} catch (Exception e) {
@@ -423,7 +422,7 @@ class ObjectRest_Test extends TestBase {
 			"f1,f2,f3,f4,f2a,f3a,f4a,f5,f6,f7,f8",
 			"<null>,InvalidDataConversionException,InvalidDataConversionException,InvalidDataConversionException,<null>,<null>,<null>,<null>,<null>,<null>,<null>");
 
-		BiFunction<ObjectRest,String,Object> f4 = (r,p) -> {
+		BiFunction<PathTraversal,String,Object> f4 = (r,p) -> {
 			try {
 				return r.getJsonMap(p, jm);
 			} catch (Exception e) {
@@ -736,34 +735,10 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// invokeMethod(String url, String method, String args)
-	//====================================================================================================
-	@Test void f02_invokeMethod() throws Exception {
-
-		var model = ObjectRest.create(new AddressBook().init());
-		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
-
-		model = ObjectRest.create(new AddressBook().init(), Json5Parser.DEFAULT);
-		assertEquals("Person(name=Bill Clinton,age=65)", model.invokeMethod("0", "toString", ""));
-		assertEquals("NY", model.invokeMethod("0/addresses/0/state", "toString", ""));
-		assertNull(model.invokeMethod("1", "toString", ""));
-	}
-
-	//====================================================================================================
-	// getPublicMethods(String url)
-	//====================================================================================================
-	@Test void f03_getPublicMethods() {
-		var model = ObjectRest.create(new AddressBook().init());
-		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0")).contains("'toString'"));
-		assertTrue(Json5Serializer.DEFAULT.toString(model.getPublicMethods("0/addresses/0/state")).contains("'toString'"));
-		assertNull(model.getPublicMethods("1"));
-	}
-
-	//====================================================================================================
 	// getClassMeta(String url)
 	//====================================================================================================
 	@Test void f04_getClassMeta() {
-		var model = ObjectRest.create(new AddressBook().init());
+		var model = PathTraversal.create(new AddressBook().init());
 		assertEquals("Person", model.getClassMeta("0").inner().getSimpleName());
 		assertEquals("String", model.getClassMeta("0/addresses/0/state").inner().getSimpleName());
 		assertNull(model.getClassMeta("1"));
@@ -774,7 +749,7 @@ class ObjectRest_Test extends TestBase {
 	// g - get(url, Type, Type[]) and getWithDefault(url, def, Type, Type[]) - parameterized typed getters
 	//====================================================================================================
 	@Test void g01_getParameterized_listOfStrings() {
-		var model = ObjectRest.create(Json5Map.ofString("{a:['x','y','z']}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:['x','y','z']}"));
 		List<String> v = model.get("a", LinkedList.class, String.class);
 		assertEquals(3, v.size());
 		assertEquals("x", v.get(0));
@@ -782,20 +757,20 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	@Test void g02_getParameterized_mapOfStrings() {
-		var model = ObjectRest.create(Json5Map.ofString("{a:{x:'1',y:'2'}}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:{x:'1',y:'2'}}"));
 		Map<String,Integer> v = model.get("a", TreeMap.class, String.class, Integer.class);
 		assertEquals(2, v.size());
 		assertEquals(Integer.valueOf(1), v.get("x"));
 	}
 
 	@Test void g03_getParameterized_nullReturnsNull() {
-		var model = ObjectRest.create(new Json5Map());
+		var model = PathTraversal.create(new Json5Map());
 		List<String> v = model.get("missing", LinkedList.class, String.class);
 		assertNull(v);
 	}
 
 	@Test void g04_getWithDefaultParameterized_returnsDefault() {
-		var model = ObjectRest.create(new Json5Map());
+		var model = PathTraversal.create(new Json5Map());
 		var def = new LinkedList<String>();
 		def.add("default");
 		List<String> v = model.getWithDefault("missing", def, LinkedList.class, String.class);
@@ -803,7 +778,7 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	@Test void g05_getWithDefaultParameterized_returnsConverted() {
-		var model = ObjectRest.create(Json5Map.ofString("{a:['x','y']}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:['x','y']}"));
 		var def = new LinkedList<String>();
 		List<String> v = model.getWithDefault("a", def, LinkedList.class, String.class);
 		assertEquals(2, v.size());
@@ -815,21 +790,21 @@ class ObjectRest_Test extends TestBase {
 	//====================================================================================================
 	@Test void h01_put_deepPathInMap() {
 		// MarshalledMap.put now returns the prior value from the underlying LinkedHashMap,
-		// matching the previous-value contract documented on ObjectRest.put.
+		// matching the previous-value contract documented on PathTraversal.put.
 		var inner = new Json5Map();
 		inner.put("c", "oldVal");
 		var middle = new Json5Map();
 		middle.put("b", inner);
 		var outer = new Json5Map();
 		outer.put("a", middle);
-		var model = ObjectRest.create(outer);
+		var model = PathTraversal.create(outer);
 		var prev = model.put("a/b/c", "newVal");
 		assertEquals("oldVal", prev);
 		assertEquals("newVal", model.get("a/b/c"));
 	}
 
 	@Test void h02_put_intoList() {
-		var model = ObjectRest.create(Json5Map.ofString("{l:['a','b','c']}"));
+		var model = PathTraversal.create(Json5Map.ofString("{l:['a','b','c']}"));
 		var prev = model.put("l/1", "B");
 		assertEquals("b", prev);
 		assertEquals("B", model.get("l/1"));
@@ -839,20 +814,20 @@ class ObjectRest_Test extends TestBase {
 		// parentUrl resolves through a null intermediate -> getNode returns null -> 404
 		var m = new HashMap<String,Object>();
 		m.put("a", null);
-		var model = ObjectRest.create(m);
-		assertThrowsWithMessage(ObjectRestException.class, "Node at URL 'a/b' not found.", ()->model.put("a/b/c", "v"));
+		var model = PathTraversal.create(m);
+		assertThrowsWithMessage(PathTraversalException.class, "Node at URL 'a/b' not found.", ()->model.put("a/b/c", "v"));
 	}
 
 	@Test void h03_put_parentMissing_404() {
 		// When a parent URL resolves to a missing key in a Map, the resolved JsonNode has o==null and cm
 		// defaults to Object; service() detects this and returns 404.
-		var model = ObjectRest.create(new Json5Map());
-		assertThrowsWithMessage(ObjectRestException.class, "Node at URL 'missing' not found.", ()->model.put("missing/x", "v"));
+		var model = PathTraversal.create(new Json5Map());
+		assertThrowsWithMessage(PathTraversalException.class, "Node at URL 'missing' not found.", ()->model.put("missing/x", "v"));
 	}
 
 	@Test void h04_put_intoBean() {
 		// BeanMap.put may not return prior value depending on impl; we verify the put took effect.
-		var model = ObjectRest.create(new AddressBook().init());
+		var model = PathTraversal.create(new AddressBook().init());
 		model.put("0/name", "Hillary Clinton");
 		assertEquals("Hillary Clinton", model.get("0/name"));
 	}
@@ -862,7 +837,7 @@ class ObjectRest_Test extends TestBase {
 		var arr = new String[]{"a","b","c"};
 		var map = new Json5Map();
 		map.put("arr", arr);
-		var model = ObjectRest.create(map);
+		var model = PathTraversal.create(map);
 		var result = model.put("arr/1", "B");
 		assertEquals("arr/1", result);
 		assertEquals("B", ((String[])map.get("arr"))[1]);
@@ -870,7 +845,7 @@ class ObjectRest_Test extends TestBase {
 
 	@Test void h06_put_intoArray_parentBean() {
 		var p = new Person("a", 1, new Address("s","c","st",1,true), new Address("s2","c2","st2",2,false));
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		var newAddr = new Address("xs","xc","xst",99,true);
 		var result = model.put("addresses/0", newAddr);
 		assertEquals("addresses/0", result);
@@ -880,7 +855,7 @@ class ObjectRest_Test extends TestBase {
 	@Test void h07_put_intoArray_listIndexOutOfBounds_expands() {
 		// setArrayEntry expansion path (a.length <= index)
 		var p = new Person("a", 1, new Address("s","c","st",1,true));
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		var newAddr = new Address("xs","xc","xst",99,true);
 		var result = model.put("addresses/3", newAddr);
 		assertEquals("addresses/3", result);
@@ -890,15 +865,15 @@ class ObjectRest_Test extends TestBase {
 
 	@Test void h08_put_nonIntegerArrayIndexThrows() {
 		var p = new Person("a", 1, new Address("s","c","st",1,true));
-		var model = ObjectRest.create(p);
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot address an item in an array with a non-integer key", ()->model.put("addresses/foo", new Address()));
+		var model = PathTraversal.create(p);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot address an item in an array with a non-integer key", ()->model.put("addresses/foo", new Address()));
 	}
 
 	@Test void h09_put_intoLeafTypeThrows() {
 		// PUT into a node whose parent is a bean property of type "Object" -- when leaf is a String, can't traverse further
-		var model = ObjectRest.create(Json5Map.ofString("{name:'foo'}"));
+		var model = PathTraversal.create(Json5Map.ofString("{name:'foo'}"));
 		// "name" resolves to a String; trying to PUT name/x means the parent ("name") is leaf of unsupported type
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot perform PUT on", ()->model.put("name/x", "v"));
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform PUT on", ()->model.put("name/x", "v"));
 	}
 
 	@Test void h11_put_setNotListThrows() {
@@ -907,14 +882,14 @@ class ObjectRest_Test extends TestBase {
 		s.add("a");
 		var m = new HashMap<String,Object>();
 		m.put("s", s);
-		var model = ObjectRest.create(m);
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot PUT to indexed position in non-List collection 's/0'", ()->model.put("s/0", "x"));
+		var model = PathTraversal.create(m);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot PUT to indexed position in non-List collection 's/0'", ()->model.put("s/0", "x"));
 	}
 
 	@Test void h10_put_mapWithBeanValueType_convertsMap() {
 		// Cover convert() bean+Map path: put a HashMap into a typed map slot whose value type is Address
 		var p = new Person("a", 1, new Address("s","c","st",1,true));
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		var asMap = new HashMap<String,Object>();
 		asMap.put("street","S2"); asMap.put("city","C2"); asMap.put("state","ST2"); asMap.put("zip",2); asMap.put("isCurrent",false);
 		model.put("addresses/0", asMap);
@@ -925,19 +900,19 @@ class ObjectRest_Test extends TestBase {
 	// i - POST operations
 	//====================================================================================================
 	@Test void i01_post_toCollection_returnsIndexedUrl() {
-		var model = ObjectRest.create(Json5Map.ofString("{l:['a']}"));
+		var model = PathTraversal.create(Json5Map.ofString("{l:['a']}"));
 		var ret = model.post("l", "b");
 		assertEquals("l/1", ret);
 	}
 
 	@Test void i02_post_toRoot_listAddsAndReturnsUrl() {
-		var model = ObjectRest.create(new Json5List());
+		var model = PathTraversal.create(new Json5List());
 		var ret = model.post("", "x");
 		assertEquals("/0", ret);
 	}
 
 	@Test void i03_post_toRoot_array() {
-		var model = ObjectRest.create(new String[]{"a","b"});
+		var model = PathTraversal.create(new String[]{"a","b"});
 		var ret = model.post("", "c");
 		assertEquals("/2", ret);
 		var arr = (String[])model.getRootObject();
@@ -946,20 +921,20 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	@Test void i04_post_toRoot_invalidTypeThrows() {
-		var model = ObjectRest.create(new Json5Map());
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot perform POST on", ()->model.post("", "v"));
+		var model = PathTraversal.create(new Json5Map());
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform POST on", ()->model.post("", "v"));
 	}
 
 	@Test void i05_post_missingNode_404() {
 		// Same scenario as h03 — a missing key resolves to an Object-typed node; service() detects this and returns 404.
-		var model = ObjectRest.create(new Json5Map());
-		assertThrowsWithMessage(ObjectRestException.class, "Node at URL 'missing' not found.", ()->model.post("missing", "v"));
+		var model = PathTraversal.create(new Json5Map());
+		assertThrowsWithMessage(PathTraversalException.class, "Node at URL 'missing' not found.", ()->model.post("missing", "v"));
 	}
 
 	@Test void i06_post_toArray_parentMap() {
 		var map = new Json5Map();
 		map.put("arr", new String[]{"a","b"});
-		var model = ObjectRest.create(map);
+		var model = PathTraversal.create(map);
 		var ret = model.post("arr", "c");
 		assertEquals("arr/2", ret);
 		assertEquals(3, ((String[])map.get("arr")).length);
@@ -967,7 +942,7 @@ class ObjectRest_Test extends TestBase {
 
 	@Test void i07_post_toArray_parentBean() {
 		var p = new Person("a", 1, new Address("s","c","st",1,true));
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		var newAddr = new Address("xs","xc","xst",99,true);
 		var ret = model.post("addresses", newAddr);
 		assertEquals("addresses/1", ret);
@@ -978,7 +953,7 @@ class ObjectRest_Test extends TestBase {
 		// POST to root Set: c.add returns true, but `c instanceof List` false -> service returns null.
 		var s = new LinkedHashSet<String>();
 		s.add("a");
-		var model = ObjectRest.create(s);
+		var model = PathTraversal.create(s);
 		var ret = model.post("", "b");
 		assertNull(ret);
 		assertTrue(s.contains("b"));
@@ -990,29 +965,29 @@ class ObjectRest_Test extends TestBase {
 		s.add("a");
 		var m = new HashMap<String,Object>();
 		m.put("s", s);
-		var model = ObjectRest.create(m);
+		var model = PathTraversal.create(m);
 		var ret = model.post("s", "b");
 		assertNull(ret);
 		assertTrue(s.contains("b"));
 	}
 
 	@Test void i08_post_toLeafTypeThrows() {
-		var model = ObjectRest.create(Json5Map.ofString("{name:'foo'}"));
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot perform POST on", ()->model.post("name", "v"));
+		var model = PathTraversal.create(Json5Map.ofString("{name:'foo'}"));
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform POST on", ()->model.post("name", "v"));
 	}
 
 	//====================================================================================================
 	// j - DELETE operations
 	//====================================================================================================
 	@Test void j01_delete_fromMap() {
-		var model = ObjectRest.create(Json5Map.ofString("{a:'x',b:'y'}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:'x',b:'y'}"));
 		var prev = model.delete("a");
 		assertEquals("x", prev);
 		assertNull(model.get("a"));
 	}
 
 	@Test void j02_delete_fromList() {
-		var model = ObjectRest.create(Json5Map.ofString("{l:['a','b','c']}"));
+		var model = PathTraversal.create(Json5Map.ofString("{l:['a','b','c']}"));
 		var prev = model.delete("l/1");
 		assertEquals("b", prev);
 		var l = (List<?>)model.get("l");
@@ -1024,7 +999,7 @@ class ObjectRest_Test extends TestBase {
 	@Test void j03_delete_fromArray_parentMap() {
 		var map = new Json5Map();
 		map.put("arr", new String[]{"a","b","c"});
-		var model = ObjectRest.create(map);
+		var model = PathTraversal.create(map);
 		var prev = model.delete("arr/1");
 		assertEquals("b", prev);
 		assertEquals(2, ((String[])map.get("arr")).length);
@@ -1032,14 +1007,14 @@ class ObjectRest_Test extends TestBase {
 
 	@Test void j04_delete_fromArray_parentBean() {
 		var p = new Person("a", 1, new Address("s","c","st",1,true), new Address("s2","c2","st2",2,false));
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		var prev = (Address)model.delete("addresses/0");
 		assertEquals("c", prev.city);
 		assertEquals(1, p.addresses.length);
 	}
 
 	@Test void j05_delete_fromBean_setsNull() {
-		var model = ObjectRest.create(new AddressBook().init());
+		var model = PathTraversal.create(new AddressBook().init());
 		// DELETE on bean property invokes BeanMap.put(key, null)
 		model.delete("0/name");
 		var p = (Person)model.get("0");
@@ -1047,21 +1022,21 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	@Test void j06_delete_root() {
-		var model = ObjectRest.create(Json5Map.ofString("{a:'x'}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:'x'}"));
 		var prev = model.delete("");
 		assertEquals("{a:'x'}", prev.toString());
 		assertNull(model.getRootObject());
 	}
 
 	@Test void j07_delete_root_locked() {
-		var model = ObjectRest.create(new Json5Map()).setRootLocked();
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot overwrite root object", ()->model.delete(""));
+		var model = PathTraversal.create(new Json5Map()).setRootLocked();
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot overwrite root object", ()->model.delete(""));
 	}
 
 	@Test void j08_delete_nonIntegerArrayIndex() {
 		var p = new Person("a", 1, new Address("s","c","st",1,true));
-		var model = ObjectRest.create(p);
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot address an item in an array with a non-integer key", ()->model.delete("addresses/foo"));
+		var model = PathTraversal.create(p);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot address an item in an array with a non-integer key", ()->model.delete("addresses/foo"));
 	}
 
 	@Test void j09a_delete_setNotListThrows() {
@@ -1070,14 +1045,14 @@ class ObjectRest_Test extends TestBase {
 		s.add("a"); s.add("b");
 		var m = new HashMap<String,Object>();
 		m.put("s", s);
-		var model = ObjectRest.create(m);
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot DELETE indexed position in non-List collection 's/0'", ()->model.delete("s/0"));
+		var model = PathTraversal.create(m);
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot DELETE indexed position in non-List collection 's/0'", ()->model.delete("s/0"));
 	}
 
 	@Test void j09_delete_unsupportedLeafTypeThrows() {
 		// DELETE on a leaf node whose parent type isn't map/list/array/bean
-		var model = ObjectRest.create(Json5Map.ofString("{name:'foo'}"));
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot perform PUT on", ()->model.delete("name/x"));
+		var model = PathTraversal.create(Json5Map.ofString("{name:'foo'}"));
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot perform PUT on", ()->model.delete("name/x"));
 	}
 
 	//====================================================================================================
@@ -1085,38 +1060,38 @@ class ObjectRest_Test extends TestBase {
 	//====================================================================================================
 	@Test void k01_get_nullValueInMap() {
 		// get path that traverses through a null value in a map
-		var model = ObjectRest.create(Json5Map.ofString("{a:null}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:null}"));
 		assertNull(model.get("a/b"));
 	}
 
 	@Test void k02_get_listIndexOutOfBounds_returnsNull() {
-		var model = ObjectRest.create(Json5Map.ofString("{l:['a','b']}"));
+		var model = PathTraversal.create(Json5Map.ofString("{l:['a','b']}"));
 		assertNull(model.get("l/5"));
 	}
 
 	@Test void k03_get_arrayIndexOutOfBounds_returnsNull() {
-		var model = ObjectRest.create(new String[]{"a","b"});
+		var model = PathTraversal.create(new String[]{"a","b"});
 		assertNull(model.get("5"));
 	}
 
 	@Test void k04_get_arrayElement() {
-		var model = ObjectRest.create(new String[]{"a","b","c"});
+		var model = PathTraversal.create(new String[]{"a","b","c"});
 		assertEquals("b", model.get("1"));
 	}
 
 	@Test void k05_get_listNonIntegerKeyThrows() {
-		var model = ObjectRest.create(Json5Map.ofString("{l:['a','b']}"));
-		assertThrowsWithMessage(ObjectRestException.class, "Cannot address an item in an array with a non-integer key", ()->model.get("l/foo"));
+		var model = PathTraversal.create(Json5Map.ofString("{l:['a','b']}"));
+		assertThrowsWithMessage(PathTraversalException.class, "Cannot address an item in an array with a non-integer key", ()->model.get("l/foo"));
 	}
 
 	@Test void k06_get_beanUnknownPropertyThrows() {
-		var model = ObjectRest.create(new AddressBook().init());
-		assertThrowsWithMessage(ObjectRestException.class, "Unknown property", ()->model.get("0/notARealField"));
+		var model = PathTraversal.create(new AddressBook().init());
+		assertThrowsWithMessage(PathTraversalException.class, "Unknown property", ()->model.get("0/notARealField"));
 	}
 
 	@Test void k07_get_blankAndSlashReturnRoot() {
 		var m = new Json5Map();
-		var model = ObjectRest.create(m);
+		var model = PathTraversal.create(m);
 		assertSame(m, model.get(""));
 		assertSame(m, model.get("/"));
 		assertSame(m, model.get(null));
@@ -1124,7 +1099,7 @@ class ObjectRest_Test extends TestBase {
 
 	@Test void k08_get_deepPathThroughMixedTypes() {
 		var p = new Person("a", 1, new Address("s","city1","st",1,true), new Address("s","city2","st",2,false));
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		assertEquals("city2", model.get("addresses/1/city"));
 	}
 
@@ -1135,7 +1110,7 @@ class ObjectRest_Test extends TestBase {
 		s.add("x"); s.add("y");
 		var m = new HashMap<String,Object>();
 		m.put("s", s);
-		var model = ObjectRest.create(m);
+		var model = PathTraversal.create(m);
 		// Indexing into a Set traverses through the (cm.isCollection() && !instanceof List) branch
 		// and returns a JsonNode with o=null cm=Object since ct2 stays null. The result is null.
 		assertNull(model.get("s/0"));
@@ -1145,25 +1120,16 @@ class ObjectRest_Test extends TestBase {
 		// Bean property whose value is null - traversal returns null
 		var p = new Person();
 		p.name = null;
-		var model = ObjectRest.create(p);
+		var model = PathTraversal.create(p);
 		assertNull(model.get("name/sub"));
-	}
-
-	//====================================================================================================
-	// l - invokeMethod exception path
-	//====================================================================================================
-	@Test void l01_invokeMethod_invalidMethodThrows() {
-		var model = ObjectRest.create(new AddressBook().init());
-		// Invoking a method that doesn't exist should yield ExecutableException
-		assertThrows(ExecutableException.class, ()->model.invokeMethod("0", "noSuchMethodOnPerson", ""));
 	}
 
 	//====================================================================================================
 	// m - JsonNode constructor branch coverage (cm == null path, cm == object path)
 	//====================================================================================================
 	@Test void m01_jsonNode_nullValueGetsObjectMeta() {
-		// Construct ObjectRest over null - JsonNode constructor takes the o==null branch in cm assignment
-		var model = ObjectRest.create(null);
+		// Construct PathTraversal over null - JsonNode constructor takes the o==null branch in cm assignment
+		var model = PathTraversal.create(null);
 		assertNull(model.getRootObject());
 		// PUT "" replaces root even when starting from null
 		model.put("", "x");
@@ -1171,7 +1137,7 @@ class ObjectRest_Test extends TestBase {
 	}
 
 	@Test void m02_create_withParserUsesParserSession() {
-		var model = ObjectRest.create(new Json5Map(), Json5Parser.DEFAULT);
+		var model = PathTraversal.create(new Json5Map(), Json5Parser.DEFAULT);
 		model.put("a", "v");
 		assertEquals("v", model.get("a"));
 	}
@@ -1180,18 +1146,18 @@ class ObjectRest_Test extends TestBase {
 	// n - URI/path syntax: leading slashes, empty segments
 	//====================================================================================================
 	@Test void n01_path_leadingSlashIgnored() {
-		var model = ObjectRest.create(Json5Map.ofString("{a:'v'}"));
+		var model = PathTraversal.create(Json5Map.ofString("{a:'v'}"));
 		assertEquals("v", model.get("a"));
 		assertEquals("v", model.get("/a"));
 	}
 
 	@Test void n02_path_listIndexNavigation() {
-		var model = ObjectRest.create(Json5Map.ofString("{l:[{x:1},{x:2},{x:3}]}"));
+		var model = PathTraversal.create(Json5Map.ofString("{l:[{x:1},{x:2},{x:3}]}"));
 		assertEquals(2, model.getInt("l/1/x"));
 	}
 
 	@Test void n03_post_emptyRootIsOk() {
-		var model = ObjectRest.create(new Json5List());
+		var model = PathTraversal.create(new Json5List());
 		model.post(null, "x");
 		model.post("/", "y");
 		var l = (List<?>)model.getRootObject();
@@ -1204,7 +1170,7 @@ class ObjectRest_Test extends TestBase {
 	// o - Patch-like behavior: mix of put/delete on the same model
 	//====================================================================================================
 	@Test void o01_patch_likeWorkflow() {
-		var model = ObjectRest.create(Json5Map.ofString("{user:{name:'Alice',roles:['admin','editor']}}"));
+		var model = PathTraversal.create(Json5Map.ofString("{user:{name:'Alice',roles:['admin','editor']}}"));
 		model.put("user/name", "Bob");
 		model.delete("user/roles/0");
 		model.post("user/roles", "viewer");
