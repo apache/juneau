@@ -195,6 +195,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/02.06.01.NullAndInclusionPolicies',
+							label: '2.6.1. Null & Inclusion Policies',
+						},
+						{
+							type: 'doc',
 							id: 'topics/02.07.ContextAnnotations',
 							label: '2.7. Context Annotations',
 						},
@@ -212,6 +217,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/02.09.ComplexDataTypes',
 							label: '2.9. Complex Data Types',
+						},
+						{
+							type: 'doc',
+							id: 'topics/02.09.01.SupportedJdkDatatypes',
+							label: '2.9.1. Supported JDK Datatypes',
 						},
 						{
 							type: 'doc',
