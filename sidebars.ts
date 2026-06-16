@@ -171,13 +171,18 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.04.10.PojoBuilders',
 									label: '2.4.10. POJO Builders',
 								},
-								{
-									type: 'doc',
-									id: 'topics/02.04.11.BypassSerialization',
-									label: '2.4.10. Bypass Serialization using `Readers` and `InputStreams`',
-								},
-							],
-						},
+							{
+								type: 'doc',
+								id: 'topics/02.04.11.BypassSerialization',
+								label: '2.4.11. Bypass Serialization using `Readers` and `InputStreams`',
+							},
+							{
+								type: 'doc',
+								id: 'topics/02.04.12.ViewProjection',
+								label: '2.4.12. View-Based Projection',
+							},
+						],
+					},
 						{
 							type: 'doc',
 							id: 'topics/02.05.HttpPartSerializersParsers',
