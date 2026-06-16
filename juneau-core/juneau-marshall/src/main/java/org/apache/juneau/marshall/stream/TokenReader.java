@@ -301,4 +301,66 @@ public interface TokenReader extends RecordReader {
 	 */
 	@Override
 	void close() throws IOException;
+
+	// =================================================================================
+	// Binary-native opt-in metadata accessors.  Default cursors and formats without
+	// native concepts inherit the safe defaults below: getNativeKind() returns NONE,
+	// getTagCount() returns 0, and the value accessors throw.  Format-specific cursors
+	// override the relevant subset (CBOR overrides getNativeKind/getTagCount/getTag/
+	// getSimpleValue; MsgPack overrides getNativeKind/getExtType).  See
+	// {@link BinaryNativeKind} for the catalog of native concepts.
+	// =================================================================================
+
+	/**
+	 * Returns the binary-native classification of the current token.
+	 *
+	 * @return The native kind, or {@link BinaryNativeKind#NONE NONE} when the current token
+	 * 	carries no binary-native metadata.  Never {@code null}.
+	 */
+	default BinaryNativeKind getNativeKind() {
+		return BinaryNativeKind.NONE;
+	}
+
+	/**
+	 * Returns the number of semantic tags wrapping the current token.
+	 *
+	 * @return The tag count (0 when {@link #getNativeKind()} is not
+	 * 	{@link BinaryNativeKind#CBOR_TAG CBOR_TAG}).
+	 */
+	default int getTagCount() {
+		return 0;
+	}
+
+	/**
+	 * Returns the semantic tag at the specified position in the tag stack.
+	 *
+	 * @param index The tag position; outermost tag is {@code 0}.
+	 * @return The tag number.
+	 * @throws IndexOutOfBoundsException If {@code index} is outside {@code [0, getTagCount())}.
+	 */
+	default long getTag(int index) {
+		throw new IndexOutOfBoundsException("Tag index " + index + " out of bounds for tagCount " + getTagCount());
+	}
+
+	/**
+	 * Returns the typed-binary type byte for the current token.
+	 *
+	 * @return The signed type byte (range {@code -128..127}).
+	 * @throws IllegalStateException If {@link #getNativeKind()} is not
+	 * 	{@link BinaryNativeKind#MSGPACK_EXT MSGPACK_EXT}.
+	 */
+	default int getExtType() {
+		throw new IllegalStateException("Current token is not a typed-binary (ext) value (nativeKind=" + getNativeKind() + ")");
+	}
+
+	/**
+	 * Returns the opaque simple value for the current token.
+	 *
+	 * @return The simple int.
+	 * @throws IllegalStateException If {@link #getNativeKind()} is not
+	 * 	{@link BinaryNativeKind#CBOR_SIMPLE CBOR_SIMPLE}.
+	 */
+	default int getSimpleValue() {
+		throw new IllegalStateException("Current token is not a simple value (nativeKind=" + getNativeKind() + ")");
+	}
 }

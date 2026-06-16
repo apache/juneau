@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.math.*;
@@ -78,6 +79,9 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
+	// Property name constants
+	private static final String PROP_nativeMode = "nativeMode";
+
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends CborParser {
 
@@ -98,11 +102,14 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 
 		private static final Cache<HashKey,CborParser> CACHE = Cache.of(HashKey.class, CborParser.class).build();
 
+		private boolean nativeMode;
+
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
 			consumes("application/cbor");
+			nativeMode = env("CborParser.nativeMode", false);
 		}
 
 		/**
@@ -112,6 +119,7 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			nativeMode = copyFrom.nativeMode;
 		}
 
 		/**
@@ -121,6 +129,39 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		 */
 		protected Builder(CborParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			nativeMode = copyFrom.nativeMode;
+		}
+
+		/**
+		 * Surfaces CBOR semantic tags and simple values as token-level metadata on
+		 * {@link TokenReader} cursors returned by {@link CborParserSession#parseTokens(Object)}.
+		 *
+		 * <p>
+		 * When enabled, tags accumulate on the cursor's tag stack (visible via
+		 * {@link TokenReader#getTagCount()} / {@link TokenReader#getTag(int)}) and simple values
+		 * surface their int via {@link TokenReader#getSimpleValue()} on
+		 * {@link TokenType#VALUE_NULL} tokens.  When disabled (default), tags are silently
+		 * unwrapped and simple values collapse to {@link TokenType#VALUE_NULL} with no metadata.
+		 *
+		 * <p>
+		 * This is a token-cursor-level setting and does not affect the high-level POJO databind
+		 * path ({@link CborParser#parse(Object, Class)}); that path always discards tags.
+		 *
+		 * @return This object.
+		 */
+		public Builder nativeMode() {
+			return nativeMode(true);
+		}
+
+		/**
+		 * Same as {@link #nativeMode()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder nativeMode(boolean value) {
+			nativeMode = value;
+			return this;
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -131,6 +172,11 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		@Override /* Overridden from Context.Builder<?> */
 		public Builder copy() {
 			return new Builder(this);
+		}
+
+		@Override /* Overridden from Context.Builder<?> */
+		public HashKey hashKey() {
+			return HashKey.of(super.hashKey(), nativeMode);
 		}
 	}
 
@@ -149,6 +195,8 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 
 	/** Default parser, all default settings. */
 	public static final CborParser DEFAULT = new CborParser(create());
+	/** Default parser with binary-native opt-in mode enabled (CBOR tags / simple values surface as token-level metadata). */
+	public static final CborParser DEFAULT_NATIVE = new CborParser(create().nativeMode());
 	/** Default parser, string input encoded as spaced-hex. */
 	public static final CborParser DEFAULT_SPACED_HEX = new SpacedHex(create());
 	/** Default parser, string input encoded as BASE64. */
@@ -163,6 +211,8 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 		return new Builder();
 	}
 
+	protected final boolean nativeMode;
+
 	private final Map<ClassMeta<?>,CborClassMeta> cborClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,CborBeanPropertyMeta> cborBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -173,6 +223,16 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	 */
 	public CborParser(Builder builder) {
 		super(builder);
+		this.nativeMode = builder.nativeMode;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if token-cursor native mode is enabled.
+	 *
+	 * @return <jk>true</jk> if native mode is enabled, else <jk>false</jk>.
+	 */
+	public boolean isNativeMode() {
+		return nativeMode;
 	}
 
 	@Override /* Overridden from Context */
@@ -233,5 +293,11 @@ public class CborParser extends InputStreamParser implements CborMetaProvider, T
 	@Override /* ArrayRecordReadable */
 	public RecordReader parseArrayRecords(Object input) throws IOException {
 		return getSession().parseArrayRecords(input);
+	}
+
+	@Override /* Overridden from InputStreamParser */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a(PROP_nativeMode, nativeMode);
 	}
 }

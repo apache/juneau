@@ -58,6 +58,8 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	 */
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
+		final boolean nativeMode;
+
 		/**
 		 * Constructor
 		 *
@@ -66,6 +68,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		 */
 		protected Builder(MsgPackParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
+			this.nativeMode = ctx.isNativeMode();
 		}
 
 		@Override
@@ -86,6 +89,8 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
+	private final boolean nativeMode;
+
 	/**
 	 * Constructor.
 	 *
@@ -93,6 +98,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	 */
 	protected MsgPackParserSession(Builder builder) {
 		super(builder);
+		this.nativeMode = builder.nativeMode;
 	}
 
 	/**
@@ -114,7 +120,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	@Override /* TokenReadable */
 	public TokenReader parseTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(input, isDebug(), isAutoCloseStreams(), isUnbuffered(), null);
-		return new MsgPackTokenReader(pipe, this);
+		return new MsgPackTokenReader(pipe, this).setNativeMode(nativeMode);
 	}
 
 	/**

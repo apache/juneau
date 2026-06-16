@@ -178,6 +178,35 @@ public class MsgPackOutputStream extends OutputStream {
 	}
 
 	/**
+	 * Appends a MsgPack {@code ext} field (typed binary) to the stream.
+	 *
+	 * <p>
+	 * Selects the smallest framing that fits the payload length: fixext1/2/4/8/16 for the five
+	 * exact lengths, else ext8 / ext16 / ext32 with a length prefix; the type byte and payload
+	 * are appended after the framing header.
+	 *
+	 * @param type The {@code ext} type byte (signed; range {@code -128..127}).
+	 * @param payload The {@code ext} payload bytes.
+	 * @return This stream.
+	 */
+	MsgPackOutputStream writeExt(int type, byte[] payload) {
+		var n = payload.length;
+		switch (n) {
+			case 1: return append1(FIXEXT1).append1(type).append(payload);
+			case 2: return append1(FIXEXT2).append1(type).append(payload);
+			case 4: return append1(FIXEXT4).append1(type).append(payload);
+			case 8: return append1(FIXEXT8).append1(type).append(payload);
+			case 16: return append1(FIXEXT16).append1(type).append(payload);
+			default: break;
+		}
+		if (n < (1 << 8))
+			return append1(EXT8).append1(n).append1(type).append(payload);
+		if (n < (1 << 16))
+			return append1(EXT16).append2(n).append1(type).append(payload);
+		return append1(EXT32).append4(n).append1(type).append(payload);
+	}
+
+	/**
 	 * Appends a binary field to the stream.
 	 */
 	MsgPackOutputStream appendBinary(byte[] b) {

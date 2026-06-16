@@ -288,4 +288,59 @@ public interface TokenWriter extends RecordWriter {
 	 */
 	@Override
 	void close() throws IOException;
+
+	// =================================================================================
+	// Binary-native opt-in emits.  These default to UnsupportedOperationException so
+	// formats override only the subset they support (CBOR overrides writeTag and
+	// writeSimple; MsgPack overrides writeExt; text formats inherit the throwing
+	// defaults).  See {@link BinaryNativeKind} for the catalog of native concepts.
+	// =================================================================================
+
+	/**
+	 * Emits a semantic tag prefixing the next value emit.
+	 *
+	 * <p>
+	 * Tags compose: {@code writeTag(1).writeTag(2).number(5)} writes {@code tag(1)(tag(2)(5))}.
+	 * The tag header is written immediately and does NOT consume a map-key/value or array-element
+	 * slot; that bookkeeping belongs to the wrapped value emit that follows.
+	 *
+	 * @param tagNumber The unsigned tag number (carried as a {@code long} for the full unsigned
+	 * 	64-bit range).
+	 * @return This object.
+	 * @throws IOException If a problem occurred writing to the underlying stream.
+	 * @throws UnsupportedOperationException If the format does not support semantic tags.
+	 */
+	default TokenWriter writeTag(long tagNumber) throws IOException {
+		throw new UnsupportedOperationException("writeTag is not supported by this writer.");
+	}
+
+	/**
+	 * Emits an opaque simple value.  The corresponding read-side token is
+	 * {@link TokenType#VALUE_NULL} with {@link TokenReader#getSimpleValue()}.
+	 *
+	 * @param value The simple value.  Format-specific reserved encodings (e.g. CBOR major-7
+	 * 	codepoints 20-23, 25-27, 31 collide with bool/null/undefined/float/break) must not be
+	 * 	used.
+	 * @return This object.
+	 * @throws IOException If a problem occurred writing to the underlying stream.
+	 * @throws UnsupportedOperationException If the format does not support opaque simple values.
+	 */
+	default TokenWriter writeSimple(int value) throws IOException {
+		throw new UnsupportedOperationException("writeSimple is not supported by this writer.");
+	}
+
+	/**
+	 * Emits a typed-binary value (signed type byte + binary payload).  The corresponding
+	 * read-side token is {@link TokenType#VALUE_BINARY} with {@link TokenReader#getExtType()}
+	 * and {@link TokenReader#getBinary()}.
+	 *
+	 * @param type The signed type byte (range {@code -128..127}).
+	 * @param payload The payload bytes.  Must not be {@code null}.
+	 * @return This object.
+	 * @throws IOException If a problem occurred writing to the underlying stream.
+	 * @throws UnsupportedOperationException If the format does not support typed-binary values.
+	 */
+	default TokenWriter writeExt(int type, byte[] payload) throws IOException {
+		throw new UnsupportedOperationException("writeExt is not supported by this writer.");
+	}
 }

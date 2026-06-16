@@ -61,6 +61,14 @@ public class MsgPackTokenReader implements TokenReader {
 	private boolean currentBoolean;
 	private byte[] currentBinary;
 
+	// Binary-native opt-in state (175ad).  Defaults preserve the normalize-by-default contract:
+	// EXT payloads surface as VALUE_BINARY with no metadata.  When nativeMode is true, the EXT
+	// branch additionally captures the signed type byte into 'extType' and sets
+	// 'nativeKind' = MSGPACK_EXT.
+	private boolean nativeMode;
+	private BinaryNativeKind nativeKind = BinaryNativeKind.NONE;
+	private int extType;
+
 	/**
 	 * Constructor with default settings.
 	 *
@@ -86,6 +94,23 @@ public class MsgPackTokenReader implements TokenReader {
 		this.session = session;
 	}
 
+	/**
+	 * Enables or disables binary-native opt-in mode.
+	 *
+	 * <p>
+	 * When enabled, MsgPack {@code ext} tokens carry the signed type byte via
+	 * {@link #getExtType()}.  When disabled (default), the payload still surfaces as
+	 * {@link TokenType#VALUE_BINARY} but the type byte is dropped &mdash; identical to the
+	 * pre-native-mode behavior.
+	 *
+	 * @param value <jk>true</jk> to enable native mode.
+	 * @return This object.
+	 */
+	public MsgPackTokenReader setNativeMode(boolean value) {
+		nativeMode = value;
+		return this;
+	}
+
 	// ==============================================================================================
 	// State-machine summary.  MsgPack containers are length-prefixed (no indefinite-length
 	// encoding), so next() reads the data-type tag via MsgPackInputStream.readDataType() and
@@ -107,6 +132,7 @@ public class MsgPackTokenReader implements TokenReader {
 		currentNumberLexeme = null;
 		currentNumber = null;
 		currentBinary = null;
+		nativeKind = BinaryNativeKind.NONE;
 
 		// Inside a container at element-count zero: emit END_*.
 		if (depth > 0 && stackRemaining[depth - 1] == 0) {
@@ -192,7 +218,13 @@ public class MsgPackTokenReader implements TokenReader {
 				consumedOneElement();
 			}
 			case EXT -> {
-				// Q3 default: normalize to common scalars; skip the extension payload as binary.
+				// Q3 default: normalize to common scalars; the extension payload surfaces as
+				// VALUE_BINARY.  In native mode (175ad), the signed ext type byte is also
+				// captured for retrieval via getExtType().
+				if (nativeMode) {
+					extType = (byte) is.getExtType();
+					nativeKind = BinaryNativeKind.MSGPACK_EXT;
+				}
 				currentBinary = is.readBinary();
 				currentToken = TokenType.VALUE_BINARY;
 				consumedOneElement();
@@ -364,4 +396,31 @@ public class MsgPackTokenReader implements TokenReader {
 
 	@Override /* TokenReader */
 	public void close() throws IOException { pipe.close(); }
+
+	@Override /* TokenReader */
+	public BinaryNativeKind getNativeKind() {
+		return nativeKind;
+	}
+
+	@Override /* TokenReader */
+	public int getTagCount() {
+		return 0;
+	}
+
+	@Override /* TokenReader */
+	public long getTag(int index) {
+		throw new IndexOutOfBoundsException("Tag index " + index + " out of bounds for tagCount 0");
+	}
+
+	@Override /* TokenReader */
+	public int getExtType() {
+		if (nativeKind != BinaryNativeKind.MSGPACK_EXT)
+			throw new IllegalStateException("Current token is not a MsgPack ext (nativeKind=" + nativeKind + ")");
+		return extType;
+	}
+
+	@Override /* TokenReader */
+	public int getSimpleValue() {
+		throw new IllegalStateException("MsgPack cursor has no CBOR simple value.");
+	}
 }

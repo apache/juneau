@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.msgpack;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -73,6 +74,9 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 
+	// Property name constants
+	private static final String PROP_nativeMode = "nativeMode";
+
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends MsgPackParser {
 
@@ -93,11 +97,14 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 		private static final Cache<HashKey,MsgPackParser> CACHE = Cache.of(HashKey.class, MsgPackParser.class).build();
 
+		private boolean nativeMode;
+
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
 			consumes("application/msgpack,octal/msgpack");
+			nativeMode = env("MsgPackParser.nativeMode", false);
 		}
 
 		/**
@@ -108,6 +115,7 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			nativeMode = copyFrom.nativeMode;
 		}
 
 		/**
@@ -118,6 +126,39 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		 */
 		protected Builder(MsgPackParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			nativeMode = copyFrom.nativeMode;
+		}
+
+		/**
+		 * Surfaces the MsgPack {@code ext} type byte as token-level metadata on
+		 * {@link TokenReader} cursors returned by {@link MsgPackParserSession#parseTokens(Object)}.
+		 *
+		 * <p>
+		 * When enabled, ext tokens carry the signed type byte (visible via
+		 * {@link TokenReader#getExtType()}) on {@link TokenType#VALUE_BINARY} tokens.  When
+		 * disabled (default), the payload still surfaces as {@link TokenType#VALUE_BINARY} but
+		 * the type byte is dropped.
+		 *
+		 * <p>
+		 * This is a token-cursor-level setting and does not affect the high-level POJO databind
+		 * path ({@link MsgPackParser#parse(Object, Class)}); that path always discards the type
+		 * byte.
+		 *
+		 * @return This object.
+		 */
+		public Builder nativeMode() {
+			return nativeMode(true);
+		}
+
+		/**
+		 * Same as {@link #nativeMode()} but allows you to explicitly specify the value.
+		 *
+		 * @param value The value for this setting.
+		 * @return This object.
+		 */
+		public Builder nativeMode(boolean value) {
+			nativeMode = value;
+			return this;
 		}
 
 		@Override /* Overridden from Context.Builder<?> */
@@ -130,7 +171,10 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 			return new Builder(this);
 		}
 
-
+		@Override /* Overridden from Context.Builder<?> */
+		public HashKey hashKey() {
+			return HashKey.of(super.hashKey(), nativeMode);
+		}
 	}
 
 	/** Default parser, string input encoded as spaced-hex. */
@@ -148,6 +192,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 
 	/** Default parser, all default settings.*/
 	public static final MsgPackParser DEFAULT = new MsgPackParser(create());
+	/** Default parser with binary-native opt-in mode enabled (MsgPack {@code ext} type byte surfaces as token-level metadata). */
+	public static final MsgPackParser DEFAULT_NATIVE = new MsgPackParser(create().nativeMode());
 	/** Default parser, all default settings, string input encoded as spaced-hex.*/
 	public static final MsgPackParser DEFAULT_SPACED_HEX = new SpacedHex(create());
 
@@ -163,6 +209,8 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 		return new Builder();
 	}
 
+	protected final boolean nativeMode;
+
 	private final Map<ClassMeta<?>,MsgPackClassMeta> msgPackClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,MsgPackBeanPropertyMeta> msgPackBeanPropertyMetas = new ConcurrentHashMap<>();
 
@@ -173,6 +221,16 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	 */
 	public MsgPackParser(Builder builder) {
 		super(builder);
+		this.nativeMode = builder.nativeMode;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if token-cursor native mode is enabled.
+	 *
+	 * @return <jk>true</jk> if native mode is enabled, else <jk>false</jk>.
+	 */
+	public boolean isNativeMode() {
+		return nativeMode;
 	}
 
 	@Override /* Overridden from Context */
@@ -231,5 +289,11 @@ public class MsgPackParser extends InputStreamParser implements MsgPackMetaProvi
 	@Override /* ArrayRecordReadable */
 	public RecordReader parseArrayRecords(Object input) throws IOException {
 		return getSession().parseArrayRecords(input);
+	}
+
+	@Override /* Overridden from InputStreamParser */
+	protected FluentMap<String,Object> properties() {
+		return super.properties()
+			.a(PROP_nativeMode, nativeMode);
 	}
 }

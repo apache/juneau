@@ -266,6 +266,25 @@ public class CborTokenWriter implements TokenWriter {
 	}
 
 	@Override /* TokenWriter */
+	public CborTokenWriter writeTag(long tagNumber) throws IOException {
+		assertOpen();
+		// A tag is a prefix on the next value emit; it does NOT consume a map-key/value or
+		// array-element slot.  Skip preValueWrite()/afterValue() — the wrapped value emit that
+		// follows owns the state transition.
+		out.writeTag(tagNumber);
+		return this;
+	}
+
+	@Override /* TokenWriter */
+	public CborTokenWriter writeSimple(int value) throws IOException {
+		assertOpen();
+		preValueWrite();
+		out.writeSimple(value);
+		afterValue();
+		return this;
+	}
+
+	@Override /* TokenWriter */
 	public TokenWriter object(Object value) throws IOException {
 		assertOpen();
 		PojoWalker.walk(this, value, settings.walk);

@@ -86,6 +86,17 @@ public class CborTokenReader implements TokenReader {
 	private boolean currentBoolean;
 	private byte[] currentBinary;
 
+	// Binary-native opt-in state (175ad).  Defaults preserve the normalize-by-default contract:
+	// nativeMode == false ⇒ tag numbers are dropped, simple values surface as VALUE_NULL with no
+	// metadata.  When nativeMode is true, the TAG branch accumulates tag numbers into 'tags' as
+	// it recurses, the SIMPLE branch captures the simple int into 'simpleValue', and 'nativeKind'
+	// classifies the resulting token for format-agnostic consumers.
+	private boolean nativeMode;
+	private BinaryNativeKind nativeKind = BinaryNativeKind.NONE;
+	private long[] tags = new long[4];
+	private int tagCount;
+	private int simpleValue;
+
 	/**
 	 * Constructor with default settings.
 	 *
@@ -128,6 +139,24 @@ public class CborTokenReader implements TokenReader {
 		return this;
 	}
 
+	/**
+	 * Enables or disables binary-native opt-in mode.
+	 *
+	 * <p>
+	 * When enabled, CBOR semantic tags are captured on the tag stack rather than discarded
+	 * (surface them via {@link #getTagCount()} / {@link #getTag(int)}), and CBOR simple values
+	 * surface their int via {@link #getSimpleValue()}.  When disabled (default), tags are
+	 * silently unwrapped and simple values collapse to {@link TokenType#VALUE_NULL} with no
+	 * metadata &mdash; identical to the pre-native-mode behavior.
+	 *
+	 * @param value <jk>true</jk> to enable native mode.
+	 * @return This object.
+	 */
+	public CborTokenReader setNativeMode(boolean value) {
+		nativeMode = value;
+		return this;
+	}
+
 	// ==============================================================================================
 	// State-machine summary.  CBOR is already a token-shaped wire format (RFC 8949 major types), so
 	// next() reads the next data-type tag via CborInputStream.readDataType() and dispatches based
@@ -136,7 +165,7 @@ public class CborTokenReader implements TokenReader {
 	// END_*), and (3) within a map, whether we're at a key position or value position.
 	//
 	// Per-level container state lives on parallel stacks (stackRemaining + stackIsMap +
-	// stackAwaitingKey, indexed by depth).  A stackRemaining value of -1 means indefinite-length;
+	// stackAwaitingKey, indexed by depth).  A stackRemaining value of -1 means indefinite-length
 	// in that case the next() loop relies on CborInputStream returning DataType.BREAK instead of
 	// counting elements.
 	// ==============================================================================================
@@ -154,6 +183,12 @@ public class CborTokenReader implements TokenReader {
 		currentNumberLexeme = null;
 		currentNumber = null;
 		currentBinary = null;
+		// Native-mode metadata: only reset at outermost entry — recursive tag unwraps preserve the
+		// accumulated tag stack so nested tag(tag(value)) round-trips losslessly.
+		if (tagNestingDepth == 0) {
+			nativeKind = BinaryNativeKind.NONE;
+			tagCount = 0;
+		}
 
 		// Inside a definite-length container at element-count zero: emit END_*.
 		if (depth > 0 && stackRemaining[depth - 1] == 0) {
@@ -241,7 +276,16 @@ public class CborTokenReader implements TokenReader {
 			case TAG, SIMPLE -> {
 				// Q3: by default normalize to common scalars.  TAG: skip the tag and read the
 				// next item as the wrapped value.  SIMPLE: emit as VALUE_NULL (best-effort).
+				// In native mode (175ad): TAG numbers accumulate on the tag stack across
+				// recursion; SIMPLE captures the simple int as metadata on the VALUE_NULL token.
 				if (dt == DataType.TAG) {
+					var n = is.readLength();
+					if (nativeMode) {
+						if (tagCount == tags.length)
+							tags = java.util.Arrays.copyOf(tags, tags.length * 2);
+						tags[tagCount++] = n;
+						nativeKind = BinaryNativeKind.CBOR_TAG;
+					}
 					// Guard against pathologically deep tag chains blowing the JVM stack.
 					if (tagNestingDepth >= maxTagNestingDepth)
 						throw new ParseException(
@@ -253,6 +297,10 @@ public class CborTokenReader implements TokenReader {
 					} finally {
 						tagNestingDepth--;
 					}
+				}
+				if (nativeMode) {
+					simpleValue = (int) is.readLength();
+					nativeKind = BinaryNativeKind.CBOR_SIMPLE;
 				}
 				currentToken = TokenType.VALUE_NULL;
 				consumedOneElement();
@@ -445,5 +493,34 @@ public class CborTokenReader implements TokenReader {
 	@Override /* TokenReader */
 	public void close() throws IOException {
 		pipe.close();
+	}
+
+	@Override /* TokenReader */
+	public BinaryNativeKind getNativeKind() {
+		return nativeKind;
+	}
+
+	@Override /* TokenReader */
+	public int getTagCount() {
+		return tagCount;
+	}
+
+	@Override /* TokenReader */
+	public long getTag(int index) {
+		if (index < 0 || index >= tagCount)
+			throw new IndexOutOfBoundsException("Tag index " + index + " out of bounds for tagCount " + tagCount);
+		return tags[index];
+	}
+
+	@Override /* TokenReader */
+	public int getExtType() {
+		throw new IllegalStateException("CBOR cursor has no MsgPack ext type.");
+	}
+
+	@Override /* TokenReader */
+	public int getSimpleValue() {
+		if (nativeKind != BinaryNativeKind.CBOR_SIMPLE)
+			throw new IllegalStateException("Current token is not a CBOR simple value (nativeKind=" + nativeKind + ")");
+		return simpleValue;
 	}
 }

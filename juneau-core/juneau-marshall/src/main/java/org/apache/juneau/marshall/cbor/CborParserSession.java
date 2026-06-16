@@ -57,6 +57,8 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	 */
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
+		final boolean nativeMode;
+
 		/**
 		 * Constructor
 		 *
@@ -65,6 +67,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		 */
 		protected Builder(CborParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
+			this.nativeMode = ctx.isNativeMode();
 		}
 
 		@Override
@@ -85,6 +88,8 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
+	private final boolean nativeMode;
+
 	/**
 	 * Constructor.
 	 *
@@ -92,6 +97,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	 */
 	protected CborParserSession(Builder builder) {
 		super(builder);
+		this.nativeMode = builder.nativeMode;
 	}
 
 	/**
@@ -119,7 +125,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 	@Override /* TokenReadable */
 	public TokenReader parseTokens(Object input) throws IOException {
 		var pipe = new ParserPipe(input, isDebug(), isAutoCloseStreams(), isUnbuffered(), null);
-		return new CborTokenReader(pipe, this);
+		return new CborTokenReader(pipe, this).setNativeMode(nativeMode);
 	}
 
 	/**

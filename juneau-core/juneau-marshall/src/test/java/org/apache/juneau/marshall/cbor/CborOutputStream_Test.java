@@ -235,4 +235,23 @@ class CborOutputStream_Test extends TestBase {
 		var b = CborSerializer.DEFAULT.serialize(m);
 		assertTrue(toSpacedHex(b).startsWith("B8 18"));
 	}
+
+	@Test
+	@SuppressWarnings("resource") // writeSimple returns the stream (fluent this); the discarded value is os, closed by the try-with-resources.
+	void a32_writeSimple() throws Exception {
+		// Major type 7 with the additional info encoding the simple value.
+		// Inline (0..23): one byte, 0xE0 | value.
+		var bos = new java.io.ByteArrayOutputStream();
+		try (var os = new CborOutputStream(bos)) {
+			os.writeSimple(0);
+		}
+		assertEquals("E0", toSpacedHex(bos.toByteArray()));
+
+		// Two-byte encoding (24..255): 0xF8 then the value.
+		bos = new java.io.ByteArrayOutputStream();
+		try (var os = new CborOutputStream(bos)) {
+			os.writeSimple(255);
+		}
+		assertEquals("F8 FF", toSpacedHex(bos.toByteArray()));
+	}
 }

@@ -132,4 +132,5 @@ class FormatStreamingCapability_Test extends TestBase {
 		}
 		assertTrue(checked > 0, "expected at least one format to expose an array-record writer");
 	}
+
 }

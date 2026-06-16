@@ -398,4 +398,20 @@ public class CborOutputStream extends OutputStream {
 		writeHead(6, tagNumber);
 		return this;
 	}
+
+	/**
+	 * Writes a CBOR simple value (major type 7).
+	 *
+	 * <p>
+	 * Caller responsibility: reserved encodings (20-23 = bool/null/undefined; 25-27 =
+	 * float16/32/64; 31 = break) collide with native scalar/structural emits and must not be used
+	 * here.
+	 *
+	 * @param value The simple value (range {@code 0..255}; reserved values noted above).
+	 * @return This stream.
+	 */
+	CborOutputStream writeSimple(int value) {
+		writeHead(7, value);
+		return this;
+	}
 }

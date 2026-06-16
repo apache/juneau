@@ -288,6 +288,17 @@ public class MsgPackTokenWriter implements TokenWriter {
 	}
 
 	@Override /* TokenWriter */
+	public MsgPackTokenWriter writeExt(int type, byte[] payload) throws IOException {
+		assertOpen();
+		if (payload == null)
+			throw new IllegalArgumentException("ext payload must not be null");
+		preValueCheck();
+		new MsgPackOutputStream(activeOut()).writeExt(type, payload);
+		afterValue();
+		return this;
+	}
+
+	@Override /* TokenWriter */
 	public TokenWriter object(Object value) throws IOException {
 		assertOpen();
 		PojoWalker.walk(this, value, settings.walk);
