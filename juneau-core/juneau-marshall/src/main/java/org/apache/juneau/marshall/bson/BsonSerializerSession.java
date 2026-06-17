@@ -252,7 +252,10 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 				out.writeString(serializeCalendar(o, sType));
 			}
 		} else if (sType.isTemporal()) {
-			if (ctx.writeDatesAsDatetime) {
+			// BSON datetime (0x09) is int64 millis-since-epoch, so only instant-bearing temporals can use it.
+			// Local temporals (LocalDate/LocalDateTime/LocalTime/Year/...) cannot supply an instant; fall back to
+			// the ISO-string path instead of crashing in Instant.from(...) (matches CBOR/MsgPack temporal handling).
+			if (ctx.writeDatesAsDatetime && isInstantCapable(o)) {
 				out.writeElement(DATETIME.value, name);
 				out.writeDateTime(toEpochMillis(o));
 			} else {
@@ -328,6 +331,22 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 			var name = (key == null) ? ctx.nullKeyString : trim(key);
 			writeElement(out, name, entry.getValue(), valueType, null);
 		}
+	}
+
+	/**
+	 * Returns whether the given value can supply an instant for BSON datetime (0x09) encoding.
+	 *
+	 * <p>
+	 * Only instant-bearing temporals (such as {@link Instant}, {@link OffsetDateTime}, and {@link ZonedDateTime})
+	 * support {@link ChronoField#INSTANT_SECONDS}.  Local temporals ({@link LocalDate}, {@link LocalDateTime},
+	 * {@link LocalTime}, {@link Year}, {@link YearMonth}, {@link MonthDay}) cannot, so they must fall back to the
+	 * ISO-string path rather than crashing in {@link Instant#from(TemporalAccessor)}.
+	 *
+	 * @param o The value being serialized.
+	 * @return <jk>true</jk> if the value is an instant-bearing temporal.
+	 */
+	private static boolean isInstantCapable(Object o) {
+		return o instanceof TemporalAccessor o2 && o2.isSupported(ChronoField.INSTANT_SECONDS);
 	}
 
 	private static long toEpochMillis(Object o) {

@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.cbor.DataType.*;
 
 import java.io.*;
+import java.math.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -185,8 +186,14 @@ public class CborParserSession extends InputStreamParserSession implements Token
 		if (dt != NULL) {
 			if (dt == BOOLEAN)
 				o = is.readBoolean();
-			else if (dt == UINT || dt == NINT)
-				o = is.readLong();
+			else if (dt == UINT || dt == NINT) {
+				// Surface unsigned 64-bit by the target Java type (175fc GAP-1, aligned with the
+				// proto-binary R5 decision): a BigInteger field carries the full magnitude (values
+				// beyond signed long widen losslessly); any other type keeps the raw 64-bit bits as
+				// a long (preserving the native int64 round-trip used by epoch/millis temporal and
+				// duration values).
+				o = sType.inner() == BigInteger.class ? is.readBigInteger() : (Object)is.readLong();
+			}
 			else if (dt == FLOAT) {
 				// Prefer double for conversion; single-precision if target is Float
 				if (sType.isFloat() && !sType.isDouble())

@@ -50,7 +50,9 @@ public class BsonConfigAnnotation {
 
 		@Override
 		public void apply(AnnotationInfo<BsonConfig> ai, BsonParser.Builder b) {
-			// No-op for parser
+			BsonConfig a = ai.inner();
+
+			integer(a.maxLength(), "maxLength").ifPresent(b::maxLength);
 		}
 	}
 

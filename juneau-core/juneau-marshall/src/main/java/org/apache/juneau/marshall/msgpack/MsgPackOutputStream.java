@@ -77,10 +77,11 @@ public class MsgPackOutputStream extends OutputStream {
 				count++;
 			} else if (ch <= 0x7FF) {
 				count += 2;
-			} else if (Character.isHighSurrogate(ch)) {
+			} else if (Character.isHighSurrogate(ch) && i + 1 < len && Character.isLowSurrogate(cs.charAt(i + 1))) {
 				count += 4;
 				++i;
 			} else {
+				// BMP char, or an unpaired surrogate emitted as U+FFFD (3 bytes) to match String.getBytes(UTF_8).
 				count += 3;
 			}
 		}
@@ -102,7 +103,7 @@ public class MsgPackOutputStream extends OutputStream {
 				write((byte)(0xC0 + ((c >> 6) & 0x1F)));
 				write((byte)(0x80 + (c & 0x3F)));
 				count += 2;
-			} else if (c >= 0xD800 && c <= 0xDFFF) {
+			} else if (c >= 0xD800 && c <= 0xDBFF && i + 1 < len && Character.isLowSurrogate(in.charAt(i + 1))) {
 				int jchar2 = in.charAt(++i) & 0xFFFF;
 				int n = (c << 10) + jchar2 + 0xFCA02400;
 				write((byte)(0xF0 + ((n >> 18) & 0x07)));
@@ -110,6 +111,13 @@ public class MsgPackOutputStream extends OutputStream {
 				write((byte)(0x80 + ((n >> 6) & 0x3F)));
 				write((byte)(0x80 + (n & 0x3F)));
 				count += 4;
+			} else if (c >= 0xD800 && c <= 0xDFFF) {
+				// Unpaired surrogate -> U+FFFD replacement char (matches String.getBytes(UTF_8) and the
+				// length predicted by getUtf8ByteLength).  Prevents reading past the end of the input (G9).
+				write((byte)0xEF);
+				write((byte)0xBF);
+				write((byte)0xBD);
+				count += 3;
 			} else {
 				write((byte)(0xE0 + ((c >> 12) & 0x0F)));
 				write((byte)(0x80 + ((c >> 6) & 0x3F)));
@@ -367,10 +375,30 @@ public class MsgPackOutputStream extends OutputStream {
 		if (c == Double.class)
 			return appendDouble(n.doubleValue());
 		if (c == BigInteger.class)
-			return appendLong(n.longValue());
+			return appendBigInteger((BigInteger)n);
 		if (c == BigDecimal.class)
 			return appendDouble(n.doubleValue());
 		return appendInt(0);
+	}
+
+	/**
+	 * Appends a {@link BigInteger} to the stream without loss of magnitude.
+	 *
+	 * <p>
+	 * Values within signed {@code long} range are emitted via {@link #appendLong(long)}; positive values in
+	 * {@code [2^63, 2^64-1]} are emitted as an unsigned 64-bit integer (UINT64).  Values outside the 64-bit
+	 * range cannot be represented by any MessagePack integer type and throw a {@link SerializeException}
+	 * rather than silently truncating (G4).
+	 *
+	 * @param value The value to append.  Must not be <jk>null</jk>.
+	 * @return This stream.
+	 */
+	MsgPackOutputStream appendBigInteger(BigInteger value) {
+		if (value.bitLength() < 64)
+			return appendLong(value.longValue());
+		if (value.signum() > 0 && value.bitLength() == 64)
+			return append1(UINT64).append8(value.longValue());
+		throw new SerializeException("BigInteger value ''{0}'' is outside the range supported by MessagePack integer types (64-bit).", value);
 	}
 
 	/**

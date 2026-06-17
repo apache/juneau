@@ -36,14 +36,28 @@ final class ParquetColumnWriter {
 	private final ParquetSchemaElement schema;
 	private final ByteArrayOutputStream out = new ByteArrayOutputStream();
 	private int valueCount;
+	private int boolBits;
+	private int boolBitCount;
 
 	ParquetColumnWriter(ParquetSchemaElement schema) {
 		this.schema = schema;
 		this.valueCount = 0;
 	}
 
+	/**
+	 * Writes a boolean using PLAIN encoding: 1 bit per value, bit-packed LSB-first into successive bytes
+	 * (GAP-4).  Only present (non-null) booleans are written; the partial trailing byte is flushed by
+	 * {@link #finalizePage()}.
+	 */
 	void writeBoolean(boolean value) {
-		out.write(value ? 1 : 0);
+		if (value)
+			boolBits |= 1 << boolBitCount;
+		boolBitCount++;
+		if (boolBitCount == 8) {
+			out.write(boolBits & 0xFF);
+			boolBits = 0;
+			boolBitCount = 0;
+		}
 		valueCount++;
 	}
 
@@ -115,6 +129,11 @@ final class ParquetColumnWriter {
 	 * Resets the writer for the next page.
 	 */
 	byte[] finalizePage() {
+		if (boolBitCount > 0) {
+			out.write(boolBits & 0xFF);
+			boolBits = 0;
+			boolBitCount = 0;
+		}
 		var result = out.toByteArray();
 		out.reset();
 		valueCount = 0;

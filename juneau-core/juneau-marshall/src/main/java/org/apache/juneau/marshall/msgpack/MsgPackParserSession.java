@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.msgpack.DataType.*;
 
 import java.io.*;
+import java.math.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -89,7 +90,20 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
+	/**
+	 * Maximum databind parse-recursion depth.
+	 *
+	 * <p>
+	 * The databind {@link #parseAnything(ClassMeta, MsgPackInputStream, Object, BeanPropertyMeta) parseAnything}
+	 * path recurses once per nesting level; this bound makes an adversarial deeply-nested document fail with a
+	 * {@link ParseException} instead of a {@link StackOverflowError}.  The token-cursor path is iterative and
+	 * unaffected.
+	 */
+	private static final int MAX_PARSE_DEPTH = 1000;
+
 	private final boolean nativeMode;
+
+	private int parseDepth;
 
 	/**
 	 * Constructor.
@@ -145,13 +159,30 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	}
 
 	/*
+	 * Workhorse entry point.  Wraps {@link #parseAnything0} with a recursion-depth guard so that an
+	 * adversarial deeply-nested document fails with a {@link ParseException} instead of a
+	 * {@link StackOverflowError}.
+	 */
+	<T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+		if (++parseDepth > MAX_PARSE_DEPTH) {
+			parseDepth--;
+			throw new ParseException(this, "Maximum parse depth exceeded ({0}).", MAX_PARSE_DEPTH);
+		}
+		try {
+			return parseAnything0(eType, is, outer, pMeta);
+		} finally {
+			parseDepth--;
+		}
+	}
+
+	/*
 	 * Workhorse method.
 	 */
 	@SuppressWarnings({
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541"  // Single-threaded session contexts do not require synchronization
 	})
-	<T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
+	private <T> T parseAnything0(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 
 		if (eType == null)
 			eType = object();
@@ -172,22 +203,38 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 
 		Object o = null;
 		DataType dt = is.readDataType();
-		int length = (int)is.readLength();
+		var rawLength = is.readLength();
+		// G8: array32/map32/str32/bin32/ext32 lengths are 32-bit unsigned (up to 2^32-1); a value in
+		// [2^31, 2^32-1] would truncate to a negative int.  Java containers/arrays cannot exceed int range.
+		if (rawLength > Integer.MAX_VALUE)
+			throw new ParseException(this, "MessagePack length {0} exceeds the maximum supported size of {1}.", rawLength, Integer.MAX_VALUE);
+		int length = (int)rawLength;
 
 		if (dt != DataType.NULL) {
 			if (dt == BOOLEAN)
 				o = is.readBoolean();
 			else if (dt == INT)
 				o = is.readInt();
-			else if (dt == LONG)
-				o = is.readLong();
-			else if (dt == FLOAT)
+			else if (dt == LONG) {
+				var l = is.readLong();
+				// G3: a uint64 above Long.MAX_VALUE comes back as a negative signed long.  Mirror the
+				// protobuf R5 cross-format decision: a long target keeps the raw bits, a BigInteger target
+				// carries the full unsigned magnitude (lossless widen).
+				if (is.isUint64() && sType.inner() == BigInteger.class)
+					o = new BigInteger(Long.toUnsignedString(l));
+				else
+					o = l;
+			} else if (dt == FLOAT)
 				o = is.readFloat();
 			else if (dt == DOUBLE)
 				o = is.readDouble();
 			else if (dt == STRING)
 				o = trim(is.readString());
 			else if (dt == BIN)
+				o = is.readBinary();
+			else if (dt == EXT)
+				// G1: always consume the ext payload (mirrors the token cursor) and surface it as byte[].
+				// Without this branch the payload bytes are left in the stream, desyncing the next element.
 				o = is.readBinary();
 			else if (dt == ARRAY && sType.isObject()) {
 				var jl = newGenericList();

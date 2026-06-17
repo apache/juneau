@@ -253,7 +253,10 @@ public class MsgPackTokenWriter implements TokenWriter {
 		if (value == null)
 			return nil();
 		preValueCheck();
-		new MsgPackOutputStream(activeOut()).appendLong(value.longValueExact());
+		// Align with the databind serializer path (G4): long-range -> INT64, [2^63,2^64-1] -> UINT64,
+		// otherwise throw — rather than the previous longValueExact() which threw on the representable
+		// [2^63,2^64-1] range.
+		new MsgPackOutputStream(activeOut()).appendBigInteger(value);
 		afterValue();
 		return this;
 	}

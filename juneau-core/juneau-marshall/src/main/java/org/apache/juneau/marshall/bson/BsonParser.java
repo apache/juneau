@@ -69,6 +69,10 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>ObjectId (0x07) is read-only; parsed as 24-character hex strings.
  * 	<li>Deprecated types (Undefined, DBPointer, Symbol, JS with Scope) are silently skipped.
  * 	<li>MongoDB-internal types (JavaScript, Timestamp, MinKey, MaxKey) are not supported.
+ * 	<li>Decimal128 (0x13) NaN and ±Infinity have no {@link BigDecimal} form; they are normalized to <jk>null</jk>.
+ * 	<li>Wire-declared lengths (strings, binary, document/array size prefixes) are bounds-checked against a
+ * 		configurable maximum (default 16 MiB, see {@link Builder#maxLength(int)}); malformed/adversarial lengths
+ * 		fail with a clean {@link org.apache.juneau.marshall.parser.ParseException} instead of an unchecked error.
  * 	<li>BSON is binary; <c>SpacedHex</c> and <c>Base64</c> subclasses accept text-encoded input.
  * </ul>
  *
@@ -86,6 +90,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_copyFrom = "copyFrom";
 	private static final String DEFAULT_NULL_KEY = "<NULL>";
+	private static final int DEFAULT_MAX_LENGTH = BsonInputStream.DEFAULT_MAX_LENGTH;
 
 	/** Default parser, string input encoded as BASE64. */
 	public static class Base64 extends BsonParser {
@@ -108,6 +113,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		private static final Cache<HashKey,BsonParser> CACHE = Cache.of(HashKey.class, BsonParser.class).build();
 
 		private String nullKeyString = DEFAULT_NULL_KEY;
+		private int maxLength = DEFAULT_MAX_LENGTH;
 
 		/**
 		 * Constructor, default settings.
@@ -115,6 +121,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		protected Builder() {
 			consumes("application/bson");
 			nullKeyString = env("BsonParser.nullKeyString", DEFAULT_NULL_KEY);
+			maxLength = env("BsonParser.maxLength", DEFAULT_MAX_LENGTH);
 		}
 
 		/**
@@ -125,6 +132,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
+			maxLength = copyFrom.maxLength;
 		}
 
 		/**
@@ -135,6 +143,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 		protected Builder(BsonParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			nullKeyString = copyFrom.nullKeyString;
+			maxLength = copyFrom.maxLength;
 		}
 
 		@Override /* InputStreamParser.Builder<?> */
@@ -158,6 +167,24 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 			return this;
 		}
 
+		/**
+		 * The maximum allowed wire-declared length (in bytes) for BSON strings, binary payloads, and document/array
+		 * size prefixes.
+		 *
+		 * <p>
+		 * Guards against malformed or adversarial input where a small payload declares a huge or negative length,
+		 * which would otherwise trigger {@link OutOfMemoryError} or {@link NegativeArraySizeException}.  Malformed
+		 * lengths are reported as a clean parse error instead.
+		 *
+		 * @param value The maximum length in bytes.  Default is 16 MiB (the conventional BSON document-size limit).
+		 * 	Values &le; 0 disable the cap (only the negative-length check remains).
+		 * @return This object.
+		 */
+		public Builder maxLength(int value) {
+			maxLength = value;
+			return this;
+		}
+
 		@Override /* Parser.Builder<?> */
 		public Builder trimStrings() {
 			super.trimStrings();
@@ -177,7 +204,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 
 		@Override /* Context.Builder<?> */
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), nullKeyString);
+			return HashKey.of(super.hashKey(), nullKeyString, maxLength);
 		}
 
 		@Override /* Context.Builder<?> */
@@ -218,6 +245,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 	private final Map<ClassMeta<?>,BsonClassMeta> bsonClassMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,BsonBeanPropertyMeta> bsonBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final String nullKeyString;
+	private final int maxLength;
 
 	/**
 	 * Constructor.
@@ -227,6 +255,7 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 	public BsonParser(Builder builder) {
 		super(builder);
 		nullKeyString = builder.nullKeyString;
+		maxLength = builder.maxLength;
 	}
 
 	@Override /* Context */
@@ -263,6 +292,16 @@ public class BsonParser extends InputStreamParser implements BsonMetaProvider, R
 	 */
 	public String getNullKeyString() {
 		return nullKeyString;
+	}
+
+	/**
+	 * Returns the maximum allowed wire-declared length (in bytes) for strings, binary payloads, and document/array
+	 * size prefixes.
+	 *
+	 * @return The maximum length in bytes.
+	 */
+	public int getMaxLength() {
+		return maxLength;
 	}
 
 	/**

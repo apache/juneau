@@ -42,6 +42,7 @@ public final class ParquetSchemaBuilder {
 	private final MarshallingContext marshallingContext;
 	private final boolean writeDatesAsTimestamp;
 	private final ParquetCycleHandling cycleHandling;
+	private final int maxRecursionDepth;
 
 	/**
 	 * Constructor.
@@ -51,9 +52,22 @@ public final class ParquetSchemaBuilder {
 	 * @param cycleHandling How to handle structural cycles when building schema.
 	 */
 	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling) {
+		this(marshallingContext, writeDatesAsTimestamp, cycleHandling, 5);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param marshallingContext The bean context for type resolution.
+	 * @param writeDatesAsTimestamp If true, Date/Calendar/Temporal map to INT64+TIMESTAMP_MILLIS; else to BYTE_ARRAY+STRING.
+	 * @param cycleHandling How to handle structural cycles when building schema.
+	 * @param maxRecursionDepth Maximum expansion depth for self-referential bean types (GAP-13).
+	 */
+	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling, int maxRecursionDepth) {
 		this.marshallingContext = marshallingContext;
 		this.writeDatesAsTimestamp = writeDatesAsTimestamp;
 		this.cycleHandling = cycleHandling != null ? cycleHandling : ParquetCycleHandling.NULL;
+		this.maxRecursionDepth = Math.max(1, maxRecursionDepth);
 	}
 
 	/**
@@ -75,7 +89,7 @@ public final class ParquetSchemaBuilder {
 	 */
 	public List<ParquetSchemaElement> buildSchema(ClassMeta<?> cm, Object sampleBean) {
 		var elements = new ArrayList<ParquetSchemaElement>();
-		var typesInProgress = new HashSet<Class<?>>();
+		var typesInProgress = new HashMap<Class<?>, Integer>();
 		addSchemaElements(elements, cm, "root", null, true, sampleBean, typesInProgress);
 		return elements;
 	}
@@ -104,7 +118,7 @@ public final class ParquetSchemaBuilder {
 			null,
 			null,
 			null));
-		var typesInProgress = new HashSet<Class<?>>();
+		var typesInProgress = new HashMap<Class<?>, Integer>();
 		for (var key : keys) {
 			var val = map.get(key);
 			var cm = marshallingContext.getClassMeta(val != null ? val.getClass() : Object.class);
@@ -125,7 +139,7 @@ public final class ParquetSchemaBuilder {
 	 */
 	public List<ParquetSchemaElement> buildSchemaForKeyValuePairs(Object keySample, Object valueSample) {
 		var elements = new ArrayList<ParquetSchemaElement>();
-		var typesInProgress = new HashSet<Class<?>>();
+		var typesInProgress = new HashMap<Class<?>, Integer>();
 		var keyCm = marshallingContext.getClassMeta(keySample != null ? keySample.getClass() : Object.class);
 		var valueCm = marshallingContext.getClassMeta(valueSample != null ? valueSample.getClass() : Object.class);
 		elements.add(new ParquetSchemaElement("root", null, null, null, 2, null, null, null, null, null));
@@ -134,7 +148,7 @@ public final class ParquetSchemaBuilder {
 		return elements;
 	}
 
-	private void addSchemaElements(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Set<Class<?>> typesInProgress) {
+	private void addSchemaElements(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		if (cm.isOptional()) {
 			addOptionalSchema(elements, cm, name, parentPath, isRoot, sampleBean, typesInProgress);
 		} else if (cm.isBean()) {
@@ -154,7 +168,7 @@ public final class ParquetSchemaBuilder {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive Complexity: optional/value dispatch is inherently branchy
 	})
-	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Set<Class<?>> typesInProgress) {
+	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null)
 			et = marshallingContext.getClassMeta(Object.class);
@@ -167,12 +181,16 @@ public final class ParquetSchemaBuilder {
 	@SuppressWarnings({
 		"java:S3776" // Cognitive Complexity: bean/cycle/property dispatch is inherently branchy
 	})
-	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Set<Class<?>> typesInProgress) {
+	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
 		if (bm == null)
 			throw illegalArg("Class ''{0}'' is not a bean", cm.getName());
 		var beanClass = cm.inner();
-		if (typesInProgress.contains(beanClass)) {
+		// Recursion reached here indirectly (e.g. through Optional/collection of the same type) at the depth
+		// limit: keep the legacy String back-reference placeholder so the enclosing group's child count stays
+		// consistent.  Direct bean-property recursion is handled by the per-property filter below (truncated
+		// by omission, which round-trips as null).
+		if (typesInProgress.getOrDefault(beanClass, 0) >= maxRecursionDepth) {
 			if (cycleHandling == ParquetCycleHandling.THROW) {
 				var path = parentPath != null ? parentPath + "." + name : name;
 				throw new SerializeException("Cyclic type reference at ''{0}'' (type ''{1}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());
@@ -180,40 +198,58 @@ public final class ParquetSchemaBuilder {
 			addLeafSchema(elements, marshallingContext.getClassMeta(String.class), name, parentPath, isRoot);
 			return;
 		}
-		typesInProgress.add(beanClass);
+		typesInProgress.merge(beanClass, 1, Integer::sum);
 		try {
 			var ap = marshallingContext.getAnnotationProvider();
 			var props = bm.getProperties().values().stream()
 				.filter(BeanPropertyMeta::canRead)
 				.filter(p -> !isParentProperty(ap, p))
 				.toList();
-			int numChildren = props.size();
-			elements.add(new ParquetSchemaElement(
-				name,
-				null,
-				null,
-				isRoot ? null : OPTIONAL,
-				numChildren,
-				null,
-				null,
-				null,
-				null,
-				parentPath != null ? parentPath + "." + name : name));
+			var childParentPath = parentPath != null ? parentPath + "." + name : name;
+			// Resolve each property (incl. Object->sample inference) and drop direct recursive bean properties
+			// that would exceed the depth limit (GAP-13).  Omitting them keeps the schema acyclic; on read the
+			// missing column reconstructs as null (documented-lossy beyond the limit) instead of a toString.
+			var entries = new ArrayList<ResolvedProp>();
 			for (var p : props) {
-				var childParentPath = parentPath != null ? parentPath + "." + name : name;
 				Object childSample = null;
-				if (sampleBean != null && sampleBean instanceof Map<?, ?> m)
+				if (sampleBean instanceof Map<?, ?> m)
 					childSample = m.get(p.getName());
 				ClassMeta<?> propCm = (ClassMeta<?>) p.getBeanInfo();
 				// When property type is Object, infer from sample so Map/Collection get proper schema (2.2)
 				if ((propCm == null || propCm.isObject()) && childSample != null)
 					propCm = marshallingContext.getClassMeta(childSample.getClass());
-				addSchemaElements(elements, propCm, p.getName(), childParentPath, false, childSample, typesInProgress);
+				// When property type is the abstract java.lang.Number, re-type from a concrete numeric sample so
+				// the column uses the actual physical width (INT32/INT64/DOUBLE) and fractional values survive
+				// (GAP-12).  Only fires when the sample is itself a Number — a swapped property whose raw sample
+				// is non-numeric stays on the lossless INT64 default.
+				else if (propCm != null && propCm.is(Number.class) && childSample instanceof Number)
+					propCm = marshallingContext.getClassMeta(childSample.getClass());
+				if (propCm != null && propCm.isBean() && typesInProgress.getOrDefault(propCm.inner(), 0) >= maxRecursionDepth) {
+					if (cycleHandling == ParquetCycleHandling.THROW)
+						throw new SerializeException("Cyclic type reference at ''{0}.{1}'' (type ''{2}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", childParentPath, p.getName(), propCm.inner().getName());
+					continue;
+				}
+				entries.add(new ResolvedProp(p.getName(), propCm, childSample));
 			}
+			elements.add(new ParquetSchemaElement(
+				name,
+				null,
+				null,
+				isRoot ? null : OPTIONAL,
+				entries.size(),
+				null,
+				null,
+				null,
+				null,
+				childParentPath));
+			for (var e : entries)
+				addSchemaElements(elements, e.cm, e.name, childParentPath, false, e.sample, typesInProgress);
 		} finally {
-			typesInProgress.remove(beanClass);
+			typesInProgress.merge(beanClass, -1, (a, b) -> a + b == 0 ? null : a + b);
 		}
 	}
+
+	private record ResolvedProp(String name, ClassMeta<?> cm, Object sample) {}
 
 	private static boolean isParentProperty(AnnotationProvider ap, BeanPropertyMeta p) {
 		var g = p.getGetter();
@@ -226,7 +262,7 @@ public final class ParquetSchemaBuilder {
 		return f != null && ap.has(ParentProperty.class, f);
 	}
 
-	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Set<Class<?>> typesInProgress) {
+	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null)
 			throw illegalArg("List element type cannot be determined for ''{0}''", cm.getName());
@@ -253,7 +289,7 @@ public final class ParquetSchemaBuilder {
 		return Collections.emptyList();
 	}
 
-	private void addMapSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Set<Class<?>> typesInProgress) {
+	private void addMapSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Map<Class<?>, Integer> typesInProgress) {
 		var vt = cm.getValueType();
 		// Parquet MAP stores keys as STRING; non-String keys (e.g. Enum) are serialized via toString/name()
 		if (vt == null)
@@ -284,7 +320,15 @@ public final class ParquetSchemaBuilder {
 				ct = CONVERTED_INT_32;
 			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, ct, null, null, null, path));
 		} else if (cm.is(Number.class)) {
-			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, CONVERTED_INT_32, null, null, null, path));
+			// A statically-typed java.lang.Number leaf has no fixed physical width.  Mapping it to INT32 silently
+			// truncates values above 2^31 (e.g. 5_000_000_000L -> 705032704) — GAP-12.  Default to INT64, which
+			// is lossless for every integral Number and keeps the wire value integral.  Integral matters for
+			// round-trip correctness: an ObjectSwap whose swap type is exactly java.lang.Number (e.g.
+			// enum-as-ordinal) round-trips through String.valueOf(...), and "0" parses where "0.0" would not.
+			// When a concrete runtime sample is available (addBeanSchema), the column is re-typed to the actual
+			// subtype (INT32/INT64/DOUBLE) so fractional values are preserved too.  BigInteger/BigDecimal have
+			// their own lossless string mappings and never reach this branch.
+			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_INT_64, null, null, null, path));
 		} else if (cm.is(long.class) || cm.is(Long.class)) {
 			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_INT_64, null, null, null, path));
 		} else if (cm.is(float.class) || cm.is(Float.class)) {

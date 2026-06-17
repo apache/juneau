@@ -181,6 +181,23 @@ public final class BsonDecimal128 {
 		return bd;
 	}
 
+	/**
+	 * Converts to BigDecimal, normalizing the special IEEE-754 values that have no BigDecimal representation.
+	 *
+	 * <p>
+	 * Unlike {@link #toBigDecimal()}, this never throws: <c>NaN</c> and <c>±Infinity</c> (both valid on the BSON
+	 * wire and emitted by MongoDB) map to <jk>null</jk>, and negative zero maps to a finite zero.  Used by the
+	 * parser so adversarial/MongoDB-sourced special decimals fail soft instead of aborting the whole parse with an
+	 * unchecked {@link ArithmeticException}.
+	 *
+	 * @return The equivalent BigDecimal, or <jk>null</jk> if the value is NaN or Infinity.
+	 */
+	public BigDecimal toBigDecimalOrNull() {
+		if (isNaN() || isInfinite())
+			return null;
+		return toBigDecimalNoNegativeZeroCheck();
+	}
+
 	private boolean isNaN() {
 		return (high & NaN_MASK) == NaN_MASK;
 	}

@@ -111,9 +111,23 @@ public class MsgPackInputStream extends ParserInputStream {
 	int getExtType() { return extType; }
 
 	/**
+	 * Returns whether the last-read {@link DataType#LONG} token was an unsigned 64-bit integer (uint64, {@code 0xCF}).
+	 *
+	 * <p>
+	 * Only meaningful immediately after a {@link DataType#LONG} tag has been read via {@link #readDataType()}.
+	 */
+	boolean isUint64() {
+		return lastByte == UINT64;
+	}
+
+	/**
 	 * Read a binary field from the stream.
 	 */
 	byte[] readBinary() throws IOException {
+		// Java arrays/collections are int-indexed; a 32-bit MessagePack length in [2^31, 2^32-1] would
+		// otherwise truncate to a negative int and allocate the wrong size (G8).
+		if (length > Integer.MAX_VALUE)
+			throw ioex("MessagePack length {0} exceeds the maximum supported size of {1}.", length, Integer.MAX_VALUE);
 		var b = new byte[(int)length];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
@@ -224,6 +238,9 @@ public class MsgPackInputStream extends ParserInputStream {
 				break;
 			}
 			case LONG: {
+				// Remember the tag byte so isUint64() can distinguish an unsigned 64-bit integer from a
+				// signed INT64 / unsigned UINT32 on the LONG read path (used by the uint64-widening logic).
+				lastByte = i;
 				if (i == UINT32)
 					length = 4;
 				else if (i == INT64 || i == UINT64)

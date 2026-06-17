@@ -53,11 +53,18 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>CBOR semantic tag (major type 6) → tag ignored; tagged value parsed normally
  * </ul>
  *
- * <h5 class='section'>Limitations:</h5>
+ * <h5 class='section'>Round-trip notes:</h5>
  * <ul class='spaced-list'>
- * 	<li>{@link BigInteger} / {@link BigDecimal} — Cast to long/double; precision loss.
- * 	<li>Indefinite-length CBOR (break code 0xFF) not supported.
- * 	<li>Semantic tags are read and discarded; tag number does not affect parsed type.
+ * 	<li>Integers (major types 0/1) surface by target type: a {@link BigInteger} field carries the full
+ * 		unsigned-64-bit magnitude; any other numeric type keeps the raw 64-bit bits as a {@code long}.
+ * 	<li>{@link BigInteger} / {@link BigDecimal} round-trip losslessly (big integers decode from native
+ * 		CBOR integers or, beyond {@code ±2^64}, from their decimal string; {@link BigDecimal} decodes
+ * 		from its decimal string).
+ * 	<li>Indefinite-length CBOR (RFC 8949 §3.2) is supported: arrays, maps, and chunked text/byte
+ * 		strings all decode.
+ * 	<li>Semantic tags are read and discarded on the databind path; tag number does not affect parsed
+ * 		type.  Enable {@link Builder#nativeMode() nativeMode} to surface tags/simple values on the
+ * 		{@link TokenReader} cursor.
  * </ul>
  *
  * <h5 class='section'>Notes:</h5><ul>

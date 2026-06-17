@@ -231,7 +231,9 @@ public class CborTokenWriter implements TokenWriter {
 		if (value == null)
 			return nil();
 		preValueWrite();
-		out.appendLong(value.longValueExact());
+		// Delegates to appendNumber so values outside the signed-long range are emitted losslessly
+		// (native CBOR integer up to ±2^64, decimal string beyond) rather than throwing on overflow.
+		out.appendNumber(value);
 		afterValue();
 		return this;
 	}

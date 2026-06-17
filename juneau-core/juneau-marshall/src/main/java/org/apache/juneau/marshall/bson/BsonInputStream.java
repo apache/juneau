@@ -44,7 +44,11 @@ public class BsonInputStream extends ParserInputStream {
 	private static final Charset UTF8 = StandardCharsets.UTF_8;
 	private static final String UNEXPECTED_END_OF_BSON_STREAM = "Unexpected end of BSON stream";
 
+	/** Default cap (16 MiB, the conventional BSON document-size limit) for wire-declared lengths. */
+	static final int DEFAULT_MAX_LENGTH = 16 * 1024 * 1024;
+
 	private int pushback = -1;
+	private int maxLength = DEFAULT_MAX_LENGTH;
 
 	/**
 	 * Constructor.
@@ -54,6 +58,36 @@ public class BsonInputStream extends ParserInputStream {
 	 */
 	protected BsonInputStream(ParserPipe pipe) throws IOException {
 		super(pipe);
+	}
+
+	/**
+	 * Sets the maximum allowed wire-declared length (in bytes) for strings, binary payloads, and document/array
+	 * size prefixes.
+	 *
+	 * <p>
+	 * Guards against malformed/adversarial input where a small payload declares a huge or negative length that
+	 * would otherwise trigger {@link OutOfMemoryError} or {@link NegativeArraySizeException}.
+	 *
+	 * @param value The maximum length in bytes.  Values &le; 0 disable the cap (only the negative-length check remains).
+	 */
+	void setMaxLength(int value) {
+		maxLength = value <= 0 ? Integer.MAX_VALUE : value;
+	}
+
+	/**
+	 * Validates a wire-declared length against sane bounds before it is used to allocate a buffer.
+	 *
+	 * @param len The declared length read off the wire.
+	 * @param what A short description of the field being read (for the error message).
+	 * @return The validated length.
+	 * @throws IOException If the length is negative or exceeds the configured maximum.
+	 */
+	private int checkLength(int len, String what) throws IOException {
+		if (len < 0)
+			throw ioex("Invalid BSON {0} length (negative): {1}", what, len);
+		if (len > maxLength)
+			throw ioex("BSON {0} length {1} exceeds maximum allowed {2}", what, len, maxLength);
+		return len;
 	}
 
 	@Override
@@ -108,7 +142,7 @@ public class BsonInputStream extends ParserInputStream {
 	 * @throws IOException If the stream ends prematurely.
 	 */
 	public int readDocumentSize() throws IOException {
-		return readLE4();
+		return checkLength(readLE4(), "document");
 	}
 
 	/**
@@ -227,6 +261,7 @@ public class BsonInputStream extends ParserInputStream {
 		var len = readLE4();
 		if (len <= 0)
 			throw ioex("Invalid BSON string length: {0}", len);
+		checkLength(len, "string");
 		var bytes = new byte[len - 1]; // length includes null
 		for (var i = 0; i < bytes.length; i++) {
 			var b = read();
@@ -247,7 +282,7 @@ public class BsonInputStream extends ParserInputStream {
 	 * @throws IOException If the stream ends prematurely.
 	 */
 	public byte[] readBinary() throws IOException {
-		var len = readLE4();
+		var len = checkLength(readLE4(), "binary");
 		var subtype = read();
 		if (subtype < 0)
 			throw ioex(UNEXPECTED_END_OF_BSON_STREAM);
@@ -294,7 +329,7 @@ public class BsonInputStream extends ParserInputStream {
 	/**
 	 * Reads BSON decimal128 (16 bytes, IEEE 754-2008) as BigDecimal.
 	 *
-	 * @return The decimal value.
+	 * @return The decimal value, or <jk>null</jk> if the wire value is NaN or ±Infinity (which have no BigDecimal form).
 	 * @throws IOException If the stream ends prematurely.
 	 */
 	public BigDecimal readDecimal128() throws IOException {
@@ -376,7 +411,9 @@ public class BsonInputStream extends ParserInputStream {
 			throw new IllegalArgumentException("Decimal128 must be 16 bytes");
 		var low = readLE8From(bytes, 0);
 		var high = readLE8From(bytes, 8);
-		return BsonDecimal128.fromIEEE754BIDEncoding(high, low).toBigDecimal();
+		// NaN/Infinity are valid Decimal128 wire values (MongoDB emits them) but have no BigDecimal form; normalize
+		// them to null instead of throwing an unchecked ArithmeticException that would abort the whole parse.
+		return BsonDecimal128.fromIEEE754BIDEncoding(high, low).toBigDecimalOrNull();
 	}
 
 	private static long readLE8From(byte[] bytes, int offset) {

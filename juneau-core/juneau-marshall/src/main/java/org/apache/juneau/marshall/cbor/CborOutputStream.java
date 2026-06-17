@@ -263,10 +263,44 @@ public class CborOutputStream extends OutputStream {
 		if (c == Double.class)
 			return appendDouble(n.doubleValue());
 		if (c == BigInteger.class)
-			return appendLong(n.longValue());
+			return appendBigInteger((BigInteger)n);
 		if (c == BigDecimal.class)
-			return appendDouble(n.doubleValue());
+			return appendString(n.toString());
 		return appendInt(0);
+	}
+
+	/**
+	 * Appends a {@link BigInteger} losslessly.
+	 *
+	 * <p>
+	 * Values within the signed {@code long} range use the compact integer encoding.  Values that
+	 * still fit CBOR's native integer range (unsigned 64-bit for positives via major type 0, down to
+	 * {@code -2^64} for negatives via major type 1) are emitted with the full 64-bit magnitude rather
+	 * than truncating.  Values beyond {@code ±2^64} (which have no native CBOR integer head) fall back
+	 * to a lossless decimal string so no magnitude is lost.
+	 *
+	 * @param value The value.
+	 * @return This stream.
+	 */
+	CborOutputStream appendBigInteger(BigInteger value) {
+		if (value.bitLength() <= 63)
+			return appendLong(value.longValueExact());
+		if (value.signum() > 0) {
+			if (value.bitLength() <= 64) {
+				write1(0x1B);  // major type 0 | additional info 27 (8-byte argument)
+				write8(value.longValue());  // low 64 bits == full unsigned magnitude here
+				return this;
+			}
+		} else {
+			var arg = value.negate().subtract(BigInteger.ONE);  // CBOR major type 1 argument == -1 - value
+			if (arg.bitLength() <= 64) {
+				write1(0x3B);  // major type 1 | additional info 27 (8-byte argument)
+				write8(arg.longValue());
+				return this;
+			}
+		}
+		// Beyond ±2^64: no native CBOR integer head exists; emit a lossless decimal string.
+		return appendString(value.toString());
 	}
 
 	@SuppressWarnings({
@@ -280,10 +314,11 @@ public class CborOutputStream extends OutputStream {
 				count++;
 			else if (ch <= 0x7FF)
 				count += 2;
-			else if (Character.isHighSurrogate(ch)) {
+			else if (Character.isHighSurrogate(ch) && i + 1 < len && Character.isLowSurrogate(cs.charAt(i + 1))) {
 				count += 4;
 				++i;
 			} else
+				// BMP char, or an unpaired surrogate which is emitted as the 3-byte U+FFFD replacement.
 				count += 3;
 		}
 		return count;
@@ -303,7 +338,7 @@ public class CborOutputStream extends OutputStream {
 				write((byte)(0xC0 + ((c >> 6) & 0x1F)));
 				write((byte)(0x80 + (c & 0x3F)));
 				count += 2;
-			} else if (c >= 0xD800 && c <= 0xDFFF) {
+			} else if (c >= 0xD800 && c <= 0xDBFF && i + 1 < len && Character.isLowSurrogate(in.charAt(i + 1))) {
 				int jchar2 = in.charAt(++i) & 0xFFFF;
 				int n = (c << 10) + jchar2 + 0xFCA02400;
 				write((byte)(0xF0 + ((n >> 18) & 0x07)));
@@ -312,6 +347,11 @@ public class CborOutputStream extends OutputStream {
 				write((byte)(0x80 + (n & 0x3F)));
 				count += 4;
 			} else {
+				// BMP char, or an unpaired surrogate.  An unpaired surrogate is not a valid Unicode
+				// scalar value, so emit the U+FFFD replacement character rather than crashing or
+				// producing malformed UTF-8.
+				if (c >= 0xD800 && c <= 0xDFFF)
+					c = 0xFFFD;
 				write((byte)(0xE0 + ((c >> 12) & 0x0F)));
 				write((byte)(0x80 + ((c >> 6) & 0x3F)));
 				write((byte)(0x80 + (c & 0x3F)));

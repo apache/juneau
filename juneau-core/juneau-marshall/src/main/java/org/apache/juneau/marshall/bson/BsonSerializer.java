@@ -71,6 +71,13 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>ObjectId (0x07) is not generated; parsing returns 24-character hex strings.
  * 	<li>Deprecated types (Undefined, DBPointer, Symbol, JS with Scope) are skipped during parsing.
  * 	<li>MongoDB-internal types (JavaScript, Timestamp, MinKey, MaxKey) are not supported.
+ * 	<li>{@link BigDecimal} / {@link BigInteger} values outside the Decimal128 range (max 34 significant digits,
+ * 		exponent -6176..6111) cannot be represented and throw a {@link SerializeException} with a clear message.
+ * 	<li>BSON datetime (0x09) is millisecond-resolution, so sub-millisecond (nanosecond) precision of
+ * 		{@link Instant}/{@link OffsetDateTime}/{@link ZonedDateTime} is truncated when
+ * 		{@code writeDatesAsDatetime=true}. Use {@code writeDatesAsDatetime=false} for lossless ISO-8601 string output.
+ * 	<li>Local {@code java.time} types ({@link LocalDate}, {@link LocalDateTime}, {@link LocalTime}, {@link Year},
+ * 		etc.) have no instant, so they are always written as ISO-8601 strings even when {@code writeDatesAsDatetime=true}.
  * 	<li>BSON is binary; <c>SpacedHex</c> and <c>Base64</c> subclasses provide text-encodable output.
  * </ul>
  *

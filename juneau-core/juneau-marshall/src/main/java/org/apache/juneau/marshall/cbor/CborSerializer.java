@@ -31,7 +31,6 @@ import java.io.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
-import org.apache.juneau.marshall.swap.*;
 
 /**
  * Serializes POJO models to CBOR (RFC 8949).
@@ -74,10 +73,14 @@ import org.apache.juneau.marshall.swap.*;
  * 	byte[] <jv>cbor</jv> = <jv>s</jv>.serialize(<jv>myBean</jv>);
  * </p>
  *
- * <h5 class='section'>Limitations:</h5>
+ * <h5 class='section'>Round-trip notes:</h5>
  * <ul class='spaced-list'>
- * 	<li>{@link BigInteger} / {@link BigDecimal} — Cast to long/double; precision loss for values exceeding range. Use {@link ObjectSwap} to serialize as string if precision required.
- * 	<li>Indefinite-length encoding not supported in output.
+ * 	<li>{@link BigInteger} — emitted losslessly as a native CBOR integer when it fits CBOR's integer
+ * 		range ({@code -2^64 .. 2^64-1}), otherwise as a lossless decimal string.
+ * 	<li>{@link BigDecimal} — emitted as a lossless decimal string (native CBOR has no decimal number
+ * 		head without semantic tags).
+ * 	<li>The high-level databind path emits definite-length containers; the streaming
+ * 		{@link CborTokenWriter} emits indefinite-length containers (both are valid RFC 8949).
  * 	<li>Half-precision float (0xF9) not produced; always uses float32 (0xFA) or float64 (0xFB).
  * 	<li>Semantic tags (major type 6) not emitted unless {@link Builder#useTags(boolean) useTags(true)}.
  * </ul>

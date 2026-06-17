@@ -330,6 +330,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private static final long MAX_NUM_ROWS = 10_000_000;
 	private static final long MAX_NUM_VALUES = 10_000_000;
 
+	/** Sentinel for a null intermediate OPTIONAL group at the given def level (GAP-14 multi-level nesting). */
+	private record GroupNull(int defLevel) {}
+
 	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths) {}
 	private record RowGroupMeta(List<ColumnChunkMeta> columns) {}
 	private record ColumnChunkMeta(int type, List<String> pathInSchema, int codec, long numValues, long dataPageOffset, long totalCompressedSize) {}
@@ -1000,7 +1003,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int rep = schemaRepetition.getOrDefault(path, OPTIONAL);
 			boolean isUnderListRoot = path != null && path.startsWith("root.list.element.");
 			boolean isPrimitiveType = cc.type() == TYPE_INT32 || cc.type() == TYPE_INT64 || cc.type() == TYPE_FLOAT || cc.type() == TYPE_DOUBLE || cc.type() == TYPE_BOOLEAN;
-			int maxDefLevel = (rep == REQUIRED || (isUnderListRoot && isPrimitiveType)) ? 0 : 1;
+			// Max def level for a non-list/non-map leaf is the number of OPTIONAL groups enclosing it, i.e. the
+			// rowRelative path segment count (GAP-14).  Single-segment columns keep the historical max=1.
+			int rowRelSeg = rowRelativePath(path).split("\\.").length;
+			int maxDefLevel = (rep == REQUIRED || (isUnderListRoot && isPrimitiveType)) ? 0 : rowRelSeg;
+			int defBitWidth = maxDefLevel <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxDefLevel);
 			boolean isRawByteArrayColumn = rawByteArrayPaths.contains(path);
 			boolean isUuidColumn = uuidPaths.contains(path);
 			if (parquetDebug())
@@ -1009,10 +1016,16 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				+ " isPrimitive=" + isPrimitiveType + " isRawByteArrayColumn=" + isRawByteArrayColumn
 				+ " isUuidColumn=" + isUuidColumn);
 			int valuesToRead = (int)Math.min(cc.numValues(), numRows);
-			var reader = new ParquetColumnReader(decompressed, valuesToRead, maxDefLevel);
+			var reader = new ParquetColumnReader(decompressed, valuesToRead, maxDefLevel, defBitWidth);
 			var values = new ArrayList<>();
 			while (reader.hasNext()) {
-				values.add(readValue(reader, cc.type(), trimStrings, isRawByteArrayColumn, isUuidColumn));
+				var v = readValue(reader, cc.type(), trimStrings, isRawByteArrayColumn, isUuidColumn);
+				// def < maxDef-1 means an intermediate OPTIONAL group is null at level=def; record it so the
+				// reconstruction nulls that group rather than synthesizing a present group with a null leaf.
+				if (maxDefLevel >= 2 && reader.getDefLevel() < maxDefLevel - 1)
+					values.add(new GroupNull(reader.getDefLevel()));
+				else
+					values.add(v);
 			}
 			if (parquetDebug())
 				parquetDebugLog("readColumnChunk values: path=" + path + " values=" + values);
@@ -1108,6 +1121,17 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 					continue;
 				var values = e.getValue();
 				var v = i < values.size() ? values.get(i) : null;
+				if (v instanceof GroupNull gn) {
+					// Null intermediate group: set the prefix path (up to the null level) to null without
+					// synthesizing the deeper map structure (GAP-14).
+					var parts = rowRelPath.split("\\.");
+					var lvl = Math.min(gn.defLevel(), parts.length - 1);
+					var prefix = String.join(".", Arrays.copyOfRange(parts, 0, lvl + 1));
+					if (isTrimStrings())
+						prefix = prefix.trim();
+					setByPath(row, prefix, null);
+					continue;
+				}
 				var path = isListColumnPath(fullPath) ? listProp : rowRelPath;
 				if (isTrimStrings())
 					path = path.trim();

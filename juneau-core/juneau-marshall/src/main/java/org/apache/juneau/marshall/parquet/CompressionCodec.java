@@ -87,10 +87,36 @@ public enum CompressionCodec {
 
 	abstract byte[] decompress(byte[] data, int uncompressedSize) throws IOException;
 
-	static CompressionCodec fromThrift(int value) {
+	/**
+	 * Resolves a Thrift {@code CompressionCodec} enum value to a supported codec.
+	 *
+	 * <p>
+	 * Only {@code UNCOMPRESSED} (0) and {@code GZIP} (2) are supported.  Any other value — whether a
+	 * known-but-unsupported codec (SNAPPY/LZO/BROTLI/LZ4/ZSTD/LZ4_RAW) or an unrecognized id — is a hard
+	 * error rather than a silent fallback to {@code UNCOMPRESSED}, which would otherwise treat still-compressed
+	 * bytes as raw page data and surface silent garbage (GAP-5).
+	 *
+	 * @param value The Thrift codec enum value.
+	 * @return The matching supported codec.
+	 * @throws IOException If the codec is not supported by this implementation.
+	 */
+	static CompressionCodec fromThrift(int value) throws IOException {
 		for (var c : values())
 			if (c.thriftValue == value)
 				return c;
-		return UNCOMPRESSED;
+		throw new IOException("Unsupported Parquet compression codec: " + codecName(value)
+			+ ". Only UNCOMPRESSED and GZIP are supported.");
+	}
+
+	private static String codecName(int value) {
+		return switch (value) {
+			case 1 -> "SNAPPY (1)";
+			case 3 -> "LZO (3)";
+			case 4 -> "BROTLI (4)";
+			case 5 -> "LZ4 (5)";
+			case 6 -> "ZSTD (6)";
+			case 7 -> "LZ4_RAW (7)";
+			default -> Integer.toString(value);
+		};
 	}
 }

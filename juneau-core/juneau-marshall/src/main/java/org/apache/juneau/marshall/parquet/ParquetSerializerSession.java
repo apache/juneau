@@ -149,21 +149,21 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			var elementType = getClassMetaForObject(bm.getBean());
 			// For collection root: use element type for flat row schema (root.name, root.age).
 			// Each collection element becomes one Parquet row. Avoids list column format issues.
-			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchema(elementType, first);
+			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth).buildSchema(elementType, first);
 		} else if (first instanceof Map<?,?> mapFirst) {
 			if (rootType.isMap() && o instanceof Map<?, ?> origMap && !origMap.isEmpty()
 				&& !(origMap.keySet().iterator().next() instanceof String)) {
-				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling)
+				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth)
 					.buildSchemaForKeyValuePairs(mapFirst.get("key"), mapFirst.get("value"));
 			} else {
-				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchemaFromMap((Map<?, ?>) first);
+				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth).buildSchemaFromMap((Map<?, ?>) first);
 			}
 		} else {
 			var elementType = getClassMetaForObject(first);
 			var cm = (rootType.isCollection() || rootType.isArray())
 				? ctx.getMarshallingContext().getClassMeta(List.class, elementType.inner())
 				: elementType;
-			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling).buildSchema(cm, first);
+			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth).buildSchema(cm, first);
 		}
 		var leafColumns = ParquetSchemaBuilder.getLeafColumns(schema);
 		writeMagic(out);
@@ -346,40 +346,101 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		if (path != null && isMapKeyValueColumnPath(path)) {
 			return writeMapColumnChunk(out, rows, col, path, chunkStart);
 		}
-		var values = extractColumnValues(rows, path);
-		// Root key_value format uses root.key/root.value - convert keys to stored strings (ISO8601, etc.)
-		boolean isRootKeyColumn = "root.key".equals(col.path);
-		if (isRootKeyColumn) {
-			var converted = new ArrayList<>(values.size());
-			for (var val : values) {
-				converted.add(val == null ? null : mapKeyToStoredString(unwrapOptional(val)));
-			}
-			values = converted;
-		}
-		boolean hasNulls = col.repetitionType != null && col.repetitionType == OPTIONAL;
-		RleBitPackingEncoder defLevels = hasNulls ? new RleBitPackingEncoder(1) : null;
+		// Definition-level handling for non-list/non-map columns.
+		// A leaf nested under N OPTIONAL groups needs a max def level of N (GAP-14) so the reader can tell
+		// a null intermediate group apart from a present group with a null leaf.  Single-segment columns
+		// (maxDef<=1) use the original 1-bit scheme unchanged.
+		boolean optional = col.repetitionType != null && col.repetitionType == OPTIONAL;
+		int segCount = path == null ? 1 : path.split("\\.").length;
+		int maxDef = optional ? segCount : 0;
 		var writer = new ParquetColumnWriter(col);
-		for (var i = 0; i < values.size(); i++) {
-			var v = unwrapOptional(values.get(i));
-			if (defLevels != null)
-				defLevels.writeInt(v == null ? 0 : 1);
-			if (v != null)
-				writeValue(writer, col, v);
+		int numRows = rows.size();
+		byte[] defLevelBytes;
+		if (maxDef >= 2) {
+			var defLevels = new RleBitPackingEncoder(defRepBitWidth(maxDef));
+			for (var row : rows) {
+				var dv = computeDefValue(row, path, maxDef);
+				defLevels.writeInt(dv.def());
+				if (dv.def() == maxDef && dv.value() != null)
+					writeValue(writer, col, dv.value());
+			}
+			defLevelBytes = defLevels.toByteArrayWithLength();
+		} else {
+			var values = extractColumnValues(rows, path);
+			// Root key_value format uses root.key/root.value - convert keys to stored strings (ISO8601, etc.)
+			boolean isRootKeyColumn = "root.key".equals(col.path);
+			if (isRootKeyColumn) {
+				var converted = new ArrayList<>(values.size());
+				for (var val : values) {
+					converted.add(val == null ? null : mapKeyToStoredString(unwrapOptional(val)));
+				}
+				values = converted;
+			}
+			RleBitPackingEncoder defLevels = maxDef == 1 ? new RleBitPackingEncoder(1) : null;
+			for (var i = 0; i < values.size(); i++) {
+				var v = unwrapOptional(values.get(i));
+				if (defLevels != null)
+					defLevels.writeInt(v == null ? 0 : 1);
+				if (v != null)
+					writeValue(writer, col, v);
+			}
+			defLevelBytes = defLevels != null ? defLevels.toByteArrayWithLength() : new byte[0];
 		}
 		byte[] valueBytes = writer.finalizePage();
-		byte[] defLevelBytes = defLevels != null ? defLevels.toByteArrayWithLength() : new byte[0];
 		byte[] pageData = new byte[defLevelBytes.length + valueBytes.length];
 		System.arraycopy(defLevelBytes, 0, pageData, 0, defLevelBytes.length);
 		System.arraycopy(valueBytes, 0, pageData, defLevelBytes.length, valueBytes.length);
 		int uncompressedSize = pageData.length;
 		byte[] compressedData = ctx.compressionCodec.compress(pageData);
 		int compressedSize = compressedData.length;
-		var pageHeader = ParquetColumnWriter.createPageHeader(values.size(), uncompressedSize, compressedSize);
+		var pageHeader = ParquetColumnWriter.createPageHeader(numRows, uncompressedSize, compressedSize);
 		out.write(pageHeader);
 		int headerSize = pageHeader.length;
 		out.write(compressedData);
 		var pathParts = col.path != null ? List.of(col.path.split("\\.")) : List.<String>of();
-		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, values.size(), uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
+		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, numRows, uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
+	}
+
+	private record DefValue(int def, Object value) {}
+
+	/**
+	 * Walks {@code path} from {@code row}, returning the definition level (count of leading present OPTIONAL
+	 * nodes) and the leaf value.  Used by multi-level OPTIONAL columns (GAP-14): {@code def == maxDef} means
+	 * the leaf is present; {@code def == maxDef-1} means the deepest group is present but the leaf is null;
+	 * {@code def < maxDef-1} means an intermediate group is null at level {@code def}.
+	 */
+	private DefValue computeDefValue(Object row, String path, int maxDef) throws SerializeException {
+		var parts = path.split("\\.");
+		var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
+		seen.add(row);
+		if (row instanceof BeanMap<?> bm0) {
+			var bean = bm0.getBean();
+			if (bean != null)
+				seen.add(bean);
+		}
+		Object current = row;
+		int def = 0;
+		for (var i = 0; i < parts.length; i++) {
+			var part = parts[i];
+			if (current instanceof Optional<?> opt && "value".equals(part))
+				current = opt.orElse(null);
+			else if (current instanceof BeanMap<?> bm)
+				current = bm.get(part);
+			else if (current instanceof Map<?,?> m)
+				current = m.get(part);
+			else
+				current = toBeanMap(current).get(part);
+			if (current != null && seen.contains(current))
+				current = handleCycle(path);
+			if (current == null)
+				return new DefValue(def, null);
+			seen.add(current);
+			def = i + 1;
+		}
+		current = unwrapOptional(current);
+		if (current == null)
+			return new DefValue(Math.max(0, def - 1), null);
+		return new DefValue(maxDef, current);
 	}
 
 	/** Returns true if path is a map key_value leaf (e.g. f9.key_value.key or f9.key_value.value). */

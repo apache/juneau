@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.marshall.cbor.DataType.*;
 
 import java.io.*;
+import java.math.*;
 
 import org.apache.juneau.marshall.parser.*;
 
@@ -33,7 +34,9 @@ import org.apache.juneau.marshall.parser.*;
  *
  * <h5 class='section'>Notes:</h5><ul>
  * 	<li class='note'>This class is not intended for external use.
- * 	<li class='note'>Indefinite-length encoding (break code 0xFF) is not supported and will throw.
+ * 	<li class='note'>Indefinite-length encoding (RFC 8949 §3.2) is supported: arrays/maps decode via the
+ * 		BREAK-aware container loop, and chunked text/byte strings (heads <c>0x7F</c>/<c>0x5F</c>) are
+ * 		reassembled from their definite-length pieces.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -245,10 +248,9 @@ public class CborInputStream extends ParserInputStream {
 			else
 				length = 8;
 		} else if ((dt == ARRAY || dt == MAP || dt == STRING || dt == BINARY) && additionalInfo == 31) {
-			// Indefinite-length container or string.  Sentinel: length = -1.  Used by the public
-			// token-streaming surface (CborTokenReader); the legacy POJO databind path
-			// (CborParserSession.parseAnything) doesn't currently support indefinite-length and
-			// surfaces an error there.
+			// Indefinite-length container or string.  Sentinel: length = -1.  Containers are driven by
+			// the BREAK-aware loop (shouldContinueContainer / peekBreak); indefinite text/byte strings
+			// are reassembled from their chunks in readBinary (RFC 8949 §3.2.3).
 			length = -1;
 		} else if (dt != BOOLEAN && dt != NULL && dt != UNDEFINED && dt != BREAK)
 			length = readArgument(additionalInfo);
@@ -289,6 +291,26 @@ public class CborInputStream extends ParserInputStream {
 			return readUnsignedLong();
 		if (lastDataType == NINT)
 			return -1 - readUnsignedLong();
+		throw new IllegalStateException("Expected integer type, got " + lastDataType);
+	}
+
+	/**
+	 * Reads the last integer (UINT/NINT) as a {@link BigInteger}, preserving the full unsigned
+	 * 64-bit magnitude.
+	 *
+	 * <p>
+	 * Used when the target Java type is {@link BigInteger} so that values beyond the signed
+	 * {@code long} range (CBOR major type 0 values {@code >= 2^63}, and major type 1 values
+	 * {@code < -2^63}) widen losslessly instead of surfacing as a sign-wrapped {@code long}.
+	 *
+	 * @return The integer value as a {@link BigInteger}.
+	 */
+	BigInteger readBigInteger() {
+		var magnitude = new BigInteger(Long.toUnsignedString(length));
+		if (lastDataType == UINT)
+			return magnitude;
+		if (lastDataType == NINT)
+			return BigInteger.valueOf(-1).subtract(magnitude);
 		throw new IllegalStateException("Expected integer type, got " + lastDataType);
 	}
 
@@ -342,8 +364,14 @@ public class CborInputStream extends ParserInputStream {
 		int exp = (half >> 10) & 0x1F;
 		int mant = half & 0x3FF;
 		int sign = (half & 0x8000) << 16;
-		if (exp == 0)
-			return Float.intBitsToFloat(sign | (mant << 13));
+		if (exp == 0) {
+			// Zero (mant == 0) or subnormal (mant != 0).  A half subnormal is mant * 2^-24; the
+			// previous (mant << 13) form reinterpreted the bits as a float32 subnormal (mant * 2^-149),
+			// which is effectively zero.  Compute mant * 2^-24 directly (exact for mant <= 1023) and
+			// re-apply the sign bit.
+			var v = mant / 16777216f;  // 16777216 == 2^24
+			return Float.intBitsToFloat(Float.floatToRawIntBits(v) | sign);
+		}
 		if (exp == 31)
 			return mant == 0 ? Float.intBitsToFloat(sign | 0x7F800000)
 				: Float.NaN;
@@ -359,13 +387,55 @@ public class CborInputStream extends ParserInputStream {
 	}
 
 	/**
-	 * Reads a byte string.
+	 * Reads a byte string (or text string's raw bytes).
+	 *
+	 * <p>
+	 * Handles both definite-length strings and indefinite-length strings (RFC 8949 §3.2.3): when the
+	 * head carried additional-info 31 ({@code length == -1}) the chunked definite-length pieces are
+	 * reassembled until the BREAK marker.
 	 */
 	byte[] readBinary() throws IOException {
+		if (length == -1)
+			return readIndefiniteString();
 		var b = new byte[(int)length];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
 			throw ioex("Expected to read {0} bytes but only read {1}", b.length, bytesRead);
 		return b;
+	}
+
+	/**
+	 * Reassembles an indefinite-length text/byte string (RFC 8949 §3.2.3) from its definite-length
+	 * chunks, terminated by the BREAK marker (0xFF).
+	 *
+	 * <p>
+	 * Per §3.2.3 every chunk must be a definite-length string of the same major type as the
+	 * enclosing indefinite string, and nested indefinite chunks are not permitted.  Malformed input
+	 * surfaces as a clean {@link IOException} rather than a {@link NegativeArraySizeException}.
+	 */
+	private byte[] readIndefiniteString() throws IOException {
+		var expectedMajorType = getMajorType(lastInitialByte);
+		var baos = new ByteArrayOutputStream();
+		while (true) {
+			int ib = read();
+			if (ib == -1)
+				throw ioex("Unexpected end of CBOR input in indefinite-length string");
+			ib &= 0xFF;
+			if (ib == 0xFF)  // BREAK
+				break;
+			var chunkMajorType = getMajorType(ib);
+			var chunkInfo = getAdditionalInfo(ib);
+			if (chunkMajorType != expectedMajorType)
+				throw ioex("Invalid chunk major type {0} in indefinite-length string (expected {1})", chunkMajorType, expectedMajorType);
+			if (chunkInfo == 31)
+				throw ioex("Nested indefinite-length string chunk not allowed");
+			var chunkLen = (int)readArgument(chunkInfo);
+			var chunk = new byte[chunkLen];
+			var bytesRead = read(chunk);
+			if (bytesRead != chunk.length)
+				throw ioex("Expected to read {0} bytes but only read {1}", chunk.length, bytesRead);
+			baos.write(chunk, 0, chunk.length);
+		}
+		return baos.toByteArray();
 	}
 }

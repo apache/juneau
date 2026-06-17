@@ -37,8 +37,22 @@ final class ParquetColumnReader {
 	private final int maxDefLevel;
 	private int readCount;
 	private boolean nextNull;
+	private int defLevel;
+	private int boolByte;
+	private int boolBitPos = 8;
 
 	ParquetColumnReader(byte[] pageData, int numValues, int maxDefLevel) {
+		this(pageData, numValues, maxDefLevel, 1);
+	}
+
+	/**
+	 * @param pageData The (decompressed) page bytes.
+	 * @param numValues Number of level/value entries in the page.
+	 * @param maxDefLevel Maximum definition level; the leaf is present iff its def level equals this.
+	 * @param defBitWidth Bit width of the RLE-encoded definition levels.  For multi-level OPTIONAL nesting
+	 * 	(GAP-14) this is wider than 1 so intermediate-null vs leaf-null can be distinguished.
+	 */
+	ParquetColumnReader(byte[] pageData, int numValues, int maxDefLevel, int defBitWidth) {
 		this.numValues = numValues;
 		this.maxDefLevel = maxDefLevel;
 		this.readCount = 0;
@@ -50,7 +64,7 @@ final class ParquetColumnReader {
 			var hasDefLevels = defLen >= 0 && defLen <= pageData.length - 4;
 			if (hasDefLevels) {
 				off += 4;
-				this.defLevelDecoder = new RleBitPackingDecoder(pageData, off, defLen, 1);
+				this.defLevelDecoder = new RleBitPackingDecoder(pageData, off, defLen, defBitWidth);
 				off += defLen;
 			} else {
 				this.defLevelDecoder = null;
@@ -63,6 +77,19 @@ final class ParquetColumnReader {
 
 	boolean isNull() {
 		return nextNull;
+	}
+
+	/**
+	 * Returns the definition level read by the most recent {@link #advance()} call.
+	 *
+	 * <p>
+	 * Used by multi-level OPTIONAL reconstruction (GAP-14) to tell a null intermediate group
+	 * (def &lt; maxDefLevel-1) apart from a present group with a null leaf (def == maxDefLevel-1).
+	 *
+	 * @return The last definition level (0 when the column carries no definition levels).
+	 */
+	int getDefLevel() {
+		return defLevel;
 	}
 
 	boolean hasNext() {
@@ -80,8 +107,15 @@ final class ParquetColumnReader {
 	boolean readBoolean() throws IOException {
 		if (nextNull)
 			return false;
-		var b = valueStream.read();
-		return b == 1;
+		// PLAIN BOOLEAN is bit-packed 1 bit/value, LSB-first (GAP-4).  Pull a fresh byte every 8 present
+		// booleans; null slots consume no bit (matches the writer, which only packs present values).
+		if (boolBitPos == 8) {
+			boolByte = valueStream.read();
+			boolBitPos = 0;
+		}
+		var bit = (boolByte >> boolBitPos) & 1;
+		boolBitPos++;
+		return bit == 1;
 	}
 
 	int readInt32() throws IOException {
@@ -159,9 +193,10 @@ final class ParquetColumnReader {
 		if (readCount >= numValues)
 			return;
 		if (maxDefLevel > 0 && defLevelDecoder != null) {
-			var defLevel = defLevelDecoder.readInt();
+			defLevel = defLevelDecoder.readInt();
 			nextNull = defLevel < maxDefLevel;
 		} else {
+			defLevel = maxDefLevel;
 			nextNull = false;
 		}
 		readCount++;

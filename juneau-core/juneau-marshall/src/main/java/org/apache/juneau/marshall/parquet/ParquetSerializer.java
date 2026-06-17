@@ -66,6 +66,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		private boolean writeDatesAsTimestamp = true;
 		private boolean emitLogicalTypes = false;
 		private ParquetCycleHandling cycleHandling = ParquetCycleHandling.NULL;
+		private int maxRecursionDepth = 5;
 		private String nullKeyString;
 
 		/**
@@ -75,6 +76,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			produces("application/vnd.apache.parquet");
 			accept("application/vnd.apache.parquet");
 			emitLogicalTypes = env("ParquetSerializer.emitLogicalTypes", false);
+			maxRecursionDepth = env("ParquetSerializer.maxRecursionDepth", 5);
 			nullKeyString = env("ParquetSerializer.nullKeyString", "<NULL>");
 		}
 
@@ -92,6 +94,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			writeDatesAsTimestamp = copyFrom.writeDatesAsTimestamp;
 			emitLogicalTypes = copyFrom.emitLogicalTypes;
 			cycleHandling = copyFrom.cycleHandling;
+			maxRecursionDepth = copyFrom.maxRecursionDepth;
 			nullKeyString = copyFrom.nullKeyString;
 		}
 
@@ -109,6 +112,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			writeDatesAsTimestamp = copyFrom.writeDatesAsTimestamp;
 			emitLogicalTypes = copyFrom.emitLogicalTypes;
 			cycleHandling = copyFrom.cycleHandling;
+			maxRecursionDepth = copyFrom.maxRecursionDepth;
 			nullKeyString = copyFrom.nullKeyString;
 		}
 
@@ -203,6 +207,25 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		}
 
 		/**
+		 * Sets the maximum expansion depth for self-referential (recursive) bean types.
+		 *
+		 * <p>
+		 * A self-referential type (e.g. <c>class Node { String val; Node next; }</c>) is expanded into this
+		 * many nested column levels so acyclic data (trees, linked lists) up to this depth round-trips
+		 * losslessly instead of degrading to a {@code toString} representation (GAP-13).  Structure deeper
+		 * than this is truncated to <jk>null</jk> (documented-lossy).  Larger values support deeper structures
+		 * at the cost of a wider schema; the schema is expanded structurally regardless of the actual data
+		 * depth, so keep this modest for recursive types with high fan-out.
+		 *
+		 * @param value The maximum recursion expansion depth. Values below 1 are clamped to 1.
+		 * @return This object.
+		 */
+		public Builder maxRecursionDepth(int value) {
+			maxRecursionDepth = Math.max(1, value);
+			return this;
+		}
+
+		/**
 		 * The string used to represent <jk>null</jk> map keys in Parquet MAP key_value format.
 		 *
 		 * <p>
@@ -230,7 +253,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 
 		@Override
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), compressionCodec, rowGroupSize, pageSize, addBeanTypesParquet, writeDatesAsTimestamp, emitLogicalTypes, cycleHandling, nullKeyString);
+			return HashKey.of(super.hashKey(), compressionCodec, rowGroupSize, pageSize, addBeanTypesParquet, writeDatesAsTimestamp, emitLogicalTypes, cycleHandling, maxRecursionDepth, nullKeyString);
 		}
 	}
 
@@ -250,6 +273,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 	final boolean writeDatesAsTimestamp;
 	final boolean emitLogicalTypes;
 	final ParquetCycleHandling cycleHandling;
+	final int maxRecursionDepth;
 	final String nullKeyString;
 
 	private final Map<BeanPropertyMeta,ParquetBeanPropertyMeta> parquetBeanPropertyMetas = new ConcurrentHashMap<>();
@@ -269,6 +293,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		writeDatesAsTimestamp = builder.writeDatesAsTimestamp;
 		emitLogicalTypes = builder.emitLogicalTypes;
 		cycleHandling = builder.cycleHandling;
+		maxRecursionDepth = builder.maxRecursionDepth;
 		nullKeyString = builder.nullKeyString;
 	}
 

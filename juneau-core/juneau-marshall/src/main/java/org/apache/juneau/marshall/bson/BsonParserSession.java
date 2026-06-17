@@ -61,6 +61,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	public static class Builder extends InputStreamParserSession.Builder<Builder> {
 
 		private final String nullKeyString;
+		private final int maxLength;
 
 		/**
 		 * Constructor
@@ -70,6 +71,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		protected Builder(BsonParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			nullKeyString = ctx.getNullKeyString();
+			maxLength = ctx.getMaxLength();
 		}
 
 		@Override
@@ -89,10 +91,12 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	}
 
 	private final String nullKeyString;
+	private final int maxLength;
 
 	protected BsonParserSession(Builder builder) {
 		super(builder);
 		nullKeyString = builder.nullKeyString;
+		maxLength = builder.maxLength;
 	}
 
 	private String trimKey(String name) {
@@ -178,7 +182,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 				var key = trimKey(name);
 				var bpm = beanMap.getPropertyMeta(key);
 				Object value;
-				if ("_type".equals(name)) {
+				if (name.equals(getBeanTypePropertyName(eType))) {
 					value = readTypedValue(is, et, string(), null, null);
 					if (nn(value))
 						beanMap = applyTypeProperty(beanMap, value.toString(), eType);
@@ -290,6 +294,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 	@Override
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		try (var is = new BsonInputStream(pipe)) {
+			is.setMaxLength(maxLength);
 			return (T)parseDocument(is, type, getOuter(), null);
 		}
 	}
