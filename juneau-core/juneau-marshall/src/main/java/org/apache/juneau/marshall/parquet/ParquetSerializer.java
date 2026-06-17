@@ -65,6 +65,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		private boolean addBeanTypesParquet = false;
 		private boolean writeDatesAsTimestamp = true;
 		private boolean emitLogicalTypes = false;
+		private boolean nativeLogicalTypes = false;
 		private ParquetCycleHandling cycleHandling = ParquetCycleHandling.NULL;
 		private int maxRecursionDepth = 5;
 		private String nullKeyString;
@@ -93,6 +94,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			addBeanTypesParquet = copyFrom.addBeanTypesParquet;
 			writeDatesAsTimestamp = copyFrom.writeDatesAsTimestamp;
 			emitLogicalTypes = copyFrom.emitLogicalTypes;
+			nativeLogicalTypes = copyFrom.nativeLogicalTypes;
 			cycleHandling = copyFrom.cycleHandling;
 			maxRecursionDepth = copyFrom.maxRecursionDepth;
 			nullKeyString = copyFrom.nullKeyString;
@@ -111,6 +113,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 			addBeanTypesParquet = copyFrom.addBeanTypesParquet;
 			writeDatesAsTimestamp = copyFrom.writeDatesAsTimestamp;
 			emitLogicalTypes = copyFrom.emitLogicalTypes;
+			nativeLogicalTypes = copyFrom.nativeLogicalTypes;
 			cycleHandling = copyFrom.cycleHandling;
 			maxRecursionDepth = copyFrom.maxRecursionDepth;
 			nullKeyString = copyFrom.nullKeyString;
@@ -195,6 +198,25 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		}
 
 		/**
+		 * Emits binary-native logical types (DECIMAL, DATE, TIME, TIMESTAMP-micros) on write instead of the
+		 * default string / TIMESTAMP-millis normalization.
+		 *
+		 * <p>
+		 * Disabled by default, which preserves the current wire shape (and lossless Juneau&#8596;Juneau
+		 * round-trips).  When enabled, {@code BigDecimal} columns are written as DECIMAL with scale/precision,
+		 * {@code LocalDate} as DATE, {@code LocalTime}/{@code OffsetTime} as TIME(MICROS), and date/instant
+		 * temporals as TIMESTAMP(MICROS) — interoperable with parquet-mr / Spark and sub-millisecond precise.
+		 * Read-side decode of these types is always on regardless of this flag.
+		 *
+		 * @param value Whether to emit binary-native logical types on write.
+		 * @return This object.
+		 */
+		public Builder nativeLogicalTypes(boolean value) {
+			nativeLogicalTypes = value;
+			return this;
+		}
+
+		/**
 		 * Sets how to handle cyclic references during serialization.
 		 *
 		 * @param value THROW to fail with {@link SerializeException};
@@ -253,7 +275,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 
 		@Override
 		public HashKey hashKey() {
-			return HashKey.of(super.hashKey(), compressionCodec, rowGroupSize, pageSize, addBeanTypesParquet, writeDatesAsTimestamp, emitLogicalTypes, cycleHandling, maxRecursionDepth, nullKeyString);
+			return HashKey.of(super.hashKey(), compressionCodec, rowGroupSize, pageSize, addBeanTypesParquet, writeDatesAsTimestamp, emitLogicalTypes, nativeLogicalTypes, cycleHandling, maxRecursionDepth, nullKeyString);
 		}
 	}
 
@@ -272,6 +294,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 	final boolean addBeanTypesParquet;
 	final boolean writeDatesAsTimestamp;
 	final boolean emitLogicalTypes;
+	final boolean nativeLogicalTypes;
 	final ParquetCycleHandling cycleHandling;
 	final int maxRecursionDepth;
 	final String nullKeyString;
@@ -292,6 +315,7 @@ public class ParquetSerializer extends OutputStreamSerializer implements Parquet
 		addBeanTypesParquet = builder.addBeanTypesParquet;
 		writeDatesAsTimestamp = builder.writeDatesAsTimestamp;
 		emitLogicalTypes = builder.emitLogicalTypes;
+		nativeLogicalTypes = builder.nativeLogicalTypes;
 		cycleHandling = builder.cycleHandling;
 		maxRecursionDepth = builder.maxRecursionDepth;
 		nullKeyString = builder.nullKeyString;

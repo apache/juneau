@@ -23,7 +23,10 @@ import java.util.zip.*;
  * Parquet compression codecs supported by this implementation.
  *
  * <p>
- * Only UNCOMPRESSED and GZIP are supported; Snappy, LZ4, and Zstd require external libraries.
+ * UNCOMPRESSED and GZIP support both directions.  SNAPPY is <b>decode-only</b> (a dependency-free,
+ * pure-Java Snappy <i>block-format</i> decompressor) so Juneau can read spec-compliant Parquet from
+ * parquet-mr / Spark / Hive, which default to Snappy.  LZ4, Zstd, Brotli, and LZO require external
+ * libraries and remain unsupported (hard error on read).
  */
 public enum CompressionCodec {
 
@@ -38,6 +41,20 @@ public enum CompressionCodec {
 		@Override
 		byte[] decompress(byte[] data, int uncompressedSize) {
 			return data;
+		}
+	},
+
+	/** Snappy block format — decode only (write is not supported). */
+	SNAPPY(1) {
+
+		@Override
+		byte[] compress(byte[] data) throws IOException {
+			throw new IOException("Snappy compression (write) is not supported; use UNCOMPRESSED or GZIP.");
+		}
+
+		@Override
+		byte[] decompress(byte[] data, int uncompressedSize) throws IOException {
+			return SnappyBlockDecompressor.decompress(data, uncompressedSize);
 		}
 	},
 
@@ -91,10 +108,10 @@ public enum CompressionCodec {
 	 * Resolves a Thrift {@code CompressionCodec} enum value to a supported codec.
 	 *
 	 * <p>
-	 * Only {@code UNCOMPRESSED} (0) and {@code GZIP} (2) are supported.  Any other value — whether a
-	 * known-but-unsupported codec (SNAPPY/LZO/BROTLI/LZ4/ZSTD/LZ4_RAW) or an unrecognized id — is a hard
-	 * error rather than a silent fallback to {@code UNCOMPRESSED}, which would otherwise treat still-compressed
-	 * bytes as raw page data and surface silent garbage (GAP-5).
+	 * {@code UNCOMPRESSED} (0) and {@code GZIP} (2) support both directions; {@code SNAPPY} (1) is
+	 * decode-only.  Any other value — a known-but-unsupported codec (LZO/BROTLI/LZ4/ZSTD/LZ4_RAW) or an
+	 * unrecognized id — is a hard error rather than a silent fallback to {@code UNCOMPRESSED}, which would
+	 * otherwise treat still-compressed bytes as raw page data and surface silent garbage (GAP-5).
 	 *
 	 * @param value The Thrift codec enum value.
 	 * @return The matching supported codec.
@@ -105,12 +122,11 @@ public enum CompressionCodec {
 			if (c.thriftValue == value)
 				return c;
 		throw new IOException("Unsupported Parquet compression codec: " + codecName(value)
-			+ ". Only UNCOMPRESSED and GZIP are supported.");
+			+ ". Only UNCOMPRESSED, GZIP, and SNAPPY (decode-only) are supported.");
 	}
 
 	private static String codecName(int value) {
 		return switch (value) {
-			case 1 -> "SNAPPY (1)";
 			case 3 -> "LZO (3)";
 			case 4 -> "BROTLI (4)";
 			case 5 -> "LZ4 (5)";

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -43,6 +44,11 @@ public final class ParquetSchemaBuilder {
 	private final boolean writeDatesAsTimestamp;
 	private final ParquetCycleHandling cycleHandling;
 	private final int maxRecursionDepth;
+	private final boolean nativeLogicalTypes;
+
+	/** Fixed scale/precision for INT64-backed native DECIMAL emission (GAP-9). 9 fractional digits, 18 total. */
+	static final int DECIMAL_SCALE = 9;
+	static final int DECIMAL_PRECISION = 18;
 
 	/**
 	 * Constructor.
@@ -52,7 +58,7 @@ public final class ParquetSchemaBuilder {
 	 * @param cycleHandling How to handle structural cycles when building schema.
 	 */
 	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling) {
-		this(marshallingContext, writeDatesAsTimestamp, cycleHandling, 5);
+		this(marshallingContext, writeDatesAsTimestamp, cycleHandling, 5, false);
 	}
 
 	/**
@@ -64,10 +70,25 @@ public final class ParquetSchemaBuilder {
 	 * @param maxRecursionDepth Maximum expansion depth for self-referential bean types (GAP-13).
 	 */
 	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling, int maxRecursionDepth) {
+		this(marshallingContext, writeDatesAsTimestamp, cycleHandling, maxRecursionDepth, false);
+	}
+
+	/**
+	 * Constructor.
+	 *
+	 * @param marshallingContext The bean context for type resolution.
+	 * @param writeDatesAsTimestamp If true, Date/Calendar/Temporal map to INT64+TIMESTAMP_MILLIS; else to BYTE_ARRAY+STRING.
+	 * @param cycleHandling How to handle structural cycles when building schema.
+	 * @param maxRecursionDepth Maximum expansion depth for self-referential bean types (GAP-13).
+	 * @param nativeLogicalTypes If true, emit binary-native DECIMAL/DATE/TIME/TIMESTAMP-micros logical types
+	 * 	instead of the default string / TIMESTAMP-millis normalization (GAP-9/10).
+	 */
+	public ParquetSchemaBuilder(MarshallingContext marshallingContext, boolean writeDatesAsTimestamp, ParquetCycleHandling cycleHandling, int maxRecursionDepth, boolean nativeLogicalTypes) {
 		this.marshallingContext = marshallingContext;
 		this.writeDatesAsTimestamp = writeDatesAsTimestamp;
 		this.cycleHandling = cycleHandling != null ? cycleHandling : ParquetCycleHandling.NULL;
 		this.maxRecursionDepth = Math.max(1, maxRecursionDepth);
+		this.nativeLogicalTypes = nativeLogicalTypes;
 	}
 
 	/**
@@ -215,6 +236,15 @@ public final class ParquetSchemaBuilder {
 				if (sampleBean instanceof Map<?, ?> m)
 					childSample = m.get(p.getName());
 				ClassMeta<?> propCm = (ClassMeta<?>) p.getBeanInfo();
+				// Native logical types (GAP-9/10): a java.time temporal property carries a swap, so its
+				// resolved ClassMeta is an Object/String surrogate that hides the concrete type.  Recover the
+				// declared field/getter type so the DATE/TIME/TIMESTAMP-micros leaf branches can fire.  Only
+				// overrides when the declared type is one of the native logical types we emit.
+				if (nativeLogicalTypes) {
+					var declared = declaredNativeType(p);
+					if (declared != null)
+						propCm = marshallingContext.getClassMeta(declared);
+				}
 				// When property type is Object, infer from sample so Map/Collection get proper schema (2.2)
 				if ((propCm == null || propCm.isObject()) && childSample != null)
 					propCm = marshallingContext.getClassMeta(childSample.getClass());
@@ -250,6 +280,24 @@ public final class ParquetSchemaBuilder {
 	}
 
 	private record ResolvedProp(String name, ClassMeta<?> cm, Object sample) {}
+
+	/**
+	 * Returns the property's declared field/getter class when it is a binary-native logical type
+	 * (java.time temporal, {@link java.math.BigDecimal}, or {@link java.math.BigInteger}); otherwise
+	 * <jk>null</jk>.  Used to look past a registered swap whose resolved ClassMeta hides the concrete
+	 * type, so the native logical-type leaf branches in {@link #addLeafSchema} can fire (GAP-9/10).
+	 */
+	private static Class<?> declaredNativeType(BeanPropertyMeta p) {
+		// Resolve the declared class from the field (preferred) or, for getter-only properties, the getter.
+		var f = p.getField();
+		Class<?> c = f != null ? f.getFieldType().inner() : p.getGetter().getReturnType().inner();
+		if (c == LocalDate.class || c == LocalTime.class || c == OffsetTime.class
+			|| c == java.math.BigDecimal.class || c == java.math.BigInteger.class
+			|| java.util.Date.class.isAssignableFrom(c) || java.util.Calendar.class.isAssignableFrom(c)
+			|| java.time.temporal.Temporal.class.isAssignableFrom(c))
+			return c;
+		return null;
+	}
 
 	private static boolean isParentProperty(AnnotationProvider ap, BeanPropertyMeta p) {
 		var g = p.getGetter();
@@ -311,12 +359,12 @@ public final class ParquetSchemaBuilder {
 		if (cm.isBoolean()) {
 			elements.add(new ParquetSchemaElement(name, TYPE_BOOLEAN, null, repetition, null, null, null, null, null, path));
 		} else if (cm.is(byte.class) || cm.is(Byte.class) || cm.is(short.class) || cm.is(Short.class) || cm.is(int.class) || cm.is(Integer.class)) {
-			Integer ct = null;
+			Integer ct;
 			if (cm.is(byte.class) || cm.is(Byte.class))
 				ct = CONVERTED_INT_8;
 			else if (cm.is(short.class) || cm.is(Short.class))
 				ct = CONVERTED_INT_16;
-			else if (cm.is(int.class) || cm.is(Integer.class))
+			else  // int/Integer — the only remaining type the enclosing guard admits.
 				ct = CONVERTED_INT_32;
 			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, ct, null, null, null, path));
 		} else if (cm.is(Number.class)) {
@@ -335,22 +383,32 @@ public final class ParquetSchemaBuilder {
 			elements.add(new ParquetSchemaElement(name, TYPE_FLOAT, null, repetition, null, null, null, null, null, path));
 		} else if (cm.is(double.class) || cm.is(Double.class)) {
 			elements.add(new ParquetSchemaElement(name, TYPE_DOUBLE, null, repetition, null, null, null, null, null, path));
-		} else if (cm.isAssignableTo(CharSequence.class) || cm.isAssignableTo(String.class)) {
+		} else if (cm.isAssignableTo(CharSequence.class)) {  // String is a CharSequence, so this covers both.
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_UTF8, LOGICAL_TYPE_STRING, null, null, path));
 		} else if (cm.isEnum()) {
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_ENUM, null, null, null, path));
 		} else if (cm.isByteArray()) {
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, null, null, null, null, path));
+		} else if (nativeLogicalTypes && cm.inner() == LocalDate.class) {
+			// DATE (GAP-10): days since epoch as INT32.  Match on inner() (the concrete class resolved from a
+			// runtime sample) since a swapped property ClassMeta reports neither is(LocalDate) nor isDateOrCalendarOrTemporal.
+			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, CONVERTED_DATE, LOGICAL_TYPE_DATE, null, null, path));
+		} else if (nativeLogicalTypes && (cm.inner() == LocalTime.class || cm.inner() == OffsetTime.class)) {
+			// TIME (GAP-10): micros since midnight as INT64 (TIME_MICROS).
+			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_TIME_MICROS, LOGICAL_TYPE_TIME, null, null, path));
+		} else if (nativeLogicalTypes && cm.isDateOrCalendarOrTemporal()) {
+			// TIMESTAMP (GAP-10): micros since epoch as INT64 (TIMESTAMP_MICROS) — sub-millisecond precise.
+			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_TIMESTAMP_MICROS, LOGICAL_TYPE_TIMESTAMP, null, null, path));
 		} else if (cm.isDateOrCalendarOrTemporal() && writeDatesAsTimestamp) {
 			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_TIMESTAMP_MILLIS, LOGICAL_TYPE_TIMESTAMP, null, null, path));
 		} else if (cm.isDateOrCalendarOrTemporal()) {
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_UTF8, LOGICAL_TYPE_STRING, null, null, path));
 		} else if (cm.isDuration()) {
 			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_UTF8, LOGICAL_TYPE_STRING, null, null, path));
-		} else if (cm.isDecimal()) {
-			// Store as UTF-8 string to match JSON/CBOR behavior; DECIMAL binary encoding is not used since
-			// the reader always reads BYTE_ARRAY as a UTF-8 string for type conversion via MarshallingSession.
-			elements.add(new ParquetSchemaElement(name, TYPE_BYTE_ARRAY, null, repetition, null, CONVERTED_UTF8, LOGICAL_TYPE_STRING, null, null, path));
+		} else if (nativeLogicalTypes && (cm.is(java.math.BigDecimal.class) || cm.is(java.math.BigInteger.class))) {
+			// DECIMAL (GAP-9): unscaled value as INT64 with scale/precision in the schema.  Scale is fixed at
+			// DECIMAL_SCALE; values requiring more fractional digits are rounded (HALF_UP) on write.
+			elements.add(new ParquetSchemaElement(name, TYPE_INT64, null, repetition, null, CONVERTED_DECIMAL, LOGICAL_TYPE_DECIMAL, DECIMAL_SCALE, DECIMAL_PRECISION, path));
 		} else if (cm.isAssignableTo(UUID.class)) {
 			elements.add(new ParquetSchemaElement(name, TYPE_FIXED_LEN_BYTE_ARRAY, 16, repetition, null, null, LOGICAL_TYPE_UUID, null, null, path));
 		} else {

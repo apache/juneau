@@ -206,12 +206,13 @@ class ParquetConformance_Test extends TestBase {
 	void gap5_supportedCodecsResolve() throws Exception {
 		assertEquals(CompressionCodec.UNCOMPRESSED, CompressionCodec.fromThrift(0));
 		assertEquals(CompressionCodec.GZIP, CompressionCodec.fromThrift(2));
+		// SNAPPY (1) now resolves — decode-only support was added for external-read interop.
+		assertEquals(CompressionCodec.SNAPPY, CompressionCodec.fromThrift(1));
 	}
 
 	@Test
 	void gap5_unsupportedCodecThrows() {
 		// Every known-but-unsupported codec id (and an unknown id) is a hard error with a descriptive name.
-		assertCodecError(1, "SNAPPY");
 		assertCodecError(3, "LZO");
 		assertCodecError(4, "BROTLI");
 		assertCodecError(5, "LZ4");

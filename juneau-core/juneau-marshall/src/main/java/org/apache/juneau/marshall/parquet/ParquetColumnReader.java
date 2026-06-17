@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parquet;
 
 import java.io.*;
 import java.nio.charset.*;
+import java.time.*;
 
 /**
  * Reads column values from Parquet page data (PLAIN encoding).
@@ -140,6 +141,27 @@ final class ParquetColumnReader {
 		var b6 = (long)(valueStream.read() & 0xFF);
 		var b7 = (long)(valueStream.read() & 0xFF);
 		return b0 | (b1 << 8) | (b2 << 16) | (b3 << 24) | (b4 << 32) | (b5 << 40) | (b6 << 48) | (b7 << 56);
+	}
+
+	/**
+	 * Reads a legacy INT96 value (GAP-8) — 12 bytes: an 8-byte little-endian nanoseconds-of-day followed
+	 * by a 4-byte little-endian Julian day number — and converts it to an {@link Instant}.  Used by
+	 * Impala/Hive/older-Spark timestamp columns.  Returns <jk>null</jk> for a null slot.
+	 */
+	Instant readInt96AsInstant() throws IOException {
+		if (nextNull) {
+			// Still consume the 12 bytes so the stream stays aligned.
+			for (var i = 0; i < 12; i++)
+				valueStream.read();
+			return null;
+		}
+		long nanosOfDay = readInt64();
+		int julianDay = readInt32();
+		// Julian day 2440588 == 1970-01-01.  Days since epoch * 86400s + nanos-of-day.
+		long epochDay = (long) julianDay - 2440588L;
+		long epochSecond = epochDay * 86_400L + nanosOfDay / 1_000_000_000L;
+		long nanoAdjust = nanosOfDay % 1_000_000_000L;
+		return Instant.ofEpochSecond(epochSecond, nanoAdjust);
 	}
 
 	float readFloat() throws IOException {

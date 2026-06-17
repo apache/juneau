@@ -211,7 +211,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				|| inner == Character.class || Number.class.isAssignableFrom(inner)))
 				elementType = ctx.getMarshallingContext().getClassMeta(Map.class);
 		}
-		var rows = readAllRows(bytes, meta, elementType, meta.schemaRepetition(), meta.rawByteArrayPaths(), meta.uuidPaths());
+		var rows = readAllRows(bytes, meta, elementType, meta.schemaRepetition(), meta.rawByteArrayPaths(), meta.uuidPaths(), meta.columnLogical());
 		// Unwrap ValueHolder {value: X} when single row has "value" key and target expects scalar (not Map/List<Map>)
 		boolean targetWantsScalar = !type.isMap()
 			&& !(type.isCollection() && type.getElementType() != null && type.getElementType().isMap())
@@ -333,9 +333,103 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	/** Sentinel for a null intermediate OPTIONAL group at the given def level (GAP-14 multi-level nesting). */
 	private record GroupNull(int defLevel) {}
 
-	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths) {}
-	private record RowGroupMeta(List<ColumnChunkMeta> columns) {}
+	private record FileMeta(long numRows, List<RowGroupMeta> rowGroups, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) {}
+	private record RowGroupMeta(long numRows, List<ColumnChunkMeta> columns) {}
 	private record ColumnChunkMeta(int type, List<String> pathInSchema, int codec, long numValues, long dataPageOffset, long totalCompressedSize) {}
+
+	// Parquet page types (PageHeader.type).
+	private static final int PAGE_DATA = 0;
+	private static final int PAGE_DICTIONARY = 2;
+
+	// Parquet encodings (DataPageHeader.encoding).
+	private static final int ENCODING_PLAIN = 0;
+	private static final int ENCODING_PLAIN_DICTIONARY = 2;
+	private static final int ENCODING_RLE_DICTIONARY = 8;
+
+	/**
+	 * One decoded Parquet page header plus the file offset at which its (possibly compressed) page
+	 * body begins.  Covers both {@code DataPageHeader} (field 5) and {@code DictionaryPageHeader}
+	 * (field 7); the unused sub-header's fields are left at their defaults.
+	 *
+	 * @param pageType {@code PageHeader.type} — {@link #PAGE_DATA}, {@link #PAGE_DICTIONARY}, etc.
+	 * @param uncompressedSize Uncompressed page-body size in bytes.
+	 * @param compressedSize Compressed page-body size in bytes (equals uncompressedSize when UNCOMPRESSED).
+	 * @param numValues Value count carried by the page's own sub-header.
+	 * @param encoding Data/dictionary page encoding ({@link #ENCODING_PLAIN}, {@link #ENCODING_RLE_DICTIONARY}, …).
+	 * @param bodyStart File offset where the page body (compressed bytes) starts.
+	 */
+	private record PageHeaderInfo(int pageType, int uncompressedSize, int compressedSize, int numValues, int encoding, int bodyStart) {}
+
+	private static final int MAX_PAGE_SIZE = 256 * 1024 * 1024;
+
+	/**
+	 * Reads a single Parquet {@code PageHeader} Thrift struct starting at {@code off} in {@code fileBytes}.
+	 *
+	 * @param fileBytes The whole file.
+	 * @param off Offset of the page header.
+	 * @param columnPath Column path (for error messages only).
+	 * @return The decoded header plus the offset where the page body begins.
+	 * @throws ParseException If the header is malformed or declares out-of-range sizes.
+	 * @throws IOException If the underlying Thrift decode fails.
+	 */
+	@SuppressWarnings({
+		"resource" // bais is an in-memory ByteArrayInputStream; no OS resource to close.
+	})
+	private static PageHeaderInfo readPageHeader(byte[] fileBytes, int off, String columnPath) throws ParseException, IOException {
+		var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
+		var dec = new ThriftCompactDecoder(bais);
+		dec.readStructBegin();
+		int pageType = PAGE_DATA;
+		int uncompressedSize = 0;
+		int compressedSize = 0;
+		int numValues = 0;
+		int encoding = ENCODING_PLAIN;
+		ThriftCompactDecoder.FieldHeader fh;
+		while (!(fh = dec.readFieldHeader()).isStop) {
+			switch (fh.fieldId) {
+				case 1 -> pageType = dec.readI32();
+				case 2 -> uncompressedSize = dec.readI32();
+				case 3 -> compressedSize = dec.readI32();
+				case 5, 7 -> { // DataPageHeader (5) or DictionaryPageHeader (7): both carry num_values(1)+encoding(2).
+					dec.readStructBegin();
+					ThriftCompactDecoder.FieldHeader sub;
+					while (!(sub = dec.readFieldHeader()).isStop) {
+						if (sub.fieldId == 1)
+							numValues = dec.readI32();
+						else if (sub.fieldId == 2)
+							encoding = dec.readI32();
+						else
+							dec.skipField(sub.type);
+					}
+					dec.readStructEnd();
+				}
+				default -> dec.skipField(fh.type);
+			}
+		}
+		dec.readStructEnd();
+		int headerConsumed = (fileBytes.length - off) - bais.available();
+		int bodyStart = off + headerConsumed;
+		if (uncompressedSize < 0 || uncompressedSize > MAX_PAGE_SIZE
+			|| compressedSize < 0 || compressedSize > MAX_PAGE_SIZE
+			|| bodyStart + compressedSize > fileBytes.length)
+			throw new ParseException("Invalid page header for column ''{0}'': uncompressed=''{1}'', compressed=''{2}''",
+				columnPath, uncompressedSize, compressedSize);
+		if (numValues < 0 || numValues > MAX_NUM_VALUES)
+			throw new ParseException("Invalid page num_values for column ''{0}'': {1}", columnPath, numValues);
+		return new PageHeaderInfo(pageType, uncompressedSize, compressedSize, numValues, encoding, bodyStart);
+	}
+
+	/**
+	 * Returns the offset of the first {@code DATA_PAGE} at or after {@code off}, skipping a leading
+	 * {@code DICTIONARY_PAGE} if one is present.  Used by the repeated (list/map) chunk readers, which
+	 * decode a single data page but must still tolerate a dictionary page in front of it.
+	 */
+	private static int skipToDataPage(byte[] fileBytes, int off, String columnPath) throws ParseException, IOException {
+		var ph = readPageHeader(fileBytes, off, columnPath);
+		if (ph.pageType() == PAGE_DICTIONARY)
+			return ph.bodyStart() + ph.compressedSize();
+		return off;
+	}
 
 	/**
 	 * Result of {@link #readSchema(ThriftCompactDecoder)}: the per-leaf repetition map plus the set of
@@ -353,7 +447,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * physical-type heuristic when no logical type is recorded (backward compatibility with files written
 	 * without the opt-in discriminator).
 	 */
-	private record SchemaReadResult(Map<String, Integer> repetitions, Set<String> rawByteArrayPaths, Set<String> uuidPaths) {}
+	private record SchemaReadResult(Map<String, Integer> repetitions, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) {}
+
+	/**
+	 * Per-leaf logical-type metadata captured from the schema, used to decode native logical-type columns
+	 * (GAP-9/10): the {@code convertedType} (parquet.thrift ConvertedType), DECIMAL {@code scale}/{@code precision},
+	 * and the physical {@code type}.  All fields are best-effort: {@code convertedType} is null when absent.
+	 */
+	record ColumnLogical(Integer convertedType, int scale, int precision) {}
 
 	private static FileMeta parseFileMetaData(byte[] footer) throws ParseException {
 		try {
@@ -364,6 +465,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			Map<String, Integer> schemaRepetition = Map.of();
 			Set<String> rawByteArrayPaths = Set.of();
 			Set<String> uuidPaths = Set.of();
+			Map<String, ColumnLogical> columnLogical = Map.of();
 			ThriftCompactDecoder.FieldHeader fh;
 			while (!(fh = dec.readFieldHeader()).isStop) {
 				switch (fh.fieldId) {
@@ -373,6 +475,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 						schemaRepetition = sr.repetitions();
 						rawByteArrayPaths = sr.rawByteArrayPaths();
 						uuidPaths = sr.uuidPaths();
+						columnLogical = sr.columnLogical();
 					}
 					case 3 -> numRows = dec.readI64();
 					case 4 -> rowGroups = readRowGroups(dec);
@@ -380,7 +483,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				}
 			}
 			dec.readStructEnd();
-			return new FileMeta(numRows, rowGroups != null ? rowGroups : List.of(), schemaRepetition, rawByteArrayPaths, uuidPaths);
+			return new FileMeta(numRows, rowGroups != null ? rowGroups : List.of(), schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical);
 		} catch (IOException e) {
 			throw new ParseException(e);
 		}
@@ -394,6 +497,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		var result = new LinkedHashMap<String, Integer>();
 		var rawByteArrayPaths = new java.util.LinkedHashSet<String>();
 		var uuidPaths = new java.util.LinkedHashSet<String>();
+		var columnLogical = new LinkedHashMap<String, ColumnLogical>();
 		for (int i = 0; i < lh.size; i++) {
 			dec.readStructBegin();
 			Integer type = null;
@@ -402,6 +506,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			Integer numChildren = null;
 			Integer convertedType = null;
 			Integer logicalType = null;
+			int scale = 0;
+			int precision = 0;
 			ThriftCompactDecoder.FieldHeader fh;
 			while (!(fh = dec.readFieldHeader()).isStop) {
 				switch (fh.fieldId) {
@@ -411,6 +517,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 					case 4 -> name = dec.readString();
 					case 5 -> numChildren = dec.readI32();
 					case 6 -> convertedType = dec.readI32();
+					case 7 -> scale = dec.readI32();      // SchemaElement.scale (DECIMAL)
+					case 8 -> precision = dec.readI32();  // SchemaElement.precision (DECIMAL)
 					case 10 -> logicalType = readLogicalTypeUnion(dec);
 					default -> dec.skipField(fh.type);
 				}
@@ -429,6 +537,10 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				// Leaf element: record it and decrement parent's child count
 				int rep = repetitionType != null ? repetitionType : OPTIONAL;
 				result.put(path, rep);
+				// Capture logical-type metadata for native-type decode (GAP-9/10).  Only the DECIMAL and
+				// temporal converted types matter to the decoder; the UUID/string paths are handled separately.
+				if (convertedType != null)
+					columnLogical.put(path, new ColumnLogical(convertedType, scale, precision));
 				// Bug #11 fix: a TYPE_BYTE_ARRAY column with no convertedType uniquely identifies a
 				// raw byte[] column emitted by ParquetSchemaBuilder.addLeafSchema's cm.isByteArray()
 				// branch.  Every other writer site that emits TYPE_BYTE_ARRAY sets a discriminator
@@ -462,7 +574,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 		if (parquetDebug())
 			parquetDebugLog("readSchema result: " + result + " rawByteArrayPaths=" + rawByteArrayPaths + " uuidPaths=" + uuidPaths);
-		return new SchemaReadResult(result, rawByteArrayPaths, uuidPaths);
+		return new SchemaReadResult(result, rawByteArrayPaths, uuidPaths, columnLogical);
 	}
 
 	/**
@@ -498,15 +610,18 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		for (int i = 0; i < lh.size; i++) {
 			dec.readStructBegin();
 			List<ColumnChunkMeta> columns = null;
+			long groupNumRows = 0;
 			ThriftCompactDecoder.FieldHeader fh;
 			while (!(fh = dec.readFieldHeader()).isStop) {
 				if (fh.fieldId == 1)
 					columns = readColumnChunks(dec);
+				else if (fh.fieldId == 3)
+					groupNumRows = dec.readI64(); // RowGroup.num_rows
 				else
 					dec.skipField(fh.type);
 			}
 			dec.readStructEnd();
-			list.add(new RowGroupMeta(columns != null ? columns : List.of()));
+			list.add(new RowGroupMeta(groupNumRows, columns != null ? columns : List.of()));
 		}
 		return list;
 	}
@@ -567,15 +682,27 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return list;
 	}
 
-	private List<?> readAllRows(byte[] fileBytes, FileMeta meta, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths) throws ParseException {
-		if (meta.numRows() == 0)
+	private List<?> readAllRows(byte[] fileBytes, FileMeta meta, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) throws ParseException {
+		if (meta.numRows() == 0 || meta.rowGroups().isEmpty())
 			return List.of();
-		var firstGroup = meta.rowGroups().isEmpty() ? null : meta.rowGroups().get(0);
-		if (firstGroup == null)
-			return List.of();
-		int numRows = (int)meta.numRows();
+		// Multi-row-group (GAP-2): read every row group and concatenate its reassembled rows in order.
+		// Each group declares its own num_rows; fall back to the file total only for a lone group whose
+		// per-group count wasn't recorded (older Juneau-written files).
+		var allRows = new ArrayList<Object>((int)Math.min(meta.numRows(), MAX_NUM_ROWS));
+		for (var group : meta.rowGroups()) {
+			int groupRows = (int)group.numRows();
+			if (groupRows <= 0)
+				groupRows = meta.rowGroups().size() == 1 ? (int)meta.numRows() : 0;
+			if (groupRows <= 0)
+				continue;
+			allRows.addAll(readRowGroupRows(fileBytes, group, groupRows, elementType, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical));
+		}
+		return allRows;
+	}
+
+	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) throws ParseException {
 		var columnData = new LinkedHashMap<String, List<Object>>();
-		for (var cc : firstGroup.columns()) {
+		for (var cc : group.columns()) {
 			var path = String.join(".", cc.pathInSchema());
 			List<Object> values;
 			var trim = isTrimStrings();
@@ -584,14 +711,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			else if (isMapKeyValueColumnPath(path))
 				values = readMapKeyValueColumnChunk(fileBytes, cc, numRows, trim);
 			else
-				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, uuidPaths, trim);
+				values = readColumnChunk(fileBytes, cc, numRows, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical, trim);
 			columnData.put(path, values);
 		}
 		if (parquetDebug()) {
 			var summary = columnData.entrySet().stream()
 				.map(e -> e.getKey() + "->" + e.getValue())
 				.toList();
-			parquetDebugLog("readAllRows: numRows=" + numRows + " columnData=" + summary);
+			parquetDebugLog("readRowGroupRows: numRows=" + numRows + " columnData=" + summary);
 		}
 		return reassembleRows(columnData, numRows, elementType);
 	}
@@ -650,41 +777,18 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int defBitWidth = maxDef <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxDef);
 			int repBitWidth = maxRep <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxRep);
 
-			int off = (int)cc.dataPageOffset();
-			var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
-			var dec = new ThriftCompactDecoder(bais);
-			dec.readStructBegin();
-			int uncompressedSize = 0;
-			int compressedSize = 0;
-			ThriftCompactDecoder.FieldHeader fh;
-			while (!(fh = dec.readFieldHeader()).isStop) {
-				if (fh.fieldId == 2)
-					uncompressedSize = dec.readI32();
-				else if (fh.fieldId == 3)
-					compressedSize = dec.readI32();
-				else if (fh.fieldId == 5) {
-					dec.readStructBegin();
-					ThriftCompactDecoder.FieldHeader fh2;
-					while (!(fh2 = dec.readFieldHeader()).isStop)
-						dec.skipField(fh2.type);
-					dec.readStructEnd();
-				} else
-					dec.skipField(fh.type);
-			}
-			dec.readStructEnd();
-			int headerConsumed = (fileBytes.length - off) - bais.available();
-			int pageStart = off + headerConsumed;
-			int maxPageSize = 256 * 1024 * 1024;
-			if (uncompressedSize < 0 || uncompressedSize > maxPageSize
-				|| compressedSize < 0 || compressedSize > maxPageSize
-				|| pageStart + compressedSize > fileBytes.length)
-				throw new ParseException("Invalid page header: uncompressed=''{0}'', compressed=''{1}''",
-					uncompressedSize, compressedSize);
-			var compressedData = Arrays.copyOfRange(fileBytes, pageStart, pageStart + compressedSize);
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
 				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
-			var decompressed = codec.decompress(compressedData, uncompressedSize);
+			// Skip a leading dictionary page if present, then read the single data page.  Repeated
+			// (list/map) columns carry rep+def levels with cross-page state; Juneau emits them as a single
+			// data page, and dictionary-encoded repeated columns are not produced here, so a single-data-page
+			// decode (via the shared page-header reader for Snappy + validation) is sufficient.
+			var chunkPath = String.join(".", cc.pathInSchema());
+			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath);
+			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath);
+			var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
+			var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 
 			int numValues = (int)cc.numValues();
 			int off2 = 0;
@@ -852,41 +956,18 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int defBitWidth = maxDef <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxDef);
 			int repBitWidth = maxRep <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxRep);
 
-			int off = (int)cc.dataPageOffset();
-			var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
-			var dec = new ThriftCompactDecoder(bais);
-			dec.readStructBegin();
-			int uncompressedSize = 0;
-			int compressedSize = 0;
-			ThriftCompactDecoder.FieldHeader fh;
-			while (!(fh = dec.readFieldHeader()).isStop) {
-				if (fh.fieldId == 2)
-					uncompressedSize = dec.readI32();
-				else if (fh.fieldId == 3)
-					compressedSize = dec.readI32();
-				else if (fh.fieldId == 5) {
-					dec.readStructBegin();
-					ThriftCompactDecoder.FieldHeader fh2;
-					while (!(fh2 = dec.readFieldHeader()).isStop)
-						dec.skipField(fh2.type);
-					dec.readStructEnd();
-				} else
-					dec.skipField(fh.type);
-			}
-			dec.readStructEnd();
-			int headerConsumed = (fileBytes.length - off) - bais.available();
-			int pageStart = off + headerConsumed;
-			int maxPageSize = 256 * 1024 * 1024;
-			if (uncompressedSize < 0 || uncompressedSize > maxPageSize
-				|| compressedSize < 0 || compressedSize > maxPageSize
-				|| pageStart + compressedSize > fileBytes.length)
-				throw new ParseException("Invalid page header: uncompressed=''{0}'', compressed=''{1}''",
-					uncompressedSize, compressedSize);
-			var compressedData = Arrays.copyOfRange(fileBytes, pageStart, pageStart + compressedSize);
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
 				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
-			var decompressed = codec.decompress(compressedData, uncompressedSize);
+			// Skip a leading dictionary page if present, then read the single data page.  Repeated
+			// (list/map) columns carry rep+def levels with cross-page state; Juneau emits them as a single
+			// data page, and dictionary-encoded repeated columns are not produced here, so a single-data-page
+			// decode (via the shared page-header reader for Snappy + validation) is sufficient.
+			var chunkPath = String.join(".", cc.pathInSchema());
+			int dataPageOff = skipToDataPage(fileBytes, (int)cc.dataPageOffset(), chunkPath);
+			var ph = readPageHeader(fileBytes, dataPageOff, chunkPath);
+			var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
+			var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
 
 			int numValues = (int)cc.numValues();
 			int off2 = 0;
@@ -962,43 +1043,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return result;
 	}
 
-	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, boolean trimStrings) throws ParseException {
+	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical, boolean trimStrings) throws ParseException {
 		try {
-			int off = (int)cc.dataPageOffset();
-			var bais = new ByteArrayInputStream(fileBytes, off, fileBytes.length - off);
-			var dec = new ThriftCompactDecoder(bais);
-			dec.readStructBegin();
-			int uncompressedSize = 0;
-			int compressedSize = 0;
-			ThriftCompactDecoder.FieldHeader fh;
-			while (!(fh = dec.readFieldHeader()).isStop) {
-				if (fh.fieldId == 2)
-					uncompressedSize = dec.readI32();
-				else if (fh.fieldId == 3)
-					compressedSize = dec.readI32();
-				else if (fh.fieldId == 5) {
-					dec.readStructBegin();
-					ThriftCompactDecoder.FieldHeader fh2;
-					while (!(fh2 = dec.readFieldHeader()).isStop)
-						dec.skipField(fh2.type);
-					dec.readStructEnd();
-				} else
-					dec.skipField(fh.type);
-			}
-			dec.readStructEnd();
-			int headerConsumed = (fileBytes.length - off) - bais.available();
-			int pageStart = off + headerConsumed;
-			int maxPageSize = 256 * 1024 * 1024;
-			if (uncompressedSize < 0 || uncompressedSize > maxPageSize
-				|| compressedSize < 0 || compressedSize > maxPageSize
-				|| pageStart + compressedSize > fileBytes.length)
-				throw new ParseException("Invalid page header: uncompressed=''{0}'', compressed=''{1}''",
-					uncompressedSize, compressedSize);
-			var compressedData = Arrays.copyOfRange(fileBytes, pageStart, pageStart + compressedSize);
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
 				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
-			var decompressed = codec.decompress(compressedData, uncompressedSize);
 			var path = String.join(".", cc.pathInSchema());
 			int rep = schemaRepetition.getOrDefault(path, OPTIONAL);
 			boolean isUnderListRoot = path != null && path.startsWith("root.list.element.");
@@ -1010,22 +1059,38 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int defBitWidth = maxDefLevel <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxDefLevel);
 			boolean isRawByteArrayColumn = rawByteArrayPaths.contains(path);
 			boolean isUuidColumn = uuidPaths.contains(path);
+			var logical = columnLogical.get(path);
 			if (parquetDebug())
 				parquetDebugLog("readColumnChunk: path=" + path + " pathInSchema=" + cc.pathInSchema()
 				+ " rep=" + rep + " (REQ=" + REQUIRED + ") maxDefLevel=" + maxDefLevel + " type=" + cc.type()
 				+ " isPrimitive=" + isPrimitiveType + " isRawByteArrayColumn=" + isRawByteArrayColumn
-				+ " isUuidColumn=" + isUuidColumn);
+				+ " isUuidColumn=" + isUuidColumn + " logical=" + logical);
+
+			// Page loop (GAP-1): a column chunk may hold a leading dictionary page (GAP-3) followed by
+			// one or more data pages.  Walk pages from dataPageOffset until the chunk's numValues
+			// level/value entries are consumed.
 			int valuesToRead = (int)Math.min(cc.numValues(), numRows);
-			var reader = new ParquetColumnReader(decompressed, valuesToRead, maxDefLevel, defBitWidth);
 			var values = new ArrayList<>();
-			while (reader.hasNext()) {
-				var v = readValue(reader, cc.type(), trimStrings, isRawByteArrayColumn, isUuidColumn);
-				// def < maxDef-1 means an intermediate OPTIONAL group is null at level=def; record it so the
-				// reconstruction nulls that group rather than synthesizing a present group with a null leaf.
-				if (maxDefLevel >= 2 && reader.getDefLevel() < maxDefLevel - 1)
-					values.add(new GroupNull(reader.getDefLevel()));
-				else
-					values.add(v);
+			List<Object> dictionary = null;
+			int pageOff = (int)cc.dataPageOffset();
+			int consumed = 0;
+			int pageGuard = 0;
+			while (consumed < valuesToRead && pageOff < fileBytes.length) {
+				if (++pageGuard > MAX_PAGES_PER_CHUNK)
+					throw new ParseException("Column ''{0}'' exceeds the maximum of {1} pages per chunk", path, MAX_PAGES_PER_CHUNK);
+				var ph = readPageHeader(fileBytes, pageOff, path);
+				var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
+				var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
+				if (ph.pageType() == PAGE_DICTIONARY) {
+					dictionary = readDictionaryPage(decompressed, ph.numValues(), cc.type(), trimStrings, isRawByteArrayColumn, isUuidColumn, logical);
+				} else {
+					int pageValues = Math.min(ph.numValues(), valuesToRead - consumed);
+					boolean dictEncoded = ph.encoding() == ENCODING_PLAIN_DICTIONARY || ph.encoding() == ENCODING_RLE_DICTIONARY;
+					readDataPageValues(decompressed, pageValues, maxDefLevel, defBitWidth, cc.type(), trimStrings,
+						isRawByteArrayColumn, isUuidColumn, logical, dictEncoded, dictionary, values);
+					consumed += pageValues;
+				}
+				pageOff = ph.bodyStart() + ph.compressedSize();
 			}
 			if (parquetDebug())
 				parquetDebugLog("readColumnChunk values: path=" + path + " values=" + values);
@@ -1035,20 +1100,122 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 	}
 
+	private static final int MAX_PAGES_PER_CHUNK = 1_000_000;
+
+	/**
+	 * Decodes one PLAIN-or-dictionary-encoded data page into {@code values}, appending {@link GroupNull}
+	 * sentinels for null intermediate OPTIONAL groups (GAP-14).
+	 */
+	private static void readDataPageValues(byte[] decompressed, int pageValues, int maxDefLevel, int defBitWidth,
+			int type, boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical,
+			boolean dictEncoded, List<Object> dictionary, List<Object> values) throws IOException, ParseException {
+		if (dictEncoded) {
+			// Dictionary-encoded data page (GAP-3): def levels (if any) then a 1-byte bit-width followed by
+			// RLE/bit-packed dictionary indices.  Nulls consume a def level but no index.
+			readDictionaryEncodedPage(decompressed, pageValues, maxDefLevel, defBitWidth, dictionary, values);
+			return;
+		}
+		var reader = new ParquetColumnReader(decompressed, pageValues, maxDefLevel, defBitWidth);
+		while (reader.hasNext()) {
+			var v = readValue(reader, type, trimStrings, isRawByteArrayColumn, isUuidColumn, logical);
+			if (maxDefLevel >= 2 && reader.getDefLevel() < maxDefLevel - 1)
+				values.add(new GroupNull(reader.getDefLevel()));
+			else
+				values.add(v);
+		}
+	}
+
+	/**
+	 * Decodes a {@code DICTIONARY_PAGE} body (PLAIN-encoded values, no def/rep levels) into an indexable
+	 * dictionary (GAP-3).
+	 *
+	 * @return The dictionary entries in index order.
+	 */
+	private static List<Object> readDictionaryPage(byte[] decompressed, int numDictValues, int type,
+			boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical) throws IOException {
+		// A dictionary page is PLAIN-encoded with no definition levels (every entry present): maxDefLevel=0.
+		var reader = new ParquetColumnReader(decompressed, numDictValues, 0);
+		var dict = new ArrayList<>(numDictValues);
+		while (reader.hasNext())
+			dict.add(readValue(reader, type, trimStrings, isRawByteArrayColumn, isUuidColumn, logical));
+		return dict;
+	}
+
+	/**
+	 * Decodes a dictionary-encoded data page (GAP-3): optional RLE definition levels, then a leading
+	 * 1-byte bit-width followed by RLE/bit-packed dictionary indices.  Present values map their index
+	 * back through {@code dictionary}; nulls consume a definition level but no index.
+	 */
+	// Package-private for focused unit testing of the dictionary-index decode path (GAP-3).
+	static void readDictionaryEncodedPage(byte[] decompressed, int pageValues, int maxDefLevel, int defBitWidth,
+			List<Object> dictionary, List<Object> values) throws ParseException {
+		if (dictionary == null)
+			throw new ParseException("Dictionary-encoded data page encountered with no preceding dictionary page");
+		try {
+			int off = 0;
+			RleBitPackingDecoder defDecoder = null;
+			if (maxDefLevel > 0 && decompressed.length >= 4) {
+				int defLen = (decompressed[0] & 0xFF) | ((decompressed[1] & 0xFF) << 8)
+					| ((decompressed[2] & 0xFF) << 16) | ((decompressed[3] & 0xFF) << 24);
+				if (defLen >= 0 && defLen <= decompressed.length - 4) {
+					off = 4;
+					defDecoder = new RleBitPackingDecoder(decompressed, off, defLen, defBitWidth);
+					off += defLen;
+				}
+			}
+			// Dictionary indices section: 1-byte bit width, then RLE/bit-packed hybrid indices.
+			int indexBitWidth = decompressed[off] & 0xFF;
+			off++;
+			var idxDecoder = new RleBitPackingDecoder(decompressed, off, decompressed.length - off, indexBitWidth);
+			for (int i = 0; i < pageValues; i++) {
+				int def = defDecoder != null ? defDecoder.readInt() : maxDefLevel;
+				if (def < maxDefLevel) {
+					if (maxDefLevel >= 2 && def < maxDefLevel - 1)
+						values.add(new GroupNull(def));
+					else
+						values.add(null);
+				} else {
+					int idx = idxDecoder.readInt();
+					if (idx < 0 || idx >= dictionary.size())
+						throw new ParseException("Dictionary index {0} out of range [0,{1})", idx, dictionary.size());
+					values.add(dictionary.get(idx));
+				}
+			}
+		} catch (IOException e) {
+			throw new ParseException(e);
+		}
+	}
+
 	private static Object readValue(ParquetColumnReader reader, int type, boolean trimStrings) throws IOException {
 		// List/map element columns: no per-path discriminator is threaded, so keep the legacy
 		// "FIXED_LEN_BYTE_ARRAY == UUID" assumption (isUuidColumn=true) to preserve existing round trips.
-		return readValue(reader, type, trimStrings, false, true);
+		return readValue(reader, type, trimStrings, false, true, null);
 	}
 
-	private static Object readValue(ParquetColumnReader reader, int type, boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn) throws IOException {
+	// Package-private for focused unit testing of the external-read value-decode paths (INT96/DECIMAL/TIME/etc.).
+	static Object readValue(ParquetColumnReader reader, int type, boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical) throws IOException {
 		reader.advance();
 		if (reader.isNull())
 			return null;
+		// Native logical-type decode (GAP-9/10): when a column carries a DECIMAL/DATE/TIME/TIMESTAMP-micros
+		// convertedType, decode to the matching value and surface a form the framework's coercion understands.
+		// Read-side decode is always on; absent a logical convertedType the physical-type switch below applies.
+		if (logical != null && logical.convertedType() != null) {
+			var nativeValue = readLogicalValue(reader, type, logical);
+			if (nativeValue != NOT_LOGICAL)
+				return nativeValue;
+		}
 		return switch (type) {
 			case TYPE_BOOLEAN -> reader.readBoolean();
 			case TYPE_INT32 -> reader.readInt32();
 			case TYPE_INT64 -> reader.readInt64();
+			// INT96 (GAP-8): legacy 12-byte timestamp (Impala/Hive/older Spark).  Decode to an Instant and
+			// surface its ISO-8601 string so the framework's temporal coercion reconstructs the target type.
+			// Read-only — Juneau never writes INT96.
+			case TYPE_INT96 -> {
+				var instant = reader.readInt96AsInstant();
+				yield instant == null ? null : instant.toString();
+			}
 			case TYPE_FLOAT -> reader.readFloat();
 			case TYPE_DOUBLE -> reader.readDouble();
 			case TYPE_BYTE_ARRAY -> {
@@ -1084,6 +1251,66 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				yield trimStrings && s != null ? s.trim() : s;
 			}
 		};
+	}
+
+	/** Sentinel returned by {@link #readLogicalValue} when the column is not a recognized native logical type. */
+	private static final Object NOT_LOGICAL = new Object();
+
+	/**
+	 * Decodes a native logical-type value (GAP-9/10) based on the column's {@code convertedType} and physical
+	 * type.  Returns {@link #NOT_LOGICAL} if the convertedType is not one this decoder handles (so the caller
+	 * falls back to the physical-type switch).  The reader has already been advanced and confirmed non-null.
+	 *
+	 * <ul>
+	 * 	<li>DECIMAL (INT32/INT64) → {@link java.math.BigDecimal} with the schema scale.
+	 * 	<li>DATE (INT32 days-since-epoch) → {@link java.time.LocalDate} ISO string.
+	 * 	<li>TIME_MILLIS / TIME_MICROS → {@link java.time.LocalTime} ISO string.
+	 * 	<li>TIMESTAMP_MICROS (INT64 micros-since-epoch) → {@link java.time.Instant} ISO string.
+	 * </ul>
+	 */
+	// Package-private for focused unit testing of the native logical-type decode paths (GAP-9/10).
+	static Object readLogicalValue(ParquetColumnReader reader, int type, ColumnLogical logical) throws IOException {
+		int ct = logical.convertedType();
+		switch (ct) {
+			case CONVERTED_DECIMAL -> {
+				// DECIMAL backed by INT32 or INT64: unscaled integer * 10^-scale.  BYTE_ARRAY/FLBA-backed
+				// DECIMAL is left to the string path (not commonly emitted by Juneau).
+				long unscaled;
+				if (type == TYPE_INT32)
+					unscaled = reader.readInt32();
+				else if (type == TYPE_INT64)
+					unscaled = reader.readInt64();
+				else
+					return NOT_LOGICAL;
+				return java.math.BigDecimal.valueOf(unscaled, logical.scale());
+			}
+			case CONVERTED_DATE -> {
+				if (type != TYPE_INT32)
+					return NOT_LOGICAL;
+				return java.time.LocalDate.ofEpochDay(reader.readInt32()).toString();
+			}
+			case CONVERTED_TIME_MILLIS -> {
+				if (type != TYPE_INT32)
+					return NOT_LOGICAL;
+				return java.time.LocalTime.ofNanoOfDay(reader.readInt32() * 1_000_000L).toString();
+			}
+			case CONVERTED_TIME_MICROS -> {
+				if (type != TYPE_INT64)
+					return NOT_LOGICAL;
+				return java.time.LocalTime.ofNanoOfDay(reader.readInt64() * 1_000L).toString();
+			}
+			case CONVERTED_TIMESTAMP_MICROS -> {
+				if (type != TYPE_INT64)
+					return NOT_LOGICAL;
+				long micros = reader.readInt64();
+				long secs = Math.floorDiv(micros, 1_000_000L);
+				long microOfSec = Math.floorMod(micros, 1_000_000L);
+				return java.time.Instant.ofEpochSecond(secs, microOfSec * 1_000L).toString();
+			}
+			default -> {
+				return NOT_LOGICAL;
+			}
+		}
 	}
 
 	/**

@@ -145,49 +145,73 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		var first = rows.get(0);
 		var rootType = getExpectedRootType(o);
 		List<ParquetSchemaElement> schema;
+		// collectBeans() always returns rows whose first element is a BeanMap (bean / collection / array /
+		// single-value roots, all BeanMap-wrapped) or a Map (string-keyed and non-string-keyed map roots),
+		// so those are the only two cases.
 		if (first instanceof BeanMap<?> bm) {
 			var elementType = getClassMetaForObject(bm.getBean());
 			// For collection root: use element type for flat row schema (root.name, root.age).
 			// Each collection element becomes one Parquet row. Avoids list column format issues.
-			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth).buildSchema(elementType, first);
-		} else if (first instanceof Map<?,?> mapFirst) {
+			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes).buildSchema(elementType, first);
+		} else {
+			var mapFirst = (Map<?, ?>) first;
 			if (rootType.isMap() && o instanceof Map<?, ?> origMap && !origMap.isEmpty()
 				&& !(origMap.keySet().iterator().next() instanceof String)) {
-				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth)
+				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes)
 					.buildSchemaForKeyValuePairs(mapFirst.get("key"), mapFirst.get("value"));
 			} else {
-				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth).buildSchemaFromMap((Map<?, ?>) first);
+				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes).buildSchemaFromMap(mapFirst);
 			}
-		} else {
-			var elementType = getClassMetaForObject(first);
-			var cm = (rootType.isCollection() || rootType.isArray())
-				? ctx.getMarshallingContext().getClassMeta(List.class, elementType.inner())
-				: elementType;
-			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth).buildSchema(cm, first);
 		}
 		var leafColumns = ParquetSchemaBuilder.getLeafColumns(schema);
 		writeMagic(out);
 		long dataStart = 4;
 		var rowGroups = new ArrayList<RowGroupMeta>();
-		var columnChunks = new ArrayList<ColumnChunkMeta>();
 		long fileOffset = dataStart;
-		for (var col : leafColumns) {
-			var chunk = writeColumnChunk(out, rows, col, fileOffset);
-			columnChunks.add(chunk);
-			fileOffset += chunk.totalCompressedSize;
+		// Multi-row-group write (GAP-2 round-trip): split rows into batches of rowsPerRowGroup and emit one
+		// row group per batch.  Defaults keep the historical single-row-group output (the cap is huge), but a
+		// small rowGroupSize produces multiple groups for interop/round-trip coverage.
+		int rowsPerRowGroup = rowsPerRowGroup(leafColumns.size());
+		for (int start = 0; start < rows.size(); start += rowsPerRowGroup) {
+			var batch = rows.subList(start, Math.min(start + rowsPerRowGroup, rows.size()));
+			long groupStart = fileOffset;
+			var columnChunks = new ArrayList<ColumnChunkMeta>();
+			for (var col : leafColumns) {
+				var chunk = writeColumnChunk(out, batch, col, fileOffset);
+				columnChunks.add(chunk);
+				fileOffset += chunk.totalCompressedSize;
+			}
+			long totalByteSize = 0;
+			long totalCompressedSize = 0;
+			for (var c : columnChunks) {
+				totalByteSize += c.totalUncompressedSize;
+				totalCompressedSize += c.totalCompressedSize;
+			}
+			rowGroups.add(new RowGroupMeta(columnChunks, totalByteSize, batch.size(), groupStart, totalCompressedSize));
 		}
-		long totalByteSize = 0;
-		for (var c : columnChunks)
-			totalByteSize += c.totalUncompressedSize;
-		long totalCompressedSize = 0;
-		for (var c : columnChunks)
-			totalCompressedSize += c.totalCompressedSize;
-		rowGroups.add(new RowGroupMeta(columnChunks, totalByteSize, rows.size(), dataStart, totalCompressedSize));
 		var footerBytes = writeFileMetaData(schema, rows.size(), rowGroups);
 		out.write(footerBytes);
 		writeLe4(out, footerBytes.length);
 		out.write(MAGIC);
 	}
+
+	/**
+	 * Rows per row group, derived from the {@code rowGroupSize} byte budget via a coarse per-row estimate.
+	 *
+	 * <p>
+	 * Real writers flush a group once its accumulated byte size crosses the budget; Juneau's column-oriented
+	 * writer materializes whole columns at once, so we instead translate the byte budget into a row count
+	 * using a nominal {@code BYTES_PER_ROW_ESTIMATE} per leaf column.  With the default 128&nbsp;MB budget this
+	 * yields an effectively unbounded count (single group, unchanged output); a small {@code rowGroupSize}
+	 * (e.g. set in a test) produces several groups.
+	 */
+	private int rowsPerRowGroup(int leafColumnCount) {
+		long perRow = (long) Math.max(1, leafColumnCount) * BYTES_PER_ROW_ESTIMATE;
+		long n = Math.max(1, ctx.rowGroupSize / perRow);
+		return (int) Math.min(n, Integer.MAX_VALUE);
+	}
+
+	private static final int BYTES_PER_ROW_ESTIMATE = 32;
 
 	private void writeEmptyFile(OutputStream out) throws IOException {
 		writeMagic(out);
@@ -353,8 +377,46 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		boolean optional = col.repetitionType != null && col.repetitionType == OPTIONAL;
 		int segCount = path == null ? 1 : path.split("\\.").length;
 		int maxDef = optional ? segCount : 0;
-		var writer = new ParquetColumnWriter(col);
 		int numRows = rows.size();
+
+		// Multi-page write (GAP-1 round-trip): split the column's rows into page batches of rowsPerPage.
+		// Defaults keep a single page (huge cap); a small pageSize produces several data pages in one chunk,
+		// which the page-loop reader concatenates.
+		int rowsPerPage = rowsPerPage();
+		var pathParts = col.path != null ? List.of(col.path.split("\\.")) : List.<String>of();
+		long totalUncompressed = 0;
+		long totalStored = 0;
+		int firstHeaderSize = 0;
+		boolean firstPage = true;
+		for (int start = 0; start < numRows || (numRows == 0 && firstPage); start += rowsPerPage) {
+			var pageRows = numRows == 0 ? rows : rows.subList(start, Math.min(start + rowsPerPage, numRows));
+			byte[] pageData = encodeColumnPage(pageRows, col, path, maxDef);
+			int uncompressedSize = pageData.length;
+			byte[] compressedData = ctx.compressionCodec.compress(pageData);
+			int compressedSize = compressedData.length;
+			var pageHeader = ParquetColumnWriter.createPageHeader(pageRows.size(), uncompressedSize, compressedSize);
+			out.write(pageHeader);
+			out.write(compressedData);
+			totalUncompressed += uncompressedSize;
+			totalStored += compressedSize + (long) pageHeader.length;
+			if (firstPage) {
+				firstHeaderSize = pageHeader.length;
+				firstPage = false;
+			}
+			if (numRows == 0)
+				break;
+		}
+		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, numRows, totalUncompressed, totalStored, chunkStart, firstHeaderSize);
+	}
+
+	private int rowsPerPage() {
+		long n = Math.max(1, ctx.pageSize / BYTES_PER_ROW_ESTIMATE);
+		return (int) Math.min(n, Integer.MAX_VALUE);
+	}
+
+	/** Encodes one data page (def levels + PLAIN values) for a batch of rows of a non-list/non-map column. */
+	private byte[] encodeColumnPage(List<?> rows, ParquetSchemaElement col, String path, int maxDef) throws IOException, SerializeException {
+		var writer = new ParquetColumnWriter(col);
 		byte[] defLevelBytes;
 		if (maxDef >= 2) {
 			var defLevels = new RleBitPackingEncoder(defRepBitWidth(maxDef));
@@ -390,15 +452,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		byte[] pageData = new byte[defLevelBytes.length + valueBytes.length];
 		System.arraycopy(defLevelBytes, 0, pageData, 0, defLevelBytes.length);
 		System.arraycopy(valueBytes, 0, pageData, defLevelBytes.length, valueBytes.length);
-		int uncompressedSize = pageData.length;
-		byte[] compressedData = ctx.compressionCodec.compress(pageData);
-		int compressedSize = compressedData.length;
-		var pageHeader = ParquetColumnWriter.createPageHeader(numRows, uncompressedSize, compressedSize);
-		out.write(pageHeader);
-		int headerSize = pageHeader.length;
-		out.write(compressedData);
-		var pathParts = col.path != null ? List.of(col.path.split("\\.")) : List.<String>of();
-		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, numRows, uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
+		return pageData;
 	}
 
 	private record DefValue(int def, Object value) {}
@@ -804,10 +858,22 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				w.writeBoolean(v instanceof Boolean b ? b : Boolean.parseBoolean(String.valueOf(v)));
 				break;
 			case TYPE_INT32:
-				w.writeInt32(toInt32(v));
+				// Native DATE (GAP-10): days since epoch.
+				if (col.convertedType != null && col.convertedType == CONVERTED_DATE)
+					w.writeInt32((int) toEpochDay(v));
+				else
+					w.writeInt32(toInt32(v));
 				break;
 			case TYPE_INT64:
-				w.writeInt64(toInt64(v));
+				// Native logical INT64 encodings (GAP-9/10): DECIMAL unscaled, TIME/TIMESTAMP in micros.
+				if (col.convertedType != null && col.convertedType == CONVERTED_DECIMAL)
+					w.writeInt64(toDecimalUnscaled(v));
+				else if (col.convertedType != null && col.convertedType == CONVERTED_TIME_MICROS)
+					w.writeInt64(toTimeMicros(v));
+				else if (col.convertedType != null && col.convertedType == CONVERTED_TIMESTAMP_MICROS)
+					w.writeInt64(toTimestampMicros(v));
+				else
+					w.writeInt64(toInt64(v));
 				break;
 			case TYPE_FLOAT:
 				w.writeFloat(v instanceof Number n ? n.floatValue() : Float.parseFloat(String.valueOf(v)));
@@ -866,6 +932,82 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		if (v instanceof Number n)
 			return n.longValue();
 		return Long.parseLong(String.valueOf(v));
+	}
+
+	/** Native DATE (GAP-10): epoch-day from a date-like temporal. */
+	private static long toEpochDay(Object v) throws SerializeException {
+		if (v instanceof LocalDate ld)
+			return ld.toEpochDay();
+		if (v instanceof LocalDateTime ldt)
+			return ldt.toLocalDate().toEpochDay();
+		if (v instanceof Instant i)
+			return i.atZone(ZoneOffset.UTC).toLocalDate().toEpochDay();
+		if (v instanceof ZonedDateTime zdt)
+			return zdt.toLocalDate().toEpochDay();
+		if (v instanceof OffsetDateTime odt)
+			return odt.toLocalDate().toEpochDay();
+		if (v instanceof Number n)
+			return n.longValue();
+		return LocalDate.parse(String.valueOf(v)).toEpochDay();
+	}
+
+	/** Native TIME_MICROS (GAP-10): micros since midnight. */
+	private static long toTimeMicros(Object v) {
+		if (v instanceof LocalTime lt)
+			return lt.toNanoOfDay() / 1_000L;
+		if (v instanceof OffsetTime ot)
+			return ot.toLocalTime().toNanoOfDay() / 1_000L;
+		if (v instanceof Number n)
+			return n.longValue();
+		return LocalTime.parse(String.valueOf(v)).toNanoOfDay() / 1_000L;
+	}
+
+	/** Native TIMESTAMP_MICROS (GAP-10): micros since epoch, sub-millisecond precise. */
+	private static long toTimestampMicros(Object v) throws SerializeException {
+		Instant i = toInstant(v);
+		return Math.multiplyExact(i.getEpochSecond(), 1_000_000L) + i.getNano() / 1_000L;
+	}
+
+	private static Instant toInstant(Object v) throws SerializeException {
+		if (v instanceof Instant i)
+			return i;
+		if (v instanceof Date d)
+			return d.toInstant();
+		if (v instanceof Calendar c)
+			return c.toInstant();
+		if (v instanceof LocalDateTime ldt)
+			return ldt.toInstant(ZoneOffset.UTC);
+		if (v instanceof LocalDate ld)
+			return ld.atStartOfDay(ZoneOffset.UTC).toInstant();
+		if (v instanceof ZonedDateTime zdt)
+			return zdt.toInstant();
+		if (v instanceof OffsetDateTime odt)
+			return odt.toInstant();
+		if (v instanceof TemporalAccessor ta) {
+			try {
+				return Instant.from(ta);
+			} catch (@SuppressWarnings("unused") Exception e) {
+				// fall through to string parse
+			}
+		}
+		try {
+			return Instant.parse(String.valueOf(v));
+		} catch (@SuppressWarnings("unused") Exception e) {
+			throw new SerializeException("Cannot convert value of type {0} to a TIMESTAMP", v == null ? "null" : v.getClass().getName());
+		}
+	}
+
+	/** Native DECIMAL (GAP-9): unscaled INT64 at the fixed schema scale; over-precise values are rounded. */
+	private static long toDecimalUnscaled(Object v) throws SerializeException {
+		java.math.BigDecimal bd;
+		if (v instanceof java.math.BigDecimal d)
+			bd = d;
+		else if (v instanceof Number n)
+			bd = new java.math.BigDecimal(n.toString());
+		else
+			bd = new java.math.BigDecimal(String.valueOf(v));
+		// Scale to the fixed schema scale (round half-up), then take the unscaled long.
+		return bd.setScale(ParquetSchemaBuilder.DECIMAL_SCALE, java.math.RoundingMode.HALF_UP).unscaledValue().longValueExact();
 	}
 
 	private byte[] toByteArray(Object v, ParquetSchemaElement col) throws SerializeException {

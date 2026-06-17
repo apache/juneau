@@ -57,6 +57,8 @@ public final class ParquetSchemaElement {
 	public static final int TYPE_INT32 = 1;
 	/** Parquet physical type: INT64. */
 	public static final int TYPE_INT64 = 2;
+	/** Parquet physical type: INT96 (legacy 12-byte timestamp; read-only). */
+	public static final int TYPE_INT96 = 3;
 	/** Parquet physical type: FLOAT. */
 	public static final int TYPE_FLOAT = 4;
 	/** Parquet physical type: DOUBLE. */
@@ -102,6 +104,26 @@ public final class ParquetSchemaElement {
 	static final int LOGICAL_TYPE_TIMESTAMP = 8;
 	/** LogicalType union discriminant for DECIMAL (DecimalType). */
 	static final int LOGICAL_TYPE_DECIMAL = 5;
+	/** LogicalType union discriminant for DATE (DateType). */
+	static final int LOGICAL_TYPE_DATE = 6;
+	/** LogicalType union discriminant for TIME (TimeType). */
+	static final int LOGICAL_TYPE_TIME = 7;
+
+	/** TimeUnit union discriminant: MILLIS. */
+	static final int TIME_UNIT_MILLIS = 1;
+	/** TimeUnit union discriminant: MICROS. */
+	static final int TIME_UNIT_MICROS = 2;
+	/** TimeUnit union discriminant: NANOS. */
+	static final int TIME_UNIT_NANOS = 3;
+
+	/** Converted type: DATE (days since epoch). */
+	public static final int CONVERTED_DATE = 6;
+	/** Converted type: TIME_MILLIS. */
+	public static final int CONVERTED_TIME_MILLIS = 7;
+	/** Converted type: TIMESTAMP_MICROS. */
+	public static final int CONVERTED_TIMESTAMP_MICROS = 10;
+	/** Converted type: TIME_MICROS. */
+	public static final int CONVERTED_TIME_MICROS = 8;
 
 	/** Field name. Required. */
 	public final String name;
