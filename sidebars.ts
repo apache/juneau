@@ -687,6 +687,11 @@ const sidebars: SidebarsConfig = {
 									id: 'topics/02.38.01.JsonlBasics',
 									label: '2.38.1. JSONL Basics',
 								},
+								{
+									type: 'doc',
+									id: 'topics/02.38.02.Json5lBasics',
+									label: '2.38.2. JSON5L Basics',
+								},
 							],
 						},
 						{
