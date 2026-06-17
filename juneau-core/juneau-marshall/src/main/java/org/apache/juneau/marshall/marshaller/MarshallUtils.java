@@ -1551,14 +1551,14 @@ public final class MarshallUtils {
 	 * Serializes a Java object to a Protocol Buffers text string.
 	 *
 	 * <p>
-	 * A shortcut for calling <c>Proto.<jsm>of</jsm>(<jv>object</jv>)</c>.
+	 * A shortcut for calling <c>Prototext.<jsm>of</jsm>(<jv>object</jv>)</c>.
 	 *
 	 * @param object The object to serialize.
 	 * @return The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String proto(Object object) throws SerializeException {
-		return Proto.of(object);
+		return Prototext.of(object);
 	}
 
 	/**
@@ -1571,7 +1571,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object proto(Object object, Object output) throws SerializeException, IOException {
-		return Proto.of(object, output);
+		return Prototext.of(object, output);
 	}
 
 	/**
@@ -1585,7 +1585,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T proto(Object input, Class<T> type) throws ParseException, IOException {
-		return Proto.to(input, type);
+		return Prototext.to(input, type);
 	}
 
 	/**
@@ -1600,33 +1600,33 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T proto(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Proto.to(input, type, args);
+		return Prototext.to(input, type, args);
 	}
 
 	/**
 	 * Parses a Protocol Buffers text string to the specified Java type.
 	 *
 	 * @param <T> The class type of the object being created.
-	 * @param o The Proto input string.
+	 * @param o The Prototext input string.
 	 * @param c The object type to create.
 	 * @return The parsed object.
 	 */
 	public static <T> T proto(String o, Class<T> c) {
-		return safe(() -> Proto.to(o, c));
+		return safe(() -> Prototext.to(o, c));
 	}
 
 	/**
 	 * Parses a Protocol Buffers text string to the specified parameterized Java type.
 	 *
 	 * @param <T> The class type of the object being created.
-	 * @param input The Proto input string.
+	 * @param input The Prototext input string.
 	 * @param type The object type to create.
 	 * @param args The type arguments of the class if it's a collection or map.
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T proto(String input, Type type, Type... args) throws ParseException {
-		return Proto.to(input, type, args);
+		return Prototext.to(input, type, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

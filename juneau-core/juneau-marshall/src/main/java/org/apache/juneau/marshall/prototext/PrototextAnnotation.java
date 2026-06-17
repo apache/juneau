@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -23,18 +23,18 @@ import java.lang.annotation.*;
 import org.apache.juneau.commons.*;
 
 /**
- * Utility classes and methods for the {@link Proto @Proto} annotation.
+ * Utility classes and methods for the {@link Prototext @Prototext} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
  * </ul>
  */
-public class ProtoAnnotation {
+public class PrototextAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private ProtoAnnotation() {}
+	private PrototextAnnotation() {}
 	/**
 	 * Builder class.
 	 *
@@ -51,15 +51,15 @@ public class ProtoAnnotation {
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(Proto.class);
+			super(Prototext.class);
 		}
 
 		/**
-		 * Instantiates a new {@link Proto @Proto} object initialized with this builder.
+		 * Instantiates a new {@link Prototext @Prototext} object initialized with this builder.
 		 *
-		 * @return A new {@link Proto @Proto} object.
+		 * @return A new {@link Prototext @Prototext} object.
 		 */
-		public Proto build() {
+		public Prototext build() {
 			return new Object(this);
 		}
 
@@ -89,12 +89,12 @@ public class ProtoAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AnnotationObject implements Proto {
+	private static class Object extends AnnotationObject implements Prototext {
 
 		private final String comment;
 		private final String[] description;
 
-		Object(ProtoAnnotation.Builder b) {
+		Object(PrototextAnnotation.Builder b) {
 			super(b);
 			this.comment = b.comment;
 			this.description = copyOf(b.description);
@@ -112,7 +112,7 @@ public class ProtoAnnotation {
 	}
 
 	/** Default value */
-	public static final Proto DEFAULT = create().build();
+	public static final Prototext DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.

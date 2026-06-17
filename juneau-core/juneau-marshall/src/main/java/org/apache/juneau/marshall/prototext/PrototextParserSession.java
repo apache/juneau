@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
@@ -44,22 +44,22 @@ import org.apache.juneau.marshall.utils.*;
 	"java:S115", // ARG_ prefix follows framework convention
 	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class ProtoParserSession extends ReaderParserSession implements RecordReadable {
+public class PrototextParserSession extends ReaderParserSession implements RecordReadable {
 
 	private static final String ARG_ctx = "ctx";
 
 	/**
-	 * Builder for Proto parser session.
+	 * Builder for Prototext parser session.
 	 */
 	public static class Builder extends ReaderParserSession.Builder<Builder> {
 
-		protected Builder(ProtoParser ctx) {
+		protected Builder(PrototextParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 		}
 
 		@Override
-		public ProtoParserSession build() {
-			return new ProtoParserSession(this);
+		public PrototextParserSession build() {
+			return new PrototextParserSession(this);
 		}
 	}
 
@@ -69,11 +69,11 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 	 * @param ctx The parser context.
 	 * @return A new builder.
 	 */
-	public static Builder create(ProtoParser ctx) {
+	public static Builder create(PrototextParser ctx) {
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
-	protected ProtoParserSession(Builder builder) {
+	protected PrototextParserSession(Builder builder) {
 		super(builder);
 	}
 
@@ -92,7 +92,7 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 		try (Reader r = pipe.getParserReader()) {
 			if (r == null)
 				return null;
-			var t = new ProtoTokenizer(r);
+			var t = new PrototextTokenizer(r);
 			Map<String, Object> root = parseMessage(t, false);
 			if (isEmpty(root))
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
@@ -101,7 +101,7 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 				// Bug #12 (top-level only): when the root payload is a String-shaped byte[], consult
 				// the configured BinaryFormat's variant BinarySwap before falling through to convertValue's
 				// default String → byte[] UTF-8 coercion.  Collection-element route is intentionally not
-				// touched here — that surface is Bug #11 (Proto's repeated bytes field).
+				// touched here — that surface is Bug #11 (Prototext's repeated bytes field).
 				if (raw instanceof String s && type != null && type.inner() == byte[].class) {
 					var swap = type.getSwap(this);
 					if (swap != null)
@@ -113,14 +113,14 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 		}
 	}
 
-	private Map<String, Object> parseMessage(ProtoTokenizer t, boolean requireBraces) throws IOException, ParseException {
-		ProtoToken.TokenType closeBrace = null;
+	private Map<String, Object> parseMessage(PrototextTokenizer t, boolean requireBraces) throws IOException, ParseException {
+		PrototextToken.TokenType closeBrace = null;
 		if (requireBraces) {
 			var tok = t.read();
-			if (tok.type() == ProtoToken.TokenType.LBRACE)
-				closeBrace = ProtoToken.TokenType.RBRACE;
-			else if (tok.type() == ProtoToken.TokenType.LANGLE)
-				closeBrace = ProtoToken.TokenType.RANGLE;
+			if (tok.type() == PrototextToken.TokenType.LBRACE)
+				closeBrace = PrototextToken.TokenType.RBRACE;
+			else if (tok.type() == PrototextToken.TokenType.LANGLE)
+				closeBrace = PrototextToken.TokenType.RANGLE;
 			else
 				return new LinkedHashMap<>();
 		}
@@ -130,7 +130,7 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 		while (true) {
 			t.skipWhitespaceAndComments();
 			var t2 = t.peek();
-			if (t2.type() == ProtoToken.TokenType.EOF)
+			if (t2.type() == PrototextToken.TokenType.EOF)
 				break;
 			if (closeBrace != null && t2.type() == closeBrace) {
 				t.read();
@@ -145,18 +145,18 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 			t2 = t.peek();
 
 			Object value;
-			if (t2.type() == ProtoToken.TokenType.COLON) {
+			if (t2.type() == PrototextToken.TokenType.COLON) {
 				t.read();
 				t.skipWhitespaceAndComments();
 				t2 = t.peek();
-				if (t2.type() == ProtoToken.TokenType.LBRACKET) {
+				if (t2.type() == PrototextToken.TokenType.LBRACKET) {
 					value = parseList(t);
-				} else if (t2.type() == ProtoToken.TokenType.LBRACE || t2.type() == ProtoToken.TokenType.LANGLE) {
+				} else if (t2.type() == PrototextToken.TokenType.LBRACE || t2.type() == PrototextToken.TokenType.LANGLE) {
 					value = parseMessage(t, true);
 				} else {
 					value = parseScalarValue(t);
 				}
-			} else if (t2.type() == ProtoToken.TokenType.LBRACE || t2.type() == ProtoToken.TokenType.LANGLE) {
+			} else if (t2.type() == PrototextToken.TokenType.LBRACE || t2.type() == PrototextToken.TokenType.LANGLE) {
 				value = parseMessage(t, true);
 			} else {
 				throw t.parseException("Expected ':' or '{' after field name");
@@ -177,38 +177,38 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 
 			t.skipWhitespaceAndComments();
 			t2 = t.peek();
-			if (t2.type() == ProtoToken.TokenType.SEMICOLON || t2.type() == ProtoToken.TokenType.COMMA)
+			if (t2.type() == PrototextToken.TokenType.SEMICOLON || t2.type() == PrototextToken.TokenType.COMMA)
 				t.read();
 		}
 		return result;
 	}
 
-	private static String readFieldName(ProtoTokenizer t) throws IOException, ParseException {
+	private static String readFieldName(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.peek();
-		if (tok.type() == ProtoToken.TokenType.IDENT)
+		if (tok.type() == PrototextToken.TokenType.IDENT)
 			return t.read().stringValue();
-		if (tok.type() == ProtoToken.TokenType.STRING)
+		if (tok.type() == PrototextToken.TokenType.STRING)
 			return t.read().stringValue();
 		// Bare integer / hex / octal field tags (e.g. {@code 0: "first"}).  Required for the
 		// Bug #7b residual fix on the serialize side, which emits numeric Map<K,V> keys as bare
 		// integer tags rather than quoted strings.  The string-form of the numeric value is the
 		// field-name; downstream key-type coercion in convertMapToType / convertValue handles the
 		// conversion back to the bean property's declared key type.
-		if (tok.type() == ProtoToken.TokenType.DEC_INT
-			|| tok.type() == ProtoToken.TokenType.HEX_INT
-			|| tok.type() == ProtoToken.TokenType.OCT_INT)
+		if (tok.type() == PrototextToken.TokenType.DEC_INT
+			|| tok.type() == PrototextToken.TokenType.HEX_INT
+			|| tok.type() == PrototextToken.TokenType.OCT_INT)
 			return Long.toString(t.read().numberValue().longValue());
 		return null;
 	}
 
-	private List<Object> parseList(ProtoTokenizer t) throws IOException, ParseException {
+	private List<Object> parseList(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.read();
-		if (tok.type() != ProtoToken.TokenType.LBRACKET)
+		if (tok.type() != PrototextToken.TokenType.LBRACKET)
 			throw t.parseException("Expected '['");
 		var list = new ArrayList<>();
 		t.skipWhitespaceAndComments();
 		tok = t.peek();
-		if (tok.type() == ProtoToken.TokenType.RBRACKET) {
+		if (tok.type() == PrototextToken.TokenType.RBRACKET) {
 			t.read();
 			return list;
 		}
@@ -216,11 +216,11 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 			list.add(parseScalarOrMessageInList(t));
 			t.skipWhitespaceAndComments();
 			tok = t.peek();
-			if (tok.type() == ProtoToken.TokenType.RBRACKET) {
+			if (tok.type() == PrototextToken.TokenType.RBRACKET) {
 				t.read();
 				break;
 			}
-			if (tok.type() == ProtoToken.TokenType.COMMA) {
+			if (tok.type() == PrototextToken.TokenType.COMMA) {
 				t.read();
 				t.skipWhitespaceAndComments();
 			} else {
@@ -230,21 +230,21 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 		return list;
 	}
 
-	private Object parseScalarOrMessageInList(ProtoTokenizer t) throws IOException, ParseException {
+	private Object parseScalarOrMessageInList(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.peek();
-		if (tok.type() == ProtoToken.TokenType.LBRACE || tok.type() == ProtoToken.TokenType.LANGLE)
+		if (tok.type() == PrototextToken.TokenType.LBRACE || tok.type() == PrototextToken.TokenType.LANGLE)
 			return parseMessage(t, true);
 		return parseScalarValue(t);
 	}
 
-	private static Object parseScalarValue(ProtoTokenizer t) throws IOException, ParseException {
+	private static Object parseScalarValue(PrototextTokenizer t) throws IOException, ParseException {
 		var tok = t.read();
-		if (tok.type() == ProtoToken.TokenType.STRING) {
+		if (tok.type() == PrototextToken.TokenType.STRING) {
 			var sb = new StringBuilder(tok.stringValue());
 			while (true) {
 				t.skipWhitespaceAndComments();
 				var next = t.peek();
-				if (next.type() != ProtoToken.TokenType.STRING)
+				if (next.type() != PrototextToken.TokenType.STRING)
 					break;
 				t.read();
 				sb.append(next.stringValue());
@@ -381,7 +381,7 @@ public class ProtoParserSession extends ReaderParserSession implements RecordRea
 		//   (1) non-NOT_SET: consult the variant BinarySwap installed on byte[].class via
 		//       targetType.getSwap(this); the wire is a hex / base64 string emitted by the
 		//       swap's swap() on the serializer side.
-		//   (2) NOT_SET: BinarySwap.match returns 0 so no swap fires.  The Proto serializer's
+		//   (2) NOT_SET: BinarySwap.match returns 0 so no swap fires.  The Prototext serializer's
 		//       bytesValue path emits each byte as a hex-escaped char ("\xFF" etc.); the proto
 		//       tokenizer decodes those escapes back into a Java String where each char's code
 		//       point equals the byte's unsigned value.  Reconstruct byte[] by iterating chars.

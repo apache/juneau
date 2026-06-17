@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
@@ -69,18 +69,18 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * {@link FloatFormat} only controls how non-finite values ({@code NaN}, {@code ±Infinity}) are emitted on
  * <b>text-based</b> wire formats; finite values ride the natural bare-numeric token and binary serializers
- * (BSON / CBOR / MsgPack / Proto / Parquet) emit native IEEE-754 regardless of this setting per the
+ * (BSON / CBOR / MsgPack / Prototext / Parquet) emit native IEEE-754 regardless of this setting per the
  * {@link FloatFormat} class-level "Binary serializers" note.  The matrix below exercises finite values across
  * all five {@link FloatFormat} constants for the standard tests, with a dedicated non-finite test
  * ({@link #a04_doubleProperty_nonFinite}) that skips {@link FloatFormat#NaN_AS_ERROR} (throws on swap) and
  * canonicalises against the format-specific wire shape via {@link #expectedAfterNonFinite}.
  *
  * <p>
- * Unlike the {@link Float} sibling, this file has no Proto-skip helper — the Proto text-format tokenizer
+ * Unlike the {@link Float} sibling, this file has no Prototext-skip helper — the Prototext text-format tokenizer
  * bugs that forced those skips (Bug #4a — neg-flag discard on the Double return path of
  * {@code readDecimalOrFloat}; Bug #4b — {@code 0.x} mis-tokenisation in {@code lexNumber}'s `0`-prefix
  * branch) were both fixed before this file landed (see the work item 57 notes). The {@code a04} non-finite
- * test still skips Proto in the {@link Float} sibling because Bug #4c ({@code mightStartNumber}
+ * test still skips Prototext in the {@link Float} sibling because Bug #4c ({@code mightStartNumber}
  * {@code nan}/{@code inf} asymmetry) is still open — same predicate carried into this file for the same
  * reason.
  */
@@ -203,9 +203,9 @@ class FloatFormat_Double_RoundTrip_Test extends TestBase {
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType().floatFormat(fmt))
 			.parser(MarkdownParser.create().floatFormat(fmt))
 			.build(),
-		fmt -> RoundTrip_Tester.create(36, "Proto - default | " + fmt)
-			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType().floatFormat(fmt))
-			.parser(ProtoParser.create().floatFormat(fmt))
+		fmt -> RoundTrip_Tester.create(36, "Prototext - default | " + fmt)
+			.serializer(PrototextSerializer.create().keepNullProperties().addBeanTypes().addRootType().floatFormat(fmt))
+			.parser(PrototextParser.create().floatFormat(fmt))
 			.build(),
 		fmt -> RoundTrip_Tester.create(37, "Hjson - default | " + fmt)
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().floatFormat(fmt))
@@ -251,7 +251,7 @@ class FloatFormat_Double_RoundTrip_Test extends TestBase {
 	 * Returns <jk>true</jk> when {@code t} is wrapped around a binary serializer (any
 	 * {@link OutputStreamSerializer} subtype).  Binary serializers emit native IEEE-754 regardless of
 	 * {@link FloatFormat} per the class-level "Binary serializers" note, so non-finite values round-trip
-	 * natively without going through the format dispatch.  Covers MsgPack, CBOR, BSON, Parquet, Proto,
+	 * natively without going through the format dispatch.  Covers MsgPack, CBOR, BSON, Parquet, Prototext,
 	 * and the RDF stream variants (RdfThrift / RdfProto).
 	 */
 	private static boolean isBinarySerializer(RoundTrip_Tester t) {

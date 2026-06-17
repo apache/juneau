@@ -49,7 +49,7 @@ import org.junit.jupiter.params.provider.*;
  *
  * <p>
  * {@link BinaryFormat} only affects text-based serializers per the class-level "Binary serializers" note —
- * BSON / CBOR / MsgPack / Proto / Parquet emit native bytes regardless of the configured constant.  The
+ * BSON / CBOR / MsgPack / Prototext / Parquet emit native bytes regardless of the configured constant.  The
  * variant {@code binarySwap} installed by {@code MarshalledPropertyPostProcessor} respects that by handing
  * the raw {@code byte[]} back to {@link org.apache.juneau.marshall.serializer.OutputStreamSerializerSession}
  * subtypes instead of the formatted wire string, so bean-property round-trips through binary serializers

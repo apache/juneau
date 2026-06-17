@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Annotation for specifying config properties defined in {@link ProtoSerializer} and {@link ProtoParser}.
+ * Annotation for specifying config properties defined in {@link PrototextSerializer} and {@link PrototextParser}.
  *
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.
@@ -36,8 +36,8 @@ import org.apache.juneau.marshall.*;
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
 @Inherited
-@ContextApply({ ProtoConfigAnnotation.SerializerApply.class, ProtoConfigAnnotation.ParserApply.class })
-public @interface ProtoConfig {
+@ContextApply({ PrototextConfigAnnotation.SerializerApply.class, PrototextConfigAnnotation.ParserApply.class })
+public @interface PrototextConfig {
 
 	/**
 	 * Use list syntax for bean collections.

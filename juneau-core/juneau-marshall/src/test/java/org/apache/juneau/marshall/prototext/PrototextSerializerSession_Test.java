@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,16 +26,16 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests targeting low-coverage paths in {@link ProtoSerializerSession}.
+ * Tests targeting low-coverage paths in {@link PrototextSerializerSession}.
  *
- * <p>Exercises serializer paths that the higher-level Proto*_Test files don't reach:
+ * <p>Exercises serializer paths that the higher-level Prototext*_Test files don't reach:
  * collections-of-beans inside beans, arrays of primitives/beans, streamable element types
  * (Iterable/Iterator/Stream), nested map-of-maps, debug trace toggle, useColon/listSyntax
  * options, scalar value type dispatch (Date/Calendar/Temporal/Duration/Period/byte[]), and
  * bean property comments.
  */
 @SuppressWarnings("unchecked")
-class ProtoSerializerSession_Test extends TestBase {
+class PrototextSerializerSession_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Debug trace
@@ -43,35 +43,35 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	@Test void a01_setDebugTrace_toggle() throws Exception {
 		// Snapshot starting state then exercise the static toggle in both directions.
-		ProtoSerializerSession.setDebugTrace(true);
+		PrototextSerializerSession.setDebugTrace(true);
 		try {
 			var m = JsonMap.of("k", "v");
-			var proto = ProtoSerializer.DEFAULT.serialize(m);
+			var proto = PrototextSerializer.DEFAULT.serialize(m);
 			assertNotNull(proto);
 			assertTrue(proto.contains("k"));
 			// Trace log should have captured at least one entry while debugTrace was on.
-			assertFalse(ProtoSerializerSession.traceLog.isEmpty());
+			assertFalse(PrototextSerializerSession.traceLog.isEmpty());
 		} finally {
-			ProtoSerializerSession.setDebugTrace(false);
+			PrototextSerializerSession.setDebugTrace(false);
 		}
 	}
 
 	@Test void a02_debugTrace_serializeAnythingRoot() throws Exception {
 		// Force serializeAnything root path (top-level Collection) with debug trace enabled.
-		ProtoSerializerSession.setDebugTrace(true);
+		PrototextSerializerSession.setDebugTrace(true);
 		try {
-			ProtoSerializerSession.traceLog.clear();
-			var proto = ProtoSerializer.DEFAULT.serialize(List.of(1, 2, 3));
+			PrototextSerializerSession.traceLog.clear();
+			var proto = PrototextSerializer.DEFAULT.serialize(List.of(1, 2, 3));
 			assertNotNull(proto);
-			assertFalse(ProtoSerializerSession.traceLog.isEmpty());
+			assertFalse(PrototextSerializerSession.traceLog.isEmpty());
 		} finally {
-			ProtoSerializerSession.setDebugTrace(false);
+			PrototextSerializerSession.setDebugTrace(false);
 		}
 	}
 
 	@Test void a03_doSerialize_nullObject() throws Exception {
 		// null root must produce empty output without error.
-		var proto = ProtoSerializer.DEFAULT.serialize(null);
+		var proto = PrototextSerializer.DEFAULT.serialize(null);
 		assertTrue(proto == null || proto.isEmpty());
 	}
 
@@ -81,32 +81,32 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	@Test void b01_topLevelString() throws Exception {
 		// Hits scalar root branch (CONST_value).
-		var proto = ProtoSerializer.DEFAULT.serialize("hello");
+		var proto = PrototextSerializer.DEFAULT.serialize("hello");
 		assertNotNull(proto);
 		assertTrue(proto.contains("hello"));
 	}
 
 	@Test void b02_topLevelInteger() throws Exception {
-		var proto = ProtoSerializer.DEFAULT.serialize(42);
+		var proto = PrototextSerializer.DEFAULT.serialize(42);
 		assertNotNull(proto);
 		assertTrue(proto.contains("42"));
 	}
 
 	@Test void b03_topLevelEnum() throws Exception {
-		var proto = ProtoSerializer.DEFAULT.serialize(LogLevel.WARN);
+		var proto = PrototextSerializer.DEFAULT.serialize(LogLevel.WARN);
 		assertNotNull(proto);
 		assertTrue(proto.contains("WARN"));
 	}
 
 	@Test void b04_topLevelArray() throws Exception {
 		// Hits sType.isArray() branch in serializeAnything root path.
-		var proto = ProtoSerializer.DEFAULT.serialize(new int[] { 1, 2, 3 });
+		var proto = PrototextSerializer.DEFAULT.serialize(new int[] { 1, 2, 3 });
 		assertNotNull(proto);
 		assertTrue(proto.contains("1") && proto.contains("2") && proto.contains("3"));
 	}
 
 	@Test void b05_topLevelStringArray() throws Exception {
-		var proto = ProtoSerializer.DEFAULT.serialize(new String[] { "a", "b" });
+		var proto = PrototextSerializer.DEFAULT.serialize(new String[] { "a", "b" });
 		assertNotNull(proto);
 		assertTrue(proto.contains("a") && proto.contains("b"));
 	}
@@ -114,7 +114,7 @@ class ProtoSerializerSession_Test extends TestBase {
 	@Test void b06_topLevelIterable() throws Exception {
 		// Hits sType.isStreamable() branch.
 		Iterable<String> it = List.of("x", "y", "z");
-		var proto = ProtoSerializer.DEFAULT.serialize(it);
+		var proto = PrototextSerializer.DEFAULT.serialize(it);
 		assertNotNull(proto);
 		assertTrue(proto.contains("x"));
 	}
@@ -122,13 +122,13 @@ class ProtoSerializerSession_Test extends TestBase {
 	@Test void b07_topLevelIterator() throws Exception {
 		// Hits sType.isStreamable() branch with Iterator.
 		Iterator<String> it = List.of("p", "q").iterator();
-		var proto = ProtoSerializer.DEFAULT.serialize(it);
+		var proto = PrototextSerializer.DEFAULT.serialize(it);
 		assertNotNull(proto);
 		assertTrue(proto.contains("p"));
 	}
 
 	@Test void b08_topLevelEmptyArray() throws Exception {
-		var proto = ProtoSerializer.DEFAULT.serialize(new int[0]);
+		var proto = PrototextSerializer.DEFAULT.serialize(new int[0]);
 		assertNotNull(proto);
 	}
 
@@ -149,7 +149,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		root.put("name", "parent");
 		root.put("children", List.of(c1, c2));
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
 		assertTrue(proto.contains("children"), () -> "Expected children in: " + proto);
@@ -157,7 +157,7 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	@Test void c02_beanProperty_listOfBeans_listSyntax() throws Exception {
 		// useListSyntaxForBeans=true → exercise the [{...}, {...}] writer path.
-		var ser = ProtoSerializer.create().useListSyntaxForBeans(true).build();
+		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();
 		var c1 = new LinkedHashMap<String, Object>();
 		c1.put("id", 1);
 		c1.put("label", "alpha");
@@ -185,7 +185,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		root.put("name", "parent");
 		root.put("children", arr);
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("x") && proto.contains("y"), () -> "Expected x+y in: " + proto);
 	}
@@ -194,14 +194,14 @@ class ProtoSerializerSession_Test extends TestBase {
 		// int[] in a Map property — exercises array → list of scalars branch.
 		var root = new LinkedHashMap<String, Object>();
 		root.put("values", new int[] { 10, 20, 30 });
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("10") && proto.contains("20") && proto.contains("30"));
 	}
 
 	@Test void c05_listSyntax_useColon() throws Exception {
 		// Combine useListSyntaxForBeans + useColonForMessages to hit both branches.
-		var ser = ProtoSerializer.create().useListSyntaxForBeans(true).useColonForMessages(true).build();
+		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).useColonForMessages(true).build();
 		var c1 = new LinkedHashMap<String, Object>();
 		c1.put("label", "z");
 		var root = new LinkedHashMap<String, Object>();
@@ -214,7 +214,7 @@ class ProtoSerializerSession_Test extends TestBase {
 	}
 
 	@Test void c06_useColonForMessages_nestedBean() throws Exception {
-		var ser = ProtoSerializer.create().useColonForMessages(true).build();
+		var ser = PrototextSerializer.create().useColonForMessages(true).build();
 		var inner = new LinkedHashMap<String, Object>();
 		inner.put("x", 1);
 		var m = new LinkedHashMap<String, Object>();
@@ -242,7 +242,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var root = new LinkedHashMap<String, Object>();
 		root.put("config", outer);
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("config {"));
 		assertTrue(proto.contains("nested {"));
@@ -256,7 +256,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var root = new LinkedHashMap<String, Object>();
 		root.put("sub", sub);
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("tags"));
 		assertTrue(proto.contains("a") && proto.contains("b"));
@@ -269,7 +269,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var root = new LinkedHashMap<String, Object>();
 		root.put("sub", sub);
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("80") && proto.contains("443"));
 	}
@@ -288,7 +288,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var root = new LinkedHashMap<String, Object>();
 		root.put("entries", entries);
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("first") && proto.contains("second"));
 	}
@@ -300,7 +300,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var root = new LinkedHashMap<String, Object>();
 		root.put("sub", sub);
 
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertTrue(proto.contains("present"));
 		assertFalse(proto.contains("missing"));
 	}
@@ -314,7 +314,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		Iterable<String> items = List.of("alpha", "beta");
 		var root = new LinkedHashMap<String, Object>();
 		root.put("items", items);
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
 	}
@@ -327,7 +327,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// type.isDate() branch.
 		var root = new LinkedHashMap<String, Object>();
 		root.put("when", new Date(0L));
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("when"));
 	}
@@ -337,7 +337,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var cal = GregorianCalendar.from(Instant.EPOCH.atZone(ZoneOffset.UTC));
 		var root = new LinkedHashMap<String, Object>();
 		root.put("when", cal);
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("when"));
 	}
@@ -346,7 +346,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// type.isTemporal() branch.
 		var root = new LinkedHashMap<String, Object>();
 		root.put("when", Instant.ofEpochMilli(0L));
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("when"));
 	}
@@ -355,7 +355,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// type.isDuration() branch.
 		var root = new LinkedHashMap<String, Object>();
 		root.put("length", Duration.ofMinutes(90));
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("length"));
 		assertTrue(proto.contains("PT") || proto.contains("1H"));
@@ -365,7 +365,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// type.isPeriod() branch.
 		var root = new LinkedHashMap<String, Object>();
 		root.put("span", Period.ofDays(7));
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("span"));
 		assertTrue(proto.contains("P7D") || proto.contains("D"));
@@ -375,7 +375,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// value instanceof byte[] branch.
 		var root = new LinkedHashMap<String, Object>();
 		root.put("payload", new byte[] { 0x01, 0x02, 0x03 });
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("payload"));
 	}
@@ -384,7 +384,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// value instanceof Float branch (separate from Double).
 		var root = new LinkedHashMap<String, Object>();
 		root.put("ratio", 3.5f);
-		var proto = ProtoSerializer.DEFAULT.serialize(root);
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
 		assertNotNull(proto);
 		assertTrue(proto.contains("3.5"));
 	}
@@ -392,7 +392,7 @@ class ProtoSerializerSession_Test extends TestBase {
 	@Test void f08_keepNullProperties() throws Exception {
 		// keepNullProperties=true should still skip writing null values per the proto.
 		// However, this exercises the alternative branch in the checkNull predicate.
-		var ser = ProtoSerializer.create().keepNullProperties().build();
+		var ser = PrototextSerializer.create().keepNullProperties().build();
 		var root = new LinkedHashMap<String, Object>();
 		root.put("a", null);
 
@@ -409,7 +409,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// Hits isOptional branch in serializeAnything (via map of Optional<String>).
 		var m = new LinkedHashMap<String, Object>();
 		m.put("opt", Optional.of("value"));
-		var proto = ProtoSerializer.DEFAULT.serialize(m);
+		var proto = PrototextSerializer.DEFAULT.serialize(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("value"));
 	}
@@ -418,7 +418,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// Optional.empty() -> serializeAnything handles via getOptionalValue (returns null).
 		var m = new LinkedHashMap<String, Object>();
 		m.put("opt", Optional.empty());
-		var proto = ProtoSerializer.DEFAULT.serialize(m);
+		var proto = PrototextSerializer.DEFAULT.serialize(m);
 		assertNotNull(proto);
 	}
 
@@ -427,10 +427,10 @@ class ProtoSerializerSession_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_beanWithCommentedProperty() throws Exception {
-		// Bean property with @Proto(comment="...") — exercises the protoPMeta comment path.
+		// Bean property with @Prototext(comment="...") — exercises the protoPMeta comment path.
 		var bean = new BeanWithCommentedProperty();
 		bean.setName("test");
-		var proto = ProtoSerializer.DEFAULT.serialize(bean);
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("# This is the name field"));
 		assertTrue(proto.contains("name"));
@@ -438,14 +438,14 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	@Test void h02_beanWithListOfMaps() throws Exception {
 		// Bean has a List<Map> property — exercises serializeBeanMap collection-with-bean-elements
-		// path (lines 270-296 in ProtoSerializerSession).
+		// path (lines 270-296 in PrototextSerializerSession).
 		var bean = new BeanWithListOfMaps();
 		var c1 = new LinkedHashMap<String, Object>();
 		c1.put("k", "alpha");
 		var c2 = new LinkedHashMap<String, Object>();
 		c2.put("k", "beta");
 		bean.setItems(List.of(c1, c2));
-		var proto = ProtoSerializer.DEFAULT.serialize(bean);
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
 	}
@@ -459,7 +459,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var c2 = new LinkedHashMap<String, Object>();
 		c2.put("k", "beta");
 		bean.setItems(List.of(c1, c2));
-		var ser = ProtoSerializer.create().useListSyntaxForBeans(true).build();
+		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();
 		var proto = ser.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("[") && proto.contains("]"), () -> "Expected list syntax in: " + proto);
@@ -479,7 +479,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		})
 		var arr = new Map[] { c1, c2 };
 		bean.setItems(arr);
-		var proto = ProtoSerializer.DEFAULT.serialize(bean);
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
 	}
@@ -496,7 +496,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		})
 		var arr = new Map[] { c1, c2 };
 		bean.setItems(arr);
-		var ser = ProtoSerializer.create().useListSyntaxForBeans(true).build();
+		var ser = PrototextSerializer.create().useListSyntaxForBeans(true).build();
 		var proto = ser.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("[") && proto.contains("]"), () -> "Expected list syntax in: " + proto);
@@ -507,7 +507,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// Bean with List<String> — exercises serializeBeanMap scalar-list branch (lines 298-309).
 		var bean = new BeanWithListOfStrings();
 		bean.setTags(List.of("a", "b", "c"));
-		var proto = ProtoSerializer.DEFAULT.serialize(bean);
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("a") && proto.contains("b") && proto.contains("c"));
 	}
@@ -516,7 +516,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		// Bean with int[] — exercises serializeBeanMap array→list branch with primitive elements.
 		var bean = new BeanWithIntArrayProp();
 		bean.setValues(new int[] { 1, 2, 3 });
-		var proto = ProtoSerializer.DEFAULT.serialize(bean);
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("1") && proto.contains("2") && proto.contains("3"));
 	}
@@ -532,7 +532,7 @@ class ProtoSerializerSession_Test extends TestBase {
 		var c2 = new LinkedHashMap<String, Object>();
 		c2.put("k", "beta");
 		var stream = java.util.stream.Stream.of(c1, c2);
-		var proto = ProtoSerializer.DEFAULT.serialize(stream);
+		var proto = PrototextSerializer.DEFAULT.serialize(stream);
 		assertNotNull(proto);
 		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
 	}
@@ -540,7 +540,7 @@ class ProtoSerializerSession_Test extends TestBase {
 	@Test void h08_topLevelStreamOfStrings() throws Exception {
 		// Top-level Stream<String> — hits serializeStreamable scalar branch.
 		var stream = java.util.stream.Stream.of("a", "b", "c");
-		var proto = ProtoSerializer.DEFAULT.serialize(stream);
+		var proto = PrototextSerializer.DEFAULT.serialize(stream);
 		assertNotNull(proto);
 		assertTrue(proto.contains("a") && proto.contains("b") && proto.contains("c"));
 	}
@@ -550,7 +550,7 @@ class ProtoSerializerSession_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_create_nullCtxThrows() {
-		assertThrows(IllegalArgumentException.class, () -> ProtoSerializerSession.create((ProtoSerializer) null));
+		assertThrows(IllegalArgumentException.class, () -> PrototextSerializerSession.create((PrototextSerializer) null));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -561,7 +561,7 @@ class ProtoSerializerSession_Test extends TestBase {
 
 	public static class BeanWithCommentedProperty {
 		private String name;
-		@org.apache.juneau.marshall.proto.Proto(comment = "This is the name field")
+		@org.apache.juneau.marshall.prototext.Prototext(comment = "This is the name field")
 		public String getName() { return name; }
 		public void setName(String v) { name = v; }
 	}

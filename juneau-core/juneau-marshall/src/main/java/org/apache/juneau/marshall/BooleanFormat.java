@@ -53,7 +53,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * <h5 class='topic'>Binary serializers</h5>
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit a native boolean wire type regardless
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a native boolean wire type regardless
  * of this setting; the setting only affects text-based serializers (JSON / XML / CSV / HOCON / TOML / etc.).
  * For {@link #ZERO_ONE}, JSON / JSON5 emit the bare numeric token <c>0</c> / <c>1</c> (not the string
  * <c>"0"</c> / <c>"1"</c>) so the wire shape matches an <code><jk>int</jk></code> field.

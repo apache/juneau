@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parquet.*;
 import org.apache.juneau.marshall.plaintext.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.soap.*;
 import org.apache.juneau.marshall.toml.*;
@@ -169,7 +169,7 @@ import org.apache.juneau.rest.server.servlet.*;
 		TomlSerializer.class,
 		IniSerializer.class,
 		ParquetSerializer.class,
-		ProtoSerializer.class,
+		PrototextSerializer.class,
 		MarkdownSerializer.class
 	},
 
@@ -194,7 +194,7 @@ import org.apache.juneau.rest.server.servlet.*;
 		TomlParser.class,
 		IniParser.class,
 		ParquetParser.class,
-		ProtoParser.class,
+		PrototextParser.class,
 		MarkdownParser.class
 	},
 

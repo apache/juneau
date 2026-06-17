@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import java.io.*;
 import java.util.*;
@@ -44,7 +44,7 @@ import org.apache.juneau.marshall.parser.*;
 	"java:S6541", // Brain method acceptable for tokenizer
 	"resource" // Reader field is owned by the caller; the tokenizer reads from it but does not own its lifecycle.
 })
-class ProtoTokenizer {
+class PrototextTokenizer {
 
 	private static final String CONST_integerOverflow = "Integer overflow: ";
 	private static final String CONST_invalidFloat = "Invalid float: ";
@@ -53,9 +53,9 @@ class ProtoTokenizer {
 	private final Deque<Integer> pushback = new ArrayDeque<>();
 	private int line = 1;
 	private int column;
-	private ProtoToken nextToken;
+	private PrototextToken nextToken;
 
-	ProtoTokenizer(Reader reader) {
+	PrototextTokenizer(Reader reader) {
 		this.reader = reader == null ? new StringReader("") : reader;
 	}
 
@@ -114,43 +114,43 @@ class ProtoTokenizer {
 		}
 	}
 
-	ProtoToken peek() throws IOException, ParseException {
+	PrototextToken peek() throws IOException, ParseException {
 		if (nextToken == null)
 			nextToken = lex();
 		return nextToken;
 	}
 
-	ProtoToken read() throws IOException, ParseException {
+	PrototextToken read() throws IOException, ParseException {
 		var t = peek();
 		nextToken = null;
 		return t;
 	}
 
-	private ProtoToken lex() throws IOException, ParseException {
+	private PrototextToken lex() throws IOException, ParseException {
 		skipWhitespaceAndComments();
 		int c = peekChar();
 		if (c < 0)
-			return new ProtoToken(ProtoToken.TokenType.EOF, null);
+			return new PrototextToken(PrototextToken.TokenType.EOF, null);
 
 		switch (c) {
-			case '{' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.LBRACE, null); }
-			case '}' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.RBRACE, null); }
-			case '<' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.LANGLE, null); }
-			case '>' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.RANGLE, null); }
-			case '[' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.LBRACKET, null); }
-			case ']' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.RBRACKET, null); }
-			case ':' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.COLON, null); }
-			case ',' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.COMMA, null); }
-			case ';' -> { readChar(); return new ProtoToken(ProtoToken.TokenType.SEMICOLON, null); }
-			case '"' -> { return new ProtoToken(ProtoToken.TokenType.STRING, readDoubleQuotedString()); }
-			case '\'' -> { return new ProtoToken(ProtoToken.TokenType.STRING, readSingleQuotedString()); }
+			case '{' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.LBRACE, null); }
+			case '}' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.RBRACE, null); }
+			case '<' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.LANGLE, null); }
+			case '>' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.RANGLE, null); }
+			case '[' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.LBRACKET, null); }
+			case ']' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.RBRACKET, null); }
+			case ':' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.COLON, null); }
+			case ',' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.COMMA, null); }
+			case ';' -> { readChar(); return new PrototextToken(PrototextToken.TokenType.SEMICOLON, null); }
+			case '"' -> { return new PrototextToken(PrototextToken.TokenType.STRING, readDoubleQuotedString()); }
+			case '\'' -> { return new PrototextToken(PrototextToken.TokenType.STRING, readSingleQuotedString()); }
 			default -> { /* Fall through to number/identifier handling or throw below */ }
 		}
 
 		if (mightStartNumber(c))
 			return lexNumber();
 		if (isLetterOrUnderscore(c))
-			return new ProtoToken(ProtoToken.TokenType.IDENT, readIdentifier());
+			return new PrototextToken(PrototextToken.TokenType.IDENT, readIdentifier());
 		throw parseException("Unexpected character: " + (char) c);
 	}
 
@@ -211,7 +211,7 @@ class ProtoTokenizer {
 		return isSpecial;
 	}
 
-	private ProtoToken lexNumber() throws IOException, ParseException {
+	private PrototextToken lexNumber() throws IOException, ParseException {
 		int c = peekChar();
 		boolean neg = false;
 		if (c == '-') {
@@ -228,28 +228,28 @@ class ProtoTokenizer {
 			if (next == 'x' || next == 'X') {
 				readChar();
 				long val = readHexInteger();
-				return new ProtoToken(ProtoToken.TokenType.HEX_INT, neg ? -val : val);
+				return new PrototextToken(PrototextToken.TokenType.HEX_INT, neg ? -val : val);
 			}
 			if (next >= '0' && next <= '7') {
 				long val = readOctalInteger();
-				return new ProtoToken(ProtoToken.TokenType.OCT_INT, neg ? -val : val);
+				return new PrototextToken(PrototextToken.TokenType.OCT_INT, neg ? -val : val);
 			}
 			if (next == '.' || next == 'e' || next == 'E' || next == 'f' || next == 'F') {
 				double val = readFloatLiteral(neg, "0");
-				return new ProtoToken(ProtoToken.TokenType.FLOAT, val);
+				return new PrototextToken(PrototextToken.TokenType.FLOAT, val);
 			}
-			return new ProtoToken(ProtoToken.TokenType.DEC_INT, 0L);
+			return new PrototextToken(PrototextToken.TokenType.DEC_INT, 0L);
 		}
 		if (c == '.') {
 			double val = readFloatLiteral(neg, "");
-			return new ProtoToken(ProtoToken.TokenType.FLOAT, val);
+			return new PrototextToken(PrototextToken.TokenType.FLOAT, val);
 		}
 		if (c == 'i' || c == 'I' || c == 'n' || c == 'N')
 			return readSpecialFloatOrIdent(neg);
 		var result = readDecimalOrFloat(neg);
 		if (result instanceof Double result2)
-			return new ProtoToken(ProtoToken.TokenType.FLOAT, result2);
-		return new ProtoToken(ProtoToken.TokenType.DEC_INT, result);
+			return new PrototextToken(PrototextToken.TokenType.FLOAT, result2);
+		return new PrototextToken(PrototextToken.TokenType.DEC_INT, result);
 	}
 
 	private long readHexInteger() throws IOException, ParseException {
@@ -338,19 +338,19 @@ class ProtoTokenizer {
 	 * token when the lowercased form is one of the proto special-float literals (nan / inf /
 	 * infinity), or to an IDENT token otherwise.
 	 */
-	private ProtoToken readSpecialFloatOrIdent(boolean neg) throws IOException, ParseException {
+	private PrototextToken readSpecialFloatOrIdent(boolean neg) throws IOException, ParseException {
 		var sb = new StringBuilder();
 		while (isLetterOrUnderscore(peekChar()) || Character.isDigit(peekChar()))
 			sb.append((char) readChar());
 		var s = sb.toString();
 		var lower = s.toLowerCase();
 		if (lower.equals("inf") || lower.equals("infinity"))
-			return new ProtoToken(ProtoToken.TokenType.FLOAT, neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
+			return new PrototextToken(PrototextToken.TokenType.FLOAT, neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
 		if (lower.equals("nan"))
-			return new ProtoToken(ProtoToken.TokenType.FLOAT, Double.NaN);
+			return new PrototextToken(PrototextToken.TokenType.FLOAT, Double.NaN);
 		if (neg)
 			throw parseException("Invalid float literal: -" + s);
-		return new ProtoToken(ProtoToken.TokenType.IDENT, s);
+		return new PrototextToken(PrototextToken.TokenType.IDENT, s);
 	}
 
 	/**
@@ -512,23 +512,23 @@ class ProtoTokenizer {
 
 	double readFloat() throws IOException, ParseException {
 		var t = read();
-		if (t.type() == ProtoToken.TokenType.FLOAT)
+		if (t.type() == PrototextToken.TokenType.FLOAT)
 			return t.numberValue().doubleValue();
-		if (t.type() == ProtoToken.TokenType.DEC_INT || t.type() == ProtoToken.TokenType.HEX_INT || t.type() == ProtoToken.TokenType.OCT_INT)
+		if (t.type() == PrototextToken.TokenType.DEC_INT || t.type() == PrototextToken.TokenType.HEX_INT || t.type() == PrototextToken.TokenType.OCT_INT)
 			return t.numberValue().doubleValue();
 		throw parseException("Expected float, got " + t.type());
 	}
 
 	boolean readBoolean() throws IOException, ParseException {
 		var t = read();
-		if (t.type() == ProtoToken.TokenType.IDENT) {
+		if (t.type() == PrototextToken.TokenType.IDENT) {
 			var s = t.stringValue().toLowerCase();
 			if (s.equals("true") || s.equals("t") || s.equals("1"))
 				return true;
 			if (s.equals("false") || s.equals("f") || s.equals("0"))
 				return false;
 		}
-		if (t.type() == ProtoToken.TokenType.DEC_INT) {
+		if (t.type() == PrototextToken.TokenType.DEC_INT) {
 			long v = t.numberValue().longValue();
 			if (v == 0) return false;
 			if (v == 1) return true;

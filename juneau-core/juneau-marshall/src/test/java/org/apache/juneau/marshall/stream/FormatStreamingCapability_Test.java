@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parquet.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.plaintext.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.marshall.toml.*;
@@ -61,7 +61,7 @@ class FormatStreamingCapability_Test extends TestBase {
 		return List.of(
 			JsonParser.DEFAULT, Json5Parser.DEFAULT, JsonlParser.DEFAULT,
 			CborParser.DEFAULT, MsgPackParser.DEFAULT, BsonParser.DEFAULT,
-			ProtoParser.DEFAULT, ParquetParser.DEFAULT, YamlParser.DEFAULT,
+			PrototextParser.DEFAULT, ParquetParser.DEFAULT, YamlParser.DEFAULT,
 			TomlParser.DEFAULT, HoconParser.DEFAULT, HjsonParser.DEFAULT,
 			CsvParser.DEFAULT, PlainTextParser.DEFAULT, MarkdownParser.DEFAULT,
 			IniParser.DEFAULT, UonParser.DEFAULT, OpenApiParser.DEFAULT,
@@ -73,7 +73,7 @@ class FormatStreamingCapability_Test extends TestBase {
 		return List.of(
 			JsonSerializer.DEFAULT, Json5Serializer.DEFAULT, JsonlSerializer.DEFAULT,
 			CborSerializer.DEFAULT, MsgPackSerializer.DEFAULT, BsonSerializer.DEFAULT,
-			ProtoSerializer.DEFAULT, ParquetSerializer.DEFAULT, YamlSerializer.DEFAULT,
+			PrototextSerializer.DEFAULT, ParquetSerializer.DEFAULT, YamlSerializer.DEFAULT,
 			TomlSerializer.DEFAULT, HoconSerializer.DEFAULT, HjsonSerializer.DEFAULT,
 			CsvSerializer.DEFAULT, PlainTextSerializer.DEFAULT, MarkdownSerializer.DEFAULT,
 			IniSerializer.DEFAULT, UonSerializer.DEFAULT, OpenApiSerializer.DEFAULT,

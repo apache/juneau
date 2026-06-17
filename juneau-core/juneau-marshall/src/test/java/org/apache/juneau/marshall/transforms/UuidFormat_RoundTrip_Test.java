@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
@@ -63,7 +63,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * {@link UuidFormat} is structurally lossless on text serializers — every constant preserves the full
  * 128-bit value (the choice is just hyphenated / compact / URN-prefixed).  Binary serializers
- * (BSON / CBOR / MsgPack / Proto) bypass the format dispatch and emit a native 16-byte binary
+ * (BSON / CBOR / MsgPack / Prototext) bypass the format dispatch and emit a native 16-byte binary
  * representation; the round-trip is still lossless.
  */
 @SuppressWarnings({
@@ -176,9 +176,9 @@ class UuidFormat_RoundTrip_Test extends TestBase {
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType().uuidFormat(fmt))
 			.parser(MarkdownParser.create().uuidFormat(fmt))
 			.build(),
-		fmt -> RoundTrip_Tester.create(36, "Proto - default | " + fmt)
-			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType().uuidFormat(fmt))
-			.parser(ProtoParser.create().uuidFormat(fmt))
+		fmt -> RoundTrip_Tester.create(36, "Prototext - default | " + fmt)
+			.serializer(PrototextSerializer.create().keepNullProperties().addBeanTypes().addRootType().uuidFormat(fmt))
+			.parser(PrototextParser.create().uuidFormat(fmt))
 			.build(),
 		fmt -> RoundTrip_Tester.create(37, "Hjson - default | " + fmt)
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().uuidFormat(fmt))

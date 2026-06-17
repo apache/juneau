@@ -1155,7 +1155,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 			public Object swap(MarshallingSession session, Boolean o) {
 				if (o == null)
 					return null;
-				// Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit native bool regardless.
+				// Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit native bool regardless.
 				if (session instanceof OutputStreamSerializerSession)
 					return o;
 				return BooleanFormat.format(o.booleanValue(), format);

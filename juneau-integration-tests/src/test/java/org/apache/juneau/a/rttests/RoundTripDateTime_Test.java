@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
@@ -203,9 +203,9 @@ class RoundTripDateTime_Test extends TestBase {
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType())
 			.parser(MarkdownParser.create())
 			.build(),
-		tester(36, "Proto - default")
-			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType())
-			.parser(ProtoParser.create())
+		tester(36, "Prototext - default")
+			.serializer(PrototextSerializer.create().keepNullProperties().addBeanTypes().addRootType())
+			.parser(PrototextParser.create())
 			.build(),
 		tester(37, "Hjson - default")
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType())

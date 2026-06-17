@@ -85,7 +85,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * <h5 class='topic'>Binary serializers</h5>
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit a UTF-8 string regardless of this
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this
  * setting — there is no native {@code Class} wire type in any supported binary format.
  */
 public enum ClassFormat {

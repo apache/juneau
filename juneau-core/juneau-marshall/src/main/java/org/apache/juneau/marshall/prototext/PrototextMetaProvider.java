@@ -14,19 +14,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Interface for providing access to {@link ProtoClassMeta} and {@link ProtoBeanPropertyMeta} objects.
+ * Interface for providing access to {@link PrototextClassMeta} and {@link PrototextBeanPropertyMeta} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
  * </ul>
  */
-public interface ProtoMetaProvider {
+public interface PrototextMetaProvider {
 
 	/**
 	 * Returns the language-specific metadata on the specified bean property.
@@ -34,7 +34,7 @@ public interface ProtoMetaProvider {
 	 * @param bpm The bean property to return the metadata on.
 	 * @return The metadata.
 	 */
-	ProtoBeanPropertyMeta getProtoBeanPropertyMeta(BeanPropertyMeta bpm);
+	PrototextBeanPropertyMeta getPrototextBeanPropertyMeta(BeanPropertyMeta bpm);
 
 	/**
 	 * Returns the language-specific metadata on the specified class.
@@ -42,5 +42,5 @@ public interface ProtoMetaProvider {
 	 * @param cm The class to return the metadata on.
 	 * @return The metadata.
 	 */
-	ProtoClassMeta getProtoClassMeta(ClassMeta<?> cm);
+	PrototextClassMeta getPrototextClassMeta(ClassMeta<?> cm);
 }

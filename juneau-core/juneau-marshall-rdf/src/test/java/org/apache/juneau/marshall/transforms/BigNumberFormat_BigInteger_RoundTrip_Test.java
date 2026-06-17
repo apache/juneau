@@ -51,7 +51,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * {@link BigNumberFormat} is structurally lossless for {@link BigInteger} on text serializers — every constant
  * preserves the full integer value (the choice is just bare-numeric vs quoted-string vs JS-safe hybrid).
- * Binary serializers (MsgPack / CBOR / Proto / BSON) bypass the format dispatch and receive the native
+ * Binary serializers (MsgPack / CBOR / Prototext / BSON) bypass the format dispatch and receive the native
  * {@link BigInteger}; the binary format then decides how to encode it natively.  Values beyond a 64-bit
  * signed integer ({@code ±2^63 − 1}) may lose precision or fail in formats that lack a wide-integer wire type.
  */
@@ -225,10 +225,10 @@ class BigNumberFormat_BigInteger_RoundTrip_Test extends TestBase {
 	// Bean with large BigInteger — JS-unsafe-but-long-safe stress (AUTO dispatch + NUMBER/STRING boundary)
 	//
 	// <p>
-	// Values are pinned within signed 64-bit range so binary serializers (MsgPack / CBOR / BSON / Proto)
+	// Values are pinned within signed 64-bit range so binary serializers (MsgPack / CBOR / BSON / Prototext)
 	// that bypass {@code BigNumberFormat} dispatch and emit native int64 round-trip cleanly.  Values beyond
 	// {@code Long.MAX_VALUE} are out-of-matrix scope by design: per the {@link BigNumberFormat} class-level
-	// "Binary serializers" note, MsgPack / CBOR / Proto / BSON downcast big integers to their widest native
+	// "Binary serializers" note, MsgPack / CBOR / Prototext / BSON downcast big integers to their widest native
 	// numeric type (int64 / double / decimal128) and lose precision above that ceiling.  JCS additionally
 	// caps at {@code Long.MAX_VALUE} via {@code BigInteger.longValueExact} per RFC 8785.  The matrix below
 	// stays under that ceiling but still exceeds the JavaScript {@code 2^53 − 1} safe-integer limit, which
@@ -247,7 +247,7 @@ class BigNumberFormat_BigInteger_RoundTrip_Test extends TestBase {
 	void a04_bigIntegerProperty_largeValues(RoundTrip_Tester t, BigNumberFormat fmt) throws Exception {
 		var x = new A04Bean();
 		x.longMax = BigInteger.valueOf(Long.MAX_VALUE);
-		// Long.MIN_VALUE + 1 instead of Long.MIN_VALUE: the Proto tokenizer parses signed integers by
+		// Long.MIN_VALUE + 1 instead of Long.MIN_VALUE: the Prototext tokenizer parses signed integers by
 		// tokenising magnitude-first then applying sign, so the literal "-9223372036854775808" overflows on
 		// the unsigned magnitude side.  Long.MIN_VALUE + 1's magnitude == Long.MAX_VALUE which fits.
 		x.longMinPlusOne = BigInteger.valueOf(Long.MIN_VALUE + 1L);

@@ -3631,7 +3631,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 *
 		 * <p>
 		 * Controls how {@link UUID} values are written to text-based wire formats. Binary
-		 * serializers (BSON / CBOR / MsgPack / Proto) emit native 16-byte binary regardless of this setting.
+		 * serializers (BSON / CBOR / MsgPack / Prototext) emit native 16-byte binary regardless of this setting.
 		 *
 		 * @param value The value for this setting.
 		 * @return This object.
@@ -3676,7 +3676,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 *
 		 * <p>
 		 * Controls how {@link Boolean} / <code><jk>boolean</jk></code> values are written to text-based
-		 * wire formats. Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit a native
+		 * wire formats. Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a native
 		 * boolean wire type regardless of this setting.
 		 *
 		 * @param value The value for this setting.

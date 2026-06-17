@@ -69,7 +69,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * <h5 class='topic'>Binary serializers</h5>
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit native IEEE-754 floats regardless
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit native IEEE-754 floats regardless
  * of this setting; native non-finite representations exist in every supported binary format (BSON
  * {@code double} / {@code decimal128}; CBOR's tag 22 / 23 / 24 for special floats; MsgPack {@code float64}).
  * This setting only affects text-based serializers.

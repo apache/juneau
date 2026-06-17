@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
@@ -78,13 +78,13 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use the default parser to parse into a bean</jc>
- * 	MyBean <jv>bean</jv> = ProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, MyBean.<jk>class</jk>);
+ * 	MyBean <jv>bean</jv> = PrototextParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Parse into an untyped map</jc>
- * 	JsonMap <jv>map</jv> = ProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, JsonMap.<jk>class</jk>);
+ * 	JsonMap <jv>map</jv> = PrototextParser.<jsf>DEFAULT</jsf>.parse(<jv>input</jv>, JsonMap.<jk>class</jk>);
  *
  * 	<jc>// Create a parser with validate-end enabled</jc>
- * 	ProtoParser <jv>parser</jv> = ProtoParser.<jsm>create</jsm>().build();
+ * 	PrototextParser <jv>parser</jv> = PrototextParser.<jsm>create</jsm>().build();
  * 	MyBean <jv>bean</jv> = <jv>parser</jv>.parse(<jv>input</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
@@ -98,17 +98,17 @@ import org.apache.juneau.marshall.stream.*;
 	"java:S115",  // ARG_ prefix follows framework convention
 	"resource" // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
 })
-public class ProtoParser extends ReaderParser implements ProtoMetaProvider, RecordReadable {
+public class PrototextParser extends ReaderParser implements PrototextMetaProvider, RecordReadable {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
 	/**
-	 * Builder for {@link ProtoParser}.
+	 * Builder for {@link PrototextParser}.
 	 */
 	public static class Builder extends ReaderParser.Builder<Builder> {
 
-		private static final Cache<HashKey, ProtoParser> CACHE =
-			Cache.of(HashKey.class, ProtoParser.class).build();
+		private static final Cache<HashKey, PrototextParser> CACHE =
+			Cache.of(HashKey.class, PrototextParser.class).build();
 
 		protected Builder() {
 			consumes("text/protobuf,text/x-protobuf");
@@ -118,13 +118,13 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider, Reco
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
-		protected Builder(ProtoParser copyFrom) {
+		protected Builder(PrototextParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 		}
 
 		@Override
-		public ProtoParser build() {
-			return cache(CACHE).build(ProtoParser.class);
+		public PrototextParser build() {
+			return cache(CACHE).build(PrototextParser.class);
 		}
 
 		@Override
@@ -134,10 +134,10 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider, Reco
 	}
 
 	/** Default parser instance. */
-	public static final ProtoParser DEFAULT = new ProtoParser(create());
+	public static final PrototextParser DEFAULT = new PrototextParser(create());
 
-	private final Map<ClassMeta<?>, ProtoClassMeta> protoClassMetas = new ConcurrentHashMap<>();
-	private final Map<BeanPropertyMeta, ProtoBeanPropertyMeta> protoBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>, PrototextClassMeta> prototextClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta, PrototextBeanPropertyMeta> prototextBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates a new builder.
@@ -153,13 +153,13 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider, Reco
 	 *
 	 * @param builder The builder.
 	 */
-	public ProtoParser(Builder builder) {
+	public PrototextParser(Builder builder) {
 		super(builder);
 	}
 
 	@Override
-	public ProtoParserSession.Builder createSession() {
-		return ProtoParserSession.create(this);
+	public PrototextParserSession.Builder createSession() {
+		return PrototextParserSession.create(this);
 	}
 
 	@Override
@@ -167,16 +167,16 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider, Reco
 		return new Builder(this);
 	}
 
-	@Override /* ProtoMetaProvider */
-	public ProtoBeanPropertyMeta getProtoBeanPropertyMeta(BeanPropertyMeta bpm) {
+	@Override /* PrototextMetaProvider */
+	public PrototextBeanPropertyMeta getPrototextBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
-			return ProtoBeanPropertyMeta.DEFAULT;
-		return protoBeanPropertyMetas.computeIfAbsent(bpm, k -> new ProtoBeanPropertyMeta(k.getDelegateFor(), this));
+			return PrototextBeanPropertyMeta.DEFAULT;
+		return prototextBeanPropertyMetas.computeIfAbsent(bpm, k -> new PrototextBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
-	@Override /* ProtoMetaProvider */
-	public ProtoClassMeta getProtoClassMeta(ClassMeta<?> cm) {
-		return protoClassMetas.computeIfAbsent(cm, k -> new ProtoClassMeta(k, this));
+	@Override /* PrototextMetaProvider */
+	public PrototextClassMeta getPrototextClassMeta(ClassMeta<?> cm) {
+		return prototextClassMetas.computeIfAbsent(cm, k -> new PrototextClassMeta(k, this));
 	}
 
 	/**
@@ -184,9 +184,9 @@ public class ProtoParser extends ReaderParser implements ProtoMetaProvider, Reco
 	 * <b>default session arguments</b> (mirrors {@link #parse(Object, Class)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link ProtoParserSession#parseRecords(Object)}.  Callers
+	 * The real implementation lives on {@link PrototextParserSession#parseRecords(Object)}.  Callers
 	 * that need request-derived configuration (locale, timezone, schema, swaps) should call
-	 * {@link #createSession()} and invoke {@link ProtoParserSession#parseRecords(Object)} on the
+	 * {@link #createSession()} and invoke {@link PrototextParserSession#parseRecords(Object)} on the
 	 * built session instead.
 	 *
 	 * @param input The input.

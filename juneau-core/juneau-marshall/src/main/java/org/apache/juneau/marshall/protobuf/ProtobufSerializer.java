@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.serializer.*;
  *
  * <h5 class='topic'>Description</h5>
  * <p>
- * Unlike the text-format {@link org.apache.juneau.marshall.proto.ProtoSerializer} (<c>text/protobuf</c>), this
+ * Unlike the text-format {@link org.apache.juneau.marshall.prototext.PrototextSerializer} (<c>text/protobuf</c>), this
  * serializer emits the compact, non-self-describing protobuf binary wire format.  Because the wire carries neither
  * field names nor specific scalar types, a per-bean field-number/scalar-type table (cached on
  * {@link ProtobufClassMeta}) is consulted during serialization.  The codec is lossless for Juneau&hArr;Juneau

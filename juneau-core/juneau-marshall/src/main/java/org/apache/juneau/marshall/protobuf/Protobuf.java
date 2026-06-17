@@ -26,7 +26,7 @@ import java.lang.annotation.*;
  * via {@link ProtobufSerializer} and {@link ProtobufParser}.
  *
  * <p>
- * This is the binary-format counterpart to the text-format {@link org.apache.juneau.marshall.proto.Proto @Proto}
+ * This is the binary-format counterpart to the text-format {@link org.apache.juneau.marshall.prototext.Prototext @Prototext}
  * annotation, and is kept deliberately separate from it.
  *
  * <p>

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.config;
 
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.rest.server.*;
 
 /**
@@ -28,8 +28,8 @@ import org.apache.juneau.rest.server.*;
  * <ul class='spaced-list'>
  * 	<li class='ja'>{@link Rest}:
  * 		<ul>
- * 			<li class='jma'>{@link Rest#serializers() serializers}: {@link ProtoSerializer}
- * 			<li class='jma'>{@link Rest#parsers() parsers}: {@link ProtoParser}
+ * 			<li class='jma'>{@link Rest#serializers() serializers}: {@link PrototextSerializer}
+ * 			<li class='jma'>{@link Rest#parsers() parsers}: {@link PrototextParser}
  * 			<li class='jma'>{@link Rest#defaultAccept() defaultAccept}:  <js>"text/protobuf"</js>
  *		</ul>
  *	</li>
@@ -40,8 +40,8 @@ import org.apache.juneau.rest.server.*;
  * </ul>
  */
 @Rest(
-	serializers={ProtoSerializer.class},
-	parsers={ProtoParser.class},
+	serializers={PrototextSerializer.class},
+	parsers={PrototextParser.class},
 	defaultAccept="text/protobuf"
 )
-public interface BasicProtoConfig extends DefaultConfig {}
+public interface BasicPrototextConfig extends DefaultConfig {}

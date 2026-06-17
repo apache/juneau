@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
@@ -28,18 +28,18 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S1186" // Empty test method intentional for framework testing
 })
-class ProtoAnnotation_Test extends TestBase {
+class PrototextAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	Proto a1 = ProtoAnnotation.create()
+	Prototext a1 = PrototextAnnotation.create()
 		.comment("a")
 		.description("b")
 		.build();
 
-	Proto a2 = ProtoAnnotation.create()
+	Prototext a2 = PrototextAnnotation.create()
 		.comment("a")
 		.description("b")
 		.build();
@@ -68,19 +68,19 @@ class ProtoAnnotation_Test extends TestBase {
 	// Comparison with declared annotations.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Proto(
+	@Prototext(
 		comment="a",
 		description={ "b" }
 	)
 	public static class D1 {}
-	Proto d1 = D1.class.getAnnotationsByType(Proto.class)[0];
+	Prototext d1 = D1.class.getAnnotationsByType(Prototext.class)[0];
 
-	@Proto(
+	@Prototext(
 		comment="a",
 		description={ "b" }
 	)
 	public static class D2 {}
-	Proto d2 = D2.class.getAnnotationsByType(Proto.class)[0];
+	Prototext d2 = D2.class.getAnnotationsByType(Prototext.class)[0];
 
 	@Test void d01_comparisonWithDeclarativeAnnotations() {
 		assertEqualsAll(a1, d1, d2);
@@ -89,97 +89,97 @@ class ProtoAnnotation_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// ProtoApplyAnnotation tests.
+	// PrototextApplyAnnotation tests.
 	//------------------------------------------------------------------------------------------------------------------
 
 	public static class E02_Class {}
 	public static class E04_Class {}
 
 	@Test void e01_applyAnnotationDefault() {
-		assertNotNull(ProtoApplyAnnotation.DEFAULT);
+		assertNotNull(PrototextApplyAnnotation.DEFAULT);
 	}
 
 	@Test void e02_applyAnnotationEmpty() {
-		assertTrue(ProtoApplyAnnotation.empty(null));
-		assertTrue(ProtoApplyAnnotation.empty(ProtoApplyAnnotation.DEFAULT));
-		assertFalse(ProtoApplyAnnotation.empty(ProtoApplyAnnotation.create(E02_Class.class).build()));
+		assertTrue(PrototextApplyAnnotation.empty(null));
+		assertTrue(PrototextApplyAnnotation.empty(PrototextApplyAnnotation.DEFAULT));
+		assertFalse(PrototextApplyAnnotation.empty(PrototextApplyAnnotation.create(E02_Class.class).build()));
 	}
 
 	@Test void e03_applyAnnotationCreate() {
-		var a = ProtoApplyAnnotation.create().build();
+		var a = PrototextApplyAnnotation.create().build();
 		assertNotNull(a);
 	}
 
 	@Test void e04_applyAnnotationCreateWithClass() {
-		var a = ProtoApplyAnnotation.create(E04_Class.class).build();
+		var a = PrototextApplyAnnotation.create(E04_Class.class).build();
 		assertNotNull(a);
 	}
 
 	@Test void e05_applyAnnotationCreateWithString() {
-		var a = ProtoApplyAnnotation.create("myClass").build();
+		var a = PrototextApplyAnnotation.create("myClass").build();
 		assertNotNull(a);
 	}
 
 	@Test void e06_applyAnnotationBuilderValue() {
-		var proto = ProtoAnnotation.create().comment("test").build();
-		var a = ProtoApplyAnnotation.create().value(proto).build();
+		var proto = PrototextAnnotation.create().comment("test").build();
+		var a = PrototextApplyAnnotation.create().value(proto).build();
 		assertNotNull(a);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// ProtoBeanPropertyMeta + ProtoClassMeta lookup tests.
+	// PrototextBeanPropertyMeta + PrototextClassMeta lookup tests.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_protoBeanPropertyMeta_default() {
-		assertNotNull(ProtoBeanPropertyMeta.DEFAULT);
+		assertNotNull(PrototextBeanPropertyMeta.DEFAULT);
 	}
 
 	public static class F02_Bean { public String name; }
 
 	@Test void f02_protoBeanPropertyMeta_lookup() {
-		var s = ProtoSerializer.DEFAULT;
+		var s = PrototextSerializer.DEFAULT;
 		var bc = s.getMarshallingContext();
 		var bm = bc.getBeanMeta(F02_Bean.class);
 		assertNotNull(bm);
 		var bpm = bm.getPropertyMeta("name");
 		assertNotNull(bpm);
-		assertNotNull(s.getProtoBeanPropertyMeta(bpm));
+		assertNotNull(s.getPrototextBeanPropertyMeta(bpm));
 		// null path
-		assertNotNull(s.getProtoBeanPropertyMeta(null));
+		assertNotNull(s.getPrototextBeanPropertyMeta(null));
 	}
 
 	@Test void f03_protoClassMeta_lookup() {
-		var s = ProtoSerializer.DEFAULT;
+		var s = PrototextSerializer.DEFAULT;
 		var bc = s.getMarshallingContext();
 		var cm = bc.getClassMeta(F02_Bean.class);
-		assertNotNull(s.getProtoClassMeta(cm));
+		assertNotNull(s.getPrototextClassMeta(cm));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// ProtoConfigAnnotation tests.
+	// PrototextConfigAnnotation tests.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@ProtoConfig(useListSyntaxForBeans = "true")
+	@PrototextConfig(useListSyntaxForBeans = "true")
 	public static class G01_Bean {}
 
 	@Test void g01_protoConfigUseListSyntaxForBeans() {
-		var s = ProtoSerializer.create().applyAnnotations(G01_Bean.class).build();
+		var s = PrototextSerializer.create().applyAnnotations(G01_Bean.class).build();
 		assertNotNull(s);
 	}
 
-	@ProtoConfig(useColonForMessages = "true")
+	@PrototextConfig(useColonForMessages = "true")
 	public static class G02_Bean {}
 
 	@Test void g02_protoConfigUseColonForMessages() {
-		var s = ProtoSerializer.create().applyAnnotations(G02_Bean.class).build();
+		var s = PrototextSerializer.create().applyAnnotations(G02_Bean.class).build();
 		assertNotNull(s);
 	}
 
-	@ProtoConfig
+	@PrototextConfig
 	public static class G03_Bean {}
 
 	@Test void g03_protoConfigParserApply() {
-		var p = ProtoParser.create().applyAnnotations(G03_Bean.class).build();
+		var p = PrototextParser.create().applyAnnotations(G03_Bean.class).build();
 		assertNotNull(p);
 	}
 
@@ -189,9 +189,9 @@ class ProtoAnnotation_Test extends TestBase {
 
 	@Test
 	void h01_comment() throws Exception {
-		// Serialize structure with name/test; @Proto(comment) on bean field emits comment when bean is used
+		// Serialize structure with name/test; @Prototext(comment) on bean field emits comment when bean is used
 		var a = JsonMap.of("name", "test");
-		var proto = ProtoSerializer.DEFAULT.serialize(a);
+		var proto = PrototextSerializer.DEFAULT.serialize(a);
 		assertNotNull(proto);
 		assertTrue(proto.contains("name"));
 		assertTrue(proto.contains("test"));
@@ -199,8 +199,8 @@ class ProtoAnnotation_Test extends TestBase {
 
 	@Test
 	void h02_annotationEquivalency() {
-		var a = ProtoAnnotation.create().comment("x").build();
-		var b = ProtoAnnotation.create().comment("x").build();
+		var a = PrototextAnnotation.create().comment("x").build();
+		var b = PrototextAnnotation.create().comment("x").build();
 		assertEquals(a.comment(), b.comment());
 	}
 }

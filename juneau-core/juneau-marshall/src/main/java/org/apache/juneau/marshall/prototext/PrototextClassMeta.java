@@ -14,47 +14,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.*;
-
-import java.lang.annotation.*;
+import org.apache.juneau.marshall.*;
 
 /**
- * Annotation that can be applied to classes, fields, and methods to tweak how they are handled by {@link ProtoSerializer} and {@link ProtoParser}.
- *
- * <p>
- * Can be used in the following locations:
- * <ul>
- * 	<li>Marshalled classes/methods/fields.
- * </ul>
+ * Metadata on classes specific to the Prototext serializers and parsers pulled from the {@link Prototext @Prototext} annotation on
+ * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
  * </ul>
  */
-@Documented
-@Target({ TYPE, FIELD, METHOD })
-@Retention(RUNTIME)
-@Inherited
-public @interface Proto {
+public class PrototextClassMeta extends ExtendedClassMeta {
 
 	/**
-	 * Comment to emit before this field in the serialized output.
+	 * Constructor.
 	 *
-	 * <p>
-	 * When specified, a protobuf-style comment (<c># text</c>) is written before the field.
-	 *
-	 * @return The annotation value.
+	 * @param cm The class that this annotation is defined on.
+	 * @param mp Prototext metadata provider (for finding information about other artifacts).
 	 */
-	String comment() default "";
-
-	/**
-	 * Optional description for the exposed API.
-	 *
-	 * @return The annotation value.
-	 * @since 9.2.0
-	 */
-	String[] description() default {};
+	public PrototextClassMeta(ClassMeta<?> cm, PrototextMetaProvider mp) {
+		super(cm);
+	}
 }

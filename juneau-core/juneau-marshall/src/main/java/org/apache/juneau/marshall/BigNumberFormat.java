@@ -62,7 +62,7 @@ import java.math.*;
  * <h5 class='topic'>Binary serializers</h5>
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto) emit native numeric types regardless of the
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native numeric types regardless of the
  * configured {@code BigNumberFormat}; this setting only affects text-based serializers. BSON has
  * {@code decimal128} for exact decimal values; CBOR / MsgPack handle big-integer values via
  * tag&nbsp;2 / tag&nbsp;3 with string fallback.

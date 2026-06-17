@@ -25,14 +25,14 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link Proto} marshaller.
+ * Tests for {@link Prototext} marshaller.
  */
-class Proto_Test {
+class Prototext_Test {
 
 	@Test
 	void e01_of() {
 		var bean = JsonMap.of("name", "Alice", "age", 30);
-		var proto = Proto.of(bean);
+		var proto = Prototext.of(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("name"));
 		assertTrue(proto.contains("Alice"));
@@ -43,7 +43,7 @@ class Proto_Test {
 	@Test
 	void e02_to() {
 		var input = "name: \"Alice\"\nage: 30";
-		var bean = Proto.to(input, JsonMap.class);
+		var bean = Prototext.to(input, JsonMap.class);
 		assertNotNull(bean);
 		assertEquals("Alice", bean.get("name"));
 		assertEquals(30L, bean.get("age"));
@@ -52,8 +52,8 @@ class Proto_Test {
 	@Test
 	void e03_roundTrip() {
 		var original = JsonMap.of("s", "hello", "n", 42, "b", true);
-		var proto = Proto.of(original);
-		var roundTrip = Proto.to(proto, JsonMap.class);
+		var proto = Prototext.of(original);
+		var roundTrip = Prototext.to(proto, JsonMap.class);
 		assertEquals("hello", roundTrip.get("s"));
 		assertEquals(42L, roundTrip.get("n"));
 		assertEquals(true, roundTrip.get("b"));
@@ -62,10 +62,10 @@ class Proto_Test {
 	@Test
 	void e04_defaultInstance() {
 		var bean = JsonMap.of("x", 1);
-		var proto = Proto.DEFAULT.write(bean);
+		var proto = Prototext.DEFAULT.write(bean);
 		assertNotNull(proto);
 		assertTrue(proto.contains("x"));
-		var parsed = Proto.DEFAULT.read(proto, JsonMap.class);
+		var parsed = Prototext.DEFAULT.read(proto, JsonMap.class);
 		assertEquals(1L, parsed.get("x"));
 	}
 
@@ -80,10 +80,10 @@ class Proto_Test {
 		var bean = new SimpleBean();
 		bean.name = "Bob";
 		bean.age = 25;
-		var proto = Proto.DEFAULT.write(bean);
+		var proto = Prototext.DEFAULT.write(bean);
 		assertNotNull(proto);
-		assertTrue(proto.contains("Bob"), "Proto must serialize bean fields, got: [" + proto + "]");
-		var parsed = Proto.DEFAULT.read(proto, SimpleBean.class);
+		assertTrue(proto.contains("Bob"), "Prototext must serialize bean fields, got: [" + proto + "]");
+		var parsed = Prototext.DEFAULT.read(proto, SimpleBean.class);
 		assertEquals("Bob", parsed.name);
 		assertEquals(25, parsed.age);
 	}
@@ -101,10 +101,10 @@ class Proto_Test {
 		bean.instant = Instant.parse("2012-12-21T12:34:56Z");
 		bean.localDate = LocalDate.parse("2012-12-21");
 		bean.duration = Duration.ofHours(2).plusMinutes(30);
-		var proto = Proto.DEFAULT.write(bean);
+		var proto = Prototext.DEFAULT.write(bean);
 		assertNotNull(proto);
-		assertTrue(proto.contains("2012-12-21"), "Proto must serialize date fields");
-		var parsed = Proto.DEFAULT.read(proto, DateTimeBean.class);
+		assertTrue(proto.contains("2012-12-21"), "Prototext must serialize date fields");
+		var parsed = Prototext.DEFAULT.read(proto, DateTimeBean.class);
 		assertEquals(Instant.parse("2012-12-21T12:34:56Z"), parsed.instant);
 		assertEquals(LocalDate.parse("2012-12-21"), parsed.localDate);
 		assertEquals(Duration.ofHours(2).plusMinutes(30), parsed.duration);
@@ -114,7 +114,7 @@ class Proto_Test {
 	void e07_epochMillisToDate() {
 		var expected = Instant.parse("2012-12-21T12:34:56Z");
 		var input = "ts: " + expected.toEpochMilli();
-		var bean = Proto.to(input, EpochBean.class);
+		var bean = Prototext.to(input, EpochBean.class);
 		assertNotNull(bean);
 		assertEquals(expected, bean.ts);
 	}

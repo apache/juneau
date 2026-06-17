@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
@@ -68,7 +68,7 @@ import org.junit.jupiter.params.provider.*;
  *
  * <p>
  * {@link BinaryFormat} only affects text-based serializers per the class-level "Binary serializers" note —
- * BSON / CBOR / MsgPack / Proto / Parquet emit native bytes regardless of the configured constant.  The
+ * BSON / CBOR / MsgPack / Prototext / Parquet emit native bytes regardless of the configured constant.  The
  * variant {@code binarySwap} installed by {@code MarshalledPropertyPostProcessor} respects that by handing
  * the raw {@code byte[]} back to {@link org.apache.juneau.marshall.serializer.OutputStreamSerializerSession}
  * subtypes instead of the formatted wire string, so bean-property round-trips through binary serializers
@@ -186,9 +186,9 @@ class BinaryFormat_RoundTrip_Test extends TestBase {
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType().binaryFormat(fmt))
 			.parser(MarkdownParser.create().binaryFormat(fmt))
 			.build(),
-		fmt -> RoundTrip_Tester.create(36, "Proto - default | " + fmt)
-			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType().binaryFormat(fmt))
-			.parser(ProtoParser.create().binaryFormat(fmt))
+		fmt -> RoundTrip_Tester.create(36, "Prototext - default | " + fmt)
+			.serializer(PrototextSerializer.create().keepNullProperties().addBeanTypes().addRootType().binaryFormat(fmt))
+			.parser(PrototextParser.create().binaryFormat(fmt))
 			.build(),
 		fmt -> RoundTrip_Tester.create(37, "Hjson - default | " + fmt)
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().binaryFormat(fmt))

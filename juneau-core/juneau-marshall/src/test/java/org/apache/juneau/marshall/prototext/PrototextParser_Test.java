@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,13 +24,13 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link ProtoParser}.
+ * Tests for {@link PrototextParser}.
  */
-class ProtoParser_Test {
+class PrototextParser_Test {
 
 	@Test
 	void a01_parseSimpleBean() {
-		var a = ProtoParser.DEFAULT.parse("name: \"Alice\"\nage: 30\nactive: true", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("name: \"Alice\"\nage: 30\nactive: true", JsonMap.class);
 		assertEquals("Alice", a.get("name"));
 		assertEquals(30L, a.get("age"));
 		assertEquals(true, a.get("active"));
@@ -38,7 +38,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a02_parseNestedBean() {
-		var a = ProtoParser.DEFAULT.parse("address {\n  city: \"Boston\"\n  state: \"MA\"\n}", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("address {\n  city: \"Boston\"\n  state: \"MA\"\n}", JsonMap.class);
 		var addr = a.getMap("address");
 		assertNotNull(addr);
 		assertEquals("Boston", addr.get("city"));
@@ -47,7 +47,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a03_parseDeeplyNestedBean() {
-		var a = ProtoParser.DEFAULT.parse("a { b { c: 1 } }", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("a { b { c: 1 } }", JsonMap.class);
 		var b = a.getMap("a");
 		assertNotNull(b);
 		var c = b.getMap("b");
@@ -57,7 +57,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a04_parseListOfStrings() {
-		var a = ProtoParser.DEFAULT.parse("tags: [\"a\", \"b\", \"c\"]", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("tags: [\"a\", \"b\", \"c\"]", JsonMap.class);
 		var list = a.getList("tags");
 		assertNotNull(list);
 		assertEquals(List.of("a", "b", "c"), list);
@@ -65,7 +65,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a05_parseListOfIntegers() {
-		var a = ProtoParser.DEFAULT.parse("ports: [8080, 8443, 9090]", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("ports: [8080, 8443, 9090]", JsonMap.class);
 		var list = a.getList("ports");
 		assertNotNull(list);
 		assertEquals(3, list.size());
@@ -76,7 +76,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a06_parseRepeatedMessages() {
-		var a = ProtoParser.DEFAULT.parse(
+		var a = PrototextParser.DEFAULT.parse(
 			"servers { host: \"alpha\" port: 8080 }\nservers { host: \"beta\" port: 8081 }",
 			JsonMap.class);
 		var list = a.getList("servers");
@@ -88,7 +88,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a07_parseMapProperty() {
-		var a = ProtoParser.DEFAULT.parse("env { PATH: \"/usr/bin\" HOME: \"/home\" }", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("env { PATH: \"/usr/bin\" HOME: \"/home\" }", JsonMap.class);
 		var env = a.getMap("env");
 		assertNotNull(env);
 		assertEquals("/usr/bin", env.get("PATH"));
@@ -97,14 +97,14 @@ class ProtoParser_Test {
 
 	@Test
 	void a08_parseBooleans() {
-		var a = ProtoParser.DEFAULT.parse("t: true f: false", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("t: true f: false", JsonMap.class);
 		assertEquals(true, a.get("t"));
 		assertEquals(false, a.get("f"));
 	}
 
 	@Test
 	void a09_parseIntegers() {
-		var a = ProtoParser.DEFAULT.parse("d: 42 h: 0xFF o: 0755", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("d: 42 h: 0xFF o: 0755", JsonMap.class);
 		assertEquals(42L, a.get("d"));
 		assertEquals(255L, a.get("h"));
 		assertEquals(493L, a.get("o"));
@@ -112,7 +112,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a10_parseFloats() {
-		var a = ProtoParser.DEFAULT.parse("x: 3.14 inf: inf neg: -inf n: nan", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("x: 3.14 inf: inf neg: -inf n: nan", JsonMap.class);
 		assertEquals(3.14, ((Number) a.get("x")).doubleValue(), 1e-6);
 		assertEquals(Double.POSITIVE_INFINITY, a.get("inf"));
 		assertEquals(Double.NEGATIVE_INFINITY, a.get("neg"));
@@ -121,47 +121,47 @@ class ProtoParser_Test {
 
 	@Test
 	void a11_parseStrings() {
-		var a = ProtoParser.DEFAULT.parse("a: \"hello\" b: 'world'", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("a: \"hello\" b: 'world'", JsonMap.class);
 		assertEquals("hello", a.get("a"));
 		assertEquals("world", a.get("b"));
 	}
 
 	@Test
 	void a12_parseMultiPartStrings() {
-		var a = ProtoParser.DEFAULT.parse("s: \"hello\" \" world\"", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("s: \"hello\" \" world\"", JsonMap.class);
 		assertEquals("hello world", a.get("s"));
 	}
 
 	@Test
 	void a13_parseComments() {
-		var a = ProtoParser.DEFAULT.parse("# comment\nname: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("# comment\nname: 1", JsonMap.class);
 		assertEquals(1L, a.get("name"));
 	}
 
 	@Test
 	void a14_parseSemicolonSeparators() {
-		var a = ProtoParser.DEFAULT.parse("a: 1; b: 2", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("a: 1; b: 2", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertEquals(2L, a.get("b"));
 	}
 
 	@Test
 	void a15_parseCommaSeparators() {
-		var a = ProtoParser.DEFAULT.parse("a: 1, b: 2", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("a: 1, b: 2", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertEquals(2L, a.get("b"));
 	}
 
 	@Test
 	void a16_parseMissingFields() {
-		var a = ProtoParser.DEFAULT.parse("a: 1", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("a: 1", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertNull(a.get("b"));
 	}
 
 	@Test
 	void a17_parseAngleBrackets() {
-		var a = ProtoParser.DEFAULT.parse("m < k: 1 >", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("m < k: 1 >", JsonMap.class);
 		var m = a.getMap("m");
 		assertNotNull(m);
 		assertEquals(1L, m.get("k"));
@@ -169,7 +169,7 @@ class ProtoParser_Test {
 
 	@Test
 	void a18_parseColonBeforeMessage() {
-		var a = ProtoParser.DEFAULT.parse("m: { k: 1 }", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("m: { k: 1 }", JsonMap.class);
 		var m = a.getMap("m");
 		assertNotNull(m);
 		assertEquals(1L, m.get("k"));
@@ -177,13 +177,13 @@ class ProtoParser_Test {
 
 	@Test
 	void a19_parseEnumValues() {
-		var a = ProtoParser.DEFAULT.parse("level: WARN", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("level: WARN", JsonMap.class);
 		assertEquals("WARN", a.get("level"));
 	}
 
 	@Test
 	void a20_parseQuotedKeys() {
-		var a = ProtoParser.DEFAULT.parse("\"special.key\": \"value\"; \"key.with.dots\": 42", JsonMap.class);
+		var a = PrototextParser.DEFAULT.parse("\"special.key\": \"value\"; \"key.with.dots\": 42", JsonMap.class);
 		assertEquals("value", a.get("special.key"));
 		assertEquals(42L, a.get("key.with.dots"));
 	}

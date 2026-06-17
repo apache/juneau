@@ -71,7 +71,7 @@ import java.util.*;
  * <h5 class='topic'>Binary serializers</h5>
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto / Parquet) emit a UTF-8 string regardless of this
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext / Parquet) emit a UTF-8 string regardless of this
  * setting — there is no native {@code Currency} wire type in any supported binary format. The choice of
  * {@code ISO_CODE} vs {@code SYMBOL} vs {@code DISPLAY_NAME} is purely about the textual content of that
  * string.

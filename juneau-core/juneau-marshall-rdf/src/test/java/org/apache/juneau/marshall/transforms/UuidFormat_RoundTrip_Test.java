@@ -44,7 +44,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * {@link UuidFormat} is structurally lossless on text serializers — every constant preserves the full
  * 128-bit value (the choice is just hyphenated / compact / URN-prefixed).  Binary serializers
- * (BSON / CBOR / MsgPack / Proto) bypass the format dispatch and emit a native 16-byte binary
+ * (BSON / CBOR / MsgPack / Prototext) bypass the format dispatch and emit a native 16-byte binary
  * representation; the round-trip is still lossless.
  */
 @SuppressWarnings({

@@ -237,8 +237,8 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 		assertNotNull(org.apache.juneau.marshall.hjson.HjsonParser.create().validateSchema(true).build());
 		assertNotNull(org.apache.juneau.marshall.toml.TomlSerializer.create().validateSchema().build());
 		assertNotNull(org.apache.juneau.marshall.toml.TomlParser.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.marshall.proto.ProtoSerializer.create().validateSchema().build());
-		assertNotNull(org.apache.juneau.marshall.proto.ProtoParser.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.prototext.PrototextSerializer.create().validateSchema().build());
+		assertNotNull(org.apache.juneau.marshall.prototext.PrototextParser.create().validateSchema().build());
 		assertNotNull(org.apache.juneau.marshall.cbor.CborSerializer.create().validateSchema().build());
 		assertNotNull(org.apache.juneau.marshall.cbor.CborParser.create().validateSchema().build());
 		assertNotNull(org.apache.juneau.marshall.bson.BsonSerializer.create().validateSchema().build());

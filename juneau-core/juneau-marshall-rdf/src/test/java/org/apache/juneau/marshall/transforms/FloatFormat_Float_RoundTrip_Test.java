@@ -50,7 +50,7 @@ import org.junit.jupiter.params.provider.*;
  * <p>
  * {@link FloatFormat} only controls how non-finite values ({@code NaN}, {@code ±Infinity}) are emitted on
  * <b>text-based</b> wire formats; finite values ride the natural bare-numeric token and binary serializers
- * (BSON / CBOR / MsgPack / Proto / Parquet) emit native IEEE-754 regardless of this setting per the
+ * (BSON / CBOR / MsgPack / Prototext / Parquet) emit native IEEE-754 regardless of this setting per the
  * {@link FloatFormat} class-level "Binary serializers" note.  The matrix below exercises finite values across
  * all five {@link FloatFormat} constants for the standard tests, with a dedicated non-finite test
  * ({@link #a04_floatProperty_nonFinite}) that skips {@link FloatFormat#NaN_AS_ERROR} (throws on swap) and
@@ -143,7 +143,7 @@ class FloatFormat_Float_RoundTrip_Test extends TestBase {
 	 * Returns <jk>true</jk> when {@code t} is wrapped around a binary serializer (any
 	 * {@link OutputStreamSerializer} subtype).  Binary serializers emit native IEEE-754 regardless of
 	 * {@link FloatFormat} per the class-level "Binary serializers" note, so non-finite values round-trip
-	 * natively without going through the format dispatch.  Covers MsgPack, CBOR, BSON, Parquet, Proto,
+	 * natively without going through the format dispatch.  Covers MsgPack, CBOR, BSON, Parquet, Prototext,
 	 * and the RDF stream variants (RdfThrift / RdfProto).
 	 */
 	private static boolean isBinarySerializer(RoundTrip_Tester t) {

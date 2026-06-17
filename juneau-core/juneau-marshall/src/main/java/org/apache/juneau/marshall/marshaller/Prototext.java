@@ -20,11 +20,11 @@ import java.io.*;
 import java.lang.reflect.*;
 
 import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 
 /**
- * A pairing of a {@link ProtoSerializer} and {@link ProtoParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link PrototextSerializer} and {@link PrototextParser} into a single class with convenience read/write methods.
  *
  * <p>
  * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
@@ -32,14 +32,14 @@ import org.apache.juneau.marshall.serializer.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	Proto <jv>proto</jv> = <jk>new</jk> Proto();
+ * 	Prototext <jv>proto</jv> = <jk>new</jk> Prototext();
  * 	MyPojo <jv>myPojo</jv> = <jv>proto</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
  * 	String <jv>string</jv> = <jv>proto</jv>.write(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = Proto.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = Proto.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = Prototext.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = Prototext.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -65,10 +65,10 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
  * </ul>
  */
-public class Proto extends CharMarshaller {
+public class Prototext extends CharMarshaller {
 
 	/** Default marshaller instance. */
-	public static final Proto DEFAULT = new Proto();
+	public static final Prototext DEFAULT = new Prototext();
 
 	/**
 	 * Serializes a Java object to a Protobuf Text Format string.
@@ -159,8 +159,8 @@ public class Proto extends CharMarshaller {
 	}
 
 	/** Creates using default serializer and parser. */
-	public Proto() {
-		this(ProtoSerializer.DEFAULT, ProtoParser.DEFAULT);
+	public Prototext() {
+		this(PrototextSerializer.DEFAULT, PrototextParser.DEFAULT);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class Proto extends CharMarshaller {
 	 * @param s The serializer.
 	 * @param p The parser.
 	 */
-	public Proto(ProtoSerializer s, ProtoParser p) {
+	public Prototext(PrototextSerializer s, PrototextParser p) {
 		super(s, p);
 	}
 }

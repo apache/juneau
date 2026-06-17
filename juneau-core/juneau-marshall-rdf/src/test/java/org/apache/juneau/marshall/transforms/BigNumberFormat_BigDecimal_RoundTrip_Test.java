@@ -52,7 +52,7 @@ import org.junit.jupiter.params.provider.*;
  * {@link BigNumberFormat#format(BigDecimal, BigNumberFormat) BigNumberFormat.format(BigDecimal,&hellip;)} contract,
  * any non-zero-scale {@link BigDecimal} (anything with a fractional part) is forced to {@link BigNumberFormat#STRING}
  * regardless of magnitude.  Zero-scale {@link BigDecimal} values use the integer JS-safe bound.  Binary serializers
- * (MsgPack / CBOR / Proto / BSON / Parquet) bypass the format dispatch and receive the native {@link BigDecimal};
+ * (MsgPack / CBOR / Prototext / BSON / Parquet) bypass the format dispatch and receive the native {@link BigDecimal};
  * they downcast to {@code double} or equivalent and may lose precision past 64-bit float capacity.  The matrix
  * below stays inside double-precision-safe scales / magnitudes so binary round-trips remain lossless.
  */
@@ -178,7 +178,7 @@ class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 	 * fractional {@link BigDecimal} values to integer on the wire.
 	 *
 	 * <p>
-	 * Toml and Proto serializer sessions classify any non-{@link Float} / non-{@link Double} {@link Number}
+	 * Toml and Prototext serializer sessions classify any non-{@link Float} / non-{@link Double} {@link Number}
 	 * via {@code w.integerValue(((Number)value).longValue())} in their {@code writeValue} dispatch, which
 	 * truncates the fractional part.  Under {@link BigNumberFormat#STRING} / {@link BigNumberFormat#AUTO}
 	 * the swap returns a {@link String} for the bean-property path, so the {@code Number} branch isn't
@@ -193,7 +193,7 @@ class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 	 */
 	private static boolean truncatesFractionalBigDecimal(RoundTrip_Tester t, BigNumberFormat fmt, boolean isTopLevel) {
 		var s = t.getSerializer();
-		var affected = s instanceof org.apache.juneau.marshall.toml.TomlSerializer || s instanceof org.apache.juneau.marshall.proto.ProtoSerializer;
+		var affected = s instanceof org.apache.juneau.marshall.toml.TomlSerializer || s instanceof org.apache.juneau.marshall.prototext.PrototextSerializer;
 		if (!affected)
 			return false;
 		if (isTopLevel)
@@ -342,7 +342,7 @@ class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 		// standalone BigDecimal value — they assert that the serializer accepts it without throwing.
 		if (t.isValidationOnly())
 			return;
-		// Top-level raw-value dispatch on Toml/Proto truncates fractional BigDecimal regardless of format
+		// Top-level raw-value dispatch on Toml/Prototext truncates fractional BigDecimal regardless of format
 		// (the swap install path only applies to bean-property metadata, not standalone-value dispatch).
 		if (truncatesFractionalBigDecimal(t, fmt, true))
 			return;

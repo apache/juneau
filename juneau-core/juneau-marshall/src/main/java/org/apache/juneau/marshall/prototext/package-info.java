@@ -28,12 +28,12 @@
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	String proto = ProtoSerializer.<jsf>DEFAULT</jsf>.serialize(myBean);
- * 	MyBean bean = ProtoParser.<jsf>DEFAULT</jsf>.parse(proto, MyBean.<jk>class</jk>);
+ * 	String proto = PrototextSerializer.<jsf>DEFAULT</jsf>.serialize(myBean);
+ * 	MyBean bean = PrototextParser.<jsf>DEFAULT</jsf>.parse(proto, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Or use the marshaller:</jc>
- * 	String proto = Proto.<jsm>of</jsm>(myBean);
- * 	MyBean bean = Proto.<jsm>to</jsm>(proto, MyBean.<jk>class</jk>);
+ * 	String proto = Prototext.<jsm>of</jsm>(myBean);
+ * 	MyBean bean = Prototext.<jsm>to</jsm>(proto, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -41,4 +41,4 @@
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format Specification</a>
  * </ul>
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;

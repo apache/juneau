@@ -105,7 +105,7 @@ import org.apache.juneau.marshall.parquet.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.plaintext.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
@@ -5374,7 +5374,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 					HjsonSerializer.class,
 					HoconSerializer.class,
 					IniSerializer.class,
-					ProtoSerializer.class,
+					PrototextSerializer.class,
 					MarkdownSerializer.class
 				)
 				.parsers(
@@ -5395,7 +5395,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 					HjsonParser.class,
 					HoconParser.class,
 					IniParser.class,
-					ProtoParser.class,
+					PrototextParser.class,
 					MarkdownParser.class
 				);
 			// @formatter:on

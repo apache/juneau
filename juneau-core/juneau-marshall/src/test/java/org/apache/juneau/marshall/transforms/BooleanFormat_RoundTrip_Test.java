@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
@@ -72,7 +72,7 @@ import org.junit.jupiter.params.provider.*;
  *
  * <p>
  * Per the {@link BooleanFormat} class-level "Binary serializers" note, the binary serializer family
- * (BSON / CBOR / MsgPack / Proto / Parquet) emits a native boolean wire type regardless of the
+ * (BSON / CBOR / MsgPack / Prototext / Parquet) emits a native boolean wire type regardless of the
  * configured constant.  The variant {@code booleanSwap} installed by
  * {@link org.apache.juneau.marshall.MarshalledPropertyPostProcessor} respects that by returning the raw
  * {@link Boolean} to {@link org.apache.juneau.marshall.serializer.OutputStreamSerializerSession} subtypes
@@ -191,9 +191,9 @@ class BooleanFormat_RoundTrip_Test extends TestBase {
 			.serializer(MarkdownSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
 			.parser(MarkdownParser.create().booleanFormat(fmt))
 			.build(),
-		fmt -> RoundTrip_Tester.create(36, "Proto - default | " + fmt)
-			.serializer(ProtoSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
-			.parser(ProtoParser.create().booleanFormat(fmt))
+		fmt -> RoundTrip_Tester.create(36, "Prototext - default | " + fmt)
+			.serializer(PrototextSerializer.create().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))
+			.parser(PrototextParser.create().booleanFormat(fmt))
 			.build(),
 		fmt -> RoundTrip_Tester.create(37, "Hjson - default | " + fmt)
 			.serializer(HjsonSerializer.create().ws().keepNullProperties().addBeanTypes().addRootType().booleanFormat(fmt))

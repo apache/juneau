@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
@@ -43,12 +43,12 @@ import org.apache.juneau.marshall.stream.*;
 	"java:S3776", // Cognitive complexity acceptable for serialize dispatch
 	"java:S6541"  // Brain method acceptable for serializeAnything
 })
-public class ProtoSerializerSession extends WriterSerializerSession implements RecordWritable {
+public class PrototextSerializerSession extends WriterSerializerSession implements RecordWritable {
 
 	private static final String ARG_ctx = "ctx";
 	private static final String CONST_value = "_value";
 
-	/** Enable with -Djuneau.proto.serialize.debug=true or ProtoSerializerSession.setDebugTrace(true) */
+	/** Enable with -Djuneau.proto.serialize.debug=true or PrototextSerializerSession.setDebugTrace(true) */
 	private static boolean debugTrace = Boolean.getBoolean("juneau.proto.serialize.debug");
 
 	/**
@@ -62,20 +62,20 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 	protected static final List<String> traceLog = new ArrayList<>();
 
 	/**
-	 * Builder for Proto serializer session.
+	 * Builder for Prototext serializer session.
 	 */
 	public static class Builder extends WriterSerializerSession.Builder<Builder> {
 
-		private ProtoSerializer ctx;
+		private PrototextSerializer ctx;
 
-		protected Builder(ProtoSerializer ctx) {
+		protected Builder(PrototextSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
 		}
 
 		@Override
-		public ProtoSerializerSession build() {
-			return new ProtoSerializerSession(this);
+		public PrototextSerializerSession build() {
+			return new PrototextSerializerSession(this);
 		}
 	}
 
@@ -85,13 +85,13 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 	 * @param ctx The serializer context.
 	 * @return A new builder.
 	 */
-	public static Builder create(ProtoSerializer ctx) {
+	public static Builder create(PrototextSerializer ctx) {
 		return new Builder(assertArgNotNull(ARG_ctx, ctx));
 	}
 
-	private final ProtoSerializer ctx;
+	private final PrototextSerializer ctx;
 
-	protected ProtoSerializerSession(Builder builder) {
+	protected PrototextSerializerSession(Builder builder) {
 		super(builder);
 		ctx = builder.ctx;
 	}
@@ -110,8 +110,8 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		if (o == null)
 			return;
-		if (debugTrace) traceLog.add("[Proto] doSerialize: o=" + cn(o) + ", getExpectedRootType=" + getExpectedRootType(o).inner().getName());
-		var w = getProtoWriter(out);
+		if (debugTrace) traceLog.add("[Prototext] doSerialize: o=" + cn(o) + ", getExpectedRootType=" + getExpectedRootType(o).inner().getName());
+		var w = getPrototextWriter(out);
 		var eType = getExpectedRootType(o);
 		var cm = getClassMetaForObject(o);
 		// For root object: if it's a bean (or toBeanMap works), serialize as bean directly to avoid
@@ -130,16 +130,16 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 		serializeAnything(w, o, eType, null, null);
 	}
 
-	protected final ProtoWriter getProtoWriter(SerializerPipe out) {
+	protected final PrototextWriter getPrototextWriter(SerializerPipe out) {
 		var output = out.getRawOutput();
-		if (output instanceof ProtoWriter output2)
+		if (output instanceof PrototextWriter output2)
 			return output2;
-		var w = new ProtoWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getUriResolver());
+		var w = new PrototextWriter(out.getWriter(), isUseWhitespace(), getMaxIndent(), isTrimStrings(), getUriResolver());
 		out.setWriter(w);
 		return w;
 	}
 
-	private void serializeAnything(ProtoWriter out, Object o, ClassMeta<?> eType, String fieldName, BeanPropertyMeta pMeta) throws SerializeException {
+	private void serializeAnything(PrototextWriter out, Object o, ClassMeta<?> eType, String fieldName, BeanPropertyMeta pMeta) throws SerializeException {
 		if (o == null)
 			return;
 		if (eType == null)
@@ -151,7 +151,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 			var aTypeName = aType == null ? "null" : aType.inner().getName();
 			var isBean = aType != null ? aType.isBean() : "n/a";
 			var isMap = aType != null ? aType.isMap() : "n/a";
-			traceLog.add("[Proto] serializeAnything(root): push2 aType=" + aTypeName
+			traceLog.add("[Prototext] serializeAnything(root): push2 aType=" + aTypeName
 				+ ", isBean=" + isBean + ", isMap=" + isMap + ", isRecursion=" + isRecursion);
 		}
 		if (aType == null) {
@@ -189,7 +189,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 				path = "collection";
 			else
 				path = "scalar";
-			traceLog.add("[Proto] serializeAnything(root): sType=" + sType.inner().getName() + ", isBean=" + sType.isBean() + ", isMap=" + sType.isMap()
+			traceLog.add("[Prototext] serializeAnything(root): sType=" + sType.inner().getName() + ", isBean=" + sType.isBean() + ", isMap=" + sType.isMap()
 				+ ", path=" + path);
 		}
 		// Workaround: when isBean() is false but toBeanMap works (e.g. POJO with public fields),
@@ -247,7 +247,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 			pop();
 	}
 
-	private void serializeBeanMap(ProtoWriter out, BeanMap<?> m, String typeName) throws SerializeException {
+	private void serializeBeanMap(PrototextWriter out, BeanMap<?> m, String typeName) throws SerializeException {
 		if (isAddBeanTypes() && nn(typeName)) {
 			out.cr(indent);
 			out.scalarField("_type");
@@ -263,7 +263,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			if (canIgnoreValue(pMeta, key, value))
 				return;
-			var protoPMeta = ctx.getProtoBeanPropertyMeta(pMeta);
+			var protoPMeta = ctx.getPrototextBeanPropertyMeta(pMeta);
 			if (nn(protoPMeta) && !protoPMeta.getComment().isEmpty())
 				out.comment(protoPMeta.getComment());
 			out.cr(indent);
@@ -325,7 +325,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 		});
 	}
 
-	private void serializeMap(ProtoWriter out, Map<?, ?> map, ClassMeta<?> type) throws SerializeException {
+	private void serializeMap(PrototextWriter out, Map<?, ?> map, ClassMeta<?> type) throws SerializeException {
 		forEachEntry(map, e -> {
 			var k = toString(e.getKey());
 			var v = e.getValue();
@@ -354,7 +354,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 		});
 	}
 
-	private void serializeCollectionItem(ProtoWriter out, Object item) throws SerializeException {
+	private void serializeCollectionItem(PrototextWriter out, Object item) throws SerializeException {
 		var aType = getClassMetaForObject(item);
 		if (aType.isBean())
 			serializeBeanMap(out, toBeanMap(item), null);
@@ -364,7 +364,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 			serializeScalarValue(out, item, aType);
 	}
 
-	private void serializeBeanOrMapItem(ProtoWriter out, Object item) throws SerializeException {
+	private void serializeBeanOrMapItem(PrototextWriter out, Object item) throws SerializeException {
 		var aType = getClassMetaForObject(item);
 		if (aType.isMap())
 			serializeMap(out, (Map) item, aType);
@@ -372,7 +372,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 			serializeBeanMap(out, toBeanMap(item), null);
 	}
 
-	private void serializeCollection(ProtoWriter out, Collection<?> c, ClassMeta<?> type, String fieldName) throws SerializeException {
+	private void serializeCollection(PrototextWriter out, Collection<?> c, ClassMeta<?> type, String fieldName) throws SerializeException {
 		var elType = type.getElementType();
 		// When element type is Object, resolve actual type from first element for beans/maps
 		var elementIsBeanOrMap = elType.isBean() || elType.isMap();
@@ -420,7 +420,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 		}
 	}
 
-	private void serializeStreamable(ProtoWriter out, Object o, ClassMeta<?> sType, String fieldName) throws SerializeException {
+	private void serializeStreamable(PrototextWriter out, Object o, ClassMeta<?> sType, String fieldName) throws SerializeException {
 		var elType = sType.getElementType();
 		if (elType.isBean() || elType.isMap()) {
 			forEachStreamableEntry(o, sType, item -> {
@@ -442,7 +442,7 @@ public class ProtoSerializerSession extends WriterSerializerSession implements R
 		}
 	}
 
-	private void serializeScalarValue(ProtoWriter out, Object value, ClassMeta<?> type) throws SerializeException {
+	private void serializeScalarValue(PrototextWriter out, Object value, ClassMeta<?> type) throws SerializeException {
 		if (value == null)
 			return;
 		// Resolve to the runtime type and apply any registered swap.  Required for collection/array

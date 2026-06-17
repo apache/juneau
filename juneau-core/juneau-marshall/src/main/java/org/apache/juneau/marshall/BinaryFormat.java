@@ -39,7 +39,7 @@ import java.util.*;
  * {@link #HEX}, {@link #BASE64}, {@link #SPACED_HEX}, or {@link #BASE64_URL}.
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto) emit native bytes regardless of the configured
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native bytes regardless of the configured
  * {@code BinaryFormat}; this setting only affects text-based serializers and the
  * {@code OutputStreamSerializerSession#serializeToString(Object)} stream-to-string convenience.
  */

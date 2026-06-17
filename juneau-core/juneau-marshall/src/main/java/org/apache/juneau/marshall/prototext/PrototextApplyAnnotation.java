@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
@@ -27,23 +27,23 @@ import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Utility classes and methods for the {@link ProtoApply @ProtoApply} annotation.
+ * Utility classes and methods for the {@link PrototextApply @PrototextApply} annotation.
  *
  */
-public class ProtoApplyAnnotation {
+public class PrototextApplyAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private ProtoApplyAnnotation() {}
+	private PrototextApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link ProtoApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link PrototextApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
 	})
-	public static class Applier extends AnnotationApplier<ProtoApply,Context.Builder> {
+	public static class Applier extends AnnotationApplier<PrototextApply,Context.Builder> {
 
 		/**
 		 * Constructor.
@@ -51,12 +51,12 @@ public class ProtoApplyAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public Applier(VarResolverSession vr) {
-			super(ProtoApply.class, Context.Builder.class, vr);
+			super(PrototextApply.class, Context.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ProtoApply> ai, Context.Builder b) {
-			ProtoApply a = ai.inner();
+		public void apply(AnnotationInfo<PrototextApply> ai, Context.Builder b) {
+			PrototextApply a = ai.inner();
 			if (isEmptyArray(a.on()) && isEmptyArray(a.onClass()))
 				return;
 			b.annotations(a);
@@ -72,22 +72,22 @@ public class ProtoApplyAnnotation {
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {
 
-		Proto value = ProtoAnnotation.DEFAULT;
+		Prototext value = PrototextAnnotation.DEFAULT;
 
 		/**
 		 * Constructor.
 		 */
 		protected Builder() {
-			super(ProtoApply.class);
+			super(PrototextApply.class);
 		}
 
 		/**
-		 * Sets the {@link ProtoApply#value()} property on this annotation.
+		 * Sets the {@link PrototextApply#value()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
 		 * @return This object.
 		 */
-		public Builder value(Proto value) {
+		public Builder value(Prototext value) {
 			this.value = value;
 			return this;
 		}
@@ -147,11 +147,11 @@ public class ProtoApplyAnnotation {
 		}
 
 		/**
-		 * Instantiates a new {@link ProtoApply @ProtoApply} object initialized with this builder.
+		 * Instantiates a new {@link PrototextApply @PrototextApply} object initialized with this builder.
 		 *
-		 * @return A new {@link ProtoApply} object.
+		 * @return A new {@link PrototextApply} object.
 		 */
-		public ProtoApply build() {
+		public PrototextApply build() {
 			return new Object(this);
 		}
 	}
@@ -159,23 +159,23 @@ public class ProtoApplyAnnotation {
 	@SuppressWarnings({
 		"java:S2160" // equals() inherited from AnnotationObject compares all annotation interface methods; subclass fields are accessed via those methods
 	})
-	private static class Object extends AppliedOnClassAnnotationObject implements ProtoApply {
+	private static class Object extends AppliedOnClassAnnotationObject implements PrototextApply {
 
-		private final Proto value;
+		private final Prototext value;
 
-		Object(ProtoApplyAnnotation.Builder b) {
+		Object(PrototextApplyAnnotation.Builder b) {
 			super(b);
 			value = b.value;
 		}
 
-		@Override /* Overridden from ProtoApply */
-		public Proto value() {
+		@Override /* Overridden from PrototextApply */
+		public Prototext value() {
 			return value;
 		}
 	}
 
 	/** Default value */
-	public static final ProtoApply DEFAULT = create().build();
+	public static final PrototextApply DEFAULT = create().build();
 
 	/**
 	 * Instantiates a new builder for this class.
@@ -212,7 +212,7 @@ public class ProtoApplyAnnotation {
 	 * @param a The annotation to check.
 	 * @return <jk>true</jk> if the specified annotation contains all default values.
 	 */
-	public static boolean empty(ProtoApply a) {
+	public static boolean empty(PrototextApply a) {
 		return a == null || DEFAULT.equals(a);
 	}
 }

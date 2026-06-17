@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
@@ -24,19 +24,19 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Metadata on bean properties specific to the Proto serializers and parsers pulled from the {@link Proto @Proto}
+ * Metadata on bean properties specific to the Prototext serializers and parsers pulled from the {@link Prototext @Prototext}
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
  * </ul>
  */
-public class ProtoBeanPropertyMeta extends ExtendedBeanPropertyMeta {
+public class PrototextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 	/**
 	 * Default instance.
 	 */
-	public static final ProtoBeanPropertyMeta DEFAULT = new ProtoBeanPropertyMeta();
+	public static final PrototextBeanPropertyMeta DEFAULT = new PrototextBeanPropertyMeta();
 
 	private final String comment;
 
@@ -44,22 +44,22 @@ public class ProtoBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	 * Constructor.
 	 *
 	 * @param bpm The metadata of the bean property of this additional metadata.
-	 * @param mp Proto metadata provider (for finding information about other artifacts).
+	 * @param mp Prototext metadata provider (for finding information about other artifacts).
 	 */
-	public ProtoBeanPropertyMeta(BeanPropertyMeta bpm, ProtoMetaProvider mp) {
+	public PrototextBeanPropertyMeta(BeanPropertyMeta bpm, PrototextMetaProvider mp) {
 		super(bpm);
-		var first = getBeanPropertyMeta().getAnnotations(Proto.class).findFirst();
+		var first = getBeanPropertyMeta().getAnnotations(Prototext.class).findFirst();
 		var c = first.map(ai -> nullIfEmpty(trim(ai.inner().comment()))).orElse("");
 		this.comment = emptyIfNull(c);
 	}
 
-	private ProtoBeanPropertyMeta() {
+	private PrototextBeanPropertyMeta() {
 		super(null);
 		this.comment = "";
 	}
 
 	/**
-	 * Returns the comment to emit before this field (from {@link Proto#comment()}).
+	 * Returns the comment to emit before this field (from {@link Prototext#comment()}).
 	 *
 	 * @return The comment, or empty string if none.
 	 */

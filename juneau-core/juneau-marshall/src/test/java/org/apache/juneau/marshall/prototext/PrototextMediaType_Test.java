@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,20 +22,20 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for Proto media type configuration.
+ * Tests for Prototext media type configuration.
  */
-class ProtoMediaType_Test {
+class PrototextMediaType_Test {
 
 	@Test
 	void a01_producesCorrectMediaType() {
-		var ct = ProtoSerializer.DEFAULT.getResponseContentType();
+		var ct = PrototextSerializer.DEFAULT.getResponseContentType();
 		assertEquals("text", ct.getType());
 		assertEquals("protobuf", ct.getSubType());
 	}
 
 	@Test
 	void a02_consumesCorrectMediaType() {
-		var types = ProtoParser.DEFAULT.getMediaTypes().stream()
+		var types = PrototextParser.DEFAULT.getMediaTypes().stream()
 			.map(mt -> mt.getType() + "/" + mt.getSubType())
 			.toList();
 		assertTrue(types.stream().anyMatch(t -> t.contains("protobuf")), "Expected protobuf types: " + types);
@@ -44,9 +44,9 @@ class ProtoMediaType_Test {
 	@Test
 	void a03_contentNegotiation() {
 		var bean = JsonMap.of("x", 1);
-		var proto = org.apache.juneau.marshall.marshaller.Proto.of(bean);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(bean);
 		assertNotNull(proto);
-		var parsed = org.apache.juneau.marshall.marshaller.Proto.to(proto, JsonMap.class);
+		var parsed = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
 		assertEquals(1L, parsed.get("x"));
 	}
 }

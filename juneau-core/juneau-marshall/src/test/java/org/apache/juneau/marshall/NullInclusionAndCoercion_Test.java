@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.hocon.*;
 import org.apache.juneau.marshall.ini.*;
 import org.apache.juneau.marshall.jcs.*;
 import org.apache.juneau.marshall.json.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.toml.*;
 import org.apache.juneau.marshall.uon.*;
@@ -527,7 +527,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		var bean = new G1();
 		List<Serializer> serializers = List.of(
 			HjsonSerializer.DEFAULT, HoconSerializer.DEFAULT, IniSerializer.DEFAULT, JcsSerializer.DEFAULT,
-			ProtoSerializer.DEFAULT, TomlSerializer.DEFAULT, UonSerializer.DEFAULT, XmlSerializer.DEFAULT,
+			PrototextSerializer.DEFAULT, TomlSerializer.DEFAULT, UonSerializer.DEFAULT, XmlSerializer.DEFAULT,
 			YamlSerializer.DEFAULT);
 		for (var s : serializers)
 			assertDoesNotThrow(() -> s.serialize(bean), () -> s.getClass().getSimpleName());

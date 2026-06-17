@@ -36,7 +36,7 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parquet.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.plaintext.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.marshall.toml.*;
@@ -88,7 +88,7 @@ class RecordStream_Test extends TestBase {
 		MSGPACK    (org.apache.juneau.marshall.msgpack.MsgPackParser.DEFAULT,
 		            org.apache.juneau.marshall.msgpack.MsgPackSerializer.DEFAULT, Mode.BINARY),
 		BSON       (BsonParser.DEFAULT,         BsonSerializer.DEFAULT,         Mode.BINARY),
-		PROTO      (ProtoParser.DEFAULT,        ProtoSerializer.DEFAULT,        Mode.BINARY, Skip.PROTO_LIMITATIONS),
+		PROTO      (PrototextParser.DEFAULT,        PrototextSerializer.DEFAULT,        Mode.BINARY, Skip.PROTO_LIMITATIONS),
 		PARQUET    (ParquetParser.DEFAULT,      ParquetSerializer.DEFAULT,      Mode.BINARY, Skip.PARQUET_LIMITATIONS),
 		YAML       (YamlParser.DEFAULT,         YamlSerializer.DEFAULT),
 		TOML       (TomlParser.DEFAULT,         TomlSerializer.DEFAULT,         Skip.NESTED_ROOT_REQUIRED, Skip.LIMITED_BEAN_BINDING),
@@ -148,7 +148,7 @@ class RecordStream_Test extends TestBase {
 		NESTED_ROOT_REQUIRED,
 		/** JSONL produces multiple records on the wire; we test it via separate multi-record assertions. */
 		MULTI_RECORD,
-		/** Proto's wire format requires beans with explicit field tags; many shapes don't round-trip. */
+		/** Prototext's wire format requires beans with explicit field tags; many shapes don't round-trip. */
 		PROTO_LIMITATIONS,
 		/** Parquet's row-group layout doesn't roundtrip arbitrary nested shapes for single-bean payloads. */
 		PARQUET_LIMITATIONS,
@@ -247,7 +247,7 @@ class RecordStream_Test extends TestBase {
 		assumeFalse(fmt.has(Skip.MARKDOWN_FRAGMENT_ONLY), "Markdown fragments don't round-trip arbitrary scalars");
 		assumeFalse(fmt.has(Skip.NESTED_ROOT_REQUIRED), "Format requires a bean/map root");
 		assumeFalse(fmt.has(Skip.CSV_FLAT_TABULAR_ONLY), "CSV requires a tabular root");
-		assumeFalse(fmt.has(Skip.PROTO_LIMITATIONS), "Proto requires bean schema");
+		assumeFalse(fmt.has(Skip.PROTO_LIMITATIONS), "Prototext requires bean schema");
 		assumeFalse(fmt.has(Skip.PARQUET_LIMITATIONS), "Parquet requires row-shaped data");
 		assumeFalse(fmt.has(Skip.URLENC_LIMITATIONS), "UrlEncoding requires top-level map shape");
 		assumeFalse(fmt.has(Skip.MULTI_RECORD), "JSONL multi-record covered separately");
@@ -268,7 +268,7 @@ class RecordStream_Test extends TestBase {
 		assumeFalse(fmt.has(Skip.PLAINTEXT_TOSTRING_ONLY), "PlainText only round-trips strings");
 		assumeFalse(fmt.has(Skip.MULTI_RECORD), "JSONL multi-record covered separately");
 		assumeFalse(fmt.has(Skip.WRITER_ONLY_OUTPUT_ONLY), "writer-only no roundtrip");
-		assumeFalse(fmt.has(Skip.PROTO_LIMITATIONS), "Proto requires schema annotations");
+		assumeFalse(fmt.has(Skip.PROTO_LIMITATIONS), "Prototext requires schema annotations");
 		assumeFalse(fmt.has(Skip.PARQUET_LIMITATIONS), "Parquet requires List wrapper");
 		assumeFalse(fmt.has(Skip.URLENC_LIMITATIONS), "UrlEncoding requires top-level map shape");
 		assumeFalse(fmt.has(Skip.MARKDOWN_FRAGMENT_ONLY), "Markdown serializer/parser asymmetric for single-bean key/value table");

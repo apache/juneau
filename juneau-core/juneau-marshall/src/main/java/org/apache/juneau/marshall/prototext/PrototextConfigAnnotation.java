@@ -14,30 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Utility classes and methods for the {@link ProtoConfig @ProtoConfig} annotation.
+ * Utility classes and methods for the {@link PrototextConfig @PrototextConfig} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
  * </ul>
  */
-public class ProtoConfigAnnotation {
+public class PrototextConfigAnnotation {
 
 	/**
 	 * Prevents instantiation.
 	 */
-	private ProtoConfigAnnotation() {}
+	private PrototextConfigAnnotation() {}
 
 	/**
-	 * Applies {@link ProtoConfig} annotations to a {@link org.apache.juneau.marshall.proto.ProtoParser.Builder}.
+	 * Applies {@link PrototextConfig} annotations to a {@link org.apache.juneau.marshall.prototext.PrototextParser.Builder}.
 	 */
-	public static class ParserApply extends AnnotationApplier<ProtoConfig,ProtoParser.Builder> {
+	public static class ParserApply extends AnnotationApplier<PrototextConfig,PrototextParser.Builder> {
 
 		/**
 		 * Constructor.
@@ -45,19 +45,19 @@ public class ProtoConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public ParserApply(VarResolverSession vr) {
-			super(ProtoConfig.class, ProtoParser.Builder.class, vr);
+			super(PrototextConfig.class, PrototextParser.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ProtoConfig> ai, ProtoParser.Builder b) {
-			// No-op: ProtoParser has no config options from ProtoConfig
+		public void apply(AnnotationInfo<PrototextConfig> ai, PrototextParser.Builder b) {
+			// No-op: PrototextParser has no config options from PrototextConfig
 		}
 	}
 
 	/**
-	 * Applies {@link ProtoConfig} annotations to a {@link org.apache.juneau.marshall.proto.ProtoSerializer.Builder}.
+	 * Applies {@link PrototextConfig} annotations to a {@link org.apache.juneau.marshall.prototext.PrototextSerializer.Builder}.
 	 */
-	public static class SerializerApply extends AnnotationApplier<ProtoConfig,ProtoSerializer.Builder> {
+	public static class SerializerApply extends AnnotationApplier<PrototextConfig,PrototextSerializer.Builder> {
 
 		/**
 		 * Constructor.
@@ -65,11 +65,11 @@ public class ProtoConfigAnnotation {
 		 * @param vr The resolver for resolving values in annotations.
 		 */
 		public SerializerApply(VarResolverSession vr) {
-			super(ProtoConfig.class, ProtoSerializer.Builder.class, vr);
+			super(PrototextConfig.class, PrototextSerializer.Builder.class, vr);
 		}
 
 		@Override
-		public void apply(AnnotationInfo<ProtoConfig> ai, ProtoSerializer.Builder b) {
+		public void apply(AnnotationInfo<PrototextConfig> ai, PrototextSerializer.Builder b) {
 			var a = ai.inner();
 
 			bool(a.useListSyntaxForBeans()).ifPresent(b::useListSyntaxForBeans);

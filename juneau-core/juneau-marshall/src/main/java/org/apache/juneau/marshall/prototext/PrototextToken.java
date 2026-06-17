@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 /**
- * Token produced by {@link ProtoTokenizer} for Protobuf Text Format parsing.
+ * Token produced by {@link PrototextTokenizer} for Protobuf Text Format parsing.
  *
  * <p>
  * Holds a {@link TokenType} and an optional value for tokens that carry data
@@ -26,7 +26,7 @@ package org.apache.juneau.marshall.proto;
  * @param type The token type.
  * @param value The token value (<jk>null</jk> for structural tokens).
  */
-public record ProtoToken(ProtoToken.TokenType type, Object value) {
+public record PrototextToken(PrototextToken.TokenType type, Object value) {
 
 	/**
 	 * Token type enumeration.

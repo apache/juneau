@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Output is binary (<code><jk>byte</jk>[]</code>) in the Protocol Buffers <b>binary</b> wire format.
  *
  * <p>
- * Distinct from the text-format {@link Proto} marshaller (<c>text/protobuf</c>):  this marshaller emits the compact,
+ * Distinct from the text-format {@link Prototext} marshaller (<c>text/protobuf</c>):  this marshaller emits the compact,
  * non-self-describing protobuf binary wire format and requires the target type on read.
  *
  * <h5 class='figure'>Examples:</h5>

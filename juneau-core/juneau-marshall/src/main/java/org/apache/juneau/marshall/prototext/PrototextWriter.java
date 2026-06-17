@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.serializer.*;
 	"java:S3776", // Cognitive complexity acceptable for protobuf formatting methods
 	"resource" // Writer resource managed by calling code
 })
-public class ProtoWriter extends SerializerWriter {
+public class PrototextWriter extends SerializerWriter {
 
 	/**
 	 * Constructor.
@@ -53,7 +53,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param trimStrings If <jk>true</jk>, trim strings before serialization.
 	 * @param uriResolver The URI resolver.
 	 */
-	protected ProtoWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, UriResolver uriResolver) {
+	protected PrototextWriter(Writer out, boolean useWhitespace, int maxIndent, boolean trimStrings, UriResolver uriResolver) {
 		super(out, useWhitespace, maxIndent, trimStrings, '"', uriResolver);
 	}
 
@@ -63,7 +63,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param name The field name.
 	 * @return This object.
 	 */
-	public ProtoWriter fieldName(String name) {
+	public PrototextWriter fieldName(String name) {
 		if (isBareIdentifier(name) || isBareIntegerTag(name))
 			w(name);
 		else
@@ -80,7 +80,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param name The field name.
 	 * @return This object.
 	 */
-	public ProtoWriter scalarField(String name) {
+	public PrototextWriter scalarField(String name) {
 		fieldName(name);
 		w(": ");
 		return this;
@@ -93,7 +93,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param useColon If <jk>true</jk>, include colon before brace.
 	 * @return This object.
 	 */
-	public ProtoWriter messageStart(String name, boolean useColon) {
+	public PrototextWriter messageStart(String name, boolean useColon) {
 		fieldName(name);
 		if (useColon)
 			w(": ");
@@ -108,7 +108,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param depth The current indentation depth for the closing brace.
 	 * @return This object.
 	 */
-	public ProtoWriter messageEnd(int depth) {
+	public PrototextWriter messageEnd(int depth) {
 		i(depth).w('}');
 		nl(depth);
 		return this;
@@ -120,7 +120,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param value The string value.
 	 * @return This object.
 	 */
-	public ProtoWriter stringValue(String value) {
+	public PrototextWriter stringValue(String value) {
 		if (trimStrings)
 			value = trim(value);
 		w('"').w(escapeString(value == null ? "" : value)).w('"');
@@ -133,7 +133,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param value The integer value.
 	 * @return This object.
 	 */
-	public ProtoWriter integerValue(long value) {
+	public PrototextWriter integerValue(long value) {
 		w(Long.toString(value));
 		return this;
 	}
@@ -144,7 +144,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param value The float value.
 	 * @return This object.
 	 */
-	public ProtoWriter floatValue(double value) {
+	public PrototextWriter floatValue(double value) {
 		if (Double.isNaN(value))
 			w("nan");
 		else if (value == Double.POSITIVE_INFINITY)
@@ -166,7 +166,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param value The boolean value.
 	 * @return This object.
 	 */
-	public ProtoWriter booleanValue(boolean value) {
+	public PrototextWriter booleanValue(boolean value) {
 		w(value ? "true" : "false");
 		return this;
 	}
@@ -177,7 +177,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param name The enum constant name.
 	 * @return This object.
 	 */
-	public ProtoWriter enumValue(String name) {
+	public PrototextWriter enumValue(String name) {
 		w(name == null ? "" : name);
 		return this;
 	}
@@ -188,7 +188,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param data The byte array.
 	 * @return This object.
 	 */
-	public ProtoWriter bytesValue(byte[] data) {
+	public PrototextWriter bytesValue(byte[] data) {
 		if (data == null)
 			return this;
 		w('"');
@@ -208,7 +208,7 @@ public class ProtoWriter extends SerializerWriter {
 	 *
 	 * @return This object.
 	 */
-	public ProtoWriter listStart() {
+	public PrototextWriter listStart() {
 		w('[');
 		return this;
 	}
@@ -218,7 +218,7 @@ public class ProtoWriter extends SerializerWriter {
 	 *
 	 * @return This object.
 	 */
-	public ProtoWriter listEnd() {
+	public PrototextWriter listEnd() {
 		w(']');
 		return this;
 	}
@@ -229,7 +229,7 @@ public class ProtoWriter extends SerializerWriter {
 	 * @param text The comment text.
 	 * @return This object.
 	 */
-	public ProtoWriter comment(String text) {
+	public PrototextWriter comment(String text) {
 		if (!isEmpty(text))
 			w("# ").w(text).w('\n');
 		return this;
@@ -314,26 +314,26 @@ public class ProtoWriter extends SerializerWriter {
 	}
 
 	// Override return types for chaining
-	@Override public ProtoWriter append(char c) { super.append(c); return this; }
-	@Override public ProtoWriter append(char[] value) { super.append(value); return this; }
-	@Override public ProtoWriter append(int indent, char c) { super.append(indent, c); return this; }
-	@Override public ProtoWriter append(int indent, String text) { super.append(indent, text); return this; }
-	@Override public ProtoWriter append(Object text) { super.append(text); return this; }
-	@Override public ProtoWriter append(String text) { super.append(text); return this; }
-	@Override public ProtoWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }
-	@Override public ProtoWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }
-	@Override public ProtoWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }
-	@Override public ProtoWriter appendln(String text) { super.appendln(text); return this; }
-	@Override public ProtoWriter appendUri(Object value) { super.appendUri(value); return this; }
-	@Override public ProtoWriter cr(int depth) { super.cr(depth); return this; }
-	@Override public ProtoWriter cre(int depth) { super.cre(depth); return this; }
-	@Override public ProtoWriter i(int indent) { super.i(indent); return this; }
-	@Override public ProtoWriter ie(int indent) { super.ie(indent); return this; }
-	@Override public ProtoWriter nl(int indent) { super.nl(indent); return this; }
-	@Override public ProtoWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }
-	@Override public ProtoWriter q() { super.q(); return this; }
-	@Override public ProtoWriter s() { super.s(); return this; }
-	@Override public ProtoWriter sIf(boolean flag) { super.sIf(flag); return this; }
-	@Override public ProtoWriter w(char value) { super.w(value); return this; }
-	@Override public ProtoWriter w(String value) { super.w(value); return this; }
+	@Override public PrototextWriter append(char c) { super.append(c); return this; }
+	@Override public PrototextWriter append(char[] value) { super.append(value); return this; }
+	@Override public PrototextWriter append(int indent, char c) { super.append(indent, c); return this; }
+	@Override public PrototextWriter append(int indent, String text) { super.append(indent, text); return this; }
+	@Override public PrototextWriter append(Object text) { super.append(text); return this; }
+	@Override public PrototextWriter append(String text) { super.append(text); return this; }
+	@Override public PrototextWriter appendIf(boolean b, char c) { super.appendIf(b, c); return this; }
+	@Override public PrototextWriter appendIf(boolean b, String text) { super.appendIf(b, text); return this; }
+	@Override public PrototextWriter appendln(int indent, String text) { super.appendln(indent, text); return this; }
+	@Override public PrototextWriter appendln(String text) { super.appendln(text); return this; }
+	@Override public PrototextWriter appendUri(Object value) { super.appendUri(value); return this; }
+	@Override public PrototextWriter cr(int depth) { super.cr(depth); return this; }
+	@Override public PrototextWriter cre(int depth) { super.cre(depth); return this; }
+	@Override public PrototextWriter i(int indent) { super.i(indent); return this; }
+	@Override public PrototextWriter ie(int indent) { super.ie(indent); return this; }
+	@Override public PrototextWriter nl(int indent) { super.nl(indent); return this; }
+	@Override public PrototextWriter nlIf(boolean flag, int indent) { super.nlIf(flag, indent); return this; }
+	@Override public PrototextWriter q() { super.q(); return this; }
+	@Override public PrototextWriter s() { super.s(); return this; }
+	@Override public PrototextWriter sIf(boolean flag) { super.sIf(flag); return this; }
+	@Override public PrototextWriter w(char value) { super.w(value); return this; }
+	@Override public PrototextWriter w(String value) { super.w(value); return this; }
 }

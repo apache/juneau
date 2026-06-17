@@ -56,7 +56,7 @@ import java.util.*;
  * <h5 class='topic'>Binary serializers</h5>
  *
  * <p>
- * Binary serializers (BSON / CBOR / MsgPack / Proto) emit native 16-byte binary regardless of the
+ * Binary serializers (BSON / CBOR / MsgPack / Prototext) emit native 16-byte binary regardless of the
  * configured {@code UuidFormat}; this setting only affects text-based serializers. BSON in particular
  * uses {@code binData} subtype 4 (UUID).
  */

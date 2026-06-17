@@ -18,7 +18,7 @@
  * Protocol Buffers <b>binary wire-format</b> marshalling support (bean/reflection-driven, no <c>.proto</c> file required).
  *
  * <p>
- * Unlike the text-format {@link org.apache.juneau.marshall.proto} package (<c>text/protobuf</c>), this package emits and
+ * Unlike the text-format {@link org.apache.juneau.marshall.prototext} package (<c>text/protobuf</c>), this package emits and
  * parses the compact, non-self-describing protobuf <b>binary</b> wire format (<c>application/protobuf</c>).  Because the
  * binary wire carries neither field names nor specific scalar types, both serialization and parsing consult a per-bean
  * <b>field-number &hArr; property + wire-scalar-type</b> table derived from Juneau bean metadata and cached on

@@ -174,7 +174,7 @@ public class ContentType extends HttpMediaTypeHeader {
 	public static final ContentType TEXT_OPENAPI = new ContentType("text/openapi");
 	/** Content-Type for {@code text/plain}. */
 	public static final ContentType TEXT_PLAIN = new ContentType("text/plain");
-	/** Content-Type for {@code text/protobuf} (Juneau {@code ProtoSerializer}/{@code ProtoParser}). */
+	/** Content-Type for {@code text/protobuf} (Juneau {@code PrototextSerializer}/{@code PrototextParser}). */
 	public static final ContentType TEXT_PROTOBUF = new ContentType("text/protobuf");
 	/** Content-Type for {@code text/turtle} (RDF Turtle). */
 	public static final ContentType TEXT_TURTLE = new ContentType("text/turtle");

@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parquet.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.plaintext.*;
-import org.apache.juneau.marshall.proto.*;
+import org.apache.juneau.marshall.prototext.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.soap.*;
 import org.apache.juneau.marshall.toml.*;
@@ -439,7 +439,7 @@ public abstract class Context {
 		 * 	<li class='ja'>{@link OpenApiConfig}
 		 * 	<li class='ja'>{@link ParserConfig}
 		 * 	<li class='ja'>{@link ParquetConfig}
-		 * 	<li class='ja'>{@link ProtoConfig}
+		 * 	<li class='ja'>{@link PrototextConfig}
 		 * 	<li class='ja'>{@link PlainTextConfig}
 		 * 	<li class='ja'>{@link SerializerConfig}
 		 * 	<li class='ja'>{@link SoapXmlConfig}

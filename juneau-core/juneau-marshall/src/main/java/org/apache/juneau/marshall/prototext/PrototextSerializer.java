@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
@@ -78,19 +78,19 @@ import org.apache.juneau.marshall.stream.*;
  * The following direct subclasses are provided for convenience:
  * <ul class='spaced-list'>
  * 	<li>
- * 		{@link ProtoSerializer.Readable} - Default serializer with additional indentation spacing.
+ * 		{@link PrototextSerializer.Readable} - Default serializer with additional indentation spacing.
  * </ul>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Use one of the default serializers to serialize a POJO</jc>
- * 	String <jv>proto</jv> = ProtoSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
+ * 	String <jv>proto</jv> = PrototextSerializer.<jsf>DEFAULT</jsf>.serialize(<jv>someObject</jv>);
  *
  * 	<jc>// Create a custom serializer</jc>
- * 	ProtoSerializer <jv>serializer</jv> = ProtoSerializer.<jsm>create</jsm>().addBeanTypes().build();
+ * 	PrototextSerializer <jv>serializer</jv> = PrototextSerializer.<jsm>create</jsm>().addBeanTypes().build();
  *
  * 	<jc>// Clone an existing serializer and modify it</jc>
- * 	<jv>serializer</jv> = ProtoSerializer.<jsf>DEFAULT</jsf>.copy().useColonForMessages().build();
+ * 	<jv>serializer</jv> = PrototextSerializer.<jsf>DEFAULT</jsf>.copy().useColonForMessages().build();
  *
  * 	<jc>// Serialize a POJO to Protobuf Text Format</jc>
  * 	<jv>proto</jv> = <jv>serializer</jv>.serialize(<jv>someObject</jv>);
@@ -128,7 +128,7 @@ import org.apache.juneau.marshall.stream.*;
 	"java:S115",  // PROP_/ARG_ prefix follows framework convention
 	"resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.
 })
-public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvider, RecordWritable {
+public class PrototextSerializer extends WriterSerializer implements PrototextMetaProvider, RecordWritable {
 
 	private static final String PROP_useListSyntaxForBeans = "useListSyntaxForBeans";
 	private static final String PROP_useColonForMessages = "useColonForMessages";
@@ -139,8 +139,8 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 	 */
 	public static class Builder extends WriterSerializer.Builder<Builder> {
 
-		private static final Cache<HashKey, ProtoSerializer> CACHE =
-			Cache.of(HashKey.class, ProtoSerializer.class).build();
+		private static final Cache<HashKey, PrototextSerializer> CACHE =
+			Cache.of(HashKey.class, PrototextSerializer.class).build();
 
 		private boolean useListSyntaxForBeans = false;
 		private boolean useColonForMessages = false;
@@ -156,7 +156,7 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 			useColonForMessages = copyFrom.useColonForMessages;
 		}
 
-		protected Builder(ProtoSerializer copyFrom) {
+		protected Builder(PrototextSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
 			useListSyntaxForBeans = copyFrom.useListSyntaxForBeans;
 			useColonForMessages = copyFrom.useColonForMessages;
@@ -203,8 +203,8 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 		}
 
 		@Override
-		public ProtoSerializer build() {
-			return cache(CACHE).build(ProtoSerializer.class);
+		public PrototextSerializer build() {
+			return cache(CACHE).build(PrototextSerializer.class);
 		}
 
 		@Override
@@ -223,13 +223,13 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 	}
 
 	/** Default serializer. */
-	public static final ProtoSerializer DEFAULT = new ProtoSerializer(create());
+	public static final PrototextSerializer DEFAULT = new PrototextSerializer(create());
 
 	/** Default serializer with additional indentation. */
-	public static final ProtoSerializer DEFAULT_READABLE = new ProtoSerializer(create().useWhitespace());
+	public static final PrototextSerializer DEFAULT_READABLE = new PrototextSerializer(create().useWhitespace());
 
 	/** Default serializer subclass with readable output. */
-	public static class Readable extends ProtoSerializer {
+	public static class Readable extends PrototextSerializer {
 		/**
 		 * Constructor.
 		 */
@@ -245,23 +245,23 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 	protected final boolean useListSyntaxForBeans;
 	protected final boolean useColonForMessages;
 
-	private final Map<ClassMeta<?>, ProtoClassMeta> protoClassMetas = new ConcurrentHashMap<>();
-	private final Map<BeanPropertyMeta, ProtoBeanPropertyMeta> protoBeanPropertyMetas = new ConcurrentHashMap<>();
+	private final Map<ClassMeta<?>, PrototextClassMeta> prototextClassMetas = new ConcurrentHashMap<>();
+	private final Map<BeanPropertyMeta, PrototextBeanPropertyMeta> prototextBeanPropertyMetas = new ConcurrentHashMap<>();
 
 	/**
 	 * Constructor.
 	 *
 	 * @param builder The builder.
 	 */
-	public ProtoSerializer(Builder builder) {
+	public PrototextSerializer(Builder builder) {
 		super(builder);
 		useListSyntaxForBeans = builder.useListSyntaxForBeans;
 		useColonForMessages = builder.useColonForMessages;
 	}
 
 	@Override
-	public ProtoSerializerSession.Builder createSession() {
-		return ProtoSerializerSession.create(this);
+	public PrototextSerializerSession.Builder createSession() {
+		return PrototextSerializerSession.create(this);
 	}
 
 	@Override
@@ -276,16 +276,16 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 			.a(PROP_useColonForMessages, useColonForMessages);
 	}
 
-	@Override /* ProtoMetaProvider */
-	public ProtoBeanPropertyMeta getProtoBeanPropertyMeta(BeanPropertyMeta bpm) {
+	@Override /* PrototextMetaProvider */
+	public PrototextBeanPropertyMeta getPrototextBeanPropertyMeta(BeanPropertyMeta bpm) {
 		if (bpm == null)
-			return ProtoBeanPropertyMeta.DEFAULT;
-		return protoBeanPropertyMetas.computeIfAbsent(bpm, k -> new ProtoBeanPropertyMeta(k.getDelegateFor(), this));
+			return PrototextBeanPropertyMeta.DEFAULT;
+		return prototextBeanPropertyMetas.computeIfAbsent(bpm, k -> new PrototextBeanPropertyMeta(k.getDelegateFor(), this));
 	}
 
-	@Override /* ProtoMetaProvider */
-	public ProtoClassMeta getProtoClassMeta(ClassMeta<?> cm) {
-		return protoClassMetas.computeIfAbsent(cm, k -> new ProtoClassMeta(k, this));
+	@Override /* PrototextMetaProvider */
+	public PrototextClassMeta getPrototextClassMeta(ClassMeta<?> cm) {
+		return prototextClassMetas.computeIfAbsent(cm, k -> new PrototextClassMeta(k, this));
 	}
 
 	/**
@@ -293,9 +293,9 @@ public class ProtoSerializer extends WriterSerializer implements ProtoMetaProvid
 	 * <b>default session arguments</b> (mirrors {@link #serialize(Object)}).
 	 *
 	 * <p>
-	 * The real implementation lives on {@link ProtoSerializerSession#serializeRecords(Object)}.
+	 * The real implementation lives on {@link PrototextSerializerSession#serializeRecords(Object)}.
 	 * Callers that need request-derived configuration should call {@link #createSession()} and
-	 * invoke {@link ProtoSerializerSession#serializeRecords(Object)} on the built session instead.
+	 * invoke {@link PrototextSerializerSession#serializeRecords(Object)} on the built session instead.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.

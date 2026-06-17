@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.proto;
+package org.apache.juneau.marshall.prototext;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
@@ -24,11 +24,11 @@ import java.lang.annotation.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Dynamically applies a {@link Proto @Proto} annotation to specified classes, methods, or fields.
+ * Dynamically applies a {@link Prototext @Prototext} annotation to specified classes, methods, or fields.
  *
  * <p>
  * This annotation separates the <b>targeting</b> concern ({@link #on()}/{@link #onClass()}) from the
- * <b>content</b> concern ({@link #value()}), enabling {@link Proto @Proto} to be a pure data annotation
+ * <b>content</b> concern ({@link #value()}), enabling {@link Prototext @Prototext} to be a pure data annotation
  * without marshall-specific application machinery.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -38,16 +38,16 @@ import org.apache.juneau.marshall.*;
 @Documented
 @Target({ TYPE, METHOD })
 @Retention(RUNTIME)
-@Repeatable(ProtoApply.Array.class)
-@ContextApply(ProtoApplyAnnotation.Applier.class)
-public @interface ProtoApply {
+@Repeatable(PrototextApply.Array.class)
+@ContextApply(PrototextApplyAnnotation.Applier.class)
+public @interface PrototextApply {
 
 	/**
-	 * The {@link Proto @Proto} annotation to apply.
+	 * The {@link Prototext @Prototext} annotation to apply.
 	 *
 	 * @return The annotation value.
 	 */
-	Proto value();
+	Prototext value();
 
 	/**
 	 * Dynamically apply this annotation to the specified classes/methods/fields.
@@ -72,7 +72,7 @@ public @interface ProtoApply {
 	Class<?>[] onClass() default {};
 
 	/**
-	 * A collection of {@link ProtoApply @ProtoApply annotations}.
+	 * A collection of {@link PrototextApply @PrototextApply annotations}.
 	 */
 	@Documented
 	@Target({ TYPE, METHOD })
@@ -84,6 +84,6 @@ public @interface ProtoApply {
 		 *
 		 * @return The annotation value.
 		 */
-		ProtoApply[] value();
+		PrototextApply[] value();
 	}
 }

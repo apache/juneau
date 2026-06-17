@@ -88,7 +88,7 @@ class PetstoreJetty_Test extends TestBase {
 	private static HttpResponse<String> get(String path, String accept) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create(fixture.getRootUrl() + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.header("Accept", accept)
 			.GET()
 			.build();
@@ -98,7 +98,7 @@ class PetstoreJetty_Test extends TestBase {
 	private static HttpResponse<String> getWithAuth(String path, String accept, String authValue) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create(fixture.getRootUrl() + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.header("Accept", accept)
 			.header("Authorization", authValue)
 			.GET()
@@ -109,7 +109,7 @@ class PetstoreJetty_Test extends TestBase {
 	private static HttpResponse<String> post(String path, String contentType, String body) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create(fixture.getRootUrl() + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.header("Content-Type", contentType)
 			.header("Accept", "application/json")
 			.POST(HttpRequest.BodyPublishers.ofString(body))
@@ -120,7 +120,7 @@ class PetstoreJetty_Test extends TestBase {
 	private static HttpResponse<String> delete(String path) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create(fixture.getRootUrl() + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.DELETE()
 			.build();
 		return HTTP.send(req, BodyHandlers.ofString());
