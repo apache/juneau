@@ -667,6 +667,11 @@ const sidebars: SidebarsConfig = {
 								},
 								{
 									type: 'doc',
+									id: 'topics/02.34.07.ProtobufBinaryBasics',
+									label: '2.34.5.2. Protobuf Binary Format Basics',
+								},
+								{
+									type: 'doc',
 									id: 'topics/02.34.06.ParquetBasics',
 									label: '2.34.6. Parquet Basics',
 								},
