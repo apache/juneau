@@ -72,6 +72,7 @@ class ContentType_Test extends TestBase {
 			Arguments.of("APPLICATION_JCS_JSON", ContentType.APPLICATION_JCS_JSON, "application/jcs+json"),
 			Arguments.of("APPLICATION_JSON", ContentType.APPLICATION_JSON, "application/json"),
 			Arguments.of("APPLICATION_JSON5", ContentType.APPLICATION_JSON5, "application/json5"),
+			Arguments.of("APPLICATION_JSON5L", ContentType.APPLICATION_JSON5L, "application/json5l"),
 			Arguments.of("APPLICATION_JSONL", ContentType.APPLICATION_JSONL, "application/jsonl"),
 			Arguments.of("APPLICATION_JSON_PATCH", ContentType.APPLICATION_JSON_PATCH, "application/json-patch+json"),
 			Arguments.of("APPLICATION_LD_JSON", ContentType.APPLICATION_LD_JSON, "application/ld+json"),

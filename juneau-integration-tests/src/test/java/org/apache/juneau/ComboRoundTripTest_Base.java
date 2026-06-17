@@ -195,6 +195,34 @@ public abstract class ComboRoundTripTest_Base extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// JSON5L
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a46_serializeJson5l(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testSerialize("json5l");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a47_parseJson5l(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParse("json5l");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a48_parseJson5lJsonEquivalency(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseJsonEquivalency("json5l");
+	}
+
+	@ParameterizedTest
+	@MethodSource("testers")
+	public void a49_verifyJson5l(ComboRoundTrip_Tester<?> t) throws Exception {
+		t.testParseVerify("json5l");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// XML
 	//-----------------------------------------------------------------------------------------------------------------
 

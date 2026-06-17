@@ -95,6 +95,7 @@ import org.apache.juneau.marshall.ini.*;
 import org.apache.juneau.marshall.jcs.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.json5l.*;
 import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -5359,6 +5360,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 					JsonSerializer.class,
 					JcsSerializer.class,
 					Json5Serializer.class,
+					Json5lSerializer.class,
 					JsonlSerializer.class,
 					HtmlSerializer.class,
 					XmlSerializer.class,
@@ -5380,6 +5382,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				.parsers(
 					JsonParser.class,
 					Json5Parser.class,
+					Json5lParser.class,
 					JsonlParser.class,
 					XmlParser.class,
 					HtmlParser.class,

@@ -32,6 +32,7 @@ import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.ini.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.json5l.*;
 import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
@@ -113,6 +114,7 @@ public class ComboRoundTrip_Tester<T> {
 		public Builder<T> json5T(String value) { expected.put("json5T", value); return this; }
 		public Builder<T> json5R(String value) { expected.put("json5R", value); return this; }
 		public Builder<T> jsonl(String value) { expected.put("jsonl", value); return this; }
+		public Builder<T> json5l(String value) { expected.put("json5l", value); return this; }
 		public Builder<T> xml(String value) { expected.put("xml", value); return this; }
 		public Builder<T> xmlT(String value) { expected.put("xmlT", value); return this; }
 		public Builder<T> xmlR(String value) { expected.put("xmlR", value); return this; }
@@ -171,6 +173,7 @@ public class ComboRoundTrip_Tester<T> {
 		serializers.put("json5T", create(b, Json5Serializer.create().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("json5R", create(b, Json5Serializer.DEFAULT_READABLE.copy().addBeanTypes().addRootType()));
 		serializers.put("jsonl", create(b, JsonlSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
+		serializers.put("json5l", create(b, Json5lSerializer.create().keepNullProperties().addBeanTypes().addRootType()));
 		serializers.put("xml", create(b, XmlSerializer.DEFAULT_SQ.copy().addBeanTypes().addRootType()));
 		serializers.put("xmlT", create(b, XmlSerializer.create().sq().typePropertyName("t").addBeanTypes().addRootType()));
 		serializers.put("xmlR", create(b, XmlSerializer.DEFAULT_SQ_READABLE.copy().addBeanTypes().addRootType()));
@@ -201,6 +204,7 @@ public class ComboRoundTrip_Tester<T> {
 		parsers.put("json5T", create(b, Json5Parser.create().typePropertyName("t")));
 		parsers.put("json5R", create(b, Json5Parser.DEFAULT.copy()));
 		parsers.put("jsonl", create(b, JsonlParser.create()));
+		parsers.put("json5l", create(b, Json5lParser.create()));
 		parsers.put("xml", create(b, XmlParser.DEFAULT.copy()));
 		parsers.put("xmlT", create(b, XmlParser.create().typePropertyName("t")));
 		parsers.put("xmlR", create(b, XmlParser.DEFAULT.copy()));

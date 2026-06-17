@@ -28,6 +28,7 @@ import org.apache.juneau.marshall.ini.*;
 import org.apache.juneau.marshall.jcs.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.json5l.*;
 import org.apache.juneau.marshall.jsonl.*;
 import org.apache.juneau.marshall.markdown.*;
 import org.apache.juneau.marshall.msgpack.*;
@@ -62,6 +63,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 					<li class='jc'>{@link HtmlSchemaDocSerializer}
  * 					<li class='jc'>{@link JsonSerializer}
  * 					<li class='jc'>{@link Json5Serializer}
+ * 					<li class='jc'>{@link Json5lSerializer}
  * 					<li class='jc'>{@link JsonSchemaSerializer}
  * 					<li class='jc'>{@link XmlDocSerializer}
  * 					<li class='jc'>{@link UonSerializer}
@@ -76,6 +78,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 				<ul class='javatree'>
  * 					<li class='jc'>{@link JsonParser}
  * 					<li class='jc'>{@link Json5Parser}
+ * 					<li class='jc'>{@link Json5lParser}
  * 					<li class='jc'>{@link XmlParser}
  * 					<li class='jc'>{@link HtmlParser}
  * 					<li class='jc'>{@link UonParser}
@@ -153,6 +156,7 @@ import org.apache.juneau.rest.server.servlet.*;
 		JsonSerializer.class,
 		JcsSerializer.class,
 		Json5Serializer.class,
+		Json5lSerializer.class,
 		JsonlSerializer.class,
 		JsonSchemaSerializer.class,
 		XmlDocSerializer.class,
@@ -177,6 +181,7 @@ import org.apache.juneau.rest.server.servlet.*;
 	parsers={
 		JsonParser.class,
 		Json5Parser.class,
+		Json5lParser.class,
 		JsonlParser.class,
 		XmlParser.class,
 		HtmlParser.class,
