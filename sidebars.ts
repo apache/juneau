@@ -1099,6 +1099,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/05.15.YamlConfigFiles',
 							label: '5.15. YAML Config Files',
 						},
+						{
+							type: 'doc',
+							id: 'topics/05.16.ConfigProfilesAndRelaxedBinding',
+							label: '5.16. Config Profiles & Relaxed Binding',
+						},
 					],
 				},
 					{
