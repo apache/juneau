@@ -2108,6 +2108,18 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'category',
+					label: '17. Dependency Management',
+					collapsed: true,
+					items: [
+						{
+							type: 'doc',
+							id: 'topics/17.01.DependencyManagement',
+							label: '17.1. Dependency Management (BOM & Bundles)',
+						},
+					],
+				},
+				{
+					type: 'category',
 					label: '18. Starter Projects',
 					collapsed: true,
 					items: [
