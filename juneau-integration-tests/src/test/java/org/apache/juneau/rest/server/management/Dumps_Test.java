@@ -112,10 +112,33 @@ class Dumps_Test extends TestBase {
 		c.get("/threaddump").run().assertStatus(200).assertContent().asString().isNotEmpty();
 	}
 
-	@Test void c02_heapDumpEnabled() throws Exception {
-		var c = MockRestClient.buildLax(B.class);
-		var bytes = c.get("/heapdump").run().assertStatus(200).getContent().asBytes();
-		assertTrue(bytes.length > 0, "Heap dump body should be non-empty");
+	// The enabled-path heap-dump handler body (resolve stream -> set headers -> stream it back) is covered with a
+	// FAKE DumpsManager that returns a tiny in-memory stream instead of a real JVM heap dump.  We must NOT drive a
+	// REAL enabled /heapdump through MockRestClient: MockServletResponse buffers the whole response in memory, so a
+	// full JVM heap dump would OOM the constrained CI fork.  (Real dumpHeap content is covered by worker test a03.)
+
+	/** A DumpsManager that enables heap dumps and returns a tiny fixed stream — no real (huge) JVM dump. */
+	public static class FakeHeapDumpManager extends DumpsManager {
+		@Override public DumpsSettings resolveSettings(RestContext context) {
+			return DumpsSettings.create().enableHeapDump().build();
+		}
+		@Override public InputStream heapDumpStream(boolean live) {
+			return new ByteArrayInputStream("JAVA PROFILE 1.0.2\0".getBytes());
+		}
+	}
+
+	@Rest(mixins={DumpsMixin.class})
+	public static class HF extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public DumpsManager dumpsManager() { return new FakeHeapDumpManager(); }
+	}
+
+	@Test void c03_heapDumpEnabled_handlerBody_fakeManager() throws Exception {
+		var c = MockRestClient.buildLax(HF.class);
+		var body = c.get("/heapdump").run().assertStatus(200)
+			.assertHeader("Content-Type").is("application/octet-stream")
+			.getContent().asString();
+		assertTrue(body.startsWith("JAVA PROFILE"), "Fake heap-dump stream should be returned verbatim");
 	}
 
 	// =================================================================================
@@ -141,10 +164,23 @@ class Dumps_Test extends TestBase {
 		c.get("/dumps/threaddump").run().assertStatus(200).assertContent().asString().isNotEmpty();
 	}
 
-	@Test void d02_resourceHeapDumpEnabled() throws Exception {
-		var c = MockRestClient.buildLax(D.class);
-		var bytes = c.get("/dumps/heapdump").run().assertStatus(200).getContent().asBytes();
-		assertTrue(bytes.length > 0, "Heap dump body should be non-empty");
+	// Resource-flavor enabled heap-dump handler body via the fake manager (no real JVM dump — see the mixin note).
+	@Rest(path="/dumps")
+	public static class FakeHeapChild extends DumpsResource {
+		@Bean public DumpsManager dumpsManager() { return new FakeHeapDumpManager(); }
+	}
+
+	@Rest(children={FakeHeapChild.class})
+	public static class DF extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void d02_resourceHeapDumpEnabled_handlerBody_fakeManager() throws Exception {
+		var c = MockRestClient.buildLax(DF.class);
+		var body = c.get("/dumps/heapdump").run().assertStatus(200)
+			.assertHeader("Content-Type").is("application/octet-stream")
+			.getContent().asString();
+		assertTrue(body.startsWith("JAVA PROFILE"), "Fake heap-dump stream should be returned verbatim");
 	}
 
 	// A child with no DumpsSettings bean -> deny-by-default on both ops.

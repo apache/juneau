@@ -45,7 +45,22 @@ import org.apache.juneau.rest.server.servlet.*;
 @Rest
 public class DumpsMixin extends RestMixin {
 
-	private final DumpsManager manager = new DumpsManager();
+	private final DumpsManager defaultManager = new DumpsManager();
+
+	/**
+	 * Returns the {@link DumpsManager} worker, resolved from the host bean store when a consumer registers one,
+	 * else a built-in default.  Resolving through the bean store lets consumers (and tests) supply an alternate
+	 * worker without subclassing.
+	 *
+	 * @param req The HTTP request (its context's bean store is searched).
+	 * @return The resolved manager; never <jk>null</jk>.
+	 */
+	@SuppressWarnings({
+		"resource" // The bean store is owned by the RestContext; this only borrows a bean and must not close it.
+	})
+	protected DumpsManager manager(RestRequest req) {
+		return req.getContext().getBeanStore().getBean(DumpsManager.class).orElse(defaultManager);
+	}
 
 	/**
 	 * [GET /threaddump] - Full thread dump from the {@link java.lang.management.ThreadMXBean ThreadMXBean}.
@@ -63,6 +78,7 @@ public class DumpsMixin extends RestMixin {
 		description="Renders a full thread dump from the JVM ThreadMXBean.  Disabled by default; opt in via DumpsSettings."
 	)
 	public String getThreadDump(RestRequest req) {
+		var manager = manager(req);
 		if (! manager.resolveSettings(req.getContext()).isThreadDumpEnabled())
 			throw new Forbidden("The /threaddump endpoint is disabled.  Register a DumpsSettings bean with threadDump enabled to use it.");
 		return manager.threadDump();
@@ -91,6 +107,7 @@ public class DumpsMixin extends RestMixin {
 		"resource" // The returned stream is handed off to the framework's InputStreamProcessor, which pipes then closes it (and the backing temp file self-deletes on close).
 	})
 	public InputStream getHeapDump(RestRequest req, RestResponse res) throws IOException {
+		var manager = manager(req);
 		if (! manager.resolveSettings(req.getContext()).isHeapDumpEnabled())
 			throw new Forbidden("The /heapdump endpoint is disabled.  Register a DumpsSettings bean with heapDump enabled to use it.");
 		var stream = manager.heapDumpStream(true);
