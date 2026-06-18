@@ -69,7 +69,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 		var cfg = inMemoryConfig("a01.cfg", "health.paths = /healthz, /readyz");
 		var overlay = overlayWith(cfg);
 
-		var args = new RestContext.Args(A_ConfigKey.class, null, null, A_ConfigKey::new, "", null, overlay, null, false);
+		var args = new RestContext.Args(A_ConfigKey.class, null, null, A_ConfigKey::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/healthz", "/readyz"}, ctx.getPaths(),
@@ -85,7 +85,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 		var cfg = inMemoryConfig("b01.cfg", "extra.paths = /probes/live, /probes/ready");
 		var overlay = overlayWith(cfg);
 
-		var args = new RestContext.Args(B_LiteralMixedWithConfig.class, null, null, B_LiteralMixedWithConfig::new, "", null, overlay, null, false);
+		var args = new RestContext.Args(B_LiteralMixedWithConfig.class, null, null, B_LiteralMixedWithConfig::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/api", "/probes/live", "/probes/ready"}, ctx.getPaths(),
@@ -102,7 +102,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 		var cfg = inMemoryConfig("c01.cfg", "some.other.key = /not-this");
 		var overlay = overlayWith(cfg);
 
-		var args = new RestContext.Args(C_ConfigMissWithDefault.class, null, null, C_ConfigMissWithDefault::new, "", null, overlay, null, false);
+		var args = new RestContext.Args(C_ConfigMissWithDefault.class, null, null, C_ConfigMissWithDefault::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-default"}, ctx.getPaths(),
@@ -120,7 +120,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 		var cfg = inMemoryConfig("c02.cfg", "some.other.key = /not-this");
 		var overlay = overlayWith(cfg);
 
-		var args = new RestContext.Args(C2_ConfigMissNoDefault.class, null, null, C2_ConfigMissNoDefault::new, "", null, overlay, null, false);
+		var args = new RestContext.Args(C2_ConfigMissNoDefault.class, null, null, C2_ConfigMissNoDefault::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertNotNull(ctx.getPaths());
@@ -138,7 +138,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 	@Test
 	void d01_envVar_unset_fallsBackToLiteralDefault() throws Exception {
 		// Env var should not be set on the test JVM; the $E{...,default} form resolves to "/healthz".
-		var args = new RestContext.Args(D_EnvDefault.class, null, null, D_EnvDefault::new, "", null, null, null, false);
+		var args = new RestContext.Args(D_EnvDefault.class, null, null, D_EnvDefault::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/healthz"}, ctx.getPaths(),
@@ -152,7 +152,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 	void e01_envVar_unset_defaultWithCommas_splitsAfterResolve() throws Exception {
 		// $E{NAME,a,b,c} returns "a,b,c" (the SVL var concatenates everything after the first comma as the
 		// default).  Then the outer comma-split fires and produces 2 mount paths.
-		var args = new RestContext.Args(E_EnvDefaultMulti.class, null, null, E_EnvDefaultMulti::new, "", null, null, null, false);
+		var args = new RestContext.Args(E_EnvDefaultMulti.class, null, null, E_EnvDefaultMulti::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/healthz", "/readyz"}, ctx.getPaths(),
@@ -171,7 +171,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 		var key = "juneau.todo73.svl.test.prop";
 		System.setProperty(key, "/sys-a,/sys-b");
 		try {
-			var args = new RestContext.Args(F_SysProp.class, null, null, F_SysProp::new, "", null, null, null, false);
+			var args = new RestContext.Args(F_SysProp.class, null, null, F_SysProp::new, "", null, null, null, RestContext.ContextKind.ROOT);
 			var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 			assertArrayEquals(new String[]{"/sys-a", "/sys-b"}, ctx.getPaths(),
@@ -184,7 +184,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 	@Test
 	void f02_systemProperty_unset_fallsBackToDefault() throws Exception {
 		// Property is not set; $S{key,/fallback} returns "/fallback".
-		var args = new RestContext.Args(F_SysProp.class, null, null, F_SysProp::new, "", null, null, null, false);
+		var args = new RestContext.Args(F_SysProp.class, null, null, F_SysProp::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/fallback"}, ctx.getPaths(),
@@ -200,7 +200,7 @@ class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 
 	@Test
 	void g01_pureLiteralPaths_passThroughUnchanged() throws Exception {
-		var args = new RestContext.Args(G_PureLiteral.class, null, null, G_PureLiteral::new, "", null, null, null, false);
+		var args = new RestContext.Args(G_PureLiteral.class, null, null, G_PureLiteral::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/static-1", "/static-2"}, ctx.getPaths(),

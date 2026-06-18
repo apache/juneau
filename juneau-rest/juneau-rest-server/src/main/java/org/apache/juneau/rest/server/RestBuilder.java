@@ -104,6 +104,14 @@ public interface RestBuilder<SELF extends RestBuilder<SELF>> {
 	SELF mixins(Class<?>... value);
 
 	/**
+	 * Specifies the {@link Rest#mixinDefs() mixinDefs} (rich, host-overriding mixin definitions) for this resource.
+	 *
+	 * @param value The new value for this property.
+	 * @return This object.
+	 */
+	SELF mixinDefs(Mixin... value);
+
+	/**
 	 * Specifies the {@link Rest#uriAuthority() uriAuthority} for this resource.
 	 *
 	 * @param value The new value for this property.

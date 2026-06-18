@@ -259,7 +259,7 @@ public final class MockRestClient implements Closeable {
 					restContext = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 						bs.addBean(Enablement.class, CONDITIONAL);
 						bs.addBeanType(CallLogger.class, BasicTestCallLogger.class);
-					}, overlay, null, false)).postInit().postInitChildFirst();
+					}, overlay, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
 					if (overlay == null)
 						restContextCache.put(c, restContext);
 				}

@@ -40,7 +40,7 @@ class BasicSwaggerProviderSession_Coverage_Test extends TestBase {
 	public void testMethod() { /* no-op */ }
 
 	private static org.apache.juneau.bean.swagger.Swagger getSwagger(Object resource) throws Exception {
-		var rc = new RestContext(new RestContext.Args(resource.getClass(), null, null, () -> resource, "", null, null, null, false));
+		var rc = new RestContext(new RestContext.Args(resource.getClass(), null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT));
 		var roc = new RestOpContext(BasicSwaggerProviderSession_Coverage_Test.class.getMethod("testMethod"), rc);
 		var call = RestSession.create(rc).resource(resource).req(new MockServletRequest()).res(new MockServletResponse()).build();
 		var req = roc.createRequest(call);

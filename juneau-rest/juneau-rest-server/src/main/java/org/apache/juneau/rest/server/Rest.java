@@ -249,7 +249,13 @@ public @interface Rest {
 	 * 		{@code B} get {@code parentContext = host}, never an {@code A → B} chain.
 	 * </ul>
 	 *
+	 * <p>
+	 * For host-side per-mixin setting overrides (applying guards / serializers / a mount path / etc. to a
+	 * specific mixin's endpoints without editing the mixin class), see the rich {@link #mixinDefs() mixinDefs}
+	 * companion attribute.
+	 *
 	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='jma'>{@link #mixinDefs()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server &mdash; Mixin Sub-Contexts</a>
 	 * </ul>
@@ -257,6 +263,38 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<?>[] mixins() default {};
+
+	/**
+	 * Rich mixin definitions &mdash; the host-side override form of {@link #mixins()}.
+	 *
+	 * <p>
+	 * Each {@link Mixin @Mixin} entry names a mixin class (via {@link Mixin#type()}) <b>and</b> lets the host
+	 * override selected {@code @Rest}-level settings for that mixin's mixed-in endpoints &mdash; guards, role
+	 * guards, serializers, default headers, mount path, etc. &mdash; without subclassing or editing the mixin
+	 * class.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Rest</ja>(
+	 * 		mixinDefs=<ja>@Mixin</ja>(type=FooMixin.<jk>class</jk>, guards=AdminGuard.<jk>class</jk>)
+	 * 	)
+	 * 	<jk>public class</jk> MyResource { ... }
+	 * </p>
+	 *
+	 * <p>
+	 * This attribute is additive to {@link #mixins()}: bare-class entries in {@code mixins()} and rich entries
+	 * here are discovered together (bare classes first, then {@code mixinDefs}).  A {@code @Mixin(type=X.class)}
+	 * with no overrides is the exact equivalent of a bare {@code mixins=X.class} entry.
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Mixin}
+	 * 	<li class='jm'>{@link #mixins()}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	Mixin[] mixinDefs() default {};
 
 	/**
 	 * Client version header.

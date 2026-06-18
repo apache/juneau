@@ -930,8 +930,39 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		beanStore().createBeanFromMethod(UrlPathMatcherList.class, resource(), this::matchesInjectScope, v.get())
 			.ifPresent(v::set);
 
+		// @Mixin(path/paths) re-mount: when this op belongs to a mixin sub-context whose host @Mixin declared a
+		// mount prefix, re-mount every matcher under each host-chosen prefix.  Reuses the pathToken normalization
+		// (via RestContext.getMixinMountPrefixes) so override input forms (bare / leading-slash / trailing /*)
+		// all collapse to one clean prefix.  Build-time only.
+		var prefixes = restContext().getMixinMountPrefixes();
+		if (! prefixes.isEmpty()) {
+			var remounted = UrlPathMatcherList.create();
+			for (var prefix : prefixes)
+				for (var pm : v.get().asArray())
+					remounted.add(UrlPathMatcher.of(prefixPath(prefix, pm.toString())));
+			v.set(remounted);
+		}
+
 		return v.get().asArray();
 	});
+
+	/**
+	 * Prepends a host-chosen mixin mount prefix to an op path pattern.
+	 *
+	 * <p>
+	 * {@code prefix} is a bare token (no slashes — already normalized by {@code RestContext.getMixinMountPrefixes}).
+	 * The original pattern keeps its leading slash and any trailing {@code /*}; e.g. prefix {@code "admin"} +
+	 * pattern {@code /info} &rarr; {@code /admin/info}, and prefix {@code "admin"} + {@code /loggers/*} &rarr;
+	 * {@code /admin/loggers/*}.
+	 *
+	 * @param prefix The normalized mount-prefix token.
+	 * @param pattern The original op path pattern.
+	 * @return The prefixed pattern.
+	 */
+	private static String prefixPath(String prefix, String pattern) {
+		var p = pattern.startsWith("/") ? pattern : "/" + pattern;
+		return "/" + prefix + p;
+	}
 
 	/** The required matchers extracted from {@link #matchersList}. */
 	private final Memoizer<RestMatcher[]> requiredMatchers = memoizer(() -> matchersList.get().getRequiredEntries());

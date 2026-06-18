@@ -76,6 +76,7 @@ public class RestAnnotation {
 		private Class<? extends Serializer>[] serializers = new Class[0];
 		private Class<?>[] children = {};
 		private Class<?>[] mixins = {};
+		private Mixin[] mixinDefs = {};
 		private Class<?>[] parsers = {};
 		private Swagger swagger = SwaggerAnnotation.DEFAULT;
 		private String disableContentParam = "";
@@ -210,6 +211,17 @@ public class RestAnnotation {
 		 */
 		public Builder mixins(Class<?>...value) {
 			mixins = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#mixinDefs()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder mixinDefs(Mixin...value) {
+			mixinDefs = value;
 			return this;
 		}
 
@@ -781,6 +793,7 @@ public class RestAnnotation {
 		private final Class<? extends Serializer>[] serializers;
 		private final Class<?>[] children;
 		private final Class<?>[] mixins;
+		private final Mixin[] mixinDefs;
 		private final Class<?>[] parsers;
 		private final Swagger swagger;
 		private final String disableContentParam;
@@ -835,6 +848,7 @@ public class RestAnnotation {
 			callLogger = b.callLogger;
 			children = copyOf(b.children);
 			mixins = copyOf(b.mixins);
+			mixinDefs = copyOf(b.mixinDefs);
 			clientVersionHeader = b.clientVersionHeader;
 			config = b.config;
 			eagerInit = b.eagerInit;
@@ -916,6 +930,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<?>[] mixins() {
 			return mixins;
+		}
+
+		@Override /* Overridden from Rest */
+		public Mixin[] mixinDefs() {
+			return mixinDefs;
 		}
 
 		@Override /* Overridden from Rest */

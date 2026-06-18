@@ -88,7 +88,7 @@ class DebugEnablement_Test extends TestBase {
 
 	private static RestContext newRestContext() throws Exception {
 		var resource = new R();
-		return new RestContext(new RestContext.Args(R.class, null, null, () -> resource, "", null, null, null, false))
+		return new RestContext(new RestContext.Args(R.class, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT))
 			.postInit().postInitChildFirst();
 	}
 

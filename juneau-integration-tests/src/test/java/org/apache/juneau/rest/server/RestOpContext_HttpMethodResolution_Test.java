@@ -39,7 +39,7 @@ class RestOpContext_HttpMethodResolution_Test extends TestBase {
 
 	private static RestContext build(Class<?> c) throws Exception {
 		var o = c.getDeclaredConstructor().newInstance();
-		return new RestContext(new RestContext.Args(c, null, null, () -> o, "", null, null, null, false)).postInit().postInitChildFirst();
+		return new RestContext(new RestContext.Args(c, null, null, () -> o, "", null, null, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
 	}
 
 	private static String verbOf(RestContext ctx, String javaMethodName) {

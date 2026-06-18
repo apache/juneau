@@ -41,7 +41,7 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 
 	private static RestContext ctx() throws Exception {
 		var resource = new A();
-		return new RestContext(new RestContext.Args(A.class, null, null, () -> resource, "", null, null, null, false))
+		return new RestContext(new RestContext.Args(A.class, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT))
 			.postInit().postInitChildFirst();
 	}
 
@@ -211,7 +211,7 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 	@Test void b01_builder_paths_setter() throws Exception {
 		var resource = new B();
 		// Builder.paths(...) is package-private; call via Args.paths.
-		var args = new RestContext.Args(B.class, null, null, () -> resource, "", null, null, new String[]{"/p1", "/p2"}, false);
+		var args = new RestContext.Args(B.class, null, null, () -> resource, "", null, null, new String[]{"/p1", "/p2"}, RestContext.ContextKind.ROOT);
 		var c = new RestContext(args).postInit().postInitChildFirst();
 		var paths = c.getPaths();
 		assertEquals(2, paths.length);
@@ -221,7 +221,7 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 
 	@Test void b02_builder_paths_empty_clears() throws Exception {
 		var resource = new B();
-		var args = new RestContext.Args(B.class, null, null, () -> resource, "", null, null, new String[0], false);
+		var args = new RestContext.Args(B.class, null, null, () -> resource, "", null, null, new String[0], RestContext.ContextKind.ROOT);
 		var c = new RestContext(args).postInit().postInitChildFirst();
 		assertEquals(0, c.getPaths().length);
 	}

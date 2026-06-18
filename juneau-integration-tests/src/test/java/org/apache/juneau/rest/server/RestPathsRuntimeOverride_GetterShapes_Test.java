@@ -68,7 +68,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a01_returnsNull_fallsBackToAnnotation() throws Exception {
-		var args = new RestContext.Args(A01_ReturnsNull.class, null, null, A01_ReturnsNull::new, "", null, null, null, false);
+		var args = new RestContext.Args(A01_ReturnsNull.class, null, null, A01_ReturnsNull::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/from-annotation"}, ctx.getPaths(),
@@ -87,7 +87,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a02_returnsString_single() throws Exception {
-		var args = new RestContext.Args(A02_ReturnsString.class, null, null, A02_ReturnsString::new, "", null, null, null, false);
+		var args = new RestContext.Args(A02_ReturnsString.class, null, null, A02_ReturnsString::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/foo"}, ctx.getPaths(),
@@ -106,7 +106,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a03_returnsString_cdl() throws Exception {
-		var args = new RestContext.Args(A03_ReturnsStringCdl.class, null, null, A03_ReturnsStringCdl::new, "", null, null, null, false);
+		var args = new RestContext.Args(A03_ReturnsStringCdl.class, null, null, A03_ReturnsStringCdl::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/foo", "/bar", "/baz"}, ctx.getPaths(),
@@ -125,7 +125,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a04_returnsStringArray() throws Exception {
-		var args = new RestContext.Args(A04_ReturnsStringArray.class, null, null, A04_ReturnsStringArray::new, "", null, null, null, false);
+		var args = new RestContext.Args(A04_ReturnsStringArray.class, null, null, A04_ReturnsStringArray::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/a", "/b"}, ctx.getPaths(),
@@ -144,7 +144,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a05_returnsStringArray_withCdlElement() throws Exception {
-		var args = new RestContext.Args(A05_ReturnsStringArrayWithCdl.class, null, null, A05_ReturnsStringArrayWithCdl::new, "", null, null, null, false);
+		var args = new RestContext.Args(A05_ReturnsStringArrayWithCdl.class, null, null, A05_ReturnsStringArrayWithCdl::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/a", "/b", "/c"}, ctx.getPaths(),
@@ -163,7 +163,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a06_returnsList() throws Exception {
-		var args = new RestContext.Args(A06_ReturnsList.class, null, null, A06_ReturnsList::new, "", null, null, null, false);
+		var args = new RestContext.Args(A06_ReturnsList.class, null, null, A06_ReturnsList::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/x", "/y"}, ctx.getPaths(),
@@ -187,7 +187,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a07_returnsSet() throws Exception {
-		var args = new RestContext.Args(A07_ReturnsSet.class, null, null, A07_ReturnsSet::new, "", null, null, null, false);
+		var args = new RestContext.Args(A07_ReturnsSet.class, null, null, A07_ReturnsSet::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/x", "/y"}, ctx.getPaths(),
@@ -208,7 +208,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a08_returnsNestedListOfArrays() throws Exception {
-		var args = new RestContext.Args(A08_ReturnsNestedMix.class, null, null, A08_ReturnsNestedMix::new, "", null, null, null, false);
+		var args = new RestContext.Args(A08_ReturnsNestedMix.class, null, null, A08_ReturnsNestedMix::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/a", "/b", "/c", "/d"}, ctx.getPaths(),
@@ -228,7 +228,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 	@Test
 	void a09_returnsStringWithSvl() throws Exception {
 		// REST_PATHS_TEST_VAR is intentionally never set on the test JVM; the SVL fallback default fires.
-		var args = new RestContext.Args(A09_ReturnsStringWithSvl.class, null, null, A09_ReturnsStringWithSvl::new, "", null, null, null, false);
+		var args = new RestContext.Args(A09_ReturnsStringWithSvl.class, null, null, A09_ReturnsStringWithSvl::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/fallback"}, ctx.getPaths(),
@@ -252,7 +252,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 	void a10_returnsListWithSvlAndCdl() throws Exception {
 		// $E{NAME,a,b,c} concatenates everything after the first comma as the default — SVL returns
 		// "/x,/y" here, then the post-SVL comma-split produces two mount paths.
-		var args = new RestContext.Args(A10_ReturnsListWithSvlCdl.class, null, null, A10_ReturnsListWithSvlCdl::new, "", null, null, null, false);
+		var args = new RestContext.Args(A10_ReturnsListWithSvlCdl.class, null, null, A10_ReturnsListWithSvlCdl::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"/x", "/y"}, ctx.getPaths(),
@@ -271,7 +271,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a11_returnsEmptyList() throws Exception {
-		var args = new RestContext.Args(A11_ReturnsEmptyList.class, null, null, A11_ReturnsEmptyList::new, "", null, null, null, false);
+		var args = new RestContext.Args(A11_ReturnsEmptyList.class, null, null, A11_ReturnsEmptyList::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertEquals(0, ctx.getPaths().length,
@@ -290,7 +290,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a12_returnsEmptyString() throws Exception {
-		var args = new RestContext.Args(A12_ReturnsEmptyString.class, null, null, A12_ReturnsEmptyString::new, "", null, null, null, false);
+		var args = new RestContext.Args(A12_ReturnsEmptyString.class, null, null, A12_ReturnsEmptyString::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertEquals(0, ctx.getPaths().length,
@@ -309,7 +309,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a13_returnsBlankString() throws Exception {
-		var args = new RestContext.Args(A13_ReturnsBlankString.class, null, null, A13_ReturnsBlankString::new, "", null, null, null, false);
+		var args = new RestContext.Args(A13_ReturnsBlankString.class, null, null, A13_ReturnsBlankString::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertEquals(0, ctx.getPaths().length,
@@ -334,7 +334,7 @@ class RestPathsRuntimeOverride_GetterShapes_Test extends TestBase {
 
 	@Test
 	void a14_returnsInteger_treatedAsString() throws Exception {
-		var args = new RestContext.Args(A14_ReturnsInteger.class, null, null, A14_ReturnsInteger::new, "", null, null, null, false);
+		var args = new RestContext.Args(A14_ReturnsInteger.class, null, null, A14_ReturnsInteger::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		var ctx = new RestContext(args).postInit().postInitChildFirst();
 
 		assertArrayEquals(new String[]{"42"}, ctx.getPaths(),

@@ -46,7 +46,7 @@ class RestBuilder_Test extends TestBase {
 	}
 
 	private static RestContext ctx(RestResource r) throws Exception {
-		return new RestContext(new RestContext.Args(r.getClass(), null, null, () -> r, "", null, null, null, false))
+		return new RestContext(new RestContext.Args(r.getClass(), null, null, () -> r, "", null, null, null, RestContext.ContextKind.ROOT))
 			.postInit().postInitChildFirst();
 	}
 

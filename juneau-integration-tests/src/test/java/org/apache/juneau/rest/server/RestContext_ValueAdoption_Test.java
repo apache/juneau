@@ -69,7 +69,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 
 	private RestContext ctx() throws Exception {
 		var resource = new A();
-		return new RestContext(new RestContext.Args(A.class, null, null, () -> resource, "", null, null, null, false))
+		return new RestContext(new RestContext.Args(A.class, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT))
 			.postInit().postInitChildFirst();
 	}
 

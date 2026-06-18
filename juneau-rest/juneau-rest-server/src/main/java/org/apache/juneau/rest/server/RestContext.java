@@ -219,11 +219,12 @@ public class RestContext extends Context {
 	 * 	default) means &quot;no programmatic override&quot; &mdash; resolution falls through to the resource's
 	 * 	{@code getPaths()} getter, then {@link Rest#paths()} (SVL-resolved per element and comma-split).
 	 * 	An empty array explicitly clears the mount list (no top-level mounts).
-	 * @param mixinContext {@code true} when this context is a per-mixin sub-context constructed by the host's
-	 * 	{@code restOperations} memoizer (parent-linked to the host's {@link RestContext} so that
+	 * @param kind The build-time {@link ContextKind kind} of this context — {@link ContextKind#ROOT ROOT} for a
+	 * 	top-level/host/mock resource, {@link ContextKind#CHILD CHILD} for a {@link Rest#children() @Rest(children)}
+	 * 	sub-resource (isolated resolution), or a {@link ContextKind.Mixin MIXIN} carrying the {@link ResolvedMixin}
+	 * 	that produced a per-mixin sub-context (parent-linked to the host so that
 	 * 	{@link RestContext#getRestAnnotationsForProperty(String) annotation-property walks} prepend the host's
-	 * 	{@code @Rest} chain before the mixin's own).  {@code false} for top-level resources and for
-	 * 	{@link Rest#children() @Rest(children)} sub-resources (which retain pre-10.0.0 isolated resolution).
+	 * 	{@code @Rest} chain before the mixin's own).
 	 *
 	 * @since 10.0.0
 	 */
@@ -239,7 +240,7 @@ public class RestContext extends Context {
 		Consumer<WritableBeanStore> beanStoreConfigurer,
 		BeanStore overridingParent,
 		String[] paths,
-		boolean mixinContext,
+		ContextKind kind,
 		RestBuilder<?> restBuilder
 	) {
 
@@ -253,6 +254,8 @@ public class RestContext extends Context {
 				path = "";
 			if (beanStoreConfigurer == null)
 				beanStoreConfigurer = bs -> {};
+			if (kind == null)
+				kind = ContextKind.ROOT;
 		}
 
 		/**
@@ -270,11 +273,128 @@ public class RestContext extends Context {
 		 * @param beanStoreConfigurer The bean-store configurer, or <jk>null</jk>.
 		 * @param overridingParent The overriding parent bean store, or <jk>null</jk>.
 		 * @param paths The programmatic mount-paths override, or <jk>null</jk>.
-		 * @param mixinContext Whether this is a mixin sub-context.
+		 * @param kind The build-time {@link ContextKind kind} of this context, or <jk>null</jk> for {@link ContextKind#ROOT}.
 		 */
-		public Args(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig, Supplier<?> resource, String path, Consumer<WritableBeanStore> beanStoreConfigurer, BeanStore overridingParent, String[] paths, boolean mixinContext) {
-			this(resourceClass, parentContext, servletConfig, resource, path, beanStoreConfigurer, overridingParent, paths, mixinContext, null);
+		public Args(Class<?> resourceClass, RestContext parentContext, ServletConfig servletConfig, Supplier<?> resource, String path, Consumer<WritableBeanStore> beanStoreConfigurer, BeanStore overridingParent, String[] paths, ContextKind kind) {
+			this(resourceClass, parentContext, servletConfig, resource, path, beanStoreConfigurer, overridingParent, paths, kind, null);
 		}
+
+		/**
+		 * Returns {@code true} when this context is a per-mixin sub-context (its {@link #kind()} is a
+		 * {@link ContextKind.Mixin}).
+		 *
+		 * @return {@code true} for a mixin sub-context.
+		 */
+		public boolean isMixinContext() {
+			return kind instanceof ContextKind.Mixin;
+		}
+	}
+
+	/**
+	 * The discovery-time normalized declaration of a single mixin.
+	 *
+	 * <p>
+	 * Every mixin entry &mdash; whether a bare {@link Rest#mixins() Class&lt;?&gt;} or a rich
+	 * {@link Rest#mixinDefs() &#64;Mixin} &mdash; is normalized to one of these immutable carriers at discovery
+	 * time, so all downstream code consumes a single shape with no bare-vs-def branching.  A bare class is
+	 * normalized to {@code new ResolvedMixin(type, MixinAnnotation.DEFAULT)} (i.e. {@code @Mixin(type=X)} with
+	 * empty overrides), so a bare class and an empty-override {@code @Mixin} are structurally identical.
+	 *
+	 * <p>
+	 * The {@code overrides} annotation is the single home for the host-declared override payload (guards,
+	 * serializers, default headers, {@code path}/{@code paths}, {@code noInherit}, &hellip;).  For bare classes
+	 * it is {@link MixinAnnotation#DEFAULT} (all slots empty), which contributes nothing &mdash; so bare-class
+	 * mixins behave exactly as they did before the {@code @Mixin} feature.
+	 *
+	 * @param type The mixin class.
+	 * @param overrides The host-declared override annotation, or {@link MixinAnnotation#DEFAULT} for a bare class.
+	 *
+	 * @since 10.0.0
+	 */
+	public static record ResolvedMixin(Class<?> type, Mixin overrides) {
+
+		/**
+		 * Compact canonical constructor — validates required components and null-coalesces {@code overrides}.
+		 */
+		public ResolvedMixin {
+			assertArgNotNull("type", type);
+			if (overrides == null)
+				overrides = MixinAnnotation.DEFAULT;
+		}
+
+		/**
+		 * Normalizes a bare mixin class to a {@link ResolvedMixin} with no overrides.
+		 *
+		 * @param type The mixin class.
+		 * @return A {@link ResolvedMixin} carrying {@link MixinAnnotation#DEFAULT} overrides.
+		 */
+		static ResolvedMixin ofBare(Class<?> type) {
+			return new ResolvedMixin(type, MixinAnnotation.DEFAULT);
+		}
+
+		/**
+		 * Normalizes a rich {@code @Mixin} declaration to a {@link ResolvedMixin}.
+		 *
+		 * @param m The {@code @Mixin} annotation.
+		 * @return A {@link ResolvedMixin} carrying {@code m} as its override payload.
+		 */
+		static ResolvedMixin ofDef(Mixin m) {
+			return new ResolvedMixin(m.type(), m);
+		}
+
+		/**
+		 * Returns {@code true} when this mixin carries no host-declared overrides (i.e. is equivalent to a bare class).
+		 *
+		 * @return {@code true} if the override payload is {@link MixinAnnotation#DEFAULT}.
+		 */
+		boolean hasNoOverrides() {
+			return overrides == MixinAnnotation.DEFAULT;
+		}
+	}
+
+	/**
+	 * The build-time <i>kind</i> of a {@link RestContext} — which of the three construction flavors produced it.
+	 *
+	 * <p>
+	 * Replaces the former boolean {@code mixinContext} flag on {@link Args} with a typed discriminator so the
+	 * three flavors are explicit and self-documenting at every call site, and so the {@code MIXIN} flavor can
+	 * carry the {@link ResolvedMixin} that produced it (the single home for the host-declared override payload,
+	 * consumed at build time when the mixin sub-context resolves its settings).
+	 *
+	 * <p>
+	 * <b>Mixin vs. child asymmetry (important — do not assume symmetry):</b> a {@link Mixin} sub-context is
+	 * parent-linked to the host and <i>inherits</i> the host's {@code @Rest} annotation chain
+	 * ({@link #getRestAnnotationsForProperty(String)} walks host&rarr;mixin), so {@code @Mixin} overrides
+	 * <i>layer on top of</i> an inherited chain.  A {@link Child} is <i>isolated</i> ({@link #HOST_ONLY_PROPERTIES}
+	 * includes {@code children}; children retain pre-10.0.0 isolated resolution with no parent walk).  So a future
+	 * {@code @Child} would <i>seed</i> settings onto an isolated context rather than <i>override</i> an inherited
+	 * chain, and would have no {@code noInherit} analog — it must NOT reuse the mixin override-resolution path.
+	 * The {@code Child} variant is intentionally shaped so it can later widen to reference a {@code ResolvedChild}
+	 * (mirroring how {@code Mixin} references a {@code ResolvedMixin}) without re-plumbing this discriminator.
+	 * See {@code MAYBE-182} for the parked {@code @Child} design.
+	 *
+	 * @since 10.0.0
+	 */
+	public sealed interface ContextKind permits ContextKind.Root, ContextKind.Child, ContextKind.Mixin {
+
+		/** A top-level (host) resource, mock context, or servlet-mounted resource. */
+		record Root() implements ContextKind {}
+
+		/** A routed child resource (mounted via {@link Rest#children() @Rest(children)}); isolated resolution. */
+		record Child() implements ContextKind {}
+
+		/**
+		 * A per-mixin sub-context (composed via {@link Rest#mixins()}/{@link Rest#mixinDefs()}); inherits the host chain.
+		 *
+		 * @param def The normalized declaration that produced this sub-context — carries the host-declared override payload.
+		 */
+		record Mixin(ResolvedMixin def) implements ContextKind {}
+
+		/** Shared {@link Root} singleton (the common case). */
+		ContextKind ROOT = new Root();
+
+		/** Shared {@link Child} singleton (the path override travels in {@link Args#path()}, not here). */
+		ContextKind CHILD = new Child();
 	}
 
 	/**
@@ -711,6 +831,10 @@ public class RestContext extends Context {
 	protected final Instant startTime;
 	protected final RestContext parentContext;
 	protected final boolean isMixinContext;
+	/** The build-time kind of this context (never {@code null}). */
+	protected final ContextKind contextKind;
+	/** The normalized mixin declaration that produced this sub-context, or {@code null} when not a mixin context. */
+	protected final ResolvedMixin resolvedMixin;
 	protected final String fullPath;
 	protected final String path;
 	protected final String[] paths;
@@ -740,6 +864,15 @@ public class RestContext extends Context {
 	private Supplier<?> resource() { return resource; }
 	private Class<?> resourceClass() { return resourceClass; }
 	private boolean isMixinContextField() { return isMixinContext; }
+
+	/**
+	 * Field accessor for {@link #resolvedMixin}, callable from memoizer field-initializer lambdas (which run
+	 * before the blank-final field is read directly).  Returns the normalized mixin declaration that produced
+	 * this sub-context, or {@code null} when this is not a mixin context.
+	 *
+	 * @return The resolved mixin, or {@code null}.
+	 */
+	private ResolvedMixin resolvedMixinField() { return resolvedMixin; }
 
 	/**
 	 * Creates the bean store for this context.
@@ -1318,7 +1451,10 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<NamedAttributeMap> defaultRequestAttributes = memoizer(() -> {
 		var v = Holder.of(NamedAttributeMap.create());
-		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultRequestAttributes())
+		// Resolution moved onto the unified noInherit-aware walk (cleanup #3): getRestAnnotationsForProperty yields
+		// the same parent-to-child order getRestAnnotationsTopDown did for non-mixin contexts, plus host→mixin
+		// inheritance, noInherit cutoff, and @Mixin override injection for mixin sub-contexts.
+		getRestAnnotationsForProperty(PROPERTY_defaultRequestAttributes).forEach(ai -> Arrays.stream(ai.inner().defaultRequestAttributes())
 			.filter(StringUtils::isNotBlank)
 			.map(this::resolve)
 			.filter(StringUtils::isNotBlank)
@@ -1338,7 +1474,10 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpHeaderList> defaultRequestHeaders = memoizer(() -> {
 		var v = Holder.of(HttpHeaderList.create());
-		getRestAnnotationsTopDown().forEach(ai -> {
+		// Resolution moved onto the unified noInherit-aware walk (cleanup #3) — see defaultRequestAttributes.
+		// defaultAccept/defaultContentType are folded into this same walk (as they always were); they key off
+		// the defaultRequestHeaders property for noInherit/override purposes.
+		getRestAnnotationsForProperty(PROPERTY_defaultRequestHeaders).forEach(ai -> {
 			Rest a = ai.inner();
 			Arrays.stream(a.defaultRequestHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault);
 			var defaultAccept = resolve(a.defaultAccept());
@@ -1361,7 +1500,8 @@ public class RestContext extends Context {
 	 */
 	private final Memoizer<HttpHeaderList> defaultResponseHeaders = memoizer(() -> {
 		var v = Holder.of(HttpHeaderList.create());
-		getRestAnnotationsTopDown().forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
+		// Resolution moved onto the unified noInherit-aware walk (cleanup #3) — see defaultRequestAttributes.
+		getRestAnnotationsForProperty(PROPERTY_defaultResponseHeaders).forEach(ai -> Arrays.stream(ai.inner().defaultResponseHeaders()).filter(StringUtils::isNotBlank).map(this::resolve).filter(StringUtils::isNotBlank).map(HttpStringHeader::ofPair).forEach(v.get()::setDefault));
 		beanStore().createBeanFromMethod(HttpHeaderList.class, resource().get(), x -> isBeanMethod(x, PROP_defaultResponseHeaders), v.get()).ifPresent(v::set);
 		return v.get();
 	});
@@ -1451,11 +1591,26 @@ public class RestContext extends Context {
 		// Walk @Rest annotations parent-to-child; child wins because location() prepends.
 		// Resolve location strings against the simple resolver — full resolver isn't available yet
 		// (it depends on getMessages()).
+		// NOTE (cleanup #3): messages is structurally bundle-CHAINED (not list/replace-merged), so it keeps its
+		// own local location walk + Messages.chain rather than routing through getRestAnnotationsForProperty
+		// (which would double-count host locations for a mixin context).  The two @Mixin hooks are layered on
+		// explicitly instead: (1) a host @Mixin(messages=...) location is applied last (highest priority), and
+		// (2) the host→mixin chain cutoff consults the unified noInherit set, so @Mixin(noInherit="messages")
+		// cuts the host bundle exactly like the mixin class's own @Rest(noInherit="messages").
 		var vrs = getBootstrapVarResolver().createSession();
 		getRestAnnotationsTopDown().forEach(ai -> ai.getString(PROPERTY_messages).filter(StringUtils::isNotBlank).ifPresent(s -> b.location(vrs.resolve(s))));
+		var rmMessages = resolvedMixinField();
+		if (rmMessages != null) {
+			var mm = rmMessages.overrides().messages();
+			if (StringUtils.isNotBlank(mm))
+				b.location(vrs.resolve(mm));
+		}
 		var override = beanStore().createBeanFromMethod(Messages.class, resource().get(), RestContext::isBeanMethod, b).orElse(null);
 		var local = nn(override) ? override : b.build();
 		var parent = parentContext();
+		// Use the SVL-free isNoInheritLiteral (NOT the noInherit memoizer) to avoid a resolver cycle:
+		// noInherit -> resolveCdl -> getVarResolver -> getMessages -> messages.  It now also consults the
+		// host @Mixin(noInherit=...) tokens so a @Mixin can cut the host bundle just like the mixin class's own.
 		if (isMixinContextField() && nn(parent) && !isNoInheritLiteral(PROPERTY_messages))
 			return Messages.chain(local, parent.getMessages());
 		return local;
@@ -1911,7 +2066,7 @@ public class RestContext extends Context {
 	 * {@code @Rest(mixins=B)} discovers B as a mixin of the host, not as a nested mixin of A).
 	 *
 	 * <p>
-	 * Each sub-context is constructed with {@link Args#mixinContext()} set to {@code true}, with its
+	 * Each sub-context is constructed with a {@link ContextKind.Mixin} {@link Args#kind() kind}, with its
 	 * {@code parentContext} pointing at this host context.  That parent-linkage drives the inheritance walk in
 	 * {@link #getRestAnnotationsForProperty(String)} for serializers, parsers, encoders, converters, response
 	 * processors, REST op args, guards, callLogger, debugEnablement, messages, varResolver tokens, etc.
@@ -1922,18 +2077,18 @@ public class RestContext extends Context {
 		if (isMixinContextField())
 			return Map.of();
 		var out = new LinkedHashMap<Class<?>,RestContext>();
-		for (var mixinClass : getRestMixinClasses()) {
-			if (mixinClass == resourceClass())
+		for (var rm : getResolvedMixins()) {
+			if (rm.type() == resourceClass())
 				continue;
 			RestContext mixinCtx;
 			try {
-				mixinCtx = buildMixinContext(mixinClass);
+				mixinCtx = buildMixinContext(rm);
 			} catch (RuntimeException e) {
 				throw e;
 			} catch (Exception e) {
-				throw rex(e, "Failed to construct mixin sub-context for {0}: {1}", mixinClass.getName(), e.getMessage());
+				throw rex(e, "Failed to construct mixin sub-context for {0}: {1}", rm.type().getName(), e.getMessage());
 			}
-			out.put(mixinClass, mixinCtx);
+			out.put(rm.type(), mixinCtx);
 		}
 		return u(out);
 	});
@@ -1943,7 +2098,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Instantiates the mixin resource via this host's bean store, constructs a new {@link RestContext} with
-	 * {@code parentContext=this} and {@link Args#mixinContext() mixinContext=true}, and reflectively invokes
+	 * {@code parentContext=this} and a {@link ContextKind.Mixin} {@link Args#kind() kind}, and reflectively invokes
 	 * any {@code setContext(RestContext)} method on the mixin instance (mirroring the existing
 	 * {@code RestChildren.buildChildContext(...)} contract).  The host's {@link ServletConfig} is propagated
 	 * so the mixin sees the same servlet container settings.
@@ -1957,10 +2112,11 @@ public class RestContext extends Context {
 	 * convention-endpoint mixins (favicon, SEO, version, well-known) be configured by the importer using
 	 * their own builder before the mixin walk wires them in.
 	 */
-	private RestContext buildMixinContext(Class<?> mixinClass) throws Exception {
+	private RestContext buildMixinContext(ResolvedMixin rm) throws Exception {
+		var mixinClass = rm.type();
 		Object preBuilt = beanStore.getBean(mixinClass).orElse(null);
 		final var mixinResource = preBuilt != null ? preBuilt : beanStore.instantiate(mixinClass);
-		var args = new Args(mixinClass, this, builder.inner, () -> mixinResource, "", null, null, null, true);
+		var args = new Args(mixinClass, this, builder.inner, () -> mixinResource, "", null, null, null, new ContextKind.Mixin(rm));
 		var mixinCtx = new RestContext(args);
 		var setCtx = ClassInfo.of(mixinResource).getMethod(x -> x.hasName("setContext") && x.hasParameterTypes(RestContext.class)).orElse(null);
 		if (setCtx != null)
@@ -1978,6 +2134,53 @@ public class RestContext extends Context {
 	 * @since 10.0.0
 	 */
 	public Map<Class<?>,RestContext> getMixinContexts() { return mixinContexts.get(); }
+
+	/**
+	 * Returns the host-chosen mount prefix(es) declared on the {@code @Mixin} that produced this mixin
+	 * sub-context, for re-mounting the mixin's endpoints under host-chosen path(s).
+	 *
+	 * <p>
+	 * Resolved from {@link Mixin#path()} and {@link Mixin#paths()} (SVL-resolved, then normalized via the same
+	 * {@code pathToken} cleanup the bundled SVL-configurable mixins use — leading/trailing slashes and a trailing
+	 * {@code /*} wildcard stripped to a bare token).  {@link Mixin#path()} (single) and {@link Mixin#paths()}
+	 * (multi) are unioned; an empty result means "no host re-mount" (the mixin's own op paths apply unchanged).
+	 *
+	 * @return The normalized, de-duplicated mount-prefix tokens (no slashes), or an empty list when none; never {@code null}.
+	 * @since 10.0.0
+	 */
+	public List<String> getMixinMountPrefixes() { return mixinMountPrefixes.get(); }
+
+	/**
+	 * Memoized normalized {@code @Mixin(path/paths)} mount prefixes (built once; zero per-request cost).
+	 */
+	private final Memoizer<List<String>> mixinMountPrefixes = memoizer(() -> {
+		var rm = resolvedMixinField();
+		if (rm == null || rm.hasNoOverrides())
+			return List.of();
+		var m = rm.overrides();
+		var out = new LinkedHashSet<String>();
+		var vrs = getBootstrapVarResolver().createSession();
+		if (StringUtils.isNotBlank(m.path()))
+			addMountPrefix(out, vrs.resolve(m.path()));
+		for (var p : m.paths())
+			if (StringUtils.isNotBlank(p))
+				addMountPrefix(out, vrs.resolve(p));
+		return List.copyOf(out);
+	});
+
+	/** Normalizes one path override to a bare token (strip leading/trailing slashes and a trailing {@code /*}). */
+	private static void addMountPrefix(Set<String> out, String raw) {
+		var s = trim(raw);
+		if (s.endsWith("/*"))
+			s = s.substring(0, s.length() - 2);
+		// Strip leading and trailing slashes.
+		while (s.startsWith("/"))
+			s = s.substring(1);
+		while (s.endsWith("/"))
+			s = s.substring(0, s.length() - 1);
+		if (! s.isEmpty())
+			out.add(s);
+	}
 
 	/**
 	 * The {@link RestOperations} for this resource — all {@link RestOpContext} instances built from
@@ -2045,26 +2248,51 @@ public class RestContext extends Context {
 		}
 	}
 
-	private LinkedHashSet<Class<?>> getRestMixinClasses() {
-		var out = new LinkedHashSet<Class<?>>();
-		var visited = new HashSet<Class<?>>();
+	/**
+	 * Discovers all mixins declared on this resource's {@code @Rest} chain, normalized to {@link ResolvedMixin}.
+	 *
+	 * <p>
+	 * Reads both {@link Rest#mixins() bare-class} and {@link Rest#mixinDefs() rich &#64;Mixin} entries (bare first,
+	 * then {@code mixinDefs}), recursing into each mixin class's own {@code @Rest(mixins=)}/{@code @Rest(mixinDefs=)}
+	 * (the flat-inheritance rule still applies — nested mixins are collected at the host level).  First occurrence
+	 * of a class wins for ordering; a rich {@code @Mixin} <b>upgrades</b> an earlier bare entry for the same class
+	 * (a bare class is just {@code @Mixin(type=X)} with empty overrides, so upgrading only adds the host overrides).
+	 *
+	 * @return The ordered, de-duplicated normalized mixins, never {@code null}.
+	 */
+	private Collection<ResolvedMixin> getResolvedMixins() {
+		var out = new LinkedHashMap<Class<?>,ResolvedMixin>();
 		getRestAnnotationsForProperty(PROPERTY_mixins).forEach(ai -> {
 			for (var mixin : ai.inner().mixins())
-				collectRestMixins(mixin, out, visited);
+				collectResolvedMixin(ResolvedMixin.ofBare(mixin), out);
+			for (var def : ai.inner().mixinDefs())
+				collectResolvedMixin(ResolvedMixin.ofDef(def), out);
 		});
-		return out;
+		return out.values();
 	}
 
-	private void collectRestMixins(Class<?> mixin, LinkedHashSet<Class<?>> out, Set<Class<?>> visited) {
-		if (mixin == null || mixin == resourceClass())
+	private void collectResolvedMixin(ResolvedMixin rm, LinkedHashMap<Class<?>,ResolvedMixin> out) {
+		var type = rm.type();
+		// type==null is defensive only — @Mixin.type() defaults to Object.class and a declarative @Mixin requires
+		// a class literal, so it is never null in practice.  type==resourceClass() guards a host/mixin listing
+		// itself (skip to avoid self-recursion).
+		if (type == null || type == resourceClass())  // HTT: the null arm is not reachable via the annotation API.
 			return;
-		if (!visited.add(mixin))
+		var existing = out.get(type);
+		if (existing != null) {
+			// Already discovered.  A rich @Mixin upgrades a bare entry (in place, preserving position); otherwise
+			// the first occurrence wins and we do not recurse again.
+			if (existing.hasNoOverrides() && ! rm.hasNoOverrides())
+				out.put(type, rm);
 			return;
-		out.add(mixin);
-		var r = mixin.getAnnotation(Rest.class);
+		}
+		out.put(type, rm);
+		var r = type.getAnnotation(Rest.class);
 		if (r != null) {
 			for (var nested : r.mixins())
-				collectRestMixins(nested, out, visited);
+				collectResolvedMixin(ResolvedMixin.ofBare(nested), out);
+			for (var nestedDef : r.mixinDefs())
+				collectResolvedMixin(ResolvedMixin.ofDef(nestedDef), out);
 		}
 	}
 
@@ -2149,7 +2377,9 @@ public class RestContext extends Context {
 			this.builder = builder;
 
 			parentContext = builder.parentContext;
-			isMixinContext = builder.args.mixinContext();
+			contextKind = builder.args.kind();
+			isMixinContext = contextKind instanceof ContextKind.Mixin;
+			resolvedMixin = (contextKind instanceof ContextKind.Mixin m) ? m.def() : null;
 			resourceClass = builder.resourceClass;
 			var rs = new ResourceSupplier(resourceClass, assertArgNotNull("resource", builder.args.resource()));
 			resource = rs;
@@ -2485,12 +2715,76 @@ public class RestContext extends Context {
 	 * <p>
 	 * {@code noInherit} itself is never inherited; it only applies to the {@code @Rest} that declares it.
 	 */
-	private final Memoizer<SortedSet<String>> noInherit = memoizer(() ->
-		getRestAnnotation()
-			.map(x -> x.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
-			.map(x -> treeSet(String.CASE_INSENSITIVE_ORDER, resolveCdl(x).toList()))
-			.orElseGet(Collections::emptySortedSet)
-	);
+	private final Memoizer<SortedSet<String>> noInherit = memoizer(() -> {
+		var out = treeSet(String.CASE_INSENSITIVE_ORDER,
+			getRestAnnotation()
+				.map(x -> x.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
+				.map(x -> resolveCdl(x).toList())
+				.orElseGet(Collections::emptyList));
+		// Dual noInherit source: when this is a mixin sub-context built from a host @Mixin(noInherit=...),
+		// the host-declared cutoff tokens union with the mixin class's own @Rest(noInherit=...).  A token from
+		// EITHER source cuts the host→mixin inheritance walk for that property (OQ2/OQ3).
+		var rmNoInherit = resolvedMixinField();
+		if (rmNoInherit != null)
+			resolveCdl(rmNoInherit.overrides().noInherit()).forEach(out::add);
+		return out;
+	});
+
+	/**
+	 * The host-declared {@code @Mixin} override values translated into a synthetic {@link Rest} annotation, for a
+	 * mixin sub-context that carries overrides.  {@code null} for non-mixin contexts and for mixins with no
+	 * overrides (bare classes).
+	 *
+	 * <p>
+	 * Built once at memoizer-init time (zero per-request cost).  The synthetic annotation is injected at the
+	 * most-derived position of {@link #getRestAnnotationsForProperty(String)} so the host override resolves as if
+	 * declared on the mixin class itself — list-shaped props append after the inherited host chain, replace-shaped
+	 * props win — but ahead of the mixin class's own {@code @Rest}, so the host override is authoritative (OQ3).
+	 */
+	private final Memoizer<AnnotationInfo<Rest>> mixinOverrideAnnotation = memoizer(() -> {
+		var rm = resolvedMixinField();
+		if (rm == null || rm.hasNoOverrides())
+			return null;
+		var rest = buildMixinOverrideRest(rm.overrides());
+		return AnnotationInfo.of(ClassInfo.of(getResourceClass()), rest);
+	});
+
+	/**
+	 * Translates a host-declared {@link Mixin @Mixin} into a synthetic {@link Rest @Rest} carrying only its
+	 * override slots, so the standard {@code @Rest} resolution chain applies the overrides uniformly.
+	 *
+	 * @param m The {@code @Mixin} override declaration.
+	 * @return A synthetic {@code @Rest} populated from {@code m}'s override slots.
+	 */
+	private static Rest buildMixinOverrideRest(Mixin m) {
+		// @formatter:off
+		var b = RestAnnotation.create()
+			.guards(m.guards())
+			.roleGuard(m.roleGuard())
+			.rolesDeclared(m.rolesDeclared())
+			.converters(m.converters())
+			.encoders(m.encoders())
+			.serializers(m.serializers())
+			.parsers(m.parsers())
+			.responseProcessors(m.responseProcessors())
+			.restOpArgs(m.restOpArgs())
+			.callLogger(m.callLogger())
+			.partSerializer(m.partSerializer())
+			.partParser(m.partParser())
+			.debug(m.debug())
+			.messages(m.messages())
+			.defaultRequestHeaders(m.defaultRequestHeaders())
+			.defaultResponseHeaders(m.defaultResponseHeaders())
+			.defaultRequestAttributes(m.defaultRequestAttributes())
+			.produces(m.produces())
+			.consumes(m.consumes())
+			.defaultAccept(m.defaultAccept())
+			.defaultContentType(m.defaultContentType())
+			.defaultCharset(m.defaultCharset())
+			.maxInput(m.maxInput());
+		// @formatter:on
+		return b.build();
+	}
 
 	/**
 	 * Memoized list of every {@link Rest} annotation on the resource class and its supertypes, in child-to-parent order.
@@ -2937,7 +3231,20 @@ public class RestContext extends Context {
 				break;
 			}
 		}
-		return rstream(annotations.subList(0, cutoff));
+		var resolved = annotations.subList(0, cutoff);
+		// Mixin override injection (cleanup #3): for a mixin sub-context carrying host @Mixin overrides, the
+		// synthetic override annotation is the most-derived contribution.  `resolved` is in child-to-parent order
+		// (it is reversed to parent-to-child by rstream below), so prepending here places the override LAST in the
+		// emitted stream — list-shaped props append it after the inherited host+mixin chain, replace-shaped props
+		// take it as the final (winning) value.  It is added after the noInherit cutoff scan so it is never itself
+		// cut, and HOST_ONLY_PROPERTIES are excluded (path/paths/mixins/children are not @Mixin override slots).
+		var override = HOST_ONLY_PROPERTIES.contains(name) ? null : mixinOverrideAnnotation.get();
+		if (override == null)
+			return rstream(resolved);
+		var withOverride = new ArrayList<AnnotationInfo<Rest>>(resolved.size() + 1);
+		withOverride.add(override);
+		withOverride.addAll(resolved);
+		return rstream(withOverride);
 	}
 
 	/**
@@ -3033,7 +3340,7 @@ public class RestContext extends Context {
 	 * @return {@code true} if {@code property} is named as a literal token in the local {@code @Rest(noInherit=...)}.
 	 */
 	private boolean isNoInheritLiteral(String property) {
-		return getRestAnnotation()
+		var fromRest = getRestAnnotation()
 			.map(x -> x.getStringArray("noInherit").orElse(StringUtils.EMPTY_STRING_ARRAY))
 			.stream()
 			.flatMap(Arrays::stream)
@@ -3042,6 +3349,17 @@ public class RestContext extends Context {
 			.map(String::trim)
 			.filter(StringUtils::isNotBlank)
 			.anyMatch(property::equalsIgnoreCase);
+		if (fromRest)
+			return true;
+		// Also honor a host @Mixin(noInherit=...) token (raw / SVL-free, same as the @Rest path above) so the
+		// messages memoizer's cutoff check sees both noInherit sources without inducing the resolver cycle.
+		if (resolvedMixin != null) {
+			for (var s : resolvedMixin.overrides().noInherit())
+				for (var t : StringUtils.split(s, ','))
+					if (property.equalsIgnoreCase(t.trim()))
+						return true;
+		}
+		return false;
 	}
 
 	/**

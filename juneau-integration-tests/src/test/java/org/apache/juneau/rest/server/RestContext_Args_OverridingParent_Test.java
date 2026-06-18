@@ -58,7 +58,7 @@ class RestContext_Args_OverridingParent_Test extends TestBase {
 	void a01_overlay_shadows_atBeanFactory_forFrameworkType() throws Exception {
 		var overlay = new TestBeanStore().override(CallLogger.class, OVERRIDE_LOGGER);
 
-		var args = new RestContext.Args(A_OverlayWinsOverBean.class, null, null, A_OverlayWinsOverBean::new, "", null, overlay, null, false);
+		var args = new RestContext.Args(A_OverlayWinsOverBean.class, null, null, A_OverlayWinsOverBean::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		new RestContext(args).postInit().postInitChildFirst();
 
 		assertSame(OVERRIDE_LOGGER, A_OverlayWinsOverBean.callLoggerCapture,
@@ -70,7 +70,7 @@ class RestContext_Args_OverridingParent_Test extends TestBase {
 		// Reset capture from previous tests.
 		A_NoOverlay.callLoggerCapture = null;
 
-		var args = new RestContext.Args(A_NoOverlay.class, null, null, A_NoOverlay::new, "", null, null, null, false);
+		var args = new RestContext.Args(A_NoOverlay.class, null, null, A_NoOverlay::new, "", null, null, null, RestContext.ContextKind.ROOT);
 		new RestContext(args).postInit().postInitChildFirst();
 
 		assertSame(BEAN_LOGGER, A_NoOverlay.callLoggerCapture,
@@ -105,7 +105,7 @@ class RestContext_Args_OverridingParent_Test extends TestBase {
 	void b01_overlay_shadows_atBeanFactory_forUserType() throws Exception {
 		var overlay = new TestBeanStore().override(CustomBean.class, OVERLAY_CUSTOM);
 
-		var args = new RestContext.Args(B_OverlayWinsForUserBean.class, null, null, B_OverlayWinsForUserBean::new, "", null, overlay, null, false);
+		var args = new RestContext.Args(B_OverlayWinsForUserBean.class, null, null, B_OverlayWinsForUserBean::new, "", null, overlay, null, RestContext.ContextKind.ROOT);
 		new RestContext(args).postInit().postInitChildFirst();
 
 		assertSame(OVERLAY_CUSTOM, B_OverlayWinsForUserBean.customBeanCapture,

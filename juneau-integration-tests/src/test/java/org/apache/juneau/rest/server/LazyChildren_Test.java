@@ -209,7 +209,7 @@ class LazyChildren_Test extends TestBase {
 		assertFalse(rc.isLazyChildren(), "No annotation => eager (default)");
 
 		// Separately verify that the builder knob can be set and read.
-		var args = new RestContext.Args(D_EagerParent.class, null, null, () -> d, "", null, null, null, false);
+		var args = new RestContext.Args(D_EagerParent.class, null, null, () -> d, "", null, null, null, RestContext.ContextKind.ROOT);
 		var builder = new RestContext.Builder(args);
 		assertNull(builder.lazyChildInit, "Default builder knob should be null");
 		builder.lazyChildInit(true);

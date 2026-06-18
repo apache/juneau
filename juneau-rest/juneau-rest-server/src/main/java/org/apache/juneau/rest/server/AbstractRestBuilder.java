@@ -168,6 +168,9 @@ public abstract class AbstractRestBuilder<R, SELF extends AbstractRestBuilder<R,
 	public SELF mixins(Class<?>... value) { anno.mixins(value); return self(); }
 
 	@Override /* RestBuilder<?> */
+	public SELF mixinDefs(Mixin... value) { anno.mixinDefs(value); return self(); }
+
+	@Override /* RestBuilder<?> */
 	public SELF uriAuthority(String value) { anno.uriAuthority(value); return self(); }
 
 	@Override /* RestBuilder<?> */
