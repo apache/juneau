@@ -69,9 +69,16 @@
 		<sonar.cpd.exclusions>**/rest/server/Rest*Annotation.java,**/rest/server/RestOp.java,**/rest/server/RestGet.java,**/rest/server/RestPut.java,**/rest/server/RestPost.java,**/rest/server/RestDelete.java,**/rest/server/RestPatch.java,**/rest/server/RestOptions.java,**/rest/server/RestPreCall.java,**/rest/server/RestPostCall.java,**/rest/server/RestStartCall.java,**/rest/server/RestEndCall.java,**/rest/server/RestInit.java,**/rest/server/RestDestroy.java,**/rest/server/RestPostInit.java,**/marshall/marshaller/*.java,**/marshall/jena/marshaller/*.java,**/marshall/jena/Rdf*Serializer*.java,**/marshall/jena/Rdf*Parser*.java,**/marshall/ItemsAnnotation.java,**/marshall/SubItemsAnnotation.java,**/marshall/MarshalledAnnotation.java,**/marshall/MarshalledPropAnnotation.java,**/marshall/jena/RdfConfigAnnotation.java,**/commons/Items.java,**/commons/SubItems.java,**/marshall/MarshalledProp.java,**/marshall/hjson/HjsonTokenizer.java,**/marshall/hocon/HoconTokenizer.java,**/marshall/msgpack/MsgPackSerializerSession.java,**/marshall/cbor/CborSerializerSession.java,**/marshall/html/HtmlSchema*Serializer.java,**/marshall/json/JsonSchemaSerializer.java,**/marshall/csv/CsvSerializer.java,**/marshall/csv/CsvParser.java,**/marshall/urlencoding/UrlEncodingParser.java,**/marshall/html/HtmlClassMeta.java,**/marshall/collections/JsonList.java,**/marshall/collections/JsonMap.java,**/rest/server/servlet/BasicRest*Group.java,**/rest/server/ops/AdminResource.java,**/rest/server/ops/AdminServlet.java,**/rest/server/health/HealthResource.java,**/rest/server/health/HealthMixin.java,**/rest/server/health/HealthServlet.java,**/http/classic/header/HeaderBeanMeta.java,**/http/classic/part/PartBeanMeta.java,**/rest/server/auth/oauth/flow/OAuth*Flow.java</sonar.cpd.exclusions>
 		<sonar.coverage.exclusions>**/juneau-examples/**,**/juneau-petstore/**,**/*-microservice/**,**/juneau-sc-server/**,**/juneau-core/juneau-test-utils/**</sonar.coverage.exclusions>
 		<jena.version>5.6.0</jena.version>
+		<!-- Hoisted from owning modules so the juneau-bom + curated bundles can pin one coherent version source. -->
+		<micrometer.version>1.13.6</micrometer.version>
+		<opentelemetry.version>1.62.0</opentelemetry.version>
+		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
+		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 	</properties>
 
 	<modules>
+		<module>juneau-bom</module>
+		<module>juneau-bundles</module>
 		<module>juneau-core</module>
 		<module>juneau-rest</module>
 		<module>juneau-microservice</module>

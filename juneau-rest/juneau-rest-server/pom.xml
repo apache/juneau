@@ -73,7 +73,7 @@
 		<dependency>
 			<groupId>jakarta.servlet</groupId>
 			<artifactId>jakarta.servlet-api</artifactId>
-			<version>6.1.0</version>
+			<version>${jakarta.servlet-api.version}</version>
 		</dependency>
 
 		<!--
@@ -85,7 +85,7 @@
 		<dependency>
 			<groupId>jakarta.validation</groupId>
 			<artifactId>jakarta.validation-api</artifactId>
-			<version>3.0.2</version>
+			<version>${jakarta.validation-api.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

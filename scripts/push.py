@@ -534,6 +534,8 @@ Examples:
         if not args.skip_tests:
             print(f"  {step_num}. Verify container test tags: python3 scripts/check-container-tags.py")
             step_num += 1
+            print(f"  {step_num}. Verify BOM completeness: python3 scripts/check-bom-completeness.py")
+            step_num += 1
             print(f"  {step_num}. Run tests with timing capture: python3 scripts/test.py --full --timing-log ~/.cache/juneau-push-timings/<branch>.jsonl")
             step_num += 1
             print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --log ~/.cache/juneau-push-timings/<branch>.jsonl")
@@ -571,6 +573,18 @@ Examples:
                 juneau_root
             ):
                 print("\n❌ Build process aborted due to missing container test tags.")
+                play_sound(success=False)
+                return 1
+            step_num += 1
+
+        check_bom = script_dir / "check-bom-completeness.py"
+        if check_bom.exists():
+            if not run_command(
+                [sys.executable, str(check_bom)],
+                f"🔎 Step {step_num}: Checking BOM completeness...",
+                juneau_root
+            ):
+                print("\n❌ Build process aborted: juneau-bom is out of sync with the reactor.")
                 play_sound(success=False)
                 return 1
             step_num += 1

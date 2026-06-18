@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.juneau</groupId>
+		<artifactId>juneau</artifactId>
+		<version>10.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>juneau-bom</artifactId>
+	<packaging>pom</packaging>
+
+	<name>Apache Juneau Bill of Materials</name>
+	<description>Bill-of-materials (BOM) for version-aligning Apache Juneau modules.  Import it (scope=import, type=pom) and drop explicit versions from your Juneau dependencies.  Enumerates the consumer-facing Juneau modules plus the small set of starter-relevant third-party versions the curated *-bundle POMs pin; it does NOT mirror a whole-world third-party BOM.</description>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- ===================================================================================== -->
+			<!-- juneau-core                                                                           -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-commons</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-marshall</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-marshall-rdf</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-config</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-assertions</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bct</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-junit5</artifactId><version>${project.version}</version></dependency>
+
+			<!-- ===================================================================================== -->
+			<!-- juneau-rest                                                                           -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-common</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-common-classic</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-rdf</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-mcp</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-jwt</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-saml</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-oauth</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-oidc-rp</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-metrics-micrometer</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-tracing-otel</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-reactive</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-reactive-reactor</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-view-jsp</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-view-thymeleaf</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-view-mustache</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-view-freemarker</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-springboot</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-classic</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-mock</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-apache-httpclient-45</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-apache-httpclient-50</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-okhttp</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-client-jetty</artifactId><version>${project.version}</version></dependency>
+
+			<!-- ===================================================================================== -->
+			<!-- juneau-microservice                                                                   -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-jetty</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-tomcat</artifactId><version>${project.version}</version></dependency>
+
+			<!-- ===================================================================================== -->
+			<!-- juneau-bean                                                                           -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-common</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-atom</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-html5</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-hal</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-rfc7807</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-jsonpatch</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-jsonapi</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-jsonschema</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-mcp</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-openapi-v3</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bean-swagger-v2</artifactId><version>${project.version}</version></dependency>
+
+			<!-- ===================================================================================== -->
+			<!-- juneau-sc                                                                             -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-sc-client</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-sc-server</artifactId><version>${project.version}</version></dependency>
+
+			<!-- ===================================================================================== -->
+			<!-- Curated dependency bundles (transitive module sets per deployment shape)              -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-jetty-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-tomcat-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-springboot-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
+
+			<!-- ===================================================================================== -->
+			<!-- Starter-relevant third-party versions (the small set the curated bundles need to be    -->
+			<!-- coherent).  NOT a whole-world third-party BOM (see TODO-174c Q2).                       -->
+			<!-- ===================================================================================== -->
+			<dependency><groupId>io.micrometer</groupId><artifactId>micrometer-core</artifactId><version>${micrometer.version}</version></dependency>
+			<dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-api</artifactId><version>${opentelemetry.version}</version></dependency>
+			<dependency><groupId>jakarta.servlet</groupId><artifactId>jakarta.servlet-api</artifactId><version>${jakarta.servlet-api.version}</version></dependency>
+			<dependency><groupId>jakarta.validation</groupId><artifactId>jakarta.validation-api</artifactId><version>${jakarta.validation-api.version}</version></dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>
