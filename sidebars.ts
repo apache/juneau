@@ -1446,6 +1446,11 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.10.05.RestServerChildrenVsMixins',
+							label: '10.10.5. REST Server — Children vs Mixins',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.11.RestServerSelfRegistration',
 							label: '10.11. REST Server — Self-Registration',
 						},
@@ -2088,6 +2093,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/16.11.GracefulShutdown',
 							label: '16.11. Graceful Shutdown & Readiness Gating',
+						},
+						{
+							type: 'doc',
+							id: 'topics/16.12.ManagementSurface',
+							label: '16.12. Management Surface (Actuator-style endpoints)',
 						},
 					],
 				},
