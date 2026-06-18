@@ -214,4 +214,50 @@ class MdcAsyncListener_Test extends TestBase {
 		// MDC must be cleared even though the callback threw.
 		assertNull(MDC.get("requestId"), "MDC must be cleared in the finally block even when callback throws.");
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// traceEnrichment: snapshot() folds the active OTel trace/span id into the MDC snapshot so log
+	// correlation survives the async-completion hop (resolved Q5).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void traceEnrichment_01_activeSpanFoldsTraceAndSpanIdIntoSnapshot() {
+		var tracer = io.opentelemetry.sdk.OpenTelemetrySdk.builder()
+			.setTracerProvider(io.opentelemetry.sdk.trace.SdkTracerProvider.builder().build())
+			.build()
+			.getTracer("test");
+		var span = tracer.spanBuilder("op").startSpan();
+		try (var scope = span.makeCurrent()) {
+			var snap = MdcAsyncListener.snapshot();
+			assertNotNull(snap, "An active valid span must produce a non-null snapshot even with empty MDC.");
+			assertEquals(span.getSpanContext().getTraceId(), snap.get("trace_id"));
+			assertEquals(span.getSpanContext().getSpanId(), snap.get("span_id"));
+		} finally {
+			span.end();
+		}
+	}
+
+	@Test
+	void traceEnrichment_02_noActiveSpanLeavesSnapshotUnenriched() {
+		// No active span — empty MDC must stay null (lazy-skip contract preserved).
+		assertNull(MdcAsyncListener.snapshot());
+	}
+
+	@Test
+	void traceEnrichment_03_existingMdcPreservedAlongsideTraceIds() {
+		var tracer = io.opentelemetry.sdk.OpenTelemetrySdk.builder()
+			.setTracerProvider(io.opentelemetry.sdk.trace.SdkTracerProvider.builder().build())
+			.build()
+			.getTracer("test");
+		var span = tracer.spanBuilder("op").startSpan();
+		MDC.put("requestId", "abc-123");
+		try (var scope = span.makeCurrent()) {
+			var snap = MdcAsyncListener.snapshot();
+			assertNotNull(snap);
+			assertEquals("abc-123", snap.get("requestId"), "Pre-existing MDC keys must be preserved.");
+			assertEquals(span.getSpanContext().getTraceId(), snap.get("trace_id"));
+		} finally {
+			span.end();
+		}
+	}
 }

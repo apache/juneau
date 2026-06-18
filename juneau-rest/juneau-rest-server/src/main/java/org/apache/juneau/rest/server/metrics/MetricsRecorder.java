@@ -111,4 +111,33 @@ public interface MetricsRecorder {
 		"java:S107"   // The 8 parameters form the stable per-request metric event contract; a holder object would obscure this SPI signature.
 	})
 	void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags);
+
+	/**
+	 * Records one custom (non-request) observation event.
+	 *
+	 * <p>
+	 * Unlike {@link #record(String, String, String, int, Duration, Throwable, String, String)}, this
+	 * entry point is <b>not</b> tied to an HTTP request &mdash; it is the substrate for the explicit
+	 * programmatic observation API ({@link org.apache.juneau.rest.server.observation.Observations}) so
+	 * application code can time an arbitrary block of work. Bridge implementations record a timer named
+	 * {@code metricName} carrying {@code metricTags} (plus an {@code exception} tag derived from
+	 * {@code error}).
+	 *
+	 * <p>
+	 * The default implementation does nothing &mdash; a bridge that does not override it simply does not
+	 * record custom observations, and the no-backend path stays zero-allocation. The shipped Micrometer
+	 * bridge overrides it.
+	 *
+	 * @param metricName The timer name (e.g. {@code "order.load"}). Never <jk>null</jk>; never blank.
+	 * @param metricTags Additional tags as comma-separated {@code key=value} pairs (e.g.
+	 * 	{@code "team=payments,region=us-east"}). Empty string means no additional tags. Never <jk>null</jk>.
+	 * @param elapsed Wall-clock duration of the observed block. Never <jk>null</jk>; never negative.
+	 * @param error The exception thrown by the observed block, or <jk>null</jk> if it completed normally.
+	 */
+	@SuppressWarnings({
+		"java:S6213" // 'record' is the established SPI method name; renaming would break the public observability API.
+	})
+	default void record(String metricName, String metricTags, Duration elapsed, Throwable error) {
+		// Default no-op: bridges that support custom observations override this.
+	}
 }

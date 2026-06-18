@@ -108,13 +108,18 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-jetty-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-tomcat-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-springboot-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-observability-otlp-bundle</artifactId><version>${project.version}</version><type>pom</type></dependency>
 
 			<!-- ===================================================================================== -->
 			<!-- Starter-relevant third-party versions (the small set the curated bundles need to be    -->
 			<!-- coherent).  NOT a whole-world third-party BOM (see TODO-174c Q2).                       -->
 			<!-- ===================================================================================== -->
 			<dependency><groupId>io.micrometer</groupId><artifactId>micrometer-core</artifactId><version>${micrometer.version}</version></dependency>
+			<dependency><groupId>io.micrometer</groupId><artifactId>micrometer-registry-otlp</artifactId><version>${micrometer.version}</version></dependency>
 			<dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-api</artifactId><version>${opentelemetry.version}</version></dependency>
+			<dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-sdk</artifactId><version>${opentelemetry.version}</version></dependency>
+			<dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-exporter-otlp</artifactId><version>${opentelemetry.version}</version></dependency>
+			<dependency><groupId>io.opentelemetry</groupId><artifactId>opentelemetry-sdk-extension-autoconfigure</artifactId><version>${opentelemetry.version}</version></dependency>
 			<dependency><groupId>jakarta.servlet</groupId><artifactId>jakarta.servlet-api</artifactId><version>${jakarta.servlet-api.version}</version></dependency>
 			<dependency><groupId>jakarta.validation</groupId><artifactId>jakarta.validation-api</artifactId><version>${jakarta.validation-api.version}</version></dependency>
 

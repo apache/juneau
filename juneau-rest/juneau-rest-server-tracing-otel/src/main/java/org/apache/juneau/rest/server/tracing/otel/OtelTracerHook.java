@@ -194,6 +194,18 @@ public class OtelTracerHook implements TracerHook {
 		return new OtelScope(span, otelScope);
 	}
 
+	@Override /* TracerHook */
+	public Scope startSpan(String spanName) {
+		// Custom (non-request) observation: open an INTERNAL span parented to the current context
+		// (so it nests under an active request span when one exists), with no HTTP attributes.
+		Span span = tracer.spanBuilder(spanName)
+			.setSpanKind(SpanKind.INTERNAL)
+			.setParent(Context.current())
+			.startSpan();
+		io.opentelemetry.context.Scope otelScope = Context.current().with(span).makeCurrent();
+		return new OtelScope(span, otelScope);
+	}
+
 	private void stashTraceContext(RestRequest request, Context spanContext) {
 		var carrier = new HashMap<String,String>(4);
 		propagator.inject(spanContext, carrier, MAP_SETTER);

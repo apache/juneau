@@ -48,6 +48,9 @@ import org.apache.juneau.marshall.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // Decorator owns the wrapped delegate store and closes it in close(); the delegate's lifecycle is managed here, not leaked.
+})
 public class ProfileConfigStore extends ConfigStore {
 
 	/**

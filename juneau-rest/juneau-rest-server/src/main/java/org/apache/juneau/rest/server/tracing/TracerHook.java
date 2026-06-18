@@ -94,4 +94,27 @@ public interface TracerHook {
 	 * 	contract still holds.
 	 */
 	Scope startSpan(RestRequest request);
+
+	/**
+	 * Opens a new span for a custom (non-request) observation.
+	 *
+	 * <p>
+	 * Unlike {@link #startSpan(RestRequest)}, this entry point is <b>not</b> tied to an in-flight
+	 * {@link RestRequest} &mdash; it is the substrate for the explicit programmatic observation API
+	 * ({@link org.apache.juneau.rest.server.observation.Observations}) so application code can trace an
+	 * arbitrary block of work that has no associated HTTP request. Bridge implementations typically open
+	 * a span of kind {@code INTERNAL} (rather than {@code SERVER}) named {@code spanName}.
+	 *
+	 * <p>
+	 * The default implementation returns {@link NoOpTracerHook.NoOpScope#INSTANCE} &mdash; a bridge that
+	 * does not override this method simply does not trace custom observations, and the no-backend path
+	 * stays zero-allocation. Both shipped bridges (the OpenTelemetry {@code TracerHook}) override it.
+	 *
+	 * @param spanName The span name (e.g. {@code "loadOrder"}). Never <jk>null</jk>; never blank.
+	 * @return The opened {@link Scope}. Never <jk>null</jk> &mdash; implementations that cannot open a
+	 * 	span must return {@link NoOpTracerHook.NoOpScope#INSTANCE} so the close-in-finally contract holds.
+	 */
+	default Scope startSpan(String spanName) {
+		return NoOpTracerHook.NoOpScope.INSTANCE;
+	}
 }

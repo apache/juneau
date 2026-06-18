@@ -30,11 +30,11 @@ import org.junit.jupiter.api.*;
  * Tests for config <b>profiles</b> &mdash; {@code <name>-<profile>} overlays activated via
  * {@code Config.Builder.profiles(...)} (the standalone path; the Spring piggyback is covered in the springboot module).
  */
+@SuppressWarnings({
+	"resource" // MemoryStore/Config are test fixtures; lifecycle managed by the test, not a real leak.
+})
 class ConfigProfiles_Test extends TestBase {
 
-	@SuppressWarnings({
-		"resource" // MemoryStore/Config are test fixtures; lifecycle managed by the test, not a real leak.
-	})
 	private static MemoryStore store(String... namesAndContents) {
 		var s = MemoryStore.create().build();
 		for (var i = 0; i < namesAndContents.length; i += 2)
@@ -42,9 +42,6 @@ class ConfigProfiles_Test extends TestBase {
 		return s;
 	}
 
-	@SuppressWarnings({
-		"resource" // see above.
-	})
 	private static Config config(MemoryStore s, String name, String... profiles) {
 		try {
 			return Config.create().store(s).name(name).profiles(profiles).build();

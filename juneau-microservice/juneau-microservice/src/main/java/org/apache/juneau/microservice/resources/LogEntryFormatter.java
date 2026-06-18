@@ -84,6 +84,8 @@ public class LogEntryFormatter extends Formatter {
 	 * 		<li><js>"{msg}"</js> - The log message.
 	 * 		<li><js>"{threadid}"</js> - The thread ID.
 	 * 		<li><js>"{exception}"</js> - The localized exception message.
+	 * 		<li><js>"{traceId}"</js> - The active OpenTelemetry trace ID (empty when OTel is absent or no span is active).
+	 * 		<li><js>"{spanId}"</js> - The active OpenTelemetry span ID (empty when OTel is absent or no span is active).
 	 * 	</ol>
 	 * @param dateFormat
 	 * 	The {@link SimpleDateFormat} format to use for dates.  e.g. <js>"yyyy.MM.dd hh:mm:ss"</js>.
@@ -110,7 +112,9 @@ public class LogEntryFormatter extends Formatter {
 			.replace("{level}", "%5$s")
 			.replace("{msg}", "%6$s")
 			.replace("{threadid}", "%7$s")
-			.replace("{exception}", "%8$s");
+			.replace("{exception}", "%8$s")
+			.replace("{traceId}", "%9$s")
+			.replace("{spanId}", "%10$s");
 		// @formatter:on
 
 		this.format = format;
@@ -147,6 +151,9 @@ public class LogEntryFormatter extends Formatter {
 			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
 				if (c == '$') {
 					state = S4;
+				} else if (Character.isDigit(c)) {
+					// Stay in S3: group numbers may be multi-digit (e.g. %10$s for {spanId}).
+					state = S3;  // NOSONAR - explicit self-transition documents the multi-digit case
 				} else {
 					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit followed by non-$ which can't come from standard format placeholders
 					state = S1;
@@ -187,7 +194,15 @@ public class LogEntryFormatter extends Formatter {
 							fieldIndexes.put("exception", index++);
 							re.append("(.*)");
 							break;
-						default: // HTT - group numbers > 8 would require a format placeholder beyond {exception} // NOSONAR
+						case 9:
+							fieldIndexes.put("traceId", index++);
+							re.append("([0-9a-f]*)");
+							break;
+						case 10:
+							fieldIndexes.put("spanId", index++);
+							re.append("([0-9a-f]*)");
+							break;
+						default: // HTT - group numbers > 10 would require a format placeholder beyond {spanId} // NOSONAR
 					}
 				} else {
 					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit$ followed by non-s which can't come from standard format placeholders
@@ -229,7 +244,7 @@ public class LogEntryFormatter extends Formatter {
 			}
 		}
 		var s = String.format(format, df.format(new Date(r.getMillis())), r.getSourceClassName(), r.getSourceMethodName(), r.getLoggerName(), r.getLevel(), msg, r.getThreadID(),
-			r.getThrown() == null ? "" : r.getThrown().getMessage());
+			r.getThrown() == null ? "" : r.getThrown().getMessage(), TraceContext.currentTraceId(), TraceContext.currentSpanId());
 		if (nn(t))
 			s += String.format("%n%s", getStackTrace(r.getThrown()));
 		return s;
@@ -258,6 +273,8 @@ public class LogEntryFormatter extends Formatter {
 	 * 		<li><js>"msg"</js>
 	 * 		<li><js>"threadid"</js>
 	 * 		<li><js>"exception"</js>
+	 * 		<li><js>"traceId"</js>
+	 * 		<li><js>"spanId"</js>
 	 * 	</ul>
 	 * @param m The matcher.
 	 * @return The field value, or <jk>null</jk> if the specified field does not exist.

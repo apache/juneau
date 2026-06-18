@@ -165,13 +165,31 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 			.tag(TAG_URI, defaultIfBlank(uriTemplate, ""))
 			.tag(TAG_STATUS, Integer.toString(statusCode))
 			.tag(TAG_EXCEPTION, exceptionTag(error));
+		builder = applyMetricTags(builder, metricTags);
+		builder.register(registry).record(elapsed);
+	}
+
+	@SuppressWarnings({
+		"java:S6213" // Method name 'record' is part of the established MetricsRecorder SPI; renaming this overriding method would be a breaking API change.
+	})
+	@Override /* MetricsRecorder */
+	public void record(String metricName, String metricTags, Duration elapsed, Throwable error) {
+		// Custom (non-request) observation: a timer named metricName carrying only the exception tag
+		// plus any caller-supplied metricTags - no HTTP method/uri/status tags (there is no request).
+		var builder = Timer.builder(metricName)
+			.tag(TAG_EXCEPTION, exceptionTag(error));
+		builder = applyMetricTags(builder, metricTags);
+		builder.register(registry).record(elapsed);
+	}
+
+	private static Timer.Builder applyMetricTags(Timer.Builder builder, String metricTags) {
 		if (ne(metricTags))
 			for (var pair : metricTags.split(",")) {
 				var kv = pair.split("=", 2);
 				if (kv.length == 2)
 					builder = builder.tag(kv[0].strip(), kv[1].strip());
 			}
-		builder.register(registry).record(elapsed);
+		return builder;
 	}
 
 	private static String exceptionTag(Throwable error) {

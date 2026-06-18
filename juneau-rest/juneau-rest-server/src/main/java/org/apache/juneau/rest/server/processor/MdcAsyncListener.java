@@ -81,6 +81,19 @@ public final class MdcAsyncListener {
 	private static final Method SET_CONTEXT_MAP;
 	private static final Method CLEAR;
 
+	/** MDC keys carrying the active trace / span id &mdash; the convention used by the OTel logback / log4j appenders. */
+	static final String MDC_TRACE_ID = "trace_id";
+	static final String MDC_SPAN_ID = "span_id";
+
+	/** {@code true} if {@code io.opentelemetry.api.trace.Span} was found on the classpath at class-load time. */
+	private static final boolean OTEL_AVAILABLE;
+
+	private static final Method SPAN_CURRENT;
+	private static final Method SPAN_GET_SPAN_CONTEXT;
+	private static final Method CTX_IS_VALID;
+	private static final Method CTX_GET_TRACE_ID;
+	private static final Method CTX_GET_SPAN_ID;
+
 	static {
 		boolean available = false;
 		Method copyOf = null;
@@ -99,6 +112,31 @@ public final class MdcAsyncListener {
 		GET_COPY_OF_CONTEXT_MAP = copyOf;
 		SET_CONTEXT_MAP = set;
 		CLEAR = clr;
+
+		boolean otel = false;
+		Method spanCurrent = null;
+		Method getSpanContext = null;
+		Method isValid = null;
+		Method getTraceId = null;
+		Method getSpanId = null;
+		try {
+			Class<?> span = Class.forName("io.opentelemetry.api.trace.Span");
+			Class<?> spanContext = Class.forName("io.opentelemetry.api.trace.SpanContext");
+			spanCurrent = span.getMethod("current");
+			getSpanContext = span.getMethod("getSpanContext");
+			isValid = spanContext.getMethod("isValid");
+			getTraceId = spanContext.getMethod("getTraceId");
+			getSpanId = spanContext.getMethod("getSpanId");
+			otel = true;
+		} catch (Exception e) {
+			LOG.fine(() -> "OpenTelemetry API not found on classpath — trace/span id is not propagated across async boundaries: " + e.getMessage());
+		}
+		OTEL_AVAILABLE = otel;
+		SPAN_CURRENT = spanCurrent;
+		SPAN_GET_SPAN_CONTEXT = getSpanContext;
+		CTX_IS_VALID = isValid;
+		CTX_GET_TRACE_ID = getTraceId;
+		CTX_GET_SPAN_ID = getSpanId;
 	}
 
 	private MdcAsyncListener() {}
@@ -141,10 +179,38 @@ public final class MdcAsyncListener {
 			return null;
 		try {
 			Map<String, String> map = (Map<String, String>) GET_COPY_OF_CONTEXT_MAP.invoke(null);
+			// Enrich the snapshot with the active OTel trace/span id (under the conventional OTel
+			// appender keys) so log correlation survives the async-completion hop even when the
+			// completion thread has lost the OTel context. Only when an OTel span is actually active.
+			map = enrichWithTraceContext(map);
 			return (map == null || map.isEmpty()) ? null : map;
 		} catch (Exception e) {
 			LOG.fine(() -> "MDC.getCopyOfContextMap() failed: " + e.getMessage());
 			return null;
+		}
+	}
+
+	@SuppressWarnings({
+		"java:S3011", // Reflective access to the OTel trace API — intentional; OpenTelemetry is not a compile dep.
+		"java:S1168"  // null preserves the lazy-skip contract: a null map with no active trace must stay null (no MDC to propagate).
+	})
+	private static Map<String, String> enrichWithTraceContext(Map<String, String> map) {
+		if (!OTEL_AVAILABLE)
+			return map;
+		try {
+			Object span = SPAN_CURRENT.invoke(null);
+			if (span == null)
+				return map;
+			Object ctx = SPAN_GET_SPAN_CONTEXT.invoke(span);
+			if (ctx == null || ! ((Boolean) CTX_IS_VALID.invoke(ctx)).booleanValue())
+				return map;
+			var out = (map == null) ? new HashMap<String, String>(4) : new HashMap<>(map);
+			out.put(MDC_TRACE_ID, String.valueOf(CTX_GET_TRACE_ID.invoke(ctx)));
+			out.put(MDC_SPAN_ID, String.valueOf(CTX_GET_SPAN_ID.invoke(ctx)));
+			return out;
+		} catch (Exception e) {
+			LOG.fine(() -> "OTel trace-context enrichment failed: " + e.getMessage());
+			return map;
 		}
 	}
 

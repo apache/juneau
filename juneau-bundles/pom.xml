@@ -35,6 +35,7 @@
 		<module>juneau-microservice-jetty-bundle</module>
 		<module>juneau-microservice-tomcat-bundle</module>
 		<module>juneau-springboot-bundle</module>
+		<module>juneau-observability-otlp-bundle</module>
 	</modules>
 
 </project>

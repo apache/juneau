@@ -20,6 +20,7 @@ import java.nio.file.*;
 import java.time.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.tracing.*;
 import org.openjdk.jmh.annotations.*;
@@ -119,7 +120,7 @@ public class ObservabilityNoopBenchmark {
 		@SuppressWarnings({
 			"java:S2637"  // Suppression required for test context; see annotation for details.
 		})
-		var scope = tracer.startSpan(null);
+		var scope = tracer.startSpan((RestRequest) null);
 		try {
 			scope.setStatusCode(STATUS_CODE);
 		} finally {

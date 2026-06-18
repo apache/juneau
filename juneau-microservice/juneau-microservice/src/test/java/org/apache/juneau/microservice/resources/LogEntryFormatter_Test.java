@@ -194,4 +194,37 @@ class LogEntryFormatter_Test extends TestBase {
 		assertTrue(result.contains("INFO"));
 		assertTrue(result.contains("No exception"));
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Log correlation: {traceId} / {spanId} placeholders.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_traceIdSpanId_renderWithoutError() {
+		// OTel is not on this module's test classpath, so the trace/span fields render empty - but the
+		// placeholders must still be recognized (no literal "{traceId}" leaks into the output).
+		var f = new LogEntryFormatter("[{date} {level}] {msg} trace={traceId} span={spanId}%n", DATE_FORMAT, false);
+		var r = new LogRecord(Level.INFO, "hello");
+		var result = f.format(r);
+		assertNotNull(result);
+		assertTrue(result.contains("trace= span="), "Expected empty trace/span fields, got:\n" + result);
+		assertFalse(result.contains("{traceId}"));
+		assertFalse(result.contains("{spanId}"));
+	}
+
+	@Test void b02_traceIdSpanId_registeredAsParsableFields() {
+		// {msg} uses a greedy (.*) match, so it must come last; put the trace/span fields ahead of it.
+		var f = new LogEntryFormatter("[{date} {level}] trace={traceId} span={spanId} {msg}", DATE_FORMAT, false);
+		var line = "[2023.01.15 10:30:45 INFO] trace=0af7651916cd43dd8448eb211c80319c span=b7ad6b7169203331 hello";
+		var m = f.getLogEntryPattern().matcher(line);
+		assertTrue(m.matches(), "Pattern should match a line with populated trace/span ids");
+		assertEquals("0af7651916cd43dd8448eb211c80319c", f.getField("traceId", m));
+		assertEquals("b7ad6b7169203331", f.getField("spanId", m));
+	}
+
+	@Test void b03_traceContext_unavailableReturnsEmpty() {
+		// Without OTel on the classpath, the reflective accessor degrades to empty strings.
+		assertFalse(TraceContext.isAvailable());
+		assertEquals("", TraceContext.currentTraceId());
+		assertEquals("", TraceContext.currentSpanId());
+	}
 }

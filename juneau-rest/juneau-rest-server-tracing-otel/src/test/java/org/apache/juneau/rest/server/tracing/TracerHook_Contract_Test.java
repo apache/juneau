@@ -159,7 +159,7 @@ class TracerHook_Contract_Test extends TestBase {
 	}
 
 	@Test void d02_noOpTracer_returnsNoOpScope() {
-		var scope = NoOpTracerHook.INSTANCE.startSpan(null);
+		var scope = NoOpTracerHook.INSTANCE.startSpan((RestRequest) null);
 		assertSame(NoOpTracerHook.NoOpScope.INSTANCE, scope);
 	}
 
