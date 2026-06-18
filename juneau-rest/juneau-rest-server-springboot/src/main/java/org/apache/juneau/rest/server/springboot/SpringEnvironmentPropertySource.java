@@ -115,11 +115,25 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 				}
 			}
 		}
-		if (e == null || ! e.containsProperty(name))
+		if (e == null)
+			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
+		// Profile piggyback: a Juneau config-profile activation lookup resolves to Spring's active profiles, so a
+		// Spring-Boot deployment has a single source of truth for which profiles are active.  Only answered when the
+		// caller has NOT explicitly set juneau.profiles.active as a property (that exact key wins if present).
+		if (PROFILES_ACTIVE_KEY.equals(name) && ! e.containsProperty(name)) {
+			var active = e.getActiveProfiles();
+			if (active != null && active.length > 0)  // HTT: getActiveProfiles() never returns null per the Environment contract; the guard is defensive.
+				return org.apache.juneau.commons.settings.PropertyLookupResult.present(opt(String.join(",", active)));
+			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
+		}
+		if (! e.containsProperty(name))
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
 		// Spring's getProperty() returns null only for unresolved placeholders, which
 		// containsProperty() already filtered out.  Wrap defensively anyway.
 		var v = e.getProperty(name);
 		return org.apache.juneau.commons.settings.PropertyLookupResult.present(opt(v));
 	}
+
+	/** The Juneau config-profile activation key that piggybacks on Spring's active profiles. */
+	private static final String PROFILES_ACTIVE_KEY = "juneau.profiles.active";
 }

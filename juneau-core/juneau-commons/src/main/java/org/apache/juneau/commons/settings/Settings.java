@@ -159,6 +159,19 @@ public class Settings {
 	 */
 	public static final PropertySource SYSTEM_ENV_SOURCE = FunctionalPropertySource.of(System::getenv);
 
+	/**
+	 * {@link #SYSTEM_ENV_SOURCE} wrapped with {@link RelaxedPropertySource relaxed binding}, so a single logical key
+	 * resolves from any of the common environment-variable spellings (e.g. {@code my.prop} / {@code myProp} /
+	 * {@code MySection/myKey} all satisfied by {@code MY_PROP} / {@code MY_SECTION_MY_KEY}).
+	 *
+	 * <p>
+	 * This is the env source used by the default {@link #get() singleton}.  It is verbatim-first, so exact-match
+	 * behavior is unchanged &mdash; a relaxed variant is only probed when the exact name misses.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final PropertySource RELAXED_SYSTEM_ENV_SOURCE = new RelaxedPropertySource(SYSTEM_ENV_SOURCE);
+
 	private static final String DISABLE_GLOBAL_PROP = "juneau.settings.disableGlobal";
 	private static final String MSG_globalDisabled = "Global settings not enabled";
 	private static final String MSG_localDisabled = "Local settings not enabled";
@@ -334,7 +347,7 @@ public class Settings {
 
 	private static final Settings INSTANCE = new Builder()
 		.globalStore(initProperty(DISABLE_GLOBAL_PROP).map(Boolean::valueOf).orElse(false) ? () -> null : MapStore::new)
-		.setSources(SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
+		.setSources(RELAXED_SYSTEM_ENV_SOURCE, SYSTEM_PROPERTY_SOURCE)
 		.useServiceLoader()
 		.build();
 

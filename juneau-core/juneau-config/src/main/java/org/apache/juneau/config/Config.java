@@ -97,6 +97,7 @@ public class Config extends Context implements ConfigEventListener {
 		private ConfigFormat format;
 		private VarResolver varResolver;
 		private WriterSerializer serializer;
+		private List<String> profiles;
 
 		/**
 		 * Constructor, default settings.
@@ -114,6 +115,22 @@ public class Config extends Context implements ConfigEventListener {
 			store = FileStore.DEFAULT;
 			format = null;
 			varResolver = VarResolver.DEFAULT;
+			profiles = defaultProfiles();
+		}
+
+		/**
+		 * Resolves the default active profiles from {@code juneau.profiles.active} (system property / env var / config),
+		 * comma-split and trimmed.  Returns an empty list when unset.
+		 */
+		private static List<String> defaultProfiles() {
+			var s = env("juneau.profiles.active", "");
+			if (s == null || s.isBlank())
+				return list();
+			var out = new ArrayList<String>();
+			for (var p : s.split(","))
+				if (! p.isBlank())
+					out.add(p.trim());
+			return out;
 		}
 
 		/**
@@ -134,6 +151,7 @@ public class Config extends Context implements ConfigEventListener {
 			serializer = copyFrom.serializer;
 			store = copyFrom.store;
 			varResolver = copyFrom.varResolver;
+			profiles = copyFrom.profiles == null ? list() : new ArrayList<>(copyFrom.profiles);
 		}
 
 		/**
@@ -289,6 +307,29 @@ public class Config extends Context implements ConfigEventListener {
 		 */
 		public Builder name(String value) {
 			name = assertArgNotNull(ARG_value, value);
+			return this;
+		}
+
+		/**
+		 * Active configuration profiles.
+		 *
+		 * <p>
+		 * Each active profile {@code P} activates a {@code <name>-P} overlay (e.g. base {@code my.cfg} + profile
+		 * {@code stage} &rarr; {@code my-stage.cfg}) layered over the base config: profile entries win over base, and
+		 * for multiple active profiles the <b>last</b> one wins.  YAML bases use {@code <name>-P.yml} overlays the same
+		 * way.  Overlays are resolved through the configured {@link #store(ConfigStore) store}, so live-reload fires when
+		 * either the base or an active profile file changes.
+		 *
+		 * <p>
+		 * Defaults to the comma-separated value of {@code juneau.profiles.active} (system property, environment variable
+		 * &mdash; with relaxed binding &mdash; or config key).  Pass no arguments / an empty array to disable profiles.
+		 *
+		 * @param value The active profile names, in activation order.  May be empty.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public Builder profiles(String...value) {
+			profiles = value == null ? list() : list(value);
 			return this;
 		}
 
@@ -600,7 +641,12 @@ public class Config extends Context implements ConfigEventListener {
 		parser = builder.parser;
 		readOnly = builder.readOnly;
 		serializer = builder.serializer;
-		store = builder.store;
+		// When profiles are active, wrap the configured store so reads of the base name return the base config
+		// with each active profile's <name>-<profile> overlay merged on top (profile-wins, last-active-wins).
+		var profiles2 = builder.profiles == null ? Collections.<String>emptyList() : builder.profiles;
+		store = profiles2.isEmpty()
+			? builder.store
+			: ProfileConfigStore.create().delegate(builder.store).baseName(name).profiles(profiles2).format(format).build();
 		varResolver = builder.varResolver;
 		configMap = store.getMap(name, format);
 		configMap.register(this);

@@ -237,4 +237,31 @@ class SpringEnvironmentPropertySource_Test extends TestBase {
 			store.clear();
 		}
 	}
+
+	// =================================================================================
+	// D. Config-profile piggyback — juneau.profiles.active resolves to Spring's active profiles.
+	// =================================================================================
+
+	@Test void d01_profilesActiveResolvesToSpringActiveProfiles() {
+		var env = new MockEnvironment();
+		env.setActiveProfiles("stage", "cloud");
+		var src = new SpringEnvironmentPropertySource(env);
+		var r = src.get("juneau.profiles.active");
+		assertTrue(r.isPresent());
+		assertEquals("stage,cloud", r.value().orElse(null));
+	}
+
+	@Test void d02_noActiveProfilesMissing() {
+		var env = new MockEnvironment();  // no active profiles
+		var src = new SpringEnvironmentPropertySource(env);
+		assertFalse(src.get("juneau.profiles.active").isPresent());
+	}
+
+	@Test void d03_explicitPropertyWinsOverActiveProfiles() {
+		// An explicit juneau.profiles.active property takes precedence over getActiveProfiles().
+		var env = new MockEnvironment().withProperty("juneau.profiles.active", "explicit");
+		env.setActiveProfiles("stage");
+		var src = new SpringEnvironmentPropertySource(env);
+		assertEquals("explicit", src.get("juneau.profiles.active").value().orElse(null));
+	}
 }
