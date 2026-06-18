@@ -71,7 +71,7 @@
 		<jena.version>5.6.0</jena.version>
 		<!-- Hoisted from owning modules so the juneau-bom + curated bundles can pin one coherent version source. -->
 		<micrometer.version>1.13.6</micrometer.version>
-		<opentelemetry.version>1.62.0</opentelemetry.version>
+		<opentelemetry.version>1.63.0</opentelemetry.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
 	</properties>
