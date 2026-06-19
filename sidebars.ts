@@ -2121,6 +2121,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/17.01.DependencyManagement',
 							label: '17.1. Dependency Management (BOM & Bundles)',
 						},
+						{
+							type: 'doc',
+							id: 'topics/17.02.NativeImageAndLayeredJars',
+							label: '17.2. GraalVM Native Image & Docker Layering',
+						},
 					],
 				},
 				{
