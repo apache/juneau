@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 /**
- * Mixin flavor of the {@code /loggers} runtime log-level management endpoint (JUL).
+ * Mixin flavor of the {@code /loggers} runtime log-level management endpoint.
  *
  * <p>
  * Composes the logger read/set endpoints into a host resource via
@@ -36,13 +36,15 @@ import org.apache.juneau.rest.server.servlet.*;
  * set-level endpoint <b>mutates runtime logging</b> and should be guarded (deny-by-default) when assembled into a
  * management group &mdash; see the actuator group's exposure policy.
  *
- * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='warn'>JUL-only in v1 &mdash; see {@link LoggersManager}.
+ * <h5 class='section'>Backend:</h5><ul>
+ * 	<li>Drives {@link JulLogBackend java.util.logging} by default; declare a Logback / Log4j2 backend
+ * 		explicitly via {@link LoggersSettings.Builder#backend(LogBackend)} &mdash; see {@link LogBackend}.
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link LoggersResource}
  * 	<li class='jc'>{@link LoggersManager}
+ * 	<li class='jc'>{@link LogBackend}
  * </ul>
  *
  * @since 10.0.0
@@ -55,20 +57,22 @@ public class LoggersMixin extends RestMixin {
 	/**
 	 * [GET /loggers] - All loggers and their configured levels.
 	 *
+	 * @param req The HTTP request.
 	 * @return A sorted map of logger name to configured level (empty string = inherited).
 	 */
 	@RestGet(
 		path="/loggers",
 		summary="Runtime logger levels",
-		description="Lists all java.util.logging loggers and their configured levels (empty = inherited from ancestor)."
+		description="Lists all loggers and their configured levels (empty = inherited from ancestor)."
 	)
-	public Map<String,String> getLoggers() {
-		return manager.getLevels();
+	public Map<String,String> getLoggers(RestRequest req) {
+		return manager.getLevels(req.getContext());
 	}
 
 	/**
 	 * [GET /loggers/{name}] - One logger's configured level.
 	 *
+	 * @param req The HTTP request.
 	 * @param name The logger name ("ROOT" for the root logger).
 	 * @return The configured level name, empty string if inherited.
 	 * @throws NotFound If no logger with that name is registered.
@@ -76,10 +80,10 @@ public class LoggersMixin extends RestMixin {
 	@RestGet(
 		path="/loggers/{name}",
 		summary="Runtime logger level",
-		description="Returns the configured level of a single java.util.logging logger."
+		description="Returns the configured level of a single logger."
 	)
-	public String getLogger(@Path("name") String name) {
-		var level = manager.getLevel(name);
+	public String getLogger(RestRequest req, @Path("name") String name) {
+		var level = manager.getLevel(req.getContext(), name);
 		if (level == null)
 			throw new NotFound("No logger named ''{0}'' is registered.", name);
 		return level;
@@ -106,9 +110,9 @@ public class LoggersMixin extends RestMixin {
 	public String setLogger(RestRequest req, @Path("name") String name, @Content String level) {
 		if (! manager.resolveSettings(req.getContext()).isWriteEnabled())
 			throw new Forbidden("The /loggers set-level endpoint is disabled.  Register a LoggersSettings bean with write enabled to use it.");
-		manager.setLevel(name, level);
+		manager.setLevel(req.getContext(), name, level);
 		// setLevel creates the logger on demand, so getLevel always returns non-null here (level name or "" if inherited).
-		return manager.getLevel(name);
+		return manager.getLevel(req.getContext(), name);
 	}
 
 	/**

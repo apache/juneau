@@ -27,8 +27,18 @@ package org.apache.juneau.rest.server.management;
  * no such bean is present, {@link LoggersManager} resolves the default (writes disabled) and the set-level
  * endpoints respond {@code 403 Forbidden}.
  *
+ * <h5 class='topic'>Backend selection (explicit)</h5>
+ *
+ * <p>
+ * The {@code /loggers} endpoint drives a {@link LogBackend}.  By default that is
+ * {@link JulLogBackend java.util.logging}.  To drive a different backend (e.g. Logback or Log4j2 via the
+ * {@code juneau-rest-server-management-logging} add-on), declare it <i>explicitly</i> with
+ * {@link Builder#backend(LogBackend)} &mdash; the endpoint never classpath-scans for, and then drives, a backend
+ * the operator did not choose.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link LoggersManager}
+ * 	<li class='jc'>{@link LogBackend}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface</a>
  * </ul>
  *
@@ -36,13 +46,15 @@ package org.apache.juneau.rest.server.management;
  */
 public class LoggersSettings {
 
-	/** The default (read-only) settings used when no bean is registered. */
+	/** The default (read-only, JUL-backed) settings used when no bean is registered. */
 	public static final LoggersSettings DEFAULT = create().build();
 
 	private final boolean writeEnabled;
+	private final LogBackend backend;
 
 	private LoggersSettings(Builder b) {
 		this.writeEnabled = b.writeEnabled;
+		this.backend = b.backend == null ? JulLogBackend.INSTANCE : b.backend;
 	}
 
 	/**
@@ -62,10 +74,19 @@ public class LoggersSettings {
 	}
 
 	/**
+	 * @return The explicitly-declared {@link LogBackend} the {@code /loggers} endpoint drives, or
+	 * 	{@link JulLogBackend#INSTANCE} when none was declared.  Never <jk>null</jk>.
+	 */
+	public LogBackend getBackend() {
+		return backend;
+	}
+
+	/**
 	 * Builder for {@link LoggersSettings}.
 	 */
 	public static class Builder {
 		private boolean writeEnabled;
+		private LogBackend backend;
 
 		/**
 		 * Enables the {@code PUT}/{@code POST} set-level endpoints.
@@ -74,6 +95,22 @@ public class LoggersSettings {
 		 */
 		public Builder enableWrite() {
 			writeEnabled = true;
+			return this;
+		}
+
+		/**
+		 * Explicitly declares the {@link LogBackend} the {@code /loggers} endpoint drives.
+		 *
+		 * <p>
+		 * When not set, the endpoint drives {@link JulLogBackend java.util.logging}.  Pass a Logback / Log4j2
+		 * backend (from {@code juneau-rest-server-management-logging}) or a custom implementation to drive a
+		 * different backend &mdash; this is the explicit opt-in; the endpoint does not auto-detect.
+		 *
+		 * @param value The backend.  <jk>null</jk> resets to the JUL default.
+		 * @return This object.
+		 */
+		public Builder backend(LogBackend value) {
+			backend = value;
 			return this;
 		}
 

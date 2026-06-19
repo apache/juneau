@@ -42,6 +42,7 @@
 		<module>juneau-rest-server-auth-oidc-rp</module>
 		<module>juneau-rest-server-metrics-micrometer</module>
 		<module>juneau-rest-server-tracing-otel</module>
+		<module>juneau-rest-server-management-logging</module>
 		<module>juneau-rest-server-reactive</module>
 		<module>juneau-rest-server-reactive-reactor</module>
 		<module>juneau-rest-server-view-jsp</module>

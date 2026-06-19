@@ -52,34 +52,35 @@ class Loggers_Test extends TestBase {
 	// =================================================================================
 
 	@Test void a01_managerGetSetClear() {
+		// Manager with a null context resolves the JUL default backend.
 		var m = new LoggersManager();
-		m.setLevel(LName, "FINE");
-		assertEquals("FINE", m.getLevel(LName));
-		assertTrue(m.getLevels().containsKey(LName));
-		assertEquals("FINE", m.getLevels().get(LName));
+		m.setLevel(null, LName, "FINE");
+		assertEquals("FINE", m.getLevel(null, LName));
+		assertTrue(m.getLevels(null).containsKey(LName));
+		assertEquals("FINE", m.getLevels(null).get(LName));
 		// Blank clears the level (inherits) -> empty string.
-		m.setLevel(LName, "");
-		assertEquals("", m.getLevel(LName));
+		m.setLevel(null, LName, "");
+		assertEquals("", m.getLevel(null, LName));
 	}
 
 	@Test void a02_managerUnknownLoggerNull() {
-		assertNull(new LoggersManager().getLevel("no.such.logger.anywhere.xyz"));
+		assertNull(new LoggersManager().getLevel(null, "no.such.logger.anywhere.xyz"));
 	}
 
 	@Test void a03_managerRootAlias() {
 		// "ROOT" resolves to the empty-named root logger; it's always present in the snapshot.
-		assertTrue(new LoggersManager().getLevels().containsKey("ROOT"));
+		assertTrue(new LoggersManager().getLevels(null).containsKey("ROOT"));
 	}
 
 	@Test void a04_managerInvalidLevelThrows() {
 		var m = new LoggersManager();
-		assertThrows(IllegalArgumentException.class, () -> m.setLevel(LName, "NOPE"));
+		assertThrows(IllegalArgumentException.class, () -> m.setLevel(null, LName, "NOPE"));
 	}
 
 	@Test void a05_managerNullLevelClears() {
 		var m = new LoggersManager();
-		m.setLevel(LName, "FINE");
-		m.setLevel(LName, null);
+		m.setLevel(null, LName, "FINE");
+		m.setLevel(null, LName, null);
 		assertNull(Logger.getLogger(LName).getLevel());
 	}
 
@@ -87,13 +88,40 @@ class Loggers_Test extends TestBase {
 		var s = new LoggersManager().resolveSettings(null);
 		assertSame(LoggersSettings.DEFAULT, s);
 		assertFalse(s.isWriteEnabled());
+		// The default settings drive the JUL backend.
+		assertSame(JulLogBackend.INSTANCE, s.getBackend());
 	}
 
 	@Test void a07_rootAndNullResolveToRootLogger() {
 		var m = new LoggersManager();
 		// "ROOT" and null both map to the empty-named root logger, which is always present.
-		assertNotNull(m.getLevel("ROOT"));
-		assertNotNull(m.getLevel(null));
+		assertNotNull(m.getLevel(null, "ROOT"));
+		assertNotNull(m.getLevel(null, null));
+	}
+
+	@Test void a08_julBackendDirect() {
+		// JulLogBackend carries the JUL logic directly (the default backend).
+		var b = JulLogBackend.INSTANCE;
+		b.setLevel(LName, "FINE");
+		assertEquals("FINE", b.getLevel(LName));
+		assertTrue(b.getLevels().containsKey("ROOT"));
+		b.setLevel(LName, null);
+		assertEquals("", b.getLevel(LName));
+	}
+
+	@Test void a09_explicitBackendSelection() {
+		// A LoggersSettings with an explicitly-declared backend drives that backend, not JUL.
+		var calls = new java.util.ArrayList<String>();
+		LogBackend fake = new LogBackend() {
+			@Override public java.util.Map<String,String> getLevels() { calls.add("getLevels"); return java.util.Map.of("x", "DEBUG"); }
+			@Override public String getLevel(String name) { calls.add("getLevel:" + name); return "DEBUG"; }
+			@Override public void setLevel(String name, String level) { calls.add("setLevel:" + name + "=" + level); }
+		};
+		var s = LoggersSettings.create().backend(fake).build();
+		assertSame(fake, s.getBackend());
+		s.getBackend().setLevel("x", "DEBUG");
+		assertEquals("DEBUG", s.getBackend().getLevel("x"));
+		assertTrue(calls.contains("setLevel:x=DEBUG"));
 	}
 
 	// =================================================================================

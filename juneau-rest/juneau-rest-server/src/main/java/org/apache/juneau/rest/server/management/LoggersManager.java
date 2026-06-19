@@ -17,25 +17,27 @@
 package org.apache.juneau.rest.server.management;
 
 import java.util.*;
-import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
 
 /**
- * Shared worker for the {@code /loggers} management endpoint:  reads and sets
- * {@link java.util.logging java.util.logging} (JUL) levels at runtime.
+ * Shared worker for the {@code /loggers} management endpoint:  reads and sets logger levels at runtime by
+ * delegating to the {@link LogBackend} resolved from the host context.
  *
  * <p>
  * Both the {@link LoggersMixin mixin} and {@link LoggersResource resource} flavors delegate here, so the
  * two forms cannot drift &mdash; the same pattern the health package uses with its aggregator.
  *
- * <h5 class='section'>Notes:</h5><ul>
- * 	<li class='warn'>This endpoint is <b>JUL-only</b> in v1.  Applications that route logging through
- * 		SLF4J&rarr;Logback or Log4j2 will not have their levels changed here; backend-aware level control is
- * 		tracked as a separate follow-on.
- * </ul>
+ * <h5 class='section'>Backend</h5>
+ * <p>
+ * The driven backend defaults to {@link JulLogBackend java.util.logging}.  A consumer drives a different backend
+ * (e.g. Logback / Log4j2 via {@code juneau-rest-server-management-logging}) by <i>explicitly</i> declaring it on a
+ * {@link LoggersSettings} bean via {@link LoggersSettings.Builder#backend(LogBackend)} &mdash; the endpoint never
+ * auto-detects.  The response shape (logger name &rarr; configured level, empty string = inherited) is identical
+ * across backends.
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link LogBackend}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ManagementSurface">Management Surface</a>
  * </ul>
  *
@@ -44,66 +46,46 @@ import org.apache.juneau.rest.server.*;
 public class LoggersManager {
 
 	/**
-	 * Returns a snapshot of all known loggers and their <i>configured</i> levels.
+	 * Returns a snapshot of all known loggers and their configured levels, for the backend resolved from the
+	 * supplied context.
 	 *
-	 * <p>
-	 * Walks {@link LogManager#getLoggerNames()} and reports each logger's own level
-	 * ({@link Logger#getLevel()}), or {@code null} (rendered as the empty string) when the logger inherits
-	 * its level from an ancestor.  The root logger is reported under the key {@code "ROOT"}.
-	 *
-	 * @return A sorted map of logger name &rarr; configured level name (never <jk>null</jk>).
+	 * @param context The REST context whose bean store supplies the {@link LoggersSettings} / {@link LogBackend}.
+	 * 	May be <jk>null</jk> (uses the JUL default).
+	 * @return A sorted map of logger name &rarr; configured level name (empty string = inherited).  Never <jk>null</jk>.
 	 */
-	public Map<String,String> getLevels() {
-		var out = new TreeMap<String,String>();
-		var lm = LogManager.getLogManager();
-		var names = Collections.list(lm.getLoggerNames());
-		for (var name : names) {
-			var logger = lm.getLogger(name);
-			if (logger == null)
-				continue;
-			var level = logger.getLevel();
-			var key = name.isEmpty() ? "ROOT" : name;
-			out.put(key, level == null ? "" : level.getName());
-		}
-		return out;
+	public Map<String,String> getLevels(RestContext context) {
+		return resolveSettings(context).getBackend().getLevels();
 	}
 
 	/**
-	 * Returns the configured level of a single logger.
+	 * Returns the configured level of a single logger, for the backend resolved from the supplied context.
 	 *
+	 * @param context The REST context whose bean store supplies the backend.  May be <jk>null</jk>.
 	 * @param name The logger name ({@code "ROOT"} or empty for the root logger).
 	 * @return The configured level name, the empty string if the level is inherited, or <jk>null</jk> if no
 	 * 	such logger is currently registered.
 	 */
-	public String getLevel(String name) {
-		var logger = LogManager.getLogManager().getLogger(resolveName(name));
-		if (logger == null)
-			return null;
-		var level = logger.getLevel();
-		return level == null ? "" : level.getName();
+	public String getLevel(RestContext context, String name) {
+		return resolveSettings(context).getBackend().getLevel(name);
 	}
 
 	/**
-	 * Sets (or clears) the level of a single logger at runtime.
+	 * Sets (or clears) the level of a single logger at runtime (process-lifetime-only), for the backend resolved
+	 * from the supplied context.
 	 *
-	 * <p>
-	 * A non-null, non-blank {@code level} is parsed via {@link Level#parse(String)} and applied; a
-	 * <jk>null</jk> or blank {@code level} clears the logger's own level so it inherits from its ancestor.
-	 * The named logger is created on demand via {@link Logger#getLogger(String)} if it does not yet exist
-	 * (matching JUL semantics).
-	 *
+	 * @param context The REST context whose bean store supplies the backend.  May be <jk>null</jk>.
 	 * @param name The logger name ({@code "ROOT"} or empty for the root logger).
-	 * @param level The level name (e.g. {@code "FINE"}, {@code "INFO"}, {@code "OFF"}), or <jk>null</jk>/blank to inherit.
-	 * @throws IllegalArgumentException If {@code level} is non-blank but not a valid {@link Level} name.
+	 * @param level The backend-native level name (e.g. {@code "FINE"}/{@code "INFO"} for JUL,
+	 * 	{@code "DEBUG"}/{@code "INFO"} for Logback/Log4j2), or <jk>null</jk>/blank to inherit.
+	 * @throws IllegalArgumentException If {@code level} is non-blank but not a valid level name for the backend.
 	 */
-	public void setLevel(String name, String level) {
-		var logger = Logger.getLogger(resolveName(name));
-		logger.setLevel(level == null || level.isBlank() ? null : Level.parse(level.trim()));
+	public void setLevel(RestContext context, String name, String level) {
+		resolveSettings(context).getBackend().setLevel(name, level);
 	}
 
 	/**
 	 * Resolves the {@link LoggersSettings} from the host context's bean store, falling back to the
-	 * read-only default.
+	 * read-only (JUL-backed) default.
 	 *
 	 * @param context The REST context whose bean store is searched.  May be <jk>null</jk>.
 	 * @return The registered settings, or {@link LoggersSettings#DEFAULT} when none is registered.
@@ -115,10 +97,5 @@ public class LoggersManager {
 		if (context == null)
 			return LoggersSettings.DEFAULT;
 		return context.getBeanStore().getBean(LoggersSettings.class).orElse(LoggersSettings.DEFAULT);
-	}
-
-	private static String resolveName(String name) {
-		// The root logger is the empty-string-named logger; expose it under the friendlier "ROOT" alias.
-		return (name == null || name.equals("ROOT")) ? "" : name;
 	}
 }

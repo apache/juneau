@@ -59,6 +59,7 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-auth-oidc-rp</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-metrics-micrometer</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-tracing-otel</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-management-logging</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-reactive</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-reactive-reactor</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-rest-server-view-jsp</artifactId><version>${project.version}</version></dependency>

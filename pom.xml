@@ -74,6 +74,8 @@
 		<opentelemetry.version>1.62.0</opentelemetry.version>
 		<jakarta.servlet-api.version>6.1.0</jakarta.servlet-api.version>
 		<jakarta.validation-api.version>3.0.2</jakarta.validation-api.version>
+		<logback.version>1.5.18</logback.version>
+		<log4j.version>2.24.3</log4j.version>
 	</properties>
 
 	<modules>
