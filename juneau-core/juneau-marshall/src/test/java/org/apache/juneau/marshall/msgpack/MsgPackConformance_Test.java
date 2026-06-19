@@ -214,8 +214,16 @@ class MsgPackConformance_Test extends TestBase {
 		for (var i = 0; i < 1100; i++)
 			sb.append("91 ");
 		sb.append("00");
-		assertThrowsWithMessage(ParseException.class, "Maximum parse depth exceeded",
-			() -> parse(sb.toString(), Object.class));
+		// The contract is graceful failure (a ParseException, NOT a raw StackOverflowError). Which guard
+		// trips first is stack-size dependent: on a roomy stack the soft MAX_PARSE_DEPTH guard fires
+		// ("Maximum parse depth exceeded"); on a constrained CI thread stack a real StackOverflowError is
+		// caught and rewrapped ("Depth too deep.  Stack overflow occurred.") below the soft limit. Accept either.
+		var input = sb.toString();
+		var e = assertThrows(ParseException.class, () -> parse(input, Object.class));
+		var msg = String.valueOf(e.getMessage());
+		assertTrue(
+			msg.contains("Maximum parse depth exceeded") || msg.contains("Depth too deep"),
+			"Expected a graceful depth-failure ParseException.  Actual:\n" + msg);
 	}
 
 	@Test void f02_moderateNestingStillParses() throws Exception {
