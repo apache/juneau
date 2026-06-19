@@ -80,6 +80,7 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-jetty</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-tomcat</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-microservice-test</artifactId><version>${project.version}</version></dependency>
 
 			<!-- ===================================================================================== -->
 			<!-- juneau-bean                                                                           -->

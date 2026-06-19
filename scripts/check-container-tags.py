@@ -45,9 +45,11 @@ TAG_MARKERS = (
     "@SpringbootTest",
     "@JettyMicroserviceTest",
     "@TomcatMicroserviceTest",
+    "@MicroserviceTest",
     "@org.apache.juneau.testing.annotations.SpringbootTest",
     "@org.apache.juneau.testing.annotations.JettyMicroserviceTest",
     "@org.apache.juneau.testing.annotations.TomcatMicroserviceTest",
+    "@org.apache.juneau.microservice.test.MicroserviceTest",
 )
 
 
@@ -93,7 +95,7 @@ def main() -> int:
     for path in offenders:
         rel = path.relative_to(repo_root)
         print(f"  - {rel}")
-    print("\nAdd @SpringbootTest, @JettyMicroserviceTest, or @TomcatMicroserviceTest to each class.")
+    print("\nAdd @MicroserviceTest, @SpringbootTest, @JettyMicroserviceTest, or @TomcatMicroserviceTest to each class.")
     return 1
 
 

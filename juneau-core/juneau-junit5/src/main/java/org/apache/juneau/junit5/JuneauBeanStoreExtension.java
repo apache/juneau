@@ -419,6 +419,61 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	}
 
 	/**
+	 * Discovers the {@code @TestBean} overrides declared on a test instance (and its class hierarchy) and returns
+	 * them as a single {@link OverrideSet} &mdash; the public composition entry point for other JUnit 5 extensions
+	 * (e.g. {@code @MicroserviceTest}) that need the {@code @TestBean} substrate without driving this extension's
+	 * own lifecycle.
+	 *
+	 * <p>
+	 * Both {@code @TestBean(scope = CLASS)} (static) and {@code @TestBean(scope = METHOD)} (instance) declarations
+	 * are collected into one flattened overlay (method-scope chained over class-scope), so a composing extension
+	 * that boots a single system-under-test per scope sees every declared override. The returned
+	 * {@link OverrideSet#mode()} is the unified mode of all declarations (defaulting to {@link Mode#INJECT} when
+	 * none are present); mixing {@code INJECT} and {@code OVERLAY} in one scope throws {@link IllegalStateException}.
+	 *
+	 * @param testInstance The test-class instance to scan. Must not be <jk>null</jk>.
+	 * @return The discovered overrides + their unified mode. Never <jk>null</jk>; {@link OverrideSet#isEmpty()} is
+	 * 	<jk>true</jk> when no {@code @TestBean} members were found.
+	 * @since 10.0.0
+	 */
+	public static OverrideSet discoverOverrides(Object testInstance) {
+		var classScoped = buildClassScopeStoreWithMode(testInstance.getClass());
+		var methodScoped = buildMethodScopeStoreWithMode(testInstance, classScoped.store());
+		// Unify the two scopes' modes: an empty scope contributes no constraint; a populated one does.
+		var mode = methodScoped.empty() ? classScoped.mode() : methodScoped.mode();
+		if (! classScoped.empty() && ! methodScoped.empty() && classScoped.mode() != methodScoped.mode())
+			throw new IllegalStateException(
+				"Mixed @TestBean modes across scopes: CLASS declares Mode." + classScoped.mode()
+				+ " but METHOD declares Mode." + methodScoped.mode()
+				+ ".  All @TestBean declarations must use the same mode for a single-boot SUT.");
+		var empty = classScoped.empty() && methodScoped.empty();
+		return new OverrideSet(methodScoped.store(), mode, empty);
+	}
+
+	/**
+	 * The flattened result of {@link #discoverOverrides(Object)}: the {@code @TestBean} overlay store, the unified
+	 * {@link Mode} of all declarations, and whether any were found.
+	 *
+	 * @param store The overlay {@link BeanStore} carrying the discovered overrides (method-scope chained over
+	 * 	class-scope). Usable directly as a builder {@code overridingBeanStore(...)} argument for {@link Mode#INJECT},
+	 * 	or as a {@code pushOverlay(...)} argument for {@link Mode#OVERLAY}.
+	 * @param mode The unified declaration mode ({@link Mode#INJECT} by default).
+	 * @param empty Whether no {@code @TestBean} members were discovered.
+	 * @since 10.0.0
+	 */
+	public record OverrideSet(TestBeanStore store, Mode mode, boolean empty) {
+
+		/**
+		 * Returns whether no {@code @TestBean} members were discovered.
+		 *
+		 * @return <jk>true</jk> if the override set is empty.
+		 */
+		public boolean isEmpty() {
+			return empty;
+		}
+	}
+
+	/**
 	 * Walks the test-class hierarchy and registers every {@code @TestBean(scope = CLASS)} declared on a
 	 * {@code static} field or {@code static} method.
 	 *
