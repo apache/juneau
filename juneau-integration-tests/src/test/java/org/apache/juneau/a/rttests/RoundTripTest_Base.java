@@ -42,9 +42,6 @@ import org.apache.juneau.marshall.yaml.*;
  * Tests designed to serialize and parse objects to make sure we end up
  * with the same objects for all serializers and parsers.
  */
-@SuppressWarnings({
-	"unchecked" // Type safety in generic test helpers
-})
 public abstract class RoundTripTest_Base extends TestBase {
 
 	private static final RoundTrip_Tester[] TESTERS = {
@@ -267,68 +264,5 @@ public abstract class RoundTripTest_Base extends TestBase {
 			if (ct.isArray() && ct.getComponentType().isPrimitive()) return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Returns true if the object can be faithfully round-tripped through CSV.
-	 *
-	 * <p>
-	 * CSV round-trips when the object is a non-empty {@link Collection} of flat beans or Maps
-	 * whose properties are primitives, strings, numbers, dates, byte arrays, or primitive arrays.
-	 * Nested structures require {@code allowNestedStructures(true)}.
-	 */
-	protected static boolean isCsvRoundTripCompatible(Object o) {
-		if (o == null)
-			return false;
-		if (!(o instanceof Collection<?> col))
-			return false;
-		if (col.isEmpty())
-			return false;
-		var first = col.iterator().next();
-		if (first == null)
-			return false;
-		return isCsvCompatibleElement(first);
-	}
-
-	private static boolean isCsvCompatibleElement(Object elem) {
-		if (elem == null) return false;
-		var cls = elem.getClass();
-		if (cls.isPrimitive()) return false;
-		if (elem instanceof Number || elem instanceof Boolean || elem instanceof Character) return false;
-		if (elem instanceof CharSequence || cls.isEnum()) return false;
-		if (elem instanceof Optional || elem instanceof Collection) return false;
-		// 1D primitive arrays and byte[] are supported
-		if (cls.isArray()) {
-			var ct = cls.getComponentType();
-			return !ct.isArray(); // 1D arrays only
-		}
-		if (elem instanceof Map m) {
-			return m.values().stream().allMatch(v -> v == null || isCsvSimpleType(v.getClass()));
-		}
-		if (cls.getName().startsWith("java.") || cls.getName().startsWith("javax.")) return false;
-		for (var field : cls.getFields()) {
-			if (!isCsvSimpleType(field.getType())) return false;
-		}
-		return cls.getFields().length > 0 || cls.getMethods().length > 0;
-	}
-
-	private static boolean isCsvSimpleType(Class<?> t) {
-		if (t == null) return true;
-		if (t.isPrimitive()
-			|| t == String.class
-			|| t == Boolean.class
-			|| t == Character.class
-			|| Number.class.isAssignableFrom(t)
-			|| t.isEnum()
-			|| java.time.temporal.Temporal.class.isAssignableFrom(t)
-			|| t == Date.class
-			|| t == Calendar.class)
-			return true;
-		// byte[] and primitive arrays [1;2;3]
-		if (t.isArray()) {
-			var ct = t.getComponentType();
-			return ct.isPrimitive() || ct == Byte.class;
-		}
-		return false;
 	}
 }
