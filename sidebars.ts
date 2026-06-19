@@ -2037,6 +2037,11 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/15.09.InjectAwareMicroservice',
 							label: '15.9. Inject-Aware Microservice',
 						},
+						{
+							type: 'doc',
+							id: 'topics/15.10.MicroserviceTesting',
+							label: '15.10. Whole-Microservice Integration Tests (@MicroserviceTest)',
+						},
 					],
 				},
 				{
