@@ -132,4 +132,103 @@ class SamlAuthFilter_Test extends TestBase {
 		var result = f.authenticate(req("/saml/acs", b64));
 		assertEquals(Set.of("admin", "user"), result.get().getRoles());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: matchesPath — pathInfo null falls through to servletPath; both null → false
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_pathInfo_null_fallsToServletPath() throws Exception {
+		// pathInfo==null → use servletPath; servletPath=="/saml/acs" → matches
+		var r = mock(HttpServletRequest.class);
+		when(r.getPathInfo()).thenReturn(null);
+		when(r.getServletPath()).thenReturn("/saml/acs");
+		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
+		when(r.getParameter("SAMLResponse")).thenReturn(b64);
+		var cp = new ClaimsPrincipal("bob", Map.of());
+		var f = SamlAuthFilter.create().validator(validator(x -> cp)).build();
+		assertTrue(f.authenticate(r).isPresent());
+	}
+
+	@Test void e02_bothPathNull_returnsEmpty() throws Exception {
+		// pathInfo==null, servletPath==null → s==null → filter does not apply
+		var r = mock(HttpServletRequest.class);
+		when(r.getPathInfo()).thenReturn(null);
+		when(r.getServletPath()).thenReturn(null);
+		when(r.getParameter("SAMLResponse")).thenReturn("anything");
+		var f = SamlAuthFilter.create().validator(validator(x -> new ClaimsPrincipal("x", Map.of()))).build();
+		assertTrue(f.authenticate(r).isEmpty());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// F: invalid base64 → AuthenticationException (decodeSamlResponse line 227)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_invalidBase64_throws() throws Exception {
+		var f = SamlAuthFilter.create().validator(validator(x -> new ClaimsPrincipal("x", Map.of()))).build();
+		assertThrows(AuthenticationException.class, () -> f.authenticate(req("/saml/acs", "!!!not-base64!!!")));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// G: validator throws RuntimeException → wrapped in AuthenticationException (runValidator line 271)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_validatorRuntimeException_wrapped() throws Exception {
+		var v = validator(x -> { throw new RuntimeException("unexpected"); });
+		var f = SamlAuthFilter.create().validator(v).build();
+		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
+		var ex = assertThrows(AuthenticationException.class, () -> f.authenticate(req("/saml/acs", b64)));
+		assertTrue(ex.getMessage().contains("SAML validation failed") || ex.getCause() instanceof RuntimeException);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// H: extractRoles — non-ClaimsPrincipal → empty roles; rolesClaim value not a List → empty roles
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_nonClaimsPrincipal_emptyRoles() throws Exception {
+		// Principal is not a ClaimsPrincipal → extractRoles returns emptySet()
+		var v = validator(x -> (Principal) () -> "plain-principal");
+		var f = SamlAuthFilter.create().validator(v).build();
+		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
+		var result = f.authenticate(req("/saml/acs", b64));
+		assertTrue(result.isPresent());
+		assertTrue(result.get().getRoles().isEmpty());
+	}
+
+	@Test void h02_rolesClaim_notAList_emptyRoles() throws Exception {
+		// roles claim is a String, not a List → extractRoles returns emptySet()
+		var cp = new ClaimsPrincipal("alice", Map.of("roles", "admin"));
+		var v = validator(x -> cp);
+		var f = SamlAuthFilter.create().validator(v).build();
+		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
+		var result = f.authenticate(req("/saml/acs", b64));
+		assertTrue(result.isPresent());
+		assertTrue(result.get().getRoles().isEmpty());
+	}
+
+	@Test void h03_rolesClaim_listWithNonStringItem_skipped() throws Exception {
+		// List contains a non-String element → item instanceof String is false → item skipped
+		var roles = new ArrayList<>();
+		roles.add("admin");
+		roles.add(42);  // non-String item
+		roles.add("user");
+		var cp = new ClaimsPrincipal("alice", Map.of("roles", roles));
+		var v = validator(x -> cp);
+		var f = SamlAuthFilter.create().validator(v).build();
+		var b64 = Base64.getEncoder().encodeToString("<x/>".getBytes(StandardCharsets.UTF_8));
+		var result = f.authenticate(req("/saml/acs", b64));
+		assertTrue(result.isPresent());
+		assertEquals(Set.of("admin", "user"), result.get().getRoles());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// I: inflate() — malformed/truncated DEFLATE stream paths (lines 244-247)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_redirect_malformedDeflate_dataFormatException() throws Exception {
+		// Random bytes → Inflater.inflate() throws DataFormatException → caught → IOException → AuthenticationException
+		var v = validator(x -> new ClaimsPrincipal("x", Map.of()));
+		var f = SamlAuthFilter.create().binding(SamlBinding.REDIRECT).validator(v).build();
+		var b64 = Base64.getEncoder().encodeToString(new byte[]{(byte)0xff, (byte)0xfe, 0x01, 0x02, 0x03, 0x04});
+		assertThrows(AuthenticationException.class, () -> f.authenticate(req("/saml/acs", b64)));
+	}
 }

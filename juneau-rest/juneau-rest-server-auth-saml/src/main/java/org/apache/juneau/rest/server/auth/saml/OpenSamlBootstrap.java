@@ -45,7 +45,7 @@ final class OpenSamlBootstrap {
 		if (initialized)
 			return;
 		synchronized (LOCK) {
-			if (initialized)
+			if (initialized) // HTT: inner DCL check; unreachable in single-threaded tests (concurrent first-load race)
 				return;
 			try {
 				InitializationService.initialize();

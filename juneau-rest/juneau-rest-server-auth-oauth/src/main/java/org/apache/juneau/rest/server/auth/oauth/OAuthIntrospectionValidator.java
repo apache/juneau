@@ -371,7 +371,7 @@ public class OAuthIntrospectionValidator implements TokenValidator {
 			return Collections.emptySet();
 		var out = new LinkedHashSet<String>();
 		for (var v : s.toStringList())
-			if (v != null && !v.isBlank())
+			if (v != null && !v.isBlank()) // HTT: v==null branch unreachable; Nimbus Scope.toStringList() never returns null entries
 				out.add(v);
 		return out;
 	}

@@ -241,8 +241,8 @@ public class SamlAuthFilter extends AuthFilter {
 		try {
 			while (!inflater.finished()) {
 				int n = inflater.inflate(buf);
-				if (n == 0) {
-					if (inflater.needsInput() || inflater.needsDictionary())
+				if (n == 0) { // HTT: n==0 without finished=true requires a crafted partial DEFLATE stream (all bytes consumed but stream not closed)
+					if (inflater.needsInput() || inflater.needsDictionary()) // HTT: requires carefully crafted incomplete DEFLATE that exhausts input without DataFormatException
 						throw new IOException("SAMLResponse: DEFLATE stream truncated");
 					break;
 				}

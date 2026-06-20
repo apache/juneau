@@ -25,6 +25,10 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
 
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.*;
+import com.nimbusds.jwt.*;
+
 /**
  * Tests for {@link SignedCookieSessionStore} &mdash; stateless HMAC-signed cookie round-trip, tamper
  * rejection, expiry, and the size cap.
@@ -111,5 +115,75 @@ class SignedCookieSessionStore_Test extends TestBase {
 
 	@Test void f02_missingKey_rejected() {
 		assertThrows(IllegalStateException.class, () -> SignedCookieSessionStore.create().build());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// G: builder guard — maxCookieBytes <= 0 rejected (line 121 false branch).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_maxCookieBytes_zeroRejected() {
+		assertThrows(IllegalArgumentException.class,
+			() -> SignedCookieSessionStore.create().signingKey(KEY).maxCookieBytes(0));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// H: lookup — edge cases on JWT fields that createSessionCookieValue always populates.
+	//    These tests craft raw HMACSigned JWTs to hit null-field branches in lookup().
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/** Signs a JWT with the test key and the given claims. */
+	private static String signed(JWTClaimsSet claims) throws JOSEException {
+		var jwt = new SignedJWT(new JWSHeader(JWSAlgorithm.HS256), claims);
+		jwt.sign(new MACSigner(KEY));
+		return jwt.serialize();
+	}
+
+	@Test void h01_lookup_missingExpiry_returnEmpty() throws Exception {
+		// exp == null → line 201 first branch.
+		var cookie = signed(new JWTClaimsSet.Builder()
+			.subject("alice").jwtID("id-1").claim("n", "alice")
+			.build());
+		assertTrue(SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build().lookup(cookie).isEmpty());
+	}
+
+	@Test void h02_lookup_missingSubject_returnEmpty() throws Exception {
+		// subject == null → line 205 first branch.
+		var cookie = signed(new JWTClaimsSet.Builder()
+			.jwtID("id-1").claim("n", "alice")
+			.expirationTime(Date.from(NOW.plus(Duration.ofHours(8))))
+			.build());
+		assertTrue(SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build().lookup(cookie).isEmpty());
+	}
+
+	@Test void h03_lookup_missingName_returnEmpty() throws Exception {
+		// name == null (CLAIM_NAME absent) → line 205 second branch.
+		var cookie = signed(new JWTClaimsSet.Builder()
+			.subject("alice").jwtID("id-1")
+			.expirationTime(Date.from(NOW.plus(Duration.ofHours(8))))
+			.build());
+		assertTrue(SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build().lookup(cookie).isEmpty());
+	}
+
+	@Test void h04_lookup_noRolesClaim_returnsEmptyRoleSet() throws Exception {
+		// rolesClaim == null → line 209 false branch (roles stays empty).
+		var cookie = signed(new JWTClaimsSet.Builder()
+			.subject("alice").jwtID("id-1").claim("n", "alice")
+			.issueTime(Date.from(NOW))
+			.expirationTime(Date.from(NOW.plus(Duration.ofHours(8))))
+			.build());
+		var s = SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build().lookup(cookie);
+		assertTrue(s.isPresent());
+		assertTrue(s.get().roles().isEmpty());
+	}
+
+	@Test void h05_lookup_missingIssueTime_usesClockAsCreatedAt() throws Exception {
+		// getIssueTime() == null → line 214 false branch (createdAt falls back to clock.instant()).
+		var cookie = signed(new JWTClaimsSet.Builder()
+			.subject("alice").jwtID("id-1").claim("n", "alice")
+			.expirationTime(Date.from(NOW.plus(Duration.ofHours(8))))
+			.build());
+		var s = SignedCookieSessionStore.create().signingKey(KEY).clock(CLOCK).build().lookup(cookie);
+		assertTrue(s.isPresent());
+		assertEquals(NOW, s.get().createdAt());
 	}
 }

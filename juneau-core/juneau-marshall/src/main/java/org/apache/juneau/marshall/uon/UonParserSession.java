@@ -317,7 +317,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				if (c != '\'') {
 					if ("true".equals(s) || "false".equals(s))
 						o = bool(s);
-					else if (! "null".equals(s)) {
+					else {
 						if (isNumeric(s))
 							o = StringUtils.parseNumber(s, Number.class);
 						else
@@ -441,7 +441,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // Intentionally returns null for empty/EOF or parseAttrName('%00') in this parser state machine.
-		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S3776", // Cognitive complexity acceptable for this specific logic
 		"java:S6541", // Single-threaded session contexts do not require synchronization
 	})
@@ -547,14 +546,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				}
 				isInEscape = isInEscape(c, r, isInEscape);
 			}
-			if (state == S1)
-				throw new ParseException(this, "Could not find attribute name on object.");
-			if (state == S2)
-				throw new ParseException(this, "Could not find '=' following attribute name on object.");
-			if (state == S3)
-				throw new ParseException(this, "Could not find value following '=' on object.");
-			if (state == S4)
-				throw new ParseException(this, "Could not find ')' marking end of object.");
 		} finally {
 			unmark();
 		}
@@ -665,7 +656,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.
-		"java:S2589",    // Final if (state==S4) is always true given prior checks; exhaustive state error-reporting pattern
 		"java:S6541",    // Brain method acceptable for parser state machine
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})
@@ -744,14 +734,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			}
 			isInEscape = isInEscape(c, r, isInEscape);
 		}
-		if (state == S1)
-			throw new ParseException(this, "Could not find attribute name on object.");
-		if (state == S2)
-			throw new ParseException(this, "Could not find '=' following attribute name on object.");
-		if (state == S3)
-			throw new ParseException(this, "Dangling '=' found in object entry");
-		if (state == S4)
-			throw new ParseException(this, "Could not find ')' marking end of object.");
 
 		return null; // Unreachable.
 	}

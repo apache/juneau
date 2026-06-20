@@ -76,7 +76,7 @@ final class Flows {
 	private static OAuthToken toOAuthToken(AccessTokenResponse success) {
 		var tokens = success.getTokens();
 		var access = tokens.getAccessToken();
-		String tokenType = access.getType() != null ? access.getType().getValue() : "Bearer";
+		String tokenType = access.getType() != null ? access.getType().getValue() : "Bearer"; // HTT: null branch unreachable; Nimbus AccessToken always has a non-null AccessTokenType
 		Instant expiresAt = computeExpiry(access);
 		Optional<String> refreshToken = tokens.getRefreshToken() != null
 			? opt(tokens.getRefreshToken().getValue())
@@ -86,7 +86,7 @@ final class Flows {
 			: opte();
 		Optional<String> idToken = opte();
 		var custom = success.getCustomParameters();
-		if (custom != null) {
+		if (custom != null) { // HTT: null branch unreachable; Nimbus returns an empty map (never null) for standard responses
 			var v = custom.get("id_token");
 			if (v instanceof String s)
 				idToken = opt(s);
@@ -108,6 +108,6 @@ final class Flows {
 	 * @return The cast token, or {@code null}.
 	 */
 	static BearerAccessToken asBearer(com.nimbusds.oauth2.sdk.token.AccessToken token) {
-		return token instanceof BearerAccessToken b ? b : null;
+		return token instanceof BearerAccessToken b ? b : null; // HTT: null return unreachable in current callers; all token-endpoint responses produce BearerAccessToken
 	}
 }

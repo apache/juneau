@@ -32,7 +32,8 @@ import org.junit.jupiter.api.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S5778", // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
+	"java:S2925"  // Thread.sleep required to test TTL expiry; BoundedLruTokenCache has no clock injection point
 })
 class BoundedLruTokenCache_Test extends TestBase {
 
@@ -113,6 +114,23 @@ class BoundedLruTokenCache_Test extends TestBase {
 		c.putToken("k", token);
 		var skew = Duration.ofSeconds(30);
 		assertTrue(c.getToken("k", NOW, skew).isEmpty());
+	}
+
+	@Test void b04_getPrincipal_expired_evictsAndReturnsEmpty() throws Exception {
+		// line 117: expired principal → entry removed, Optional.empty() returned.
+		var c = BoundedLruTokenCache.create();
+		c.putPrincipal("t-exp", ALICE, Duration.ofMillis(1));
+		Thread.sleep(5);
+		assertTrue(c.getPrincipal("t-exp").isEmpty());
+		assertEquals(0, c.size());
+	}
+
+	@Test void d04_getToken_negativeSkew_throws() {
+		// line 139: negative skew → IllegalArgumentException.
+		var c = BoundedLruTokenCache.create();
+		c.putToken("k", sampleToken(NOW.plusSeconds(60)));
+		assertThrows(IllegalArgumentException.class,
+			() -> c.getToken("k", NOW, Duration.ofSeconds(-1)));
 	}
 
 	@Test void e01_invalidate_removesEntry() {

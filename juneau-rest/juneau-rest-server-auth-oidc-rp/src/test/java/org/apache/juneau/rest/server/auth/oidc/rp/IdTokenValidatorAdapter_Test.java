@@ -114,4 +114,57 @@ class IdTokenValidatorAdapter_Test extends TestBase {
 		assertThrows(IllegalStateException.class,
 			() -> IdTokenValidatorAdapter.create().issuer(ISS).jwkSet(publicJwks(key)).build());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// D: algorithms() guard branches not yet covered.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_algorithms_emptyArray_rejected() {
+		// values.length == 0 → assertArg false branch (line 157).
+		assertThrows(IllegalArgumentException.class,
+			() -> IdTokenValidatorAdapter.create().algorithms());
+	}
+
+	@Test void d02_algorithms_nullElement_rejected() {
+		// null element → assertArgNotNull false branch (line 159).
+		assertThrows(IllegalArgumentException.class,
+			() -> IdTokenValidatorAdapter.create().algorithms((JWSAlgorithm) null));
+	}
+
+	@Test void d03_algorithms_validAlgorithm_accepted() {
+		// RS256 is not NONE → assertArg true branch (line 161 TRUE branch). Build also uses jwkSet.
+		assertDoesNotThrow(() -> IdTokenValidatorAdapter.create()
+			.issuer(ISS).clientId(CID).jwkSet(publicJwks(key))
+			.algorithms(JWSAlgorithm.RS256)
+			.build());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: maxClockSkewSeconds negative rejected (line 175 false branch).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_maxClockSkewSeconds_negativeRejected() {
+		assertThrows(IllegalArgumentException.class,
+			() -> IdTokenValidatorAdapter.create().maxClockSkewSeconds(-1));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// F: resolveSource — jwksUri path (line 217 false branch when jwkSet is null).
+	// F: validate — null expectedNonce (line 246 false branch).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_jwksUri_path_buildSucceeds() throws Exception {
+		// jwkSet is null, jwksUri is set — resolveSource takes the jwksUri branch (line 217 false).
+		assertDoesNotThrow(() -> IdTokenValidatorAdapter.create()
+			.issuer(ISS).clientId(CID)
+			.jwksUri(URI.create("https://stub-idp.example.com/.well-known/jwks.json"))
+			.build());
+	}
+
+	@Test void f02_validate_nullNonce_passedThrough() throws Exception {
+		// expectedNonce == null → ternary false branch (line 246 null → null Nonce).
+		// Token is minted without nonce; validate() called with null nonce.
+		var jwt = signIdToken(key, ISS, CID, "alice", null, null, now, Duration.ofMinutes(5), null);
+		assertDoesNotThrow(() -> validator().validate(jwt, null));
+	}
 }

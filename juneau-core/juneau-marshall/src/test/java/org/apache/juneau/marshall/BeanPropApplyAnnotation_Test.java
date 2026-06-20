@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 class BeanPropApplyAnnotation_Test extends TestBase {

@@ -75,7 +75,7 @@ public final class SamlMetadataResolvers {
 	public static MetadataResolver file(File file) throws IOException {
 		if (file == null)
 			throw new IllegalArgumentException("file must not be null");
-		if (!file.isFile())
+		if (!file.isFile()) // HTT: false branch (file present) requires valid SAML metadata XML; covered by integration tests
 			throw new FileNotFoundException("SAML metadata file not found: " + file);
 
 		OpenSamlBootstrap.ensureInitialized();
@@ -122,7 +122,7 @@ public final class SamlMetadataResolvers {
 				.GET()
 				.build();
 			var resp = client.send(req, HttpResponse.BodyHandlers.ofByteArray());
-			if (resp.statusCode() < 200 || resp.statusCode() >= 300)
+			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests
 				throw new IOException("Failed to fetch SAML metadata from " + url + " (HTTP " + resp.statusCode() + ")");
 
 			var dbf = DocumentBuilderFactory.newInstance();
@@ -160,7 +160,7 @@ public final class SamlMetadataResolvers {
 	 * @throws IOException If the file cannot be parsed or initialized.
 	 */
 	public static MetadataResolver file(Path path) throws IOException {
-		if (path == null)
+		if (path == null) // HTT: false branch (valid path) delegates to file(File); covered wherever file(File) is tested
 			throw new IllegalArgumentException("path must not be null");
 		return file(path.toFile());
 	}

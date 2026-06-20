@@ -119,4 +119,52 @@ class InMemorySessionStore_Test extends TestBase {
 		assertTrue(store.lookup("id-1").isEmpty());
 		assertEquals(0, store.invalidateBySubject("alice"), "evicted session must also be unindexed");
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: constructor guard — maxEntries <= 0 is rejected (line 81 false branch).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_constructor_zeroMaxEntries_throws() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemorySessionStore(0, CLOCK));
+	}
+
+	@Test void e02_constructor_negativeMaxEntries_throws() {
+		assertThrows(IllegalArgumentException.class, () -> new InMemorySessionStore(-1, CLOCK));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// F: removeById on nonexistent id returns false (line 177 true branch).
+	// invalidate() is a no-op when the id was never registered or already removed.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_invalidate_unknownId_doesNotThrow() {
+		var store = store();
+		// id never registered — removeById returns false; no exception expected.
+		store.invalidate("nonexistent");
+		assertEquals(0, store.size());
+	}
+
+	@Test void f02_invalidate_idRemovedTwice_doesNotThrow() {
+		var store = store();
+		store.createSessionCookieValue(session("id-1", "alice", "sess-1"));
+		store.invalidate("id-1");
+		// Second invalidate — id no longer in byId; removeById returns false.
+		store.invalidate("id-1");
+		assertEquals(0, store.size());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// G: two sessions sharing the same sid — invalidating one leaves sid index entry with one remaining id
+	//    (line 194 false branch: sids.isEmpty() == false).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_twoSessionsSameSid_invalidateOne_sidIndexRetained() {
+		var store = store();
+		store.createSessionCookieValue(session("id-1", "alice", "shared-sid"));
+		store.createSessionCookieValue(session("id-2", "bob", "shared-sid"));
+		store.invalidate("id-1");
+		// sid index must still contain id-2 — invalidateBySessionId should remove it.
+		assertEquals(1, store.invalidateBySessionId("shared-sid"));
+		assertEquals(0, store.size());
+	}
 }

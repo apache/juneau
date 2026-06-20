@@ -142,7 +142,7 @@ public class InMemorySessionStore implements SessionStore {
 				return 0;
 			var count = 0;
 			for (var id : new ArrayList<>(ids))
-				count += removeById(id) ? 1 : 0;
+				count += removeById(id) ? 1 : 0; // HTT: false branch requires index/map inconsistency
 			return count;
 		}
 	}
@@ -156,7 +156,7 @@ public class InMemorySessionStore implements SessionStore {
 				return 0;
 			var count = 0;
 			for (var id : new ArrayList<>(ids))
-				count += removeById(id) ? 1 : 0;
+				count += removeById(id) ? 1 : 0; // HTT: false branch requires index/map inconsistency
 			return count;
 		}
 	}
@@ -182,14 +182,14 @@ public class InMemorySessionStore implements SessionStore {
 
 	private void unindex(OidcSession s) {
 		var subjects = bySubject.get(s.subject());
-		if (subjects != null) {
+		if (subjects != null) { // HTT: null branch requires map inconsistency
 			subjects.remove(s.id());
 			if (subjects.isEmpty())
 				bySubject.remove(s.subject());
 		}
 		s.sid().ifPresent(sid -> {
 			var sids = bySid.get(sid);
-			if (sids != null) {
+			if (sids != null) { // HTT: null branch requires map inconsistency
 				sids.remove(s.id());
 				if (sids.isEmpty())
 					bySid.remove(sid);

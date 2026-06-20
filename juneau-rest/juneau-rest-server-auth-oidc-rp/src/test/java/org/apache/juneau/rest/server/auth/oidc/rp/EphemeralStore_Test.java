@@ -101,6 +101,11 @@ class EphemeralStore_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ZERO, 100, CLOCK));
 	}
 
+	/** Negative TTL rejected — line 82 second bytecode branch of {@code !isZero && !isNegative}. */
+	@Test void d05_rejectsNegativeTtl() {
+		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofSeconds(-1), 100, CLOCK));
+	}
+
 	@Test void d02_rejectsTtlAbove30Minutes() {
 		assertThrows(IllegalArgumentException.class, () -> new EphemeralStore(Duration.ofMinutes(31), 100, CLOCK));
 	}

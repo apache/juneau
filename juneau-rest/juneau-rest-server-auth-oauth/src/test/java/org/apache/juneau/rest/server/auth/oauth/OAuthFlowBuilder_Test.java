@@ -57,7 +57,17 @@ class OAuthFlowBuilder_Test extends TestBase {
 	}
 
 	@Test void b01_authCode_requiredFields() {
+		// Exercises each guard in turn: authorizationEndpoint, tokenEndpoint, clientId, redirectUri.
 		assertThrows(IllegalStateException.class, () -> OAuthAuthorizationCodeFlow.create().build());
+		assertThrows(IllegalStateException.class, () -> OAuthAuthorizationCodeFlow.create()
+			.authorizationEndpoint(URI.create("https://x.example.com/authorize")).build());
+		assertThrows(IllegalStateException.class, () -> OAuthAuthorizationCodeFlow.create()
+			.authorizationEndpoint(URI.create("https://x.example.com/authorize"))
+			.tokenEndpoint(URI.create("https://x.example.com/token")).build());
+		assertThrows(IllegalStateException.class, () -> OAuthAuthorizationCodeFlow.create()
+			.authorizationEndpoint(URI.create("https://x.example.com/authorize"))
+			.tokenEndpoint(URI.create("https://x.example.com/token"))
+			.clientId("id").build());
 	}
 
 	@Test void b02_authCode_buildsAndGeneratesAuthUrl() {
@@ -83,7 +93,13 @@ class OAuthFlowBuilder_Test extends TestBase {
 		"deprecation"  // Deprecated API used intentionally for backward compatibility testing.
 	})
 	@Test void c01_resourceOwner_requiredFields() {
+		// Exercises each guard in turn: tokenEndpoint, clientId, clientSecretSupplier, username, password.
 		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create().build());
+		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
+			.tokenEndpoint(URI.create("https://x.example.com/token")).build());
+		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
+			.tokenEndpoint(URI.create("https://x.example.com/token"))
+			.clientId("id").build());
 		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
 			.tokenEndpoint(URI.create("https://x.example.com/token"))
 			.clientId("id").clientSecret("secret").username("alice").build());
@@ -104,7 +120,13 @@ class OAuthFlowBuilder_Test extends TestBase {
 	}
 
 	@Test void d01_refresh_requiredFields() {
+		// Exercises each guard in turn: tokenEndpoint, clientId, refreshToken.
 		assertThrows(IllegalStateException.class, () -> OAuthRefreshTokenFlow.create().build());
+		assertThrows(IllegalStateException.class, () -> OAuthRefreshTokenFlow.create()
+			.tokenEndpoint(URI.create("https://x.example.com/token")).build());
+		assertThrows(IllegalStateException.class, () -> OAuthRefreshTokenFlow.create()
+			.tokenEndpoint(URI.create("https://x.example.com/token"))
+			.clientId("id").build());
 	}
 
 	@Test void d02_refresh_buildsWithMinimum() {

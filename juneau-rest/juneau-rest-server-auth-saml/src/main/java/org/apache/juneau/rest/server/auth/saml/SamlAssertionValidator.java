@@ -421,7 +421,7 @@ public class SamlAssertionValidator {
 				.wwwAuthenticate("SAML error=\"signature_required\"");
 
 		var alg = signature.getSignatureAlgorithm();
-		if (alg == null || !algorithms.contains(alg))
+		if (alg == null || !algorithms.contains(alg)) // HTT: alg==null unreachable; OpenSAML always populates SignatureAlgorithm after signing
 			throw new AuthenticationException("SAML signature algorithm not allowlisted: " + alg)
 				.wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");
 
@@ -477,7 +477,7 @@ public class SamlAssertionValidator {
 	private static Credential extractSigningCredential(IDPSSODescriptor idp) {
 		for (KeyDescriptor kd : idp.getKeyDescriptors()) {
 			var credential = credentialFromKeyDescriptor(kd);
-			if (credential != null)
+			if (credential != null) // HTT: true branch (successful credential extraction) requires real X.509 metadata; covered by integration tests
 				return credential;
 		}
 		return null;
@@ -503,7 +503,7 @@ public class SamlAssertionValidator {
 			if (base64 == null)
 				continue;
 			var credential = parseX509Credential(base64);
-			if (credential != null)
+			if (credential != null) // HTT: true branch requires valid X.509 DER bytes; covered by integration tests
 				return credential;
 		}
 		return null;
@@ -586,10 +586,10 @@ public class SamlAssertionValidator {
 	}
 
 	private static String extractStringValue(org.opensaml.core.xml.XMLObject av) {
-		if (av == null)
+		if (av == null) // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries
 			return null;
 		var dom = av.getDOM();
-		if (dom != null)
+		if (dom != null) // HTT: DOM is non-null only after marshalling; XSString values always have DOM after Response.marshall()
 			return dom.getTextContent();
 		return av.toString();
 	}

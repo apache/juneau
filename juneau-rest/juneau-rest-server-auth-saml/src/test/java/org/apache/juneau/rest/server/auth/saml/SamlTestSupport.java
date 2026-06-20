@@ -60,6 +60,213 @@ final class SamlTestSupport {
 
 	private SamlTestSupport() {}
 
+	// -----------------------------------------------------------------------------------------------------------------
+	// Flexible builder helpers used by Validate/Metadata test files.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/** Returns the OpenSAML XMLObject builder factory (initialized via the static block above). */
+	static org.opensaml.core.xml.XMLObjectBuilderFactory bf() {
+		return XMLObjectProviderRegistrySupport.getBuilderFactory();
+	}
+
+	/** Builds an Issuer element. */
+	static Issuer issuer(String value) {
+		var b = (SAMLObjectBuilder<Issuer>) bf().getBuilder(Issuer.DEFAULT_ELEMENT_NAME);
+		var i = b.buildObject();
+		i.setValue(value);
+		return i;
+	}
+
+	/** Builds a minimal Conditions element with audience restriction but no NotBefore/NotOnOrAfter. */
+	static Conditions conditions(String audience, Instant notBefore, Instant notOnOrAfter) {
+		var bf = bf();
+		var condBuilder = (SAMLObjectBuilder<Conditions>) bf.getBuilder(Conditions.DEFAULT_ELEMENT_NAME);
+		var arBuilder   = (SAMLObjectBuilder<AudienceRestriction>) bf.getBuilder(AudienceRestriction.DEFAULT_ELEMENT_NAME);
+		var audBuilder  = (SAMLObjectBuilder<Audience>) bf.getBuilder(Audience.DEFAULT_ELEMENT_NAME);
+		var conditions = condBuilder.buildObject();
+		if (notBefore != null)
+			conditions.setNotBefore(notBefore);
+		if (notOnOrAfter != null)
+			conditions.setNotOnOrAfter(notOnOrAfter);
+		var ar = arBuilder.buildObject();
+		var aud = audBuilder.buildObject();
+		aud.setURI(audience);
+		ar.getAudiences().add(aud);
+		conditions.getAudienceRestrictions().add(ar);
+		return conditions;
+	}
+
+	/** Builds a Subject with the given NameID value, or null subject if subjectName is null. */
+	static Subject subject(String subjectName) {
+		if (subjectName == null)
+			return null;
+		var bf = bf();
+		var subBuilder = (SAMLObjectBuilder<Subject>) bf.getBuilder(Subject.DEFAULT_ELEMENT_NAME);
+		var nidBuilder = (SAMLObjectBuilder<NameID>)  bf.getBuilder(NameID.DEFAULT_ELEMENT_NAME);
+		var sub = subBuilder.buildObject();
+		var nid = nidBuilder.buildObject();
+		nid.setValue(subjectName);
+		nid.setFormat(NameIDType.UNSPECIFIED);
+		sub.setNameID(nid);
+		return sub;
+	}
+
+	/** Builds a Subject with a NameID whose value is explicitly null. */
+	static Subject subjectWithNullNameIdValue() {
+		var bf = bf();
+		var subBuilder = (SAMLObjectBuilder<Subject>) bf.getBuilder(Subject.DEFAULT_ELEMENT_NAME);
+		var nidBuilder = (SAMLObjectBuilder<NameID>)  bf.getBuilder(NameID.DEFAULT_ELEMENT_NAME);
+		var sub = subBuilder.buildObject();
+		var nid = nidBuilder.buildObject();
+		// deliberately do NOT call nid.setValue(...)
+		sub.setNameID(nid);
+		return sub;
+	}
+
+	/** Builds a Subject with NO NameID element — tests the nameID==null branch in nameId(). */
+	static Subject subjectWithNoNameId() {
+		var bf = bf();
+		var subBuilder = (SAMLObjectBuilder<Subject>) bf.getBuilder(Subject.DEFAULT_ELEMENT_NAME);
+		// deliberately do NOT call sub.setNameID(...)
+		return subBuilder.buildObject();
+	}
+
+	/**
+	 * Builds an Assertion, signs it, wraps it in a Response, and serializes.
+	 * responseIssuer may be null to omit the response-level {@code <Issuer>} element.
+	 * The assertion is taken as-is; callers configure subject/conditions/attributes before passing in.
+	 */
+	static String signAndBuildResponse(BasicCredential signingCred, String responseIssuer, Assertion assertion) throws Exception {
+		var bf = bf();
+		var responseBuilder = (SAMLObjectBuilder<Response>) bf.getBuilder(Response.DEFAULT_ELEMENT_NAME);
+		var response = responseBuilder.buildObject();
+		response.setID("_resp-" + System.nanoTime());
+		response.setIssueInstant(ISSUE_INSTANT);
+		response.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
+		if (responseIssuer != null)
+			response.setIssuer(buildIssuer(bf, responseIssuer));
+		response.setStatus(buildStatus(bf));
+
+		var sig = new SignatureBuilder().buildObject();
+		sig.setSigningCredential(signingCred);
+		sig.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
+		sig.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
+		assertion.setSignature(sig);
+
+		response.getAssertions().add(assertion);
+
+		MarshallerFactory mf = XMLObjectProviderRegistrySupport.getMarshallerFactory();
+		var dom = mf.getMarshaller(response).marshall(response);
+		Signer.signObject(sig);
+
+		return serialize(dom);
+	}
+
+	/**
+	 * Builds a Response with a bare assertion (no Signature) and serializes.
+	 * Used to test the unsigned-assertion branch in verifySignature.
+	 */
+	static String buildUnsignedResponse(String issuer, Assertion assertion) throws Exception {
+		var bf = bf();
+		var responseBuilder = (SAMLObjectBuilder<Response>) bf.getBuilder(Response.DEFAULT_ELEMENT_NAME);
+		var response = responseBuilder.buildObject();
+		response.setID("_resp-" + System.nanoTime());
+		response.setIssueInstant(ISSUE_INSTANT);
+		response.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
+		response.setIssuer(buildIssuer(bf, issuer));
+		response.setStatus(buildStatus(bf));
+		response.getAssertions().add(assertion);
+
+		MarshallerFactory mf = XMLObjectProviderRegistrySupport.getMarshallerFactory();
+		var dom = mf.getMarshaller(response).marshall(response);
+		return serialize(dom);
+	}
+
+	/**
+	 * Builds a minimal Assertion (issuer + subject + conditions) without signing it.
+	 * Used to build custom shapes before calling signAndBuildResponse.
+	 */
+	static Assertion buildMinimalAssertion(String issuer, String audience, String subjectName,
+			Instant notBefore, Instant notOnOrAfter) {
+		var bf = bf();
+		var ab = (SAMLObjectBuilder<Assertion>) bf.getBuilder(Assertion.DEFAULT_ELEMENT_NAME);
+		var assertion = ab.buildObject();
+		assertion.setID("_a-" + System.nanoTime());
+		assertion.setIssueInstant(ISSUE_INSTANT);
+		assertion.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
+		assertion.setIssuer(buildIssuer(bf, issuer));
+		assertion.setSubject(subject(subjectName));
+		assertion.setConditions(conditions(audience, notBefore, notOnOrAfter));
+		return assertion;
+	}
+
+	/**
+	 * Builds an Assertion with issuer and subject but NO Conditions element.
+	 * Used to test the conditions==null branch in validateConditions.
+	 */
+	static Assertion buildAssertionNoConditions(String issuer, String subjectName) {
+		var bf = bf();
+		var ab = (SAMLObjectBuilder<Assertion>) bf.getBuilder(Assertion.DEFAULT_ELEMENT_NAME);
+		var assertion = ab.buildObject();
+		assertion.setID("_a-" + System.nanoTime());
+		assertion.setIssueInstant(ISSUE_INSTANT);
+		assertion.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
+		assertion.setIssuer(buildIssuer(bf, issuer));
+		assertion.setSubject(subject(subjectName));
+		// intentionally no setConditions — assertion.getConditions() returns null
+		return assertion;
+	}
+
+	/**
+	 * Builds a minimal Assertion with a pre-built Subject (allows testing nameId branches
+	 * such as null-NameID-value without going through subject(String)).
+	 */
+	static Assertion buildMinimalAssertionWithSubject(String issuer, String audience, Subject sub,
+			Instant notBefore, Instant notOnOrAfter) {
+		var bf = bf();
+		var ab = (SAMLObjectBuilder<Assertion>) bf.getBuilder(Assertion.DEFAULT_ELEMENT_NAME);
+		var assertion = ab.buildObject();
+		assertion.setID("_a-" + System.nanoTime());
+		assertion.setIssueInstant(ISSUE_INSTANT);
+		assertion.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
+		assertion.setIssuer(buildIssuer(bf, issuer));
+		assertion.setSubject(sub);
+		assertion.setConditions(conditions(audience, notBefore, notOnOrAfter));
+		return assertion;
+	}
+
+	/**
+	 * Appends an AttributeStatement with a single Attribute carrying the given values to an existing Assertion.
+	 * Pass {@code name=null} to produce a nameless attribute (tests the null-name-skip branch in buildClaims).
+	 */
+	static void addAttributeStatement(Assertion assertion, String name, String... values) {
+		var bf = bf();
+		var asBuilder = (SAMLObjectBuilder<AttributeStatement>) bf.getBuilder(AttributeStatement.DEFAULT_ELEMENT_NAME);
+		var attrBuilder = (SAMLObjectBuilder<Attribute>) bf.getBuilder(Attribute.DEFAULT_ELEMENT_NAME);
+		var stringBuilder = (org.opensaml.core.xml.schema.impl.XSStringBuilder)
+			bf.getBuilder(org.opensaml.core.xml.schema.XSString.TYPE_NAME);
+		var stmt = asBuilder.buildObject();
+		var attr = attrBuilder.buildObject();
+		attr.setName(name);
+		for (var v : values) {
+			var av = stringBuilder.buildObject(AttributeValue.DEFAULT_ELEMENT_NAME,
+				org.opensaml.core.xml.schema.XSString.TYPE_NAME);
+			av.setValue(v);
+			attr.getAttributeValues().add(av);
+		}
+		stmt.getAttributes().add(attr);
+		assertion.getAttributeStatements().add(stmt);
+	}
+
+	private static String serialize(org.w3c.dom.Element dom) throws Exception {
+		var sw = new StringWriter();
+		var tf = TransformerFactory.newInstance();
+		var transformer = tf.newTransformer();
+		transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+		transformer.transform(new DOMSource(dom), new StreamResult(sw));
+		return sw.toString();
+	}
+
 	static KeyPair generateRsaKeyPair() throws Exception {
 		var kp = KeyPairGenerator.getInstance("RSA");
 		kp.initialize(2048);

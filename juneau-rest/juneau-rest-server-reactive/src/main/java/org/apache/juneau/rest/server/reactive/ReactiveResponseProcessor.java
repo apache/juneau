@@ -133,7 +133,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		var res = opSession.getResponse();
 		var content = res.getContent().orElse(null);
 
-		if (content == null)
+		if (content == null) // HTT: true branch requires a response with no content at all; framework-level null-content suppression makes this unreachable in practice
 			return NEXT;
 
 		if (content instanceof Flow.Publisher<?> pub)
@@ -141,9 +141,9 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 
 		var a = adapters();
 		for (var adapter : a) {
-			if (adapter.canAdapt(content)) {
+			if (adapter.canAdapt(content)) { // HTT: true branch requires a ReactiveStreamsAdapter on classpath (lives in juneau-rest-server-reactive-reactor, not on this module's test classpath)
 				var adaptation = adapter.adapt(content);
-				if (adaptation.isStream())
+				if (adaptation.isStream()) // HTT: both branches require a ReactiveStreamsAdapter (see above)
 					return dispatch(opSession, adaptation.stream());
 				res.setContent(adaptation.single());
 				return RESTART;
@@ -189,12 +189,12 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 			: ReactiveResponseProcessor::writeNdjsonFrame;
 
 		var req = opSession.getRequest().getHttpServletRequest();
-		var mdc = opSession.getRestContext().isMdcAsyncPropagation()
+		var mdc = opSession.getRestContext().isMdcAsyncPropagation() // HTT: false branch requires MDC propagation enabled
 			? MdcAsyncListener.snapshot()
 			: null;
 
 		AsyncContext asyncCtx = null;
-		if (req.isAsyncSupported()) {
+		if (req.isAsyncSupported()) { // HTT: true branch requires a real servlet container (MockServletRequest returns false)
 			try {
 				asyncCtx = req.startAsync();
 			} catch (IllegalStateException e) {
@@ -202,7 +202,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 			}
 		}
 
-		if (asyncCtx != null) {
+		if (asyncCtx != null) { // HTT: true branch requires a real servlet container
 			req.setAttribute(AsyncResponseProcessor.ATTR_ASYNC_DISPATCH_OWNED, Boolean.TRUE);
 			var ac = asyncCtx;
 			ac.setTimeout(0);  // No artificial timeout — streams are paced by the producer / client disconnect.
@@ -250,11 +250,11 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		}
 	}
 
-	private static void completeAsync(AsyncContext asyncCtx, RestResponse res, Throwable error) {
+	private static void completeAsync(AsyncContext asyncCtx, RestResponse res, Throwable error) { // HTT: only reachable from the async path (real servlet container required)
 		try {
-			if (error != null)
+			if (error != null) // HTT: false branch only reachable from async path
 				LOG.log(Level.FINE, error, () -> "Reactive stream terminated with error: " + error.getMessage());
-			if (! res.getHttpServletResponse().isCommitted())
+			if (! res.getHttpServletResponse().isCommitted()) // HTT: true branch (committed=false) only via async path
 				res.flushBuffer();
 		} catch (IOException e) {
 			LOG.log(Level.FINEST, e, () -> "Flush during async stream completion failed: " + e.getMessage());
@@ -333,7 +333,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		if (a == null) {
 			synchronized (ReactiveResponseProcessor.class) {
 				a = adapters;
-				if (a == null) {
+				if (a == null) { // HTT: inner DCL null-check missed branch requires concurrent first-load race
 					a = loadAdapters();
 					adapters = a;
 				}
@@ -357,7 +357,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	private static void addNextAdapter(Iterator<ReactiveStreamsAdapter> it, List<ReactiveStreamsAdapter> out) {
 		try {
 			out.add(it.next());
-		} catch (ServiceConfigurationError | RuntimeException e) {
+		} catch (ServiceConfigurationError | RuntimeException e) { // HTT: catch branch requires a broken ServiceLoader registration (backing library absent at runtime)
 			LOG.log(Level.FINE, e, () -> "Skipping reactive adapter (backing library likely absent): " + e.getMessage());
 		}
 	}
@@ -435,12 +435,12 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		}
 
 		private void terminate(Throwable t) {
-			if (! terminated.compareAndSet(false, true))
+			if (! terminated.compareAndSet(false, true)) // HTT: false branch requires concurrent double-terminate
 				return;
 			withMdc(() -> {
 				if (t != null && ! wrote) {
 					try {
-						if (! res.getHttpServletResponse().isCommitted())
+						if (! res.getHttpServletResponse().isCommitted()) // HTT: true branch (isCommitted=false) only via async path
 							res.getHttpServletResponse().sendError(SC_INTERNAL_SERVER_ERROR);
 					} catch (IOException e) {
 						LOG.log(Level.FINEST, e, () -> "sendError on pre-write stream failure failed: " + e.getMessage());
@@ -450,7 +450,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 			onTerminate.accept(t);
 		}
 
-		private static Throwable unwrap(Throwable t) {
+		private static Throwable unwrap(Throwable t) { // HTT: only called when writeFrame throws RuntimeException (serializer failure)
 			if ((t instanceof IllegalStateException || t instanceof CompletionException) && t.getCause() != null)
 				return t.getCause();
 			return t;

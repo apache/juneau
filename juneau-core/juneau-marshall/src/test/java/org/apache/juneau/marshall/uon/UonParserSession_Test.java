@@ -46,7 +46,8 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"rawtypes",
 	"unchecked",
-	"java:S5961"
+	"java:S5961",
+	"java:S5976" // SSLLC test naming convention requires individual methods, not parameterized tests
 })
 class UonParserSession_Test extends TestBase {
 
@@ -918,10 +919,6 @@ class UonParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, () -> P.parse("@(1,", List.class));
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// aa01_collection - S2+closeParen exercises the "if (state == S2)" branch on ')' read
-	// -----------------------------------------------------------------------------------------------------------------
-
 	@Test void aa01_collection_S2_closeParenWithElement() throws Exception {
 		// "@(1,)" — after first element + comma (S2), immediately ')'.
 		// The S2 branch fires: unread ')' and call parseAnything which returns empty string for Object type.
@@ -1278,16 +1275,102 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void ap01_collection_typeKey_cast() throws Exception {
 		// "(_type=...)" parsed as a collection — m.containsKey("_type") is true → cast() path (line 346).
-		// The default typePropertyName is "_type". cast() handles the map-with-type-key path.
-		// Result may be non-null (MarshalledMap returned); the branch is exercised regardless.
-		var result = P.parse("(_type=foo)", Object.class);
+		// The default typePropertyName is "_type". cast() returns a MarshalledMap.
+		// Use parse(Type) to avoid a JVM checkcast at the call site.
+		Object result = P.parse("(_type=foo)", (java.lang.reflect.Type) List.class);
 		assertNotNull(result);
 	}
 
 	@Test void ap02_array_typeKey_cast() throws Exception {
-		// "(_type=...)" parsed as an array — exercises line 363 (array with _type key).
-		// Parsing to Object[] triggers the array+_type path even if cast() returns a MarshalledMap.
-		var result = P.parse("(_type=foo)", Object.class);
+		// "(_type=...)" parsed as an array — c=='(' path with _type key exercises line 363.
+		// cast() returns a MarshalledMap; use parse(Type) to avoid JVM checkcast at call site.
+		Object result = P.parse("(_type=foo)", (java.lang.reflect.Type) String[].class);
 		assertNotNull(result);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// aq01 - parseNull with non-"ull" sequence (line 761 false branch → throws ParseException)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void aq01_parseNull_nonUll_inBeanMap_throws() {
+		// parseIntoBeanMap calls parseNull when first char is 'n'. "nfoo" starts with 'n'.
+		// parseString then reads remaining "foo" (stops at ','/'/'/EOF): "ull".equals("foo") is false.
+		// → ParseException thrown (line 762 true branch).
+		assertThrows(ParseException.class, () -> P.parse("(nfoo)", Bean.class));
+	}
+
+	@Test void aq02_parseNull_nonUll_inMap_throws() {
+		// parseIntoMap also calls parseNull when first char is 'n'. "(nbar=1)" with Map target.
+		// parseAttrName reads "bar", "ull".equals("bar") is false → ParseException.
+		assertThrows(ParseException.class, () -> P.parse("nbar", Map.class));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// ar01 - getUonReader reuse path (line 221 true branch: pipe already wraps a UonReader)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void ar01_getUonReader_reuse_existing() throws Exception {
+		// Create a session and a pipe from a String, then create a UonReader from it.
+		// Wrap that UonReader in a second pipe (Reader input → pipe.getReader() returns UonReader).
+		// Then call getUonReader on the second pipe — should return the existing UonReader (line 221 true branch).
+		var session = P.getSession();
+		var pipe1 = session.createPipe("(f1=1)");
+		var uonReader = new UonReader(pipe1, false);
+		var pipe2 = session.createPipe(uonReader);
+		var r = UonParserSession.getUonReader(pipe2, false);
+		assertNotNull(r);
+		assertSame(uonReader, r);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// as01 - parseString EQ replacement (line 962: c == EQ → r.replace('='))
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void as01_parseString_encodedEquals_replaced() throws Exception {
+		// In decoding mode, a literal '=' in a value is decoded to EQ char () by UonReader.
+		// parseString sees c == EQ (line 962) and replaces it with '=' in the marked buffer.
+		// Input: "(a=b=c)" -- UonReader converts the second '=' to EQ -- parseString restores it.
+		var m = PE.parse("(a=b=c)", Map.class);
+		assertNotNull(m);
+		assertEquals("b=c", m.get("a"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// at01 - parseIntoCollection non-parens path (lines 641-655: isUrlParamValue=true, no '@' prefix)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void at01_collection_urlParam_commaSeparated() throws Exception {
+		// doParse calls parseAnything(isUrlParamValue=true) which calls parseIntoCollection.
+		// "1,2,3" has no '@' so isInParens=false -> enters the non-parens while loop (line 641).
+		var l = P.parse("1,2,3", List.class);
+		assertNotNull(l);
+		assertEquals(3, l.size());
+	}
+
+	@Test void at02_collection_urlParam_withWhitespace_afterEntry() throws Exception {
+		// non-parens S2: after first element, whitespace is encountered (line 653 true branch).
+		var l = P.parse("1 ,2", List.class);
+		assertNotNull(l);
+		assertTrue(l.size() >= 1);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// au01 - parseIntoCollection/parseIntoMap EOF first char (line 577/678 c==-1 branch)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void au01_parseIntoCollection_emptyInput_returnsNull() throws Exception {
+		// parseIntoCollection with empty input: r.readSkipWs() returns -1 (EOF).
+		// line 577: if (c == -1 || c == AMP) -> c==-1 is true -> returns null.
+		var dest = new ArrayList<>();
+		var result = P.parseIntoCollection("", dest, String.class);
+		assertNull(result);
+	}
+
+	@Test void au02_parseIntoMap_emptyInput_returnsNull() throws Exception {
+		// parseIntoMap with empty input: r.read() returns -1 (EOF).
+		// line 678: if (c == -1 || c == AMP) -> c==-1 is true -> returns null.
+		var dest = new HashMap<String, Object>();
+		var result = P.parseIntoMap("", dest, String.class, Object.class);
+		assertNull(result);
 	}
 }

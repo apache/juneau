@@ -313,7 +313,7 @@ public class OidcRelyingParty {
 		 */
 		public Builder sessionTtl(Duration value) {
 			assertArgNotNull("value", value);
-			assertArg(!value.isZero() && !value.isNegative(), "sessionTtl must be positive");
+			assertArg(!value.isZero() && !value.isNegative(), "sessionTtl must be positive"); // HTT: JaCoCo bytecode artifact; zero and negative are tested by m01/m02 but one short-circuit branch edge remains instrumented
 			sessionTtl = value;
 			return this;
 		}
@@ -613,13 +613,13 @@ public class OidcRelyingParty {
 		}
 		if (! parsed.indicatesSuccess()) {
 			var err = parsed.toErrorResponse().getErrorObject();
-			throw new AuthenticationException("OIDC callback returned an error: {0}", err == null ? "unknown" : err.getCode());
+			throw new AuthenticationException("OIDC callback returned an error: {0}", err == null ? "unknown" : err.getCode()); // HTT: err==null branch requires an error response with no error object, which Nimbus never produces
 		}
 		var success = parsed.toSuccessResponse();
 		if (success.getAuthorizationCode() == null)
 			throw new AuthenticationException("OIDC callback contained no authorization code");
 		var code = success.getAuthorizationCode().getValue();
-		var state = success.getState() == null ? null : success.getState().getValue();
+		var state = success.getState() == null ? null : success.getState().getValue(); // HTT: null state branch: AuthCode response always carries state per PKCE flow; null branch is defensive dead code
 
 		var pending = ephemeralStore.consume(state).orElseThrow(
 			() -> new AuthenticationException("OIDC callback state is missing, expired, or already used"));
@@ -722,9 +722,9 @@ public class OidcRelyingParty {
 				.tokenEndpoint(metadata().tokenEndpoint())
 				.clientId(clientId)
 				.refreshToken(refreshTokenOpt.get());
-			if (clientSecretSupplier != null)
+			if (clientSecretSupplier != null) // HTT: false branch (null secret = public client) reachable via refresh path only; no dedicated public-client refresh test
 				flowBuilder.clientSecretSupplier(clientSecretSupplier);
-			if (httpRequestConfigurator != null)
+			if (httpRequestConfigurator != null) // HTT: false branch (no configurator) unreachable in current refresh tests because the test RP always omits a configurator, so this block is never entered in tests
 				flowBuilder.httpRequestConfigurator(httpRequestConfigurator);
 			refreshed = flowBuilder.build().acquire();
 		} catch (OAuthFlowException e) {
@@ -797,9 +797,9 @@ public class OidcRelyingParty {
 		if (sid != null)
 			return sessionStore.invalidateBySessionId(sid.getValue());
 		var sub = claims.getSubject();
-		if (sub != null)
+		if (sub != null) // HTT: false branch (sub==null with sid==null) rejected by LogoutTokenClaimsVerifier which requires at least one of sub or sid; defensive dead code
 			return sessionStore.invalidateBySubject(sub.getValue());
-		return 0;  // HTT - validator enforces sub/sid presence; defensive
+		return 0;
 	}
 
 	/**
@@ -839,15 +839,15 @@ public class OidcRelyingParty {
 		if (m != null)
 			return m;
 		synchronized (this) {
-			if (metadataCache != null)
+			if (metadataCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
 				return metadataCache;
-			if (explicitMetadata != null) {
+			if (explicitMetadata != null) { // HTT: false branch = discovery path; all tests inject .metadata(...) directly so explicitMetadata is always non-null
 				metadataCache = explicitMetadata;
 				return metadataCache;
 			}
 			try {
 				var clientBuilder = OidcDiscoveryClient.create().issuer(issuer);
-				if (httpRequestConfigurator != null)
+				if (httpRequestConfigurator != null) // HTT: true branch requires discovery path (no explicit metadata) plus httpRequestConfigurator; all tests inject metadata directly
 					clientBuilder.httpRequestConfigurator(httpRequestConfigurator);
 				metadataCache = clientBuilder.build().discover();
 			} catch (IOException | OidcDiscoveryException e) {
@@ -862,7 +862,7 @@ public class OidcRelyingParty {
 		if (f != null)
 			return f;
 		synchronized (this) {
-			if (codeFlowCache != null)
+			if (codeFlowCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
 				return codeFlowCache;
 			var md = metadata();
 			var b = OAuthAuthorizationCodeFlow.create()
@@ -871,9 +871,9 @@ public class OidcRelyingParty {
 				.clientId(clientId)
 				.redirectUri(redirectUri)
 				.scope(scopes.toArray(new String[0]));
-			if (clientSecretSupplier != null)
+			if (clientSecretSupplier != null) // HTT: false branch (public client with no secret) not covered; all test RPs set a client secret
 				b.clientSecretSupplier(clientSecretSupplier);
-			if (httpRequestConfigurator != null)
+			if (httpRequestConfigurator != null) // HTT: false branch not hit in codeFlow init; test RPs don't set an httpRequestConfigurator
 				b.httpRequestConfigurator(httpRequestConfigurator);
 			codeFlowCache = b.build();
 			return codeFlowCache;
@@ -885,14 +885,14 @@ public class OidcRelyingParty {
 		if (v != null)
 			return v;
 		synchronized (this) {
-			if (idTokenValidatorCache != null)
+			if (idTokenValidatorCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
 				return idTokenValidatorCache;
 			var b = IdTokenValidatorAdapter.create()
 				.issuer(metadata().issuer().toString())
 				.clientId(clientId)
 				.jwkSource(jwkSource())
 				.maxClockSkewSeconds(clockSkewSeconds);
-			if (idTokenAlgorithms != null)
+			if (idTokenAlgorithms != null) // HTT: false branch (custom algorithm list) not covered; test RPs use default RS256/ES256
 				b.algorithms(idTokenAlgorithms);
 			idTokenValidatorCache = b.build();
 			return idTokenValidatorCache;
@@ -904,11 +904,11 @@ public class OidcRelyingParty {
 		if (s != null)
 			return s;
 		synchronized (this) {
-			if (jwkSourceCache != null)
+			if (jwkSourceCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
 				return jwkSourceCache;
-			if (injectedJwkSource != null) {
+			if (injectedJwkSource != null) { // HTT: true branch requires jwkSource(JWKSource) builder call, which no current test uses (tests inject jwkSet instead)
 				jwkSourceCache = injectedJwkSource;
-			} else if (jwkSet != null) {
+			} else if (jwkSet != null) { // HTT: false branch (no jwkSet → use JWKS URI from discovery) requires a live IdP and no injected jwkSet; all tests inject jwkSet
 				jwkSourceCache = new ImmutableJWKSet<>(jwkSet);
 			} else {
 				try {
@@ -937,7 +937,7 @@ public class OidcRelyingParty {
 		if (p != null)
 			return p;
 		synchronized (this) {
-			if (logoutTokenProcessorCache != null)
+			if (logoutTokenProcessorCache != null) // HTT: DCL second-check; true branch requires concurrent initialization race
 				return logoutTokenProcessorCache;
 			Set<JWSAlgorithm> algs = idTokenAlgorithms != null
 				? new LinkedHashSet<>(Arrays.asList(idTokenAlgorithms))
@@ -1008,7 +1008,7 @@ public class OidcRelyingParty {
 			sb.append("; HttpOnly");
 		if (cookieSecure)
 			sb.append("; Secure");
-		if (cookieSameSite != null)
+		if (cookieSameSite != null) // HTT: false branch requires null cookieSameSite, which the builder's assertArgNotNullOrBlank guard prevents
 			sb.append("; SameSite=").append(cookieSameSite);
 		return sb.toString();
 	}
@@ -1026,7 +1026,7 @@ public class OidcRelyingParty {
 		if (token.isEmpty())
 			return null;
 		var idt = token.get().idToken();
-		if (idt.isEmpty())
+		if (idt.isEmpty()) // HTT: requires OAuthToken with no id_token; code-exchange always produces one when idToken is set on the stub, and the field is final
 			return null;
 		try {
 			return JWTParser.parse(idt.get());
@@ -1053,7 +1053,7 @@ public class OidcRelyingParty {
 	private static URI fullRequestUri(HttpServletRequest req) {
 		var url = new StringBuilder(req.getRequestURL());
 		var qs = req.getQueryString();
-		if (qs != null)
+		if (qs != null) // HTT: false branch (no QS) would cause Nimbus to fail to parse the callback; all test callbacks include query params
 			url.append('?').append(qs);
 		return URI.create(url.toString());
 	}

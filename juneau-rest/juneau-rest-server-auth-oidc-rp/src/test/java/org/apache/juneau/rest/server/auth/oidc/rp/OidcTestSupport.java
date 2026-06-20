@@ -150,6 +150,8 @@ final class OidcTestSupport {
 		volatile String rotatedRefreshToken = "rt-2";
 		/** When true, the {@code /token} endpoint returns an error (simulates revoked / reused refresh token). */
 		volatile boolean failToken;
+		/** When true, the {@code /userinfo} endpoint returns 401 (simulates a non-success UserInfo response). */
+		volatile boolean userInfoFail;
 		/** Extra claims served by {@code /userinfo}. */
 		volatile Map<String,Object> userInfo = new LinkedHashMap<>();
 
@@ -181,6 +183,10 @@ final class OidcTestSupport {
 		}
 
 		private void handleUserInfo(HttpExchange ex) throws IOException {
+			if (userInfoFail) {
+				writeJson(ex, 401, "{\"error\":\"invalid_token\"}");
+				return;
+			}
 			var sb = new StringBuilder("{\"sub\":\"alice\"");
 			userInfo.forEach((k, v) -> sb.append(",\"").append(k).append("\":\"").append(v).append("\""));
 			sb.append("}");

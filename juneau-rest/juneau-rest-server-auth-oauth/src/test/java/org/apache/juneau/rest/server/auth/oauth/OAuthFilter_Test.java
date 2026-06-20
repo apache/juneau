@@ -110,6 +110,34 @@ class OAuthFilter_Test extends TestBase {
 		assertEquals(Set.of("admin", "user"), f.authenticate(req("Bearer x")).get().getRoles());
 	}
 
+	@Test void c04_scopeClaim_nullValue_emptyRoles() throws Exception {
+		// extractRoles: v == null (scope key absent from claims) returns empty set.
+		Principal cp = new ClaimsPrincipal("alice", Map.of("other", "x"));
+		var f = OAuthFilter.create().validator(token -> cp).build();
+		assertTrue(f.authenticate(req("Bearer x")).get().getRoles().isEmpty());
+	}
+
+	@Test void c05_scopeClaim_stringWithLeadingBlank_blankPiecesSkipped() throws Exception {
+		// extractRoles: "  read" split on \s+ produces ["", "read"]; blank first piece is skipped.
+		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", "  read"));
+		var f = OAuthFilter.create().validator(token -> cp).build();
+		assertEquals(Set.of("read"), f.authenticate(req("Bearer x")).get().getRoles());
+	}
+
+	@Test void c06_scopeClaim_nonStringNonCollection_emptyRoles() throws Exception {
+		// extractRoles: v is an Integer — neither String nor Collection; returns empty set.
+		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", 42));
+		var f = OAuthFilter.create().validator(token -> cp).build();
+		assertTrue(f.authenticate(req("Bearer x")).get().getRoles().isEmpty());
+	}
+
+	@Test void c07_scopeClaim_collectionWithNonStringItems_nonStringSkipped() throws Exception {
+		// extractRoles: Collection contains Integer items; item instanceof String is false for each.
+		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", List.of(1, 2, 3)));
+		var f = OAuthFilter.create().validator(token -> cp).build();
+		assertTrue(f.authenticate(req("Bearer x")).get().getRoles().isEmpty());
+	}
+
 	@Test void d01_builder_validatorRequired() {
 		assertThrows(IllegalStateException.class, () -> OAuthFilter.create().build());
 	}
