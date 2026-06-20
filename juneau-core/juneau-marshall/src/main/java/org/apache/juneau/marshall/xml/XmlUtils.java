@@ -512,7 +512,7 @@ public class XmlUtils {
 			throw bex("Found @Xml.prefix annotation with no matching URI.  prefix=''{0}''", prefix);
 		}
 
-		// If only namespaceURI specified, need to search for prefix.
+		// If only namespaceURI specified, need to search for prefix. // HTT: reached only via XmlSerializer when @Xml has namespace but no prefix; not exercised by unit tests
 		if (! ns.isEmpty()) {
 			if (nn(xmls))
 				for (var xml2 : xmls)

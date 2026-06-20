@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.httppart;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.httppart.*;
@@ -35,7 +34,6 @@ import org.apache.juneau.commons.httppart.*;
 public class HttpPart implements NameValuePair {
 	private final String name;
 	private final Object opart;
-	private final String spart;
 	private final HttpPartType partType;
 	private final HttpPartSchema schema;
 	private final HttpPartSerializerSession serializer;
@@ -58,7 +56,6 @@ public class HttpPart implements NameValuePair {
 		this.schema = schema;
 		this.serializer = serializer;
 		this.opart = part;
-		this.spart = null;
 	}
 
 	@Override /* Overridden from NameValuePair */
@@ -66,8 +63,6 @@ public class HttpPart implements NameValuePair {
 
 	@Override /* Overridden from NameValuePair */
 	public String getValue() {
-		if (nn(spart))
-			return spart;
 		try {
 			return serializer.serialize(partType, schema, opart);
 		} catch (Exception e) {

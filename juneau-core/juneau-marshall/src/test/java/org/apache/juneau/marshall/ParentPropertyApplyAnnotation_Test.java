@@ -14,49 +14,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.marshall.jsonschema;
+package org.apache.juneau.marshall;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.svl.*;
-import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({
-	"java:S1186" // Empty test method intentional for framework testing
-})
-class SchemaApplyAnnotation_Test extends TestBase {
-
-	private static final String CNAME = SchemaApplyAnnotation_Test.class.getName();
-
-	private static class X1 {}
+class ParentPropertyApplyAnnotation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	SchemaApply a1 = SchemaApplyAnnotation.create()
+	ParentPropertyApply a1 = ParentPropertyApplyAnnotation.create()
 		.on("u")
-		.onClass(X1.class)
-		.value(SchemaAnnotation.create().format("date-time").build())
+		.value(ParentPropertyAnnotation.create().build())
 		.build();
 
-	SchemaApply a2 = SchemaApplyAnnotation.create()
+	ParentPropertyApply a2 = ParentPropertyApplyAnnotation.create()
 		.on("u")
-		.onClass(X1.class)
-		.value(SchemaAnnotation.create().format("date-time").build())
+		.value(ParentPropertyAnnotation.create().build())
 		.build();
 
 	@Test void a01_basic() {
-		assertBean(a1, "on,onClass,value{format}", "[u],[X1],{date-time}");
+		assertBean(a1, "on", "[u]");
 	}
 
-	@Test void a02_testEquivalency() {
+	@Test void a02_equivalency() {
 		assertEquals(a2, a1);
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEquals(a1.hashCode(), a2.hashCode());
@@ -66,77 +55,53 @@ class SchemaApplyAnnotation_Test extends TestBase {
 	// PropertyStore equivalency.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_testEquivalencyInPropertyStores() {
+	@Test void b01_propertyStoreEquivalency() {
 		var bc1 = MarshallingContext.create().annotations(a1).build();
 		var bc2 = MarshallingContext.create().annotations(a2).build();
 		assertSame(bc1, bc2);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Targeting methods
+	// Targeting — empty on() array skips application (Applier.apply false branch)
 	//------------------------------------------------------------------------------------------------------------------
 
-	public static class C1 {
-		public int f1;
-		public void m1() {}
-	}
-	public static class C2 {
-		public int f2;
-		public void m2() {}
-	}
-
-	@Test void c01_targetingMethods() throws Exception {
-		var c1 = SchemaApplyAnnotation.create(C1.class).on(C2.class).build();
-		var c2 = SchemaApplyAnnotation.create("a").on("b").build();
-		var c3 = SchemaApplyAnnotation.create().on(C1.class.getField("f1")).on(C2.class.getField("f2")).build();
-		var c4 = SchemaApplyAnnotation.create().on(C1.class.getMethod("m1")).on(C2.class.getMethod("m2")).build();
-
-		assertBean(c1, "on", "["+CNAME+"$C1,"+CNAME+"$C2]");
-		assertBean(c2, "on", "[a,b]");
-		assertBean(c3, "on", "["+CNAME+"$C1.f1,"+CNAME+"$C2.f2]");
-		assertBean(c4, "on", "["+CNAME+"$C1.m1(),"+CNAME+"$C2.m2()]");
+	@Test void c01_emptyOn_applierSkips() {
+		var a = ParentPropertyApplyAnnotation.create().build();
+		var bc = MarshallingContext.create().annotations(a).build();
+		assertNotNull(bc);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Comparison with declared annotations.
+	// empty() helper
 	//------------------------------------------------------------------------------------------------------------------
 
-	@SchemaApply(on="u", onClass=X1.class, value=@Schema(format="date-time"))
-	public static class D1 {}
-	SchemaApply d1 = D1.class.getAnnotationsByType(SchemaApply.class)[0];
+	@Test void d01_empty_null() {
+		assertTrue(ParentPropertyApplyAnnotation.empty(null));
+	}
 
-	@SchemaApply(on="u", onClass=X1.class, value=@Schema(format="date-time"))
-	public static class D2 {}
-	SchemaApply d2 = D2.class.getAnnotationsByType(SchemaApply.class)[0];
+	@Test void d02_empty_default() {
+		assertTrue(ParentPropertyApplyAnnotation.empty(ParentPropertyApplyAnnotation.DEFAULT));
+	}
 
-	@Test void d01_comparisonWithDeclarativeAnnotations() {
-		assertEqualsAll(a1, d1, d2);
-		assertNotEqualsAny(a1.hashCode(), 0, -1);
-		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
+	@Test void d03_empty_nonDefault() {
+		assertFalse(ParentPropertyApplyAnnotation.empty(a1));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Dynamic application via MarshallingContext
+	// create(String...) convenience constructor
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_dynamicApplication() {
-		var schema = SchemaAnnotation.create().type("string").format("date-time").build();
-		var apply = SchemaApplyAnnotation.create("com.example.Foo").value(schema).build();
-
-		assertBean(apply, "on,value{type,format}", "[com.example.Foo],{string,date-time}");
-	}
-
-	@Test void e02_emptyCheck() {
-		assertTrue(SchemaApplyAnnotation.empty(null));
-		assertTrue(SchemaApplyAnnotation.empty(SchemaApplyAnnotation.DEFAULT));
-		assertFalse(SchemaApplyAnnotation.empty(a1));
+	@Test void e01_createWithOnTargets() {
+		var a = ParentPropertyApplyAnnotation.create("MyClass.myField").build();
+		assertEquals(1, a.on().length);
+		assertEquals("MyClass.myField", a.on()[0]);
 	}
 
 	@Test void b05_applier_emptyOn_returnsEarly() {
 		var vr = VarResolver.DEFAULT.createSession();
-		var applier = new SchemaApplyAnnotation.Applier(vr);
+		var applier = new ParentPropertyApplyAnnotation.Applier(vr);
 		var b = MarshallingContext.DEFAULT.copy();
-		var a = SchemaApplyAnnotation.DEFAULT;
+		var a = ParentPropertyApplyAnnotation.DEFAULT;
 		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
 		// No exception = early-return branch was taken
 	}

@@ -129,4 +129,47 @@ class MarkdownWriter_Test {
 		assertTrue(out.contains("|---|---|"), out);
 		assertTrue(out.contains("| 1 | 2 |"), out);
 	}
+
+	// null → "" branch in tableRow
+	@Test void c16_tableRow_nullValue() throws Exception {
+		var out = run(w -> w.tableRow((String)null));
+		assertEquals("|  |\n", out);
+	}
+
+	// null → "" branch in bulletItem
+	@Test void c17_bulletItem_nullText() throws Exception {
+		var out = run(w -> w.bulletItem(0, null));
+		assertEquals("- \n", out);
+	}
+
+	// null → "" branch in code
+	@Test void c18_code_nullText() throws Exception {
+		var out = run(w -> w.code(null));
+		assertEquals("``", out);
+	}
+
+	// null → "" branch in escapeCell
+	@Test void c19_escapeCell_null() {
+		assertEquals("", MarkdownWriter.escapeCell(null));
+	}
+
+	// \n → <br> branch in escapeCell
+	@Test void c20_escapeCell_newline() {
+		assertEquals("a<br>b", MarkdownWriter.escapeCell("a\nb"));
+	}
+
+	// \r → skip branch in escapeCell
+	@Test void c21_escapeCell_carriageReturn() {
+		assertEquals("ab", MarkdownWriter.escapeCell("a\rb"));
+	}
+
+	// null → "" branch in escapeText
+	@Test void c22_escapeText_null() {
+		assertEquals("", MarkdownWriter.escapeText(null));
+	}
+
+	// '\\' → "\\\\" branch in escapeText
+	@Test void c23_escapeText_backslash() {
+		assertEquals("a\\\\b", MarkdownWriter.escapeText("a\\b"));
+	}
 }

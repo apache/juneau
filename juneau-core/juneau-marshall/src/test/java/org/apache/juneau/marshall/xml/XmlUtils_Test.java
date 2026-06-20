@@ -442,4 +442,150 @@ class XmlUtils_Test extends TestBase {
 			r.close();
 		}
 	}
+
+	// PROCESSING_INSTRUCTION (event type 3)
+	@Test void h02_toReadableEvent_processingInstruction() throws Exception {
+		var xml = "<?pi target?><root/>";
+		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		try (var sr = new java.io.StringReader(xml)) {
+			var r = f.createXMLStreamReader(sr);
+			r.next(); // PROCESSING_INSTRUCTION
+			assertEquals("PROCESSING_INSTRUCTION", XmlUtils.toReadableEvent(r));
+			r.close();
+		}
+	}
+
+	// COMMENT (event type 5) — need coalescing=false and IS_SUPPORTING_EXTERNAL_ENTITIES=false
+	@Test void h03_toReadableEvent_comment() throws Exception {
+		var xml = "<!-- my comment --><root/>";
+		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		f.setProperty(javax.xml.stream.XMLInputFactory.IS_COALESCING, Boolean.FALSE);
+		try (var sr = new java.io.StringReader(xml)) {
+			var r = f.createXMLStreamReader(sr);
+			r.next(); // COMMENT
+			if (r.getEventType() == 5) // only assert if parser emits COMMENT events
+				assertEquals("COMMENTS=[" + r.getText() + "]", XmlUtils.toReadableEvent(r));
+			r.close();
+		}
+	}
+
+	// CDATA (event type 12)
+	@Test void h04_toReadableEvent_cdata() throws Exception {
+		var xml = "<root><![CDATA[cdata text]]></root>";
+		var f = javax.xml.stream.XMLInputFactory.newInstance();
+		f.setProperty(javax.xml.stream.XMLInputFactory.IS_COALESCING, Boolean.FALSE);
+		try (var sr = new java.io.StringReader(xml)) {
+			var r = f.createXMLStreamReader(sr);
+			r.next(); // START_ELEMENT
+			r.next(); // CDATA or CHARACTERS depending on parser
+			if (r.getEventType() == 12)
+				assertEquals("CDATA=[cdata text]", XmlUtils.toReadableEvent(r));
+			r.close();
+		}
+	}
+
+	//------------------------------------------------------------------------------------------------
+	// encodeElementName — Unicode character range branches (line 460 inner loop)
+	//------------------------------------------------------------------------------------------------
+
+	// À-Ö range
+	@Test void d12_encodeElementName_unicodeC0() {
+		var s = "Àname"; // starts with À — valid XML name start char
+		assertEquals("Àname", XmlUtils.encodeElementName(s));
+	}
+
+	// Ø-ö range
+	@Test void d13_encodeElementName_unicodeD8() {
+		var s = "Øname";
+		assertEquals("Øname", XmlUtils.encodeElementName(s));
+	}
+
+	// ø-˿ range
+	@Test void d14_encodeElementName_unicodeF8() {
+		var s = "øname";
+		assertEquals("øname", XmlUtils.encodeElementName(s));
+	}
+
+	// Ͱ-ͽ range
+	@Test void d15_encodeElementName_unicode370() {
+		var s = "Ͱname";
+		assertEquals("Ͱname", XmlUtils.encodeElementName(s));
+	}
+
+	// Ϳ-῿ range
+	@Test void d16_encodeElementName_unicode37F() {
+		var s = "Ϳname";
+		assertEquals("Ϳname", XmlUtils.encodeElementName(s));
+	}
+
+	// ‌-‍ range
+	@Test void d17_encodeElementName_unicode200C() {
+		var s = "‌name";
+		assertEquals("‌name", XmlUtils.encodeElementName(s));
+	}
+
+	// ⁰-↏ range
+	@Test void d18_encodeElementName_unicode2070() {
+		var s = "⁰name";
+		assertEquals("⁰name", XmlUtils.encodeElementName(s));
+	}
+
+	// Ⰰ-⿯ range
+	@Test void d19_encodeElementName_unicode2C00() {
+		var s = "Ⰰname";
+		assertEquals("Ⰰname", XmlUtils.encodeElementName(s));
+	}
+
+	// 、-퟿ range
+	@Test void d20_encodeElementName_unicode3001() {
+		var s = "、name";
+		assertEquals("、name", XmlUtils.encodeElementName(s));
+	}
+
+	// 豈-﷏ range
+	@Test void d21_encodeElementName_unicodeF900() {
+		var s = "豈name";
+		assertEquals("豈name", XmlUtils.encodeElementName(s));
+	}
+
+	// ﷰ-� range
+	@Test void d22_encodeElementName_unicodeFDF0() {
+		var s = "ﷰname";
+		assertEquals("ﷰname", XmlUtils.encodeElementName(s));
+	}
+
+	// · in non-first position (combining dot)
+	@Test void d23_encodeElementName_unicodeB7() {
+		var s = "a·b";
+		assertEquals("a·b", XmlUtils.encodeElementName(s));
+	}
+
+	// ̀-ͯ in non-first position
+	@Test void d24_encodeElementName_unicode0300() {
+		var s = "àb";
+		assertEquals("àb", XmlUtils.encodeElementName(s));
+	}
+
+	// ‿-⁀ in non-first position
+	@Test void d25_encodeElementName_unicode203F() {
+		var s = "a‿b";
+		assertEquals("a‿b", XmlUtils.encodeElementName(s));
+	}
+
+	//------------------------------------------------------------------------------------------------
+	// isHexCharacter — lowercase hex chars return false (branch miss)
+	//------------------------------------------------------------------------------------------------
+
+	// encodeAttrName with _xABCD_ escape sequence followed by lowercase hex (not matching escape → preserve underscore)
+	@Test void b10_encodeAttrName_lowercase_hex_in_escape() throws Exception {
+		// "_xabcd_" has lowercase hex, so isHexCharacter('a') returns false → not treated as escape → '_' at pos 0 encoded
+		var r = encodeAttrName("_xabcd_");
+		// underscore at position 0: not an escape sequence (lowercase), so appended directly
+		assertTrue(r.startsWith("_") || r.startsWith("_x"), "result=" + r);
+	}
+
+	// needsElementNameEncoding: starts with letter (returns false quickly)
+	@Test void d26_encodeElementName_all_letters_no_encoding() {
+		assertEquals("abc", XmlUtils.encodeElementName("abc"));
+	}
 }

@@ -152,7 +152,7 @@ public class Namespace {
 		if (n == null) {
 			n = new Namespace(key, name, uri);
 			var n2 = CACHE.putIfAbsent(key, n);
-			return (n2 == null ? n : n2);
+			return (n2 == null ? n : n2); // HTT: n2 != null branch requires concurrent first-load race
 		}
 		return n;
 	}
