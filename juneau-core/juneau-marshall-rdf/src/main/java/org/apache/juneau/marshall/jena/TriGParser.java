@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the TriG marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = TriG.to(<jv>triG</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = TriG.DEFAULT.to(<jv>triG</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>

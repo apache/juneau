@@ -50,10 +50,10 @@ class Marshalled_Test extends TestBase {
 	}
 
 	@Test void a01_beanAnnotationOverridesPrivate() throws Exception {
-		var json = Json5.of(A1.create());
+		var json = Json5.DEFAULT.of(A1.create());
 		assertEquals("{f1:1}", json);
-		var a = Json5.DEFAULT.read(json, A1.class);
-		json = Json5.of(a);
+		var a = Json5.DEFAULT.to(json, A1.class);
+		json = Json5.DEFAULT.of(a);
 		assertEquals("{f1:1}", json);
 	}
 
@@ -118,10 +118,10 @@ class Marshalled_Test extends TestBase {
 	}
 
 	@Test void a03_beanxAnnotationOverridesPrivate() throws Exception {
-		var json = Json5.of(B1.create());
+		var json = Json5.DEFAULT.of(B1.create());
 		assertEquals("{f1:1,f2:2}", json);
-		var b = Json5.DEFAULT.read(json, B1.class);
-		json = Json5.of(b);
+		var b = Json5.DEFAULT.to(json, B1.class);
+		json = Json5.DEFAULT.of(b);
 		assertEquals("{f1:1,f2:2}", json);
 	}
 
@@ -208,18 +208,18 @@ class Marshalled_Test extends TestBase {
 	private static ClassInfo dConfig = ClassInfo.of(DConfig.class);
 
 	@Test void d01_beanPropertiesExcludePropertiesCombined_noMarshalledConfig() throws Exception {
-		var json = Json5.of(D1.create());
+		var json = Json5.DEFAULT.of(D1.create());
 		assertEquals("{a:1,c:3}", json);
-		var x = Json5.DEFAULT.read(json, D1.class);
-		json = Json5.of(x);
+		var x = Json5.DEFAULT.to(json, D1.class);
+		json = Json5.DEFAULT.of(x);
 		assertEquals("{a:1,c:3}", json);
 	}
 
 	@Test void d02_beanPXpCombined_noMarshalledConfig() throws Exception {
-		var json = Json5.of(D2.create());
+		var json = Json5.DEFAULT.of(D2.create());
 		assertEquals("{a:1,c:3}", json);
-		var x = Json5.DEFAULT.read(json, D2.class);
-		json = Json5.of(x);
+		var x = Json5.DEFAULT.to(json, D2.class);
+		json = Json5.DEFAULT.of(x);
 		assertEquals("{a:1,c:3}", json);
 	}
 
@@ -319,18 +319,18 @@ class Marshalled_Test extends TestBase {
 	private static ClassInfo eConfig = ClassInfo.of(EConfig.class);
 
 	@Test void e01_beanPropertiesExcludePropertiesCombined_multipleMarshalledAnnotations_noMarshalledConfig() throws Exception {
-		var json = Json5.of(E1.create());
+		var json = Json5.DEFAULT.of(E1.create());
 		assertEquals("{a:1,c:3}", json);
-		var e = Json5.DEFAULT.read(json, E1.class);
-		json = Json5.of(e);
+		var e = Json5.DEFAULT.to(json, E1.class);
+		json = Json5.DEFAULT.of(e);
 		assertEquals("{a:1,c:3}", json);
 	}
 
 	@Test void e02_beanPXpCombined_multipleMarshalledAnnotations_noMarshalledConfig() throws Exception {
-		var json = Json5.of(E2.create());
+		var json = Json5.DEFAULT.of(E2.create());
 		assertEquals("{a:1,c:3}", json);
-		var e = Json5.DEFAULT.read(json, E2.class);
-		json = Json5.of(e);
+		var e = Json5.DEFAULT.to(json, E2.class);
+		json = Json5.DEFAULT.of(e);
 		assertEquals("{a:1,c:3}", json);
 	}
 

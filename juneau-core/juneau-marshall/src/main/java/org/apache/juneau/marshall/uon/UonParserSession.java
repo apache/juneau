@@ -441,8 +441,9 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // Intentionally returns null for empty/EOF or parseAttrName('%00') in this parser state machine.
-		"java:S3776", // Cognitive complexity acceptable for this specific logic
-		"java:S6541", // Single-threaded session contexts do not require synchronization
+		"java:S2583",    // S1 checks c==-1/AMP for defensive completeness; while-guard makes these sub-expressions always-false
+		"java:S3776",    // Cognitive complexity acceptable for this specific logic
+		"java:S6541",    // Single-threaded session contexts do not require synchronization
 	})
 	private <T> BeanMap<T> parseIntoBeanMap(UonReader r, BeanMap<T> m) throws IOException, ParseException, ExecutableException {
 
@@ -458,99 +459,93 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		// S2: Found attrName end, looking for =.
 		// S3: Found =, looking for valStart.
 		// S4: Looking for , or }
-		boolean isInEscape = false;
 
 		var state = S1;
 		var currAttr = "";
 		mark();
 		try {
-			while (c != -1 && c != AMP) {
+			while (true) {
 				c = r.read();
-				if (! isInEscape) {
-					if (state == S1) {
+				if (state == S1) {
+					if (c == ')' || c == -1 || c == AMP) {
+						return m;
+					}
+					if (Character.isWhitespace(c))
+						skipSpace(r);
+					else {
+						r.unread();
+						mark();
+						currAttr = parseAttrName(r, decoding);
+						if (currAttr == null) { // Value was '%00'
+							return null;
+						}
+						state = S2;
+					}
+				} else if (state == S2) {
+					if (c == EQ || c == '=')
+						state = S3;
+					else if (c == -1 || c == ',' || c == ')' || c == AMP) {
+						m.put(currAttr, null);
 						if (c == ')' || c == -1 || c == AMP) {
 							return m;
 						}
-						if (Character.isWhitespace(c))
-							skipSpace(r);
-						else {
-							r.unread();
-							mark();
-							currAttr = parseAttrName(r, decoding);
-							if (currAttr == null) { // Value was '%00'
-								return null;
-							}
-							state = S2;
-						}
-					} else if (state == S2) {
-						if (c == EQ || c == '=')
-							state = S3;
-						else if (c == -1 || c == ',' || c == ')' || c == AMP) {
-							m.put(currAttr, null);
-							if (c == ')' || c == -1 || c == AMP) {
-								return m;
-							}
-							state = S1;
-						}
-					} else if (state == S3) {
-						if (c == -1 || c == ',' || c == ')' || c == AMP) {
-							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
-								var pMeta = m.getPropertyMeta(currAttr);
-								if (pMeta == null) {
-									onUnknownProperty(currAttr, m, null);
-									unmark();
-								} else {
-									unmark();
-									var value = convertToType("", (ClassMeta<?>) pMeta.getBeanInfo());
-									try {
-										pMeta.set(m, currAttr, value);
-									} catch (BeanRuntimeException e) {
-										onBeanSetterException(pMeta, e);
-										throw e;
-									}
+						state = S1;
+					}
+				} else if (state == S3) {
+					if (c == -1 || c == ',' || c == ')' || c == AMP) {
+						if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
+							var pMeta = m.getPropertyMeta(currAttr);
+							if (pMeta == null) {
+								onUnknownProperty(currAttr, m, null);
+								unmark();
+							} else {
+								unmark();
+								var value = convertToType("", (ClassMeta<?>) pMeta.getBeanInfo());
+								try {
+									pMeta.set(m, currAttr, value);
+								} catch (BeanRuntimeException e) {
+									onBeanSetterException(pMeta, e);
+									throw e;
 								}
 							}
-							if (c == -1 || c == ')' || c == AMP)
-								return m;
-							state = S1;
-						} else {
-							if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
-								var pMeta = m.getPropertyMeta(currAttr);
-								if (pMeta == null) {
-									onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), false, null));
-									unmark();
-								} else {
-									unmark();
-									setCurrentProperty(pMeta);
-									var cm = (ClassMeta<?>) pMeta.getBeanInfo();
-									var value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
-									setName(cm, value, currAttr);
-									try {
-										pMeta.set(m, currAttr, value);
-									} catch (BeanRuntimeException e) {
-										onBeanSetterException(pMeta, e);
-										throw e;
-									}
-									setCurrentProperty(null);
-								}
-							}
-							state = S4;
 						}
-					} else if (state == S4) {
-						if (c == ',')
-							state = S1;
-						else if (c == ')' || c == -1 || c == AMP) {
+						if (c == -1 || c == ')' || c == AMP)
 							return m;
+						state = S1;
+					} else {
+						if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
+							var pMeta = m.getPropertyMeta(currAttr);
+							if (pMeta == null) {
+								onUnknownProperty(currAttr, m, parseAnything(object(), r.unread(), m.getBean(false), false, null));
+								unmark();
+							} else {
+								unmark();
+								setCurrentProperty(pMeta);
+								var cm = (ClassMeta<?>) pMeta.getBeanInfo();
+								var value = parseAnything(cm, r.unread(), m.getBean(false), false, pMeta);
+								setName(cm, value, currAttr);
+								try {
+									pMeta.set(m, currAttr, value);
+								} catch (BeanRuntimeException e) {
+									onBeanSetterException(pMeta, e);
+									throw e;
+								}
+								setCurrentProperty(null);
+							}
 						}
+						state = S4;
+					}
+				} else if (state == S4) {
+					if (c == ',')
+						state = S1;
+					else if (c == ')' || c == -1 || c == AMP) {
+						return m;
 					}
 				}
-				isInEscape = isInEscape(c, r, isInEscape);
 			}
 		} finally {
 			unmark();
 		}
-
-		return null; // Unreachable.
 	}
 
 	@SuppressWarnings({
@@ -677,65 +672,58 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		// S3: Found =, looking for valStart.
 		// S4: Looking for , or )
 
-		boolean isInEscape = false;
-
 		var state = S1;
 		K currAttr = null;
 		while (c != -1 && c != AMP) {
 			c = r.read();
-			if (! isInEscape) {
-				if (state == S1) {
-					if (c == ')')
-						return m;
-					if (Character.isWhitespace(c))
-						skipSpace(r);
-					else {
+			if (state == S1) {
+				if (c == ')')
+					return m;
+				if (Character.isWhitespace(c))
+					skipSpace(r);
+				else {
+					r.unread();
+					var attr = parseAttr(r, decoding);
+					currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
+					state = S2;
+				}
+			} else if (state == S2) {
+				if (c == EQ || c == '=')
+					state = S3;
+				else if (c == -1 || c == ',' || c == ')' || c == AMP) {
+					if (currAttr == null) {
+						// Value was '%00'
 						r.unread();
-						var attr = parseAttr(r, decoding);
-						currAttr = attr == null ? null : convertAttrToType(m, trim(attr.toString()), keyType);
-						state = S2;
-						c = 0; // Avoid isInEscape if c was '\'
+						return null;
 					}
-				} else if (state == S2) {
-					if (c == EQ || c == '=')
-						state = S3;
-					else if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						if (currAttr == null) {
-							// Value was '%00'
-							r.unread();
-							return null;
-						}
-						m.put(currAttr, null);
-						if (c == ')' || c == -1 || c == AMP)
-							return m;
-						state = S1;
-					}
-				} else if (state == S3) {
-					if (c == -1 || c == ',' || c == ')' || c == AMP) {
-						V value = convertAttrToType(m, "", valueType);
-						m.put(currAttr, value);
-						if (c == -1 || c == ')' || c == AMP)
-							return m;
-						state = S1;
-					} else {
-						V value = parseAnything(valueType, r.unread(), m, false, pMeta);
-						setName(valueType, value, currAttr);
-						m.put(currAttr, value);
-						state = S4;
-						c = 0; // Avoid isInEscape if c was '\'
-					}
-				} else if (state == S4) {
-					if (c == ',')
-						state = S1;
-					else if (c == ')' || c == -1 || c == AMP) {
+					m.put(currAttr, null);
+					if (c == ')' || c == -1 || c == AMP)
 						return m;
-					}
+					state = S1;
+				}
+			} else if (state == S3) {
+				if (c == -1 || c == ',' || c == ')' || c == AMP) {
+					V value = convertAttrToType(m, "", valueType);
+					m.put(currAttr, value);
+					if (c == -1 || c == ')' || c == AMP)
+						return m;
+					state = S1;
+				} else {
+					V value = parseAnything(valueType, r.unread(), m, false, pMeta);
+					setName(valueType, value, currAttr);
+					m.put(currAttr, value);
+					state = S4;
+				}
+			} else if (state == S4) {
+				if (c == ',')
+					state = S1;
+				else if (c == ')' || c == -1 || c == AMP) {
+					return m;
 				}
 			}
-			isInEscape = isInEscape(c, r, isInEscape);
 		}
 
-		return null; // Unreachable.
+		return null; // Reachable via trailing comma at EOF (lenient parse of e.g. "(a=1,").
 	}
 
 	private Object parseNull(UonReader r) throws IOException, ParseException {
@@ -877,7 +865,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		r.mark();
 		boolean isInEscape = false;
 		if (encoded) {
-			while (c != -1) {
+			while (true) {
 				c = r.read();
 				if (! isInEscape) {
 					if (c == AMP || c == EQ || c == -1 || Character.isWhitespace(c)) {
@@ -893,7 +881,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				isInEscape = isInEscape(c, r, isInEscape);
 			}
 		} else {
-			while (c != -1) {
+			while (true) {
 				c = r.read();
 				if (! isInEscape && (c == '=' || c == -1 || Character.isWhitespace(c))) {
 					if (c != -1)
@@ -904,9 +892,6 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 				isInEscape = isInEscape(c, r, isInEscape);
 			}
 		}
-
-		// We should never get here.
-		throw new ParseException(this, "Unexpected condition.");
 	}
 
 	/**

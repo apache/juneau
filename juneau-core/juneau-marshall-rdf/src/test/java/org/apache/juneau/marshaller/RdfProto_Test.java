@@ -33,36 +33,40 @@ class RdfProto_Test extends TestBase {
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";
 		var in2 = JsonMap.of("foo", "bar");
-		var out1 = RdfProto.of(in1);
-		var out2 = RdfProto.of(in2);
+		var out1 = RdfProto.DEFAULT.of(in1);
+		var out2 = RdfProto.DEFAULT.of(in2);
 
 		assertNotNull(out1);
 		assertTrue(out1.length > 0);
 		assertNotNull(out2);
 		assertTrue(out2.length > 0);
 		// Verify the OutputStream variant also produces non-empty output
-		var baosOut = bytes(RdfProto.of(in1, baos()));
+		var baos1 = baos();
+		RdfProto.DEFAULT.of(in1, baos1);
+		var baosOut = bytes(baos1);
 		assertNotNull(baosOut);
 		assertTrue(baosOut.length > 0);
 		// Verify both outputs are semantically equivalent via roundtrip
-		assertEquals(RdfProto.to(out1, String.class), RdfProto.to(baosOut, String.class));
+		assertEquals(RdfProto.DEFAULT.to(out1, String.class), RdfProto.DEFAULT.to(baosOut, String.class));
 	}
 
 	@Test void a02_from() throws Exception {
 		var in1 = JsonMap.of("foo", "bar");
-		var bytes = RdfProto.of(in1);
-		var result = RdfProto.to(bytes, Map.class, String.class, String.class);
+		var bytes = RdfProto.DEFAULT.of(in1);
+		var result = RdfProto.DEFAULT.to(bytes, Map.class, String.class, String.class);
 		assertJson("{foo:'bar'}", result);
-		assertJson("{foo:'bar'}", RdfProto.to(fromHex(toHex(bytes)), Map.class, String.class, String.class));
+		assertJson("{foo:'bar'}", RdfProto.DEFAULT.to(fromHex(toHex(bytes)), Map.class, String.class, String.class));
 	}
 
 	@Test void a03_complexRoundtrip() throws Exception {
 		var in1 = JsonMap.of("name", "Alice", "age", 30);
-		var bytes = RdfProto.of(in1);
+		var bytes = RdfProto.DEFAULT.of(in1);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 		// Verify we can get the bytes via OutputStream variant too
-		var baosOut = bytes(RdfProto.of(in1, baos()));
+		var baos2 = baos();
+		RdfProto.DEFAULT.of(in1, baos2);
+		var baosOut = bytes(baos2);
 		assertNotNull(baosOut);
 		assertTrue(baosOut.length > 0);
 	}
@@ -73,14 +77,14 @@ class RdfProto_Test extends TestBase {
 	}
 
 	@Test void a05_to_inputStream() throws Exception {
-		var bytes = RdfProto.of("foo");
-		var result = RdfProto.to(new ByteArrayInputStream(bytes), String.class);
+		var bytes = RdfProto.DEFAULT.of("foo");
+		var result = RdfProto.DEFAULT.to(new ByteArrayInputStream(bytes), String.class);
 		assertEquals("foo", result);
 	}
 
 	@Test void a06_to_inputStream_type() throws Exception {
-		var bytes = RdfProto.of("foo");
-		var result = RdfProto.to(new ByteArrayInputStream(bytes), String.class, new java.lang.reflect.Type[0]);
+		var bytes = RdfProto.DEFAULT.of("foo");
+		var result = RdfProto.DEFAULT.to(new ByteArrayInputStream(bytes), String.class, new java.lang.reflect.Type[0]);
 		assertEquals("foo", result);
 	}
 

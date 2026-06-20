@@ -82,16 +82,16 @@ class JsonlRoundTrip_Test extends TestBase {
 			new Person("Bob", 25),
 			new Person("Carol", 35)
 		);
-		var jsonl = Jsonl.of(a);
-		var b = (List<Person>) Jsonl.to(jsonl, List.class, Person.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = (List<Person>) Jsonl.DEFAULT.to(jsonl, List.class, Person.class);
 		assertBean(b, "0{name,age},1{name,age},2{name,age}", "{Alice,30},{Bob,25},{Carol,35}");
 	}
 
 	@Test
 	void a02_roundTripBeanArray() throws Exception {
 		var a = new Person[]{new Person("Alice", 30), new Person("Bob", 25)};
-		var jsonl = Jsonl.of(a);
-		var b = Jsonl.to(jsonl, Person[].class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = Jsonl.DEFAULT.to(jsonl, Person[].class);
 		assertBean(b, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
 	}
 
@@ -101,8 +101,8 @@ class JsonlRoundTrip_Test extends TestBase {
 			new ComplexPerson("Alice", new Address("123 Main", "Boston"), list("a", "b", "c")),
 			new ComplexPerson("Bob", new Address("456 Oak", "Portland"), list("d", "e"))
 		);
-		var jsonl = Jsonl.of(a);
-		var b = (List<ComplexPerson>) Jsonl.to(jsonl, List.class, ComplexPerson.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = (List<ComplexPerson>) Jsonl.DEFAULT.to(jsonl, List.class, ComplexPerson.class);
 		assertBean(b, "0{name,address{street,city},tags},1{name,address{street,city},tags}",
 			"{Alice,{123 Main,Boston},[a,b,c]},{Bob,{456 Oak,Portland},[d,e]}");
 	}
@@ -110,16 +110,16 @@ class JsonlRoundTrip_Test extends TestBase {
 	@Test
 	void a04_roundTripWithNulls() throws Exception {
 		var a = list("a", null, "c");
-		var jsonl = Jsonl.of(a);
-		var b = (List<String>) Jsonl.to(jsonl, List.class, String.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = (List<String>) Jsonl.DEFAULT.to(jsonl, List.class, String.class);
 		assertBean(b, "0,1,2", "a,<null>,c");
 	}
 
 	@Test
 	void a05_roundTripMixedTypes() throws Exception {
 		var a = list(1, "two", true, null, 3.5);
-		var jsonl = Jsonl.of(a);
-		var b = (List<Object>) Jsonl.to(jsonl, List.class, Object.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = (List<Object>) Jsonl.DEFAULT.to(jsonl, List.class, Object.class);
 		assertBean(b, "0,1,2,3,4", "1,two,true,<null>,3.5");
 	}
 
@@ -127,13 +127,13 @@ class JsonlRoundTrip_Test extends TestBase {
 	void a06_roundTripWithSwaps() throws Exception {
 		var s = (JsonlSerializer) JsonlSerializer.create().binaryFormat(BinaryFormat.BASE64).build();
 		var p = (JsonlParser) JsonlParser.create().binaryFormat(BinaryFormat.BASE64).build();
-		var m = new Jsonl(s, p);
+		CharMarshaller m = new Jsonl(s, p);
 		var a = list(
 			JsonMap.of("name", "Alice", "data", new byte[]{1, 2, 3}),
 			JsonMap.of("name", "Bob", "data", new byte[]{4, 5, 6})
 		);
-		var jsonl = m.write(a);
-		var b = (List<JsonMap>) m.read(jsonl, List.class, JsonMap.class);
+		var jsonl = m.of(a);
+		var b = (List<JsonMap>) m.to(jsonl, List.class, JsonMap.class);
 		assertBean(b, "0{name},1{name}", "{Alice},{Bob}");
 		assertTrue(jsonl.contains("AQID"));
 		assertTrue(jsonl.contains("BAUG"));
@@ -142,16 +142,16 @@ class JsonlRoundTrip_Test extends TestBase {
 	@Test
 	void a07_roundTripSingleObject() throws Exception {
 		var a = new Person("Alice", 30);
-		var jsonl = Jsonl.of(a);
-		var b = Jsonl.to(jsonl, Person.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = Jsonl.DEFAULT.to(jsonl, Person.class);
 		assertBean(b, "name,age", "Alice,30");
 	}
 
 	@Test
 	void a08_roundTripEmptyCollection() throws Exception {
 		var a = list();
-		var jsonl = Jsonl.of(a);
-		var b = (List<?>) Jsonl.to(jsonl, List.class, Person.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = (List<?>) Jsonl.DEFAULT.to(jsonl, List.class, Person.class);
 		assertNotNull(b);
 		assertTrue(b.isEmpty());
 	}

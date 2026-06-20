@@ -28,14 +28,14 @@ class Jcs_Test extends TestBase {
 	@Test
 	void e01_of() throws Exception {
 		var m = JsonMap.of("name", "Alice", "age", 30);
-		var s = Jcs.of(m);
+		var s = Jcs.DEFAULT.of(m);
 		assertEquals("{\"age\":30,\"name\":\"Alice\"}", s);
 	}
 
 	@Test
 	void e02_to() throws Exception {
 		var s = "{\"age\":30,\"name\":\"Alice\"}";
-		var m = Jcs.to(s, JsonMap.class);
+		var m = Jcs.DEFAULT.to(s, JsonMap.class);
 		assertEquals(30, m.getInt("age"));
 		assertEquals("Alice", m.getString("name"));
 	}
@@ -43,14 +43,14 @@ class Jcs_Test extends TestBase {
 	@Test
 	void e03_roundTrip() throws Exception {
 		var m = JsonMap.of("a", 1, "b", 2, "c", 3);
-		var s = Jcs.of(m);
-		var m2 = Jcs.to(s, JsonMap.class);
+		var s = Jcs.DEFAULT.of(m);
+		var m2 = Jcs.DEFAULT.to(s, JsonMap.class);
 		assertEquals(m, m2);
 	}
 
 	@Test
 	void e04_defaultInstance() throws Exception {
 		var m = JsonMap.of("x", 1);
-		assertEquals("{\"x\":1}", Jcs.DEFAULT.write(m));
+		assertEquals("{\"x\":1}", Jcs.DEFAULT.of(m));
 	}
 }

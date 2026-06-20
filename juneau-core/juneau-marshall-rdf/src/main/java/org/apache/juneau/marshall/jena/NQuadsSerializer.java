@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the NQuads marshaller for convenience.</jc>
- * 	String <jv>nQuads</jv> = NQuads.of(<jv>person</jv>);
+ * 	String <jv>nQuads</jv> = NQuads.DEFAULT.of(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom serializer with swaps.</jc>

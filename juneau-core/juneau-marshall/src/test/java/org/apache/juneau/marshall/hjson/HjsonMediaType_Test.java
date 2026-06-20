@@ -50,9 +50,9 @@ class HjsonMediaType_Test {
 	@Test
 	void g03_contentNegotiation() throws Exception {
 		var a = JsonMap.of("name", "test", "count", 42);
-		var hjson = org.apache.juneau.marshall.marshaller.Hjson.of(a);
+		var hjson = org.apache.juneau.marshall.marshaller.Hjson.DEFAULT.of(a);
 		assertNotNull(hjson);
-		var b = (Map<String, Object>) org.apache.juneau.marshall.marshaller.Hjson.to(hjson, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) org.apache.juneau.marshall.marshaller.Hjson.DEFAULT.to(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
 	}
 }

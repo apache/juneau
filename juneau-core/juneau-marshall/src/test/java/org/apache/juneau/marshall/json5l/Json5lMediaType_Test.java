@@ -65,9 +65,9 @@ class Json5lMediaType_Test {
 	@Test
 	void a04_contentNegotiation() throws Exception {
 		var a = list(JsonMap.of("k", "v"));
-		var json5l = Json5l.of(a);
+		var json5l = Json5l.DEFAULT.of(a);
 		assertNotNull(json5l);
-		var b = (List<JsonMap>) Json5l.to(json5l, List.class, JsonMap.class);
+		var b = (List<JsonMap>) Json5l.DEFAULT.to(json5l, List.class, JsonMap.class);
 		assertBean(b, "0{k}", "{v}");
 	}
 }

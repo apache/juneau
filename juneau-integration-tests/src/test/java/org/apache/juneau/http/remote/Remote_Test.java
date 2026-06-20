@@ -553,9 +553,9 @@ class Remote_Test extends TestBase {
 
 	@Test void f01_headers() throws Exception {
 		var x = client(F.class).header("Check","Foo").build().getRemote(F1a.class);
-		assertEquals("['bar','baz','qux']",Json5.of(x.getHeaders()));
+		assertEquals("['bar','baz','qux']",Json5.DEFAULT.of(x.getHeaders()));
 		x = client(F.class).header("Check","Client-Version").build().getRemote(F1a.class);
-		assertEquals("['1.2.3']",Json5.of(x.getHeaders()));
+		assertEquals("['1.2.3']",Json5.DEFAULT.of(x.getHeaders()));
 	}
 
 	@Remote(headerList=F2b.class)

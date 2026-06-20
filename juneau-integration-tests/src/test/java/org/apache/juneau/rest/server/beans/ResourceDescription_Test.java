@@ -26,7 +26,7 @@ class ResourceDescription_Test extends TestBase {
 
 	@Test void a01_basic() throws Exception {
 		var rd = new ResourceDescription("a","b?c=d&e=f","g");
-		assertEquals("<table><tr><td>name</td><td><a href=\"/b?c=d&amp;e=f\">a</a></td></tr><tr><td>description</td><td>g</td></tr></table>", Html.of(rd));
-		assertEquals("{name:'a',description:'g'}", Json5.of(rd));
+		assertEquals("<table><tr><td>name</td><td><a href=\"/b?c=d&amp;e=f\">a</a></td></tr><tr><td>description</td><td>g</td></tr></table>", Html.DEFAULT.of(rd));
+		assertEquals("{name:'a',description:'g'}", Json5.DEFAULT.of(rd));
 	}
 }

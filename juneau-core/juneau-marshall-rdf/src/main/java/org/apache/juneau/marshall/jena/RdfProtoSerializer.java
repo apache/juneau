@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfProto marshaller for convenience.</jc>
- * 	<jk>byte</jk>[] <jv>protoBytes</jv> = RdfProto.of(<jv>person</jv>);
+ * 	<jk>byte</jk>[] <jv>protoBytes</jv> = RdfProto.DEFAULT.of(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Serialize to OutputStream.</jc>

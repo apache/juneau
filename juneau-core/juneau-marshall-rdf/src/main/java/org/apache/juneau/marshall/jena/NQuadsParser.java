@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the NQuads marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = NQuads.to(<jv>nQuads</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = NQuads.DEFAULT.to(<jv>nQuads</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>

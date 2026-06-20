@@ -53,7 +53,7 @@ class Json5l_Test extends TestBase {
 			new Person("Bob", 25),
 			new Person("Carol", 35)
 		);
-		var json5l = Json5l.of(list);
+		var json5l = Json5l.DEFAULT.of(list);
 		var lines = json5l.split("\n");
 		assertEquals(3, lines.length);
 		assertTrue(lines[0].contains("\"name\":\"Alice\""));
@@ -67,7 +67,7 @@ class Json5l_Test extends TestBase {
 	@Test
 	void a02_serializeArray() throws Exception {
 		var arr = new Person[]{new Person("Alice", 30), new Person("Bob", 25)};
-		var json5l = Json5l.of(arr);
+		var json5l = Json5l.DEFAULT.of(arr);
 		var lines = json5l.split("\n");
 		assertEquals(2, lines.length);
 		assertTrue(lines[0].contains("\"Alice\""));
@@ -77,7 +77,7 @@ class Json5l_Test extends TestBase {
 	@Test
 	void a03_serializeSingleBean() throws Exception {
 		var p = new Person("Alice", 30);
-		var json5l = Json5l.of(p);
+		var json5l = Json5l.DEFAULT.of(p);
 		assertEquals(1, json5l.split("\n").length);
 		assertTrue(json5l.contains("\"name\":\"Alice\""));
 		assertTrue(json5l.contains("\"age\":30"));
@@ -86,7 +86,7 @@ class Json5l_Test extends TestBase {
 	@Test
 	void a04_serializeCollectionOfStrings() throws Exception {
 		var list = list("foo", "bar", "baz");
-		var json5l = Json5l.of(list);
+		var json5l = Json5l.DEFAULT.of(list);
 		var lines = json5l.split("\n");
 		assertEquals(3, lines.length);
 		assertTrue(lines[0].contains("\"foo\""));
@@ -96,14 +96,14 @@ class Json5l_Test extends TestBase {
 
 	@Test
 	void a05_serializeEmptyCollection() throws Exception {
-		var json5l = Json5l.of(list());
+		var json5l = Json5l.DEFAULT.of(list());
 		assertEquals("", json5l.trim());
 	}
 
 	@Test
 	void a06_serializeNullValues() throws Exception {
 		var list = list("a", null, "c");
-		var json5l = Json5l.of(list);
+		var json5l = Json5l.DEFAULT.of(list);
 		var lines = json5l.split("\n");
 		assertEquals(3, lines.length);
 		assertEquals("null", lines[1]);
@@ -112,7 +112,7 @@ class Json5l_Test extends TestBase {
 	@Test
 	void a07_serializeNestedObjects() throws Exception {
 		var outer = JsonMap.of("name", "Alice", "inner", JsonMap.of("x", 1, "y", 2));
-		var json5l = Json5l.of(outer);
+		var json5l = Json5l.DEFAULT.of(outer);
 		assertTrue(json5l.contains("\"inner\":{\"x\":1,\"y\":2}"));
 	}
 
@@ -126,12 +126,12 @@ class Json5l_Test extends TestBase {
 			new Person("Alice", 30),
 			new Person("Bob", 25)
 		);
-		assertEquals(Jsonl.of(list), Json5l.of(list));
+		assertEquals(Jsonl.DEFAULT.of(list), Json5l.DEFAULT.of(list));
 	}
 
 	@Test
 	void b02_defaultProducesStrictDoubleQuotes() throws Exception {
-		var json5l = Json5l.of(JsonMap.of("name", "Alice"));
+		var json5l = Json5l.DEFAULT.of(JsonMap.of("name", "Alice"));
 		assertTrue(json5l.contains("\"name\":\"Alice\""));
 		assertFalse(json5l.contains("'"));
 	}

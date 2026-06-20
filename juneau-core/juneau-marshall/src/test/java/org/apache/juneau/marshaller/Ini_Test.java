@@ -35,7 +35,7 @@ class Ini_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "test");
 		a.put("count", 42);
-		var ini = Ini.of(a);
+		var ini = Ini.DEFAULT.of(a);
 		assertNotNull(ini);
 		assertTrue(ini.contains("name") && ini.contains("test"));
 		assertTrue(ini.contains("count") && ini.contains("42"));
@@ -44,7 +44,7 @@ class Ini_Test extends TestBase {
 	@Test
 	void a02_to() throws Exception {
 		var ini = "name = Alice\nage = 30";
-		var m = (Map<String, Object>) Ini.to(ini, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) Ini.DEFAULT.to(ini, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
@@ -53,8 +53,8 @@ class Ini_Test extends TestBase {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "foo");
 		a.put("value", 123);
-		var ini = Ini.of(a);
-		var b = (Map<String, Object>) Ini.to(ini, Map.class, String.class, Object.class);
+		var ini = Ini.DEFAULT.of(a);
+		var b = (Map<String, Object>) Ini.DEFAULT.to(ini, Map.class, String.class, Object.class);
 		assertBean(b, "name,value", "foo,123");
 	}
 
@@ -62,9 +62,9 @@ class Ini_Test extends TestBase {
 	void a04_defaultInstance() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("k", "v");
-		var ini = Ini.DEFAULT.write(a);
+		var ini = Ini.DEFAULT.of(a);
 		assertTrue(ini.contains("k") && ini.contains("v"));
-		var b = (Map<String, Object>) Ini.DEFAULT.read(ini, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) Ini.DEFAULT.to(ini, Map.class, String.class, Object.class);
 		assertBean(b, "k", "v");
 	}
 }

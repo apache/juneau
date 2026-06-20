@@ -37,7 +37,7 @@ class Hocon_Test {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "test");
 		a.put("count", 42);
-		var hocon = Hocon.of(a);
+		var hocon = Hocon.DEFAULT.of(a);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("name") && hocon.contains("test"));
 		assertTrue(hocon.contains("count") && hocon.contains("42"));
@@ -46,7 +46,7 @@ class Hocon_Test {
 	@Test
 	void h02_to() throws Exception {
 		var hocon = "name = Alice\nage = 30";
-		var m = (Map<String, Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) Hocon.DEFAULT.to(hocon, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
@@ -55,8 +55,8 @@ class Hocon_Test {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "foo");
 		a.put("value", 123);
-		var hocon = Hocon.of(a);
-		var b = (Map<String, Object>) Hocon.to(hocon, Map.class, String.class, Object.class);
+		var hocon = Hocon.DEFAULT.of(a);
+		var b = (Map<String, Object>) Hocon.DEFAULT.to(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,value", "foo,123");
 	}
 
@@ -64,9 +64,9 @@ class Hocon_Test {
 	void h04_defaultInstance() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("k", "v");
-		var hocon = Hocon.DEFAULT.write(a);
+		var hocon = Hocon.DEFAULT.of(a);
 		assertTrue(hocon.contains("k") && hocon.contains("v"));
-		var b = (Map<String, Object>) Hocon.DEFAULT.read(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) Hocon.DEFAULT.to(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "k", "v");
 	}
 }

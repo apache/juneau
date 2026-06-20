@@ -31,6 +31,6 @@ public class ABean {
 
 	@Override
 	public String toString() {
-		return Json5.of(this);
+		return Json5.DEFAULT.of(this);
 	}
 }

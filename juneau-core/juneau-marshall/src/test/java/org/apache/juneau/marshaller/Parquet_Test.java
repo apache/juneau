@@ -20,6 +20,7 @@ import static org.apache.juneau.junit.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.List;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -38,7 +39,7 @@ class Parquet_Test extends TestBase {
 	@Test
 	void a01_of() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.of(a);
+		var bytes = Parquet.DEFAULT.of(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -46,18 +47,18 @@ class Parquet_Test extends TestBase {
 	@Test
 	void a02_to() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.of(a);
-		var b = Parquet.to(bytes, Bean.class);
+		var bytes = Parquet.DEFAULT.of(a);
+		List<Bean> b = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
 		assertBeans(b, "x,y", "test,42");
 	}
 
 	@Test
 	void a03_roundTrip() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.of(a);
-		var b = Parquet.to(bytes, Bean.class);
-		var bytes2 = Parquet.of(b);
-		var c = Parquet.to(bytes2, Bean.class);
+		var bytes = Parquet.DEFAULT.of(a);
+		List<Bean> b = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
+		var bytes2 = Parquet.DEFAULT.of(b);
+		List<Bean> c = Parquet.DEFAULT.to(bytes2, List.class, Bean.class);
 		assertBeans(c, "x,y", "test,42");
 	}
 
@@ -65,19 +66,19 @@ class Parquet_Test extends TestBase {
 	void a04_ofToOutputStream() throws Exception {
 		var a = new Bean();
 		var out = new ByteArrayOutputStream();
-		Parquet.DEFAULT.write(a, out);
+		Parquet.DEFAULT.of(a, out);
 		var bytes = out.toByteArray();
 		assertTrue(bytes.length > 0);
-		var b = Parquet.to(bytes, Bean.class);
+		List<Bean> b = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
 		assertBeans(b, "x,y", "test,42");
 	}
 
 	@Test
 	void a05_toFromInputStream() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.of(a);
+		var bytes = Parquet.DEFAULT.of(a);
 		try (var is = new ByteArrayInputStream(bytes)) {
-			var b = Parquet.to(is.readAllBytes(), Bean.class);
+			List<Bean> b = Parquet.DEFAULT.to(is.readAllBytes(), List.class, Bean.class);
 			assertBeans(b, "x,y", "test,42");
 		}
 	}
@@ -90,9 +91,9 @@ class Parquet_Test extends TestBase {
 		var b = new Bean();
 		b.x = "second";
 		b.y = 2;
-		var list = java.util.List.of(a, b);
-		var bytes = Parquet.of(list);
-		var parsed = Parquet.to(bytes, Bean.class);
+		var list = List.of(a, b);
+		var bytes = Parquet.DEFAULT.of(list);
+		List<Bean> parsed = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
 		assertBeans(parsed, "x,y", "first,1", "second,2");
 	}
 }

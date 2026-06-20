@@ -42,8 +42,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using the DEFAULT instance</jc>
- * 	byte[] <jv>protobuf</jv> = Protobuf.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
- * 	MyBean <jv>parsed</jv> = Protobuf.<jsf>DEFAULT</jsf>.read(<jv>protobuf</jv>, MyBean.<jk>class</jk>);
+ * 	byte[] <jv>protobuf</jv> = Protobuf.<jsf>DEFAULT</jsf>.of(<jv>myBean</jv>);
+ * 	MyBean <jv>parsed</jv> = Protobuf.<jsf>DEFAULT</jsf>.to(<jv>protobuf</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -57,105 +57,6 @@ public class Protobuf extends StreamMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Protobuf DEFAULT = new Protobuf();
-
-	/**
-	 * Serializes a Java object to protobuf binary bytes.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
-	 *
-	 * @param object The object to serialize.
-	 * @return The serialized protobuf binary bytes.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public static byte[] of(Object object) throws SerializeException {
-		return DEFAULT.write(object);
-	}
-
-	/**
-	 * Serializes a Java object to an output.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>, <jv>output</jv>)</c>.
-	 *
-	 * @param object The object to serialize.
-	 * @param output The output object (e.g. {@link OutputStream}, {@link File}).
-	 * @return The output object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static Object of(Object object, Object output) throws SerializeException, IOException {
-		DEFAULT.write(object, output);
-		return output;
-	}
-
-	/**
-	 * Parses protobuf binary bytes to the specified type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The protobuf binary byte array.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(byte[] input, Class<T> type) throws ParseException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses protobuf binary input to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(byte[] input, Type type, Type...args) throws ParseException {
-		return DEFAULT.read(input, type, args);
-	}
-
-	/**
-	 * Parses protobuf binary input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input (byte[], InputStream, File, or CharSequence with binaryFormat encoding).
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses protobuf binary input object to the specified Java type.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
-		return DEFAULT.read(input, type, args);
-	}
 
 	/**
 	 * Constructor.

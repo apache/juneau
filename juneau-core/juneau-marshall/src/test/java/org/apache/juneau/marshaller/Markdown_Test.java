@@ -34,7 +34,7 @@ class Markdown_Test extends TestBase {
 
 	@Test void d01_of() throws Exception {
 		var bean = JsonMap.of("name", "Alice", "age", 30);
-		var md = Markdown.of(bean);
+		var md = Markdown.DEFAULT.of(bean);
 		assertTrue(md.contains("| Key | Value |") || md.contains("| Property | Value |"), "Expected table header: " + md);
 		assertTrue(md.contains("| name | Alice |"), "Expected name: " + md);
 		assertTrue(md.contains("| age | 30 |"), "Expected age: " + md);
@@ -42,7 +42,7 @@ class Markdown_Test extends TestBase {
 
 	@Test void d02_write() throws Exception {
 		var bean = JsonMap.of("name", "Alice", "age", 30);
-		var md = Markdown.DEFAULT.write(bean);
+		var md = Markdown.DEFAULT.of(bean);
 		assertTrue(md.contains("| Key | Value |") || md.contains("| Property | Value |"), "Expected table header: " + md);
 		assertTrue(md.contains("| name | Alice |"), "Expected name: " + md);
 	}
@@ -50,7 +50,7 @@ class Markdown_Test extends TestBase {
 	@Test void d03_docMode() throws Exception {
 		var bean = JsonMap.of("name", "Alice", "age", 30);
 		var serializer = MarkdownDocSerializer.create().title("Person").build();
-		var md = new MarkdownDoc(serializer, MarkdownDocParser.DEFAULT).write(bean);
+		var md = ((CharMarshaller) new MarkdownDoc(serializer, MarkdownDocParser.DEFAULT)).of(bean);
 		assertTrue(md.contains("# Person"), "Expected H1 title: " + md);
 		assertTrue(md.contains("| Key | Value |") || md.contains("| Property | Value |"), "Expected table: " + md);
 		assertTrue(md.contains("| name | Alice |"), "Expected name: " + md);
@@ -59,7 +59,7 @@ class Markdown_Test extends TestBase {
 	@Test void d04_toOutput() throws Exception {
 		var bean = JsonMap.of("name", "Alice", "age", 30);
 		var sw = new StringWriter();
-		Markdown.DEFAULT.write(bean, sw);
+		Markdown.DEFAULT.of(bean, sw);
 		var md = sw.toString();
 		assertTrue(md.contains("| Key | Value |") || md.contains("| Property | Value |"), "Expected table header: " + md);
 		assertTrue(md.contains("| name | Alice |"), "Expected name: " + md);

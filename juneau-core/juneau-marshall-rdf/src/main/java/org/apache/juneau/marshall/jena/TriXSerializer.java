@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the TriX marshaller for convenience.</jc>
- * 	String <jv>triX</jv> = TriX.of(<jv>person</jv>);
+ * 	String <jv>triX</jv> = TriX.DEFAULT.of(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom serializer with swaps.</jc>

@@ -52,7 +52,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	@Test void a02_beanpOnPrimitiveFields_parser() {
-		var x = Json5.DEFAULT.read("{f1:1,f2:2}", A.class);
+		var x = Json5.DEFAULT.to("{f1:1,f2:2}", A.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -108,7 +108,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	@Test void b02_beanAnnotationParser_usingConfig() throws Exception {
-		var x = Json5.DEFAULT.read("{f1:1,f2:2}", B.class);
+		var x = Json5.DEFAULT.to("{f1:1,f2:2}", B.class);
 		assertEquals(0, x.f1);
 		assertEquals(2, x.f2);
 	}
@@ -225,7 +225,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	@Test void d02_beanAnnotation_bproAll_Parser() {
-		var x = Json5.DEFAULT.read("{f1:1,f2:2}", D.class);
+		var x = Json5.DEFAULT.to("{f1:1,f2:2}", D.class);
 		assertEquals(0, x.f1);
 		assertEquals(0, x.f2);
 	}
@@ -277,7 +277,7 @@ class ReadWriteOnlyProperties_Test extends TestBase {
 	}
 
 	@Test void e02_beanAnnotation_bpwoAll_Parser() throws Exception {
-		var x = Json5.DEFAULT.read("{f1:1,f2:2}", E.class);
+		var x = Json5.DEFAULT.to("{f1:1,f2:2}", E.class);
 		assertEquals(1, x.f1);
 		assertEquals(2, x.f2);
 	}

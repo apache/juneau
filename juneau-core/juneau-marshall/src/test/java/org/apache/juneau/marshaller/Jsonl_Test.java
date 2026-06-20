@@ -38,13 +38,13 @@ class Jsonl_Test extends TestBase {
 		var b = JsonMap.of("foo", "bar");
 		var c = list(JsonMap.of("a", 1), JsonMap.of("b", 2));
 
-		assertEquals("\"foo\"", Jsonl.of(a).trim());
-		assertEquals("\"foo\"", Jsonl.of(a, stringWriter()).toString().trim());
-		assertTrue(Jsonl.of(b).contains("\"foo\":\"bar\""));
+		assertEquals("\"foo\"", Jsonl.DEFAULT.of(a).trim());
+		{ var sw = stringWriter(); Jsonl.DEFAULT.of(a, sw); assertEquals("\"foo\"", sw.toString().trim()); }
+		assertTrue(Jsonl.DEFAULT.of(b).contains("\"foo\":\"bar\""));
 		var sw = new StringWriter();
-		Jsonl.of(b, sw);
+		Jsonl.DEFAULT.of(b, sw);
 		assertTrue(sw.toString().contains("\"foo\":\"bar\""));
-		var jsonl = Jsonl.of(c);
+		var jsonl = Jsonl.DEFAULT.of(c);
 		assertTrue(jsonl.contains("\"a\":1"));
 		assertTrue(jsonl.contains("\"b\":2"));
 		assertEquals(2, jsonl.split("\n").length);
@@ -55,13 +55,13 @@ class Jsonl_Test extends TestBase {
 		var b = "{\"foo\":\"bar\"}";
 		var c = "{\"a\":1}\n{\"b\":2}";
 
-		assertEquals("foo", Jsonl.to(a, String.class));
-		assertEquals("foo", Jsonl.to(stringReader(a), String.class));
-		var m = (Map<String,String>) Jsonl.to(b, Map.class, String.class, String.class);
+		assertEquals("foo", Jsonl.DEFAULT.to(a, String.class));
+		assertEquals("foo", Jsonl.DEFAULT.to(stringReader(a), String.class));
+		var m = (Map<String,String>) Jsonl.DEFAULT.to(b, Map.class, String.class, String.class);
 		assertEquals("bar", m.get("foo"));
-		m = (Map<String,String>) Jsonl.to(stringReader(b), Map.class, String.class, String.class);
+		m = (Map<String,String>) Jsonl.DEFAULT.to(stringReader(b), Map.class, String.class, String.class);
 		assertEquals("bar", m.get("foo"));
-		var list = (List<JsonMap>) Jsonl.to(c, List.class, JsonMap.class);
+		var list = (List<JsonMap>) Jsonl.DEFAULT.to(c, List.class, JsonMap.class);
 		assertEquals(2, list.size());
 		assertEquals(1, list.get(0).getInt("a"));
 		assertEquals(2, list.get(1).getInt("b"));
@@ -69,8 +69,8 @@ class Jsonl_Test extends TestBase {
 
 	@Test void a03_roundTrip() throws Exception {
 		var a = list(JsonMap.of("x", 1), JsonMap.of("y", 2));
-		var jsonl = Jsonl.of(a);
-		var b = (List<JsonMap>) Jsonl.to(jsonl, List.class, JsonMap.class);
+		var jsonl = Jsonl.DEFAULT.of(a);
+		var b = (List<JsonMap>) Jsonl.DEFAULT.to(jsonl, List.class, JsonMap.class);
 		assertEquals(2, b.size());
 		assertEquals(1, b.get(0).getInt("x"));
 		assertEquals(2, b.get(1).getInt("y"));
@@ -78,9 +78,9 @@ class Jsonl_Test extends TestBase {
 
 	@Test void a04_defaultInstance() throws Exception {
 		var a = list(JsonMap.of("k", "v"));
-		var jsonl = Jsonl.DEFAULT.write(a);
+		var jsonl = Jsonl.DEFAULT.of(a);
 		assertTrue(jsonl.contains("\"k\":\"v\""));
-		var b = (List<JsonMap>) Jsonl.DEFAULT.read(jsonl, List.class, JsonMap.class);
+		var b = (List<JsonMap>) Jsonl.DEFAULT.to(jsonl, List.class, JsonMap.class);
 		assertEquals(1, b.size());
 		assertEquals("v", b.get(0).getString("k"));
 	}

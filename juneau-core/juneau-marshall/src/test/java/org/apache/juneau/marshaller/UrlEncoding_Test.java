@@ -39,10 +39,10 @@ class UrlEncoding_Test extends TestBase {
 		var expected1 = "_value=foo";
 		var expected2 = "foo=bar";
 
-		assertString(expected1, UrlEncoding.of(in1));
-		assertString(expected1, UrlEncoding.of(in1,stringWriter()));
-		assertString(expected2, UrlEncoding.of(in2));
-		assertString(expected2, UrlEncoding.of(in2,stringWriter()));
+		assertString(expected1, UrlEncoding.DEFAULT.of(in1));
+		{ var sw1 = stringWriter(); UrlEncoding.DEFAULT.of(in1, sw1); assertString(expected1, sw1); }
+		assertString(expected2, UrlEncoding.DEFAULT.of(in2));
+		{ var sw2 = stringWriter(); UrlEncoding.DEFAULT.of(in2, sw2); assertString(expected2, sw2); }
 	}
 
 	@Test void a02_from() throws Exception {
@@ -51,10 +51,10 @@ class UrlEncoding_Test extends TestBase {
 		var expected1 = "foo";
 		var expected2 = "{foo:'bar'}";
 
-		assertEquals(expected1, UrlEncoding.to(in1, String.class));
-		assertEquals(expected1, UrlEncoding.to(stringReader(in1), String.class));
-		assertJson(expected2, UrlEncoding.to(in2, Map.class, String.class, String.class));
-		assertJson(expected2, UrlEncoding.to(stringReader(in2), Map.class, String.class, String.class));
+		assertEquals(expected1, UrlEncoding.DEFAULT.to(in1, String.class));
+		assertEquals(expected1, UrlEncoding.DEFAULT.to(stringReader(in1), String.class));
+		assertJson(expected2, UrlEncoding.DEFAULT.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, UrlEncoding.DEFAULT.to(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

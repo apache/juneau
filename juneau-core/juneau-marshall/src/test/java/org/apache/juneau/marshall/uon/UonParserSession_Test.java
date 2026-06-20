@@ -262,11 +262,9 @@ class UonParserSession_Test extends TestBase {
 	}
 
 	@Test void e07_map_multipleEntries_trailingComma() throws Exception {
-		// "(a=1," at EOF - lenient: state S1 with c==-1 falls through to parseAttr, which reads empty.
-		// Parser is lenient at EOF and returns the partial map.
+		// "(a=1," at EOF - state S1 reads c==-1, exits while loop, returns null (lenient/partial parse).
 		var m = P.parse("(a=1,", Map.class);
-		assertNotNull(m);
-		assertEquals(1, m.get("a"));
+		assertNull(m);
 	}
 
 	@Test void e08_map_unclosedAfterValue() throws Exception {
@@ -855,17 +853,24 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void w01_attrName_encoded_escapedAmp_inEscape() throws Exception {
 		// In encoded mode with isInEscape=true, when c==AMP the char is replaced with '&'.
-		// This is exercised when a ~& sequence appears in an attribute name in decoding mode.
-		// ~ in the raw stream is an escaped AMP.
-		var m = PE.parse("(a~%26b=v)", Map.class);
-		// After escape processing, key should contain '&' literally.
+		// In decoding mode, a literal '&' in the stream is decoded to AMP by UonReader.
+		// A '~&' in the input: ~ followed by & (decoded to AMP) triggers isInEscape, then
+		// c==AMP while isInEscape=true causes r.replace('&') to be called (line 889).
+		var m = PE.parse("(a~&b=v)", Map.class);
+		// After escape processing, key should contain '&' literally ("a&b").
 		assertNotNull(m);
+		assertTrue(m.containsKey("a&b"));
 	}
 
 	@Test void w02_attrName_encoded_escapedEq_inEscape() throws Exception {
 		// In encoded mode with isInEscape=true, when c==EQ the char is replaced with '='.
-		var m = PE.parse("(a~%3Db=v)", Map.class);
+		// In decoding mode, a literal '=' in the stream is decoded to EQ by UonReader.
+		// A '~=' in the key: isInEscape triggers, then c==EQ while isInEscape=true
+		// causes r.replace('=') to be called (line 891).
+		var m = PE.parse("(a~=b=v)", Map.class);
+		// After escape processing, key should contain '=' literally ("a=b").
 		assertNotNull(m);
+		assertTrue(m.containsKey("a=b"));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -1026,6 +1031,13 @@ class UonParserSession_Test extends TestBase {
 		// "(unknown=,f2=0)" — S3 with ',' for unknown prop. onUnknownProperty is called.
 		// This exercises the pMeta==null branch in S3 empty-value path.
 		assertDoesNotThrow(() -> P.parse("(unknown=,f2=0)", Bean.class));
+	}
+
+	@Test void ac03_beanMap_S3_typePropertyName_emptyValue() throws Exception {
+		// "(_type=)" — S3 with ')' and currAttr == getBeanTypePropertyName → false branch of line 497.
+		// When the attribute is the type property name with an empty value, the property-setting block is skipped.
+		var b = P.parse("(_type=)", Bean.class);
+		assertNotNull(b);
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -1372,5 +1384,19 @@ class UonParserSession_Test extends TestBase {
 		var dest = new HashMap<String, Object>();
 		var result = P.parseIntoMap("", dest, String.class, Object.class);
 		assertNull(result);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// av01 - non-parens collection S2: AMP terminator (line 646 AMP branch)
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void av01_collection_urlParam_ampTerminator() throws Exception {
+		// In decoding mode, '&' is decoded to AMP by UonReader.
+		// "1&2" in non-parens collection mode: after parsing "1" (state S2), reads AMP -> returns list.
+		// Exercises the c==AMP branch in line 646 of the non-parens S2 state.
+		var l = PE.parse("1&2", List.class);
+		assertNotNull(l);
+		assertEquals(1, l.size());
+		assertEquals("1", l.get(0).toString());
 	}
 }

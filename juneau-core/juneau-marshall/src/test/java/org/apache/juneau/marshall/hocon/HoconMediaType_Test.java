@@ -50,9 +50,9 @@ class HoconMediaType_Test {
 	@Test
 	void j03_contentNegotiation() throws Exception {
 		var a = JsonMap.of("name", "test", "count", 42);
-		var hocon = org.apache.juneau.marshall.marshaller.Hocon.of(a);
+		var hocon = org.apache.juneau.marshall.marshaller.Hocon.DEFAULT.of(a);
 		assertNotNull(hocon);
-		var b = (Map<String, Object>) org.apache.juneau.marshall.marshaller.Hocon.to(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) org.apache.juneau.marshall.marshaller.Hocon.DEFAULT.to(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
 	}
 }

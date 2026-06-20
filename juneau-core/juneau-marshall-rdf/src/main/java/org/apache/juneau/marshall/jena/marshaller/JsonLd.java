@@ -39,8 +39,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </p>
  * <p class='bcode'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = JsonLd.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = JsonLd.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = JsonLd.<jsf>DEFAULT</jsf>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = JsonLd.<jsf>DEFAULT</jsf>.of(<jv>myPojo</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age, JSON-LD format):</h5>
@@ -69,87 +69,6 @@ public class JsonLd extends CharMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final JsonLd DEFAULT = new JsonLd();
-
-	/**
-	 * Serializes a Java object to a JSON-LD string.
-	 *
-	 * @param object The object to serialize.
-	 * @return The serialized object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public static String of(Object object) throws SerializeException {
-		return DEFAULT.write(object);
-	}
-
-	/**
-	 * Serializes a Java object to JSON-LD output.
-	 *
-	 * @param object The object to serialize.
-	 * @param output The output object.
-	 * @return The output object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static Object of(Object object, Object output) throws SerializeException, IOException {
-		DEFAULT.write(object, output);
-		return output;
-	}
-
-	/**
-	 * Parses a JSON-LD input object to the specified Java type.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses a JSON-LD input object to the specified Java type.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Type type, Type... args) throws ParseException, IOException {
-		return DEFAULT.read(input, type, args);
-	}
-
-	/**
-	 * Parses a JSON-LD input string to the specified type.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(String input, Class<T> type) throws ParseException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses a JSON-LD input string to the specified Java type.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @param args The type arguments of the class if it's a collection or map.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(String input, Type type, Type... args) throws ParseException {
-		return DEFAULT.read(input, type, args);
-	}
 
 	/**
 	 * Constructor.

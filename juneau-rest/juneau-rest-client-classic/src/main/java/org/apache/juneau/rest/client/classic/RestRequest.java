@@ -1740,7 +1740,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest serializerSessionOptionsHeader(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return header(HEADER_JuneauSerializerOptions, Json5.of(properties));
+		return header(HEADER_JuneauSerializerOptions, Json5.DEFAULT.of(properties));
 	}
 
 	/**
@@ -1754,7 +1754,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest parserSessionOptionsHeader(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return header(HEADER_JuneauParserOptions, Json5.of(properties));
+		return header(HEADER_JuneauParserOptions, Json5.DEFAULT.of(properties));
 	}
 
 	/**
@@ -1793,7 +1793,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest serializerSessionOptionsQuery(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return serializerSessionOptionsQuery(Uon.of(properties));
+		return serializerSessionOptionsQuery(Uon.DEFAULT.of(properties));
 	}
 
 	/**
@@ -1807,7 +1807,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest parserSessionOptionsQuery(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return parserSessionOptionsQuery(Uon.of(properties));
+		return parserSessionOptionsQuery(Uon.DEFAULT.of(properties));
 	}
 
 	/**

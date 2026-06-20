@@ -53,16 +53,16 @@ class ProtobufMediaType_Test extends TestBase {
 
 	@Test
 	void j01_marshallerRoundTrip() throws Exception {
-		var bytes = org.apache.juneau.marshall.marshaller.Protobuf.of(new ProtobufSerializer_Test.Simple(150, "testing"));
-		var b = org.apache.juneau.marshall.marshaller.Protobuf.to(bytes, ProtobufSerializer_Test.Simple.class);
+		var bytes = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.of(new ProtobufSerializer_Test.Simple(150, "testing"));
+		var b = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.to(bytes, ProtobufSerializer_Test.Simple.class);
 		assertEquals(150, b.id);
 		assertEquals("testing", b.name);
 	}
 
 	@Test
 	void j02_marshallerDefaultWriteRead() throws Exception {
-		var bytes = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.write(new ProtobufSerializer_Test.Simple(7, "x"));
-		var b = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.read(bytes, ProtobufSerializer_Test.Simple.class);
+		var bytes = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.of(new ProtobufSerializer_Test.Simple(7, "x"));
+		var b = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.to(bytes, ProtobufSerializer_Test.Simple.class);
 		assertEquals(7, b.id);
 	}
 }

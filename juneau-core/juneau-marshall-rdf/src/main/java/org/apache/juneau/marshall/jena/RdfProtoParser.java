@@ -28,12 +28,12 @@ import java.io.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Parse RDF/PROTO bytes into a bean.</jc>
- * 	<jk>byte</jk>[] <jv>protoBytes</jv> = RdfProto.of(<jv>person</jv>);
+ * 	<jk>byte</jk>[] <jv>protoBytes</jv> = RdfProto.DEFAULT.of(<jv>person</jv>);
  * 	Person <jv>person</jv> = RdfProtoParser.<jsf>DEFAULT</jsf>.parse(<jv>protoBytes</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfProto marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = RdfProto.to(<jv>protoBytes</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfProto.DEFAULT.to(<jv>protoBytes</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map with key/value types.</jc>

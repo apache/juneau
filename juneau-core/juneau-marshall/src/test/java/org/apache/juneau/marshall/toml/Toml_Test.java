@@ -35,10 +35,10 @@ class Toml_Test {
 		m.put("a", "1");
 		m.put("b", 2);
 
-		String toml = Toml.of(m);
+		String toml = Toml.DEFAULT.of(m);
 		assertNotNull(toml);
 
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("1", parsed.getString("a"));
 		assertEquals(2, parsed.getInt("b"));
 	}
@@ -46,32 +46,32 @@ class Toml_Test {
 	@Test
 	void a02_roundTripString() {
 		var m = JsonMap.of("s", "hello");
-		String toml = Toml.of(m);
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		String toml = Toml.DEFAULT.of(m);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("hello", parsed.getString("s"));
 	}
 
 	@Test
 	void a03_roundTripNumber() {
 		var m = JsonMap.of("n", 42);
-		String toml = Toml.of(m);
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		String toml = Toml.DEFAULT.of(m);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(42, parsed.getInt("n"));
 	}
 
 	@Test
 	void a04_roundTripBoolean() {
 		var m = JsonMap.of("b", true);
-		String toml = Toml.of(m);
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		String toml = Toml.DEFAULT.of(m);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertTrue(parsed.getBoolean("b"));
 	}
 
 	@Test
 	void a05_roundTripList() {
 		var m = JsonMap.of("tags", List.of("a", "b", "c"));
-		String toml = Toml.of(m);
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		String toml = Toml.DEFAULT.of(m);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var list = parsed.getList("tags", String.class, List.of());
 		assertEquals(3, list.size());
 		assertEquals("a", list.get(0));
@@ -88,8 +88,8 @@ class Toml_Test {
 		config.put("name", "myapp");
 		config.put("database", db);
 
-		String toml = Toml.of(config);
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		String toml = Toml.DEFAULT.of(config);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("myapp", parsed.getString("name"));
 		JsonMap dbParsed = parsed.getMap("database");
 		assertNotNull(dbParsed);
@@ -112,7 +112,7 @@ class Toml_Test {
 			name = "Nail"
 			sku = 284758393
 			""";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var products = parsed.getList("products");
 		assertNotNull(products);
 		assertEquals(2, products.size());
@@ -136,7 +136,7 @@ class Toml_Test {
 			name = "Nail"
 			sku = 284758393
 			""";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("Store", parsed.getString("title"));
 		var products = parsed.getList("products");
 		assertNotNull(products);
@@ -154,7 +154,7 @@ class Toml_Test {
 	@Test
 	void c01_parseInlineTable() {
 		var toml = "point = {x = 1, y = 2}\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		JsonMap point = parsed.getMap("point");
 		assertNotNull(point);
 		assertEquals(1L, point.get("x"));
@@ -164,7 +164,7 @@ class Toml_Test {
 	@Test
 	void c02_parseNestedInlineTable() {
 		var toml = "config = {db = {host = \"localhost\", port = 5432}}\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var config = parsed.get("config");
 		assertNotNull(config);
 		assertTrue(config instanceof Map, "Expected Map for config");
@@ -205,21 +205,21 @@ class Toml_Test {
 	@Test
 	void d01_parseBasicStringWithEscapes() {
 		var toml = "msg = \"line1\\nline2\\ttab\"\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("line1\nline2\ttab", parsed.getString("msg"));
 	}
 
 	@Test
 	void d02_parseBasicStringWithUnicode() {
 		var toml = "emoji = \"\\u0041\"\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("A", parsed.getString("emoji"));
 	}
 
 	@Test
 	void d03_parseLiteralString() {
 		var toml = "path = 'C:\\Users\\admin'\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		// Literal strings have no escape processing
 		assertEquals("C:\\Users\\admin", parsed.getString("path"));
 	}
@@ -231,14 +231,14 @@ class Toml_Test {
 	@Test
 	void e01_parseLiteralStringNoEscapes() {
 		var toml = "regex = '\\d{2} apps'\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("\\d{2} apps", parsed.getString("regex"));
 	}
 
 	@Test
 	void e02_parseLiteralStringPreservesBackslash() {
 		var toml = "path = 'C:\\path\\to\\file'\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("C:\\path\\to\\file", parsed.getString("path"));
 	}
 
@@ -249,7 +249,7 @@ class Toml_Test {
 	@Test
 	void f01_parseOffsetDateTime() {
 		var toml = "odt = 1979-05-27T07:32:00Z\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var value = parsed.get("odt");
 		assertNotNull(value);
 		assertTrue(value instanceof OffsetDateTime, "Expected OffsetDateTime, got " + cn(value));
@@ -262,7 +262,7 @@ class Toml_Test {
 	@Test
 	void f02_parseLocalDateTime() {
 		var toml = "ldt = 1979-05-27T07:32:00\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var value = parsed.get("ldt");
 		assertNotNull(value);
 		assertTrue(value instanceof LocalDateTime, "Expected LocalDateTime, got " + cn(value));
@@ -274,7 +274,7 @@ class Toml_Test {
 	@Test
 	void f03_parseLocalDate() {
 		var toml = "ld = 1979-05-27\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var value = parsed.get("ld");
 		assertNotNull(value);
 		// Parser may return as string for later conversion or as LocalDate
@@ -288,7 +288,7 @@ class Toml_Test {
 	@Test
 	void f04_parseLocalTime() {
 		var toml = "lt = 07:32:00\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var value = parsed.get("lt");
 		assertNotNull(value);
 		// Bare time values may be returned as String for later conversion
@@ -303,7 +303,7 @@ class Toml_Test {
 	@Test
 	void f05_parseOffsetDateTimeWithOffset() {
 		var toml = "odt = 1979-05-27T07:32:00+05:30\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var value = parsed.get("odt");
 		assertNotNull(value);
 		assertTrue(value instanceof OffsetDateTime, "Expected OffsetDateTime, got " + cn(value));
@@ -318,13 +318,13 @@ class Toml_Test {
 	@Test
 	void g01_invalidEscapeSequence() {
 		var toml = "bad = \"hello\\qworld\"\n";
-		assertThrows(ParseException.class, () -> Toml.to(toml, JsonMap.class));
+		assertThrows(ParseException.class, () -> Toml.DEFAULT.to(toml, JsonMap.class));
 	}
 
 	@Test
 	void g02_unterminatedString() {
 		var toml = "bad = \"hello\n";
-		assertThrows(ParseException.class, () -> Toml.to(toml, JsonMap.class));
+		assertThrows(ParseException.class, () -> Toml.DEFAULT.to(toml, JsonMap.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -376,7 +376,7 @@ class Toml_Test {
 			# Another comment
 			port = 8080
 			""";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("test", parsed.getString("name"));
 		assertEquals(8080L, parsed.get("port"));
 	}
@@ -384,7 +384,7 @@ class Toml_Test {
 	@Test
 	void i02_dottedKeys() {
 		var toml = "physical.color = \"orange\"\nphysical.shape = \"round\"\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		JsonMap physical = parsed.getMap("physical");
 		assertNotNull(physical);
 		assertEquals("orange", physical.get("color"));
@@ -398,7 +398,7 @@ class Toml_Test {
 			neg = -0.5
 			sci = 1.5e2
 			""";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(3.14159, (Double) parsed.get("pi"), 0.00001);
 		assertEquals(-0.5, (Double) parsed.get("neg"), 0.00001);
 		assertEquals(150.0, (Double) parsed.get("sci"), 0.00001);
@@ -411,7 +411,7 @@ class Toml_Test {
 			pos = +17
 			zero = 0
 			""";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(-42L, parsed.get("neg"));
 		assertEquals(17L, parsed.get("pos"));
 		assertEquals(0L, parsed.get("zero"));
@@ -420,14 +420,14 @@ class Toml_Test {
 	@Test
 	void i05_underscoresInNumbers() {
 		var toml = "big = 1_000_000\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(1000000L, parsed.get("big"));
 	}
 
 	@Test
 	void i06_emptyInput() {
 		var toml = "";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		// Empty TOML produces null or empty map
 		assertTrue(parsed == null || parsed.isEmpty());
 	}
@@ -435,7 +435,7 @@ class Toml_Test {
 	@Test
 	void i07_quotedKeys() {
 		var toml = "\"key with spaces\" = \"value\"\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("value", parsed.get("key with spaces"));
 	}
 
@@ -449,7 +449,7 @@ class Toml_Test {
 		m.put("pos_inf", Double.POSITIVE_INFINITY);
 		m.put("neg_inf", Double.NEGATIVE_INFINITY);
 		m.put("nan_val", Double.NaN);
-		String toml = Toml.of(m);
+		String toml = Toml.DEFAULT.of(m);
 		assertTrue(toml.contains("inf"));
 		assertTrue(toml.contains("-inf"));
 		assertTrue(toml.contains("nan"));
@@ -458,7 +458,7 @@ class Toml_Test {
 	@Test
 	void j02_serializeEscapedStrings() {
 		var m = JsonMap.of("msg", "hello\nworld\t\"quoted\"");
-		String toml = Toml.of(m);
+		String toml = Toml.DEFAULT.of(m);
 		assertTrue(toml.contains("\\n"), "Should contain escaped newline");
 		assertTrue(toml.contains("\\t"), "Should contain escaped tab");
 		assertTrue(toml.contains("\\\""), "Should contain escaped quote");
@@ -467,8 +467,8 @@ class Toml_Test {
 	@Test
 	void j03_roundTripEscapedStrings() {
 		var m = JsonMap.of("msg", "line1\nline2\ttab");
-		String toml = Toml.of(m);
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		String toml = Toml.DEFAULT.of(m);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("line1\nline2\ttab", parsed.getString("msg"));
 	}
 
@@ -488,7 +488,7 @@ class Toml_Test {
 			host = "beta"
 			port = 9090
 			""";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		var servers = parsed.getList("servers");
 		assertNotNull(servers);
 		assertEquals(2, servers.size());
@@ -505,7 +505,7 @@ class Toml_Test {
 	@Test
 	void l01_quotedKeyForSpecialChars() {
 		var m = JsonMap.of("key.with.dots", "value1", "key with spaces", "value2");
-		String toml = Toml.of(m);
+		String toml = Toml.DEFAULT.of(m);
 		assertTrue(toml.contains("\"key.with.dots\"") || toml.contains("'key.with.dots'"),
 			"Keys with dots should be quoted");
 		assertTrue(toml.contains("\"key with spaces\"") || toml.contains("'key with spaces'"),
@@ -545,21 +545,21 @@ class Toml_Test {
 	@Test
 	void n01_parseMultiLineBasicString() {
 		var toml = "msg = \"\"\"line1\nline2\"\"\"\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("line1\nline2", parsed.getString("msg"));
 	}
 
 	@Test
 	void n02_parseMultiLineLiteralString() {
 		var toml = "msg = '''line1\nline2'''\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("line1\nline2", parsed.getString("msg"));
 	}
 
 	@Test
 	void n03_parseMultiLineBasicStringWithEscapes() {
 		var toml = "msg = \"\"\"hello \\\"world\\\"\"\"\"\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals("hello \"world\"", parsed.getString("msg"));
 	}
 
@@ -570,35 +570,35 @@ class Toml_Test {
 	@Test
 	void o01_parseHexInteger() {
 		var toml = "n = 0xFF\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(255L, parsed.get("n"));
 	}
 
 	@Test
 	void o02_parseHexIntegerLowerCase() {
 		var toml = "n = 0xdeadbeef\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(0xdeadbeefL, parsed.get("n"));
 	}
 
 	@Test
 	void o03_parseOctalInteger() {
 		var toml = "n = 0o755\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(0755L, parsed.get("n"));
 	}
 
 	@Test
 	void o04_parseBinaryInteger() {
 		var toml = "n = 0b1010\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(10L, parsed.get("n"));
 	}
 
 	@Test
 	void o05_parseHexIntegerWithUnderscores() {
 		var toml = "n = 0xFFFF_FFFF\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(0xFFFFFFFFL, parsed.get("n"));
 	}
 
@@ -609,28 +609,28 @@ class Toml_Test {
 	@Test
 	void p01_parsePositiveInfinity() {
 		var toml = "x = inf\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, (Double) parsed.get("x"));
 	}
 
 	@Test
 	void p02_parseExplicitPositiveInfinity() {
 		var toml = "x = +inf\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(Double.POSITIVE_INFINITY, (Double) parsed.get("x"));
 	}
 
 	@Test
 	void p03_parseNegativeInfinity() {
 		var toml = "x = -inf\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertEquals(Double.NEGATIVE_INFINITY, (Double) parsed.get("x"));
 	}
 
 	@Test
 	void p04_parseNan() {
 		var toml = "x = nan\n";
-		JsonMap parsed = Toml.to(toml, JsonMap.class);
+		JsonMap parsed = Toml.DEFAULT.to(toml, JsonMap.class);
 		assertTrue(Double.isNaN((Double) parsed.get("x")));
 	}
 }

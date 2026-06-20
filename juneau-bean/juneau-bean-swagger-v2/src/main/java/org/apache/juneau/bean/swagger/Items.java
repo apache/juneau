@@ -470,7 +470,7 @@ public class Items extends SwaggerElement {
 	 */
 	public Items setCollectionFormat(String value) {
 		if (isStrict() && ! contains(value, VALID_COLLECTION_FORMATS))
-			throw rex("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_COLLECTION_FORMATS));
+			throw rex("Invalid value passed in to setCollectionFormat(String).  Value=''{0}'', valid values={1}", value, Json5.DEFAULT.of(VALID_COLLECTION_FORMATS));
 		collectionFormat = value;
 		return this;
 	}
@@ -725,7 +725,7 @@ public class Items extends SwaggerElement {
 	 */
 	public Items setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw rex("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
+			throw rex("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.DEFAULT.of(VALID_TYPES));
 		type = value;
 		return this;
 	}

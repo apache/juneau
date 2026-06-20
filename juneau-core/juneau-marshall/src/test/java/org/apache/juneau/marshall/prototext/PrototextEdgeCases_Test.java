@@ -30,21 +30,21 @@ class PrototextEdgeCases_Test {
 
 	@Test
 	void g01_emptyInput() {
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to("", JsonMap.class);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to("", JsonMap.class);
 		assertTrue(b == null || b.isEmpty());
 	}
 
 	@Test
 	void g02_onlyComments() {
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to("# comment one\n# comment two\n", JsonMap.class);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to("# comment one\n# comment two\n", JsonMap.class);
 		assertTrue(b == null || b.isEmpty());
 	}
 
 	@Test
 	void g03_unicodeStrings() {
 		var a = JsonMap.of("name", "José", "city", "北京");
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
 		assertEquals("José", b.get("name"));
 		assertEquals("北京", b.get("city"));
 	}
@@ -53,8 +53,8 @@ class PrototextEdgeCases_Test {
 	void g04_veryLongStrings() {
 		var longStr = "x".repeat(10000);
 		var a = JsonMap.of("s", longStr);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
 		assertEquals(longStr, b.get("s"));
 	}
 
@@ -63,8 +63,8 @@ class PrototextEdgeCases_Test {
 		var inner = JsonMap.of("x", 1);
 		for (var i = 0; i < 10; i++)
 			inner = JsonMap.of("nested", inner);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(inner);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(inner);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
 		for (var m = b; m != null; m = m.getMap("nested"))
 			if (m.containsKey("x"))
 				assertEquals(1L, m.get("x"));
@@ -73,7 +73,7 @@ class PrototextEdgeCases_Test {
 	@Test
 	void g06_windowsLineEndings() {
 		var input = "a: 1\r\nb: 2";
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(input, JsonMap.class);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(input, JsonMap.class);
 		assertEquals(1L, b.get("a"));
 		assertEquals(2L, b.get("b"));
 	}
@@ -81,7 +81,7 @@ class PrototextEdgeCases_Test {
 	@Test
 	void g07_mixedSeparators() {
 		var input = "a: 1\nb: 2; c: 3, d: 4";
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(input, JsonMap.class);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(input, JsonMap.class);
 		assertEquals(1L, b.get("a"));
 		assertEquals(2L, b.get("b"));
 		assertEquals(3L, b.get("c"));
@@ -93,14 +93,14 @@ class PrototextEdgeCases_Test {
 		var a = new JsonMap();
 		a.put("name", "self");
 		a.put("ref", a);
-		assertThrows(Exception.class, () -> org.apache.juneau.marshall.marshaller.Prototext.of(a));
+		assertThrows(Exception.class, () -> org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a));
 	}
 
 	@Test
 	void g09_optionalProperties() {
 		var a = JsonMap.of("present", "yes");
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
 		assertEquals("yes", b.get("present"));
 	}
 
@@ -109,15 +109,15 @@ class PrototextEdgeCases_Test {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("k1", "one");
 		a.put("k2", "two");
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
+		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
 		assertEquals("one", b.get("k1"));
 		assertEquals("two", b.get("k2"));
 	}
 
 	@Test
 	void g11_emptyMessages() {
-		var a = org.apache.juneau.marshall.marshaller.Prototext.to("outer { }", JsonMap.class);
+		var a = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to("outer { }", JsonMap.class);
 		var inner = a.getMap("outer");
 		assertNotNull(inner);
 		assertTrue(inner.isEmpty());
@@ -125,7 +125,7 @@ class PrototextEdgeCases_Test {
 
 	@Test
 	void g12_trailingComma() {
-		var a = org.apache.juneau.marshall.marshaller.Prototext.to("a: 1, b: 2,", JsonMap.class);
+		var a = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to("a: 1, b: 2,", JsonMap.class);
 		assertEquals(1L, a.get("a"));
 		assertEquals(2L, a.get("b"));
 	}

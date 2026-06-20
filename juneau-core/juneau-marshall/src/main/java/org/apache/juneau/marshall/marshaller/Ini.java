@@ -38,8 +38,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = Ini.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = Ini.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = Ini.<jsf>DEFAULT</jsf>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = Ini.<jsf>DEFAULT</jsf>.of(<jv>myPojo</jv>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>
@@ -76,87 +76,6 @@ public class Ini extends CharMarshaller {
 
 	/** Default reusable instance, readable format. */
 	public static final Ini DEFAULT_READABLE = new Ini(IniSerializer.DEFAULT_READABLE, IniParser.DEFAULT);
-
-	/**
-	 * Serializes a Java object to an INI string.
-	 *
-	 * @param object The object to serialize.
-	 * @return The serialized object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 */
-	public static String of(Object object) throws SerializeException {
-		return DEFAULT.write(object);
-	}
-
-	/**
-	 * Serializes a Java object to INI output.
-	 *
-	 * @param object The object to serialize.
-	 * @param output The output (Writer, OutputStream, File, StringBuilder).
-	 * @return The output object.
-	 * @throws SerializeException If a problem occurred trying to convert the output.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static Object of(Object object, Object output) throws SerializeException, IOException {
-		DEFAULT.write(object, output);
-		return output;
-	}
-
-	/**
-	 * Parses INI input to the specified Java type.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Class<T> type) throws ParseException, IOException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses INI input to the specified Java type.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @param args The type arguments for maps and collections.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 * @throws IOException Thrown by underlying stream.
-	 */
-	public static <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
-		return DEFAULT.read(input, type, args);
-	}
-
-	/**
-	 * Parses an INI string to the specified type.
-	 *
-	 * @param <T> The class type of the object being created.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(String input, Class<T> type) throws ParseException {
-		return DEFAULT.read(input, type);
-	}
-
-	/**
-	 * Parses an INI string to the specified Java type.
-	 *
-	 * @param <T> The class type of the object to create.
-	 * @param input The input.
-	 * @param type The object type to create.
-	 * @param args The type arguments for maps and collections.
-	 * @return The parsed object.
-	 * @throws ParseException Malformed input encountered.
-	 */
-	public static <T> T to(String input, Type type, Type...args) throws ParseException {
-		return DEFAULT.read(input, type, args);
-	}
 
 	/**
 	 * Constructor.

@@ -40,7 +40,7 @@ import org.apache.juneau.commons.bean.*;
  * <p>
  * The payload field {@link #getData() data} is a <b>pre-serialized</b> {@link String} — the SSE
  * serializer does not compose with a delegate marshaller. Callers that need a typed payload should
- * serialize it themselves (e.g. via {@link org.apache.juneau.marshall.marshaller.Json#of(Object) Json.of(x)})
+ * serialize it themselves (e.g. via {@link org.apache.juneau.marshall.marshaller.Json#of(Object) Json.DEFAULT.of(x)})
  * and assign the resulting string to {@link #setData(String) setData(...)}. The serializer will
  * split that string on {@code \n} into multiple <c>data:</c> lines per spec.
  *

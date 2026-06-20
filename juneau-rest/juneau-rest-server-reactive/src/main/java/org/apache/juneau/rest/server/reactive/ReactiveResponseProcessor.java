@@ -285,7 +285,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 			SseSerializer.DEFAULT.serialize(ev, w);
 			return;
 		}
-		var data = element instanceof CharSequence c ? c.toString() : Json.of(element);
+		var data = element instanceof CharSequence c ? c.toString() : Json.DEFAULT.of(element);
 		SseSerializer.DEFAULT.serialize(new SseEvent(null, data), w);
 	}
 
@@ -295,7 +295,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws SerializeException {
 		if (element == null)
 			return;
-		var json = element instanceof CharSequence c ? c.toString() : Json.of(element);
+		var json = element instanceof CharSequence c ? c.toString() : Json.DEFAULT.of(element);
 		w.write(json);
 		w.write("\n");
 		w.flush();

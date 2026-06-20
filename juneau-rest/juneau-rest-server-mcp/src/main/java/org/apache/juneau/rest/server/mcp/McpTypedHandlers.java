@@ -94,8 +94,8 @@ public final class McpTypedHandlers {
 		if (arguments == null || arguments.isEmpty())
 			return null;
 		try {
-			var json = Json.of(arguments);
-			return Json.to(json, type);
+			var json = Json.DEFAULT.of(arguments);
+			return Json.DEFAULT.to(json, type);
 		} catch (Exception e) {
 			throw new McpException(McpDispatcher.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
 		}
@@ -111,7 +111,7 @@ public final class McpTypedHandlers {
 			text = s;
 		else {
 			try {
-				text = Json.of(result);
+				text = Json.DEFAULT.of(result);
 			} catch (Exception e) {
 				throw new McpException(McpDispatcher.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
 			}

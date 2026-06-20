@@ -44,9 +44,9 @@ class PrototextMediaType_Test {
 	@Test
 	void a03_contentNegotiation() {
 		var bean = JsonMap.of("x", 1);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.of(bean);
+		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(bean);
 		assertNotNull(proto);
-		var parsed = org.apache.juneau.marshall.marshaller.Prototext.to(proto, JsonMap.class);
+		var parsed = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
 		assertEquals(1L, parsed.get("x"));
 	}
 }
