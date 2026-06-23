@@ -1437,32 +1437,32 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/10.08.RestServerComposition',
-							label: '10.8. REST Server — Mixins and Multi-Mount Paths',
+							label: '10.8. Mixins and Multi-Mount Paths',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.09.RestServerMixinSubContexts',
-							label: '10.9. REST Server — Mixin Sub-Contexts',
+							label: '10.9. Mixin Sub-Contexts',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.10.RestServerStandaloneVsMixin',
-							label: '10.10. REST Server — Standalone vs Mixin Resources',
+							label: '10.10. Standalone vs Mixin Resources',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.10.05.RestServerChildrenVsMixins',
-							label: '10.10.5. REST Server — Children vs Mixins',
+							label: '10.10.5. Children vs Mixins',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.11.RestServerSelfRegistration',
-							label: '10.11. REST Server — Self-Registration',
+							label: '10.11. Self-Registration',
 						},
 						{
 							type: 'doc',
 							id: 'topics/10.12.RestServerProgrammaticBuilder',
-							label: '10.12. REST Server — Programmatic Fluent Builder',
+							label: '10.12. Programmatic Fluent Builder',
 						},
 						{
 							type: 'doc',
@@ -1690,6 +1690,16 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
+							id: 'topics/10.40.01.RestServerMicrometerMetrics',
+							label: '10.40.01. Micrometer Metrics Bridge',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.40.02.RestServerOtelTracing',
+							label: '10.40.02. OpenTelemetry Tracing Bridge',
+						},
+						{
+							type: 'doc',
 							id: 'topics/10.41.RestServerAsyncDispatch',
 							label: '10.41. Async Returns + Virtual-Thread Dispatch',
 						},
@@ -1773,13 +1783,18 @@ const sidebars: SidebarsConfig = {
 							id: 'topics/10.57.OtherNotes',
 							label: '10.57. Other Notes',
 						},
-						{
-							type: 'doc',
-							id: 'topics/10.58.Log4j',
-							label: '10.58. Using LOG4J for logging',
-						},
-					],
-				},
+					{
+						type: 'doc',
+						id: 'topics/10.58.Log4j',
+						label: '10.58. Using LOG4J for logging',
+					},
+					{
+						type: 'doc',
+						id: 'topics/10.59.RestServerManagementLogging',
+						label: '10.59. Management / Logging Surface (juneau-rest-server-management-logging)',
+					},
+				],
+			},
 				{
 					type: 'category',
 					label: '11. juneau-rest-server-mcp',
@@ -1963,13 +1978,45 @@ const sidebars: SidebarsConfig = {
 								},
 							],
 						},
-						{
-							type: 'doc',
-							id: 'topics/13.15.NextGenRestClient',
-							label: '13.15. Next-Generation REST Client (Beta)',
-						},
-					],
-				},
+					{
+						type: 'doc',
+						id: 'topics/13.15.NextGenRestClient',
+						label: '13.15. Next-Generation REST Client (Beta)',
+					},
+					{
+						type: 'category',
+						label: '13.16. HTTP Transport Adapters',
+						collapsed: true,
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/13.16.RestClientTransportAdapters',
+								label: '13.16. HTTP Transport Adapters Overview',
+							},
+							{
+								type: 'doc',
+								id: 'topics/13.16.01.RestClientApacheHttpClient45',
+								label: '13.16.1. Apache HttpClient 4.5 Transport',
+							},
+							{
+								type: 'doc',
+								id: 'topics/13.16.02.RestClientApacheHttpClient50',
+								label: '13.16.2. Apache HttpClient 5.0 Transport',
+							},
+							{
+								type: 'doc',
+								id: 'topics/13.16.03.RestClientOkHttp',
+								label: '13.16.3. OkHttp Transport',
+							},
+							{
+								type: 'doc',
+								id: 'topics/13.16.04.RestClientJetty',
+								label: '13.16.4. Jetty HTTP Client Transport',
+							},
+						],
+					},
+				],
+			},
 				{
 					type: 'category',
 					label: '14. juneau-rest-mock',
@@ -2111,149 +2158,195 @@ const sidebars: SidebarsConfig = {
 						},
 					],
 				},
-				{
-					type: 'category',
-					label: '17. Dependency Management',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/17.01.DependencyManagement',
-							label: '17.1. Dependency Management (BOM & Bundles)',
-						},
-						{
-							type: 'doc',
-							id: 'topics/17.02.NativeImageAndLayeredJars',
-							label: '17.2. GraalVM Native Image & Docker Layering',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '18. Starter Projects',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/18.01.StarterProjects',
-							label: '18.1. Starter Projects',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '19. juneau-petstore',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/19.01.JuneauPetstoreOverview',
-							label: '19.1. juneau-petstore Overview',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '20. juneau-examples',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/20.01.JuneauExamplesCore',
-							label: '20.1. juneau-examples-core',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '21. juneau-shaded',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/21.01.JuneauShadedOverview',
-							label: '21.1. Juneau Shaded Artifacts',
-						},
-						{
-							type: 'doc',
-							id: 'topics/21.02.JuneauShadedCore',
-							label: '21.2. juneau-shaded-core',
-						},
-						{
-							type: 'doc',
-							id: 'topics/21.03.JuneauShadedRestClient',
-							label: '21.3. juneau-shaded-rest-client',
-						},
-						{
-							type: 'doc',
-							id: 'topics/21.04.JuneauShadedRestServer',
-							label: '21.4. juneau-shaded-rest-server',
-						},
-						{
-							type: 'doc',
-							id: 'topics/21.05.JuneauShadedRestServerSpringboot',
-							label: '21.5. juneau-shaded-rest-server-springboot',
-						},
-						{
-							type: 'doc',
-							id: 'topics/21.06.JuneauShadedAll',
-							label: '21.6. juneau-shaded-all',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '22. Security',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/22.01.SecurityBasics',
-							label: '22.1. Security Basics',
-						},
-						{
-							type: 'doc',
-							id: 'topics/22.02.MarshallingSecurity',
-							label: '22.2. Marshalling Security',
-						},
-						{
-							type: 'doc',
-							id: 'topics/22.03.SvlSecurity',
-							label: '22.3. SVL Security',
-						},
-						{
-							type: 'doc',
-							id: 'topics/22.04.RestSecurity',
-							label: '22.4. REST Security',
-						},
-						{
-							type: 'doc',
-							id: 'topics/22.05.ContentSecurityPolicy',
-							label: '22.5. Content Security Policy',
-						},
-					],
-				},
-				{
-					type: 'category',
-					label: '23. V9.0 Migration Guide',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/23.01.V9MigrationGuide',
-							label: '23.1. v9.0 Migration Guide',
-						},
-					],
-				},
+			{
+				type: 'category',
+				label: '17. juneau-microservice-tomcat',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/17.01.JuneauMicroserviceTomcatBasics',
+						label: '17.1. juneau-microservice-tomcat Basics',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '18. juneau-sc',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/18.01.JuneauScOverview',
+						label: '18.1. juneau-sc Overview',
+					},
+					{
+						type: 'doc',
+						id: 'topics/18.02.ScServerOverview',
+						label: '18.2. juneau-sc-server',
+					},
+					{
+						type: 'doc',
+						id: 'topics/18.03.ScClientOverview',
+						label: '18.3. juneau-sc-client',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '19. Bundles',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/19.01.Bundles',
+						label: '19.1. Juneau Bundle Artifacts',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '20. Dependency Management',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/17.01.DependencyManagement',
+						label: '20.1. Dependency Management (BOM & Bundles)',
+					},
+					{
+						type: 'doc',
+						id: 'topics/17.02.NativeImageAndLayeredJars',
+						label: '20.2. GraalVM Native Image & Docker Layering',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '21. Starter Projects',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/18.01.StarterProjects',
+						label: '21.1. Starter Projects',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '22. juneau-petstore',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/19.01.JuneauPetstoreOverview',
+						label: '22.1. juneau-petstore Overview',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '23. juneau-examples',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/20.01.JuneauExamplesCore',
+						label: '23.1. juneau-examples-core',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '24. juneau-shaded',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/21.01.JuneauShadedOverview',
+						label: '24.1. Juneau Shaded Artifacts',
+					},
+					{
+						type: 'doc',
+						id: 'topics/21.02.JuneauShadedCore',
+						label: '24.2. juneau-shaded-core',
+					},
+					{
+						type: 'doc',
+						id: 'topics/21.03.JuneauShadedRestClient',
+						label: '24.3. juneau-shaded-rest-client',
+					},
+					{
+						type: 'doc',
+						id: 'topics/21.04.JuneauShadedRestServer',
+						label: '24.4. juneau-shaded-rest-server',
+					},
+					{
+						type: 'doc',
+						id: 'topics/21.05.JuneauShadedRestServerSpringboot',
+						label: '24.5. juneau-shaded-rest-server-springboot',
+					},
+					{
+						type: 'doc',
+						id: 'topics/21.06.JuneauShadedAll',
+						label: '24.6. juneau-shaded-all',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '25. Security',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/22.01.SecurityBasics',
+						label: '25.1. Security Basics',
+					},
+					{
+						type: 'doc',
+						id: 'topics/22.02.MarshallingSecurity',
+						label: '25.2. Marshalling Security',
+					},
+					{
+						type: 'doc',
+						id: 'topics/22.03.SvlSecurity',
+						label: '25.3. SVL Security',
+					},
+					{
+						type: 'doc',
+						id: 'topics/22.04.RestSecurity',
+						label: '25.4. REST Security',
+					},
+					{
+						type: 'doc',
+						id: 'topics/22.05.ContentSecurityPolicy',
+						label: '25.5. Content Security Policy',
+					},
+				],
+			},
+			{
+				type: 'category',
+				label: '26. V9.0 Migration Guide',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/23.01.V9MigrationGuide',
+						label: '26.1. v9.0 Migration Guide',
+					},
+				],
+			},
 		{
 			type: 'category',
-			label: '24. V10.0 Migration Guide',
+			label: '27. V10.0 Migration Guide',
 			collapsed: true,
 			items: [
 				{
 					type: 'doc',
 					id: 'topics/24.01.V10MigrationGuide',
-					label: '24.1. v10.0 Migration Guide',
+					label: '27.1. v10.0 Migration Guide',
 				},
 			],
 		},
