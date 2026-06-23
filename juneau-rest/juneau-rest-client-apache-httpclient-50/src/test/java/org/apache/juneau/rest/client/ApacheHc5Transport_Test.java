@@ -82,6 +82,11 @@ class ApacheHc5Transport_Test {
 			exchange.close();
 		});
 
+		server.createContext("/no-content", exchange -> {
+			exchange.sendResponseHeaders(204, -1);
+			exchange.close();
+		});
+
 		server.start();
 	}
 
@@ -173,6 +178,19 @@ class ApacheHc5Transport_Test {
 		}
 	}
 
+	@Test
+	void b04_patch_echosMethod() throws Exception {
+		var transport = ApacheHc5Transport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.patch("/echo-method")
+					.body(StringBody.of("", "text/plain"))
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("PATCH", response.getBodyAsString());
+			}
+		}
+	}
+
 	// =================================================================================================================
 	// C — Request body
 	// =================================================================================================================
@@ -200,6 +218,32 @@ class ApacheHc5Transport_Test {
 					.run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("byte content", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void c03_post_nullContentTypeBody() throws Exception {
+		// Exercises the ct == null branch in buildEntity() → uses APPLICATION_OCTET_STREAM fallback.
+		var transport = ApacheHc5Transport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			var bytes = "raw".getBytes(StandardCharsets.UTF_8);
+			try (var response = client.post("/echo-body")
+					.body(ByteArrayBody.of(bytes, null))
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("raw", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void c04_get_noContentResponse() throws Exception {
+		// Exercises the entity == null branch in buildTransportResponse() for a 204 No Content response.
+		var transport = ApacheHc5Transport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.get("/no-content").run()) {
+				assertEquals(204, response.getStatusCode());
 			}
 		}
 	}

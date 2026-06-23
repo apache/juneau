@@ -16,15 +16,8 @@
  */
 package org.apache.juneau.marshall.jena.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link N3Serializer} and {@link N3Parser} into a single class with convenience read/write methods.

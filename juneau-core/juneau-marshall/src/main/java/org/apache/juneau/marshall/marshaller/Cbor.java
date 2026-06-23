@@ -16,12 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-
 import org.apache.juneau.marshall.cbor.*;
-import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link CborSerializer} and {@link CborParser} into a single class with convenience read/write methods.

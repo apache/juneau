@@ -477,6 +477,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 	@Override
 	protected void doSerialize(SerializerPipe out, Object o) throws IOException, SerializeException {
 		var cm = getClassMetaForObject(o);
+		// HTT: RdfStreamSerializer.Builder only exposes language(); looseCollections is always false for stream serializers.
 		if (ctx.isLooseCollections() && nn(cm) && cm.isCollectionOrArray()) {
 			Collection c = cm.isCollection() ? (Collection)o : toList(cm.inner(), o);
 			forEachEntry(c, x -> serializeAnything(x, false, object(), "root", null, null));
@@ -489,6 +490,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 			} else {
 				r = n.asResource();
 			}
+			// HTT: RdfStreamSerializer.Builder only exposes language(); addRootProp is always false.
 			if (ctx.isAddRootProp())
 				r.addProperty(pRoot, "true");
 		}

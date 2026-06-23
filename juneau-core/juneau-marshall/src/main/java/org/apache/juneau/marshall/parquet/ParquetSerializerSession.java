@@ -143,7 +143,6 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			return;
 		}
 		var first = rows.get(0);
-		var rootType = getExpectedRootType(o);
 		List<ParquetSchemaElement> schema;
 		// collectBeans() always returns rows whose first element is a BeanMap (bean / collection / array /
 		// single-value roots, all BeanMap-wrapped) or a Map (string-keyed and non-string-keyed map roots),
@@ -155,8 +154,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes).buildSchema(elementType, first);
 		} else {
 			var mapFirst = (Map<?, ?>) first;
-			if (rootType.isMap() && o instanceof Map<?, ?> origMap && !origMap.isEmpty()
-				&& !(origMap.keySet().iterator().next() instanceof String)) {
+			if (!(((Map<?,?>) o).keySet().iterator().next() instanceof String)) {
 				schema = new ParquetSchemaBuilder(ctx.getMarshallingContext(), ctx.writeDatesAsTimestamp, ctx.cycleHandling, ctx.maxRecursionDepth, ctx.nativeLogicalTypes)
 					.buildSchemaForKeyValuePairs(mapFirst.get("key"), mapFirst.get("value"));
 			} else {
@@ -245,7 +243,8 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			return collectBeans(inner);
 		}
 		var sType = getExpectedRootType(o);
-		if (sType.isMap() && o instanceof Map<?, ?> m) {
+		if (sType.isMap()) {
+			var m = (Map<?, ?>) o;
 			if (m.isEmpty())
 				return List.of();
 			var firstKey = m.keySet().iterator().next();
@@ -325,8 +324,6 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	private Object applySwap(Object value, ClassMeta<?> type) throws SerializeException {
-		if (value == null || type == null)
-			return value;
 		var swap = type.getSwap(this);
 		if (nn(swap))
 			return swap(swap, value);
@@ -352,11 +349,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	 * serializeAnything} dispatcher.  No-op for values whose runtime type has no registered swap.
 	 */
 	private Object applyDefaultSwap(Object value) throws SerializeException {
-		if (value == null)
-			return value;
 		var cm = getClassMetaForObject(value);
-		if (cm == null)
-			return value;
 		var swap = cm.getSwap(this);
 		if (nn(swap))
 			return swap(swap, value);
@@ -365,31 +358,28 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 
 	private ColumnChunkMeta writeColumnChunk(OutputStream out, List<?> rows, ParquetSchemaElement col, long chunkStart) throws IOException, SerializeException {
 		var path = rowRelativePath(col.path);
-		if (path != null && path.contains(".list.element"))
+		if (path.contains(".list.element"))
 			return writeListColumnChunk(out, rows, col, path, chunkStart);
-		if (path != null && isMapKeyValueColumnPath(path)) {
+		if (isMapKeyValueColumnPath(path))
 			return writeMapColumnChunk(out, rows, col, path, chunkStart);
-		}
 		// Definition-level handling for non-list/non-map columns.
 		// A leaf nested under N OPTIONAL groups needs a max def level of N (GAP-14) so the reader can tell
 		// a null intermediate group apart from a present group with a null leaf.  Single-segment columns
-		// (maxDef<=1) use the original 1-bit scheme unchanged.
-		boolean optional = col.repetitionType != null && col.repetitionType == OPTIONAL;
-		int segCount = path == null ? 1 : path.split("\\.").length;
-		int maxDef = optional ? segCount : 0;
+		// (maxDef==1) use the original 1-bit scheme unchanged.
+		int maxDef = path.split("\\.").length;
 		int numRows = rows.size();
 
 		// Multi-page write (GAP-1 round-trip): split the column's rows into page batches of rowsPerPage.
 		// Defaults keep a single page (huge cap); a small pageSize produces several data pages in one chunk,
 		// which the page-loop reader concatenates.
 		int rowsPerPage = rowsPerPage();
-		var pathParts = col.path != null ? List.of(col.path.split("\\.")) : List.<String>of();
+		var pathParts = List.of(col.path.split("\\."));
 		long totalUncompressed = 0;
 		long totalStored = 0;
 		int firstHeaderSize = 0;
 		boolean firstPage = true;
-		for (int start = 0; start < numRows || (numRows == 0 && firstPage); start += rowsPerPage) {
-			var pageRows = numRows == 0 ? rows : rows.subList(start, Math.min(start + rowsPerPage, numRows));
+		for (int start = 0; start < numRows; start += rowsPerPage) {
+			var pageRows = rows.subList(start, Math.min(start + rowsPerPage, numRows));
 			byte[] pageData = encodeColumnPage(pageRows, col, path, maxDef);
 			int uncompressedSize = pageData.length;
 			byte[] compressedData = ctx.compressionCodec.compress(pageData);
@@ -403,10 +393,8 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				firstHeaderSize = pageHeader.length;
 				firstPage = false;
 			}
-			if (numRows == 0)
-				break;
 		}
-		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, numRows, totalUncompressed, totalStored, chunkStart, firstHeaderSize);
+		return new ColumnChunkMeta(col.path, pathParts, col.type, numRows, totalUncompressed, totalStored, chunkStart, firstHeaderSize);
 	}
 
 	private int rowsPerPage() {
@@ -423,7 +411,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			for (var row : rows) {
 				var dv = computeDefValue(row, path, maxDef);
 				defLevels.writeInt(dv.def());
-				if (dv.def() == maxDef && dv.value() != null)
+				if (dv.def() == maxDef)
 					writeValue(writer, col, dv.value());
 			}
 			defLevelBytes = defLevels.toByteArrayWithLength();
@@ -438,15 +426,14 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				}
 				values = converted;
 			}
-			RleBitPackingEncoder defLevels = maxDef == 1 ? new RleBitPackingEncoder(1) : null;
+			var defLevels = new RleBitPackingEncoder(1);
 			for (var i = 0; i < values.size(); i++) {
 				var v = unwrapOptional(values.get(i));
-				if (defLevels != null)
-					defLevels.writeInt(v == null ? 0 : 1);
+				defLevels.writeInt(v == null ? 0 : 1);
 				if (v != null)
 					writeValue(writer, col, v);
 			}
-			defLevelBytes = defLevels != null ? defLevels.toByteArrayWithLength() : new byte[0];
+			defLevelBytes = defLevels.toByteArrayWithLength();
 		}
 		byte[] valueBytes = writer.finalizePage();
 		byte[] pageData = new byte[defLevelBytes.length + valueBytes.length];
@@ -467,21 +454,15 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		var parts = path.split("\\.");
 		var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
 		seen.add(row);
-		if (row instanceof BeanMap<?> bm0) {
-			var bean = bm0.getBean();
-			if (bean != null)
-				seen.add(bean);
-		}
+		seen.add(((BeanMap<?>) row).getBean());
 		Object current = row;
 		int def = 0;
 		for (var i = 0; i < parts.length; i++) {
 			var part = parts[i];
-			if (current instanceof Optional<?> opt && "value".equals(part))
+			if (current instanceof Optional<?> opt)
 				current = opt.orElse(null);
 			else if (current instanceof BeanMap<?> bm)
 				current = bm.get(part);
-			else if (current instanceof Map<?,?> m)
-				current = m.get(part);
 			else
 				current = toBeanMap(current).get(part);
 			if (current != null && seen.contains(current))
@@ -491,41 +472,25 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			seen.add(current);
 			def = i + 1;
 		}
-		current = unwrapOptional(current);
-		if (current == null)
-			return new DefValue(Math.max(0, def - 1), null);
-		return new DefValue(maxDef, current);
+		return new DefValue(maxDef, unwrapOptional(current));
 	}
 
 	/** Returns true if path is a map key_value leaf (e.g. f9.key_value.key or f9.key_value.value). */
 	private static boolean isMapKeyValueColumnPath(String path) {
-		if (path == null)
-			return false;
 		return path.endsWith(".key_value.key") || path.endsWith(".key_value.value");
 	}
 
 	/** For map key_value path like "f9.key_value.key", returns the map property name ("f9"). */
 	private static String mapPropertyPath(String mapKeyValuePath) {
-		if (mapKeyValuePath == null)
-			return mapKeyValuePath;
-		int idx = mapKeyValuePath.indexOf(".key_value.");
-		return idx < 0 ? mapKeyValuePath : mapKeyValuePath.substring(0, idx);
+		return mapKeyValuePath.substring(0, mapKeyValuePath.indexOf(".key_value."));
 	}
 
-	/** Path relative to the row (bean) for extraction. Schema paths may include root prefix for list roots. */
+	/** Path relative to the row (bean) for extraction. All schema leaf paths start with "root.". */
 	private static String rowRelativePath(String fullPath) {
-		if (fullPath == null)
-			return fullPath;
-		if (fullPath.startsWith("root.list.element."))
-			return fullPath.substring("root.list.element.".length());
-		if (fullPath.startsWith("root."))
-			return fullPath.substring("root.".length());
-		return fullPath;
+		return fullPath.substring("root.".length());
 	}
 
 	private static int listDepth(String path) {
-		if (path == null)
-			return 0;
 		int depth = 0;
 		for (int idx = 0; (idx = path.indexOf(".list.element", idx)) >= 0; idx += 13)
 			depth++;
@@ -537,7 +502,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	private static int defRepBitWidth(int maxLevel) {
-		return maxLevel <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxLevel);
+		return 32 - Integer.numberOfLeadingZeros(maxLevel);
 	}
 
 	private ColumnChunkMeta writeListColumnChunk(OutputStream out, List<?> rows, ParquetSchemaElement col, String path, long chunkStart) throws IOException, SerializeException {
@@ -545,44 +510,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		int maxDef = maxDefLevelForListPath(path);
 		int maxRep = listDepth(path);
 		int defBitWidth = defRepBitWidth(maxDef);
-		int repBitWidth = maxRep > 0 ? defRepBitWidth(maxRep) : 1;
-		var defLevels = new RleBitPackingEncoder(defBitWidth);
-		var repLevels = maxRep > 0 ? new RleBitPackingEncoder(repBitWidth) : null;
-		var writer = new ParquetColumnWriter(col);
-		for (var e : flattened) {
-			if (repLevels != null)
-				repLevels.writeInt(e.repLevel);
-			defLevels.writeInt(e.defLevel);
-			var v = unwrapOptional(e.value);
-			if (e.defLevel >= maxDef && v != null)
-				writeValue(writer, col, v);
-		}
-		byte[] valueBytes = writer.finalizePage();
-		byte[] defLevelBytes = defLevels.toByteArrayWithLength();
-		byte[] repLevelBytes = repLevels != null ? repLevels.toByteArrayWithLength() : new byte[0];
-		byte[] pageData = new byte[repLevelBytes.length + defLevelBytes.length + valueBytes.length];
-		int off = 0;
-		System.arraycopy(repLevelBytes, 0, pageData, off, repLevelBytes.length);
-		off += repLevelBytes.length;
-		System.arraycopy(defLevelBytes, 0, pageData, off, defLevelBytes.length);
-		off += defLevelBytes.length;
-		System.arraycopy(valueBytes, 0, pageData, off, valueBytes.length);
-		int uncompressedSize = pageData.length;
-		byte[] compressedData = ctx.compressionCodec.compress(pageData);
-		int compressedSize = compressedData.length;
-		var pageHeader = ParquetColumnWriter.createPageHeader(flattened.size(), uncompressedSize, compressedSize);
-		out.write(pageHeader);
-		int headerSize = pageHeader.length;
-		out.write(compressedData);
-		var pathParts = col.path != null ? List.of(col.path.split("\\.")) : List.<String>of();
-		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, flattened.size(), uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
-	}
-
-	private ColumnChunkMeta writeMapColumnChunk(OutputStream out, List<?> rows, ParquetSchemaElement col, String path, long chunkStart) throws IOException, SerializeException {
-		boolean isKeyColumn = path.endsWith(".key_value.key");
-		var flattened = extractFlattenedMapValues(rows, path, isKeyColumn);
-		int defBitWidth = defRepBitWidth(MAP_MAX_DEF);
-		int repBitWidth = defRepBitWidth(MAP_MAX_REP);
+		int repBitWidth = defRepBitWidth(maxRep);
 		var defLevels = new RleBitPackingEncoder(defBitWidth);
 		var repLevels = new RleBitPackingEncoder(repBitWidth);
 		var writer = new ParquetColumnWriter(col);
@@ -590,7 +518,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			repLevels.writeInt(e.repLevel);
 			defLevels.writeInt(e.defLevel);
 			var v = unwrapOptional(e.value);
-			if (e.defLevel >= MAP_MAX_DEF && v != null)
+			if (e.defLevel >= maxDef)
 				writeValue(writer, col, v);
 		}
 		byte[] valueBytes = writer.finalizePage();
@@ -610,8 +538,44 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		out.write(pageHeader);
 		int headerSize = pageHeader.length;
 		out.write(compressedData);
-		var pathParts = col.path != null ? List.of(col.path.split("\\.")) : List.<String>of();
-		return new ColumnChunkMeta(col.path, pathParts, col.type != null ? col.type : TYPE_BYTE_ARRAY, flattened.size(), uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
+		var pathParts = List.of(col.path.split("\\."));
+		return new ColumnChunkMeta(col.path, pathParts, col.type, flattened.size(), uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
+	}
+
+	private ColumnChunkMeta writeMapColumnChunk(OutputStream out, List<?> rows, ParquetSchemaElement col, String path, long chunkStart) throws IOException, SerializeException {
+		boolean isKeyColumn = path.endsWith(".key_value.key");
+		var flattened = extractFlattenedMapValues(rows, path, isKeyColumn);
+		int defBitWidth = defRepBitWidth(MAP_MAX_DEF);
+		int repBitWidth = defRepBitWidth(MAP_MAX_REP);
+		var defLevels = new RleBitPackingEncoder(defBitWidth);
+		var repLevels = new RleBitPackingEncoder(repBitWidth);
+		var writer = new ParquetColumnWriter(col);
+		for (var e : flattened) {
+			repLevels.writeInt(e.repLevel);
+			defLevels.writeInt(e.defLevel);
+			var v = unwrapOptional(e.value);
+			if (e.defLevel >= MAP_MAX_DEF)
+				writeValue(writer, col, v);
+		}
+		byte[] valueBytes = writer.finalizePage();
+		byte[] defLevelBytes = defLevels.toByteArrayWithLength();
+		byte[] repLevelBytes = repLevels.toByteArrayWithLength();
+		byte[] pageData = new byte[repLevelBytes.length + defLevelBytes.length + valueBytes.length];
+		int off = 0;
+		System.arraycopy(repLevelBytes, 0, pageData, off, repLevelBytes.length);
+		off += repLevelBytes.length;
+		System.arraycopy(defLevelBytes, 0, pageData, off, defLevelBytes.length);
+		off += defLevelBytes.length;
+		System.arraycopy(valueBytes, 0, pageData, off, valueBytes.length);
+		int uncompressedSize = pageData.length;
+		byte[] compressedData = ctx.compressionCodec.compress(pageData);
+		int compressedSize = compressedData.length;
+		var pageHeader = ParquetColumnWriter.createPageHeader(flattened.size(), uncompressedSize, compressedSize);
+		out.write(pageHeader);
+		int headerSize = pageHeader.length;
+		out.write(compressedData);
+		var pathParts = List.of(col.path.split("\\."));
+		return new ColumnChunkMeta(col.path, pathParts, col.type, flattened.size(), uncompressedSize, compressedSize + (long) headerSize, chunkStart, headerSize);
 	}
 
 	private record FlattenedEntry(Object value, int defLevel, int repLevel) {}
@@ -654,36 +618,20 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	private List<FlattenedEntry> extractFlattenedMapValues(List<?> rows, String path, boolean isKeyColumn) throws SerializeException {
 		var result = new ArrayList<FlattenedEntry>();
 		var mapProp = mapPropertyPath(path);
-		boolean isRootKeyValue = "root".equals(mapProp) && path != null && path.contains(".key_value.");
 		for (var row : rows) {
-			Map<?, ?> map;
-			if (isRootKeyValue && row instanceof Map<?, ?> rowMap && rowMap.containsKey("key") && rowMap.containsKey("value")) {
-				// Rows are key-value pairs [{key:k1,value:v1}, {key:k2,value:v2}, ...]; treat as single-entry map
-				map = Collections.singletonMap(rowMap.get("key"), rowMap.get("value"));
-			} else {
-				map = getMapAtPath(row, mapProp);
-			}
-			if (map.isEmpty()) {
-				// Do not add any entry; parser will produce empty list per row and mergeMapColumns returns empty LinkedHashMap
-			} else {
-				// Write entries; skip empty maps (parser pads with empty list per row, avoids {null=null} misread)
-			int idx = 0;
-			for (var e : map.entrySet()) {
-				int rep = idx == 0 ? 0 : MAP_MAX_REP;
-				Object val = isKeyColumn ? e.getKey() : e.getValue();
-				val = unwrapOptional(val);
-				if (isKeyColumn)
-					val = mapKeyToStoredString(val);
-				int def;
-				if (val != null)
-					def = MAP_MAX_DEF;
-				else if (isKeyColumn)
-					def = MAP_MAX_DEF;
-				else
-					def = 1;
-				result.add(new FlattenedEntry(val, def, rep));
-				idx++;
-			}
+			var map = getMapAtPath(row, mapProp);
+			if (!map.isEmpty()) {
+				int idx = 0;
+				for (var e : map.entrySet()) {
+					int rep = idx == 0 ? 0 : MAP_MAX_REP;
+					Object val = isKeyColumn ? e.getKey() : e.getValue();
+					val = unwrapOptional(val);
+					if (isKeyColumn)
+						val = mapKeyToStoredString(val);
+					int def = val != null ? MAP_MAX_DEF : 1;
+					result.add(new FlattenedEntry(val, def, rep));
+					idx++;
+				}
 			}
 		}
 		return result;
@@ -693,9 +641,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		var obj = getValueByPath(row, mapProp);
 		if (obj == null)
 			return Collections.emptyMap();
-		if (obj instanceof Map<?,?> m)
-			return m;
-		return toBeanMap(obj);
+		return (Map<?,?>) obj;
 	}
 
 	@SuppressWarnings({
@@ -735,7 +681,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				list = c;
 			else if (obj instanceof Object[] arr) {
 				list = Arrays.asList(arr);
-			} else if (obj.getClass().isArray() && obj.getClass().getComponentType().isPrimitive()) {
+			} else if (obj.getClass().isArray()) {
 				// Primitive arrays (boolean[], int[], char[], etc.) — box each element
 				int len = Array.getLength(obj);
 				var al = new ArrayList<>(len);
@@ -773,7 +719,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				if (partIndex + 2 >= parts.length) {
 					out.add(new FlattenedEntry(val, def, r));
 				} else {
-					flattenListValues(item, path, partIndex + 2, firstInRow && idx == 0, r, listDepth, maxDef, out, seen);
+					flattenListValues(item, path, partIndex + 2, firstInRow, r, listDepth, maxDef, out, seen);
 				}
 				firstInRow = false;
 				idx++;
@@ -782,7 +728,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		}
 		Object next = obj;
 		if (next != null) {
-			if (next instanceof Optional<?> opt && "value".equals(parts[partIndex]))
+			if (next instanceof Optional<?> opt)
 				next = opt.orElse(null);
 			else if (next instanceof BeanMap<?> bm)
 				next = bm.get(parts[partIndex]);
@@ -802,23 +748,16 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	}
 
 	private Object getValueByPath(Object row, String path) throws SerializeException {
-		if (path == null || path.isEmpty())
-			return row;
 		var parts = path.split("\\.");
 		var seen = Collections.newSetFromMap(new IdentityHashMap<Object, Boolean>());
 		seen.add(row);
-		if (row instanceof BeanMap<?> bm) {
-			var bean = bm.getBean();
-			if (bean != null)
-				seen.add(bean);
-		}
+		if (row instanceof BeanMap<?> bm)
+			seen.add(bm.getBean());
 		Object current = row;
 		for (var part : parts) {
 			if (current == null)
 				return null;
-			if (current instanceof Optional<?> opt && "value".equals(part))
-				current = opt.orElse(null);
-			else if (current instanceof BeanMap<?> bm)
+			if (current instanceof BeanMap<?> bm)
 				current = bm.get(part);
 			else if (current instanceof Map<?,?> m)
 				current = m.get(part);
@@ -850,27 +789,24 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		// Unwrap handled by callers (writeColumnChunk, writeListColumnChunk) for correct def levels
 		v = unwrapOptional(v);
 		v = applyDefaultSwap(v);
-		Integer type = col.type;
-		if (type == null)
-			return;
-		switch (type) {
+		switch (col.type) {
 			case TYPE_BOOLEAN:
 				w.writeBoolean(v instanceof Boolean b ? b : Boolean.parseBoolean(String.valueOf(v)));
 				break;
 			case TYPE_INT32:
 				// Native DATE (GAP-10): days since epoch.
-				if (col.convertedType != null && col.convertedType == CONVERTED_DATE)
+				if (col.convertedType == CONVERTED_DATE)
 					w.writeInt32((int) toEpochDay(v));
 				else
 					w.writeInt32(toInt32(v));
 				break;
 			case TYPE_INT64:
 				// Native logical INT64 encodings (GAP-9/10): DECIMAL unscaled, TIME/TIMESTAMP in micros.
-				if (col.convertedType != null && col.convertedType == CONVERTED_DECIMAL)
+				if (col.convertedType == CONVERTED_DECIMAL)
 					w.writeInt64(toDecimalUnscaled(v));
-				else if (col.convertedType != null && col.convertedType == CONVERTED_TIME_MICROS)
+				else if (col.convertedType == CONVERTED_TIME_MICROS)
 					w.writeInt64(toTimeMicros(v));
-				else if (col.convertedType != null && col.convertedType == CONVERTED_TIMESTAMP_MICROS)
+				else if (col.convertedType == CONVERTED_TIMESTAMP_MICROS)
 					w.writeInt64(toTimestampMicros(v));
 				else
 					w.writeInt64(toInt64(v));
@@ -882,14 +818,13 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				w.writeDouble(v instanceof Number n ? n.doubleValue() : Double.parseDouble(String.valueOf(v)));
 				break;
 			case TYPE_BYTE_ARRAY:
-				w.writeByteArray(toByteArray(v, col));
+				w.writeByteArray(toByteArray(v));
 				break;
 			case TYPE_FIXED_LEN_BYTE_ARRAY:
 				w.writeFixedLenByteArray(toFixedLenByteArray(v));
 				break;
 			default:
-				w.writeByteArray(String.valueOf(v).getBytes(StandardCharsets.UTF_8));
-				break;
+				throw new SerializeException("Unsupported Parquet physical type: {0}", col.type);
 		}
 	}
 
@@ -993,7 +928,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		try {
 			return Instant.parse(String.valueOf(v));
 		} catch (@SuppressWarnings("unused") Exception e) {
-			throw new SerializeException("Cannot convert value of type {0} to a TIMESTAMP", v == null ? "null" : v.getClass().getName());
+			throw new SerializeException("Cannot convert value of type {0} to a TIMESTAMP", v.getClass().getName());
 		}
 	}
 
@@ -1010,7 +945,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		return bd.setScale(ParquetSchemaBuilder.DECIMAL_SCALE, java.math.RoundingMode.HALF_UP).unscaledValue().longValueExact();
 	}
 
-	private byte[] toByteArray(Object v, ParquetSchemaElement col) throws SerializeException {
+	private byte[] toByteArray(Object v) throws SerializeException {
 		if (v instanceof byte[] b)
 			return b;
 		if (v instanceof String s)
@@ -1019,11 +954,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 			return ctx.getMarshallingContext().getEnumFormat().format(e).getBytes(StandardCharsets.UTF_8);
 		if (v instanceof Duration d)
 			return d.toString().getBytes(StandardCharsets.UTF_8);
-	// BigDecimal is stored as a UTF-8 string (same as JSON/CBOR) so fall through to String.valueOf below.
-		if (col.convertedType != null && col.convertedType == CONVERTED_TIMESTAMP_MILLIS)
-			return String.valueOf(toInt64(v)).getBytes(StandardCharsets.UTF_8);
-		if (col.convertedType != null && (col.convertedType == CONVERTED_UTF8 || col.convertedType == CONVERTED_ENUM))
-			return String.valueOf(v).getBytes(StandardCharsets.UTF_8);
+		// BigDecimal and all other types stored as UTF-8 string.
 		return String.valueOf(v).getBytes(StandardCharsets.UTF_8);
 	}
 

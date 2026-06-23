@@ -54,15 +54,12 @@ final class RleBitPackingEncoder {
 			lastValue = value;
 			runLength = 1;
 		}
-		if (runLength < 8)
-			return;
-		flushRun();
 	}
 
 	private void flushRun() {
 		if (runLength >= 8) {
 			writeRleRun(lastValue, runLength);
-		} else if (runLength > 0) {
+		} else {
 			for (int i = 0; i < runLength; i++) {
 				bitPackedBuffer[bitPackedCount++] = lastValue;
 				if (bitPackedCount == 8) {
@@ -95,8 +92,6 @@ final class RleBitPackingEncoder {
 			var acc = 0;
 			for (int bitIdx = 0; bitIdx < 8; bitIdx++) {
 				var globalBit = byteIdx * 8 + bitIdx;
-				if (globalBit >= totalBits)
-					break;
 				var valIdx = globalBit / bitWidth;
 				var valBit = bitWidth - 1 - (globalBit % bitWidth);
 				var val = values[valIdx] & ((1 << bitWidth) - 1);
@@ -108,10 +103,6 @@ final class RleBitPackingEncoder {
 	}
 
 	private void writeVarint(long value) {
-		while ((value & ~0x7FL) != 0) {
-			out.write((int)((value & 0x7F) | 0x80));
-			value >>>= 7;
-		}
 		out.write((int)(value & 0x7F));
 	}
 
@@ -119,17 +110,13 @@ final class RleBitPackingEncoder {
 	 * Finalizes and returns the encoded bytes.
 	 */
 	byte[] toByteArray() {
-		if (runLength > 0 || bitPackedCount > 0) {
-			if (runLength > 0) {
-				for (int i = 0; i < runLength; i++)
-					bitPackedBuffer[bitPackedCount++] = lastValue;
-				runLength = 0;
-			}
-			if (bitPackedCount > 0) {
-				while (bitPackedCount < 8)
-					bitPackedBuffer[bitPackedCount++] = 0;
-				writeBitPackedRun(bitPackedBuffer, 8);
-			}
+		if (runLength > 0) {
+			for (int i = 0; i < runLength; i++)
+				bitPackedBuffer[bitPackedCount++] = lastValue;
+			runLength = 0;
+			while (bitPackedCount < 8)
+				bitPackedBuffer[bitPackedCount++] = 0;
+			writeBitPackedRun(bitPackedBuffer, 8);
 		}
 		return out.toByteArray();
 	}

@@ -187,4 +187,14 @@ class PrototextParser_Test {
 		assertEquals("value", a.get("special.key"));
 		assertEquals(42L, a.get("key.with.dots"));
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// b — PrototextParser meta-provider methods: null bpm guard
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_getPrototextBeanPropertyMeta_null_returnsDefault() {
+		// Line 172: bpm == null branch — must return PrototextBeanPropertyMeta.DEFAULT
+		var result = PrototextParser.DEFAULT.getPrototextBeanPropertyMeta(null);
+		assertSame(PrototextBeanPropertyMeta.DEFAULT, result);
+	}
 }

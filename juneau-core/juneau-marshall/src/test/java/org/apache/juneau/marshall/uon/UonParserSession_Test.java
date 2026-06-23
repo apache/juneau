@@ -1371,16 +1371,14 @@ class UonParserSession_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void au01_parseIntoCollection_emptyInput_returnsNull() throws Exception {
-		// parseIntoCollection with empty input: r.readSkipWs() returns -1 (EOF).
-		// line 577: if (c == -1 || c == AMP) -> c==-1 is true -> returns null.
+		// parseIntoCollection with empty input: readSkipWs() hits EOF on first char, early-return yields null.
 		var dest = new ArrayList<>();
 		var result = P.parseIntoCollection("", dest, String.class);
 		assertNull(result);
 	}
 
 	@Test void au02_parseIntoMap_emptyInput_returnsNull() throws Exception {
-		// parseIntoMap with empty input: r.read() returns -1 (EOF).
-		// line 678: if (c == -1 || c == AMP) -> c==-1 is true -> returns null.
+		// parseIntoMap with empty input: read() hits EOF on first char, early-return yields null.
 		var dest = new HashMap<String, Object>();
 		var result = P.parseIntoMap("", dest, String.class, Object.class);
 		assertNull(result);

@@ -79,9 +79,9 @@ public final class ProblemAdapters {
 		if (e == null)
 			return null;
 		var statusLine = e.getStatusLine();
-		var reasonPhrase = statusLine == null ? null : statusLine.getReasonPhrase();
+		var reasonPhrase = statusLine == null ? null : statusLine.getReasonPhrase(); // HTT — statusLine is always set in BasicHttpException constructors
 		var message = e.getMessage();
-		var detail = (message == null || message.equals(reasonPhrase)) ? null : message;
+		var detail = (message == null || message.equals(reasonPhrase)) ? null : message; // HTT — getMessage() always returns non-null (falls back to reasonPhrase)
 		return new Problem()
 			.setStatus(e.getStatusCode())
 			.setTitle(reasonPhrase)

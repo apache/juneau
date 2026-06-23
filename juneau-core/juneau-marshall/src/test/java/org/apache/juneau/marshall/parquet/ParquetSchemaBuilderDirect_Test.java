@@ -194,4 +194,37 @@ class ParquetSchemaBuilderDirect_Test extends TestBase {
 		assertTrue(schema.stream().anyMatch(e -> e.convertedType != null && e.convertedType == ParquetSchemaElement.CONVERTED_DECIMAL));
 		assertTrue(schema.stream().anyMatch(e -> e.convertedType != null && e.convertedType == ParquetSchemaElement.CONVERTED_TIME_MICROS));
 	}
+
+	public static class ObjectPropBean { public Object val; }
+	public static class NumberPropBean { public Number num; }
+	public static class SelfRefBean { public String name; public SelfRefBean child; }
+
+	@Test
+	void a14_objectTypedPropertyWithSampleInferredToConcreteType() {
+		// Object-typed property with a non-null sample: propCm is inferred from the sample's concrete class.
+		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
+		var sample = new LinkedHashMap<String,Object>();
+		sample.put("val", "hello"); // concrete String sample for the Object-typed property
+		var schema = b.buildSchema(MC.getClassMeta(ObjectPropBean.class), sample);
+		assertFalse(schema.isEmpty());
+	}
+
+	@Test
+	void a15_numberTypedPropertyWithConcreteNumericSample() {
+		// Abstract Number property with Integer sample: propCm is re-typed to Integer via the concrete sample.
+		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
+		var sample = new LinkedHashMap<String,Object>();
+		sample.put("num", 42);
+		var schema = b.buildSchema(MC.getClassMeta(NumberPropBean.class), sample);
+		assertFalse(schema.isEmpty());
+	}
+
+	@Test
+	void a16_propertyTypeAtRecursionDepthSkipped() {
+		// SelfRefBean.child is a SelfRefBean; at maxRecursionDepth=1 the child is already in progress so it is dropped.
+		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 1, false);
+		var schema = b.buildSchema(MC.getClassMeta(SelfRefBean.class), null);
+		// Schema should include the top-level bean but the recursive "child" property should be dropped
+		assertTrue(schema.stream().anyMatch(e -> "name".equals(e.name)));
+	}
 }

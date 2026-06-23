@@ -131,6 +131,15 @@ class ParquetAnnotation_Test {
 		assertNotNull(s);
 	}
 
+	@ParquetConfig(compressionCodec = "SNAPPY")
+	public static class G01b_Class {}
+
+	@Test void g01b_parquetConfigNonGzipCodecFallsToUncompressed() {
+		// "SNAPPY" is not "GZIP" → ternary false branch → CompressionCodec.UNCOMPRESSED
+		var s = ParquetSerializer.create().applyAnnotations(G01b_Class.class).build();
+		assertNotNull(s);
+	}
+
 	@ParquetConfig(addBeanTypes = "true")
 	public static class G02_Class {}
 

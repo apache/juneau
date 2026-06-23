@@ -16,14 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.util.*;
-
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parquet.*;
-import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of {@link ParquetSerializer} and {@link ParquetParser} for Apache Parquet binary format.

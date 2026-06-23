@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.bean.swagger.*;
+import org.apache.juneau.bean.swagger.Info;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
@@ -102,16 +103,16 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			char c = charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getContact()).map(Utils::s).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getContact).map(Utils::s).orElse(null);
 			} else if (c == 'd') {
 				if ("description".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getDescription()).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getDescription).orElse(null);
 			} else if (c == 'e') {
 				if ("externalDocs".equals(key))
 					return swagger.map(Swagger::getExternalDocs).map(ExternalDocumentation::toString).orElse(null);
 			} else if (c == 'l') {
 				if ("license".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getLicense()).map(Utils::s).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getLicense).map(Utils::s).orElse(null);
 			} else if (c == 'o') {
 				if ("operationDescription".equals(key))
 					return methodSwagger.map(Operation::getDescription).orElse(null);
@@ -119,16 +120,16 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 					return methodSwagger.map(Operation::getSummary).orElse(null);
 			} else if (c == 's') {
 				if ("siteName".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getSiteName()).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getSiteName).orElse(null);
 			} else if (c == 't') {
 				if ("tags".equals(key))
 					return swagger.map(Swagger::getTags).map(s::toString).orElse(null);
 				if ("termsOfService".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getTermsOfService()).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getTermsOfService).orElse(null);
 				if ("title".equals(key))
-					return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getTitle()).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getTitle).orElse(null);
 			} else if (c == 'v' && "version".equals(key))
-				return swagger.map(Swagger::getInfo).map(x -> x == null ? null : x.getVersion()).orElse(null);
+				return swagger.map(Swagger::getInfo).map(Info::getVersion).orElse(null);
 			return null;
 		} catch (Exception e) {
 			throw new InternalServerError(e);

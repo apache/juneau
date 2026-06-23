@@ -507,4 +507,26 @@ class XmlParserSession_Test extends TestBase {
 		var m = (Map) P.parse("<object><k _type='number'>42</k></object>", Map.class);
 		assertEquals(42, m.get("k"));
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// s — XmlReader constructor: reporter / resolver / eventAllocator non-null branches
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void s01_parseWithReporter_succeeds() throws Exception {
+		var parser = XmlParser.create().reporter(XmlConfigAnnotationTest.AB.class).build();
+		var bean = parser.parse("<object><name>Alice</name><age>30</age></object>", JsonMap.class);
+		assertEquals("Alice", bean.get("name"));
+	}
+
+	@Test void s02_parseWithResolver_succeeds() throws Exception {
+		var parser = XmlParser.create().resolver(XmlConfigAnnotationTest.AC.class).build();
+		var bean = parser.parse("<object><name>Bob</name></object>", JsonMap.class);
+		assertEquals("Bob", bean.get("name"));
+	}
+
+	@Test void s03_parseWithEventAllocator_succeeds() throws Exception {
+		var parser = XmlParser.create().eventAllocator(XmlConfigAnnotationTest.AA.class).build();
+		var bean = parser.parse("<object><x>test</x></object>", JsonMap.class);
+		assertEquals("test", bean.get("x"));
+	}
 }

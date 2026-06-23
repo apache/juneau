@@ -454,6 +454,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
+			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
 			l.add(e);
 		}
@@ -463,6 +464,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException, ExecutableException {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
+			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
 			l.add(e);
 		}
@@ -504,8 +506,10 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 		var roots = getRoots(model);
 
 		// Special case where we're parsing a loose collection of resources.
+		// HTT: RdfStreamParser.Builder only exposes language(); looseCollections is always false for stream parsers.
 		if (isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c;
+			// HTT: isArgs() requires method-argument list types; not externally constructable through the public API.
 			if (type.isArray() || type.isArgs())
 				c = list();
 			else
@@ -513,8 +517,10 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 
 			var argIndex = new AtomicInteger(0);
 			var c2 = c;
+			// HTT: isArgs() guard — same constraint as above.
 			roots.forEach(x -> c2.add(parseAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
 
+			// HTT: isArgs() guard — same constraint as above.
 			if (type.isArray() || type.isArgs())
 				return (T)toArray(type, c);
 			return (T)c;

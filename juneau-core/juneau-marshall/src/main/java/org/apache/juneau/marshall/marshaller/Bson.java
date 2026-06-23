@@ -16,13 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.bson.*;
-import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link BsonSerializer} and {@link BsonParser} into a single class with convenience read/write methods.

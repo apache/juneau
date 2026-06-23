@@ -91,13 +91,13 @@ public class RestRequestArgs extends SimpleRestOperationArg {
 			return new RestRequestArgs(RestRequest::getAttributes);
 		if (paramInfo.isType(RequestContent.class))
 			return new RestRequestArgs(RestRequest::getContent);
-		if (paramInfo.isType(RequestFormParamList.class) || paramInfo.isType(RequestFormParamList.class))
+		if (paramInfo.isType(RequestFormParamList.class))
 			return new RestRequestArgs(RestRequest::getFormParams);
-		if (paramInfo.isType(RequestHeaderList.class) || paramInfo.isType(RequestHeaderList.class))
+		if (paramInfo.isType(RequestHeaderList.class))
 			return new RestRequestArgs(RestRequest::getHeaders);
-		if (paramInfo.isType(RequestPathParamList.class) || paramInfo.isType(RequestPathParamList.class))
+		if (paramInfo.isType(RequestPathParamList.class))
 			return new RestRequestArgs(RestRequest::getPathParams);
-		if (paramInfo.isType(RequestQueryParamList.class) || paramInfo.isType(RequestQueryParamList.class))
+		if (paramInfo.isType(RequestQueryParamList.class))
 			return new RestRequestArgs(RestRequest::getQueryParams);
 		if (paramInfo.isType(ResourceBundle.class))
 			return new RestRequestArgs(RestRequest::getMessages);

@@ -554,6 +554,167 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// Nested maps and collections — serializeMap / serializeCollection paths
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j_mapWithMapValue() throws Exception {
+		// Map value inside a Map → serializeMap: aType.isMap() branch (line 337/340 isMap=true)
+		var outer = new LinkedHashMap<String, Object>();
+		var inner = new LinkedHashMap<String, Object>();
+		inner.put("k1", "v1");
+		outer.put("nested", inner);
+		var proto = PrototextSerializer.DEFAULT.serialize(outer);
+		assertNotNull(proto);
+		assertTrue(proto.contains("nested"), "Expected nested map field: " + proto);
+	}
+
+	@Test void j_mapWithCollectionValue() throws Exception {
+		// Collection value inside a Map → serializeMap: aType.isCollection() branch
+		var m = new LinkedHashMap<String, Object>();
+		m.put("items", List.of("a", "b", "c"));
+		var proto = PrototextSerializer.DEFAULT.serialize(m);
+		assertNotNull(proto);
+		assertTrue(proto.contains("items"), "Expected items field: " + proto);
+	}
+
+	@Test void j_beanListProperty_noListSyntax() throws Exception {
+		// Bean property with List<Map> → serializeCollection: elementIsBeanOrMap=true, useListSyntaxForBeans=false (default)
+		// Exercises the else-if(nn(fieldName)) path in serializeBeanMap for collection-of-maps
+		var root = new BeanWithBeanListProp();
+		var item1 = new LinkedHashMap<String, Object>();
+		item1.put("name", "alice");
+		var item2 = new LinkedHashMap<String, Object>();
+		item2.put("name", "bob");
+		root.setChildren(List.of(item1, item2));
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
+		assertNotNull(proto);
+		assertTrue(proto.contains("children"), "Expected children field: " + proto);
+	}
+
+	@Test void j_beanListProperty_useListSyntax() throws Exception {
+		// Bean property with List<Map> and useListSyntaxForBeans=true → list syntax path
+		var s = PrototextSerializer.create().useListSyntaxForBeans(true).build();
+		var root = new BeanWithBeanListProp();
+		var item1 = new LinkedHashMap<String, Object>();
+		item1.put("name", "alice");
+		var item2 = new LinkedHashMap<String, Object>();
+		item2.put("name", "bob");
+		root.setChildren(List.of(item1, item2));
+		var proto = s.serialize(root);
+		assertNotNull(proto);
+		assertTrue(proto.contains("children"), "Expected children field: " + proto);
+	}
+
+	@Test void j_collectionOfMaps_asProperty() throws Exception {
+		// Collection items that are Maps → serializeCollectionItem: aType.isMap() branch (line 361)
+		var root = new BeanWithMapListProp();
+		var m1 = new LinkedHashMap<String, Object>();
+		m1.put("x", "1");
+		var m2 = new LinkedHashMap<String, Object>();
+		m2.put("x", "2");
+		root.setEntries(List.of(m1, m2));
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
+		assertNotNull(proto);
+		assertTrue(proto.contains("entries") || proto.contains("x"), "Expected map items: " + proto);
+	}
+
+	@Test void j_mapWithBeanValue_serializeMap() throws Exception {
+		// Map value that is a bean → serializeMap: aType.isBean() branch (line 340 true)
+		var outer = new LinkedHashMap<String, Object>();
+		outer.put("child", new ChildBean("eve"));
+		var proto = PrototextSerializer.DEFAULT.serialize(outer);
+		assertNotNull(proto);
+		assertTrue(proto.contains("child"), "Expected child field: " + proto);
+		assertTrue(proto.contains("eve"), "Expected eve in: " + proto);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Scalar type dispatch: Date / Calendar / Temporal / Duration / Period / byte[]
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_dateBeanProperty() throws Exception {
+		// java.util.Date bean property → serializeScalarValue Date branch
+		var bean = new BeanWithDateProp();
+		bean.ts = new java.util.Date(0);
+		bean.name = "dateTest";
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("ts"), "Expected ts field: " + proto);
+	}
+
+	@Test void j02_calendarBeanProperty() throws Exception {
+		// java.util.Calendar bean property → serializeScalarValue Calendar branch
+		var bean = new BeanWithCalendarProp();
+		bean.cal = java.util.Calendar.getInstance();
+		bean.label = "calTest";
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("cal"), "Expected cal field: " + proto);
+	}
+
+	@Test void j03_temporalBeanProperty() throws Exception {
+		// java.time.Instant property → serializeScalarValue Temporal branch
+		var bean = new BeanWithInstantProp();
+		bean.instant = java.time.Instant.ofEpochMilli(0);
+		bean.label = "temporalTest";
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("instant"), "Expected instant field: " + proto);
+	}
+
+	@Test void j04_durationBeanProperty() throws Exception {
+		// java.time.Duration property → serializeScalarValue Duration branch
+		var bean = new BeanWithDurationProp();
+		bean.dur = java.time.Duration.ofSeconds(30);
+		bean.label = "durationTest";
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("dur"), "Expected dur field: " + proto);
+	}
+
+	@Test void j05_periodBeanProperty() throws Exception {
+		// java.time.Period property → serializeScalarValue Period branch
+		var bean = new BeanWithPeriodProp();
+		bean.period = java.time.Period.ofDays(7);
+		bean.label = "periodTest";
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("period"), "Expected period field: " + proto);
+	}
+
+	@Test void j06_bytesBeanProperty() throws Exception {
+		// byte[] property → serializeScalarValue byte[] branch
+		var bean = new BeanWithBytesProp();
+		bean.data = new byte[] { 1, 2, 3 };
+		bean.label = "bytesTest";
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("data"), "Expected data field: " + proto);
+	}
+
+	@Test void j07_floatAndDoubleValues() throws Exception {
+		// Float and Double in bean property → serializeScalarValue float branch
+		var bean = new BeanWithFloatProp();
+		bean.f = 1.5f;
+		bean.d = 2.5;
+		var proto = PrototextSerializer.DEFAULT.serialize(bean);
+		assertNotNull(proto);
+		assertTrue(proto.contains("1.5") || proto.contains("f"), "Expected float: " + proto);
+		assertTrue(proto.contains("2.5") || proto.contains("d"), "Expected double: " + proto);
+	}
+
+	@Test void j08_serializeAnything_withFieldName_collection() throws Exception {
+		// serializeAnything called with fieldName non-null and Collection type
+		// This is hit when a bean property has a collection value
+		var root = new BeanWithStringListField();
+		root.setNames(List.of("Alice", "Bob"));
+		var proto = PrototextSerializer.DEFAULT.serialize(root);
+		assertNotNull(proto);
+		assertTrue(proto.contains("names"), "Expected names field: " + proto);
+		assertTrue(proto.contains("Alice") && proto.contains("Bob"));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// Test fixture beans
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -588,5 +749,66 @@ class PrototextSerializerSession_Test extends TestBase {
 		private Map<String, Object>[] items;
 		public Map<String, Object>[] getItems() { return items; }
 		public void setItems(Map<String, Object>[] v) { items = v; }
+	}
+
+	public static class ChildBean {
+		private String name;
+		public String getName() { return name; }
+		public void setName(String v) { name = v; }
+		public ChildBean(String n) { name = n; }
+		public ChildBean() {}
+	}
+
+	public static class BeanWithBeanListProp {
+		private List<Object> children;
+		public List<Object> getChildren() { return children; }
+		public void setChildren(List<Object> v) { children = v; }
+	}
+
+	public static class BeanWithMapListProp {
+		private List<Map<String, Object>> entries;
+		public List<Map<String, Object>> getEntries() { return entries; }
+		public void setEntries(List<Map<String, Object>> v) { entries = v; }
+	}
+
+	public static class BeanWithDateProp {
+		public String name;
+		public java.util.Date ts;
+	}
+
+	public static class BeanWithCalendarProp {
+		public String label;
+		public java.util.Calendar cal;
+	}
+
+	public static class BeanWithInstantProp {
+		public String label;
+		public java.time.Instant instant;
+	}
+
+	public static class BeanWithDurationProp {
+		public String label;
+		public java.time.Duration dur;
+	}
+
+	public static class BeanWithPeriodProp {
+		public String label;
+		public java.time.Period period;
+	}
+
+	public static class BeanWithBytesProp {
+		public String label;
+		public byte[] data;
+	}
+
+	public static class BeanWithFloatProp {
+		public float f;
+		public double d;
+	}
+
+	public static class BeanWithStringListField {
+		private List<String> names;
+		public List<String> getNames() { return names; }
+		public void setNames(List<String> v) { names = v; }
 	}
 }

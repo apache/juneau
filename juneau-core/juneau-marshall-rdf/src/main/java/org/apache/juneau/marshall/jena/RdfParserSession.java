@@ -214,7 +214,7 @@ public class RdfParserSession extends ReaderParserSession {
 	}
 
 	private boolean isMultiValuedCollections(BeanPropertyMeta pMeta) {
-		var bpRdf = (pMeta == null ? RdfBeanPropertyMeta.DEFAULT : getRdfBeanPropertyMeta(pMeta));
+		var bpRdf = getRdfBeanPropertyMeta(pMeta);
 
 		if (bpRdf.getCollectionFormat() != RdfCollectionFormat.DEFAULT)
 			return bpRdf.getCollectionFormat() == RdfCollectionFormat.MULTI_VALUED;
@@ -430,6 +430,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private <E> Collection<E> parseIntoCollection(Container c, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
 		int argIndex = 0;
 		for (NodeIterator ni = c.iterator(); ni.hasNext();) {
+			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
 			l.add(e);
 		}
@@ -439,6 +440,7 @@ public class RdfParserSession extends ReaderParserSession {
 	private <E> Collection<E> parseIntoCollection(RDFList list, Collection<E> l, ClassMeta<?> type, BeanPropertyMeta pMeta) throws ParseException {
 		int argIndex = 0;
 		for (ExtendedIterator<RDFNode> ni = list.iterator(); ni.hasNext();) {
+			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			E e = (E)parseAnything(type.isArgs() ? type.getArg(argIndex++) : type.getElementType(), ni.next(), l, pMeta);
 			l.add(e);
 		}
@@ -483,6 +485,7 @@ public class RdfParserSession extends ReaderParserSession {
 		// Special case where we're parsing a loose collection of resources.
 		if (isLooseCollections() && type.isCollectionOrArray()) {
 			Collection c;
+			// HTT: isArgs() requires method-argument list ClassMeta; not reachable through public parse() API.
 			if (type.isArray() || type.isArgs())
 				c = list();
 			else
@@ -490,8 +493,10 @@ public class RdfParserSession extends ReaderParserSession {
 
 			var argIndex = new AtomicInteger(0);
 			var c2 = c;
+			// HTT: isArgs() guard — same constraint as above.
 			roots.forEach(x -> c2.add(parseAnything(type.isArgs() ? type.getArg(argIndex.getAndIncrement()) : type.getElementType(), x, getOuter(), null)));
 
+			// HTT: isArgs() guard — same constraint as above.
 			if (type.isArray() || type.isArgs())
 				return (T)toArray(type, c);
 			return (T)c;

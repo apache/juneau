@@ -109,6 +109,8 @@ public class PathRemainderArg implements RestOpArg {
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
+		// HTT: all branches require a live RestOpSession with HTTP path-parsing context;
+		//      covered by integration tests in juneau-integration-tests.
 		var req = opSession.getRequest();
 		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		// The path remainder is stored under the name "/*"

@@ -252,5 +252,32 @@ class PrototextSerializer_Test {
 		assertTrue(proto.contains("data:"));
 	}
 
+	// b — PrototextWriter branch fills via serializer
+	//----------------------------------------------------
+
+	@Test void b01_trimStrings_trims_leading_trailing_spaces() {
+		// Triggers PrototextWriter.stringValue() trimStrings=true branch (line 124)
+		var serializer = PrototextSerializer.create().trimStrings().build();
+		var m = JsonMap.of("name", "  Alice  ");
+		var proto = serializer.serialize(m);
+		assertTrue(proto.contains("\"Alice\""), "expected trimmed value in: " + proto);
+	}
+
+	@Test void b02_quotedFieldName_for_non_identifier_key() {
+		// Triggers PrototextWriter.fieldName() quoted-key branch: key starts with digit
+		var m = new LinkedHashMap<String, Object>();
+		m.put("123abc", "val");
+		var proto = PrototextSerializer.DEFAULT.serialize(m);
+		assertTrue(proto.contains("\"123abc\""), "expected quoted key in: " + proto);
+	}
+
+	@Test void b03_negativeIntegerKey_gets_quoted() {
+		// Triggers isBareIntegerTag false branch: negative integer
+		var m = new LinkedHashMap<String, Object>();
+		m.put("-1", "val");
+		var proto = PrototextSerializer.DEFAULT.serialize(m);
+		assertTrue(proto.contains("\"-1\""), "expected quoted negative key in: " + proto);
+	}
+
 	enum LogLevel { DEBUG, INFO, WARN, ERROR }
 }

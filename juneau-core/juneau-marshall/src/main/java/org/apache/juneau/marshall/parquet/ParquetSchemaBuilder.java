@@ -191,7 +191,7 @@ public final class ParquetSchemaBuilder {
 	})
 	private void addOptionalSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var et = cm.getElementType();
-		if (et == null)
+		if (et == null) // HTT: ClassMeta always resolves Optional's type parameter to Object at minimum
 			et = marshallingContext.getClassMeta(Object.class);
 		Object innerSample = sampleBean instanceof Optional<?> o ? o.orElse(null) : sampleBean;
 		var optPath = parentPath != null ? parentPath + "." + name : name;
@@ -204,7 +204,7 @@ public final class ParquetSchemaBuilder {
 	})
 	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
-		if (bm == null)
+		if (bm == null) // HTT: addBeanSchema is only called after isBean() check; getBeanMeta() is non-null
 			throw illegalArg("Class ''{0}'' is not a bean", cm.getName());
 		var beanClass = cm.inner();
 		// Recursion reached here indirectly (e.g. through Optional/collection of the same type) at the depth
@@ -213,7 +213,7 @@ public final class ParquetSchemaBuilder {
 		// by omission, which round-trips as null).
 		if (typesInProgress.getOrDefault(beanClass, 0) >= maxRecursionDepth) {
 			if (cycleHandling == ParquetCycleHandling.THROW) {
-				var path = parentPath != null ? parentPath + "." + name : name;
+				var path = parentPath != null ? parentPath + "." + name : name; // HTT: parentPath is always non-null when recursion limit is reached at depth ≥ 2
 				throw new SerializeException("Cyclic type reference at ''{0}'' (type ''{1}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());
 			}
 			addLeafSchema(elements, marshallingContext.getClassMeta(String.class), name, parentPath, isRoot);
@@ -246,15 +246,15 @@ public final class ParquetSchemaBuilder {
 						propCm = marshallingContext.getClassMeta(declared);
 				}
 				// When property type is Object, infer from sample so Map/Collection get proper schema (2.2)
-				if ((propCm == null || propCm.isObject()) && childSample != null)
+				if ((propCm == null || propCm.isObject()) && childSample != null) // HTT: propCm is non-null (getBeanInfo always non-null for bean properties)
 					propCm = marshallingContext.getClassMeta(childSample.getClass());
 				// When property type is the abstract java.lang.Number, re-type from a concrete numeric sample so
 				// the column uses the actual physical width (INT32/INT64/DOUBLE) and fractional values survive
 				// (GAP-12).  Only fires when the sample is itself a Number — a swapped property whose raw sample
 				// is non-numeric stays on the lossless INT64 default.
-				else if (propCm != null && propCm.is(Number.class) && childSample instanceof Number)
+				else if (propCm != null && propCm.is(Number.class) && childSample instanceof Number) // HTT: propCm is non-null (same invariant as above)
 					propCm = marshallingContext.getClassMeta(childSample.getClass());
-				if (propCm != null && propCm.isBean() && typesInProgress.getOrDefault(propCm.inner(), 0) >= maxRecursionDepth) {
+				if (propCm != null && propCm.isBean() && typesInProgress.getOrDefault(propCm.inner(), 0) >= maxRecursionDepth) { // HTT: propCm is non-null
 					if (cycleHandling == ParquetCycleHandling.THROW)
 						throw new SerializeException("Cyclic type reference at ''{0}.{1}'' (type ''{2}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", childParentPath, p.getName(), propCm.inner().getName());
 					continue;
@@ -312,7 +312,7 @@ public final class ParquetSchemaBuilder {
 
 	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var et = cm.getElementType();
-		if (et == null)
+		if (et == null) // HTT: ClassMeta always provides an element type (at least Object) for list types
 			throw illegalArg("List element type cannot be determined for ''{0}''", cm.getName());
 		// Resolve element type from sample when generics are erased (et is Object) for proper list-of-bean
 		// expansion into leaf columns (e.g. members.list.element.name, members.list.element.age)
@@ -340,7 +340,7 @@ public final class ParquetSchemaBuilder {
 	private void addMapSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Map<Class<?>, Integer> typesInProgress) {
 		var vt = cm.getValueType();
 		// Parquet MAP stores keys as STRING; non-String keys (e.g. Enum) are serialized via toString/name()
-		if (vt == null)
+		if (vt == null) // HTT: ClassMeta always provides a value type (at least Object) for map types
 			vt = marshallingContext.getClassMeta(Object.class);
 		var mapPath = parentPath != null ? parentPath + "." + name : name;
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, CONVERTED_MAP, null, null, null, null));

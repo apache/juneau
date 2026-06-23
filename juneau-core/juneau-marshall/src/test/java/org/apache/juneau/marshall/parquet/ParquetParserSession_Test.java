@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.parquet;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -108,6 +109,35 @@ class ParquetParserSession_Test extends TestBase {
 		} catch (@SuppressWarnings("unused") ParseException expected) {
 			// Acceptable - we're hitting the error path.
 		}
+	}
+
+	private static byte[] buildParquetWithNumRows(long numRows) throws IOException {
+		var footer = ThriftCompactEncoder.encodeToBytes(enc -> {
+			enc.writeStructBegin();
+			enc.writeFieldBegin(ThriftCompactEncoder.I64, 3); // field 3 = num_rows
+			enc.writeI64(numRows);
+			enc.writeStructEnd();
+		});
+		var out = new ByteArrayOutputStream();
+		out.write(new byte[]{'P', 'A', 'R', '1'});
+		out.write(footer);
+		int flen = footer.length;
+		out.write(flen & 0xFF);
+		out.write((flen >> 8) & 0xFF);
+		out.write((flen >> 16) & 0xFF);
+		out.write((flen >> 24) & 0xFF);
+		out.write(new byte[]{'P', 'A', 'R', '1'});
+		return out.toByteArray();
+	}
+
+	@Test void a06_negativeNumRows_throws() throws Exception {
+		var bytes = buildParquetWithNumRows(-1L);
+		assertThrows(ParseException.class, () -> ParquetParser.DEFAULT.parse(bytes, Object.class));
+	}
+
+	@Test void a07_tooLargeNumRows_throws() throws Exception {
+		var bytes = buildParquetWithNumRows(Long.MAX_VALUE);
+		assertThrows(ParseException.class, () -> ParquetParser.DEFAULT.parse(bytes, Object.class));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

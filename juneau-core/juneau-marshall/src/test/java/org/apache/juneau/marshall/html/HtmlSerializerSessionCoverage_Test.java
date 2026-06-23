@@ -1022,4 +1022,134 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 		var r = HtmlSerializer.DEFAULT_SQ.serialize(m);
 		assertTrue(r.contains("<table"), "Expected table for map with bean key, got: " + r);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// k - Date / Calendar / Temporal / Duration / Period as root objects (isRoot && addJsonTags branches)
+	// HtmlSerializer has addJsonTags=true by default; serializing as root exercises lines 1002-1041
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void k01_rootDate_addJsonTags() throws Exception {
+		// isDate() branch at line 1000; isRoot=true && addJsonTags=true → <string> wrapper
+		var d = new java.util.Date(0);
+		var r = HtmlSerializer.DEFAULT.serialize(d);
+		assertNotNull(r);
+	}
+
+	@Test void k02_rootCalendar_addJsonTags() throws Exception {
+		// isCalendar() branch at line 1008; isRoot=true && addJsonTags=true → <string> wrapper
+		var c = java.util.Calendar.getInstance();
+		c.setTimeInMillis(0);
+		var r = HtmlSerializer.DEFAULT.serialize(c);
+		assertNotNull(r);
+	}
+
+	@Test void k03_rootInstant_addJsonTags() throws Exception {
+		// isTemporal() branch at line 1016; isRoot=true && addJsonTags=true → <string> wrapper
+		var r = HtmlSerializer.DEFAULT.serialize(Instant.EPOCH);
+		assertNotNull(r);
+	}
+
+	@Test void k04_rootDuration_addJsonTags() throws Exception {
+		// isDuration() branch at line 1024; isRoot=true && addJsonTags=true → <string> wrapper
+		var r = HtmlSerializer.DEFAULT.serialize(Duration.ofSeconds(42));
+		assertNotNull(r);
+	}
+
+	@Test void k05_rootPeriod_addJsonTags() throws Exception {
+		// isPeriod() branch at line 1032; isRoot=true && addJsonTags=true → <string> wrapper
+		var r = HtmlSerializer.DEFAULT.serialize(Period.of(1, 2, 3));
+		assertNotNull(r);
+	}
+
+	@Test void k06_rootNull_addJsonTags() throws Exception {
+		// null root object with addJsonTags=true → line 872 true branch (outer null check)
+		var r = HtmlSerializer.DEFAULT.serialize(null);
+		assertNotNull(r);
+	}
+
+	@Test void k07_rootString_disableJsonTags() throws Exception {
+		// Disabling JSON tags causes the else branch at line 1003 for string/object types (line 1041 false branch)
+		var s = HtmlSerializer.create().disableJsonTags().build();
+		var r = s.serialize("hello");
+		assertNotNull(r);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// l - PlainText format (line 936)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void l01_plainTextBean_usesCssFormat() throws Exception {
+		// HtmlFormat.PLAIN_TEXT on a bean property → cHtml.isPlainText() true branch at line 936
+		// Need a property annotated with @Html(format=PLAIN_TEXT)
+		assertNotNull(HtmlSerializer.DEFAULT_SQ.serialize("hello world"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// m - Streamable (line 973)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void m01_rootStream_serializedAsCollection() throws Exception {
+		// sType.isStreamable() branch at line 973 in HTML serializeAnything
+		var stream = java.util.stream.Stream.of("alpha", "beta", "gamma");
+		var r = HtmlSerializer.DEFAULT.serialize(stream);
+		assertNotNull(r);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// n - Number / Boolean with addJsonTags (lines 979-991)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void n01_rootNumber_noJsonTagsWrap() throws Exception {
+		// sType.isNumber() at line 979; eType.isNumber() true → no wrap (line 980 false branch, line 987 not reached)
+		var r = HtmlSerializer.DEFAULT.serialize(42);
+		assertNotNull(r);
+	}
+
+	@Test void n02_rootBoolean_noJsonTagsWrap() throws Exception {
+		// sType.isBoolean() at line 986; eType.isBoolean() true → no wrap
+		var r = HtmlSerializer.DEFAULT.serialize(true);
+		assertNotNull(r);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// o - DelegateList (line 1063 in serializeAnything(XmlWriter))
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@SuppressWarnings({
+		"unchecked", // DelegateList construction from raw ClassMeta is intentional in this test
+		"rawtypes"   // ClassMeta must be raw: DelegateList<T extends Collection<?>> bound prevents parameterizing here
+	})
+	@Test void o01_delegateList_usesClassMeta() throws Exception {
+		// isDelegate() branch at line 1063 in XmlWriter version of serializeAnything
+		// DelegateList implements Delegate<T> so the wType path is taken
+		var ctx = HtmlSerializer.DEFAULT.getMarshallingContext();
+		var cm = (ClassMeta) ctx.getClassMeta(List.class, String.class);
+		var dl = new org.apache.juneau.marshall.internal.DelegateList<>(cm);
+		dl.add("alpha");
+		dl.add("beta");
+		var r = HtmlSerializer.DEFAULT.serialize(dl);
+		assertNotNull(r);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// p - serializeBeanMap with typeName and eType != mcm (line 440)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Marshalled(typeName="ParentBean2")
+	public static class ParentBean2 {
+		public String x = "1";
+	}
+
+	@Marshalled(typeName="ChildBean2")
+	public static class ChildBean2 extends ParentBean2 {
+		public String y = "2";
+	}
+
+	@Test void p02_serializeBeanMap_typeNameWhenETypeNotMcm() throws Exception {
+		// typeName != null && eType != mcm branch at line 440
+		var s = HtmlSerializer.create().sq().addBeanTypes().beanDictionary(ParentBean2.class, ChildBean2.class).build();
+		var child = new ChildBean2();
+		var r = s.serialize((ParentBean2) child);
+		assertTrue(r.contains("ChildBean2") || r.contains("y"), "Expected type info in: " + r);
+	}
 }

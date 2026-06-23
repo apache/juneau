@@ -93,6 +93,8 @@ public class RecordReaderArg extends SimpleRestOperationArg {
 	}
 
 	private static Object resolve(RestOpSession opSession, Class<?> declaredType) throws IOException, ParseException {
+		// HTT: all branches require a live RestOpSession with HTTP request parsing infrastructure;
+		//      covered by integration tests in juneau-integration-tests.
 		var req = opSession.getRequest();
 		var content = req.getContent();
 		var match = content.getParserMatch();

@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -231,5 +232,371 @@ class MarkdownSerializer_Test {
 		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(original);
 		var parsed = (Map<String, String>) org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.to(md, Map.class, String.class, String.class);
 		assertEquals(original, parsed);
+	}
+
+	//====================================================================================================
+	// j — meta-provider methods: null-bpm guard + nullValue(null) guard
+	//====================================================================================================
+
+	@Test void j01_getMarkdownBeanPropertyMeta_null_returnsDefault() {
+		var result = MarkdownSerializer.DEFAULT.getMarkdownBeanPropertyMeta(null);
+		assertSame(org.apache.juneau.marshall.markdown.MarkdownBeanPropertyMeta.DEFAULT, result);
+	}
+
+	@Test void j02_nullValue_null_usesDefaultMarker() {
+		var serializer = MarkdownSerializer.create().nullValue(null).build();
+		assertNotNull(serializer.getNullValue());
+	}
+
+	//====================================================================================================
+	// k - Date and temporal types in inline cell values
+	//====================================================================================================
+
+	@Test void k01_serializeDateInlineValue() {
+		// java.util.Date property in a bean → serializeInlineValue Date path
+		var bean = new K();
+		bean.ts = new java.util.Date(0);
+		bean.name = "test";
+		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		assertNotNull(md);
+		assertTrue(md.contains("| ts |"), "Expected ts property: " + md);
+	}
+
+	@Test void k02_serializeCalendarInlineValue() {
+		// java.util.Calendar property → serializeInlineValue Calendar path
+		var bean = new KCal();
+		bean.cal = java.util.Calendar.getInstance();
+		bean.label = "calTest";
+		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		assertNotNull(md);
+		assertTrue(md.contains("| cal |"), "Expected cal property: " + md);
+	}
+
+	@Test void k03_serializeTemporalInlineValue() {
+		// java.time.Instant property → serializeInlineValue Temporal path
+		var bean = new KTemporal();
+		bean.instant = java.time.Instant.ofEpochMilli(0);
+		bean.label = "temporalTest";
+		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		assertNotNull(md);
+		assertTrue(md.contains("| instant |"), "Expected instant property: " + md);
+	}
+
+	@Test void k04_serializeDurationInlineValue() {
+		// java.time.Duration property → serializeInlineValue Duration path
+		var bean = new KDuration();
+		bean.dur = java.time.Duration.ofSeconds(60);
+		bean.label = "durationTest";
+		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		assertNotNull(md);
+		assertTrue(md.contains("| dur |"), "Expected dur property: " + md);
+	}
+
+	@Test void k05_serializePeriodInlineValue() {
+		// java.time.Period property → serializeInlineValue Period path
+		var bean = new KPeriod();
+		bean.period = java.time.Period.ofDays(7);
+		bean.label = "periodTest";
+		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		assertNotNull(md);
+		assertTrue(md.contains("| period |"), "Expected period property: " + md);
+	}
+
+	@Test void k06_serializeOptionalEmptyInBean() {
+		// Optional.empty() property → serializeAnything Optional.isEmpty() branch (null path)
+		var bean = new KOptional();
+		bean.name = java.util.Optional.empty();
+		var md = MarkdownSerializer.DEFAULT.serialize(bean);
+		assertNotNull(md);
+		// Empty Optional renders as null value (null marker or omitted key)
+		assertTrue(md.contains("name") || md.contains("*null*"), "Expected name property in: " + md);
+	}
+
+	public static class K {
+		public String name;
+		public java.util.Date ts;
+	}
+
+	public static class KCal {
+		public String label;
+		public java.util.Calendar cal;
+	}
+
+	public static class KTemporal {
+		public String label;
+		public java.time.Instant instant;
+	}
+
+	public static class KDuration {
+		public String label;
+		public java.time.Duration dur;
+	}
+
+	public static class KPeriod {
+		public String label;
+		public java.time.Period period;
+	}
+
+	public static class KOptional {
+		public java.util.Optional<String> name;
+	}
+
+	//====================================================================================================
+	// l - Collection edge cases in serializeCollection
+	//====================================================================================================
+
+	@Test void l01_serializeEmptyCollection() {
+		// Empty collection → serializeCollection returns immediately (empty branch)
+		var md = MarkdownSerializer.DEFAULT.serialize(java.util.List.of());
+		// Empty collection → empty output
+		assertTrue(md == null || md.isEmpty() || md.isBlank(), "Expected empty output for empty collection: '" + md + "'");
+	}
+
+	@Test void l02_serializeCollectionWithAllNullItems() {
+		// All-null collection → getTableHeaders returns null → bulleted list path
+		var list = new java.util.ArrayList<>();
+		list.add(null);
+		list.add(null);
+		var md = MarkdownSerializer.DEFAULT.serialize(list);
+		assertNotNull(md);
+		// Should render as bulleted list with null markers
+		assertTrue(md.contains("*null*"), "Expected null markers in bulleted list: " + md);
+	}
+
+	@Test void l03_serializeMapWithNullKey() {
+		// Map with null key → serializeMap null-key branch
+		var m = new java.util.HashMap<>();
+		m.put(null, "value");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("*null*") || md.contains("value"), "Expected map output: " + md);
+	}
+
+	//====================================================================================================
+	// m - escapeJson5String special character paths
+	//====================================================================================================
+
+	@Test void m01_serializeStringWithSingleQuoteAndBackslash() {
+		// Single-quote and backslash in string → escapeJson5String special char branches
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("val", "it's a \\test");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		// The string should be wrapped in JSON5 backtick syntax (ambiguous due to backslash or single quote)
+		// Round-trip should preserve the value
+		@SuppressWarnings("unchecked")
+		var parsed = (java.util.Map<String,String>) MarkdownParser.DEFAULT.parse(md, java.util.Map.class);
+		assertEquals("it's a \\test", parsed.get("val"));
+	}
+
+	@Test void m02_serializeStringWithTabAndCR() {
+		// Tab and CR in string → escapeJson5String \t and \r paths
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("tab", "a\tb");
+		m.put("cr", "a\rb");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		// These should be wrapped in JSON5 backtick syntax (control chars trigger isAmbiguousString)
+		assertTrue(md.contains("`'"), "Expected JSON5 wrapping for tab/CR: " + md);
+	}
+
+	//====================================================================================================
+	// n - addBeanTypes with polymorphic beans
+	//====================================================================================================
+
+	@Marshalled(typeName="nbase")
+	public static class NBase {
+		public String type;
+	}
+
+	@Marshalled(typeName="nchild")
+	public static class NChild extends NBase {
+		public String extra;
+	}
+
+	@Test void n01_addBeanTypes_inKeyValueTable() {
+		// addBeanTypes → getBeanTypeName may return non-null when declared type differs from actual type
+		var s = MarkdownSerializer.create().addBeanTypes().beanDictionary(NBase.class, NChild.class).build();
+		var child = new NChild();
+		child.type = "test";
+		child.extra = "extra";
+		// Serialize as the declared parent type so addBeanTypes kicks in
+		var md = s.serialize((NBase) child);
+		assertNotNull(md);
+		// Should produce some table output with bean properties
+		assertTrue(md.contains("|"), "Expected table output: " + md);
+	}
+
+	//====================================================================================================
+	// o - Date/Calendar/Temporal/Duration/Period as MAP values
+	// These hit serializeInlineValue's isDate/isCalendar/isTemporal/isDuration/isPeriod branches
+	// (lines 459-471). Bean properties miss these because applyContextFormats installs a per-property
+	// swap that converts them to String before serializeInlineValue is called.
+	//====================================================================================================
+
+	@Test void o01_dateAsMapValue() {
+		var m = new java.util.LinkedHashMap<String, Object>();
+		m.put("ts", new java.util.Date(0));
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("| ts |"), "Expected ts key: " + md);
+	}
+
+	@Test void o02_calendarAsMapValue() {
+		var m = new java.util.LinkedHashMap<String, Object>();
+		m.put("cal", java.util.Calendar.getInstance());
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("| cal |"), "Expected cal key: " + md);
+	}
+
+	@Test void o03_temporalAsMapValue() {
+		var m = new java.util.LinkedHashMap<String, Object>();
+		m.put("instant", java.time.Instant.ofEpochMilli(0));
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("| instant |"), "Expected instant key: " + md);
+	}
+
+	@Test void o04_durationAsMapValue() {
+		var m = new java.util.LinkedHashMap<String, Object>();
+		m.put("dur", java.time.Duration.ofSeconds(60));
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("| dur |"), "Expected dur key: " + md);
+	}
+
+	@Test void o05_periodAsMapValue() {
+		var m = new java.util.LinkedHashMap<String, Object>();
+		m.put("period", java.time.Period.ofDays(7));
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("| period |"), "Expected period key: " + md);
+	}
+
+	//====================================================================================================
+	// p - Direct serializeAnything paths: null root, Optional
+	//====================================================================================================
+
+	@Test void p01_serializeNullRoot() {
+		// null as root object → serializeAnything null branch at line 153
+		var md = MarkdownSerializer.DEFAULT.serialize(null);
+		assertNotNull(md);
+		assertTrue(md.contains("*null*"), "Expected null marker: " + md);
+	}
+
+	@Test void p02_serializeOptionalPresent() {
+		// Optional.of("hello") as root → serializeAnything isOptional=true, isEmpty=false (lines 172, 174 false)
+		var md = MarkdownSerializer.DEFAULT.serialize(java.util.Optional.of("hello"));
+		assertNotNull(md);
+		assertTrue(md.contains("hello"), "Expected value in output: " + md);
+	}
+
+	@Test void p03_serializeOptionalEmpty() {
+		// Optional.empty() as root → serializeAnything isOptional=true, isEmpty=true (lines 172, 174 true)
+		var md = MarkdownSerializer.DEFAULT.serialize(java.util.Optional.empty());
+		assertNotNull(md);
+		assertTrue(md.contains("*null*"), "Expected null marker: " + md);
+	}
+
+	@Test void p04_serializeStreamable() {
+		// Stream as root → serializeAnything isStreamable branch at line 191
+		var stream = java.util.stream.Stream.of("alpha", "beta", "gamma");
+		var md = MarkdownSerializer.DEFAULT.serialize(stream);
+		assertNotNull(md);
+		assertTrue(md.contains("alpha"), "Expected alpha in output: " + md);
+	}
+
+	//====================================================================================================
+	// q - showHeaders=false for map serialization
+	//====================================================================================================
+
+	@Test void q01_noHeadersForMap() {
+		// showHeaders=false with a map → skip header at line 257
+		var s = MarkdownSerializer.create().showHeaders(false).build();
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("k1", "v1");
+		var md = s.serialize(m);
+		assertFalse(md.contains("| Key |"), "Should not have header row: " + md);
+		assertTrue(md.contains("| k1 | v1 |"), "Expected data row: " + md);
+	}
+
+	//====================================================================================================
+	// r - Ambiguous map key (line 266 in serializeMap)
+	//====================================================================================================
+
+	@Test void r01_numericMapKey() {
+		// Key that looks like a number → isAmbiguousString returns true for key at line 266
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("42", "answer");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("42"), "Expected numeric key in output: " + md);
+	}
+
+	@Test void r02_nullValueStringAsMapKey() {
+		// Key matching nullValue → isAmbiguousString(key, nullValue) returns true at line 370
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("*null*", "surprise");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+	}
+
+	//====================================================================================================
+	// s - Collection with null item in table mode (line 310)
+	//====================================================================================================
+
+	@Test void s01_beanCollectionWithNullItem() {
+		// Collection of beans where one item is null → null row in table at line 310
+		var list = new java.util.ArrayList<B>();
+		list.add(new B("Alice", 30));
+		list.add(null);
+		list.add(new B("Bob", 25));
+		var md = MarkdownSerializer.DEFAULT.serialize(list);
+		assertNotNull(md);
+		assertTrue(md.contains("Alice"), "Expected Alice in table: " + md);
+		assertTrue(md.contains("*null*"), "Expected null row: " + md);
+	}
+
+	//====================================================================================================
+	// t - addBeanTypes + addRootType on a list of polymorphic beans (lines 326-335)
+	//====================================================================================================
+
+	@Test void t01_addRootType_beanCollection() {
+		// addBeanTypes + addRootType on a list → isRoot() && isAddRootType() check at line 328
+		var s = MarkdownSerializer.create().addBeanTypes().addRootType().beanDictionary(NBase.class, NChild.class).build();
+		var list = java.util.List.of(new NChild(), new NChild());
+		var md = s.serialize(list);
+		assertNotNull(md);
+		assertTrue(md.contains("|"), "Expected table output: " + md);
+	}
+
+	//====================================================================================================
+	// u - isAmbiguousString edge cases in serializeInlineValue (lines 369-377)
+	//====================================================================================================
+
+	@Test void u01_emptyStringAsMapValue() {
+		// Empty string value → isAmbiguousString returns true at line 369 (s.isEmpty())
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("key", "");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+		assertTrue(md.contains("key"), "Expected key in output: " + md);
+	}
+
+	@Test void u02_nullValueStringAsMapValue() {
+		// String equal to nullValue → isAmbiguousString returns true at line 370 (s.equals(nullValue))
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("key", "*null*");
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
+	}
+
+	@Test void u03_controlCharStringAsMapValue() {
+		// String with char < 32 → isAmbiguousString returns true at line 373
+		var m = new java.util.LinkedHashMap<String, String>();
+		m.put("key", "a\u007fb");  // char 127 (DEL) triggers the c == 127 branch
+		var md = MarkdownSerializer.DEFAULT.serialize(m);
+		assertNotNull(md);
 	}
 }

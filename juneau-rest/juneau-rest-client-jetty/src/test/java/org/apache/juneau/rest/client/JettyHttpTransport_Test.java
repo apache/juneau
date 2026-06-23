@@ -83,6 +83,11 @@ class JettyHttpTransport_Test {
 			exchange.close();
 		});
 
+		server.createContext("/no-content", exchange -> {
+			exchange.sendResponseHeaders(204, -1);
+			exchange.close();
+		});
+
 		server.start();
 	}
 
@@ -174,6 +179,19 @@ class JettyHttpTransport_Test {
 		}
 	}
 
+	@Test
+	void b04_patch_echosMethod() throws Exception {
+		var transport = JettyHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.patch("/echo-method")
+					.body(StringBody.of("", "text/plain"))
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("PATCH", response.getBodyAsString());
+			}
+		}
+	}
+
 	// =================================================================================================================
 	// C — Request body
 	// =================================================================================================================
@@ -201,6 +219,21 @@ class JettyHttpTransport_Test {
 					.run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("byte content", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void c03_post_nullContentTypeBody() throws Exception {
+		// Exercises the ct == null branch in buildRequestContent() → uses "application/octet-stream" fallback.
+		var transport = JettyHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			var bytes = "raw".getBytes(StandardCharsets.UTF_8);
+			try (var response = client.post("/echo-body")
+					.body(ByteArrayBody.of(bytes, null))
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("raw", response.getBodyAsString());
 			}
 		}
 	}
@@ -246,6 +279,34 @@ class JettyHttpTransport_Test {
 			try (var response = client.get("/hello").run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("Hello, World!", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void e02_builder_withAlreadyStartedHttpClient() throws Exception {
+		// Exercises the httpClient.isStarted() == true branch (skip start()).
+		var httpClient = new HttpClient();
+		httpClient.start();
+		var transport = JettyHttpTransport.builder()
+			.httpClient(httpClient)
+			.build();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.get("/hello").run()) {
+				assertEquals(200, response.getStatusCode());
+			}
+		}
+	}
+
+	@Test
+	void e03_builder_zeroResponseTimeout() throws Exception {
+		// Exercises the responseTimeoutMs <= 0 branch → waits with Long.MAX_VALUE.
+		var transport = JettyHttpTransport.builder()
+			.responseTimeoutMs(0)
+			.build();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.get("/hello").run()) {
+				assertEquals(200, response.getStatusCode());
 			}
 		}
 	}

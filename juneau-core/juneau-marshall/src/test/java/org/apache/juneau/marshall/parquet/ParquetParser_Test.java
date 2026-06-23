@@ -30,6 +30,39 @@ import org.junit.jupiter.api.*;
  */
 class ParquetParser_Test extends TestBase {
 
+	// Builder branch coverage: nullKeyString + getParquetBeanPropertyMeta(null)
+
+	@Test
+	void b01_nullKeyStringNull() {
+		// nullKeyString(null) → falls back to the default "<NULL>" literal
+		var p = ParquetParser.create().nullKeyString(null).build();
+		assertEquals("<NULL>", p.nullKeyString);
+	}
+
+	@Test
+	void b02_nullKeyStringNonNull() {
+		// nullKeyString("N/A") → stored verbatim
+		var p = ParquetParser.create().nullKeyString("N/A").build();
+		assertEquals("N/A", p.nullKeyString);
+	}
+
+	@Test
+	void b03_getParquetBeanPropertyMetaNull() {
+		// getParquetBeanPropertyMeta(null) → DEFAULT sentinel
+		assertSame(ParquetBeanPropertyMeta.DEFAULT, ParquetParser.DEFAULT.getParquetBeanPropertyMeta(null));
+	}
+
+	public static class B04_Bean { public String name; }
+
+	@Test
+	void b04_getParquetBeanPropertyMetaNonNull() {
+		// getParquetBeanPropertyMeta(non-null bpm) → creates/caches a ParquetBeanPropertyMeta
+		var bm = org.apache.juneau.marshall.MarshallingContext.DEFAULT.getBeanMeta(B04_Bean.class);
+		var bpm = bm.getPropertyMeta("name");
+		var meta = ParquetParser.DEFAULT.getParquetBeanPropertyMeta(bpm);
+		assertNotNull(meta);
+	}
+
 	@Test
 	void a01_parseSimpleBean() throws Exception {
 		var a = new ParquetSerializer_Test.SimpleBean();

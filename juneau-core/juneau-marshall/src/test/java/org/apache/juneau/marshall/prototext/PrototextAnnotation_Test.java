@@ -203,4 +203,13 @@ class PrototextAnnotation_Test extends TestBase {
 		var b = PrototextAnnotation.create().comment("x").build();
 		assertEquals(a.comment(), b.comment());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// i — builder null-guard branches
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_comment_null_usesEmpty() {
+		var a = PrototextAnnotation.create().comment(null).build();
+		assertEquals("", a.comment());
+	}
 }

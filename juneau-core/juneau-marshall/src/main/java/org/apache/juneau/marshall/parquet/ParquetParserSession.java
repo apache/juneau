@@ -219,19 +219,16 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		if (rows.size() == 1 && rows.get(0) instanceof Map<?, ?> m && m.containsKey("value") && targetWantsScalar) {
 			var inner = m.get("value");
 			if (type.isOptional())
-				return (T)(inner == null ? opte() : opt(convertToType(inner, type.getElementType())));
+				return (T)opt(convertToType(inner, type.getElementType()));
 			if (type.isArray()) {
-				var list = new ArrayList<>();
-				if (inner != null)
-					list.add(inner);
+				var list = new ArrayList<>(List.of(inner));
 				return (T)convertToType(list, type);
 			}
 			if (type.isCollection()) {
 				Object coll = type.newInstance();
 				if (coll == null)
 					coll = new ArrayList<>();
-				if (inner != null)
-					((Collection<Object>)coll).add(convertToType(prepareMapForBean(inner, type.getElementType()), type.getElementType()));
+				((Collection<Object>)coll).add(convertToType(prepareMapForBean(inner, type.getElementType()), type.getElementType()));
 				return (T)coll;
 			}
 			return (T)convertToType(prepareMapForBean(inner, type), type);
@@ -292,11 +289,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 		if (rows.size() == 1) {
 			var row0 = rows.get(0);
-			// Explicit unwrap for ValueHolder {value: X} when target expects scalar
-			if (row0 instanceof Map<?, ?> mapRow && mapRow.containsKey("value") && targetWantsScalar) {
-				var inner = mapRow.get("value");
-				return (T)convertToType(prepareMapForBean(inner == null ? "" : inner, type), type);
-			}
 			var unwrapped = unwrapValueHolder(row0, type);
 			return (T)unwrapped;
 		}
@@ -317,7 +309,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	private static boolean startsWith(byte[] a, byte[] b, int off) {
-		if (off + b.length > a.length) return false;
 		for (int i = 0; i < b.length; i++)
 			if (a[off + i] != b[i]) return false;
 		return true;
@@ -552,11 +543,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				// Prefer the explicit LogicalType discriminant (field 10) when present; otherwise fall back to
 				// the legacy "FIXED_LEN_BYTE_ARRAY == UUID" physical-type heuristic for backward compatibility
 				// with files written without the opt-in discriminator (work item 134).
-				if (type == TYPE_FIXED_LEN_BYTE_ARRAY) {
-					var readAsUuid = logicalType == null || logicalType == LOGICAL_TYPE_UUID;
-					if (readAsUuid)
-						uuidPaths.add(path);
-				}
+				if (type == TYPE_FIXED_LEN_BYTE_ARRAY)
+					uuidPaths.add(path);
 				if (parquetDebug())
 					parquetDebugLog("readSchema leaf: path=" + path + " name=" + name + " rep=" + rep
 						+ " convertedType=" + convertedType + " logicalType=" + logicalType + " pathStack=" + pathStack);
@@ -691,10 +679,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		var allRows = new ArrayList<Object>((int)Math.min(meta.numRows(), MAX_NUM_ROWS));
 		for (var group : meta.rowGroups()) {
 			int groupRows = (int)group.numRows();
-			if (groupRows <= 0)
-				groupRows = meta.rowGroups().size() == 1 ? (int)meta.numRows() : 0;
-			if (groupRows <= 0)
-				continue;
 			allRows.addAll(readRowGroupRows(fileBytes, group, groupRows, elementType, schemaRepetition, rawByteArrayPaths, uuidPaths, columnLogical));
 		}
 		return allRows;
@@ -724,45 +708,32 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	private static boolean isListColumnPath(String path) {
-		return path != null && (path.endsWith(".list.element") || path.contains(".list.element."));
+		return path.endsWith(".list.element") || path.contains(".list.element.");
 	}
 
 	private static boolean isMapKeyValueColumnPath(String path) {
-		return path != null && (path.contains(".key_value.key") || path.contains(".key_value.value"));
+		return path.contains(".key_value.key") || path.contains(".key_value.value");
 	}
 
 	private static String mapPropertyPath(String mapKeyValuePath) {
-		if (mapKeyValuePath == null)
-			return mapKeyValuePath;
-		int idx = mapKeyValuePath.indexOf(".key_value.");
-		return idx < 0 ? mapKeyValuePath : mapKeyValuePath.substring(0, idx);
+		return mapKeyValuePath.substring(0, mapKeyValuePath.indexOf(".key_value."));
 	}
 
 	/** Returns true if rows are key-value pairs (Map with non-String keys format). */
 	private static boolean isKeyValuePairFormat(List<?> rows) {
 		if (e(rows))
 			return false;
-		var first = rows.get(0);
-		if (!(first instanceof Map<?, ?> m))
-			return false;
-		return m.containsKey("key") && m.containsKey("value") && m.size() == 2;
+		var first = (Map<?,?>) rows.get(0);
+		return first.containsKey("key") && first.containsKey("value") && first.size() == 2;
 	}
 
-	/** Path relative to the row (bean). Schema paths may include root prefix for list roots. */
+	/** Path relative to the row (bean). All schema leaf paths start with "root.". */
 	private static String rowRelativePath(String fullPath) {
-		if (fullPath == null)
-			return fullPath;
-		if (fullPath.startsWith("root.list.element."))
-			return fullPath.substring("root.list.element.".length());
-		if (fullPath.startsWith("root."))
-			return fullPath.substring("root.".length());
-		return fullPath;
+		return fullPath.substring("root.".length());
 	}
 
 	/** For list column path like "tags.list.element" or "members.list.element.name", returns the bean property name ("tags" or "members"). */
 	private static String listPropertyPath(String listColumnPath) {
-		if (listColumnPath == null)
-			return listColumnPath;
 		int idx = listColumnPath.indexOf(".list.element");
 		return idx < 0 ? listColumnPath : listColumnPath.substring(0, idx);
 	}
@@ -774,8 +745,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int listDepth = listDepth(rowRelPath);
 			int maxDef = 3 * listDepth;
 			int maxRep = listDepth;
-			int defBitWidth = maxDef <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxDef);
-			int repBitWidth = maxRep <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxRep);
+			int defBitWidth = 32 - Integer.numberOfLeadingZeros(maxDef);
+			int repBitWidth = 32 - Integer.numberOfLeadingZeros(maxRep);
 
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
 				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
@@ -792,39 +763,25 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 			int numValues = (int)cc.numValues();
 			int off2 = 0;
-			int repLen = 0;
-			if (maxRep > 0 && decompressed.length >= 4) {
-				repLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-					| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
-				off2 += 4 + repLen;
-			}
+			int repLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
+				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			off2 += 4 + repLen;
 			int defStart = off2;
-			int defLen = 0;
-			if (decompressed.length - off2 >= 4) {
-				defLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-					| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
-				off2 += 4 + defLen;
-			}
+			int defLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
+				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			off2 += 4 + defLen;
 			var valueBytes = Arrays.copyOfRange(decompressed, off2, decompressed.length);
-
-			var repBytes = maxRep > 0 && repLen > 0
-				? Arrays.copyOfRange(decompressed, 4, 4 + repLen)
-					: null;
+			var repBytes = Arrays.copyOfRange(decompressed, 4, 4 + repLen);
 			var defBytes = Arrays.copyOfRange(decompressed, defStart + 4, defStart + 4 + defLen);
-			var repDecoder = repBytes != null ? new RleBitPackingDecoder(repBytes, repBitWidth) : null;
+			var repDecoder = new RleBitPackingDecoder(repBytes, repBitWidth);
 			var defDecoder = new RleBitPackingDecoder(defBytes, defBitWidth);
 			var valueReader = new ParquetColumnReader(valueBytes, numValues, 0);
 
 			var flattened = new ArrayList<Object[]>();
 			for (int i = 0; i < numValues; i++) {
-				int rep = repDecoder != null ? repDecoder.readInt() : 0;
+				int rep = repDecoder.readInt();
 				int def = defDecoder.readInt();
-				Object val;
-				if (def >= maxDef) {
-					val = readValue(valueReader, cc.type(), trimStrings);
-				} else {
-					val = null;
-				}
+				Object val = def >= maxDef ? readValue(valueReader, cc.type(), trimStrings) : null;
 				flattened.add(new Object[] { val, rep, def });
 			}
 
@@ -938,8 +895,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	}
 
 	private static int listDepth(String path) {
-		if (path == null)
-			return 0;
 		int depth = 0;
 		for (int idx = 0; (idx = path.indexOf(".list.element", idx)) >= 0; idx += 13)
 			depth++;
@@ -953,8 +908,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		try {
 			int maxDef = MAP_MAX_DEF;
 			int maxRep = MAP_MAX_REP;
-			int defBitWidth = maxDef <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxDef);
-			int repBitWidth = maxRep <= 0 ? 1 : 32 - Integer.numberOfLeadingZeros(maxRep);
+			int defBitWidth = 32 - Integer.numberOfLeadingZeros(maxDef);
+			int repBitWidth = 32 - Integer.numberOfLeadingZeros(maxRep);
 
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
 				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
@@ -971,38 +926,25 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 			int numValues = (int)cc.numValues();
 			int off2 = 0;
-			int repLen = 0;
-			if (maxRep > 0 && decompressed.length >= 4) {
-				repLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-					| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
-				off2 += 4 + repLen;
-			}
+			int repLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
+				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			off2 += 4 + repLen;
 			int defStart = off2;
-			int defLen = 0;
-			if (decompressed.length - off2 >= 4) {
-				defLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
-					| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
-				off2 += 4 + defLen;
-			}
-			var repBytes = maxRep > 0 && repLen > 0
-				? Arrays.copyOfRange(decompressed, 4, 4 + repLen)
-					: null;
+			int defLen = (decompressed[off2] & 0xFF) | ((decompressed[off2 + 1] & 0xFF) << 8)
+				| ((decompressed[off2 + 2] & 0xFF) << 16) | ((decompressed[off2 + 3] & 0xFF) << 24);
+			off2 += 4 + defLen;
+			var repBytes = Arrays.copyOfRange(decompressed, 4, 4 + repLen);
 			var defBytes = Arrays.copyOfRange(decompressed, defStart + 4, defStart + 4 + defLen);
-			var repDecoder = repBytes != null ? new RleBitPackingDecoder(repBytes, repBitWidth) : null;
+			var repDecoder = new RleBitPackingDecoder(repBytes, repBitWidth);
 			var defDecoder = new RleBitPackingDecoder(defBytes, defBitWidth);
 			var valueBytes = Arrays.copyOfRange(decompressed, off2, decompressed.length);
 			var valueReader = new ParquetColumnReader(valueBytes, numValues, 0);
 
 			var flattened = new ArrayList<Object[]>();
 			for (int i = 0; i < numValues; i++) {
-				int rep = repDecoder != null ? repDecoder.readInt() : 0;
+				int rep = repDecoder.readInt();
 				int def = defDecoder.readInt();
-				Object val;
-				if (def >= maxDef) {
-					val = readValue(valueReader, cc.type(), trimStrings);
-				} else {
-					val = null;
-				}
+				Object val = def >= maxDef ? readValue(valueReader, cc.type(), trimStrings) : null;
 				flattened.add(new Object[] { val, rep, def });
 			}
 
@@ -1050,7 +992,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			var path = String.join(".", cc.pathInSchema());
 			int rep = schemaRepetition.getOrDefault(path, OPTIONAL);
-			boolean isUnderListRoot = path != null && path.startsWith("root.list.element.");
+			boolean isUnderListRoot = path.startsWith("root.list.element.");
 			boolean isPrimitiveType = cc.type() == TYPE_INT32 || cc.type() == TYPE_INT64 || cc.type() == TYPE_FLOAT || cc.type() == TYPE_DOUBLE || cc.type() == TYPE_BOOLEAN;
 			// Max def level for a non-list/non-map leaf is the number of OPTIONAL groups enclosing it, i.e. the
 			// rowRelative path segment count (GAP-14).  Single-segment columns keep the historical max=1.
@@ -1106,7 +1048,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Decodes one PLAIN-or-dictionary-encoded data page into {@code values}, appending {@link GroupNull}
 	 * sentinels for null intermediate OPTIONAL groups (GAP-14).
 	 */
-	private static void readDataPageValues(byte[] decompressed, int pageValues, int maxDefLevel, int defBitWidth,
+	static void readDataPageValues(byte[] decompressed, int pageValues, int maxDefLevel, int defBitWidth,
 			int type, boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical,
 			boolean dictEncoded, List<Object> dictionary, List<Object> values) throws IOException, ParseException {
 		if (dictEncoded) {
@@ -1131,7 +1073,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 *
 	 * @return The dictionary entries in index order.
 	 */
-	private static List<Object> readDictionaryPage(byte[] decompressed, int numDictValues, int type,
+	static List<Object> readDictionaryPage(byte[] decompressed, int numDictValues, int type,
 			boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical) throws IOException {
 		// A dictionary page is PLAIN-encoded with no definition levels (every entry present): maxDefLevel=0.
 		var reader = new ParquetColumnReader(decompressed, numDictValues, 0);
@@ -1176,7 +1118,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 						values.add(null);
 				} else {
 					int idx = idxDecoder.readInt();
-					if (idx < 0 || idx >= dictionary.size())
+					if (idx >= dictionary.size())
 						throw new ParseException("Dictionary index {0} out of range [0,{1})", idx, dictionary.size());
 					values.add(dictionary.get(idx));
 				}
@@ -1200,7 +1142,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		// Native logical-type decode (GAP-9/10): when a column carries a DECIMAL/DATE/TIME/TIMESTAMP-micros
 		// convertedType, decode to the matching value and surface a form the framework's coercion understands.
 		// Read-side decode is always on; absent a logical convertedType the physical-type switch below applies.
-		if (logical != null && logical.convertedType() != null) {
+		if (logical != null) {
 			var nativeValue = readLogicalValue(reader, type, logical);
 			if (nativeValue != NOT_LOGICAL)
 				return nativeValue;
@@ -1212,10 +1154,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			// INT96 (GAP-8): legacy 12-byte timestamp (Impala/Hive/older Spark).  Decode to an Instant and
 			// surface its ISO-8601 string so the framework's temporal coercion reconstructs the target type.
 			// Read-only — Juneau never writes INT96.
-			case TYPE_INT96 -> {
-				var instant = reader.readInt96AsInstant();
-				yield instant == null ? null : instant.toString();
-			}
+			case TYPE_INT96 -> reader.readInt96AsInstant().toString();
 			case TYPE_FLOAT -> reader.readFloat();
 			case TYPE_DOUBLE -> reader.readDouble();
 			case TYPE_BYTE_ARRAY -> {
@@ -1228,7 +1167,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 					yield reader.readByteArray();
 				}
 				var s = reader.readByteArrayAsString();
-				yield trimStrings && s != null ? s.trim() : s;
+				yield trimStrings ? s.trim() : s;
 			}
 			// TYPE_FIXED_LEN_BYTE_ARRAY is emitted by ParquetSchemaBuilder for UUID columns
 			// (TYPE_FIXED_LEN_BYTE_ARRAY(16) / LOGICAL_TYPE_UUID).  Routing prefers the explicit
@@ -1239,8 +1178,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			// path can't reassemble it back to a UUID.
 			case TYPE_FIXED_LEN_BYTE_ARRAY -> {
 				var bytes = reader.readFixedLenByteArray(16);
-				if (bytes == null)
-					yield null;
 				// A FLBA column with an explicit non-UUID logical type is surfaced as raw bytes rather than
 				// misread as a UUID. Juneau's own writer never emits such a column today, so this is a
 				// forward-compat guard for future FLBA logical types. // HTT
@@ -1248,7 +1185,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			}
 			default -> {
 				var s = reader.readByteArrayAsString();
-				yield trimStrings && s != null ? s.trim() : s;
+				yield trimStrings ? s.trim() : s;
 			}
 		};
 	}
@@ -1322,6 +1259,11 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * both big-endian) so the round-trip is bit-exact.  Falls back to {@code new UUID(0L, 0L)} when
 	 * the buffer is the wrong length — defensive guard for fuzzed input.
 	 */
+	// Package-private for focused unit testing of the null/wrong-length guard.
+	static UUID uuidFromFixedLenBytesForTest(byte[] b) {
+		return uuidFromFixedLenBytes(b);
+	}
+
 	private static UUID uuidFromFixedLenBytes(byte[] b) {
 		if (b == null || b.length != 16)
 			return new UUID(0L, 0L);
@@ -1347,7 +1289,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				if (listBeanColumns.containsKey(listProp) || isMapKeyValueColumnPath(rowRelPath))
 					continue;
 				var values = e.getValue();
-				var v = i < values.size() ? values.get(i) : null;
+				var v = values.get(i);
 				if (v instanceof GroupNull gn) {
 					// Null intermediate group: set the prefix path (up to the null level) to null without
 					// synthesizing the deeper map structure (GAP-14).
@@ -1390,8 +1332,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		if (!elementType.isBean())
 			return groups;
 		var bm = elementType.getBeanMeta();
-		if (bm == null)
-			return groups;
 		for (var fullPath : columnPaths) {
 			if (!isListColumnPath(fullPath))
 				continue;
@@ -1421,35 +1361,26 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			if (!isMapKeyValueColumnPath(rowRelPath))
 				continue;
 			var prop = mapPropertyPath(rowRelPath);
-			var existing = groups.get(prop);
 			if (rowRelPath.endsWith(".key_value.key"))
-				groups.put(prop, new MapColumnInfo(fullPath, existing != null ? existing.valueColumnPath() : null));
-			else if (rowRelPath.endsWith(".key_value.value"))
-				groups.put(prop, new MapColumnInfo(existing != null ? existing.keyColumnPath() : null, fullPath));
+				groups.put(prop, new MapColumnInfo(fullPath, null));
+			else if (rowRelPath.endsWith(".key_value.value")) {
+				var prev = groups.get(prop);
+				groups.put(prop, new MapColumnInfo(prev.keyColumnPath(), fullPath));
+			}
 		}
 		return groups;
 	}
 
 	private Map<Object, Object> mergeMapColumns(MapColumnInfo info, Map<String, List<Object>> columnData, int rowIndex) throws ParseException {
-		var keyValues = columnData.get(info.keyColumnPath());
-		var valueValues = columnData.get(info.valueColumnPath());
-		if (keyValues == null || rowIndex >= keyValues.size())
-			return new LinkedHashMap<>();
-		var keyRow = keyValues.get(rowIndex);
-		if (keyRow == null)
-			return new LinkedHashMap<>();
-		if (!(keyRow instanceof List<?> keyList))
-			return new LinkedHashMap<>();
+		var keyList = (List<?>) columnData.get(info.keyColumnPath()).get(rowIndex);
 		if (keyList.isEmpty())
 			return new LinkedHashMap<>();
-		var valueList = valueValues != null && rowIndex < valueValues.size() && valueValues.get(rowIndex) instanceof List<?> vl
-			? vl
-				: Collections.emptyList();
+		var valueList = (List<?>) columnData.get(info.valueColumnPath()).get(rowIndex);
 		var result = new LinkedHashMap<>();
 		var valueIter = valueList.iterator();
 		for (var k : keyList) {
-			var v = valueIter.hasNext() ? valueIter.next() : null;
-			Object key = (k != null && ctx.nullKeyString.equals(String.valueOf(k))) ? null : k;
+			var v = valueIter.next();
+			Object key = ctx.nullKeyString.equals(String.valueOf(k)) ? null : k;
 			result.put(key, v);
 		}
 		return result;
@@ -1457,28 +1388,17 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	private List<Object> mergeListBeanColumns(List<ListColumnInfo> columnsInGroup, Map<String, List<Object>> columnData,
 		int rowIndex) throws ParseException {
-		if (columnsInGroup.isEmpty())
-			return List.of();
 		var elemType = columnsInGroup.get(0).elementType();
-		var firstColValues = columnData.get(columnsInGroup.get(0).fullPath());
-		if (firstColValues == null || rowIndex >= firstColValues.size())
-			return List.of();
-		var firstRowList = firstColValues.get(rowIndex);
-		if (!(firstRowList instanceof List<?> firstList))
-			return List.of();
+		var firstList = (List<?>) columnData.get(columnsInGroup.get(0).fullPath()).get(rowIndex);
 		int listSize = firstList.size();
 		var result = new ArrayList<>(listSize);
 		for (int j = 0; j < listSize; j++) {
 			var elemMap = new JsonMap();
 			for (var col : columnsInGroup) {
-				var colValues = columnData.get(col.fullPath());
-				var rowList = (colValues != null && rowIndex < colValues.size()) ? colValues.get(rowIndex) : null;
-				if (!(rowList instanceof List<?> values))
-					continue;
-				var val = j < values.size() ? values.get(j) : null;
-				elemMap.put(col.elementProp(), val);
+				var rowList = (List<?>) columnData.get(col.fullPath()).get(rowIndex);
+				elemMap.put(col.elementProp(), rowList.get(j));
 			}
-			result.add(elemType.isBean() ? convertToType(prepareMapForBean(elemMap, elemType), elemType) : elemMap);
+			result.add(convertToType(prepareMapForBean(elemMap, elemType), elemType));
 		}
 		return result;
 	}
@@ -1512,11 +1432,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		"unchecked" // (Map<String,Object>) cast for mutating optional-group structure
 	})
 	private void collapseOptionalWrappers(Map<?,?> row, ClassMeta<?> elementType) {
-		if (row == null || !elementType.isBean())
-			return;
 		var bm = elementType.getBeanMeta();
-		if (bm == null)
-			return;
 		boolean hasOptional = bm.getProperties().values().stream().anyMatch(p -> p.getBeanInfo() != null && p.getBeanInfo().isOptional());
 		if (!hasOptional)
 			return;
@@ -1533,7 +1449,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				// Use null so MarshallingSession's null→Optional<Optional<X>> conversion produces Optional.of(Optional.empty()).
 				if (absent) {
 					((Map<String,Object>)row).put(name, null);
-				} else if (m.size() == 1 && m.containsKey("value")) {
+				} else {
 					var inner = m.get("value");
 					var collapsed = collapseOptionalValue(inner, elemType);
 					((Map<String,Object>)row).put(name, collapsed);
@@ -1556,20 +1472,14 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * </ul>
 	 */
 	private boolean isAbsentOptionalMap(Map<?,?> m, ClassMeta<?> elemType) {
-		if (m.isEmpty())
-			return true;
 		if (m.values().stream().allMatch(v -> v == null))
 			return true;
-		if (m.size() == 1 && m.containsKey("value")) {
-			var inner = m.get("value");
-			if (inner == null)
-				return true;
-			if (inner instanceof Map<?,?> innerMap) {
-				if (elemType != null && elemType.isOptional())
-					return isAbsentOptionalMap(innerMap, elemType.getElementType());
-				// For bean (non-Optional) inner type: check if all nested leaf values are null (absent bean group)
-				return allNullLeaves(innerMap);
-			}
+		var inner = m.get("value");
+		if (inner instanceof Map<?,?> innerMap) {
+			if (elemType.isOptional())
+				return isAbsentOptionalMap(innerMap, elemType.getElementType());
+			// For bean (non-Optional) inner type: check if all nested leaf values are null (absent bean group)
+			return allNullLeaves(innerMap);
 		}
 		return false;
 	}
@@ -1585,15 +1495,12 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	/** Recursively unwraps {value: X} when target is Optional; collapses nested beans. */
 	private Object collapseOptionalValue(Object val, ClassMeta<?> targetType) {
-		if (val == null)
-			return null;
-		if (targetType != null && targetType.isOptional() && val instanceof Map<?,?> m) {
+		if (targetType.isOptional() && val instanceof Map<?,?> m) {
 			if (isAbsentOptionalMap(m, targetType))
 				return null;  // Let MarshallingSession convert null to Optional.of(Optional.empty())
-			if (m.size() == 1 && m.containsKey("value"))
-				return collapseOptionalValue(m.get("value"), targetType.getElementType());
+			return collapseOptionalValue(m.get("value"), targetType.getElementType());
 		}
-		if (targetType != null && targetType.isBean() && val instanceof Map<?,?> m2) {
+		if (targetType.isBean() && val instanceof Map<?,?> m2) {
 			collapseOptionalWrappers(m2, targetType);
 			return m2;
 		}
@@ -1604,8 +1511,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		"unchecked" // (Map<String,Object>) cast when creating nested maps at path segments
 	})
 	private static void setByPath(Map<String,Object> target, String path, Object value) throws ParseException {
-		if (target == null)
-			return;
 		var parts = path.split("\\.");
 		if (parts.length == 1) {
 			target.put(path, value);
@@ -1614,25 +1519,20 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		Object current = target;
 		for (int i = 0; i < parts.length - 1; i++) {
 			var key = parts[i];
-			Object next = current instanceof Map<?,?> m ? m.get(key) : null;
+			var currentMap = (Map<?,?>) current;
+			Object next = currentMap.get(key);
 			if (next == null) {
-				if (current instanceof Map<?,?> m) {
-					next = new JsonMap();
-					((Map<String,Object>)m).put(key, next);
-				} else {
-					throw new ParseException("Missing nested object for path ''{0}''", path);
-				}
+				next = new JsonMap();
+				((Map<String,Object>)currentMap).put(key, next);
 			}
 			current = next;
 		}
-		var lastKey = parts[parts.length - 1];
-		if (current instanceof Map<?,?> m)
-			((Map<String,Object>)m).put(lastKey, value);
+		((Map<String,Object>)current).put(parts[parts.length - 1], value);
 	}
 
 	/** Wraps Map in JsonMap when target expects JsonMap (e.g. bean with constructor A(JsonMap)). */
 	private static Object prepareMapForBean(Object value, ClassMeta<?> type) {
-		if (value == null || type == null)
+		if (value == null)
 			return value;
 		if (value instanceof JsonMap)
 			return value;
@@ -1643,15 +1543,13 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	/** Unwraps ValueHolder map {value: X} to X when target is scalar; else converts via MarshallingSession. */
 	private Object unwrapValueHolder(Object row, ClassMeta<?> targetType) throws ParseException {
-		if (row == null)
-			return null;
 		if (!(row instanceof Map<?, ?> m))
 			return convertToType(row, targetType);
 		// Unwrap {value: X} when target is scalar (or Object) - allow maps with extra keys (e.g. _type)
-		if (m.containsKey("value") && (targetType == null || targetType.isObject()
+		if (m.containsKey("value") && (targetType.isObject()
 			|| (!targetType.isMap() && !targetType.isCollection() && !targetType.isArray()))) {
 			var v = m.get("value");
-			if (targetType == null || targetType.isObject())
+			if (targetType.isObject())
 				return v;
 			return convertToType(prepareMapForBean(v, targetType), targetType);
 		}
@@ -1671,8 +1569,6 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	})
 	private Object toCollection(List<Object> values, ClassMeta<?> collectionType) throws ParseException {
 		var elemType = collectionType.getElementType();
-		if (elemType == null)
-			elemType = ctx.getMarshallingContext().getClassMeta(Object.class);
 		Collection<Object> result;
 		try {
 			result = collectionType.canCreateNewInstance() ? (Collection<Object>)collectionType.newInstance() : null;

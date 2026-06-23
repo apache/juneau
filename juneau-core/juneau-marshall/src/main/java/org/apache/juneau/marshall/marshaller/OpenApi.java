@@ -16,12 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-
 import org.apache.juneau.commons.httppart.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;

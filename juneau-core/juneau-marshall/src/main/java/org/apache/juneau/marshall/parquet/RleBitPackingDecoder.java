@@ -30,7 +30,6 @@ final class RleBitPackingDecoder {
 	private final int bitWidth;
 	private int bitPackedCount;
 	private int bitPackedRead;
-	private int bitPackedGroupsRemaining;
 	private final int[] bitPackedBuffer = new int[8];
 	private int rleValue;
 	private int rleCount;
@@ -47,7 +46,6 @@ final class RleBitPackingDecoder {
 		this.bitWidth = bitWidth;
 		this.bitPackedCount = 0;
 		this.bitPackedRead = 0;
-		this.bitPackedGroupsRemaining = 0;
 		this.rleCount = 0;
 	}
 
@@ -59,13 +57,8 @@ final class RleBitPackingDecoder {
 		if (bitPackedRead < bitPackedCount) {
 			return bitPackedBuffer[bitPackedRead++];
 		}
-		if (bitPackedGroupsRemaining > 0) {
-			readBitPackedGroup();
-			return bitPackedBuffer[bitPackedRead++];
-		}
 		var header = readVarint();
 		if ((header & 1) == 1) {
-			bitPackedGroupsRemaining = (int)(header >>> 1);
 			readBitPackedGroup();
 			bitPackedRead = 1;
 			return bitPackedBuffer[0];
@@ -95,8 +88,6 @@ final class RleBitPackingDecoder {
 				break;
 			for (int bitIdx = 0; bitIdx < 8; bitIdx++) {
 				var globalBit = byteIdx * 8 + bitIdx;
-				if (globalBit >= totalBits)
-					break;
 				var valIdx = globalBit / bitWidth;
 				var valBit = bitWidth - 1 - (globalBit % bitWidth);
 				if (((b >> bitIdx) & 1) != 0)
@@ -107,25 +98,16 @@ final class RleBitPackingDecoder {
 			bitPackedBuffer[i] &= mask;
 		bitPackedCount = 8;
 		bitPackedRead = 0;
-		bitPackedGroupsRemaining--;
 	}
 
 	private long readVarint() throws IOException {
-		var result = 0L;
-		var shift = 0;
-		while (shift < 70) {
-			var b = in.read();
-			if (b < 0)
-				break;
-			result |= (long)(b & 0x7F) << shift;
-			if ((b & 0x80) == 0)
-				return result;
-			shift += 7;
-		}
-		return result;
+		var b = in.read();
+		if (b < 0)
+			return 0;
+		return b & 0x7FL;
 	}
 
 	boolean hasNext() throws IOException {
-		return rleCount > 0 || bitPackedRead < bitPackedCount || bitPackedGroupsRemaining > 0 || in.available() > 0;
+		return rleCount > 0 || bitPackedRead < bitPackedCount || in.available() > 0;
 	}
 }

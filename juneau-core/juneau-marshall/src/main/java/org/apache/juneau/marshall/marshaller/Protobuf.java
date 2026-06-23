@@ -16,12 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-
-import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.protobuf.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link ProtobufSerializer} and {@link ProtobufParser} into a single class with convenience read/write

@@ -175,7 +175,7 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 		@Override /* HttpEntity */
 		public boolean isStreaming() {
-			return !body.isRepeatable();
+			return !body.isRepeatable(); // HTT — only called by HC4.5 retry/redirect machinery, not in normal single-request flow
 		}
 	}
 }

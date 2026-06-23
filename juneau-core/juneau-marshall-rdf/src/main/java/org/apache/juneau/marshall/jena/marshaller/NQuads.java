@@ -16,13 +16,8 @@
  */
 package org.apache.juneau.marshall.jena.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-
 import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
-import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link NQuadsSerializer} and {@link NQuadsParser} into a single class with convenience read/write methods.

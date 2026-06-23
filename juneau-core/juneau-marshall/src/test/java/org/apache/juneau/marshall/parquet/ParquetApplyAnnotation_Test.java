@@ -50,7 +50,24 @@ class ParquetApplyAnnotation_Test extends TestBase {
 		var applier = new ParquetApplyAnnotation.Applier(vr);
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = ParquetApplyAnnotation.DEFAULT;
-		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
+	}
+
+	@Test void b06_applier_nonEmptyOn_callsAnnotations() {
+		var vr = VarResolver.DEFAULT.createSession();
+		var applier = new ParquetApplyAnnotation.Applier(vr);
+		var b = MarshallingContext.DEFAULT.copy();
+		var a = ParquetApplyAnnotation.create("MyClass").build();
+		// on() is non-empty → b.annotations(a) is called; should not throw
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
+	}
+
+	@Test void b07_applier_emptyOn_nonEmptyOnClass_callsAnnotations() {
+		var vr = VarResolver.DEFAULT.createSession();
+		var applier = new ParquetApplyAnnotation.Applier(vr);
+		var b = MarshallingContext.DEFAULT.copy();
+		// on() is empty but onClass() is non-empty → A=true, B=false → falls through to b.annotations(a)
+		var a = ParquetApplyAnnotation.create().onClass(String.class).build();
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
 	}
 }

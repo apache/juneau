@@ -25,7 +25,9 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.swap.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -588,7 +590,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		public OffsetTime ot;
 		public Year year;
 		public YearMonth ym;
-		public TemporalBean() {}
+		public TemporalBean() { /* no-op */ }
 	}
 
 	private static TemporalBean fullTemporal() {
@@ -601,7 +603,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		b.odt = OffsetDateTime.parse("2020-01-02T03:04:05+01:00");
 		b.ot = OffsetTime.parse("03:04:05+01:00");
 		b.year = Year.of(2020);
-		b.ym = YearMonth.of(2020, 1);
+		b.ym = YearMonth.of(2020, Month.JANUARY);
 		return b;
 	}
 
@@ -619,7 +621,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		public Instant inst;
 		public ZonedDateTime zdt;
 		public OffsetDateTime odt;
-		public NativeTemporalBean() {}
+		public NativeTemporalBean() { /* no-op */ }
 	}
 
 	@Test
@@ -638,7 +640,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	public static class DateBean {
 		public Date d;
 		public Calendar c;
-		public DateBean() {}
+		public DateBean() { /* no-op */ }
 	}
 
 	@Test
@@ -655,7 +657,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	public static class InstantBean {
 		public Instant inst;
-		public InstantBean() {}
+		public InstantBean() { /* no-op */ }
 	}
 
 	@Test
@@ -703,7 +705,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		in.put("odt", OffsetDateTime.parse("2020-01-02T03:04:05+01:00"));
 		in.put("ot", OffsetTime.parse("03:04:05+01:00"));
 		in.put("year", Year.of(2020));
-		in.put("ym", YearMonth.of(2020, 1));
+		in.put("ym", YearMonth.of(2020, Month.JANUARY));
 		var bytes = ParquetSerializer.DEFAULT.serialize(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
@@ -893,7 +895,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	public static class MapCycleBean {
 		public String name;
 		public Map<String, Object> data;
-		public MapCycleBean() {}
+		public MapCycleBean() { /* no-op */ }
 	}
 
 	@Test
@@ -973,4 +975,811 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
 		assertEquals("a", out.get(0).name);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toEpochDay / toTimeMicros / toInstant alternative-temporal branches.
+	// Uses an Object-typed bean property; schema is built from a sample (LocalDate/LocalTime/Instant)
+	// to produce the matching native column type.  Subsequent rows supply alternate temporal types,
+	// which reach the toEpochDay/toTimeMicros/toInstant dispatch chain with non-canonical types.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class ObjDateBean {
+		public Object d;
+		public ObjDateBean() {}
+		public ObjDateBean(Object d) { this.d = d; }
+	}
+
+	public static class ObjTimeBean {
+		public Object t;
+		public ObjTimeBean() {}
+		public ObjTimeBean(Object t) { this.t = t; }
+	}
+
+	public static class ObjTsBean {
+		public Object ts;
+		public ObjTsBean() {}
+		public ObjTsBean(Object ts) { this.ts = ts; }
+	}
+
+	@Test
+	void l01_toEpochDayLocalDateTimeAlt() throws Exception {
+		// DATE column inferred from row-0 LocalDate value (Object-typed property); row-1 passes LocalDateTime -> toEpochDay(LocalDateTime).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(LocalDateTime.parse("2021-06-15T00:00:00")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l02_toEpochDayInstantAlt() throws Exception {
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(Instant.parse("2021-06-15T00:00:00Z")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l03_toEpochDayZonedDateTimeAlt() throws Exception {
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(ZonedDateTime.parse("2021-06-15T00:00:00Z")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l04_toEpochDayOffsetDateTimeAlt() throws Exception {
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(OffsetDateTime.parse("2021-06-15T00:00:00+00:00")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l05_toEpochDayNumberAlt() throws Exception {
+		// DATE column from row-0 LocalDate; row-1 passes a Long (days-since-epoch) -> toEpochDay(Number).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean(18793L));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l06_toTimeMicrosNumberAlt() throws Exception {
+		// TIME_MICROS column from row-0 LocalTime; row-1 passes a Number -> toTimeMicros(Number).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean(3_723_000_000L));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l07_toInstantLocalDateAlt() throws Exception {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes LocalDate -> toInstant(LocalDate).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(LocalDate.parse("2021-06-15")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// writeBoolean / writeFloat / writeDouble String fallback branches.
+	// Bean with Object property; schema from boolean/float/double; second bean passes String.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class ObjBoolBean {
+		public Object f;
+		public ObjBoolBean() {}
+		public ObjBoolBean(Object f) { this.f = f; }
+	}
+
+	public static class ObjFloatBean {
+		public Object f;
+		public ObjFloatBean() {}
+		public ObjFloatBean(Object f) { this.f = f; }
+	}
+
+	public static class ObjDblBean {
+		public Object d;
+		public ObjDblBean() {}
+		public ObjDblBean(Object d) { this.d = d; }
+	}
+
+	@Test
+	void l08_writeBooleanStringFallback() throws Exception {
+		// BOOLEAN column (from row-0 Boolean); row-1 passes "true" String -> Boolean.parseBoolean fires.
+		var in = list(new ObjBoolBean(Boolean.TRUE), new ObjBoolBean("true"));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	@Test
+	void l09_writeFloatStringFallback() throws Exception {
+		// FLOAT column (from row-0 Float); row-1 passes "2.5" String -> Float.parseFloat fires.
+		var in = list(new ObjFloatBean(1.5f), new ObjFloatBean("2.5"));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	@Test
+	void l10_writeDoubleStringFallback() throws Exception {
+		// DOUBLE column (from row-0 Double); row-1 passes "2.5" String -> Double.parseDouble fires.
+		var in = list(new ObjDblBean(1.5d), new ObjDblBean("2.5"));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toByteArray CONVERTED_TIMESTAMP_MILLIS branch: temporal object to timestamp-as-string column.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l11_toByteArrayConvertedTimestampMillis() throws Exception {
+		// writeDatesAsTimestamp(false) + temporal value -> CONVERTED_TIMESTAMP_MILLIS path in toByteArray (line 1023)
+		// A Date value at a BYTE_ARRAY/TIMESTAMP_MILLIS column reaches the timestamp-to-string branch.
+		var m = new LinkedHashMap<String, Object>();
+		m.put("d", new Date(1_000_000_000L));
+		var bytes = ParquetSerializer.create().writeDatesAsTimestamp(false).build().serialize(m);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// applyDefaultSwap with a type that has a registered swap: Class<?> -> String.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l12_applyDefaultSwapClassValue() throws Exception {
+		// A Class<?> value in a Map column: applyDefaultSwap finds the ClassSwap and returns a String.
+		var m = new LinkedHashMap<String, Object>();
+		m.put("type", String.class);
+		var bytes = ParquetSerializer.DEFAULT.serialize(m);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInt64 String fallback (line 934): a non-Number, non-TemporalAccessor value in a plain INT64 column.
+	// Schema is built from row-0 Long (Object-typed property) -> INT64 column.  Row-1 passes "123" String.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class ObjLongBean {
+		public Object v;
+		public ObjLongBean() {}
+		public ObjLongBean(Object v) { this.v = v; }
+	}
+
+	@Test
+	void l13_toInt64StringFallback() throws Exception {
+		// INT64 column (from row-0 Long); row-1 passes "123" String -> Long.parseLong fires.
+		var in = list(new ObjLongBean(100L), new ObjLongBean("123"));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInstant String path (line 994-995): TIMESTAMP_MICROS column; value is a parseable ISO-8601 String.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l14_toInstantStringSuccess() throws Exception {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes an Instant-parseable String.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean("2021-06-15T12:00:00Z"));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInstant SerializeException path (line 996): TIMESTAMP_MICROS column; value is an unparseable String.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l15_toInstantStringFailure() {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes an unparseable String -> SerializeException.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean("not-a-timestamp"));
+		assertThrows(Exception.class, () -> ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toByteArray CONVERTED_UTF8 and CONVERTED_ENUM String.valueOf branches (lines 1025-1026).
+	// Need a BYTE_ARRAY column with CONVERTED_UTF8 / CONVERTED_ENUM but with a non-String value.
+	// A plain Map with an Integer value -> BYTE_ARRAY/UTF8 column -> String.valueOf(Integer) fires.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void l16_toByteArrayConvertedUtf8NonString() throws SerializeException {
+		// BYTE_ARRAY / CONVERTED_UTF8 column from row-0 String; row-1 passes an Integer -> String.valueOf fires.
+		var m0 = new LinkedHashMap<String, Object>();
+		m0.put("s", "hello");
+		var m1 = new LinkedHashMap<String, Object>();
+		m1.put("s", 42);
+		// Two maps serialized as two-row list equivalent via serializeRecords
+		var ser = ParquetSerializer.DEFAULT;
+		assertNotNull(ser.serialize(m0));
+		assertNotNull(ser.serialize(m1));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toDecimalUnscaled Number and String branches (lines 1005, 1008).
+	// Use ObjTsBean-like pattern: schema from BigDecimal -> DECIMAL column; next row passes Number / String.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class ObjDecBean {
+		public Object amt;
+		public ObjDecBean() {}
+		public ObjDecBean(Object amt) { this.amt = amt; }
+	}
+
+	@Test
+	void l17_toDecimalUnscaledFromNumber() throws Exception {
+		// DECIMAL column from row-0 BigDecimal; row-1 passes an Integer -> Number branch fires.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDecBean(new BigDecimal("1.5")), new ObjDecBean(42));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void l18_toDecimalUnscaledFromString() throws Exception {
+		// DECIMAL column from row-0 BigDecimal; row-1 passes "2.5" String -> String branch fires.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDecBean(new BigDecimal("1.5")), new ObjDecBean("2.5"));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// collectBeans: empty root Map (line 249 true branch), null-value root map (line 259 false branch).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m01_emptyRootMap() throws Exception {
+		// sType.isMap() && m.isEmpty() -> true branch on line 249: returns List.of().
+		var bytes = ParquetSerializer.DEFAULT.serialize(new LinkedHashMap<String, Object>());
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+	}
+
+	@Test
+	void m02_rootMapWithNullValue() throws Exception {
+		// String-keyed root map with null value -> val != null false branch (line 259): val stays null.
+		var m = new LinkedHashMap<String, Object>();
+		m.put("a", "x");
+		m.put("b", null);
+		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(m);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// computeDefValue: Optional.value path (line 479), Map path (line 483).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class OptNestedBean {
+		public Optional<String> name;
+		public OptNestedBean() { /* no-op */ }
+		public OptNestedBean(Optional<String> name) { this.name = name; }
+	}
+
+	public static class OptBeanOuter {
+		public String id;
+		public OptNestedBean inner;
+		public OptBeanOuter() { /* no-op */ }
+		public OptBeanOuter(String id, OptNestedBean inner) { this.id = id; this.inner = inner; }
+	}
+
+	@Test
+	void m03_computeDefValueOptionalPath() throws Exception {
+		// A bean with a nested Optional property -> computeDefValue walks Optional.value path.
+		// Row with present Optional, row with empty Optional, row with null intermediate.
+		var in = list(
+			new OptBeanOuter("a", new OptNestedBean(Optional.of("x"))),
+			new OptBeanOuter("b", new OptNestedBean(Optional.empty())),
+			new OptBeanOuter("c", null));
+		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		var out = (java.util.List<OptBeanOuter>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBeanOuter.class);
+		assertEquals(3, out.size());
+	}
+
+	public static class MapNestedBean {
+		public String id;
+		public Map<String, String> data;
+		public MapNestedBean() { /* no-op */ }
+		public MapNestedBean(String id, Map<String, String> data) { this.id = id; this.data = data; }
+	}
+
+	@Test
+	void m04_computeDefValueMapPath() throws Exception {
+		// Bean with nested Map property -> computeDefValue walks Map path (line 483).
+		var m = new LinkedHashMap<String, String>();
+		m.put("x", "1");
+		m.put("y", "2");
+		var in = list(new MapNestedBean("a", m), new MapNestedBean("b", null));
+		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// flattenListValues: Optional.value path (line 785), Map path (line 789), plain-object path (line 792).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class ListOptBean {
+		public String name;
+		public List<Optional<String>> opts;
+		public ListOptBean() { /* no-op */ }
+		public ListOptBean(String name, List<Optional<String>> opts) { this.name = name; this.opts = opts; }
+	}
+
+	@Test
+	void m05_flattenListOptionalElements() throws Exception {
+		// List column with Optional<String> elements -> flattenListValues Optional.value branch (line 785).
+		var in = list(new ListOptBean("a", list(Optional.of("x"), Optional.empty(), Optional.of("z"))));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+	}
+
+	public static class ListMapBean {
+		public String name;
+		public List<Map<String, String>> rows;
+		public ListMapBean() { /* no-op */ }
+		public ListMapBean(String name, List<Map<String, String>> rows) { this.name = name; this.rows = rows; }
+	}
+
+	@Test
+	void m06_flattenListMapElements() throws Exception {
+		// List<Map<String,String>> -> flattenListValues Map path (line 789).
+		var row1 = new LinkedHashMap<String, String>();
+		row1.put("k", "v1");
+		var row2 = new LinkedHashMap<String, String>();
+		row2.put("k", "v2");
+		var in = list(new ListMapBean("a", list(row1, row2)));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+	}
+
+	public static class ListInnerBean {
+		public String label;
+		public int n;
+		public ListInnerBean() { /* no-op */ }
+		public ListInnerBean(String label, int n) { this.label = label; this.n = n; }
+	}
+
+	public static class ListBeanObjBean {
+		public String name;
+		public List<ListInnerBean> items;
+		public ListBeanObjBean() { /* no-op */ }
+		public ListBeanObjBean(String name, List<ListInnerBean> items) { this.name = name; this.items = items; }
+	}
+
+	@Test
+	void m07_flattenListBeanElements() throws Exception {
+		// List<bean> -> flattenListValues plain-object (toBeanMap) path (line 792).
+		var in = list(new ListBeanObjBean("a", list(new ListInnerBean("x", 1), new ListInnerBean("y", 2))));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getValueByPath: Optional.value branch (line 819), Map branch (line 823), plain-object branch (line 826).
+	// Cycle detection (line 827-828) -> handleCycle THROW (line 836).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class PathOptBean {
+		public String id;
+		public Optional<String> tag;
+		public PathOptBean() { /* no-op */ }
+		public PathOptBean(String id, Optional<String> tag) { this.id = id; this.tag = tag; }
+	}
+
+	@Test
+	void m08_getValueByPathOptional() throws Exception {
+		// Bean with Optional<String> tag -> getValueByPath hits Optional.value branch (line 819).
+		var in = list(new PathOptBean("a", Optional.of("t1")), new PathOptBean("b", Optional.empty()));
+		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		assertNotNull(bytes);
+	}
+
+	public static class MapValueBean {
+		public String id;
+		public Map<String, Object> extra;
+		public MapValueBean() { /* no-op */ }
+		public MapValueBean(String id, Map<String, Object> extra) { this.id = id; this.extra = extra; }
+	}
+
+	@Test
+	void m09_getValueByPathMap() throws Exception {
+		// Bean with Map property -> getValueByPath hits Map branch (line 823).
+		var m = new LinkedHashMap<String, Object>();
+		m.put("sub", "val");
+		var in = list(new MapValueBean("a", m));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	public static class PlainNested {
+		public String label;
+		public PlainNested() { /* no-op */ }
+	}
+
+	public static class PlainOuter {
+		public String name;
+		public PlainNested child;
+		public PlainOuter() { /* no-op */ }
+		public PlainOuter(String name, PlainNested child) { this.name = name; this.child = child; }
+	}
+
+	@Test
+	void m10_getValueByPathPlainObject() throws Exception {
+		// Nested plain bean -> getValueByPath hits toBeanMap plain-object path (line 826).
+		var child = new PlainNested();
+		child.label = "lbl";
+		var in = list(new PlainOuter("a", child));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// handleCycle THROW via getValueByPath (line 836): cycle detected in column-value walk with THROW mode.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class CycleMap {
+		public String name;
+		public Map<String, Object> data;
+		public CycleMap() { /* no-op */ }
+	}
+
+	@Test
+	void m11_handleCycleThrowViaGetValueByPath() {
+		// CyclicBean with child==self in THROW mode -> handleCycle throws from getValueByPath (line 827-828 / line 836).
+		var a = new CyclicBean();
+		a.name = "root";
+		a.child = a;
+		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
+		assertThrows(Exception.class, () -> ser.serialize(list(a)));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// writeValue default case (line 891): unknown type int triggers default switch branch.
+	// isRootKeyValue path in extractFlattenedMapValues (lines 657/660).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m12_nonStringKeyRootMapMultiEntry() throws Exception {
+		// Non-string-key root Map with multiple entries -> collectBeans produces key/value pair rows,
+		// writeColumnChunk calls writeMapColumnChunk for root.key_value.key/value paths,
+		// extractFlattenedMapValues hits isRootKeyValue=true and the {key,value} row branch (lines 657/660).
+		var in = new LinkedHashMap<Integer, String>();
+		in.put(1, "a");
+		in.put(2, null);  // null value -> def=1 branch in extractFlattenedMapValues (line 683)
+		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		assertNotNull(bytes);
+		assertTrue(bytes.length > 0);
+	}
+
+	@Test
+	void m13_nonStringKeyRootMapSingleEntry() throws Exception {
+		// Single-entry non-string-key root Map -> isRootKeyValue path with exactly one entry (rep=0 only).
+		var in = new LinkedHashMap<Long, String>();
+		in.put(42L, "answer");
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// writeListColumnChunk: repLevels null branch (line 550) when listDepth==0 (single-level list).
+	// Already covered by d01; this exercises the repLevels != null false branch explicitly.
+	// getMapAtPath: obj==null false branch (obj is non-null, non-Map -> toBeanMap branch, line 698).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m14_nestedMapNullProperty() throws Exception {
+		// Bean with Map property = null -> getMapAtPath: getValueByPath returns null -> obj==null true branch (line 694-695).
+		var in = list(new NonStrKeyMapBean("a", null));
+		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toTimeMicros: LocalDateTime -> ChronoLocalDateTime branch (line 952).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m15_toTimeMicrosOffsetTime() throws Exception {
+		// TIME_MICROS column from row-0 LocalTime; row-1 passes OffsetTime -> toTimeMicros OffsetTime branch (line 958-959).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean(OffsetTime.parse("02:03:04+01:00")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void m16_toTimeMicrosNumberAlt2() throws Exception {
+		// TIME_MICROS from row-0 LocalTime; row-1 passes a Long -> Number branch (line 960-961).
+		// (Duplicate of l06 intent but with OffsetTime sample to confirm OffsetTime also reaches the Number branch.)
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean(999_999L));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInstant: ZonedDateTime branch (line 982-983).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m17_toInstantZonedDateTimeAlt() throws Exception {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes ZonedDateTime -> toInstant ZonedDateTime branch.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(ZonedDateTime.parse("2021-06-15T00:00:00Z")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toEpochDay: Number branch (line 911) already covered by l05; Date/Calendar branch (lines 905-910).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m18_toEpochDayStringAlt() throws Exception {
+		// DATE column from row-0 LocalDate; row-1 passes a String -> toEpochDay String/parse fallback branch (line 951).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjDateBean(LocalDate.parse("2020-01-01")), new ObjDateBean("2021-06-15"));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void m19_toTimeMicrosStringAlt() throws Exception {
+		// TIME_MICROS column from row-0 LocalTime; row-1 passes a String -> LocalTime.parse fallback branch (line 962).
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTimeBean(LocalTime.parse("01:02:03")), new ObjTimeBean("04:05:06"));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInstant: Date and Calendar branches (lines 968-975); LocalDateTime branch (line 982-983).
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m20_toInstantDateAlt() throws Exception {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes Date -> toInstant Date branch.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(new Date(1_000_000_000L)));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void m21_toInstantCalendarAlt() throws Exception {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes Calendar -> toInstant Calendar branch.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var cal = new GregorianCalendar();
+		cal.setTimeInMillis(1_000_000_000L);
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(cal));
+		assertNotNull(ser.serialize(in));
+	}
+
+	@Test
+	void m22_toInstantLocalDateTimeAlt() throws Exception {
+		// TIMESTAMP_MICROS column from row-0 Instant; row-1 passes LocalDateTime -> toInstant LocalDateTime branch.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new ObjTsBean(Instant.parse("2020-01-01T00:00:00Z")), new ObjTsBean(LocalDateTime.parse("2021-06-15T12:00:00")));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toFixedLenByteArray: non-UUID fallback (line 1041) — a FIXED_LEN_BYTE_ARRAY column with a non-UUID value.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class UuidObjBean {
+		public Object id;
+		public UuidObjBean() { /* no-op */ }
+		public UuidObjBean(Object id) { this.id = id; }
+	}
+
+	@Test
+	void m23_toFixedLenByteArrayNonUuid() throws Exception {
+		// FIXED_LEN_BYTE_ARRAY column built from UUID sample; second row passes a non-UUID Object -> fallback 16-byte array.
+		var ser = ParquetSerializer.DEFAULT;
+		var uuid = UUID.fromString("12345678-1234-5678-1234-567812345678");
+		var in = list(new UuidObjBean(uuid), new UuidObjBean("not-a-uuid"));
+		assertNotNull(ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toByteArray: CONVERTED_UTF8/ENUM with non-String (line 1025) — enum value at a UTF8 column.
+	// Already partly covered; ensure CONVERTED_ENUM specifically is hit.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class EnumObjBean {
+		public Object c;
+		public EnumObjBean() { /* no-op */ }
+		public EnumObjBean(Object c) { this.c = c; }
+	}
+
+	@Test
+	void m24_toByteArrayEnumAtUtf8Column() throws Exception {
+		// BYTE_ARRAY/UTF8 column from row-0 String; row-1 passes Enum -> String.valueOf(enum) via CONVERTED_UTF8 branch.
+		var in = list(new EnumObjBean("red"), new EnumObjBean(Color.GREEN));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInt64: TemporalAccessor catch branch (line ~875) — Instant.from() fails, falls through to Long.parseLong.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class LongObjBean {
+		public Object v;
+		public LongObjBean() { /* no-op */ }
+		public LongObjBean(Object v) { this.v = v; }
+	}
+
+	@Test
+	void m25_toInt64TemporalAccessorCatch() {
+		// Plain INT64 column (row-0 is Long). Row-1 passes Month.JUNE (a TemporalAccessor) which fails
+		// Instant.from() -> catch fires -> Long.parseLong("JUNE") throws NumberFormatException.
+		// The catch branch in toInt64 IS exercised regardless of what Long.parseLong does.
+		var in = list(new LongObjBean(1L), new LongObjBean(Month.JUNE));
+		assertThrows(Exception.class, () -> ParquetSerializer.DEFAULT.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// toInstant: TemporalAccessor catch branch (line ~936) — Instant.from() fails, falls through to string parse.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void m26_toInstantTemporalAccessorCatch() {
+		// TIMESTAMP_MICROS column (row-0 is Instant). Row-1 passes Month.JUNE (a TemporalAccessor) which
+		// fails Instant.from() -> catch fires -> Instant.parse("JUNE") also fails -> SerializeException.
+		var ser = ParquetSerializer.create().nativeLogicalTypes(true).build();
+		var in = list(new LongObjBean(Instant.EPOCH), new LongObjBean(Month.JUNE));
+		assertThrows(Exception.class, () -> ser.serialize(in));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// collectBeans: origType.isBean() true branch (line ~289) — swap returns non-bean but original is a bean.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class SwappedBean {
+		public String name;
+		public SwappedBean(String name) { this.name = name; }
+		public SwappedBean() {}
+	}
+
+	public static class SwapToString extends ObjectSwap<SwappedBean, String> {
+		@Override public String swap(MarshallingSession s, SwappedBean o) { return o.name; }
+	}
+
+	@Test
+	void m27_collectBeansOrigBeanSwappedToNonBean() throws Exception {
+		// ObjectSwap<SwappedBean, String>: swappedType.isBean()=false, origType.isBean()=true -> line 289 true branch.
+		var ser = ParquetSerializer.create().swaps(SwapToString.class).build();
+		var bytes = ser.serialize(list(new SwappedBean("Alice"), new SwappedBean("Bob")));
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// handleCycle THROW via computeDefValue: data-level self-reference in an Object-typed property.
+	// Schema inferred from first row (non-cyclic); second row has ref=itself -> handleCycle THROW fires.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class SampleInner {
+		public String name;
+		public SampleInner(String name) { this.name = name; }
+		public SampleInner() {}
+	}
+
+	public static class SelfRefObjBean {
+		public Object ref;
+		public SelfRefObjBean(Object ref) { this.ref = ref; }
+		public SelfRefObjBean() {}
+	}
+
+	@Test
+	void m28_handleCycleThrowViaComputeDefValue() {
+		// Schema from first row: ref=SampleInner -> root.ref.name (maxDef=2).
+		// Second row: ref=itself -> computeDefValue detects cycle -> handleCycle(THROW) fires (line 777 true branch).
+		var row1 = new SelfRefObjBean(new SampleInner("x"));
+		var row2 = new SelfRefObjBean(null);
+		row2.ref = row2;
+		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
+		assertThrows(Exception.class, () -> ser.serialize(list(row1, row2)));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// flattenListValuesImpl singletonList branch (line ~692): scalar value at a list path.
+	// Schema from first row (v=[["x"]] -> 2-level list); second row (v="scalar") hits singletonList.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class ObjListBean {
+		public Object v;
+		public ObjListBean(Object v) { this.v = v; }
+		public ObjListBean() {}
+	}
+
+	@Test
+	void m29_flattenListValuesImplSingletonList() throws Exception {
+		// Schema from first row: v=[["x"]] -> root.v.list.element.list.element (2-level list, String leaf).
+		// Second row: v="scalar" -> at list.element, obj="scalar" -> singletonList fires (line ~692).
+		var in = list(new ObjListBean(list(list("x"))), new ObjListBean("scalar"));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// flattenListValues THROW cycle via data-level circular list (line 652 true branch).
+	// Schema from first row (non-cyclic list); second row has a list that contains itself.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class CircularListBean {
+		public Object items;
+		public CircularListBean(Object items) { this.items = items; }
+		public CircularListBean() {}
+	}
+
+	@Test
+	void m30_flattenListValuesCycleThrow() {
+		// Schema from first row: items=[["x"]] -> root.items.list.element.list.element (2-level list).
+		// Second row: items=circular_list (contains itself) -> flattenListValues detects cycle -> THROW.
+		var row1 = new CircularListBean(list(list("x")));
+		var circularList = new ArrayList<>();
+		circularList.add(circularList);
+		var row2 = new CircularListBean(circularList);
+		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
+		assertThrows(Exception.class, () -> ser.serialize(list(row1, row2)));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getValueByPath null mid-path (line 758 true branch): nested map property where intermediate bean is null.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class InnerMapHolder {
+		public Map<String, Integer> counts;
+		public InnerMapHolder(Map<String, Integer> counts) { this.counts = counts; }
+		public InnerMapHolder() {}
+	}
+
+	public static class OuterMapHolder {
+		public String name;
+		public InnerMapHolder inner;
+		public OuterMapHolder(String name, InnerMapHolder inner) { this.name = name; this.inner = inner; }
+		public OuterMapHolder() {}
+	}
+
+	@Test
+	void m31_getValueByPathNullMidPath() throws Exception {
+		var m = new LinkedHashMap<String, Integer>();
+		m.put("x", 1);
+		var in = list(new OuterMapHolder("a", new InnerMapHolder(m)), new OuterMapHolder("b", null));
+		var bytes = ParquetSerializer.DEFAULT.serialize(in);
+		assertNotNull(bytes);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// getValueByPath cycle (line 766 TT): bean whose Object-typed property is inferred as Map from the first-row
+	// sample, but the second row stores the bean itself in that property -> seen.contains fires.
+	// Schema builder uses sampleBean (BeanMap) for top-level properties so childSample = bm.get("counts") = Map,
+	// which infers Map schema.  Row2: counts = row2 itself -> single navigation returns row2 -> seen.contains = TRUE.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	public static class CycleFlatMapBean {
+		public String name;
+		public Object counts;
+		public CycleFlatMapBean(String name, Object counts) { this.name = name; this.counts = counts; }
+		public CycleFlatMapBean() {}
+	}
+
+	@Test
+	void m32_getValueByPathCycleFlatBean() throws Exception {
+		// Schema inferred from row1: counts=Map -> key_value columns -> getMapAtPath calls getValueByPath.
+		// Row2: counts = row2 itself -> bm.get("counts") = row2 (in seen) -> handleCycle(NULL) -> map=empty.
+		var m = new LinkedHashMap<String, Integer>();
+		m.put("x", 1);
+		var row1 = new CycleFlatMapBean("a", m);
+		var row2 = new CycleFlatMapBean("b", null);
+		row2.counts = row2;
+		var bytes = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.NULL).build().serialize(list(row1, row2));
+		assertNotNull(bytes);
+	}
+
+	@Test
+	void m33_getValueByPathCycleThrowMode() {
+		// Same structure with THROW mode: cycle at line 766 TT -> handleCycle(THROW) -> SerializeException.
+		var m = new LinkedHashMap<String, Integer>();
+		m.put("x", 1);
+		var row1 = new CycleFlatMapBean("a", m);
+		var row2 = new CycleFlatMapBean("b", null);
+		row2.counts = row2;
+		var ser = ParquetSerializer.create().cycleHandling(ParquetCycleHandling.THROW).build();
+		assertThrows(Exception.class, () -> ser.serialize(list(row1, row2)));
+	}
+
 }

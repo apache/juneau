@@ -198,6 +198,15 @@ class SnappyBlockDecompressor_Test extends TestBase {
 	}
 
 	@Test
+	void a18_literalExceedsDeclaredOutputLengthThrows() {
+		// uncompressedLen=2 but literal len=3 (fits in input) → outPos+len > uncompressedLen
+		// varint(2) = 0x02; tag = litLenMinus1=2 → (2 << 2)=0x08; payload = 3 bytes
+		var block = new byte[]{0x02, 0x08, 1, 2, 3};
+		var ex = assertThrows(IOException.class, () -> SnappyBlockDecompressor.decompress(block, -1));
+		assertTrue(ex.getMessage().contains("overruns"), "Expected overruns message: " + ex.getMessage());
+	}
+
+	@Test
 	void a13_truncatedBlockMidStream() {
 		// Declares 5 bytes of output but provides no element bytes after the length.
 		var block = new byte[]{5};

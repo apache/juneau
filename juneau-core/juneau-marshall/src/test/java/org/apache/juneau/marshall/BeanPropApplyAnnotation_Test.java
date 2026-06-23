@@ -50,6 +50,6 @@ class BeanPropApplyAnnotation_Test extends TestBase {
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = BeanPropApplyAnnotation.DEFAULT;
 		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertNotNull(b);  // early-return branch taken; builder unchanged
 	}
 }

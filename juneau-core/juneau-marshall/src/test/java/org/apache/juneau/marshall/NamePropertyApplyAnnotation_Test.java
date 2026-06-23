@@ -103,6 +103,49 @@ class NamePropertyApplyAnnotation_Test extends TestBase {
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = NamePropertyApplyAnnotation.DEFAULT;
 		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertNotNull(b); // early-return branch taken; builder unmodified
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Builder.on(Method.../Field.../FieldInfo.../MethodInfo...) overloads
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class OnTarget {
+		public String field1;
+		public void method1() { /* intentionally empty */ }
+	}
+
+	@Test void f01_on_method() throws Exception {
+		var m = OnTarget.class.getMethod("method1");
+		var a = NamePropertyApplyAnnotation.create().on(m).build();
+		assertEquals(1, a.on().length);
+	}
+
+	@Test void f02_on_methodInfo() throws Exception {
+		var m = MethodInfo.of(OnTarget.class.getMethod("method1"));
+		var a = NamePropertyApplyAnnotation.create().on(m).build();
+		assertEquals(1, a.on().length);
+	}
+
+	@Test void f03_on_field() throws Exception {
+		var f = OnTarget.class.getField("field1");
+		var a = NamePropertyApplyAnnotation.create().on(f).build();
+		assertEquals(1, a.on().length);
+	}
+
+	@Test void f04_on_fieldInfo() throws Exception {
+		var f = FieldInfo.of(OnTarget.class.getField("field1"));
+		var a = NamePropertyApplyAnnotation.create().on(f).build();
+		assertEquals(1, a.on().length);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// value() accessor
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_value_returnsExpected() {
+		var npa = NamePropertyAnnotation.create().build();
+		var a = NamePropertyApplyAnnotation.create().on("MyClass.myField").value(npa).build();
+		assertSame(npa, a.value());
 	}
 }

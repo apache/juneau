@@ -360,4 +360,19 @@ class MarkdownParser_Test {
 		assertEquals("Alice", r.get(0).name);
 		assertEquals(0, r.get(0).age);
 	}
+
+	//====================================================================================================
+	// n — meta-provider methods: null-bpm guard + nullValue(null) guard
+	//====================================================================================================
+
+	@Test void n01_getMarkdownBeanPropertyMeta_null_returnsDefault() {
+		var result = MarkdownParser.DEFAULT.getMarkdownBeanPropertyMeta(null);
+		assertSame(MarkdownBeanPropertyMeta.DEFAULT, result);
+	}
+
+	@Test void n02_nullValue_null_usesDefaultMarker() {
+		var parser = MarkdownParser.create().nullValue(null).build();
+		// getNullValue() should return the CONST_null default, not null
+		assertNotNull(parser.getNullValue());
+	}
 }

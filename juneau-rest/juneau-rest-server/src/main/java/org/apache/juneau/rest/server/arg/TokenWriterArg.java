@@ -78,6 +78,8 @@ public class TokenWriterArg extends SimpleRestOperationArg {
 	}
 
 	private static Object resolve(RestOpSession opSession, Class<?> declaredType) throws Exception {
+		// HTT: all branches require a live RestOpSession with response serializer infrastructure;
+		//      covered by integration tests in juneau-integration-tests.
 		var req = opSession.getRequest();
 		var res = opSession.getResponse();
 		var match = res.getSerializerMatch();

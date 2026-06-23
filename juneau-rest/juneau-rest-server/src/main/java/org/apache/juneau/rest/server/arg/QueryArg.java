@@ -152,6 +152,8 @@ public class QueryArg implements RestOpArg {
 	})
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
+		// HTT: all branches require a live RestOpSession with real HTTP parsing infrastructure;
+		//      covered by integration tests in juneau-integration-tests.
 		var req = opSession.getRequest();
 		var ps = partParser == null ? req.getPartParserSession() : partParser.getPartSession();
 		var rh = req.getQueryParams();

@@ -84,6 +84,11 @@ class OkHttpTransport_Test {
 			exchange.close();
 		});
 
+		server.createContext("/no-content", exchange -> {
+			exchange.sendResponseHeaders(204, -1);
+			exchange.close();
+		});
+
 		server.start();
 	}
 
@@ -175,6 +180,56 @@ class OkHttpTransport_Test {
 		}
 	}
 
+	@Test
+	void b04_patch_echosMethod() throws Exception {
+		// Exercises the PATCH branch in requiresBody().
+		var transport = OkHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.patch("/echo-method")
+					.body(StringBody.of("", "text/plain"))
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("PATCH", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void b05_post_noBody() throws Exception {
+		// Exercises the null-body + requiresBody(POST)=true branch → creates empty RequestBody.
+		var transport = OkHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.post("/echo-method").run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("POST", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void b06_put_noBody() throws Exception {
+		// Exercises the null-body + requiresBody(PUT)=true branch → creates empty RequestBody.
+		var transport = OkHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.put("/echo-method").run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("PUT", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void b07_patch_noBody() throws Exception {
+		// Exercises the null-body + requiresBody(PATCH)=true branch → creates empty RequestBody.
+		var transport = OkHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			try (var response = client.patch("/echo-method").run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("PATCH", response.getBodyAsString());
+			}
+		}
+	}
+
 	// =================================================================================================================
 	// C — Request body
 	// =================================================================================================================
@@ -202,6 +257,21 @@ class OkHttpTransport_Test {
 					.run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("byte content", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void c03_post_nullContentTypeBody() throws Exception {
+		// Exercises the ct == null branch in buildOkBody() → MediaType.parse(null) path not taken; mediaType = null.
+		var transport = OkHttpTransport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl(rootUrl()).build()) {
+			var bytes = "raw".getBytes(StandardCharsets.UTF_8);
+			try (var response = client.post("/echo-body")
+					.body(ByteArrayBody.of(bytes, null))
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("raw", response.getBodyAsString());
 			}
 		}
 	}

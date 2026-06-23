@@ -179,7 +179,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * XML-encodes the specified string using the {@link XmlUtils#escapeText(Object)} method.
 	 */
 	private String encodeTextInvalidChars(Object o) {
-		if (o == null)
+		if (o == null) // HTT - callers always pass non-null; defensive guard
 			return null;
 		var s = toString(o);
 		return XmlUtils.escapeText(s);
@@ -189,7 +189,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		String s = null;
 		if (nn(uri))
 			s = uri.toString();
-		if (e(s) && nn(uri2))
+		if (e(s) && nn(uri2)) // HTT - all callers pass uri2=null; uri2 fallback is dead
 			s = uri2.toString();
 		if (s == null)
 			return null;

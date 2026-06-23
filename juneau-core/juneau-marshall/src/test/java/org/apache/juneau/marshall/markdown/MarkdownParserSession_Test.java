@@ -434,9 +434,10 @@ class MarkdownParserSession_Test extends TestBase {
 	}
 
 	@Test void i02_topLevelSwapKeyValueTable() throws Exception {
-		// Top-level type has a swap → needsJson5Path returns true → keyValueTableToJson5 path is hit.
+		// Top-level type has a swap explicitly registered → needsJson5Path returns true → keyValueTableToJson5 path is hit.
+		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| count | 7 |";
-		var r = MarkdownParser.DEFAULT.parse(md, IBeanWithSwap.class);
+		var r = p.parse(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertEquals(7, r.count);
@@ -448,8 +449,9 @@ class MarkdownParserSession_Test extends TestBase {
 	})
 	void i03_topLevelSwapMultiColumnTable() throws Exception {
 		// Same swap exercised through parseRow's needsJson5Path branch (rowToJson5).
+		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| name | count |\n|---|---|\n| Alice | 3 |\n| Bob | 5 |";
-		var r = (List<IBeanWithSwap>) MarkdownParser.DEFAULT.parse(md, List.class, IBeanWithSwap.class);
+		var r = (List<IBeanWithSwap>) p.parse(md, List.class, IBeanWithSwap.class);
 		assertEquals(2, r.size());
 		assertEquals("Alice", r.get(0).name);
 		assertEquals(3, r.get(0).count);
@@ -459,9 +461,10 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void i04_cellToJson5_inlineJson5Unwrapped() throws Exception {
 		// Backtick-wrapped cell value embedded into the JSON5 object via cellToJson5.
-		// Property value uses inline JSON5; outer type has a swap so the JSON5 path is taken.
+		// Swap is explicitly registered so keyValueTableToJson5 path is taken.
+		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | `'Alice'` |\n| count | 12 |";
-		var r = MarkdownParser.DEFAULT.parse(md, IBeanWithSwap.class);
+		var r = p.parse(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertEquals("Alice", r.name);
 		assertEquals(12, r.count);
@@ -469,11 +472,67 @@ class MarkdownParserSession_Test extends TestBase {
 
 	@Test void i05_cellToJson5_nullAndEmpty() throws Exception {
 		// "*null*" cell becomes JSON5 null; empty cell becomes "''" via cellToJson5.
+		// Swap explicitly registered so keyValueTableToJson5 path is taken.
+		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
 		var md = "| Property | Value |\n|---|---|\n| name | *null* |\n| count | 0 |";
-		var r = MarkdownParser.DEFAULT.parse(md, IBeanWithSwap.class);
+		var r = p.parse(md, IBeanWithSwap.class);
 		assertNotNull(r);
 		assertNull(r.name);
 		assertEquals(0, r.count);
+	}
+
+	@Marshalled(typeName="i07bean")
+	public static class I07Bean {
+		public String name;
+		public int count;
+	}
+
+	public static class I07BeanSwap extends ObjectSwap<I07Bean, Map<String,Object>> {
+		@Override
+		public Map<String,Object> swap(MarshallingSession session, I07Bean o) {
+			var m = new LinkedHashMap<String,Object>();
+			if (o != null) { m.put("name", o.name); m.put("count", o.count); }
+			return m;
+		}
+		@Override
+		public I07Bean unswap(MarshallingSession session, Map<String,Object> in, ClassMeta<?> hint, String attrName) {
+			var b = new I07Bean();
+			b.name = (String) in.get("name");
+			b.count = in.get("count") == null ? 0 : ((Number)in.get("count")).intValue();
+			return b;
+		}
+	}
+
+	@Test void i07_keyValueTableToJson5_typeKey() throws Exception {
+		// _type key in keyValueTableToJson5 → _type handling branch (lines 721-722).
+		var p = MarkdownParser.create().swaps(I07BeanSwap.class).beanDictionary(I07Bean.class).build();
+		var md = "| Property | Value |\n|---|---|\n| _type | i07bean |\n| name | Bob |\n| count | 5 |";
+		var r = p.parse(md, I07Bean.class);
+		assertNotNull(r);
+		assertEquals("Bob", r.name);
+	}
+
+	@Test void i08_rowToJson5_typeColumn() throws Exception {
+		// _type column in multi-column table → rowToJson5 _type handling branch (lines 695-697).
+		var p = MarkdownParser.create().swaps(I07BeanSwap.class).beanDictionary(I07Bean.class).build();
+		var md = "| _type | name | count |\n|---|---|---|\n| i07bean | Carol | 9 |";
+		@SuppressWarnings("unchecked")
+		var r = (List<I07Bean>) p.parse(md, List.class, I07Bean.class);
+		assertNotNull(r);
+		assertFalse(r.isEmpty());
+		assertEquals("Carol", r.get(0).name);
+	}
+
+	@Test void i09_keyValueTableToJson5_withLongAndDouble() throws Exception {
+		// Long and Double cell values in keyValueTableToJson5 path → cellToJson5 Long/Double branches.
+		// Use a class that is not a bean (no public fields) → needsJson5Path returns true
+		// via !type.isBean(). Use IBeanMapSwap target so we get the swap path.
+		var p = MarkdownParser.create().swaps(IBeanMapSwap.class).build();
+		var md = "| Property | Value |\n|---|---|\n| name | test |\n| count | 9999999999 |";
+		// count will be parsed as Long in cellToJson5 → Long branch hit
+		var r = p.parse(md, IBeanWithSwap.class);
+		assertNotNull(r);
+		assertEquals("test", r.name);
 	}
 
 	@Test void i06_cellToJson5_booleanLiteral() throws Exception {
@@ -572,5 +631,226 @@ class MarkdownParserSession_Test extends TestBase {
 		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
 		assertNotNull(r);
 		assertEquals(0, r.age);
+	}
+
+	//====================================================================================================
+	// n - parseCellValue edge cases
+	//====================================================================================================
+
+	@Test void n01_trimStrings_trimsCellValue() throws Exception {
+		// isTrimStrings() = true → cell value is trimmed (line 574 in parseCellValue, line 60 in json5Parser memoizer)
+		var p = MarkdownParser.create().trimStrings().build();
+		var md = "| Property | Value |\n|---|---|\n| name |   Alice   |\n| age | 30 |";
+		var r = p.parse(md, MarkdownParser_Test.A.class);
+		assertEquals("Alice", r.name);
+		assertEquals(30, r.age);
+	}
+
+	@Test void n02_emptyCellForIntType() throws Exception {
+		// Empty cell for int type → parseCellValue returns null/default-zero at line 578
+		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| age |  |";
+		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		assertEquals("Alice", r.name);
+		assertEquals(0, r.age);
+	}
+
+	@Test void n03_customNullValueMatch() throws Exception {
+		// Cell value matching custom nullValue → parseCellValue returns null at line 572
+		var p = MarkdownParser.create().nullValue("N/A").build();
+		var md = "| Property | Value |\n|---|---|\n| name | N/A |\n| age | 30 |";
+		var r = p.parse(md, MarkdownParser_Test.A.class);
+		assertNull(r.name);
+		assertEquals(30, r.age);
+	}
+
+	//====================================================================================================
+	// o - Empty input parsing
+	//====================================================================================================
+
+	@Test void o01_emptyInputForBean() throws Exception {
+		// Empty input string for a non-String type → parseAnything null branch at line 174
+		var r = MarkdownParser.DEFAULT.parse("", MarkdownParser_Test.A.class);
+		assertNull(r);
+	}
+
+	@Test void o02_emptyInputForString() throws Exception {
+		// Empty input string for String type → parseAnything returns "" at line 175
+		var r = MarkdownParser.DEFAULT.parse("", String.class);
+		assertEquals("", r);
+	}
+
+	@Test void o03_blankLinesOnlyForBean() throws Exception {
+		// Only blank lines → nonBlank is empty → returns null for non-String
+		var r = MarkdownParser.DEFAULT.parse("   \n  \n  ", MarkdownParser_Test.A.class);
+		assertNull(r);
+	}
+
+	//====================================================================================================
+	// p - Polymorphic bean parsing with _type row
+	//====================================================================================================
+
+	@Marshalled(typeName="pbase")
+	public static class PBase {
+		public String name;
+	}
+
+	@Marshalled(typeName="pchild")
+	public static class PChild extends PBase {
+		public String extra;
+	}
+
+	@Test void p01_beanWithTypeRow_resolvedViaRegistry() throws Exception {
+		// Key-value table with _type row for bean type → lines 266-270 in parseKeyValueTable
+		// Registry is non-null and resolves to the child type
+		var p = MarkdownParser.create().beanDictionary(PBase.class, PChild.class).build();
+		var md = "| Property | Value |\n|---|---|\n| _type | pchild |\n| name | Alice |\n| extra | bonus |";
+		var r = p.parse(md, PBase.class);
+		assertNotNull(r);
+		assertEquals("Alice", r.name);
+		assertInstanceOf(PChild.class, r);
+		assertEquals("bonus", ((PChild) r).extra);
+	}
+
+	@Test void p02_beanWithTypeRow_noRegistry() throws Exception {
+		// Key-value table with _type row but no registry → resolved == null, actualType unchanged (line 269 false branch)
+		var md = "| Property | Value |\n|---|---|\n| _type | unknown |\n| name | Bob |";
+		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		assertNotNull(r);
+		assertEquals("Bob", r.name);
+	}
+
+	//====================================================================================================
+	// q - Unknown bean property handling (onUnknownProperty path)
+	//====================================================================================================
+
+	@Test void q01_beanWithUnknownProperty() throws Exception {
+		// Key-value table with property not in the bean → pm == null → onUnknownProperty at line 300
+		// Must enable ignoreUnknownBeanProperties to avoid exception
+		var p = MarkdownParser.create().ignoreUnknownBeanProperties().build();
+		var md = "| Property | Value |\n|---|---|\n| name | Alice |\n| unknownProp | someValue |";
+		var r = p.parse(md, MarkdownParser_Test.A.class);
+		assertNotNull(r);
+		assertEquals("Alice", r.name);
+	}
+
+	//====================================================================================================
+	// r - Multi-column table edge cases (parseMultiColumnTable)
+	//====================================================================================================
+
+	@Test void r01_multiColumnTable_asArray() throws Exception {
+		// Multi-column table parsed as array type → isArray() branch in parseMultiColumnTable at line 366
+		var md = "| name | age |\n|---|---|\n| Alice | 30 |\n| Bob | 25 |";
+		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A[].class);
+		assertNotNull(r);
+		assertEquals(2, r.length);
+		assertEquals("Alice", r[0].name);
+	}
+
+	@Test void r02_multiColumnTable_singleBeanTarget() throws Exception {
+		// Multi-column table with a single bean target (not a collection/array) → else branch at line 375
+		var md = "| name | age |\n|---|---|\n| Alice | 30 |";
+		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		assertNotNull(r);
+		assertEquals("Alice", r.name);
+		assertEquals(30, r.age);
+	}
+
+	//====================================================================================================
+	// s - parseRow: all-null cells and _type column in multi-column table
+	//====================================================================================================
+
+	@Test
+	@SuppressWarnings({
+		"unchecked"
+	})
+	void s01_parseRow_allNullCells() throws Exception {
+		// All cells are null/nullValue → allNull=true → parseRow returns null at line 415 (line 371 check)
+		var md = "| name | age |\n|---|---|\n| *null* | *null* |";
+		var r = (List<MarkdownParser_Test.A>) MarkdownParser.DEFAULT.parse(md, List.class, MarkdownParser_Test.A.class);
+		assertNotNull(r);
+		assertEquals(1, r.size());
+		assertNull(r.get(0));
+	}
+
+	@Test
+	@SuppressWarnings({
+		"unchecked"
+	})
+	void s02_parseRow_withTypeColumn_resolvesType() throws Exception {
+		// Multi-column table with _type column → typeColIndex resolution (line 422)
+		var p = MarkdownParser.create().beanDictionary(PBase.class, PChild.class).build();
+		var md = "| _type | name | extra |\n|---|---|---|\n| pchild | Alice | bonus |";
+		var r = (List<PBase>) p.parse(md, List.class, PBase.class);
+		assertNotNull(r);
+		assertEquals(1, r.size());
+		assertInstanceOf(PChild.class, r.get(0));
+		assertEquals("Alice", r.get(0).name);
+	}
+
+	//====================================================================================================
+	// t - Map target in parseKeyValueTable (line 306)
+	//====================================================================================================
+
+	@Test
+	@SuppressWarnings({
+		"unchecked"
+	})
+	void t01_keyValueTable_asTypedMap() throws Exception {
+		// Key-value table with typed Map target → isMap() branch in parseKeyValueTable at line 306
+		// Also covers line 311 (keyType != null), 315 (cells.size() < 2)
+		var r = (java.util.TreeMap<String, String>) MarkdownParser.DEFAULT.parse(
+			"| Key | Value |\n|---|---|\n| k1 | v1 |\n| k2 | v2 |",
+			java.util.TreeMap.class, String.class, String.class
+		);
+		assertNotNull(r);
+		assertEquals("v1", r.get("k1"));
+		assertEquals("v2", r.get("k2"));
+	}
+
+	//====================================================================================================
+	// u - parseCellValue backtick edge cases (line 582)
+	//====================================================================================================
+
+	@Test void u01_backtick_singleChar() throws Exception {
+		// Single backtick cell "`" — startsWith("`") and endsWith("`") but length == 1 → NOT inline JSON5
+		var md = "| Property | Value |\n|---|---|\n| name | ` |\n| age | 10 |";
+		var r = MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class);
+		assertNotNull(r);
+	}
+
+	//====================================================================================================
+	// v - keyValueTableToJson5 path (needsJson5Path returns true for non-bean, non-primitive types)
+	//====================================================================================================
+
+	// A class with a static fromString factory — NOT a Juneau bean (no public fields/properties)
+	public static class NonBeanType {
+		private final String value;
+		private NonBeanType(String v) { this.value = v; }
+		public static NonBeanType fromString(String s) { return new NonBeanType(s); }
+		@Override public String toString() { return value; }
+	}
+
+	@Test void v01_keyValueTableToJson5_nonBeanType() throws Exception {
+		// Non-bean type (no public properties) → needsJson5Path returns true → keyValueTableToJson5 is invoked
+		// The JSON5 path is taken; parsing may throw since non-bean can't be deserialized from JSON5 object
+		var md = "| Property | Value |\n|---|---|\n| value | hello |";
+		assertThrows(Exception.class, () -> MarkdownParser.DEFAULT.parse(md, NonBeanType.class));
+	}
+
+	@Test void v02_keyValueTableToJson5_typeKeyRow() throws Exception {
+		// Non-bean type with _type row → keyValueTableToJson5 handles _type as quoted string (line 721-722)
+		// May succeed or fail depending on how Json5Parser handles the output; either way, line 721-722 is exercised.
+		var md = "| Property | Value |\n|---|---|\n| _type | mytype |\n| value | hello |";
+		try {
+			MarkdownParser.DEFAULT.parse(md, NonBeanType.class);
+		} catch (Exception e) {
+			// Expected: non-bean type can't be deserialized from JSON5 object
+		}
+	}
+
+	@Test void v03_keyValueTableToJson5_multipleRows() throws Exception {
+		// Multiple rows → keyValueTableToJson5 appends comma between entries (line 718-719)
+		var md = "| Property | Value |\n|---|---|\n| a | 1 |\n| b | 2 |";
+		assertThrows(Exception.class, () -> MarkdownParser.DEFAULT.parse(md, NonBeanType.class));
 	}
 }

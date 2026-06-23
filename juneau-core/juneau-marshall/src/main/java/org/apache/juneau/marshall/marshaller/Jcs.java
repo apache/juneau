@@ -16,15 +16,8 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.nio.charset.*;
-
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.jcs.*;
 import org.apache.juneau.marshall.json.*;
-import org.apache.juneau.marshall.parser.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link JcsSerializer} and {@link JsonParser} into a single class with

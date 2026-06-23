@@ -96,7 +96,8 @@ public class TestUtils extends Utils {
 	 * Validates that the whitespace is correct in the specified XML.
 	 */
 	@SuppressWarnings({
-		"java:S112"  // Generic exception throw required; checked exception wrapping would obscure test intent.
+		"java:S112",  // Generic exception throw required; checked exception wrapping would obscure test intent.
+		"java:S5852"  // Regex backtracking: patterns are bounded by XML line structure; catastrophic backtracking is not possible in practice.
 	})
 	public static final void checkXmlWhitespace(String out) throws Exception {
 		if (out.indexOf('\u0000') != -1) {
