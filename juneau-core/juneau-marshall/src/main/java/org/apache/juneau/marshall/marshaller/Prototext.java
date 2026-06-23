@@ -19,17 +19,17 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.prototext.*;
 
 /**
- * A pairing of a {@link PrototextSerializer} and {@link PrototextParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link PrototextSerializer} and {@link PrototextParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Prototext <jv>proto</jv> = <jk>new</jk> Prototext();
- * 	MyPojo <jv>myPojo</jv> = <jv>proto</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>proto</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>proto</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>proto</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>

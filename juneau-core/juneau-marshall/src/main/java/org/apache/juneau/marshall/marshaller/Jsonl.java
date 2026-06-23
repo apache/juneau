@@ -20,14 +20,14 @@ import org.apache.juneau.marshall.jsonl.*;
 
 /**
  * Pairs {@link JsonlSerializer} and {@link JsonlParser} into a single class with convenience
- * read/write methods.
+ * to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize to JSONL using instance</jc>
  * 	Jsonl <jv>jsonl</jv> = <jk>new</jk> Jsonl();
- * 	String <jv>out</jv> = <jv>jsonl</jv>.write(<jv>myList</jv>);
- * 	List&lt;MyBean&gt; <jv>in</jv> = <jv>jsonl</jv>.read(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+ * 	String <jv>out</jv> = <jv>jsonl</jv>.of(<jv>myList</jv>);
+ * 	List&lt;MyBean&gt; <jv>in</jv> = <jv>jsonl</jv>.to(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Serialize to JSONL using DEFAULT instance</jc>
  * 	String <jv>out</jv> = Jsonl.<jsm>of</jsm>(<jv>myList</jv>);

@@ -33,8 +33,8 @@ import org.apache.juneau.marshall.parquet.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	Parquet <jv>m</jv> = Parquet.<jsf>DEFAULT</jsf>;
- * 	<jv>bytes</jv> = <jv>m</jv>.write(<jv>beans</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>bytes</jv>, MyBean.<jk>class</jk>);
+ * 	<jv>bytes</jv> = <jv>m</jv>.of(<jv>beans</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>bytes</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <p>Output is binary (<jk>byte</jk>[]), Apache Parquet columnar format.</p>

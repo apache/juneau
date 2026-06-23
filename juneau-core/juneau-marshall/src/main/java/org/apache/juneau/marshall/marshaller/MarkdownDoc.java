@@ -20,17 +20,17 @@ import org.apache.juneau.marshall.markdown.*;
 
 /**
  * A pairing of a {@link MarkdownDocSerializer} and {@link MarkdownDocParser} into a single class with
- * convenience read/write methods for document-mode Markdown (headings + tables).
+ * convenience to/of methods for document-mode Markdown (headings + tables).
  *
  * <p>
- * The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	MarkdownDoc <jv>md</jv> = <jk>new</jk> MarkdownDoc();
- * 	MyPojo <jv>myPojo</jv> = <jv>md</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>md</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>md</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>md</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using DEFAULT instance.</jc>

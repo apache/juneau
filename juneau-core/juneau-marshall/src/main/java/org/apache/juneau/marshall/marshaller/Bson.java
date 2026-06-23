@@ -19,17 +19,17 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.bson.*;
 
 /**
- * A pairing of a {@link BsonSerializer} and {@link BsonParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link BsonSerializer} and {@link BsonParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Bson <jv>bson</jv> = <jk>new</jk> Bson();
- * 	MyPojo <jv>myPojo</jv> = <jv>bson</jv>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
- * 	<jk>byte</jk>[] <jv>bytes</jv> = <jv>bson</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>bson</jv>.to(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = <jv>bson</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using DEFAULT instance.</jc>

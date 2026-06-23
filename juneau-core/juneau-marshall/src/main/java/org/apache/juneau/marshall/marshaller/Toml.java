@@ -38,8 +38,8 @@ import org.apache.juneau.marshall.toml.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	Toml <jv>m</jv> = Toml.<jsf>DEFAULT</jsf>;
- * 	String <jv>toml</jv> = <jv>m</jv>.write(<jv>config</jv>);
- * 	JsonMap <jv>parsed</jv> = <jv>m</jv>.read(<jv>toml</jv>, JsonMap.<jk>class</jk>);
+ * 	String <jv>toml</jv> = <jv>m</jv>.of(<jv>config</jv>);
+ * 	JsonMap <jv>parsed</jv> = <jv>m</jv>.to(<jv>toml</jv>, JsonMap.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example output (Map of name/age):</h5>

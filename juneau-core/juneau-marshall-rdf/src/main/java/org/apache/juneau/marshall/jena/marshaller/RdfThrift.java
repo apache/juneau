@@ -33,8 +33,8 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	RdfThrift <jv>m</jv> = RdfThrift.<jsf>DEFAULT</jsf>;
- * 	<jv>bytes</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jv>bytes</jv> = <jv>m</jv>.of(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
  * <p>Output is binary (<jk>byte</jk>[]), Apache Thrift format.</p>

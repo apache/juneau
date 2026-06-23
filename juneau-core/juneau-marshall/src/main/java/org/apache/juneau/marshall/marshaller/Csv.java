@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.csv.*;
 
 /**
- * A pairing of a {@link CsvSerializer} and {@link CsvParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link CsvSerializer} and {@link CsvParser} into a single class with convenience to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
@@ -36,8 +36,8 @@ import org.apache.juneau.marshall.csv.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	Csv <jv>m</jv> = Csv.<jsf>DEFAULT</jsf>;
- * 	<jv>csv</jv> = <jv>m</jv>.write(<jv>people</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>csv</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
+ * 	<jv>csv</jv> = <jv>m</jv>.of(<jv>people</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>csv</jv>, List.<jk>class</jk>, Person.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example output (list of maps with a,b):</h5>

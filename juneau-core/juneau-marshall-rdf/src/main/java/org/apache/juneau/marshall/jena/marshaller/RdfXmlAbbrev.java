@@ -20,17 +20,17 @@ import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * A pairing of a {@link RdfXmlAbbrevSerializer} and {@link RdfXmlParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link RdfXmlAbbrevSerializer} and {@link RdfXmlParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	RdfXmlAbbrev <jv>rdfXmlAbbrev</jv> = <jk>new</jk> RdfXmlAbbrev();
- * 	MyPojo <jv>myPojo</jv> = <jv>rdfXmlAbbrev</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>rdfXmlAbbrev</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>rdfXmlAbbrev</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>rdfXmlAbbrev</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>

@@ -20,17 +20,17 @@ import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * A pairing of a {@link NTripleSerializer} and {@link NTripleParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link NTripleSerializer} and {@link NTripleParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	NTriple <jv>nTriple</jv> = <jk>new</jk> NTriple();
- * 	MyPojo <jv>myPojo</jv> = <jv>nTriple</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>nTriple</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>nTriple</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>nTriple</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>

@@ -20,7 +20,7 @@ import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * A pairing of a {@link TriXSerializer} and {@link TriXParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link TriXSerializer} and {@link TriXParser} into a single class with convenience to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
@@ -33,8 +33,8 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	TriX <jv>m</jv> = TriX.<jsf>DEFAULT</jsf>;
- * 	<jv>trix</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>trix</jv>, MyPojo.<jk>class</jk>);
+ * 	<jv>trix</jv> = <jv>m</jv>.of(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>trix</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age):</h5>

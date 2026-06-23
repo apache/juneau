@@ -19,14 +19,14 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.hocon.*;
 
 /**
- * A pairing of a {@link HoconSerializer} and {@link HoconParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link HoconSerializer} and {@link HoconParser} into a single class with convenience to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Instance usage</jc>
  * 	Hocon <jv>hocon</jv> = <jk>new</jk> Hocon();
- * 	MyBean <jv>bean</jv> = <jv>hocon</jv>.read(<jv>hoconString</jv>, MyBean.<jk>class</jk>);
- * 	String <jv>hoconOut</jv> = <jv>hocon</jv>.write(<jv>bean</jv>);
+ * 	MyBean <jv>bean</jv> = <jv>hocon</jv>.to(<jv>hoconString</jv>, MyBean.<jk>class</jk>);
+ * 	String <jv>hoconOut</jv> = <jv>hocon</jv>.of(<jv>bean</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Static DEFAULT instance</jc>

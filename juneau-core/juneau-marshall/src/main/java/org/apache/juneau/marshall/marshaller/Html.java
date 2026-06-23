@@ -19,17 +19,17 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.html.*;
 
 /**
- * A pairing of a {@link HtmlSerializer} and {@link HtmlParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link HtmlSerializer} and {@link HtmlParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Html <jv>html</jv> = <jk>new</jk> Html();
- * 	MyPojo <jv>myPojo</jv> = <jv>html</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>html</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>html</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>html</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>

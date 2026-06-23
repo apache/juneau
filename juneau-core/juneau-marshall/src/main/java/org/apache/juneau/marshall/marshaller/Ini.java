@@ -19,17 +19,17 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.ini.*;
 
 /**
- * A pairing of an {@link IniSerializer} and {@link IniParser} into a single class with convenience read/write methods.
+ * A pairing of an {@link IniSerializer} and {@link IniParser} into a single class with convenience to/of methods.
  *
  * <p>
- * The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Ini <jv>ini</jv> = <jk>new</jk> Ini();
- * 	MyPojo <jv>myPojo</jv> = <jv>ini</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>ini</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>ini</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>ini</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using DEFAULT instance.</jc>

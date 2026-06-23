@@ -20,7 +20,7 @@ import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * A pairing of a {@link RdfJsonSerializer} and {@link RdfJsonParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link RdfJsonSerializer} and {@link RdfJsonParser} into a single class with convenience to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
@@ -33,8 +33,8 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	RdfJson <jv>m</jv> = RdfJson.<jsf>DEFAULT</jsf>;
- * 	<jv>rdfJson</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>rdfJson</jv>, MyPojo.<jk>class</jk>);
+ * 	<jv>rdfJson</jv> = <jv>m</jv>.of(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>rdfJson</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age, RDF/JSON format):</h5>

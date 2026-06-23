@@ -23,17 +23,17 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 
 /**
- * A pairing of a {@link OpenApiSerializer} and {@link OpenApiParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link OpenApiSerializer} and {@link OpenApiParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	OpenApi <jv>oapi</jv> = <jk>new</jk> OpenApi();
- * 	MyPojo <jv>myPojo</jv> = <jv>oapi</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>oapi</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>oapi</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>oapi</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>

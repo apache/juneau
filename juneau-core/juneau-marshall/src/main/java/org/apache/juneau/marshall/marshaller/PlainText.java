@@ -19,17 +19,17 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.plaintext.*;
 
 /**
- * A pairing of a {@link PlainTextSerializer} and {@link PlainTextParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link PlainTextSerializer} and {@link PlainTextParser} into a single class with convenience to/of methods.
  *
  * <p>
- * 	The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * 	The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	PlainText <jv>plainText</jv> = <jk>new</jk> PlainText();
- * 	MyPojo <jv>myPojo</jv> = <jv>plainText</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>plainText</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>plainText</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>plainText</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>

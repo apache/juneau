@@ -20,7 +20,7 @@ import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * A pairing of a {@link TriGSerializer} and {@link TriGParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link TriGSerializer} and {@link TriGParser} into a single class with convenience to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
@@ -33,8 +33,8 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	TriG <jv>m</jv> = TriG.<jsf>DEFAULT</jsf>;
- * 	<jv>trig</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>trig</jv>, MyPojo.<jk>class</jk>);
+ * 	<jv>trig</jv> = <jv>m</jv>.of(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>trig</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age, Turtle with named graph):</h5>

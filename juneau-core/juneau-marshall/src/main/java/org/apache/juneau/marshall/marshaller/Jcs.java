@@ -21,7 +21,7 @@ import org.apache.juneau.marshall.json.*;
 
 /**
  * A pairing of a {@link JcsSerializer} and {@link JsonParser} into a single class with
- * convenience read/write methods.
+ * convenience to/of methods.
  *
  * <p>
  * 	Produces canonical JSON per <a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8785">RFC 8785</a>.
@@ -37,8 +37,8 @@ import org.apache.juneau.marshall.json.*;
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Jcs <jv>jcs</jv> = <jk>new</jk> Jcs();
- * 	String <jv>s</jv> = <jv>jcs</jv>.write(<jv>myBean</jv>);
- * 	MyBean <jv>b</jv> = <jv>jcs</jv>.read(<jv>s</jv>, MyBean.<jk>class</jk>);
+ * 	String <jv>s</jv> = <jv>jcs</jv>.of(<jv>myBean</jv>);
+ * 	MyBean <jv>b</jv> = <jv>jcs</jv>.to(<jv>s</jv>, MyBean.<jk>class</jk>);
  * </p>
  *
  * <h5 class='figure'>Example output (bean with name/age):</h5>

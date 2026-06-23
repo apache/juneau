@@ -20,14 +20,14 @@ import org.apache.juneau.marshall.json5l.*;
 
 /**
  * Pairs {@link Json5lSerializer} and {@link Json5lParser} into a single class with convenience
- * read/write methods.
+ * to/of methods.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Serialize to JSON5L using instance</jc>
  * 	Json5l <jv>json5l</jv> = <jk>new</jk> Json5l();
- * 	String <jv>out</jv> = <jv>json5l</jv>.write(<jv>myList</jv>);
- * 	List&lt;MyBean&gt; <jv>in</jv> = <jv>json5l</jv>.read(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+ * 	String <jv>out</jv> = <jv>json5l</jv>.of(<jv>myList</jv>);
+ * 	List&lt;MyBean&gt; <jv>in</jv> = <jv>json5l</jv>.to(<jv>out</jv>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
  *
  * 	<jc>// Serialize to JSON5L using DEFAULT instance</jc>
  * 	String <jv>out</jv> = Json5l.<jsm>of</jsm>(<jv>myList</jv>);

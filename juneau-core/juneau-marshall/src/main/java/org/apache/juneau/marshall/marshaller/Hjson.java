@@ -19,17 +19,17 @@ package org.apache.juneau.marshall.marshaller;
 import org.apache.juneau.marshall.hjson.*;
 
 /**
- * A pairing of a {@link HjsonSerializer} and {@link HjsonParser} into a single class with convenience read/write methods.
+ * A pairing of a {@link HjsonSerializer} and {@link HjsonParser} into a single class with convenience to/of methods.
  *
  * <p>
- * The general idea is to combine a single serializer and parser inside a simplified API for reading and writing POJOs.
+ * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	Hjson <jv>hjson</jv> = <jk>new</jk> Hjson();
- * 	MyPojo <jv>myPojo</jv> = <jv>hjson</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>hjson</jv>.write(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>hjson</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>hjson</jv>.of(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using DEFAULT instance.</jc>
