@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.parser.*;
  *
  * <h5 class='section'>Usage:</h5>
  * <p class='bjava'>
- * 	<jk>try</jk> (RecordReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.parseRecords(<jv>input</jv>)) {
+ * 	<jk>try</jk> (RecordReader <jv>r</jv> = Json.<jsf>DEFAULT</jsf>.fromRecords(<jv>input</jv>)) {
  * 		<jk>while</jk> (<jv>r</jv>.canRead()) {
  * 			Bean <jv>bean</jv> = <jv>r</jv>.read(Bean.<jk>class</jk>);
  * 			process(<jv>bean</jv>);
