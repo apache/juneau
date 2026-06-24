@@ -2015,6 +2015,16 @@ const sidebars: SidebarsConfig = {
 							},
 						],
 					},
+					{
+						type: 'doc',
+						id: 'topics/13.17.StreamingCursors',
+						label: '13.17. Streaming Cursors',
+					},
+					{
+						type: 'doc',
+						id: 'topics/13.18.ContentTypeNegotiation',
+						label: '13.18. Content-Type Negotiation',
+					},
 				],
 			},
 				{
