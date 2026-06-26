@@ -25,13 +25,22 @@ import java.lang.annotation.*;
  * Specifies the {@link HttpPartSerializer} and {@link HttpPartParser} to use for serializing/parsing HTTP parts.
  *
  * <p>
- * Can be applied alongside parameter annotations such as <ja>@Query</ja>, <ja>@Header</ja>, <ja>@FormData</ja>,
- * <ja>@Path</ja>, <ja>@Request</ja>, and <ja>@Response</ja> to override the default part serializer/parser
- * for that specific parameter.
+ * Can be applied alongside the HTTP-part parameter annotations <ja>@Query</ja>, <ja>@Header</ja>, <ja>@FormData</ja>,
+ * and <ja>@Path</ja> to override the default part serializer for that specific value.  It may also be declared at the
+ * method or interface level to supply a default for all parts of that scope.
  *
  * <p>
- * This annotation is used by the classic {@code RestClient} remote-proxy path.
- * The next-generation {@code org.apache.juneau.rest.client.RestClient} does not use this annotation.
+ * The next-generation {@code org.apache.juneau.rest.client.RestClient} remote-proxy engine
+ * ({@code RestClient.remote(Class)}) honors the {@link #serializer()} attribute for outgoing HTTP <i>parts</i>
+ * (query / header / path / form-data), resolving the most-specific declaration: parameter-level overrides
+ * method-level, which overrides interface-level.  When absent, the client's default part serializer is used
+ * (behavior is unchanged).
+ *
+ * <p>
+ * <b>Not currently consumed:</b> the {@link #parser()} attribute (the next-gen engine has no response-part parsing
+ * path; response bodies are handled by the client {@code Parser}s, not part parsers), the request body (<ja>@Content</ja>,
+ * which uses a full {@code Serializer}/{@code Parser} rather than a part serializer/parser), and the classic
+ * {@code RestClient} remote-proxy path (which does not discover this annotation).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

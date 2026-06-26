@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.Utils.*;
-
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
@@ -29,7 +27,6 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Fluent builder for a single HTTP request.
@@ -62,6 +59,9 @@ public final class RestRequest {
 	private TransportBody convertedBody;
 	private boolean debug;
 	private URI resolvedUri;
+	private Duration timeout;
+	// Per-request interceptors, unioned with the client-level interceptors at run() time.
+	private final List<RestCallInterceptor> requestInterceptors = new ArrayList<>();
 
 	RestRequest(RestClient client, String method, String url) {
 		this.client = client;
@@ -109,6 +109,20 @@ public final class RestRequest {
 	public RestRequest header(String name, Supplier<String> value) {
 		headers.add(HttpHeaderBean.of(name, value));
 		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if a header with the given name (case-insensitive) is already set on this request.
+	 *
+	 * <p>
+	 * Used by the next-gen remote-proxy engine to honor the precedence of a caller-supplied
+	 * {@code @Header} parameter over an annotation-declared {@code accept}/{@code contentType} attribute.
+	 *
+	 * @param name The header name. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the header is present.
+	 */
+	public boolean hasHeader(String name) {
+		return headers.stream().anyMatch(h -> name.equalsIgnoreCase(h.getName()));
 	}
 
 	// --------------------------------------------------
@@ -253,23 +267,13 @@ public final class RestRequest {
 				return this;
 			}
 		}
-		// No converter matched: serialize the POJO with the client's default serializer.
+		// No converter matched: stream the POJO through the client's default serializer.
+		// Mirrors classic SerializedEntity — the serializer writes straight to the transport output stream during
+		// run() rather than being pre-materialized into a String/byte[].  Repeatable (re-serializes on resend), so a
+		// future auto-retry can resend it; streaming bodies (InputStream/Reader) remain non-repeatable.
 		var s = client.getDefaultSerializer();
-		Object out;
-		try {
-			out = s.serialize(value);
-		} catch (SerializeException e) {
-			throw new IOException(e);
-		}
 		var mt = s.getResponseContentType();
-		if (out instanceof byte[]) {
-			body = ByteArrayBody.of((byte[]) out, mt != null ? mt.toString() : "application/octet-stream");
-			convertedBody = null;
-			return this;
-		}
-		if (! (out instanceof CharSequence))
-			throw new IllegalArgumentException("Default serializer '" + cn(s) + "' produced output that is neither text nor byte[] for type: " + cn(value));
-		body = StringBody.of(out.toString(), mt != null ? mt.toString() : "application/json");
+		body = SerializerBody.of(s, value, mt != null ? mt.toString() : "application/json");
 		convertedBody = null;
 		return this;
 	}
@@ -338,6 +342,60 @@ public final class RestRequest {
 	}
 
 	// --------------------------------------------------
+	// Timeout / interceptors
+	// --------------------------------------------------
+
+	/**
+	 * Sets a per-call response timeout for this request.
+	 *
+	 * <p>
+	 * Threaded onto the {@link TransportRequest} and applied by the transport as the response/read timeout.  Connect
+	 * timeouts remain a client-level setting.
+	 *
+	 * @param value The response timeout. May be <jk>null</jk> to use the transport default.
+	 * @return This object.
+	 */
+	public RestRequest timeout(Duration value) {
+		timeout = value;
+		return this;
+	}
+
+	/**
+	 * Adds per-request lifecycle interceptors.
+	 *
+	 * <p>
+	 * These are unioned with the client-level interceptors when the request runs: the client-level (builder)
+	 * interceptors fire first, then these in the order added.  The next-gen remote-proxy engine uses this to layer
+	 * annotation-declared interface-level then method-level interceptors after the builder-configured ones.
+	 *
+	 * @param value The interceptors to add. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RestRequest interceptors(RestCallInterceptor... value) {
+		requestInterceptors.addAll(Arrays.asList(value));
+		return this;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this request's body can be safely re-sent (retry gating).
+	 *
+	 * <p>
+	 * A request with no body is trivially repeatable.  Otherwise the answer is delegated to the underlying
+	 * body's {@link HttpBody#isRepeatable()} (or {@link TransportBody#isRepeatable()} for a pre-converted body):
+	 * buffered bodies (string/byte[]/file/serialized POJO) are repeatable; one-shot streaming bodies
+	 * ({@link InputStream}/{@link Reader}/piped) are not.
+	 *
+	 * @return <jk>true</jk> if the body is absent or repeatable.
+	 */
+	public boolean isBodyRepeatable() {
+		if (convertedBody != null)
+			return convertedBody.isRepeatable();
+		if (body != null)
+			return body.isRepeatable();
+		return true;
+	}
+
+	// --------------------------------------------------
 	// Accessors (for logging / interceptors)
 	// --------------------------------------------------
 
@@ -380,15 +438,18 @@ public final class RestRequest {
 		var start = Instant.now();
 		RestResponse response = null;
 		Throwable error = null;
+		// Union the client-level (builder) interceptors with any per-request (interface- then
+		// method-level) interceptors, preserving the order builder → interface → method.
+		var effectiveInterceptors = effectiveInterceptors();
 		try {
-			for (var interceptor : client.interceptors)
+			for (var interceptor : effectiveInterceptors)
 				interceptor.onInit(this);
 
 			var transportRequest = buildTransportRequest();
 			var transportResponse = client.transport.execute(transportRequest);
 			response = new RestResponse(transportResponse, client);
 
-			for (var interceptor : client.interceptors)
+			for (var interceptor : effectiveInterceptors)
 				interceptor.onConnect(this, response);
 
 			return response;
@@ -401,7 +462,7 @@ public final class RestRequest {
 		} finally {
 			var elapsed = Duration.between(start, Instant.now());
 			RestResponse finalResponse = response;
-			for (var interceptor : client.interceptors) {
+			for (var interceptor : effectiveInterceptors) {
 				try {
 					interceptor.onClose(this, finalResponse);
 				} catch (Exception e2) { // HTT: exception in onClose; hard to test reliably
@@ -421,13 +482,24 @@ public final class RestRequest {
 		}
 	}
 
+	/** Returns the client-level interceptors followed by the per-request ones (builder → interface → method order). */
+	private List<RestCallInterceptor> effectiveInterceptors() {
+		if (requestInterceptors.isEmpty())
+			return client.interceptors;
+		var l = new ArrayList<RestCallInterceptor>(client.interceptors.size() + requestInterceptors.size());
+		l.addAll(client.interceptors);
+		l.addAll(requestInterceptors);
+		return l;
+	}
+
 	private TransportRequest buildTransportRequest() {
 		var resolvedUrl = applyPathSubstitutions(url);
 		resolvedUri = appendQuery(resolvedUrl);
 
 		var builder = TransportRequest.builder()
 			.method(method)
-			.uri(resolvedUri);
+			.uri(resolvedUri)
+			.timeout(timeout);
 
 		// Headers
 		for (var h : headers) {
@@ -445,18 +517,23 @@ public final class RestRequest {
 			}
 		}
 
+		// A Content-Type already present in the header list (a caller-supplied @Header param, or a constant header)
+		// wins over the body's own content type, and is never duplicated by it (dedup invariant).
+		var hasContentType = hasHeader("Content-Type");
+
 		// Pre-converted body from body(Object) takes priority
 		if (convertedBody != null) {
-			if (convertedBody.getContentType() != null)
+			if (convertedBody.getContentType() != null && ! hasContentType)
 				builder.header("Content-Type", convertedBody.getContentType());
 			builder.body(convertedBody);
 		} else if (!formData.isEmpty() && body == null) {
 			// Form body when form data is present and no explicit body was set
 			var formBody = buildFormBody();
-			builder.header("Content-Type", formBody.getContentType());
+			if (! hasContentType)
+				builder.header("Content-Type", formBody.getContentType());
 			builder.body(TransportBody.of(formBody));
 		} else if (body != null) {
-			if (body.getContentType() != null)
+			if (body.getContentType() != null && ! hasContentType)
 				builder.header("Content-Type", body.getContentType());
 			builder.body(TransportBody.of(body));
 		}

@@ -21,6 +21,7 @@ import static java.util.EnumSet.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -42,6 +43,15 @@ class HealthServlet_Test extends TestBase {
 	@Rest
 	public static class B extends HealthServlet {
 		private static final long serialVersionUID = 1L;
+
+		// Register a context-scoped readiness state so the readiness gate resolves to this bean instead of the
+		// process-wide shared singleton, which embedded-microservice shutdown hooks flip out of service and leak
+		// across the reused Surefire JVM.
+		@Bean
+		public ReadinessState readinessState() {
+			return new ReadinessState();
+		}
+
 		@Override
 		protected Map<String,HealthIndicator> indicators() {
 			return Map.of(

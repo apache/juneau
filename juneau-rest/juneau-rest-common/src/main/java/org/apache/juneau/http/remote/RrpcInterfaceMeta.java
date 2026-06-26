@@ -24,6 +24,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.common.utils.*;
 
 /**
@@ -51,6 +53,22 @@ public final class RrpcInterfaceMeta {
 
 	private final Class<?> iface;
 	private final String basePath;
+	// Interface-level base/host override: an annotation-declared substitute for the client root URL.
+	private final String baseUrl;
+	// Interface-level content negotiation: default accept + contentType media-type overrides.
+	private final String accept;
+	private final String contentType;
+	private final List<Map.Entry<String,String>> headers;
+	private final List<Map.Entry<String,String>> queryData;
+	private final List<Map.Entry<String,String>> formData;
+	// Interface-level custom part serializer: from @HttpPartMarshalling(serializer=...) on the interface.
+	private final HttpPartSerializer partSerializer;
+	// Interface-level cross-cutting call policy: defaults inherited by every method.
+	private final Class<?>[] interceptorClasses;
+	private final String timeout;
+	private final int retries;
+	private final boolean retryNonIdempotent;
+	private final boolean throwOnError;
 	private final Map<Method, RrpcInterfaceMethodMeta> methodMetas;
 	private final Map<String, RrpcInterfaceMethodMeta> methodMetasByPath;
 
@@ -86,6 +104,20 @@ public final class RrpcInterfaceMeta {
 
 		this.iface = iface;
 		this.basePath = buildBasePath(remote);
+		this.baseUrl = remote == null ? "" : VarResolver.DEFAULT.resolve(remote.baseUrl());
+		this.accept = remote == null ? "" : VarResolver.DEFAULT.resolve(remote.accept());
+		this.contentType = remote == null ? "" : VarResolver.DEFAULT.resolve(remote.contentType());
+		this.headers = buildHeaders(remote);
+		this.queryData = remote == null ? List.of() : parseConstantParts(remote.queryData(), '=');
+		this.formData = remote == null ? List.of() : parseConstantParts(remote.formData(), '=');
+		var hpm = iface.getAnnotation(HttpPartMarshalling.class);
+		this.partSerializer = hpm == null ? null : RrpcInterfaceMethodMeta.resolvePartSerializer(hpm.serializer());
+		// Interface-level cross-cutting policy defaults.
+		this.interceptorClasses = remote == null ? new Class<?>[0] : remote.interceptors();
+		this.timeout = remote == null ? "" : remote.timeout();
+		this.retries = remote == null ? 0 : remote.retries();
+		this.retryNonIdempotent = remote != null && remote.retryNonIdempotent();
+		this.throwOnError = remote != null && remote.throwOnError();
 
 		var metas = new LinkedHashMap<Method, RrpcInterfaceMethodMeta>();
 		for (var m : iface.getMethods()) {
@@ -108,6 +140,58 @@ public final class RrpcInterfaceMeta {
 		if (remote == null)
 			return "";
 		return remote.path().isEmpty() ? remote.value() : remote.path();
+	}
+
+	/**
+	 * Resolves the interface-level constant headers declared via {@link Remote#headers()} and the client-version
+	 * header derived from {@link Remote#version()}/{@link Remote#versionHeader()}.
+	 *
+	 * <p>
+	 * Each {@code headers()} entry is a {@code "Name: value"} string (the colon-separated form), resolved through
+	 * {@link VarResolver#DEFAULT} so values such as {@code "$S{sysprop}"} expand.  A non-empty {@code version()}
+	 * appends a {@code Client-Version} header (or the name given by {@code versionHeader()}).
+	 *
+	 * <p>
+	 * <b>Note:</b> {@link Remote#headerList()} is intentionally <i>not</i> honored by the next-gen engine — its value
+	 * type is a classic {@code org.apache.juneau.http.classic.header.HeaderList} subclass that is specific to the
+	 * Apache-HttpClient transport.  Use {@code headers()} for transport-agnostic constant headers.
+	 */
+	private static List<Map.Entry<String,String>> buildHeaders(Remote remote) {
+		if (remote == null)
+			return List.of();
+		var l = new ArrayList<>(parseConstantParts(remote.headers(), ':'));
+		var version = VarResolver.DEFAULT.resolve(remote.version());
+		if (! version.isEmpty()) {
+			var vh = remote.versionHeader().isEmpty() ? "Client-Version" : VarResolver.DEFAULT.resolve(remote.versionHeader());
+			l.add(Map.entry(vh, version));
+		}
+		return Collections.unmodifiableList(l);
+	}
+
+	/**
+	 * Parses an array of constant {@code "name<delim>value"} strings into resolved name/value entries.
+	 *
+	 * <p>
+	 * Each entry is resolved through {@link VarResolver#DEFAULT} (so values such as {@code "$S{sysprop}"} expand), then
+	 * split on the first occurrence of {@code delim} ({@code ':'} for the {@code "Name: value"} header form, {@code '='}
+	 * for the {@code "name=value"} query/form-data form).  Entries with no delimiter are skipped.  Both the name and the
+	 * value are trimmed.
+	 *
+	 * @param entries The raw annotation strings (may be empty).
+	 * @param delim The name/value delimiter character.
+	 * @return An unmodifiable list of resolved name/value entries. Never <jk>null</jk>, but may be empty.
+	 */
+	static List<Map.Entry<String,String>> parseConstantParts(String[] entries, char delim) {
+		if (entries.length == 0)
+			return List.of();
+		var l = new ArrayList<Map.Entry<String,String>>();
+		for (var e : entries) {
+			var s = VarResolver.DEFAULT.resolve(e);
+			var i = s.indexOf(delim);
+			if (i != -1)
+				l.add(Map.entry(s.substring(0, i).trim(), s.substring(i + 1).trim()));
+		}
+		return Collections.unmodifiableList(l);
 	}
 
 	private static String buildSignaturePath(Method m) {
@@ -201,6 +285,150 @@ public final class RrpcInterfaceMeta {
 	}
 
 	/**
+	 * Returns the interface-level base/host override, or an empty string if none.
+	 *
+	 * <p>
+	 * Sourced from {@link Remote#baseUrl()} (resolved through {@link VarResolver#DEFAULT}).  Used as a substitute for
+	 * the client root URL when neither an {@link org.apache.juneau.http.Url @Url} parameter nor a method-level
+	 * {@code baseUrl} is in effect; preserves the interface base path + method path + templating.
+	 *
+	 * @return The base/host override. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getBaseUrl() {
+		return baseUrl;
+	}
+
+	/**
+	 * Returns the interface-level default {@code contentType} media-type override, or an empty string.
+	 *
+	 * <p>
+	 * Sourced from {@link Remote#contentType()} (resolved through {@link VarResolver#DEFAULT}).  Used as the default
+	 * request-serializer/{@code Content-Type} selector for methods that declare no method-level
+	 * {@link RrpcInterfaceMethodMeta#getContentType()}.
+	 *
+	 * @return The {@code contentType} media type. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getContentType() {
+		return contentType;
+	}
+
+	/**
+	 * Returns the interface-level default {@code accept} media-type override, or an empty string.
+	 *
+	 * <p>
+	 * Sourced from {@link Remote#accept()} (resolved through {@link VarResolver#DEFAULT}).  Used as the default
+	 * {@code Accept} header / response-parser fallback for methods that declare no method-level
+	 * {@link RrpcInterfaceMethodMeta#getAccept()}.
+	 *
+	 * @return The {@code accept} media type. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getAccept() {
+		return accept;
+	}
+
+	/**
+	 * Returns the interface-level constant headers to set on every request.
+	 *
+	 * <p>
+	 * Includes the headers declared via {@link Remote#headers()} plus the client-version header derived from
+	 * {@link Remote#version()}/{@link Remote#versionHeader()} (if a version was specified).
+	 *
+	 * @return An unmodifiable list of name/value header entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getHeaders() {
+		return headers;
+	}
+
+	/**
+	 * Returns the interface-level constant query parameters to apply to every request.
+	 *
+	 * <p>
+	 * Resolved from {@link Remote#queryData()} (the {@code "name=value"} form, with {@link VarResolver#DEFAULT}
+	 * expansion).
+	 *
+	 * @return An unmodifiable list of name/value query entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getQueryData() {
+		return queryData;
+	}
+
+	/**
+	 * Returns the interface-level constant form-data parameters to apply to every request.
+	 *
+	 * <p>
+	 * Resolved from {@link Remote#formData()} (the {@code "name=value"} form, with {@link VarResolver#DEFAULT}
+	 * expansion).
+	 *
+	 * @return An unmodifiable list of name/value form-data entries. Never <jk>null</jk>, but may be empty.
+	 */
+	public List<Map.Entry<String,String>> getFormData() {
+		return formData;
+	}
+
+	/**
+	 * Returns the interface-level custom {@link HttpPartSerializer}, or <jk>null</jk> if none.
+	 *
+	 * <p>
+	 * Sourced from {@code @HttpPartMarshalling(serializer=...)} declared on the interface.  Used as
+	 * the lowest-precedence default for part serialization: a parameter-level or method-level
+	 * {@code @HttpPartMarshalling} serializer takes precedence over it.
+	 *
+	 * @return The resolved part serializer, or <jk>null</jk>.
+	 */
+	public HttpPartSerializer getPartSerializer() {
+		return partSerializer;
+	}
+
+	/**
+	 * Returns the interface-level interceptor classes, or an empty array if none.
+	 *
+	 * <p>
+	 * Each class implements the next-gen client-side interceptor SPI and is resolved to an instance by the next-gen
+	 * {@code RemoteClient} (the raw {@code Class<?>[]} type avoids a module dependency on {@code juneau-rest-client}).
+	 *
+	 * @return The interceptor classes. Never <jk>null</jk>, but may be empty.
+	 */
+	public Class<?>[] getInterceptorClasses() {
+		return interceptorClasses;
+	}
+
+	/**
+	 * Returns the interface-level default per-call timeout as a duration string, or an empty string.
+	 *
+	 * @return The timeout duration string. Never <jk>null</jk>, but may be empty.
+	 */
+	public String getTimeout() {
+		return timeout;
+	}
+
+	/**
+	 * Returns the interface-level default max retry attempts, or {@code 0} if retries are disabled.
+	 *
+	 * @return The retry count.
+	 */
+	public int getRetries() {
+		return retries;
+	}
+
+	/**
+	 * Returns whether the interface opts non-idempotent verbs (POST/PATCH) into automatic retries.
+	 *
+	 * @return <jk>true</jk> if non-idempotent retries are opted in at the interface level.
+	 */
+	public boolean isRetryNonIdempotent() {
+		return retryNonIdempotent;
+	}
+
+	/**
+	 * Returns whether the interface throws a generic exception on an unmatched error response.
+	 *
+	 * @return <jk>true</jk> if {@code throwOnError} is set at the interface level.
+	 */
+	public boolean isThrowOnError() {
+		return throwOnError;
+	}
+
+	/**
 	 * Returns the method metadata for all annotated methods.
 	 *
 	 * @return An unmodifiable map from {@link Method} to {@link RrpcInterfaceMethodMeta}. Never <jk>null</jk>.
@@ -222,23 +450,33 @@ public final class RrpcInterfaceMeta {
 	private static Optional<RrpcInterfaceMethodMeta> buildMethodMeta(Method m) {
 		if (m.isAnnotationPresent(RemoteGet.class)) {
 			var a = m.getAnnotation(RemoteGet.class);
-			return opt(simpleMeta(m, "GET", a.path(), a.value(), a.returns()));
+			return opt(simpleMeta(m, "GET", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
+				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemotePost.class)) {
 			var a = m.getAnnotation(RemotePost.class);
-			return opt(simpleMeta(m, "POST", a.path(), a.value(), a.returns()));
+			return opt(simpleMeta(m, "POST", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
+				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemotePut.class)) {
 			var a = m.getAnnotation(RemotePut.class);
-			return opt(simpleMeta(m, "PUT", a.path(), a.value(), a.returns()));
+			return opt(simpleMeta(m, "PUT", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
+				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemotePatch.class)) {
 			var a = m.getAnnotation(RemotePatch.class);
-			return opt(simpleMeta(m, "PATCH", a.path(), a.value(), a.returns()));
+			return opt(simpleMeta(m, "PATCH", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
+				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemoteDelete.class)) {
 			var a = m.getAnnotation(RemoteDelete.class);
-			return opt(simpleMeta(m, "DELETE", a.path(), a.value(), a.returns()));
+			return opt(simpleMeta(m, "DELETE", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
+				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemoteOp.class))
 			return opt(buildRemoteOpMeta(m, m.getAnnotation(RemoteOp.class)));
@@ -246,9 +484,26 @@ public final class RrpcInterfaceMeta {
 		return opte();
 	}
 
-	private static RrpcInterfaceMethodMeta simpleMeta(Method m, String httpMethod, String pathAttr, String valueAttr, RemoteReturn returnType) {
+	/**
+	 * Builds a resolved {@link RrpcInterfaceMethodMeta.ContentNegotiation} carrier from the raw
+	 * {@code accept}/{@code contentType} annotation members, expanding {@link VarResolver#DEFAULT} variables.
+	 */
+	private static RrpcInterfaceMethodMeta.ContentNegotiation neg(String accept, String contentType) {
+		return new RrpcInterfaceMethodMeta.ContentNegotiation(VarResolver.DEFAULT.resolve(accept), VarResolver.DEFAULT.resolve(contentType));
+	}
+
+	@SuppressWarnings({
+		"java:S107" // The 11 parameters mirror the verb-annotation surface (verb/path/value/return + the 3 constant-part arrays + the baseUrl override + the cross-cutting policy carrier + the content-negotiation carrier) threaded into the method-meta; holder types would add indirection without improving this internal builder.
+	})
+	private static RrpcInterfaceMethodMeta simpleMeta(Method m, String httpMethod, String pathAttr, String valueAttr, RemoteReturn returnType, String[] headers, String[] queryData, String[] formData, String baseUrl, RrpcInterfaceMethodMeta.Policy policy, RrpcInterfaceMethodMeta.ContentNegotiation neg) {
 		var path = pathAttr.isEmpty() ? valueAttr : pathAttr;
-		return new RrpcInterfaceMethodMeta(m, httpMethod, path, returnType);
+		return new RrpcInterfaceMethodMeta(m, httpMethod, path, returnType,
+			parseConstantParts(headers, ':'),
+			parseConstantParts(queryData, '='),
+			parseConstantParts(formData, '='),
+			VarResolver.DEFAULT.resolve(baseUrl),
+			policy,
+			neg);
 	}
 
 	private static RrpcInterfaceMethodMeta buildRemoteOpMeta(Method m, RemoteOp a) {
@@ -271,7 +526,13 @@ public final class RrpcInterfaceMeta {
 			method = HttpUtils.detectHttpMethod(m, true, "GET");
 		if (!isOneOf(method, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
 			throw illegalArg("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
-		return new RrpcInterfaceMethodMeta(m, method, trimSlashes(path), returnType);
+		return new RrpcInterfaceMethodMeta(m, method, trimSlashes(path), returnType,
+			parseConstantParts(a.headers(), ':'),
+			parseConstantParts(a.queryData(), '='),
+			parseConstantParts(a.formData(), '='),
+			VarResolver.DEFAULT.resolve(a.baseUrl()),
+			new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
+			neg(a.accept(), a.contentType()));
 	}
 
 	@Override /* Object */

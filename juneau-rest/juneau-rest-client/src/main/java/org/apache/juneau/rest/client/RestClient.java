@@ -262,6 +262,50 @@ public final class RestClient implements Closeable {
 	}
 
 	/**
+	 * Returns the registered request serializer matching the given media type, or <jk>null</jk> if none matches.
+	 *
+	 * <p>
+	 * Unlike {@link #getDefaultSerializer()}, this method performs media-type-driven <i>selection</i> against the
+	 * client's {@link SerializerSet} (via {@link SerializerSet#getSerializer(String)}) and returns <jk>null</jk> on no
+	 * match so the caller can apply the locked no-match fallback (use the default serializer but still send the
+	 * overridden {@code Content-Type} label).  An explicitly-configured single default serializer is also consulted
+	 * when no set is registered.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 *
+	 * @param mediaType The desired request media type. May be <jk>null</jk>/empty.
+	 * @return The matching serializer, or <jk>null</jk> if no registered serializer matches.
+	 */
+	public Serializer getSerializerForMediaType(String mediaType) {
+		if (mediaType == null || mediaType.isEmpty() || serializers == null)
+			return null;
+		return serializers.getSerializer(mediaType);
+	}
+
+	/**
+	 * Returns the registered parser matching the given media type, or <jk>null</jk> if none matches.
+	 *
+	 * <p>
+	 * Used by the next-gen {@code RemoteClient} as the {@code accept} fallback parser: it is consulted only when the
+	 * response {@code Content-Type} matched no registered parser (or the response was unlabeled).  Returns
+	 * <jk>null</jk> on no match so the caller can fall back to the default parser.
+	 *
+	 * <p>
+	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
+	 * ({@code org.apache.juneau.marshall.ng.*}).
+	 *
+	 * @param mediaType The desired parse media type. May be <jk>null</jk>/empty.
+	 * @return The matching parser, or <jk>null</jk> if no registered parser matches.
+	 */
+	public Parser getParserForMediaType(String mediaType) {
+		if (mediaType == null || mediaType.isEmpty() || parsers == null)
+			return null;
+		return parsers.getParser(mediaType);
+	}
+
+	/**
 	 * Returns the default {@code Accept} header value advertising what this client can read.
 	 *
 	 * <p>

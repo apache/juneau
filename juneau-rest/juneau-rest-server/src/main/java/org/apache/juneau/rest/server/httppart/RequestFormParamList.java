@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
 
-import jakarta.servlet.http.*;
+import jakarta.servlet.http.Part;
 
 /**
  * Represents the parsed form-data parameters in an HTTP request.

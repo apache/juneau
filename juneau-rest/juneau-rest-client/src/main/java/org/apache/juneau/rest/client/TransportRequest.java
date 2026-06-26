@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
+import java.time.*;
 import java.util.*;
 
 /**
@@ -45,12 +46,14 @@ public final class TransportRequest {
 	private final URI uri;
 	private final List<TransportHeader> headers;
 	private final TransportBody body;
+	private final Duration timeout;
 
 	private TransportRequest(Builder builder) {
 		this.method = assertArgNotNull("method", builder.method);
 		this.uri = assertArgNotNull("uri", builder.uri);
 		this.headers = List.copyOf(builder.headers);
 		this.body = builder.body;
+		this.timeout = builder.timeout;
 	}
 
 	/** Returns a new {@link Builder}. */
@@ -107,6 +110,19 @@ public final class TransportRequest {
 		return body;
 	}
 
+	/**
+	 * Returns the per-call response timeout, or {@code null} if none was set.
+	 *
+	 * <p>
+	 * Transports apply this as the response/read timeout for the request; a {@code null} value means the
+	 * transport's own default applies.  Connect timeouts remain a client-level concern.
+	 *
+	 * @return The response timeout, possibly <jk>null</jk>.
+	 */
+	public Duration getTimeout() {
+		return timeout;
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// Builder
 	// -----------------------------------------------------------------------------------------------------------------
@@ -125,6 +141,7 @@ public final class TransportRequest {
 		URI uri;
 		final List<TransportHeader> headers = new ArrayList<>();
 		TransportBody body;
+		Duration timeout;
 
 		private Builder() {}
 
@@ -197,6 +214,17 @@ public final class TransportRequest {
 		 */
 		public Builder body(TransportBody value) {
 			body = value;
+			return this;
+		}
+
+		/**
+		 * Sets the per-call response timeout.
+		 *
+		 * @param value The response timeout. May be <jk>null</jk> to use the transport default.
+		 * @return This object.
+		 */
+		public Builder timeout(Duration value) {
+			timeout = value;
 			return this;
 		}
 

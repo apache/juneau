@@ -99,6 +99,9 @@ public final class JavaHttpTransport implements HttpTransport {
 		var builder = HttpRequest.newBuilder().uri(request.getUri()).method(request.getMethod(), buildBodyPublisher(request.getBody()));
 		for (var h : request.getHeaders())
 			builder.header(h.name(), h.value());
+		var timeout = request.getTimeout();
+		if (timeout != null)
+			builder.timeout(timeout);
 		return builder.build();
 	}
 
