@@ -134,6 +134,8 @@ public final class RemoteClient {
 		 * it.  Resolved instances are independent of any client, so the cache is safely shared statically.
 		 */
 		private static final Map<Class<?>, RestCallInterceptor> INTERCEPTORS = new ConcurrentHashMap<>();
+		private static final String HEADER_ACCEPT = "Accept";
+		private static final String MEDIA_OCTET_STREAM = "application/octet-stream";
 
 		/** Builds a fresh {@link RestRequest} for an invocation; re-invoked per retry attempt. */
 		@FunctionalInterface
@@ -248,8 +250,8 @@ public final class RemoteClient {
 
 			// Set the Accept header from the dedicated attribute unless a caller-supplied @Header
 			// param already provided one (caller wins per existing semantics); a single Accept header is emitted.
-			if (isNotEmpty(effectiveAccept) && ! req.hasHeader("Accept"))
-				req.header("Accept", effectiveAccept);
+			if (isNotEmpty(effectiveAccept) && ! req.hasHeader(HEADER_ACCEPT))
+				req.header(HEADER_ACCEPT, effectiveAccept);
 
 			// Apply annotation-declared interceptors + per-call timeout.
 			applyPolicy(req, methodMeta);
@@ -464,7 +466,7 @@ public final class RemoteClient {
 			merged.forEach((k, v) -> {
 				if (skipContentType && "Content-Type".equalsIgnoreCase(k))
 					return;
-				if (skipAccept && "Accept".equalsIgnoreCase(k))
+				if (skipAccept && HEADER_ACCEPT.equalsIgnoreCase(k))
 					return;
 				req.header(k, v);
 			});
@@ -522,7 +524,8 @@ public final class RemoteClient {
 			if (path != null) {
 				var name = firstNonEmpty(path.value(), path.name(), param.getName());
 				// Parameter-level def (non-_NONE_) wins, else method-level @Path(def=...).
-				var value = arg != null ? arg : firstNonEmpty(NONE.equals(path.def()) ? null : path.def(), methodMeta.getPathDefault(name));
+				var pathDef = NONE.equals(path.def()) ? null : path.def();
+				var value = arg != null ? arg : firstNonEmpty(pathDef, methodMeta.getPathDefault(name));
 				if (value != null)
 					req.pathData(name, serializePart(HttpPartType.PATH, HttpPartSchema.create(path, null), value, serializer));
 				return;
@@ -771,24 +774,26 @@ public final class RemoteClient {
 				// Non-repeatable body: refuse to retry (resending a consumed stream would corrupt the call).
 				if (attempt == 0 && ! req.isBodyRepeatable())
 					return processReturnOnce(req, returnMode, method, throwOnError, acceptFallback);
-				RestResponse resp;
+				var shouldRetry = false;
+				RestResponse resp = null;
 				try {
 					resp = req.run();
 				} catch (TransportException e) {
-					if (attempt++ < maxRetries) {
-						backoff(attempt);
-						continue;
-					}
-					throw e;
+					if (attempt++ >= maxRetries)
+						throw e;
+					backoff(attempt);
+					shouldRetry = true;
 				}
-				if (attempt < maxRetries && isRetryableStatus(resp.getStatusCode())) {
+				if (! shouldRetry && resp != null && attempt < maxRetries && isRetryableStatus(resp.getStatusCode())) {
 					resp.close();
 					attempt++;
 					backoff(attempt);
-					continue;
+					shouldRetry = true;
 				}
-				try (resp) { // HTT - exception during close() branch
-					return materializeResponse(resp, returnMode, returnType, genericReturnType, method, throwOnError, acceptFallback);
+				if (shouldRetry)
+					continue;
+				try (var r = resp) { // HTT - exception during close() branch
+					return materializeResponse(r, returnMode, returnType, genericReturnType, method, throwOnError, acceptFallback);
 				}
 			}
 		}
@@ -1000,6 +1005,15 @@ public final class RemoteClient {
 					response.close();
 				}
 			}
+
+			@Override
+			public int read(byte[] buf, int off, int len) throws IOException {
+				if (len == 0) return 0;
+				int b = read();
+				if (b == -1) return -1;
+				buf[off] = (byte) b;
+				return 1;
+			}
 		}
 
 		/** A response-body {@link Reader} that releases the owning {@link RestResponse} when closed. */
@@ -1125,12 +1139,12 @@ public final class RemoteClient {
 				if (part == null)
 					continue;
 				var arg = (args == null || i >= args.length) ? null : args[i];
-				if (arg == null)
-					continue; // A null @Part argument contributes no part.
-				var name = firstNonEmpty(part.name(), part.value(), params[i].getName());
-				var contentType = part.contentType().isEmpty() ? null : part.contentType();
-				var fileName = firstNonEmpty(part.fileName().isEmpty() ? null : part.fileName(), defaultFileName(arg));
-				builder.part(MultipartBody.MultipartPart.of(name, fileName, contentType, toPartBody(arg, contentType)));
+				if (arg != null) {
+					var name = firstNonEmpty(part.name(), part.value(), params[i].getName());
+					var contentType = part.contentType().isEmpty() ? null : part.contentType();
+					var fileName = firstNonEmpty(part.fileName().isEmpty() ? null : part.fileName(), defaultFileName(arg));
+					builder.part(MultipartBody.MultipartPart.of(name, fileName, contentType, toPartBody(arg, contentType)));
+				}
 			}
 			req.body(builder.build());
 		}
@@ -1147,11 +1161,11 @@ public final class RemoteClient {
 			if (arg instanceof HttpBody b)
 				return b;
 			if (arg instanceof byte[] bytes)
-				return ByteArrayBody.of(bytes, firstNonEmpty(contentType, "application/octet-stream"));
+				return ByteArrayBody.of(bytes, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
 			if (arg instanceof File f)
-				return FileBody.of(f, firstNonEmpty(contentType, "application/octet-stream"));
+				return FileBody.of(f, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
 			if (arg instanceof InputStream in)
-				return StreamBody.of(in, firstNonEmpty(contentType, "application/octet-stream"));
+				return StreamBody.of(in, firstNonEmpty(contentType, MEDIA_OCTET_STREAM));
 			if (arg instanceof Reader r)
 				return ReaderBody.of(r, firstNonEmpty(contentType, "text/plain; charset=UTF-8"));
 			if (isScalarPart(arg))

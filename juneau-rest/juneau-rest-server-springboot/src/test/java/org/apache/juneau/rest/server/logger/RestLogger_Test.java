@@ -286,10 +286,8 @@ class RestLogger_Test extends TestBase {
 		var req = new org.springframework.mock.web.MockHttpServletRequest("GET", "/error");
 		var res = new org.springframework.mock.web.MockHttpServletResponse();
 		res.setStatus(500);
-		// Disabled logger should not throw and should not produce output
-		logger.log(req, res);
-		// No exception = pass. Disabled logger has no observable output to verify directly
-		// but we confirm it does not throw.
+		// Disabled logger has no observable output; the only contract to assert is that it does not throw.
+		assertDoesNotThrow(() -> logger.log(req, res));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

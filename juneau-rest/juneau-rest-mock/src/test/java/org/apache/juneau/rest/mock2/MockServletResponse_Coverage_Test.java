@@ -171,7 +171,7 @@ class MockServletResponse_Coverage_Test extends TestBase {
 		assertNotNull(res.getWriter());
 	}
 
-	@Test void a23_updateContentTypeHeader_nullCharset() throws Exception {
+	@Test void a23_updateContentTypeHeader_nullCharset() {
 		// Test when charset is null: setCharacterEncoding(null) then setContentType triggers updateContentTypeHeader
 		// with charset=null which skips the body
 		var res = new MockServletResponse();

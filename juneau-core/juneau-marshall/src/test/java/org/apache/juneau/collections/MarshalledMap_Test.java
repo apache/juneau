@@ -65,14 +65,14 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals(1, m.getInt("a"));
 	}
 
-	@Test void a05_parseViaOfString() throws Exception {
+	@Test void a05_parseViaOfString() {
 		var m = MarshalledMap.ofString("{a:1,b:'two'}", Json5Parser.DEFAULT);
 		assertNotNull(m);
 		assertEquals(1, m.getInt("a"));
 		assertEquals("two", m.getString("b"));
 	}
 
-	@Test void a06_parseViaOfStringNullInput() throws Exception {
+	@Test void a06_parseViaOfStringNullInput() {
 		var m = MarshalledMap.ofString((CharSequence)null, Json5Parser.DEFAULT);
 		assertNotNull(m);
 		assertTrue(m.isEmpty());
@@ -81,7 +81,7 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals(1, m.size());
 	}
 
-	@Test void a06c_parseViaOfStringNullReader() throws Exception {
+	@Test void a06c_parseViaOfStringNullReader() {
 		var m = MarshalledMap.ofString((java.io.Reader)null, Json5Parser.DEFAULT);
 		assertNotNull(m);
 		assertTrue(m.isEmpty());
@@ -90,7 +90,7 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals(1, m.size());
 	}
 
-	@Test void a06b_ofTextAliasStillWorks() throws Exception {
+	@Test void a06b_ofTextAliasStillWorks() {
 		var m = MarshalledMap.ofString("{a:1}", Json5Parser.DEFAULT);
 		assertNotNull(m);
 		assertEquals(1, m.getInt("a"));
@@ -114,7 +114,7 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals(3, got.size());
 	}
 
-	@Test void a08b_parseProducesJson5MapInternally() throws Exception {
+	@Test void a08b_parseProducesJson5MapInternally() {
 		var m = MarshalledMap.ofString("{nested:{x:1}}", Json5Parser.DEFAULT);
 		var nested = m.getMap("nested");
 		assertTrue(nested instanceof Json5Map, "Json5Parser produces Json5Map for nested objects");
@@ -203,7 +203,7 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals("value", m.findString("primary", "alt"));
 	}
 
-	@Test void a17_castToMapInterfaceReturnsNeutralFallback() throws Exception {
+	@Test void a17_castToMapInterfaceReturnsNeutralFallback() {
 		var m = MarshalledMap.ofString("{a:1,b:2}", Json5Parser.DEFAULT);
 		// Casting from a MarshalledMap to the Map interface should fall back to MarshalledMap.
 		Map<?,?> casted = m.cast(Map.class);
@@ -733,7 +733,7 @@ class MarshalledMap_Test extends TestBase {
 		assertEquals(1, m.size());
 	}
 
-	@Test void b76_castToBean() throws Exception {
+	@Test void b76_castToBean() {
 		var m = MarshalledMap.of("name", "alice", "age", 30);
 		var bean = m.cast(B76_Bean.class);
 		assertEquals("alice", bean.name);

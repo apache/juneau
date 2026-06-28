@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  */
 class ProtobufWriter_Test extends TestBase {
 
-	private static String write(ThrowingConsumer<ProtobufWriter> c) throws Exception {
+	private static String write(ThrowingConsumer<ProtobufWriter> c) {
 		var baos = new ByteArrayOutputStream();
 		var w = new ProtobufWriter(baos);
 		c.accept(w);
@@ -40,7 +40,7 @@ class ProtobufWriter_Test extends TestBase {
 	}
 
 	@Test
-	void a01_varintSmall() throws Exception {
+	void a01_varintSmall() {
 		assertEquals("00", write(w -> w.writeVarint(0)));
 		assertEquals("01", write(w -> w.writeVarint(1)));
 		assertEquals("96 01", write(w -> w.writeVarint(150)));
@@ -48,13 +48,13 @@ class ProtobufWriter_Test extends TestBase {
 	}
 
 	@Test
-	void a02_varintNegativeInt32Is10Bytes() throws Exception {
+	void a02_varintNegativeInt32Is10Bytes() {
 		// int32 -1 sign-extends to 64 bits -> 10-byte varint.
 		assertEquals("FF FF FF FF FF FF FF FF FF 01", write(w -> w.writeVarint(-1L)));
 	}
 
 	@Test
-	void a03_zigzag32() throws Exception {
+	void a03_zigzag32() {
 		assertEquals("00", write(w -> w.writeZigZag32(0)));
 		assertEquals("01", write(w -> w.writeZigZag32(-1)));
 		assertEquals("02", write(w -> w.writeZigZag32(1)));
@@ -63,21 +63,21 @@ class ProtobufWriter_Test extends TestBase {
 	}
 
 	@Test
-	void a04_zigzag64() throws Exception {
+	void a04_zigzag64() {
 		assertEquals("00", write(w -> w.writeZigZag64(0L)));
 		assertEquals("01", write(w -> w.writeZigZag64(-1L)));
 		assertEquals("02", write(w -> w.writeZigZag64(1L)));
 	}
 
 	@Test
-	void a05_fixed() throws Exception {
+	void a05_fixed() {
 		// little-endian
 		assertEquals("00 00 80 3F", write(w -> w.writeFixed32(Float.floatToIntBits(1.0f))));
 		assertEquals("00 00 00 00 00 00 F0 3F", write(w -> w.writeFixed64(Double.doubleToLongBits(1.0))));
 	}
 
 	@Test
-	void a06_tag() throws Exception {
+	void a06_tag() {
 		assertEquals("08", write(w -> w.writeTag(1, WireType.VARINT)));
 		assertEquals("12", write(w -> w.writeTag(2, WireType.LEN)));
 		assertEquals("22", write(w -> w.writeTag(4, WireType.LEN)));
@@ -86,7 +86,7 @@ class ProtobufWriter_Test extends TestBase {
 	}
 
 	@Test
-	void a07_stringLenDelimited() throws Exception {
+	void a07_stringLenDelimited() {
 		assertEquals("07 74 65 73 74 69 6E 67", write(w -> w.writeLenDelimited("testing".getBytes(UTF_8))));
 		assertEquals("07 74 65 73 74 69 6E 67", write(w -> w.writeString("testing")));
 		assertEquals("00", write(w -> w.writeString("")));

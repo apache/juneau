@@ -41,7 +41,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	/** Simple bean serializes to XML and round-trips back. */
-	@Test void a01_simpleBean() throws Exception {
+	@Test void a01_simpleBean() {
 		var bean = new SimpleBean();
 		bean.name = "Alice";
 		bean.age = 30;
@@ -55,7 +55,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** Bean with null field round-trips correctly — null fields are omitted by default. */
-	@Test void a02_nullField() throws Exception {
+	@Test void a02_nullField() {
 		var bean = new SimpleBean();
 		bean.name = null;
 		bean.age = 5;
@@ -67,7 +67,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** Map serializes to XML and round-trips via JsonMap. */
-	@Test void a03_map() throws Exception {
+	@Test void a03_map() {
 		var m = new LinkedHashMap<String, Object>();
 		m.put("k1", "v1");
 		m.put("k2", 42);
@@ -80,7 +80,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** List serializes to XML and round-trips via JsonList. */
-	@Test void a04_list() throws Exception {
+	@Test void a04_list() {
 		var list = new ArrayList<>(Arrays.asList("alpha", "beta", "gamma"));
 		var xml = SER.serialize(list);
 		assertNotNull(xml);
@@ -90,7 +90,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** Empty bean serializes to an element with no children and round-trips. */
-	@Test void a05_emptyBean() throws Exception {
+	@Test void a05_emptyBean() {
 		var bean = new EmptyBean();
 		var xml = SER.serialize(bean);
 		assertNotNull(xml);
@@ -98,7 +98,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** Nested bean serializes with child elements and round-trips. */
-	@Test void a06_nestedBean() throws Exception {
+	@Test void a06_nestedBean() {
 		var outer = new OuterBean();
 		outer.label = "outer";
 		outer.inner = new SimpleBean();
@@ -113,7 +113,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** Array serializes as repeated elements and round-trips. */
-	@Test void a07_array() throws Exception {
+	@Test void a07_array() {
 		var arr = new int[]{1, 2, 3};
 		var xml = SER.serialize(arr);
 		assertNotNull(xml);
@@ -122,7 +122,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** trimStrings=true strips whitespace around string values during serialization. */
-	@Test void a08_trimStrings() throws Exception {
+	@Test void a08_trimStrings() {
 		var s = XmlSerializer.create().trimStrings().build();
 		var m = new LinkedHashMap<String, Object>();
 		m.put("key", "  padded  ");
@@ -133,7 +133,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** addBeanTypesXml causes type information to be encoded when the declared type is abstract. */
-	@Test void a09_addBeanTypes() throws Exception {
+	@Test void a09_addBeanTypes() {
 		var s = XmlSerializer.create().addBeanTypesXml().build();
 		var bean = new SimpleBean();
 		bean.name = "typeTest";
@@ -167,21 +167,21 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** property() with addNamespaceUrisToRoot key → switch case at line 172. */
-	@Test void b03_property_addNamespaceUrisToRoot() throws Exception {
+	@Test void b03_property_addNamespaceUrisToRoot() {
 		var s = XmlSerializer.DEFAULT.createSession().property("addNamespaceUrisToRoot", true).build();
 		var xml = s.serialize(new SimpleBean());
 		assertNotNull(xml);
 	}
 
 	/** property() with textNodeDelimiter key → switch case at line 180. */
-	@Test void b04_property_textNodeDelimiter() throws Exception {
+	@Test void b04_property_textNodeDelimiter() {
 		var s = XmlSerializer.DEFAULT.createSession().property("textNodeDelimiter", " | ").build();
 		var xml = s.serialize(new SimpleBean());
 		assertNotNull(xml);
 	}
 
 	/** property() with defaultNamespace key → switch case at line 176. */
-	@Test void b05_property_defaultNamespace() throws Exception {
+	@Test void b05_property_defaultNamespace() {
 		var s = XmlSerializer.DEFAULT.createSession().property("defaultNamespace", "http://example.com").build();
 		assertNotNull(s);
 	}
@@ -198,14 +198,14 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	/** Bean with namespace enabled → namespace-aware serialization. */
-	@Test void c01_enableNamespaces() throws Exception {
+	@Test void c01_enableNamespaces() {
 		var s = XmlSerializer.create().enableNamespaces().addNamespaceUrisToRoot().build();
 		var xml = s.serialize(new SimpleBean());
 		assertNotNull(xml);
 	}
 
 	/** List with namespace enabled → collection namespace serialization. */
-	@Test void c02_enableNamespaces_collection() throws Exception {
+	@Test void c02_enableNamespaces_collection() {
 		var s = XmlSerializer.create().enableNamespaces().build();
 		var list = new ArrayList<>(List.of("alpha", "beta"));
 		var xml = s.serialize(list);
@@ -213,7 +213,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	}
 
 	/** Null root object serializes to XML. */
-	@Test void c03_nullRoot() throws Exception {
+	@Test void c03_nullRoot() {
 		var xml = SER.serialize(null);
 		assertNotNull(xml);
 	}
@@ -223,43 +223,43 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// ------------------------------------------------------------------------------------------------------------------
 
 	/** java.util.Date serializes without error. */
-	@Test void d01_date() throws Exception {
+	@Test void d01_date() {
 		var xml = SER.serialize(new java.util.Date(0));
 		assertNotNull(xml);
 	}
 
 	/** java.time.Instant serializes without error. */
-	@Test void d02_instant() throws Exception {
+	@Test void d02_instant() {
 		var xml = SER.serialize(java.time.Instant.EPOCH);
 		assertNotNull(xml);
 	}
 
 	/** java.time.Duration serializes without error. */
-	@Test void d03_duration() throws Exception {
+	@Test void d03_duration() {
 		var xml = SER.serialize(java.time.Duration.ofSeconds(42));
 		assertNotNull(xml);
 	}
 
 	/** java.time.Period serializes without error. */
-	@Test void d04_period() throws Exception {
+	@Test void d04_period() {
 		var xml = SER.serialize(java.time.Period.of(1, 2, 3));
 		assertNotNull(xml);
 	}
 
 	/** Boolean serializes to XML. */
-	@Test void d05_booleanValue() throws Exception {
+	@Test void d05_booleanValue() {
 		var xml = SER.serialize(true);
 		assertNotNull(xml);
 	}
 
 	/** Number serializes to XML. */
-	@Test void d06_number() throws Exception {
+	@Test void d06_number() {
 		var xml = SER.serialize(42);
 		assertNotNull(xml);
 	}
 
 	/** char value zero serializes to XML. */
-	@Test void d07_charZero() throws Exception {
+	@Test void d07_charZero() {
 		var xml = SER.serialize('\0');
 		assertNotNull(xml);
 	}
@@ -274,14 +274,14 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 		public List<String> items = List.of("a", "b", "c");
 	}
 
-	@Test void e01_beanWithListProperty() throws Exception {
+	@Test void e01_beanWithListProperty() {
 		var xml = SER.serialize(new BeanWithListProp());
 		assertNotNull(xml);
 		assertTrue(xml.contains("a"), "Expected items in: " + xml);
 	}
 
 	/** Stream serialized as collection. */
-	@Test void e02_streamAsCollection() throws Exception {
+	@Test void e02_streamAsCollection() {
 		var stream = java.util.stream.Stream.of("x", "y", "z");
 		var xml = SER.serialize(stream);
 		assertNotNull(xml);
@@ -291,7 +291,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// f - DelegateList serialization (lines 693-709)
 	// ------------------------------------------------------------------------------------------------------------------
 
-	@Test @SuppressWarnings({"unchecked","rawtypes"}) void f01_delegateList() throws Exception {
+	@Test @SuppressWarnings({"unchecked","rawtypes"}) void f01_delegateList() {
 		var ctx = XmlSerializer.DEFAULT.getMarshallingContext();
 		var cm = (org.apache.juneau.marshall.ClassMeta) ctx.getClassMeta(java.util.List.class, String.class);
 		var dl = new org.apache.juneau.marshall.internal.DelegateList<>(cm);
@@ -305,7 +305,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// g - Auto-detect namespaces (line 334)
 	// ------------------------------------------------------------------------------------------------------------------
 
-	@Test void g01_autoDetectNamespaces() throws Exception {
+	@Test void g01_autoDetectNamespaces() {
 		// autoDetectNamespaces is on by default (disable method is disableAutoDetectNamespaces)
 		var s = XmlSerializer.create().enableNamespaces(true).addNamespaceUrisToRoot().build();
 		var xml = s.serialize(new SimpleBean());

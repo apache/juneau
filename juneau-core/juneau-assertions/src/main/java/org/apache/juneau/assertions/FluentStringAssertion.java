@@ -249,7 +249,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	 * @return This object.
 	 */
 	public FluentStringAssertion<R> asOneLine() {
-		return asTransformed(x -> x == null ? null : x.replaceAll("[ \\t]*[\\r\\n]+[ \\t]*", "  "));
+		return asTransformed(x -> x == null ? null : x.replaceAll("[\\r\\n]+[ \\t]*", "  "));
 	}
 
 	/**

@@ -613,7 +613,7 @@ class StreamInternals_Test extends TestBase {
 			}
 		}
 
-		@Test void f03_tokenWriterObjectDefaultThrows() throws Exception {
+		@Test void f03_tokenWriterObjectDefaultThrows() {
 			try (var w = new StubTokenWriter()) {
 				assertThrows(UnsupportedOperationException.class, () -> w.object(42));
 				// write(Object) default delegates to object(Object).

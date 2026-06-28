@@ -26,6 +26,8 @@ import java.math.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.stream.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Regression tests for the Phase-2 CBOR conformance fixes (175fc).
@@ -131,23 +133,10 @@ class CborConformanceFixes_Test extends TestBase {
 		assertEquals(v, rt(v, BigInteger.class));
 	}
 
-	@Test
-	void b05_bigIntegerBeyondCborRangeRoundTrip() throws Exception {
-		// 2^64 has no native CBOR integer head; falls back to a lossless decimal string.
-		var v = new BigInteger("18446744073709551616");
-		assertEquals(v, rt(v, BigInteger.class));
-	}
-
-	@Test
-	void b06_negativeBigIntegerInLongRangeRoundTrip() throws Exception {
-		var v = new BigInteger("-5");
-		assertEquals(v, rt(v, BigInteger.class));
-	}
-
-	@Test
-	void b07_negativeBigIntegerBeyondCborRangeRoundTrip() throws Exception {
-		// -(2^64 + 1) is below CBOR's smallest negative integer; falls back to a lossless string.
-		var v = new BigInteger("-18446744073709551617");
+	@ParameterizedTest
+	@ValueSource(strings = {"18446744073709551616", "-5", "-18446744073709551617"})
+	void b05_bigIntegerRoundTrip(String value) throws Exception {
+		var v = new BigInteger(value);
 		assertEquals(v, rt(v, BigInteger.class));
 	}
 

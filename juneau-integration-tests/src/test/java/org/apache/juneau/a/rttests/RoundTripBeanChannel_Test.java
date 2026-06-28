@@ -180,12 +180,13 @@ class RoundTripBeanChannel_Test extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void c01_beanConsumer_rejected_by_serializer(RoundTrip_Tester t) {
 		BeanConsumer<String> a = item -> {};
-		assertThrows(SerializeException.class, () -> t.getSerializer().serialize(a));
+		var s = t.getSerializer();
+		assertThrows(SerializeException.class, () -> s.serialize(a));
 	}
 
 	@ParameterizedTest
 	@MethodSource("testers")
-	void c02_beanChannel_accepted_by_serializer(RoundTrip_Tester t) throws Exception {
+	void c02_beanChannel_accepted_by_serializer(RoundTrip_Tester t) {
 		// Use an anonymous BeanChannel (pure Iterable interface, no extra bean properties)
 		// so that all serializers treat it as a sequence, not a bean.
 		BeanChannel<String> a = new BeanChannel<>() {

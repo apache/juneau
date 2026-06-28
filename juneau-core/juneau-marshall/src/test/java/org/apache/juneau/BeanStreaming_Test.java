@@ -42,28 +42,28 @@ class BeanStreaming_Test extends TestBase {
 	class A_supplierUnwrapping extends TestBase {
 
 		@Test
-		void a01_singleLevelSupplier() throws Exception {
+		void a01_singleLevelSupplier() {
 			Supplier<String> a = () -> "hello";
 			var json = Json5Serializer.DEFAULT.serialize(a);
 			assertEquals("'hello'", json);
 		}
 
 		@Test
-		void a02_nestedSupplier() throws Exception {
+		void a02_nestedSupplier() {
 			Supplier<Supplier<String>> a = () -> () -> "nested";
 			var json = Json5Serializer.DEFAULT.serialize(a);
 			assertEquals("'nested'", json);
 		}
 
 		@Test
-		void a03_supplierReturningNull() throws Exception {
+		void a03_supplierReturningNull() {
 			Supplier<String> a = () -> null;
 			var json = Json5Serializer.DEFAULT.serialize(a);
 			assertEquals("null", json);
 		}
 
 		@Test
-		void a04_supplierReturningList() throws Exception {
+		void a04_supplierReturningList() {
 			Supplier<List<String>> a = () -> list("x", "y", "z");
 			var json = Json5Serializer.DEFAULT.serialize(a);
 			assertEquals("['x','y','z']", json);
@@ -99,7 +99,7 @@ class BeanStreaming_Test extends TestBase {
 	class B_beanSupplierSerialization extends TestBase {
 
 		@Test
-		void b01_beanSupplier_lifecycle_begin_complete_called() throws Exception {
+		void b01_beanSupplier_lifecycle_begin_complete_called() {
 			var lifecycleLog = new ArrayList<String>();
 			BeanSupplier<String> a = new BeanSupplier<>() {
 				@Override public void begin() throws Exception { lifecycleLog.add("begin"); }
@@ -112,7 +112,7 @@ class BeanStreaming_Test extends TestBase {
 		}
 
 		@Test
-		void b02_beanSupplier_onError_called_on_iteration_failure() throws Exception {
+		void b02_beanSupplier_onError_called_on_iteration_failure() {
 			var lifecycleLog = new ArrayList<String>();
 			BeanSupplier<String> a = new BeanSupplier<>() {
 				@Override public void begin() throws Exception { lifecycleLog.add("begin"); }
@@ -173,7 +173,7 @@ class BeanStreaming_Test extends TestBase {
 		}
 
 		@Test
-		void c03_parseToBeanConsumer_onError_rethrow_stops_parsing() throws Exception {
+		void c03_parseToBeanConsumer_onError_rethrow_stops_parsing() {
 			var lifecycleLog = new ArrayList<String>();
 			BeanConsumer<String> a = new BeanConsumer<>() {
 				@Override public void acceptThrows(String item) throws Exception {
@@ -279,7 +279,7 @@ class BeanStreaming_Test extends TestBase {
 		}
 
 		@Test
-		void e01_factory_class_can_be_instantiated_directly() throws Exception {
+		void e01_factory_class_can_be_instantiated_directly() {
 			var factory = new A_SimpleFactory();
 			var bean = factory.create();
 			assertEquals("from-factory", bean.name);

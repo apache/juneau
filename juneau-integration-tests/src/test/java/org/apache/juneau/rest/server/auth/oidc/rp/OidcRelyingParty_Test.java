@@ -197,7 +197,7 @@ class OidcRelyingParty_Test extends TestBase {
 		assertThrows(AuthenticationException.class, () -> rp.completeLogin(replayReq, replayRes));
 	}
 
-	@Test void b02_unknownState_isRejected() throws Exception {
+	@Test void b02_unknownState_isRejected() {
 		var rp = rp(InMemorySessionStore.create());
 		var req = MockServletRequest.create("GET", REDIRECT_URI + "?code=abc&state=never-issued");
 		var res = MockServletResponse.create();

@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server.servlet;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.*;
@@ -127,7 +126,7 @@ class BasicRestResourceGroup_Test extends TestBase {
 			.filter(ex -> !jakarta.servlet.ServletException.class.isAssignableFrom(ex)
 				         && !RuntimeException.class.isAssignableFrom(ex))
 			.map(Class::getSimpleName)
-			.collect(Collectors.toList());
+			.toList();
 		assertTrue(violations.isEmpty(),
 			"Child-management methods must not declare unexpected checked exceptions: " + violations);
 	}

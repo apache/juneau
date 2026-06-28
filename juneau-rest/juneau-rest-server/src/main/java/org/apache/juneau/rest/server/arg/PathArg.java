@@ -142,8 +142,6 @@ public class PathArg implements RestOpArg {
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		// HTT: all branches require a live RestOpSession with real HTTP path-parameter parsing;
-		//      covered by integration tests in juneau-integration-tests.
 		var req = opSession.getRequest();
 		if (name.equals("*")) {
 			var m = new JsonMap();

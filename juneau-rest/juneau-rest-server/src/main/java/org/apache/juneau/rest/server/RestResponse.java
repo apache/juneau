@@ -27,6 +27,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.httppart.*;
@@ -129,6 +130,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 
 	private static final String HEADER_ContentType = "Content-Type";
 	private static final String ARG_VALUE = "value";
+	private static final Pattern ENCODING_DISABLED_PATTERN = Pattern.compile("(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0)");
 
 	private HttpServletResponse inner;
 	private final RestRequest request;
@@ -406,7 +408,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 				var match = encoders.getEncoderMatch(ae);
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
-					if (ae.matches(".*(identity|\\*)\\s*;\\s*q\\s*=\\s*(0(?!\\.)|0\\.0).*")) {
+					if (ENCODING_DISABLED_PATTERN.matcher(ae).find()) {
 						throw new NotAcceptable("Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}", ae, Json5.DEFAULT.of(encoders.getSupportedEncodings()));
 					}
 				} else {

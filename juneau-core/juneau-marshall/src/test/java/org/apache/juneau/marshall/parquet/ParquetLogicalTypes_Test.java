@@ -24,7 +24,10 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
+import java.util.stream.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Cluster B binary-native logical-type tests (GAP-8/9/10): INT96 read, DECIMAL, and
@@ -47,34 +50,22 @@ class ParquetLogicalTypes_Test extends TestBase {
 		return b;
 	}
 
-	@Test
-	void b1_01_int96EpochPlusOneSecond() throws Exception {
-		// Julian day 2440588 == 1970-01-01; nanos-of-day = 1e9 -> 1970-01-01T00:00:01Z.
-		var page = int96Page(2440588L, 1_000_000_000L);
+	@ParameterizedTest
+	@MethodSource("b1_01_int96ReadProvider")
+	void b1_01_int96ReadAsInstant(long julianDay, long nanosOfDay, String expectedInstant) throws Exception {
+		var page = int96Page(julianDay, nanosOfDay);
 		var reader = new ParquetColumnReader(page, 1, 0);
 		reader.advance();
 		var instant = reader.readInt96AsInstant();
-		assertEquals(Instant.parse("1970-01-01T00:00:01Z"), instant);
+		assertEquals(Instant.parse(expectedInstant), instant);
 	}
 
-	@Test
-	void b1_02_int96WithSubsecondNanos() throws Exception {
-		// 2440588 (1970-01-01), nanos-of-day = 1 second + 500ms.
-		var page = int96Page(2440588L, 1_500_000_000L);
-		var reader = new ParquetColumnReader(page, 1, 0);
-		reader.advance();
-		var instant = reader.readInt96AsInstant();
-		assertEquals(Instant.parse("1970-01-01T00:00:01.500Z"), instant);
-	}
-
-	@Test
-	void b1_03_int96LaterDay() throws Exception {
-		// Julian day 2440589 == 1970-01-02; nanos-of-day = 0 -> 1970-01-02T00:00:00Z.
-		var page = int96Page(2440589L, 0L);
-		var reader = new ParquetColumnReader(page, 1, 0);
-		reader.advance();
-		var instant = reader.readInt96AsInstant();
-		assertEquals(Instant.parse("1970-01-02T00:00:00Z"), instant);
+	static Stream<Arguments> b1_01_int96ReadProvider() {
+		return Stream.of(
+			Arguments.of(2440588L, 1_000_000_000L, "1970-01-01T00:00:01Z"),
+			Arguments.of(2440588L, 1_500_000_000L, "1970-01-01T00:00:01.500Z"),
+			Arguments.of(2440589L, 0L, "1970-01-02T00:00:00Z")
+		);
 	}
 
 	// =================================================================================

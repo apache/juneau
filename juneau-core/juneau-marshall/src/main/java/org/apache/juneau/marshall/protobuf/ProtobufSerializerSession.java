@@ -26,6 +26,7 @@ import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.utils.Utils;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.swap.*;
@@ -125,7 +126,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 
 		// Collect non-null property values keyed by name (presence model:  null => omit).
 		var values = new HashMap<String,Object>();
-		m.forEachValue(x -> nn(x), (pMeta, key, value, thrown) -> {
+		m.forEachValue(Utils::nn, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			else

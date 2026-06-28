@@ -86,8 +86,6 @@ public class ContentArg implements RestOpArg {
 
 	@Override /* Overridden from RestOpArg */
 	public Object resolve(RestOpSession opSession) throws Exception {
-		// HTT: validate=true branch requires BeanValidator with full request/bean-store context;
-		//      covered by integration tests in juneau-integration-tests.
 		var bean = opSession.getRequest().getContent().setSchema(schema).as(type);
 		return validate ? BeanValidator.validate(bean, opSession.getBeanStore()) : bean;
 	}

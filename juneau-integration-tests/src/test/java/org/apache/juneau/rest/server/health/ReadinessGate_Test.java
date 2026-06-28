@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Validates the zero-downtime readiness gate (TODO-174a) surfaced by {@link HealthAggregator}.
+ * Validates the zero-downtime readiness gate surfaced by {@link HealthAggregator}.
  *
  * <p>
  * When the shared {@link ReadinessState} flips {@link ReadinessState#markOutOfService() out of service} (as the

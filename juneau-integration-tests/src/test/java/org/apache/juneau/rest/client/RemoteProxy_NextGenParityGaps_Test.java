@@ -361,10 +361,10 @@ class RemoteProxy_NextGenParityGaps_Test {
 	}
 
 	// =================================================================================================================
-	// @Content(def=...) default / constant body
-	//   (a) parameter-level @Content(def) fills a null body arg          (mirrors classic i01/i02)
-	//   (b) method-level @Content(def) with a @Content param fills a null (mirrors classic e02)
-	//   (c) param-less method-level @Content(def) sends a constant body   (mirrors classic e03)
+	// Content default and constant body behaviors
+	//   (a) parameter-level default fills a null body arg          (mirrors classic i01/i02)
+	//   (b) method-level default with a body param fills a null    (mirrors classic e02)
+	//   (c) param-less method-level default sends a constant body  (mirrors classic e03)
 	//   (d) a caller-supplied body value still wins
 	// =================================================================================================================
 
@@ -785,7 +785,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 				assertEquals("ok", c.remote(L_InterceptorClient.class).get());
 			}
 			// Union order: builder → interface → method (method closest to the call).
-			assertEquals(List.of("builder", "iface", "method"), L_FIRED);
+			assertEquals(L_FIRED, List.of("builder", "iface", "method"));
 		}
 	}
 
@@ -885,7 +885,8 @@ class RemoteProxy_NextGenParityGaps_Test {
 			try (var c = retryClient(calls, req -> { throw new TransportException("boom"); })) {
 				// The checked TransportException propagates out of the proxy wrapped in an UndeclaredThrowableException
 				// (standard JDK dynamic-proxy behavior for a checked exception not declared by the method).
-				var e = assertThrows(java.lang.reflect.UndeclaredThrowableException.class, () -> c.remote(N_RetryClient.class).get());
+				var proxy = c.remote(N_RetryClient.class);
+				var e = assertThrows(java.lang.reflect.UndeclaredThrowableException.class, proxy::get);
 				assertInstanceOf(TransportException.class, e.getCause());
 			}
 			assertEquals(4, calls.get());  // 1 initial + 3 retries
@@ -1305,19 +1306,22 @@ class RemoteProxy_NextGenParityGaps_Test {
 
 		@Test void s01_multipartPlusContent_buildTimeError() throws Exception {
 			try (var mrc = MockRestClient.create(S_Resource.class)) {
-				assertThrows(IllegalArgumentException.class, () -> mrc.getClient().remote(S_ConflictClient.class));
+				var client = mrc.getClient();
+				assertThrows(IllegalArgumentException.class, () -> client.remote(S_ConflictClient.class));
 			}
 		}
 
 		@Test void s02_multipartWithNoPart_buildTimeError() throws Exception {
 			try (var mrc = MockRestClient.create(S_Resource.class)) {
-				assertThrows(IllegalArgumentException.class, () -> mrc.getClient().remote(S_NoPartClient.class));
+				var client = mrc.getClient();
+				assertThrows(IllegalArgumentException.class, () -> client.remote(S_NoPartClient.class));
 			}
 		}
 
 		@Test void s03_partWithoutMultipart_buildTimeError() throws Exception {
 			try (var mrc = MockRestClient.create(S_Resource.class)) {
-				assertThrows(IllegalArgumentException.class, () -> mrc.getClient().remote(S_PartWithoutMultipartClient.class));
+				var client = mrc.getClient();
+				assertThrows(IllegalArgumentException.class, () -> client.remote(S_PartWithoutMultipartClient.class));
 			}
 		}
 

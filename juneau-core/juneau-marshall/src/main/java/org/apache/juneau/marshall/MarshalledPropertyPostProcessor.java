@@ -377,7 +377,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 */
 	private static Object emptyOptional(Class<?> propertyClass, ClassMeta<?> propertyMeta) {
 		if (Optional.class.equals(propertyClass))
-			return (propertyMeta != null && propertyMeta.isOptional()) ? propertyMeta.getOptionalDefault() : Optional.empty();
+			return (propertyMeta != null && propertyMeta.isOptional()) ? propertyMeta.getOptionalDefault() : opte();
 		if (OptionalInt.class.equals(propertyClass))
 			return OptionalInt.empty();
 		if (OptionalLong.class.equals(propertyClass))

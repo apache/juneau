@@ -153,7 +153,7 @@ class IdTokenValidatorAdapter_Test extends TestBase {
 	// F: validate — null expectedNonce (line 246 false branch).
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_jwksUri_path_buildSucceeds() throws Exception {
+	@Test void f01_jwksUri_path_buildSucceeds() {
 		// jwkSet is null, jwksUri is set — resolveSource takes the jwksUri branch (line 217 false).
 		assertDoesNotThrow(() -> IdTokenValidatorAdapter.create()
 			.issuer(ISS).clientId(CID)

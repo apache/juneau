@@ -101,6 +101,9 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 	}
 
 	@Override
+	@SuppressWarnings({
+		"java:S2589" // Double-checked locking: the inner `if (!resolved)` and its else-branch look redundant to Sonar's single-threaded symbolic execution but are essential for MT correctness (another thread can set resolved=true between the outer and inner checks).
+	})
 	public org.apache.juneau.commons.settings.PropertyLookupResult get(String name) {
 		var e = env;
 		if (! resolved) {
@@ -122,7 +125,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		// caller has NOT explicitly set juneau.profiles.active as a property (that exact key wins if present).
 		if (PROFILES_ACTIVE_KEY.equals(name) && ! e.containsProperty(name)) {
 			var active = e.getActiveProfiles();
-			if (active != null && active.length > 0)  // HTT: getActiveProfiles() never returns null per the Environment contract; the guard is defensive.
+			if (active.length > 0)  // getActiveProfiles() never returns null per the Environment contract.
 				return org.apache.juneau.commons.settings.PropertyLookupResult.present(opt(String.join(",", active)));
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
 		}

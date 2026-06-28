@@ -492,6 +492,9 @@ public final class RestRequest {
 		return l;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Request-assembly branching is intentional and cohesive; refactoring would reduce readability without benefit.
+	})
 	private TransportRequest buildTransportRequest() {
 		var resolvedUrl = applyPathSubstitutions(url);
 		resolvedUri = appendQuery(resolvedUrl);

@@ -50,7 +50,7 @@ class RdfThrift_Test extends TestBase {
 		assertEquals(RdfThrift.DEFAULT.to(out1, String.class), RdfThrift.DEFAULT.to(baosOut, String.class));
 	}
 
-	@Test void a02_from() throws Exception {
+	@Test void a02_from() {
 		var in1 = JsonMap.of("foo", "bar");
 		var bytes = RdfThrift.DEFAULT.of(in1);
 		var result = RdfThrift.DEFAULT.to(bytes, Map.class, String.class, String.class);

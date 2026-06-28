@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.rest.observability;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
-
-import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
@@ -185,7 +184,7 @@ class TraceContextResponseProcessor_Test extends TestBase {
 		var opSession = mock(RestOpSession.class);
 
 		var tpAttr = mock(RequestAttribute.class);
-		when(tpAttr.as(String.class)).thenReturn(Optional.of("00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"));
+		when(tpAttr.as(String.class)).thenReturn(opt("00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01"));
 		when(req.getAttribute(TraceContextResponseProcessor.ATTR_TRACEPARENT)).thenReturn(tpAttr);
 
 		when(opSession.getRequest()).thenReturn(req);

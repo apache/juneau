@@ -96,7 +96,7 @@ class HoconTokenizer_Test extends TestBase {
 	}
 
 	@Test
-	void b03_peekNoSkipDoesNotSkipWhitespace() throws Exception {
+	void b03_peekNoSkipDoesNotSkipWhitespace() {
 		var t = tokenizer("  foo");
 		// peekNoSkip starts directly at the leading space and treats it as part of a string
 		// (actually: leading space is part of unquoted forbidden chars for unquoted, but not handled
@@ -601,7 +601,7 @@ class HoconTokenizer_Test extends TestBase {
 	}
 
 	@Test
-	void j10_dollarWithoutBrace() throws Exception {
+	void j10_dollarWithoutBrace() {
 		// '$' is in UNQUOTED_FORBIDDEN — dollar without brace is an orphan and triggers IOException
 		var t = tokenizer("$abc");
 		assertThrows(IOException.class, t::read);
@@ -702,7 +702,7 @@ class HoconTokenizer_Test extends TestBase {
 	}
 
 	@Test
-	void k12_numberPlusSignIsString() throws Exception {
+	void k12_numberPlusSignIsString() {
 		// '+' is not in the regex; "+5" can't be tokenized as a leading char anyway since '+' alone goes
 		// to the +/+ branch, and "+5" is "+ then 5"; the '+' lacks '=' continuation so we fall to the
 		// unquoted path which throws.

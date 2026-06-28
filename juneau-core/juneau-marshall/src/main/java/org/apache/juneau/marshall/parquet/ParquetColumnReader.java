@@ -158,7 +158,7 @@ final class ParquetColumnReader {
 		long nanosOfDay = readInt64();
 		int julianDay = readInt32();
 		// Julian day 2440588 == 1970-01-01.  Days since epoch * 86400s + nanos-of-day.
-		long epochDay = (long) julianDay - 2440588L;
+		long epochDay = julianDay - 2440588L;
 		long epochSecond = epochDay * 86_400L + nanosOfDay / 1_000_000_000L;
 		long nanoAdjust = nanosOfDay % 1_000_000_000L;
 		return Instant.ofEpochSecond(epochSecond, nanoAdjust);

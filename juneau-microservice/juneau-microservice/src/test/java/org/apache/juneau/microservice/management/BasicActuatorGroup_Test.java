@@ -40,6 +40,8 @@ import org.junit.jupiter.api.*;
 })
 class BasicActuatorGroup_Test extends TestBase {
 
+	// Mixed-case name retained to match log-level probe expectations in test assertions.
+	@SuppressWarnings("java:S115")
 	private static final String LName = "org.apache.juneau.test.actuator.Probe";
 
 	private static ManifestFile manifest() throws IOException {

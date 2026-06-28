@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.protobuf;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.time.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
@@ -275,7 +276,7 @@ class ProtobufCoverage_Test extends TestBase {
 		var a = new Temporals();
 		a.cal = java.util.GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-02T03:04:05Z"));
 		a.dur = java.time.Duration.ofSeconds(90);
-		a.ld = java.time.LocalDate.of(2024, 1, 2);
+		a.ld = LocalDate.of(2024, Month.JANUARY, 2);
 		a.per = java.time.Period.of(1, 2, 3);
 		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
 		var b = ProtobufParser.DEFAULT.parse(bytes, Temporals.class);
@@ -322,14 +323,14 @@ class ProtobufCoverage_Test extends TestBase {
 		var cal = java.util.GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-02T03:04:05Z"));
 		a.dates = java.util.Map.of("k", d);
 		a.cals = java.util.Map.of("k", cal);
-		a.lds = java.util.Map.of("k", java.time.LocalDate.of(2024, 1, 2));
+		a.lds = java.util.Map.of("k", LocalDate.of(2024, Month.JANUARY, 2));
 		a.durs = java.util.Map.of("k", java.time.Duration.ofSeconds(90));
 		a.pers = java.util.Map.of("k", java.time.Period.of(1, 2, 3));
 		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
 		var b = ProtobufParser.DEFAULT.parse(bytes, C03_TemporalMaps.class);
 		assertEquals(d, b.dates.get("k"));
 		assertEquals(cal.toInstant(), b.cals.get("k").toInstant());
-		assertEquals(java.time.LocalDate.of(2024, 1, 2), b.lds.get("k"));
+		assertEquals(LocalDate.of(2024, Month.JANUARY, 2), b.lds.get("k"));
 		assertEquals(java.time.Duration.ofSeconds(90), b.durs.get("k"));
 		assertEquals(java.time.Period.of(1, 2, 3), b.pers.get("k"));
 	}

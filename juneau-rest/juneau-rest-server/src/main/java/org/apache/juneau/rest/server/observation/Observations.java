@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.observation;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.util.concurrent.atomic.*;
+
 /**
  * Static facade over an explicitly-installed default {@link Observer} for ergonomic custom
  * (non-request) observations.
@@ -66,9 +68,11 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 })
 public class Observations {
 
+	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
+	@SuppressWarnings("java:S115")
 	private static final String ARG_observer = "observer";
 
-	private static volatile Observer defaultObserver = Observer.NOOP;
+	private static final AtomicReference<Observer> defaultObserver = new AtomicReference<>(Observer.NOOP);
 
 	private Observations() {}
 
@@ -82,14 +86,14 @@ public class Observations {
 	 * @param observer The observer to install. Must not be <jk>null</jk>.
 	 */
 	public static void install(Observer observer) {
-		defaultObserver = assertArgNotNull(ARG_observer, observer);
+		defaultObserver.set(assertArgNotNull(ARG_observer, observer));
 	}
 
 	/**
 	 * Resets the process-wide default observer back to {@link Observer#NOOP}.
 	 */
 	public static void reset() {
-		defaultObserver = Observer.NOOP;
+		defaultObserver.set(Observer.NOOP);
 	}
 
 	/**
@@ -98,7 +102,7 @@ public class Observations {
 	 * @return The default observer; {@link Observer#NOOP} if none was installed. Never <jk>null</jk>.
 	 */
 	public static Observer observer() {
-		return defaultObserver;
+		return defaultObserver.get();
 	}
 
 	/**
@@ -111,7 +115,7 @@ public class Observations {
 	 * @return The started {@link Observation} (a try-with-resources handle). Never <jk>null</jk>.
 	 */
 	public static Observation observe(String name, String tags) {
-		return defaultObserver.start(name, tags);
+		return defaultObserver.get().start(name, tags);
 	}
 
 	/**
@@ -121,6 +125,6 @@ public class Observations {
 	 * @return The started {@link Observation}. Never <jk>null</jk>.
 	 */
 	public static Observation observe(String name) {
-		return defaultObserver.start(name, "");
+		return defaultObserver.get().start(name, "");
 	}
 }

@@ -44,7 +44,13 @@ import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.stats.*;
 import org.apache.juneau.rest.server.util.*;
+import java.util.function.*;
+import java.util.stream.*;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 /**
  * Branch-coverage unit tests for the {@code create()} factory methods on the REST arg-resolver classes.
@@ -670,9 +676,19 @@ class RestArgResolvers_Test extends TestBase {
 		assertNotNull(RestContextArgs.create(pi));
 	}
 
-	@Test void t03_restContextArgs_create_returnsNullForUnknownType() {
+	static Stream<Arguments> t_contextArgs_returnsNullForUnknownType() {
+		return Stream.of(
+			Arguments.of("RestContextArgs",   (Function<ParameterInfo, Object>) p -> RestContextArgs.create(p)),
+			Arguments.of("RestOpContextArgs", (Function<ParameterInfo, Object>) p -> RestOpContextArgs.create(p)),
+			Arguments.of("RestOpSessionArgs", (Function<ParameterInfo, Object>) p -> RestOpSessionArgs.create(p)),
+			Arguments.of("RestSessionArgs",   (Function<ParameterInfo, Object>) p -> RestSessionArgs.create(p))
+		);
+	}
+
+	@ParameterizedTest @MethodSource("t_contextArgs_returnsNullForUnknownType")
+	void t03_t05_t07_t09_contextArgs_create_returnsNullForUnknownType(String label, Function<ParameterInfo, Object> factory) {
 		var pi = firstParam(Fixture.class, "noAnnotation");
-		assertNull(RestContextArgs.create(pi));
+		assertNull(factory.apply(pi), label + ".create must return null for unannotated parameter");
 	}
 
 	@Test void t04_restOpContextArgs_create_matchesRestOpContext() {
@@ -680,29 +696,14 @@ class RestArgResolvers_Test extends TestBase {
 		assertNotNull(RestOpContextArgs.create(pi));
 	}
 
-	@Test void t05_restOpContextArgs_create_returnsNullForUnknownType() {
-		var pi = firstParam(Fixture.class, "noAnnotation");
-		assertNull(RestOpContextArgs.create(pi));
-	}
-
 	@Test void t06_restOpSessionArgs_create_matchesRestOpSession() {
 		var pi = firstParam(Fixture.class, "withRestOpSession");
 		assertNotNull(RestOpSessionArgs.create(pi));
 	}
 
-	@Test void t07_restOpSessionArgs_create_returnsNullForUnknownType() {
-		var pi = firstParam(Fixture.class, "noAnnotation");
-		assertNull(RestOpSessionArgs.create(pi));
-	}
-
 	@Test void t08_restSessionArgs_create_matchesRestSession() {
 		var pi = firstParam(Fixture.class, "withRestSession");
 		assertNotNull(RestSessionArgs.create(pi));
-	}
-
-	@Test void t09_restSessionArgs_create_returnsNullForUnknownType() {
-		var pi = firstParam(Fixture.class, "noAnnotation");
-		assertNull(RestSessionArgs.create(pi));
 	}
 
 	// -----------------------------------------------------------------------------------------

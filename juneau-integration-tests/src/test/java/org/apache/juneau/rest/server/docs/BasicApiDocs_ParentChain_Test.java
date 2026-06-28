@@ -60,7 +60,7 @@ class BasicApiDocs_ParentChain_Test extends TestBase {
 
 	private static final MockRestClient c = MockRestClient.buildLax(Child.class);
 
-	@Test void a01_parentChainAggregatesAllMixins() throws Exception {
+	@Test void a01_parentChainAggregatesAllMixins() {
 		MockRestClient.buildLax(Child.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(Child.class);
 		var contexts = hostCtx.getMixinContexts();

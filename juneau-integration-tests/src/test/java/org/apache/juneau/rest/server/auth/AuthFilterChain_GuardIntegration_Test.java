@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -87,8 +88,8 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 	/** ApiKeyStore: "apikey-admin" → ClaimsPrincipal(bob, roles=[admin]) */
 	private static final ApiKeyStore KEY_STORE = key -> {
 		if ("apikey-admin".equals(key))
-			return Optional.of(new ClaimsPrincipal("bob", Map.of("roles", List.of("admin"), "sub", "bob")));
-		return Optional.empty();
+			return opt(new ClaimsPrincipal("bob", Map.of("roles", List.of("admin"), "sub", "bob")));
+		return opte();
 	};
 
 	private static AuthFilterChain buildChain() {

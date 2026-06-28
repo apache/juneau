@@ -29,6 +29,8 @@ import org.junit.jupiter.api.*;
  * Tests for {@link CallLoggerRule#matches}, {@link BasicCallLogger}, {@link BasicDisabledCallLogger},
  * and {@link BasicTestCaptureCallLogger}.
  */
+// h01 validates no-op behavior of BasicDisabledCallLogger via absence of exception; no observable return value to assert.
+@SuppressWarnings("java:S2699")
 class RestLogger_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

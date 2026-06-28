@@ -29,6 +29,7 @@ import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.util.*;
 
@@ -545,6 +546,14 @@ public class RestSession extends ContextSession {
 			var opRestContext = opSession.getContext().getContext();
 			if (opRestContext.isMixinContext())
 				opRestContext.startCall(this);
+			try {
+				// Resource-level authentication fold (RestAuthenticator) — runs before preCall so @RestPreCall
+				// hooks, guards (roleGuard), and @Auth arg resolution all see the resolved principal/roles.
+				opRestContext.authenticate(opSession);
+			} catch (AuthenticationException e) {
+				AuthFilter.sendChallenge(res, e);
+				return;
+			}
 			context.preCall(opSession);
 			opSession.run();
 			context.postCall(opSession);

@@ -45,11 +45,13 @@ class Observations_Test {
 		final List<String> events = new ArrayList<>();
 
 		@Override /* MetricsRecorder */
+		@SuppressWarnings("java:S6213") // 'record' is the established SPI method name; renaming would break the MetricsRecorder interface contract.
 		public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
 			// Request-path method unused by these tests.
 		}
 
 		@Override /* MetricsRecorder */
+		@SuppressWarnings("java:S6213") // 'record' is the established SPI method name; renaming would break the MetricsRecorder interface contract.
 		public void record(String metricName, String metricTags, Duration elapsed, Throwable error) {
 			assertNotNull(elapsed);
 			assertFalse(elapsed.isNegative());
@@ -110,6 +112,9 @@ class Observations_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S2699" // Validates that observation completes without error; no return value to assert.
+	})
 	@Test void a04_noopHandle_setErrorAndCloseAreSafe() {
 		var o = Observation.NOOP;
 		o.setError(new RuntimeException("ignored"));

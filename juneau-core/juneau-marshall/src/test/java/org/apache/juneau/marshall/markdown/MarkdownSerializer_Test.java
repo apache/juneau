@@ -16,12 +16,17 @@
  */
 package org.apache.juneau.marshall.markdown;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests for {@link MarkdownSerializer} and {@link MarkdownSerializerSession} (fragment mode).
@@ -305,7 +310,7 @@ class MarkdownSerializer_Test {
 	@Test void k06_serializeOptionalEmptyInBean() {
 		// Optional.empty() property → serializeAnything Optional.isEmpty() branch (null path)
 		var bean = new KOptional();
-		bean.name = java.util.Optional.empty();
+		bean.name = opte();
 		var md = MarkdownSerializer.DEFAULT.serialize(bean);
 		assertNotNull(md);
 		// Empty Optional renders as null value (null marker or omitted key)
@@ -434,44 +439,24 @@ class MarkdownSerializer_Test {
 	// swap that converts them to String before serializeInlineValue is called.
 	//====================================================================================================
 
-	@Test void o01_dateAsMapValue() {
-		var m = new java.util.LinkedHashMap<String, Object>();
-		m.put("ts", new java.util.Date(0));
+	@ParameterizedTest
+	@MethodSource("o01_temporalTypeAsMapValueProvider")
+	void o01_temporalTypeAsMapValue(String key, Object value) {
+		var m = new LinkedHashMap<String, Object>();
+		m.put(key, value);
 		var md = MarkdownSerializer.DEFAULT.serialize(m);
 		assertNotNull(md);
-		assertTrue(md.contains("| ts |"), "Expected ts key: " + md);
+		assertTrue(md.contains("| " + key + " |"), "Expected " + key + " key: " + md);
 	}
 
-	@Test void o02_calendarAsMapValue() {
-		var m = new java.util.LinkedHashMap<String, Object>();
-		m.put("cal", java.util.Calendar.getInstance());
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
-		assertNotNull(md);
-		assertTrue(md.contains("| cal |"), "Expected cal key: " + md);
-	}
-
-	@Test void o03_temporalAsMapValue() {
-		var m = new java.util.LinkedHashMap<String, Object>();
-		m.put("instant", java.time.Instant.ofEpochMilli(0));
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
-		assertNotNull(md);
-		assertTrue(md.contains("| instant |"), "Expected instant key: " + md);
-	}
-
-	@Test void o04_durationAsMapValue() {
-		var m = new java.util.LinkedHashMap<String, Object>();
-		m.put("dur", java.time.Duration.ofSeconds(60));
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
-		assertNotNull(md);
-		assertTrue(md.contains("| dur |"), "Expected dur key: " + md);
-	}
-
-	@Test void o05_periodAsMapValue() {
-		var m = new java.util.LinkedHashMap<String, Object>();
-		m.put("period", java.time.Period.ofDays(7));
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
-		assertNotNull(md);
-		assertTrue(md.contains("| period |"), "Expected period key: " + md);
+	static Stream<Arguments> o01_temporalTypeAsMapValueProvider() {
+		return Stream.of(
+			Arguments.of("ts", new Date(0)),
+			Arguments.of("cal", Calendar.getInstance()),
+			Arguments.of("instant", Instant.ofEpochMilli(0)),
+			Arguments.of("dur", Duration.ofSeconds(60)),
+			Arguments.of("period", Period.ofDays(7))
+		);
 	}
 
 	//====================================================================================================
@@ -487,14 +472,14 @@ class MarkdownSerializer_Test {
 
 	@Test void p02_serializeOptionalPresent() {
 		// Optional.of("hello") as root → serializeAnything isOptional=true, isEmpty=false (lines 172, 174 false)
-		var md = MarkdownSerializer.DEFAULT.serialize(java.util.Optional.of("hello"));
+		var md = MarkdownSerializer.DEFAULT.serialize(opt("hello"));
 		assertNotNull(md);
 		assertTrue(md.contains("hello"), "Expected value in output: " + md);
 	}
 
 	@Test void p03_serializeOptionalEmpty() {
 		// Optional.empty() as root → serializeAnything isOptional=true, isEmpty=true (lines 172, 174 true)
-		var md = MarkdownSerializer.DEFAULT.serialize(java.util.Optional.empty());
+		var md = MarkdownSerializer.DEFAULT.serialize(opte());
 		assertNotNull(md);
 		assertTrue(md.contains("*null*"), "Expected null marker: " + md);
 	}

@@ -31,6 +31,7 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
+import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
@@ -165,6 +166,31 @@ public @interface Rest {
 	 * @return The annotation value.
 	 */
 	Class<? extends CallLogger> callLogger() default CallLogger.Void.class;
+
+	/**
+	 * Resource-level authenticator.
+	 *
+	 * <p>
+	 * Resolves the {@link java.security.Principal} and roles for requests to this resource and its descendant child
+	 * resources (inherited unless cut off via {@code noInherit={"authenticator"}}), so that {@code roleGuard} /
+	 * {@link org.apache.juneau.rest.server.guard.RoleBasedRestGuard} / {@link org.apache.juneau.rest.server.auth.Auth @Auth}
+	 * / {@code isUserInRole} resolve against the computed identity.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The implementation is instantiated through the resource's bean store (constructor injection).
+	 * 	<li class='note'>
+	 * 		The default {@link org.apache.juneau.rest.server.auth.RestAuthenticator.Null} sentinel means &quot;not specified.&quot;
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthenticator">REST Authenticator</a>
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	Class<? extends RestAuthenticator> authenticator() default RestAuthenticator.Null.class;
 
 	/**
 	 * REST children.

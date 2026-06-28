@@ -106,9 +106,9 @@ public class TestUtils extends Utils {
 		}
 
 		var indent = -1;
-		var startTag = Pattern.compile("^(\\s*)<[^/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");
+		var startTag = Pattern.compile("^(\\s*)<[^\\s/>]++(\\s++\\S++=['\"]\\S*+['\"])*+\\s*+>$");
 		var endTag = Pattern.compile("^(\\s*)</[^>]+>$");
-		var combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
+		var combinedTag = Pattern.compile("^(\\s*)<[^\\s>/]++(\\s++\\S++=['\"]\\S*+['\"])*+\\s*+/>$");
 		var contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
 		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
 		var lines = out.split("\n");
@@ -300,7 +300,7 @@ public class TestUtils extends Utils {
 		List<String> results = list();
 		if (html == null || elementName == null)
 			return results;
-		var pattern = Pattern.compile("<" + Pattern.quote(elementName) + "(\\s[^>]*)?>", Pattern.CASE_INSENSITIVE);
+		var pattern = Pattern.compile("<" + Pattern.quote(elementName) + "(\\s[^>]*+)?>", Pattern.CASE_INSENSITIVE);
 		@SuppressWarnings({
 			"unused"  // Unused parameters/variables kept for consistent method signatures across test utilities.
 		})

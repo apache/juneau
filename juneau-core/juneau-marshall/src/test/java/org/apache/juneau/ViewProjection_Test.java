@@ -37,9 +37,7 @@ import org.junit.jupiter.api.*;
  */
 class ViewProjection_Test extends TestBase {
 
-	//------------------------------------------------------------------------------------------------------------------
 	// A: baseline — no active view → all properties visible
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class A {
 		public String id = "1";
@@ -59,9 +57,7 @@ class ViewProjection_Test extends TestBase {
 		assertJson("{description:'A person',id:'1',name:'Alice'}", A.create());
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// B: summary view — tagged summary + untagged
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_summaryView_serializer() {
 		var s = Json5Serializer.DEFAULT.copy().activeView("summary").build();
@@ -86,9 +82,7 @@ class ViewProjection_Test extends TestBase {
 		assertSerialized(A.create(), s, "{id:'1'}");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// C: multi-view union membership
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class C {
 		public String id = "1";
@@ -114,9 +108,7 @@ class ViewProjection_Test extends TestBase {
 		assertSerialized(C.create(), s, "{description:'A person',id:'1',name:'Alice'}");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// D: disableDefaultViewInclusion — untagged properties excluded when view active
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_disableDefaultViewInclusion_summaryView() {
 		var s = Json5Serializer.DEFAULT.copy().activeView("summary").disableDefaultViewInclusion().build();
@@ -133,9 +125,7 @@ class ViewProjection_Test extends TestBase {
 		assertSerialized(A.create(), s, "{}");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// E: per-session override — context sets default, session overrides per-call
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_perSessionOverride_overridesContextDefault() throws Exception {
 		var s = Json5Serializer.DEFAULT.copy().activeView("summary").build();
@@ -150,9 +140,7 @@ class ViewProjection_Test extends TestBase {
 		assertEquals("{description:'A person',id:'1',name:'Alice'}", s.createSession().activeView(null).build().serialize(A.create()));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// F: precedence — @MarshalledIgnore overrides view
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class F {
 		public String id = "1";
@@ -171,9 +159,7 @@ class ViewProjection_Test extends TestBase {
 		assertSerialized(F.create(), s, "{id:'1'}");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// G: precedence — readOnly/writeOnly compose with view
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class G {
 		@BeanProp(ro = "true")
@@ -206,9 +192,7 @@ class ViewProjection_Test extends TestBase {
 		assertEquals("New", x.description);  // in detail view and write-only
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// H: view via *Config / @ContextApply on unmodifiable class
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class H {
 		public String id = "1";
@@ -242,9 +226,7 @@ class ViewProjection_Test extends TestBase {
 		assertEquals("A person", x.description); // unchanged
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// I: cross-format — XML spot check
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class I {
 		public String id = "1";
@@ -273,9 +255,7 @@ class ViewProjection_Test extends TestBase {
 		assertTrue(xml.contains("1"), "Expected id value in XML: " + xml);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// J: cross-format — MsgPack binary spot check
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void j01_msgpackFormat_summaryView_serializer() {
 		// MsgPack with summary view — only id (untagged) and name (in summary) should appear
@@ -287,9 +267,7 @@ class ViewProjection_Test extends TestBase {
 		assertNotEquals(fullBytes, summaryBytes);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// K: view interacts with beanProperties* (intersection: view ∩ filter)
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void k01_viewAndBeanPropertiesFilter_onlyUntaggedSurvivesBoth() {
 		// beanProperties restricts visible set to {id, name}
@@ -302,9 +280,7 @@ class ViewProjection_Test extends TestBase {
 		assertSerialized(A.create(), s, "{id:'1'}");
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// L: parse-side — out-of-view property with ignoreUnknownBeanProperties=false throws
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void l01_parseSide_outOfViewThrowsWhenIgnoreDisabled() {
 		var p = Json5Parser.DEFAULT.copy().activeView("summary").build();
@@ -316,9 +292,7 @@ class ViewProjection_Test extends TestBase {
 		assertDoesNotThrow(() -> p.parse("{id:'1',description:'x'}", A.class));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// M: context-level default view is part of hashKey (different contexts cached separately)
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void m01_differentActiveViews_differentContexts() {
 		var s1 = Json5Serializer.DEFAULT.copy().activeView("summary").build();
@@ -330,9 +304,7 @@ class ViewProjection_Test extends TestBase {
 		assertNotEquals(s1.serialize(A.create()), s2.serialize(A.create()));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// N: MarshalledIgnore annotation on a field with no view tag — never visible
-	//------------------------------------------------------------------------------------------------------------------
 
 	public static class N {
 		public String id = "1";

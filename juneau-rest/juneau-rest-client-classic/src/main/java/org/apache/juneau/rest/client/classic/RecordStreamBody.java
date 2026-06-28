@@ -76,8 +76,10 @@ public final class RecordStreamBody {
 	}
 
 	/** @return The caller's consumer (typed as Consumer&lt;RecordWriter&gt; or Consumer&lt;TokenWriter&gt;). */
+	@SuppressWarnings("java:S1452") // wildcard is intentional: field holds one of two unrelated Consumer types
 	public Consumer<?> getConsumer() { return consumer; }
 
 	/** @return Either {@code RecordWriter.class} or {@code TokenWriter.class}. */
+	@SuppressWarnings("java:S1452") // wildcard is intentional: field holds one of two unrelated Class tokens
 	public Class<?> getWriterKind() { return writerKind; }
 }

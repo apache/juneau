@@ -77,8 +77,14 @@ public final class Observer {
 	 */
 	public static final Observer NOOP = new Observer(NoOpMetricsRecorder.INSTANCE, NoOpTracerHook.INSTANCE);
 
+	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
+	@SuppressWarnings("java:S115")
 	private static final String ARG_recorder = "recorder";
+	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
+	@SuppressWarnings("java:S115")
 	private static final String ARG_tracer = "tracer";
+	// Constant name intentionally uses camelCase to match observation/metrics naming conventions.
+	@SuppressWarnings("java:S115")
 	private static final String ARG_name = "name";
 
 	private final MetricsRecorder recorder;

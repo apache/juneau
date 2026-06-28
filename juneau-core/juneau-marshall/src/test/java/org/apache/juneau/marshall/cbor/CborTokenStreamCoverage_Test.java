@@ -398,7 +398,7 @@ class CborTokenStreamCoverage_Test extends TestBase {
 			}
 		}
 
-		@Test void w08_endContainerWithNoStartThrows() throws Exception {
+		@Test void w08_endContainerWithNoStartThrows() {
 			var bos = new ByteArrayOutputStream();
 			var w = new CborTokenWriter(bos);
 			assertThrows(IllegalStateException.class, w::endObject);

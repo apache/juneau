@@ -329,7 +329,7 @@ class Records_RoundTripTest extends RoundTripTest_Base {
 	}
 
 	@Test
-	void d07_jsonParsingRenamedProperty() throws Exception {
+	void d07_jsonParsingRenamedProperty() {
 		var parsed = json("{\"fullName\":\"John\",\"age\":30}", WithMarshalledProp.class);
 		assertEquals("John", parsed.name());
 		assertEquals(30, parsed.age());

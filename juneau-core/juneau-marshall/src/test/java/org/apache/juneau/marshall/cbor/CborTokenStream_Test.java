@@ -35,10 +35,6 @@ import org.junit.jupiter.api.*;
 })
 class CborTokenStream_Test extends TestBase {
 
-	// =================================================================================
-	// A. Reader
-	// =================================================================================
-
 	@Nested class A_reader extends TestBase {
 
 		@Test void a01_emptyMap() throws Exception {
@@ -131,10 +127,6 @@ class CborTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// B. Writer (indefinite-length containers)
-	// =================================================================================
-
 	@Nested class B_writer extends TestBase {
 
 		@Test void b01_emptyMap() throws Exception {
@@ -175,7 +167,7 @@ class CborTokenStream_Test extends TestBase {
 			assertArrayEquals(new byte[]{0x44, 0x01, 0x02, 0x03, 0x04}, bos.toByteArray());
 		}
 
-		@Test void b05_capability() throws Exception {
+		@Test void b05_capability() {
 			assertInstanceOf(TokenWritable.class, CborSerializer.DEFAULT);
 		}
 
@@ -219,10 +211,6 @@ class CborTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// C. Round-trip via the cursor (writer -> reader)
-	// =================================================================================
-
 	@Nested class C_roundTrip extends TestBase {
 
 		@Test void c01_simpleStructure() throws Exception {
@@ -261,10 +249,6 @@ class CborTokenStream_Test extends TestBase {
 			}
 		}
 	}
-
-	// =================================================================================
-	// D. read() POJO bridge
-	// =================================================================================
 
 	@Nested class D_read extends TestBase {
 
@@ -305,10 +289,6 @@ class CborTokenStream_Test extends TestBase {
 			assertEquals("bob", seen.get(1).name);
 		}
 	}
-
-	// =================================================================================
-	// E. object() POJO walker
-	// =================================================================================
 
 	@Nested class E_object extends TestBase {
 
@@ -359,10 +339,6 @@ class CborTokenStream_Test extends TestBase {
 			}
 		}
 	}
-
-	// =================================================================================
-	// F. Tag-nesting depth guard (TODO-175aa code-smell #2)
-	// =================================================================================
 
 	@Nested class F_tagNestingGuard extends TestBase {
 

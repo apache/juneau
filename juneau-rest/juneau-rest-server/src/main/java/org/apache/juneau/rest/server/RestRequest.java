@@ -31,6 +31,7 @@ import java.lang.reflect.*;
 import java.lang.reflect.Proxy;
 import java.net.*;
 import java.nio.charset.*;
+import java.security.*;
 import java.text.*;
 import java.time.*;
 import java.time.format.*;
@@ -65,6 +66,7 @@ import org.apache.juneau.marshall.marshaller.Uon;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.server.assertions.*;
+import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.debug.format.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
@@ -240,6 +242,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private Charset charset;
 	private Map<String,Object> serializerSessionProperties;
 	private Map<String,Object> parserSessionProperties;
+
+	// Framework-set resource-level authentication result; may be null.
+	private AuthResult authResult;
 
 	/**
 	 * Constructor.
@@ -1671,6 +1676,45 @@ public class RestRequest extends HttpServletRequestWrapper {
 	@Override
 	public void setAttribute(String name, Object value) {
 		attrs.set(name, value);
+	}
+
+	/**
+	 * Sets the resolved resource-level authentication result.
+	 *
+	 * <p>
+	 * Invoked by the framework after the {@link org.apache.juneau.rest.server.auth.RestAuthenticator} fold resolves
+	 * an identity for this request.  The stored result drives {@link #getUserPrincipal()}, {@link #isUserInRole(String)},
+	 * and {@link #getRemoteUser()}, and (when a principal is present) stashes the principal under
+	 * {@link RestServerConstants#PRINCIPAL_ATTR} so {@code @Auth} argument injection resolves it.
+	 *
+	 * @param value The result. Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 * @since 10.0.0
+	 */
+	public RestRequest setAuthResult(AuthResult value) {
+		authResult = value;
+		if (value != null && value.getPrincipal() != null)
+			setAttribute(RestServerConstants.PRINCIPAL_ATTR, value.getPrincipal());
+		return this;
+	}
+
+	@Override /* Overridden from HttpServletRequestWrapper */
+	public Principal getUserPrincipal() {
+		var p = authResult == null ? null : authResult.getPrincipal();
+		return p != null ? p : super.getUserPrincipal();
+	}
+
+	@Override /* Overridden from HttpServletRequestWrapper */
+	public boolean isUserInRole(String role) {
+		if (authResult != null && authResult.getRoles().contains(role))
+			return true;
+		return super.isUserInRole(role);
+	}
+
+	@Override /* Overridden from HttpServletRequestWrapper */
+	public String getRemoteUser() {
+		var p = authResult == null ? null : authResult.getPrincipal();
+		return p != null ? p.getName() : super.getRemoteUser();
 	}
 
 	/**

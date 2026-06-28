@@ -35,6 +35,7 @@ import org.junit.jupiter.api.*;
 class AuthResult_Test extends TestBase {
 
 	private static final Principal ALICE = () -> "alice";
+	private static final Principal BOB = () -> "bob";
 
 	@Test void a01_ofVarargs_principalAndRoles() {
 		var a = AuthResult.of(ALICE, "user", "admin");
@@ -75,5 +76,49 @@ class AuthResult_Test extends TestBase {
 
 	@Test void a07_nullPrincipalThrows() {
 		assertThrows(Exception.class, () -> AuthResult.of(null, "user"));
+	}
+
+	@Test void b01_defaultModeIsAdd() {
+		var x = AuthResult.of(ALICE, "admin", "user");
+		assertEquals(AuthResult.MergeMode.ADD, x.getMode());
+		assertSame(ALICE, x.getPrincipal());
+		assertEquals(Set.of("admin", "user"), x.getRoles());
+	}
+
+	@Test void b02_ofRoles_nullPrincipalAddMode() {
+		var x = AuthResult.ofRoles("reader");
+		assertNull(x.getPrincipal());
+		assertEquals(AuthResult.MergeMode.ADD, x.getMode());
+		assertEquals(Set.of("reader"), x.getRoles());
+	}
+
+	@Test void b03_replacing_replaceMode() {
+		var x = AuthResult.replacing(BOB, "admin");
+		assertEquals(AuthResult.MergeMode.REPLACE, x.getMode());
+		assertSame(BOB, x.getPrincipal());
+		assertEquals(Set.of("admin"), x.getRoles());
+	}
+
+	@Test void b04_replacingRequiresPrincipal() {
+		assertThrows(Exception.class, () -> AuthResult.replacing(null, "x"));
+	}
+
+	@Test void b05_ofRolesCollection() {
+		var x = AuthResult.ofRoles(java.util.List.of("r1", "r2"));
+		assertNull(x.getPrincipal());
+		assertEquals(AuthResult.MergeMode.ADD, x.getMode());
+		assertEquals(Set.of("r1", "r2"), x.getRoles());
+	}
+
+	@Test void b06_ofRolesNullArgs() {
+		assertTrue(AuthResult.ofRoles((String[]) null).getRoles().isEmpty());
+		assertTrue(AuthResult.ofRoles((java.util.Collection<String>) null).getRoles().isEmpty());
+	}
+
+	@Test void b07_replacingSetAndNullRoles() {
+		var x = AuthResult.replacing(BOB, Set.of("admin"));
+		assertEquals(AuthResult.MergeMode.REPLACE, x.getMode());
+		assertEquals(Set.of("admin"), x.getRoles());
+		assertTrue(AuthResult.replacing(BOB, (Set<String>) null).getRoles().isEmpty());
 	}
 }

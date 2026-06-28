@@ -39,10 +39,6 @@ import org.junit.jupiter.api.*;
 })
 class JsonTokenStream_Test extends TestBase {
 
-	// =================================================================================
-	// A. TokenReader basics
-	// =================================================================================
-
 	@Nested class A_reader extends TestBase {
 
 		@Test void a01_emptyObject() throws Exception {
@@ -214,10 +210,6 @@ class JsonTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// B. TokenReader malformed input
-	// =================================================================================
-
 	@Nested class B_readerErrors extends TestBase {
 
 		@Test void b01_truncatedObject() {
@@ -285,10 +277,6 @@ class JsonTokenStream_Test extends TestBase {
 			}
 		}
 	}
-
-	// =================================================================================
-	// C. TokenWriter basics
-	// =================================================================================
 
 	@Nested class C_writer extends TestBase {
 
@@ -473,10 +461,6 @@ class JsonTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// D. Round-trip
-	// =================================================================================
-
 	@Nested class D_roundTrip extends TestBase {
 
 		@Test void d01_basicRoundTrip() throws Exception {
@@ -533,10 +517,6 @@ class JsonTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// E. Capability matrix
-	// =================================================================================
-
 	@Nested class E_capabilities extends TestBase {
 
 		@Test void e01_jsonParserDeclaresFull() throws Exception {
@@ -554,10 +534,6 @@ class JsonTokenStream_Test extends TestBase {
 			}
 		}
 	}
-
-	// =================================================================================
-	// F. Settings propagation from JsonSerializer / JsonParser builders
-	// =================================================================================
 
 	@Nested class F_settingsPropagation extends TestBase {
 
@@ -778,10 +754,6 @@ class JsonTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// G. read() — POJO bridge
-	// =================================================================================
-
 	@Nested class G_read extends TestBase {
 
 		public static class Bean {
@@ -900,10 +872,6 @@ class JsonTokenStream_Test extends TestBase {
 			}
 		}
 	}
-
-	// =================================================================================
-	// H. object() — POJO-walking writer bridge
-	// =================================================================================
 
 	@Nested class H_object extends TestBase {
 

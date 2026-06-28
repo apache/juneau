@@ -114,7 +114,7 @@ class OAuthFilter_Test extends TestBase {
 		assertThrows(IllegalStateException.class, () -> OAuthFilter.create().build());
 	}
 
-	@Test void d02_builder_realmCustomization() throws Exception {
+	@Test void d02_builder_realmCustomization() {
 		TokenValidator v = token -> { throw new AuthenticationException("bad"); };
 		var f = OAuthFilter.create().validator(v).realm("api2").build();
 		var e = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer x")));

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -48,14 +49,14 @@ class PropertySources_Test extends TestBase {
 
 	@Test
 	void a03_result_present_withOptionalValue() {
-		var r = PropertyLookupResult.present(Optional.of("hello"));
+		var r = PropertyLookupResult.present(opt("hello"));
 		assertTrue(r.isPresent());
 		assertEquals("hello", r.value().orElse(null));
 	}
 
 	@Test
 	void a04_result_present_withOptionalEmpty() {
-		var r = PropertyLookupResult.present(Optional.empty());
+		var r = PropertyLookupResult.present(opte());
 		assertTrue(r.isPresent());
 		assertFalse(r.value().isPresent());
 	}

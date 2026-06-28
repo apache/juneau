@@ -79,6 +79,7 @@ import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
+import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.debug.*;
 import org.apache.juneau.rest.server.debug.format.*;
@@ -1231,6 +1232,99 @@ public class RestContext extends Context {
 		bs.createBeanFromMethod(CallLogger.class, resource().get(), RestContext::isBeanMethod).ifPresent(creator::impl);
 		return creator.asOptional().orElse(null);
 	});
+
+	/**
+	 * The locally-resolved {@link RestAuthenticator} for this resource, if any.
+	 *
+	 * <p>
+	 * Resolution precedence (highest first, per design spec &sect;5.3):
+	 * <ol>
+	 * 	<li>Registered bean &mdash; {@code beanStore().getBean(RestAuthenticator.class)}.
+	 * 	<li>{@code @Rest(authenticator=X)} &mdash; instantiated via the bean store (constructor injection).
+	 * 	<li>{@code @Bean} factory method on the resource.
+	 * 	<li>{@link RestServlet#createAuthenticator(BeanStore)} override.
+	 * </ol>
+	 * The {@link RestAuthenticator.Null} sentinel is treated as &quot;unset.&quot;
+	 */
+	private final Memoizer<Optional<RestAuthenticator>> localAuthenticator = memoizer(() -> {
+		var bs = beanStore();
+		var bean = bs.getBean(RestAuthenticator.class).orElse(null);
+		if (bean != null)
+			return opt(bean);
+		var annoClass = getRestAnnotationsForProperty(PROPERTY_authenticator)
+			.map(ai -> ai.inner().authenticator())
+			.filter(x -> x != RestAuthenticator.Null.class)
+			.reduce((first, second) -> second)
+			.orElse(null);
+		if (annoClass != null)
+			return opt(BeanInstantiator.of(RestAuthenticator.class, bs).type(annoClass).noBuilder().run());
+		var fromMethod = bs.createBeanFromMethod(RestAuthenticator.class, resource().get(), RestContext::isBeanMethod).orElse(null);
+		if (fromMethod != null)
+			return opt(fromMethod);
+		if (resource().get() instanceof RestServlet rs) {
+			var fromOverride = rs.createAuthenticator(bs);
+			if (fromOverride != null)
+				return opt(fromOverride);
+		}
+		return Optional.<RestAuthenticator>empty();
+	});
+
+	/**
+	 * The effective root-to-this {@link RestAuthenticator} list, honoring {@code noInherit={"authenticator"}}.
+	 *
+	 * <p>
+	 * Unlike guards (which are child-isolated), authenticators inherit down the child-resource tree: the parent
+	 * context's effective list is prepended (root first), then this resource's local authenticator is appended.
+	 * A {@code @Rest(noInherit={"authenticator"})} on this resource cuts off the parent walk (subtree opt-out).
+	 */
+	private final Memoizer<List<RestAuthenticator>> effectiveAuthenticators = memoizer(() -> {
+		var l = new ArrayList<RestAuthenticator>();
+		var pc = parentContext();
+		if (isInherited(PROPERTY_authenticator) && pc != null)
+			l.addAll(pc.getEffectiveAuthenticators());
+		localAuthenticator.get().ifPresent(l::add);
+		return u(l);
+	});
+
+	/**
+	 * Returns the effective (root-to-this) authenticator chain for this resource.
+	 *
+	 * @return The effective authenticator chain, never <jk>null</jk>; may be empty.
+	 * @since 10.0.0
+	 */
+	public List<RestAuthenticator> getEffectiveAuthenticators() {
+		return effectiveAuthenticators.get();
+	}
+
+	/**
+	 * Runs the effective authenticator chain for this request, folding results and applying the resolved
+	 * principal/roles to the {@link RestRequest}.
+	 *
+	 * <p>
+	 * Invoked by {@link RestSession} before {@code preCall}.  When no authenticators are configured this is a
+	 * no-op (anonymous passthrough).  Each authenticator's {@link AuthenticationException} propagates to abort
+	 * the request with a {@code 401}.
+	 *
+	 * @param session The op session for this request.
+	 * @throws AuthenticationException If credentials are present but invalid.
+	 * @since 10.0.0
+	 */
+	protected void authenticate(RestOpSession session) throws AuthenticationException {
+		var auths = getEffectiveAuthenticators();
+		if (auths.isEmpty())
+			return;
+		var req = session.getRequest();
+		var acc = new AuthResultAccumulator();
+		// Seed the fold with any pre-existing identity (container security or a servlet-layer AuthFilterChain) so
+		// roles-only ADD results from resource authenticators augment it instead of being dropped (spec §5.6/§5.7).
+		// A later REPLACE result still overrides this seed (the accumulator resets principal+roles on REPLACE).
+		var existing = req.getUserPrincipal();
+		if (existing != null)
+			acc.add(AuthResult.of(existing));
+		for (var a : auths)
+			a.authenticate(req).ifPresent(acc::add);  // RestRequest is-a HttpServletRequest; AuthenticationException propagates -> 401
+		acc.result().ifPresent(req::setAuthResult);
+	}
 
 	/**
 	 * The resolving {@link Config} for this resource.

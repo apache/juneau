@@ -136,7 +136,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 	 * It is left buffered for now: Juneau's YAML reader is a single hand-written indentation state
 	 * machine ({@code parseBlockSequence}/{@code parseFlowSequence}) whose per-element advance and
 	 * dedent bookkeeping are not currently exposed as a pull cursor, and extracting that safely is a
-	 * non-trivial parser refactor with real regression surface.  Per {@code TODO-175ab} Item 3 this
+	 * non-trivial parser refactor with real regression surface.  This
 	 * is demand-driven &mdash; convert when a large-YAML-array use case justifies the refactor.
 	 *
 	 * @param input The input.

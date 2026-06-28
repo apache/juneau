@@ -91,6 +91,31 @@ public final class RrpcInterfaceMethodMeta {
 
 		/** The empty (no-op) policy used for methods that declare none of the cross-cutting policy members. */
 		public static final Policy NONE = new Policy(new Class<?>[0], "", 0, false, false);
+
+		@Override
+		public boolean equals(Object o) {
+			if (this == o) return true;
+			if (!(o instanceof Policy other)) return false;
+			return Arrays.equals(interceptors, other.interceptors)
+				&& timeout.equals(other.timeout)
+				&& retries == other.retries
+				&& retryNonIdempotent == other.retryNonIdempotent
+				&& throwOnError == other.throwOnError;
+		}
+
+		@Override
+		public int hashCode() {
+			return Objects.hash(Arrays.hashCode(interceptors), timeout, retries, retryNonIdempotent, throwOnError);
+		}
+
+		@Override
+		public String toString() {
+			return "Policy[interceptors=" + Arrays.toString(interceptors)
+				+ ", timeout=" + timeout
+				+ ", retries=" + retries
+				+ ", retryNonIdempotent=" + retryNonIdempotent
+				+ ", throwOnError=" + throwOnError + "]";
+		}
 	}
 
 	/**

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
@@ -131,6 +132,6 @@ class BoundedLruTokenCache_Test extends TestBase {
 	}
 
 	private static OAuthToken sampleToken(Instant expiresAt) {
-		return new OAuthToken("access-1", "Bearer", expiresAt, Optional.empty(), Optional.empty(), Optional.empty());
+		return new OAuthToken("access-1", "Bearer", expiresAt, opte(), opte(), opte());
 	}
 }

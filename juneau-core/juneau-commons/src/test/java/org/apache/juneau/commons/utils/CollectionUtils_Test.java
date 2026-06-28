@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -549,10 +550,10 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a031_first() {
 		var list = list("a", "b", "c");
-		assertEquals(Optional.of("a"), first(list));
+		assertEquals(opt("a"), first(list));
 
-		assertEquals(Optional.empty(), first(null));
-		assertEquals(Optional.empty(), first(list()));
+		assertEquals(opte(), first(null));
+		assertEquals(opte(), first(list()));
 
 		// Test with Set
 		var set = set(1, 2, 3);
@@ -1323,11 +1324,11 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(2, result5.size());
 
 		// Optional - empty
-		List<?> result6 = toList(Optional.empty());
+		List<?> result6 = toList(opte());
 		assertTrue(result6.isEmpty());
 
 		// Optional - present
-		List<?> result7 = toList(Optional.of("test"));
+		List<?> result7 = toList(opt("test"));
 		assertEquals(1, result7.size());
 		assertEquals("test", result7.get(0));
 

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
@@ -76,7 +77,7 @@ class AuthFilterChain_Test extends TestBase {
 	private static AuthFilter succeeds(Principal principal, String... roles) {
 		return new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
-				return Optional.of(AuthResult.of(principal, roles));
+				return opt(AuthResult.of(principal, roles));
 			}
 		};
 	}
@@ -85,7 +86,7 @@ class AuthFilterChain_Test extends TestBase {
 	private static AuthFilter empty() {
 		return new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
-				return Optional.empty();
+				return opte();
 			}
 		};
 	}
@@ -131,7 +132,7 @@ class AuthFilterChain_Test extends TestBase {
 		AuthFilter shouldNotRun = new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
 				called.set(true);
-				return Optional.empty();
+				return opte();
 			}
 		};
 		var chain = AuthFilterChain.create(null)
@@ -241,6 +242,79 @@ class AuthFilterChain_Test extends TestBase {
 		// At least one filter succeeded; failure from later filter is ignored
 		assertInstanceOf(AuthenticatedRequestWrapper.class, capturing.captured);
 		assertSame(ALICE, ((AuthenticatedRequestWrapper) capturing.captured).getUserPrincipal());
+	}
+
+	@Test void e01_authenticateReturnsFoldedResult_noResponseWrite() throws Exception {
+		var chain = AuthFilterChain.create(null)
+			.append(succeeds(ALICE, "admin"))
+			.build();
+		var r = chain.authenticate(req("/x"));
+		assertSame(ALICE, r.orElseThrow().getPrincipal());
+		assertTrue(r.orElseThrow().getRoles().contains("admin"));
+	}
+
+	@Test void e02_authenticateNoMatch_returnsEmpty() throws Exception {
+		var chain = AuthFilterChain.create(null)
+			.append(succeeds(ALICE), "/api/*")
+			.build();
+		assertTrue(chain.authenticate(req("/public/page")).isEmpty());
+	}
+
+	@Test void e03_authenticateAllEmpty_returnsEmpty() throws Exception {
+		var chain = AuthFilterChain.create(null)
+			.append(empty())
+			.build();
+		assertTrue(chain.authenticate(req("/")).isEmpty());
+	}
+
+	@Test void e04_authenticateAllFail_throwsAggregated() {
+		var chain = AuthFilterChain.create(null)
+			.append(fails("token bad"))
+			.build();
+		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(req("/")));
+		assertTrue(e.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+	}
+
+	@Test void e05_authenticateRoleUnionAcrossSuccesses() throws Exception {
+		var chain = AuthFilterChain.create(null)
+			.append(succeeds(ALICE, "user"))
+			.append(succeeds(BOB, "admin"))
+			.build();
+		var r = chain.authenticate(req("/")).orElseThrow();
+		assertSame(ALICE, r.getPrincipal());
+		assertTrue(r.getRoles().contains("user"));
+		assertTrue(r.getRoles().contains("admin"));
+	}
+
+	@Test void e06_aggregateWithNullMessageAndNoChallenge() throws Exception {
+		// Failure with a null message and no WWW-Authenticate header: aggregate body collapses to null and no
+		// challenge header is emitted (exercises the empty-body / empty-wwwAuth branches of aggregate()).
+		AuthFilter bare = new AuthFilter() {
+			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
+				throw new AuthenticationException((String) null);
+			}
+		};
+		var chain = AuthFilterChain.create(null).append(bare).build();
+		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(req("/")));
+		assertTrue(e.getHeaders().stream().noneMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
+	}
+
+	@Test void e07_authenticateWithNullContextPath() throws Exception {
+		// contextPath == null must not NPE; path resolves to the raw URI.
+		var req = mock(HttpServletRequest.class);
+		when(req.getRequestURI()).thenReturn("/x");
+		when(req.getContextPath()).thenReturn(null);
+		var chain = AuthFilterChain.create(null).append(succeeds(ALICE, "user")).build();
+		assertSame(ALICE, chain.authenticate(req).orElseThrow().getPrincipal());
+	}
+
+	@Test void e08_authenticateEmptyPathBecomesRoot() throws Exception {
+		// URI equals contextPath → stripped path is empty → normalized to "/".
+		var req = mock(HttpServletRequest.class);
+		when(req.getRequestURI()).thenReturn("/myapp");
+		when(req.getContextPath()).thenReturn("/myapp");
+		var chain = AuthFilterChain.create(null).append(succeeds(ALICE, "user")).build();
+		assertSame(ALICE, chain.authenticate(req).orElseThrow().getPrincipal());
 	}
 
 	@Test void a12_wwwAuthenticateAggregatedOnAllFailure() throws Exception {

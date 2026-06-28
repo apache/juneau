@@ -186,7 +186,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	 */
 	public static UrlPathMatcher of(String pattern) {
 		pattern = emptyIfNull(pattern);
-		boolean isFilePattern = pattern.matches("[^\\/]+\\.[^\\/]+");
+		boolean isFilePattern = pattern.matches("[^\\/\\.]+\\.[^\\/]+");
 		return isFilePattern ? new FileNameMatcher(pattern) : new PathMatcher(pattern);
 
 	}

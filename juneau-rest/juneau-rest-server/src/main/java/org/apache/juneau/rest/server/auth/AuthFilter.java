@@ -56,7 +56,7 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-public abstract class AuthFilter implements Filter {
+public abstract class AuthFilter implements Filter, Authenticator {
 
 	/** WWW-Authenticate response header name (RFC 7235 §4.1). */
 	static final String WWW_AUTHENTICATE = "WWW-Authenticate";
@@ -135,7 +135,7 @@ public abstract class AuthFilter implements Filter {
 	@SuppressWarnings({
 		"resource" // Writer lifecycle is servlet-managed; do not close.
 	})
-	static void sendChallenge(HttpServletResponse resp, AuthenticationException e) throws IOException {
+	public static void sendChallenge(HttpServletResponse resp, AuthenticationException e) throws IOException {
 		e.getHeaders().stream()
 			.filter(h -> WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))
 			.map(h -> h.getValue())

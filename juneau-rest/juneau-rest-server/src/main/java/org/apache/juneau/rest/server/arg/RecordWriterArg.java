@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.arg;
 
+import java.io.*;
+
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.serializer.*;
@@ -86,9 +88,7 @@ public class RecordWriterArg extends SimpleRestOperationArg {
 		this.declaredType = declaredType;
 	}
 
-	private static Object resolve(RestOpSession opSession, Class<?> declaredType) throws Exception {
-		// HTT: all branches require a live RestOpSession with response serializer infrastructure;
-		//      covered by integration tests in juneau-integration-tests.
+	private static Object resolve(RestOpSession opSession, Class<?> declaredType) throws IOException {
 		var req = opSession.getRequest();
 		var res = opSession.getResponse();
 		var match = res.getSerializerMatch();

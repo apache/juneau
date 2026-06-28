@@ -27,6 +27,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
 import org.apache.juneau.rest.server.converter.*;
+import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
@@ -67,6 +68,7 @@ public class RestAnnotation {
 		private Class<? extends StaticFiles> staticFiles = StaticFiles.Void.class;
 		private Class<? extends ResponseProcessor>[] responseProcessors = new Class[0];
 		private Class<? extends CallLogger> callLogger = CallLogger.Void.class;
+		private Class<? extends RestAuthenticator> authenticator = RestAuthenticator.Null.class;
 		private Class<? extends RestConverter>[] converters = new Class[0];
 		private Class<? extends RestGuard>[] guards = new Class[0];
 		private Class<? extends SwaggerProvider> swaggerProvider = SwaggerProvider.Void.class;
@@ -189,6 +191,17 @@ public class RestAnnotation {
 		 */
 		public Builder callLogger(Class<? extends CallLogger> value) {
 			callLogger = value;
+			return this;
+		}
+
+		/**
+		 * Sets the {@link Rest#authenticator()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 */
+		public Builder authenticator(Class<? extends RestAuthenticator> value) {
+			authenticator = value;
 			return this;
 		}
 
@@ -784,6 +797,7 @@ public class RestAnnotation {
 		private final Class<? extends StaticFiles> staticFiles;
 		private final Class<? extends ResponseProcessor>[] responseProcessors;
 		private final Class<? extends CallLogger> callLogger;
+		private final Class<? extends RestAuthenticator> authenticator;
 		private final Class<? extends RestConverter>[] converters;
 		private final Class<? extends RestGuard>[] guards;
 		private final Class<? extends SwaggerProvider> swaggerProvider;
@@ -846,6 +860,7 @@ public class RestAnnotation {
 			allowedMethodHeaders = b.allowedMethodHeaders;
 			allowedMethodParams = b.allowedMethodParams;
 			callLogger = b.callLogger;
+			authenticator = b.authenticator;
 			children = copyOf(b.children);
 			mixins = copyOf(b.mixins);
 			mixinDefs = copyOf(b.mixinDefs);
@@ -920,6 +935,11 @@ public class RestAnnotation {
 		@Override /* Overridden from Rest */
 		public Class<? extends CallLogger> callLogger() {
 			return callLogger;
+		}
+
+		@Override /* Overridden from Rest */
+		public Class<? extends RestAuthenticator> authenticator() {
+			return authenticator;
 		}
 
 		@Override /* Overridden from Rest */

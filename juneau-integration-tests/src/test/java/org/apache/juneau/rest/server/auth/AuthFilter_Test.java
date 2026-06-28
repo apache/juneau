@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -77,20 +78,20 @@ class AuthFilter_Test extends TestBase {
 	// init() / destroy()
 	// ========================================================================
 
-	@Test void a01_init_withConfig_isNoOp() throws Exception {
-		var f = new TestFilter(req -> Optional.empty());
+	@Test void a01_init_withConfig_isNoOp() {
+		var f = new TestFilter(req -> opte());
 		var cfg = mock(FilterConfig.class);
 		assertDoesNotThrow(() -> f.init(cfg));
 	}
 
-	@Test void a02_init_nullConfig_isNoOp() throws Exception {
+	@Test void a02_init_nullConfig_isNoOp() {
 		// Default impl is a no-op so null config must not blow up.
-		var f = new TestFilter(req -> Optional.empty());
+		var f = new TestFilter(req -> opte());
 		assertDoesNotThrow(() -> f.init(null));
 	}
 
 	@Test void a03_destroy_isNoOp() {
-		var f = new TestFilter(req -> Optional.empty());
+		var f = new TestFilter(req -> opte());
 		assertDoesNotThrow(f::destroy);
 		// idempotent — calling again still must not throw
 		assertDoesNotThrow(f::destroy);
@@ -101,7 +102,7 @@ class AuthFilter_Test extends TestBase {
 	// ========================================================================
 
 	@Test void b01_doFilter_authPresent_wrapsRequest_andCallsChain() throws Exception {
-		var f = new TestFilter(req -> Optional.of(AuthResult.of(ALICE, "user")));
+		var f = new TestFilter(req -> opt(AuthResult.of(ALICE, "user")));
 		var req = MockServletRequest.create("GET", "/x");
 		var resp = MockServletResponse.create();
 		var chain = new RecordingChain();
@@ -125,7 +126,7 @@ class AuthFilter_Test extends TestBase {
 	// ========================================================================
 
 	@Test void c01_doFilter_authEmpty_passesOriginalReqAndResp() throws Exception {
-		var f = new TestFilter(req -> Optional.empty());
+		var f = new TestFilter(req -> opte());
 		var req = MockServletRequest.create("GET", "/x");
 		var resp = MockServletResponse.create();
 		var chain = new RecordingChain();
@@ -199,7 +200,7 @@ class AuthFilter_Test extends TestBase {
 	// ========================================================================
 
 	@Test void e01_doFilter_chainThrowsIOException_propagates() {
-		var f = new TestFilter(req -> Optional.empty());
+		var f = new TestFilter(req -> opte());
 		var chain = new RecordingChain();
 		chain.ioToThrow = new IOException("boom");
 		var req = MockServletRequest.create("GET", "/x");
@@ -211,7 +212,7 @@ class AuthFilter_Test extends TestBase {
 	}
 
 	@Test void e02_doFilter_chainThrowsServletException_propagates() {
-		var f = new TestFilter(req -> Optional.of(AuthResult.of(ALICE)));
+		var f = new TestFilter(req -> opt(AuthResult.of(ALICE)));
 		var chain = new RecordingChain();
 		chain.seToThrow = new ServletException("downstream");
 		var req = MockServletRequest.create("GET", "/x");
@@ -230,7 +231,7 @@ class AuthFilter_Test extends TestBase {
 		var counter = new AtomicInteger();
 		var f = new TestFilter(req -> {
 			counter.incrementAndGet();
-			return Optional.empty();
+			return opte();
 		});
 		var req = MockServletRequest.create("GET", "/x");
 		var resp = MockServletResponse.create();
@@ -242,7 +243,7 @@ class AuthFilter_Test extends TestBase {
 	}
 
 	@Test void f02_doFilter_authResultCarriesRoles_intoWrapper() throws Exception {
-		var f = new TestFilter(req -> Optional.of(AuthResult.of(ALICE, "user", "admin")));
+		var f = new TestFilter(req -> opt(AuthResult.of(ALICE, "user", "admin")));
 		var req = MockServletRequest.create("GET", "/x");
 		var resp = MockServletResponse.create();
 		var chain = new RecordingChain();

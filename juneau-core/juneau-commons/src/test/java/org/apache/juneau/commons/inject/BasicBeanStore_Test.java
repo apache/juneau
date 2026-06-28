@@ -1241,12 +1241,12 @@ class BasicBeanStore_Test extends TestBase {
 	@Test
 	void v02_toString_nonBasicOverridingParent_usesStringForm() {
 		var overriding = new BeanStore() {
-			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return Optional.empty(); }
-			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return Optional.empty(); }
+			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return opte(); }
+			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return opte(); }
 			@Override public boolean hasBean(Class<?> t) { return false; }
 			@Override public boolean hasBean(Class<?> t, String n) { return false; }
-			@Override public <T> Optional<T> getBean(Class<T> t) { return Optional.empty(); }
-			@Override public <T> Optional<T> getBean(Class<T> t, String n) { return Optional.empty(); }
+			@Override public <T> Optional<T> getBean(Class<T> t) { return opte(); }
+			@Override public <T> Optional<T> getBean(Class<T> t, String n) { return opte(); }
 			@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return java.util.Map.of(); }
 		};
 		var store = new BasicBeanStore(null, overriding);

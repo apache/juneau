@@ -46,7 +46,7 @@ class Json5lMediaType_Test {
 		var types = new ArrayList<String>();
 		Json5lSerializer.DEFAULT.forEachAcceptMediaType(mt -> types.add(mt.getType() + "/" + mt.getSubType()));
 		assertTrue(types.stream().anyMatch(t -> t.contains("json5l")), "Expected application/json5l: " + types);
-		assertTrue(types.stream().anyMatch(t -> "text/json5l".equals(t)), "Expected text/json5l: " + types);
+		assertTrue(types.stream().anyMatch("text/json5l"::equals), "Expected text/json5l: " + types);
 		// Cross-acceptance of the JSONL family (reduced q-value).
 		assertTrue(types.stream().anyMatch(t -> t.contains("jsonl")), "Expected jsonl cross-accept: " + types);
 		assertTrue(types.stream().anyMatch(t -> t.contains("ndjson")), "Expected ndjson cross-accept: " + types);

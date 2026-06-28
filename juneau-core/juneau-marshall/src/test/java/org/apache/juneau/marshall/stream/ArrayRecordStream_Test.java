@@ -375,13 +375,13 @@ class ArrayRecordStream_Test extends TestBase {
 	void h02_selfReferenceArrayElementIsHandled(Format fmt) throws Exception {
 		var a = new Node("a", null);
 		a.child = a;  // self-reference
-		try {
-			writeAll(fmt, List.of(a));
-		} catch (StackOverflowError e) {
-			fail("cycle leaked a raw StackOverflowError for " + fmt);
-		} catch (@SuppressWarnings("unused") Throwable expectedControlledFailure) {
-			// Controlled failure — acceptable.
-		}
+		assertDoesNotThrow(() -> {
+			try {
+				writeAll(fmt, List.of(a));
+			} catch (@SuppressWarnings("unused") Exception expectedControlledFailure) {
+				// Controlled failure — acceptable.
+			}
+		}, "cycle leaked a raw StackOverflowError for " + fmt);
 	}
 
 	// =====================================================================================

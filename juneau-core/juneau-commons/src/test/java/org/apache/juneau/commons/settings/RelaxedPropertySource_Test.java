@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -33,7 +34,7 @@ class RelaxedPropertySource_Test extends TestBase {
 		var m = new LinkedHashMap<String,String>();
 		for (var i = 0; i < kv.length; i += 2)
 			m.put(kv[i], kv[i + 1]);
-		return name -> m.containsKey(name) ? PropertyLookupResult.present(Optional.ofNullable(m.get(name))) : PropertyLookupResult.missing();
+		return name -> m.containsKey(name) ? PropertyLookupResult.present(opt(m.get(name))) : PropertyLookupResult.missing();
 	}
 
 	private static String resolve(PropertySource s, String name) {
@@ -116,7 +117,7 @@ class RelaxedPropertySource_Test extends TestBase {
 
 	@Test void c07_presentNullValuePreserved() {
 		// A key present with a null value resolves as present-empty, not missing.
-		var s = new RelaxedPropertySource(name -> "MY_PROP".equals(name) ? PropertyLookupResult.present(Optional.empty()) : PropertyLookupResult.missing());
+		var s = new RelaxedPropertySource(name -> "MY_PROP".equals(name) ? PropertyLookupResult.present(opte()) : PropertyLookupResult.missing());
 		var r = s.get("my.prop");
 		assertTrue(r.isPresent());
 		assertTrue(r.value().isEmpty());

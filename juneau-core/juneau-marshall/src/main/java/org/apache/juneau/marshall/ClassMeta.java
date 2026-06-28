@@ -676,7 +676,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	@Override
 	public Optional<?> getOptionalDefault() {
 		if (isPrimitiveOptional())
-			return Optional.empty();
+			return opte();
 		if (isOptional())
 			return opt(getElementType().getOptionalDefault());
 		return null;

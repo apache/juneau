@@ -221,11 +221,11 @@ public class TestUtils extends Utils {
 		}
 
 		var indent = -1;
-		var startTag = Pattern.compile("^(\\s*)<[^/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");
+		var startTag = Pattern.compile("^(\\s*)<[^\\s/>]+(\\s+\\S+=['\"]\\S*['\"])*\\s*>$");
 		var endTag = Pattern.compile("^(\\s*)</[^>]+>$");
-		var combinedTag = Pattern.compile("^(\\s*)<[^>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
+		var combinedTag = Pattern.compile("^(\\s*)<[^\\s>/]+(\\s+\\S+=['\"]\\S*['\"])*\\s*/>$");
 		var contentOnly = Pattern.compile("^(\\s*)[^\\s\\<]+$");
-		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>.*</[^>]+>$");
+		var tagWithContent = Pattern.compile("^(\\s*)<[^>]+>[^<]*</[^>]+>$");
 		var lines = out.split("\n");
 		try {
 			for (var i = 0; i < lines.length; i++) {

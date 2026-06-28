@@ -49,7 +49,7 @@ class SseBroadcaster_Test {
 	}
 
 	@Test
-	void a03_closeSubscriptionStopsDelivery() throws Exception {
+	void a03_closeSubscriptionStopsDelivery() {
 		var a = SseBroadcaster.create();
 		try (var b = a.subscribe("b")) {
 			b.close();

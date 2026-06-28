@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.markdown;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -182,7 +183,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f12_optionalProperties() {
 		var bean = new F12_Bean();
-		bean.name = Optional.of("Alice");
+		bean.name = opt("Alice");
 		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
 		assertTrue(md.contains("Alice"), "Expected Optional value: " + md);
 	}

@@ -23,6 +23,8 @@ import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
+// Version-range patterns (e.g. [1.0,2.0)) are semantic constructs that cannot be simplified without changing behavior.
+@SuppressWarnings("java:S8786")
 class RestOp_ClientVersion_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------

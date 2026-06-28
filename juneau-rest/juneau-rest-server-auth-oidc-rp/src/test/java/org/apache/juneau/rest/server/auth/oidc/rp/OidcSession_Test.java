@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -39,10 +40,10 @@ class OidcSession_Test extends TestBase {
 		var session = new OidcSession(
 			"id-1",
 			"alice",
-			Optional.empty(),
+			opte(),
 			new ClaimsPrincipal("alice", Map.of("sub", "alice")),
 			null,  // null roles → defensive null-handling in compact constructor
-			Optional.empty(),
+			opte(),
 			NOW,
 			NOW.plus(Duration.ofHours(8)));
 		assertNotNull(session.roles());

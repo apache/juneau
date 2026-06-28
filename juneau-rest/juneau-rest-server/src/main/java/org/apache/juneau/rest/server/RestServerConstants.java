@@ -133,6 +133,9 @@ public final class RestServerConstants {
 	/** The {@code "callLogger"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the call logger. */
 	public static final String PROPERTY_callLogger = "callLogger";
 
+	/** The {@code "authenticator"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the child-resource inheritance walk when resolving the {@link org.apache.juneau.rest.server.auth.RestAuthenticator}. */
+	public static final String PROPERTY_authenticator = "authenticator";
+
 	/** The {@code "debugEnablement"} annotation attribute name — used in {@code noInherit} matching on {@code @Rest} annotations to cut off the resource-class hierarchy walk when resolving the debug enablement bean. */
 	public static final String PROPERTY_debugEnablement = "debugEnablement";
 

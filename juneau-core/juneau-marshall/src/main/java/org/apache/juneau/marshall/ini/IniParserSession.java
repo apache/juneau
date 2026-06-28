@@ -48,7 +48,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	private static final String ARG_ctx = "ctx";
 
 	/** Pattern for key=value or key = value. */
-	private static final Pattern KV_PATTERN = Pattern.compile("^([^=#\\s][^=]*?)\\s*[=:]\\s*(.*)$", Pattern.DOTALL);
+	private static final Pattern KV_PATTERN = Pattern.compile("^([^=#\\s][^=]*)\\s*[=:]\\s*(.*)$", Pattern.DOTALL);
 
 	/** Delimiter for nested section names (e.g. {@code address/street}). */
 	private static final String SECTION_PATH_DELIMITER = "/";

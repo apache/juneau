@@ -167,11 +167,6 @@ class Flows_Live_Test extends TestBase {
 		assertEquals(Instant.MAX, t.expiresAt());
 	}
 
-	// -----------------------------------------------------------------------------------------------------------------
-	// I: OAuthClientCredentialsFlow.acquire() — tokenCache putToken path (line 243)
-	// When acquire() succeeds and tokenCache is set, it calls tokenCache.putToken after Flows.send().
-	// -----------------------------------------------------------------------------------------------------------------
-
 	@Test void i01_tokenCachePutAfterAcquire() {
 		nextResponse = "{\"access_token\":\"at-cached\",\"token_type\":\"Bearer\",\"expires_in\":3600}";
 		var cache = BoundedLruTokenCache.create();

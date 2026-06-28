@@ -337,14 +337,14 @@ class ContextSession_Test extends TestBase {
 
 		// -- SerializerSession: trimStrings --
 
-		@Test void e22_serializer_trimStrings_shortForm() throws Exception {
+		@Test void e22_serializer_trimStrings_shortForm() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("trimStrings", true)
 				.build();
 			assertEquals("\"hello\"", session.serialize("  hello  "));
 		}
 
-		@Test void e23_serializer_trimStrings_qualifiedForm() throws Exception {
+		@Test void e23_serializer_trimStrings_qualifiedForm() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("SerializerSession.trimStrings", "true")
 				.build();
@@ -353,7 +353,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- SerializerSession: keepNullProperties --
 
-		@Test void e24_serializer_keepNullProperties_true() throws Exception {
+		@Test void e24_serializer_keepNullProperties_true() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("keepNullProperties", true)
 				.build();
@@ -361,7 +361,7 @@ class ContextSession_Test extends TestBase {
 			assertTrue(result.contains("\"a\""));
 		}
 
-		@Test void e25_serializer_keepNullProperties_false() throws Exception {
+		@Test void e25_serializer_keepNullProperties_false() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("SerializerSession.keepNullProperties", "false")
 				.build();
@@ -371,7 +371,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- SerializerSession: sortCollections --
 
-		@Test void e26_serializer_sortCollections() throws Exception {
+		@Test void e26_serializer_sortCollections() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("sortCollections", true)
 				.build();
@@ -381,7 +381,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- SerializerSession: sortMaps --
 
-		@Test void e27_serializer_sortMaps() throws Exception {
+		@Test void e27_serializer_sortMaps() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("SerializerSession.sortMaps", "true")
 				.build();
@@ -395,7 +395,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- SerializerSession: trimEmptyCollections --
 
-		@Test void e28_serializer_trimEmptyCollections() throws Exception {
+		@Test void e28_serializer_trimEmptyCollections() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("trimEmptyCollections", true)
 				.build();
@@ -406,7 +406,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- SerializerSession: trimEmptyMaps --
 
-		@Test void e29_serializer_trimEmptyMaps() throws Exception {
+		@Test void e29_serializer_trimEmptyMaps() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("trimEmptyMaps", true)
 				.build();
@@ -417,7 +417,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- WriterSerializerSession: maxIndent --
 
-		@Test void e30_writerSerializer_maxIndent_shortForm() throws Exception {
+		@Test void e30_writerSerializer_maxIndent_shortForm() {
 			var ctx = JsonSerializer.create().useWhitespace().build();
 			var noLimitSession = (WriterSerializerSession) ctx.createSession().build();
 			var limitedSession = (WriterSerializerSession) ctx.createSession()
@@ -430,7 +430,7 @@ class ContextSession_Test extends TestBase {
 			assertFalse(limited.contains("\t"));
 		}
 
-		@Test void e31_writerSerializer_maxIndent_qualifiedForm() throws Exception {
+		@Test void e31_writerSerializer_maxIndent_qualifiedForm() {
 			var ctx = JsonSerializer.create().useWhitespace().build();
 			var session = (WriterSerializerSession) ctx.createSession()
 				.property("WriterSerializerSession.maxIndent", "0")
@@ -441,7 +441,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- WriterSerializerSession: quoteChar --
 
-		@Test void e32_writerSerializer_quoteChar_shortForm() throws Exception {
+		@Test void e32_writerSerializer_quoteChar_shortForm() {
 			var session = (WriterSerializerSession) Json5Serializer.DEFAULT.createSession()
 				.property("quoteChar", '"')
 				.build();
@@ -449,7 +449,7 @@ class ContextSession_Test extends TestBase {
 			assertEquals("\"hello\"", result);
 		}
 
-		@Test void e33_writerSerializer_quoteChar_qualifiedForm() throws Exception {
+		@Test void e33_writerSerializer_quoteChar_qualifiedForm() {
 			var session = (WriterSerializerSession) Json5Serializer.DEFAULT.createSession()
 				.property("WriterSerializerSession.quoteChar", "\"")
 				.build();
@@ -459,7 +459,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- CsvSerializerSession: nullValue --
 
-		@Test void e34_csv_nullValue_shortForm() throws Exception {
+		@Test void e34_csv_nullValue_shortForm() {
 			var session = CsvSerializer.DEFAULT.createSession()
 				.property("nullValue", "N/A")
 				.build();
@@ -467,7 +467,7 @@ class ContextSession_Test extends TestBase {
 			assertTrue(result.contains("N/A"));
 		}
 
-		@Test void e35_csv_nullValue_qualifiedForm() throws Exception {
+		@Test void e35_csv_nullValue_qualifiedForm() {
 			var session = CsvSerializer.DEFAULT.createSession()
 				.property("CsvSerializerSession.nullValue", "EMPTY")
 				.build();
@@ -477,7 +477,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- CsvSerializerSession: byteArrayFormat --
 
-		@Test void e36_csv_byteArrayFormat_shortForm() throws Exception {
+		@Test void e36_csv_byteArrayFormat_shortForm() {
 			var session = CsvSerializer.DEFAULT.createSession()
 				.property("byteArrayFormat", CsvByteArrayCellFormat.SEMICOLON_DELIMITED)
 				.build();
@@ -487,7 +487,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- ParserSession: trimStrings --
 
-		@Test void e37_parser_trimStrings_shortForm() throws Exception {
+		@Test void e37_parser_trimStrings_shortForm() {
 			var session = JsonParser.DEFAULT.createSession()
 				.property("trimStrings", true)
 				.build();
@@ -495,7 +495,7 @@ class ContextSession_Test extends TestBase {
 			assertEquals("hello", result);
 		}
 
-		@Test void e38_parser_trimStrings_qualifiedForm() throws Exception {
+		@Test void e38_parser_trimStrings_qualifiedForm() {
 			var session = JsonParser.DEFAULT.createSession()
 				.property("ParserSession.trimStrings", "true")
 				.build();
@@ -505,7 +505,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- JsonSerializerSession: escapeSolidus --
 
-		@Test void e39_json_escapeSolidus_shortForm() throws Exception {
+		@Test void e39_json_escapeSolidus_shortForm() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("escapeSolidus", true)
 				.build();
@@ -513,7 +513,7 @@ class ContextSession_Test extends TestBase {
 			assertTrue(result.contains("\\/"));
 		}
 
-		@Test void e40_json_escapeSolidus_qualifiedForm() throws Exception {
+		@Test void e40_json_escapeSolidus_qualifiedForm() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
 				.property("JsonSerializerSession.escapeSolidus", "true")
 				.build();
@@ -523,7 +523,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- JsonParserSession: validateEnd --
 
-		@Test void e41_json_validateEnd_shortForm() throws Exception {
+		@Test void e41_json_validateEnd_shortForm() {
 			var session = JsonParser.DEFAULT.createSession()
 				.property("validateEnd", true)
 				.build();
@@ -533,7 +533,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- UonParserSession: validateEnd --
 
-		@Test void e42_uon_validateEnd_shortForm() throws Exception {
+		@Test void e42_uon_validateEnd_shortForm() {
 			var session = UonParser.DEFAULT.createSession()
 				.property("validateEnd", true)
 				.build();
@@ -542,7 +542,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- UonSerializerSession: encoding --
 
-		@Test void e43_uon_encoding_shortForm() throws Exception {
+		@Test void e43_uon_encoding_shortForm() {
 			var session = (WriterSerializerSession) UonSerializer.DEFAULT.createSession()
 				.property("encoding", true)
 				.build();
@@ -552,7 +552,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- UonSerializerSession: paramFormat --
 
-		@Test void e44_uon_paramFormat_shortForm() throws Exception {
+		@Test void e44_uon_paramFormat_shortForm() {
 			var session = (WriterSerializerSession) UonSerializer.DEFAULT.createSession()
 				.property("paramFormat", ParamFormat.PLAINTEXT)
 				.build();
@@ -562,7 +562,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- UrlEncodingSerializerSession: expandedParams --
 
-		@Test void e45_urlEncoding_expandedParams_shortForm() throws Exception {
+		@Test void e45_urlEncoding_expandedParams_shortForm() {
 			var session = (WriterSerializerSession) UrlEncodingSerializer.DEFAULT.createSession()
 				.property("expandedParams", true)
 				.build();
@@ -572,7 +572,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- XmlSerializerSession: enableNamespaces --
 
-		@Test void e46_xml_enableNamespaces_shortForm() throws Exception {
+		@Test void e46_xml_enableNamespaces_shortForm() {
 			var session = (WriterSerializerSession) XmlSerializer.DEFAULT.createSession()
 				.property("enableNamespaces", false)
 				.build();
@@ -582,7 +582,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- XmlParserSession: preserveRootElement --
 
-		@Test void e47_xml_preserveRootElement_shortForm() throws Exception {
+		@Test void e47_xml_preserveRootElement_shortForm() {
 			var session = XmlParser.DEFAULT.createSession()
 				.property("preserveRootElement", true)
 				.build();
@@ -592,7 +592,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- HtmlSerializerSession: detectLinksInStrings --
 
-		@Test void e48_html_detectLinksInStrings_shortForm() throws Exception {
+		@Test void e48_html_detectLinksInStrings_shortForm() {
 			var session = (WriterSerializerSession) HtmlSerializer.DEFAULT.createSession()
 				.property("detectLinksInStrings", false)
 				.build();
@@ -602,7 +602,7 @@ class ContextSession_Test extends TestBase {
 
 		// -- HtmlSerializerSession: labelParameter --
 
-		@Test void e49_html_labelParameter_shortForm() throws Exception {
+		@Test void e49_html_labelParameter_shortForm() {
 			var session = (WriterSerializerSession) HtmlSerializer.DEFAULT.createSession()
 				.property("labelParameter", "customlabel")
 				.build();

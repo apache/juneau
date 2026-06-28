@@ -39,7 +39,7 @@ class StackTraceElementSwap_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
-	@Test void basicTests() throws Exception {
+	@Test void basicTests() {
 		var ste = new StackTraceElement("foo.bar.Baz", "qux", "Baz.java", 123);
 
 		assertEquals("'foo.bar.Baz.qux(Baz.java:123)'", write(ste));

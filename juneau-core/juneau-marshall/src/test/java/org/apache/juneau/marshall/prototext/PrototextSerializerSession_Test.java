@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.prototext;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -37,9 +38,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings("unchecked")
 class PrototextSerializerSession_Test extends TestBase {
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Debug trace
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_setDebugTrace_toggle() throws Exception {
 		// Snapshot starting state then exercise the static toggle in both directions.
@@ -75,9 +74,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto == null || proto.isEmpty());
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Top-level scalar / collection / array / streamable
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_topLevelString() throws Exception {
 		// Hits scalar root branch (CONST_value).
@@ -132,9 +129,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertNotNull(proto);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Bean with collection-of-beans
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_beanProperty_listOfBeans() throws Exception {
 		// Exercise the collection-of-beans branch in serializeBeanMap.
@@ -227,9 +222,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto.matches("(?s).*inner:\\s+\\{.*"), () -> "Expected 'inner:<ws>{' in: " + proto);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Map-with-bean-or-map values
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_mapOfMaps() throws Exception {
 		// Hits serializeMap → bean/map branch (recursive serializeMap).
@@ -305,9 +298,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertFalse(proto.contains("missing"));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Streamable bean property
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_iterableProperty_scalar() throws Exception {
 		// Iterable<String> as a Map-property value — exercises the streamable scalar element path.
@@ -319,9 +310,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto.contains("alpha") && proto.contains("beta"), () -> "Expected alpha+beta in: " + proto);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Scalar value type dispatch
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_dateProperty() throws Exception {
 		// type.isDate() branch.
@@ -401,14 +390,12 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertNotNull(proto);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Optional<T> property
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_optionalProperty_present() throws Exception {
 		// Hits isOptional branch in serializeAnything (via map of Optional<String>).
 		var m = new LinkedHashMap<String, Object>();
-		m.put("opt", Optional.of("value"));
+		m.put("opt", opt("value"));
 		var proto = PrototextSerializer.DEFAULT.serialize(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("value"));
@@ -417,14 +404,12 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void g02_optionalProperty_empty() throws Exception {
 		// Optional.empty() -> serializeAnything handles via getOptionalValue (returns null).
 		var m = new LinkedHashMap<String, Object>();
-		m.put("opt", Optional.empty());
+		m.put("opt", opte());
 		var proto = PrototextSerializer.DEFAULT.serialize(m);
 		assertNotNull(proto);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Bean with comment annotation on bean property
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_beanWithCommentedProperty() throws Exception {
 		// Bean property with @Prototext(comment="...") — exercises the protoPMeta comment path.
@@ -521,9 +506,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto.contains("1") && proto.contains("2") && proto.contains("3"));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Streamable bean property — exercises serializeStreamable (lines 405-425)
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h07_topLevelStreamOfMaps() throws Exception {
 		// Top-level Stream<Map> — hits serializeStreamable bean-element branch.
@@ -545,17 +528,13 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto.contains("a") && proto.contains("b") && proto.contains("c"));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Builder
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_create_nullCtxThrows() {
 		assertThrows(IllegalArgumentException.class, () -> PrototextSerializerSession.create((PrototextSerializer) null));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Nested maps and collections — serializeMap / serializeCollection paths
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void j_mapWithMapValue() throws Exception {
 		// Map value inside a Map → serializeMap: aType.isMap() branch (line 337/340 isMap=true)
@@ -628,9 +607,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto.contains("eve"), "Expected eve in: " + proto);
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Scalar type dispatch: Date / Calendar / Temporal / Duration / Period / byte[]
-	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void j01_dateBeanProperty() throws Exception {
 		// java.util.Date bean property → serializeScalarValue Date branch
@@ -714,9 +691,7 @@ class PrototextSerializerSession_Test extends TestBase {
 		assertTrue(proto.contains("Alice") && proto.contains("Bob"));
 	}
 
-	//------------------------------------------------------------------------------------------------------------------
 	// Test fixture beans
-	//------------------------------------------------------------------------------------------------------------------
 
 	enum LogLevel { DEBUG, INFO, WARN, ERROR }
 

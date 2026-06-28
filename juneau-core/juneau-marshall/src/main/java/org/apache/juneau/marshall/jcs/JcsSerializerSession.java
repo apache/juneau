@@ -148,7 +148,7 @@ public class JcsSerializerSession extends JsonSerializerSession {
 
 	private static String stripTrailingZeros(String s) {
 		if (s.contains(".")) {
-			s = s.replaceAll("0+$", "");
+			s = s.replaceAll("0++$", "");
 			if (s.endsWith("."))
 				s = s.substring(0, s.length() - 1);
 		}

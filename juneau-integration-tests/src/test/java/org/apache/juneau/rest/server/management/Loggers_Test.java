@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  */
 class Loggers_Test extends TestBase {
 
-	private static final String LName = "org.apache.juneau.test.loggers.Probe";
+	private static final String L_NAME = "org.apache.juneau.test.loggers.Probe";
 
 	@Rest(mixins={LoggersMixin.class})
 	public static class A extends BasicRestServlet {
@@ -44,7 +44,7 @@ class Loggers_Test extends TestBase {
 
 	@AfterEach
 	void resetProbeLogger() {
-		Logger.getLogger(LName).setLevel(null);
+		Logger.getLogger(L_NAME).setLevel(null);
 	}
 
 	// =================================================================================
@@ -54,13 +54,13 @@ class Loggers_Test extends TestBase {
 	@Test void a01_managerGetSetClear() {
 		// Manager with a null context resolves the JUL default backend.
 		var m = new LoggersManager();
-		m.setLevel(null, LName, "FINE");
-		assertEquals("FINE", m.getLevel(null, LName));
-		assertTrue(m.getLevels(null).containsKey(LName));
-		assertEquals("FINE", m.getLevels(null).get(LName));
+		m.setLevel(null, L_NAME, "FINE");
+		assertEquals("FINE", m.getLevel(null, L_NAME));
+		assertTrue(m.getLevels(null).containsKey(L_NAME));
+		assertEquals("FINE", m.getLevels(null).get(L_NAME));
 		// Blank clears the level (inherits) -> empty string.
-		m.setLevel(null, LName, "");
-		assertEquals("", m.getLevel(null, LName));
+		m.setLevel(null, L_NAME, "");
+		assertEquals("", m.getLevel(null, L_NAME));
 	}
 
 	@Test void a02_managerUnknownLoggerNull() {
@@ -74,14 +74,14 @@ class Loggers_Test extends TestBase {
 
 	@Test void a04_managerInvalidLevelThrows() {
 		var m = new LoggersManager();
-		assertThrows(IllegalArgumentException.class, () -> m.setLevel(null, LName, "NOPE"));
+		assertThrows(IllegalArgumentException.class, () -> m.setLevel(null, L_NAME, "NOPE"));
 	}
 
 	@Test void a05_managerNullLevelClears() {
 		var m = new LoggersManager();
-		m.setLevel(null, LName, "FINE");
-		m.setLevel(null, LName, null);
-		assertNull(Logger.getLogger(LName).getLevel());
+		m.setLevel(null, L_NAME, "FINE");
+		m.setLevel(null, L_NAME, null);
+		assertNull(Logger.getLogger(L_NAME).getLevel());
 	}
 
 	@Test void a06_resolveSettingsNullContextDefault() {
@@ -102,11 +102,11 @@ class Loggers_Test extends TestBase {
 	@Test void a08_julBackendDirect() {
 		// JulLogBackend carries the JUL logic directly (the default backend).
 		var b = JulLogBackend.INSTANCE;
-		b.setLevel(LName, "FINE");
-		assertEquals("FINE", b.getLevel(LName));
+		b.setLevel(L_NAME, "FINE");
+		assertEquals("FINE", b.getLevel(L_NAME));
 		assertTrue(b.getLevels().containsKey("ROOT"));
-		b.setLevel(LName, null);
-		assertEquals("", b.getLevel(LName));
+		b.setLevel(L_NAME, null);
+		assertEquals("", b.getLevel(L_NAME));
 	}
 
 	@Test void a09_explicitBackendSelection() {
@@ -135,15 +135,15 @@ class Loggers_Test extends TestBase {
 
 	@Test void b02_getSetGetRoundTrip() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
-		c.put("/loggers/" + LName, "FINE").accept("application/json").run().assertStatus(200);
-		c.get("/loggers/" + LName).accept("application/json").run().assertStatus(200).assertContent().asString().isContains("FINE");
-		assertEquals(Level.FINE, Logger.getLogger(LName).getLevel());
+		c.put("/loggers/" + L_NAME, "FINE").accept("application/json").run().assertStatus(200);
+		c.get("/loggers/" + L_NAME).accept("application/json").run().assertStatus(200).assertContent().asString().isContains("FINE");
+		assertEquals(Level.FINE, Logger.getLogger(L_NAME).getLevel());
 	}
 
 	@Test void b03_postAliasSets() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
-		c.post("/loggers/" + LName, "WARNING").accept("application/json").run().assertStatus(200);
-		assertEquals(Level.WARNING, Logger.getLogger(LName).getLevel());
+		c.post("/loggers/" + L_NAME, "WARNING").accept("application/json").run().assertStatus(200);
+		assertEquals(Level.WARNING, Logger.getLogger(L_NAME).getLevel());
 	}
 
 	@Test void b04_getUnknownLogger404() throws Exception {
@@ -153,9 +153,9 @@ class Loggers_Test extends TestBase {
 
 	@Test void b05_setBlankInherits() throws Exception {
 		var c = MockRestClient.buildLax(A.class);
-		Logger.getLogger(LName).setLevel(Level.FINE);
-		c.put("/loggers/" + LName, "").accept("application/json").run().assertStatus(200);
-		assertNull(Logger.getLogger(LName).getLevel());
+		Logger.getLogger(L_NAME).setLevel(Level.FINE);
+		c.put("/loggers/" + L_NAME, "").accept("application/json").run().assertStatus(200);
+		assertNull(Logger.getLogger(L_NAME).getLevel());
 	}
 
 	// =================================================================================
@@ -179,14 +179,14 @@ class Loggers_Test extends TestBase {
 	@Test void c01_resourceListAndSet() throws Exception {
 		var c = MockRestClient.buildLax(B.class);
 		c.get("/loggers").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("ROOT");
-		c.put("/loggers/" + LName, "INFO").accept("application/json").run().assertStatus(200);
-		assertEquals(Level.INFO, Logger.getLogger(LName).getLevel());
+		c.put("/loggers/" + L_NAME, "INFO").accept("application/json").run().assertStatus(200);
+		assertEquals(Level.INFO, Logger.getLogger(L_NAME).getLevel());
 	}
 
 	@Test void c02_resourceGetSingleAndPostAlias() throws Exception {
 		var c = MockRestClient.buildLax(B.class);
-		c.post("/loggers/" + LName, "WARNING").accept("application/json").run().assertStatus(200);
-		c.get("/loggers/" + LName).accept("application/json").run().assertStatus(200).assertContent().asString().isContains("WARNING");
+		c.post("/loggers/" + L_NAME, "WARNING").accept("application/json").run().assertStatus(200);
+		c.get("/loggers/" + L_NAME).accept("application/json").run().assertStatus(200).assertContent().asString().isContains("WARNING");
 	}
 
 	@Test void c03_resourceGetUnknown404() throws Exception {
@@ -206,9 +206,9 @@ class Loggers_Test extends TestBase {
 	@Test void c04_resourceWriteDeniedByDefault() throws Exception {
 		var c = MockRestClient.buildLax(E.class);
 		c.get("/loggers").accept("application/json").run().assertStatus(200);
-		c.put("/loggers/" + LName, "FINE").run().assertStatus(403);
-		c.post("/loggers/" + LName, "FINE").run().assertStatus(403);
-		assertNull(Logger.getLogger(LName).getLevel());
+		c.put("/loggers/" + L_NAME, "FINE").run().assertStatus(403);
+		c.post("/loggers/" + L_NAME, "FINE").run().assertStatus(403);
+		assertNull(Logger.getLogger(L_NAME).getLevel());
 	}
 
 	// =================================================================================
@@ -225,8 +225,8 @@ class Loggers_Test extends TestBase {
 		// Reads still work...
 		c.get("/loggers").accept("application/json").run().assertStatus(200).assertContent().asString().isContains("ROOT");
 		// ...but writes are denied without an opt-in LoggersSettings bean.
-		c.put("/loggers/" + LName, "FINE").run().assertStatus(403);
-		c.post("/loggers/" + LName, "FINE").run().assertStatus(403);
-		assertNull(Logger.getLogger(LName).getLevel());
+		c.put("/loggers/" + L_NAME, "FINE").run().assertStatus(403);
+		c.post("/loggers/" + L_NAME, "FINE").run().assertStatus(403);
+		assertNull(Logger.getLogger(L_NAME).getLevel());
 	}
 }

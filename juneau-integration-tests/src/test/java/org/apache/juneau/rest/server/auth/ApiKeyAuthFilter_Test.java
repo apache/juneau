@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -39,7 +40,7 @@ import jakarta.servlet.http.*;
 class ApiKeyAuthFilter_Test extends TestBase {
 
 	private static final Principal ALICE = () -> "alice";
-	private static final ApiKeyStore STORE = key -> "good-key".equals(key) ? Optional.of(ALICE) : Optional.empty();
+	private static final ApiKeyStore STORE = key -> "good-key".equals(key) ? opt(ALICE) : opte();
 
 	private static HttpServletRequest reqWithHeader(String headerName, String value) {
 		var r = mock(HttpServletRequest.class);
@@ -137,7 +138,7 @@ class ApiKeyAuthFilter_Test extends TestBase {
 	@Test void a11_claimsPrincipal_rolesFlowToAuthResult() throws Exception {
 		var claims = Map.<String, Object>of("roles", List.of("user"), "sub", "alice");
 		var cp = new ClaimsPrincipal("alice", claims);
-		ApiKeyStore store = key -> "good-key".equals(key) ? Optional.of(cp) : Optional.empty();
+		ApiKeyStore store = key -> "good-key".equals(key) ? opt(cp) : opte();
 		var f = ApiKeyAuthFilter.create().store(store).build();
 		var result = f.authenticate(reqWithHeader("X-API-Key", "good-key"));
 		assertTrue(result.isPresent());

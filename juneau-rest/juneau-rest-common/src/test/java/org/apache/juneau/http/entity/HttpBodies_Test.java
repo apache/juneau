@@ -188,7 +188,7 @@ class HttpBodies_Test extends TestBase {
 		assertTrue(wire.endsWith("--boundary123--\r\n"));
 	}
 
-	@Test void f02_multipartBody_notRepeatable_whenStreamPart() throws Exception {
+	@Test void f02_multipartBody_notRepeatable_whenStreamPart() {
 		var body = MultipartBody.builder()
 			.part(MultipartBody.MultipartPart.of("upload", "x.bin", "application/octet-stream",
 				StreamBody.of(new ByteArrayInputStream(new byte[]{1}))))

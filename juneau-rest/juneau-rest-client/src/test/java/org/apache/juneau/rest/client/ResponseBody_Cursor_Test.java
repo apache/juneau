@@ -34,7 +34,9 @@ class ResponseBody_Cursor_Test {
 	public static class Bean {
 		public String name;
 		public int age;
-		public Bean() {}
+		public Bean() {
+			// No-arg constructor required for deserialization.
+		}
 	}
 
 	@SuppressWarnings({

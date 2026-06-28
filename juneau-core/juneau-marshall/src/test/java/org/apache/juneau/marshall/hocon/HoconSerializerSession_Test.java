@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.hocon;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -410,7 +411,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// Reach via Optional.empty() inside a map entry which routes to serializeString
 		// for the unwrapped null. (Optional path in serializeAnything → recursion).
 		var m = new LinkedHashMap<String,Object>();
-		m.put("opt", Optional.empty());
+		m.put("opt", opte());
 		var hocon = HoconSerializer.create().keepNullProperties().build().serialize(m);
 		assertNotNull(hocon);
 		assertTrue(hocon.contains("opt"));
@@ -578,7 +579,7 @@ class HoconSerializerSession_Test extends TestBase {
 	@Test void g01_optionalPresent() throws Exception {
 		// Optional present → isOptional branch (lines 251-254).
 		var x = new B_WithOptional();
-		x.name = Optional.of("alpha");
+		x.name = opt("alpha");
 		var hocon = HoconSerializer.DEFAULT.serialize(x);
 		assertTrue(hocon.contains("alpha"));
 	}
@@ -586,7 +587,7 @@ class HoconSerializerSession_Test extends TestBase {
 	@Test void g02_optionalEmpty() throws Exception {
 		// Optional empty → isOptional branch + null path.
 		var x = new B_WithOptional();
-		x.name = Optional.empty();
+		x.name = opte();
 		var s = HoconSerializer.create().keepNullProperties().build();
 		var hocon = s.serialize(x);
 		assertNotNull(hocon);

@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -339,7 +340,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void d01_optionalPropertyPresent() throws Exception {
 		var b = new OptionalBean();
-		b.nick = Optional.of("ace");
+		b.nick = opt("ace");
 		b.age = 10;
 		var bytes = ParquetSerializer.DEFAULT.serialize(list(b));
 		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
@@ -351,7 +352,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 
 	@Test void d02_optionalPropertyEmpty() throws Exception {
 		var b = new OptionalBean();
-		b.nick = Optional.empty();
+		b.nick = opte();
 		b.age = 20;
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b));
 		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
@@ -361,8 +362,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	}
 
 	@Test void d03_mixedOptionalRows() throws Exception {
-		var b1 = new OptionalBean(); b1.nick = Optional.of("x"); b1.age = 1;
-		var b2 = new OptionalBean(); b2.nick = Optional.empty(); b2.age = 2;
+		var b1 = new OptionalBean(); b1.nick = opt("x"); b1.age = 1;
+		var b2 = new OptionalBean(); b2.nick = opte(); b2.age = 2;
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(b1, b2));
 		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
 		assertEquals("x", out.get(0).nick.orElse(null));
@@ -372,7 +373,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void d04_optionalBeanPropertyPresent() throws Exception {
 		// Optional<Inner> bean property — exercises collapseOptionalValue's bean branch + absent detection.
 		var o = new OptionalBeanProp();
-		o.a = Optional.of("hi");
+		o.a = opt("hi");
 		var inner = new Inner(); inner.v = "x"; inner.n = 5;
 		o.b = Optional.of(inner);
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
@@ -386,8 +387,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void d05_optionalBeanPropertyEmpty() throws Exception {
 		// Empty Optional<Inner> — exercises allNullLeaves / isAbsentOptionalMap bean-group branch.
 		var o = new OptionalBeanProp();
-		o.a = Optional.empty();
-		o.b = Optional.empty();
+		o.a = opte();
+		o.b = opte();
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBeanProp.class);
 		assertFalse(out.get(0).a.isPresent());
@@ -856,8 +857,8 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// for each absent Optional contains {value: null}; isAbsentOptionalMap's allNull-values
 		// check (m.values().stream().allMatch(v -> v == null)) returns true.
 		var o = new DeepOptBean();
-		o.a = Optional.empty();
-		o.b = Optional.empty();
+		o.a = opte();
+		o.b = opte();
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<DeepOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, DeepOptBean.class);
 		assertFalse(out.get(0).a.isPresent());
@@ -867,7 +868,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 	@Test void r02_collapseOptionalValueWithBeanInner() throws Exception {
 		// Optional<Inner> present: collapseOptionalValue enters the targetType.isBean() branch (line 1601).
 		var o = new OptionalBeanProp();
-		o.b = Optional.of(new Inner());
+		o.b = opt(new Inner());
 		o.b.get().v = "val";
 		o.b.get().n = 99;
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
@@ -899,7 +900,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// collapseOptionalValue hits the isOptional branch (line 1595), isAbsentOptionalMap=false,
 		// then recurses through {value:{value:"x"}} → "x".
 		var o = new NestedOptBean();
-		o.deep = Optional.of(Optional.of("hello"));
+		o.deep = opt(opt("hello"));
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedOptBean.class);
 		assertTrue(out.get(0).deep.isPresent());
@@ -911,7 +912,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Optional<Optional<String>> with inner Optional empty:
 		// isAbsentOptionalMap recurses (elemType.isOptional branch, line 1574) and returns true.
 		var o = new NestedOptBean();
-		o.deep = Optional.of(Optional.empty());
+		o.deep = opt(opte());
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedOptBean.class);
 		assertTrue(out.get(0).deep.isPresent());
@@ -934,7 +935,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// collapseOptionalValue: isAbsentOptionalMap for outer returns true → null.
 		// MarshallingSession converts null Optional<Optional<String>> property to Optional.empty or Optional.of(empty).
 		var o = new NestedOptBean();
-		o.deep = Optional.empty();
+		o.deep = opte();
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<NestedOptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, NestedOptBean.class);
 		// Parquet round-trip serializes Optional.empty() as a null group; on parse the outer Optional is
@@ -948,7 +949,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// allNullLeaves(null) returns true (line 1505 true branch), allMatch → true →
 		// isAbsentOptionalMap returns true → property set to null → MarshallingSession → Optional.empty().
 		var o = new OptNullInnerBean();
-		o.inner = Optional.of(new NestedB());  // NestedB.v stays null
+		o.inner = opt(new NestedB());  // NestedB.v stays null
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<OptNullInnerBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptNullInnerBean.class);
 		assertFalse(out.get(0).inner.isPresent());
@@ -1139,7 +1140,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// prepareMapForBean with value==null returns null immediately (line 1635 false branch).
 		// Achieved indirectly: a null Optional<String> property stores null in the row map,
 		// then prepareMapForBean(null, ...) is invoked on the collapsed value.
-		var o = new OptionalBean(); o.nick = Optional.empty(); o.age = 5;
+		var o = new OptionalBean(); o.nick = opte(); o.age = 5;
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<OptionalBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBean.class);
 		assertFalse(out.get(0).nick.isPresent());
@@ -1442,7 +1443,7 @@ class ParquetParserSessionFull_Test extends TestBase {
 		// Achieved by serializing Optional<String> present and parsing as OptionalBeanProp
 		// — the Optional<String> "a" property gets a String inner, not a Map.
 		var o = new OptionalBeanProp();
-		o.a = Optional.of("strval");
+		o.a = opt("strval");
 		o.b = null;
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(list(o));
 		var out = (List<OptionalBeanProp>) ParquetParser.DEFAULT.parse(bytes, List.class, OptionalBeanProp.class);

@@ -132,7 +132,7 @@ public enum DurationFormat {
 			if (minutes > 0)
 				sb.append(minutes).append('M');
 			if (seconds > 0 || nanos > 0 || (hours == 0 && minutes == 0))
-				sb.append(seconds).append(nanos == 0 ? "" : "." + String.format("%09d", nanos).replaceAll("0+$", "")).append('S');
+				sb.append(seconds).append(nanos == 0 ? "" : "." + String.format("%09d", nanos).replaceAll("0++$", "")).append('S');
 		}
 		return sb.toString();
 	}

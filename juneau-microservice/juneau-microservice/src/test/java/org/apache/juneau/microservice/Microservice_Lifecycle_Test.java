@@ -90,8 +90,8 @@ class Microservice_Lifecycle_Test extends TestBase {
 		"unchecked"  // Unchecked cast required for generic test utility.
 	})
 	@Test void a02_builder_consoleCommands_classes_throwsForNoNoargCtor() {
-		assertThrows(ExecutableException.class,
-			() -> Microservice.create().consoleCommands(NoNoargConsoleCommand.class));
+		var b = Microservice.create();
+		assertThrows(ExecutableException.class, () -> b.consoleCommands(NoNoargConsoleCommand.class));
 	}
 
 	@Test void a03_builder_manifest_file(@TempDir Path tmp) throws Exception {

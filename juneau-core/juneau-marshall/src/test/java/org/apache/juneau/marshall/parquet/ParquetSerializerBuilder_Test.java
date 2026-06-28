@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 class ParquetSerializerBuilder_Test extends TestBase {
 
 	@Test
-	void a01_allSettersThenCopyConstructors() throws Exception {
+	void a01_allSettersThenCopyConstructors() {
 		// Set every knob to a non-default value.
 		var s1 = ParquetSerializer.create()
 			.compressionCodec(CompressionCodec.GZIP)
@@ -63,7 +63,7 @@ class ParquetSerializerBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void a06_builderToBuilderCopy() throws Exception {
+	void a06_builderToBuilderCopy() {
 		// Builder.copy() exercises the Builder(Builder) copy constructor (distinct from serializer.copy(),
 		// which uses Builder(ParquetSerializer)).
 		var b1 = ParquetSerializer.create()
@@ -84,7 +84,7 @@ class ParquetSerializerBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void a02_nullCoalescingGuards() throws Exception {
+	void a02_nullCoalescingGuards() {
 		// Null arguments fall back to documented defaults (the false branch of each ternary).
 		var s = ParquetSerializer.create()
 			.compressionCodec(null)
@@ -96,7 +96,7 @@ class ParquetSerializerBuilder_Test extends TestBase {
 	}
 
 	@Test
-	void a03_minimumSizeClamps() throws Exception {
+	void a03_minimumSizeClamps() {
 		// rowGroupSize/pageSize clamp to a 1024 floor.
 		var s = ParquetSerializer.create().rowGroupSize(1).pageSize(1).build();
 		assertEquals(1024, s.rowGroupSize);

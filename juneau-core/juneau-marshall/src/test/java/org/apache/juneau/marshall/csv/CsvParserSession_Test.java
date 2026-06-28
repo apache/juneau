@@ -42,7 +42,7 @@ class CsvParserSession_Test extends TestBase {
 	// a - Builder configuration variants (nullValue null fallback, byteArrayFormat)
 	//====================================================================================================
 
-	@Test void a01_nullValueExplicitlyNull_fallsBackToDefault() throws Exception {
+	@Test void a01_nullValueExplicitlyNull_fallsBackToDefault() {
 		// Builder.nullValue(null) -> session falls back to default "<NULL>" marker.
 		var p = CsvParser.create().nullValue(null).build();
 		var csv = "b,c\n<NULL>,1\nx,2\n";
@@ -53,7 +53,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals("x", r.get(1).b);
 	}
 
-	@Test void a02_byteArrayFormat_base64_explicit() throws Exception {
+	@Test void a02_byteArrayFormat_base64_explicit() {
 		// Default byteArrayFormat is BASE64; ensure parse works when explicitly configured.
 		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.BASE64).build();
 		var bytes = "Hi".getBytes();
@@ -63,7 +63,7 @@ class CsvParserSession_Test extends TestBase {
 		assertArrayEquals(bytes, r.get(0).data);
 	}
 
-	@Test void a03_byteArrayFormat_semicolon_emptyValueYieldsEmptyArray() throws Exception {
+	@Test void a03_byteArrayFormat_semicolon_emptyValueYieldsEmptyArray() {
 		// Empty byte[] cell -> parseCsvCellValue short-circuits (val.isEmpty()) and
 		// convertToType("", byte[]) yields a zero-length array.
 		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
@@ -78,14 +78,14 @@ class CsvParserSession_Test extends TestBase {
 	// b - Optional<T> target types
 	//====================================================================================================
 
-	@Test void b01_parseIntoOptionalString() throws Exception {
+	@Test void b01_parseIntoOptionalString() {
 		var csv = "value\nhello\n";
 		var r = (Optional<String>) CsvParser.DEFAULT.parse(csv, Optional.class, String.class);
 		assertTrue(r.isPresent());
 		assertEquals("hello", r.get());
 	}
 
-	@Test void b02_parseIntoOptionalInteger() throws Exception {
+	@Test void b02_parseIntoOptionalInteger() {
 		var csv = "value\n42\n";
 		var r = (Optional<Integer>) CsvParser.DEFAULT.parse(csv, Optional.class, Integer.class);
 		assertTrue(r.isPresent());
@@ -96,31 +96,31 @@ class CsvParserSession_Test extends TestBase {
 	// c - Empty / boundary inputs for single-target shapes
 	//====================================================================================================
 
-	@Test void c01_singleBean_emptyInput_returnsNull() throws Exception {
+	@Test void c01_singleBean_emptyInput_returnsNull() {
 		assertNull(CsvParser.DEFAULT.parse("", A.class));
 	}
 
-	@Test void c02_singleBean_headerOnly_returnsNullObject() throws Exception {
+	@Test void c02_singleBean_headerOnly_returnsNullObject() {
 		// Header row exists but no data row -> parseRowIntoBean is skipped, returns null.
 		assertNull(CsvParser.DEFAULT.parse("b,c\n", A.class));
 	}
 
-	@Test void c03_singleMap_headerOnly_returnsNullObject() throws Exception {
+	@Test void c03_singleMap_headerOnly_returnsNullObject() {
 		assertNull(CsvParser.DEFAULT.parse("k1,k2\n", Map.class));
 	}
 
-	@Test void c04_singleString_headerOnly_returnsNull() throws Exception {
+	@Test void c04_singleString_headerOnly_returnsNull() {
 		// Simple-type target with header only and no data row.
 		assertNull(CsvParser.DEFAULT.parse("value\n", String.class));
 	}
 
-	@Test void c05_singleString_headerWithoutValueColumn_usesFirstColumn() throws Exception {
+	@Test void c05_singleString_headerWithoutValueColumn_usesFirstColumn() {
 		// When no "value" column is present, fall back to column index 0.
 		var r = CsvParser.DEFAULT.parse("foo\nbar\n", String.class);
 		assertEquals("bar", r);
 	}
 
-	@Test void c06_objectTarget_headerOnly_returnsNull() throws Exception {
+	@Test void c06_objectTarget_headerOnly_returnsNull() {
 		// Object-target branch: header but no rows -> results empty -> null.
 		assertNull(CsvParser.DEFAULT.parse("a,b\n", Object.class));
 	}
@@ -129,7 +129,7 @@ class CsvParserSession_Test extends TestBase {
 	// d - Concrete Collection / Map types (canCreateNewInstance)
 	//====================================================================================================
 
-	@Test void d01_concreteCollectionType_linkedList() throws Exception {
+	@Test void d01_concreteCollectionType_linkedList() {
 		// Sets sType.canCreateNewInstance(outer) == true so the parser uses the
 		// supplied collection class rather than ArrayList.
 		var csv = "value\nfoo\nbar\n";
@@ -138,7 +138,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals(List.of("foo", "bar"), r);
 	}
 
-	@Test void d02_singleMap_concreteLinkedHashMap() throws Exception {
+	@Test void d02_singleMap_concreteLinkedHashMap() {
 		// canCreateNewInstance(outer) on map type -> uses provided LinkedHashMap impl.
 		var csv = "k1,k2\nv1,v2\n";
 		var r = CsvParser.DEFAULT.parse(csv, LinkedHashMap.class);
@@ -151,7 +151,7 @@ class CsvParserSession_Test extends TestBase {
 	// e - Polymorphic / type-discriminator branches in parseRow / parseRowIntoBean
 	//====================================================================================================
 
-	@Test void e01_polymorphicWithDictionary_resolvesViaTypeColumn() throws Exception {
+	@Test void e01_polymorphicWithDictionary_resolvesViaTypeColumn() {
 		// Shape is an interface with bean dictionary; header carries _type column.
 		// parseRow takes the BeanRegistry/_type branch, parses to map then casts to Circle.
 		var csv = "name,radius,_type\nc1,9,Circle\n";
@@ -178,7 +178,7 @@ class CsvParserSession_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("e02_singleBeanTypeColumnGuardBranches")
-	void e02_singleBeanTypeColumnGuardBranches(String csv, int expectedC) throws Exception {
+	void e02_singleBeanTypeColumnGuardBranches(String csv, int expectedC) {
 		// Single-bean target (parseAnything's isBean branch): in each variant the _type
 		// column does not redirect to a different bean type, so A.class is used as-is.
 		var r = CsvParser.DEFAULT.parse(csv, A.class);
@@ -190,14 +190,14 @@ class CsvParserSession_Test extends TestBase {
 	// f - Unknown property + bean property fallthrough
 	//====================================================================================================
 
-	@Test void f01_unknownProperty_throwsByDefault() throws Exception {
+	@Test void f01_unknownProperty_throwsByDefault() {
 		// Header has an extra column not on the bean -> onUnknownProperty branch
 		// triggers ParseException because ignoreUnknownBeanProperties is false by default.
 		var csv = "b,c,extra\nfoo,7,ignored\n";
 		assertThrows(ParseException.class, () -> CsvParser.DEFAULT.parse(csv, List.class, A.class));
 	}
 
-	@Test void f01b_unknownProperty_ignoredWhenConfigured() throws Exception {
+	@Test void f01b_unknownProperty_ignoredWhenConfigured() {
 		// Same input but with ignoreUnknownBeanProperties() -> unknown column accepted silently.
 		var p = CsvParser.create().ignoreUnknownBeanProperties().build();
 		var csv = "b,c,extra\nfoo,7,ignored\n";
@@ -207,7 +207,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals(7, r.get(0).c);
 	}
 
-	@Test void f02_beanRow_shorterThanHeaders_missingPropsNullDefault() throws Exception {
+	@Test void f02_beanRow_shorterThanHeaders_missingPropsNullDefault() {
 		// Row shorter than headers -> i < row.size() is false on trailing columns; // NOSONAR
 		// parseCellValue invoked with null val.
 		var csv = "b,c\nonly_b\n";
@@ -221,7 +221,7 @@ class CsvParserSession_Test extends TestBase {
 	// g - parseRow Object element-type branch (List<Object>)
 	//====================================================================================================
 
-	@Test void g01_parseListOfObject_yieldsMapsPerRow() throws Exception {
+	@Test void g01_parseListOfObject_yieldsMapsPerRow() {
 		// Element type Object -> parseRow takes the "isObject()" early branch
 		// returning a generic map per row.
 		var csv = "a,b\n1,2\n3,4\n";
@@ -233,7 +233,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals("4", r.get(1).get("b"));
 	}
 
-	@Test void g02_parseListOfObject_shortRow_padsWithNull() throws Exception {
+	@Test void g02_parseListOfObject_shortRow_padsWithNull() {
 		// In parseRow Object branch, i < row.size() false case -> map gets null for missing cell.
 		var csv = "a,b\n1\n";
 		var r = (List<Map>) CsvParser.DEFAULT.parse(csv, List.class, Object.class);
@@ -246,7 +246,7 @@ class CsvParserSession_Test extends TestBase {
 	// h - Simple-type element list with empty data row
 	//====================================================================================================
 
-	@Test void h01_simpleTypeList_emptyDataCell_yieldsNullElement() throws Exception {
+	@Test void h01_simpleTypeList_emptyDataCell_yieldsNullElement() {
 		// Multi-column header with one empty value column; parseRow simple-type path
 		// reads row.get(0), which is an empty cell; parseCellValue("",String) -> null.
 		var csv = "value,other\n,x\n";
@@ -259,20 +259,20 @@ class CsvParserSession_Test extends TestBase {
 	// i - Quoted-field edge cases at parser-session level
 	//====================================================================================================
 
-	@Test void i01_quotedComma_inBeanField() throws Exception {
+	@Test void i01_quotedComma_inBeanField() {
 		var csv = "b,c\n\"a,b,c\",5\n";
 		var r = (List<A>) CsvParser.DEFAULT.parse(csv, List.class, A.class);
 		assertEquals("a,b,c", r.get(0).b);
 		assertEquals(5, r.get(0).c);
 	}
 
-	@Test void i02_quotedNewline_inBeanField() throws Exception {
+	@Test void i02_quotedNewline_inBeanField() {
 		var csv = "b,c\n\"line1\nline2\",1\n";
 		var r = (List<A>) CsvParser.DEFAULT.parse(csv, List.class, A.class);
 		assertEquals("line1\nline2", r.get(0).b);
 	}
 
-	@Test void i03_escapedQuotes_inBeanField() throws Exception {
+	@Test void i03_escapedQuotes_inBeanField() {
 		var csv = "b,c\n\"a\"\"b\",1\n";
 		var r = (List<A>) CsvParser.DEFAULT.parse(csv, List.class, A.class);
 		assertEquals("a\"b", r.get(0).b);
@@ -282,7 +282,7 @@ class CsvParserSession_Test extends TestBase {
 	// j - Primitive-array branches in parseCsvCellValue
 	//====================================================================================================
 
-	@Test void j01_primitiveArrays_longFloatShortBooleanChar() throws Exception {
+	@Test void j01_primitiveArrays_longFloatShortBooleanChar() {
 		var csv = """
 			name,longs,floats,shorts,bools,chars
 			row1,[1;2;3],[1.5;2.5],[10;20],[true;false],[65;66;67]
@@ -296,7 +296,7 @@ class CsvParserSession_Test extends TestBase {
 		assertArrayEquals(new char[]{'A', 'B', 'C'}, r.get(0).chars);
 	}
 
-	@Test void j02_primitiveArrays_emptyVariants() throws Exception {
+	@Test void j02_primitiveArrays_emptyVariants() {
 		// "[]" -> createEmptyPrimitiveArray; exercises long/float/short/bool/char empty branches.
 		var csv = """
 			name,longs,floats,shorts,bools,chars
@@ -310,7 +310,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals(0, r.get(0).chars.length);
 	}
 
-	@Test void j03_primitiveArray_missingBracketsTreatedAsString() throws Exception {
+	@Test void j03_primitiveArray_missingBracketsTreatedAsString() {
 		// Array cell without [..] markers -> parseCsvCellValue returns null and
 		// convertToType(string,int[]) is attempted; throws ParseException.
 		var csv = """
@@ -320,7 +320,7 @@ class CsvParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, () -> CsvParser.DEFAULT.parse(csv, List.class, P.class));
 	}
 
-	@Test void j04_byteArrayElement_emptyArrayLiteral() throws Exception {
+	@Test void j04_byteArrayElement_emptyArrayLiteral() {
 		// Element type byte[] with non-empty value (semicolon) returns byte[].
 		var p = CsvParser.create().byteArrayFormat(CsvByteArrayCellFormat.SEMICOLON_DELIMITED).build();
 		var csv = "name,data\nr,7;8;9\n";
@@ -332,13 +332,13 @@ class CsvParserSession_Test extends TestBase {
 	// k - parseCellValue type-conversion failure path
 	//====================================================================================================
 
-	@Test void k01_nonNumericIntoInt_throwsParseException() throws Exception {
+	@Test void k01_nonNumericIntoInt_throwsParseException() {
 		// Triggers InvalidDataConversionException -> rewrapped as ParseException.
 		var csv = "b,c\nfoo,not-a-number\n";
 		assertThrows(ParseException.class, () -> CsvParser.DEFAULT.parse(csv, List.class, A.class));
 	}
 
-	@Test void k02_emptyStringIntoInteger_returnsNull() throws Exception {
+	@Test void k02_emptyStringIntoInteger_returnsNull() {
 		// Empty CharSequence cell -> parseCellValue returns null via the
 		// "val.isEmpty() && eType.isCharSequence()" branch when target is String.
 		var csv = "b,c\n,5\n";
@@ -352,7 +352,7 @@ class CsvParserSession_Test extends TestBase {
 	// m - trimStrings + allowNestedStructures branches
 	//====================================================================================================
 
-	@Test void m01_trimStrings_appliesAtCellLevel() throws Exception {
+	@Test void m01_trimStrings_appliesAtCellLevel() {
 		// Builder.trimStrings() -> isTrimStrings() returns true; cell value "  hi  " is trimmed.
 		var p = CsvParser.create().trimStrings().build();
 		var csv = "b,c\n  hi  ,  3  \n";
@@ -362,7 +362,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals(3, r.get(0).c);
 	}
 
-	@Test void m02_allowNestedStructures_plainCellTreatedAsString() throws Exception {
+	@Test void m02_allowNestedStructures_plainCellTreatedAsString() {
 		// allowNestedStructures=true but cell does not start with { or [ ->
 		// fallback to convertToType (no nested-parse attempt).
 		var p = CsvParser.create().allowNestedStructures(true).build();
@@ -372,7 +372,7 @@ class CsvParserSession_Test extends TestBase {
 		assertEquals(42, r.get(0).c);
 	}
 
-	@Test void m03_allowNestedStructures_withTrimStringsCombined() throws Exception {
+	@Test void m03_allowNestedStructures_withTrimStringsCombined() {
 		// allowNestedStructures=true + trimStrings=true: cell with leading whitespace
 		// before [ should still be detected as a nested structure after trim.
 		var p = CsvParser.create().allowNestedStructures(true).trimStrings().build();
@@ -386,7 +386,7 @@ class CsvParserSession_Test extends TestBase {
 	// n - Map element type with explicit value-type
 	//====================================================================================================
 
-	@Test void n01_mapCollection_typedValues() throws Exception {
+	@Test void n01_mapCollection_typedValues() {
 		// Map<String,Integer> element type drives keyType / valueType branches in parseRowIntoMap.
 		var csv = "a,b\n1,2\n3,4\n";
 		var r = (List<Map<String,Integer>>) CsvParser.DEFAULT.parse(csv,

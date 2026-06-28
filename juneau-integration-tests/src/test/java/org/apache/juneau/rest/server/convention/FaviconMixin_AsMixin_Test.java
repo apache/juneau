@@ -127,7 +127,7 @@ class FaviconMixin_AsMixin_Test extends TestBase {
 			.assertHeader("Cache-Control").is("max-age=300, public");
 	}
 
-	@Test void c02_classpathMissingFallsBackToDefault() throws Exception {
+	@Test void c02_classpathMissingFallsBackToDefault() {
 		// A builder pointed at a missing classpath path falls back to the framework default.
 		var fav = FaviconMixin.create()
 			.classpath("/no-such-favicon.ico")

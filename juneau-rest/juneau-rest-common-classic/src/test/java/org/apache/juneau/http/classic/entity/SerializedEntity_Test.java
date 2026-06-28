@@ -52,7 +52,7 @@ class SerializedEntity_Test extends TestBase {
 		assertEquals("\"hello\"", copy.asString());
 	}
 
-	@Test void a05_copyWith_noChange() throws Exception {
+	@Test void a05_copyWith_noChange() {
 		var x = serializedEntity("hello", JsonSerializer.DEFAULT);
 		var copy = x.copyWith(null, null);
 		assertSame(x, copy);
@@ -182,7 +182,7 @@ class SerializedEntity_Test extends TestBase {
 		assertEquals("hello", x.asString());
 	}
 
-	@Test void a28_copyWith_alreadySet() throws Exception {
+	@Test void a28_copyWith_alreadySet() {
 		var x = serializedEntity("hello", JsonSerializer.DEFAULT);
 		// copyWith returns same instance when serializer is already set
 		var copy = x.copyWith(JsonSerializer.DEFAULT, null);

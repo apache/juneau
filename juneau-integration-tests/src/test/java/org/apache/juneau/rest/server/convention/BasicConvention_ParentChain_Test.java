@@ -82,7 +82,7 @@ class BasicConvention_ParentChain_Test extends TestBase {
 
 	private static final MockRestClient c = MockRestClient.buildLax(A.class);
 
-	@Test void a01_allFourMixinContextsRegistered() throws Exception {
+	@Test void a01_allFourMixinContextsRegistered() {
 		MockRestClient.buildLax(A.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(A.class);
 		var ctxs = hostCtx.getMixinContexts();

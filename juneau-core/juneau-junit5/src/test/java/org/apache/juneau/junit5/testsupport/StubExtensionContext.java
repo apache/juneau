@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.junit5.testsupport;
 
+import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -94,24 +96,24 @@ public final class StubExtensionContext {
 		public Object invoke(Object proxy, Method method, Object[] args) {
 			var name = method.getName();
 			return switch (name) {
-				case "getParent" -> Optional.ofNullable(state.parent);
+				case "getParent" -> opt(state.parent);
 				case "getRoot" -> state.parent == null ? proxy : state.parent.getRoot();
 				case "getUniqueId" -> "stub:" + (state.testClass == null ? "?" : state.testClass.getName());
 				case "getDisplayName" -> "stub:" + (state.testClass == null ? "?" : state.testClass.getName());
 				case "getTags" -> Set.of();
-				case "getElement" -> Optional.ofNullable((Object) state.testClass);
-				case "getTestClass" -> Optional.ofNullable((Object) state.testClass);
+				case "getElement" -> opt((Object) state.testClass);
+				case "getTestClass" -> opt((Object) state.testClass);
 				case "getRequiredTestClass" -> Objects.requireNonNull(state.testClass, "no test class");
 				case "getEnclosingTestClasses" -> List.of();
-				case "getTestInstanceLifecycle" -> Optional.empty();
-				case "getTestInstance" -> Optional.ofNullable(state.testInstance);
+				case "getTestInstanceLifecycle" -> opte();
+				case "getTestInstance" -> opt(state.testInstance);
 				case "getRequiredTestInstance" -> Objects.requireNonNull(state.testInstance, "no test instance");
-				case "getTestInstances" -> Optional.empty();
+				case "getTestInstances" -> opte();
 				case "getRequiredTestInstances" -> throw new UnsupportedOperationException("getRequiredTestInstances");
-				case "getTestMethod" -> Optional.empty();
+				case "getTestMethod" -> opte();
 				case "getRequiredTestMethod" -> throw new UnsupportedOperationException("getRequiredTestMethod");
-				case "getExecutionException" -> Optional.empty();
-				case "getConfigurationParameter" -> Optional.empty();
+				case "getExecutionException" -> opte();
+				case "getConfigurationParameter" -> opte();
 				case "publishReportEntry", "publishFile", "publishDirectory" -> null;
 				case "getStore" -> storeFor(args);
 				case "getExecutionMode" -> throw new UnsupportedOperationException("getExecutionMode");

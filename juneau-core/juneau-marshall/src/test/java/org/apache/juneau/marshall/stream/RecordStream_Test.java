@@ -448,13 +448,13 @@ class RecordStream_Test extends TestBase {
 
 		// Either a controlled throw (SerializeException/IOException/IllegalStateException) or a
 		// bounded, throw-free completion is acceptable; a raw StackOverflowError is NOT.
-		try {
-			serialize(fmt, a);
-		} catch (StackOverflowError e) {
-			fail("cycle leaked a raw StackOverflowError for " + fmt);
-		} catch (@SuppressWarnings("unused") Throwable expectedControlledFailure) {
-			// Controlled failure — acceptable per-format cycle handling.
-		}
+		assertDoesNotThrow(() -> {
+			try {
+				serialize(fmt, a);
+			} catch (@SuppressWarnings("unused") Exception expectedControlledFailure) {
+				// Controlled failure — acceptable per-format cycle handling.
+			}
+		}, "cycle leaked a raw StackOverflowError for " + fmt);
 	}
 
 	// =====================================================================================

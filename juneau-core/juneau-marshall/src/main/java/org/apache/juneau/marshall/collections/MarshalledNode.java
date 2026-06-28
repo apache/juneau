@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.collections;
 
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -328,7 +329,7 @@ public class MarshalledNode {
 	 */
 	public Optional<MarshalledNode> find(String pointer) {
 		var o = JsonPointer.of(pointer).evalOrMissing(value);
-		return JsonPointer.isMissing(o) ? Optional.empty() : Optional.of(new MarshalledNode(o));
+		return JsonPointer.isMissing(o) ? opte() : opt(new MarshalledNode(o));
 	}
 
 	/**

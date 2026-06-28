@@ -363,7 +363,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 	// back the resource bean and the BeanStore directly.
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static RestContext build(Class<?> resourceClass) throws Exception {
+	private static RestContext build(Class<?> resourceClass) {
 		// MockRestClient.build() instantiates a RestContext for the resource class (and caches it
 		// statically); look the result up in the global registry to read the injected fields.
 		MockRestClient.build(resourceClass);

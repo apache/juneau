@@ -120,7 +120,7 @@ class RecordStreamArg_Test {
 	@Rest(serializers = org.apache.juneau.marshall.plaintext.PlainTextSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
 	public static class D_WrongCursorTypeResource {
 		@RestPost
-		public String post(JsonlTokenReader r) throws Exception {
+		public String post(JsonlTokenReader r) {
 			return "should-not-reach:" + r;
 		}
 	}

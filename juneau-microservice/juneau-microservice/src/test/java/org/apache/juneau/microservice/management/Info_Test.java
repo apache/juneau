@@ -40,12 +40,13 @@ class Info_Test extends TestBase {
 
 	/** A manifest stamped with the Q7 build/version/git fields plus a stock Main-* attribute. */
 	private static ManifestFile stampedManifest() throws IOException {
-		var mf = ""
-			+ "Manifest-Version: 1.0\n"
-			+ "Main-Class: org.apache.juneau.microservice.MyApp\n"
-			+ "Implementation-Version: 10.0.0\n"
-			+ "Build-Time: 2026-06-17T00:00:00Z\n"
-			+ "Git-Commit-Id: abc1234\n";
+		var mf = """
+				Manifest-Version: 1.0
+				Main-Class: org.apache.juneau.microservice.MyApp
+				Implementation-Version: 10.0.0
+				Build-Time: 2026-06-17T00:00:00Z
+				Git-Commit-Id: abc1234
+				""";
 		return new ManifestFile(new StringReader(mf));
 	}
 

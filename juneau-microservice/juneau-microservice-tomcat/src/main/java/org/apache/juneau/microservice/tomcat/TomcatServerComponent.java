@@ -87,6 +87,7 @@ import jakarta.servlet.*;
 })
 public class TomcatServerComponent implements MicroserviceListener {
 
+	@SuppressWarnings("java:S2245") // Non-security use: port-selection jitter only; not used for tokens, session IDs, or any security-sensitive purpose.
 	private static final Random RANDOM = new Random();
 	private static final String ROOT_CONTEXT_PATH = "";
 	private static final String ROOT_DOC_BASE = ".";

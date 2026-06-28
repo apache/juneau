@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.parquet;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -48,7 +49,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a01_temporalAsTimestampMillis() {
-		// isDateOrCalendarOrTemporal() && writeDatesAsTimestamp -> TIMESTAMP_MILLIS (line 410/411).
+		// Temporal + writeDatesAsTimestamp enabled -> TIMESTAMP_MILLIS path (line 410/411).
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
 		var s = b.buildSchema(MC.getClassMeta(Instant.class));
 		assertTrue(hasConverted(s, ParquetSchemaElement.CONVERTED_TIMESTAMP_MILLIS));
@@ -56,7 +57,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a02_temporalAsStringWhenNotTimestamp() {
-		// isDateOrCalendarOrTemporal() && !writeDatesAsTimestamp -> UTF8 string (line 412/413).
+		// Temporal + writeDatesAsTimestamp disabled -> UTF8 string path (line 412/413).
 		var b = new ParquetSchemaBuilder(MC, false, ParquetCycleHandling.NULL, 5, false);
 		var s = b.buildSchema(MC.getClassMeta(Instant.class));
 		assertTrue(hasConverted(s, ParquetSchemaElement.CONVERTED_UTF8));
@@ -65,7 +66,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a03_durationLeaf() {
-		// isDuration() -> UTF8 string (line 414/415).
+		// Duration type maps to UTF8 string (line 414/415).
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
 		var s = b.buildSchema(MC.getClassMeta(Duration.class));
 		assertTrue(hasConverted(s, ParquetSchemaElement.CONVERTED_UTF8));
@@ -73,7 +74,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a04_nativeDecimalLeaf() {
-		// nativeLogicalTypes && is(BigDecimal) -> DECIMAL (line 416/419), via a directly-resolved ClassMeta.
+		// nativeLogicalTypes + BigDecimal type -> DECIMAL (line 416/419), via a directly-resolved ClassMeta.
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, true);
 		var s = b.buildSchema(MC.getClassMeta(BigDecimal.class));
 		assertTrue(hasConverted(s, ParquetSchemaElement.CONVERTED_DECIMAL));
@@ -81,7 +82,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a05_nativeBigIntegerLeaf() {
-		// nativeLogicalTypes && is(BigInteger) -> DECIMAL (line 416, second operand).
+		// nativeLogicalTypes + BigInteger type -> DECIMAL (line 416, second operand).
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, true);
 		var s = b.buildSchema(MC.getClassMeta(BigInteger.class));
 		assertTrue(hasConverted(s, ParquetSchemaElement.CONVERTED_DECIMAL));
@@ -97,7 +98,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 
 	@Test
 	void a07_uuidLeaf() {
-		// isAssignableTo(UUID) -> FIXED_LEN_BYTE_ARRAY(16)+UUID logical (line 424/425), root and non-root.
+		// UUID type maps to FIXED_LEN_BYTE_ARRAY(16) with UUID logical type (line 424/425), root and non-root.
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
 		assertTrue(hasLogical(b.buildSchema(MC.getClassMeta(UUID.class)), ParquetSchemaElement.LOGICAL_TYPE_UUID));
 		var sample = new ArrayList<Object>(List.of(UUID.fromString("00000000-0000-0000-0000-000000000001")));
@@ -182,15 +183,15 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 	void a15_optionalRawElementNull() {
 		// Raw Optional -> element type null -> Object fallback (line 194/195), plus Optional sample unwrap.
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
-		var s = b.buildSchema(MC.getClassMeta(Optional.class), Optional.of("x"));
+		var s = b.buildSchema(MC.getClassMeta(Optional.class), opt("x"));
 		assertFalse(s.isEmpty());
 	}
 
 	@Test
 	void a16_optionalEmptySample() {
-		// Optional sample present but empty -> orElse(null) inner sample (line 196 true branch, null inner).
+		// Optional sample present but empty: null inner sample via orElse (line 196 true branch, null inner).
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
-		var s = b.buildSchema(MC.getClassMeta(Optional.class), Optional.empty());
+		var s = b.buildSchema(MC.getClassMeta(Optional.class), opte());
 		assertFalse(s.isEmpty());
 	}
 

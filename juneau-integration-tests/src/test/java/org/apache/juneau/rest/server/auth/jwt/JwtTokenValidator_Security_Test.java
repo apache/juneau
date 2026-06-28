@@ -53,7 +53,7 @@ class JwtTokenValidator_Security_Test extends TestBase {
 		assertTrue(ex.getMessage().toLowerCase().contains("alg") || ex.getMessage().toLowerCase().contains("sign"));
 	}
 
-	@Test void a02_noneInBuilderAllowlist_isRefused() throws Exception {
+	@Test void a02_noneInBuilderAllowlist_isRefused() {
 		// JWSAlgorithm has no static `NONE` constant typed as JWSAlgorithm (nimbus exposes it on the
 		// shared Algorithm parent, returned as Algorithm).  Re-creating it by name lets us assert
 		// the builder refuses the deny-listed value via the JWSAlgorithm path callers actually use.

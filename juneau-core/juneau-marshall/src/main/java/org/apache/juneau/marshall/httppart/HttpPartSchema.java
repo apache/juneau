@@ -4472,7 +4472,7 @@ public class HttpPartSchema {
 
 	private static boolean isValidIpv6(String x) {
 		// RFC 4291 IPv6 validation (simplified)
-		return x.matches("^([0-9a-fA-F]{0,4}:){7}[0-9a-fA-F]{0,4}$|^::([0-9a-fA-F]{0,4}:){0,6}[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}:){1,7}:$");
+		return x.matches("^([0-9a-fA-F]{0,4}+:){7}[0-9a-fA-F]{0,4}$|^::([0-9a-fA-F]{0,4}+:){0,6}[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}+:){1,7}:$");
 	}
 
 	private static boolean isValidIri(String x) {

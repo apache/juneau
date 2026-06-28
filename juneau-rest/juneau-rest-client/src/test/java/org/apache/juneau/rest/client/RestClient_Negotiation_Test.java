@@ -100,7 +100,7 @@ class RestClient_Negotiation_Test {
 		try (var c = RestClient.builder().defaultParser(JsonlParser.DEFAULT).build()) {
 			var accept = c.getDefaultAccept();
 			assertTrue(accept.startsWith("application/jsonl"), () -> "Default Accept was: " + accept);
-			assertFalse(accept.equals("application/json"), () -> "Default Accept was: " + accept);
+			assertNotEquals("application/json", accept, () -> "Default Accept was: " + accept);
 		}
 	}
 

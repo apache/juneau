@@ -99,7 +99,7 @@ class LogsResource_Coverage_Test extends TestBase {
 	// A. FileResource bean - size, name, type, last-modified, action listing, child-files filter.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_fileResource_size_forRegularFile() throws Exception {
+	@Test void a01_fileResource_size_forRegularFile() {
 		var f = logRoot.resolve("plain.log").toFile();
 		var fr = new FileResource(f, "plain.log", false, false);
 		assertEquals(f.length(), fr.getSize());

@@ -188,7 +188,7 @@ class BoundedServletInputStream_Test extends TestBase {
 		}
 	}
 
-	@Test void d05_close_propagates() throws Exception {
+	@Test void d05_close_propagates() {
 		var underlying = new ByteArrayInputStream("abc".getBytes());
 		var in = new BoundedServletInputStream(underlying, 10);
 		assertDoesNotThrow(in::close);

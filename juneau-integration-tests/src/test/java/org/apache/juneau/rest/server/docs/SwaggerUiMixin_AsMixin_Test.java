@@ -73,7 +73,7 @@ class SwaggerUiMixin_AsMixin_Test extends TestBase {
 			.assertContent().asString().isContains("\"swagger\":\"2.0\"");
 	}
 
-	@Test void a04_subContextsConstructed() throws Exception {
+	@Test void a04_subContextsConstructed() {
 		MockRestClient.buildLax(A.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(A.class);
 		var contexts = hostCtx.getMixinContexts();

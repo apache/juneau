@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.security.*;
@@ -87,7 +88,7 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
-public class AuthFilterChain implements Filter {
+public class AuthFilterChain implements Filter, Authenticator {
 
 	/**
 	 * A single entry in the chain: an {@link AuthFilter} paired with an optional path pattern.
@@ -193,23 +194,43 @@ public class AuthFilterChain implements Filter {
 	 * See the class-level Javadoc for the full decision flow.
 	 */
 	@Override /* Overridden from Filter */
-	@SuppressWarnings({
-		"java:S3776" // Cognitive complexity acceptable for auth filter chain dispatch
-	})
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
 		var hreq = (HttpServletRequest) req;
 		var hresp = (HttpServletResponse) resp;
 
-		// Build the effective request path relative to the context root.
-		var contextPath = hreq.getContextPath();
-		var uri = hreq.getRequestURI();
-		var path = (contextPath != null && !contextPath.isEmpty() && uri.startsWith(contextPath))
-			? uri.substring(contextPath.length())
-			: uri;
-		if (isEmpty(path))
-			path = "/";
-		var urlPath = UrlPath.of(path);
+		try {
+			var result = authenticate(hreq);
+			if (result.isPresent())
+				chain.doFilter(new AuthenticatedRequestWrapper(hreq, result.get()), resp);
+			else
+				chain.doFilter(req, resp);
+		} catch (AuthenticationException e) {
+			AuthFilter.sendChallenge(hresp, e);
+		}
+	}
+
+	/**
+	 * Runs the composed {@link AuthFilter} entries for the request and folds their results, without writing any
+	 * response.
+	 *
+	 * <p>
+	 * Selects the entries whose path pattern matches the request (or that have no pattern), runs each in declaration
+	 * order folding results via an {@link AuthResultAccumulator} (first-success principal wins, roles union), and:
+	 * <ul>
+	 * 	<li>returns the folded {@link AuthResult} if any entry succeeded;
+	 * 	<li>throws an aggregated {@link AuthenticationException} (combining all {@code WWW-Authenticate} challenges)
+	 * 		if no entry succeeded but at least one rejected the request;
+	 * 	<li>returns {@link Optional#empty()} if no entry matched the path or all matching entries returned empty.
+	 * </ul>
+	 *
+	 * @param hreq The incoming HTTP request. Never <jk>null</jk>.
+	 * @return The folded authentication result, or {@link Optional#empty()}.
+	 * @throws AuthenticationException If no entry succeeded but at least one rejected the request.
+	 */
+	@Override /* Overridden from Authenticator */
+	public Optional<AuthResult> authenticate(HttpServletRequest hreq) throws AuthenticationException {
+		var urlPath = toUrlPath(hreq);
 
 		// Select matching entries.
 		var matchingEntries = new ArrayList<Entry>();
@@ -217,32 +238,16 @@ public class AuthFilterChain implements Filter {
 			if (e.matcher == null || e.matcher.match(urlPath) != null)
 				matchingEntries.add(e);
 
-		// No filters match this path — pass through unchanged.
-		if (matchingEntries.isEmpty()) {
-			chain.doFilter(req, resp);
-			return;
-		}
+		// No filters match this path — does not apply.
+		if (matchingEntries.isEmpty())
+			return opte();
 
-		// Run all matching filters.
-		Principal principal = null;
-		AuthenticatedRequestWrapper wrapper = null;
+		var acc = new AuthResultAccumulator();
 		List<AuthenticationException> failures = null;
 
 		for (var e : matchingEntries) {
 			try {
-				var result = e.filter.authenticate(hreq);
-				if (result.isPresent()) {
-					var ar = result.get();
-					if (principal == null) {
-						// First success: this principal wins.
-						principal = ar.getPrincipal();
-						wrapper = new AuthenticatedRequestWrapper(hreq, ar);
-					} else {
-						// Subsequent success: contribute roles only.
-						wrapper.withAdditionalRoles(ar.getRoles());
-					}
-				}
-				// Empty Optional: filter doesn't apply — continue.
+				e.filter.authenticate(hreq).ifPresent(acc::add);
 			} catch (AuthenticationException ex) {
 				if (failures == null)
 					failures = new ArrayList<>();
@@ -250,50 +255,45 @@ public class AuthFilterChain implements Filter {
 			}
 		}
 
-		if (principal != null) {
-			// At least one filter succeeded.
-			chain.doFilter(wrapper, resp);
-			return;
-		}
+		var folded = acc.result();
+		if (folded.isPresent())
+			return folded;
+		if (failures != null)
+			throw aggregate(failures);
+		return opte();
+	}
 
-		if (failures != null) {
-			// No success, but at least one filter actively rejected the request.
-			sendAggregatedChallenge(hresp, failures);
-			return;
-		}
-
-		// All matching filters returned empty — no credentials for any filter; pass through.
-		chain.doFilter(req, resp);
+	/** Builds the effective request path relative to the context root. */
+	private static UrlPath toUrlPath(HttpServletRequest hreq) {
+		var contextPath = hreq.getContextPath();
+		var uri = hreq.getRequestURI();
+		var path = (contextPath != null && !contextPath.isEmpty() && uri.startsWith(contextPath))
+			? uri.substring(contextPath.length())
+			: uri;
+		if (isEmpty(path))
+			path = "/";
+		return UrlPath.of(path);
 	}
 
 	/**
-	 * Sends an aggregated {@code 401} response combining the {@code WWW-Authenticate} challenges and failure
-	 * messages from all rejecting filters.
-	 *
-	 * @param resp The HTTP response.
-	 * @param failures The list of failures to aggregate.
-	 * @throws IOException If writing to the response fails.
+	 * Aggregates multiple authentication failures into a single {@link AuthenticationException} carrying the
+	 * combined {@code WWW-Authenticate} challenges and messages.
 	 */
-	@SuppressWarnings({
-		"resource" // Writer lifecycle is servlet-managed; do not close.
-	})
-	private static void sendAggregatedChallenge(HttpServletResponse resp, List<AuthenticationException> failures)
-			throws IOException {
+	private static AuthenticationException aggregate(List<AuthenticationException> failures) {
 		var wwwAuth = failures.stream()
 			.flatMap(e -> e.getHeaders().stream())
 			.filter(h -> AuthFilter.WWW_AUTHENTICATE.equalsIgnoreCase(h.getName()))
 			.map(h -> h.getValue())
 			.distinct()
 			.collect(Collectors.joining(", "));
-		if (!wwwAuth.isEmpty())
-			resp.setHeader(AuthFilter.WWW_AUTHENTICATE, wwwAuth);
-		resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 		var body = failures.stream()
 			.map(Throwable::getMessage)
 			.filter(m -> m != null)
 			.collect(Collectors.joining("; "));
-		if (!body.isEmpty())
-			resp.getWriter().write(body);
+		var ex = new AuthenticationException(body.isEmpty() ? null : body);
+		if (!wwwAuth.isEmpty())
+			ex.wwwAuthenticate(wwwAuth);
+		return ex;
 	}
 
 	/**

@@ -30,10 +30,14 @@ import java.util.logging.*;
  *
  * @since 10.0.0
  */
+// Singleton is appropriate for a JUL logging backend — single shared instance per JVM.
+@SuppressWarnings("java:S6548")
 public class JulLogBackend implements LogBackend {
 
 	/** Process-wide shared instance (stateless). */
 	public static final JulLogBackend INSTANCE = new JulLogBackend();
+
+	private JulLogBackend() {}
 
 	@Override /* LogBackend */
 	public Map<String,String> getLevels() {

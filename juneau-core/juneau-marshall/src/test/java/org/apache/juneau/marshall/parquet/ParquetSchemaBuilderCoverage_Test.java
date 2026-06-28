@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -75,7 +76,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 	public static class Nested {
 		public String name;
 		public AllScalars inner;
-		public Optional<String> maybe = Optional.empty();
+		public Optional<String> maybe = opte();
 		public List<String> tags;
 		public List<List<Integer>> matrix;
 		public int[] nums;
@@ -103,7 +104,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		var n = new Nested();
 		n.name = "n";
 		n.inner = AllScalars.sample();
-		n.maybe = Optional.of("y");
+		n.maybe = opt("y");
 		n.tags = list("a", "b");
 		n.matrix = list(list(1, 2), list(3));
 		n.nums = new int[]{9, 8};
@@ -169,7 +170,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 
 	@Test
 	void a09_datesAsStringWhenTimestampDisabled() throws Exception {
-		// writeDatesAsTimestamp(false) routes temporals to the UTF-8 string branch (non-native path).
+		// With writeDatesAsTimestamp disabled, temporals go to the UTF-8 string branch (non-native path).
 		var t = new Temporals();
 		t.date = LocalDate.parse("2026-06-17");
 		t.ts = Instant.parse("2026-06-17T00:00:00Z");

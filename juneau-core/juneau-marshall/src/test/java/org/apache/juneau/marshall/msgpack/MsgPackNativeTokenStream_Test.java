@@ -43,10 +43,6 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 		return bos.toByteArray();
 	}
 
-	// =================================================================================
-	// A. Reader native-mode (parseNativeTokens)
-	// =================================================================================
-
 	@Test void a01_ext() throws Exception {
 		// fixext4 with type 5 and 4-byte payload.
 		var data = ext(5, (byte) 1, (byte) 2, (byte) 3, (byte) 4);
@@ -116,10 +112,6 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 		}
 	}
 
-	// =================================================================================
-	// B. Writer native-mode (serializeTokens) — round-trip through reader
-	// =================================================================================
-
 	@Test void b01_writeExt() throws Exception {
 		var bos = new ByteArrayOutputStream();
 		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
@@ -134,7 +126,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	}
 
 	@Test void b02_extInsideArray() throws Exception {
-		// [ ext(5, [1,2,3,4]) ]
+		// Round-trips an ext value inside an array.
 		var bos = new ByteArrayOutputStream();
 		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
 			w.startArray();
@@ -151,7 +143,7 @@ class MsgPackNativeTokenStream_Test extends TestBase {
 	}
 
 	@Test void b03_extInsideMap() throws Exception {
-		// { "k": ext(5, [9]) }
+		// Round-trips an ext value inside a map.
 		var bos = new ByteArrayOutputStream();
 		try (var w = MsgPackSerializer.DEFAULT.getSession().serializeTokens(bos)) {
 			w.startObject();

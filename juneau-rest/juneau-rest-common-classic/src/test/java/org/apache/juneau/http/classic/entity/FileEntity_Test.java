@@ -139,7 +139,7 @@ class FileEntity_Test extends TestBase {
 		assertFalse(x.isChunked());
 	}
 
-	@Test void a16_setContentType_string() throws Exception {
+	@Test void a16_setContentType_string() {
 		var x = new FileEntity().setContent(tempFile).setContentType("text/plain");
 		assertEquals("text/plain", x.getContentType().getValue());
 	}
@@ -172,7 +172,7 @@ class FileEntity_Test extends TestBase {
 		assertEquals(11L, x.getContentLength());
 	}
 
-	@Test void a22_setContentType_object() throws Exception {
+	@Test void a22_setContentType_object() {
 		var x = new FileEntity().setContent(tempFile).setContentType(ContentType.TEXT_HTML);
 		assertEquals("text/html", x.getContentType().getValue());
 	}

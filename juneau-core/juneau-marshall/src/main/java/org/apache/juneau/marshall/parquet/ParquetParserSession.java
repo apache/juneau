@@ -139,8 +139,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * values are stored <b>column-major</b> &mdash; reconstructing one logical record requires
 	 * reading one page from every column chunk.  Both properties force whole-file (or at minimum
 	 * whole-row-group) buffering; a true O(1)-in-rows cursor is not achievable over the current
-	 * single-row-group in-memory decoder.  Left buffered by design &mdash; see {@code TODO-175ab}
-	 * Item 3.
+	 * single-row-group in-memory decoder.  Left buffered by design.
 	 *
 	 * @param input The input.
 	 * @return A buffered {@link RecordReader}.
@@ -548,14 +547,15 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				if (parquetDebug())
 					parquetDebugLog("readSchema leaf: path=" + path + " name=" + name + " rep=" + rep
 						+ " convertedType=" + convertedType + " logicalType=" + logicalType + " pathStack=" + pathStack);
-				while (!pathStack.isEmpty()) {
+				boolean moreToDecrement = true;
+				while (!pathStack.isEmpty() && moreToDecrement) {
 					var top = pathStack.get(pathStack.size() - 1);
 					var newRemaining = top.remaining - 1;
 					if (newRemaining <= 0)
 						pathStack.remove(pathStack.size() - 1);
 					else {
 						pathStack.set(pathStack.size() - 1, new SchemaStackFrame(top.name, newRemaining));
-						break;
+						moreToDecrement = false;
 					}
 				}
 			}
@@ -684,6 +684,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return allRows;
 	}
 
+	@SuppressWarnings({
+		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
+	})
 	private List<?> readRowGroupRows(byte[] fileBytes, RowGroupMeta group, int numRows, ClassMeta<?> elementType, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical) throws ParseException {
 		var columnData = new LinkedHashMap<String, List<Object>>();
 		for (var cc : group.columns()) {
@@ -845,10 +848,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			// Null at level 1 is the only case where def==0 AND rep==0; it was flushed above.
 			if (rep == 0 && def == 0) {
 				result.add(null);   // whole field is null
-				continue;
-			}
-
-			if (def <= 2 * (depth - 1) + 1) {
+			} else if (def <= 2 * (depth - 1) + 1) {
 				// Null or empty list at nesting level k (1-indexed): def=2*(k-1) → null; def=2*(k-1)+1 → empty.
 				int level = def / 2 + 1;
 				boolean isNull = (def % 2 == 0);
@@ -985,6 +985,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		return result;
 	}
 
+	@SuppressWarnings({
+		"java:S107" // Parser-internal method threads decode state (column paths, schema repetition, logical types); parameter count is intentional.
+	})
 	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical, boolean trimStrings) throws ParseException {
 		try {
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
@@ -1048,6 +1051,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * Decodes one PLAIN-or-dictionary-encoded data page into {@code values}, appending {@link GroupNull}
 	 * sentinels for null intermediate OPTIONAL groups (GAP-14).
 	 */
+	@SuppressWarnings({
+		"java:S107" // Parser-internal method threads decode state (page metrics, def levels, logical types, value sink); parameter count is intentional.
+	})
 	static void readDataPageValues(byte[] decompressed, int pageValues, int maxDefLevel, int defBitWidth,
 			int type, boolean trimStrings, boolean isRawByteArrayColumn, boolean isUuidColumn, ColumnLogical logical,
 			boolean dictEncoded, List<Object> dictionary, List<Object> values) throws IOException, ParseException {
@@ -1299,12 +1305,12 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 					if (isTrimStrings())
 						prefix = prefix.trim();
 					setByPath(row, prefix, null);
-					continue;
+				} else {
+					var path = isListColumnPath(fullPath) ? listProp : rowRelPath;
+					if (isTrimStrings())
+						path = path.trim();
+					setByPath(row, path, v);
 				}
-				var path = isListColumnPath(fullPath) ? listProp : rowRelPath;
-				if (isTrimStrings())
-					path = path.trim();
-				setByPath(row, path, v);
 			}
 			for (var e : listBeanColumns.entrySet()) {
 				var listProp = e.getKey();
@@ -1520,12 +1526,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		for (int i = 0; i < parts.length - 1; i++) {
 			var key = parts[i];
 			var currentMap = (Map<?,?>) current;
-			Object next = currentMap.get(key);
-			if (next == null) {
-				next = new JsonMap();
-				((Map<String,Object>)currentMap).put(key, next);
-			}
-			current = next;
+			current = ((Map<String,Object>)currentMap).computeIfAbsent(key, k -> new JsonMap());
 		}
 		((Map<String,Object>)current).put(parts[parts.length - 1], value);
 	}

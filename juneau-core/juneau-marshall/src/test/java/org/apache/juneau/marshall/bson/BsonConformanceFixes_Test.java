@@ -105,14 +105,14 @@ class BsonConformanceFixes_Test extends TestBase {
 	@Test
 	void a01_localDateDoesNotCrash() throws Exception {
 		// Was: DateTimeException (Instant.from(LocalDate)) under default writeDatesAsDatetime=true.
-		var bytes = BsonSerializer.DEFAULT.serialize(JsonMap.of("d", LocalDate.of(2020, 1, 1)));
+		var bytes = BsonSerializer.DEFAULT.serialize(JsonMap.of("d", LocalDate.of(2020, Month.JANUARY, 1)));
 		var parsed = (Map<String,Object>) BsonParser.DEFAULT.parse(bytes, Map.class, String.class, Object.class);
 		assertEquals("2020-01-01", parsed.get("d"));
 	}
 
 	@Test
 	void a02_localDateTimeDoesNotCrash() throws Exception {
-		var v = LocalDateTime.of(2020, 1, 2, 3, 4, 5);
+		var v = LocalDateTime.of(2020, Month.JANUARY, 2, 3, 4, 5);
 		var bytes = BsonSerializer.DEFAULT.serialize(JsonMap.of("d", v));
 		var parsed = (Map<String,Object>) BsonParser.DEFAULT.parse(bytes, Map.class, String.class, Object.class);
 		assertEquals(v.toString(), parsed.get("d"));

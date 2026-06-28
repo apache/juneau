@@ -52,24 +52,24 @@ class OAuthFilter_Test extends TestBase {
 		return OAuthFilter.create().validator(v).build();
 	}
 
-	@Test void a01_happyPath_returnsAuthResult() throws Exception {
+	@Test void a01_happyPath_returnsAuthResult() {
 		var f = filter(token -> ALICE);
 		var result = f.authenticate(req("Bearer good-token"));
 		assertTrue(result.isPresent());
 		assertSame(ALICE, result.get().getPrincipal());
 	}
 
-	@Test void a02_missingHeader_returnsEmpty() throws Exception {
+	@Test void a02_missingHeader_returnsEmpty() {
 		var f = filter(token -> ALICE);
 		assertTrue(f.authenticate(req(null)).isEmpty());
 	}
 
-	@Test void a03_wrongScheme_returnsEmpty() throws Exception {
+	@Test void a03_wrongScheme_returnsEmpty() {
 		var f = filter(token -> ALICE);
 		assertTrue(f.authenticate(req("Basic xyz")).isEmpty());
 	}
 
-	@Test void a04_blankToken_returnsEmpty() throws Exception {
+	@Test void a04_blankToken_returnsEmpty() {
 		var f = filter(token -> ALICE);
 		assertTrue(f.authenticate(req("Bearer    ")).isEmpty());
 	}
@@ -88,7 +88,7 @@ class OAuthFilter_Test extends TestBase {
 		assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer x")));
 	}
 
-	@Test void c01_scopeClaim_splitOnWhitespace() throws Exception {
+	@Test void c01_scopeClaim_splitOnWhitespace() {
 		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", "read:orders write:orders admin"));
 		TokenValidator v = token -> cp;
 		var f = OAuthFilter.create().validator(v).build();
@@ -96,42 +96,42 @@ class OAuthFilter_Test extends TestBase {
 		assertEquals(Set.of("read:orders", "write:orders", "admin"), roles);
 	}
 
-	@Test void c02_scopeClaim_asList_collected() throws Exception {
+	@Test void c02_scopeClaim_asList_collected() {
 		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", List.of("read", "write")));
 		TokenValidator v = token -> cp;
 		var f = OAuthFilter.create().validator(v).build();
 		assertEquals(Set.of("read", "write"), f.authenticate(req("Bearer x")).get().getRoles());
 	}
 
-	@Test void c03_customRolesClaim() throws Exception {
+	@Test void c03_customRolesClaim() {
 		Principal cp = new ClaimsPrincipal("alice", Map.of("groups", List.of("admin", "user")));
 		TokenValidator v = token -> cp;
 		var f = OAuthFilter.create().validator(v).rolesClaim("groups").build();
 		assertEquals(Set.of("admin", "user"), f.authenticate(req("Bearer x")).get().getRoles());
 	}
 
-	@Test void c04_scopeClaim_nullValue_emptyRoles() throws Exception {
+	@Test void c04_scopeClaim_nullValue_emptyRoles() {
 		// extractRoles: v == null (scope key absent from claims) returns empty set.
 		Principal cp = new ClaimsPrincipal("alice", Map.of("other", "x"));
 		var f = OAuthFilter.create().validator(token -> cp).build();
 		assertTrue(f.authenticate(req("Bearer x")).get().getRoles().isEmpty());
 	}
 
-	@Test void c05_scopeClaim_stringWithLeadingBlank_blankPiecesSkipped() throws Exception {
+	@Test void c05_scopeClaim_stringWithLeadingBlank_blankPiecesSkipped() {
 		// extractRoles: "  read" split on \s+ produces ["", "read"]; blank first piece is skipped.
 		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", "  read"));
 		var f = OAuthFilter.create().validator(token -> cp).build();
 		assertEquals(Set.of("read"), f.authenticate(req("Bearer x")).get().getRoles());
 	}
 
-	@Test void c06_scopeClaim_nonStringNonCollection_emptyRoles() throws Exception {
+	@Test void c06_scopeClaim_nonStringNonCollection_emptyRoles() {
 		// extractRoles: v is an Integer — neither String nor Collection; returns empty set.
 		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", 42));
 		var f = OAuthFilter.create().validator(token -> cp).build();
 		assertTrue(f.authenticate(req("Bearer x")).get().getRoles().isEmpty());
 	}
 
-	@Test void c07_scopeClaim_collectionWithNonStringItems_nonStringSkipped() throws Exception {
+	@Test void c07_scopeClaim_collectionWithNonStringItems_nonStringSkipped() {
 		// extractRoles: Collection contains Integer items; item instanceof String is false for each.
 		Principal cp = new ClaimsPrincipal("alice", Map.of("scope", List.of(1, 2, 3)));
 		var f = OAuthFilter.create().validator(token -> cp).build();
@@ -142,7 +142,7 @@ class OAuthFilter_Test extends TestBase {
 		assertThrows(IllegalStateException.class, () -> OAuthFilter.create().build());
 	}
 
-	@Test void d02_builder_realmCustomization() throws Exception {
+	@Test void d02_builder_realmCustomization() {
 		TokenValidator v = token -> { throw new AuthenticationException("bad"); };
 		var f = OAuthFilter.create().validator(v).realm("api2").build();
 		var e = assertThrows(AuthenticationException.class, () -> f.authenticate(req("Bearer x")));

@@ -321,7 +321,7 @@ class EchoMixin_AsMixin_Test extends TestBase {
 			"null varargs should clear the redact list");
 	}
 
-	@Test void f08_zeroBodyLimitTruncatesEverything() throws Exception {
+	@Test void f08_zeroBodyLimitTruncatesEverything() {
 		// Builder accepts 0; the handler then truncates any non-empty body.
 		var b = EchoMixin.create().bodyLimit(0L).build();
 		Assertions.assertEquals(0L, b.getBodyLimit());

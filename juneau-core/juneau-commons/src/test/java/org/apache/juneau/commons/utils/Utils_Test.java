@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -475,7 +475,7 @@ class Utils_Test extends TestBase {
 		assertTrue(identity.contains("String"));
 		assertTrue(identity.contains("@"));
 		assertNull(id(null));
-		assertNotNull(id(Optional.of("test")));
+		assertNotNull(id(opt("test")));
 	}
 
 	//====================================================================================================
@@ -1113,11 +1113,11 @@ class Utils_Test extends TestBase {
 		assertEquals("test", unwrap(value));
 
 		// Test with Optional
-		var optional = Optional.of("test");
+		var optional = opt("test");
 		assertEquals("test", unwrap(optional));
 
 		// Test nested unwrapping
-		Supplier<Optional<String>> nested = () -> Optional.of("test");
+		Supplier<Optional<String>> nested = () -> opt("test");
 		assertEquals("test", unwrap(nested));
 
 		// Test regular object
@@ -1264,7 +1264,7 @@ class Utils_Test extends TestBase {
 		assertFalse(lte(10, 5));
 		assertTrue(lte("apple", "banana"));
 		assertTrue(lte("apple", "apple"));
-		assertTrue(lte(null, null)); // null equals null
+		assertTrue(lte((String)null, null)); // null equals null
 		assertTrue(lte(null, "apple")); // null is less than non-null
 		assertFalse(lte("apple", null));
 	}
@@ -1293,7 +1293,7 @@ class Utils_Test extends TestBase {
 		assertFalse(gte(5, 10));
 		assertTrue(gte("banana", "apple"));
 		assertTrue(gte("apple", "apple"));
-		assertTrue(gte(null, null)); // null equals null
+		assertTrue(gte((String)null, null)); // null equals null
 		assertFalse(gte(null, "apple")); // null is not greater
 		assertTrue(gte("apple", null)); // non-null is greater than null
 	}
@@ -1459,7 +1459,7 @@ class Utils_Test extends TestBase {
 		assertEquals("apple", min("banana", "apple"));
 		assertEquals(10, min(null, 10));
 		assertEquals(10, min(10, null));
-		assertNull(min(null, null));
+		assertNull(min((String)null, null));
 	}
 
 	//====================================================================================================
@@ -1474,7 +1474,7 @@ class Utils_Test extends TestBase {
 		assertEquals("banana", max("banana", "apple"));
 		assertEquals(10, max(null, 10));
 		assertEquals(10, max(10, null));
-		assertNull(max(null, null));
+		assertNull(max((String)null, null));
 	}
 
 	//====================================================================================================
@@ -1507,7 +1507,7 @@ class Utils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a085_lt_null_null() {
-		assertFalse(lt(null, null));
+		assertFalse(lt((String)null, null));
 		assertTrue(lt(null, "x"));
 	}
 

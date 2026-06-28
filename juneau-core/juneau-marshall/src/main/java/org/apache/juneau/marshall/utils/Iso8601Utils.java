@@ -474,7 +474,7 @@ public final class Iso8601Utils {
 		s2 = s2.substring(2);
 		long totalNanos = 0;
 		boolean found = false;
-		var p = Pattern.compile("(\\d+(?:\\.\\d+)?)\\s*([HhMmSs])");
+		var p = Pattern.compile("(\\d++(?:\\.\\d++)?+)\\s*([HhMmSs])");
 		var m = p.matcher(s2);
 		while (m.find()) {
 			found = true;

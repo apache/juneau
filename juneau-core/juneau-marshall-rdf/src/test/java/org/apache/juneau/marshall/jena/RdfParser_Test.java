@@ -742,10 +742,10 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(result);
 		}
 
-		public interface H06_Animal {}
+		public interface H06Animal {}
 
 		@Marshalled(typeName = "H06Dog")
-		public static class H06_Dog implements H06_Animal {
+		public static class H06_Dog implements H06Animal {
 			public String name = "Buddy";
 		}
 
@@ -757,7 +757,7 @@ class RdfParser_Test extends TestBase {
 			var bpNs = p.getJuneauBpNs().getUri();
 			var rdf = "_:B1 <" + bpNs + "_type> \"H06Dog\" .\n"
 				+ "_:B1 <" + bpNs + "name> \"Buddy\" .\n";
-			var result = p.parse(rdf, H06_Animal.class);
+			var result = p.parse(rdf, H06Animal.class);
 			assertNotNull(result);
 		}		public static class H07_FullBean {
 			public String known = "x";
@@ -819,10 +819,12 @@ class RdfParser_Test extends TestBase {
 			assertTrue(result.isEmpty());
 		}
 
-		@Test void h13_parse_too_many_roots_throws() throws Exception {
+		@Test void h13_parse_too_many_roots_throws() {
 			// N-Triple with two disconnected resources — too many roots → ParseException (line 503-504)
-			var rdf = "<http://a.example.org/1> <http://p.example.org/prop> \"val1\" .\n"
-				+ "<http://b.example.org/2> <http://p.example.org/prop> \"val2\" .\n";
+			var rdf = """
+					<http://a.example.org/1> <http://p.example.org/prop> "val1" .
+					<http://b.example.org/2> <http://p.example.org/prop> "val2" .
+					""";
 			assertThrows(Exception.class, () -> RdfParser.create().ntriple().build().parse(rdf, String.class));
 		}
 	}
@@ -842,7 +844,7 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(result);
 		}
 
-		public interface I02_TypedInterface {}
+		public interface I02TypedInterface {}
 
 		@SuppressWarnings("rawtypes")
 		@Test void i02_parse_unknown_type_name() throws Exception {
@@ -994,7 +996,7 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(result);
 		}
 
-		@Test void i18_parse_string_from_resource_without_pvalue_throws() throws Exception {
+		@Test void i18_parse_string_from_resource_without_pvalue_throws() {
 			// Named resource without pValue wrapper parsed as String — triggers getValue():
 			// n.isLiteral()=FALSE (line 193), n.isResource()=TRUE (line 195), nn(st)=FALSE (line 197) → ParseException
 			var rdf = "<http://ex.org/a> <http://ex.org/p> \"x\" .\n";
@@ -1051,10 +1053,12 @@ class RdfParser_Test extends TestBase {
 			assertNull(result);
 		}
 
-		@Test void i24_parse_multiple_roots_throws() throws Exception {
+		@Test void i24_parse_multiple_roots_throws() {
 			// Two unconnected resources → getRoots() returns 2 → doParse line 503-504 throws ParseException
-			var rdf = "<http://ex.org/a> <http://ex.org/p> \"x\" .\n"
-				+ "<http://ex.org/b> <http://ex.org/p> \"y\" .\n";
+			var rdf = """
+					<http://ex.org/a> <http://ex.org/p> "x" .
+					<http://ex.org/b> <http://ex.org/p> "y" .
+					""";
 			assertThrows(Exception.class, () -> RdfParser.create().ntriple().build().parse(rdf, String.class));
 		}
 

@@ -190,8 +190,6 @@ public class Json5lParserSession extends Json5ParserSession {
 			return false;
 		// A line that is exactly a single block comment (possibly with surrounding whitespace,
 		// already trimmed) is comment-only.  Anything after the closing */ makes it parseable.
-		if (trimmed.startsWith("/*") && trimmed.endsWith("*/") && trimmed.indexOf("*/") == trimmed.length() - 2)
-			return false;
-		return true;
+		return !(trimmed.startsWith("/*") && trimmed.endsWith("*/") && trimmed.indexOf("*/") == trimmed.length() - 2);
 	}
 }

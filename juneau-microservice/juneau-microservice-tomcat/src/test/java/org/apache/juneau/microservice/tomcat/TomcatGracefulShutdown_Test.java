@@ -27,7 +27,7 @@ import org.apache.juneau.rest.server.health.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Graceful-shutdown / readiness-gating tests for {@link TomcatServerComponent} (TODO-174a).
+ * Graceful-shutdown / readiness-gating tests for {@link TomcatServerComponent}.
  *
  * <p>
  * Mirrors {@code JettyGracefulShutdown_Test} so both embedded servers share one zero-downtime contract:
@@ -83,7 +83,7 @@ class TomcatGracefulShutdown_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_defaultStopTimeoutConstant() {
-		assertEquals(Duration.ofSeconds(30), TomcatServerComponent.DEFAULT_STOP_TIMEOUT);
+		assertEquals(TomcatServerComponent.DEFAULT_STOP_TIMEOUT, Duration.ofSeconds(30));
 	}
 
 	@Test void b02_settingsRoundTrip() {

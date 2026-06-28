@@ -318,7 +318,7 @@ class MockServletRequest_Coverage_Test extends TestBase {
 	// MockServletRequest getter/setter methods
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void b01_gettersAndSetters() throws Exception {
+	@Test void b01_gettersAndSetters() {
 		var req = MockServletRequest.create("GET", "/test");
 
 		// Basic getters

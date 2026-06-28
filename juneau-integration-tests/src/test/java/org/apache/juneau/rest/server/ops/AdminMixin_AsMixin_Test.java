@@ -262,7 +262,7 @@ class AdminMixin_AsMixin_Test extends TestBase {
 			r.getThreadNamePrefixExclude());
 	}
 
-	@Test void d07_denyAllGuardRejects() throws Exception {
+	@Test void d07_denyAllGuardRejects() {
 		var g = new DenyAllGuard();
 		Assertions.assertFalse(g.isRequestAllowed((RestRequest) null),
 			"DenyAllGuard must always reject");

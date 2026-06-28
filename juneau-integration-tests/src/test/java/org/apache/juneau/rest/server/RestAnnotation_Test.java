@@ -271,4 +271,24 @@ class RestAnnotation_Test extends TestBase {
 		assertNotEqualsAny(a1.hashCode(), 0, -1);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// authenticator attribute (10.0.0)
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class Z01_Authenticator extends org.apache.juneau.rest.server.auth.RestAuthenticator {
+		@Override public java.util.Optional<org.apache.juneau.rest.server.auth.AuthResult> authenticate(RestRequest req) {
+			return opte();
+		}
+	}
+
+	@Test void z01_authenticatorAttribute() {
+		var a = RestAnnotation.create().authenticator(Z01_Authenticator.class).build();
+		assertEquals(Z01_Authenticator.class, a.authenticator());
+	}
+
+	@Test void z02_authenticatorDefaultsToNullSentinel() {
+		var a = RestAnnotation.create().build();
+		assertEquals(org.apache.juneau.rest.server.auth.RestAuthenticator.Null.class, a.authenticator());
+	}
 }

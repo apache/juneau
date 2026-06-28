@@ -85,7 +85,7 @@ class RedocMixin_AsMixin_Test extends TestBase {
 			.assertContent().asString().isContains("openapi:");
 	}
 
-	@Test void a06_subContextsConstructed() throws Exception {
+	@Test void a06_subContextsConstructed() {
 		MockRestClient.buildLax(A.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(A.class);
 		var contexts = hostCtx.getMixinContexts();

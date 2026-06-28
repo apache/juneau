@@ -197,7 +197,7 @@ class ParquetColumnReader_Test extends TestBase {
 		// advance() called more times than numValues short-circuits at readCount >= numValues.
 		var r = new ParquetColumnReader(new byte[]{1, 0, 0, 0}, 1, 0);
 		r.advance();
-		assertTrue(r.hasNext() == false);
+		assertFalse(r.hasNext());
 		r.advance(); // past the end — no-op, must not throw
 		assertFalse(r.hasNext());
 	}

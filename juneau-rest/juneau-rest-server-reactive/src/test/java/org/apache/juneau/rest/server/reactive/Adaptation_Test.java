@@ -49,7 +49,7 @@ class Adaptation_Test extends TestBase {
 	@Test void b01_stream_isStream_true() {
 		Flow.Publisher<String> pub = sub -> sub.onSubscribe(new Flow.Subscription() {
 			@Override public void request(long n) { sub.onComplete(); }
-			@Override public void cancel() {}
+			@Override public void cancel() { /* publisher completes immediately; cancellation is never needed */ }
 		});
 		var a = Adaptation.stream(pub);
 		assertTrue(a.isStream());

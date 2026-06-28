@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -48,9 +49,9 @@ class OidcSessionAuthFilter_Test extends TestBase {
 	}
 
 	private static OidcSession session(String id) {
-		return new OidcSession(id, "alice", Optional.of("sess-1"),
+		return new OidcSession(id, "alice", opt("sess-1"),
 			new ClaimsPrincipal("alice", Map.of("sub", "alice")),
-			Set.of("user"), Optional.empty(), NOW, NOW.plus(Duration.ofHours(8)));
+			Set.of("user"), opte(), NOW, NOW.plus(Duration.ofHours(8)));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

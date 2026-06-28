@@ -34,10 +34,6 @@ import org.junit.jupiter.api.*;
 })
 class MsgPackTokenStream_Test extends TestBase {
 
-	// =================================================================================
-	// A. Reader
-	// =================================================================================
-
 	@Nested class A_reader extends TestBase {
 
 		@Test void a01_emptyMap() throws Exception {
@@ -79,14 +75,10 @@ class MsgPackTokenStream_Test extends TestBase {
 			}
 		}
 
-		@Test void a05_capability() throws Exception {
+		@Test void a05_capability() {
 			assertInstanceOf(TokenReadable.class, MsgPackParser.DEFAULT);
 		}
 	}
-
-	// =================================================================================
-	// B. Writer (length-prefixed via buffering)
-	// =================================================================================
 
 	@Nested class B_writer extends TestBase {
 
@@ -148,7 +140,7 @@ class MsgPackTokenStream_Test extends TestBase {
 			assertArrayEquals(new byte[]{(byte) 0xC4, 0x03, 0x01, 0x02, 0x03}, bos.toByteArray());
 		}
 
-		@Test void b06_capability() throws Exception {
+		@Test void b06_capability() {
 			assertInstanceOf(TokenWritable.class, MsgPackSerializer.DEFAULT);
 		}
 
@@ -174,10 +166,6 @@ class MsgPackTokenStream_Test extends TestBase {
 			assertDoesNotThrow(w::flush);
 		}
 	}
-
-	// =================================================================================
-	// C. Round-trip
-	// =================================================================================
 
 	@Nested class C_roundTrip extends TestBase {
 
@@ -210,10 +198,6 @@ class MsgPackTokenStream_Test extends TestBase {
 			}
 		}
 	}
-
-	// =================================================================================
-	// D. read() and object()
-	// =================================================================================
 
 	@Nested class D_bridges extends TestBase {
 

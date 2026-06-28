@@ -28,11 +28,13 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.auth.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -129,6 +131,22 @@ public abstract class RestServlet extends HttpServlet {
 	 */
 	public static <R extends RestServlet> DefaultBuilder<R> builder(Class<R> type) {
 		return new DefaultBuilder<>(type);
+	}
+
+	/**
+	 * Returns the resource-level authenticator for this servlet, or <jk>null</jk> to fall through to the
+	 * {@code @Rest(authenticator=...)} annotation / registered bean / {@code @Bean} factory method.
+	 *
+	 * <p>
+	 * This is the lowest-precedence rung in the {@link RestAuthenticator} resolution chain (see design spec
+	 * &sect;5.3).  Subclasses can override it to supply an authenticator programmatically.
+	 *
+	 * @param beanStore The bean store for dependency resolution.
+	 * @return The authenticator, or <jk>null</jk> (the default).
+	 * @since 10.0.0
+	 */
+	public RestAuthenticator createAuthenticator(BeanStore beanStore) {
+		return null;
 	}
 
 	@Override /* Overridden from GenericServlet */

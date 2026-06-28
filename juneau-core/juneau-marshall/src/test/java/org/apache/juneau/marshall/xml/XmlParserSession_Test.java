@@ -51,21 +51,21 @@ class XmlParserSession_Test extends TestBase {
 	// a01 - Builder.property() switch coverage
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_builder_preserveRootElement() throws Exception {
+	@Test void a01_builder_preserveRootElement() {
 		var s = XmlParser.create().build().createSession()
 			.property("preserveRootElement", "true")
 			.build();
 		assertTrue(s.isPreserveRootElement());
 	}
 
-	@Test void a02_builder_validating() throws Exception {
+	@Test void a02_builder_validating() {
 		var s = XmlParser.create().build().createSession()
 			.property("validating", "true")
 			.build();
 		assertTrue(s.isValidating());
 	}
 
-	@Test void a03_builder_qualifiedKeys() throws Exception {
+	@Test void a03_builder_qualifiedKeys() {
 		var s = XmlParser.create().build().createSession()
 			.property("XmlParserSession.preserveRootElement", "true")
 			.property("XmlParserSession.validating", "true")
@@ -74,7 +74,7 @@ class XmlParserSession_Test extends TestBase {
 		assertTrue(s.isValidating());
 	}
 
-	@Test void a04_builder_unknownKeyFallsThrough() throws Exception {
+	@Test void a04_builder_unknownKeyFallsThrough() {
 		// Unknown key → default branch → super.property delegates without effect.
 		var s = XmlParser.create().build().createSession()
 			.property("UnknownKey", "value")
@@ -109,7 +109,7 @@ class XmlParserSession_Test extends TestBase {
 	// c01 - getUnknown() / generic Map parsing branches
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_unknown_attributesOnlyAndWithText() throws Exception {
+	@Test void c01_unknown_attributesOnlyAndWithText() {
 		// Element with attrs only → MarshalledMap with attrs only.
 		var m1 = (Map) P.parse("<A b='1' c='2'/>", Object.class);
 		assertEquals("1", m1.get("b"));
@@ -120,13 +120,13 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals("hello", m2.get("contents"));
 	}
 
-	@Test void c03_unknown_cdataAndPiAndComment() throws Exception {
+	@Test void c03_unknown_cdataAndPiAndComment() {
 		// CDATA appends text; PI and comments are skipped (PROCESSING_INSTRUCTION/COMMENT branches).
 		assertEquals("hello", P.parse("<A><![CDATA[hello]]></A>", Object.class));
 		assertEquals("hello", P.parse("<A><?pi data?><!-- comment -->hello</A>", Object.class));
 	}
 
-	@Test void c05_unknown_duplicateKeysAccumulateIntoList() throws Exception {
+	@Test void c05_unknown_duplicateKeysAccumulateIntoList() {
 		// First duplicate → JsonList; third occurrence → MarshalledList.add() branch.
 		var m = (Map) P.parse("<A><x>1</x><x>2</x><x>3</x></A>", Object.class);
 		var v = m.get("x");
@@ -134,7 +134,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals(3, ((List) v).size());
 	}
 
-	@Test void c07_unknown_namedNestedElements() throws Exception {
+	@Test void c07_unknown_namedNestedElements() {
 		// _name attribute drives the key name in the parent generic map.
 		// The child's content goes through getUnknown which sees the _name attribute and so
 		// builds a MarshalledMap; with text "v" it ends up as {contents: "v"}.
@@ -142,7 +142,7 @@ class XmlParserSession_Test extends TestBase {
 		assertNotNull(m.get("custom"));
 	}
 
-	@Test void c08_unknown_namespacedChildren() throws Exception {
+	@Test void c08_unknown_namespacedChildren() {
 		// Child elements with namespaces → keys are local-only (decoded), values parsed.
 		var xml = "<A xmlns:ns='http://x'><ns:b>1</ns:b><ns:c>2</ns:c></A>";
 		var m = (Map) P.parse(xml, Object.class);
@@ -174,7 +174,7 @@ class XmlParserSession_Test extends TestBase {
 	// e01 - parseIntoMap / Map parsing with typed keys/values + duplicate handling
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_intKeyMap() throws Exception {
+	@Test void e01_intKeyMap() {
 		// Parse a Map<Integer,String> with encoded element names; convertAttrToType bridges to Integer.
 		var src = "<object><_x0031_>a</_x0031_><_x0032_>b</_x0032_></object>";
 		Map<Integer, String> m = P.parse(src, HashMap.class, Integer.class, String.class);
@@ -182,7 +182,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals("b", m.get(2));
 	}
 
-	@Test void e02_genericMap_attributeAndDuplicates() throws Exception {
+	@Test void e02_genericMap_attributeAndDuplicates() {
 		// Top-level map with attribute → attribute becomes entry.  Duplicate child names roll into a
 		// JsonList, third occurrence appends to the existing list.
 		var m1 = (Map) P.parse("<object a='1'><b>2</b></object>", Map.class);
@@ -192,7 +192,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals(3, ((List) m2.get("x")).size());
 	}
 
-	@Test void e03_emptyMap() throws Exception {
+	@Test void e03_emptyMap() {
 		var m = P.parse("<object/>", JsonMap.class);
 		assertNotNull(m);
 		assertTrue(m.isEmpty());
@@ -202,21 +202,21 @@ class XmlParserSession_Test extends TestBase {
 	// f01 - parseIntoCollection / Array branches
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_collection_strings() throws Exception {
+	@Test void f01_collection_strings() {
 		var xml = "<array><string>a</string><string>b</string><string>c</string></array>";
 		var l = P.parse(xml, List.class);
 		assertEquals(3, l.size());
 		assertEquals("a", l.get(0));
 	}
 
-	@Test void f02_collection_typedList() throws Exception {
+	@Test void f02_collection_typedList() {
 		var xml = "<array><number>1</number><number>2</number></array>";
 		var l = (LinkedList<Integer>) P.parse(xml, LinkedList.class, Integer.class);
 		assertEquals(2, l.size());
 		assertEquals(Integer.valueOf(1), l.get(0));
 	}
 
-	@Test void f03_collection_emptyAndPrimArray() throws Exception {
+	@Test void f03_collection_emptyAndPrimArray() {
 		var emptyArr = P.parse("<array/>", String[].class);
 		assertEquals(0, emptyArr.length);
 		var arr = P.parse("<array><number>1</number><number>2</number><number>3</number></array>", int[].class);
@@ -227,19 +227,19 @@ class XmlParserSession_Test extends TestBase {
 	// g01 - parseAnything: scalar types and the type-attribute / element-name dispatch
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void g01_nilTrueReturnsNull() throws Exception {
+	@Test void g01_nilTrueReturnsNull() {
 		// "_type=null" or "nil=true" path: <object nil='true'/> when target is bean produces null/empty; // NOSONAR
 		// _type='null' returns null directly.
 		var o = P.parse("<x _type='null'/>", Object.class);
 		assertNull(o);
 	}
 
-	@Test void g02_typeNumber() throws Exception {
+	@Test void g02_typeNumber() {
 		var n = P.parse("<x _type='number'>42</x>", Object.class);
 		assertEquals(42, n);
 	}
 
-	@Test void g03_typeBooleanStringArrayObject() throws Exception {
+	@Test void g03_typeBooleanStringArrayObject() {
 		assertEquals(Boolean.TRUE, P.parse("<x _type='boolean'>true</x>", Object.class));
 		assertEquals("hi", P.parse("<x _type='string'>hi</x>", Object.class));
 		var l = (List) P.parse("<x _type='array'><string>a</string></x>", Object.class);
@@ -248,7 +248,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals("1", m.get("a"));
 	}
 
-	@Test void g04_targetCharacterAndOptional() throws Exception {
+	@Test void g04_targetCharacterAndOptional() {
 		assertEquals(Character.valueOf('z'), P.parse("<x>z</x>", Character.class));
 		var o = (Optional<Integer>) P.parse("<x>5</x>", Optional.class, Integer.class);
 		assertTrue(o.isPresent());
@@ -259,7 +259,7 @@ class XmlParserSession_Test extends TestBase {
 	// h01 - preserveRootElement + Map / generic Object
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void h01_preserveRoot_genericMap() throws Exception {
+	@Test void h01_preserveRoot_genericMap() {
 		var p = XmlParser.create().preserveRootElement().build();
 		var m = p.parse("<wrap><a>1</a></wrap>", JsonMap.class);
 		assertEquals("{\"wrap\":{\"a\":\"1\"}}", m.toString());
@@ -275,7 +275,7 @@ class XmlParserSession_Test extends TestBase {
 		public String b;
 	}
 
-	@Test void i01_attrFormat() throws Exception {
+	@Test void i01_attrFormat() {
 		var x = "<object a='1'><b>2</b></object>";
 		var bean = P.parse(x, AttrBean.class);
 		assertEquals("1", bean.a);
@@ -287,7 +287,7 @@ class XmlParserSession_Test extends TestBase {
 		public List<String> items = new ArrayList<>();
 	}
 
-	@Test void i02_collapsedFormat() throws Exception {
+	@Test void i02_collapsedFormat() {
 		var x = "<object><x>a</x><x>b</x><x>c</x></object>";
 		var bean = P.parse(x, CollapsedBean.class);
 		assertEquals(3, bean.items.size());
@@ -301,7 +301,7 @@ class XmlParserSession_Test extends TestBase {
 		public String b;
 	}
 
-	@Test void i03_textFormat() throws Exception {
+	@Test void i03_textFormat() {
 		var x = "<object a='aval'>text-content</object>";
 		var bean = P.parse(x, TextBean.class);
 		assertEquals("aval", bean.a);
@@ -315,7 +315,7 @@ class XmlParserSession_Test extends TestBase {
 		public String b;
 	}
 
-	@Test void i04_xmlTextFormat() throws Exception {
+	@Test void i04_xmlTextFormat() {
 		var x = "<object a='aval'>before<i>middle</i>after</object>";
 		var bean = P.parse(x, XmlTextBean.class);
 		assertEquals("aval", bean.a);
@@ -332,7 +332,7 @@ class XmlParserSession_Test extends TestBase {
 		public Object[] b;
 	}
 
-	@Test void i05_elementsFormat() throws Exception {
+	@Test void i05_elementsFormat() {
 		var x = "<object a='aval'><string>foo</string><number>1</number><boolean>true</boolean></object>";
 		var bean = P.parse(x, ElementsBean.class);
 		assertEquals("aval", bean.a);
@@ -346,7 +346,7 @@ class XmlParserSession_Test extends TestBase {
 		public int b;
 	}
 
-	@Test void i06_attrsFormat() throws Exception {
+	@Test void i06_attrsFormat() {
 		var x = "<object a='foo' b='42'/>";
 		var bean = P.parse(x, AttrsBean.class);
 		assertEquals("foo", bean.a);
@@ -362,7 +362,7 @@ class XmlParserSession_Test extends TestBase {
 		public int f2;
 	}
 
-	@Test void j01_commentInsideBean() throws Exception {
+	@Test void j01_commentInsideBean() {
 		// Comments between bean property elements should be ignored (event == COMMENT branch in parseIntoBean).
 		var x = "<object><!-- skip --><f1>hi</f1><f2>5</f2></object>";
 		var bean = P.parse(x, SimpleBean.class);
@@ -376,7 +376,7 @@ class XmlParserSession_Test extends TestBase {
 		assertThrows(ParseException.class, () -> P.parse(x, SimpleBean.class));
 	}
 
-	@Test void j03_ignoreUnknownProperty() throws Exception {
+	@Test void j03_ignoreUnknownProperty() {
 		var p = XmlParser.create().ignoreUnknownBeanProperties().build();
 		var x = "<object><nope>1</nope><f1>hi</f1></object>";
 		var bean = p.parse(x, SimpleBean.class);
@@ -387,7 +387,7 @@ class XmlParserSession_Test extends TestBase {
 	// k01 - Sub-document parsing: parseIntoMap with attribute on map-element
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void k01_mapAttributeBecomesEntryAndNestedMap() throws Exception {
+	@Test void k01_mapAttributeBecomesEntryAndNestedMap() {
 		// Map element with an attribute → attribute becomes a key (parseIntoMap attr loop).
 		// Nested object property becomes nested Map.
 		var x = "<object x='val'><inner><a>1</a></inner></object>";
@@ -400,7 +400,7 @@ class XmlParserSession_Test extends TestBase {
 	// l01 - Encoded element names with _xNNNN_ escapes
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void l01_encodedElementName() throws Exception {
+	@Test void l01_encodedElementName() {
 		// Element name "_x0061_" decodes to "a" via getElementName/decodeString.
 		var x = "<object><_x0061_>1</_x0061_></object>";
 		var m = (Map) P.parse(x, Map.class);
@@ -411,7 +411,7 @@ class XmlParserSession_Test extends TestBase {
 	// m01 - parseIntoBean error and content-property combinations
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void m01_parseIntoMap_facadeEntryPoint() throws Exception {
+	@Test void m01_parseIntoMap_facadeEntryPoint() {
 		// XmlParser.parseIntoMap dispatches into XmlParserSession.doParseIntoMap.
 		var dest = new LinkedHashMap<String,Integer>();
 		var x = "<object><a>1</a><b>2</b></object>";
@@ -420,7 +420,7 @@ class XmlParserSession_Test extends TestBase {
 		assertEquals(2, dest.get("b"));
 	}
 
-	@Test void m02_parseIntoCollection_facadeEntryPoint() throws Exception {
+	@Test void m02_parseIntoCollection_facadeEntryPoint() {
 		// XmlParser.parseIntoCollection dispatches into XmlParserSession.doParseIntoCollection.
 		var dest = new ArrayList<String>();
 		var x = "<array><string>x</string><string>y</string></array>";
@@ -441,7 +441,7 @@ class XmlParserSession_Test extends TestBase {
 		public List<Object> b = new ArrayList<>();
 	}
 
-	@Test void n01_mixedFormat_collection() throws Exception {
+	@Test void n01_mixedFormat_collection() {
 		// MIXED format with collection content property accumulates text nodes & elements.
 		var x = "<object a='aval'>text1<x>el</x>text2</object>";
 		var bean = P.parse(x, MixedBean.class);
@@ -454,7 +454,7 @@ class XmlParserSession_Test extends TestBase {
 	// o01 - Wrapped (preserveRoot) Map target
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void o01_preserveRoot_typedMap_and_objectType() throws Exception {
+	@Test void o01_preserveRoot_typedMap_and_objectType() {
 		// preserveRoot wraps both typed-Map and generic-Object/_type='object' targets.
 		var p = XmlParser.create().preserveRootElement().build();
 		var m = (Map) p.parse("<root><a>1</a></root>", HashMap.class);
@@ -475,7 +475,7 @@ class XmlParserSession_Test extends TestBase {
 		public String b;
 	}
 
-	@Test void p01_textPwsFormat_withInnerElement() throws Exception {
+	@Test void p01_textPwsFormat_withInnerElement() {
 		// TEXT_PWS preserves whitespace and parseText() is invoked when an inner element is found
 		// inside the text-content property.  The inner element is stringified into b.
 		var x = "<object a='aval'>before<i>inner</i>after</object>";
@@ -490,7 +490,7 @@ class XmlParserSession_Test extends TestBase {
 	// q01 - Object target with _type='string' and Character target (line 820-821 isChar branch)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void q01_objectTargetCharacterFromTypedString() throws Exception {
+	@Test void q01_objectTargetCharacterFromTypedString() {
 		// _type='string' on Object target → if Object equals char, parse as character.  We exercise
 		// the isChar branch here by parsing into Character target where parseAnything still routes
 		// through the OBJECT/STRING branch via type-attribute.
@@ -502,7 +502,7 @@ class XmlParserSession_Test extends TestBase {
 	// r01 - parseAnything: numeric on element-name dispatch (sType is Object, jsonType from element name)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void r01_elementNameDispatch_number() throws Exception {
+	@Test void r01_elementNameDispatch_number() {
 		// When inside a generic Map context, elements with _type='number' dispatch jsonType=NUMBER.
 		var m = (Map) P.parse("<object><k _type='number'>42</k></object>", Map.class);
 		assertEquals(42, m.get("k"));
@@ -512,19 +512,19 @@ class XmlParserSession_Test extends TestBase {
 	// s — XmlReader constructor: reporter / resolver / eventAllocator non-null branches
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void s01_parseWithReporter_succeeds() throws Exception {
+	@Test void s01_parseWithReporter_succeeds() {
 		var parser = XmlParser.create().reporter(XmlConfigAnnotationTest.AB.class).build();
 		var bean = parser.parse("<object><name>Alice</name><age>30</age></object>", JsonMap.class);
 		assertEquals("Alice", bean.get("name"));
 	}
 
-	@Test void s02_parseWithResolver_succeeds() throws Exception {
+	@Test void s02_parseWithResolver_succeeds() {
 		var parser = XmlParser.create().resolver(XmlConfigAnnotationTest.AC.class).build();
 		var bean = parser.parse("<object><name>Bob</name></object>", JsonMap.class);
 		assertEquals("Bob", bean.get("name"));
 	}
 
-	@Test void s03_parseWithEventAllocator_succeeds() throws Exception {
+	@Test void s03_parseWithEventAllocator_succeeds() {
 		var parser = XmlParser.create().eventAllocator(XmlConfigAnnotationTest.AA.class).build();
 		var bean = parser.parse("<object><x>test</x></object>", JsonMap.class);
 		assertEquals("test", bean.get("x"));

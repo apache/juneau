@@ -36,13 +36,29 @@ import java.util.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Duplicated "principal" literal is an assertion parameter name; a constant would obscure rather than clarify.
+})
 public final class AuthResult {
 
-	private final Principal principal;
+	/**
+	 * Controls how an {@link AuthResult} merges with results accumulated earlier in an authenticator chain.
+	 *
+	 * @since 10.0.0
+	 */
+	public enum MergeMode {
+		/** Union this result's roles into the accumulated set; principal is optional (<jk>null</jk> keeps the inherited principal). */
+		ADD,
+		/** Discard everything accumulated so far; this result's principal + roles win.  Principal is required. */
+		REPLACE
+	}
+
+	private final Principal principal;   // may be null only in ADD mode
 	private final Set<String> roles;
+	private final MergeMode mode;
 
 	/**
-	 * Creates an {@link AuthResult} with the specified principal and roles.
+	 * Creates an {@link AuthResult} with the specified principal and roles using {@link MergeMode#ADD} mode.
 	 *
 	 * @param principal The authenticated principal. Must not be <jk>null</jk>.
 	 * @param roles The roles granted to this principal. May be empty.
@@ -50,11 +66,11 @@ public final class AuthResult {
 	 */
 	public static AuthResult of(Principal principal, String... roles) {
 		assertArgNotNull("principal", principal);
-		return new AuthResult(principal, roles == null ? Collections.emptySet() : new HashSet<>(Arrays.asList(roles)));
+		return new AuthResult(principal, toSet(roles), MergeMode.ADD);
 	}
 
 	/**
-	 * Creates an {@link AuthResult} with the specified principal and role set.
+	 * Creates an {@link AuthResult} with the specified principal and role set using {@link MergeMode#ADD} mode.
 	 *
 	 * @param principal The authenticated principal. Must not be <jk>null</jk>.
 	 * @param roles The roles granted to this principal. May be <jk>null</jk> or empty.
@@ -62,21 +78,88 @@ public final class AuthResult {
 	 */
 	public static AuthResult of(Principal principal, Set<String> roles) {
 		assertArgNotNull("principal", principal);
-		return new AuthResult(principal, roles == null ? Collections.emptySet() : new HashSet<>(roles));
+		return new AuthResult(principal, toSet(roles), MergeMode.ADD);
 	}
 
-	private AuthResult(Principal principal, Set<String> roles) {
+	/**
+	 * Creates a roles-only {@link AuthResult} ({@link MergeMode#ADD} mode, <jk>null</jk> principal).
+	 *
+	 * <p>
+	 * Use this to contribute additional roles without supplying a principal &mdash; the accumulated/inherited
+	 * principal is kept.  This replaces the need for a separate roles-only authenticator type.
+	 *
+	 * @param roles The roles to contribute. May be empty.
+	 * @return A new {@link AuthResult}.
+	 */
+	public static AuthResult ofRoles(String... roles) {
+		return new AuthResult(null, toSet(roles), MergeMode.ADD);
+	}
+
+	/**
+	 * Creates a roles-only {@link AuthResult} ({@link MergeMode#ADD} mode, <jk>null</jk> principal).
+	 *
+	 * @param roles The roles to contribute. May be <jk>null</jk> or empty.
+	 * @return A new {@link AuthResult}.
+	 */
+	public static AuthResult ofRoles(Collection<String> roles) {
+		return new AuthResult(null, toSet(roles), MergeMode.ADD);
+	}
+
+	/**
+	 * Creates an {@link AuthResult} that {@link MergeMode#REPLACE replaces} any accumulated identity and roles.
+	 *
+	 * @param principal The authenticated principal. Must not be <jk>null</jk>.
+	 * @param roles The roles granted to this principal. May be empty.
+	 * @return A new {@link AuthResult}.
+	 */
+	public static AuthResult replacing(Principal principal, String... roles) {
+		assertArgNotNull("principal", principal);
+		return new AuthResult(principal, toSet(roles), MergeMode.REPLACE);
+	}
+
+	/**
+	 * Creates an {@link AuthResult} that {@link MergeMode#REPLACE replaces} any accumulated identity and roles.
+	 *
+	 * @param principal The authenticated principal. Must not be <jk>null</jk>.
+	 * @param roles The roles granted to this principal. May be <jk>null</jk> or empty.
+	 * @return A new {@link AuthResult}.
+	 */
+	public static AuthResult replacing(Principal principal, Set<String> roles) {
+		assertArgNotNull("principal", principal);
+		return new AuthResult(principal, toSet(roles), MergeMode.REPLACE);
+	}
+
+	private static Set<String> toSet(String... roles) {
+		return roles == null ? Collections.emptySet() : new HashSet<>(Arrays.asList(roles));
+	}
+
+	private static Set<String> toSet(Collection<String> roles) {
+		return roles == null ? Collections.emptySet() : new HashSet<>(roles);
+	}
+
+	private AuthResult(Principal principal, Set<String> roles, MergeMode mode) {
 		this.principal = principal;
 		this.roles = Collections.unmodifiableSet(roles);
+		this.mode = mode;
 	}
 
 	/**
 	 * Returns the authenticated principal.
 	 *
-	 * @return The authenticated principal. Never <jk>null</jk>.
+	 * @return The authenticated principal.  May be <jk>null</jk> for a roles-only ({@link MergeMode#ADD}) result.
 	 */
 	public Principal getPrincipal() {
 		return principal;
+	}
+
+	/**
+	 * Returns the merge mode for this result.
+	 *
+	 * @return The merge mode. Never <jk>null</jk>.
+	 * @since 10.0.0
+	 */
+	public MergeMode getMode() {
+		return mode;
 	}
 
 	/**

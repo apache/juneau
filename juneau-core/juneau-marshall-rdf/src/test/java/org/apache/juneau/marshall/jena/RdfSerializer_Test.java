@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.jena;
 
+import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -286,9 +287,6 @@ class RdfSerializer_Test extends TestBase {
 		public static class E01_ChildBean extends E01_RdfParentWithBeanUri {}
 
 		@Test void e01_beanPropertyMeta_parent_rdf() throws Exception {
-			// E01_ChildBean inherits @Rdf from both parents
-			// ap.find(Rdf.class, ChildBean.classMeta) traverses PARENTS → finds both @Rdf annotations
-			// This should populate rdfs and execute forEach body at lines 67-71
 			var s = (RdfSerializer) RdfSerializer.create().language("N-TRIPLE").build();
 			var bc = s.getMarshallingContext();
 			var cm = bc.getClassMeta(E01_ChildBean.class);
@@ -1071,7 +1069,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k15_stream_optional_thrift() throws Exception {
 			// Optional serialized and parsed via Thrift — covers isOptional() branch in stream sessions
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(Optional.of("opt-val"));
+				.serialize(opt("opt-val"));
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
 				.parse(bytes, Optional.class);
 			assertNotNull(result);
@@ -1516,7 +1514,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void l01_serialize_optional() throws Exception {
 			// Serialize Optional<String> — covers isOptional(aType) branch (line 220) in serializeAnything
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(Optional.of("opt-value"));
+			var result = s.serialize(opt("opt-value"));
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}

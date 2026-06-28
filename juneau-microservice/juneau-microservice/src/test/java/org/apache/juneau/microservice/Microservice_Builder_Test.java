@@ -163,7 +163,7 @@ class Microservice_Builder_Test extends TestBase {
 		assertThrows(RuntimeException.class, () -> Microservice.create().manifest(42));
 	}
 
-	@Test void a23_builder_copyWithLogConfig() throws Exception {
+	@Test void a23_builder_copyWithLogConfig() {
 		var lc = LogConfig.create().logFile("test.log").count(3);
 		var b = Microservice.create().logConfig(lc);
 		var copy = b.copy();

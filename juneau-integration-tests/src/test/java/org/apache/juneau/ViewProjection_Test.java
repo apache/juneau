@@ -259,13 +259,13 @@ class ViewProjection_Test extends TestBase {
 	// I2: MarshallingSession.getActiveView() — covers the getter body (line 738 in MarshallingSession).
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void i02_getActiveView_returnsConfiguredValue() throws Exception {
+	@Test void i02_getActiveView_returnsConfiguredValue() {
 		var s = Json5Serializer.DEFAULT.copy().activeView("summary").build();
 		var session = (MarshallingSession) s.createSession().build();
 		assertEquals("summary", session.getActiveView());
 	}
 
-	@Test void i03_getActiveView_nullByDefault() throws Exception {
+	@Test void i03_getActiveView_nullByDefault() {
 		var s = Json5Serializer.DEFAULT.copy().build();
 		var session = (MarshallingSession) s.createSession().build();
 		assertNull(session.getActiveView());

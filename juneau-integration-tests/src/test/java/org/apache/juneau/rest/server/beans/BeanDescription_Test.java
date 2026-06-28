@@ -95,7 +95,7 @@ class BeanDescription_Test extends TestBase {
 	// c. BeanPropertyDescription serialization.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_serializesAsJson() throws Exception {
+	@Test void c01_serializesAsJson() {
 		var d = BeanDescription.of(SimpleBean.class);
 		var s = JsonSerializer.DEFAULT.toString(d);
 		assertNotNull(s);

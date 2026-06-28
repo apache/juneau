@@ -220,16 +220,16 @@ public class JsonTokenReader implements TokenReader {
 	//
 	//   S00_expectValue                 - At root, after [, after :, after , inside [.
 	//                                        Expecting a JSON value: { [ " digit t f n.
-	//                                        Dispatches to readValueStart(c).
+	//                                        Dispatches to readValueStart.
 	//   S01_expectFieldName             - After { or after , inside {.
 	//                                        Expecting a quoted string field name (or }).
-	//                                        Dispatches to readFieldNameOrEndObject(c).
+	//                                        Dispatches to readFieldNameOrEndObject.
 	//   S02_expectColon                 - Just emitted a FIELD_NAME.  Expecting :.
-	//                                        Handled inline by readColonThenValue(c).
+	//                                        Handled inline by readColonThenValue.
 	//   S03_expectCommaOrEndObject      - Just emitted a value inside {.  Expecting , or }.
-	//                                        Dispatches to readCommaOrEndObject(c).
+	//                                        Dispatches to readCommaOrEndObject.
 	//   S04_expectCommaOrEndArray       - Just emitted a value inside [.  Expecting , or ].
-	//                                        Dispatches to readCommaOrEndArray(c).
+	//                                        Dispatches to readCommaOrEndArray.
 	//   S05_end                         - Root document fully consumed.  next() returns
 	//                                        END_OF_STREAM.
 	//
@@ -504,9 +504,7 @@ public class JsonTokenReader implements TokenReader {
 		pipe.close();
 	}
 
-	// =================================================================================
 	// State-machine dispatch
-	// =================================================================================
 
 	/**
 	 * State-machine dispatch: handles the next character at {@link #S00_expectValue}.
@@ -675,9 +673,7 @@ public class JsonTokenReader implements TokenReader {
 			state = S03_expectCommaOrEndObject;
 	}
 
-	// =================================================================================
 	// Scalar readers
-	// =================================================================================
 
 	/**
 	 * Reads a double-quoted JSON string from the current input position.
@@ -818,9 +814,7 @@ public class JsonTokenReader implements TokenReader {
 			throw parseException(MSG_invalidNumber, s);
 	}
 
-	// =================================================================================
 	// Reader helpers
-	// =================================================================================
 
 	/**
 	 * Reads the next non-whitespace, non-comment character or -1 at end of stream.
@@ -887,9 +881,7 @@ public class JsonTokenReader implements TokenReader {
 		return c >= '0' && c <= '9';
 	}
 
-	// =================================================================================
 	// Container stack
-	// =================================================================================
 
 	/**
 	 * Pushes a new container onto the cursor's depth stack.

@@ -198,7 +198,7 @@ class LazyChildren_Test extends TestBase {
 	}
 
 	@Test
-	void a04_builderOverride_lazyChildInitTrueOverridesEagerDefault() throws Exception {
+	void a04_builderOverride_lazyChildInitTrueOverridesEagerDefault() {
 		// Use Builder.lazyChildInit(true) to force lazy on a resource that has no annotation.
 		// The Builder is package-private, so this test is in the org.apache.juneau.rest.server.server package.
 		var d = new D_EagerParent();
