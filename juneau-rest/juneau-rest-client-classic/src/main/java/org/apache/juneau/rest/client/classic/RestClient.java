@@ -8020,7 +8020,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		if (parsers.isEmpty())
 			return null;
 		if (nn(mediaType)) {
-			var p = parsers.getParser(mediaType);
+			var p = parsers.getParser(mediaType).orElse(null);
 			if (nn(p))
 				return p;
 		}
@@ -8037,7 +8037,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		if (serializers.isEmpty())
 			return null;
 		if (nn(mediaType)) {
-			var s = serializers.getSerializer(mediaType);
+			var s = serializers.getSerializer(mediaType).orElse(null);
 			if (nn(s))
 				return s;
 		}

@@ -48,7 +48,9 @@ class ResponseBody_Cursor_Test {
 			.header("Content-Type", "application/json")
 			.body(new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)))
 			.build();
-		return new RestResponse(tr, RestClient.create());
+		// Register a JSON parser so the negotiated-parser cursor paths resolve from the application/json Content-Type
+		// (there is no implicit JSON fallback as of 10.0.0).
+		return new RestResponse(tr, RestClient.builder().parser(JsonParser.DEFAULT).build());
 	}
 
 	// ==========================================================================

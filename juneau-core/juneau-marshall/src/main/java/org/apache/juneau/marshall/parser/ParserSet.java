@@ -70,7 +70,7 @@ import org.apache.juneau.marshall.*;
  * 		.build();
  *
  * 	<jc>// Find the appropriate parser by Content-Type</jc>
- * 	ReaderParser <jv>parser</jv> = (ReaderParser)<jv>parsers</jv>.getParser(<js>"text/json"</js>);
+ * 	ReaderParser <jv>parser</jv> = (ReaderParser)<jv>parsers</jv>.getParser(<js>"text/json"</js>).orElseThrow();  <jc>// Throws if no parser matched the Content-Type.</jc>
  *
  * 	<jc>// Parse a bean from JSON</jc>
  * 	String <jv>json</jv> = <js>"{...}"</js>;
@@ -561,33 +561,31 @@ public class ParserSet {
 	/**
 	 * Same as {@link #getParserMatch(MediaType)} but returns just the matched parser.
 	 *
-	 * @param mediaType The HTTP media type.
-	 * @return The parser that matched the media type, or <jk>null</jk> if no match was made.
+	 * @param mediaType The HTTP media type.  Can be <jk>null</jk>.
+	 * @return The parser that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
-	public Parser getParser(MediaType mediaType) {
-		ParserMatch pm = getParserMatch(mediaType);
-		return pm == null ? null : pm.getParser();
+	public Optional<Parser> getParser(MediaType mediaType) {
+		return getParserMatch(mediaType).map(ParserMatch::getParser);
 	}
 
 	/**
 	 * Same as {@link #getParserMatch(String)} but returns just the matched parser.
 	 *
 	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header string.
-	 * @return The parser that matched the content type header, or <jk>null</jk> if no match was made.
+	 * @return The parser that matched the content type header, or {@link Optional#empty()} if no match was made.
 	 */
-	public Parser getParser(String contentTypeHeader) {
-		ParserMatch pm = getParserMatch(contentTypeHeader);
-		return pm == null ? null : pm.getParser();
+	public Optional<Parser> getParser(String contentTypeHeader) {
+		return getParserMatch(contentTypeHeader).map(ParserMatch::getParser);
 	}
 
 	/**
 	 * Same as {@link #getParserMatch(String)} but matches using a {@link MediaType} instance.
 	 *
-	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.
-	 * @return The parser and media type that matched the media type, or <jk>null</jk> if no match was made.
+	 * @param mediaType The HTTP <l>Content-Type</l> header value as a media type.  Can be <jk>null</jk>.
+	 * @return The parser and media type that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
-	public ParserMatch getParserMatch(MediaType mediaType) {
-		return getParserMatch(mediaType.toString());
+	public Optional<ParserMatch> getParserMatch(MediaType mediaType) {
+		return mediaType == null ? opte() : getParserMatch(mediaType.toString());
 	}
 
 	/**
@@ -596,13 +594,15 @@ public class ParserSet {
 	 * <p>
 	 * The returned object includes both the parser and media type that matched.
 	 *
-	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.
-	 * @return The parser and media type that matched the content type header, or <jk>null</jk> if no match was made.
+	 * @param contentTypeHeader The HTTP <l>Content-Type</l> header value.  Can be <jk>null</jk>.
+	 * @return The parser and media type that matched the content type header, or {@link Optional#empty()} if no match was made.
 	 */
-	public ParserMatch getParserMatch(String contentTypeHeader) {
+	public Optional<ParserMatch> getParserMatch(String contentTypeHeader) {
+		if (contentTypeHeader == null)
+			return opte();
 		ParserMatch pm = cache.get(contentTypeHeader);
 		if (nn(pm))
-			return pm;
+			return opt(pm);
 
 		var ct = MediaType.of(contentTypeHeader);
 		int match = ct.match(l(mediaTypes));
@@ -612,7 +612,7 @@ public class ParserSet {
 			cache.putIfAbsent(contentTypeHeader, pm);
 		}
 
-		return cache.get(contentTypeHeader);
+		return opt(cache.get(contentTypeHeader));
 	}
 
 	/**

@@ -84,7 +84,8 @@ class NextGenContentNegotiation_Test {
 	void a01_outboundContentTypeFromDefaultSerializer() throws Exception {
 		var sset = SerializerSet.create().add(JsonlSerializer.DEFAULT).build();
 		try (var mock = MockRestClient.create(JsonlServer.class)) {
-			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).serializers(sset).build()) {
+			// A registered set is no longer an implicit default — designate the default serializer explicitly.
+			try (var nc = RestClient.builder().transport(mock.getClient().getTransport()).serializers(sset).defaultSerializer(JsonlSerializer.DEFAULT).build()) {
 				var rawBody = nc.post("/echoContentType").body(new Bean("a", 1)).run().body().asString();
 				var echoed = JsonParser.DEFAULT.parse(rawBody, String.class);
 				assertTrue(echoed.startsWith("application/jsonl"), () -> "Echoed Content-Type was: " + echoed);

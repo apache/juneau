@@ -83,9 +83,9 @@ class MixinInheritance_Parsers_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
 		assertNotNull(mixinCtx);
 
-		assertNotNull(hostCtx.getParsers().getParser(MediaType.of("text/host-p1")),
+		assertTrue(hostCtx.getParsers().getParser(MediaType.of("text/host-p1")).isPresent(),
 			"Host must register its declared HostP1 parser");
-		assertNotNull(mixinCtx.getParsers().getParser(MediaType.of("text/host-p1")),
+		assertTrue(mixinCtx.getParsers().getParser(MediaType.of("text/host-p1")).isPresent(),
 			"Mixin with no parser overrides must inherit the host's HostP1 parser");
 	}
 
@@ -95,11 +95,11 @@ class MixinInheritance_Parsers_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinP1.class);
 		assertNotNull(mixinCtx);
 
-		assertNull(hostCtx.getParsers().getParser(MediaType.of("text/mixin-p1")),
+		assertTrue(hostCtx.getParsers().getParser(MediaType.of("text/mixin-p1")).isEmpty(),
 			"Host endpoint must NOT have MixinP1 — mixin contributions are scoped to the mixin context");
-		assertNotNull(mixinCtx.getParsers().getParser(MediaType.of("text/mixin-p1")),
+		assertTrue(mixinCtx.getParsers().getParser(MediaType.of("text/mixin-p1")).isPresent(),
 			"Mixin endpoint must have MixinP1 via the mixin's own @Rest(parsers=)");
-		assertNotNull(mixinCtx.getParsers().getParser(MediaType.of("text/host-p1")),
+		assertTrue(mixinCtx.getParsers().getParser(MediaType.of("text/host-p1")).isPresent(),
 			"Mixin endpoint must still have the host's HostP1 (inheritance walk)");
 	}
 
@@ -109,14 +109,14 @@ class MixinInheritance_Parsers_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_NoInheritP1.class);
 		assertNotNull(mixinCtx);
 
-		assertNotNull(mixinCtx.getParsers().getParser(MediaType.of("text/mixin-p1")),
+		assertTrue(mixinCtx.getParsers().getParser(MediaType.of("text/mixin-p1")).isPresent(),
 			"Mixin's own MixinP1 must be present");
-		assertNull(mixinCtx.getParsers().getParser(MediaType.of("text/host-p1")),
+		assertTrue(mixinCtx.getParsers().getParser(MediaType.of("text/host-p1")).isEmpty(),
 			"Mixin with noInherit=\"parsers\" must NOT see the host's HostP1 (parent walk blocked)");
 
-		assertNotNull(hostCtx.getParsers().getParser(MediaType.of("text/host-p1")),
+		assertTrue(hostCtx.getParsers().getParser(MediaType.of("text/host-p1")).isPresent(),
 			"Host must retain its HostP1 regardless of mixin's noInherit");
-		assertNull(hostCtx.getParsers().getParser(MediaType.of("text/mixin-p1")),
+		assertTrue(hostCtx.getParsers().getParser(MediaType.of("text/mixin-p1")).isEmpty(),
 			"Host must NOT pick up MixinP1 from a noInherit-isolated mixin");
 	}
 }

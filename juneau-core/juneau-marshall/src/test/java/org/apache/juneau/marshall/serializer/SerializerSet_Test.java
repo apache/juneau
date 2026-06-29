@@ -38,25 +38,25 @@ class SerializerSet_Test extends TestBase {
 	@Test void a01_serializerGroupMatching() {
 
 		var sg = SerializerSet.create().add(SA1.class, SA2.class, SA3.class).build();
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo"));
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a"));
-		assertInstanceOf(SA1.class, sg.getSerializer("text/xxx+foo_a"));
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a+xxx"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar_a"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo+xxx"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo+xxx"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz+yyy"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a+yyy"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz"));
-		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz_a"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo").orElseThrow());
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a").orElseThrow());
+		assertInstanceOf(SA1.class, sg.getSerializer("text/xxx+foo_a").orElseThrow());
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo_a+xxx").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/foo+bar_a").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar+foo+xxx").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/bar_a+foo+xxx").orElseThrow());
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz").orElseThrow());
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a").orElseThrow());
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz+yyy").orElseThrow());
+		assertInstanceOf(SA3.class, sg.getSerializer("text/baz_a+yyy").orElseThrow());
+		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz").orElseThrow());
+		assertInstanceOf(SA3.class, sg.getSerializer("text/yyy+baz_a").orElseThrow());
 
-		assertInstanceOf(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8"));
-		assertInstanceOf(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9"));
+		assertInstanceOf(SA1.class, sg.getSerializer("text/foo;q=0.9,text/foo+bar;q=0.8").orElseThrow());
+		assertInstanceOf(SA2.class, sg.getSerializer("text/foo;q=0.8,text/foo+bar;q=0.9").orElseThrow());
 	}
 
 	public static class SA1 extends JsonSerializer {
@@ -130,9 +130,9 @@ class SerializerSet_Test extends TestBase {
 	@Test void a03_mediaTypesWithMetaCharacters() {
 		var gb = SerializerSet.create().add(SC1.class, SC2.class, SC3.class);
 		var g = gb.build();
-		assertInstanceOf(SC1.class, g.getSerializer("text/foo"));
-		assertInstanceOf(SC2.class, g.getSerializer("foo/json"));
-		assertInstanceOf(SC3.class, g.getSerializer("foo/foo"));
+		assertInstanceOf(SC1.class, g.getSerializer("text/foo").orElseThrow());
+		assertInstanceOf(SC2.class, g.getSerializer("foo/json").orElseThrow());
+		assertInstanceOf(SC3.class, g.getSerializer("foo/foo").orElseThrow());
 	}
 
 	public static class SC1 extends JsonSerializer {
@@ -166,7 +166,7 @@ class SerializerSet_Test extends TestBase {
 	@Test void b01_builder_addInstancesDirectly() {
 		var instance = new SB1(JsonSerializer.create().accept("text/1"));
 		var s = SerializerSet.create().add(instance).build();
-		assertInstanceOf(SB1.class, s.getSerializer("text/1"));
+		assertInstanceOf(SB1.class, s.getSerializer("text/1").orElseThrow());
 	}
 
 	@Test void b02_builder_addInvalidClassThrows() {
@@ -178,9 +178,9 @@ class SerializerSet_Test extends TestBase {
 		var sb = SerializerSet.create().add(SB1.class, SB2.class);
 		sb.set(SerializerSet.Inherit.class, SB3.class);
 		var s = sb.build();
-		assertInstanceOf(SB1.class, s.getSerializer("text/1"));
-		assertInstanceOf(SB2.class, s.getSerializer("text/2"));
-		assertInstanceOf(SB3.class, s.getSerializer("text/3"));
+		assertInstanceOf(SB1.class, s.getSerializer("text/1").orElseThrow());
+		assertInstanceOf(SB2.class, s.getSerializer("text/2").orElseThrow());
+		assertInstanceOf(SB3.class, s.getSerializer("text/3").orElseThrow());
 	}
 
 	@Test void b04_builder_setWithInvalidClassThrows() {
@@ -225,8 +225,8 @@ class SerializerSet_Test extends TestBase {
 		var sb1 = SerializerSet.create().add(SB1.class);
 		var sb2 = sb1.copy();
 		sb2.add(SB2.class);
-		assertNotNull(sb2.build().getSerializer("text/2"));
-		assertNull(sb1.build().getSerializer("text/2"));
+		assertTrue(sb2.build().getSerializer("text/2").isPresent());
+		assertTrue(sb1.build().getSerializer("text/2").isEmpty());
 	}
 
 	@Test void b12_builder_beanContext_propagatesToBuilders() {
@@ -280,18 +280,18 @@ class SerializerSet_Test extends TestBase {
 	@Test void b19_serializerSet_copy_returnsNewBuilder() {
 		var s = SerializerSet.create().add(SB1.class).build();
 		var copy = s.copy();
-		assertInstanceOf(SB1.class, copy.build().getSerializer("text/1"));
+		assertInstanceOf(SB1.class, copy.build().getSerializer("text/1").orElseThrow());
 	}
 
 	@Test void b20_getSerializer_byMediaType() {
 		var s = SerializerSet.create().add(SB1.class).build();
-		assertInstanceOf(SB1.class, s.getSerializer(MediaType.of("text/1")));
-		assertNull(s.getSerializer(MediaType.of("text/unknown")));
+		assertInstanceOf(SB1.class, s.getSerializer(MediaType.of("text/1")).orElseThrow());
+		assertTrue(s.getSerializer(MediaType.of("text/unknown")).isEmpty());
 	}
 
-	@Test void b21_getSerializer_nullMediaType_returnsNull() {
+	@Test void b21_getSerializer_nullMediaType_returnsEmpty() {
 		var s = SerializerSet.create().add(SB1.class).build();
-		assertNull(s.getSerializer((MediaType) null));
+		assertTrue(s.getSerializer((MediaType) null).isEmpty());
 	}
 
 	@Test void b22_builder_clear_removesAllEntries() {
@@ -303,22 +303,22 @@ class SerializerSet_Test extends TestBase {
 
 	@Test void b23_getSerializerMatch_byMediaType() {
 		var s = SerializerSet.create().add(SB1.class).build();
-		assertNotNull(s.getSerializerMatch(MediaType.of("text/1")));
+		assertTrue(s.getSerializerMatch(MediaType.of("text/1")).isPresent());
 	}
 
-	@Test void b24_getSerializerMatch_nullString_returnsNull() {
+	@Test void b24_getSerializerMatch_nullString_returnsEmpty() {
 		var s = SerializerSet.create().add(SB1.class).build();
-		assertNull(s.getSerializerMatch((String) null));
+		assertTrue(s.getSerializerMatch((String) null).isEmpty());
 	}
 
 	@Test void b25_getWriterSerializer_byMediaType() {
 		var s = SerializerSet.create().add(SB1.class).build();
-		assertInstanceOf(SB1.class, s.getWriterSerializer(MediaType.of("text/1")));
+		assertInstanceOf(SB1.class, s.getWriterSerializer(MediaType.of("text/1")).orElseThrow());
 	}
 
 	@Test void b26_add_serializerWithNoArgConstructor_instantiatesDirectly() {
 		var s = SerializerSet.create().add(SimpleSerializer.class).build();
-		assertInstanceOf(SimpleSerializer.class, s.getSerializer("text/simple"));
+		assertInstanceOf(SimpleSerializer.class, s.getSerializer("text/simple").orElseThrow());
 	}
 
 	@Test void b27_copy_withSerializerInstance_coversNonBuilderBranch() {
@@ -328,9 +328,9 @@ class SerializerSet_Test extends TestBase {
 		assertFalse(copy.inner().isEmpty());
 	}
 
-	@Test void b28_getStreamSerializer_withNoMatch_returnsNull() {
+	@Test void b28_getStreamSerializer_withNoMatch_returnsEmpty() {
 		var s = SerializerSet.create().add(SB1.class).build();
-		assertNull(s.getStreamSerializer(MediaType.of("text/unknown")));
-		assertNull(s.getStreamSerializer("text/unknown"));
+		assertTrue(s.getStreamSerializer(MediaType.of("text/unknown")).isEmpty());
+		assertTrue(s.getStreamSerializer("text/unknown").isEmpty());
 	}
 }

@@ -69,7 +69,8 @@ import org.apache.juneau.marshall.*;
  *
  * 	<jc>// Find the appropriate serializer by Accept type</jc>
  * 	WriterSerializer <jv>serializer</jv> = <jv>serializers</jv>
- * 		.getWriterSerializer(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>);
+ * 		.getWriterSerializer(<js>"text/foo, text/json;q=0.8, text/*;q:0.6, *\/*;q=0.0"</js>)
+ * 		.orElseThrow();  <jc>// Throws if no serializer matched the Accept header.</jc>
  *
  * 	<jc>// Serialize a bean to JSON text </jc>
  * 	AddressBook <jv>addressBook</jv> = <jk>new</jk> AddressBook();  <jc>// Bean to serialize.</jc>
@@ -567,33 +568,30 @@ public class SerializerSet {
 	 * Same as {@link #getSerializerMatch(MediaType)} but returns just the matched serializer.
 	 *
 	 * @param mediaType The HTTP media type.
-	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public Serializer getSerializer(MediaType mediaType) {
-		if (mediaType == null)
-			return null;
-		return getSerializer(mediaType.toString());
+	public Optional<Serializer> getSerializer(MediaType mediaType) {
+		return getSerializerMatch(mediaType).map(SerializerMatch::getSerializer);
 	}
 
 	/**
 	 * Same as {@link #getSerializerMatch(String)} but returns just the matched serializer.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
-	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public Serializer getSerializer(String acceptHeader) {
-		SerializerMatch sm = getSerializerMatch(acceptHeader);
-		return sm == null ? null : sm.getSerializer();
+	public Optional<Serializer> getSerializer(String acceptHeader) {
+		return getSerializerMatch(acceptHeader).map(SerializerMatch::getSerializer);
 	}
 
 	/**
 	 * Same as {@link #getSerializerMatch(String)} but matches using a {@link MediaType} instance.
 	 *
-	 * @param mediaType The HTTP media type.
-	 * @return The serializer and media type that matched the media type, or <jk>null</jk> if no match was made.
+	 * @param mediaType The HTTP media type.  Can be <jk>null</jk>.
+	 * @return The serializer and media type that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
-	public SerializerMatch getSerializerMatch(MediaType mediaType) {
-		return getSerializerMatch(mediaType.toString());
+	public Optional<SerializerMatch> getSerializerMatch(MediaType mediaType) {
+		return mediaType == null ? opte() : getSerializerMatch(mediaType.toString());
 	}
 
 	/**
@@ -617,14 +615,14 @@ public class SerializerSet {
 	 * The returned object includes both the serializer and media type that matched.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
-	 * @return The serializer and media type that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer and media type that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public SerializerMatch getSerializerMatch(String acceptHeader) {
+	public Optional<SerializerMatch> getSerializerMatch(String acceptHeader) {
 		if (acceptHeader == null)
-			return null;
+			return opte();
 		SerializerMatch sm = cache.get(acceptHeader);
 		if (nn(sm))
-			return sm;
+			return opt(sm);
 
 		var a = MediaRanges.of(acceptHeader);
 		int match = a.match(mediaRangesList);
@@ -633,7 +631,7 @@ public class SerializerSet {
 			cache.putIfAbsent(acceptHeader, sm);
 		}
 
-		return cache.get(acceptHeader);
+		return opt(cache.get(acceptHeader));
 	}
 
 	/**
@@ -647,20 +645,20 @@ public class SerializerSet {
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link OutputStreamSerializer}.
 	 *
 	 * @param mediaType The HTTP media type.
-	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public OutputStreamSerializer getStreamSerializer(MediaType mediaType) {
-		return (OutputStreamSerializer)getSerializer(mediaType);
+	public Optional<OutputStreamSerializer> getStreamSerializer(MediaType mediaType) {
+		return getSerializer(mediaType).map(OutputStreamSerializer.class::cast);
 	}
 
 	/**
 	 * Same as {@link #getSerializer(String)}, but casts it to an {@link OutputStreamSerializer}.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
-	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public OutputStreamSerializer getStreamSerializer(String acceptHeader) {
-		return (OutputStreamSerializer)getSerializer(acceptHeader);
+	public Optional<OutputStreamSerializer> getStreamSerializer(String acceptHeader) {
+		return getSerializer(acceptHeader).map(OutputStreamSerializer.class::cast);
 	}
 
 	/**
@@ -677,20 +675,20 @@ public class SerializerSet {
 	 * Same as {@link #getSerializer(MediaType)}, but casts it to a {@link WriterSerializer}.
 	 *
 	 * @param mediaType The HTTP media type.
-	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public WriterSerializer getWriterSerializer(MediaType mediaType) {
-		return (WriterSerializer)getSerializer(mediaType);
+	public Optional<WriterSerializer> getWriterSerializer(MediaType mediaType) {
+		return getSerializer(mediaType).map(WriterSerializer.class::cast);
 	}
 
 	/**
 	 * Same as {@link #getSerializer(String)}, but casts it to a {@link WriterSerializer}.
 	 *
 	 * @param acceptHeader The HTTP <l>Accept</l> header string.
-	 * @return The serializer that matched the accept header, or <jk>null</jk> if no match was made.
+	 * @return The serializer that matched the accept header, or {@link Optional#empty()} if no match was made.
 	 */
-	public WriterSerializer getWriterSerializer(String acceptHeader) {
-		return (WriterSerializer)getSerializer(acceptHeader);
+	public Optional<WriterSerializer> getWriterSerializer(String acceptHeader) {
+		return getSerializer(acceptHeader).map(WriterSerializer.class::cast);
 	}
 
 	/**

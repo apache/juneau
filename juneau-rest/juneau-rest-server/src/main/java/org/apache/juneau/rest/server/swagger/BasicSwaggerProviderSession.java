@@ -733,7 +733,7 @@ public class BasicSwaggerProviderSession {
 
 		for (var mt : mediaTypes) {
 			if (mt != MediaType.HTML) {
-				var s2 = sm.getSerializers().getSerializer(mt);
+				var s2 = sm.getSerializers().getSerializer(mt).orElse(null);
 				if (nn(s2)) {
 					try {
 						// @formatter:off

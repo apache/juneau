@@ -43,6 +43,10 @@ import org.springframework.boot.test.web.server.*;
  */
 @org.apache.juneau.testing.annotations.SpringbootTest
 @SpringBootTest(classes = App.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SuppressWarnings({
+	"java:S8692", // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.
+	"java:S2925" // warmUpServer() readiness loop needs a back-off between retries; without it a ConnectException would busy-spin. No event/latch to await and Awaitility isn't on the test classpath.
+})
 class PetstoreSpringboot_Test {
 
 	@LocalServerPort
@@ -53,10 +57,50 @@ class PetstoreSpringboot_Test {
 		.followRedirects(HttpClient.Redirect.NEVER)
 		.build();
 
+	private static volatile boolean warmedUp;
+
+	/**
+	 * Primes the root endpoint before the timed test methods run.
+	 *
+	 * <p>
+	 * Spring Boot's {@code RANDOM_PORT} environment only waits for the Tomcat connector to bind — not for the Juneau
+	 * REST servlet to initialize. The first request to the group resource ({@code /}) forces one-time
+	 * {@code RestContext} setup of the root <i>and all of its child resources</i> (serializer/parser metadata,
+	 * {@code HtmlDocSerializer} construction) in a single request. Under a loaded CI agent this cold start can exceed
+	 * the per-request timeout the test methods use (it timed out at exactly 10s in build #2472). Absorbing that
+	 * startup cost here once (with a generous budget + retry) removes the race from {@code a01} while keeping the
+	 * per-test timeouts tight. Mirrors the same guard in {@code PetstoreJetty_Test}.
+	 */
+	@BeforeEach
+	void warmUpServer() throws Exception {
+		if (warmedUp)
+			return;
+		var deadline = Instant.now().plusSeconds(30);
+		Exception last = null;
+		while (Instant.now().isBefore(deadline)) {
+			try {
+				var req = HttpRequest.newBuilder()
+					.uri(URI.create("http://localhost:" + port + "/"))
+					.timeout(Duration.ofSeconds(20))
+					.header("Accept", "text/html")
+					.GET()
+					.build();
+				if (HTTP.send(req, BodyHandlers.ofString()).statusCode() == 200) {
+					warmedUp = true;
+					return;
+				}
+			} catch (HttpTimeoutException | ConnectException e) {
+				last = e;
+			}
+			Thread.sleep(250);
+		}
+		throw new IllegalStateException("Petstore Spring Boot server did not become ready within 30s", last);
+	}
+
 	private HttpResponse<String> get(String path, String accept) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:" + port + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.header("Accept", accept)
 			.GET()
 			.build();
@@ -66,7 +110,7 @@ class PetstoreSpringboot_Test {
 	private HttpResponse<String> getWithAuth(String path, String accept, String authValue) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:" + port + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.header("Accept", accept)
 			.header("Authorization", authValue)
 			.GET()
@@ -77,7 +121,7 @@ class PetstoreSpringboot_Test {
 	private HttpResponse<String> post(String path, String contentType, String body) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:" + port + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.header("Content-Type", contentType)
 			.header("Accept", "application/json")
 			.POST(HttpRequest.BodyPublishers.ofString(body))
@@ -88,7 +132,7 @@ class PetstoreSpringboot_Test {
 	private HttpResponse<String> delete(String path) throws Exception {
 		var req = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:" + port + path))
-			.timeout(Duration.ofSeconds(10))
+			.timeout(Duration.ofSeconds(30))
 			.DELETE()
 			.build();
 		return HTTP.send(req, BodyHandlers.ofString());

@@ -28,6 +28,7 @@ import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -238,6 +239,23 @@ class RemoteProxy_FeatureParity_Test {
 		@RestGet("/rest/remainder/*") public String remainder(@PathRemainder String r) { return "r=" + r; }
 	}
 
+	/**
+	 * JSON-negotiating fixture for the response-deserialization rows (F15&ndash;F19, G11).  Unlike
+	 * {@link A_ParityResource} (which returns pre-serialized raw strings and runs serializer-less), this resource
+	 * configures a JSON serializer/parser and returns <i>typed</i> objects, so the next-gen client &mdash; which now
+	 * advertises {@code Accept: application/json} once a parser is configured and has no implicit JSON fallback &mdash;
+	 * negotiates a real {@code application/json} round-trip rather than relying on the removed implicit default.
+	 */
+	@Rest(serializers=JsonSerializer.class, parsers=JsonParser.class)
+	public static class A_ParityJsonResource {
+		@RestGet("/rest/bean")  public A_Bean bean() { var b = new A_Bean(); b.setName("na44"); return b; }
+		@RestGet("/rest/list")  public List<A_Bean> list() { var b = new A_Bean(); b.setName("na44"); return List.of(b); }
+		@RestGet("/rest/map")   public Map<String,String> map() { return Map.of("k", "v"); }
+		@RestPatch("/rest/count") public Integer count(@Content String body) { return 5; }
+		@RestGet("/rest/object") public Object object() { return 123; }
+		@RestPost("/rest/beanContent") public String beanContent(@Content A_Bean bean) { return "posted:" + bean.getName(); }
+	}
+
 	// =================================================================================================================
 	// Shared helpers
 	// =================================================================================================================
@@ -306,6 +324,20 @@ class RemoteProxy_FeatureParity_Test {
 
 		private A_ParityClient proxy(MockRestClient mrc) {
 			return mrc.getClient().remote(A_ParityClient.class);
+		}
+
+		@SuppressWarnings({
+			"resource" // The negotiating client shares the MockRestClient's (root-mounted) transport, closed by mrc; not closed separately.
+		})
+		private A_ParityClient parsingProxy(MockRestClient mrc) {
+			// Response-body deserialization needs a resolvable parser; the next-gen client has no implicit JSON default,
+			// so configure JSON serializer + default parser explicitly over the mock's (A_ParityJsonResource) transport.
+			return RestClient.builder()
+				.transport(mrc.getClient().getTransport())
+				.defaultSerializer(JsonSerializer.DEFAULT)
+				.defaultParser(JsonParser.DEFAULT)
+				.build()
+				.remote(A_ParityClient.class);
 		}
 
 		// ---- Active cells -------------------------------------------------------------------------------------------
@@ -414,35 +446,35 @@ class RemoteProxy_FeatureParity_Test {
 		}
 
 		@Test void b23_returnBean_parsed_F15() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				var bean = proxy(mrc).getBean();
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
+				var bean = parsingProxy(mrc).getBean();
 				assertEquals("na44", bean.getName());
 			}
 		}
 
 		@Test void b24_returnList_parsed_F16() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				var l = proxy(mrc).getList();
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
+				var l = parsingProxy(mrc).getList();
 				assertEquals(1, l.size());
 				assertEquals("na44", l.get(0).getName());
 			}
 		}
 
 		@Test void b25_returnMap_parsed_F17() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				assertEquals("v", proxy(mrc).getMap().get("k"));
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
+				assertEquals("v", parsingProxy(mrc).getMap().get("k"));
 			}
 		}
 
 		@Test void b26_returnInteger_parsed_F18() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				assertEquals(Integer.valueOf(5), proxy(mrc).patchCount("x"));
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
+				assertEquals(Integer.valueOf(5), parsingProxy(mrc).patchCount("x"));
 			}
 		}
 
 		@Test void b27_returnObject_parsed_F19() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				assertEquals(123, proxy(mrc).getObject());
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
+				assertEquals(123, parsingProxy(mrc).getObject());
 			}
 		}
 
@@ -472,8 +504,8 @@ class RemoteProxy_FeatureParity_Test {
 		}
 
 		@Test void b32_optionalReturn_G11() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				assertTrue(proxy(mrc).getBeanOptional().isPresent());
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class)) {
+				assertTrue(parsingProxy(mrc).getBeanOptional().isPresent());
 			}
 		}
 
@@ -570,7 +602,7 @@ class RemoteProxy_FeatureParity_Test {
 	@Nested class C_RealTransportColumn {
 
 		private RestClient client(List<TransportRequest> captured) {
-			return RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build();
+			return RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").defaultSerializer(JsonSerializer.DEFAULT).build();
 		}
 
 		// ---- Active cells -------------------------------------------------------------------------------------------
@@ -797,7 +829,8 @@ class RemoteProxy_FeatureParity_Test {
 			var t = MockHttpTransport.builder()
 				.fallback(req -> TransportResponse.builder().statusCode(200).body(new ByteArrayInputStream("[{\"name\":\"na44\"}]".getBytes())).build())
 				.build();
-			try (var c = RestClient.builder().transport(t).rootUrl("http://x.com").build()) {
+			// Response carries no Content-Type, so resolve via the explicit default parser (no implicit JSON fallback).
+			try (var c = RestClient.builder().transport(t).rootUrl("http://x.com").defaultParser(JsonParser.DEFAULT).build()) {
 				var f = c.remote(A_ParityClient.class).getListAsync();
 				var list = f.get();
 				assertNotNull(list);
@@ -836,9 +869,13 @@ class RemoteProxy_FeatureParity_Test {
 			}
 		}
 
+		@SuppressWarnings({
+			"resource" // The negotiating client shares the MockRestClient's (root-mounted) transport, closed by mrc.
+		})
 		@Test void c43_jsonRoundTrip_F23() throws Exception {
-			try (var mrc = MockRestClient.create(A_ParityResource.class)) {
-				var svc = mrc.getClient().remote(A_ParityClient.class);
+			try (var mrc = MockRestClient.create(A_ParityJsonResource.class);
+					var c = RestClient.builder().transport(mrc.getClient().getTransport()).defaultSerializer(JsonSerializer.DEFAULT).defaultParser(JsonParser.DEFAULT).build()) {
+				var svc = c.remote(A_ParityClient.class);
 				var b = new A_Bean(); b.setName("na44");
 				assertTrue(svc.postBean(b).contains("na44"));
 				assertEquals("na44", svc.getBean().getName());

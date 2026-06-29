@@ -80,9 +80,9 @@ class MixinInheritance_Serializers_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_Empty.class);
 		assertNotNull(mixinCtx);
 
-		assertNotNull(hostCtx.getSerializers().getSerializer("text/host-s1"),
+		assertTrue(hostCtx.getSerializers().getSerializer("text/host-s1").isPresent(),
 			"Host must register its declared HostS1 serializer");
-		assertNotNull(mixinCtx.getSerializers().getSerializer("text/host-s1"),
+		assertTrue(mixinCtx.getSerializers().getSerializer("text/host-s1").isPresent(),
 			"Mixin with no serializer overrides must inherit the host's HostS1 serializer");
 	}
 
@@ -92,11 +92,11 @@ class MixinInheritance_Serializers_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_AppendsMixinS1.class);
 		assertNotNull(mixinCtx);
 
-		assertNull(hostCtx.getSerializers().getSerializer("text/mixin-s1"),
+		assertTrue(hostCtx.getSerializers().getSerializer("text/mixin-s1").isEmpty(),
 			"Host endpoint must NOT have MixinS1 — mixin contributions are scoped to the mixin context");
-		assertNotNull(mixinCtx.getSerializers().getSerializer("text/mixin-s1"),
+		assertTrue(mixinCtx.getSerializers().getSerializer("text/mixin-s1").isPresent(),
 			"Mixin endpoint must have MixinS1 via the mixin's own @Rest(serializers=)");
-		assertNotNull(mixinCtx.getSerializers().getSerializer("text/host-s1"),
+		assertTrue(mixinCtx.getSerializers().getSerializer("text/host-s1").isPresent(),
 			"Mixin endpoint must still have the host's HostS1 (inheritance walk)");
 	}
 }

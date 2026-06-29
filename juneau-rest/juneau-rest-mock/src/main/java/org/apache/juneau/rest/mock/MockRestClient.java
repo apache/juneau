@@ -25,6 +25,7 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.server.*;
@@ -271,6 +272,7 @@ public final class MockRestClient implements Closeable {
 				var ngClient = RestClient.builder()
 					.transport(transport)
 					.rootUrl("http://localhost" + fullContextPath)
+					.defaultSerializer(JsonSerializer.DEFAULT)
 					.build();
 
 				return new MockRestClient(ngClient);

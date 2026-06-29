@@ -199,7 +199,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 	}
 
 	private static RestClient captureClient(List<TransportRequest> captured) {
-		return RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").build();
+		return RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").defaultSerializer(JsonSerializer.DEFAULT).build();
 	}
 
 	private static String readBody(TransportRequest req) throws IOException {
@@ -1367,7 +1367,7 @@ class RemoteProxy_NextGenParityGaps_Test {
 	}
 
 	private static RestClient captureClient(List<TransportRequest> captured, SerializerSet serializers, ParserSet parsers) {
-		var b = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com");
+		var b = RestClient.builder().transport(captureTransport(captured).build()).rootUrl("http://x.com").defaultSerializer(JsonSerializer.DEFAULT);
 		if (serializers != null)
 			b.serializers(serializers);
 		if (parsers != null)

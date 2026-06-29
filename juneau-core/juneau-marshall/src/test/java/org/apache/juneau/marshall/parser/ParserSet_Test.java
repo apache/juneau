@@ -38,20 +38,20 @@ class ParserSet_Test extends TestBase {
 	@Test void a01_parserGroupMatching() {
 
 		var s = ParserSet.create().add(Parser1.class, Parser2.class, Parser3.class).build();
-		assertInstanceOf(Parser1.class, s.getParser("text/foo"));
-		assertInstanceOf(Parser1.class, s.getParser("text/foo_a"));
-		assertInstanceOf(Parser1.class, s.getParser("text/foo_a+xxx"));
-		assertInstanceOf(Parser1.class, s.getParser("text/xxx+foo_a"));
-		assertInstanceOf(Parser2.class, s.getParser("text/foo+bar"));
-		assertInstanceOf(Parser2.class, s.getParser("text/foo+bar_a"));
-		assertInstanceOf(Parser2.class, s.getParser("text/bar+foo"));
-		assertInstanceOf(Parser2.class, s.getParser("text/bar+foo+xxx"));
-		assertInstanceOf(Parser3.class, s.getParser("text/baz"));
-		assertInstanceOf(Parser3.class, s.getParser("text/baz_a"));
-		assertInstanceOf(Parser3.class, s.getParser("text/baz+yyy"));
-		assertInstanceOf(Parser3.class, s.getParser("text/baz_a+yyy"));
-		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz"));
-		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz_a"));
+		assertInstanceOf(Parser1.class, s.getParser("text/foo").orElseThrow());
+		assertInstanceOf(Parser1.class, s.getParser("text/foo_a").orElseThrow());
+		assertInstanceOf(Parser1.class, s.getParser("text/foo_a+xxx").orElseThrow());
+		assertInstanceOf(Parser1.class, s.getParser("text/xxx+foo_a").orElseThrow());
+		assertInstanceOf(Parser2.class, s.getParser("text/foo+bar").orElseThrow());
+		assertInstanceOf(Parser2.class, s.getParser("text/foo+bar_a").orElseThrow());
+		assertInstanceOf(Parser2.class, s.getParser("text/bar+foo").orElseThrow());
+		assertInstanceOf(Parser2.class, s.getParser("text/bar+foo+xxx").orElseThrow());
+		assertInstanceOf(Parser3.class, s.getParser("text/baz").orElseThrow());
+		assertInstanceOf(Parser3.class, s.getParser("text/baz_a").orElseThrow());
+		assertInstanceOf(Parser3.class, s.getParser("text/baz+yyy").orElseThrow());
+		assertInstanceOf(Parser3.class, s.getParser("text/baz_a+yyy").orElseThrow());
+		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz").orElseThrow());
+		assertInstanceOf(Parser3.class, s.getParser("text/yyy+baz_a").orElseThrow());
 	}
 
 	public static class Parser1 extends JsonParser { public Parser1(JsonParser.Builder<?> b) { super(b.consumes("text/foo,text/foo_a")); }}
@@ -94,7 +94,7 @@ class ParserSet_Test extends TestBase {
 	@Test void b01_builder_addInstancesDirectly() {
 		var instance = new P1(JsonParser.create().consumes("text/1"));
 		var s = ParserSet.create().add(instance).build();
-		assertInstanceOf(P1.class, s.getParser("text/1"));
+		assertInstanceOf(P1.class, s.getParser("text/1").orElseThrow());
 	}
 
 	@Test void b02_builder_clear_removesAllEntries() {
@@ -113,9 +113,9 @@ class ParserSet_Test extends TestBase {
 		var sb = ParserSet.create().add(P1.class, P2.class);
 		sb.set(ParserSet.Inherit.class, P3.class);
 		var s = sb.build();
-		assertInstanceOf(P1.class, s.getParser("text/1"));
-		assertInstanceOf(P2.class, s.getParser("text/2"));
-		assertInstanceOf(P3.class, s.getParser("text/3"));
+		assertInstanceOf(P1.class, s.getParser("text/1").orElseThrow());
+		assertInstanceOf(P2.class, s.getParser("text/2").orElseThrow());
+		assertInstanceOf(P3.class, s.getParser("text/3").orElseThrow());
 	}
 
 	@Test void b05_builder_setWithInvalidClassThrows() {
@@ -160,8 +160,8 @@ class ParserSet_Test extends TestBase {
 		var sb1 = ParserSet.create().add(P1.class);
 		var sb2 = sb1.copy();
 		sb2.add(P2.class);
-		assertTrue(sb2.build().getParser("text/2") instanceof P2);
-		assertNull(sb1.build().getParser("text/2"));
+		assertTrue(sb2.build().getParser("text/2").orElseThrow() instanceof P2);
+		assertTrue(sb1.build().getParser("text/2").isEmpty());
 	}
 
 	@Test void b13_builder_beanContext_propagatesToBuilders() {
@@ -216,18 +216,18 @@ class ParserSet_Test extends TestBase {
 	@Test void b20_parserSet_copy_returnsNewBuilder() {
 		var s = ParserSet.create().add(P1.class).build();
 		var copy = s.copy();
-		assertInstanceOf(P1.class, copy.build().getParser("text/1"));
+		assertInstanceOf(P1.class, copy.build().getParser("text/1").orElseThrow());
 	}
 
 	@Test void b21_getParser_byMediaType() {
 		var s = ParserSet.create().add(P1.class).build();
-		assertInstanceOf(P1.class, s.getParser(MediaType.of("text/1")));
-		assertNull(s.getParser(MediaType.of("text/unknown")));
+		assertInstanceOf(P1.class, s.getParser(MediaType.of("text/1")).orElseThrow());
+		assertTrue(s.getParser(MediaType.of("text/unknown")).isEmpty());
 	}
 
 	@Test void b22_add_parserWithNoArgConstructor_instantiatesDirectly() {
 		var s = ParserSet.create().add(SimpleParser.class).build();
-		assertInstanceOf(SimpleParser.class, s.getParser("text/simple"));
+		assertInstanceOf(SimpleParser.class, s.getParser("text/simple").orElseThrow());
 	}
 
 	@Test void b23_copy_withParserInstance_coversNonBuilderBranch() {

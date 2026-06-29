@@ -24,15 +24,24 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
+/**
+ * Content-negotiation resolver contract for the next-gen {@link RestClient}.
+ *
+ * <p>
+ * As of 10.0.0 the implicit JSON fallback and the lone-registered-entry fallback are removed: a serializer/parser is
+ * resolved only by an exact media-type match or by an explicitly-configured {@code defaultSerializer(...)} /
+ * {@code defaultParser(...)}; otherwise the resolver is genuinely empty (and callers throw 415 / a client-side error).
+ */
 class RestClient_Negotiation_Test {
 
 	@Test
-	void a01_unconfigured_defaultsToJson() throws Exception {
+	void a01_unconfigured_resolvesEmpty() throws Exception {
+		// No serializers/parsers and no explicit defaults — everything resolves empty (no implicit JSON).
 		try (var c = RestClient.create()) {
-			assertSame(JsonSerializer.DEFAULT, c.getDefaultSerializer());
-			assertSame(JsonParser.DEFAULT, c.getMatchingParser(null));
-			assertSame(JsonParser.DEFAULT, c.getMatchingParser("application/jsonl"));
-			assertEquals("application/json", c.getDefaultAccept());
+			assertTrue(c.getDefaultSerializer().isEmpty());
+			assertTrue(c.getMatchingParser(null).isEmpty());
+			assertTrue(c.getMatchingParser("application/jsonl").isEmpty());
+			assertNull(c.getDefaultAccept());
 		}
 	}
 
@@ -41,17 +50,18 @@ class RestClient_Negotiation_Test {
 		var sset = SerializerSet.create().add(JsonSerializer.DEFAULT, JsonlSerializer.DEFAULT).build();
 		var pset = ParserSet.create().add(JsonParser.DEFAULT, JsonlParser.DEFAULT).build();
 		try (var c = RestClient.builder().serializers(sset).parsers(pset).build()) {
-			assertInstanceOf(JsonlParser.class, c.getMatchingParser("application/jsonl"));
-			assertInstanceOf(JsonParser.class, c.getMatchingParser("application/json"));
-			assertSame(JsonSerializer.DEFAULT, c.getDefaultSerializer());
-			assertInstanceOf(JsonParser.class, c.getMatchingParser("text/unknown"));
+			assertInstanceOf(JsonlParser.class, c.getMatchingParser("application/jsonl").orElseThrow());
+			assertInstanceOf(JsonParser.class, c.getMatchingParser("application/json").orElseThrow());
+			// A registered set is NOT a default — no implicit first-entry/JSON fallback.
+			assertTrue(c.getDefaultSerializer().isEmpty());
+			assertTrue(c.getMatchingParser("text/unknown").isEmpty());
 			assertTrue(c.getDefaultAccept().contains("application/json"));
 			assertTrue(c.getDefaultAccept().contains("application/jsonl"));
 		}
 	}
 
 	@Test
-	void a03_explicitDefaultOverridesFirstInSet() throws Exception {
+	void a03_explicitDefaultIsUsedForUnmatched() throws Exception {
 		var sset = SerializerSet.create().add(JsonSerializer.DEFAULT, JsonlSerializer.DEFAULT).build();
 		var pset = ParserSet.create().add(JsonParser.DEFAULT, JsonlParser.DEFAULT).build();
 		try (var c = RestClient.builder()
@@ -59,20 +69,23 @@ class RestClient_Negotiation_Test {
 				.defaultSerializer(JsonlSerializer.DEFAULT)
 				.defaultParser(JsonlParser.DEFAULT)
 				.build()) {
-			assertSame(JsonlSerializer.DEFAULT, c.getDefaultSerializer());
-			assertSame(JsonlParser.DEFAULT, c.getMatchingParser("text/unknown"));
-			assertInstanceOf(JsonParser.class, c.getMatchingParser("application/json"));
+			assertSame(JsonlSerializer.DEFAULT, c.getDefaultSerializer().orElseThrow());
+			assertSame(JsonlParser.DEFAULT, c.getMatchingParser("text/unknown").orElseThrow());
+			// Exact match still wins over the configured default.
+			assertInstanceOf(JsonParser.class, c.getMatchingParser("application/json").orElseThrow());
 		}
 	}
 
 	@Test
-	void a04_appendConvenience() throws Exception {
+	void a04_appendConvenience_isNotADefault() throws Exception {
+		// Appending serializers/parsers registers them in the set but does NOT make them the default.
 		try (var c = RestClient.builder()
 				.serializer(JsonlSerializer.DEFAULT)
 				.parser(JsonlParser.DEFAULT)
 				.build()) {
-			assertSame(JsonlSerializer.DEFAULT, c.getDefaultSerializer());
-			assertInstanceOf(JsonlParser.class, c.getMatchingParser("application/jsonl"));
+			assertTrue(c.getDefaultSerializer().isEmpty());
+			assertInstanceOf(JsonlParser.class, c.getMatchingParser("application/jsonl").orElseThrow());
+			assertTrue(c.getMatchingParser("text/unknown").isEmpty());
 		}
 	}
 
@@ -82,8 +95,8 @@ class RestClient_Negotiation_Test {
 				.defaultSerializer(JsonlSerializer.DEFAULT)
 				.defaultParser(JsonlParser.DEFAULT)
 				.build()) {
-			assertSame(JsonlSerializer.DEFAULT, c.getDefaultSerializer());
-			assertSame(JsonlParser.DEFAULT, c.getMatchingParser("text/unknown"));
+			assertSame(JsonlSerializer.DEFAULT, c.getDefaultSerializer().orElseThrow());
+			assertSame(JsonlParser.DEFAULT, c.getMatchingParser("text/unknown").orElseThrow());
 		}
 	}
 
@@ -92,6 +105,24 @@ class RestClient_Negotiation_Test {
 		var pset = ParserSet.create().add(JsonParser.DEFAULT, JsonlParser.DEFAULT).build();
 		try (var c = RestClient.builder().parsers(pset).build()) {
 			assertEquals("application/json, text/json, application/jcs+json, application/jsonl, application/x-ndjson, text/jsonl", c.getDefaultAccept());
+		}
+	}
+
+	@Test
+	void a07_explicitSetWinsOverAppend() throws Exception {
+		var sset = SerializerSet.create().add(JsonSerializer.DEFAULT).build();
+		var pset = ParserSet.create().add(JsonParser.DEFAULT).build();
+		try (var c = RestClient.builder()
+				.serializers(sset).parsers(pset)
+				.serializer(JsonlSerializer.DEFAULT)
+				.parser(JsonlParser.DEFAULT)
+				.build()) {
+			// The appended jsonl entries are ignored because an explicit set was supplied.
+			assertInstanceOf(JsonParser.class, c.getMatchingParser("application/json").orElseThrow());
+			assertTrue(c.getMatchingParser("application/jsonl").isEmpty());
+			assertTrue(c.getMatchingParser("text/unknown").isEmpty());
+			assertTrue(c.getDefaultSerializer().isEmpty());
+			assertFalse(c.getDefaultAccept().contains("jsonl"));
 		}
 	}
 
@@ -105,18 +136,22 @@ class RestClient_Negotiation_Test {
 	}
 
 	@Test
-	void a07_explicitSetWinsOverAppend() throws Exception {
-		var sset = SerializerSet.create().add(JsonSerializer.DEFAULT).build();
-		var pset = ParserSet.create().add(JsonParser.DEFAULT).build();
-		try (var c = RestClient.builder()
-				.serializers(sset).parsers(pset)
-				.serializer(JsonlSerializer.DEFAULT)
-				.parser(JsonlParser.DEFAULT)
-				.build()) {
-			assertSame(JsonSerializer.DEFAULT, c.getDefaultSerializer());
-			assertInstanceOf(JsonParser.class, c.getMatchingParser("text/unknown"));
-			assertInstanceOf(JsonParser.class, c.getMatchingParser("application/jsonl"));
-			assertFalse(c.getDefaultAccept().contains("jsonl"));
+	void a09_exactMatchWinsOverExplicitDefault() throws Exception {
+		var pset = ParserSet.create().add(JsonParser.DEFAULT, JsonlParser.DEFAULT).build();
+		try (var c = RestClient.builder().parsers(pset).defaultParser(JsonParser.DEFAULT).build()) {
+			// Exact match on the registered set takes precedence over the explicit default.
+			assertInstanceOf(JsonlParser.class, c.getMatchingParser("application/jsonl").orElseThrow());
+			// Unmatched falls back to the explicit default.
+			assertSame(JsonParser.DEFAULT, c.getMatchingParser("text/unknown").orElseThrow());
+		}
+	}
+
+	@Test
+	void a10_defaultSerializerOptInRestoresFallback() throws Exception {
+		try (var unconfigured = RestClient.create();
+			 var configured = RestClient.builder().defaultSerializer(JsonSerializer.DEFAULT).build()) {
+			assertTrue(unconfigured.getDefaultSerializer().isEmpty());
+			assertSame(JsonSerializer.DEFAULT, configured.getDefaultSerializer().orElseThrow());
 		}
 	}
 }

@@ -22,6 +22,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
+import java.util.*;
 import org.junit.jupiter.api.*;
 
 import org.apache.juneau.*;
@@ -376,7 +377,7 @@ class RestServerVars_Test extends TestBase {
 	@Test void e05_serializedRequestAttrVar_resolveTo_serializerNotFound_noOutput() throws Exception {
 		var req = mock(RestRequest.class, RETURNS_DEEP_STUBS);
 		when(req.getAttribute(any())).thenReturn(mock(RequestAttribute.class));
-		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(null);
+		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(opte());
 		var w = new StringWriter();
 		new SerializedRequestAttrVar().resolveTo(sessionWith(req), w, "text/plain,myKey");
 		assertEquals("", w.toString());
@@ -392,7 +393,7 @@ class RestServerVars_Test extends TestBase {
 		var attr = mock(RequestAttribute.class);
 		when(attr.orElse(any())).thenReturn(outputSb);
 		when(req.getAttribute(any())).thenReturn(attr);
-		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(Json5Serializer.DEFAULT);
+		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(Optional.of(Json5Serializer.DEFAULT));
 		new SerializedRequestAttrVar().resolveTo(sessionWith(req), new StringWriter(), "application/json,myKey");
 		assertFalse(outputSb.toString().isEmpty());
 	}

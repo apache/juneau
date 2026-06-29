@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
 
@@ -128,8 +129,9 @@ public final class ResponseBody {
 	 *
 	 * <p>
 	 * Equivalent to {@link #asCursor(Parser, Class) asCursor(negotiatedParser, type)} where the parser is selected
-	 * from the response {@code Content-Type} header (defaulting to JSON when no match is found); use
-	 * {@link #asCursor(Parser, Class)} to read with an explicit parser.
+	 * from the response {@code Content-Type} header; when no registered parser matches and no default parser is
+	 * configured, a <c>415 Unsupported Media Type</c> is thrown.  Use {@link #asCursor(Parser, Class)} to read with an
+	 * explicit parser.
 	 *
 	 * @param <T> The cursor type ({@link RecordReader}, {@link TokenReader}, or a concrete subtype).
 	 * @param type The declared cursor type. Must not be <jk>null</jk>.
@@ -142,11 +144,12 @@ public final class ResponseBody {
 	}
 
 	/**
-	 * Parses the response body to {@code type} using the parser negotiated from the response {@code Content-Type}
-	 * (defaulting to JSON when the header is absent, or the client has no matching/configured parser).
+	 * Parses the response body to {@code type} using the parser negotiated from the response {@code Content-Type}.
 	 *
 	 * <p>
-	 * Use {@link #as(Parser, Class)} to force a specific parser, bypassing content negotiation.
+	 * When the header is absent or matches no registered parser and no default parser is configured, a
+	 * <c>415 Unsupported Media Type</c> is thrown.  Use {@link #as(Parser, Class)} to force a specific parser,
+	 * bypassing content negotiation.
 	 *
 	 * @param <T> The type to parse to.
 	 * @param type The type to parse to. Must not be <jk>null</jk>.
@@ -188,7 +191,9 @@ public final class ResponseBody {
 
 	private Parser negotiatedParser() {
 		var h = response.getFirstHeader("Content-Type");
-		return response.getClient().getMatchingParser(h == null ? null : h.value());
+		var ct = h == null ? null : h.value();
+		return response.getClient().getMatchingParser(ct).orElseThrow(() -> new UnsupportedMediaType(
+			"No parser matched the response Content-Type ''{0}'' and no default parser is configured on the client.", ct));
 	}
 
 	/**

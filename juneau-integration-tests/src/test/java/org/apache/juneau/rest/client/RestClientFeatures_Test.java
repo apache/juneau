@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
 
@@ -768,6 +769,7 @@ class RestClientFeatures_Test {
 		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
+				.defaultSerializer(JsonSerializer.DEFAULT)
 				.bodyConverters() // empty converter list
 				.build()) {
 			try (var r = client.post("/").body("no-converter").run()) {
@@ -815,6 +817,7 @@ class RestClientFeatures_Test {
 		try (var client = RestClient.builder()
 				.transport(transport)
 				.rootUrl("http://x.com")
+				.defaultSerializer(JsonSerializer.DEFAULT)
 				.bodyConverters() // no converters
 				.build()) {
 			try (var r = client.post("/").body(new ByteArrayInputStream(new byte[0])).run()) {

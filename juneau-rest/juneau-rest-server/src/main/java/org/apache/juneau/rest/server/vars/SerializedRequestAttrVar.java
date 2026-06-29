@@ -69,7 +69,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 		var s2 = splita(key);
 		var req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		var o = req.getAttribute(key).orElse(key);
-		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]);
+		Serializer s = req.getOpContext().getSerializers().getSerializer(s2[0]).orElse(null);
 		if (nn(s))
 			s.serialize(w, o);
 	}

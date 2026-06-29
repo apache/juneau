@@ -265,21 +265,22 @@ public final class RemoteClient {
 		 *
 		 * <p>
 		 * When a {@code contentType} media type is in effect, the matching registered request serializer is selected
-		 * from the client's serializer set ({@link RestClient#getSerializerForMediaType(String)}).  Per the locked
-		 * no-match fallback, if no registered serializer matches, the client's default serializer is used to write the
-		 * body but the overridden media type is still sent as the {@code Content-Type} label (supporting vendor media
-		 * types such as {@code application/vnd.foo+json} whose bytes are really the default format).
+		 * from the client's serializer set ({@link RestClient#getSerializerForMediaType(String)}).  If no registered
+		 * serializer matches, the client's explicitly-configured default serializer is used to write the body but the
+		 * overridden media type is still sent as the {@code Content-Type} label (supporting vendor media types such as
+		 * {@code application/vnd.foo+json} whose bytes are really the default format).  If neither a match nor a default
+		 * serializer is available, an {@link IllegalStateException} is raised (there is no implicit JSON fallback).
 		 *
 		 * @param methodMeta The method metadata.
 		 * @return The resolved body format; {@link BodyFormat#NONE} when no {@code contentType} attribute is in effect.
+		 * @throws IllegalStateException If no serializer matches and no default serializer is configured on the client.
 		 */
 		private BodyFormat resolveBodyFormat(RrpcInterfaceMethodMeta methodMeta) {
 			var contentType = firstNonEmpty(methodMeta.getContentType(), meta.getContentType());
 			if (isEmpty(contentType))
 				return BodyFormat.NONE;
-			var serializer = client.getSerializerForMediaType(contentType);
-			if (serializer == null)
-				serializer = client.getDefaultSerializer();  // No-match fallback: default bytes, overridden label.
+			var serializer = client.getSerializerForMediaType(contentType).or(client::getDefaultSerializer).orElseThrow(() ->
+				new IllegalStateException("No serializer matched Content-Type '" + contentType + "' and no default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...)."));
 			return new BodyFormat(serializer, contentType);
 		}
 
@@ -1171,7 +1172,8 @@ public final class RemoteClient {
 			if (isScalarPart(arg))
 				return StringBody.of(arg.toString(), firstNonEmpty(contentType, "text/plain; charset=UTF-8"));
 			// Bean part: stream it through the client's default serializer (no full in-memory materialization).
-			var s = client.getDefaultSerializer();
+			var s = client.getDefaultSerializer().orElseThrow(() -> new IllegalStateException(
+				"No default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...)."));
 			return contentType != null ? SerializerBody.of(s, arg, contentType) : SerializerBody.of(s, arg);
 		}
 
@@ -1249,25 +1251,29 @@ public final class RemoteClient {
 		 * 	<li>If the response {@code Content-Type} matches a registered parser, use it.
 		 * 	<li>Otherwise (response unlabeled or its type matched nothing), use the parser matching the {@code accept}
 		 * 		media type, if one is registered.
-		 * 	<li>Otherwise fall back to the client default parser ({@link RestClient#getMatchingParser(String)}).
+		 * 	<li>Otherwise fall back to the client's explicitly-configured default parser
+		 * 		({@link RestClient#getMatchingParser(String)}); if none is configured this throws
+		 * 		<c>415 Unsupported Media Type</c> (there is no implicit JSON fallback).
 		 * </ol>
 		 *
 		 * @param resp The response (source of the client + parsers).
 		 * @param responseContentType The response {@code Content-Type} header value. May be <jk>null</jk>.
 		 * @param acceptFallback The {@code accept} media type fallback. May be <jk>null</jk>/empty.
 		 * @return The parser to use. Never <jk>null</jk>.
+		 * @throws UnsupportedMediaType If no parser matches and no default parser is configured on the client.
 		 */
 		private static Parser selectParser(RestResponse resp, String responseContentType, String acceptFallback) {
 			var c = resp.getClient();
 			var p = c.getParserForMediaType(responseContentType);
-			if (p != null)
-				return p;
+			if (p.isPresent())
+				return p.get();
 			if (isNotEmpty(acceptFallback)) {
 				var ap = c.getParserForMediaType(acceptFallback);
-				if (ap != null)
-					return ap;
+				if (ap.isPresent())
+					return ap.get();
 			}
-			return c.getMatchingParser(responseContentType);
+			return c.getMatchingParser(responseContentType).orElseThrow(() -> new UnsupportedMediaType(
+				"No parser matched the response Content-Type ''{0}'' and no default parser is configured on the client.", responseContentType));
 		}
 
 		private static String combinePaths(String base, String method) {

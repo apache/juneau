@@ -18,6 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -30,7 +31,6 @@ import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.part.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.client.remote.*;
@@ -218,7 +218,12 @@ public final class RestClient implements Closeable {
 	}
 
 	/**
-	 * Returns the serializer used for outbound bodies when the format is not otherwise discernable.
+	 * Returns the explicitly-configured default serializer used for outbound bodies when the format is not otherwise
+	 * discernable.
+	 *
+	 * <p>
+	 * Only an explicit default set via {@link Builder#defaultSerializer(Serializer)} is honored — there is no implicit
+	 * JSON fallback and no lone-registered-entry fallback.  A fully-unconfigured client returns {@link Optional#empty()}.
 	 *
 	 * <p>
 	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
@@ -226,18 +231,20 @@ public final class RestClient implements Closeable {
 	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
 	 * (and possibly earlier).
 	 *
-	 * @return The default serializer. Never <jk>null</jk>.
+	 * @return The configured default serializer, or {@link Optional#empty()} if none was set.
 	 */
-	public Serializer getDefaultSerializer() {
-		if (defaultSerializer != null)
-			return defaultSerializer;
-		if (serializers != null && ! serializers.isEmpty())
-			return serializers.getSerializers().get(0);
-		return JsonSerializer.DEFAULT;
+	public Optional<Serializer> getDefaultSerializer() {
+		return opt(defaultSerializer);
 	}
 
 	/**
-	 * Returns the parser matching the given response {@code Content-Type}, falling back to the default/JSON.
+	 * Returns the parser matching the given response {@code Content-Type}, or the explicitly-configured default parser.
+	 *
+	 * <p>
+	 * Resolution precedence: an exact media-type match against the client's {@link ParserSet} wins; otherwise the
+	 * explicitly-configured {@link Builder#defaultParser(Parser) default parser} is used; otherwise
+	 * {@link Optional#empty()} is returned.  There is no implicit JSON fallback and no lone-registered-entry fallback,
+	 * so a fully-unconfigured client resolves to empty (callers throw <c>415 Unsupported Media Type</c>).
 	 *
 	 * <p>
 	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
@@ -246,62 +253,58 @@ public final class RestClient implements Closeable {
 	 * (and possibly earlier).
 	 *
 	 * @param contentType The response {@code Content-Type} header value. May be <jk>null</jk>.
-	 * @return The matching parser. Never <jk>null</jk>.
+	 * @return The matching parser, or {@link Optional#empty()} if nothing matched and no default parser is configured.
 	 */
-	public Parser getMatchingParser(String contentType) {
+	public Optional<Parser> getMatchingParser(String contentType) {
 		if (parsers != null && contentType != null) {
 			var p = parsers.getParser(contentType);
-			if (p != null)
+			if (p.isPresent())
 				return p;
 		}
-		if (defaultParser != null)
-			return defaultParser;
-		if (parsers != null && ! parsers.isEmpty())
-			return parsers.getParsers().get(0);
-		return JsonParser.DEFAULT;
+		return opt(defaultParser);
 	}
 
 	/**
-	 * Returns the registered request serializer matching the given media type, or <jk>null</jk> if none matches.
+	 * Returns the registered request serializer matching the given media type, or {@link Optional#empty()} if none matches.
 	 *
 	 * <p>
 	 * Unlike {@link #getDefaultSerializer()}, this method performs media-type-driven <i>selection</i> against the
-	 * client's {@link SerializerSet} (via {@link SerializerSet#getSerializer(String)}) and returns <jk>null</jk> on no
-	 * match so the caller can apply the locked no-match fallback (use the default serializer but still send the
-	 * overridden {@code Content-Type} label).  An explicitly-configured single default serializer is also consulted
-	 * when no set is registered.
+	 * client's {@link SerializerSet} (via {@link SerializerSet#getSerializer(String)}) and returns
+	 * {@link Optional#empty()} on no match so the caller can apply the locked no-match fallback (use the default
+	 * serializer but still send the overridden {@code Content-Type} label).  An explicitly-configured single default
+	 * serializer is also consulted when no set is registered.
 	 *
 	 * <p>
 	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
 	 * ({@code org.apache.juneau.marshall.ng.*}).
 	 *
 	 * @param mediaType The desired request media type. May be <jk>null</jk>/empty.
-	 * @return The matching serializer, or <jk>null</jk> if no registered serializer matches.
+	 * @return The matching serializer, or {@link Optional#empty()} if no registered serializer matches.
 	 */
-	public Serializer getSerializerForMediaType(String mediaType) {
+	public Optional<Serializer> getSerializerForMediaType(String mediaType) {
 		if (mediaType == null || mediaType.isEmpty() || serializers == null)
-			return null;
+			return opte();
 		return serializers.getSerializer(mediaType);
 	}
 
 	/**
-	 * Returns the registered parser matching the given media type, or <jk>null</jk> if none matches.
+	 * Returns the registered parser matching the given media type, or {@link Optional#empty()} if none matches.
 	 *
 	 * <p>
 	 * Used by the next-gen {@code RemoteClient} as the {@code accept} fallback parser: it is consulted only when the
 	 * response {@code Content-Type} matched no registered parser (or the response was unlabeled).  Returns
-	 * <jk>null</jk> on no match so the caller can fall back to the default parser.
+	 * {@link Optional#empty()} on no match so the caller can fall back to the default parser.
 	 *
 	 * <p>
 	 * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack
 	 * ({@code org.apache.juneau.marshall.ng.*}).
 	 *
 	 * @param mediaType The desired parse media type. May be <jk>null</jk>/empty.
-	 * @return The matching parser, or <jk>null</jk> if no registered parser matches.
+	 * @return The matching parser, or {@link Optional#empty()} if no registered parser matches.
 	 */
-	public Parser getParserForMediaType(String mediaType) {
+	public Optional<Parser> getParserForMediaType(String mediaType) {
 		if (mediaType == null || mediaType.isEmpty() || parsers == null)
-			return null;
+			return opte();
 		return parsers.getParser(mediaType);
 	}
 
@@ -314,7 +317,8 @@ public final class RestClient implements Closeable {
 	 * It is not API-frozen: binary- and source-incompatible changes may appear in the <b>next major</b> Juneau release
 	 * (and possibly earlier).
 	 *
-	 * @return The default {@code Accept} header value. Never <jk>null</jk>.
+	 * @return The default {@code Accept} header value, or <jk>null</jk> if no parsers and no default parser are
+	 * 	configured (no implicit {@code application/json} fallback).
 	 */
 	public String getDefaultAccept() {
 		if (parsers != null) {
@@ -327,7 +331,7 @@ public final class RestClient implements Closeable {
 			if (! mts.isEmpty())
 				return mts.stream().map(MediaType::toString).collect(Collectors.joining(", "));
 		}
-		return "application/json";
+		return null;
 	}
 
 	/**
@@ -567,7 +571,14 @@ public final class RestClient implements Closeable {
 		}
 
 		/**
-		 * Designates the default serializer used when the outbound format is not otherwise discernable.
+		 * Designates the default serializer used for outbound bodies when no registered serializer matches the
+		 * requested media type.
+		 *
+		 * <p>
+		 * This is the explicit, opt-in way to restore a fallback serializer.  Without it, a request that cannot be
+		 * matched to a registered serializer (and any body requiring serialization on a serializer-less client) fails
+		 * rather than silently defaulting to JSON.  Set {@code defaultSerializer(JsonSerializer.DEFAULT)} to recover
+		 * the pre-10.0 implicit-JSON behavior.
 		 *
 		 * @param value The default serializer. May be <jk>null</jk>.
 		 * @return This object.
@@ -578,7 +589,14 @@ public final class RestClient implements Closeable {
 		}
 
 		/**
-		 * Designates the default parser used when the response {@code Content-Type} is absent or unmatched.
+		 * Designates the default parser used when the response {@code Content-Type} is absent or matches no registered
+		 * parser.
+		 *
+		 * <p>
+		 * This is the explicit, opt-in way to restore a fallback parser.  Without it, a response whose
+		 * {@code Content-Type} matches no registered parser fails with <c>415 Unsupported Media Type</c> rather than
+		 * silently parsing as JSON.  Set {@code defaultParser(JsonParser.DEFAULT)} to recover the pre-10.0
+		 * implicit-JSON behavior.
 		 *
 		 * @param value The default parser. May be <jk>null</jk>.
 		 * @return This object.

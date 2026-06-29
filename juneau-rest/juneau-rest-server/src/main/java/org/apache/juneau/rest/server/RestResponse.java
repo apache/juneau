@@ -491,7 +491,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (nn(serializer)) {
 			serializerMatch = opt(new SerializerMatch(getMediaType(), serializer));
 		} else {
-			serializerMatch = opt(opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*")));
+			serializerMatch = opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*"));
 		}
 		return serializerMatch;
 	}

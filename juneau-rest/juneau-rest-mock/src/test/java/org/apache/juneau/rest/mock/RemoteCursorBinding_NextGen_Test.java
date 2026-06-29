@@ -35,8 +35,8 @@ import org.junit.jupiter.api.*;
  * <p>
  * Verifies that {@code RecordReader} / {@code TokenReader} (and concrete subtypes like {@code JsonTokenReader}) work
  * as {@code @RemoteOp} return types, and that {@code RecordStreamBody} works as a {@code @Content} parameter and as a
- * directly-set request body.  The next-generation client performs no {@code Content-Type} negotiation, so cursors use
- * the default JSON marshaller.
+ * directly-set request body.  Each test builds a next-generation client configured with a JSON parser so the
+ * inbound cursor parser is negotiated from the response {@code Content-Type}.
  */
 class RemoteCursorBinding_NextGen_Test {
 
@@ -84,8 +84,9 @@ class RemoteCursorBinding_NextGen_Test {
 		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
 	})
 	void a01_recordReaderReturnType() throws Exception {
-		try (var client = MockRestClient.create(JsonServer.class)) {
-			var api = client.getClient().remote(JsonClientApi.class);
+		try (var client = MockRestClient.create(JsonServer.class);
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+			var api = nc.remote(JsonClientApi.class);
 			try (RecordReader r = api.getBean()) {
 				var b = r.read(Bean.class);
 				assertEquals("alice", b.name);
@@ -99,8 +100,9 @@ class RemoteCursorBinding_NextGen_Test {
 		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
 	})
 	void a02_tokenReaderReturnType() throws Exception {
-		try (var client = MockRestClient.create(JsonServer.class)) {
-			var api = client.getClient().remote(JsonClientApi.class);
+		try (var client = MockRestClient.create(JsonServer.class);
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+			var api = nc.remote(JsonClientApi.class);
 			try (TokenReader r = api.getBeanAsTokens()) {
 				var b = r.read(Bean.class);
 				assertEquals("alice", b.name);
@@ -114,8 +116,9 @@ class RemoteCursorBinding_NextGen_Test {
 		"resource" // Inner client returned by getClient() is owned by the MockRestClient, not closed separately.
 	})
 	void a03_concreteCursorReturnType() throws Exception {
-		try (var client = MockRestClient.create(JsonServer.class)) {
-			var api = client.getClient().remote(JsonClientApi.class);
+		try (var client = MockRestClient.create(JsonServer.class);
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+			var api = nc.remote(JsonClientApi.class);
 			try (JsonTokenReader r = api.getBeanAsJsonTokens()) {
 				var b = r.read(Bean.class);
 				assertEquals("alice", b.name);
@@ -132,8 +135,9 @@ class RemoteCursorBinding_NextGen_Test {
 		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close.
 	})
 	void b01_recordStreamBody_record() throws Exception {
-		try (var client = MockRestClient.create(JsonServer.class)) {
-			var api = client.getClient().remote(JsonClientApi.class);
+		try (var client = MockRestClient.create(JsonServer.class);
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+			var api = nc.remote(JsonClientApi.class);
 			Bean got = api.echo(RecordStreamBody.records(w -> {
 				try {
 					w.write(new Bean("dave", 99));
@@ -151,8 +155,9 @@ class RemoteCursorBinding_NextGen_Test {
 		"resource" // Fluent writer calls return the caller-owned writer for chaining; nothing new to close.
 	})
 	void b02_recordStreamBody_token() throws Exception {
-		try (var client = MockRestClient.create(JsonServer.class)) {
-			var api = client.getClient().remote(JsonClientApi.class);
+		try (var client = MockRestClient.create(JsonServer.class);
+				var nc = RestClient.builder().transport(client.getClient().getTransport()).parser(JsonParser.DEFAULT).build()) {
+			var api = nc.remote(JsonClientApi.class);
 			Bean got = api.echo(RecordStreamBody.token(w -> {
 				try {
 					w.startObject();

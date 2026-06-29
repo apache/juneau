@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.client.remote.*;
 import org.apache.juneau.rest.mock.*;
 import org.junit.jupiter.api.*;
@@ -695,7 +696,9 @@ class RemoteClient_Test {
 	}
 
 	@Test void t02_object_return_falls_through_to_string() throws Exception {
-		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").build()) {
+		// Object-return fallthrough: the negotiated parser fails to parse the plain body, so the raw string is returned.
+		// Requires a parser to be resolvable — configure JSON as the default (the next-gen client has no implicit one).
+		try (var client = RestClient.builder().transport(MockHttpTransport.of(200, "hello")).rootUrl("http://x.com").defaultParser(JsonParser.DEFAULT).build()) {
 			var svc = client.remote(T01_VoidBoxedReturnService.class);
 			assertEquals("hello", svc.getObject());
 		}

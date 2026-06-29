@@ -72,9 +72,9 @@ class MixinInheritance_NoInherit_Test extends TestBase {
 		var mixinCtx = hostCtx.getMixinContexts().get(M_MixinS1Only.class);
 		assertNotNull(mixinCtx);
 
-		assertNotNull(mixinCtx.getSerializers().getSerializer("text/mixin-s1"),
+		assertTrue(mixinCtx.getSerializers().getSerializer("text/mixin-s1").isPresent(),
 			"Mixin's own MixinS1 must be present");
-		assertNull(mixinCtx.getSerializers().getSerializer("text/host-s1"),
+		assertTrue(mixinCtx.getSerializers().getSerializer("text/host-s1").isEmpty(),
 			"Mixin with noInherit=\"serializers\" must NOT see the host's HostS1 (parent walk blocked)");
 	}
 
@@ -82,9 +82,9 @@ class MixinInheritance_NoInherit_Test extends TestBase {
 		MockRestClient.buildLax(Host.class);
 		var hostCtx = RestContext.getGlobalRegistry().get(Host.class);
 
-		assertNotNull(hostCtx.getSerializers().getSerializer("text/host-s1"),
+		assertTrue(hostCtx.getSerializers().getSerializer("text/host-s1").isPresent(),
 			"Host must retain its declared HostS1 serializer regardless of mixin's noInherit");
-		assertNull(hostCtx.getSerializers().getSerializer("text/mixin-s1"),
+		assertTrue(hostCtx.getSerializers().getSerializer("text/mixin-s1").isEmpty(),
 			"Host must NOT pick up MixinS1 from a noInherit-isolated mixin");
 	}
 }

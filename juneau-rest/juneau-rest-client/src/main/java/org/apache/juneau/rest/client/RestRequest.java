@@ -244,12 +244,15 @@ public final class RestRequest {
 	 * Custom converters can be registered on the builder.
 	 *
 	 * <p>
-	 * If no converter matches, the object is serialized with the client's default serializer
-	 * ({@link RestClient#getDefaultSerializer()}) and sent as a string body using the serializer's content type.
+	 * If no converter matches, the object is serialized with the client's explicitly-configured default serializer
+	 * ({@link RestClient#getDefaultSerializer()}) and sent as a string body using the serializer's content type.  When
+	 * no default serializer is configured, an {@link IllegalStateException} is raised (there is no implicit JSON
+	 * fallback) — configure one via {@link RestClient.Builder#defaultSerializer(org.apache.juneau.marshall.serializer.Serializer)}.
 	 *
 	 * @param value The body object. May be <jk>null</jk> to clear the body.
 	 * @return This object.
 	 * @throws IOException If a converter fails or the default serializer fails.
+	 * @throws IllegalStateException If no converter matches and no default serializer is configured on the client.
 	 * @throws IllegalArgumentException If the default serializer produces output that is neither text nor {@code byte[]}.
 	 * 	Binary ({@code byte[]}) serializer output is sent as a binary body using the serializer's media type
 	 * 	(falling back to {@code application/octet-stream} when the media type is <jk>null</jk>).
@@ -271,7 +274,8 @@ public final class RestRequest {
 		// Mirrors classic SerializedEntity — the serializer writes straight to the transport output stream during
 		// run() rather than being pre-materialized into a String/byte[].  Repeatable (re-serializes on resend), so a
 		// future auto-retry can resend it; streaming bodies (InputStream/Reader) remain non-repeatable.
-		var s = client.getDefaultSerializer();
+		var s = client.getDefaultSerializer().orElseThrow(() -> new IllegalStateException(
+			"No default serializer is configured on the client.  Configure one via RestClient.Builder.defaultSerializer(...)."));
 		var mt = s.getResponseContentType();
 		body = SerializerBody.of(s, value, mt != null ? mt.toString() : "application/json");
 		convertedBody = null;

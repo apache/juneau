@@ -397,7 +397,7 @@ public class RequestContent {
 		if (nn(mediaType) && nn(parser))
 			return opt(new ParserMatch(mediaType, parser));
 		var mt = getMediaType();
-		return opt(mt).map(x -> parsers.getParserMatch(x));
+		return opt(mt).flatMap(parsers::getParserMatch);
 	}
 
 	/**
