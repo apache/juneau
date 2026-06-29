@@ -643,43 +643,66 @@ const sidebars: SidebarsConfig = {
 								},
 							],
 						},
-						{
-							type: 'category',
-							label: '2.34. TOML Support',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/02.34.01.TomlBasics',
-									label: '2.34.1. TOML Basics',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '2.34.5. Protobuf Text Format',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/02.34.05.ProtobufBasics',
-									label: '2.34.5.1. Protobuf Text Format Basics',
-								},
-								{
-									type: 'doc',
-									id: 'topics/02.34.07.ProtobufBinaryBasics',
-									label: '2.34.5.2. Protobuf Binary Format Basics',
-								},
-								{
-									type: 'doc',
-									id: 'topics/02.34.06.ParquetBasics',
-									label: '2.34.6. Parquet Basics',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '2.38. JSONL Support',
+					{
+						type: 'category',
+						label: '2.34. TOML Support',
+						collapsed: true,
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/02.34.01.TomlBasics',
+								label: '2.34.1. TOML Basics',
+							},
+							{
+								type: 'doc',
+								id: 'topics/02.34.05.ProtobufBasics',
+								label: '2.34.2. Protobuf Text Format Basics',
+							},
+							{
+								type: 'doc',
+								id: 'topics/02.34.07.ProtobufBinaryBasics',
+								label: '2.34.3. Protobuf Binary Format Basics',
+							},
+							{
+								type: 'doc',
+								id: 'topics/02.34.06.ParquetBasics',
+								label: '2.34.4. Parquet Basics',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '2.35. YAML Support',
+						collapsed: true,
+						items: [
+							{ type: 'doc', id: 'topics/02.35.01.YamlBasics', label: '2.35.1. YAML Basics' },
+							{ type: 'doc', id: 'topics/02.35.02.YamlMethodology', label: '2.35.2. YAML Methodology' },
+							{ type: 'doc', id: 'topics/02.35.03.YamlSerializers', label: '2.35.3. YAML Serializers' },
+							{ type: 'doc', id: 'topics/02.35.04.YamlParsers', label: '2.35.4. YAML Parsers' },
+							{ type: 'doc', id: 'topics/02.35.05.YamlAnnotation', label: '2.35.5. @YamlConfig Annotation' },
+						],
+					},
+					{
+						type: 'category',
+						label: '2.36. CSV Support',
+						collapsed: true,
+						items: [
+							{ type: 'doc', id: 'topics/02.36.01.CsvBasics', label: '2.36.1. CSV Basics' },
+							{ type: 'doc', id: 'topics/02.36.02.CsvSerializers', label: '2.36.2. CSV Serializers' },
+							{ type: 'doc', id: 'topics/02.36.03.CsvParsers', label: '2.36.3. CSV Parsers' },
+						],
+					},
+					{
+						type: 'category',
+						label: '2.37. Markdown Support',
+						collapsed: true,
+						items: [
+							{ type: 'doc', id: 'topics/02.37.01.MarkdownBasics', label: '2.37.1. Markdown Basics' },
+						],
+					},
+					{
+						type: 'category',
+						label: '2.38. JSONL Support',
 							collapsed: true,
 							items: [
 								{
@@ -771,39 +794,9 @@ const sidebars: SidebarsConfig = {
 								},
 							],
 						},
-						{
-							type: 'category',
-							label: '2.35. YAML Support',
-							collapsed: true,
-							items: [
-								{ type: 'doc', id: 'topics/02.35.01.YamlBasics', label: '2.35.1. YAML Basics' },
-								{ type: 'doc', id: 'topics/02.35.02.YamlMethodology', label: '2.35.2. YAML Methodology' },
-								{ type: 'doc', id: 'topics/02.35.03.YamlSerializers', label: '2.35.3. YAML Serializers' },
-								{ type: 'doc', id: 'topics/02.35.04.YamlParsers', label: '2.35.4. YAML Parsers' },
-								{ type: 'doc', id: 'topics/02.35.05.YamlAnnotation', label: '2.35.5. @YamlConfig Annotation' },
-							],
-						},
-						{
-							type: 'category',
-							label: '2.36. CSV Support',
-							collapsed: true,
-							items: [
-								{ type: 'doc', id: 'topics/02.36.01.CsvBasics', label: '2.36.1. CSV Basics' },
-								{ type: 'doc', id: 'topics/02.36.02.CsvSerializers', label: '2.36.2. CSV Serializers' },
-								{ type: 'doc', id: 'topics/02.36.03.CsvParsers', label: '2.36.3. CSV Parsers' },
-							],
-						},
-						{
-							type: 'category',
-							label: '2.37. Markdown Support',
-							collapsed: true,
-							items: [
-								{ type: 'doc', id: 'topics/02.37.01.MarkdownBasics', label: '2.37.1. Markdown Basics' },
-							],
-						},
-						{
-							type: 'category',
-							label: '2.50. Token / Record Streaming',
+					{
+						type: 'category',
+						label: '2.50. Token / Record Streaming',
 							collapsed: true,
 							items: [
 								{ type: 'doc', id: 'topics/02.50.01.TokenStreamingBasics', label: '2.50.1. Token-Streaming Basics' },
@@ -1707,6 +1700,11 @@ const sidebars: SidebarsConfig = {
 							type: 'doc',
 							id: 'topics/10.42.AuthFilterFramework',
 							label: '10.42. AuthN Filter Framework — Servlet-Layer Authentication',
+						},
+						{
+							type: 'doc',
+							id: 'topics/10.42.01.RestServerAuthenticator',
+							label: '10.42.01. REST Authenticator — Resource-Level Authentication',
 						},
 						{
 							type: 'doc',
