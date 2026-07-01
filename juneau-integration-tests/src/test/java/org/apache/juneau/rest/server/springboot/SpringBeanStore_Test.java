@@ -31,7 +31,7 @@ import org.springframework.context.*;
 /**
  * Tests for {@link SpringBeanStore}.
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
 	"unchecked" // getBean(String, Class) invocation in test
 })

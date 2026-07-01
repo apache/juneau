@@ -17,7 +17,7 @@
 package org.apache.juneau.utils;
 
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.apache.juneau.marshall.UriRelativity.*;
 import static org.apache.juneau.marshall.UriResolution.*;
 import static org.junit.jupiter.api.Assertions.*;

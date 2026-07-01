@@ -29,7 +29,7 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.conn.*;
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;

@@ -24,7 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.testing.annotations.*;
+import org.apache.juneau.testing.*;
 import org.junit.jupiter.api.*;
 
 /**

@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.html5;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.html.*;

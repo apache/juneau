@@ -108,54 +108,29 @@
 									<destFileName>org.apache.juneau.commons_${project.version}.jar</destFileName>
 								</artifactItem>
 
-								<!-- juneau-assertions -->
+								<!-- juneau-test -->
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-assertions</artifactId>
+									<artifactId>juneau-test</artifactId>
 									<version>${project.version}</version>
 									<type>jar</type>
 									<classifier>sources</classifier>
-									<destFileName>apache-juneau-assertions-${project.version}-sources.jar</destFileName>
+									<destFileName>apache-juneau-test-${project.version}-sources.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-assertions</artifactId>
+									<artifactId>juneau-test</artifactId>
 									<version>${project.version}</version>
-									<destFileName>apache-juneau-assertions-${project.version}.jar</destFileName>
+									<destFileName>apache-juneau-test-${project.version}.jar</destFileName>
 								</artifactItem>
 								<artifactItem>
 									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
 									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-assertions</artifactId>
+									<artifactId>juneau-test</artifactId>
 									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.assertions_${project.version}.jar</destFileName>
-								</artifactItem>
-
-								<!-- juneau-bct -->
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/src/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bct</artifactId>
-									<version>${project.version}</version>
-									<type>jar</type>
-									<classifier>sources</classifier>
-									<destFileName>apache-juneau-bct-${project.version}-sources.jar</destFileName>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/lib</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bct</artifactId>
-									<version>${project.version}</version>
-									<destFileName>apache-juneau-bct-${project.version}.jar</destFileName>
-								</artifactItem>
-								<artifactItem>
-									<outputDirectory>${project.build.directory}/bin/osgi</outputDirectory>
-									<groupId>org.apache.juneau</groupId>
-									<artifactId>juneau-bct</artifactId>
-									<version>${project.version}</version>
-									<destFileName>org.apache.juneau.bct_${project.version}.jar</destFileName>
+									<destFileName>org.apache.juneau.test_${project.version}.jar</destFileName>
 								</artifactItem>
 
 								<!-- juneau-marshall -->

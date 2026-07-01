@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.junit5.*;
+import org.apache.juneau.test.junit.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.MethodName.class)
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 class Microservice_PushPopOverlay_Test extends TestBase {
 
 	interface ExternalApi {

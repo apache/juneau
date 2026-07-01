@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.classic.response;
 
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.test.assertions.Assertions.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.commons.utils.Utils.*;

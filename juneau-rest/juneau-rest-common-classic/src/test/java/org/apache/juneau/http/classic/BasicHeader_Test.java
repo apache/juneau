@@ -17,7 +17,7 @@
 package org.apache.juneau.http.classic;
 
 import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;

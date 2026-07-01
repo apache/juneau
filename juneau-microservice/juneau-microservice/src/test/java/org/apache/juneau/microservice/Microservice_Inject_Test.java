@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * that explicit builder calls always win, and that the bean store is closed on
  * {@link Microservice#stop()} so <c>@PreDestroy</c> hooks fire.
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 class Microservice_Inject_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

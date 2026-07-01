@@ -26,7 +26,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.utils.*;
-import org.apache.juneau.junit.bct.*;
+import org.apache.juneau.test.bct.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.*;

@@ -17,13 +17,13 @@
 package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.assertions.Assertions.*;
+import static org.apache.juneau.test.assertions.Assertions.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.junit.bct.BctAssertions.assertBean;
-import static org.apache.juneau.junit.bct.BctAssertions.assertList;
-import static org.apache.juneau.junit.bct.BctAssertions.assertString;
+import static org.apache.juneau.test.bct.BctAssertions.assertBean;
+import static org.apache.juneau.test.bct.BctAssertions.assertList;
+import static org.apache.juneau.test.bct.BctAssertions.assertString;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -102,7 +102,7 @@ class RestClient_Response_Body_Test extends TestBase {
 	}
 
 	@Test void a01_basic() throws Exception {
-		client().build().post("/echo",bean).run().assertContent().as(ABean.class).asJson().is("{f:1}");
+		client().build().post("/echo",bean).run().assertContent().as(ABean.class).asString(Json5Serializer.DEFAULT).is("{f:1}");
 		client().build().post("/echo",bean).run().assertContent().asBytes().asString().is("{\"f\":1}");
 	}
 

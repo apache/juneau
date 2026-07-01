@@ -40,7 +40,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.swagger.Operation;
 import org.apache.juneau.bean.swagger.Swagger;
@@ -60,6 +60,7 @@ import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.cp.*;
+import org.apache.juneau.marshall.cp.Messages;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.marshaller.Uon;

@@ -26,7 +26,7 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Simplified logger for intercepting and asserting logging messages.

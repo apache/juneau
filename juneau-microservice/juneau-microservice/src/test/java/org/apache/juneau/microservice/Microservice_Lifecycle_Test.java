@@ -64,7 +64,7 @@ import org.junit.jupiter.api.io.*;
  * {@link Microservice#exit()} and {@link Microservice#kill()} both call {@link System#exit(int)} unconditionally and
  * are not safely reachable from a unit test without bringing down the JVM.
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 class Microservice_Lifecycle_Test extends TestBase {
 
 	// =================================================================================================================

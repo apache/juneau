@@ -25,7 +25,7 @@ import java.time.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
-import org.apache.juneau.testing.annotations.*;
+import org.apache.juneau.testing.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 

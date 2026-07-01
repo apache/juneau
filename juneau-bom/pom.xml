@@ -41,9 +41,7 @@
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-marshall</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-marshall-rdf</artifactId><version>${project.version}</version></dependency>
 			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-config</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-assertions</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-bct</artifactId><version>${project.version}</version></dependency>
-			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-junit5</artifactId><version>${project.version}</version></dependency>
+			<dependency><groupId>org.apache.juneau</groupId><artifactId>juneau-test</artifactId><version>${project.version}</version></dependency>
 
 			<!-- ===================================================================================== -->
 			<!-- juneau-rest                                                                           -->

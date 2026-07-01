@@ -49,7 +49,7 @@ import org.springframework.mock.env.*;
  * context which now installs the bridge automatically via {@link SpringBeanStore}'s constructor.
  * This test keeps the focus on the bridge itself.
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
 	"java:S2094", // Test fixture / data class, no methods required.
 	"java:S2093" // SpringBeanStore teardown uses clear() (which removes the installed Settings source); try-with-resources would call close() instead, which does not remove the source and would leak the bridge into later tests.

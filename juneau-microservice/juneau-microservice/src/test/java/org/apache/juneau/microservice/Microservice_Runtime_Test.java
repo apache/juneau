@@ -47,7 +47,7 @@ import org.junit.jupiter.api.*;
  * {@code Microservice_Listener_Fanout_Test}; the bean-store overlay/inject by
  * {@code Microservice_OverridingBeanStore_Test} / {@code Microservice_PushPopOverlay_Test}).
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 class Microservice_Runtime_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------

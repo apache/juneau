@@ -17,7 +17,7 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

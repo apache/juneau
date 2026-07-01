@@ -39,7 +39,7 @@ import jakarta.servlet.http.*;
  * that auto-discovered <c>@Rest</c> servlets are mounted at <c>@Rest(path=...)</c>, and that duplicate
  * mount paths fail fast.
  */
-@org.apache.juneau.testing.annotations.TomcatMicroserviceTest
+@org.apache.juneau.testing.TomcatMicroserviceTest
 @SuppressWarnings({
 	"resource" // Microservice/bean-store lookups return Closeables whose lifecycle is owned by the test; Eclipse JDT @Owning warning is by design.
 })

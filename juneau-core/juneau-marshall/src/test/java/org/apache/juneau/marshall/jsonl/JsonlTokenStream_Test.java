@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.jsonl;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 

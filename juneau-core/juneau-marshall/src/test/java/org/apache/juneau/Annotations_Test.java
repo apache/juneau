@@ -16,7 +16,7 @@
  */
 package org.apache.juneau;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;

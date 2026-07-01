@@ -22,7 +22,7 @@ import static org.apache.juneau.rest.server.logger.CallLoggingDetail.*;
 import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.inject.*;
 
 /**

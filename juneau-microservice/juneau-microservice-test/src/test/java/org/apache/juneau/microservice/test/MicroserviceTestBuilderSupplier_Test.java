@@ -58,9 +58,10 @@ class MicroserviceTestBuilderSupplier_Test extends TestBase {
 	}
 
 	@Test void a01_builderSupplierBootsAndServes(RestClient client) throws Exception {
-		var resp = client.get("/ping").run();
-		assertEquals(200, resp.getStatusCode());
-		assertEquals("pong", resp.getBodyAsString());
+		try (var resp = client.get("/ping").run()) {
+			assertEquals(200, resp.getStatusCode());
+			assertEquals("pong", resp.getBodyAsString());
+		}
 	}
 
 	@Test void a02_freshInstancePerClass(Microservice ms) {

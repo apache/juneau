@@ -25,7 +25,7 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 

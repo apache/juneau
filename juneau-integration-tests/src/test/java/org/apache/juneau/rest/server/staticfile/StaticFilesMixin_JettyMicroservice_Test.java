@@ -60,7 +60,7 @@ import jakarta.servlet.*;
  *
  * @since 10.0.0
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 class StaticFilesMixin_JettyMicroservice_Test extends TestBase {
 
 	/** Test host: vanilla {@link BasicRestServlet} subclass with the static-files mixin attached. */

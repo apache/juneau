@@ -72,7 +72,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-junit5</artifactId>
+			<artifactId>juneau-test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

@@ -18,7 +18,7 @@ package org.apache.juneau.bean.atom;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.atom.AtomBuilder.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;

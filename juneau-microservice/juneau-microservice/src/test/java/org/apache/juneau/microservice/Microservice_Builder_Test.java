@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.microservice;
 
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 /**
  * Tests for {@link Microservice.Builder} methods.
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 @SuppressWarnings({
 	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })

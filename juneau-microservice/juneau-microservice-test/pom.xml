@@ -50,7 +50,7 @@
 		<!-- The JUnit 5 mock-bean substrate (@TestBean / TestBeanStore / discovery) this extension composes. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-junit5</artifactId>
+			<artifactId>juneau-test</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- Boots a real embedded-Jetty Microservice on an ephemeral port (Jetty-only for v1). -->

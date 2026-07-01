@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
 	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })

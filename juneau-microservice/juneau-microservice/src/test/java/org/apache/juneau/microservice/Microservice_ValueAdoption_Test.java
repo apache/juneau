@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 
 import org.apache.juneau.commons.settings.*;
-import org.apache.juneau.testing.annotations.*;
+import org.apache.juneau.testing.*;
 import org.junit.jupiter.api.*;
 
 /**

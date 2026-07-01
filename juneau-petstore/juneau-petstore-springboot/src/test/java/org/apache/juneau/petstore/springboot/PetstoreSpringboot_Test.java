@@ -41,7 +41,7 @@ import org.springframework.boot.test.web.server.*;
  * mounts is reachable identically here, plus the Spring-injected {@link HelloResource} demonstrates the
  * deployment-specific {@code @Autowired} pattern.
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 @SpringBootTest(classes = App.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 @SuppressWarnings({
 	"java:S8692", // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.

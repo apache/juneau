@@ -32,6 +32,7 @@ import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
@@ -205,13 +206,13 @@ class RestClient_Response_Test extends TestBase {
 	}
 
 	@Test void d01_response_assertBody() throws Exception {
-		client(D.class).build().post("/bean",bean).run().assertContent().as(ABean.class).asJson().is("{f:1}");
+		client(D.class).build().post("/bean",bean).run().assertContent().as(ABean.class).asString(Json5Serializer.DEFAULT).is("{f:1}");
 	}
 
 	@Test void d02_response_setEntity() throws Exception {
 		var x = client(D.class).build().post("/bean",bean).run();
 		x.setEntity(new StringEntity("{\"f\":2}"));
-		x.assertContent().as(ABean.class).asJson().is("{f:2}");
+		x.assertContent().as(ABean.class).asString(Json5Serializer.DEFAULT).is("{f:2}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

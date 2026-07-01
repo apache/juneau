@@ -19,10 +19,10 @@ package org.apache.juneau.rest.server.assertions;
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshall.serializer.*;
 
 /**
  * Used for fluent assertion calls against {@link HttpRequestLine} objects.
@@ -41,11 +41,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 		<li class='jm'>{@link FluentObjectAssertion#isNull() isNull()}
  * 		<li class='jm'>{@link FluentObjectAssertion#isNotNull() isNotNull()}
  * 		<li class='jm'>{@link FluentObjectAssertion#isString(String) isString(String)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isJson(String) isJson(String)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isSame(Object) isSame(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameJsonAs(Object) isSameJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSortedJsonAs(Object) isSameSortedJsonAs(Object)}
- * 		<li class='jm'>{@link FluentObjectAssertion#isSameSerializedAs(Object, WriterSerializer) isSameSerializedAs(Object, WriterSerializer)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isType(Class) isType(Class)}
  * 		<li class='jm'>{@link FluentObjectAssertion#isExactType(Class) isExactType(Class)}
  * 	</ul>
@@ -63,10 +59,7 @@ import org.apache.juneau.marshall.serializer.*;
  * 	<li class='jc'>{@link FluentObjectAssertion}
  * 	<ul class='javatreec'>
  * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(WriterSerializer) asString(WriterSerializer)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asString(Function) asString(Function)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJson() asJson()}
- * 		<li class='jm'>{@link FluentObjectAssertion#asJsonSorted() asJsonSorted()}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asString(ThrowingFunction) asString(ThrowingFunction)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(java.util.function.UnaryOperator) asTransformed(UnaryOperator)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>

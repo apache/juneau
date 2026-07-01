@@ -57,7 +57,7 @@ import org.junit.jupiter.api.extension.*;
  * <h5 class='topic'>Mock-bean injection</h5>
  *
  * <p>
- * Declare collaborators to substitute with the existing {@link org.apache.juneau.junit5.TestBean @TestBean}
+ * Declare collaborators to substitute with the existing {@link org.apache.juneau.test.junit.TestBean @TestBean}
  * (the {@code @MockBean} analog) &mdash; no parallel injection annotation. By default these are installed via
  * <b>Mode INJECT</b> (through {@code Microservice.Builder.overridingBeanStore(...)}) <i>before</i> boot, so the
  * service sees them from startup. {@code @TestBean(mode = Mode.OVERLAY)} pushes/pops against the already-booted
@@ -71,7 +71,7 @@ import org.junit.jupiter.api.extension.*;
  * primary convenience), {@link org.apache.juneau.microservice.Microservice Microservice}, the
  * {@link org.apache.juneau.commons.inject.WritableBeanStore WritableBeanStore}, and the bound port (as {@code int}
  * / {@code Integer}). The same {@code TestBeanStore} parameter the underlying
- * {@link org.apache.juneau.junit5.JuneauBeanStoreExtension} resolves is available too.
+ * {@link org.apache.juneau.test.junit.JuneauBeanStoreExtension} resolves is available too.
  *
  * <h5 class='topic'>When to use this vs. {@code MockRestClient}</h5>
  *
@@ -102,7 +102,7 @@ import org.junit.jupiter.api.extension.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link MicroserviceExtension}
- * 	<li class='jc'>{@link org.apache.juneau.junit5.TestBean}
+ * 	<li class='jc'>{@link org.apache.juneau.test.junit.TestBean}
  * </ul>
  *
  * @since 10.0.0

@@ -26,6 +26,7 @@ import java.io.*;
 import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -162,14 +163,14 @@ class RestClient_Body_Test extends TestBase {
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
-			.assertContent().as(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertContent().as(ABean.class).asString(Json5Serializer.DEFAULT).is("{a:1,b:'foo'}");
 
 		var x3 = serializedEntity(ABean::get,js,null);
 		client().build().post("/",x3).run()
 			.assertHeader("X-Content-Length").isNull()
 			.assertHeader("X-Content-Encoding").isNull()
 			.assertHeader("X-Content-Type").is("application/json")
-			.assertContent().as(ABean.class).asJson().is("{a:1,b:'foo'}");
+			.assertContent().as(ABean.class).asString(Json5Serializer.DEFAULT).is("{a:1,b:'foo'}");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

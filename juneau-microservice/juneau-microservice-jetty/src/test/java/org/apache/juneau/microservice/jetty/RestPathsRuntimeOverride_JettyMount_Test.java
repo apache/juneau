@@ -53,7 +53,7 @@ import jakarta.servlet.*;
  *
  * @since 10.0.0
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 @SuppressWarnings("resource")  // Microservice/Server instances are test fixtures managed by the test lifecycle; explicit close is not needed for these assertions.
 class RestPathsRuntimeOverride_JettyMount_Test extends TestBase {
 

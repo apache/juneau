@@ -22,7 +22,7 @@ import jakarta.servlet.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.junit5.*;
+import org.apache.juneau.test.junit.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.client.*;
@@ -88,10 +88,11 @@ class MicroserviceTest_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_restClientInjected_hitsRealEndpoint(RestClient client) throws Exception {
-		var resp = client.get("/greeting").run();
-		assertEquals(200, resp.getStatusCode());
-		// The @TestBean mock was injected before boot, so the resource's collaborator is the mock.
-		assertEquals("mocked", resp.getBodyAsString());
+		try (var resp = client.get("/greeting").run()) {
+			assertEquals(200, resp.getStatusCode());
+			// The @TestBean mock was injected before boot, so the resource's collaborator is the mock.
+			assertEquals("mocked", resp.getBodyAsString());
+		}
 	}
 
 	@Test void a02_microserviceAndBeanStoreInjected(Microservice ms, WritableBeanStore beanStore) {
@@ -105,7 +106,9 @@ class MicroserviceTest_Test extends TestBase {
 		assertTrue(port > 0, "Expected an OS-assigned ephemeral port, got " + port);
 	}
 
-	@Test void a04_serverIsReallyListening(Microservice ms) {
+	@Test
+	@SuppressWarnings("resource") // jsc.getServer() is the microservice's own Jetty Server; closing it from a test would be wrong.
+	void a04_serverIsReallyListening(Microservice ms) {
 		var jsc = ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow();
 		var listening = false;
 		for (var c : jsc.getServer().getConnectors())

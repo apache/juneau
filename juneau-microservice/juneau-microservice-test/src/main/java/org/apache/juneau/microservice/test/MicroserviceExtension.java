@@ -18,11 +18,8 @@ package org.apache.juneau.microservice.test;
 
 import java.lang.reflect.*;
 import java.net.*;
-import java.util.*;
-
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.junit5.*;
-import org.apache.juneau.junit5.JuneauBeanStoreExtension.OverrideSet;
+import org.apache.juneau.test.junit.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.client.*;
@@ -32,7 +29,7 @@ import org.junit.jupiter.api.extension.*;
 /**
  * JUnit 5 extension behind {@link MicroserviceTest @MicroserviceTest}: boots a whole
  * {@link Microservice} (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with
- * {@link org.apache.juneau.junit5.TestBean @TestBean} mock-bean injection and convenience parameter resolution.
+ * {@link org.apache.juneau.test.junit.TestBean @TestBean} mock-bean injection and convenience parameter resolution.
  *
  * <h5 class='topic'>Lifecycle (per class)</h5>
  *
@@ -46,7 +43,7 @@ import org.junit.jupiter.api.extension.*;
  * <h5 class='topic'>Mock-bean injection</h5>
  *
  * <p>
- * {@link org.apache.juneau.junit5.TestBean @TestBean} declarations are discovered via
+ * {@link org.apache.juneau.test.junit.TestBean @TestBean} declarations are discovered via
  * {@link JuneauBeanStoreExtension#discoverOverrides(Object)}. <b>Mode INJECT</b> (the default) installs the
  * overrides via {@code Microservice.Builder.overridingBeanStore(...)} <i>before</i> boot, so the service reads
  * them from startup. <b>Mode OVERLAY</b> pushes the overrides onto the booted instance's bean store for the
@@ -61,8 +58,7 @@ import org.junit.jupiter.api.extension.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"resource", // The Microservice + RestClient are owned by this extension and closed/stopped in afterAll(); not unmanaged leaks.
-	"java:S3011" // setAccessible on the test class's no-arg ctor / builder-supplier method is intentional - the same reflective access JUnit itself uses to drive user test classes.
+	"resource"
 })
 public class MicroserviceExtension implements BeforeAllCallback, AfterAllCallback, ParameterResolver {
 
@@ -178,6 +174,7 @@ public class MicroserviceExtension implements BeforeAllCallback, AfterAllCallbac
 		throw new ExtensionContextException("@MicroserviceTest annotation not found on " + testClass.getName());
 	}
 
+	@SuppressWarnings("java:S3011") // setAccessible required: builder supplier method may be package-private or private by test-class convention.
 	private static Microservice.Builder resolveBuilder(Class<?> testClass, MicroserviceTest ann) {
 		var m = findBuilderSupplier(testClass, ann.builderMethod());
 		if (m == null)
@@ -215,6 +212,7 @@ public class MicroserviceExtension implements BeforeAllCallback, AfterAllCallbac
 	 * Instantiates the test class via its no-arg constructor purely to drive {@code @TestBean} discovery (which
 	 * reads instance + static members). Falls back to a hierarchy-static-only scan if no usable no-arg ctor exists.
 	 */
+	@SuppressWarnings("java:S3011") // setAccessible required: test class no-arg constructor may be package-private for JUnit lifecycle reasons.
 	private static Object instantiateForDiscovery(Class<?> testClass) {
 		try {
 			var ctor = testClass.getDeclaredConstructor();

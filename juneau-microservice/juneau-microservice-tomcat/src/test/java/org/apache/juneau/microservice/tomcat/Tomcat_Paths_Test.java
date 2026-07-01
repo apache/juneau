@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
 
-@org.apache.juneau.testing.annotations.TomcatMicroserviceTest
+@org.apache.juneau.testing.TomcatMicroserviceTest
 @SuppressWarnings({
 	"resource" // Microservice/bean-store lookups return Closeables whose lifecycle is owned by the test; Eclipse JDT @Owning warning is by design.
 })

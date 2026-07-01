@@ -18,7 +18,7 @@ package org.apache.juneau.marshall.jsonschema;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.junit.bct.BctAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.apache.juneau.marshall.jsonschema.TypeCategory.*;
 
 import java.util.*;

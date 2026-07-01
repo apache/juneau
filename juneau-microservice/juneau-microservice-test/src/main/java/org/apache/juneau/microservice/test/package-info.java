@@ -22,7 +22,7 @@
  * {@link org.apache.juneau.microservice.test.MicroserviceTest @MicroserviceTest} boots a whole
  * {@link org.apache.juneau.microservice.Microservice Microservice} (config + lifecycle + embedded Jetty on an
  * ephemeral port) for a test class, composing the existing {@code juneau-junit5}
- * {@link org.apache.juneau.junit5.TestBean @TestBean} mock-bean substrate for collaborator substitution and
+ * {@link org.apache.juneau.test.junit.TestBean @TestBean} mock-bean substrate for collaborator substitution and
  * resolving a {@link org.apache.juneau.rest.client.RestClient RestClient} bound to the booted server for tests.
  *
  * <p>

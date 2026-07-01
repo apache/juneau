@@ -24,6 +24,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.json5.*;
 
@@ -41,7 +42,7 @@ import org.apache.juneau.marshall.json5.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class WriterSerializer extends Serializer {
+public class WriterSerializer extends Serializer implements ThrowingFunction<Object,String> {
 
 	// Property name constants
 	private static final String PROP_fileCharset = "fileCharset";
@@ -497,6 +498,28 @@ public class WriterSerializer extends Serializer {
 	@Override /* Overridden from Serializer */
 	public final String serialize(Object o) throws SerializeException {
 		return getSession().serialize(o);
+	}
+
+	/**
+	 * Allows this serializer to be used as a {@link ThrowingFunction} that converts an object to its serialized string form.
+	 *
+	 * <p>
+	 * Because {@link WriterSerializer} implements {@link ThrowingFunction ThrowingFunction&lt;Object,String&gt;}, a serializer
+	 * instance can be passed directly wherever a {@link java.util.function.Function Function} or {@link ThrowingFunction} is
+	 * expected (e.g. assertion transform methods).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jsm>assertObject</jsm>(<jv>myPojo</jv>).asString(Json5Serializer.<jsf>DEFAULT</jsf>).is(<js>"{...}"</js>);
+	 * </p>
+	 *
+	 * @param o The object to serialize.
+	 * @return The output serialized to a string.
+	 * @throws Exception If a problem occurred trying to convert the output.
+	 */
+	@Override /* Overridden from ThrowingFunction */
+	public final String applyThrows(Object o) throws Exception {
+		return serialize(o);
 	}
 
 	/**

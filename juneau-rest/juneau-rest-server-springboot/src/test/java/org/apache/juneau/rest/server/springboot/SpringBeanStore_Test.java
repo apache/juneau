@@ -31,7 +31,7 @@ import org.springframework.context.*;
 /**
  * Tests for {@link SpringBeanStore}.
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 @SuppressWarnings({
 	"resource", // Named resource variables in tests are intentionally not closed; lifecycle is managed by test infrastructure.
 	"unchecked" // getBean(String, Class) invocation in test

@@ -47,11 +47,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-assertions</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-bean-rfc7807</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -63,13 +58,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-bct</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-junit5</artifactId>
+			<artifactId>juneau-test</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>

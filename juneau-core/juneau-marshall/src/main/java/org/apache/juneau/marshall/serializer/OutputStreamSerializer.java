@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.serializer;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.marshall.*;
 
 /**
@@ -35,7 +36,7 @@ import org.apache.juneau.marshall.*;
 @SuppressWarnings({
 	"java:S115" // ARG_xxx constants use camelCase after prefix intentionally (constructor arg name keys, not enum-style constants)
 })
-public class OutputStreamSerializer extends Serializer {
+public class OutputStreamSerializer extends Serializer implements ThrowingFunction<Object,byte[]> {
 
 	private static final String ARG_copyFrom = "copyFrom";
 
@@ -150,6 +151,23 @@ public class OutputStreamSerializer extends Serializer {
 	@Override
 	public final byte[] serialize(Object o) throws SerializeException {
 		return getSession().serialize(o);
+	}
+
+	/**
+	 * Allows this serializer to be used as a {@link ThrowingFunction} that converts an object to its serialized byte array form.
+	 *
+	 * <p>
+	 * Because {@link OutputStreamSerializer} implements {@link ThrowingFunction ThrowingFunction&lt;Object,byte[]&gt;}, a
+	 * serializer instance can be passed directly wherever a {@link java.util.function.Function Function} or
+	 * {@link ThrowingFunction} is expected (e.g. assertion transform methods).
+	 *
+	 * @param o The object to serialize.
+	 * @return The output serialized to a byte array.
+	 * @throws Exception If a problem occurred trying to convert the output.
+	 */
+	@Override /* Overridden from ThrowingFunction */
+	public final byte[] applyThrows(Object o) throws Exception {
+		return serialize(o);
 	}
 
 	/**

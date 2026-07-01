@@ -60,7 +60,7 @@ import org.springframework.test.annotation.*;
  *
  * @since 10.0.0
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 @SpringBootTest(classes = StaticFilesMixin_SpringbootMetaInf_Test.TestApp.class,
 	webEnvironment = WebEnvironment.RANDOM_PORT)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)

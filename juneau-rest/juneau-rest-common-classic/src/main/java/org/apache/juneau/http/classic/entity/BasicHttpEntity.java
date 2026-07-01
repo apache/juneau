@@ -25,7 +25,7 @@ import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.assertions.*;
+import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.classic.header.*;
 

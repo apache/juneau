@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.junit5.*;
+import org.apache.juneau.test.junit.*;
 import org.apache.juneau.marshall.encoders.*;
 import org.junit.jupiter.api.*;
 

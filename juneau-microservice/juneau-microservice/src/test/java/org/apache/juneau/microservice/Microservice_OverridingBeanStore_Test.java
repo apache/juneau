@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.junit5.*;
+import org.apache.juneau.test.junit.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
  * in the {@code overridingParent} slot of the microservice's bean store so test-time overrides
  * resolve before locally-registered beans during the microservice's startup-time injection
  */
-@org.apache.juneau.testing.annotations.JettyMicroserviceTest
+@org.apache.juneau.testing.JettyMicroserviceTest
 class Microservice_OverridingBeanStore_Test extends TestBase {
 
 	interface ExternalApi {

@@ -42,7 +42,7 @@ import jakarta.servlet.ServletRegistration;
  *
  * @since 10.0.0
  */
-@org.apache.juneau.testing.annotations.SpringbootTest
+@org.apache.juneau.testing.SpringbootTest
 class JuneauRestAutoConfiguration_Test extends TestBase {
 
 	private final ApplicationContextRunner runner = new ApplicationContextRunner()
