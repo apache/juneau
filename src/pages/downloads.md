@@ -68,8 +68,7 @@
 
 <!-- ...but can also be any of the following... -->
 <!-- Core modules -->
-<artifactId>juneau-assertions</artifactId>
-<artifactId>juneau-bct</artifactId>
+<artifactId>juneau-test</artifactId>
 <artifactId>juneau-commons</artifactId>
 <artifactId>juneau-config</artifactId>
 <artifactId>juneau-marshall</artifactId>

@@ -15,7 +15,7 @@ Juneau excels in the following scenarios:
 * **Microservice development with production-focused building blocks** - Start quickly with `juneau-microservice` and deploy on Jetty or Tomcat while reusing REST APIs, auth filters (JWT, SAML, OAuth/OIDC), reactive endpoints, observability hooks (Micrometer/OpenTelemetry), and configuration APIs across services
 * **Using one ecosystem across service, client, and DTO layers** - Keep service contracts and model objects aligned with reusable DTO modules (OpenAPI, JSON Schema, RFC 7807, MCP, Atom/HAL/JSON:API) and transport adapters for Apache HttpClient 4.5/5.x, OkHttp, or Jetty clients
 * **Universal Java marshalling** - The framework handles the full breadth of Java language features automatically during marshalling — beans, generics, collections, enums, records, optionals, and more — and is extensible via swaps and surrogate classes so that virtually any Java artifact can be serialized and deserialized
-* **Bean-Centric Testing and fluent-style assertions** - Write compact, expressive unit tests that are considerably smaller than equivalent JUnit-alone tests; juneau-bct and juneau-assertions provide deep bean-aware assertions and fluent validation chains that eliminate boilerplate while improving readability
+* **Bean-Centric Testing and fluent-style assertions** - Write compact, expressive unit tests that are considerably smaller than equivalent JUnit-alone tests; juneau-test provides deep bean-aware assertions and fluent validation chains that eliminate boilerplate while improving readability
 * **Content negotiation and HTTP/2 support** - Handle multiple content types automatically with modern HTTP features
 
 ## When to Choose Juneau
@@ -35,8 +35,7 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-marshall](/docs/topics/JuneauMarshallBasics) | POJO marshalling for 25+ wire formats — JSON/JSON5/JSONL/JCS, XML/SOAP, HTML, YAML/TOML/HOCON/HJSON/INI, CBOR/BSON/MessagePack, Protobuf/Prototext, UON/URL-encoding, CSV, Parquet, Markdown, SSE, OpenAPI, and PlainText — plus a token-streaming API; no external dependencies required. |
 | [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdfOverview) | Extended marshalling support for RDF/XML, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
 | [juneau-config](/docs/topics/JuneauConfigBasics) | Multi-format (INI and YAML) configuration file API with POJO support, variable resolution, and real-time file watching. |
-| [juneau-assertions](/docs/topics/JuneauAssertionBasics) | Fluent assertion API for readable, expressive unit test validations. |
-| [juneau-bct](/docs/topics/JuneauBctBasics) | Bean-Centric Testing framework that extends JUnit with streamlined assertion methods for Java objects. |
+| [juneau-test](/docs/topics/JuneauAssertionBasics) | Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions for readable, expressive unit tests. |
 | **juneau-bean** | |
 | [juneau-bean-atom](/docs/topics/JuneauBeanAtom) | DTOs for the Atom Syndication Format (RFC 4287). |
 | [juneau-bean-common](/docs/topics/JuneauBeanCommon) | Shared DTO base classes and utilities used across juneau-bean modules. |

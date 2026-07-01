@@ -34,68 +34,79 @@ const sidebars: SidebarsConfig = {
 			label: 'Documentation',
 			collapsed: false,
 			items: [
-				{
-					type: 'category',
-					label: '1. Juneau Ecosystem',
-					collapsed: false,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/01.01.JuneauEcosystemOverview',
-							label: '1.1. Juneau Ecosystem Overview',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.02.Marshalling',
-							label: '1.2. Marshalling',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.03.EndToEndRest',
-							label: '1.3. End-to-End REST',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.04.RestServer',
-							label: '1.4. REST Server',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.05.RestClient',
-							label: '1.5. REST Client',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.06.DtoBeans',
-							label: '1.6. DTO Beans',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.07.ConfigFiles',
-							label: '1.7. Config Files',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.08.FluentAssertions',
-							label: '1.8. Fluent Assertions',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.09.GeneralDesign',
-							label: '1.9. General Design',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.10.FrameworkComparisons',
-							label: '1.10. Framework Comparisons',
-						},
-						{
-							type: 'doc',
-							id: 'topics/01.11.WhyJuneau',
-							label: '1.11. Why Choose Juneau?',
-						},
-					],
-				},
+			{
+				type: 'category',
+				label: '1. Juneau Ecosystem',
+				collapsed: false,
+				link: { type: 'doc', id: 'topics/01.01.JuneauEcosystemOverview' },
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/01.01.01.Commons',
+						label: '1.1. Commons',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.02.Marshalling',
+						label: '1.2. Marshalling',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.02.01.SimpleVariableLanguage',
+						label: '1.3. Simple Variable Language',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.02.02.BeanContextOverview',
+						label: '1.4. Bean Context',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.03.EndToEndRest',
+						label: '1.5. End-to-End REST',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.04.RestServer',
+						label: '1.6. REST Server',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.05.RestClient',
+						label: '1.7. REST Client',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.06.DtoBeans',
+						label: '1.8. DTO Beans',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.07.ConfigFiles',
+						label: '1.9. Config Files',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.08.FluentAssertions',
+						label: '1.10. Fluent Assertions',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.09.GeneralDesign',
+						label: '1.11. General Design',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.10.FrameworkComparisons',
+						label: '1.12. Framework Comparisons',
+					},
+					{
+						type: 'doc',
+						id: 'topics/01.11.WhyJuneau',
+						label: '1.13. Why Choose Juneau?',
+					},
+				],
+			},
 				{
 					type: 'category',
 					label: '2. juneau-marshall',
@@ -1155,67 +1166,72 @@ const sidebars: SidebarsConfig = {
 					},
 				{
 					type: 'category',
-					label: '7. juneau-assertions',
+					label: '7. juneau-test',
 					collapsed: true,
 					items: [
 						{
 							type: 'doc',
 							id: 'topics/07.01.JuneauAssertionBasics',
-							label: '7.1. juneau-assertions Basics',
+							label: '7.1. juneau-test Basics',
 						},
 						{
 							type: 'doc',
 							id: 'topics/07.02.AssertionsOverview',
 							label: '7.2. Assertions Overview',
 						},
-					],
-				},
-				{
-					type: 'category',
-					label: '8. juneau-bct',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/08.01.JuneauBctBasics',
-							label: '8.1. juneau-bct Basics',
-						},
-						{
-							type: 'doc',
-							id: 'topics/08.02.CustomErrorMessages',
-							label: '8.2. Custom Error Messages',
-						},
 						{
 							type: 'category',
-							label: '8.3. Customization',
+							label: '7.3. Bean-Centric Testing',
 							collapsed: true,
 							items: [
 								{
 									type: 'doc',
-									id: 'topics/08.03.01.Customization',
-									label: '8.3.1. Customization',
+									id: 'topics/08.01.JuneauBctBasics',
+									label: '7.3.1. Bean-Centric Testing Basics',
 								},
 								{
 									type: 'doc',
-									id: 'topics/08.03.02.Stringifiers',
-									label: '8.3.2. Stringifiers',
+									id: 'topics/08.02.CustomErrorMessages',
+									label: '7.3.2. Custom Error Messages',
 								},
 								{
-									type: 'doc',
-									id: 'topics/08.03.03.Listifiers',
-									label: '8.3.3. Listifiers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/08.03.04.Swappers',
-									label: '8.3.4. Swappers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/08.03.05.PropertyExtractors',
-									label: '8.3.5. Property Extractors',
+									type: 'category',
+									label: '7.3.3. Customization',
+									collapsed: true,
+									items: [
+										{
+											type: 'doc',
+											id: 'topics/08.03.01.Customization',
+											label: '7.3.3.1. Customization',
+										},
+										{
+											type: 'doc',
+											id: 'topics/08.03.02.Stringifiers',
+											label: '7.3.3.2. Stringifiers',
+										},
+										{
+											type: 'doc',
+											id: 'topics/08.03.03.Listifiers',
+											label: '7.3.3.3. Listifiers',
+										},
+										{
+											type: 'doc',
+											id: 'topics/08.03.04.Swappers',
+											label: '7.3.3.4. Swappers',
+										},
+										{
+											type: 'doc',
+											id: 'topics/08.03.05.PropertyExtractors',
+											label: '7.3.3.5. Property Extractors',
+										},
+									],
 								},
 							],
+						},
+						{
+							type: 'doc',
+							id: 'topics/08.04.JuneauTestJUnitExtensions',
+							label: '7.4. JUnit Extensions',
 						},
 					],
 				},
@@ -2042,16 +2058,21 @@ const sidebars: SidebarsConfig = {
 						},
 					],
 				},
-				{
-					type: 'category',
-					label: '15. juneau-microservice',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/15.01.JuneauMicroserviceBasics',
-							label: '15.1. juneau-microservice Basics',
-						},
+			{
+				type: 'category',
+				label: '15. juneau-microservice',
+				collapsed: true,
+				items: [
+					{
+						type: 'doc',
+						id: 'topics/15.00.MicroserviceOverview',
+						label: '15.0. Microservice Overview',
+					},
+					{
+						type: 'doc',
+						id: 'topics/15.01.JuneauMicroserviceBasics',
+						label: '15.1. juneau-microservice Basics',
+					},
 						{
 							type: 'doc',
 							id: 'topics/15.02.MicroserviceCoreOverview',
