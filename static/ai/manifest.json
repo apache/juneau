@@ -4,7 +4,7 @@
   "schema_version": "1.0.0",
   "source_commit": {
     "juneau": "f925cfecd6ad9e4fbcb5677a839302fdac3550bc",
-    "juneau_docs": "1c84283bfdbac1caf506368aa07a8d60cf93caf4"
+    "juneau_docs": "3c6aced9c6e5517c7b50d229f90d236f28020e77"
   },
   "version": "10.0.0"
 }
