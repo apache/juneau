@@ -92,7 +92,7 @@ class ArrayRecordStream_Test extends TestBase {
 		public Bean(String name, int age) { this.name = name; this.age = age; }
 	}
 
-	/** Self-similar bean for the deep-nesting / self-reference array-element rows (TODO-175ab Item 2). */
+	/** Self-similar bean for the deep-nesting / self-reference array-element rows (175ab Item 2). */
 	public static class Node {
 		public String id;
 		public Node child;
@@ -343,7 +343,8 @@ class ArrayRecordStream_Test extends TestBase {
 		var baos = new ByteArrayOutputStream();
 		try (var w = MsgPackSerializer.DEFAULT.serializeArrayRecords(baos, 1)) {
 			w.write(new Bean("a", 1));
-			assertThrows(IllegalStateException.class, () -> w.write(new Bean("b", 2)));
+			var overflow = new Bean("b", 2);
+			assertThrows(IllegalStateException.class, () -> w.write(overflow));
 		}
 	}
 
@@ -366,13 +367,13 @@ class ArrayRecordStream_Test extends TestBase {
 	}
 
 	// =====================================================================================
-	// Self-reference / cycle as an array element — TODO-175ab Item 2.  A cycle must surface as a
+	// Self-reference / cycle as an array element — 175ab Item 2.  A cycle must surface as a
 	// controlled failure, never a raw StackOverflowError, on the streaming write path.
 	// =====================================================================================
 
 	@ParameterizedTest
 	@EnumSource(value = Format.class, names = {"JSON", "JSON5", "CBOR", "MSGPACK"})
-	void h02_selfReferenceArrayElementIsHandled(Format fmt) throws Exception {
+	void h02_selfReferenceArrayElementIsHandled(Format fmt) {
 		var a = new Node("a", null);
 		a.child = a;  // self-reference
 		assertDoesNotThrow(() -> {

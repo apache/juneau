@@ -18,7 +18,6 @@ package org.apache.juneau.marshall;
 
 import java.math.*;
 import java.time.*;
-import java.util.regex.*;
 
 /**
  * Supported wire formats for {@link Duration} values.
@@ -33,7 +32,6 @@ public enum DurationFormat {
 	SECONDS,
 	HOCON;
 
-	private static final Pattern HOCON_PATTERN = Pattern.compile("^([+-]?\\d+(?:\\.\\d+)?)(ns|us|ms|s|m|h|d)$", Pattern.CASE_INSENSITIVE);
 	private static final BigDecimal NANOS_PER_SECOND = BigDecimal.valueOf(1_000_000_000L);
 
 	/**
@@ -132,7 +130,7 @@ public enum DurationFormat {
 			if (minutes > 0)
 				sb.append(minutes).append('M');
 			if (seconds > 0 || nanos > 0 || (hours == 0 && minutes == 0))
-				sb.append(seconds).append(nanos == 0 ? "" : "." + String.format("%09d", nanos).replaceAll("0++$", "")).append('S');
+				sb.append(seconds).append(nanos == 0 ? "" : "." + trimTrailingZeros(String.format("%09d", nanos))).append('S');
 		}
 		return sb.toString();
 	}
@@ -154,21 +152,51 @@ public enum DurationFormat {
 	}
 
 	private static Duration parseHocon(String s) {
-		Matcher m = HOCON_PATTERN.matcher(s);
-		if (! m.matches())
+		// Programmatic equivalent of full match ^([+-]?\d++(?:\.\d++)?)(ns|us|ms|s|m|h|d)$ (CASE_INSENSITIVE) to avoid per-parse matching.
+		// Group 1 = the numeric part, group 2 = the (case-insensitive) unit suffix. \d = ASCII [0-9].
+		var len = s.length();
+		var i = 0;
+		if (i < len && (s.charAt(i) == '+' || s.charAt(i) == '-'))
+			i++;
+		var digitsStart = i;
+		while (i < len && isAsciiDigit(s.charAt(i)))
+			i++;
+		var valid = i > digitsStart;
+		if (valid && i < len && s.charAt(i) == '.') {
+			i++;
+			var fracStart = i;
+			while (i < len && isAsciiDigit(s.charAt(i)))
+				i++;
+			valid = i > fracStart;
+		}
+		BigDecimal nanos = null;
+		if (valid) {
+			var value = new BigDecimal(s.substring(0, i));
+			nanos = switch (s.substring(i).toLowerCase()) {
+				case "d" -> value.multiply(BigDecimal.valueOf(86_400_000_000_000L));
+				case "h" -> value.multiply(BigDecimal.valueOf(3_600_000_000_000L));
+				case "m" -> value.multiply(BigDecimal.valueOf(60_000_000_000L));
+				case "s" -> value.multiply(BigDecimal.valueOf(1_000_000_000L));
+				case "ms" -> value.multiply(BigDecimal.valueOf(1_000_000L));
+				case "us" -> value.multiply(BigDecimal.valueOf(1_000L));
+				case "ns" -> value;
+				default -> null;
+			};
+		}
+		if (nanos == null)
 			throw new IllegalArgumentException("Invalid HOCON duration: " + s);
-		BigDecimal value = new BigDecimal(m.group(1));
-		String unit = m.group(2).toLowerCase();
-		BigDecimal nanos = switch (unit) {
-			case "d" -> value.multiply(BigDecimal.valueOf(86_400_000_000_000L));
-			case "h" -> value.multiply(BigDecimal.valueOf(3_600_000_000_000L));
-			case "m" -> value.multiply(BigDecimal.valueOf(60_000_000_000L));
-			case "s" -> value.multiply(BigDecimal.valueOf(1_000_000_000L));
-			case "ms" -> value.multiply(BigDecimal.valueOf(1_000_000L));
-			case "us" -> value.multiply(BigDecimal.valueOf(1_000L));
-			case "ns" -> value;
-			default -> throw new IllegalArgumentException("Invalid HOCON duration unit: " + unit);
-		};
 		return Duration.ofNanos(nanos.longValue());
+	}
+
+	private static boolean isAsciiDigit(char c) {
+		return c >= '0' && c <= '9';
+	}
+
+	// Removes trailing '0' characters. Equivalent of replaceAll("0++$", ""); returns "" if the input is all zeros.
+	private static String trimTrailingZeros(String s) {
+		var end = s.length();
+		while (end > 0 && s.charAt(end - 1) == '0')
+			end--;
+		return s.substring(0, end);
 	}
 }

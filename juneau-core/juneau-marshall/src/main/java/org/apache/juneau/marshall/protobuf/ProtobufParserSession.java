@@ -44,7 +44,8 @@ import org.apache.juneau.marshall.swap.*;
 	"rawtypes",  // Raw types necessary for generic type handling
 	"unchecked", // Type erasure requires unchecked casts
 	"java:S110", // Inheritance depth acceptable for parser session hierarchy
-	"resource"   // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"resource",  // Closeable resources are owned by the caller's parser session; Eclipse JDT @Owning warning is by design.
+	"java:S115"  // Constants use UPPER_camelCase convention (e.g., ARG_ctx)
 })
 public class ProtobufParserSession extends InputStreamParserSession {
 

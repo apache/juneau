@@ -56,23 +56,6 @@ public class TestUtils extends Utils {
 		return exception;
 	}
 
-	/**
-	 * Asserts that the specified executable throws an exception whose chained messages contain all of
-	 * the specified substrings.
-	 *
-	 * @param <T> The expected exception type.
-	 * @param expectedType The expected exception type.
-	 * @param expectedSubstrings The substrings expected in the exception message chain.
-	 * @param executable The code expected to throw.
-	 * @return The thrown exception.
-	 */
-	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, List<String> expectedSubstrings, org.junit.jupiter.api.function.Executable executable) {
-		var exception = assertThrows(expectedType, executable);
-		var messages = getMessages(exception);
-		expectedSubstrings.forEach(x -> assertTrue(messages.contains(x), "Expected message to contain: " + x + ".\nActual:\n" + messages));
-		return exception;
-	}
-
 	private static String getMessages(Throwable t) {
 		return Stream.iterate(t, Objects::nonNull, Throwable::getCause).map(Throwable::getMessage).collect(Collectors.joining("\n"));
 	}

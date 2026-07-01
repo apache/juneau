@@ -250,12 +250,12 @@ class MarkdownParserSession_Test extends TestBase {
 		assertEquals("", r.get(0).name);
 	}
 
-	@Test void d05_invalidJson5InBackticks() throws Exception {
+	@Test void d05_invalidJson5InBackticks() {
 		var md = "| Property | Value |\n|---|---|\n| addr | `{this is not json5` |";
 		assertThrows(ParseException.class, () -> MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.D.class));
 	}
 
-	@Test void d06_invalidConvertCellValue() throws Exception {
+	@Test void d06_invalidConvertCellValue() {
 		// "abc" cannot convert to int → ParseException.
 		var md = "| Property | Value |\n|---|---|\n| age | abc |";
 		assertThrows(ParseException.class, () -> MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class));

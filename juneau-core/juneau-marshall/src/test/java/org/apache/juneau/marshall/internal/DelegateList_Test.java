@@ -51,18 +51,18 @@ class DelegateList_Test extends TestBase {
 	@Test void a04_equals_null() {
 		var cm = BC.<List<String>>getClassMeta(List.class, String.class);
 		var dl = new DelegateList<>(cm);
-		assertNotEquals(dl, null);
+		assertNotEquals(null, dl);
 	}
 
 	@Test void a05_equals_nonList() {
 		var cm = BC.<List<String>>getClassMeta(List.class, String.class);
 		var dl = new DelegateList<>(cm);
-		assertNotEquals(dl, "not a list");
+		assertNotEquals("not a list", dl);
 	}
 
 	@Test void a06_equals_emptyList() {
 		var cm = BC.<List<String>>getClassMeta(List.class, String.class);
-		var dl = new DelegateList<>(cm);
+		List<Object> dl = new DelegateList<>(cm);
 		assertEquals(new ArrayList<>(), dl);
 	}
 

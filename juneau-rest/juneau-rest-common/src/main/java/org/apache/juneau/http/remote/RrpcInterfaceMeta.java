@@ -447,8 +447,9 @@ public final class RrpcInterfaceMeta {
 		return methodMetas.get(method);
 	}
 
-	// Complexity inherent to interface metadata parsing; refactoring would reduce readability without benefit.
-	@SuppressWarnings("java:S3776")
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity inherent to per-verb interface-metadata parsing; refactoring would reduce readability without benefit.
+	})
 	private static Optional<RrpcInterfaceMethodMeta> buildMethodMeta(Method m) {
 		if (m.isAnnotationPresent(RemoteGet.class)) {
 			var a = m.getAnnotation(RemoteGet.class);

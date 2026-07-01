@@ -679,7 +679,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @return <jk>true</jk> if the values are equal under the {@code nonDefault} contract.
 	 */
 	@SuppressWarnings({
-		"java:S1244" // Float equality is intentional: caller has already narrowed to numeric short-circuit; BigDecimal compareTo handles the value-equality semantics.
+		"java:S1244", // Float equality is intentional: caller has already narrowed to numeric short-circuit; BigDecimal compareTo handles the value-equality semantics.
+		"java:S3776"  // Cognitive complexity acceptable for the numeric/NaN value-equality logic.
 	})
 	private static boolean defaultEquals(Object a, Object b) {
 		if (a == b)

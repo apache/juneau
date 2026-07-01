@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.marshall.hocon;
 
+import static org.apache.juneau.commons.utils.StringUtils.*;
+
 import java.io.*;
-import java.util.regex.*;
 
 /**
  * Tokenizer for HOCON (Human-Optimized Config Object Notation) format.
@@ -146,8 +147,6 @@ public class HoconTokenizer {
 			return new Token(optional ? TokenType.OPT_SUBSTITUTION : TokenType.SUBSTITUTION, path, null);
 		}
 	}
-
-	private static final Pattern NUMBER_PATTERN = Pattern.compile("^-?(?:0|[1-9]\\d*)(?:\\.\\d+)?(?:[eE][+-]?\\d+)?");
 
 	private final PushbackReader reader;
 	private Token peeked;
@@ -437,9 +436,9 @@ public class HoconTokenizer {
 		if (raw.equals("false")) return Token.of(TokenType.FALSE);
 		if (raw.equals("null")) return Token.of(TokenType.NULL);
 
-		var numMatcher = NUMBER_PATTERN.matcher(raw);
-		if (numMatcher.matches()) {
-			var numStr = numMatcher.group();
+		// Whole-string JSON-number match (leading-zero-restricted grammar); span equals the full token on a match.
+		if (matchNumberPrefix(raw, false) == raw.length()) {
+			var numStr = raw;
 			try {
 				if (numStr.contains(".") || numStr.toLowerCase().contains("e"))
 					return Token.number(Double.parseDouble(numStr));

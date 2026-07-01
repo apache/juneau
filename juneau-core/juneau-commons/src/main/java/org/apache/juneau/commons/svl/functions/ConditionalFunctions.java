@@ -18,6 +18,9 @@ package org.apache.juneau.commons.svl.functions;
 
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
+import java.util.regex.*;
+
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
@@ -78,6 +81,11 @@ public final class ConditionalFunctions {
 	 * </ul>
 	 */
 	public static class Switch extends TypedFunction {
+
+		// Compiled glob-derived regexes are cached and reused.  Bounded (entire cache cleared past maxSize) to guard
+		// against unbounded growth from arbitrary user-supplied glob patterns.  Pattern is immutable/thread-safe.
+		private static final Cache<String,Pattern> PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();
+
 		@Override public String name() { return "switch"; }
 		public String invoke(String[] args) {
 			if (args.length == 0) return "";
@@ -107,7 +115,7 @@ public final class ConditionalFunctions {
 					default -> sb.append(c);
 				}
 			}
-			return java.util.regex.Pattern.compile(sb.toString()).matcher(value).matches();
+			return PATTERN_CACHE.get(sb.toString()).matcher(value).matches();
 		}
 	}
 

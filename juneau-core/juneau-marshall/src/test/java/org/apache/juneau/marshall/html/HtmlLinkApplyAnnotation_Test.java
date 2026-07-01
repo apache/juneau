@@ -50,7 +50,6 @@ class HtmlLinkApplyAnnotation_Test extends TestBase {
 		var applier = new HtmlLinkApplyAnnotation.Applier(vr);
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = HtmlLinkApplyAnnotation.DEFAULT;
-		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
 	}
 }

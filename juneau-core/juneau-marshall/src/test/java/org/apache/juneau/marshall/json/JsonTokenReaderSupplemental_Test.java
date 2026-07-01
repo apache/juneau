@@ -72,11 +72,11 @@ class JsonTokenReaderSupplemental_Test extends TestBase {
 			assertThrowsWithMessage(ParseException.class, "Invalid JSON number", () -> drain("-01"));
 		}
 
-		@Test void b03_zeroWithFractionOrExponentAccepted() throws Exception {
+		@Test void b03_zeroWithFractionOrExponentAccepted() {
 			// '0' followed by '.' / 'e' / 'E' is the valid branch of the leading-zero guard.
-			drain("0.5");
-			drain("0e1");
-			drain("0E1");
+			assertDoesNotThrow(() -> drain("0.5"));
+			assertDoesNotThrow(() -> drain("0e1"));
+			assertDoesNotThrow(() -> drain("0E1"));
 		}
 
 		@Test void b04_danglingDecimalPointRejected() {

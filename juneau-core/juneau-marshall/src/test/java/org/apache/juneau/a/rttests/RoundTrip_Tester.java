@@ -18,6 +18,7 @@ package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.XmlTestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.lang.reflect.*;

@@ -244,7 +244,7 @@ class AuthFilterChain_Test extends TestBase {
 		assertSame(ALICE, ((AuthenticatedRequestWrapper) capturing.captured).getUserPrincipal());
 	}
 
-	@Test void e01_authenticateReturnsFoldedResult_noResponseWrite() throws Exception {
+	@Test void e01_authenticateReturnsFoldedResult_noResponseWrite() {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE, "admin"))
 			.build();
@@ -253,14 +253,14 @@ class AuthFilterChain_Test extends TestBase {
 		assertTrue(r.orElseThrow().getRoles().contains("admin"));
 	}
 
-	@Test void e02_authenticateNoMatch_returnsEmpty() throws Exception {
+	@Test void e02_authenticateNoMatch_returnsEmpty() {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE), "/api/*")
 			.build();
 		assertTrue(chain.authenticate(req("/public/page")).isEmpty());
 	}
 
-	@Test void e03_authenticateAllEmpty_returnsEmpty() throws Exception {
+	@Test void e03_authenticateAllEmpty_returnsEmpty() {
 		var chain = AuthFilterChain.create(null)
 			.append(empty())
 			.build();
@@ -271,11 +271,12 @@ class AuthFilterChain_Test extends TestBase {
 		var chain = AuthFilterChain.create(null)
 			.append(fails("token bad"))
 			.build();
-		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(req("/")));
+		var r = req("/");
+		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(r));
 		assertTrue(e.getHeaders().stream().anyMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
 	}
 
-	@Test void e05_authenticateRoleUnionAcrossSuccesses() throws Exception {
+	@Test void e05_authenticateRoleUnionAcrossSuccesses() {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE, "user"))
 			.append(succeeds(BOB, "admin"))
@@ -286,7 +287,7 @@ class AuthFilterChain_Test extends TestBase {
 		assertTrue(r.getRoles().contains("admin"));
 	}
 
-	@Test void e06_aggregateWithNullMessageAndNoChallenge() throws Exception {
+	@Test void e06_aggregateWithNullMessageAndNoChallenge() {
 		// Failure with a null message and no WWW-Authenticate header: aggregate body collapses to null and no
 		// challenge header is emitted (exercises the empty-body / empty-wwwAuth branches of aggregate()).
 		AuthFilter bare = new AuthFilter() {
@@ -295,11 +296,12 @@ class AuthFilterChain_Test extends TestBase {
 			}
 		};
 		var chain = AuthFilterChain.create(null).append(bare).build();
-		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(req("/")));
+		var r = req("/");
+		var e = assertThrows(AuthenticationException.class, () -> chain.authenticate(r));
 		assertTrue(e.getHeaders().stream().noneMatch(h -> "WWW-Authenticate".equalsIgnoreCase(h.getName())));
 	}
 
-	@Test void e07_authenticateWithNullContextPath() throws Exception {
+	@Test void e07_authenticateWithNullContextPath() {
 		// contextPath == null must not NPE; path resolves to the raw URI.
 		var req = mock(HttpServletRequest.class);
 		when(req.getRequestURI()).thenReturn("/x");
@@ -308,7 +310,7 @@ class AuthFilterChain_Test extends TestBase {
 		assertSame(ALICE, chain.authenticate(req).orElseThrow().getPrincipal());
 	}
 
-	@Test void e08_authenticateEmptyPathBecomesRoot() throws Exception {
+	@Test void e08_authenticateEmptyPathBecomesRoot() {
 		// URI equals contextPath → stripped path is empty → normalized to "/".
 		var req = mock(HttpServletRequest.class);
 		when(req.getRequestURI()).thenReturn("/myapp");

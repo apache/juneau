@@ -50,7 +50,6 @@ class SoapXmlApplyAnnotation_Test extends TestBase {
 		var applier = new SoapXmlApplyAnnotation.Applier(vr);
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = SoapXmlApplyAnnotation.DEFAULT;
-		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
 	}
 }

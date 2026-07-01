@@ -651,6 +651,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 
 	@SuppressWarnings({
 		"java:S1168",    // Intentionally returns null for EOF/AMP in this parser state machine.
+		"java:S2583",    // Defensive c==-1/AMP sub-checks inside the while(c!=-1 && c!=AMP) loop; kept for state-machine completeness.
 		"java:S6541",    // Brain method acceptable for parser state machine
 		"java:S3776"     // Cognitive complexity acceptable for parser state machine
 	})

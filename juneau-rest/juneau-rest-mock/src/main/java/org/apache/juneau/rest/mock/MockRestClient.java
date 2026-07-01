@@ -26,6 +26,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.RestRequest;
 import org.apache.juneau.rest.server.*;
@@ -193,6 +194,7 @@ public final class MockRestClient implements Closeable {
 		private final Object impl;
 		private String contextPath;
 		private BeanStore overridingBeanStore;
+		private Parser defaultParser;
 
 		private Builder(Object impl) {
 			this.impl = impl;
@@ -240,6 +242,32 @@ public final class MockRestClient implements Closeable {
 		}
 
 		/**
+		 * Sets an explicit default parser used when the response {@code Content-Type} matches no registered parser.
+		 *
+		 * <p>
+		 * Setting this also causes the client to advertise the parser's media types in the {@code Accept} header,
+		 * so the server must be able to produce that content type.  Omit this (the default) when the target
+		 * resource does not have a JSON serializer configured.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyJsonResource.<jk>class</jk>)
+		 * 			.defaultParser(JsonParser.<jsf>DEFAULT</jsf>)
+		 * 			.build()) {
+		 * 		<jk>var</jk> <jv>api</jv> = <jv>client</jv>.getClient().remote(MyApi.<jk>class</jk>);
+		 * 		<jv>api</jv>.someMethod();
+		 * 	}
+		 * </p>
+		 *
+		 * @param value The parser. May be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Builder defaultParser(Parser value) {
+			defaultParser = value;
+			return this;
+		}
+
+		/**
 		 * Builds and returns the {@link MockRestClient}.
 		 *
 		 * @return A new instance. Never <jk>null</jk>.
@@ -268,12 +296,14 @@ public final class MockRestClient implements Closeable {
 				var servletPath = toValidContextPath(restContext.getFullPath());
 				var fullContextPath = emptyIfNull(contextPath) + emptyIfNull(servletPath);
 
-				var transport = new JuneauRestTransport(restContext, servletPath);
-				var ngClient = RestClient.builder()
-					.transport(transport)
-					.rootUrl("http://localhost" + fullContextPath)
-					.defaultSerializer(JsonSerializer.DEFAULT)
-					.build();
+			var transport = new JuneauRestTransport(restContext, servletPath);
+			var clientBuilder = RestClient.builder()
+				.transport(transport)
+				.rootUrl("http://localhost" + fullContextPath)
+				.defaultSerializer(JsonSerializer.DEFAULT);
+			if (defaultParser != null)
+				clientBuilder.defaultParser(defaultParser);
+			var ngClient = clientBuilder.build();
 
 				return new MockRestClient(ngClient);
 			} catch (Exception e) {

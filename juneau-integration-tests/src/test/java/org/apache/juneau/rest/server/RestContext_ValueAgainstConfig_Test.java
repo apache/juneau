@@ -113,7 +113,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		String nested;
 	}
 
-	@Test void a01_happyPath_configKeyResolves() throws Exception {
+	@Test void a01_happyPath_configKeyResolves() {
 		var rc = build(HappyPathResource.class);
 		var bean = (HappyPathResource) rc.getResource();
 		assertEquals("secret-A", bean.apiKey);
@@ -136,7 +136,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		String fromSettings;
 	}
 
-	@Test void a02_fallThrough_defaultBranch_andSettings() throws Exception {
+	@Test void a02_fallThrough_defaultBranch_andSettings() {
 		Settings.get().setGlobal("valcfg.absent.from.settings", "from-settings");
 		try {
 			var rc = build(FallThroughResource.class);
@@ -165,7 +165,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		String foo;
 	}
 
-	@Test void a03_resourceIsolation_each_sees_own_config() throws Exception {
+	@Test void a03_resourceIsolation_each_sees_own_config() {
 		var rcA = build(IsolationResourceA.class);
 		var rcB = build(IsolationResourceB.class);
 		assertEquals("A", ((IsolationResourceA) rcA.getResource()).foo);
@@ -185,7 +185,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		String fromSettings;
 	}
 
-	@Test void a04_noConfig_falls_through_to_settings_only() throws Exception {
+	@Test void a04_noConfig_falls_through_to_settings_only() {
 		Settings.get().setGlobal("valcfg.noconfig.fromSettings", "settings-value");
 		try {
 			var rc = build(NoConfigResource.class);
@@ -217,7 +217,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 	@Rest(config=CFG_CHILD)
 	public static class InheritanceChild extends InheritanceParent {}
 
-	@Test void a05_inheritance_child_wins_parent_fills_gaps() throws Exception {
+	@Test void a05_inheritance_child_wins_parent_fills_gaps() {
 		var rc = build(InheritanceChild.class);
 		var bean = (InheritanceChild) rc.getResource();
 		// Child wins on collision: shared resolves to child's value.
@@ -228,7 +228,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		assertEquals("child-value", bean.childOnly);
 	}
 
-	@Test void a05b_parent_alone_resolves_parent_keys() throws Exception {
+	@Test void a05b_parent_alone_resolves_parent_keys() {
 		var rc = build(InheritanceParent.class);
 		var bean = (InheritanceParent) rc.getResource();
 		assertEquals("parent-shared", bean.shared);
@@ -251,7 +251,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		Supplier<String> value;
 	}
 
-	@Test void a06_setGlobal_overrides_resource_config() throws Exception {
+	@Test void a06_setGlobal_overrides_resource_config() {
 		var rc = build(OverrideResource.class);
 		var bean = (OverrideResource) rc.getResource();
 		// No override active → resource Config value wins.
@@ -269,7 +269,7 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 		assertEquals("from-config", bean.value.get());
 	}
 
-	@Test void a06b_setLocal_overrides_resource_config() throws Exception {
+	@Test void a06b_setLocal_overrides_resource_config() {
 		var rc = build(OverrideResource.class);
 		var bean = (OverrideResource) rc.getResource();
 
@@ -339,14 +339,14 @@ class RestContext_ValueAgainstConfig_Test extends TestBase {
 	// Acceptance #8 — Registration is under name "rest.config" in the resource BeanStore.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void a08_propertySource_registered_under_rest_config_name() throws Exception {
+	@Test void a08_propertySource_registered_under_rest_config_name() {
 		var rc = build(HappyPathResource.class);
 		var src = rc.getBeanStore().getBean(PropertySource.class, "rest.config").orElse(null);
 		assertNotNull(src, "Expected a PropertySource bean registered as \"rest.config\" in the resource BeanStore.");
 		assertEquals("secret-A", src.get("api.key").value().orElse(null));
 	}
 
-	@Test void a08b_no_config_no_registration() throws Exception {
+	@Test void a08b_no_config_no_registration() {
 		// A @Rest resource with no config= attribute and no @Bean Config method should leave the
 		// "rest.config" slot empty (rawConfig.get() returns an empty Config that the bridge skips).
 		var rc = build(NoConfigResource.class);

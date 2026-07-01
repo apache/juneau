@@ -217,15 +217,21 @@ class MarshalledNode_Test extends TestBase {
 	}
 
 	@Test void d02_putRequiresObjectNode() {
-		assertThrows(IllegalStateException.class, () -> MarshalledNode.arrayNode().put("a", 1));
-		assertThrows(IllegalStateException.class, () -> MarshalledNode.of("scalar").put("a", 1));
-		assertThrows(IllegalStateException.class, () -> MarshalledNode.of(null).put("a", 1));
+		var array = MarshalledNode.arrayNode();
+		var scalar = MarshalledNode.of("scalar");
+		var nul = MarshalledNode.of(null);
+		assertThrows(IllegalStateException.class, () -> array.put("a", 1));
+		assertThrows(IllegalStateException.class, () -> scalar.put("a", 1));
+		assertThrows(IllegalStateException.class, () -> nul.put("a", 1));
 	}
 
 	@Test void d03_addRequiresArrayNode() {
-		assertThrows(IllegalStateException.class, () -> MarshalledNode.objectNode().add("x"));
-		assertThrows(IllegalStateException.class, () -> MarshalledNode.of("scalar").add("x"));
-		assertThrows(IllegalStateException.class, () -> MarshalledNode.of(null).add("x"));
+		var object = MarshalledNode.objectNode();
+		var scalar = MarshalledNode.of("scalar");
+		var nul = MarshalledNode.of(null);
+		assertThrows(IllegalStateException.class, () -> object.add("x"));
+		assertThrows(IllegalStateException.class, () -> scalar.add("x"));
+		assertThrows(IllegalStateException.class, () -> nul.add("x"));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -333,7 +339,8 @@ class MarshalledNode_Test extends TestBase {
 	}
 
 	@Test void g08_setRootThrows() {
-		assertThrows(IllegalArgumentException.class, () -> MarshalledNode.objectNode().set("", 1));
+		var n = MarshalledNode.objectNode();
+		assertThrows(IllegalArgumentException.class, () -> n.set("", 1));
 	}
 
 	@Test void g09_remove() {

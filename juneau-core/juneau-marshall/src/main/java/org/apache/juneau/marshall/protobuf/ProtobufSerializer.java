@@ -88,7 +88,8 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable for this class hierarchy
+	"java:S110", // Inheritance depth acceptable for this class hierarchy
+	"java:S115" // Constants use UPPER_camelCase convention (e.g., ARG_copyFrom, PROP_nativeTypes)
 })
 public class ProtobufSerializer extends OutputStreamSerializer implements ProtobufMetaProvider {
 

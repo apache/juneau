@@ -120,13 +120,13 @@ public class FileFinder_Test extends TestBase {
 			.build();
 
 		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
-		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
-		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
+		var patternsJa = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patternsJaJP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
 		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
-			var p_ja = patterns_ja[i];
-			var p_ja_JP = patterns_ja_JP[i];
+			var pJa = patternsJa[i];
+			var pJaJP = patternsJaJP[i];
 
 			assertContains("[home:/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[home:/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -135,19 +135,19 @@ public class FileFinder_Test extends TestBase {
 			assertContains("[home:/files/test1/dir/"+p+"]", read(x,"/test1/dir/"+p+"/",null));
 			assertContains("[home:/files/test1/dir/dir/"+p+"]", read(x,"/test1/dir/dir/"+p+"/",null));
 
-			assertContains("[home:/files/test1/"+p_ja+"]", read(x,"test1/"+p,JAPANESE));
-			assertContains("[home:/files/test1/dir/"+p_ja+"]", read(x,"test1/dir/"+p,JAPANESE));
-			assertContains("[home:/files/test1/dir/dir/"+p_ja+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
-			assertContains("[home:/files/test1/"+p_ja+"]", read(x,"/test1/"+p+"/",JAPANESE));
-			assertContains("[home:/files/test1/dir/"+p_ja+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
-			assertContains("[home:/files/test1/dir/dir/"+p_ja+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
+			assertContains("[home:/files/test1/"+pJa+"]", read(x,"test1/"+p,JAPANESE));
+			assertContains("[home:/files/test1/dir/"+pJa+"]", read(x,"test1/dir/"+p,JAPANESE));
+			assertContains("[home:/files/test1/dir/dir/"+pJa+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
+			assertContains("[home:/files/test1/"+pJa+"]", read(x,"/test1/"+p+"/",JAPANESE));
+			assertContains("[home:/files/test1/dir/"+pJa+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
+			assertContains("[home:/files/test1/dir/dir/"+pJa+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
 
-			assertContains("[home:/files/test1/"+p_ja_JP+"]", read(x,"test1/"+p,JAPAN));
-			assertContains("[home:/files/test1/dir/"+p_ja_JP+"]", read(x,"test1/dir/"+p,JAPAN));
-			assertContains("[home:/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
-			assertContains("[home:/files/test1/"+p_ja_JP+"]", read(x,"/test1/"+p+"/",JAPAN));
-			assertContains("[home:/files/test1/dir/"+p_ja_JP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
-			assertContains("[home:/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
+			assertContains("[home:/files/test1/"+pJaJP+"]", read(x,"test1/"+p,JAPAN));
+			assertContains("[home:/files/test1/dir/"+pJaJP+"]", read(x,"test1/dir/"+p,JAPAN));
+			assertContains("[home:/files/test1/dir/dir/"+pJaJP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
+			assertContains("[home:/files/test1/"+pJaJP+"]", read(x,"/test1/"+p+"/",JAPAN));
+			assertContains("[home:/files/test1/dir/"+pJaJP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
+			assertContains("[home:/files/test1/dir/dir/"+pJaJP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
 		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..","j.class","k.properties");
@@ -246,13 +246,13 @@ public class FileFinder_Test extends TestBase {
 			.build();
 
 		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
-		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
-		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
+		var patternsJa = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patternsJaJP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
 		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
-			var p_ja = patterns_ja[i];
-			var p_ja_JP = patterns_ja_JP[i];
+			var pJa = patternsJa[i];
+			var pJaJP = patternsJaJP[i];
 
 			assertContains("[cp:/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[cp:/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -261,19 +261,19 @@ public class FileFinder_Test extends TestBase {
 			assertContains("[cp:/files/test1/dir/"+p+"]", read(x,"/test1/dir/"+p+"/",null));
 			assertContains("[cp:/files/test1/dir/dir/"+p+"]", read(x,"/test1/dir/dir/"+p+"/",null));
 
-			assertContains("[cp:/files/test1/"+p_ja+"]", read(x,"test1/"+p,JAPANESE));
-			assertContains("[cp:/files/test1/dir/"+p_ja+"]", read(x,"test1/dir/"+p,JAPANESE));
-			assertContains("[cp:/files/test1/dir/dir/"+p_ja+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
-			assertContains("[cp:/files/test1/"+p_ja+"]", read(x,"/test1/"+p+"/",JAPANESE));
-			assertContains("[cp:/files/test1/dir/"+p_ja+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
-			assertContains("[cp:/files/test1/dir/dir/"+p_ja+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
+			assertContains("[cp:/files/test1/"+pJa+"]", read(x,"test1/"+p,JAPANESE));
+			assertContains("[cp:/files/test1/dir/"+pJa+"]", read(x,"test1/dir/"+p,JAPANESE));
+			assertContains("[cp:/files/test1/dir/dir/"+pJa+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
+			assertContains("[cp:/files/test1/"+pJa+"]", read(x,"/test1/"+p+"/",JAPANESE));
+			assertContains("[cp:/files/test1/dir/"+pJa+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
+			assertContains("[cp:/files/test1/dir/dir/"+pJa+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
 
-			assertContains("[cp:/files/test1/"+p_ja_JP+"]", read(x,"test1/"+p,JAPAN));
-			assertContains("[cp:/files/test1/dir/"+p_ja_JP+"]", read(x,"test1/dir/"+p,JAPAN));
-			assertContains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
-			assertContains("[cp:/files/test1/"+p_ja_JP+"]", read(x,"/test1/"+p+"/",JAPAN));
-			assertContains("[cp:/files/test1/dir/"+p_ja_JP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
-			assertContains("[cp:/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
+			assertContains("[cp:/files/test1/"+pJaJP+"]", read(x,"test1/"+p,JAPAN));
+			assertContains("[cp:/files/test1/dir/"+pJaJP+"]", read(x,"test1/dir/"+p,JAPAN));
+			assertContains("[cp:/files/test1/dir/dir/"+pJaJP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
+			assertContains("[cp:/files/test1/"+pJaJP+"]", read(x,"/test1/"+p+"/",JAPAN));
+			assertContains("[cp:/files/test1/dir/"+pJaJP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
+			assertContains("[cp:/files/test1/dir/dir/"+pJaJP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
 		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..");
@@ -410,13 +410,13 @@ public class FileFinder_Test extends TestBase {
 			.build();
 
 		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
-		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
-		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
+		var patternsJa = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patternsJaJP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
 		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
-			var p_ja = patterns_ja[i];
-			var p_ja_JP = patterns_ja_JP[i];
+			var pJa = patternsJa[i];
+			var pJaJP = patternsJaJP[i];
 
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -425,19 +425,19 @@ public class FileFinder_Test extends TestBase {
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"/test1/dir/"+p+"/",null));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x,"/test1/dir/dir/"+p+"/",null));
 
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]", read(x,"test1/"+p,JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]", read(x,"test1/dir/"+p,JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]", read(x,"/test1/"+p+"/",JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJa+"]", read(x,"test1/"+p,JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJa+"]", read(x,"test1/dir/"+p,JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJa+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJa+"]", read(x,"/test1/"+p+"/",JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJa+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJa+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
 
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]", read(x,"test1/"+p,JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]", read(x,"test1/dir/"+p,JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]", read(x,"/test1/"+p+"/",JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJaJP+"]", read(x,"test1/"+p,JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJaJP+"]", read(x,"test1/dir/"+p,JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJaJP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJaJP+"]", read(x,"/test1/"+p+"/",JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJaJP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJaJP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 
 		var badPatterns = a("test1/bad.txt","test1/../test1/_a.txt","bad.txt",null,"",".","..");
@@ -456,13 +456,13 @@ public class FileFinder_Test extends TestBase {
 			.build();
 
 		var patterns = a("_a.txt","_b",".c",".d.txt","e.txt","f","g_foo.txt","h.foo.txt","i_foo");
-		var patterns_ja = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
-		var patterns_ja_JP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
+		var patternsJa = a("_a_ja.txt","_b_ja",".c",".d_ja.txt","e_ja.txt","f_ja","g_foo_ja.txt","h.foo_ja.txt","i_foo_ja");
+		var patternsJaJP = a("_a_ja_JP.txt","_b_ja_JP",".c",".d_ja_JP.txt","e_ja_JP.txt","f_ja_JP","g_foo_ja_JP.txt","h.foo_ja_JP.txt","i_foo_ja_JP");
 
 		for (var i = 0; i < patterns.length; i++) {
 			var p = patterns[i];
-			var p_ja = patterns_ja[i];
-			var p_ja_JP = patterns_ja_JP[i];
+			var pJa = patternsJa[i];
+			var pJaJP = patternsJaJP[i];
 
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p+"]", read(x,"test1/"+p,null));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"test1/dir/"+p,null));
@@ -471,19 +471,19 @@ public class FileFinder_Test extends TestBase {
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p+"]", read(x,"/test1/dir/"+p+"/",null));
 			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p+"]", read(x,"/test1/dir/dir/"+p+"/",null));
 
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]", read(x,"test1/"+p,JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]", read(x,"test1/dir/"+p,JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja+"]", read(x,"/test1/"+p+"/",JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJa+"]", read(x,"test1/"+p,JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJa+"]", read(x,"test1/dir/"+p,JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJa+"]", read(x,"test1/dir/dir/"+p,JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJa+"]", read(x,"/test1/"+p+"/",JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJa+"]", read(x,"/test1/dir/"+p+"/",JAPANESE));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJa+"]", read(x,"/test1/dir/dir/"+p+"/",JAPANESE));
 
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]", read(x,"test1/"+p,JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]", read(x,"test1/dir/"+p,JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+p_ja_JP+"]", read(x,"/test1/"+p+"/",JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+p_ja_JP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
-			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+p_ja_JP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJaJP+"]", read(x,"test1/"+p,JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJaJP+"]", read(x,"test1/dir/"+p,JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJaJP+"]", read(x,"test1/dir/dir/"+p,JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/"+pJaJP+"]", read(x,"/test1/"+p+"/",JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/"+pJaJP+"]", read(x,"/test1/dir/"+p+"/",JAPAN));
+			assertContains("[cp:/org/apache/juneau/cp/files/test1/dir/dir/"+pJaJP+"]", read(x,"/test1/dir/dir/"+p+"/",JAPAN));
 		}
 	}
 

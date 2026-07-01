@@ -38,13 +38,13 @@ class AnnotationWorkList_Test {
 	// equals: o not an AnnotationWorkList
 	@Test void a03_equals_non_list() {
 		var list = AnnotationWorkList.create();
-		assertNotEquals(list, "not a list");
+		assertNotEquals("not a list", list);
 	}
 
 	// equals: o is null
 	@Test void a04_equals_null() {
 		var list = AnnotationWorkList.create();
-		assertNotEquals(list, null);
+		assertNotEquals(null, list);
 	}
 
 	// hashCode smoke test

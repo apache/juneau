@@ -4336,28 +4336,138 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidDate(String x) {
-		// RFC 3339 full-date: YYYY-MM-DD (relaxed to allow various date formats)
-		return x.matches("^\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}.*");
+		// RFC 3339 full-date: YYYY-MM-DD (relaxed to allow various date formats) (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors prefix match ^\d{4}[-/]\d{1,2}[-/]\d{1,2}.* (\d = ASCII [0-9]; trailing .* is a non-line-terminator prefix check, not a full match).
+		if (x.length() < 4)
+			return false;
+		for (var i = 0; i < 4; i++)
+			if (! isAsciiDigit(x.charAt(i)))
+				return false;
+		var i = scanSepAnd1or2Digits(x, 4);
+		if (i < 0)
+			return false;
+		i = scanSepAnd1or2Digits(x, i);
+		if (i < 0)
+			return false;
+		return hasNoLineTerminator(x, i);
 	}
 
 	private static boolean isValidDateTime(String x) {
-		// RFC 3339 date-time (relaxed to allow various datetime formats)
-		return x.matches("^\\d{4}[-/]\\d{1,2}[-/]\\d{1,2}[T\\s]\\d{1,2}:\\d{1,2}.*");
+		// RFC 3339 date-time (relaxed to allow various datetime formats) (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors prefix match ^\d{4}[-/]\d{1,2}[-/]\d{1,2}[T\s]\d{1,2}:\d{1,2}.* (\s = ASCII whitespace; trailing .* is a non-line-terminator prefix check).
+		if (x.length() < 4)
+			return false;
+		for (var i = 0; i < 4; i++)
+			if (! isAsciiDigit(x.charAt(i)))
+				return false;
+		var i = scanSepAnd1or2Digits(x, 4);
+		if (i < 0)
+			return false;
+		i = scanSepAnd1or2Digits(x, i);
+		if (i < 0)
+			return false;
+		if (i >= x.length() || ! (x.charAt(i) == 'T' || isRegexWhitespace(x.charAt(i))))
+			return false;
+		i = scan1or2Digits(x, i + 1);
+		if (i < 0)
+			return false;
+		if (! charIs(x, i, ':'))
+			return false;
+		i = scan1or2Digits(x, i + 1);
+		if (i < 0)
+			return false;
+		return hasNoLineTerminator(x, i);
 	}
 
 	private static boolean isValidDateTimeZone(String x) {
-		// RFC 3339 date-time with time zone
-		return x.matches("^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?[+-]\\d{2}:\\d{2}$");
+		// RFC 3339 date-time with time zone (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors full match ^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?[+-]\d{2}:\d{2}$ (\d = ASCII [0-9]).
+		var len = x.length();
+		var i = scanDigits(x, 0, 4);
+		if (i < 0 || ! charIs(x, i, '-'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, '-'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, 'T'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0)
+			return false;
+		if (i < len && x.charAt(i) == '.') {  // (\.\d+)? - the '.' requires at least one following digit
+			var f = i + 1;
+			i = f;
+			while (i < len && isAsciiDigit(x.charAt(i)))
+				i++;
+			if (i == f)
+				return false;
+		}
+		if (i >= len || (x.charAt(i) != '+' && x.charAt(i) != '-'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		return i == len;
 	}
 
 	private static boolean isValidDuration(String x) {
-		// RFC 3339 Appendix A duration (ISO 8601)
-		return x.matches("^P(?:\\d+Y)?(?:\\d+M)?(?:\\d+D)?(?:T(?:\\d+H)?(?:\\d+M)?(?:\\d+(?:\\.\\d+)?S)?)?$");
+		// RFC 3339 Appendix A duration (ISO 8601) (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors full match ^P(?:\d+Y)?(?:\d+M)?(?:\d+D)?(?:T(?:\d+H)?(?:\d+M)?(?:\d+(?:\.\d+)?S)?)?$ (\d = ASCII [0-9]).
+		var len = x.length();
+		if (len == 0 || x.charAt(0) != 'P')
+			return false;
+		var i = scanDurationUnit(x, 1, 'Y');
+		i = scanDurationUnit(x, i, 'M');
+		i = scanDurationUnit(x, i, 'D');
+		if (i < len && x.charAt(i) == 'T') {
+			i = scanDurationUnit(x, i + 1, 'H');
+			i = scanDurationUnit(x, i, 'M');
+			i = scanDurationSeconds(x, i);
+		}
+		return i == len;
 	}
 
 	private static boolean isValidEmail(String x) {
-		// RFC 5321 simplified email validation
-		return x.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+		// RFC 5321 simplified email validation (programmatic to avoid regex super-linear backtracking on large inputs).
+		// Mirrors ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+		var at = x.indexOf('@');
+		if (at < 1 || at != x.lastIndexOf('@'))
+			return false;
+		for (var i = 0; i < at; i++)
+			if (! isEmailLocalChar(x.charAt(i)))
+				return false;
+		var dot = x.lastIndexOf('.');
+		if (dot < at + 2)  // Need at least one domain-body char between '@' and the final '.'.
+			return false;
+		for (var i = at + 1; i < dot; i++)
+			if (! isEmailDomainChar(x.charAt(i)))
+				return false;
+		if (x.length() - dot - 1 < 2)  // TLD must be 2+ characters.
+			return false;
+		for (var i = dot + 1; i < x.length(); i++)
+			if (! isAsciiLetter(x.charAt(i)))
+				return false;
+		return true;
+	}
+
+	private static boolean isEmailLocalChar(char c) {
+		return isAsciiAlphanumeric(c) || c == '.' || c == '_' || c == '%' || c == '+' || c == '-';
+	}
+
+	private static boolean isEmailDomainChar(char c) {
+		return isAsciiAlphanumeric(c) || c == '.' || c == '-';
+	}
+
+	private static boolean isAsciiLetter(char c) {
+		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z');
 	}
 
 	private boolean isValidEnum(String x) {
@@ -4438,9 +4548,202 @@ public class HttpPartSchema {
 		return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9');
 	}
 
+	private static boolean isAsciiDigit(char c) {
+		// Java regex \d (ASCII [0-9] only).
+		return c >= '0' && c <= '9';
+	}
+
+	private static boolean isAsciiHexDigit(char c) {
+		return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
+	}
+
+	private static boolean isUriSchemeChar(char c) {
+		// Matches the regex class [a-zA-Z0-9+.-].
+		return isAsciiAlphanumeric(c) || c == '+' || c == '.' || c == '-';
+	}
+
+	private static boolean isRegexLineTerminator(char c) {
+		// Chars NOT matched by regex '.' in default (non-DOTALL) mode.
+		return c == '\n' || c == '\r' || c == '\u0085' || c == '\u2028' || c == '\u2029';
+	}
+
+	private static boolean charIs(String x, int i, char c) {
+		return i < x.length() && x.charAt(i) == c;
+	}
+
+	// Returns the index after consuming exactly n ASCII digits starting at i, or -1 if fewer than n digits are present.
+	private static int scanDigits(String x, int i, int n) {
+		if (i < 0 || i + n > x.length())
+			return -1;
+		for (var k = 0; k < n; k++)
+			if (! isAsciiDigit(x.charAt(i + k)))
+				return -1;
+		return i + n;
+	}
+
+	// Mirrors \d{1,2} - consumes 1 mandatory then 1 optional ASCII digit (greedy). Returns new index or -1.
+	private static int scan1or2Digits(String x, int i) {
+		var len = x.length();
+		if (i < 0 || i >= len || ! isAsciiDigit(x.charAt(i)))
+			return -1;
+		i++;
+		if (i < len && isAsciiDigit(x.charAt(i)))
+			i++;
+		return i;
+	}
+
+	// Mirrors [-/]\d{1,2}. Returns new index or -1.
+	private static int scanSepAnd1or2Digits(String x, int i) {
+		if (i < 0 || i >= x.length() || (x.charAt(i) != '-' && x.charAt(i) != '/'))
+			return -1;
+		return scan1or2Digits(x, i + 1);
+	}
+
+	// Mirrors '.*' / '.+' tail consumption: returns true iff every char from i onward is a non-line-terminator (i.e. matchable by regex '.').
+	private static boolean hasNoLineTerminator(String x, int i) {
+		for (var j = i; j < x.length(); j++)
+			if (isRegexLineTerminator(x.charAt(j)))
+				return false;
+		return true;
+	}
+
+	// Mirrors the optional group (?:\d+<unit>)?: consumes a run of >=1 ASCII digits followed by the unit char if present; otherwise leaves i unchanged.
+	private static int scanDurationUnit(String x, int i, char unit) {
+		var len = x.length();
+		var j = i;
+		while (j < len && isAsciiDigit(x.charAt(j)))
+			j++;
+		if (j > i && j < len && x.charAt(j) == unit)
+			return j + 1;
+		return i;
+	}
+
+	// Mirrors the optional group (?:\d+(?:\.\d+)?S)?: consumes seconds (with optional fraction) followed by 'S' if present; otherwise leaves i unchanged.
+	private static int scanDurationSeconds(String x, int i) {
+		var len = x.length();
+		var j = i;
+		while (j < len && isAsciiDigit(x.charAt(j)))
+			j++;
+		if (j == i)
+			return i;  // \d+ requires at least one digit
+		if (j < len && x.charAt(j) == '.') {
+			var f = j + 1;
+			var k = f;
+			while (k < len && isAsciiDigit(x.charAt(k)))
+				k++;
+			if (k == f)
+				return i;  // '.' with no following digit -> group cannot match -> consume nothing
+			j = k;
+		}
+		if (j < len && x.charAt(j) == 'S')
+			return j + 1;
+		return i;  // no 'S' -> group matches empty
+	}
+
+	// Mirrors ^[a-zA-Z][a-zA-Z0-9+.-]*:<rest> where <rest> is .+ (nonEmptyRest=true) or .* (nonEmptyRest=false), all non-line-terminators.
+	private static boolean isValidScheme(String x, boolean nonEmptyRest) {
+		var len = x.length();
+		if (len == 0 || ! isAsciiLetter(x.charAt(0)))
+			return false;
+		var i = 1;
+		while (i < len && isUriSchemeChar(x.charAt(i)))
+			i++;
+		if (i >= len || x.charAt(i) != ':')
+			return false;
+		i++;
+		if (nonEmptyRest && i >= len)
+			return false;
+		return hasNoLineTerminator(x, i);
+	}
+
+	// Consumes up to 4 ASCII hex digits starting at i (bounded by end). Mirrors [0-9a-fA-F]{0,4}.
+	private static int scanHex4(String x, int i, int end) {
+		var n = 0;
+		while (i < end && n < 4 && isAsciiHexDigit(x.charAt(i))) {
+			i++;
+			n++;
+		}
+		return i;
+	}
+
+	// Mirrors ^([0-9a-fA-F]{0,4}+:){7}[0-9a-fA-F]{0,4}$ - exactly 8 hextet groups separated by 7 colons.
+	private static boolean isIpv6Full(String x) {
+		var len = x.length();
+		var i = 0;
+		for (var g = 0; g < 7; g++) {
+			i = scanHex4(x, i, len);
+			if (i >= len || x.charAt(i) != ':')
+				return false;
+			i++;
+		}
+		i = scanHex4(x, i, len);
+		return i == len;
+	}
+
+	// Mirrors ^::([0-9a-fA-F]{0,4}+:){0,6}[0-9a-fA-F]{0,4}$.
+	private static boolean isIpv6LeadingDoubleColon(String x) {
+		var len = x.length();
+		if (len < 2 || x.charAt(0) != ':' || x.charAt(1) != ':')
+			return false;
+		var i = 2;
+		var groups = 0;
+		while (groups < 6) {
+			var j = scanHex4(x, i, len);
+			if (j < len && x.charAt(j) == ':') {
+				i = j + 1;
+				groups++;
+			} else {
+				break;
+			}
+		}
+		i = scanHex4(x, i, len);
+		return i == len;
+	}
+
+	// Mirrors ^([0-9a-fA-F]{0,4}+:){1,7}:$ - every such match ends in ':', and the body (minus the final ':') is 1..7 hextet+colon groups.
+	private static boolean isIpv6TrailingColon(String x) {
+		var len = x.length();
+		if (len == 0 || x.charAt(len - 1) != ':')
+			return false;
+		var body = len - 1;
+		var i = 0;
+		var groups = 0;
+		while (i < body) {
+			var j = scanHex4(x, i, body);
+			if (j < body && x.charAt(j) == ':') {
+				i = j + 1;
+				groups++;
+			} else {
+				return false;
+			}
+		}
+		return groups >= 1 && groups <= 7 && i == body;
+	}
+
 	private static boolean isValidIdnEmail(String x) {
-		// RFC 6531 - allows international characters
-		return x.matches("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$");
+		// RFC 6531 - allows international characters (programmatic to avoid regex super-linear backtracking on large inputs).
+		// Mirrors ^[^@\s]+@[^@\s]+\.[^@\s]+$
+		var at = x.indexOf('@');
+		if (at < 1 || at != x.lastIndexOf('@'))
+			return false;
+		for (var i = 0; i < at; i++)
+			if (isRegexWhitespace(x.charAt(i)))
+				return false;
+		var len = x.length();
+		var interiorDot = false;
+		for (var i = at + 1; i < len; i++) {
+			var c = x.charAt(i);
+			if (isRegexWhitespace(c))
+				return false;
+			if (c == '.' && i > at + 1 && i < len - 1)
+				interiorDot = true;
+		}
+		return interiorDot;
+	}
+
+	private static boolean isRegexWhitespace(char c) {
+		// Matches Java regex \s (ASCII whitespace only).
+		return c == ' ' || c == '\t' || c == '\n' || c == '\u000B' || c == '\f' || c == '\r';
 	}
 
 	private static boolean isValidIdnHostname(String x) {
@@ -4471,13 +4774,16 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidIpv6(String x) {
-		// RFC 4291 IPv6 validation (simplified)
-		return x.matches("^([0-9a-fA-F]{0,4}+:){7}[0-9a-fA-F]{0,4}$|^::([0-9a-fA-F]{0,4}+:){0,6}[0-9a-fA-F]{0,4}$|^([0-9a-fA-F]{0,4}+:){1,7}:$");
+		// RFC 4291 IPv6 validation (simplified) (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors the three full-match alternatives:
+		//   ^([0-9a-fA-F]{0,4}+:){7}[0-9a-fA-F]{0,4}$ | ^::([0-9a-fA-F]{0,4}+:){0,6}[0-9a-fA-F]{0,4}$ | ^([0-9a-fA-F]{0,4}+:){1,7}:$
+		return isIpv6Full(x) || isIpv6LeadingDoubleColon(x) || isIpv6TrailingColon(x);
 	}
 
 	private static boolean isValidIri(String x) {
-		// RFC 3987 IRI validation (allows international characters)
-		return x.matches("^[a-zA-Z][a-zA-Z0-9+.-]*:.+");
+		// RFC 3987 IRI validation (allows international characters) (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors prefix match ^[a-zA-Z][a-zA-Z0-9+.-]*:.+ (.+ requires at least one trailing non-line-terminator char).
+		return isValidScheme(x, true);
 	}
 
 	private static boolean isValidIriReference(String x) {
@@ -4639,8 +4945,37 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidTime(String x) {
-		// RFC 3339 time
-		return x.matches("^\\d{2}:\\d{2}:\\d{2}(\\.\\d+)?(Z|[+-]\\d{2}:\\d{2})?$");
+		// RFC 3339 time (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors full match ^\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})?$ (\d = ASCII [0-9]).
+		var len = x.length();
+		var i = scanDigits(x, 0, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0)
+			return false;
+		if (i < len && x.charAt(i) == '.') {  // (\.\d+)? - the '.' requires at least one following digit
+			var f = i + 1;
+			i = f;
+			while (i < len && isAsciiDigit(x.charAt(i)))
+				i++;
+			if (i == f)
+				return false;
+		}
+		if (i == len)
+			return true;  // (Z|[+-]\d{2}:\d{2})? matched empty
+		if (x.charAt(i) == 'Z')
+			return i + 1 == len;
+		if (x.charAt(i) != '+' && x.charAt(i) != '-')
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		if (i < 0 || ! charIs(x, i, ':'))
+			return false;
+		i = scanDigits(x, i + 1, 2);
+		return i == len;
 	}
 
 	private boolean isValidUniqueItems(Collection<?> x) {
@@ -4672,7 +5007,8 @@ public class HttpPartSchema {
 		// RFC 3986 URI validation
 		try {
 			new java.net.URI(x);
-			return x.matches("^[a-zA-Z][a-zA-Z0-9+.-]*:.*");
+			// Mirrors prefix match ^[a-zA-Z][a-zA-Z0-9+.-]*:.* (.* permits an empty trailing, non-line-terminator part).
+			return isValidScheme(x, false);
 		} catch (Exception e) {
 			return false;
 		}
@@ -4692,13 +5028,29 @@ public class HttpPartSchema {
 	}
 
 	private static boolean isValidUriTemplate(String x) {
-		// RFC 6570 URI Template validation (simplified)
-		return x.matches("^[^\\s]*$");
+		// RFC 6570 URI Template validation (simplified) (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors full match ^[^\s]*$ - every char must be a non-whitespace char (\s = ASCII whitespace).
+		for (var i = 0; i < x.length(); i++)
+			if (isRegexWhitespace(x.charAt(i)))
+				return false;
+		return true;
 	}
 
 	private static boolean isValidUuid(String x) {
-		// RFC 4122 UUID validation
-		return x.matches("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+		// RFC 4122 UUID validation (programmatic to avoid regex recompilation per HTTP-part value).
+		// Mirrors full match ^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$.
+		if (x.length() != 36)
+			return false;
+		for (var i = 0; i < 36; i++) {
+			var c = x.charAt(i);
+			if (i == 8 || i == 13 || i == 18 || i == 23) {
+				if (c != '-')
+					return false;
+			} else if (! isAsciiHexDigit(c)) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static boolean resolve(Boolean b) {

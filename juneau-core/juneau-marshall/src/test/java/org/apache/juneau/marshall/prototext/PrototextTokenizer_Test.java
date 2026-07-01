@@ -495,13 +495,16 @@ class PrototextTokenizer_Test {
 
 	@Test void b41_directReadBoolean_invalid() {
 		// Hits the error path in readBoolean (line 535) — non-boolean integer and non-bool ident.
-		assertThrows(ParseException.class, () -> tok("42").readBoolean());
-		assertThrows(ParseException.class, () -> tok("\"true\"").readBoolean());
+		var t1 = tok("42");
+		assertThrows(ParseException.class, t1::readBoolean);
+		var t2 = tok("\"true\"");
+		assertThrows(ParseException.class, t2::readBoolean);
 	}
 
 	@Test void b42_directReadBoolean_unknownIdent() {
 		// Unknown identifier (not in the true/false/t/f/1/0 set) — falls through to the error path.
-		assertThrows(ParseException.class, () -> tok("yes").readBoolean());
+		var t = tok("yes");
+		assertThrows(ParseException.class, t::readBoolean);
 	}
 
 	@Test void b43_invalidEscape_endOfStream() {

@@ -83,6 +83,10 @@ import jakarta.servlet.*;
 public class JettyServerComponent implements MicroserviceListener {
 
 	private static final String KEY_SERVLET_CONTEXT_HANDLER = "ServletContextHandler";
+
+	@SuppressWarnings({
+		"java:S2245" // Used only to pick a benign ephemeral listen port (non security-sensitive); SecureRandom is unnecessary.
+	})
 	private static final Random RANDOM = new Random();
 
 	/** Default bounded graceful-shutdown drain timeout applied to the Jetty server when none is configured. */

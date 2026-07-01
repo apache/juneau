@@ -257,7 +257,7 @@ class HtmlParserSession_Test extends TestBase {
 
 	public static class BeanWithKnownProps {
 		public String known;
-		public BeanWithKnownProps() {}
+		public BeanWithKnownProps() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test void j01_unknownBeanPropInTableRow() throws Exception {

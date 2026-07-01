@@ -18,6 +18,7 @@ package org.apache.juneau.commons.svl.functions;
 
 import java.util.regex.*;
 
+import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.svl.*;
 
 /**
@@ -35,6 +36,11 @@ public final class RegexFunctions {
 
 	private RegexFunctions() {}
 
+	// User-supplied regexes are compiled once and reused.  Bounded (entire cache cleared past maxSize) to guard
+	// against unbounded growth from arbitrary user input.  Pattern is immutable/thread-safe; a fresh Matcher is
+	// created per invocation, so behavior is identical to compiling on every call.
+	private static final Cache<String,Pattern> PATTERN_CACHE = Cache.of(String.class, Pattern.class).maxSize(1000).supplier(Pattern::compile).build();
+
 	/** All function classes in this category. */
 	@SuppressWarnings({
 		"unchecked", // Cast is safe: type verified by caller context.
@@ -49,7 +55,7 @@ public final class RegexFunctions {
 		@Override public String name() { return "match"; }
 		public String invoke(String s, String regex) {
 			if (s == null || regex == null) return "false";
-			return String.valueOf(Pattern.compile(regex).matcher(s).find());
+			return String.valueOf(PATTERN_CACHE.get(regex).matcher(s).find());
 		}
 	}
 
@@ -63,7 +69,7 @@ public final class RegexFunctions {
 		public String invoke(String s, String regex) { return invoke(s, regex, 0); }
 		public String invoke(String s, String regex, int group) {
 			if (s == null || regex == null) return "";
-			var m = Pattern.compile(regex).matcher(s);
+			var m = PATTERN_CACHE.get(regex).matcher(s);
 			if (!m.find()) return "";
 			if (group < 0 || group > m.groupCount()) return "";
 			var v = m.group(group);
@@ -77,7 +83,7 @@ public final class RegexFunctions {
 		public String invoke(String s, String regex, String replacement) {
 			if (s == null) return "";
 			if (regex == null) return s;
-			return Pattern.compile(regex).matcher(s).replaceAll(replacement == null ? "" : replacement);
+			return PATTERN_CACHE.get(regex).matcher(s).replaceAll(replacement == null ? "" : replacement);
 		}
 	}
 }

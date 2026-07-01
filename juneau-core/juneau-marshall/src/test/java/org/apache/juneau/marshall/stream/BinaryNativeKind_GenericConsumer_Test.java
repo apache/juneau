@@ -49,11 +49,7 @@ class BinaryNativeKind_GenericConsumer_Test extends TestBase {
 			if (t == TokenType.END_OF_STREAM)
 				break;
 			switch (t) {
-				case VALUE_NUMBER:
-				case VALUE_STRING:
-				case VALUE_BINARY:
-				case VALUE_NULL:
-				case VALUE_BOOLEAN:
+				case VALUE_NUMBER, VALUE_STRING, VALUE_BINARY, VALUE_NULL, VALUE_BOOLEAN:
 					sb.append(t).append('(');
 					switch (r.getNativeKind()) {
 						case CBOR_TAG:

@@ -62,24 +62,6 @@ public abstract class AuthFilter implements Filter, Authenticator {
 	static final String WWW_AUTHENTICATE = "WWW-Authenticate";
 
 	/**
-	 * Inspects the request and returns the authentication result.
-	 *
-	 * <p>
-	 * Three-state return contract:
-	 * <ul>
-	 * 	<li>{@link Optional#empty()} &mdash; this filter does not apply to the request (e.g. no
-	 * 		{@code Authorization} header for a bearer-token filter).  The chain will continue to the next filter.
-	 * 	<li>{@link Optional#of(Object) Optional.of(AuthResult)} &mdash; authentication succeeded.
-	 * 	<li>throw {@link AuthenticationException} &mdash; credentials were present but invalid.
-	 * </ul>
-	 *
-	 * @param req The incoming HTTP request. Never <jk>null</jk>.
-	 * @return The authentication result, or {@link Optional#empty()} if this filter does not apply.
-	 * @throws AuthenticationException If the request carries recognizable credentials that are invalid.
-	 */
-	public abstract Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException;
-
-	/**
 	 * Standalone-filter entry point.
 	 *
 	 * <p>

@@ -49,7 +49,6 @@ class BeanTypeApplyAnnotation_Test extends TestBase {
 		var applier = new BeanTypeApplyAnnotation.Applier(vr);
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = BeanTypeApplyAnnotation.DEFAULT;
-		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
 	}
 }

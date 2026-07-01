@@ -205,13 +205,13 @@ class StreamInternals_Test extends TestBase {
 			assertEquals("\"" + uuid + "\"", emit(uuid));
 		}
 
-		@Test void a23_recursionGuardOnCollection() throws Exception {
+		@Test void a23_recursionGuardOnCollection() {
 			var l = new ArrayList<Object>();
 			l.add(l);
 			assertThrowsWithMessage(IllegalStateException.class, "Recursion detected", () -> emit(l));
 		}
 
-		@Test void a24_recursionGuardOnMap() throws Exception {
+		@Test void a24_recursionGuardOnMap() {
 			var m = new LinkedHashMap<String, Object>();
 			m.put("self", m);
 			assertThrowsWithMessage(IllegalStateException.class, "Recursion detected", () -> emit(m));
@@ -524,7 +524,9 @@ class StreamInternals_Test extends TestBase {
 				throw new ParseException("boom-read");
 			}
 			@Override public boolean isStreaming() { return true; }
-			@Override public void close() {}
+			@Override public void close() {
+				// No-op: this stub holds no underlying resource to release.
+			}
 		}
 
 		@Test void e01_streamHappyPath() throws Exception {
@@ -573,8 +575,12 @@ class StreamInternals_Test extends TestBase {
 			@Override public String getNumberLexeme() { return null; }
 			@Override public boolean getBool() { return false; }
 			@Override public byte[] getBinary() { return null; }
-			@Override public void skipChildren() {}
-			@Override public void close() {}
+			@Override public void skipChildren() {
+				// No-op: the stub never sits on a structural token, so there are no children to skip.
+			}
+			@Override public void close() {
+				// No-op: this stub holds no underlying resource to release.
+			}
 		}
 
 		/** Minimal TokenWriter stub that overrides only the abstract methods, leaving object()/write() defaults. */
@@ -593,8 +599,12 @@ class StreamInternals_Test extends TestBase {
 			@Override public TokenWriter bool(boolean value) { return this; }
 			@Override public TokenWriter nil() { return this; }
 			@Override public TokenWriter binary(byte[] value) { return this; }
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() {
+				// No-op: this stub buffers nothing, so there is nothing to flush.
+			}
+			@Override public void close() {
+				// No-op: this stub holds no underlying resource to release.
+			}
 		}
 
 		@Test void f01_tokenReaderCanReadDefaultIsFalse() throws Exception {
@@ -604,7 +614,7 @@ class StreamInternals_Test extends TestBase {
 			}
 		}
 
-		@Test void f02_tokenReaderReadDefaultsThrow() throws Exception {
+		@Test void f02_tokenReaderReadDefaultsThrow() {
 			var cm = MarshallingContext.DEFAULT.getClassMeta(Integer.class);
 			try (var r = new StubTokenReader()) {
 				assertThrows(UnsupportedOperationException.class, () -> r.read(Integer.class));

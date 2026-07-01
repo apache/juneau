@@ -49,7 +49,6 @@ class MarshalledIgnoreApplyAnnotation_Test extends TestBase {
 		var applier = new MarshalledIgnoreApplyAnnotation.Applier(vr);
 		var b = MarshallingContext.DEFAULT.copy();
 		var a = MarshalledIgnoreApplyAnnotation.DEFAULT;
-		applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b);
-		// No exception = early-return branch was taken
+		assertDoesNotThrow(() -> applier.apply(AnnotationInfo.of(ClassInfo.of(Object.class), a), b));
 	}
 }

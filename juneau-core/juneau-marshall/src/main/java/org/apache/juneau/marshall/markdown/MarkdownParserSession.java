@@ -779,7 +779,13 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		var trimmed = line.trim();
 		if (!trimmed.startsWith("|"))
 			return false;
-		return trimmed.replaceAll("[|\\-: ]", "").isEmpty();
+		// Equivalent of trimmed.replaceAll("[|\\-: ]", "").isEmpty(): true iff every char is one of | - : space.
+		for (var i = 0; i < trimmed.length(); i++) {
+			var c = trimmed.charAt(i);
+			if (c != '|' && c != '-' && c != ':' && c != ' ')
+				return false;
+		}
+		return true;
 	}
 
 	/**

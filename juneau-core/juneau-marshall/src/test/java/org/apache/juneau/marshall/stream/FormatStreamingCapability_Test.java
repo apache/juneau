@@ -53,7 +53,7 @@ import org.junit.jupiter.api.*;
  * ({@link RecordReadable#isRecordStreaming()}, {@link ArrayRecordReadable#isArrayRecordStreaming()}
  * and the writable equivalents) on every format's convenience parser/serializer class and on its
  * per-invocation session.  Asserts the convenience-class flag agrees with the session flag (the
- * TODO-175aa reader/writer-mirror invariant) so a drift between the two surfaces is caught.
+ * 175aa reader/writer-mirror invariant) so a drift between the two surfaces is caught.
  */
 class FormatStreamingCapability_Test extends TestBase {
 

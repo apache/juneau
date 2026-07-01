@@ -105,6 +105,8 @@ class CharRdfMarshallers_Test extends TestBase {
 	@Test void a12_nquads_of_string_writer() throws Exception {
 		var sw = new StringWriter();
 		NQuads.DEFAULT.of("foo", sw);
+		// NQuads embeds a random blank-node id, so assert on the stable value triple rather than comparing two independent serializations.
+		assertTrue(sw.toString().contains("<http://www.apache.org/juneau/value> \"foo\" ."), sw.toString());
 	}
 
 	@Test void a13_nquads_roundtrip_string() throws Exception {
@@ -267,6 +269,7 @@ class CharRdfMarshallers_Test extends TestBase {
 	@Test void a37_trig_of_string_writer() throws Exception {
 		var sw = new StringWriter();
 		TriG.DEFAULT.of("foo", sw);
+		assertEquals(TriG.DEFAULT.of("foo"), sw.toString());
 	}
 
 	@Test void a38_trig_roundtrip_string() throws Exception {
@@ -297,6 +300,9 @@ class CharRdfMarshallers_Test extends TestBase {
 	@Test void a42_trix_of_string_writer() throws Exception {
 		var sw = new StringWriter();
 		TriX.DEFAULT.of("foo", sw);
+		// TriX embeds a random <id> per triple, so assert on the stable uri/plainLiteral content rather than comparing two independent serializations.
+		var out = sw.toString();
+		assertTrue(out.contains("<uri>http://www.apache.org/juneau/value</uri>") && out.contains("<plainLiteral>foo</plainLiteral>"), out);
 	}
 
 	@Test void a43_trix_roundtrip_string() throws Exception {

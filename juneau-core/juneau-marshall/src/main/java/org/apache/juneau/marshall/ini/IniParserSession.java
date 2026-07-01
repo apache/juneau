@@ -47,9 +47,6 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 
 	private static final String ARG_ctx = "ctx";
 
-	/** Pattern for key=value or key = value. */
-	private static final Pattern KV_PATTERN = Pattern.compile("^([^=#\\s][^=]*)\\s*[=:]\\s*(.*)$", Pattern.DOTALL);
-
 	/** Delimiter for nested section names (e.g. {@code address/street}). */
 	private static final String SECTION_PATH_DELIMITER = "/";
 
@@ -139,16 +136,41 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 				current = sections.computeIfAbsent(sectionName, k -> new LinkedHashMap<>());
 				continue;
 			}
-			var m = KV_PATTERN.matcher(line);
-			if (m.matches()) {
-				var key = m.group(1).trim();
-				var value = m.group(2).trim();
+			var kv = splitKeyValue(line);
+			if (kv != null) {
+				var key = kv[0].trim();
+				var value = kv[1].trim();
 				// Strip inline comment (# ...) from value (when not inside quotes)
 				value = stripInlineComment(value);
 				current.put(key, value);
 			}
 		}
 		return sections;
+	}
+
+	/**
+	 * Splits an INI {@code key=value} / {@code key:value} line into its key and raw-value parts.
+	 *
+	 * <p>
+	 * Behavior mirrors the former {@code ^([^=#\s][^=]*)\s*[=:]\s*(.*)$} regex but without its super-linear
+	 * backtracking: an {@code '='} delimiter (if present) binds to the first {@code '='}; otherwise the last
+	 * {@code ':'} is used. Surrounding whitespace is left in place (callers trim).
+	 *
+	 * @param line The (already-trimmed) candidate line.
+	 * @return A two-element array of {raw-key, raw-value}, or <jk>null</jk> if the line is not a key/value pair.
+	 */
+	private static String[] splitKeyValue(String line) {
+		if (line.isEmpty())
+			return null;
+		var first = line.charAt(0);
+		if (first == '=' || first == '#' || Character.isWhitespace(first))
+			return null;
+		var idx = line.indexOf('=');
+		if (idx < 0)
+			idx = line.lastIndexOf(':');
+		if (idx < 1)
+			return null;
+		return new String[] { line.substring(0, idx), line.substring(idx + 1) };
 	}
 
 	private void populateBean(BeanMap<?> bm, Map<String, Map<String, String>> sections, String sectionPath) throws ParseException, ExecutableException {

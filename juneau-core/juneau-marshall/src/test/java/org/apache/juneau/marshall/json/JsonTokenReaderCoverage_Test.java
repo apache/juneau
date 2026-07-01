@@ -437,18 +437,14 @@ class JsonTokenReaderCoverage_Test extends TestBase {
 			}
 		}
 
-		@Test void g02_deeplyNestedObjectsBeyond64Levels() throws Exception {
+		@Test void g02_deeplyNestedObjectsBeyond64Levels() {
 			var depth = 70;
 			var sb = new StringBuilder();
 			for (var i = 0; i < depth; i++)
 				sb.append("{\"a\":");
 			sb.append("1");
 			sb.append("}".repeat(depth));
-			try (var r = JsonParser.DEFAULT.parseTokens(sb.toString())) {
-				while (r.next() != TokenType.END_OF_STREAM) {
-					// drain; overflow object container handling is exercised
-				}
-			}
+			assertDoesNotThrow(() -> drain(sb.toString()));
 		}
 
 		@Test void g03_nestedMixedDocument() throws Exception {

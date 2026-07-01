@@ -111,6 +111,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 	}
 
 	@Test void a09_writeTokensClassCastForNonTokenFormat() {
-		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.toTokens(new StringBuilder()));
+		var sb = new StringBuilder();
+		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.toTokens(sb));
 	}
 }

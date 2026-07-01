@@ -64,7 +64,7 @@ class ProtobufSwap_Test extends TestBase {
 	public static class PointSurrogate {
 		public int px;
 		public int py;
-		public PointSurrogate() {}
+		public PointSurrogate() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	/** POJO -> surrogate-bean (message) swap. */

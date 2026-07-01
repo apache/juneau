@@ -47,7 +47,7 @@ class RestAuthenticator_Test extends TestBase {
 		return mock(HttpServletRequest.class);
 	}
 
-	@Test void a01_ofAdaptsAuthenticator() throws Exception {
+	@Test void a01_ofAdaptsAuthenticator() {
 		Authenticator inner = r -> opt(AuthResult.of(ALICE, "admin"));
 		var ra = RestAuthenticator.of(inner);
 		var result = ra.authenticateRaw(req()).orElseThrow();
@@ -55,7 +55,7 @@ class RestAuthenticator_Test extends TestBase {
 		assertTrue(result.getRoles().contains("admin"));
 	}
 
-	@Test void a02_nullSentinelReturnsEmpty() throws Exception {
+	@Test void a02_nullSentinelReturnsEmpty() {
 		var ra = new RestAuthenticator.Null();
 		assertTrue(ra.authenticateRaw(req()).isEmpty());
 		assertTrue(ra.authenticate(null).isEmpty());
@@ -64,16 +64,17 @@ class RestAuthenticator_Test extends TestBase {
 	@Test void a03_ofPropagatesAuthenticationException() {
 		Authenticator inner = r -> { throw new AuthenticationException("bad"); };
 		var ra = RestAuthenticator.of(inner);
-		assertThrows(AuthenticationException.class, () -> ra.authenticateRaw(req()));
+		var request = req();
+		assertThrows(AuthenticationException.class, () -> ra.authenticateRaw(request));
 	}
 
-	@Test void a04_ofEmptyResult() throws Exception {
+	@Test void a04_ofEmptyResult() {
 		Authenticator inner = r -> opte();
 		var ra = RestAuthenticator.of(inner);
 		assertTrue(ra.authenticateRaw(req()).isEmpty());
 	}
 
-	@Test void a05_baseAuthenticateRawDelegatesToRestRequestForm() throws Exception {
+	@Test void a05_baseAuthenticateRawDelegatesToRestRequestForm() {
 		// A subclass that does NOT override authenticateRaw exercises the base delegate (cast → authenticate(RestRequest)).
 		var ra = new RestAuthenticator() {
 			@Override public Optional<AuthResult> authenticate(RestRequest r) {

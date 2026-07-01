@@ -519,14 +519,6 @@ class MarkdownSerializer_Test {
 		assertTrue(md.contains("42"), "Expected numeric key in output: " + md);
 	}
 
-	@Test void r02_nullValueStringAsMapKey() {
-		// Key matching nullValue → isAmbiguousString(key, nullValue) returns true at line 370
-		var m = new java.util.LinkedHashMap<String, String>();
-		m.put("*null*", "surprise");
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
-		assertNotNull(md);
-	}
-
 	//====================================================================================================
 	// s - Collection with null item in table mode (line 310)
 	//====================================================================================================
@@ -569,19 +561,21 @@ class MarkdownSerializer_Test {
 		assertTrue(md.contains("key"), "Expected key in output: " + md);
 	}
 
-	@Test void u02_nullValueStringAsMapValue() {
-		// String equal to nullValue → isAmbiguousString returns true at line 370 (s.equals(nullValue))
+	@ParameterizedTest
+	@MethodSource("u02_ambiguousMapEntryProducesOutputProvider")
+	void u02_ambiguousMapEntryProducesOutput(String key, String value) {
+		// Ambiguous map keys/values still produce non-null serialized output.
 		var m = new java.util.LinkedHashMap<String, String>();
-		m.put("key", "*null*");
+		m.put(key, value);
 		var md = MarkdownSerializer.DEFAULT.serialize(m);
 		assertNotNull(md);
 	}
 
-	@Test void u03_controlCharStringAsMapValue() {
-		// String with char < 32 → isAmbiguousString returns true at line 373
-		var m = new java.util.LinkedHashMap<String, String>();
-		m.put("key", "a\u007fb");  // char 127 (DEL) triggers the c == 127 branch
-		var md = MarkdownSerializer.DEFAULT.serialize(m);
-		assertNotNull(md);
+	static Stream<Arguments> u02_ambiguousMapEntryProducesOutputProvider() {
+		return Stream.of(
+			Arguments.of("key", "*null*"),     // value equal to nullValue → isAmbiguousString line 370
+			Arguments.of("key", "a\u007fb"),   // char 127 (DEL) → isAmbiguousString line 373
+			Arguments.of("*null*", "surprise") // key equal to nullValue → isAmbiguousString line 370
+		);
 	}
 }

@@ -108,6 +108,9 @@ public class ProtobufFieldEntry {
 	 *
 	 * @return The class metadata of the property's type.
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Property type is dynamic; the wildcard ClassMeta<?> is the correct, type-safe return type.
+	})
 	public ClassMeta<?> propertyType() {
 		return propertyType;
 	}

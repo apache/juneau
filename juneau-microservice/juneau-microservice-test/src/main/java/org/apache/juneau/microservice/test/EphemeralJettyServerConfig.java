@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.microservice.test;
 
+import java.time.*;
+
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.microservice.jetty.*;
 import org.eclipse.jetty.ee11.servlet.*;
 import org.eclipse.jetty.server.*;
 
@@ -57,5 +60,23 @@ public class EphemeralJettyServerConfig {
 		server.setAttribute("ServletContextHandler", sch);
 		server.setHandler(sch);
 		return server;
+	}
+
+	/**
+	 * Disables the 30s graceful-shutdown drain wait for integration tests.
+	 *
+	 * <p>
+	 * {@code JettyServerComponent} applies a 30s {@code stopTimeout} default to support zero-downtime k8s
+	 * rollouts.  In ephemeral test servers there are no load balancers or in-flight production traffic, so
+	 * the drain wait only adds ~1s per test class to the suite runtime.  Setting it to zero restores fast
+	 * shutdown.
+	 *
+	 * @return {@link JettySettings} with {@code stopTimeout} set to zero.
+	 */
+	@Bean
+	public JettySettings jettySettings() {
+		return JettySettings.create()
+			.stopTimeout(Duration.ZERO)
+			.build();
 	}
 }

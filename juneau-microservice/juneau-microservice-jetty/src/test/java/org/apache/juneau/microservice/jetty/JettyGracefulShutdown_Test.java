@@ -29,7 +29,7 @@ import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Graceful-shutdown / readiness-gating tests for {@link JettyServerComponent} (TODO-174a).
+ * Graceful-shutdown / readiness-gating tests for {@link JettyServerComponent}.
  *
  * <p>
  * Verifies the zero-downtime shutdown contract on the Jetty side:

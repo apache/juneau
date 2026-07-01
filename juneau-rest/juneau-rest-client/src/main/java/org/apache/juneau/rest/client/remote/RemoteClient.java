@@ -760,6 +760,9 @@ public final class RemoteClient {
 		 * 		and wrapper returns ({@link Optional}/{@link Future}/{@link CompletableFuture}) are never retried.
 		 * </ul>
 		 */
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for the gated retry loop (verb/body/status safety gates + backoff).
+		})
 		private Object processReturn(RequestSupplier reqSupplier, RrpcInterfaceMethodMeta methodMeta, Method method, boolean throwOnError, String acceptFallback) throws Exception {
 			var returnMode = methodMeta.getReturnType();
 			var returnType = method.getReturnType();

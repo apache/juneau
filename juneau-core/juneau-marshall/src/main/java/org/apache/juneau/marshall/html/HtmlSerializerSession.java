@@ -224,7 +224,6 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	private final boolean detectLinksInStrings;
 	private final String labelParameter;
 	private final AnchorText uriAnchorText;
-	private final Pattern urlPattern = Pattern.compile("https?\\:\\/\\/.*");
 	private final Pattern labelPattern;
 
 	/**
@@ -301,7 +300,25 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 	 */
 	public boolean isUri(ClassMeta<?> cm, BeanPropertyMeta pMeta, Object o) {
 		return (cm.isUri() || (nn(pMeta) && pMeta.isUri()))
-			|| (isDetectLinksInStrings() && o instanceof CharSequence && urlPattern.matcher(o.toString()).matches());
+			|| (isDetectLinksInStrings() && o instanceof CharSequence && isHttpUrl(o.toString()));
+	}
+
+	// Programmatic equivalent of the full match https?\:\/\/.* (Pattern.matcher(s).matches()).
+	// The trailing .* does not cross a line terminator under matches(), so the remainder must contain none.
+	private static boolean isHttpUrl(String s) {
+		int start;
+		if (s.startsWith("http://"))
+			start = 7;
+		else if (s.startsWith("https://"))
+			start = 8;
+		else
+			return false;
+		for (var i = start; i < s.length(); i++) {
+			var c = s.charAt(i);
+			if (c == '\n' || c == '\r' || c == '\u0085' || c == '\u2028' || c == '\u2029')
+				return false;
+		}
+		return true;
 	}
 
 	/**

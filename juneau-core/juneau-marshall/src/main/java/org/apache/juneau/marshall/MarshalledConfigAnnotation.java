@@ -48,6 +48,9 @@ public class MarshalledConfigAnnotation {
 		}
 
 		@Override
+		@SuppressWarnings({
+			"java:S3776" // Cognitive complexity acceptable for the flat per-attribute config-applier sequence.
+		})
 		public void apply(AnnotationInfo<MarshalledConfig> ai, MarshallingContext.Builder b) {
 			MarshalledConfig a = ai.inner();
 

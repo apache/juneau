@@ -42,7 +42,7 @@ class ProtobufRoundTrip_Test extends TestBase {
 		public String s;
 		public java.math.BigInteger bi;
 		public java.math.BigDecimal bd;
-		public AllScalars() {}
+		public AllScalars() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test

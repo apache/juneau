@@ -546,14 +546,8 @@ public class RestSession extends ContextSession {
 			var opRestContext = opSession.getContext().getContext();
 			if (opRestContext.isMixinContext())
 				opRestContext.startCall(this);
-			try {
-				// Resource-level authentication fold (RestAuthenticator) — runs before preCall so @RestPreCall
-				// hooks, guards (roleGuard), and @Auth arg resolution all see the resolved principal/roles.
-				opRestContext.authenticate(opSession);
-			} catch (AuthenticationException e) {
-				AuthFilter.sendChallenge(res, e);
+			if (! authenticateOrChallenge(opRestContext))
 				return;
-			}
 			context.preCall(opSession);
 			opSession.run();
 			context.postCall(opSession);
@@ -569,6 +563,28 @@ public class RestSession extends ContextSession {
 				status(404);
 			exception(e);
 			context.handleNotFound(this);
+		}
+	}
+
+	/**
+	 * Runs the resource-level authentication fold ({@link RestAuthenticator}) and, on failure, writes the 401 challenge.
+	 *
+	 * <p>
+	 * Runs before preCall so {@link RestPreCall @RestPreCall} hooks, guards (roleGuard), and {@code @Auth} arg resolution
+	 * all see the resolved principal/roles.
+	 *
+	 * @param opRestContext The operation's REST context.
+	 * @return <jk>true</jk> if the request should proceed, or <jk>false</jk> if a 401 challenge was sent and processing
+	 * 	should stop.
+	 * @throws IOException If writing the challenge response fails.
+	 */
+	private boolean authenticateOrChallenge(RestContext opRestContext) throws IOException {
+		try {
+			opRestContext.authenticate(opSession);
+			return true;
+		} catch (AuthenticationException e) {
+			AuthFilter.sendChallenge(res, e);
+			return false;
 		}
 	}
 

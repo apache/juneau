@@ -38,10 +38,17 @@
 # ignored by the per-module perf-guard parser.
 # ============================================================================
 
-suite = 136                              # reactor wall-clock; carried from FINISHED-95 (re-measure post-migration).
-juneau-integration-tests/core = 60                   # carried from FINISHED-139 single-module baseline (was juneau-utest).
-juneau-integration-tests/container.springboot = 3    # carried from FINISHED-139.
-juneau-integration-tests/container.jetty = 1         # carried from FINISHED-139.
+suite = 225                              # updated baseline.
+juneau-integration-tests/core = 90                   # updated baseline.
+juneau-integration-tests/container.springboot = 5    # updated baseline.
+juneau-integration-tests/container.jetty = 2         # updated baseline; fast shutdown restored by EphemeralJettyServerConfig.stopTimeout(ZERO).
+juneau-bean/juneau-bean-atom/core = 0.4
+juneau-bean/juneau-bean-common/core = 1.0
+juneau-bean/juneau-bean-html5/core = 3.5
+juneau-bean/juneau-bean-mcp/core = 0.4
+juneau-bean/juneau-bean-openapi-v3/core = 0.9
+juneau-bean/juneau-bean-swagger-v2/core = 0.8
+juneau-bean/juneau-bean-jsonschema/core = 0.7
 
 # ─── [observability] ──────────────────────────────────────────────────────────
 #

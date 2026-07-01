@@ -46,7 +46,8 @@ import org.apache.juneau.marshall.swap.*;
 	"resource",  // Output streams managed by calling code
 	"java:S110", // Inheritance depth acceptable for serializer session hierarchy
 	"rawtypes",  // Raw types necessary for generic Map/Collection handling
-	"unchecked"  // Raw Map passed to forEachEntry requires an unchecked conversion to Map<K,V>
+	"unchecked", // Raw Map passed to forEachEntry requires an unchecked conversion to Map<K,V>
+	"java:S115"  // Constants use UPPER_camelCase convention (e.g., ARG_ctx)
 })
 public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 

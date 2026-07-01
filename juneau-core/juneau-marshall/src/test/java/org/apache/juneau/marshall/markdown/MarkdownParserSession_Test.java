@@ -106,9 +106,19 @@ class MarkdownParserSession_Test extends TestBase {
 	// b - Empty / blank input handling
 	//====================================================================================================
 
-	@Test void b01_blankLinesOnly() {
-		var r = MarkdownParser.DEFAULT.parse("\n   \n\t\n", Map.class);
-		assertNull(r);
+	@ParameterizedTest
+	@MethodSource("b01_parsesToNullProvider")
+	void b01_parsesToNull(String input, Class<?> type) {
+		assertNull(MarkdownParser.DEFAULT.parse(input, type));
+	}
+
+	static Stream<Arguments> b01_parsesToNullProvider() {
+		return Stream.of(
+			Arguments.of("\n   \n\t\n", Map.class),                   // b01: blank lines only
+			Arguments.of("*null*", MarkdownParser_Test.A.class),      // b06: "*null*" plain value to non-string type
+			Arguments.of("", MarkdownParser_Test.A.class),            // o01: empty input for non-string type (parseAnything null branch)
+			Arguments.of("   \n  \n  ", MarkdownParser_Test.A.class)  // o03: blank lines only for non-string type
+		);
 	}
 
 	@ParameterizedTest
@@ -128,12 +138,6 @@ class MarkdownParserSession_Test extends TestBase {
 	@Test void b05_plainTextToInteger() {
 		var r = MarkdownParser.DEFAULT.parse("42", Integer.class);
 		assertEquals(42, r);
-	}
-
-	@Test void b06_plainNullToBean() {
-		// "*null*" line treated as plain value parsed to type — non-string type returns null.
-		var r = MarkdownParser.DEFAULT.parse("*null*", MarkdownParser_Test.A.class);
-		assertNull(r);
 	}
 
 	//====================================================================================================
@@ -249,15 +253,23 @@ class MarkdownParserSession_Test extends TestBase {
 		assertEquals("", r.get(0).name);
 	}
 
-	@Test void d05_invalidJson5InBackticks() {
-		var md = "| Property | Value |\n|---|---|\n| addr | `{this is not json5` |";
-		assertThrows(ParseException.class, () -> MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.D.class));
+	@ParameterizedTest
+	@MethodSource("d05_parseThrowsProvider")
+	void d05_parseThrows(String md, Class<? extends Throwable> expected, Class<?> type) {
+		assertThrows(expected, () -> MarkdownParser.DEFAULT.parse(md, type));
 	}
 
-	@Test void d06_invalidConvertCellValue() {
-		// "abc" cannot convert to int → ParseException.
-		var md = "| Property | Value |\n|---|---|\n| age | abc |";
-		assertThrows(ParseException.class, () -> MarkdownParser.DEFAULT.parse(md, MarkdownParser_Test.A.class));
+	static Stream<Arguments> d05_parseThrowsProvider() {
+		return Stream.of(
+			// d05: invalid JSON5 inside backticks → ParseException
+			Arguments.of("| Property | Value |\n|---|---|\n| addr | `{this is not json5` |", ParseException.class, MarkdownParser_Test.D.class),
+			// d06: "abc" cannot convert to int → ParseException
+			Arguments.of("| Property | Value |\n|---|---|\n| age | abc |", ParseException.class, MarkdownParser_Test.A.class),
+			// v01: non-bean type can't be deserialized from a JSON5 object (needsJson5Path → keyValueTableToJson5)
+			Arguments.of("| Property | Value |\n|---|---|\n| value | hello |", Exception.class, NonBeanType.class),
+			// v03: multiple rows → keyValueTableToJson5 appends comma between entries (line 718-719)
+			Arguments.of("| Property | Value |\n|---|---|\n| a | 1 |\n| b | 2 |", Exception.class, NonBeanType.class)
+		);
 	}
 
 	//====================================================================================================
@@ -661,22 +673,10 @@ class MarkdownParserSession_Test extends TestBase {
 	// o - Empty input parsing
 	//====================================================================================================
 
-	@Test void o01_emptyInputForBean() {
-		// Empty input string for a non-String type → parseAnything null branch at line 174
-		var r = MarkdownParser.DEFAULT.parse("", MarkdownParser_Test.A.class);
-		assertNull(r);
-	}
-
 	@Test void o02_emptyInputForString() {
 		// Empty input string for String type → parseAnything returns "" at line 175
 		var r = MarkdownParser.DEFAULT.parse("", String.class);
 		assertEquals("", r);
-	}
-
-	@Test void o03_blankLinesOnlyForBean() {
-		// Only blank lines → nonBlank is empty → returns null for non-String
-		var r = MarkdownParser.DEFAULT.parse("   \n  \n  ", MarkdownParser_Test.A.class);
-		assertNull(r);
 	}
 
 	//====================================================================================================
@@ -824,27 +824,16 @@ class MarkdownParserSession_Test extends TestBase {
 		@Override public String toString() { return value; }
 	}
 
-	@Test void v01_keyValueTableToJson5_nonBeanType() {
-		// Non-bean type (no public properties) → needsJson5Path returns true → keyValueTableToJson5 is invoked
-		// The JSON5 path is taken; parsing may throw since non-bean can't be deserialized from JSON5 object
-		var md = "| Property | Value |\n|---|---|\n| value | hello |";
-		assertThrows(Exception.class, () -> MarkdownParser.DEFAULT.parse(md, NonBeanType.class));
-	}
-
 	@Test void v02_keyValueTableToJson5_typeKeyRow() {
 		// Non-bean type with _type row → keyValueTableToJson5 handles _type as quoted string (line 721-722)
 		// May succeed or fail depending on how Json5Parser handles the output; either way, line 721-722 is exercised.
 		var md = "| Property | Value |\n|---|---|\n| _type | mytype |\n| value | hello |";
-		try {
-			MarkdownParser.DEFAULT.parse(md, NonBeanType.class);
-		} catch (Exception e) {
-			// Expected: non-bean type can't be deserialized from JSON5 object
-		}
-	}
-
-	@Test void v03_keyValueTableToJson5_multipleRows() {
-		// Multiple rows → keyValueTableToJson5 appends comma between entries (line 718-719)
-		var md = "| Property | Value |\n|---|---|\n| a | 1 |\n| b | 2 |";
-		assertThrows(Exception.class, () -> MarkdownParser.DEFAULT.parse(md, NonBeanType.class));
+		assertDoesNotThrow(() -> {
+			try {
+				MarkdownParser.DEFAULT.parse(md, NonBeanType.class);
+			} catch (Exception e) {
+				// Expected: non-bean type can't be deserialized from JSON5 object
+			}
+		});
 	}
 }

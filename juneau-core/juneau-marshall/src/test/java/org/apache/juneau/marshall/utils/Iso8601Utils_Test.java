@@ -634,4 +634,132 @@ class Iso8601Utils_Test extends TestBase {
 		var r = Iso8601Utils.fromEpochMillis(0L, BC.getClassMeta(String.class), UTC);
 		assertNull(r);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// parseDuration — state-machine sniff/manual edge cases (replaces former regex implementation).
+	// These lock in the exact accept/reject and value behavior across signs, fractions, HOCON units,
+	// whitespace, and the lenient junk-skipping of the manual parser.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void v01_parseDuration_integer_signed_positive() {
+		assertEquals(Duration.ofMillis(500), Iso8601Utils.parseDuration("+500", null));
+	}
+
+	@Test void v02_parseDuration_integer_signed_negative() {
+		assertEquals(Duration.ofMillis(-500), Iso8601Utils.parseDuration("-500", null));
+	}
+
+	@Test void v03_parseDuration_decimal_signedNegative_seconds() {
+		assertEquals(Duration.ofSeconds(-2, -250_000_000), Iso8601Utils.parseDuration("-2.25", null));
+	}
+
+	@Test void v04_parseDuration_hocon_ns() {
+		assertEquals(Duration.ofNanos(5), Iso8601Utils.parseDuration("5ns", null));
+	}
+
+	@Test void v05_parseDuration_hocon_us() {
+		assertEquals(Duration.ofNanos(5_000), Iso8601Utils.parseDuration("5us", null));
+	}
+
+	@Test void v06_parseDuration_hocon_minutes() {
+		assertEquals(Duration.ofMinutes(5), Iso8601Utils.parseDuration("5m", null));
+	}
+
+	@Test void v07_parseDuration_hocon_hours() {
+		assertEquals(Duration.ofHours(5), Iso8601Utils.parseDuration("5h", null));
+	}
+
+	@Test void v08_parseDuration_hocon_days() {
+		assertEquals(Duration.ofDays(5), Iso8601Utils.parseDuration("5d", null));
+	}
+
+	@Test void v09_parseDuration_hocon_fractional() {
+		assertEquals(Duration.ofMillis(1500), Iso8601Utils.parseDuration("1.5s", null));
+	}
+
+	@Test void v10_parseDuration_uppercaseUnit_notHocon_throws() {
+		// Uppercase units are NOT accepted by the HOCON sniff (lowercase-only) and have no PT prefix,
+		// so the manual parser returns null and Duration.parse rejects the value.
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("500MS", null));
+	}
+
+	@Test void v11_parseDuration_manual_whitespaceBetweenNumberAndUnit() {
+		assertEquals(Duration.ofHours(1), Iso8601Utils.parseDuration("PT1 H", null));
+	}
+
+	@Test void v12_parseDuration_manual_strayJunkBetweenComponents_rejected() {
+		// Strict parser: stray embedded characters are no longer silently skipped — the value is rejected
+		// (manual returns null → Duration.parse rejects "PT1Hfoo2M").
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1Hfoo2M", null));
+	}
+
+	@Test void v13_parseDuration_manual_doubledDot_rejected() {
+		// Strict parser: a malformed multi-dot number is rejected rather than partially parsed.
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1.2.3H", null));
+	}
+
+	@Test void v16_parseDuration_manual_trailingJunk_rejected() {
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1H30M45Sjunk", null));
+	}
+
+	@Test void v17_parseDuration_manual_leadingJunkAfterT_rejected() {
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PTfoo1H", null));
+	}
+
+	@Test void v18_parseDuration_manual_embeddedLetters_rejected() {
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1H2Mxyz", null));
+	}
+
+	@Test void v19_parseDuration_manual_strayPunctuation_rejected() {
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1H!2M", null));
+	}
+
+	@Test void v20_parseDuration_manual_leadingDotNoInteger_rejected() {
+		// "PT.5H": the leading bare dot is stray punctuation, not a valid component start.
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT.5H", null));
+	}
+
+	@Test void v21_parseDuration_manual_consecutiveDots_rejected() {
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1..2H", null));
+	}
+
+	@Test void v22_parseDuration_manual_whitespaceInsideNumber_rejected() {
+		// A space splitting two digit runs is no longer skipped; "1 0H" is malformed.
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1 0H", null));
+	}
+
+	@Test void v14_parseDuration_manual_dotWithoutFraction_throws() {
+		// "PT1.H": the dot is not followed by a digit, so no number/unit pair matches; manual returns
+		// null and Duration.parse rejects "PT1.H".
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parseDuration("PT1.H", null));
+	}
+
+	@Test void v15_parseDuration_manual_multipleComponents() {
+		assertEquals(Duration.ofHours(1).plusMinutes(30).plusSeconds(45), Iso8601Utils.parseDuration("PT1H30M45S", null));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// parsePeriod — state-machine sniff edge cases (replaces former regex implementation).
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void w01_parsePeriod_integer_signedPositive_days() {
+		assertEquals(Period.ofDays(10), Iso8601Utils.parsePeriod("+10", null));
+	}
+
+	@Test void w02_parsePeriod_integer_signedNegative_days() {
+		assertEquals(Period.ofDays(-10), Iso8601Utils.parsePeriod("-10", null));
+	}
+
+	@Test void w03_parsePeriod_iso8601_weeks() {
+		assertEquals(Period.ofWeeks(2), Iso8601Utils.parsePeriod("P2W", PeriodFormat.ISO_8601));
+	}
+
+	@Test void w04_parsePeriod_invalidTimeDesignator_throws() {
+		// "P1H" is not a bare integer and not a valid Period (H is a time component) → Period.parse rejects.
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parsePeriod("P1H", PeriodFormat.ISO_8601));
+	}
+
+	@Test void w05_parsePeriod_nonNumericGarbage_throws() {
+		assertThrows(RuntimeException.class, () -> Iso8601Utils.parsePeriod("abc", PeriodFormat.ISO_8601));
+	}
 }

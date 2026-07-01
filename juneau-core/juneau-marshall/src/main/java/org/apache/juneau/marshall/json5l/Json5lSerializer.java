@@ -72,7 +72,8 @@ import org.apache.juneau.marshall.jsonl.*;
  * </ul>
  */
 @SuppressWarnings({
-	"java:S110" // Inheritance depth acceptable
+	"java:S110", // Inheritance depth acceptable
+	"java:S115" // Constants use UPPER_camelCase convention (e.g., ARG_copyFrom)
 })
 public class Json5lSerializer extends JsonlSerializer {
 

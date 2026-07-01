@@ -254,10 +254,19 @@ class RestArgResolvers_Test extends TestBase {
 			"QueryArg.create must return null when @Query is absent");
 	}
 
-	@Test void a03_queryArg_create_throwsWhenNameMissing() {
-		var pi = firstParam(Fixture.class, "queryNoName");
-		assertThrows(ArgException.class, () -> QueryArg.create(pi, EMPTY_AWL),
-			"QueryArg must throw ArgException when @Query has no name/value");
+	static Stream<Arguments> abc03_namedArg_create_throwsWhenNameMissing() {
+		return Stream.of(
+			Arguments.of("@Query",    "queryNoName",    (Function<ParameterInfo, Object>) p -> QueryArg.create(p, EMPTY_AWL)),
+			Arguments.of("@Header",   "headerNoName",   (Function<ParameterInfo, Object>) p -> HeaderArg.create(p, EMPTY_AWL)),
+			Arguments.of("@FormData", "formDataNoName", (Function<ParameterInfo, Object>) p -> FormDataArg.create(p, EMPTY_AWL))
+		);
+	}
+
+	@ParameterizedTest @MethodSource("abc03_namedArg_create_throwsWhenNameMissing")
+	void a03_b03_c03_namedArg_create_throwsWhenNameMissing(String annotation, String fixtureMethod, Function<ParameterInfo, Object> factory) {
+		var pi = firstParam(Fixture.class, fixtureMethod);
+		assertThrows(ArgException.class, () -> factory.apply(pi),
+			"Arg must throw ArgException when " + annotation + " has no name/value");
 	}
 
 	// -----------------------------------------------------------------------------------------
@@ -277,12 +286,6 @@ class RestArgResolvers_Test extends TestBase {
 			"HeaderArg.create must return null when @Header is absent");
 	}
 
-	@Test void b03_headerArg_create_throwsWhenNameMissing() {
-		var pi = firstParam(Fixture.class, "headerNoName");
-		assertThrows(ArgException.class, () -> HeaderArg.create(pi, EMPTY_AWL),
-			"HeaderArg must throw ArgException when @Header has no name/value");
-	}
-
 	// -----------------------------------------------------------------------------------------
 	// c — FormDataArg
 	// -----------------------------------------------------------------------------------------
@@ -298,12 +301,6 @@ class RestArgResolvers_Test extends TestBase {
 		var pi = firstParam(Fixture.class, "noAnnotation");
 		assertNull(FormDataArg.create(pi, EMPTY_AWL),
 			"FormDataArg.create must return null when @FormData is absent");
-	}
-
-	@Test void c03_formDataArg_create_throwsWhenNameMissing() {
-		var pi = firstParam(Fixture.class, "formDataNoName");
-		assertThrows(ArgException.class, () -> FormDataArg.create(pi, EMPTY_AWL),
-			"FormDataArg must throw ArgException when @FormData has no name/value");
 	}
 
 	// -----------------------------------------------------------------------------------------
@@ -678,10 +675,10 @@ class RestArgResolvers_Test extends TestBase {
 
 	static Stream<Arguments> t_contextArgs_returnsNullForUnknownType() {
 		return Stream.of(
-			Arguments.of("RestContextArgs",   (Function<ParameterInfo, Object>) p -> RestContextArgs.create(p)),
-			Arguments.of("RestOpContextArgs", (Function<ParameterInfo, Object>) p -> RestOpContextArgs.create(p)),
-			Arguments.of("RestOpSessionArgs", (Function<ParameterInfo, Object>) p -> RestOpSessionArgs.create(p)),
-			Arguments.of("RestSessionArgs",   (Function<ParameterInfo, Object>) p -> RestSessionArgs.create(p))
+			Arguments.of("RestContextArgs",   (Function<ParameterInfo, Object>) RestContextArgs::create),
+			Arguments.of("RestOpContextArgs", (Function<ParameterInfo, Object>) RestOpContextArgs::create),
+			Arguments.of("RestOpSessionArgs", (Function<ParameterInfo, Object>) RestOpSessionArgs::create),
+			Arguments.of("RestSessionArgs",   (Function<ParameterInfo, Object>) RestSessionArgs::create)
 		);
 	}
 

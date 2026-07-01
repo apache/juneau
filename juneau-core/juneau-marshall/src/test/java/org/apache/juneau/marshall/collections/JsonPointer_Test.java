@@ -207,7 +207,8 @@ class JsonPointer_Test extends TestBase {
 	@Test void e06_setIndexOutOfRangeThrows() {
 		// Setting at an index beyond the end of an existing list (not the append slot) is an error.
 		var root = JsonMap.of("a", JsonList.of(1, 2));
-		assertThrows(IllegalArgumentException.class, () -> JsonPointer.of("/a/5").set(root, 9));
+		var p = JsonPointer.of("/a/5");
+		assertThrows(IllegalArgumentException.class, () -> p.set(root, 9));
 	}
 
 	@Test void e07_setReplaceAtExistingIndex() {
@@ -234,7 +235,8 @@ class JsonPointer_Test extends TestBase {
 	@Test void e10_setNonNumericListTokenThrows() {
 		// A non-numeric, non-'-' token on a list is an invalid array index on write.
 		var root = JsonMap.of("a", JsonList.of(1, 2));
-		assertThrows(IllegalArgumentException.class, () -> JsonPointer.of("/a/foo").set(root, 9));
+		var p = JsonPointer.of("/a/foo");
+		assertThrows(IllegalArgumentException.class, () -> p.set(root, 9));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

@@ -191,7 +191,7 @@ class ProtobufCoverage_Test extends TestBase {
 		@Protobuf(type=ProtobufScalarType.SFIXED64) public long sf64;
 		@Protobuf(type=ProtobufScalarType.UINT32) public int u32;
 		@Protobuf(type=ProtobufScalarType.INT64) public long i64;
-		public ScalarTypes() {}
+		public ScalarTypes() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test
@@ -233,8 +233,8 @@ class ProtobufCoverage_Test extends TestBase {
 		assertNotNull(s);
 	}
 
-	public static class A04_C1 { public int f1; public void m1() {} }
-	public static class A04_C2 { public int f2; public void m2() {} }
+	public static class A04_C1 { public int f1; public void m1() { /* No-op method used only as a reflection target in a04_applyTargetingMethods. */ } }
+	public static class A04_C2 { public int f2; public void m2() { /* No-op method used only as a reflection target in a04_applyTargetingMethods. */ } }
 
 	@Test
 	void a04_applyTargetingMethods() throws Exception {
@@ -268,7 +268,7 @@ class ProtobufCoverage_Test extends TestBase {
 		public java.time.Duration dur;
 		public java.time.LocalDate ld;
 		public java.time.Period per;
-		public Temporals() {}
+		public Temporals() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test
@@ -292,7 +292,7 @@ class ProtobufCoverage_Test extends TestBase {
 
 	public static class Holder {
 		public java.util.Map<String,ProtobufContainers_Test.Inner> m;
-		public Holder() {}
+		public Holder() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test
@@ -313,7 +313,7 @@ class ProtobufCoverage_Test extends TestBase {
 		public java.util.Map<String,java.time.LocalDate> lds;
 		public java.util.Map<String,java.time.Duration> durs;
 		public java.util.Map<String,java.time.Period> pers;
-		public C03_TemporalMaps() {}
+		public C03_TemporalMaps() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test
@@ -349,7 +349,7 @@ class ProtobufCoverage_Test extends TestBase {
 	public static class Cycle {
 		public String name;
 		public Cycle self;
-		public Cycle() {}
+		public Cycle() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test

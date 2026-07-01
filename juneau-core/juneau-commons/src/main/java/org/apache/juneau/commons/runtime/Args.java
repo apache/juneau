@@ -22,6 +22,8 @@ import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.utils.Utils;
+
 /**
  * Lean parser for command-line arguments passed in through a {@code main(String[] args)} method.
  *
@@ -379,7 +381,7 @@ public class Args {
 				if (allowShortFlags)
 					p.add("-");
 			}
-			p.removeIf(x -> e(x));
+			p.removeIf(Utils::e);
 			p.sort((a,b) -> Integer.compare(b.length(), a.length()));
 			return p;
 		}

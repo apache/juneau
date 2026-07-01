@@ -202,7 +202,7 @@ class RecordStream_Test extends TestBase {
 		public Deep2D(List<List<Flat>> g, Flat[][] m) { this.grid = g; this.matrix = m; }
 	}
 
-	/** Self-similar bean used for the deep-nesting and self-reference/cycle matrix rows (TODO-175ab Item 2). */
+	/** Self-similar bean used for the deep-nesting and self-reference/cycle matrix rows (175ab Item 2). */
 	public static class Node {
 		public String id;
 		public Node child;
@@ -391,7 +391,7 @@ class RecordStream_Test extends TestBase {
 	}
 
 	// =====================================================================================
-	// Very-deeply-nested structure (5+ levels) — TODO-175ab Item 2 (recursion-limit row)
+	// Very-deeply-nested structure (5+ levels) — 175ab Item 2 (recursion-limit row)
 	// =====================================================================================
 
 	@ParameterizedTest
@@ -418,7 +418,7 @@ class RecordStream_Test extends TestBase {
 	}
 
 	// =====================================================================================
-	// Self-reference / cycle — TODO-175ab Item 2 (depends on the 175aa PojoWalker cycle guard).
+	// Self-reference / cycle — 175ab Item 2 (depends on the 175aa PojoWalker cycle guard).
 	// Per-format cycle handling legitimately differs: most formats (json, json5, cbor, msgpack,
 	// hjson, uon, oapi) surface a self-reference as a *controlled* failure — a SerializeException
 	// (the base session converts a StackOverflowError into a recursion message) or the PojoWalker

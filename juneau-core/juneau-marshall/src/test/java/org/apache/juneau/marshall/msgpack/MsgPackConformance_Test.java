@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Conformance regression tests guarding the Phase-2 MessagePack codec fixes (TODO-175fd audit).
+ * Conformance regression tests guarding the Phase-2 MessagePack codec fixes (175fd audit).
  *
  * <p>
  * Each test pins a specific spec-corner / lossless-round-trip gap so that a future regression is caught:

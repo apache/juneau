@@ -127,12 +127,13 @@ class ParquetColumnReader_Test extends TestBase {
 	}
 
 	@Test
-	void a10_byteArrayLengthGuard() {
+	void a10_byteArrayLengthGuard() throws Exception {
 		// A BYTE_ARRAY whose declared length exceeds the cap throws.  REQUIRED column (no def levels):
 		// 4-byte LE length = 0x7FFFFFFF, then no payload.
 		var page = new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, 0x7F};
 		var r = new ParquetColumnReader(page, 1, 0);
-		assertThrows(IOException.class, () -> { r.advance(); r.readByteArray(); });
+		r.advance();
+		assertThrows(IOException.class, r::readByteArray);
 	}
 
 	@Test

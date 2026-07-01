@@ -116,7 +116,7 @@ class Console_Test extends TestBase {
 		var output = outCapture.toString();
 		assertTrue(output.contains("Value:"), output);
 		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.matches("(?s).*Value:.*[0-9].*"), 
+		assertTrue(output.contains("Value:") && output.chars().anyMatch(Character::isDigit),
 			"Output should contain 'Value:' and at least one digit. Actual: " + output);
 	}
 
@@ -133,7 +133,7 @@ class Console_Test extends TestBase {
 		var output = outCapture.toString();
 		assertTrue(output.contains("Number:"), output);
 		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.matches("(?s).*Number:.*[0-9].*"), 
+		assertTrue(output.contains("Number:") && output.chars().anyMatch(Character::isDigit),
 			"Output should contain 'Number:' and at least one digit. Actual: " + output);
 	}
 
@@ -204,7 +204,7 @@ class Console_Test extends TestBase {
 		var output = errCapture.toString();
 		assertTrue(output.contains("Error:"), output);
 		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.matches("(?s).*Error:.*[0-9].*"), 
+		assertTrue(output.contains("Error:") && output.chars().anyMatch(Character::isDigit),
 			"Output should contain 'Error:' and at least one digit. Actual: " + output);
 	}
 
@@ -221,7 +221,7 @@ class Console_Test extends TestBase {
 		var output = errCapture.toString();
 		assertTrue(output.contains("Number:"), output);
 		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.matches("(?s).*Number:.*[0-9].*"), 
+		assertTrue(output.contains("Number:") && output.chars().anyMatch(Character::isDigit),
 			"Output should contain 'Number:' and at least one digit. Actual: " + output);
 	}
 

@@ -1794,7 +1794,7 @@ public class StringUtils {
 
 		var result = new ArrayList<String>();
 		// Email regex pattern (same as isEmail but without ^ and $ anchors)
-		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}");
+		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}");
 		var matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			result.add(matcher.group());
@@ -3235,6 +3235,71 @@ public class StringUtils {
 	}
 
 	/**
+	 * Scans the longest prefix of the specified string that matches the JSON-style number grammar.
+	 *
+	 * <p>
+	 * Hand-written equivalent (greedy, anchored at the start of the string) of one of:
+	 * <ul>
+	 * 	<li>{@code -?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?} when {@code allowLeadingZeros} is <jk>false</jk>
+	 * 		(integer part restricted to {@code 0} or a non-zero-leading run), or
+	 * 	<li>{@code -?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?} when {@code allowLeadingZeros} is <jk>true</jk>
+	 * 		(integer part is any run of one or more digits).
+	 * </ul>
+	 *
+	 * <p>
+	 * {@code \d} matches ASCII {@code [0-9]} only. To emulate a {@code matches()} (whole-string) check, test the
+	 * return value against {@code s.length()}.
+	 *
+	 * @param s The string to scan. Must not be <jk>null</jk>.
+	 * @param allowLeadingZeros Whether the integer part may contain leading zeros.
+	 * @return The length of the matched prefix, or {@code -1} if the string does not start with a valid number.
+	 */
+	public static int matchNumberPrefix(String s, boolean allowLeadingZeros) {
+		var len = s.length();
+		var i = 0;
+		if (i < len && s.charAt(i) == '-')
+			i++;
+		// Integer part (required).
+		if (i >= len)
+			return -1;
+		var c = s.charAt(i);
+		if (allowLeadingZeros) {
+			if (c < '0' || c > '9')
+				return -1;
+			i++;
+			while (i < len && s.charAt(i) >= '0' && s.charAt(i) <= '9')
+				i++;
+		} else if (c == '0') {
+			i++;
+		} else if (c >= '1' && c <= '9') {
+			i++;
+			while (i < len && s.charAt(i) >= '0' && s.charAt(i) <= '9')
+				i++;
+		} else {
+			return -1;
+		}
+		// Optional fraction (?:\.\d+)? - the '.' requires at least one following digit, else not consumed.
+		if (i < len && s.charAt(i) == '.' && i + 1 < len && s.charAt(i + 1) >= '0' && s.charAt(i + 1) <= '9') {
+			i += 2;
+			while (i < len && s.charAt(i) >= '0' && s.charAt(i) <= '9')
+				i++;
+		}
+		// Optional exponent (?:[eE][+-]?\d+)? - consumed only when a digit follows e/E and the optional sign.
+		if (i < len && (s.charAt(i) == 'e' || s.charAt(i) == 'E')) {
+			var j = i + 1;
+			if (j < len && (s.charAt(j) == '+' || s.charAt(j) == '-'))
+				j++;
+			if (j < len && s.charAt(j) >= '0' && s.charAt(j) <= '9') {
+				j++;
+				while (j < len && s.charAt(j) >= '0' && s.charAt(j) <= '9')
+					j++;
+				i = j;
+			}
+		}
+		return i;
+	}
+
+	/**
 	 * Checks if a string contains only digit characters (0-9).
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -3283,7 +3348,7 @@ public class StringUtils {
 		// Basic email regex: local@domain
 		// Allows letters, digits, dots, underscores, hyphens, and plus signs in local part
 		// Domain must have at least one dot and valid TLD
-		return str.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+		return str.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$");
 	}
 
 	/**

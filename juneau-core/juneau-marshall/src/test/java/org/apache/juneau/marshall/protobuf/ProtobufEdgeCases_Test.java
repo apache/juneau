@@ -135,7 +135,7 @@ class ProtobufEdgeCases_Test extends TestBase {
 	public static class Lists {
 		public List<Integer> nums;
 		public List<String> strs;
-		public Lists() {}
+		public Lists() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test
@@ -148,7 +148,7 @@ class ProtobufEdgeCases_Test extends TestBase {
 
 	public static class Maps {
 		public Map<String,Integer> m;
-		public Maps() {}
+		public Maps() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test

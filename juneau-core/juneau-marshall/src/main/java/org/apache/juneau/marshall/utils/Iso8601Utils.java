@@ -25,7 +25,6 @@ import java.time.Duration;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
-import java.util.regex.*;
 
 import javax.xml.datatype.*;
 
@@ -321,11 +320,11 @@ public final class Iso8601Utils {
 		if (s.startsWith("PT-"))
 			s = "-PT" + s.substring(3);
 		// Number sniffing and explicit format hints.
-		if (s.matches("^[+-]?\\d+$"))
+		if (isIntegerLiteral(s))
 			return (formatHint == null ? DurationFormat.MILLIS : formatHint).parse(s);
-		if (s.matches("^[+-]?\\d+\\.\\d+$"))
+		if (isDecimalLiteral(s))
 			return DurationFormat.SECONDS.parse(s);
-		if (s.matches("^[+-]?\\d+(?:\\.\\d+)?(?:ns|us|ms|s|m|h|d)$"))
+		if (isHoconLiteral(s))
 			return DurationFormat.HOCON.parse(s);
 		// Use manual parser for full control (handles PTnH, PTnM, PTn.nS, -PTnH, PT-6H, etc.)
 		Duration d = parseDurationManual(s);
@@ -355,7 +354,7 @@ public final class Iso8601Utils {
 		if (value == null || value.isEmpty())
 			return null;
 		String s = value.trim();
-		if (s.matches("^[+-]?\\d+$"))
+		if (isIntegerLiteral(s))
 			return (formatHint == null ? PeriodFormat.DAYS : formatHint).parse(s);
 		return Period.parse(s);
 	}
@@ -464,6 +463,23 @@ public final class Iso8601Utils {
 		return (T) parseTemporalDefault(iso8601, ttc, zoneId);
 	}
 
+	/**
+	 * Hand-written state machine that parses the {@code PT}-prefixed body as a strict, gapless sequence of
+	 * {@code number[whitespace]unit} components ({@code H}/{@code M}/{@code S}, case-insensitive).
+	 *
+	 * <p>
+	 * Whitespace is permitted between a number and its unit and between/around components, but every
+	 * non-whitespace character must belong to a valid component. The parser rejects (by returning <jk>null</jk>,
+	 * the same signal used for any input it cannot handle) when it encounters stray characters, a malformed
+	 * number (e.g. more than one decimal point, or a trailing dot with no fraction), or a number without a
+	 * trailing unit. On rejection {@link #parseDuration} falls through to {@link Duration#parse(CharSequence)},
+	 * which throws for genuinely invalid values. Numeric conversion uses the floating-point expression
+	 * {@code (long)(value * 1_000_000_000)} to preserve historical rounding for well-formed inputs.
+	 *
+	 * @param s The candidate duration string (already trimmed/dequoted/PT-normalized by {@link #parseDuration}).
+	 * @return The parsed {@link Duration}, or <jk>null</jk> if the string is too short, lacks a {@code PT}/{@code pt}
+	 * 	prefix, contains no component, or contains any stray/malformed content.
+	 */
 	private static Duration parseDurationManual(String s) {
 		if (s == null || s.length() < 3)
 			return null;
@@ -474,24 +490,140 @@ public final class Iso8601Utils {
 		s2 = s2.substring(2);
 		long totalNanos = 0;
 		boolean found = false;
-		var p = Pattern.compile("(\\d++(?:\\.\\d++)?+)\\s*([HhMmSs])");
-		var m = p.matcher(s2);
-		while (m.find()) {
+		int len = s2.length();
+		int i = 0;
+		while (i < len) {
+			// Whitespace between/around components is skipped; any other non-component character is rejected.
+			if (isRegexWhitespace(s2.charAt(i))) {
+				i++;
+				continue;
+			}
+			// A component must begin with a digit; any other character is stray junk → reject.
+			if (!isAsciiDigit(s2.charAt(i)))
+				return null;
+			int start = i;
+			while (i < len && isAsciiDigit(s2.charAt(i)))  // Integer part.
+				i++;
+			// Optional fraction: a single '.' that MUST be followed by at least one digit.
+			if (i < len && s2.charAt(i) == '.') {
+				i++;
+				if (i >= len || !isAsciiDigit(s2.charAt(i)))
+					return null;  // Trailing dot with no fraction → malformed.
+				while (i < len && isAsciiDigit(s2.charAt(i)))
+					i++;
+			}
+			int numEnd = i;
+			while (i < len && isRegexWhitespace(s2.charAt(i)))  // Optional whitespace between number and unit.
+				i++;
+			// A unit designator is required; a number without one (or followed by stray chars) is malformed.
+			if (i >= len || !isDurationUnit(s2.charAt(i)))
+				return null;
 			found = true;
-			double v = Double.parseDouble(m.group(1));
+			double v = Double.parseDouble(s2.substring(start, numEnd));
 			long nanos = (long)(v * 1_000_000_000);
-			char unit = Character.toUpperCase(m.group(2).charAt(0));
+			char unit = Character.toUpperCase(s2.charAt(i));
 			switch (unit) {
 				case 'H': totalNanos += nanos * 3600; break;
 				case 'M': totalNanos += nanos * 60; break;
 				case 'S': totalNanos += nanos; break;
-				default: break;
+				default: break;  // HTT: isDurationUnit guarantees H/M/S
 			}
+			i++;  // Consume the unit.
 		}
 		if (!found)
 			return null;
 		Duration d = Duration.ofNanos(totalNanos);
 		return neg ? d.negated() : d;
+	}
+
+	private static boolean isAsciiDigit(char c) {
+		return c >= '0' && c <= '9';
+	}
+
+	/**
+	 * Matches the regex {@code \s} character class (without the {@code UNICODE_CHARACTER_CLASS} flag).
+	 */
+	private static boolean isRegexWhitespace(char c) {
+		return c == ' ' || c == '\t' || c == '\n' || c == '\u000B' || c == '\f' || c == '\r';
+	}
+
+	private static boolean isDurationUnit(char c) {
+		return c == 'H' || c == 'h' || c == 'M' || c == 'm' || c == 'S' || c == 's';
+	}
+
+	/**
+	 * State-machine equivalent of {@code ^[+-]?\d++$} — an optional sign followed by one or more ASCII digits.
+	 *
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if the entire string is an optionally-signed integer literal.
+	 */
+	private static boolean isIntegerLiteral(String s) {
+		int len = s.length();
+		int i = 0;
+		if (i < len && (s.charAt(i) == '+' || s.charAt(i) == '-'))
+			i++;
+		if (i == len)
+			return false;
+		for (int k = i; k < len; k++)
+			if (!isAsciiDigit(s.charAt(k)))
+				return false;
+		return true;
+	}
+
+	/**
+	 * State-machine equivalent of {@code ^[+-]?\d++\.\d++$} — an optionally-signed decimal with digits on both
+	 * sides of a single dot.
+	 *
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if the entire string is an optionally-signed decimal literal.
+	 */
+	private static boolean isDecimalLiteral(String s) {
+		int len = s.length();
+		int i = 0;
+		if (i < len && (s.charAt(i) == '+' || s.charAt(i) == '-'))
+			i++;
+		int intStart = i;
+		while (i < len && isAsciiDigit(s.charAt(i)))
+			i++;
+		if (i == intStart)
+			return false;
+		if (i >= len || s.charAt(i) != '.')
+			return false;
+		i++;
+		int fracStart = i;
+		while (i < len && isAsciiDigit(s.charAt(i)))
+			i++;
+		if (i == fracStart)
+			return false;
+		return i == len;
+	}
+
+	/**
+	 * State-machine equivalent of {@code ^[+-]?\d++(?:\.\d++)?(?:ns|us|ms|s|m|h|d)$} — an optionally-signed number
+	 * (with optional fraction) followed by a HOCON time unit.
+	 *
+	 * @param s The string to test.
+	 * @return <jk>true</jk> if the entire string is an optionally-signed HOCON duration literal.
+	 */
+	private static boolean isHoconLiteral(String s) {
+		int len = s.length();
+		int i = 0;
+		if (i < len && (s.charAt(i) == '+' || s.charAt(i) == '-'))
+			i++;
+		int intStart = i;
+		while (i < len && isAsciiDigit(s.charAt(i)))
+			i++;
+		if (i == intStart)
+			return false;
+		// Optional fraction consumed only when '.' is followed by at least one digit; otherwise left for the unit.
+		if (i < len && s.charAt(i) == '.' && i + 1 < len && isAsciiDigit(s.charAt(i + 1))) {
+			i++;
+			while (i < len && isAsciiDigit(s.charAt(i)))
+				i++;
+		}
+		String unit = s.substring(i);
+		return unit.equals("ns") || unit.equals("us") || unit.equals("ms")
+			|| unit.equals("s") || unit.equals("m") || unit.equals("h") || unit.equals("d");
 	}
 
 	private static Calendar parseCalendarDefault(String iso8601, ZoneId zoneId) {

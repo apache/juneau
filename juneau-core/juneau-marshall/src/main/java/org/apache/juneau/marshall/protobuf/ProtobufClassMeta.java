@@ -52,6 +52,9 @@ public class ProtobufClassMeta extends ExtendedClassMeta {
 	 * @param cm The class that this metadata is defined on.
 	 * @param mp Protobuf metadata provider (for finding information about other artifacts).
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity acceptable for the two-pass field-number assignment.
+	})
 	public ProtobufClassMeta(ClassMeta<?> cm, ProtobufMetaProvider mp) {
 		super(cm);
 

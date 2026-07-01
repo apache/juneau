@@ -540,47 +540,56 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void j19_readIntegerEmptyHexThrows() {
-		assertThrows(ParseException.class, () -> t("0x").readInteger());
+		var tok = t("0x");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j20_readIntegerEmptyOctalThrows() {
-		assertThrows(ParseException.class, () -> t("0o").readInteger());
+		var tok = t("0o");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j21_readIntegerEmptyBinaryThrows() {
-		assertThrows(ParseException.class, () -> t("0b").readInteger());
+		var tok = t("0b");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j22_readIntegerEmptyThrows() {
-		assertThrows(ParseException.class, () -> t("").readInteger());
+		var tok = t("");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j23_readIntegerLeadingZerosThrows() {
-		assertThrows(ParseException.class, () -> t("01").readInteger());
+		var tok = t("01");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j24_readIntegerOverflowDecimal() {
-		assertThrows(ParseException.class, () -> t("99999999999999999999").readInteger());
+		var tok = t("99999999999999999999");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j25_readIntegerOverflowHex() {
-		assertThrows(ParseException.class, () -> t("0xFFFFFFFFFFFFFFFFF").readInteger());
+		var tok = t("0xFFFFFFFFFFFFFFFFF");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j26_readIntegerOverflowOctal() {
-		assertThrows(ParseException.class, () -> t("0o7777777777777777777777").readInteger());
+		var tok = t("0o7777777777777777777777");
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
 	void j27_readIntegerOverflowBinary() {
-		assertThrows(ParseException.class, () -> t("0b" + "1".repeat(80)).readInteger());
+		var tok = t("0b" + "1".repeat(80));
+		assertThrows(ParseException.class, tok::readInteger);
 	}
 
 	@Test
@@ -650,12 +659,14 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void k11_readFloatEmptyThrows() {
-		assertThrows(ParseException.class, () -> t("").readFloat());
+		var tok = t("");
+		assertThrows(ParseException.class, tok::readFloat);
 	}
 
 	@Test
 	void k12_readFloatBareSignThrows() {
-		assertThrows(ParseException.class, () -> t("-q").readFloat());
+		var tok = t("-q");
+		assertThrows(ParseException.class, tok::readFloat);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -671,7 +682,8 @@ class TomlTokenizer_Test extends TestBase {
 	void l02_specialPosInfNotSupported() {
 		// readSpecialFloat does not accept +inf (only "inf" without sign or "-inf"); // NOSONAR
 		// note: the parser session has its own parseSpecialFloat that does accept "+inf".
-		assertThrows(ParseException.class, () -> t("+inf").readSpecialFloat());
+		var tok = t("+inf");
+		assertThrows(ParseException.class, tok::readSpecialFloat);
 	}
 
 	@Test
@@ -696,7 +708,8 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void l07_specialInvalid() {
-		assertThrows(ParseException.class, () -> t("bogus").readSpecialFloat());
+		var tok = t("bogus");
+		assertThrows(ParseException.class, tok::readSpecialFloat);
 	}
 
 	@Test
@@ -720,18 +733,21 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void m03_booleanInvalid() {
-		assertThrows(ParseException.class, () -> t("xyz").readBoolean());
+		var tok = t("xyz");
+		assertThrows(ParseException.class, tok::readBoolean);
 	}
 
 	@Test
 	void m04_booleanWrongPrefix() {
 		// starts with 't' but not "true"
-		assertThrows(ParseException.class, () -> t("trxx").readBoolean());
+		var tok = t("trxx");
+		assertThrows(ParseException.class, tok::readBoolean);
 	}
 
 	@Test
 	void m05_booleanWrongFalsePrefix() {
-		assertThrows(ParseException.class, () -> t("flxxx").readBoolean());
+		var tok = t("flxxx");
+		assertThrows(ParseException.class, tok::readBoolean);
 	}
 
 	@Test
@@ -745,7 +761,8 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void n01_expectEofMidWordThrows() {
-		assertThrows(ParseException.class, () -> t("tru").readBoolean());
+		var tok = t("tru");
+		assertThrows(ParseException.class, tok::readBoolean);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -799,7 +816,8 @@ class TomlTokenizer_Test extends TestBase {
 
 	@Test
 	void o08_readDateTimeEmptyThrows() {
-		assertThrows(ParseException.class, () -> t("").readDateTime());
+		var tok = t("");
+		assertThrows(ParseException.class, tok::readDateTime);
 	}
 
 	@ParameterizedTest

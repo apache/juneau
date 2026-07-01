@@ -113,13 +113,13 @@ public class RelaxedPropertySource implements PropertySource {
 			var c = name.charAt(i);
 			if (! Character.isLetterOrDigit(c)) {
 				// Separator (., -, /, _, space, …): flush the current token.
-				if (sb.length() > 0) {
+				if (! sb.isEmpty()) {
 					tokens.add(sb.toString());
 					sb.setLength(0);
 				}
 			} else {
 				// camelCase boundary: lower/digit followed by upper starts a new token.
-				if (sb.length() > 0 && Character.isUpperCase(c) && (Character.isLowerCase(prev) || Character.isDigit(prev))) {
+				if (! sb.isEmpty() && Character.isUpperCase(c) && (Character.isLowerCase(prev) || Character.isDigit(prev))) {
 					tokens.add(sb.toString());
 					sb.setLength(0);
 				}
@@ -127,7 +127,7 @@ public class RelaxedPropertySource implements PropertySource {
 			}
 			prev = c;
 		}
-		if (sb.length() > 0)
+		if (! sb.isEmpty())
 			tokens.add(sb.toString());
 		return tokens;
 	}

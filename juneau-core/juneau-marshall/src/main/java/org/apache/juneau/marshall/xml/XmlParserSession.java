@@ -674,7 +674,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * <p>
 	 * A <jk>null</jk> {@code rootElementName} is equivalent to {@link #parseArrayRecords(Object)}.
 	 * The cursor is buffered ({@link RecordReader#isStreaming()} == <jk>false</jk>); see
-	 * {@code TODO-175ab} Item 3 for why true element-at-a-time XML streaming is left for a
+	 * {@code 175ab} Item 3 for why true element-at-a-time XML streaming is left for a
 	 * demand-driven StAX cursor.
 	 *
 	 * @param input The input.

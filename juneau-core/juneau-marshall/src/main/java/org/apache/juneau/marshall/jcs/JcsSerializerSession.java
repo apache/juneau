@@ -147,12 +147,15 @@ public class JcsSerializerSession extends JsonSerializerSession {
 	}
 
 	private static String stripTrailingZeros(String s) {
-		if (s.contains(".")) {
-			s = s.replaceAll("0++$", "");
-			if (s.endsWith("."))
-				s = s.substring(0, s.length() - 1);
-		}
-		return s;
+		// Non-regex char scan avoids regex backtracking (java:S8786) while preserving exact semantics.
+		if (s.indexOf('.') < 0)
+			return s;
+		var end = s.length();
+		while (end > 0 && s.charAt(end - 1) == '0')
+			end--;
+		if (end > 0 && s.charAt(end - 1) == '.')
+			end--;
+		return s.substring(0, end);
 	}
 
 	private static String formatDoubleScientific(double d) {

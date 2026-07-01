@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.bean.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
@@ -306,7 +307,8 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			return true;
 		if (s.equals("null") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))
 			return true;
-		if (s.matches("-?\\d+(\\.\\d+)?([eE][+-]?\\d+)?"))
+		// Whole-string numeric check; mirrors -?\d+(\.\d+)?([eE][+-]?\d+)? (integer part allows leading zeros).
+		if (StringUtils.matchNumberPrefix(s, true) == s.length())
 			return true;
 		if (s.contains("=") || s.contains("[") || s.contains("]") || s.contains("#") || s.contains("\n"))
 			return true;

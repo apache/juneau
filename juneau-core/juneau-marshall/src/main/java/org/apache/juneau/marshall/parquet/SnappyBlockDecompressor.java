@@ -53,6 +53,10 @@ final class SnappyBlockDecompressor {
 	 * @return The decompressed bytes.
 	 * @throws IOException If the block is malformed or its declared length disagrees with {@code expectedSize}.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Cognitive complexity inherent to the Snappy block-codec decode loop; splitting the tag/literal/copy
+		             // branches into helpers would fragment the tightly-coupled cursor/bounds logic and risk decoder bugs.
+	})
 	static byte[] decompress(byte[] input, int expectedSize) throws IOException {
 		var in = new int[]{0}; // boxed read cursor
 		int uncompressedLen = readVarint(input, in);
