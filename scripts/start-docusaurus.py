@@ -18,11 +18,15 @@
 """
 Start Docusaurus Server Script
 
-Starts the Docusaurus development server, automatically killing any existing
-process on port 3000 and clearing caches for a clean start.
+Starts the Docusaurus development server. Kills any existing process on port
+3000 before starting. Use --clean to also clear all caches (useful when pages
+are stale or webpack is behaving unexpectedly).
 
 Usage:
-    python3 start-docusaurus.py
+    python3 start-docusaurus.py [--clean]
+
+Options:
+    --clean     Clear .docusaurus/, build/, and node_modules/.cache before starting.
 """
 
 import os

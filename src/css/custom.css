@@ -30,6 +30,16 @@
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
+/* Scale heading sizes down one level in markdown content.
+   Infima defines .markdown > h2 at 2rem and .markdown > h3 at 1.5rem via
+   higher-specificity selectors; override them here at the same level. */
+.markdown > h2 {
+  font-size: 1.5rem;
+}
+.markdown > h3 {
+  font-size: 1rem;
+}
+
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
   --ifm-color-primary: #4caf50;
