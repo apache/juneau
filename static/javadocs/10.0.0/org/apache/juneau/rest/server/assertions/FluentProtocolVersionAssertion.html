@@ -74,9 +74,9 @@ loadScripts(document, 'script');</script>
 <h1 title="Class FluentProtocolVersionAssertion" class="title">Class FluentProtocolVersionAssertion&lt;R&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance"><a href="../../../assertions/Assertion.html" title="class in org.apache.juneau.assertions">org.apache.juneau.assertions.Assertion</a>
-<div class="inheritance"><a href="../../../assertions/FluentAssertion.html" title="class in org.apache.juneau.assertions">org.apache.juneau.assertions.FluentAssertion</a>&lt;R&gt;
-<div class="inheritance"><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">org.apache.juneau.assertions.FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr>R&gt;
+<div class="inheritance">org.apache.juneau.test.assertions.Assertion
+<div class="inheritance">org.apache.juneau.test.assertions.FluentAssertion&lt;R&gt;
+<div class="inheritance">org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr>R&gt;
 <div class="inheritance">org.apache.juneau.rest.server.assertions.FluentProtocolVersionAssertion&lt;R&gt;</div>
 </div>
 </div>
@@ -88,31 +88,27 @@ loadScripts(document, 'script');</script>
 <dd><code>R</code> - The return type.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-93">FluentProtocolVersionAssertion</a>&lt;R&gt;</span>
-<span class="extends-implements">extends <a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr>R&gt;</span></div>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-86">FluentProtocolVersionAssertion</a>&lt;R&gt;</span>
+<span class="extends-implements">extends org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr>R&gt;</span></div>
 <div class="block">Used for fluent assertion calls against <a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http"><code>HttpProtocolVersion</code></a> objects.
 
  <h5 class='topic'>Test Methods</h5>
  <p>
  <ul class='javatree'>
-   <li class='jc'><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions"><code>FluentObjectAssertion</code></a>
+   <li class='jc'><code>FluentObjectAssertion</code>
    <ul class='javatreec'>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isExists()"><code>isExists()</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#is(T)"><code>is(Object)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#is(java.util.function.Predicate)"><code>is(Predicate)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isNot(T)"><code>isNot(Object)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isAny(T...)"><code>isAny(Object...)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isNotAny(T...)"><code>isNotAny(Object...)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isNull()"><code>isNull()</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isNotNull()"><code>isNotNull()</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isString(java.lang.String)"><code>isString(String)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isJson(java.lang.String)"><code>isJson(String)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isSame(T)"><code>isSame(Object)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isSameJsonAs(java.lang.Object)"><code>isSameJsonAs(Object)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isSameSortedJsonAs(java.lang.Object)"><code>isSameSortedJsonAs(Object)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isSameSerializedAs(java.lang.Object,org.apache.juneau.marshall.serializer.WriterSerializer)"><code>isSameSerializedAs(Object, WriterSerializer)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isType(java.lang.Class)"><code>isType(Class)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#isExactType(java.lang.Class)"><code>isExactType(Class)</code></a>
+      <li class='jm'><code>isExists()</code>
+      <li class='jm'><code>is(Object)</code>
+      <li class='jm'><code>is(Predicate)</code>
+      <li class='jm'><code>isNot(Object)</code>
+      <li class='jm'><code>isAny(Object...)</code>
+      <li class='jm'><code>isNotAny(Object...)</code>
+      <li class='jm'><code>isNull()</code>
+      <li class='jm'><code>isNotNull()</code>
+      <li class='jm'><code>isString(String)</code>
+      <li class='jm'><code>isSame(Object)</code>
+      <li class='jm'><code>isType(Class)</code>
+      <li class='jm'><code>isExactType(Class)</code>
    </ul>
  </ul>
 
@@ -125,28 +121,25 @@ loadScripts(document, 'script');</script>
       <li class='jm'><a href="#asMajor()"><code>asMajor()</code></a>
       <li class='jm'><a href="#asMinor()"><code>asMinor()</code></a>
    </ul>
-   <li class='jc'><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions"><code>FluentObjectAssertion</code></a>
+   <li class='jc'><code>FluentObjectAssertion</code>
    <ul class='javatreec'>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asString()"><code>asString()</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asString(org.apache.juneau.marshall.serializer.WriterSerializer)"><code>asString(WriterSerializer)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asString(java.util.function.Function)"><code>asString(Function)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asJson()"><code>asJson()</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asJsonSorted()"><code>asJsonSorted()</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asTransformed(java.util.function.UnaryOperator)"><code>asTransformed(UnaryOperator)</code></a>
-      <li class='jm'><a href="../../../assertions/FluentObjectAssertion.html#asAny()"><code>asAny()</code></a>
+      <li class='jm'><code>asString()</code>
+      <li class='jm'><code>asString(ThrowingFunction)</code>
+      <li class='jm'><code>asTransformed(UnaryOperator)</code>
+      <li class='jm'><code>asAny()</code>
    </ul>
  </ul>
 
  <h5 class='topic'>Configuration Methods</h5>
  <p>
  <ul class='javatree'>
-   <li class='jc'><a href="../../../assertions/Assertion.html" title="class in org.apache.juneau.assertions"><code>Assertion</code></a>
+   <li class='jc'><code>Assertion</code>
    <ul class='javatreec'>
-      <li class='jm'><a href="../../../assertions/Assertion.html#setMsg(java.lang.String,java.lang.Object...)"><code>setMsg(String, Object...)</code></a>
-      <li class='jm'><a href="../../../assertions/Assertion.html#setOut(java.io.PrintStream)"><code>setOut(PrintStream)</code></a>
-      <li class='jm'><a href="../../../assertions/Assertion.html#setSilent()"><code>setSilent()</code></a>
-      <li class='jm'><a href="../../../assertions/Assertion.html#setStdOut()"><code>setStdOut()</code></a>
-      <li class='jm'><a href="../../../assertions/Assertion.html#setThrowable(java.lang.Class)"><code>setThrowable(Class)</code></a>
+      <li class='jm'><code>setMsg(String, Object...)</code>
+      <li class='jm'><code>setOut(PrintStream)</code>
+      <li class='jm'><code>setSilent()</code>
+      <li class='jm'><code>setStdOut()</code>
+      <li class='jm'><code>setThrowable(Class)</code>
    </ul>
  </ul>
  <h5 class='section'>See Also:</h5><ul>
@@ -163,16 +156,16 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.assertions.Assertion,org.apache.juneau.http.HttpProtocolVersion,R)" class="member-name-link">FluentProtocolVersionAssertion</a><wbr>(<a href="../../../assertions/Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator,
- <a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.HttpProtocolVersion,R)" class="member-name-link">FluentProtocolVersionAssertion</a><wbr>(<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
  <a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&nbsp;returns)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Chained constructor.</div>
+<div class="block">Constructor.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.http.HttpProtocolVersion,R)" class="member-name-link">FluentProtocolVersionAssertion</a><wbr>(<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(org.apache.juneau.test.assertions.Assertion,org.apache.juneau.http.HttpProtocolVersion,R)" class="member-name-link">FluentProtocolVersionAssertion</a><wbr>(org.apache.juneau.test.assertions.Assertion&nbsp;creator,
+ <a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
  <a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&nbsp;returns)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Constructor.</div>
+<div class="block">Chained constructor.</div>
 </div>
 </div>
 </section>
@@ -188,17 +181,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../assertions/FluentIntegerAssertion.html" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentIntegerAssertion&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asMajor()" class="member-name-link">asMajor</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the protocol major version as a new assertion.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../assertions/FluentIntegerAssertion.html" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentIntegerAssertion&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asMinor()" class="member-name-link">asMinor</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the protocol minor version as a new assertion.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../assertions/FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#asProtocol()" class="member-name-link">asProtocol</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the protocol string as a new assertion.</div>
@@ -233,14 +226,14 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.assertions.FluentObjectAssertion">Methods inherited from class&nbsp;org.apache.juneau.assertions.<a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a></h3>
-<code><a href="../../../assertions/FluentObjectAssertion.html#asAny()">asAny</a>, <a href="../../../assertions/FluentObjectAssertion.html#asJson()">asJson</a>, <a href="../../../assertions/FluentObjectAssertion.html#asJsonSorted()">asJsonSorted</a>, <a href="../../../assertions/FluentObjectAssertion.html#asString()">asString</a>, <a href="../../../assertions/FluentObjectAssertion.html#asString(java.util.function.Function)">asString</a>, <a href="../../../assertions/FluentObjectAssertion.html#asString(org.apache.juneau.marshall.serializer.WriterSerializer)">asString</a>, <a href="../../../assertions/FluentObjectAssertion.html#asTransformed(java.util.function.UnaryOperator)">asTransformed</a>, <a href="../../../assertions/FluentObjectAssertion.html#asTransformedTo(java.util.function.Function)">asTransformedTo</a>, <a href="../../../assertions/FluentObjectAssertion.html#equals(java.lang.Object,java.lang.Object)">equals</a>, <a href="../../../assertions/FluentObjectAssertion.html#getFailureMessage(java.util.function.Predicate,java.lang.Object)">getFailureMessage</a>, <a href="../../../assertions/FluentObjectAssertion.html#is(java.util.function.Predicate)">is</a>, <a href="../../../assertions/FluentObjectAssertion.html#is(T)">is</a>, <a href="../../../assertions/FluentObjectAssertion.html#isAny(T...)">isAny</a>, <a href="../../../assertions/FluentObjectAssertion.html#isExactType(java.lang.Class)">isExactType</a>, <a href="../../../assertions/FluentObjectAssertion.html#isExists()">isExists</a>, <a href="../../../assertions/FluentObjectAssertion.html#isJson(java.lang.String)">isJson</a>, <a href="../../../assertions/FluentObjectAssertion.html#isNot(T)">isNot</a>, <a href="../../../assertions/FluentObjectAssertion.html#isNotAny(T...)">isNotAny</a>, <a href="../../../assertions/FluentObjectAssertion.html#isNotNull()">isNotNull</a>, <a href="../../../assertions/FluentObjectAssertion.html#isNull()">isNull</a>, <a href="../../../assertions/FluentObjectAssertion.html#isSame(T)">isSame</a>, <a href="../../../assertions/FluentObjectAssertion.html#isSameJsonAs(java.lang.Object)">isSameJsonAs</a>, <a href="../../../assertions/FluentObjectAssertion.html#isSameSerializedAs(java.lang.Object,org.apache.juneau.marshall.serializer.WriterSerializer)">isSameSerializedAs</a>, <a href="../../../assertions/FluentObjectAssertion.html#isSameSortedJsonAs(java.lang.Object)">isSameSortedJsonAs</a>, <a href="../../../assertions/FluentObjectAssertion.html#isString(java.lang.String)">isString</a>, <a href="../../../assertions/FluentObjectAssertion.html#isType(java.lang.Class)">isType</a>, <a href="../../../assertions/FluentObjectAssertion.html#map(java.util.function.Function)">map</a>, <a href="../../../assertions/FluentObjectAssertion.html#opt()">opt</a>, <a href="../../../assertions/FluentObjectAssertion.html#orElse(T)">orElse</a>, <a href="../../../assertions/FluentObjectAssertion.html#toString()">toString</a>, <a href="../../../assertions/FluentObjectAssertion.html#value()">value</a>, <a href="../../../assertions/FluentObjectAssertion.html#valueAsString()">valueAsString</a>, <a href="../../../assertions/FluentObjectAssertion.html#valueIsNotNull()">valueIsNotNull</a>, <a href="../../../assertions/FluentObjectAssertion.html#valueIsNull()">valueIsNull</a></code></div>
+<h3 id="methods-inherited-from-class-org.apache.juneau.test.assertions.FluentObjectAssertion">Methods inherited from class&nbsp;org.apache.juneau.test.assertions.FluentObjectAssertion</h3>
+<code>asAny, asString, asString, asTransformed, asTransformedTo, equals, getFailureMessage, is, is, isAny, isExactType, isExists, isNot, isNotAny, isNotNull, isNull, isSame, isSameSerializedAs, isString, isType, map, opt, orElse, toString, value, valueAsString, valueIsNotNull, valueIsNull</code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.assertions.FluentAssertion">Methods inherited from class&nbsp;org.apache.juneau.assertions.<a href="../../../assertions/FluentAssertion.html" title="class in org.apache.juneau.assertions">FluentAssertion</a></h3>
-<code><a href="../../../assertions/FluentAssertion.html#returns()">returns</a></code></div>
+<h3 id="methods-inherited-from-class-org.apache.juneau.test.assertions.FluentAssertion">Methods inherited from class&nbsp;org.apache.juneau.test.assertions.FluentAssertion</h3>
+<code>returns</code></div>
 <div class="inherited-list">
-<h3 id="methods-inherited-from-class-org.apache.juneau.assertions.Assertion">Methods inherited from class&nbsp;org.apache.juneau.assertions.<a href="../../../assertions/Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a></h3>
-<code><a href="../../../assertions/Assertion.html#arrayClass(java.lang.Class)">arrayClass</a>, <a href="../../../assertions/Assertion.html#error(java.lang.String,java.lang.Object...)">error</a>, <a href="../../../assertions/Assertion.html#error(java.lang.Throwable,java.lang.String,java.lang.Object...)">error</a></code></div>
+<h3 id="methods-inherited-from-class-org.apache.juneau.test.assertions.Assertion">Methods inherited from class&nbsp;org.apache.juneau.test.assertions.Assertion</h3>
+<code>arrayClass, error, error</code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -256,9 +249,9 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(org.apache.juneau.assertions.Assertion,org.apache.juneau.http.HttpProtocolVersion,R)">
-<h3 id="&lt;init&gt;(org.apache.juneau.assertions.Assertion,org.apache.juneau.http.HttpProtocolVersion,java.lang.Object)">FluentProtocolVersionAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-112">FluentProtocolVersionAssertion</a></span><wbr><span class="parameters">(<a href="../../../assertions/Assertion.html" title="class in org.apache.juneau.assertions">Assertion</a>&nbsp;creator,
+<section class="detail" id="&lt;init&gt;(org.apache.juneau.test.assertions.Assertion,org.apache.juneau.http.HttpProtocolVersion,R)">
+<h3 id="&lt;init&gt;(org.apache.juneau.test.assertions.Assertion,org.apache.juneau.http.HttpProtocolVersion,java.lang.Object)">FluentProtocolVersionAssertion</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-105">FluentProtocolVersionAssertion</a></span><wbr><span class="parameters">(org.apache.juneau.test.assertions.Assertion&nbsp;creator,
  <a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
  <a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&nbsp;returns)</span></div>
 <div class="block">Chained constructor.
@@ -280,7 +273,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.http.HttpProtocolVersion,R)">
 <h3 id="&lt;init&gt;(org.apache.juneau.http.HttpProtocolVersion,java.lang.Object)">FluentProtocolVersionAssertion</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-128">FluentProtocolVersionAssertion</a></span><wbr><span class="parameters">(<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-121">FluentProtocolVersionAssertion</a></span><wbr><span class="parameters">(<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>&nbsp;value,
  <a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&nbsp;returns)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -304,7 +297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMajor()">
 <h3>asMajor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../assertions/FluentIntegerAssertion.html" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-137">asMajor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentIntegerAssertion&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-130">asMajor</a></span>()</div>
 <div class="block">Returns the protocol major version as a new assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -315,7 +308,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asMinor()">
 <h3>asMinor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../assertions/FluentIntegerAssertion.html" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-146">asMinor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentIntegerAssertion&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-139">asMinor</a></span>()</div>
 <div class="block">Returns the protocol minor version as a new assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -326,7 +319,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asProtocol()">
 <h3>asProtocol</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../assertions/FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-155">asProtocol</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-148">asProtocol</a></span>()</div>
 <div class="block">Returns the protocol string as a new assertion.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -337,9 +330,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setMsg(java.lang.String,java.lang.Object...)">
 <h3>setMsg</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-159">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-152">setMsg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../assertions/Assertion.html#setMsg(java.lang.String,java.lang.Object...)">Assertion</a></code></span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code>org.apache.juneau.test.assertions.Assertion</code></span></div>
 <div class="block">Allows you to override the assertion failure message.
 
  <p>
@@ -347,7 +340,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
-   <jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
+   <jk>import static</jk> org.apache.juneau.test.assertions.Assertions.*;
 
    <jc>// Throws an assertion with a custom message instead of the default "Value was null."</jc>
    <jsm>assertString</jsm>(<jv>myString</jv>)
@@ -356,7 +349,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../assertions/FluentObjectAssertion.html#setMsg(java.lang.String,java.lang.Object...)">setMsg</a></code>&nbsp;in class&nbsp;<code><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
+<dd><code>setMsg</code>&nbsp;in class&nbsp;<code>org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>msg</code> - The assertion failure message.</dd>
 <dd><code>args</code> - Optional message arguments.</dd>
@@ -368,12 +361,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setOut(java.io.PrintStream)">
 <h3>setOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-165">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../assertions/Assertion.html#setOut(java.io.PrintStream)">Assertion</a></code></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-158">setOut</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintStream.html" title="class or interface in java.io" class="external-link">PrintStream</a>&nbsp;value)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code>org.apache.juneau.test.assertions.Assertion</code></span></div>
 <div class="block">If an error occurs, send the error message to the specified stream instead of STDERR.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../assertions/FluentObjectAssertion.html#setOut(java.io.PrintStream)">setOut</a></code>&nbsp;in class&nbsp;<code><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
+<dd><code>setOut</code>&nbsp;in class&nbsp;<code>org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The output stream.
    Can be <jk>null</jk> to suppress output.</dd>
@@ -385,15 +378,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setSilent()">
 <h3>setSilent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-171">setSilent</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../assertions/Assertion.html#setSilent()">Assertion</a></code></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-164">setSilent</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code>org.apache.juneau.test.assertions.Assertion</code></span></div>
 <div class="block">Suppresses output to STDERR.
 
  <p>
  This is the equivalent to calling <c>out(<jk>null</jk>)</c>.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../assertions/FluentObjectAssertion.html#setSilent()">setSilent</a></code>&nbsp;in class&nbsp;<code><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
+<dd><code>setSilent</code>&nbsp;in class&nbsp;<code>org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -402,12 +395,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setStdOut()">
 <h3>setStdOut</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-177">setStdOut</a></span>()</div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../assertions/Assertion.html#setStdOut()">Assertion</a></code></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-170">setStdOut</a></span>()</div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code>org.apache.juneau.test.assertions.Assertion</code></span></div>
 <div class="block">If an error occurs, send the error message to STDOUT instead of STDERR.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../assertions/FluentObjectAssertion.html#setStdOut()">setStdOut</a></code>&nbsp;in class&nbsp;<code><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
+<dd><code>setStdOut</code>&nbsp;in class&nbsp;<code>org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>This object.</dd>
 </dl>
@@ -416,8 +409,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setThrowable(java.lang.Class)">
 <h3>setThrowable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-183">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
-<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../../../assertions/Assertion.html#setThrowable(java.lang.Class)">Assertion</a></code></span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="FluentProtocolVersionAssertion.html" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;<a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html#line-176">setThrowable</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;value)</span></div>
+<div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code>org.apache.juneau.test.assertions.Assertion</code></span></div>
 <div class="block">If an error occurs, throw this exception instead of the standard <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/AssertionError.html" title="class or interface in java.lang" class="external-link"><code>AssertionError</code></a>.
 
  <p>
@@ -432,7 +425,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
-   <jk>import static</jk> org.apache.juneau.marshall.assertions.Assertions.*;
+   <jk>import static</jk> org.apache.juneau.test.assertions.Assertions.*;
 
    <jc>// Throws a BadRequest instead of an AssertionError if the string is null.</jc>
    <jsm>assertString</jsm>(<jv>myString</jv>)
@@ -441,7 +434,7 @@ loadScripts(document, 'script');</script>
  </p></div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="../../../assertions/FluentObjectAssertion.html#setThrowable(java.lang.Class)">setThrowable</a></code>&nbsp;in class&nbsp;<code><a href="../../../assertions/FluentObjectAssertion.html" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
+<dd><code>setThrowable</code>&nbsp;in class&nbsp;<code>org.apache.juneau.test.assertions.FluentObjectAssertion&lt;<a href="../../../http/HttpProtocolVersion.html" title="class in org.apache.juneau.http">HttpProtocolVersion</a>,<wbr><a href="FluentProtocolVersionAssertion.html" title="type parameter in FluentProtocolVersionAssertion">R</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>value</code> - The new value for this setting.</dd>
 <dt>Returns:</dt>

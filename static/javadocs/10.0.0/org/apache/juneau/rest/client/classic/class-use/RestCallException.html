@@ -65,7 +65,9 @@ loadScripts(document, 'script');</script>
 <div class="block">REST Client Assertions</div>
 </div>
 <div class="col-first even-row-color"><a href="#org.apache.juneau.rest.mock.classic">org.apache.juneau.rest.mock.classic</a></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Mocked REST client and supporting classes for in-JVM testing built on the classic Apache HttpClient API.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -150,7 +152,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Converts the contents of the response body to a string and then matches the specified pattern against it.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="../../../../assertions/FluentStringAssertion.html" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;<a href="../RestResponse.html" title="class in org.apache.juneau.rest.client.classic">RestResponse</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>org.apache.juneau.test.assertions.FluentStringAssertion&lt;<a href="../RestResponse.html" title="class in org.apache.juneau.rest.client.classic">RestResponse</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">RestResponse.</span><code><a href="../RestResponse.html#assertCharset()" class="member-name-link">assertCharset</a>()</code></div>
 <div class="col-last even-row-color">
 <div class="block">Provides the ability to perform fluent-style assertions on the response character encoding.</div>
@@ -445,12 +447,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;<a href="../../../../assertions/FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;T,<wbr><a href="../assertion/FluentResponseHeaderAssertion.html" title="type parameter in FluentResponseHeaderAssertion">R</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>&lt;T&gt;&nbsp;org.apache.juneau.test.assertions.FluentAnyAssertion&lt;T,<wbr><a href="../assertion/FluentResponseHeaderAssertion.html" title="type parameter in FluentResponseHeaderAssertion">R</a>&gt;</code></div>
 <div class="col-second even-row-color"><span class="type-name-label">FluentResponseHeaderAssertion.</span><code><a href="../assertion/FluentResponseHeaderAssertion.html#as(java.lang.Class)" class="member-name-link">as</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Converts the parameter value to a type using <a href="../ResponseHeader.html#as(java.lang.Class)"><code>ResponseHeader.as(Class)</code></a> and then returns the value as an any-object assertion.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../../../../assertions/FluentAnyAssertion.html" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="../assertion/FluentResponseHeaderAssertion.html" title="type parameter in FluentResponseHeaderAssertion">R</a>&gt;</code></div>
+<div class="col-first odd-row-color"><code>org.apache.juneau.test.assertions.FluentAnyAssertion&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>,<wbr><a href="../assertion/FluentResponseHeaderAssertion.html" title="type parameter in FluentResponseHeaderAssertion">R</a>&gt;</code></div>
 <div class="col-second odd-row-color"><span class="type-name-label">FluentResponseHeaderAssertion.</span><code><a href="../assertion/FluentResponseHeaderAssertion.html#as(java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">as</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</code></div>
 <div class="col-last odd-row-color">

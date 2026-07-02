@@ -46,7 +46,7 @@ loadScripts(document, 'script');</script>
 <div>
 <ul class="sub-nav-list">
 <li>Package:&nbsp;</li>
-<li>Description&nbsp;|&nbsp;</li>
+<li><a href="#package-description">Description</a>&nbsp;|&nbsp;</li>
 <li><a href="#related-package-summary">Related Packages</a>&nbsp;|&nbsp;</li>
 <li><a href="#class-summary">Classes and Interfaces</a></li>
 </ul>
@@ -66,6 +66,17 @@ loadScripts(document, 'script');</script>
 </div>
 <hr>
 <div class="package-signature">package <span class="element-name">org.apache.juneau.rest.server.health</span></div>
+<section class="package-description" id="package-description">
+<div class="block">Built-in health, readiness, and liveness probe support for Juneau REST servers.
+
+ <p>
+ Provides the <a href="HealthIndicator.html" title="interface in org.apache.juneau.rest.server.health"><code>HealthIndicator</code></a> SPI for reporting
+ per-component health, an <a href="HealthAggregator.html" title="class in org.apache.juneau.rest.server.health"><code>HealthAggregator</code></a> that combines
+ results, and servlet, child-resource, and mixin flavors 
+ (<a href="HealthServlet.html" title="class in org.apache.juneau.rest.server.health"><code>HealthServlet</code></a>,
+ <a href="HealthResource.html" title="class in org.apache.juneau.rest.server.health"><code>HealthResource</code></a>,
+ <a href="HealthMixin.html" title="class in org.apache.juneau.rest.server.health"><code>HealthMixin</code></a>) that expose the probe endpoints.</div>
+</section>
 <section class="summary">
 <ul class="summary-list">
 <li>

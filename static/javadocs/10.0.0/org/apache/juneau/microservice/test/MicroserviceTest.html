@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
  <h5 class='topic'>Mock-bean injection</h5>
 
  <p>
- Declare collaborators to substitute with the existing <a href="../../junit5/TestBean.html" title="annotation interface in org.apache.juneau.junit5"><code>@TestBean</code></a>
+ Declare collaborators to substitute with the existing <code>@TestBean</code>
  (the <code>@MockBean</code> analog) &mdash; no parallel injection annotation. By default these are installed via
  <b>Mode INJECT</b> (through <code>Microservice.Builder.overridingBeanStore(...)</code>) <i>before</i> boot, so the
  service sees them from startup. <code>@TestBean(mode = Mode.OVERLAY)</code> pushes/pops against the already-booted
@@ -121,7 +121,7 @@ loadScripts(document, 'script');</script>
  primary convenience), <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a>, the
  <a href="../../commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a>, and the bound port (as <code>int</code>
  / <code>Integer</code>). The same <code>TestBeanStore</code> parameter the underlying
- <a href="../../junit5/JuneauBeanStoreExtension.html" title="class in org.apache.juneau.junit5"><code>JuneauBeanStoreExtension</code></a> resolves is available too.
+ <code>JuneauBeanStoreExtension</code> resolves is available too.
 
  <h5 class='topic'>When to use this vs. <code>MockRestClient</code></h5>
 
@@ -152,7 +152,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='jc'><a href="MicroserviceExtension.html" title="class in org.apache.juneau.microservice.test"><code>MicroserviceExtension</code></a>
-   <li class='jc'><a href="../../junit5/TestBean.html" title="annotation interface in org.apache.juneau.junit5"><code>TestBean</code></a>
+   <li class='jc'><code>TestBean</code>
  </ul></div>
 <dl class="notes">
 <dt>Since:</dt>

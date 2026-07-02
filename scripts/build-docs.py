@@ -146,14 +146,155 @@ def install_npm_dependencies(docs_dir):
     stage_banner("Installing npm dependencies")
     run_command(['npm', 'ci'], cwd=docs_dir)
 
-def build_docusaurus(docs_dir, staging=False):
+def generate_artifact_paths(master_root, docs_dir):
+    """Scan every module pom.xml under the master checkout and emit artifact-paths.json.
+
+    Produces a map of <artifactId> -> module directory (relative to the repo root),
+    consumed by docusaurus.config.ts (customFields.juneauModulePaths) to build the
+    "Source" GitHub link in the <DependencyInfo> component. The committed snapshot in
+    the docs repo is the dev-server fallback and is refreshed on every real build.
+    """
+    stage_banner("Generating artifact-paths.json")
+    out_path = Path(docs_dir) / 'artifact-paths.json'
+    if DRY_RUN:
+        print(f"[dry-run] would scan {master_root} pom.xml files -> {out_path}")
+        return
+
+    import xml.etree.ElementTree as ET
+
+    def read_artifact_id(pom_path):
+        try:
+            root = ET.parse(pom_path).getroot()
+        except Exception:
+            return None
+        ns_uri = root.tag.split('}')[0].strip('{') if '}' in root.tag else ''
+        tag = ('{%s}artifactId' % ns_uri) if ns_uri else 'artifactId'
+        # Only a direct <project><artifactId> child (ignore parent/dependency ids).
+        for child in root:
+            if child.tag == tag:
+                return (child.text or '').strip()
+        return None
+
+    skip_dirs = {'.git', 'target', 'node_modules', 'src'}
+    mapping = {}
+    for dirpath, dirnames, filenames in os.walk(master_root):
+        dirnames[:] = [d for d in dirnames if d not in skip_dirs]
+        if 'pom.xml' in filenames:
+            aid = read_artifact_id(os.path.join(dirpath, 'pom.xml'))
+            if aid:
+                rel = os.path.relpath(dirpath, master_root)
+                rel = '' if rel == '.' else rel.replace(os.sep, '/')
+                mapping[aid] = rel
+
+    mapping = {k: mapping[k] for k in sorted(mapping)}
+    with open(out_path, 'w') as f:
+        json.dump(mapping, f, indent=2)
+        f.write('\n')
+    print(f"✓ Wrote {len(mapping)} artifacts to {out_path}")
+
+def generate_javadoc_packages(master_root, docs_dir, juneau_version):
+    """Derive an artifactId -> base-package map and emit artifact-packages.json.
+
+    For each module in artifact-paths.json, the base package is the shallowest
+    org/apache/juneau/... package in the module's src/main/java tree that actually
+    has a generated package-summary.html under static/javadocs/<version>/. This map
+    lets <DependencyInfo> point its "Javadocs" link at the module's top-level package
+    summary instead of the aggregate index. Modules with no source (parents, bundles,
+    shaded/aggregator poms) or no matching package summary are simply omitted, and the
+    component falls back to the aggregate index for them. A committed snapshot is the
+    dev-server fallback and is refreshed on every real build.
+    """
+    stage_banner("Generating artifact-packages.json")
+    out_path = Path(docs_dir) / 'artifact-packages.json'
+    paths_path = Path(docs_dir) / 'artifact-paths.json'
+    javadocs_dir = Path(docs_dir) / 'static' / 'javadocs' / juneau_version
+
+    if DRY_RUN:
+        print(f"[dry-run] would derive base packages from {master_root} validated "
+              f"against {javadocs_dir} -> {out_path}")
+        return
+
+    if not paths_path.exists():
+        print(f"WARNING: {paths_path} not found; skipping javadoc-package map")
+        return
+    if not javadocs_dir.is_dir():
+        print(f"WARNING: {javadocs_dir} not found; skipping javadoc-package map")
+        return
+
+    with open(paths_path) as f:
+        artifact_paths = json.load(f)
+
+    def base_package_for(module_rel):
+        src = Path(master_root) / module_rel / 'src' / 'main' / 'java'
+        if not src.is_dir():
+            return None
+        pkgs = []
+        for dirpath, _dirnames, filenames in os.walk(src):
+            if any(fn.endswith('.java') for fn in filenames):
+                rel = os.path.relpath(dirpath, src).replace(os.sep, '/')
+                if rel.startswith('org/apache/juneau'):
+                    pkgs.append(rel)
+        # Shallowest first (fewest segments), tie-break alphabetical, then pick the
+        # first that actually has a generated package-summary.html.
+        pkgs.sort(key=lambda p: (p.count('/'), p))
+        for pkg in pkgs:
+            if (javadocs_dir / pkg / 'package-summary.html').is_file():
+                return pkg
+        return None
+
+    mapping = {}
+    for artifact in sorted(artifact_paths):
+        pkg = base_package_for(artifact_paths[artifact])
+        if pkg:
+            mapping[artifact] = pkg
+
+    with open(out_path, 'w') as f:
+        json.dump(mapping, f, indent=2)
+        f.write('\n')
+    print(f"✓ Wrote {len(mapping)} artifact base packages to {out_path}")
+
+def build_docusaurus(docs_dir, staging=False, juneau_version=None):
     """Build Docusaurus documentation."""
+    # Skip the production build if the dev server is running or if a lock file exists.
+    # Running 'docusaurus build' (production webpack) concurrently with 'docusaurus start'
+    # (dev webpack) causes both processes to fight over node_modules/.cache/webpack/,
+    # which corrupts the dev server's cache and crashes it.
+    if not DRY_RUN:
+        # Check for a running dev server process
+        try:
+            result = subprocess.run(
+                ['pgrep', '-f', 'docusaurus start'],
+                capture_output=True, text=True
+            )
+            if result.returncode == 0 and result.stdout.strip():
+                print("⚠️  Docusaurus dev server is running — skipping production build to avoid webpack cache conflict.")
+                return
+        except FileNotFoundError:
+            pass
+        # Also check port 3000 as a fallback
+        try:
+            result = subprocess.run(['lsof', '-ti:3000'], capture_output=True, text=True)
+            if result.stdout.strip():
+                print("⚠️  Dev server detected on port 3000 — skipping production build to avoid webpack cache conflict.")
+                return
+        except FileNotFoundError:
+            pass
+        # Check for dev-server lock file
+        lock_file = docs_dir / '.dev-server-running'
+        if lock_file.exists():
+            print("⚠️  Dev server lock file found — skipping production build to avoid webpack cache conflict.")
+            return
+
     stage_banner("Building Docusaurus")
     env = os.environ.copy()
     if staging:
         env['SITE_URL'] = 'https://juneau.staged.apache.org'
         if VERBOSE:
             print("  Setting SITE_URL for staging build")
+    if juneau_version:
+        env['JUNEAU_VERSION'] = juneau_version
+        if VERBOSE:
+            print(f"  Setting JUNEAU_VERSION={juneau_version} for the build")
     run_command(['npm', 'run', 'build'], cwd=docs_dir, env=env)
 
 def compile_java_modules(master_root):
@@ -191,6 +332,82 @@ def copy_maven_site(master_root, docs_dir):
         shutil.rmtree(static_site)
     shutil.copytree(source_site, static_site)
     print(f"✓ Maven site copied to {static_site}")
+
+def resolve_javadocs_version(docs_dir):
+    """Resolve the current javadocs version robustly for the apidocs symlink.
+
+    Prefers the latest entry in static/javadocs/releases.json that has a matching
+    committed static/javadocs/<version>/ directory; falls back to the sole versioned
+    directory when the index is unavailable. Returns None if none can be determined.
+    """
+    javadocs_dir = Path(docs_dir) / 'static' / 'javadocs'
+    releases_json = javadocs_dir / 'releases.json'
+
+    def version_key(v):
+        try:
+            return tuple(int(p) if p.isdigit() else p for p in v.split('.'))
+        except (ValueError, AttributeError):
+            return v
+
+    if releases_json.is_file():
+        try:
+            with open(releases_json) as f:
+                releases = json.load(f)
+            versions = [r.get('version') for r in releases if r.get('version')]
+            versions = [v for v in versions if (javadocs_dir / v).is_dir()]
+            if versions:
+                versions.sort(key=version_key, reverse=True)
+                return versions[0]
+        except Exception as e:
+            print(f"WARNING: Could not read {releases_json}: {e}")
+
+    # Fallback: a single versioned directory unambiguously identifies the version.
+    if javadocs_dir.is_dir():
+        subdirs = [d.name for d in javadocs_dir.iterdir()
+                   if d.is_dir() and d.name[:1].isdigit()]
+        if len(subdirs) == 1:
+            return subdirs[0]
+
+    return None
+
+def ensure_apidocs_symlink(docs_dir, version):
+    """Point static/site/apidocs at the committed static/javadocs/<version> tree.
+
+    Creates a RELATIVE symlink (target '../javadocs/<version>', resolved relative to
+    static/site/) so the unversioned /site/apidocs/... links resolve to the committed
+    javadocs with no Maven rebuild. Idempotent, and replaces an existing real directory
+    (e.g. the one the Maven-site copy just produced) with the symlink.
+    """
+    stage_banner("Linking static/site/apidocs to committed javadocs")
+
+    static_site = Path(docs_dir) / 'static' / 'site'
+    apidocs = static_site / 'apidocs'
+    target = os.path.join('..', 'javadocs', version)
+    versioned = Path(docs_dir) / 'static' / 'javadocs' / version
+
+    if DRY_RUN:
+        print(f"[dry-run] would symlink {apidocs} -> {target}")
+        return
+
+    if not versioned.is_dir():
+        print(f"WARNING: Committed javadocs not found at {versioned}; skipping apidocs symlink")
+        return
+
+    static_site.mkdir(parents=True, exist_ok=True)
+
+    # Idempotent: leave an already-correct relative symlink alone.
+    if apidocs.is_symlink():
+        if os.readlink(apidocs) == target:
+            print(f"✓ apidocs already links to {target}")
+            return
+        apidocs.unlink()
+    elif apidocs.is_dir():
+        shutil.rmtree(apidocs)
+    elif apidocs.exists():
+        apidocs.unlink()
+
+    os.symlink(target, apidocs)
+    print(f"✓ Linked {apidocs} -> {target}")
 
 def verify_apidocs(master_root):
     """Verify that apidocs were generated."""
@@ -406,12 +623,43 @@ def main():
     try:
         # Install npm dependencies (can be done early)
         if not args.skip_npm:
-            install_npm_dependencies(docs_dir)
+            # Check if a dev server is running before running npm ci, which wipes
+            # node_modules/.cache and corrupts the running server's webpack cache.
+            dev_server_running = False
+            try:
+                result = subprocess.run(['pgrep', '-f', 'docusaurus start'], capture_output=True, text=True)
+                if result.returncode == 0 and result.stdout.strip():
+                    dev_server_running = True
+            except FileNotFoundError:
+                pass
+            if not dev_server_running:
+                try:
+                    result = subprocess.run(['lsof', '-ti:3000'], capture_output=True, text=True)
+                    if result.stdout.strip():
+                        dev_server_running = True
+                except FileNotFoundError:
+                    pass
+            if not dev_server_running and (docs_dir / '.dev-server-running').exists():
+                dev_server_running = True
+
+            if dev_server_running:
+                print("⚠️  Dev server is running — skipping npm ci and production build to avoid webpack cache conflict.")
+            else:
+                install_npm_dependencies(docs_dir)
         else:
             print("\n=== Skipping npm install ===")
         
         # Generate Maven site and javadocs (must be done before building Docusaurus)
         # Note: Aggregate javadocs are now generated automatically as part of mvn site via the reporting section
+        # Resolve the release version and refresh artifact-paths.json from the module
+        # poms whenever the master checkout is available (needed by <DependencyInfo>).
+        juneau_version = None
+        if not args.skip_maven or (master_root and master_root.exists()):
+            juneau_version = get_current_release(master_root)
+            if juneau_version:
+                print(f"Juneau release version: {juneau_version}")
+            generate_artifact_paths(master_root, docs_dir)
+
         if not args.skip_maven:
             compile_java_modules(master_root)
             generate_maven_site(master_root)
@@ -421,6 +669,13 @@ def main():
             copy_current_javadocs(master_root, docs_dir)
         else:
             print("\n=== Skipping Maven steps ===")
+
+        # Derive the artifact -> base-package map for the <DependencyInfo> "Javadocs"
+        # link, validated against the javadocs now in place (freshly copied above, or
+        # the committed snapshot when Maven is skipped). Requires the master checkout
+        # for source trees and a resolved version.
+        if master_root and master_root.exists() and juneau_version:
+            generate_javadoc_packages(master_root, docs_dir, juneau_version)
         
         # Copy Maven site to static directory BEFORE building Docusaurus
         # (Docusaurus will automatically copy static/ contents to build/ during build)
@@ -431,10 +686,18 @@ def main():
             copy_maven_site(master_root, docs_dir)
         else:
             print("\n=== Skipping copy step ===")
+
+        # Point static/site/apidocs at the committed versioned javadocs via a relative
+        # symlink so the unversioned /site/apidocs/... links resolve without a rebuild.
+        apidocs_version = juneau_version or resolve_javadocs_version(docs_dir)
+        if apidocs_version:
+            ensure_apidocs_symlink(docs_dir, apidocs_version)
+        else:
+            print("WARNING: Could not resolve javadocs version; skipping apidocs symlink")
         
         # Build Docusaurus documentation (will copy static/ contents to build/)
         if not args.skip_npm:
-            build_docusaurus(docs_dir, staging=args.staging)
+            build_docusaurus(docs_dir, staging=args.staging, juneau_version=juneau_version)
         else:
             print("\n=== Skipping Docusaurus build ===")
         

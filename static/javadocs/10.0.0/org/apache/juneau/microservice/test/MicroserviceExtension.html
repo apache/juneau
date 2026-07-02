@@ -82,12 +82,12 @@ loadScripts(document, 'script');</script>
 <dd><code>org.junit.jupiter.api.extension.AfterAllCallback</code>, <code>org.junit.jupiter.api.extension.BeforeAllCallback</code>, <code>org.junit.jupiter.api.extension.Extension</code>, <code>org.junit.jupiter.api.extension.ParameterResolver</code>, <code>org.junit.jupiter.api.extension.TestInstantiationAwareExtension</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-63">MicroserviceExtension</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-60">MicroserviceExtension</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.api.extension.AfterAllCallback, org.junit.jupiter.api.extension.ParameterResolver</span></div>
 <div class="block">JUnit 5 extension behind <a href="MicroserviceTest.html" title="annotation interface in org.apache.juneau.microservice.test"><code>@MicroserviceTest</code></a>: boots a whole
  <a href="../Microservice.html" title="class in org.apache.juneau.microservice"><code>Microservice</code></a> (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with
- <a href="../../junit5/TestBean.html" title="annotation interface in org.apache.juneau.junit5"><code>@TestBean</code></a> mock-bean injection and convenience parameter resolution.
+ <code>@TestBean</code> mock-bean injection and convenience parameter resolution.
 
  <h5 class='topic'>Lifecycle (per class)</h5>
 
@@ -101,8 +101,8 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
  <h5 class='topic'>Mock-bean injection</h5>
 
  <p>
- <a href="../../junit5/TestBean.html" title="annotation interface in org.apache.juneau.junit5"><code>@TestBean</code></a> declarations are discovered via
- <a href="../../junit5/JuneauBeanStoreExtension.html#discoverOverrides(java.lang.Object)"><code>JuneauBeanStoreExtension.discoverOverrides(Object)</code></a>. <b>Mode INJECT</b> (the default) installs the
+ <code>@TestBean</code> declarations are discovered via
+ <code>JuneauBeanStoreExtension.discoverOverrides(Object)</code>. <b>Mode INJECT</b> (the default) installs the
  overrides via <code>Microservice.Builder.overridingBeanStore(...)</code> <i>before</i> boot, so the service reads
  them from startup. <b>Mode OVERLAY</b> pushes the overrides onto the booted instance's bean store for the
  class duration and pops them in teardown.
@@ -206,7 +206,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="BUILDER_SUPPLIER_METHOD">
 <h3>BUILDER_SUPPLIER_METHOD</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-70">BUILDER_SUPPLIER_METHOD</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-66">BUILDER_SUPPLIER_METHOD</a></span></div>
 <div class="block">Default name of the optional <code>static Microservice.Builder</code> supplier method on the test class.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -229,7 +229,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>MicroserviceExtension</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-67">MicroserviceExtension</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-63">MicroserviceExtension</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -243,7 +243,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="beforeAll(org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>beforeAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-84">beforeAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-80">beforeAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span>
                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -256,7 +256,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="afterAll(org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>afterAll</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-119">afterAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-115">afterAll</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ExtensionContext&nbsp;context)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>afterAll</code>&nbsp;in interface&nbsp;<code>org.junit.jupiter.api.extension.AfterAllCallback</code></dd>
@@ -266,7 +266,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="supportsParameter(org.junit.jupiter.api.extension.ParameterContext,org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>supportsParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-144">supportsParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;pc,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-140">supportsParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;pc,
  org.junit.jupiter.api.extension.ExtensionContext&nbsp;ec)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -277,7 +277,7 @@ implements org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.
 <li>
 <section class="detail" id="resolveParameter(org.junit.jupiter.api.extension.ParameterContext,org.junit.jupiter.api.extension.ExtensionContext)">
 <h3>resolveParameter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-151">resolveParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;pc,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/microservice/test/MicroserviceExtension.html#line-147">resolveParameter</a></span><wbr><span class="parameters">(org.junit.jupiter.api.extension.ParameterContext&nbsp;pc,
  org.junit.jupiter.api.extension.ExtensionContext&nbsp;ec)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>

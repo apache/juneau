@@ -23,6 +23,19 @@
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=apache_juneau&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=apache_juneau)
 
+Apache Juneau™ is a single cohesive Java ecosystem consisting of a comprehensive toolkit for marshalling POJOs to a wide variety of content types using a common framework, along with universal REST server and client APIs for creating Swagger-based self-documenting REST interfaces.
+
+## Key Features
+
+* **Universal Serialization** - Marshal POJOs to JSON, XML, HTML, URL-Encoding, UON, MessagePack, CSV, and more
+* **REST Services** - Create self-documenting REST interfaces with automatic Swagger/OpenAPI generation
+* **Microservices** - Build lightweight, standalone microservices with embedded Jetty
+* **Configuration Management** - Sophisticated configuration file API with variable resolution
+* **Fluent Assertions** - Powerful testing framework with fluent-style assertions
+* **Type Conversion** - Lightweight, MarshallingContext-free converter framework with caching and broad type support
+* **Large-Dataset Streaming** - BeanSupplier/BeanConsumer/BeanChannel APIs for serializing and parsing large datasets without loading all elements into memory; supports direct database integration via lifecycle methods (begin/acceptThrows/onError/complete)
+* **Zero Dependencies** - Core marshalling requires no external dependencies
+
 ## Documentation & Resources
 
 ### Official Resources

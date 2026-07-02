@@ -54,7 +54,6 @@ loadScripts(document, 'script');</script>
 <span class="package-hierarchy-label">Package Hierarchies:</span>
 <ul class="horizontal">
 <li><a href="org/apache/juneau/package-tree.html">org.apache.juneau</a>, </li>
-<li><a href="org/apache/juneau/assertions/package-tree.html">org.apache.juneau.assertions</a>, </li>
 <li><a href="org/apache/juneau/bean/package-tree.html">org.apache.juneau.bean</a>, </li>
 <li><a href="org/apache/juneau/bean/atom/package-tree.html">org.apache.juneau.bean.atom</a>, </li>
 <li><a href="org/apache/juneau/bean/hal/package-tree.html">org.apache.juneau.bean.hal</a>, </li>
@@ -124,9 +123,6 @@ loadScripts(document, 'script');</script>
 <li><a href="org/apache/juneau/http/resource/package-tree.html">org.apache.juneau.http.resource</a>, </li>
 <li><a href="org/apache/juneau/http/response/package-tree.html">org.apache.juneau.http.response</a>, </li>
 <li><a href="org/apache/juneau/httppart/bean/package-tree.html">org.apache.juneau.httppart.bean</a>, </li>
-<li><a href="org/apache/juneau/junit/bct/package-tree.html">org.apache.juneau.junit.bct</a>, </li>
-<li><a href="org/apache/juneau/junit/bct/annotations/package-tree.html">org.apache.juneau.junit.bct.annotations</a>, </li>
-<li><a href="org/apache/juneau/junit5/package-tree.html">org.apache.juneau.junit5</a>, </li>
 <li><a href="org/apache/juneau/marshall/package-tree.html">org.apache.juneau.marshall</a>, </li>
 <li><a href="org/apache/juneau/marshall/bson/package-tree.html">org.apache.juneau.marshall.bson</a>, </li>
 <li><a href="org/apache/juneau/marshall/cbor/package-tree.html">org.apache.juneau.marshall.cbor</a>, </li>
@@ -668,132 +664,31 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.commons.lang.<a href="org/apache/juneau/commons/lang/AsciiMap.html" class="type-name-link" title="class in org.apache.juneau.commons.lang">AsciiMap</a></li>
 <li class="circle">org.apache.juneau.commons.lang.<a href="org/apache/juneau/commons/lang/AsciiSet.html" class="type-name-link" title="class in org.apache.juneau.commons.lang">AsciiSet</a></li>
 <li class="circle">org.apache.juneau.commons.lang.<a href="org/apache/juneau/commons/lang/AsciiSet.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons.lang">AsciiSet.Builder</a></li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/Assertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">Assertion</a>
+<li class="circle">org.apache.juneau.test.assertions.Assertion
 <ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentAssertion</a>&lt;R&gt;
+<li class="circle">org.apache.juneau.test.assertions.FluentAssertion&lt;R&gt;
 <ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentObjectAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentObjectAssertion</a>&lt;T,<wbr>R&gt;
+<li class="circle">org.apache.juneau.test.assertions.FluentObjectAssertion&lt;T,<wbr>R&gt;
 <ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentAnyAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentAnyAssertion</a>&lt;T,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/AnyAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">AnyAssertion</a>&lt;T&gt;</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentArrayAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentArrayAssertion</a>&lt;E,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ArrayAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ArrayAssertion</a>&lt;E&gt;</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentBeanAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentBeanAssertion</a>&lt;T,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/BeanAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">BeanAssertion</a>&lt;T&gt;</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentCollectionAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentCollectionAssertion</a>&lt;E,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/CollectionAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">CollectionAssertion</a>&lt;E&gt;</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentListAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentListAssertion</a>&lt;E,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentBeanListAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentBeanListAssertion</a>&lt;E,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/BeanListAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">BeanListAssertion</a>&lt;E&gt;</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentStringListAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentStringListAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/StringListAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">StringListAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ListAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ListAssertion</a>&lt;E&gt;</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentComparableAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentComparableAssertion</a>&lt;T,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ComparableAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ComparableAssertion</a>&lt;T&gt;</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentBooleanAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentBooleanAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/BooleanAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">BooleanAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentDateAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentDateAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/DateAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">DateAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentIntegerAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentIntegerAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/IntegerAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">IntegerAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentLongAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentLongAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/LongAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">LongAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentVersionAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentVersionAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/VersionAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">VersionAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentZonedDateTimeAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentZonedDateTimeAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ZonedDateTimeAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ZonedDateTimeAssertion</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentMapAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentMapAssertion</a>&lt;K,<wbr>V,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/MapAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">MapAssertion</a>&lt;K,<wbr>V&gt;</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentPrimitiveArrayAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentPrimitiveArrayAssertion</a>&lt;E,<wbr>T,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentByteArrayAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentByteArrayAssertion</a>&lt;R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ByteArrayAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ByteArrayAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/PrimitiveArrayAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">PrimitiveArrayAssertion</a>&lt;E,<wbr>T&gt;</li>
-</ul>
-</li>
 <li class="circle">org.apache.juneau.rest.server.assertions.<a href="org/apache/juneau/rest/server/assertions/FluentProtocolVersionAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.server.assertions">FluentProtocolVersionAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.server.assertions.<a href="org/apache/juneau/rest/server/assertions/FluentRequestContentAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.server.assertions">FluentRequestContentAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.server.assertions.<a href="org/apache/juneau/rest/server/assertions/FluentRequestLineAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.server.assertions">FluentRequestLineAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.client.classic.assertion.<a href="org/apache/juneau/rest/client/classic/assertion/FluentResponseBodyAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.client.classic.assertion">FluentResponseBodyAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.client.classic.assertion.<a href="org/apache/juneau/rest/client/classic/assertion/FluentResponseStatusLineAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.client.classic.assertion">FluentResponseStatusLineAssertion</a>&lt;R&gt;</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentStringAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentStringAssertion</a>&lt;R&gt;
+<li class="circle">org.apache.juneau.test.assertions.FluentStringAssertion&lt;R&gt;
 <ul>
 <li class="circle">org.apache.juneau.rest.server.assertions.<a href="org/apache/juneau/rest/server/assertions/FluentRequestFormParamAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.server.assertions">FluentRequestFormParamAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.server.assertions.<a href="org/apache/juneau/rest/server/assertions/FluentRequestHeaderAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.server.assertions">FluentRequestHeaderAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.server.assertions.<a href="org/apache/juneau/rest/server/assertions/FluentRequestQueryParamAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.server.assertions">FluentRequestQueryParamAssertion</a>&lt;R&gt;</li>
 <li class="circle">org.apache.juneau.rest.client.classic.assertion.<a href="org/apache/juneau/rest/client/classic/assertion/FluentResponseHeaderAssertion.html" class="type-name-link" title="class in org.apache.juneau.rest.client.classic.assertion">FluentResponseHeaderAssertion</a>&lt;R&gt;</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/StringAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">StringAssertion</a></li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/FluentThrowableAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">FluentThrowableAssertion</a>&lt;T,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ThrowableAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ThrowableAssertion</a>&lt;T&gt;</li>
-</ul>
-</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/ObjectAssertion.html" class="type-name-link" title="class in org.apache.juneau.assertions">ObjectAssertion</a>&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/AssertionPredicate.html" class="type-name-link" title="class in org.apache.juneau.assertions">AssertionPredicate</a>&lt;T&gt; (implements java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;)
-<ul>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/AssertionPredicate.And.html" class="type-name-link" title="class in org.apache.juneau.assertions">AssertionPredicate.And</a>&lt;T&gt;</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/AssertionPredicate.Not.html" class="type-name-link" title="class in org.apache.juneau.assertions">AssertionPredicate.Not</a>&lt;T&gt;</li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/AssertionPredicate.Or.html" class="type-name-link" title="class in org.apache.juneau.assertions">AssertionPredicate.Or</a>&lt;T&gt;</li>
 </ul>
 </li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/AssertionPredicates.html" class="type-name-link" title="class in org.apache.juneau.assertions">AssertionPredicates</a></li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/Assertions.html" class="type-name-link" title="class in org.apache.juneau.assertions">Assertions</a></li>
 <li class="circle">org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/AssertionUtils.html" class="type-name-link" title="class in org.apache.juneau.commons.utils">AssertionUtils</a></li>
 <li class="circle">org.apache.juneau.rest.server.processor.<a href="org/apache/juneau/rest/server/processor/AsyncResponseProcessor.html" class="type-name-link" title="class in org.apache.juneau.rest.server.processor">AsyncResponseProcessor</a> (implements org.apache.juneau.rest.server.processor.<a href="org/apache/juneau/rest/server/processor/ResponseProcessor.html" title="interface in org.apache.juneau.rest.server.processor">ResponseProcessor</a>)</li>
 <li class="circle">org.apache.juneau.bean.atom.<a href="org/apache/juneau/bean/atom/AtomBuilder.html" class="type-name-link" title="class in org.apache.juneau.bean.atom">AtomBuilder</a></li>
@@ -832,13 +727,10 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.httppart.<a href="org/apache/juneau/marshall/httppart/SimplePartSerializerSession.html" class="type-name-link" title="class in org.apache.juneau.marshall.httppart">SimplePartSerializerSession</a></li>
 </ul>
 </li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BasicBeanConverter.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">BasicBeanConverter</a> (implements org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BeanConverter.html" title="interface in org.apache.juneau.junit.bct">BeanConverter</a>)</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BasicBeanConverter.Builder.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">BasicBeanConverter.Builder</a></li>
 <li class="circle">org.apache.juneau.marshall.jsonschema.<a href="org/apache/juneau/marshall/jsonschema/BasicBeanDefMapper.html" class="type-name-link" title="class in org.apache.juneau.marshall.jsonschema">BasicBeanDefMapper</a> (implements org.apache.juneau.marshall.jsonschema.<a href="org/apache/juneau/marshall/jsonschema/MarshallingDefMapper.html" title="interface in org.apache.juneau.marshall.jsonschema">MarshallingDefMapper</a>)</li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BasicBeanStore.html" class="type-name-link" title="class in org.apache.juneau.commons.inject">BasicBeanStore</a> (implements org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>)
 <ul>
 <li class="circle">org.apache.juneau.rest.server.springboot.<a href="org/apache/juneau/rest/server/springboot/SpringBeanStore.html" class="type-name-link" title="class in org.apache.juneau.rest.server.springboot">SpringBeanStore</a></li>
-<li class="circle">org.apache.juneau.junit5.<a href="org/apache/juneau/junit5/TestBeanStore.html" class="type-name-link" title="class in org.apache.juneau.junit5">TestBeanStore</a></li>
 </ul>
 </li>
 <li class="circle">org.apache.juneau.marshall.cp.<a href="org/apache/juneau/marshall/cp/BasicFileFinder.html" class="type-name-link" title="class in org.apache.juneau.marshall.cp">BasicFileFinder</a> (implements org.apache.juneau.marshall.cp.<a href="org/apache/juneau/marshall/cp/FileFinder.html" title="interface in org.apache.juneau.marshall.cp">FileFinder</a>)</li>
@@ -1064,11 +956,6 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">org.apache.juneau.microservice.tomcat.<a href="org/apache/juneau/microservice/tomcat/BasicTomcatServerFactory.html" class="type-name-link" title="class in org.apache.juneau.microservice.tomcat">BasicTomcatServerFactory</a> (implements org.apache.juneau.microservice.tomcat.<a href="org/apache/juneau/microservice/tomcat/TomcatServerFactory.html" title="interface in org.apache.juneau.microservice.tomcat">TomcatServerFactory</a>)</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BctAssertions.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">BctAssertions</a></li>
-<li class="circle">org.apache.juneau.junit.bct.annotations.<a href="org/apache/juneau/junit/bct/annotations/BctConfigExtension.html" class="type-name-link" title="class in org.apache.juneau.junit.bct.annotations">BctConfigExtension</a> (implements org.junit.jupiter.api.extension.AfterEachCallback, org.junit.jupiter.api.extension.BeforeEachCallback)</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BctConfiguration.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">BctConfiguration</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BctConfiguration.Defaults.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">BctConfiguration.Defaults</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BctUtils.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">BctUtils</a></li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BeanAnnotation.html" class="type-name-link" title="class in org.apache.juneau.commons.inject">BeanAnnotation</a></li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanConfigAnnotation.html" class="type-name-link" title="class in org.apache.juneau.commons.bean">BeanConfigAnnotation</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/BeanConfigAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall">BeanConfigAnnotation</a></li>
@@ -1101,6 +988,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanPropertyValue.html" class="type-name-link" title="class in org.apache.juneau.commons.bean">BeanPropertyValue</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;)</li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanProxyInvocationHandler.html" class="type-name-link" title="class in org.apache.juneau.commons.bean">BeanProxyInvocationHandler</a>&lt;T&gt; (implements java.lang.reflect.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/InvocationHandler.html" title="class or interface in java.lang.reflect" class="external-link">InvocationHandler</a>)</li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/BeanRegistry.html" class="type-name-link" title="class in org.apache.juneau.marshall">BeanRegistry</a> (implements org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanRegistryLookup.html" title="interface in org.apache.juneau.commons.bean">BeanRegistryLookup</a>)</li>
+<li class="circle">org.apache.juneau.<a href="org/apache/juneau/BeanTester.html" class="type-name-link" title="class in org.apache.juneau">BeanTester</a>&lt;T&gt;</li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanTypeAnnotation.html" class="type-name-link" title="class in org.apache.juneau.commons.bean">BeanTypeAnnotation</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/BeanTypeApplyAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall">BeanTypeApplyAnnotation</a></li>
 <li class="circle">org.apache.juneau.rest.server.validation.<a href="org/apache/juneau/rest/server/validation/BeanValidator.html" class="type-name-link" title="class in org.apache.juneau.rest.server.validation">BeanValidator</a></li>
@@ -1240,7 +1128,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.jsonschema.<a href="org/apache/juneau/marshall/jsonschema/JsonSchemaGenerator.html" class="type-name-link" title="class in org.apache.juneau.marshall.jsonschema">JsonSchemaGenerator</a> (implements org.apache.juneau.marshall.jsonschema.<a href="org/apache/juneau/marshall/jsonschema/JsonSchemaMetaProvider.html" title="interface in org.apache.juneau.marshall.jsonschema">JsonSchemaMetaProvider</a>)</li>
 <li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/Serializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">Serializer</a>
 <ul>
-<li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/OutputStreamSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">OutputStreamSerializer</a>
+<li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/OutputStreamSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">OutputStreamSerializer</a> (implements org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;T,<wbr>R&gt;)
 <ul>
 <li class="circle">org.apache.juneau.marshall.bson.<a href="org/apache/juneau/marshall/bson/BsonSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.bson">BsonSerializer</a> (implements org.apache.juneau.marshall.stream.<a href="org/apache/juneau/marshall/stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a>, org.apache.juneau.marshall.bson.<a href="org/apache/juneau/marshall/bson/BsonMetaProvider.html" title="interface in org.apache.juneau.marshall.bson">BsonMetaProvider</a>, org.apache.juneau.marshall.stream.<a href="org/apache/juneau/marshall/stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>)
 <ul>
@@ -1273,7 +1161,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/Serializer.Null.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">Serializer.Null</a></li>
 <li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/SerializerSet.Inherit.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">SerializerSet.Inherit</a></li>
 <li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/SerializerSet.NoInherit.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">SerializerSet.NoInherit</a></li>
-<li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/WriterSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a>
+<li class="circle">org.apache.juneau.marshall.serializer.<a href="org/apache/juneau/marshall/serializer/WriterSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.serializer">WriterSerializer</a> (implements org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/ThrowingFunction.html" title="interface in org.apache.juneau.commons.function">ThrowingFunction</a>&lt;T,<wbr>R&gt;)
 <ul>
 <li class="circle">org.apache.juneau.marshall.csv.<a href="org/apache/juneau/marshall/csv/CsvSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.csv">CsvSerializer</a> (implements org.apache.juneau.marshall.csv.<a href="org/apache/juneau/marshall/csv/CsvMetaProvider.html" title="interface in org.apache.juneau.marshall.csv">CsvMetaProvider</a>, org.apache.juneau.marshall.stream.<a href="org/apache/juneau/marshall/stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>)</li>
 <li class="circle">org.apache.juneau.marshall.hjson.<a href="org/apache/juneau/marshall/hjson/HjsonSerializer.html" class="type-name-link" title="class in org.apache.juneau.marshall.hjson">HjsonSerializer</a> (implements org.apache.juneau.marshall.hjson.<a href="org/apache/juneau/marshall/hjson/HjsonMetaProvider.html" title="interface in org.apache.juneau.marshall.hjson">HjsonMetaProvider</a>, org.apache.juneau.marshall.stream.<a href="org/apache/juneau/marshall/stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a>)</li>
@@ -2680,7 +2568,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.view.jsp.<a href="org/apache/juneau/rest/server/view/jsp/JspViewRenderer.html" class="type-name-link" title="class in org.apache.juneau.rest.server.view.jsp">JspViewRenderer</a> (implements org.apache.juneau.rest.server.view.<a href="org/apache/juneau/rest/server/view/ViewRenderer.html" title="interface in org.apache.juneau.rest.server.view">ViewRenderer</a>)</li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/JsrSupport.html" class="type-name-link" title="class in org.apache.juneau.commons.inject">JsrSupport</a></li>
 <li class="circle">org.apache.juneau.rest.server.management.<a href="org/apache/juneau/rest/server/management/JulLogBackend.html" class="type-name-link" title="class in org.apache.juneau.rest.server.management">JulLogBackend</a> (implements org.apache.juneau.rest.server.management.<a href="org/apache/juneau/rest/server/management/LogBackend.html" title="interface in org.apache.juneau.rest.server.management">LogBackend</a>)</li>
-<li class="circle">org.apache.juneau.junit5.<a href="org/apache/juneau/junit5/JuneauBeanStoreExtension.html" class="type-name-link" title="class in org.apache.juneau.junit5">JuneauBeanStoreExtension</a> (implements org.junit.jupiter.api.extension.AfterAllCallback, org.junit.jupiter.api.extension.AfterEachCallback, org.junit.jupiter.api.extension.BeforeAllCallback, org.junit.jupiter.api.extension.BeforeEachCallback, org.junit.jupiter.api.extension.ParameterResolver)</li>
 <li class="circle">org.apache.juneau.rest.server.springboot.<a href="org/apache/juneau/rest/server/springboot/JuneauRestAutoConfiguration.html" class="type-name-link" title="class in org.apache.juneau.rest.server.springboot">JuneauRestAutoConfiguration</a></li>
 <li class="circle">org.apache.juneau.rest.server.servlet.<a href="org/apache/juneau/rest/server/servlet/JuneauRestServletContainerInitializer.html" class="type-name-link" title="class in org.apache.juneau.rest.server.servlet">JuneauRestServletContainerInitializer</a> (implements jakarta.servlet.ServletContainerInitializer)</li>
 <li class="circle">org.apache.juneau.rest.server.springboot.<a href="org/apache/juneau/rest/server/springboot/JuneauServletRegistrations.html" class="type-name-link" title="class in org.apache.juneau.rest.server.springboot">JuneauServletRegistrations</a></li>
@@ -2695,7 +2582,6 @@ loadScripts(document, 'script');</script>
 </ul>
 </li>
 <li class="circle">org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/ListBeanChannel.html" class="type-name-link" title="class in org.apache.juneau.commons.function">ListBeanChannel</a>&lt;T&gt; (implements org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/BeanChannel.html" title="interface in org.apache.juneau.commons.function">BeanChannel</a>&lt;T&gt;)</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Listifiers.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">Listifiers</a></li>
 <li class="circle">org.apache.juneau.bean.mcp.<a href="org/apache/juneau/bean/mcp/ListPromptsResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ListPromptsResult</a></li>
 <li class="circle">org.apache.juneau.bean.mcp.<a href="org/apache/juneau/bean/mcp/ListResourcesResult.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">ListResourcesResult</a></li>
 <li class="circle">org.apache.juneau.commons.collections.<a href="org/apache/juneau/commons/collections/Lists.html" class="type-name-link" title="class in org.apache.juneau.commons.collections">Lists</a>&lt;E&gt;</li>
@@ -3067,13 +2953,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.bean.mcp.<a href="org/apache/juneau/bean/mcp/PromptMessage.html" class="type-name-link" title="class in org.apache.juneau.bean.mcp">PromptMessage</a></li>
 <li class="circle">org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/Property.html" class="type-name-link" title="class in org.apache.juneau.commons.reflect">Property</a>&lt;T,<wbr>V&gt;</li>
 <li class="circle">org.apache.juneau.commons.reflect.<a href="org/apache/juneau/commons/reflect/Property.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons.reflect">Property.Builder</a>&lt;T,<wbr>V&gt;</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyExtractors.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">PropertyExtractors</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyExtractors.ObjectPropertyExtractor.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">PropertyExtractors.ObjectPropertyExtractor</a> (implements org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyExtractor.html" title="interface in org.apache.juneau.junit.bct">PropertyExtractor</a>)
-<ul>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyExtractors.ListPropertyExtractor.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">PropertyExtractors.ListPropertyExtractor</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyExtractors.MapPropertyExtractor.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">PropertyExtractors.MapPropertyExtractor</a></li>
-</ul>
-</li>
 <li class="circle">org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/PropertyLookupResult.html" class="type-name-link" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/PropertyNamerDLC.html" class="type-name-link" title="class in org.apache.juneau.commons.bean">PropertyNamerDLC</a> (implements org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>)</li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/PropertyNamerDUCS.html" class="type-name-link" title="class in org.apache.juneau.commons.bean">PropertyNamerDUCS</a> (implements org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/PropertyNamer.html" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>)</li>
@@ -3130,7 +3009,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.http.<a href="org/apache/juneau/http/HttpProtocolVersion.html" class="type-name-link" title="class in org.apache.juneau.http">HttpProtocolVersion</a></li>
 <li class="circle">org.apache.juneau.marshall.json.<a href="org/apache/juneau/marshall/json/JsonTokenReader.Settings.html" class="type-name-link" title="class in org.apache.juneau.marshall.json">JsonTokenReader.Settings</a></li>
 <li class="circle">org.apache.juneau.marshall.json.<a href="org/apache/juneau/marshall/json/JsonTokenWriter.Settings.html" class="type-name-link" title="class in org.apache.juneau.marshall.json">JsonTokenWriter.Settings</a></li>
-<li class="circle">org.apache.juneau.junit5.<a href="org/apache/juneau/junit5/JuneauBeanStoreExtension.OverrideSet.html" class="type-name-link" title="class in org.apache.juneau.junit5">JuneauBeanStoreExtension.OverrideSet</a></li>
 <li class="circle">org.apache.juneau.rest.server.mcp.<a href="org/apache/juneau/rest/server/mcp/McpPage.html" class="type-name-link" title="class in org.apache.juneau.rest.server.mcp">McpPage</a>&lt;T&gt;</li>
 <li class="circle">org.apache.juneau.marshall.msgpack.<a href="org/apache/juneau/marshall/msgpack/MsgPackTokenWriter.Settings.html" class="type-name-link" title="class in org.apache.juneau.marshall.msgpack">MsgPackTokenWriter.Settings</a></li>
 <li class="circle">org.apache.juneau.http.entity.<a href="org/apache/juneau/http/entity/MultipartBody.MultipartPart.html" class="type-name-link" title="class in org.apache.juneau.http.entity">MultipartBody.MultipartPart</a></li>
@@ -3443,7 +3321,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.utils.<a href="org/apache/juneau/marshall/utils/StringExpressionMatcher.html" class="type-name-link" title="class in org.apache.juneau.marshall.utils">StringExpressionMatcher</a></li>
 <li class="circle">org.apache.juneau.commons.lang.<a href="org/apache/juneau/commons/lang/StringFormat.html" class="type-name-link" title="class in org.apache.juneau.commons.lang">StringFormat</a></li>
 <li class="circle">org.apache.juneau.commons.svl.functions.<a href="org/apache/juneau/commons/svl/functions/StringFunctions.html" class="type-name-link" title="class in org.apache.juneau.commons.svl.functions">StringFunctions</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Stringifiers.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">Stringifiers</a></li>
 <li class="circle">org.apache.juneau.commons.http.<a href="org/apache/juneau/commons/http/StringRange.html" class="type-name-link" title="class in org.apache.juneau.commons.http">StringRange</a></li>
 <li class="circle">org.apache.juneau.commons.http.<a href="org/apache/juneau/commons/http/StringRanges.html" class="type-name-link" title="class in org.apache.juneau.commons.http">StringRanges</a></li>
 <li class="circle">org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/StringUtils.html" class="type-name-link" title="class in org.apache.juneau.commons.utils">StringUtils</a></li>
@@ -3476,7 +3353,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.docs.<a href="org/apache/juneau/rest/server/docs/SwaggerUiMixin.html" class="type-name-link" title="class in org.apache.juneau.rest.server.docs">SwaggerUiMixin</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/SwapAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall">SwapAnnotation</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/SwapApplyAnnotation.html" class="type-name-link" title="class in org.apache.juneau.marshall">SwapApplyAnnotation</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Swappers.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">Swappers</a></li>
 <li class="circle">org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/SystemEnvPropertySource.html" class="type-name-link" title="class in org.apache.juneau.commons.settings">SystemEnvPropertySource</a> (implements org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>)</li>
 <li class="circle">org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/SystemEnvPropertySourceProvider.html" class="type-name-link" title="class in org.apache.juneau.commons.settings">SystemEnvPropertySourceProvider</a> (implements org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/PropertySourceProvider.html" title="interface in org.apache.juneau.commons.settings">PropertySourceProvider</a>)</li>
 <li class="circle">org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/SystemPropertyPropertySource.html" class="type-name-link" title="class in org.apache.juneau.commons.settings">SystemPropertyPropertySource</a> (implements org.apache.juneau.commons.settings.<a href="org/apache/juneau/commons/settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a>)</li>
@@ -3630,7 +3506,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.auth.oauth.flow.<a href="org/apache/juneau/rest/server/auth/oauth/flow/OAuthFlowException.html" class="type-name-link" title="class in org.apache.juneau.rest.server.auth.oauth.flow">OAuthFlowException</a></li>
 <li class="circle">org.apache.juneau.petstore.service.<a href="org/apache/juneau/petstore/service/PetstoreNotFoundException.html" class="type-name-link" title="class in org.apache.juneau.petstore.service">PetstoreNotFoundException</a></li>
 <li class="circle">org.apache.juneau.bean.rfc7807.<a href="org/apache/juneau/bean/rfc7807/ProblemException.html" class="type-name-link" title="class in org.apache.juneau.bean.rfc7807">ProblemException</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyNotFoundException.html" class="type-name-link" title="class in org.apache.juneau.junit.bct">PropertyNotFoundException</a></li>
 <li class="circle">org.apache.juneau.marshall.parser.<a href="org/apache/juneau/marshall/parser/RuntimeParseException.html" class="type-name-link" title="class in org.apache.juneau.marshall.parser">RuntimeParseException</a></li>
 </ul>
 </li>
@@ -3764,7 +3639,11 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.util.<a href="org/apache/juneau/rest/server/util/UrlPathMatch.html" class="type-name-link" title="class in org.apache.juneau.rest.server.util">UrlPathMatch</a></li>
 <li class="circle">org.apache.juneau.rest.server.util.<a href="org/apache/juneau/rest/server/util/UrlPathMatcher.html" class="type-name-link" title="class in org.apache.juneau.rest.server.util">UrlPathMatcher</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;)</li>
 <li class="circle">org.apache.juneau.petstore.dto.<a href="org/apache/juneau/petstore/dto/User.html" class="type-name-link" title="class in org.apache.juneau.petstore.dto">User</a></li>
-<li class="circle">org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/Utils.html" class="type-name-link" title="class in org.apache.juneau.commons.utils">Utils</a></li>
+<li class="circle">org.apache.juneau.commons.utils.<a href="org/apache/juneau/commons/utils/Utils.html" class="type-name-link" title="class in org.apache.juneau.commons.utils">Utils</a>
+<ul>
+<li class="circle">org.apache.juneau.<a href="org/apache/juneau/BasicTestUtils.html" class="type-name-link" title="class in org.apache.juneau">BasicTestUtils</a></li>
+</ul>
+</li>
 <li class="circle">org.apache.juneau.rest.server.validation.<a href="org/apache/juneau/rest/server/validation/ValidationViolation.html" class="type-name-link" title="class in org.apache.juneau.rest.server.validation">ValidationViolation</a></li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/ValueResolver.html" class="type-name-link" title="class in org.apache.juneau.commons.inject">ValueResolver</a></li>
 <li class="circle">org.apache.juneau.commons.svl.<a href="org/apache/juneau/commons/svl/Var.html" class="type-name-link" title="class in org.apache.juneau.commons.svl">Var</a>
@@ -3821,7 +3700,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.commons.svl.<a href="org/apache/juneau/commons/svl/VarResolver.Builder.html" class="type-name-link" title="class in org.apache.juneau.commons.svl">VarResolver.Builder</a></li>
 <li class="circle">org.apache.juneau.commons.svl.<a href="org/apache/juneau/commons/svl/VarResolverSession.html" class="type-name-link" title="class in org.apache.juneau.commons.svl">VarResolverSession</a></li>
 <li class="circle">org.apache.juneau.commons.svl.<a href="org/apache/juneau/commons/svl/VarTemplate.html" class="type-name-link" title="class in org.apache.juneau.commons.svl">VarTemplate</a></li>
-<li class="circle">org.apache.juneau.assertions.<a href="org/apache/juneau/assertions/Verify.html" class="type-name-link" title="class in org.apache.juneau.assertions">Verify</a></li>
 <li class="circle">org.apache.juneau.commons.lang.<a href="org/apache/juneau/commons/lang/Version.html" class="type-name-link" title="class in org.apache.juneau.commons.lang">Version</a> (implements java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;T&gt;)</li>
 <li class="circle">org.apache.juneau.rest.server.convention.<a href="org/apache/juneau/rest/server/convention/VersionProvider.html" class="type-name-link" title="class in org.apache.juneau.rest.server.convention">VersionProvider</a></li>
 <li class="circle">org.apache.juneau.rest.server.convention.<a href="org/apache/juneau/rest/server/convention/VersionProvider.Builder.html" class="type-name-link" title="class in org.apache.juneau.rest.server.convention">VersionProvider.Builder</a></li>
@@ -3940,7 +3818,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/WritableBeanStore.html" class="type-name-link" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a> (also extends org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BeanStore.html" title="interface in org.apache.juneau.commons.inject">BeanStore</a>)</li>
 </ul>
 </li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/BeanConverter.html" class="type-name-link" title="interface in org.apache.juneau.junit.bct">BeanConverter</a></li>
 <li class="circle">org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/BeanFactory.html" class="type-name-link" title="interface in org.apache.juneau.commons.function">BeanFactory</a>&lt;T&gt;</li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanFilter.html" class="type-name-link" title="interface in org.apache.juneau.commons.bean">BeanFilter</a></li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanMetaInitializer.html" class="type-name-link" title="interface in org.apache.juneau.commons.bean">BeanMetaInitializer</a></li>
@@ -3954,13 +3831,6 @@ loadScripts(document, 'script');</script>
 </li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BeanStoreOverridable.html" class="type-name-link" title="interface in org.apache.juneau.commons.inject">BeanStoreOverridable</a>&lt;B&gt;</li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanTypeResolver.html" class="type-name-link" title="interface in org.apache.juneau.commons.bean">BeanTypeResolver</a></li>
-<li class="circle">java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/BiFunction.html" class="type-name-link external-link" title="class or interface in java.util.function">BiFunction</a>&lt;T,<wbr>U,<wbr>R&gt;
-<ul>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Listifier.html" class="type-name-link" title="interface in org.apache.juneau.junit.bct">Listifier</a>&lt;T&gt;</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Stringifier.html" class="type-name-link" title="interface in org.apache.juneau.junit.bct">Stringifier</a>&lt;T&gt;</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Swapper.html" class="type-name-link" title="interface in org.apache.juneau.junit.bct">Swapper</a>&lt;T&gt;</li>
-</ul>
-</li>
 <li class="circle">org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/BodyConverter.html" class="type-name-link" title="interface in org.apache.juneau.rest.client">BodyConverter</a>&lt;T&gt;</li>
 <li class="circle">org.apache.juneau.rest.client.<a href="org/apache/juneau/rest/client/BodyConverter.ThrowingConverter.html" class="type-name-link" title="interface in org.apache.juneau.rest.client">BodyConverter.ThrowingConverter</a>&lt;T&gt;</li>
 <li class="circle">org.apache.juneau.marshall.bson.<a href="org/apache/juneau/marshall/bson/BsonMetaProvider.html" class="type-name-link" title="interface in org.apache.juneau.marshall.bson">BsonMetaProvider</a></li>
@@ -4168,7 +4038,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.parser.<a href="org/apache/juneau/marshall/parser/Positionable.html" class="type-name-link" title="interface in org.apache.juneau.marshall.parser">Positionable</a></li>
 <li class="circle">org.apache.juneau.bean.rfc7807.<a href="org/apache/juneau/bean/rfc7807/ProblemLocalizationStrategy.html" class="type-name-link" title="interface in org.apache.juneau.bean.rfc7807">ProblemLocalizationStrategy</a></li>
 <li class="circle">org.apache.juneau.bean.rfc7807.<a href="org/apache/juneau/bean/rfc7807/ProblemMapper.html" class="type-name-link" title="interface in org.apache.juneau.bean.rfc7807">ProblemMapper</a>&lt;T&gt;</li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/PropertyExtractor.html" class="type-name-link" title="interface in org.apache.juneau.junit.bct">PropertyExtractor</a></li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/PropertyNamer.html" class="type-name-link" title="interface in org.apache.juneau.commons.bean">PropertyNamer</a>
 <ul>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/PropertyNamer.Void.html" class="type-name-link" title="interface in org.apache.juneau.commons.bean">PropertyNamer.Void</a></li>
@@ -4215,7 +4084,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.arg.<a href="org/apache/juneau/rest/server/arg/RestOpArg.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.arg">RestOpArg</a></li>
 <li class="circle">org.apache.juneau.rest.client.classic.<a href="org/apache/juneau/rest/client/classic/RestRequestCreated.html" class="type-name-link" title="interface in org.apache.juneau.rest.client.classic">RestRequestCreated</a></li>
 <li class="circle">org.apache.juneau.rest.server.auth.oidc.rp.<a href="org/apache/juneau/rest/server/auth/oidc/rp/SessionStore.html" class="type-name-link" title="interface in org.apache.juneau.rest.server.auth.oidc.rp">SessionStore</a></li>
-<li class="circle">org.apache.juneau.junit.bct.<a href="org/apache/juneau/junit/bct/Sizer.html" class="type-name-link" title="interface in org.apache.juneau.junit.bct">Sizer</a>&lt;T&gt;</li>
 <li class="circle">org.apache.juneau.commons.function.<a href="org/apache/juneau/commons/function/Snippet.html" class="type-name-link" title="interface in org.apache.juneau.commons.function">Snippet</a></li>
 <li class="circle">org.apache.juneau.marshall.soap.<a href="org/apache/juneau/marshall/soap/SoapXmlMetaProvider.html" class="type-name-link" title="interface in org.apache.juneau.marshall.soap">SoapXmlMetaProvider</a></li>
 <li class="circle">java.util.function.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" class="type-name-link external-link" title="class or interface in java.util.function">Supplier</a>&lt;T&gt;
@@ -4249,7 +4117,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.commons.<a href="org/apache/juneau/commons/AnnotationGroup.html" class="type-name-link" title="annotation interface in org.apache.juneau.commons">AnnotationGroup</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.<a href="org/apache/juneau/rest/server/Attr.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server">Attr</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.rest.server.auth.<a href="org/apache/juneau/rest/server/auth/Auth.html" class="type-name-link" title="annotation interface in org.apache.juneau.rest.server.auth">Auth</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
-<li class="circle">org.apache.juneau.junit.bct.annotations.<a href="org/apache/juneau/junit/bct/annotations/BctConfig.html" class="type-name-link" title="annotation interface in org.apache.juneau.junit.bct.annotations">BctConfig</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/Bean.html" class="type-name-link" title="annotation interface in org.apache.juneau.commons.inject">Bean</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.commons.inject.<a href="org/apache/juneau/commons/inject/BeanAnnotation.Array.html" class="type-name-link" title="annotation interface in org.apache.juneau.commons.inject">BeanAnnotation.Array</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.commons.bean.<a href="org/apache/juneau/commons/bean/BeanConfig.html" class="type-name-link" title="annotation interface in org.apache.juneau.commons.bean">BeanConfig</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
@@ -4433,7 +4300,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/SwapApply.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall">SwapApply</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/SwapApply.Array.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall">SwapApply.Array</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.http.<a href="org/apache/juneau/http/Tag.html" class="type-name-link" title="annotation interface in org.apache.juneau.http">Tag</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
-<li class="circle">org.apache.juneau.junit5.<a href="org/apache/juneau/junit5/TestBean.html" class="type-name-link" title="annotation interface in org.apache.juneau.junit5">TestBean</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.marshall.toml.<a href="org/apache/juneau/marshall/toml/TomlConfig.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.toml">TomlConfig</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.marshall.uon.<a href="org/apache/juneau/marshall/uon/Uon.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.uon">Uon</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
 <li class="circle">org.apache.juneau.marshall.uon.<a href="org/apache/juneau/marshall/uon/UonApply.html" class="type-name-link" title="annotation interface in org.apache.juneau.marshall.uon">UonApply</a> (implements java.lang.annotation.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>)</li>
@@ -4512,7 +4378,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/LocaleFormat.html" class="type-name-link" title="enum class in org.apache.juneau.marshall">LocaleFormat</a></li>
 <li class="circle">org.apache.juneau.marshall.markdown.<a href="org/apache/juneau/marshall/markdown/MarkdownFormat.html" class="type-name-link" title="enum class in org.apache.juneau.marshall.markdown">MarkdownFormat</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/MarshalledAs.html" class="type-name-link" title="enum class in org.apache.juneau.marshall">MarshalledAs</a></li>
-<li class="circle">org.apache.juneau.junit5.<a href="org/apache/juneau/junit5/Mode.html" class="type-name-link" title="enum class in org.apache.juneau.junit5">Mode</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/Nulls.html" class="type-name-link" title="enum class in org.apache.juneau.marshall">Nulls</a></li>
 <li class="circle">org.apache.juneau.petstore.dto.<a href="org/apache/juneau/petstore/dto/OrderStatus.html" class="type-name-link" title="enum class in org.apache.juneau.petstore.dto">OrderStatus</a></li>
 <li class="circle">org.apache.juneau.marshall.uon.<a href="org/apache/juneau/marshall/uon/ParamFormat.html" class="type-name-link" title="enum class in org.apache.juneau.marshall.uon">ParamFormat</a></li>
@@ -4524,7 +4389,6 @@ loadScripts(document, 'script');</script>
 <li class="circle">org.apache.juneau.rest.server.httppart.<a href="org/apache/juneau/rest/server/httppart/RestPartType.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.httppart">RestPartType</a></li>
 <li class="circle">org.apache.juneau.bean.mcp.<a href="org/apache/juneau/bean/mcp/Role.html" class="type-name-link" title="enum class in org.apache.juneau.bean.mcp">Role</a></li>
 <li class="circle">org.apache.juneau.rest.server.auth.saml.<a href="org/apache/juneau/rest/server/auth/saml/SamlBinding.html" class="type-name-link" title="enum class in org.apache.juneau.rest.server.auth.saml">SamlBinding</a></li>
-<li class="circle">org.apache.juneau.junit5.<a href="org/apache/juneau/junit5/Scope.html" class="type-name-link" title="enum class in org.apache.juneau.junit5">Scope</a></li>
 <li class="circle">org.apache.juneau.petstore.dto.<a href="org/apache/juneau/petstore/dto/Species.html" class="type-name-link" title="enum class in org.apache.juneau.petstore.dto">Species</a></li>
 <li class="circle">org.apache.juneau.commons.lang.<a href="org/apache/juneau/commons/lang/StateEnum.html" class="type-name-link" title="enum class in org.apache.juneau.commons.lang">StateEnum</a></li>
 <li class="circle">org.apache.juneau.marshall.<a href="org/apache/juneau/marshall/TemporalFormat.html" class="type-name-link" title="enum class in org.apache.juneau.marshall">TemporalFormat</a></li>

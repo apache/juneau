@@ -3,6 +3,7 @@ AGENTS.md
 /agents/
 /.cursor/
 /.claude/
+/docs/superpowers/
 
 # Dependencies
 /node_modules
@@ -31,3 +32,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 /todo/
+
+# Python bytecode (from scripts/)
+__pycache__/
+*.pyc
+
+# Dev-server lock file
+.dev-server-running

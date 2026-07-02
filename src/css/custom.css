@@ -28,6 +28,9 @@
   --ifm-color-primary-lightest: #81c784;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  /* Widen the docs sidebar (Infima default 300px) so long module labels like
+     "juneau-rest-server-springboot" wrap onto fewer lines. */
+  --doc-sidebar-width: 350px;
 }
 
 /* Scale heading sizes down one level in markdown content.
@@ -499,19 +502,20 @@ java-method-annotation,
 java-project,
 java-doc { font-family: monospace; font-size: medium; }
 
-h3 java-package, h4 java-package,
-h3 java-annotation, h4 java-annotation,
-h3 java-class, h4 java-class,
-h3 java-abstract-class, h4 java-abstract-class,
-h3 java-interface, h4 java-interface,
-h3 java-enum, h4 java-enum,
-h3 java-field, h4 java-field,
-h3 java-field-private, h4 java-field-private,
-h3 java-method, h4 java-method,
-h3 java-method-private, h4 java-method-private,
-h3 java-method-annotation, h4 java-method-annotation,
-h3 java-project, h4 java-project,
-h3 java-doc, h4 java-doc { font-family: monospace; font-size: large; }
+/* Inside headings, java-* names inherit the heading's font-size so the heading
+   level (via .markdown > h2/h3 rules) is the single source of truth for sizing.
+   The base prose rule above (font-size: medium) still governs inline usage. */
+h1 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc),
+h2 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc),
+h3 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc),
+h4 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc) { font-family: monospace; font-size: inherit; }
+
+/* Keep the leading type-icon scaled to the (now heading-sized) name rather than
+   the fixed 'large'/'x-large' sizes used for inline prose icons. */
+h1 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc)::before,
+h2 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc)::before,
+h3 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc)::before,
+h4 :is(java-package, java-annotation, java-class, java-abstract-class, java-interface, java-enum, java-field, java-field-private, java-method, java-method-private, java-method-annotation, java-project, java-doc)::before { font-size: inherit; }
 
 /* Custom node elements for hierarchy levels */
 node-0 { display: block; margin-left: 0em; }

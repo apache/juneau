@@ -64,22 +64,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Simple Variable Language</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.junit5">org.apache.juneau.junit5</a></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice">org.apache.juneau.microservice</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Microservice API</div>
-</div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice.jetty">org.apache.juneau.microservice.jetty</a></div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.microservice">org.apache.juneau.microservice</a></div>
 <div class="col-last even-row-color">
 <div class="block">Microservice API</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.microservice.jetty">org.apache.juneau.microservice.jetty</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Microservice API</div>
+</div>
+<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server">org.apache.juneau.rest.server</a></div>
+<div class="col-last even-row-color">
 <div class="block">REST Server API</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><a href="#org.apache.juneau.rest.server.springboot">org.apache.juneau.rest.server.springboot</a></div>
+<div class="col-last odd-row-color">
 <div class="block">Spring Boot Integration</div>
 </div>
 </div>
@@ -209,44 +207,6 @@ loadScripts(document, 'script');</script>
  <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;beanStore)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Constructor.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.junit5">
-<h2>Uses of <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a> in <a href="../../../junit5/package-summary.html">org.apache.juneau.junit5</a></h2>
-<div class="caption"><span>Classes in <a href="../../../junit5/package-summary.html">org.apache.juneau.junit5</a> that implement <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="../../../junit5/TestBeanStore.html" class="type-name-link" title="class in org.apache.juneau.junit5">TestBeanStore</a></code></div>
-<div class="col-last even-row-color">
-<div class="block">Fluent <a href="../BasicBeanStore.html" title="class in org.apache.juneau.commons.inject"><code>BasicBeanStore</code></a> subclass for declaring test-time bean overrides.</div>
-</div>
-</div>
-<div class="caption"><span>Methods in <a href="../../../junit5/package-summary.html">org.apache.juneau.junit5</a> that return types with arguments of type <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JuneauBeanStoreExtension.</span><code><a href="../../../junit5/JuneauBeanStoreExtension.html#getAttachedStore()" class="member-name-link">getAttachedStore</a>()</code></div>
-<div class="col-last even-row-color">
-<div class="block">Returns the <a href="../../../junit5/JuneauBeanStoreExtension.html#attach(org.apache.juneau.commons.inject.WritableBeanStore)"><code>attached</code></a> bean store, or empty if none.</div>
-</div>
-</div>
-<div class="caption"><span>Methods in <a href="../../../junit5/package-summary.html">org.apache.juneau.junit5</a> with parameters of type <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../../../junit5/JuneauBeanStoreExtension.html" title="class in org.apache.juneau.junit5">JuneauBeanStoreExtension</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">JuneauBeanStoreExtension.</span><code><a href="../../../junit5/JuneauBeanStoreExtension.html#attach(org.apache.juneau.commons.inject.WritableBeanStore)" class="member-name-link">attach</a><wbr>(<a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject">WritableBeanStore</a>&nbsp;store)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Points this extension at a long-lived SUT's <a href="../WritableBeanStore.html" title="interface in org.apache.juneau.commons.inject"><code>WritableBeanStore</code></a> for Mode OVERLAY push/pop wiring.</div>
 </div>
 </div>
 </section>
