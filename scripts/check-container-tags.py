@@ -46,9 +46,13 @@ TAG_MARKERS = (
     "@JettyMicroserviceTest",
     "@TomcatMicroserviceTest",
     "@MicroserviceTest",
-    "@org.apache.juneau.testing.annotations.SpringbootTest",
-    "@org.apache.juneau.testing.annotations.JettyMicroserviceTest",
-    "@org.apache.juneau.testing.annotations.TomcatMicroserviceTest",
+    # Fully-qualified usages. The container marker annotations live in
+    # org.apache.juneau.testing.* (flattened from the former
+    # org.apache.juneau.testing.annotations.* package); @MicroserviceTest
+    # remains in org.apache.juneau.microservice.test.
+    "@org.apache.juneau.testing.SpringbootTest",
+    "@org.apache.juneau.testing.JettyMicroserviceTest",
+    "@org.apache.juneau.testing.TomcatMicroserviceTest",
     "@org.apache.juneau.microservice.test.MicroserviceTest",
 )
 
