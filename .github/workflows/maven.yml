@@ -17,6 +17,9 @@ name: Java CI
 
 on:
   push:
+    branches:
+      - master
+      - juneau-*-branch
     paths-ignore:
       - 'docs/**'
       - '**.md'
