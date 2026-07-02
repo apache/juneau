@@ -103,6 +103,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+						<configuration>
+							<!-- Publish only the shared fixture; keep module-local tests out of consumers' classpaths. -->
+							<includes>
+								<include>**/BasicApiDocsTestFixtures.class</include>
+								<include>**/BasicApiDocsTestFixtures$*.class</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.felix</groupId>

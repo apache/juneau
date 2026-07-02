@@ -26,6 +26,7 @@ A module is "consumer-facing publishable" when it is a leaf artifact
   - reactor aggregators (packaging=pom WITH <modules>) - not artifacts
   - juneau-bom itself
   - juneau-test-utils                    (test-only support)
+  - juneau-test-marshall-utils           (test-only support, marshall-level fixtures)
   - juneau-shaded/*                      (uber-jars, not BOM-managed)
   - juneau-examples/*, juneau-petstore/* (sample apps, not published)
   - juneau-integration-tests             (test-only)
@@ -54,6 +55,7 @@ EXCLUDED_PATH_PREFIXES = (
 EXCLUDED_ARTIFACTS = {
     "juneau-bom",                # the BOM cannot manage itself
     "juneau-test-utils",         # test-only support module
+    "juneau-test-marshall-utils",  # test-only support module (marshall-level fixtures)
     "juneau-integration-tests",  # cross-module test harness, not published
     "juneau",                    # reactor root (defensive; also an aggregator)
 }

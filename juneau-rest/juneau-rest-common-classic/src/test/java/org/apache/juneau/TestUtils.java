@@ -16,51 +16,18 @@
  */
 package org.apache.juneau;
 
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.*;
-import java.util.stream.*;
-
-import org.apache.juneau.commons.utils.*;
-import org.junit.jupiter.api.*;
-
 /**
- * Test utilities for the juneau-marshall module.
+ * Test utilities for the juneau-rest-common-classic module.
  *
- * <p>Contains a marshall-compatible subset of the methods available in the full {@code TestUtils}
- * in {@code juneau-integration-tests}.  Methods that depend on {@code juneau-rest-*} modules are excluded.</p>
+ * <p>Contains the marshall-bound helpers layered on top of the shared {@link BasicTestUtils} base.</p>
  */
-public class TestUtils extends Utils {
+public class TestUtils extends BasicTestUtils {
 
 	public static String assertJson(String expected, Object value) {
 		assertEquals(expected, json5(value));
 		return expected;
-	}
-
-	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
-		var exception = Assertions.assertThrows(expectedType, executable);
-		var messages = getMessages(exception);
-		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
-		return exception;
-	}
-
-	private static String getMessages(Throwable t) {
-		return Stream.iterate(t, Throwable::getCause).takeWhile(e -> e != null).map(Throwable::getMessage).collect(joining("\n"));
-	}
-
-	/**
-	 * Creates an input stream from the specified string.
-	 */
-	public static final ByteArrayInputStream inputStream(String in) {
-		return new ByteArrayInputStream(in.getBytes());
-	}
-
-	/**
-	 * Creates a reader from the specified string.
-	 */
-	public static final StringReader reader(String in) {
-		return new StringReader(in);
 	}
 }

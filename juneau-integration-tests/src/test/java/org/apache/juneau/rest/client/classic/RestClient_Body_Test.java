@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.testutils.pojos.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.junit.jupiter.api.*;
 
 class RestClient_Body_Test extends TestBase {

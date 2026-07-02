@@ -24,6 +24,11 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
+import org.apache.juneau.marshall.testutils.pojos.ImplicitSwappedObject;
+import org.apache.juneau.marshall.testutils.pojos.SwappedObject;
+import org.apache.juneau.marshall.testutils.pojos.TypedBean;
+import org.apache.juneau.marshall.testutils.pojos.TypedBeanImpl;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 

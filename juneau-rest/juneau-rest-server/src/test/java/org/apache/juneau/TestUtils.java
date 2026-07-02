@@ -16,47 +16,17 @@
  */
 package org.apache.juneau;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.*;
-import java.util.stream.*;
-
-import org.apache.juneau.commons.utils.Utils;
-
 /**
  * Minimal module-local test utilities for <c>juneau-rest-server</c>.
  *
  * <p>
- * Provides only the {@code assertThrowsWithMessage} helpers required by the relocated
- * {@link org.apache.juneau.mstat} tests, and inherits the shared object-rendering helpers
- * (such as {@code r(Object)}) from {@link Utils}.
+ * Inherits the shared pure-JDK/commons helpers (such as {@code assertThrowsWithMessage} and {@code r(Object)}) from
+ * {@link BasicTestUtils}, which lives in the marshall-free <c>juneau-test-utils</c> module.
  *
  * <p>
- * This class is intentionally self-contained: it must NOT reference
- * {@code org.apache.juneau.rest.mock.*} or any type that would pull a higher module into
- * <c>juneau-rest-server</c>'s test scope and introduce a Maven reactor cycle. It is deliberately
- * NOT a copy of the full cross-module {@code TestUtils} that lives in the integration-test residual.
+ * This class is intentionally self-contained: it must NOT reference {@code org.apache.juneau.rest.mock.*} or any type
+ * that would pull a higher module into <c>juneau-rest-server</c>'s test scope and introduce a Maven reactor cycle. It is
+ * deliberately NOT a copy of the full cross-module {@code TestUtils} that lives in the integration-test residual.
  */
-public class TestUtils extends Utils {
-
-	/**
-	 * Asserts that the specified executable throws an exception whose chained messages contain the
-	 * specified substring.
-	 *
-	 * @param <T> The expected exception type.
-	 * @param expectedType The expected exception type.
-	 * @param expectedSubstring The substring expected in the exception message chain.
-	 * @param executable The code expected to throw.
-	 * @return The thrown exception.
-	 */
-	public static <T extends Throwable> T assertThrowsWithMessage(Class<T> expectedType, String expectedSubstring, org.junit.jupiter.api.function.Executable executable) {
-		var exception = assertThrows(expectedType, executable);
-		var messages = getMessages(exception);
-		assertTrue(messages.contains(expectedSubstring), "Expected message to contain: " + expectedSubstring + ".\nActual:\n" + messages);
-		return exception;
-	}
-
-	private static String getMessages(Throwable t) {
-		return Stream.iterate(t, Objects::nonNull, Throwable::getCause).map(Throwable::getMessage).collect(Collectors.joining("\n"));
-	}
+public class TestUtils extends BasicTestUtils {
 }

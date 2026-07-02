@@ -19,18 +19,22 @@ package org.apache.juneau;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.commons.utils.*;
-
 /**
- * Test utilities for the juneau-marshall module.
+ * Test utilities for the juneau-bean-mcp module.
  *
- * <p>Contains a marshall-compatible subset of the methods available in the full {@code TestUtils}
- * in {@code juneau-integration-tests}.  Methods that depend on {@code juneau-rest-*} modules are excluded.</p>
+ * <p>Contains the marshall-bound helpers layered on top of the shared {@link BasicTestUtils} base.</p>
  */
-public class TestUtils extends Utils {
+@SuppressWarnings({
+	"unchecked"  // BeanTester cast and generic type handling in test utilities
+})
+public class TestUtils extends BasicTestUtils {
 
 	public static String assertJson(String expected, Object value) {
 		assertEquals(expected, json5(value));
 		return expected;
+	}
+
+	public static final <T> BeanTester<T> testBean(T bean) {
+		return (BeanTester<T>) new BeanTester<>().bean(bean);
 	}
 }

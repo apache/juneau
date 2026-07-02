@@ -36,6 +36,8 @@ import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
 import org.apache.juneau.marshall.urlencoding.UrlEncoding;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
+import org.apache.juneau.marshall.testutils.pojos.XBeans;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 

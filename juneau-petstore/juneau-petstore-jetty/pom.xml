@@ -48,6 +48,13 @@
 
 		<!-- Test dependencies -->
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>${junit.version}</version>

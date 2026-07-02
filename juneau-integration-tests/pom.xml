@@ -203,6 +203,13 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-auth-jwt</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>com.nimbusds</groupId>
 			<artifactId>nimbus-jose-jwt</artifactId>
 			<version>10.3</version>
@@ -282,8 +289,22 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-auth-oidc-rp</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-springboot</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-springboot</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
@@ -375,6 +396,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-tomcat</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -393,6 +421,12 @@
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-test-utils</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test-marshall-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
