@@ -1,6 +1,7 @@
 {
   "modules": {
-    "01": 20,
+    "00": 26,
+    "01": 19,
     "02": 30,
     "03": 34,
     "04": 18,
@@ -62,40 +63,14 @@
     "60": 1,
     "61": 1,
     "62": 1,
-    "Bundles": 1,
-    "DependencyManagement": 1,
-    "JuneauEcosystemOverview": 1,
-    "Security": 1,
-    "StarterProjects": 1,
-    "V10MigrationGuide": 1,
-    "V9MigrationGuide": 1,
+    "JuneauRest": 1,
     "api-metadata": 16,
-    "juneau-bean": 1,
-    "juneau-commons": 1,
-    "juneau-config": 1,
-    "juneau-examples": 1,
-    "juneau-marshall": 1,
-    "juneau-marshall-rdf": 1,
-    "juneau-microservice": 1,
-    "juneau-microservice-jetty": 1,
-    "juneau-microservice-tomcat": 1,
-    "juneau-petstore": 1,
-    "juneau-rest": 1,
-    "juneau-rest-client": 1,
-    "juneau-rest-common": 1,
-    "juneau-rest-mock": 1,
-    "juneau-rest-server": 1,
-    "juneau-rest-server-mcp": 1,
-    "juneau-rest-server-springboot": 1,
-    "juneau-sc": 1,
-    "juneau-shaded": 1,
-    "juneau-test": 1,
     "release-notes": 85
   },
   "schema_version": "1.0.0",
   "source_types": {
     "api-metadata": 16,
     "release-note": 85,
-    "topic": 391
+    "topic": 390
   }
 }

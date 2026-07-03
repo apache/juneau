@@ -26,16 +26,18 @@ Steps performed:
 6. Build Docusaurus documentation (copies static/ contents to build/)
 7. Copy .asf.yaml to docs/build (needed for deployment)
 8. Verify that apidocs were generated
-9. Check topic links (validates all documentation links)
+9. Verify documentation integrity (frontmatter, sidebars, links)
+10. Check topic links (validates all documentation links)
 
 Usage:
     python3 scripts/build-docs.py [--skip-npm] [--skip-maven] [--skip-copy]
-                                  [--staging] [--dry-run] [--verbose]
+                                  [--skip-verify] [--staging] [--dry-run] [--verbose]
     
 Options:
     --skip-npm      Skip npm install and Docusaurus build
     --skip-maven    Skip Maven compilation and site generation
     --skip-copy     Skip copying Maven site to static directory
+    --skip-verify   Skip the documentation-integrity check (verify-docs.py)
     --staging       Build for staging (sets SITE_URL to juneau.staged.apache.org)
     --dry-run       Print the commands that would run; perform no work
     --verbose       Print full per-stage banner output (default: one line per stage)
@@ -563,6 +565,24 @@ def check_topic_links(master_root, docs_dir):
     # It will scan master_root for links and docs_dir for topics
     run_command(['python3', str(checker_script)], cwd=docs_dir)
 
+def verify_docs_integrity(docs_dir):
+    """Run the documentation-integrity checker (verify-docs.py).
+
+    Validates topic frontmatter, filename/slug conventions, sidebars.ts
+    consistency (dangling refs, orphans, directory-vs-sidebar order), and internal
+    links. Only needs the docs checkout, so it runs even in --skip-maven CI smoke
+    runs. Fails the build (non-zero) when the checker reports any errors.
+    """
+    stage_banner("Verifying documentation integrity")
+    script_dir = Path(__file__).parent
+    checker_script = script_dir / 'verify-docs.py'
+    if not checker_script.exists():
+        print(f"WARNING: Documentation integrity checker not found at {checker_script}")
+        return
+    # run_command uses check=True, so a non-zero exit (errors found) raises
+    # CalledProcessError and fails the build in main()'s handler.
+    run_command(['python3', str(checker_script)], cwd=docs_dir)
+
 def check_ai_artifacts(docs_dir):
     """Run AI artifact drift checks."""
     stage_banner("Checking AI artifacts")
@@ -580,6 +600,7 @@ def main():
     parser.add_argument('--skip-npm', action='store_true', help='Skip npm install and Docusaurus build')
     parser.add_argument('--skip-maven', action='store_true', help='Skip Maven compilation and site generation')
     parser.add_argument('--skip-copy', action='store_true', help='Skip copying Maven site to static directory')
+    parser.add_argument('--skip-verify', action='store_true', help='Skip the documentation-integrity check (verify-docs.py)')
     parser.add_argument('--staging', action='store_true', help='Build for staging (sets SITE_URL to juneau.staged.apache.org)')
     parser.add_argument('--dry-run', action='store_true', help='Print every command/copy that would run; perform no work')
     parser.add_argument('--verbose', action='store_true', help='Print full per-stage banner output (default: one line per stage)')
@@ -713,6 +734,13 @@ def main():
                 stage_banner("Copying .asf.yaml to build directory")
                 shutil.copy2(asf_yaml, build_dir)
 
+        # Documentation-integrity check — needs only the docs checkout, so it runs
+        # even in --skip-maven CI smoke runs. Fails the build if errors are found.
+        if not args.skip_verify:
+            verify_docs_integrity(docs_dir)
+        else:
+            print("\n=== Skipping documentation-integrity check ===")
+
         # Checks that require sibling repos — skip in --skip-maven / CI smoke runs
         # where only the docs repo is checked out.
         if not args.skip_maven:
@@ -725,7 +753,7 @@ def main():
         # Publish reminder — only when this was a real, complete build
         # (no skips, not a dry-run). Skipped runs are typically partial/iterative
         # and the reminder would be misleading.
-        any_skip = args.skip_npm or args.skip_maven or args.skip_copy
+        any_skip = args.skip_npm or args.skip_maven or args.skip_copy or args.skip_verify
         if not DRY_RUN and not any_skip:
             print()
             print("Next step — publish:")

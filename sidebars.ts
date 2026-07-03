@@ -380,7 +380,7 @@ const sidebars: SidebarsConfig = {
 							type: 'category',
 							label: '3.24. Simple Variable Language',
 							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.24.SimpleVariableLanguage' },
+							link: { type: 'doc', id: 'topics/03.24.MarshallSimpleVariableLanguage' },
 							items: [
 								{
 									type: 'doc',
@@ -404,7 +404,7 @@ const sidebars: SidebarsConfig = {
 								},
 								{
 									type: 'doc',
-									id: 'topics/03.24.05.ValueAnnotationBasics',
+									id: 'topics/03.24.05.ValueAnnotation',
 									label: '3.24.5. @Value Annotation Basics',
 								},
 								{
@@ -416,7 +416,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/03.25.Encoders',
+							id: 'topics/03.25.MarshallEncoders',
 							label: '3.25. Encoders',
 						},
 						{
@@ -658,17 +658,17 @@ const sidebars: SidebarsConfig = {
 							items: [
 								{
 									type: 'doc',
-									id: 'topics/03.36.01.ProtobufBasics',
+									id: 'topics/03.36.01.Protobuf',
 									label: '3.36.1. Protobuf Text Format Basics',
 								},
 								{
 									type: 'doc',
-									id: 'topics/03.36.02.ProtobufBinaryBasics',
+									id: 'topics/03.36.02.ProtobufBinary',
 									label: '3.36.2. Protobuf Binary Format Basics',
 								},
 								{
 									type: 'doc',
-									id: 'topics/03.36.03.ParquetBasics',
+									id: 'topics/03.36.03.Parquet',
 									label: '3.36.3. Parquet Basics',
 								},
 							],
@@ -732,7 +732,7 @@ const sidebars: SidebarsConfig = {
 							items: [
 								{
 									type: 'doc',
-									id: 'topics/03.40.01.Json5lBasics',
+									id: 'topics/03.40.01.Json5l',
 									label: '3.40.1. JSON5L Basics',
 								},
 							],
@@ -765,7 +765,7 @@ const sidebars: SidebarsConfig = {
 							items: [
 								{
 									type: 'doc',
-									id: 'topics/03.45.01.IniBasics',
+									id: 'topics/03.45.01.Ini',
 									label: '3.45.1. INI Basics',
 								},
 							],
@@ -821,7 +821,7 @@ const sidebars: SidebarsConfig = {
 					items: [
 						{
 							type: 'doc',
-							id: 'topics/04.01.RdfBasics',
+							id: 'topics/04.01.Rdf',
 							label: '4.1. RDF Basics',
 						},
 						{
@@ -1005,7 +1005,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/06.07.Listeners',
+							id: 'topics/06.07.ConfigListeners',
 							label: '6.7. Listeners',
 						},
 						{
@@ -1289,7 +1289,7 @@ const sidebars: SidebarsConfig = {
 							type: 'category',
 							label: '10.4. HTTP Parts',
 							collapsed: true,
-							link: { type: 'doc', id: 'topics/10.04.HttpParts' },
+							link: { type: 'doc', id: 'topics/10.04.RestServerHttpParts' },
 							items: [
 								{
 									type: 'doc',
@@ -1390,7 +1390,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.17.Encoders',
+							id: 'topics/10.17.RestServerEncoders',
 							label: '10.17. Encoders',
 						},
 						{
@@ -1400,7 +1400,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.19.SvlVariables',
+							id: 'topics/10.19.RestServerSvlVariables',
 							label: '10.19. SVL Variables',
 						},
 						{
@@ -1541,7 +1541,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/10.32.LoggingAndDebugging',
+							id: 'topics/10.32.RestServerLoggingAndDebugging',
 							label: '10.32. Logging / Debugging',
 						},
 						{
@@ -1708,7 +1708,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/11.juneau-rest-server-mcp',
-							label: '11.1. juneau-rest-server-mcp Basics',
+							label: '11. juneau-rest-server-mcp Basics',
 						},
 					],
 					link: {
@@ -1837,7 +1837,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/13.10.LoggingAndDebugging',
+							id: 'topics/13.10.RestClientLoggingAndDebugging',
 							label: '13.10. Logging and Debugging',
 						},
 						{
@@ -1980,7 +1980,7 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.08.Listeners',
+							id: 'topics/15.08.MicroserviceCoreListeners',
 							label: '15.8. Listeners',
 						},
 						{
@@ -2073,7 +2073,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/17.juneau-microservice-tomcat',
-							label: '17.1. juneau-microservice-tomcat Basics',
+							label: '17. juneau-microservice-tomcat Basics',
 						},
 					],
 					link: {
@@ -2110,7 +2110,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/19.Bundles',
-							label: '19.1. Juneau Bundle Artifacts',
+							label: '19. Juneau Bundle Artifacts',
 						},
 					],
 					link: {
@@ -2142,7 +2142,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/21.StarterProjects',
-							label: '21.1. Starter Projects',
+							label: '21. Starter Projects',
 						},
 					],
 					link: {
@@ -2158,7 +2158,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/22.juneau-petstore',
-							label: '22.1. juneau-petstore Overview',
+							label: '22. juneau-petstore Overview',
 						},
 					],
 					link: {
@@ -2174,7 +2174,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/23.juneau-examples',
-							label: '23.1. juneau-examples-core',
+							label: '23. juneau-examples-core',
 						},
 					],
 					link: {
@@ -2257,7 +2257,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/26.V9MigrationGuide',
-							label: '26.1. v9.0 Migration Guide',
+							label: '26. v9.0 Migration Guide',
 						},
 					],
 					link: {
@@ -2273,7 +2273,7 @@ const sidebars: SidebarsConfig = {
 						{
 							type: 'doc',
 							id: 'topics/27.V10MigrationGuide',
-							label: '27.1. v10.0 Migration Guide',
+							label: '27. v10.0 Migration Guide',
 						},
 					],
 					link: {

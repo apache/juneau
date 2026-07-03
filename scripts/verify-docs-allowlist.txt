@@ -1,0 +1,24 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file *
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file        *
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance            *
+# * with the License.  You may obtain a copy of the License at                                                              *
+# *                                                                                                                         *
+# *  http://www.apache.org/licenses/LICENSE-2.0                                                                             *
+# *                                                                                                                         *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an  *
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
+# * specific language governing permissions and limitations under the License.                                              *
+# ***************************************************************************************************************************
+#
+# Orphan allowlist for verify-docs.py (check #7).
+#
+# List one EFFECTIVE doc id per line to suppress the "orphan" error for a topic
+# file that intentionally is not referenced anywhere in sidebars.ts.
+#
+# The effective doc id is the page's explicit frontmatter `id:` when present,
+# otherwise the filename without the trailing `.md` (e.g. 03.03.01.JavaBeansSupport).
+#
+# Blank lines and lines beginning with '#' are ignored.
+#
+# There are currently no intentional orphans, so this file is empty.

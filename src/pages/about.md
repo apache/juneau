@@ -31,11 +31,11 @@ The Juneau ecosystem consists of the following parts:
 | Component | Description |
 |-----------|-------------|
 | **juneau-core** | |
-| [juneau-commons](/docs/topics/JuneauCommonsBasics) | Bean metadata framework, SVL string-variable resolution, and shared utilities (I/O, reflection, HTTP, collections) used across Juneau modules. |
-| [juneau-marshall](/docs/topics/JuneauMarshallBasics) | POJO marshalling for 25+ wire formats — JSON/JSON5/JSONL/JCS, XML/SOAP, HTML, YAML/TOML/HOCON/HJSON/INI, CBOR/BSON/MessagePack, Protobuf/Prototext, UON/URL-encoding, CSV, Parquet, Markdown, SSE, OpenAPI, and PlainText — plus a token-streaming API; no external dependencies required. |
-| [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdfOverview) | Extended marshalling support for RDF/XML, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
-| [juneau-config](/docs/topics/JuneauConfigBasics) | Multi-format (INI and YAML) configuration file API with POJO support, variable resolution, and real-time file watching. |
-| [juneau-test](/docs/topics/JuneauAssertionBasics) | Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions for readable, expressive unit tests. |
+| [juneau-commons](/docs/topics/JuneauCommons) | Bean metadata framework, SVL string-variable resolution, and shared utilities (I/O, reflection, HTTP, collections) used across Juneau modules. |
+| [juneau-marshall](/docs/topics/JuneauMarshall) | POJO marshalling for 25+ wire formats — JSON/JSON5/JSONL/JCS, XML/SOAP, HTML, YAML/TOML/HOCON/HJSON/INI, CBOR/BSON/MessagePack, Protobuf/Prototext, UON/URL-encoding, CSV, Parquet, Markdown, SSE, OpenAPI, and PlainText — plus a token-streaming API; no external dependencies required. |
+| [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdf) | Extended marshalling support for RDF/XML, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
+| [juneau-config](/docs/topics/JuneauConfig) | Multi-format (INI and YAML) configuration file API with POJO support, variable resolution, and real-time file watching. |
+| [juneau-test](/docs/topics/JuneauTest) | Fluent assertions, Bean-Centric Testing, and JUnit 5 extensions for readable, expressive unit tests. |
 | **juneau-bean** | |
 | [juneau-bean-atom](/docs/topics/JuneauBeanAtom) | DTOs for the Atom Syndication Format (RFC 4287). |
 | [juneau-bean-common](/docs/topics/JuneauBeanCommon) | Shared DTO base classes and utilities used across juneau-bean modules. |
@@ -49,10 +49,10 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-bean-rfc7807](/docs/topics/JuneauBeanRfc7807) | DTOs for RFC 7807 Problem Details. |
 | [juneau-bean-swagger-v2](/docs/topics/JuneauBeanSwagger2) | DTOs for the Swagger/OpenAPI v2 specification. |
 | **juneau-rest** | |
-| [juneau-rest-common](/docs/topics/JuneauRestCommonBasics) | Shared types and utilities for the REST server and client stacks. |
-| [juneau-rest-server](/docs/topics/JuneauRestServerBasics) | Annotation-driven REST server with automatic OpenAPI/Swagger docs and content negotiation. |
-| [juneau-rest-server-springboot](/docs/topics/JuneauRestServerSpringbootBasics) | Spring Boot auto-configuration for juneau-rest-server. |
-| [juneau-rest-server-mcp](/docs/topics/JuneauRestServerMcpBasics) | Model Context Protocol (MCP) server endpoint support. |
+| [juneau-rest-common](/docs/topics/JuneauRestCommon) | Shared types and utilities for the REST server and client stacks. |
+| [juneau-rest-server](/docs/topics/JuneauRestServer) | Annotation-driven REST server with automatic OpenAPI/Swagger docs and content negotiation. |
+| [juneau-rest-server-springboot](/docs/topics/JuneauRestServerSpringboot) | Spring Boot auto-configuration for juneau-rest-server. |
+| [juneau-rest-server-mcp](/docs/topics/JuneauRestServerMcp) | Model Context Protocol (MCP) server endpoint support. |
 | [juneau-rest-server-auth-jwt](/docs/topics/AuthFilterFramework) | JWT authentication filter. |
 | [juneau-rest-server-auth-saml](/docs/topics/SamlAuthSupport) | SAML 2.0 authentication filter. |
 | [juneau-rest-server-auth-oauth](/docs/topics/OAuthAuthSupport) | OAuth 2.0 / OIDC authentication and token introspection filter. |
@@ -65,16 +65,16 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-rest-server-view-thymeleaf](/docs/topics/ThymeleafViewSupport) | Thymeleaf template view support. |
 | [juneau-rest-server-view-mustache](/docs/topics/MustacheViewSupport) | Mustache template view support. |
 | [juneau-rest-server-view-freemarker](/docs/topics/FreemarkerViewSupport) | Freemarker template view support. |
-| [juneau-rest-client](/docs/topics/JuneauRestClientBasics) | REST client with POJO mapping and type-safe proxy interface generation. |
+| [juneau-rest-client](/docs/topics/JuneauRestClient) | REST client with POJO mapping and type-safe proxy interface generation. |
 | [juneau-rest-client-apache-httpclient-45](/docs/topics/RestClientApacheHttpClient45) | Adapter for Apache HttpClient 4.5.x. |
 | [juneau-rest-client-apache-httpclient-50](/docs/topics/RestClientApacheHttpClient50) | Adapter for Apache HttpClient 5.x. |
 | [juneau-rest-client-okhttp](/docs/topics/RestClientOkHttp) | Adapter for OkHttp. |
 | [juneau-rest-client-jetty](/docs/topics/RestClientJetty) | Adapter for Jetty HTTP client. |
-| [juneau-rest-mock](/docs/topics/JuneauRestMockBasics) | Serverless REST mock client for unit testing without a servlet container. |
+| [juneau-rest-mock](/docs/topics/JuneauRestMock) | Serverless REST mock client for unit testing without a servlet container. |
 | **juneau-microservice** | |
-| [juneau-microservice](/docs/topics/JuneauMicroserviceBasics) | Core microservice framework with lifecycle management and REST API wiring. |
-| [juneau-microservice-jetty](/docs/topics/JuneauMicroserviceJettyBasics) | Jetty-embedded microservice launcher. |
-| [juneau-microservice-tomcat](/docs/topics/JuneauMicroserviceTomcatBasics) | Tomcat-embedded microservice launcher. |
+| [juneau-microservice](/docs/topics/JuneauMicroservice) | Core microservice framework with lifecycle management and REST API wiring. |
+| [juneau-microservice-jetty](/docs/topics/JuneauMicroserviceJetty) | Jetty-embedded microservice launcher. |
+| [juneau-microservice-tomcat](/docs/topics/JuneauMicroserviceTomcat) | Tomcat-embedded microservice launcher. |
 | **juneau-sc** | |
 | [juneau-sc-server](/docs/topics/ScServerOverview) | Centralized configuration server exposing juneau-config files over REST. |
 | [juneau-sc-client](/docs/topics/ScClientOverview) | Client for fetching configuration from a juneau-sc-server instance. |
@@ -90,8 +90,8 @@ The Juneau ecosystem consists of the following parts:
 | [juneau-springboot-bundle](/docs/topics/Bundles) | Spring Boot application bundle with REST server included. |
 | [juneau-observability-otlp-bundle](/docs/topics/Bundles) | Bundle combining OpenTelemetry and Micrometer observability modules. |
 | **Examples** | |
-| [juneau-examples-core](/docs/topics/JuneauExamplesCore) | Standalone examples demonstrating core marshalling and configuration APIs. |
-| [juneau-petstore](/docs/topics/JuneauPetstoreOverview) | Sample Petstore REST application available as Jetty, Tomcat, and Spring Boot variants. |
+| [juneau-examples-core](/docs/topics/JuneauExamples) | Standalone examples demonstrating core marshalling and configuration APIs. |
+| [juneau-petstore](/docs/topics/JuneauPetstore) | Sample Petstore REST application available as Jetty, Tomcat, and Spring Boot variants. |
 
 Questions via email to <a href="mailto:dev@juneau.apache.org?Subject=Apache%20Juneau%20question" target="_blank">dev@juneau.apache.org</a> are always welcome.
 
