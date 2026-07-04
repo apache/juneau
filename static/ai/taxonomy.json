@@ -63,7 +63,6 @@
     "60": 1,
     "61": 1,
     "62": 1,
-    "JuneauRest": 1,
     "api-metadata": 16,
     "release-notes": 85
   },
@@ -71,6 +70,6 @@
   "source_types": {
     "api-metadata": 16,
     "release-note": 85,
-    "topic": 401
+    "topic": 400
   }
 }

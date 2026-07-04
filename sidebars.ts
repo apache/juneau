@@ -55,6 +55,11 @@ const sidebars: SidebarsConfig = {
 				},
 				{
 					type: 'category',
+					label: 'Core & Data',
+					collapsed: false,
+					items: [
+				{
+					type: 'category',
 					label: '2. juneau-commons',
 					collapsed: true,
 					link: {
@@ -1198,11 +1203,17 @@ const sidebars: SidebarsConfig = {
 						id: 'topics/07.juneau-test',
 					},
 				},
-				{
-					type: 'doc',
-					id: 'topics/08.juneau-rest',
-					label: '8. juneau-rest',
+					],
 				},
+				{
+					type: 'category',
+					label: 'REST',
+					collapsed: false,
+					link: {
+						type: 'doc',
+						id: 'topics/08.juneau-rest',
+					},
+					items: [
 				{
 					type: 'category',
 					label: '9. juneau-rest-common',
@@ -1993,6 +2004,13 @@ const sidebars: SidebarsConfig = {
 						id: 'topics/14.juneau-rest-mock',
 					},
 				},
+					],
+				},
+				{
+					type: 'category',
+					label: 'Microservices',
+					collapsed: false,
+					items: [
 				{
 					type: 'category',
 					label: '15. juneau-microservice',
@@ -2157,184 +2175,191 @@ const sidebars: SidebarsConfig = {
 						id: 'topics/18.juneau-sc',
 					},
 				},
-				{
-					type: 'category',
-					label: '19. Bundles',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/19.Bundles',
-							label: '19. Juneau Bundle Artifacts',
-						},
 					],
-					link: {
-						type: 'doc',
-						id: 'topics/19.Bundles',
-					},
 				},
 				{
 					type: 'category',
-					label: '20. Dependency Management',
-					collapsed: true,
+					label: 'Examples & Showcases',
+					collapsed: false,
 					items: [
 						{
-							type: 'doc',
-							id: 'topics/20.01.NativeImageAndLayeredJars',
-							label: '20.1. GraalVM Native Image & Docker Layering',
+							type: 'category',
+							label: '19. juneau-petstore',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/19.juneau-petstore',
+									label: '19. juneau-petstore Overview',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/19.juneau-petstore',
+							},
+						},
+						{
+							type: 'category',
+							label: '20. juneau-examples',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/20.juneau-examples',
+									label: '20. juneau-examples-core',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/20.juneau-examples',
+							},
 						},
 					],
-					link: {
-						type: 'doc',
-						id: 'topics/20.DependencyManagement',
-					},
 				},
 				{
 					type: 'category',
-					label: '21. Starter Projects',
-					collapsed: true,
+					label: 'Packaging & Deployment',
+					collapsed: false,
 					items: [
 						{
-							type: 'doc',
-							id: 'topics/21.StarterProjects',
-							label: '21. Starter Projects',
+							type: 'category',
+							label: '21. Dependency Management',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/21.01.NativeImageAndLayeredJars',
+									label: '21.1. GraalVM Native Image & Docker Layering',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/21.DependencyManagement',
+							},
+						},
+						{
+							type: 'category',
+							label: '23. juneau-shaded',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/23.01.JuneauShadedCore',
+									label: '23.1. juneau-shaded-core',
+								},
+								{
+									type: 'doc',
+									id: 'topics/23.02.JuneauShadedRestClient',
+									label: '23.2. juneau-shaded-rest-client',
+								},
+								{
+									type: 'doc',
+									id: 'topics/23.03.JuneauShadedRestServer',
+									label: '23.3. juneau-shaded-rest-server',
+								},
+								{
+									type: 'doc',
+									id: 'topics/23.04.JuneauShadedRestServerSpringboot',
+									label: '23.4. juneau-shaded-rest-server-springboot',
+								},
+								{
+									type: 'doc',
+									id: 'topics/23.05.JuneauShadedAll',
+									label: '23.5. juneau-shaded-all',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/23.juneau-shaded',
+							},
+						},
+						{
+							type: 'category',
+							label: '24. Starter Projects',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/24.StarterProjects',
+									label: '24. Starter Projects',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/24.StarterProjects',
+							},
 						},
 					],
-					link: {
-						type: 'doc',
-						id: 'topics/21.StarterProjects',
-					},
 				},
 				{
 					type: 'category',
-					label: '22. juneau-petstore',
-					collapsed: true,
+					label: 'Guides & Reference',
+					collapsed: false,
 					items: [
 						{
-							type: 'doc',
-							id: 'topics/22.juneau-petstore',
-							label: '22. juneau-petstore Overview',
+							type: 'category',
+							label: '25. Security',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/25.01.MarshallingSecurity',
+									label: '25.1. Marshalling Security',
+								},
+								{
+									type: 'doc',
+									id: 'topics/25.02.SvlSecurity',
+									label: '25.2. SVL Security',
+								},
+								{
+									type: 'doc',
+									id: 'topics/25.03.RestSecurity',
+									label: '25.3. REST Security',
+								},
+								{
+									type: 'doc',
+									id: 'topics/25.04.ContentSecurityPolicy',
+									label: '25.4. Content Security Policy',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/25.Security',
+							},
+						},
+						{
+							type: 'category',
+							label: '26. V9.0 Migration Guide',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/26.V9MigrationGuide',
+									label: '26. v9.0 Migration Guide',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/26.V9MigrationGuide',
+							},
+						},
+						{
+							type: 'category',
+							label: '27. V10.0 Migration Guide',
+							collapsed: true,
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/27.V10MigrationGuide',
+									label: '27. v10.0 Migration Guide',
+								},
+							],
+							link: {
+								type: 'doc',
+								id: 'topics/27.V10MigrationGuide',
+							},
 						},
 					],
-					link: {
-						type: 'doc',
-						id: 'topics/22.juneau-petstore',
-					},
-				},
-				{
-					type: 'category',
-					label: '23. juneau-examples',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/23.juneau-examples',
-							label: '23. juneau-examples-core',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/23.juneau-examples',
-					},
-				},
-				{
-					type: 'category',
-					label: '24. juneau-shaded',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/24.01.JuneauShadedCore',
-							label: '24.1. juneau-shaded-core',
-						},
-						{
-							type: 'doc',
-							id: 'topics/24.02.JuneauShadedRestClient',
-							label: '24.2. juneau-shaded-rest-client',
-						},
-						{
-							type: 'doc',
-							id: 'topics/24.03.JuneauShadedRestServer',
-							label: '24.3. juneau-shaded-rest-server',
-						},
-						{
-							type: 'doc',
-							id: 'topics/24.04.JuneauShadedRestServerSpringboot',
-							label: '24.4. juneau-shaded-rest-server-springboot',
-						},
-						{
-							type: 'doc',
-							id: 'topics/24.05.JuneauShadedAll',
-							label: '24.5. juneau-shaded-all',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/24.juneau-shaded',
-					},
-				},
-				{
-					type: 'category',
-					label: '25. Security',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/25.01.MarshallingSecurity',
-							label: '25.1. Marshalling Security',
-						},
-						{
-							type: 'doc',
-							id: 'topics/25.02.SvlSecurity',
-							label: '25.2. SVL Security',
-						},
-						{
-							type: 'doc',
-							id: 'topics/25.03.RestSecurity',
-							label: '25.3. REST Security',
-						},
-						{
-							type: 'doc',
-							id: 'topics/25.04.ContentSecurityPolicy',
-							label: '25.4. Content Security Policy',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/25.Security',
-					},
-				},
-				{
-					type: 'category',
-					label: '26. V9.0 Migration Guide',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/26.V9MigrationGuide',
-							label: '26. v9.0 Migration Guide',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/26.V9MigrationGuide',
-					},
-				},
-				{
-					type: 'category',
-					label: '27. V10.0 Migration Guide',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/27.V10MigrationGuide',
-							label: '27. v10.0 Migration Guide',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/27.V10MigrationGuide',
-					},
 				},
 			],
 		},
