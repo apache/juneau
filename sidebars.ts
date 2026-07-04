@@ -108,9 +108,22 @@ const sidebars: SidebarsConfig = {
 							label: '2.9. I/O Package',
 						},
 						{
-							type: 'doc',
-							id: 'topics/02.10.JuneauCommonsInject',
+							type: 'category',
 							label: '2.10. Inject Package',
+							collapsed: true,
+							link: { type: 'doc', id: 'topics/02.10.JuneauCommonsInject' },
+							items: [
+								{
+									type: 'doc',
+									id: 'topics/02.10.01.ValueAnnotation',
+									label: '2.10.1. @Value Annotation Basics',
+								},
+								{
+									type: 'doc',
+									id: 'topics/02.10.02.ValueFrameworkInternal',
+									label: '2.10.2. @Value Framework-Internal Adoption',
+								},
+							],
 						},
 						{
 							type: 'doc',
@@ -149,671 +162,713 @@ const sidebars: SidebarsConfig = {
 						},
 					],
 				},
-				{
-					type: 'category',
-					label: '3. juneau-marshall',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/03.01.Marshallers',
-							label: '3.1. Marshallers',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.02.SerializersAndParsers',
-							label: '3.2. Serializers and Parsers',
-						},
-						{
-							type: 'category',
-							label: '3.3. Bean Contexts',
-							collapsed: true,
-							link: {
-								type: 'doc',
-								id: 'topics/03.03.BeanContexts',
-							},
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.03.01.JavaBeansSupport',
-									label: '3.3.1. Java Beans Support',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.02.JavaRecordsSupport',
-									label: '3.3.2. Java Records Support',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.03.BeanTypeAnnotation',
-									label: '3.3.3. @BeanType Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.04.BeanPropAnnotation',
-									label: '3.3.4. @BeanProp Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.05.BeanCtorAnnotation',
-									label: '3.3.5. @BeanCtor Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.06.BeanIgnoreAnnotation',
-									label: '3.3.6. @MarshalledIgnore Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.07.NamePropertyAnnotation',
-									label: '3.3.7. @NameProperty Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.08.ParentPropertyAnnotation',
-									label: '3.3.8. @ParentProperty Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.09.PojoBuilders',
-									label: '3.3.9. POJO Builders',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.10.BypassSerialization',
-									label: '3.3.10. Bypass Serialization using `Readers` and `InputStreams`',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.03.11.ViewProjection',
-									label: '3.3.11. View-Based Projection',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.04.HttpPartSerializersParsers',
-							label: '3.4. HTTP Part Serializers and Parsers',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.05.ContextSettings',
-							label: '3.5. Context Settings',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.06.NullAndInclusionPolicies',
-							label: '3.6. Null & Inclusion Policies',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.07.ContextAnnotations',
-							label: '3.7. Context Annotations',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.08.JsonMap',
-							label: '3.8. JsonMap and JsonList',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.09.MarshalledNodeAndJsonPointer',
-							label: '3.9. Tree Model & RFC 6901 JSON-Pointer',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.10.ComplexDataTypes',
-							label: '3.10. Complex Data Types',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.11.SupportedJdkDatatypes',
-							label: '3.11. Supported JDK Datatypes',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.12.SerializerSetsParserSets',
-							label: '3.12. SerializerSets and ParserSets',
-						},
-						{
-							type: 'category',
-							label: '3.13. Swaps',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.13.Swaps' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.13.01.DefaultSwaps',
-									label: '3.13.1. Default Swaps',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.13.02.AutoSwaps',
-									label: '3.13.2. Auto-detected swaps',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.13.03.PerMediaTypeSwaps',
-									label: '3.13.3. Per-media-type Swaps',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.13.04.OneWaySwaps',
-									label: '3.13.4. One-way Swaps',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.13.05.SwapAnnotation',
-									label: '3.13.5. @Swap Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.13.06.TemplatedSwaps',
-									label: '3.13.6. Templated Swaps',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.13.07.SurrogateClasses',
-									label: '3.13.7. Surrogate Classes',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.14.DynamicallyAppliedAnnotations',
-							label: '3.14. Dynamically Applied Annotations',
-						},
-						{
-							type: 'category',
-							label: '3.15. Bean Dictionaries',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.15.BeanDictionaries' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.15.01.BeanSubTypes',
-									label: '3.15.1. Bean Subtypes',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.16.VirtualBeans',
-							label: '3.16. Virtual Beans',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.17.Recursion',
-							label: '3.17. Non-Tree Models and Recursion Detection',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.18.ParsingIntoGenericModels',
-							label: '3.18. Parsing into Generic Models',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.19.ReadingContinuousStreams',
-							label: '3.19. Reading Continuous Streams',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.20.LargeDatasetStreaming',
-							label: '3.20. Large-Dataset Streaming',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.21.MarshallingUris',
-							label: '3.21. URIs',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.22.JacksonComparison',
-							label: '3.22. Comparison with Jackson',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.23.PojoCategories',
-							label: '3.23. POJO Categories',
-						},
-						{
-							type: 'category',
-							label: '3.24. Simple Variable Language',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.24.MarshallSimpleVariableLanguage' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.24.01.SvlVariables',
-									label: '3.24.1. SVL Variables',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.24.02.VarResolvers',
-									label: '3.24.2. VarResolvers and VarResolverSessions',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.24.03.DefaultVarResolver',
-									label: '3.24.3. VarResolver.DEFAULT',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.24.04.SvlOtherNotes',
-									label: '3.24.4. Other Notes',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.24.05.ValueAnnotation',
-									label: '3.24.5. @Value Annotation Basics',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.24.06.ValueFrameworkInternal',
-									label: '3.24.6. @Value Framework-Internal Adoption',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.25.MarshallEncoders',
-							label: '3.25. Encoders',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.26.ObjectTools',
-							label: '3.26. Object Tools',
-						},
-						{
-							type: 'category',
-							label: '3.27. JSON Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.27.JsonSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.27.01.JsonMethodology',
-									label: '3.27.1. JSON Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.27.02.JsonSerializers',
-									label: '3.27.2. JSON Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.27.03.Json5',
-									label: '3.27.3. JSON 5',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.27.04.JsonParsers',
-									label: '3.27.4. JSON Parsers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.27.05.JsonAnnotation',
-									label: '3.27.5. @Json Annotation',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.28.JsonSchemaDetails',
-							label: '3.28. JSON-Schema Support',
-						},
-						{
-							type: 'category',
-							label: '3.29. XML Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.29.XmlSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.29.01.XmlMethodology',
-									label: '3.29.1. XML Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.29.02.XmlSerializers',
-									label: '3.29.2. XML Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.29.03.XmlParsers',
-									label: '3.29.3. XML Parsers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.29.04.XmlBeanTypeNameAnnotation',
-									label: '3.29.4. @Marshalled(typeName) Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.29.05.XmlChildNameAnnotation',
-									label: '3.29.5. @Xml(childName) Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.29.06.XmlFormatAnnotation',
-									label: '3.29.6. @Xml(format) Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.29.07.XmlNamespaces',
-									label: '3.29.7. Namespaces',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.30. HTML Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.30.HtmlSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.30.01.HtmlMethodology',
-									label: '3.30.1. HTML Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.02.HtmlSerializers',
-									label: '3.30.2. HTML Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.03.HtmlParsers',
-									label: '3.30.3. HTML Parsers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.04.HtmlAnnotation',
-									label: '3.30.4. @Html Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.05.HtmlRenderAnnotation',
-									label: '3.30.5. @Html(render) Annotation',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.06.HtmlDocSerializer',
-									label: '3.30.6. HtmlDocSerializer',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.07.BasicHtmlDocTemplate',
-									label: '3.30.7. BasicHtmlDocTemplate',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.30.08.HtmlCustomTemplates',
-									label: '3.30.8. Custom Templates',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.31.HtmlSchemaSupport',
-							label: '3.31. HTML-Schema Support',
-						},
-						{
-							type: 'category',
-							label: '3.32. UON Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.32.UonSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.32.01.UonMethodology',
-									label: '3.32.1. UON Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.32.02.UonSerializers',
-									label: '3.32.2. UON Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.32.03.UonParsers',
-									label: '3.32.3. UON Parsers',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.33. URL-Encoding Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.33.UrlEncodingSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.33.01.UrlEncMethodology',
-									label: '3.33.1. URL-Encoding Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.33.02.UrlEncSerializers',
-									label: '3.33.2. URL-Encoding Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.33.03.UrlEncParsers',
-									label: '3.33.3. URL-Encoding Parsers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.33.04.UrlEncodingAnnotation',
-									label: '3.33.4. @UrlEncoding Annotation',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.34. MessagePack Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.34.MessagePackSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.34.01.MsgPackSerializers',
-									label: '3.34.1. MessagePack Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.34.02.MsgPackParsers',
-									label: '3.34.2. MessagePack Parsers',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.35. OpenApi Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.35.OpenApiSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.35.01.OpenApiMethodology',
-									label: '3.35.1. OpenAPI Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.35.02.OpenApiSerializers',
-									label: '3.35.2. OpenAPI Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.35.03.OpenApiParsers',
-									label: '3.35.3. OpenAPI Parsers',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.36. TOML Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.36.TomlSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.36.01.Protobuf',
-									label: '3.36.1. Protobuf Text Format Basics',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.36.02.ProtobufBinary',
-									label: '3.36.2. Protobuf Binary Format Basics',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.36.03.Parquet',
-									label: '3.36.3. Parquet Basics',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.37. YAML Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.37.YamlSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.37.01.YamlMethodology',
-									label: '3.37.1. YAML Methodology',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.37.02.YamlSerializers',
-									label: '3.37.2. YAML Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.37.03.YamlParsers',
-									label: '3.37.3. YAML Parsers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.37.04.YamlAnnotation',
-									label: '3.37.4. @YamlConfig Annotation',
-								},
-							],
-						},
-						{
-							type: 'category',
-							label: '3.38. CSV Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.38.CsvSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.38.01.CsvSerializers',
-									label: '3.38.1. CSV Serializers',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.38.02.CsvParsers',
-									label: '3.38.2. CSV Parsers',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.39.Markdown',
-							label: '3.39. Markdown Support',
-						},
-						{
-							type: 'category',
-							label: '3.40. JSONL Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.40.JsonlSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.40.01.Json5l',
-									label: '3.40.1. JSON5L Basics',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.41.Hjson',
-							label: '3.41. Hjson Support',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.42.Jcs',
-							label: '3.42. JCS Support',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.43.Bson',
-							label: '3.43. BSON Support',
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.44.Cbor',
-							label: '3.44. CBOR Support',
-						},
-						{
-							type: 'category',
-							label: '3.45. HOCON Support',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.45.HoconSupport' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.45.01.Ini',
-									label: '3.45.1. INI Basics',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.46.Sse',
-							label: '3.46. SSE Support',
-						},
-						{
-							type: 'category',
-							label: '3.47. Token / Record Streaming',
-							collapsed: true,
-							link: { type: 'doc', id: 'topics/03.47.TokenRecordStreaming' },
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/03.47.01.RecordStreaming',
-									label: '3.47.1. Record Streaming',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.47.02.TokenStreaming',
-									label: '3.47.2. Token Streaming',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.47.03.ArrayRecordStreaming',
-									label: '3.47.3. Array-Record Streaming',
-								},
-								{
-									type: 'doc',
-									id: 'topics/03.47.04.RestStreamingIntegration',
-									label: '3.47.4. REST Streaming Integration',
-								},
-							],
-						},
-						{
-							type: 'doc',
-							id: 'topics/03.48.BestPractices',
-							label: '3.48. Best Practices',
-						},
-					],
-					link: {
+			{
+				type: 'category',
+				label: '3. juneau-marshall',
+				collapsed: true,
+				items: [
+					{
 						type: 'doc',
-						id: 'topics/03.juneau-marshall',
+						id: 'topics/03.01.Marshallers',
+						label: '3.1. Marshallers',
 					},
+					{
+						type: 'doc',
+						id: 'topics/03.02.SerializersAndParsers',
+						label: '3.2. Serializers and Parsers',
+					},
+					{
+						type: 'category',
+						label: '3.3. Bean Contexts',
+						collapsed: true,
+						link: {
+							type: 'doc',
+							id: 'topics/03.03.BeanContexts',
+						},
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.03.01.JavaBeansSupport',
+								label: '3.3.1. Java Beans Support',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.02.JavaRecordsSupport',
+								label: '3.3.2. Java Records Support',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.03.BeanTypeAnnotation',
+								label: '3.3.3. @BeanType Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.04.BeanPropAnnotation',
+								label: '3.3.4. @BeanProp Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.05.BeanCtorAnnotation',
+								label: '3.3.5. @BeanCtor Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.06.BeanIgnoreAnnotation',
+								label: '3.3.6. @MarshalledIgnore Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.07.NamePropertyAnnotation',
+								label: '3.3.7. @NameProperty Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.08.ParentPropertyAnnotation',
+								label: '3.3.8. @ParentProperty Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.09.PojoBuilders',
+								label: '3.3.9. POJO Builders',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.10.BypassSerialization',
+								label: '3.3.10. Bypass Serialization using `Readers` and `InputStreams`',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.11.ViewProjection',
+								label: '3.3.11. View-Based Projection',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.12.MarshalledAnnotation',
+								label: '3.3.12. @Marshalled Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.13.MarshalledAs',
+								label: '3.3.13. @MarshalledAs Enum',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.14.MarshalledFilter',
+								label: '3.3.14. MarshalledFilter',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.03.15.ExampleAnnotation',
+								label: '3.3.15. @Example Annotation',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.04.HttpPartSerializersParsers',
+						label: '3.4. HTTP Part Serializers and Parsers',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.05.ContextSettings',
+						label: '3.5. Context Settings',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.06.NullAndInclusionPolicies',
+						label: '3.6. Null & Inclusion Policies',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.07.ContextAnnotations',
+						label: '3.7. Context Annotations',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.08.JsonMap',
+						label: '3.8. JsonMap and JsonList',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.09.MarshalledNodeAndJsonPointer',
+						label: '3.9. Tree Model & RFC 6901 JSON-Pointer',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.10.ComplexDataTypes',
+						label: '3.10. Complex Data Types',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.11.SupportedJdkDatatypes',
+						label: '3.11. Supported JDK Datatypes',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.12.SerializerSetsParserSets',
+						label: '3.12. SerializerSets and ParserSets',
+					},
+					{
+						type: 'category',
+						label: '3.13. Swaps',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.13.Swaps' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.13.01.DefaultSwaps',
+								label: '3.13.1. Default Swaps',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.13.02.AutoSwaps',
+								label: '3.13.2. Auto-detected swaps',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.13.03.PerMediaTypeSwaps',
+								label: '3.13.3. Per-media-type Swaps',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.13.04.OneWaySwaps',
+								label: '3.13.4. One-way Swaps',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.13.05.SwapAnnotation',
+								label: '3.13.5. @Swap Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.13.06.TemplatedSwaps',
+								label: '3.13.6. Templated Swaps',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.13.07.SurrogateClasses',
+								label: '3.13.7. Surrogate Classes',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.14.DynamicallyAppliedAnnotations',
+						label: '3.14. Dynamically Applied Annotations',
+					},
+					{
+						type: 'category',
+						label: '3.15. Bean Dictionaries',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.15.BeanDictionaries' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.15.01.BeanSubTypes',
+								label: '3.15.1. Bean Subtypes',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.16.VirtualBeans',
+						label: '3.16. Virtual Beans',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.17.Recursion',
+						label: '3.17. Non-Tree Models and Recursion Detection',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.18.ParsingIntoGenericModels',
+						label: '3.18. Parsing into Generic Models',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.19.MarshallingUris',
+						label: '3.19. URIs',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.20.JacksonComparison',
+						label: '3.20. Comparison with Jackson',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.21.PojoCategories',
+						label: '3.21. POJO Categories',
+					},
+					{
+						type: 'category',
+						label: '3.22. Simple Variable Language',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.22.MarshallSimpleVariableLanguage' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.22.01.SvlVariables',
+								label: '3.22.1. SVL Variables',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.22.02.VarResolvers',
+								label: '3.22.2. VarResolvers and VarResolverSessions',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.22.03.DefaultVarResolver',
+								label: '3.22.3. VarResolver.DEFAULT',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.22.04.SvlOtherNotes',
+								label: '3.22.4. Other Notes',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.23.MarshallEncoders',
+						label: '3.23. Encoders',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.24.ObjectTools',
+						label: '3.24. Object Tools',
+					},
+					{
+						type: 'category',
+						label: '3.25. JSON Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.25.JsonSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.25.01.JsonMethodology',
+								label: '3.25.1. JSON Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.25.02.JsonSerializers',
+								label: '3.25.2. JSON Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.25.03.Json5',
+								label: '3.25.3. JSON 5',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.25.04.JsonParsers',
+								label: '3.25.4. JSON Parsers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.25.05.JsonAnnotation',
+								label: '3.25.5. @Json Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.25.06.JsonSchemaDetails',
+								label: '3.25.6. JSON-Schema Support',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.26. XML Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.26.XmlSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.26.01.XmlMethodology',
+								label: '3.26.1. XML Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.26.02.XmlSerializers',
+								label: '3.26.2. XML Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.26.03.XmlParsers',
+								label: '3.26.3. XML Parsers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.26.04.XmlBeanTypeNameAnnotation',
+								label: '3.26.4. @Marshalled(typeName) Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.26.05.XmlChildNameAnnotation',
+								label: '3.26.5. @Xml(childName) Annotation',
+							},
+							{
+								type: 'category',
+								label: '3.26.6. @Xml(format) Annotation',
+								collapsed: true,
+								link: { type: 'doc', id: 'topics/03.26.06.XmlFormatAnnotation' },
+								items: [
+									{
+										type: 'doc',
+										id: 'topics/03.26.06.01.XmlFormatAttrs',
+										label: '3.26.6.1. Attribute Formats',
+									},
+									{
+										type: 'doc',
+										id: 'topics/03.26.06.02.XmlFormatCollapsed',
+										label: '3.26.6.2. Collapsed Format',
+									},
+									{
+										type: 'doc',
+										id: 'topics/03.26.06.03.XmlFormatElements',
+										label: '3.26.6.3. Element & Mixed Formats',
+									},
+									{
+										type: 'doc',
+										id: 'topics/03.26.06.04.XmlFormatText',
+										label: '3.26.6.4. Text Formats',
+									},
+									{
+										type: 'doc',
+										id: 'topics/03.26.06.05.XmlFormatWhitespace',
+										label: '3.26.6.5. Whitespace Handling',
+									},
+								],
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.26.07.XmlNamespaces',
+								label: '3.26.7. Namespaces',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.26.08.SoapXml',
+								label: '3.26.8. SOAP/XML Support',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.27. HTML Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.27.HtmlSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.27.01.HtmlMethodology',
+								label: '3.27.1. HTML Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.02.HtmlSerializers',
+								label: '3.27.2. HTML Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.03.HtmlParsers',
+								label: '3.27.3. HTML Parsers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.04.HtmlAnnotation',
+								label: '3.27.4. @Html Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.05.HtmlRenderAnnotation',
+								label: '3.27.5. @Html(render) Annotation',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.06.HtmlDocSerializer',
+								label: '3.27.6. HtmlDocSerializer',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.07.BasicHtmlDocTemplate',
+								label: '3.27.7. BasicHtmlDocTemplate',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.08.HtmlCustomTemplates',
+								label: '3.27.8. Custom Templates',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.27.09.HtmlSchemaSupport',
+								label: '3.27.9. HTML-Schema Support',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.28. UON Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.28.UonSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.28.01.UonMethodology',
+								label: '3.28.1. UON Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.28.02.UonSerializers',
+								label: '3.28.2. UON Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.28.03.UonParsers',
+								label: '3.28.3. UON Parsers',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.29. URL-Encoding Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.29.UrlEncodingSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.29.01.UrlEncMethodology',
+								label: '3.29.1. URL-Encoding Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.29.02.UrlEncSerializers',
+								label: '3.29.2. URL-Encoding Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.29.03.UrlEncParsers',
+								label: '3.29.3. URL-Encoding Parsers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.29.04.UrlEncodingAnnotation',
+								label: '3.29.4. @UrlEncoding Annotation',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.30. MessagePack Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.30.MessagePackSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.30.01.MsgPackSerializers',
+								label: '3.30.1. MessagePack Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.30.02.MsgPackParsers',
+								label: '3.30.2. MessagePack Parsers',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.31. OpenApi Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.31.OpenApiSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.31.01.OpenApiMethodology',
+								label: '3.31.1. OpenAPI Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.31.02.OpenApiSerializers',
+								label: '3.31.2. OpenAPI Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.31.03.OpenApiParsers',
+								label: '3.31.3. OpenAPI Parsers',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.32.TomlSupport',
+						label: '3.32. TOML Support',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.33.Prototext',
+						label: '3.33. Prototext (Protobuf Text Format)',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.34.Protobuf',
+						label: '3.34. Protobuf (Binary Format)',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.35.Parquet',
+						label: '3.35. Parquet Basics',
+					},
+					{
+						type: 'category',
+						label: '3.36. YAML Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.36.YamlSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.36.01.YamlMethodology',
+								label: '3.36.1. YAML Methodology',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.36.02.YamlSerializers',
+								label: '3.36.2. YAML Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.36.03.YamlParsers',
+								label: '3.36.3. YAML Parsers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.36.04.YamlAnnotation',
+								label: '3.36.4. @YamlConfig Annotation',
+							},
+						],
+					},
+					{
+						type: 'category',
+						label: '3.37. CSV Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.37.CsvSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.37.01.CsvSerializers',
+								label: '3.37.1. CSV Serializers',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.37.02.CsvParsers',
+								label: '3.37.2. CSV Parsers',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.38.Markdown',
+						label: '3.38. Markdown Support',
+					},
+					{
+						type: 'category',
+						label: '3.39. JSONL Support',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.39.JsonlSupport' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.39.01.Json5l',
+								label: '3.39.1. JSON5L Basics',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.40.Hjson',
+						label: '3.40. Hjson Support',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.41.Jcs',
+						label: '3.41. JCS Support',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.42.Bson',
+						label: '3.42. BSON Support',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.43.Cbor',
+						label: '3.43. CBOR Support',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.44.HoconSupport',
+						label: '3.44. HOCON Support',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.45.Ini',
+						label: '3.45. INI Basics',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.46.Sse',
+						label: '3.46. SSE Support',
+					},
+					{
+						type: 'category',
+						label: '3.47. Token & Record Streaming',
+						collapsed: true,
+						link: { type: 'doc', id: 'topics/03.47.TokenRecordStreaming' },
+						items: [
+							{
+								type: 'doc',
+								id: 'topics/03.47.01.RecordStreaming',
+								label: '3.47.1. Record Streaming',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.47.02.TokenStreaming',
+								label: '3.47.2. Token Streaming',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.47.03.ArrayRecordStreaming',
+								label: '3.47.3. Array-Record Streaming',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.47.04.RestStreamingIntegration',
+								label: '3.47.4. REST Streaming Integration',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.47.05.ReadingContinuousStreams',
+								label: '3.47.5. Reading Continuous Streams',
+							},
+							{
+								type: 'doc',
+								id: 'topics/03.47.06.LargeDatasetStreaming',
+								label: '3.47.6. Large-Dataset Streaming',
+							},
+						],
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.48.BestPractices',
+						label: '3.48. Best Practices',
+					},
+					{
+						type: 'doc',
+						id: 'topics/03.49.PlainText',
+						label: '3.49. PlainText Support',
+					},
+				],
+				link: {
+					type: 'doc',
+					id: 'topics/03.juneau-marshall',
 				},
+			},
 				{
 					type: 'category',
 					label: '4. juneau-marshall-rdf',
