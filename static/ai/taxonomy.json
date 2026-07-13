@@ -1,6 +1,6 @@
 {
   "modules": {
-    "00": 26,
+    "00": 19,
     "01": 19,
     "02": 30,
     "03": 38,
@@ -10,7 +10,7 @@
     "07": 9,
     "08": 8,
     "09": 18,
-    "10": 14,
+    "10": 13,
     "11": 7,
     "12": 5,
     "13": 15,
@@ -63,6 +63,13 @@
     "60": 1,
     "61": 1,
     "62": 1,
+    "JuneauExamples": 1,
+    "JuneauMicroserviceTomcat": 1,
+    "JuneauPetstore": 1,
+    "JuneauRestServerMcp": 1,
+    "StarterProjects": 1,
+    "V10MigrationGuide": 1,
+    "V9MigrationGuide": 1,
     "api-metadata": 16,
     "release-notes": 85
   },
@@ -70,6 +77,6 @@
   "source_types": {
     "api-metadata": 16,
     "release-note": 85,
-    "topic": 400
+    "topic": 399
   }
 }

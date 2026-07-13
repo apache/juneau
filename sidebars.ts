@@ -34,13 +34,14 @@ const sidebars: SidebarsConfig = {
 			items: [
 				{
 					type: 'category',
-					label: '1. Juneau Ecosystem',
+					label: 'About Juneau',
 					collapsed: false,
-					link: {
-						type: 'doc',
-						id: 'topics/01.JuneauEcosystemOverview',
-					},
 					items: [
+						{
+							type: 'doc',
+							id: 'topics/01.JuneauEcosystemOverview',
+							label: '1. Juneau Ecosystem',
+						},
 						{
 							type: 'doc',
 							id: 'topics/01.01.FrameworkComparisons',
@@ -1162,33 +1163,29 @@ const sidebars: SidebarsConfig = {
 									type: 'category',
 									label: '7.2.2. Customization',
 									collapsed: true,
+									link: { type: 'doc', id: 'topics/07.02.02.Customization' },
 									items: [
 										{
 											type: 'doc',
-											id: 'topics/07.02.02.01.Customization',
-											label: '7.2.2.1. Customization',
+											id: 'topics/07.02.02.01.Stringifiers',
+											label: '7.2.2.1. Stringifiers',
 										},
 										{
 											type: 'doc',
-											id: 'topics/07.02.02.02.Stringifiers',
-											label: '7.2.2.2. Stringifiers',
+											id: 'topics/07.02.02.02.Listifiers',
+											label: '7.2.2.2. Listifiers',
 										},
 										{
 											type: 'doc',
-											id: 'topics/07.02.02.03.Listifiers',
-											label: '7.2.2.3. Listifiers',
-										},
-										{
-											type: 'doc',
-											id: 'topics/07.02.02.04.Swappers',
-											label: '7.2.2.4. Swappers',
-										},
-										{
-											type: 'doc',
-											id: 'topics/07.02.02.05.PropertyExtractors',
-											label: '7.2.2.5. Property Extractors',
+											id: 'topics/07.02.02.03.Swappers',
+											label: '7.2.2.3. Swappers',
 										},
 									],
+								},
+								{
+									type: 'doc',
+									id: 'topics/07.02.03.PropertyExtractors',
+									label: '7.2.3. Property Extractors',
 								},
 							],
 						},
@@ -1209,11 +1206,12 @@ const sidebars: SidebarsConfig = {
 					type: 'category',
 					label: 'REST',
 					collapsed: false,
-					link: {
-						type: 'doc',
-						id: 'topics/08.juneau-rest',
-					},
 					items: [
+				{
+					type: 'doc',
+					id: 'topics/08.juneau-rest',
+					label: '8. juneau-rest',
+				},
 				{
 					type: 'category',
 					label: '9. juneau-rest-common',
@@ -1767,20 +1765,9 @@ const sidebars: SidebarsConfig = {
 					},
 				},
 				{
-					type: 'category',
+					type: 'doc',
+					id: 'topics/11.juneau-rest-server-mcp',
 					label: '11. juneau-rest-server-mcp',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/11.juneau-rest-server-mcp',
-							label: '11. juneau-rest-server-mcp Basics',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/11.juneau-rest-server-mcp',
-					},
 				},
 				{
 					type: 'category',
@@ -2023,48 +2010,43 @@ const sidebars: SidebarsConfig = {
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.02.MicroserviceCoreOverview',
-							label: '15.2. Microservice Core Overview',
+							id: 'topics/15.02.Args',
+							label: '15.2. Args',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.03.Args',
-							label: '15.3. Args',
+							id: 'topics/15.03.Manifest',
+							label: '15.3. Manifest',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.04.Manifest',
-							label: '15.4. Manifest',
+							id: 'topics/15.04.SystemProperties',
+							label: '15.4. System properties',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.05.SystemProperties',
-							label: '15.5. System properties',
+							id: 'topics/15.05.VarResolver',
+							label: '15.5. VarResolver',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.06.VarResolver',
-							label: '15.6. VarResolver',
+							id: 'topics/15.06.ConsoleCommands',
+							label: '15.6. Console Commands',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.07.ConsoleCommands',
-							label: '15.7. Console Commands',
+							id: 'topics/15.07.MicroserviceCoreListeners',
+							label: '15.7. Listeners',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.08.MicroserviceCoreListeners',
-							label: '15.8. Listeners',
+							id: 'topics/15.08.InjectAwareMicroservice',
+							label: '15.8. Inject-Aware Microservice',
 						},
 						{
 							type: 'doc',
-							id: 'topics/15.09.InjectAwareMicroservice',
-							label: '15.9. Inject-Aware Microservice',
-						},
-						{
-							type: 'doc',
-							id: 'topics/15.10.MicroserviceTesting',
-							label: '15.10. Whole-Microservice Integration Tests (@MicroserviceTest)',
+							id: 'topics/15.09.MicroserviceTesting',
+							label: '15.9. Whole-Microservice Integration Tests (@MicroserviceTest)',
 						},
 					],
 					link: {
@@ -2139,20 +2121,9 @@ const sidebars: SidebarsConfig = {
 					},
 				},
 				{
-					type: 'category',
+					type: 'doc',
+					id: 'topics/17.juneau-microservice-tomcat',
 					label: '17. juneau-microservice-tomcat',
-					collapsed: true,
-					items: [
-						{
-							type: 'doc',
-							id: 'topics/17.juneau-microservice-tomcat',
-							label: '17. juneau-microservice-tomcat Basics',
-						},
-					],
-					link: {
-						type: 'doc',
-						id: 'topics/17.juneau-microservice-tomcat',
-					},
 				},
 				{
 					type: 'category',
@@ -2183,36 +2154,14 @@ const sidebars: SidebarsConfig = {
 					collapsed: false,
 					items: [
 						{
-							type: 'category',
+							type: 'doc',
+							id: 'topics/19.juneau-petstore',
 							label: '19. juneau-petstore',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/19.juneau-petstore',
-									label: '19. juneau-petstore Overview',
-								},
-							],
-							link: {
-								type: 'doc',
-								id: 'topics/19.juneau-petstore',
-							},
 						},
 						{
-							type: 'category',
+							type: 'doc',
+							id: 'topics/20.juneau-examples',
 							label: '20. juneau-examples',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/20.juneau-examples',
-									label: '20. juneau-examples-core',
-								},
-							],
-							link: {
-								type: 'doc',
-								id: 'topics/20.juneau-examples',
-							},
 						},
 					],
 				},
@@ -2274,20 +2223,9 @@ const sidebars: SidebarsConfig = {
 							},
 						},
 						{
-							type: 'category',
+							type: 'doc',
+							id: 'topics/24.StarterProjects',
 							label: '24. Starter Projects',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/24.StarterProjects',
-									label: '24. Starter Projects',
-								},
-							],
-							link: {
-								type: 'doc',
-								id: 'topics/24.StarterProjects',
-							},
 						},
 					],
 				},
@@ -2328,36 +2266,14 @@ const sidebars: SidebarsConfig = {
 							},
 						},
 						{
-							type: 'category',
+							type: 'doc',
+							id: 'topics/26.V9MigrationGuide',
 							label: '26. V9.0 Migration Guide',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/26.V9MigrationGuide',
-									label: '26. v9.0 Migration Guide',
-								},
-							],
-							link: {
-								type: 'doc',
-								id: 'topics/26.V9MigrationGuide',
-							},
 						},
 						{
-							type: 'category',
+							type: 'doc',
+							id: 'topics/27.V10MigrationGuide',
 							label: '27. V10.0 Migration Guide',
-							collapsed: true,
-							items: [
-								{
-									type: 'doc',
-									id: 'topics/27.V10MigrationGuide',
-									label: '27. v10.0 Migration Guide',
-								},
-							],
-							link: {
-								type: 'doc',
-								id: 'topics/27.V10MigrationGuide',
-							},
 						},
 					],
 				},
