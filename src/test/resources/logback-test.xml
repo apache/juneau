@@ -11,6 +11,23 @@
  * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and limitations under the License.
 -->
+<!--
+	Shared quiet-by-default Logback config for the whole reactor's tests.
+
+	Referenced by every module's Surefire execution via the root pom's
+	maven-surefire-plugin <systemPropertyVariables>:
+
+		<logback.configurationFile>${maven.multiModuleProjectDirectory}/src/test/resources/logback-test.xml</logback.configurationFile>
+
+	Using the logback.configurationFile system property (rather than a per-module
+	classpath logback-test.xml) gives one authoritative source with no drift.
+
+	Policy: root level=WARN so genuine warnings/errors STILL print - only INFO
+	startup chatter is removed.  Named loggers below are silenced only because
+	expected negative-path tests intentionally trigger those libraries; the list
+	is a harmless superset (a logger that never fires in a given module is a no-op).
+	Never set the root to OFF.
+-->
 <configuration>
 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>

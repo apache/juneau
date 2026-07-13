@@ -333,6 +333,8 @@ public class FileStore extends ConfigStore {
 				}
 			} catch (@SuppressWarnings("unused") InterruptedException e) {
 				Thread.currentThread().interrupt();
+			} catch (@SuppressWarnings("unused") ClosedWatchServiceException e) {
+				// Expected on shutdown: interrupt() closes the WatchService while take() is blocked in this loop.
 			} catch (Exception e) {
 				throw toRex(e); // HTT - unexpected exception from watchService.take()
 			}

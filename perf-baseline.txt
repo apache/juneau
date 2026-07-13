@@ -38,17 +38,27 @@
 # ignored by the per-module perf-guard parser.
 # ============================================================================
 
-suite = 225                              # updated baseline.
-juneau-integration-tests/core = 90                   # updated baseline.
-juneau-integration-tests/container.springboot = 5    # updated baseline.
-juneau-integration-tests/container.jetty = 2         # updated baseline; fast shutdown restored by EphemeralJettyServerConfig.stopTimeout(ZERO).
+# 2026-07-13 re-baseline (set by FINISHED-232): fresh warm-machine full-suite run via
+# `python3 scripts/test.py --full`, SERIAL / single-threaded execution model (no
+# reactor -T, no Surefire forkCount/parallel — parallelism stays OFF per FINISHED-231's
+# Phase-0 isolation-audit gate). Post-TODO-160-migration reality: 135,130 tests, suite wall-clock 281s.
+# Per-module values are test.py timing-log wall-clock seconds (incl. per-fork JVM startup).
+suite = 281                              # set by FINISHED-232 (2026-07-13 re-baseline); measured 281.2s warm/serial.
+juneau-integration-tests/core = 88                   # set by FINISHED-232; measured 88.3s (time-dominant bucket).
+juneau-integration-tests/container.springboot = 5    # set by FINISHED-232; measured 4.9s.
+juneau-integration-tests/container.jetty = 8         # set by FINISHED-232; measured 7.5s under full-load; jetty container time is startup/shutdown-variable.
+juneau-core/juneau-marshall/core = 17.5              # set by FINISHED-232; 76,973 tests (count-dominant, fast in-memory).
+juneau-core/juneau-marshall-rdf/core = 9.2           # set by FINISHED-232; 21,921 tests.
+juneau-microservice/juneau-microservice/core = 12.3  # set by FINISHED-232; 205 tests but embedded-server startup heavy; time-variable.
+juneau-core/juneau-commons/core = 1.9                # set by FINISHED-232; 5,311 tests.
+juneau-core/juneau-config/core = 2.7                 # set by FINISHED-232; 458 tests.
 juneau-bean/juneau-bean-atom/core = 0.4
 juneau-bean/juneau-bean-common/core = 1.0
-juneau-bean/juneau-bean-html5/core = 3.5
+juneau-bean/juneau-bean-html5/core = 3.4             # set by FINISHED-232; 12,427 tests.
 juneau-bean/juneau-bean-mcp/core = 0.4
-juneau-bean/juneau-bean-openapi-v3/core = 0.9
-juneau-bean/juneau-bean-swagger-v2/core = 0.8
-juneau-bean/juneau-bean-jsonschema/core = 0.7
+juneau-bean/juneau-bean-openapi-v3/core = 1.0        # set by FINISHED-232; measured 1.05s.
+juneau-bean/juneau-bean-swagger-v2/core = 0.9        # set by FINISHED-232; measured 0.87s.
+juneau-bean/juneau-bean-jsonschema/core = 0.6        # set by FINISHED-232; measured 0.63s.
 
 # ─── [observability] ──────────────────────────────────────────────────────────
 #

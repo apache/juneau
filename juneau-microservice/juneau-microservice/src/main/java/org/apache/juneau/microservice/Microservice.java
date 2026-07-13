@@ -847,6 +847,10 @@ public class Microservice implements ConfigEventListener {
 
 					while (true) {
 						out.append("> ").flush();
+						// Guard against empty/closed stdin: hasNextLine() returns false at end-of-stream, so
+						// the loop ends gracefully instead of nextLine() throwing NoSuchElementException.
+						if (! in.hasNextLine())
+							break;
 						var line = in.nextLine();
 						var args2 = new Args(line);
 						if (! args2.isEmpty())

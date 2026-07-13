@@ -400,6 +400,15 @@
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-jetty</artifactId>
 			<version>${project.version}</version>
+			<!-- SLF4J binding hygiene: Logback is the quiet-by-default test binding here, so exclude
+			     Jetty's own slf4j provider to keep exactly one binding on the test classpath (Jetty
+			     logging then routes through Logback).  Prevents the "multiple SLF4J providers" warning. -->
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-slf4j-impl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
@@ -407,6 +416,12 @@
 			<version>${project.version}</version>
 			<type>test-jar</type>
 			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-slf4j-impl</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
@@ -660,7 +675,6 @@
 					</includes>
 					<systemPropertyVariables>
 						<java.locale.providers>JRE,COMPAT,SPI,CLDR</java.locale.providers>
-						<java.util.logging.config.file>${project.basedir}/src/test/resources/logging.properties</java.util.logging.config.file>
 					</systemPropertyVariables>
 				</configuration>
 				<executions>

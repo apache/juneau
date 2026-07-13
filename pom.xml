@@ -283,6 +283,35 @@
 					<version>6.0.2</version>
 				</plugin>
 
+				<!--
+					Quiet-by-default test logging, applied reactor-wide to every module's Surefire run.
+					Both properties point at a single shared config file at the reactor root, so there is
+					exactly one source of truth (no per-module copies to drift apart):
+					  - Logback (logback.configurationFile): root level=WARN - genuine WARN/ERROR still print,
+					    only INFO startup chatter is removed.
+					  - JUL (java.util.logging.config.file): ConsoleHandler=WARNING (never OFF), so real
+					    WARNING/SEVERE still surface.
+					Modules that define their own surefire <systemPropertyVariables> (e.g. java.locale.providers)
+					merge with these; module-level keys win on conflict.  See src/test/resources/.
+				-->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<configuration>
+						<systemPropertyVariables>
+							<logback.configurationFile>${maven.multiModuleProjectDirectory}/src/test/resources/logback-test.xml</logback.configurationFile>
+							<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties</java.util.logging.config.file>
+							<!-- Embedded Jetty logs through its own jetty-slf4j-impl StdErrLog (not logback/JUL),
+							     so raise its root threshold to WARN to silence server startup/stop INFO chatter. -->
+							<org.eclipse.jetty.LEVEL>WARN</org.eclipse.jetty.LEVEL>
+							<!-- Spring Boot reinitializes its own logging on context start, overriding the logback
+							     config file; set its root level to WARN so embedded Tomcat/Spring startup INFO is
+							     suppressed while real WARN/ERROR still prints. -->
+							<logging.level.root>WARN</logging.level.root>
+						</systemPropertyVariables>
+					</configuration>
+				</plugin>
+
 				<plugin>
 					<groupId>org.jacoco</groupId>
 					<artifactId>jacoco-maven-plugin</artifactId>

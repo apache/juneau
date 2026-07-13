@@ -74,6 +74,18 @@
 				<extensions>true</extensions>
 				<configuration>
 					<supportIncrementalBuild>true</supportIncrementalBuild>
+					<instructions>
+						<!--
+							The config.internal package (ConfigMap/ConfigMapEntry/ProfileMerge) is an intentional
+							bundle-private collaboration model that is reachable through the ConfigStore/ConfigFormat
+							SPI signatures (e.g. ConfigFormat.fromInternal(ConfigMap), ConfigStore.getMap(...)).  These
+							types are deliberately kept OUT of the exported API surface - the bundle is not designed for
+							cross-bundle SPI extension - so bnd's "private references" advisory is benign and expected.
+							Acknowledge it here so it does not surface as a build warning, without exporting the internal
+							package or changing the public API.
+						-->
+						<_fixupmessages>"*private references*config.internal*";is:=ignore</_fixupmessages>
+					</instructions>
 				</configuration>
 				<executions>
 				<execution>
