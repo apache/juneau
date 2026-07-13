@@ -29,14 +29,6 @@ class BsonArrayDebug_Test {
 	void dumpIntArrayBson() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var bytes = s.serialize(ints(1, 2, 3));
-		// Print hex to see structure
-		var sb = new StringBuilder();
-		for (var i = 0; i < Math.min(bytes.length, 80); i++) {
-			sb.append(String.format("%02x ", bytes[i] & 0xFF));
-			if ((i + 1) % 16 == 0) sb.append("\n");
-		}
-		System.out.println("First 80 bytes (hex):");
-		System.out.println(sb);
 		assertTrue(bytes.length > 0);
 	}
 
@@ -45,13 +37,6 @@ class BsonArrayDebug_Test {
 		var s = BsonSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var x = new org.apache.juneau.marshall.collections.JsonList("['abc',123]");
 		var bytes = s.serialize(x);
-		var sb = new StringBuilder();
-		for (var i = 0; i < Math.min(bytes.length, 100); i++) {
-			sb.append(String.format("%02x ", bytes[i] & 0xFF));
-			if ((i + 1) % 16 == 0) sb.append("\n");
-		}
-		System.out.println("JsonList BSON (hex):");
-		System.out.println(sb);
 		assertTrue(bytes.length > 0);
 	}
 }
