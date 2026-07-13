@@ -222,6 +222,13 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-auth-saml</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.opensaml</groupId>
 			<artifactId>opensaml-core-api</artifactId>
 			<version>5.2.2</version>
