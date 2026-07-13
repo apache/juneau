@@ -19,15 +19,13 @@ package org.apache.juneau;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.commons.utils.*;
-
 /**
  * Test utilities for the juneau-marshall module.
  *
  * <p>Contains a marshall-compatible subset of the methods available in the full {@code TestUtils}
  * in {@code juneau-integration-tests}.  Methods that depend on {@code juneau-rest-*} modules are excluded.</p>
  */
-public class TestUtils extends Shorts {
+public class TestUtils extends BasicTestUtils {
 
 	public static String assertJson(String expected, Object value) {
 		assertEquals(expected, json5(value));
