@@ -2212,7 +2212,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 * @return This object.
 		 */
 		public <T> Builder example(Class<T> pojoClass, T o) {
-			return annotations(MarshalledApplyAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).value(MarshalledAnnotation.create().example(Json5.DEFAULT.of(o)).build()).build());
+			return annotations(MarshalledApplyAnnotation.create(assertArgNotNull(ARG_pojoClass, pojoClass)).value(MarshalledAnnotation.create().example(Json5.of(o)).build()).build());
 		}
 
 		/**
@@ -3390,7 +3390,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 */
 		public Builder swaps(Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
-			swaps().addAll(0, accumulate(values));
+			swaps().addAll(0, accumulate((Object[])values));
 			return this;
 		}
 

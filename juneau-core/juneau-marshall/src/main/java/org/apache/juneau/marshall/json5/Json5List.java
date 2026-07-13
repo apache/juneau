@@ -436,12 +436,12 @@ public class Json5List extends MarshalledList {
 	 * @return This object as a JSON5 string.
 	 */
 	public String toJson5() {
-		return Json5.DEFAULT.of(this);
+		return Json5.of(this);
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json5.DEFAULT.of(this);
+		return Json5.of(this);
 	}
 
 	@Override /* Overridden from MarshalledList */

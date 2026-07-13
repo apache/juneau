@@ -62,7 +62,7 @@ class Remote_ContentAnnotation_Test extends TestBase {
 
 		@Override
 		public String toString() {
-			return Json5.DEFAULT.of(this);
+			return Json5.of(this);
 		}
 	}
 
@@ -182,25 +182,25 @@ class Remote_ContentAnnotation_Test extends TestBase {
 		@RestPost
 		public String x3(@Content Bean b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return Json5.DEFAULT.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost
 		public Object x4(@Content Bean[] b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return Json5.DEFAULT.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost
 		public Object x5(@Content List<Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return Json5.DEFAULT.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost
 		public Object x6(@Content Map<String,Bean> b, @Header("Content-Type") String ct) {
 			assertEquals("text/openapi",ct);
-			return Json5.DEFAULT.of(b);
+			return Json5.of(b);
 		}
 
 		@RestPost

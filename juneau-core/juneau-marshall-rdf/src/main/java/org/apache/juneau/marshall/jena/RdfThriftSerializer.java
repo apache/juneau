@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfThrift marshaller for convenience.</jc>
- * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThrift.DEFAULT.of(<jv>person</jv>);
+ * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThrift.<jsm>of</jsm>(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Serialize to OutputStream.</jc>

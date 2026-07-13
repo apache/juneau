@@ -410,7 +410,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ENCODING_DISABLED_PATTERN.matcher(ae).find()) {
-						throw new NotAcceptable("Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}", ae, Json5.DEFAULT.of(encoders.getSupportedEncodings()));
+						throw new NotAcceptable("Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}", ae, Json5.of(encoders.getSupportedEncodings()));
 					}
 				} else {
 					encoder = match.getEncoder();

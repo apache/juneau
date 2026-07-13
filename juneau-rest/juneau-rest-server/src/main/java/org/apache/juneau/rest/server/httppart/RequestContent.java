@@ -493,7 +493,7 @@ public class RequestContent {
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
 					throw new UnsupportedMediaType("Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
-						req.getHeaderParam("content-encoding").orElse(null), Json5.DEFAULT.of(encoders.getSupportedEncodings()));
+						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));
 			}
 
 			if (nn(encoder))
@@ -588,7 +588,7 @@ public class RequestContent {
 
 		var ct = req.getHeader(ContentType.class);
 		throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
-			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.DEFAULT.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
+			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
 	}
 
 	/**

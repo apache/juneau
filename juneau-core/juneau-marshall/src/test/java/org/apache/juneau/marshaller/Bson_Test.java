@@ -33,7 +33,7 @@ class Bson_Test extends TestBase {
 	@Test
 	void a01_of() throws Exception {
 		var map = JsonMap.of("foo", "bar", "num", 42);
-		var bytes = Bson.DEFAULT.of(map);
+		var bytes = Bson.of(map);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -42,7 +42,7 @@ class Bson_Test extends TestBase {
 	void a02_ofToOutputStream() throws Exception {
 		var map = JsonMap.of("foo", "bar");
 		var out = new ByteArrayOutputStream();
-		Bson.DEFAULT.of(map, out);
+		Bson.DEFAULT.write(map, out);
 		var bytes = out.toByteArray();
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
@@ -51,8 +51,8 @@ class Bson_Test extends TestBase {
 	@Test
 	void a03_to() throws Exception {
 		var map = JsonMap.of("foo", "bar", "num", 42);
-		var bytes = Bson.DEFAULT.of(map);
-		var parsed = Bson.DEFAULT.to(bytes, JsonMap.class);
+		var bytes = Bson.of(map);
+		var parsed = Bson.to(bytes, JsonMap.class);
 		assertNotNull(parsed);
 		assertEquals("bar", parsed.get("foo"));
 		assertEquals(42, parsed.get("num"));
@@ -61,9 +61,9 @@ class Bson_Test extends TestBase {
 	@Test
 	void a04_toFromInputStream() throws Exception {
 		var map = JsonMap.of("k", "v");
-		var bytes = Bson.DEFAULT.of(map);
+		var bytes = Bson.of(map);
 		try (var is = new ByteArrayInputStream(bytes)) {
-			var parsed = Bson.DEFAULT.to(is, JsonMap.class);
+			var parsed = Bson.DEFAULT.read(is, JsonMap.class);
 			assertNotNull(parsed);
 			assertEquals("v", parsed.get("k"));
 		}
@@ -72,8 +72,8 @@ class Bson_Test extends TestBase {
 	@Test
 	void a05_roundTrip() throws Exception {
 		var original = JsonMap.of("a", 1, "b", "hello", "c", true);
-		var bytes = Bson.DEFAULT.of(original);
-		var roundTrip = Bson.DEFAULT.to(bytes, JsonMap.class);
+		var bytes = Bson.of(original);
+		var roundTrip = Bson.to(bytes, JsonMap.class);
 		assertEquals(original.get("a"), roundTrip.get("a"));
 		assertEquals(original.get("b"), roundTrip.get("b"));
 		assertEquals(original.get("c"), roundTrip.get("c"));
@@ -83,8 +83,8 @@ class Bson_Test extends TestBase {
 	void a06_defaultInstance() throws Exception {
 		StreamMarshaller bson = Bson.DEFAULT;
 		var map = JsonMap.of("x", 1);
-		var bytes = bson.of(map);
-		var parsed = bson.to(bytes, JsonMap.class);
+		var bytes = bson.write(map);
+		var parsed = bson.read(bytes, JsonMap.class);
 		assertEquals(1, parsed.get("x"));
 	}
 }

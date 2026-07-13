@@ -37,7 +37,7 @@ class Hjson_Test {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "test");
 		a.put("count", 42);
-		var hjson = Hjson.DEFAULT.of(a);
+		var hjson = Hjson.of(a);
 		assertNotNull(hjson);
 		assertTrue(hjson.contains("name") && hjson.contains("test"));
 		assertTrue(hjson.contains("count") && hjson.contains("42"));
@@ -46,7 +46,7 @@ class Hjson_Test {
 	@Test
 	void a02_to() throws Exception {
 		var hjson = "{\"name\":\"Alice\",\"age\":30}";
-		var m = (Map<String, Object>) Hjson.DEFAULT.to(hjson, Map.class, String.class, Object.class);
+		var m = (Map<String, Object>) Hjson.to(hjson, Map.class, String.class, Object.class);
 		assertBean(m, "name,age", "Alice,30");
 	}
 
@@ -55,8 +55,8 @@ class Hjson_Test {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("name", "foo");
 		a.put("value", 123);
-		var hjson = Hjson.DEFAULT.of(a);
-		var b = (Map<String, Object>) Hjson.DEFAULT.to(hjson, Map.class, String.class, Object.class);
+		var hjson = Hjson.of(a);
+		var b = (Map<String, Object>) Hjson.to(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,value", "foo,123");
 	}
 
@@ -64,9 +64,9 @@ class Hjson_Test {
 	void a04_defaultInstance() throws Exception {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("k", "v");
-		var hjson = Hjson.DEFAULT.of(a);
+		var hjson = Hjson.of(a);
 		assertTrue(hjson.contains("k") && hjson.contains("v"));
-		var b = (Map<String, Object>) Hjson.DEFAULT.to(hjson, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) Hjson.to(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "k", "v");
 	}
 }

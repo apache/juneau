@@ -82,7 +82,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String json(Object object) throws SerializeException {
-		return Json.DEFAULT.of(object);
+		return Json.of(object);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object json(Object object, Object output) throws SerializeException, IOException {
-		Json.DEFAULT.of(object, output); return output;
+		Json.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -109,7 +109,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T json(Object input, Class<T> type) throws ParseException, IOException {
-		return Json.DEFAULT.to(input, type);
+		return Json.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -124,7 +124,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T json(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Json.DEFAULT.to(input, type, args);
+		return Json.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T json(String o, Class<T> c) {
-		return safe(() -> Json.DEFAULT.to(o, c));
+		return safe(() -> Json.to(o, c));
 	}
 
 	/**
@@ -150,7 +150,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T json(String input, Type type, Type... args) throws ParseException {
-		return Json.DEFAULT.to(input, type, args);
+		return Json.to(input, type, args);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String json5(Object object) throws SerializeException {
-		return Json5.DEFAULT.of(object);
+		return Json5.of(object);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object json5(Object object, Object output) throws SerializeException, IOException {
-		Json5.DEFAULT.of(object, output); return output;
+		Json5.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -191,7 +191,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T json5(Object input, Class<T> type) throws ParseException, IOException {
-		return Json5.DEFAULT.to(input, type);
+		return Json5.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T json5(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Json5.DEFAULT.to(input, type, args);
+		return Json5.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T json5(String o, Class<T> c) {
-		return safe(() -> Json5.DEFAULT.to(o, c));
+		return safe(() -> Json5.to(o, c));
 	}
 
 	/**
@@ -232,7 +232,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T json5(String input, Type type, Type... args) throws ParseException {
-		return Json5.DEFAULT.to(input, type, args);
+		return Json5.to(input, type, args);
 	}
 
 	/**
@@ -246,7 +246,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String jsonl(Object object) throws SerializeException {
-		return Jsonl.DEFAULT.of(object);
+		return Jsonl.of(object);
 	}
 
 	/**
@@ -259,7 +259,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object jsonl(Object object, Object output) throws SerializeException, IOException {
-		Jsonl.DEFAULT.of(object, output); return output;
+		Jsonl.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -273,7 +273,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T jsonl(Object input, Class<T> type) throws ParseException, IOException {
-		return Jsonl.DEFAULT.to(input, type);
+		return Jsonl.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -288,7 +288,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T jsonl(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Jsonl.DEFAULT.to(input, type, args);
+		return Jsonl.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -300,7 +300,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T jsonl(String o, Class<T> c) {
-		return safe(() -> Jsonl.DEFAULT.to(o, c));
+		return safe(() -> Jsonl.to(o, c));
 	}
 
 	/**
@@ -314,7 +314,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T jsonl(String input, Type type, Type... args) throws ParseException {
-		return Jsonl.DEFAULT.to(input, type, args);
+		return Jsonl.to(input, type, args);
 	}
 
 	/**
@@ -328,7 +328,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String jcs(Object object) throws SerializeException {
-		return Jcs.DEFAULT.of(object);
+		return Jcs.of(object);
 	}
 
 	/**
@@ -341,7 +341,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object jcs(Object object, Object output) throws SerializeException, IOException {
-		Jcs.DEFAULT.of(object, output); return output;
+		Jcs.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -355,7 +355,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T jcs(Object input, Class<T> type) throws ParseException, IOException {
-		return Jcs.DEFAULT.to(input, type);
+		return Jcs.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -370,7 +370,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T jcs(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Jcs.DEFAULT.to(input, type, args);
+		return Jcs.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -382,7 +382,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T jcs(String o, Class<T> c) {
-		return safe(() -> Jcs.DEFAULT.to(o, c));
+		return safe(() -> Jcs.to(o, c));
 	}
 
 	/**
@@ -396,7 +396,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T jcs(String input, Type type, Type... args) throws ParseException {
-		return Jcs.DEFAULT.to(input, type, args);
+		return Jcs.to(input, type, args);
 	}
 
 	/**
@@ -410,7 +410,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String hjson(Object object) throws SerializeException {
-		return Hjson.DEFAULT.of(object);
+		return Hjson.of(object);
 	}
 
 	/**
@@ -423,7 +423,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object hjson(Object object, Object output) throws SerializeException, IOException {
-		Hjson.DEFAULT.of(object, output); return output;
+		Hjson.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -437,7 +437,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T hjson(Object input, Class<T> type) throws ParseException, IOException {
-		return Hjson.DEFAULT.to(input, type);
+		return Hjson.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -452,7 +452,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T hjson(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Hjson.DEFAULT.to(input, type, args);
+		return Hjson.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -464,7 +464,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T hjson(String o, Class<T> c) {
-		return safe(() -> Hjson.DEFAULT.to(o, c));
+		return safe(() -> Hjson.to(o, c));
 	}
 
 	/**
@@ -478,7 +478,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T hjson(String input, Type type, Type... args) throws ParseException {
-		return Hjson.DEFAULT.to(input, type, args);
+		return Hjson.to(input, type, args);
 	}
 
 	/**
@@ -492,7 +492,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String xml(Object object) throws SerializeException {
-		return Xml.DEFAULT.of(object);
+		return Xml.of(object);
 	}
 
 	/**
@@ -505,7 +505,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object xml(Object object, Object output) throws SerializeException, IOException {
-		Xml.DEFAULT.of(object, output); return output;
+		Xml.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -519,7 +519,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T xml(Object input, Class<T> type) throws ParseException, IOException {
-		return Xml.DEFAULT.to(input, type);
+		return Xml.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -534,7 +534,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T xml(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Xml.DEFAULT.to(input, type, args);
+		return Xml.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -546,7 +546,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T xml(String o, Class<T> c) {
-		return safe(() -> Xml.DEFAULT.to(o, c));
+		return safe(() -> Xml.to(o, c));
 	}
 
 	/**
@@ -560,7 +560,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T xml(String input, Type type, Type... args) throws ParseException {
-		return Xml.DEFAULT.to(input, type, args);
+		return Xml.to(input, type, args);
 	}
 
 	/**
@@ -574,7 +574,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String html(Object object) throws SerializeException {
-		return Html.DEFAULT.of(object);
+		return Html.of(object);
 	}
 
 	/**
@@ -587,7 +587,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object html(Object object, Object output) throws SerializeException, IOException {
-		Html.DEFAULT.of(object, output); return output;
+		Html.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -601,7 +601,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T html(Object input, Class<T> type) throws ParseException, IOException {
-		return Html.DEFAULT.to(input, type);
+		return Html.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -616,7 +616,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T html(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Html.DEFAULT.to(input, type, args);
+		return Html.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -628,7 +628,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T html(String o, Class<T> c) {
-		return safe(() -> Html.DEFAULT.to(o, c));
+		return safe(() -> Html.to(o, c));
 	}
 
 	/**
@@ -642,7 +642,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T html(String input, Type type, Type... args) throws ParseException {
-		return Html.DEFAULT.to(input, type, args);
+		return Html.to(input, type, args);
 	}
 
 	/**
@@ -656,7 +656,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String uon(Object object) throws SerializeException {
-		return Uon.DEFAULT.of(object);
+		return Uon.of(object);
 	}
 
 	/**
@@ -669,7 +669,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object uon(Object object, Object output) throws SerializeException, IOException {
-		Uon.DEFAULT.of(object, output); return output;
+		Uon.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -683,7 +683,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T uon(Object input, Class<T> type) throws ParseException, IOException {
-		return Uon.DEFAULT.to(input, type);
+		return Uon.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -698,7 +698,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T uon(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Uon.DEFAULT.to(input, type, args);
+		return Uon.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -710,7 +710,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T uon(String o, Class<T> c) {
-		return safe(() -> Uon.DEFAULT.to(o, c));
+		return safe(() -> Uon.to(o, c));
 	}
 
 	/**
@@ -724,7 +724,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T uon(String input, Type type, Type... args) throws ParseException {
-		return Uon.DEFAULT.to(input, type, args);
+		return Uon.to(input, type, args);
 	}
 
 	/**
@@ -738,7 +738,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String urlEncoding(Object object) throws SerializeException {
-		return UrlEncoding.DEFAULT.of(object);
+		return UrlEncoding.of(object);
 	}
 
 	/**
@@ -751,7 +751,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object urlEncoding(Object object, Object output) throws SerializeException, IOException {
-		UrlEncoding.DEFAULT.of(object, output); return output;
+		UrlEncoding.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -765,7 +765,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T urlEncoding(Object input, Class<T> type) throws ParseException, IOException {
-		return UrlEncoding.DEFAULT.to(input, type);
+		return UrlEncoding.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -780,7 +780,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T urlEncoding(Object input, Type type, Type... args) throws ParseException, IOException {
-		return UrlEncoding.DEFAULT.to(input, type, args);
+		return UrlEncoding.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -792,7 +792,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T urlEncoding(String o, Class<T> c) {
-		return safe(() -> UrlEncoding.DEFAULT.to(o, c));
+		return safe(() -> UrlEncoding.to(o, c));
 	}
 
 	/**
@@ -806,7 +806,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T urlEncoding(String input, Type type, Type... args) throws ParseException {
-		return UrlEncoding.DEFAULT.to(input, type, args);
+		return UrlEncoding.to(input, type, args);
 	}
 
 	/**
@@ -820,7 +820,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String yaml(Object object) throws SerializeException {
-		return Yaml.DEFAULT.of(object);
+		return Yaml.of(object);
 	}
 
 	/**
@@ -833,7 +833,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object yaml(Object object, Object output) throws SerializeException, IOException {
-		Yaml.DEFAULT.of(object, output); return output;
+		Yaml.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -847,7 +847,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T yaml(Object input, Class<T> type) throws ParseException, IOException {
-		return Yaml.DEFAULT.to(input, type);
+		return Yaml.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -862,7 +862,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T yaml(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Yaml.DEFAULT.to(input, type, args);
+		return Yaml.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -874,7 +874,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T yaml(String o, Class<T> c) {
-		return safe(() -> Yaml.DEFAULT.to(o, c));
+		return safe(() -> Yaml.to(o, c));
 	}
 
 	/**
@@ -888,7 +888,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T yaml(String input, Type type, Type... args) throws ParseException {
-		return Yaml.DEFAULT.to(input, type, args);
+		return Yaml.to(input, type, args);
 	}
 
 	/**
@@ -902,7 +902,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String csv(Object object) throws SerializeException {
-		return Csv.DEFAULT.of(object);
+		return Csv.of(object);
 	}
 
 	/**
@@ -915,7 +915,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object csv(Object object, Object output) throws SerializeException, IOException {
-		Csv.DEFAULT.of(object, output); return output;
+		Csv.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -929,7 +929,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T csv(Object input, Class<T> type) throws ParseException, IOException {
-		return Csv.DEFAULT.to(input, type);
+		return Csv.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -944,7 +944,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T csv(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Csv.DEFAULT.to(input, type, args);
+		return Csv.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -956,7 +956,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T csv(String o, Class<T> c) {
-		return safe(() -> Csv.DEFAULT.to(o, c));
+		return safe(() -> Csv.to(o, c));
 	}
 
 	/**
@@ -970,7 +970,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T csv(String input, Type type, Type... args) throws ParseException {
-		return Csv.DEFAULT.to(input, type, args);
+		return Csv.to(input, type, args);
 	}
 
 	/**
@@ -984,7 +984,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String openApi(Object object) throws SerializeException {
-		return OpenApi.DEFAULT.of(object);
+		return OpenApi.of(object);
 	}
 
 	/**
@@ -997,7 +997,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object openApi(Object object, Object output) throws SerializeException, IOException {
-		OpenApi.DEFAULT.of(object, output); return output;
+		OpenApi.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1011,7 +1011,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T openApi(Object input, Class<T> type) throws ParseException, IOException {
-		return OpenApi.DEFAULT.to(input, type);
+		return OpenApi.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1026,7 +1026,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T openApi(Object input, Type type, Type... args) throws ParseException, IOException {
-		return OpenApi.DEFAULT.to(input, type, args);
+		return OpenApi.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1038,7 +1038,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T openApi(String o, Class<T> c) {
-		return safe(() -> OpenApi.DEFAULT.to(o, c));
+		return safe(() -> OpenApi.to(o, c));
 	}
 
 	/**
@@ -1052,7 +1052,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T openApi(String input, Type type, Type... args) throws ParseException {
-		return OpenApi.DEFAULT.to(input, type, args);
+		return OpenApi.to(input, type, args);
 	}
 
 	/**
@@ -1066,7 +1066,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String plainText(Object object) throws SerializeException {
-		return PlainText.DEFAULT.of(object);
+		return PlainText.of(object);
 	}
 
 	/**
@@ -1079,7 +1079,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object plainText(Object object, Object output) throws SerializeException, IOException {
-		PlainText.DEFAULT.of(object, output); return output;
+		PlainText.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1093,7 +1093,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T plainText(Object input, Class<T> type) throws ParseException, IOException {
-		return PlainText.DEFAULT.to(input, type);
+		return PlainText.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1108,7 +1108,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T plainText(Object input, Type type, Type... args) throws ParseException, IOException {
-		return PlainText.DEFAULT.to(input, type, args);
+		return PlainText.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1120,7 +1120,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T plainText(String o, Class<T> c) {
-		return safe(() -> PlainText.DEFAULT.to(o, c));
+		return safe(() -> PlainText.to(o, c));
 	}
 
 	/**
@@ -1134,7 +1134,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T plainText(String input, Type type, Type... args) throws ParseException {
-		return PlainText.DEFAULT.to(input, type, args);
+		return PlainText.to(input, type, args);
 	}
 
 	/**
@@ -1148,7 +1148,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String markdown(Object object) throws SerializeException {
-		return Markdown.DEFAULT.of(object);
+		return Markdown.of(object);
 	}
 
 	/**
@@ -1161,7 +1161,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object markdown(Object object, Object output) throws SerializeException, IOException {
-		Markdown.DEFAULT.of(object, output); return output;
+		Markdown.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1175,7 +1175,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T markdown(Object input, Class<T> type) throws ParseException, IOException {
-		return Markdown.DEFAULT.to(input, type);
+		return Markdown.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1190,7 +1190,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T markdown(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Markdown.DEFAULT.to(input, type, args);
+		return Markdown.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1202,7 +1202,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T markdown(String o, Class<T> c) {
-		return safe(() -> Markdown.DEFAULT.to(o, c));
+		return safe(() -> Markdown.to(o, c));
 	}
 
 	/**
@@ -1216,7 +1216,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T markdown(String input, Type type, Type... args) throws ParseException {
-		return Markdown.DEFAULT.to(input, type, args);
+		return Markdown.to(input, type, args);
 	}
 
 	/**
@@ -1230,7 +1230,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String markdownDoc(Object object) throws SerializeException {
-		return MarkdownDoc.DEFAULT.of(object);
+		return MarkdownDoc.of(object);
 	}
 
 	/**
@@ -1243,7 +1243,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object markdownDoc(Object object, Object output) throws SerializeException, IOException {
-		MarkdownDoc.DEFAULT.of(object, output); return output;
+		MarkdownDoc.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1257,7 +1257,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T markdownDoc(Object input, Class<T> type) throws ParseException, IOException {
-		return MarkdownDoc.DEFAULT.to(input, type);
+		return MarkdownDoc.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1272,7 +1272,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T markdownDoc(Object input, Type type, Type... args) throws ParseException, IOException {
-		return MarkdownDoc.DEFAULT.to(input, type, args);
+		return MarkdownDoc.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1284,7 +1284,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T markdownDoc(String o, Class<T> c) {
-		return safe(() -> MarkdownDoc.DEFAULT.to(o, c));
+		return safe(() -> MarkdownDoc.to(o, c));
 	}
 
 	/**
@@ -1298,7 +1298,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T markdownDoc(String input, Type type, Type... args) throws ParseException {
-		return MarkdownDoc.DEFAULT.to(input, type, args);
+		return MarkdownDoc.to(input, type, args);
 	}
 
 	/**
@@ -1312,7 +1312,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String ini(Object object) throws SerializeException {
-		return Ini.DEFAULT.of(object);
+		return Ini.of(object);
 	}
 
 	/**
@@ -1325,7 +1325,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object ini(Object object, Object output) throws SerializeException, IOException {
-		Ini.DEFAULT.of(object, output); return output;
+		Ini.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1339,7 +1339,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T ini(Object input, Class<T> type) throws ParseException, IOException {
-		return Ini.DEFAULT.to(input, type);
+		return Ini.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1354,7 +1354,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T ini(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Ini.DEFAULT.to(input, type, args);
+		return Ini.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1366,7 +1366,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T ini(String o, Class<T> c) {
-		return safe(() -> Ini.DEFAULT.to(o, c));
+		return safe(() -> Ini.to(o, c));
 	}
 
 	/**
@@ -1380,7 +1380,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T ini(String input, Type type, Type... args) throws ParseException {
-		return Ini.DEFAULT.to(input, type, args);
+		return Ini.to(input, type, args);
 	}
 
 	/**
@@ -1394,7 +1394,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String toml(Object object) throws SerializeException {
-		return Toml.DEFAULT.of(object);
+		return Toml.of(object);
 	}
 
 	/**
@@ -1407,7 +1407,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object toml(Object object, Object output) throws SerializeException, IOException {
-		Toml.DEFAULT.of(object, output); return output;
+		Toml.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1421,7 +1421,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T toml(Object input, Class<T> type) throws ParseException, IOException {
-		return Toml.DEFAULT.to(input, type);
+		return Toml.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1436,7 +1436,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T toml(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Toml.DEFAULT.to(input, type, args);
+		return Toml.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1448,7 +1448,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T toml(String o, Class<T> c) {
-		return safe(() -> Toml.DEFAULT.to(o, c));
+		return safe(() -> Toml.to(o, c));
 	}
 
 	/**
@@ -1462,7 +1462,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T toml(String input, Type type, Type... args) throws ParseException {
-		return Toml.DEFAULT.to(input, type, args);
+		return Toml.to(input, type, args);
 	}
 
 	/**
@@ -1476,7 +1476,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String hocon(Object object) throws SerializeException {
-		return Hocon.DEFAULT.of(object);
+		return Hocon.of(object);
 	}
 
 	/**
@@ -1489,7 +1489,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object hocon(Object object, Object output) throws SerializeException, IOException {
-		Hocon.DEFAULT.of(object, output); return output;
+		Hocon.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1503,7 +1503,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T hocon(Object input, Class<T> type) throws ParseException, IOException {
-		return Hocon.DEFAULT.to(input, type);
+		return Hocon.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1518,7 +1518,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T hocon(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Hocon.DEFAULT.to(input, type, args);
+		return Hocon.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1530,7 +1530,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T hocon(String o, Class<T> c) {
-		return safe(() -> Hocon.DEFAULT.to(o, c));
+		return safe(() -> Hocon.to(o, c));
 	}
 
 	/**
@@ -1544,7 +1544,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T hocon(String input, Type type, Type... args) throws ParseException {
-		return Hocon.DEFAULT.to(input, type, args);
+		return Hocon.to(input, type, args);
 	}
 
 	/**
@@ -1558,7 +1558,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static String proto(Object object) throws SerializeException {
-		return Prototext.DEFAULT.of(object);
+		return Prototext.of(object);
 	}
 
 	/**
@@ -1571,7 +1571,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object proto(Object object, Object output) throws SerializeException, IOException {
-		Prototext.DEFAULT.of(object, output); return output;
+		Prototext.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1585,7 +1585,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T proto(Object input, Class<T> type) throws ParseException, IOException {
-		return Prototext.DEFAULT.to(input, type);
+		return Prototext.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1600,7 +1600,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T proto(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Prototext.DEFAULT.to(input, type, args);
+		return Prototext.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1612,7 +1612,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T proto(String o, Class<T> c) {
-		return safe(() -> Prototext.DEFAULT.to(o, c));
+		return safe(() -> Prototext.to(o, c));
 	}
 
 	/**
@@ -1626,7 +1626,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T proto(String input, Type type, Type... args) throws ParseException {
-		return Prototext.DEFAULT.to(input, type, args);
+		return Prototext.to(input, type, args);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -1644,7 +1644,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static byte[] msgPack(Object object) throws SerializeException {
-		return MsgPack.DEFAULT.of(object);
+		return MsgPack.of(object);
 	}
 
 	/**
@@ -1657,7 +1657,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object msgPack(Object object, Object output) throws SerializeException, IOException {
-		MsgPack.DEFAULT.of(object, output); return output;
+		MsgPack.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1671,7 +1671,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T msgPack(Object input, Class<T> type) throws ParseException, IOException {
-		return MsgPack.DEFAULT.to(input, type);
+		return MsgPack.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1686,7 +1686,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T msgPack(Object input, Type type, Type... args) throws ParseException, IOException {
-		return MsgPack.DEFAULT.to(input, type, args);
+		return MsgPack.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1698,7 +1698,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T msgPack(byte[] o, Class<T> c) {
-		return safe(() -> MsgPack.DEFAULT.to(o, c));
+		return safe(() -> MsgPack.to(o, c));
 	}
 
 	/**
@@ -1712,7 +1712,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T msgPack(byte[] input, Type type, Type... args) throws ParseException {
-		return MsgPack.DEFAULT.to(input, type, args);
+		return MsgPack.to(input, type, args);
 	}
 
 	/**
@@ -1726,7 +1726,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static byte[] cbor(Object object) throws SerializeException {
-		return Cbor.DEFAULT.of(object);
+		return Cbor.of(object);
 	}
 
 	/**
@@ -1739,7 +1739,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object cbor(Object object, Object output) throws SerializeException, IOException {
-		Cbor.DEFAULT.of(object, output); return output;
+		Cbor.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1753,7 +1753,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T cbor(Object input, Class<T> type) throws ParseException, IOException {
-		return Cbor.DEFAULT.to(input, type);
+		return Cbor.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1768,7 +1768,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T cbor(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Cbor.DEFAULT.to(input, type, args);
+		return Cbor.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1780,7 +1780,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T cbor(byte[] o, Class<T> c) {
-		return safe(() -> Cbor.DEFAULT.to(o, c));
+		return safe(() -> Cbor.to(o, c));
 	}
 
 	/**
@@ -1794,7 +1794,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T cbor(byte[] input, Type type, Type... args) throws ParseException {
-		return Cbor.DEFAULT.to(input, type, args);
+		return Cbor.to(input, type, args);
 	}
 
 	/**
@@ -1808,7 +1808,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static byte[] bson(Object object) throws SerializeException {
-		return Bson.DEFAULT.of(object);
+		return Bson.of(object);
 	}
 
 	/**
@@ -1821,7 +1821,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object bson(Object object, Object output) throws SerializeException, IOException {
-		Bson.DEFAULT.of(object, output); return output;
+		Bson.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1835,7 +1835,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T bson(Object input, Class<T> type) throws ParseException, IOException {
-		return Bson.DEFAULT.to(input, type);
+		return Bson.DEFAULT.read(input, type);
 	}
 
 	/**
@@ -1850,7 +1850,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static <T> T bson(Object input, Type type, Type... args) throws ParseException, IOException {
-		return Bson.DEFAULT.to(input, type, args);
+		return Bson.DEFAULT.read(input, type, args);
 	}
 
 	/**
@@ -1862,7 +1862,7 @@ public final class MarshallUtils {
 	 * @return The parsed object.
 	 */
 	public static <T> T bson(byte[] o, Class<T> c) {
-		return safe(() -> Bson.DEFAULT.to(o, c));
+		return safe(() -> Bson.to(o, c));
 	}
 
 	/**
@@ -1876,7 +1876,7 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T bson(byte[] input, Type type, Type... args) throws ParseException {
-		return Bson.DEFAULT.to(input, type, args);
+		return Bson.to(input, type, args);
 	}
 
 	/**
@@ -1894,7 +1894,7 @@ public final class MarshallUtils {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public static byte[] parquet(Object object) throws SerializeException {
-		return Parquet.DEFAULT.of(object);
+		return Parquet.of(object);
 	}
 
 	/**
@@ -1907,7 +1907,7 @@ public final class MarshallUtils {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public static Object parquet(Object object, Object output) throws SerializeException, IOException {
-		Parquet.DEFAULT.of(object, output); return output;
+		Parquet.DEFAULT.write(object, output); return output;
 	}
 
 	/**
@@ -1928,7 +1928,7 @@ public final class MarshallUtils {
 		"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
 	})
 	public static <T> List<T> parquet(Object input, Class<T> type) throws ParseException, IOException {
-		return (List<T>) Parquet.DEFAULT.to(input, List.class, type);
+		return (List<T>) Parquet.DEFAULT.read(input, List.class, type);
 	}
 
 	/**
@@ -1947,7 +1947,7 @@ public final class MarshallUtils {
 		"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
 	})
 	public static <T> List<T> parquet(byte[] o, Class<T> c) {
-		return (List<T>) safe(() -> Parquet.DEFAULT.to(o, List.class, c));
+		return (List<T>) safe(() -> Parquet.to(o, List.class, c));
 	}
 
 	/**
@@ -1963,7 +1963,7 @@ public final class MarshallUtils {
 		"unchecked" // Parquet always returns List<T>; generic cast is safe by contract.
 	})
 	public static <T> List<T> parquet(byte[] input, Type type) throws ParseException {
-		return (List<T>) Parquet.DEFAULT.to(input, List.class, type);
+		return (List<T>) Parquet.to(input, List.class, type);
 	}
 
 	/**
@@ -1977,6 +1977,6 @@ public final class MarshallUtils {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static <T> T parquet(byte[] input, Type type, Type... args) throws ParseException {
-		return Parquet.DEFAULT.to(input, type, args);
+		return Parquet.to(input, type, args);
 	}
 }

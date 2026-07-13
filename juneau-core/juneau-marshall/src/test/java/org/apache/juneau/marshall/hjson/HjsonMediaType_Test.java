@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.hjson;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
@@ -50,9 +51,19 @@ class HjsonMediaType_Test {
 	@Test
 	void g03_contentNegotiation() throws Exception {
 		var a = JsonMap.of("name", "test", "count", 42);
-		var hjson = org.apache.juneau.marshall.marshaller.Hjson.DEFAULT.of(a);
+		var hjson = toHjson(a);
 		assertNotNull(hjson);
-		var b = (Map<String, Object>) org.apache.juneau.marshall.marshaller.Hjson.DEFAULT.to(hjson, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) fromHjson(hjson, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Hjson is shadowed by the @Hjson annotation in this package).
+
+	private static String toHjson(Object o) {
+		return org.apache.juneau.marshall.marshaller.Hjson.of(o);
+	}
+
+	private static <T> T fromHjson(String input, Type type, Type... args) {
+		return org.apache.juneau.marshall.marshaller.Hjson.to(input, type, args);
 	}
 }

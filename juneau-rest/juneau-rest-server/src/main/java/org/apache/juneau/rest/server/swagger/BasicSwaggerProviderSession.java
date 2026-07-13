@@ -236,7 +236,7 @@ public class BasicSwaggerProviderSession {
 		Predicate<Map<?,?>> nem = Shorts::ine;
 
 		// Load swagger JSON from classpath.
-		var omSwagger = Json5.DEFAULT.to(is, Json5Map.class);
+		var omSwagger = Json5.DEFAULT.read(is, Json5Map.class);
 		if (omSwagger == null)
 			omSwagger = new Json5Map();
 

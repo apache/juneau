@@ -50,7 +50,7 @@ class Jsonl_Test extends TestBase {
 			new Person("Bob", 25),
 			new Person("Carol", 35)
 		);
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
 		assertEquals(3, lines.length);
 		assertTrue(lines[0].contains("\"name\":\"Alice\""));
@@ -64,7 +64,7 @@ class Jsonl_Test extends TestBase {
 	@Test
 	void a02_serializeArray() throws Exception {
 		var arr = new Person[]{new Person("Alice", 30), new Person("Bob", 25)};
-		var jsonl = Jsonl.DEFAULT.of(arr);
+		var jsonl = Jsonl.of(arr);
 		var lines = jsonl.split("\n");
 		assertEquals(2, lines.length);
 		assertTrue(lines[0].contains("\"Alice\""));
@@ -74,7 +74,7 @@ class Jsonl_Test extends TestBase {
 	@Test
 	void a03_serializeSingleBean() throws Exception {
 		var p = new Person("Alice", 30);
-		var jsonl = Jsonl.DEFAULT.of(p);
+		var jsonl = Jsonl.of(p);
 		assertEquals(1, jsonl.split("\n").length);
 		assertTrue(jsonl.contains("\"name\":\"Alice\""));
 		assertTrue(jsonl.contains("\"age\":30"));
@@ -86,7 +86,7 @@ class Jsonl_Test extends TestBase {
 			JsonMap.of("a", 1, "b", 2),
 			JsonMap.of("x", "y")
 		);
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
 		assertEquals(2, lines.length);
 		assertTrue(lines[0].contains("\"a\":1"));
@@ -96,7 +96,7 @@ class Jsonl_Test extends TestBase {
 	@Test
 	void a05_serializeCollectionOfStrings() throws Exception {
 		var list = list("foo", "bar", "baz");
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
 		assertEquals(3, lines.length);
 		assertTrue(lines[0].contains("\"foo\""));
@@ -107,7 +107,7 @@ class Jsonl_Test extends TestBase {
 	@Test
 	void a06_serializeCollectionOfNumbers() throws Exception {
 		var list = list(1, 2, 3);
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
 		assertEquals(3, lines.length);
 		assertEquals("1", lines[0]);
@@ -117,14 +117,14 @@ class Jsonl_Test extends TestBase {
 
 	@Test
 	void a07_serializeEmptyCollection() throws Exception {
-		var jsonl = Jsonl.DEFAULT.of(list());
+		var jsonl = Jsonl.of(list());
 		assertEquals("", jsonl.trim());
 	}
 
 	@Test
 	void a08_serializeNullValues() throws Exception {
 		var list = list("a", null, "c");
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
 		assertEquals(3, lines.length);
 		assertEquals("null", lines[1]);
@@ -133,14 +133,14 @@ class Jsonl_Test extends TestBase {
 	@Test
 	void a09_serializeNestedObjects() throws Exception {
 		var outer = JsonMap.of("name", "Alice", "inner", JsonMap.of("x", 1, "y", 2));
-		var jsonl = Jsonl.DEFAULT.of(outer);
+		var jsonl = Jsonl.of(outer);
 		assertTrue(jsonl.contains("\"inner\":{\"x\":1,\"y\":2}"));
 	}
 
 	@Test
 	void a10_noTrailingComma() throws Exception {
 		var list = list(new Person("A", 1), new Person("B", 2));
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		assertFalse(jsonl.contains(",,"));
 		assertFalse(jsonl.contains("\n,"));
 	}
@@ -148,7 +148,7 @@ class Jsonl_Test extends TestBase {
 	@Test
 	void a11_noWhitespaceBetweenLines() throws Exception {
 		var list = list(new Person("A", 1), new Person("B", 2));
-		var jsonl = Jsonl.DEFAULT.of(list);
+		var jsonl = Jsonl.of(list);
 		var lines = jsonl.split("\n");
 		for (var line : lines) {
 			if (!line.isEmpty()) {

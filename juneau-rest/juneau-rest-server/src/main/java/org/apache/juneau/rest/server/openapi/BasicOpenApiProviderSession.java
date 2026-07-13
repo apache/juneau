@@ -143,7 +143,7 @@ public class BasicOpenApiProviderSession {
 		var swagger = swaggerSession.getSwagger();
 		// Round-trip via Json5 so we work with a plain Json5Map and can apply the spec mapping
 		// without touching the typed Swagger / OpenApi beans.
-		var swaggerMap = Json5.DEFAULT.to(Json5.DEFAULT.of(swagger), Json5Map.class);
+		var swaggerMap = Json5.to(Json5.of(swagger), Json5Map.class);
 		if (swaggerMap == null)
 			swaggerMap = new Json5Map();
 		var openApiMap = transform(swaggerMap);

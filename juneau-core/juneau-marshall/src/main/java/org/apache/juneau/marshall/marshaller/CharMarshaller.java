@@ -50,7 +50,7 @@ public class CharMarshaller extends Marshaller {
 	}
 
 	/**
-	 * Same as {@link #to(Object,Class)} but reads from a string and thus doesn't throw an <c>IOException</c>.
+	 * Same as {@link #read(Object,Class)} but reads from a string and thus doesn't throw an <c>IOException</c>.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -60,19 +60,19 @@ public class CharMarshaller extends Marshaller {
 	 * 	Marshaller <jv>marshaller</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
@@ -81,12 +81,12 @@ public class CharMarshaller extends Marshaller {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T to(String input, Class<T> type) throws ParseException {
+	public final <T> T read(String input, Class<T> type) throws ParseException {
 		return p.parse(input, type);
 	}
 
 	/**
-	 * Same as {@link #to(Object,Type,Type...)} but reads from a string and thus doesn't throw an <c>IOException</c>.
+	 * Same as {@link #read(Object,Type,Type...)} but reads from a string and thus doesn't throw an <c>IOException</c>.
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.
@@ -101,7 +101,7 @@ public class CharMarshaller extends Marshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T to(String input, Type type, Type...args) throws ParseException {
+	public final <T> T read(String input, Type type, Type...args) throws ParseException {
 		return p.parse(input, type, args);
 	}
 
@@ -113,7 +113,7 @@ public class CharMarshaller extends Marshaller {
 	 * 	The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public final String of(Object object) throws SerializeException {
+	public final String write(Object object) throws SerializeException {
 		return s.serializeToString(object);
 	}
 }

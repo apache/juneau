@@ -18,6 +18,9 @@ package org.apache.juneau.marshall.jena.marshaller;
 
 import org.apache.juneau.marshall.jena.*;
 import org.apache.juneau.marshall.marshaller.*;
+import java.lang.reflect.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of {@link RdfThriftSerializer} and {@link RdfThriftParser} for RDF/THRIFT binary format.
@@ -33,13 +36,19 @@ import org.apache.juneau.marshall.marshaller.*;
  * <p class='bjava'>
  * 	<jc>// Using instance methods</jc>
  * 	RdfThrift <jv>m</jv> = RdfThrift.<jsf>DEFAULT</jsf>;
- * 	<jv>bytes</jv> = <jv>m</jv>.of(<jv>myBean</jv>);
- * 	<jv>parsed</jv> = <jv>m</jv>.to(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jv>bytes</jv> = <jv>m</jv>.write(<jv>myBean</jv>);
+ * 	<jv>parsed</jv> = <jv>m</jv>.read(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
  * </p>
  *
  * <p>Output is binary (<jk>byte</jk>[]), Apache Thrift format.</p>
  *
  * <p>Complex structures (nested objects, arrays) serialize to equivalent RDF triples in binary form.</p>
+ *
+ * <p class='bjava'>
+ *	<jc>// Using static shortcuts.</jc>
+ * 	MyPojo <jv>myPojo</jv> = RdfThrift.<jsm>to</jsm>(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = RdfThrift.<jsm>of</jsm>(<jv>myPojo</jv>);
+ * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'>{doc jmr.RdfDetails}
@@ -50,6 +59,53 @@ public class RdfThrift extends StreamMarshaller {
 
 	/** Default reusable instance.*/
 	public static final RdfThrift DEFAULT = new RdfThrift();
+
+	/**
+	 * Serializes a POJO to a <code><jk>byte</jk>[]</code> using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
+	 *
+	 * @param object The object to serialize.
+	 * @return The serialized object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public static byte[] of(Object object) throws SerializeException {
+		return DEFAULT.write(object);
+	}
+
+	/**
+	 * Parses an input into the specified object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(byte[] input, Class<T> type) throws ParseException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses an input into the specified parameterized object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(byte[] input, Type type, Type... args) throws ParseException {
+		return DEFAULT.read(input, type, args);
+	}
 
 	/** Constructor using defaults.*/
 	public RdfThrift() {

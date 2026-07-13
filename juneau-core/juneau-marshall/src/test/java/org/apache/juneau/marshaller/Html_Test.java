@@ -39,10 +39,10 @@ class Html_Test extends TestBase {
 		var expected1 = "<string>foo</string>";
 		var expected2 = "<table><tr><td>foo</td><td>bar</td></tr></table>";
 
-		assertString(expected1, Html.DEFAULT.of(in1));
-		{ var sw1 = stringWriter(); Html.DEFAULT.of(in1, sw1); assertString(expected1, sw1); }
-		assertString(expected2, Html.DEFAULT.of(in2));
-		{ var sw2 = stringWriter(); Html.DEFAULT.of(in2, sw2); assertString(expected2, sw2); }
+		assertString(expected1, Html.of(in1));
+		{ var sw1 = stringWriter(); Html.DEFAULT.write(in1, sw1); assertString(expected1, sw1); }
+		assertString(expected2, Html.of(in2));
+		{ var sw2 = stringWriter(); Html.DEFAULT.write(in2, sw2); assertString(expected2, sw2); }
 	}
 
 	@Test void a02_from() throws Exception {
@@ -51,10 +51,10 @@ class Html_Test extends TestBase {
 		var expected1 = "foo";
 		var expected2 = "{foo:'bar'}";
 
-		assertEquals(expected1, Html.DEFAULT.to(in1, String.class));
-		assertEquals(expected1, Html.DEFAULT.to(stringReader(in1), String.class));
-		assertJson(expected2, Html.DEFAULT.to(in2, Map.class, String.class, String.class));
-		assertJson(expected2, Html.DEFAULT.to(stringReader(in2), Map.class, String.class, String.class));
+		assertEquals(expected1, Html.to(in1, String.class));
+		assertEquals(expected1, Html.DEFAULT.read(stringReader(in1), String.class));
+		assertJson(expected2, Html.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Html.DEFAULT.read(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

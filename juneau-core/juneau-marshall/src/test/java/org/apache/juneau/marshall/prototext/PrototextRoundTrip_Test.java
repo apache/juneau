@@ -32,8 +32,8 @@ class PrototextRoundTrip_Test {
 	@Test
 	void a01_simpleBeanRoundTrip() {
 		var a = JsonMap.of("s", "hello", "n", 42, "b", true, "x", 3.14);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("hello", b.get("s"));
 		assertEquals(42L, b.get("n"));
 		assertEquals(true, b.get("b"));
@@ -49,8 +49,8 @@ class PrototextRoundTrip_Test {
 		a.put("name", "Alice");
 		a.put("address", inner);
 
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("Alice", b.get("name"));
 		var addr = b.getMap("address");
 		assertNotNull(addr);
@@ -68,8 +68,8 @@ class PrototextRoundTrip_Test {
 		a2.put("port", 8081);
 		var a = JsonMap.of("servers", List.of(a1, a2));
 
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		var list = b.getList("servers");
 		assertNotNull(list);
 		assertEquals(2, list.size());
@@ -80,8 +80,8 @@ class PrototextRoundTrip_Test {
 	@Test
 	void a04_collectionOfStringsRoundTrip() {
 		var a = JsonMap.of("tags", List.of("a", "b", "c"));
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals(List.of("a", "b", "c"), b.getList("tags"));
 	}
 
@@ -90,8 +90,8 @@ class PrototextRoundTrip_Test {
 		var a = new LinkedHashMap<String, Object>();
 		a.put("env", new LinkedHashMap<>(Map.of("PATH", "/usr/bin", "HOME", "/home")));
 
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		var env = b.getMap("env");
 		assertNotNull(env);
 		assertEquals("/usr/bin", env.get("PATH"));
@@ -101,24 +101,24 @@ class PrototextRoundTrip_Test {
 	@Test
 	void a06_enumRoundTrip() {
 		var a = JsonMap.of("level", "INFO");
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("INFO", b.get("level"));
 	}
 
 	@Test
 	void a07_stringEscapingRoundTrip() {
 		var a = JsonMap.of("s", "a\nb\tc");
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("a\nb\tc", b.get("s"));
 	}
 
 	@Test
 	void a08_booleanRoundTrip() {
 		var a = JsonMap.of("t", true, "f", false);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals(true, b.get("t"));
 		assertEquals(false, b.get("f"));
 	}
@@ -126,8 +126,8 @@ class PrototextRoundTrip_Test {
 	@Test
 	void a09_numericEdgeCases() {
 		var a = JsonMap.of("i", Integer.MAX_VALUE, "l", Long.MAX_VALUE, "d", 3.14159265358979);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals((long) Integer.MAX_VALUE, b.get("i"));
 		assertEquals(Long.MAX_VALUE, b.get("l"));
 		assertEquals(3.14159265358979, ((Number) b.get("d")).doubleValue(), 1e-10);
@@ -142,8 +142,8 @@ class PrototextRoundTrip_Test {
 		a.put("tags", List.of("a", "b"));
 		a.put("nested", inner);
 
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("test", b.get("name"));
 		assertEquals(42L, b.get("count"));
 		assertEquals(List.of("a", "b"), b.getList("tags"));
@@ -162,8 +162,8 @@ class PrototextRoundTrip_Test {
 	@Test
 	void a12_emptyCollectionsRoundTrip() {
 		var a = JsonMap.of("tags", List.of());
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		var list = b.getList("tags");
 		assertNotNull(list);
 		assertTrue(list.isEmpty());
@@ -177,8 +177,8 @@ class PrototextRoundTrip_Test {
 		a.put("nullStr", null);
 		a.put("nullInt", null);
 
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("x", b.get("s"));
 		assertEquals(1L, b.get("n"));
 		assertNull(b.get("nullStr"));
@@ -188,8 +188,8 @@ class PrototextRoundTrip_Test {
 	@Test
 	void a14_topLevelScalarLimitation() {
 		var a = "bare";
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, String.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, String.class);
 		assertEquals("bare", b);
 	}
 
@@ -203,8 +203,8 @@ class PrototextRoundTrip_Test {
 		a.put("nest", inner);
 		a.put("list", List.of(1, 2, 3));
 
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("hello", b.get("s"));
 		assertEquals(42L, b.get("n"));
 		assertEquals(true, b.get("b"));
@@ -219,10 +219,20 @@ class PrototextRoundTrip_Test {
 			"localDate", "2012-12-21",
 			"timeout", "PT1H30M"
 		);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(a);
-		var b = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var proto = toPrototext(a);
+		var b = fromPrototext(proto, JsonMap.class);
 		assertEquals("2012-12-21T12:34:56Z", b.get("instant"));
 		assertEquals("2012-12-21", b.get("localDate"));
 		assertEquals("PT1H30M", b.get("timeout"));
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Prototext is shadowed by the @Prototext annotation in this package).
+
+	private static String toPrototext(Object o) {
+		return org.apache.juneau.marshall.marshaller.Prototext.of(o);
+	}
+
+	private static <T> T fromPrototext(String input, Class<T> type) {
+		return org.apache.juneau.marshall.marshaller.Prototext.to(input, type);
 	}
 }

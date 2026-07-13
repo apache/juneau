@@ -38,10 +38,10 @@ class Json5_Test extends TestBase {
 		var expected1 = "'foo'";
 		var expected2 = "{foo:'bar'}";
 
-		assertString(expected1, Json5.DEFAULT.of(in1));
-		{ var sw1 = stringWriter(); Json5.DEFAULT.of(in1, sw1); assertString(expected1, sw1); }
-		assertString(expected2, Json5.DEFAULT.of(in2));
-		{ var sw2 = stringWriter(); Json5.DEFAULT.of(in2, sw2); assertString(expected2, sw2); }
+		assertString(expected1, Json5.of(in1));
+		{ var sw1 = stringWriter(); Json5.DEFAULT.write(in1, sw1); assertString(expected1, sw1); }
+		assertString(expected2, Json5.of(in2));
+		{ var sw2 = stringWriter(); Json5.DEFAULT.write(in2, sw2); assertString(expected2, sw2); }
 	}
 
 	@Test void a02_from() throws Exception {
@@ -50,10 +50,10 @@ class Json5_Test extends TestBase {
 		var expected1 = "foo";
 		var expected2 = "{foo:'bar'}";
 
-		assertString(expected1, Json5.DEFAULT.to(in1, String.class));
-		assertString(expected1, Json5.DEFAULT.to(stringReader(in1), String.class));
-		assertJson(expected2, Json5.DEFAULT.to(in2, Map.class, String.class, String.class));
-		assertJson(expected2, Json5.DEFAULT.to(stringReader(in2), Map.class, String.class, String.class));
+		assertString(expected1, Json5.to(in1, String.class));
+		assertString(expected1, Json5.DEFAULT.read(stringReader(in1), String.class));
+		assertJson(expected2, Json5.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Json5.DEFAULT.read(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

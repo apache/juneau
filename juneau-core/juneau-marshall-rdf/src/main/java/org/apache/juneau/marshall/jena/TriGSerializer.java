@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the TriG marshaller for convenience.</jc>
- * 	String <jv>triG</jv> = TriG.DEFAULT.of(<jv>person</jv>);
+ * 	String <jv>triG</jv> = TriG.<jsm>of</jsm>(<jv>person</jv>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom serializer with swaps.</jc>

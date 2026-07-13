@@ -39,10 +39,10 @@ class Uon_Test extends TestBase {
 		var expected1 = "foo";
 		var expected2 = "(foo=bar)";
 
-		assertString(expected1, Uon.DEFAULT.of(in1));
-		{ var sw1 = stringWriter(); Uon.DEFAULT.of(in1, sw1); assertString(expected1, sw1); }
-		assertString(expected2, Uon.DEFAULT.of(in2));
-		{ var sw2 = stringWriter(); Uon.DEFAULT.of(in2, sw2); assertString(expected2, sw2); }
+		assertString(expected1, Uon.of(in1));
+		{ var sw1 = stringWriter(); Uon.DEFAULT.write(in1, sw1); assertString(expected1, sw1); }
+		assertString(expected2, Uon.of(in2));
+		{ var sw2 = stringWriter(); Uon.DEFAULT.write(in2, sw2); assertString(expected2, sw2); }
 	}
 
 	@Test void a02_from() throws Exception {
@@ -51,10 +51,10 @@ class Uon_Test extends TestBase {
 		var expected1 = "foo";
 		var expected2 = "{foo:'bar'}";
 
-		assertEquals(expected1, Uon.DEFAULT.to(in1, String.class));
-		assertEquals(expected1, Uon.DEFAULT.to(stringReader(in1), String.class));
-		assertJson(expected2, Uon.DEFAULT.to(in2, Map.class, String.class, String.class));
-		assertJson(expected2, Uon.DEFAULT.to(stringReader(in2), Map.class, String.class, String.class));
+		assertEquals(expected1, Uon.to(in1, String.class));
+		assertEquals(expected1, Uon.DEFAULT.read(stringReader(in1), String.class));
+		assertJson(expected2, Uon.to(in2, Map.class, String.class, String.class));
+		assertJson(expected2, Uon.DEFAULT.read(stringReader(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

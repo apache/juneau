@@ -40,10 +40,10 @@ class Csv_Test extends TestBase{
 		var expected1 = "value\nfoo\n";
 		var expected2 = "a,b\nfoo,bar\n";
 
-		assertString(expected1, Csv.DEFAULT.of(in1));
-		{ var sw1 = stringWriter(); Csv.DEFAULT.of(in1, sw1); assertString(expected1, sw1); }
-		assertString(expected2, Csv.DEFAULT.of(in2));
-		{ var sw2 = stringWriter(); Csv.DEFAULT.of(in2, sw2); assertString(expected2, sw2); }
+		assertString(expected1, Csv.of(in1));
+		{ var sw1 = stringWriter(); Csv.DEFAULT.write(in1, sw1); assertString(expected1, sw1); }
+		assertString(expected2, Csv.of(in2));
+		{ var sw2 = stringWriter(); Csv.DEFAULT.write(in2, sw2); assertString(expected2, sw2); }
 	}
 
 	@Test void a02_from() throws Exception {
@@ -52,21 +52,21 @@ class Csv_Test extends TestBase{
 		var csv2 = "a,b\nfoo,bar\n";
 
 		// Parse a single-column list of strings
-		var r1 = (List<String>) Csv.DEFAULT.to(csv1, List.class, String.class);
+		var r1 = (List<String>) Csv.to(csv1, List.class, String.class);
 		assertEquals(1, r1.size());
 		assertEquals("foo", r1.get(0));
 
 		// Parse from Reader
-		var r2 = (List<String>) Csv.DEFAULT.to(stringReader(csv1), List.class, String.class);
+		var r2 = (List<String>) Csv.DEFAULT.read(stringReader(csv1), List.class, String.class);
 		assertEquals(1, r2.size());
 
 		// Parse into a map
-		var r3 = Csv.DEFAULT.to(csv2, Map.class);
+		var r3 = Csv.to(csv2, Map.class);
 		assertEquals("foo", r3.get("a"));
 		assertEquals("bar", r3.get("b"));
 
 		// Parse from Reader into a map
-		var r4 = Csv.DEFAULT.to(stringReader(csv2), Map.class);
+		var r4 = Csv.DEFAULT.read(stringReader(csv2), Map.class);
 		assertEquals("foo", r4.get("a"));
 	}
 	//-----------------------------------------------------------------------------------------------------------------

@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfXml marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = RdfXml.DEFAULT.to(<jv>rdfXml</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfXml.<jsm>to</jsm>(<jv>rdfXml</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map.</jc>

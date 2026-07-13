@@ -34,14 +34,14 @@ import org.apache.juneau.marshall.stream.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
- * 	Marshaller <jv>json</jv> = <jk>new</jk> Json();
- * 	MyPojo <jv>myPojo</jv> = <jv>json</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>json</jv>.of(<jv>myPojo</jv>);
+	 * 	Marshaller <jv>json</jv> = <jk>new</jk> Json();
+ * 	MyPojo <jv>myPojo</jv> = <jv>json</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>json</jv>.write(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.of(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = Json.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = Json.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -85,7 +85,7 @@ public abstract class Marshaller {
 	public Serializer getSerializer() { return s; }
 
 	/**
-	 * Same as {@link #to(Object, Type, Type...)} except optimized for a non-parameterized class.
+	 * Same as {@link #read(Object, Type, Type...)} except optimized for a non-parameterized class.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -95,19 +95,19 @@ public abstract class Marshaller {
 	 * 	Marshaller <jv>marshaller</jv>  = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
@@ -138,7 +138,7 @@ public abstract class Marshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final <T> T to(Object input, Class<T> type) throws ParseException, IOException {
+	public final <T> T read(Object input, Class<T> type) throws ParseException, IOException {
 		return p.parse(input, type);
 	}
 
@@ -153,19 +153,19 @@ public abstract class Marshaller {
 	 * 	Marshaller <jv>marshaller</jv> = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a linked-list of strings.</jc>
-	 * 	List <jv>list1</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list1</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of beans.</jc>
-	 * 	List <jv>list2</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	List <jv>list2</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of linked-lists of strings.</jc>
-	 * 	List <jv>list3</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	List <jv>list3</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>, LinkedList.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of string keys/values.</jc>
-	 * 	Map <jv>map1</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
+	 * 	Map <jv>map1</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map containing string keys and values of lists containing beans.</jc>
-	 * 	Map <jv>map2</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
+	 * 	Map <jv>map2</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>, String.<jk>class</jk>, List.<jk>class</jk>, MyBean.<jk>class</jk>);
 	 * </p>
 	 *
 	 * <p>
@@ -179,7 +179,7 @@ public abstract class Marshaller {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		Use the {@link #to(Object, Class)} method instead if you don't need a parameterized map/collection.
+	 * 		Use the {@link #read(Object, Class)} method instead if you don't need a parameterized map/collection.
 	 * </ul>
 	 *
 	 * @param <T> The class type of the object to create.
@@ -217,7 +217,7 @@ public abstract class Marshaller {
 	 * @throws IOException Thrown by underlying stream.
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T to(Object input, Type type, Type...args) throws ParseException, IOException {
+	public final <T> T read(Object input, Type type, Type...args) throws ParseException, IOException {
 		return p.parse(input, type, args);
 	}
 
@@ -245,7 +245,7 @@ public abstract class Marshaller {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	public final void of(Object object, Object output) throws SerializeException, IOException {
+	public final void write(Object object, Object output) throws SerializeException, IOException {
 		s.serialize(object, output);
 	}
 
@@ -267,7 +267,7 @@ public abstract class Marshaller {
 	 * @return A new {@link TokenReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
-	public TokenReader fromTokens(Object input) throws IOException {
+	public TokenReader readTokens(Object input) throws IOException {
 		return ((TokenReadable) getParser()).parseTokens(input);
 	}
 
@@ -289,7 +289,7 @@ public abstract class Marshaller {
 	 * @return A new {@link TokenWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
-	public TokenWriter toTokens(Object output) throws IOException {
+	public TokenWriter writeTokens(Object output) throws IOException {
 		return ((TokenWritable) getSerializer()).serializeTokens(output);
 	}
 
@@ -310,7 +310,7 @@ public abstract class Marshaller {
 	 * @return A new {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
-	public RecordReader fromRecords(Object input) throws IOException {
+	public RecordReader readRecords(Object input) throws IOException {
 		return ((RecordReadable) getParser()).parseRecords(input);
 	}
 
@@ -331,7 +331,7 @@ public abstract class Marshaller {
 	 * @return A new {@link RecordWriter} cursor.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
-	public RecordWriter toRecords(Object output) throws IOException {
+	public RecordWriter writeRecords(Object output) throws IOException {
 		return ((RecordWritable) getSerializer()).serializeRecords(output);
 	}
 
@@ -352,7 +352,7 @@ public abstract class Marshaller {
 	 * @return A new element-streamed {@link RecordReader} cursor.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
-	public RecordReader fromArrayRecords(Object input) throws IOException {
+	public RecordReader readArrayRecords(Object input) throws IOException {
 		return ((ArrayRecordReadable) getParser()).parseArrayRecords(input);
 	}
 
@@ -374,7 +374,7 @@ public abstract class Marshaller {
 	 * @return A new element-streamed {@link RecordWriter} cursor.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */
-	public RecordWriter toArrayRecords(Object output) throws IOException {
+	public RecordWriter writeArrayRecords(Object output) throws IOException {
 		return ((ArrayRecordWritable) getSerializer()).serializeArrayRecords(output);
 	}
 }

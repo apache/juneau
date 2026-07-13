@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the TriX marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = TriX.DEFAULT.to(<jv>triX</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = TriX.<jsm>to</jsm>(<jv>triX</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Custom parser with swaps.</jc>

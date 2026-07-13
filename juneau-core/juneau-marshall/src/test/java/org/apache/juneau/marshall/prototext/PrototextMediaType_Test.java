@@ -44,9 +44,19 @@ class PrototextMediaType_Test {
 	@Test
 	void a03_contentNegotiation() {
 		var bean = JsonMap.of("x", 1);
-		var proto = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.of(bean);
+		var proto = toPrototext(bean);
 		assertNotNull(proto);
-		var parsed = org.apache.juneau.marshall.marshaller.Prototext.DEFAULT.to(proto, JsonMap.class);
+		var parsed = fromPrototext(proto, JsonMap.class);
 		assertEquals(1L, parsed.get("x"));
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Prototext is shadowed by the @Prototext annotation in this package).
+
+	private static String toPrototext(Object o) {
+		return org.apache.juneau.marshall.marshaller.Prototext.of(o);
+	}
+
+	private static <T> T fromPrototext(String input, Class<T> type) {
+		return org.apache.juneau.marshall.marshaller.Prototext.to(input, type);
 	}
 }

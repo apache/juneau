@@ -260,7 +260,7 @@ public class Messages extends ResourceBundle {
 					if (isProbablyJsonObject(value, true)) {
 						MessagesString ms;
 						try {
-							ms = Json5.DEFAULT.to(value, MessagesString.class);
+							ms = Json5.to(value, MessagesString.class);
 						} catch (ParseException e) {
 							throw toRex(e);
 						}

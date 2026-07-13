@@ -57,7 +57,7 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 		if (o == null) {
 			w.append("null");
 		} else if (o instanceof Map || o instanceof Collection || o.getClass().isArray()) {
-			w.append(Json5.DEFAULT.of(o));
+			w.append(Json5.of(o));
 		} else {
 			w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));
 		}

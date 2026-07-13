@@ -2388,7 +2388,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF serializerSessionOptionsHeader(Map<String,?> properties) {
 			try {
-				return serializerSessionOptionsHeader(isEmpty(properties) ? null : Json5.DEFAULT.of(properties));
+				return serializerSessionOptionsHeader(isEmpty(properties) ? null : Json5.of(properties));
 			} catch (SerializeException e) {
 				throw rex(e, "Could not serialize serializer session options header");
 			}
@@ -2404,7 +2404,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF parserSessionOptionsHeader(Map<String,?> properties) {
 			try {
-				return parserSessionOptionsHeader(isEmpty(properties) ? null : Json5.DEFAULT.of(properties));
+				return parserSessionOptionsHeader(isEmpty(properties) ? null : Json5.of(properties));
 			} catch (SerializeException e) {
 				throw rex(e, "Could not serialize parser session options header");
 			}
@@ -4457,7 +4457,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF serializerSessionOptionsQueryDefault(Map<String,?> properties) {
 			try {
-				return serializerSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.DEFAULT.of(properties));
+				return serializerSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.of(properties));
 			} catch (SerializeException e) {
 				throw rex(e, "Could not serialize serializer session options query default");
 			}
@@ -4473,7 +4473,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF parserSessionOptionsQueryDefault(Map<String,?> properties) {
 			try {
-				return parserSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.DEFAULT.of(properties));
+				return parserSessionOptionsQueryDefault(isEmpty(properties) ? null : Uon.of(properties));
 			} catch (SerializeException e) {
 				throw rex(e, "Could not serialize parser session options query default");
 			}

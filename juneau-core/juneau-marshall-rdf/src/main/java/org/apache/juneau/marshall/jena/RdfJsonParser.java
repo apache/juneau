@@ -31,7 +31,7 @@ package org.apache.juneau.marshall.jena;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfJson marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = RdfJson.DEFAULT.to(<jv>rdfJson</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfJson.<jsm>to</jsm>(<jv>rdfJson</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a list of beans.</jc>

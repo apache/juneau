@@ -227,6 +227,6 @@ class BasicPart_Test extends TestBase {
 	 */
 	private static void assertTypeAndJson(Class<?> c, String json, Object value) {
 		assertInstanceOf(c, value);
-		assertEquals(json, Json5.DEFAULT.of(value));
+		assertEquals(json, Json5.of(value));
 	}
 }

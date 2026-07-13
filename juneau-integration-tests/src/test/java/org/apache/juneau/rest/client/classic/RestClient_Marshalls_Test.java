@@ -45,7 +45,7 @@ public class RestClient_Marshalls_Test extends TestBase {
 
 		@Override
 		public String toString() {
-			return Json5.DEFAULT.of(this);
+			return Json5.of(this);
 		}
 	}
 

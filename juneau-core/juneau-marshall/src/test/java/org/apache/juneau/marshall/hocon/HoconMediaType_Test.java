@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.hocon;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
@@ -50,9 +51,19 @@ class HoconMediaType_Test {
 	@Test
 	void j03_contentNegotiation() throws Exception {
 		var a = JsonMap.of("name", "test", "count", 42);
-		var hocon = org.apache.juneau.marshall.marshaller.Hocon.DEFAULT.of(a);
+		var hocon = toHocon(a);
 		assertNotNull(hocon);
-		var b = (Map<String, Object>) org.apache.juneau.marshall.marshaller.Hocon.DEFAULT.to(hocon, Map.class, String.class, Object.class);
+		var b = (Map<String, Object>) fromHocon(hocon, Map.class, String.class, Object.class);
 		assertBean(b, "name,count", "test,42");
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Hocon is shadowed by the @Hocon annotation in this package).
+
+	private static String toHocon(Object o) {
+		return org.apache.juneau.marshall.marshaller.Hocon.of(o);
+	}
+
+	private static <T> T fromHocon(String input, Type type, Type... args) {
+		return org.apache.juneau.marshall.marshaller.Hocon.to(input, type, args);
 	}
 }

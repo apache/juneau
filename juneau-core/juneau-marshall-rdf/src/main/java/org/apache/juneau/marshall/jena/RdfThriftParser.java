@@ -28,12 +28,12 @@ import java.io.*;
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
  * 	<jc>// Parse RDF/THRIFT bytes into a bean.</jc>
- * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThrift.DEFAULT.of(<jv>person</jv>);
+ * 	<jk>byte</jk>[] <jv>thriftBytes</jv> = RdfThrift.<jsm>of</jsm>(<jv>person</jv>);
  * 	Person <jv>person</jv> = RdfThriftParser.<jsf>DEFAULT</jsf>.parse(<jv>thriftBytes</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Or use the RdfThrift marshaller for convenience.</jc>
- * 	Person <jv>person</jv> = RdfThrift.DEFAULT.to(<jv>thriftBytes</jv>, Person.<jk>class</jk>);
+ * 	Person <jv>person</jv> = RdfThrift.<jsm>to</jsm>(<jv>thriftBytes</jv>, Person.<jk>class</jk>);
  * </p>
  * <p class='bjava'>
  * 	<jc>// Parse into a map with key/value types.</jc>

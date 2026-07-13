@@ -121,6 +121,6 @@ public class SerializedPojoProcessor implements CatchAllResponseProcessor {
 			return FINISHED;
 
 		throw new NotAcceptable("Unsupported media-type in request header ''Accept'': ''{0}''\n\tSupported media-types: {1}", req.getHeaderParam("Accept").orElse(""),
-			Json5.DEFAULT.of(res.getOpContext().getSerializers().getSupportedMediaTypes()));
+			Json5.of(res.getOpContext().getSerializers().getSupportedMediaTypes()));
 	}
 }

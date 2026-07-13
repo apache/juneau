@@ -27,8 +27,9 @@ import org.junit.jupiter.api.*;
 
 /**
  * Coverage for the {@link Marshaller} low-level stream shortcut methods
- * ({@code fromTokens}/{@code toTokens}/{@code fromRecords}/{@code toRecords}/
- * {@code fromArrayRecords}/{@code toArrayRecords}) — each is a thin cast-and-delegate to the
+ * ({@code readTokens}/{@code writeTokens}/{@code readRecords}/{@code writeRecords}/
+ * {@code readArrayRecords}/{@code writeArrayRecords}) and the curated per-format streaming static
+ * shortcuts ({@code toTokens}/{@code ofTokens}/…) — each is a thin cast-and-delegate to the
  * underlying parser/serializer capability role.
  */
 @SuppressWarnings({
@@ -37,7 +38,7 @@ import org.junit.jupiter.api.*;
 class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a01_readTokens() throws Exception {
-		try (var r = Json.DEFAULT.fromTokens("[1]")) {
+		try (var r = Json.toTokens("[1]")) {
 			assertEquals(TokenType.START_ARRAY, r.next());
 			assertEquals(TokenType.VALUE_NUMBER, r.next());
 		}
@@ -45,14 +46,14 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a02_writeTokens() throws Exception {
 		var sb = new StringBuilder();
-		try (var w = Json.DEFAULT.toTokens(sb)) {
+		try (var w = Json.ofTokens(sb)) {
 			w.startArray().number(1).endArray();
 		}
 		assertEquals("[1]", sb.toString());
 	}
 
 	@Test void a03_readRecords() throws Exception {
-		try (var r = Json.DEFAULT.fromRecords("{\"a\":1}")) {
+		try (var r = Json.toRecords("{\"a\":1}")) {
 			assertTrue(r.isStreaming());
 			var m = r.read(Map.class);
 			assertBean(m, "a", "1");
@@ -61,7 +62,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a04_writeRecords() throws Exception {
 		var sb = new StringBuilder();
-		try (var w = Json.DEFAULT.toRecords(sb)) {
+		try (var w = Json.ofRecords(sb)) {
 			w.write(Map.of("a", 1));
 		}
 		assertEquals("{\"a\":1}", sb.toString());
@@ -69,7 +70,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a05_readArrayRecords() throws Exception {
 		var seen = new ArrayList<Integer>();
-		try (var r = Json.DEFAULT.fromArrayRecords("[1,2,3]")) {
+		try (var r = Json.toArrayRecords("[1,2,3]")) {
 			assertTrue(r.isStreaming());
 			while (r.canRead())
 				seen.add(r.read(Integer.class));
@@ -79,7 +80,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a06_writeArrayRecords() throws Exception {
 		var sb = new StringBuilder();
-		try (var w = Json.DEFAULT.toArrayRecords(sb)) {
+		try (var w = Json.ofArrayRecords(sb)) {
 			w.write(1);
 			w.write(2);
 		}
@@ -89,14 +90,14 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 	@Test void a07_jsonlArrayRecordsAreLineDelimited() throws Exception {
 		// JSONL aliases its line record stream — no surrounding [...] brackets.
 		var sb = new StringBuilder();
-		try (var w = Jsonl.DEFAULT.toArrayRecords(sb)) {
+		try (var w = Jsonl.ofArrayRecords(sb)) {
 			w.write(Map.of("x", 1));
 			w.write(Map.of("x", 2));
 		}
 		assertEquals("{\"x\":1}\n{\"x\":2}\n", sb.toString());
 
 		var seen = new ArrayList<Map<?, ?>>();
-		try (var r = Jsonl.DEFAULT.fromArrayRecords(sb.toString())) {
+		try (var r = Jsonl.toArrayRecords(sb.toString())) {
 			while (r.canRead())
 				seen.add(r.read(Map.class));
 		}
@@ -107,11 +108,11 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a08_readTokensClassCastForNonTokenFormat() {
 		// Csv's parser is not a TokenReadable, so the structural-token shortcut yields ClassCastException.
-		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.fromTokens("a\n1"));
+		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.readTokens("a\n1"));
 	}
 
 	@Test void a09_writeTokensClassCastForNonTokenFormat() {
 		var sb = new StringBuilder();
-		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.toTokens(sb));
+		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.writeTokens(sb));
 	}
 }

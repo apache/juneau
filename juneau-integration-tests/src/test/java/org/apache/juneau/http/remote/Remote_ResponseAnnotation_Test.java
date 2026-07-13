@@ -41,7 +41,7 @@ class Remote_ResponseAnnotation_Test extends TestBase {
 		}
 		@Override
 		public String toString() {
-			return Json5.DEFAULT.of(this);
+			return Json5.of(this);
 		}
 	}
 

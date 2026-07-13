@@ -52,17 +52,27 @@ class ProtobufMediaType_Test extends TestBase {
 	}
 
 	@Test
-	void j01_marshallerRoundTrip() throws Exception {
-		var bytes = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.of(new ProtobufSerializer_Test.Simple(150, "testing"));
-		var b = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.to(bytes, ProtobufSerializer_Test.Simple.class);
+	void j01_marshallerRoundTrip() {
+		var bytes = toProtobuf(new ProtobufSerializer_Test.Simple(150, "testing"));
+		var b = fromProtobuf(bytes, ProtobufSerializer_Test.Simple.class);
 		assertEquals(150, b.id);
 		assertEquals("testing", b.name);
 	}
 
 	@Test
-	void j02_marshallerDefaultWriteRead() throws Exception {
-		var bytes = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.of(new ProtobufSerializer_Test.Simple(7, "x"));
-		var b = org.apache.juneau.marshall.marshaller.Protobuf.DEFAULT.to(bytes, ProtobufSerializer_Test.Simple.class);
+	void j02_marshallerDefaultWriteRead() {
+		var bytes = toProtobuf(new ProtobufSerializer_Test.Simple(7, "x"));
+		var b = fromProtobuf(bytes, ProtobufSerializer_Test.Simple.class);
 		assertEquals(7, b.id);
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Protobuf is shadowed by the @Protobuf annotation in this package).
+
+	private static byte[] toProtobuf(Object o) {
+		return org.apache.juneau.marshall.marshaller.Protobuf.of(o);
+	}
+
+	private static <T> T fromProtobuf(byte[] input, Class<T> type) {
+		return org.apache.juneau.marshall.marshaller.Protobuf.to(input, type);
 	}
 }

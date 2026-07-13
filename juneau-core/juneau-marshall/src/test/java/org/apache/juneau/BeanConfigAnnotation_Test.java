@@ -103,7 +103,7 @@ class BeanConfigAnnotation_Test extends TestBase {
 	public static class A1 {
 		public int foo;
 		@Override
-		public String toString() {return Json5.DEFAULT.of(this);}
+		public String toString() {return Json5.of(this);}
 	}
 	@Marshalled(typeName="A2")
 	public static class A2 {

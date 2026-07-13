@@ -17,6 +17,11 @@
 package org.apache.juneau.marshall.marshaller;
 
 import org.apache.juneau.marshall.urlencoding.*;
+import java.io.*;
+import java.lang.reflect.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.stream.*;
 
 /**
  * A pairing of a {@link UrlEncodingSerializer} and {@link UrlEncodingParser} into a single class with convenience to/of methods.
@@ -28,25 +33,109 @@ import org.apache.juneau.marshall.urlencoding.*;
  * <p class='bjava'>
  * 	<jc>// Using instance.</jc>
  * 	UrlEncoding <jv>urlEncoding</jv> = <jk>new</jk> UrlEncoding();
- * 	MyPojo <jv>myPojo</jv> = <jv>urlEncoding</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>urlEncoding</jv>.of(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = <jv>urlEncoding</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = <jv>urlEncoding</jv>.write(<jv>myPojo</jv>);
  * </p>
  * <p class='bjava'>
  *	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = UrlEncoding.<jsf>DEFAULT</jsf>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = UrlEncoding.<jsf>DEFAULT</jsf>.of(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = UrlEncoding.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = UrlEncoding.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ * </p>
+ *
+ * <p class='bjava'>
+ *	<jc>// Using static shortcuts.</jc>
+ * 	MyPojo <jv>myPojo</jv> = UrlEncoding.<jsm>to</jsm>(<jv>string</jv>, MyPojo.<jk>class</jk>);
+ * 	String <jv>string</jv> = UrlEncoding.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
  * </ul>
  */
+@SuppressWarnings({
+	"resource" // Cursor shortcut methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
+})
 public class UrlEncoding extends CharMarshaller {
 
 	/**
 	 * Default reusable instance.
 	 */
 	public static final UrlEncoding DEFAULT = new UrlEncoding();
+
+	/**
+	 * Serializes a POJO to a <c>String</c> using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
+	 *
+	 * @param object The object to serialize.
+	 * @return The serialized object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public static String of(Object object) throws SerializeException {
+		return DEFAULT.write(object);
+	}
+
+	/**
+	 * Parses an input into the specified object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(String input, Class<T> type) throws ParseException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses an input into the specified parameterized object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(String input, Type type, Type... args) throws ParseException {
+		return DEFAULT.read(input, type, args);
+	}
+
+	/**
+	 * Opens a low-level {@link RecordReader} cursor over the specified input using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.readRecords(<jv>input</jv>)</c>.
+	 *
+	 * @param input The input.
+	 * @return A new {@link RecordReader}.
+	 * @throws IOException If a problem occurred opening the underlying input.
+	 */
+	public static RecordReader toRecords(Object input) throws IOException {
+		return DEFAULT.readRecords(input);
+	}
+
+	/**
+	 * Opens a low-level {@link RecordWriter} cursor over the specified output using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.writeRecords(<jv>output</jv>)</c>.
+	 *
+	 * @param output The output.
+	 * @return A new {@link RecordWriter}.
+	 * @throws IOException If a problem occurred opening the underlying output.
+	 */
+	public static RecordWriter ofRecords(Object output) throws IOException {
+		return DEFAULT.writeRecords(output);
+	}
 
 	/**
 	 * Constructor.

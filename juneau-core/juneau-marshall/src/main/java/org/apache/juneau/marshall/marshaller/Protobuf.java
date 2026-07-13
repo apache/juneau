@@ -17,6 +17,9 @@
 package org.apache.juneau.marshall.marshaller;
 
 import org.apache.juneau.marshall.protobuf.*;
+import java.lang.reflect.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 
 /**
  * A pairing of a {@link ProtobufSerializer} and {@link ProtobufParser} into a single class with convenience read/write
@@ -37,8 +40,14 @@ import org.apache.juneau.marshall.protobuf.*;
  * </p>
  * <p class='bjava'>
  * 	<jc>// Using the DEFAULT instance</jc>
- * 	byte[] <jv>protobuf</jv> = Protobuf.<jsf>DEFAULT</jsf>.of(<jv>myBean</jv>);
- * 	MyBean <jv>parsed</jv> = Protobuf.<jsf>DEFAULT</jsf>.to(<jv>protobuf</jv>, MyBean.<jk>class</jk>);
+ * 	byte[] <jv>protobuf</jv> = Protobuf.<jsf>DEFAULT</jsf>.write(<jv>myBean</jv>);
+ * 	MyBean <jv>parsed</jv> = Protobuf.<jsf>DEFAULT</jsf>.read(<jv>protobuf</jv>, MyBean.<jk>class</jk>);
+ * </p>
+ *
+ * <p class='bjava'>
+ *	<jc>// Using static shortcuts.</jc>
+ * 	MyPojo <jv>myPojo</jv> = Protobuf.<jsm>to</jsm>(<jv>bytes</jv>, MyPojo.<jk>class</jk>);
+ * 	<jk>byte</jk>[] <jv>bytes</jv> = Protobuf.<jsm>of</jsm>(<jv>myPojo</jv>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -52,6 +61,53 @@ public class Protobuf extends StreamMarshaller {
 	 * Default reusable instance.
 	 */
 	public static final Protobuf DEFAULT = new Protobuf();
+
+	/**
+	 * Serializes a POJO to a <code><jk>byte</jk>[]</code> using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
+	 *
+	 * @param object The object to serialize.
+	 * @return The serialized object.
+	 * @throws SerializeException If a problem occurred trying to convert the output.
+	 */
+	public static byte[] of(Object object) throws SerializeException {
+		return DEFAULT.write(object);
+	}
+
+	/**
+	 * Parses an input into the specified object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(byte[] input, Class<T> type) throws ParseException {
+		return DEFAULT.read(input, type);
+	}
+
+	/**
+	 * Parses an input into the specified parameterized object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input The input.
+	 * @param type The object type to create.
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered.
+	 */
+	public static <T> T to(byte[] input, Type type, Type... args) throws ParseException {
+		return DEFAULT.read(input, type, args);
+	}
 
 	/**
 	 * Constructor.

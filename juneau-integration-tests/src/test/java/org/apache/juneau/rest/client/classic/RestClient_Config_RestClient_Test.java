@@ -66,7 +66,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		}
 		@Override
 		public String toString() {
-			return Json5.DEFAULT.of(this);
+			return Json5.of(this);
 		}
 	}
 
@@ -427,7 +427,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 
 	public static class A12a extends FakeWriterSerializer {
 		public A12a(Builder builder) {
-			super(builder.partFunction((t,s,o)->"x" + Json5.DEFAULT.of(o)));
+			super(builder.partFunction((t,s,o)->"x" + Json5.of(o)));
 		}
 	}
 
@@ -439,7 +439,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 		private static Object in(HttpPartType type, HttpPartSchema schema, String in, ClassMeta<?> c) {
 			try {
 				if (c.isAssignableFrom(ABean.class))
-					return Json5.DEFAULT.to(in.substring(1),c);
+					return Json5.to(in.substring(1),c);
 				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
 			} catch (Exception e) {
 				throw ThrowableUtils.toRex(e);

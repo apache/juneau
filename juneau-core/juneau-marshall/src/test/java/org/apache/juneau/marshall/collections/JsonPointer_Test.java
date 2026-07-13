@@ -184,20 +184,20 @@ class JsonPointer_Test extends TestBase {
 	@Test void e02_vivifyNestedObject() {
 		var root = new JsonMap();
 		JsonPointer.of("/a/b/c").set(root, 1);
-		assertEquals("{\"a\":{\"b\":{\"c\":1}}}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":{\"b\":{\"c\":1}}}", Json.of(root));
 	}
 
 	@Test void e03_vivifyNestedArray() {
 		var root = new JsonMap();
 		JsonPointer.of("/a/0").set(root, "x");
-		assertEquals("{\"a\":[\"x\"]}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":[\"x\"]}", Json.of(root));
 		assertInstanceOf(JsonList.class, root.get("a"));
 	}
 
 	@Test void e04_appendToken() {
 		var root = JsonMap.of("a", JsonList.of(1, 2));
 		JsonPointer.of("/a/-").set(root, 3);
-		assertEquals("{\"a\":[1,2,3]}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":[1,2,3]}", Json.of(root));
 	}
 
 	@Test void e05_rootPointerReturnsValue() {
@@ -214,14 +214,14 @@ class JsonPointer_Test extends TestBase {
 	@Test void e07_setReplaceAtExistingIndex() {
 		var root = JsonMap.of("a", JsonList.of(1, 2, 3));
 		JsonPointer.of("/a/1").set(root, 9);
-		assertEquals("{\"a\":[1,9,3]}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":[1,9,3]}", Json.of(root));
 	}
 
 	@Test void e08_vivifyListViaDashToken() {
 		// A '-' next token makes the auto-vivified intermediate container a list, and appends to it.
 		var root = new JsonMap();
 		JsonPointer.of("/a/-").set(root, "x");
-		assertEquals("{\"a\":[\"x\"]}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":[\"x\"]}", Json.of(root));
 		assertInstanceOf(JsonList.class, root.get("a"));
 	}
 
@@ -229,7 +229,7 @@ class JsonPointer_Test extends TestBase {
 		// navigateToParent descends through an already-present intermediate map without re-vivifying it.
 		var root = JsonMap.of("a", new JsonMap());
 		JsonPointer.of("/a/b").set(root, 1);
-		assertEquals("{\"a\":{\"b\":1}}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":{\"b\":1}}", Json.of(root));
 	}
 
 	@Test void e10_setNonNumericListTokenThrows() {
@@ -246,13 +246,13 @@ class JsonPointer_Test extends TestBase {
 	@Test void f01_removeMember() {
 		var root = JsonMap.of("a", 1, "b", 2);
 		assertEquals(1, JsonPointer.of("/a").remove(root));
-		assertEquals("{\"b\":2}", Json.DEFAULT.of(root));
+		assertEquals("{\"b\":2}", Json.of(root));
 	}
 
 	@Test void f02_removeArrayElement() {
 		var root = JsonMap.of("a", JsonList.of("x", "y", "z"));
 		assertEquals("y", JsonPointer.of("/a/1").remove(root));
-		assertEquals("{\"a\":[\"x\",\"z\"]}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":[\"x\",\"z\"]}", Json.of(root));
 	}
 
 	@Test void f03_removeAbsentReturnsNull() {
@@ -274,7 +274,7 @@ class JsonPointer_Test extends TestBase {
 		assertNull(JsonPointer.of("/a/-").remove(root));
 		assertNull(JsonPointer.of("/a/foo").remove(root));
 		// The list is left unchanged.
-		assertEquals("{\"a\":[\"x\",\"y\"]}", Json.DEFAULT.of(root));
+		assertEquals("{\"a\":[\"x\",\"y\"]}", Json.of(root));
 	}
 
 	@Test void f07_removeThroughScalarReturnsNull() {

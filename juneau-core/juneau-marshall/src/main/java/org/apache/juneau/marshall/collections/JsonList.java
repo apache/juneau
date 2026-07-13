@@ -612,7 +612,7 @@ public class JsonList extends MarshalledList {
 	 * @return This object as a standard JSON string.
 	 */
 	public String toJson() {
-		return Json.DEFAULT.of(this);
+		return Json.of(this);
 	}
 
 	/**
@@ -624,7 +624,7 @@ public class JsonList extends MarshalledList {
 	 * @return This object as a JSON5 string.
 	 */
 	public String toJson5() {
-		return Json5.DEFAULT.of(this);
+		return Json5.of(this);
 	}
 
 	/**
@@ -633,7 +633,7 @@ public class JsonList extends MarshalledList {
 	 * @return This object as a JSON Lines string.
 	 */
 	public String toJsonl() {
-		return Jsonl.DEFAULT.of(this);
+		return Jsonl.of(this);
 	}
 
 	/**
@@ -642,7 +642,7 @@ public class JsonList extends MarshalledList {
 	 * @return This object as a canonical JSON string.
 	 */
 	public String toJcs() {
-		return Jcs.DEFAULT.of(this);
+		return Jcs.of(this);
 	}
 
 	/**
@@ -651,7 +651,7 @@ public class JsonList extends MarshalledList {
 	 * @return This object as an HJSON string.
 	 */
 	public String toHjson() {
-		return Hjson.DEFAULT.of(this);
+		return Hjson.of(this);
 	}
 
 	/**
@@ -707,7 +707,7 @@ public class JsonList extends MarshalledList {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return Json.DEFAULT.of(this);
+		return Json.of(this);
 	}
 
 	@Override /* Overridden from MarshalledList */

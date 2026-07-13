@@ -38,7 +38,7 @@ class Parquet_Test extends TestBase {
 	@Test
 	void a01_of() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.DEFAULT.of(a);
+		var bytes = Parquet.of(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -46,18 +46,18 @@ class Parquet_Test extends TestBase {
 	@Test
 	void a02_to() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.DEFAULT.of(a);
-		List<Bean> b = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
+		var bytes = Parquet.of(a);
+		List<Bean> b = Parquet.to(bytes, List.class, Bean.class);
 		assertBeans(b, "x,y", "test,42");
 	}
 
 	@Test
 	void a03_roundTrip() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.DEFAULT.of(a);
-		List<Bean> b = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
-		var bytes2 = Parquet.DEFAULT.of(b);
-		List<Bean> c = Parquet.DEFAULT.to(bytes2, List.class, Bean.class);
+		var bytes = Parquet.of(a);
+		List<Bean> b = Parquet.to(bytes, List.class, Bean.class);
+		var bytes2 = Parquet.of(b);
+		List<Bean> c = Parquet.to(bytes2, List.class, Bean.class);
 		assertBeans(c, "x,y", "test,42");
 	}
 
@@ -65,19 +65,19 @@ class Parquet_Test extends TestBase {
 	void a04_ofToOutputStream() throws Exception {
 		var a = new Bean();
 		var out = new ByteArrayOutputStream();
-		Parquet.DEFAULT.of(a, out);
+		Parquet.DEFAULT.write(a, out);
 		var bytes = out.toByteArray();
 		assertTrue(bytes.length > 0);
-		List<Bean> b = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
+		List<Bean> b = Parquet.to(bytes, List.class, Bean.class);
 		assertBeans(b, "x,y", "test,42");
 	}
 
 	@Test
 	void a05_toFromInputStream() throws Exception {
 		var a = new Bean();
-		var bytes = Parquet.DEFAULT.of(a);
+		var bytes = Parquet.of(a);
 		try (var is = new ByteArrayInputStream(bytes)) {
-			List<Bean> b = Parquet.DEFAULT.to(is.readAllBytes(), List.class, Bean.class);
+			List<Bean> b = Parquet.to(is.readAllBytes(), List.class, Bean.class);
 			assertBeans(b, "x,y", "test,42");
 		}
 	}
@@ -91,8 +91,8 @@ class Parquet_Test extends TestBase {
 		b.x = "second";
 		b.y = 2;
 		var list = List.of(a, b);
-		var bytes = Parquet.DEFAULT.of(list);
-		List<Bean> parsed = Parquet.DEFAULT.to(bytes, List.class, Bean.class);
+		var bytes = Parquet.of(list);
+		List<Bean> parsed = Parquet.to(bytes, List.class, Bean.class);
 		assertBeans(parsed, "x,y", "first,1", "second,2");
 	}
 }

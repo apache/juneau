@@ -213,7 +213,7 @@ class MarshalledNode_Test extends TestBase {
 		assertEquals("y", m.getList("b").getString(1));
 
 		// Serialized JSON output.
-		assertEquals("{\"a\":1,\"b\":[\"x\",\"y\"]}", Json.DEFAULT.of(m));
+		assertEquals("{\"a\":1,\"b\":[\"x\",\"y\"]}", Json.of(m));
 	}
 
 	@Test void d02_putRequiresObjectNode() {
@@ -242,7 +242,7 @@ class MarshalledNode_Test extends TestBase {
 		var map = JsonMap.of("a", 1);
 		MarshalledNode.of(map).put("b", 2);
 		assertEquals(2, map.getInt("b"));
-		assertEquals("{\"a\":1,\"b\":2}", Json.DEFAULT.of(map));
+		assertEquals("{\"a\":1,\"b\":2}", Json.of(map));
 	}
 
 	@Test void e02_addMutatesBackingList() {
@@ -329,13 +329,13 @@ class MarshalledNode_Test extends TestBase {
 		var m = new JsonMap();
 		var n = MarshalledNode.of(m);
 		assertSame(n, n.set("/a/b", 1));
-		assertEquals("{\"a\":{\"b\":1}}", Json.DEFAULT.of(m));
+		assertEquals("{\"a\":{\"b\":1}}", Json.of(m));
 	}
 
 	@Test void g07_setAppend() {
 		var m = JsonMap.of("a", JsonList.of(1, 2));
 		MarshalledNode.of(m).set("/a/-", 3);
-		assertEquals("{\"a\":[1,2,3]}", Json.DEFAULT.of(m));
+		assertEquals("{\"a\":[1,2,3]}", Json.of(m));
 	}
 
 	@Test void g08_setRootThrows() {
@@ -346,7 +346,7 @@ class MarshalledNode_Test extends TestBase {
 	@Test void g09_remove() {
 		var m = JsonMap.of("a", 1, "b", 2);
 		assertEquals(Integer.valueOf(1), MarshalledNode.of(m).remove("/a"));
-		assertEquals("{\"b\":2}", Json.DEFAULT.of(m));
+		assertEquals("{\"b\":2}", Json.of(m));
 		assertNull(MarshalledNode.of(m).remove("/missing"));
 	}
 

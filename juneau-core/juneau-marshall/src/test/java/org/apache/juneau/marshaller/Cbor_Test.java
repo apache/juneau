@@ -37,7 +37,7 @@ class Cbor_Test extends TestBase {
 	@Test
 	void a01_of() throws Exception {
 		var a = new Bean();
-		var bytes = Cbor.DEFAULT.of(a);
+		var bytes = Cbor.of(a);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 	}
@@ -45,8 +45,8 @@ class Cbor_Test extends TestBase {
 	@Test
 	void a02_to() throws Exception {
 		var a = new Bean();
-		var bytes = Cbor.DEFAULT.of(a);
-		var b = Cbor.DEFAULT.to(bytes, Bean.class);
+		var bytes = Cbor.of(a);
+		var b = Cbor.to(bytes, Bean.class);
 		assertEquals(a.x, b.x);
 		assertEquals(a.y, b.y);
 	}
@@ -54,8 +54,8 @@ class Cbor_Test extends TestBase {
 	@Test
 	void a03_roundTrip() throws Exception {
 		var a = new Bean();
-		var bytes = Cbor.DEFAULT.of(a);
-		var b = Cbor.DEFAULT.to(bytes, Bean.class);
+		var bytes = Cbor.of(a);
+		var b = Cbor.to(bytes, Bean.class);
 		assertEquals("test", b.x);
 		assertEquals(42, b.y);
 	}
@@ -64,10 +64,10 @@ class Cbor_Test extends TestBase {
 	void f04_ofToOutputStream() throws Exception {
 		var a = new Bean();
 		var out = new ByteArrayOutputStream();
-		Cbor.DEFAULT.of(a, out);
+		Cbor.DEFAULT.write(a, out);
 		var bytes = out.toByteArray();
 		assertTrue(bytes.length > 0);
-		var b = Cbor.DEFAULT.to(bytes, Bean.class);
+		var b = Cbor.to(bytes, Bean.class);
 		assertEquals(a.x, b.x);
 		assertEquals(a.y, b.y);
 	}
@@ -75,9 +75,9 @@ class Cbor_Test extends TestBase {
 	@Test
 	void f05_toFromInputStream() throws Exception {
 		var a = new Bean();
-		var bytes = Cbor.DEFAULT.of(a);
+		var bytes = Cbor.of(a);
 		try (var is = new ByteArrayInputStream(bytes)) {
-			var b = Cbor.DEFAULT.to(is, Bean.class);
+			var b = Cbor.DEFAULT.read(is, Bean.class);
 			assertEquals(a.x, b.x);
 			assertEquals(a.y, b.y);
 		}

@@ -39,10 +39,10 @@ class MsgPack_Test extends TestBase {
 		var expected1 = "A3666F6F";
 		var expected2 = "81A3666F6FA3626172";
 
-		assertEquals(toHex(MsgPack.DEFAULT.of(in1)), expected1);
-		{ var baos1 = baos(); MsgPack.DEFAULT.of(in1, baos1); assertEquals(toHex(bytes(baos1)), expected1); }
-		assertEquals(toHex(MsgPack.DEFAULT.of(in2)), expected2);
-		{ var baos2 = baos(); MsgPack.DEFAULT.of(in2, baos2); assertEquals(toHex(bytes(baos2)), expected2); }
+		assertEquals(toHex(MsgPack.of(in1)), expected1);
+		{ var baos1 = baos(); MsgPack.DEFAULT.write(in1, baos1); assertEquals(toHex(bytes(baos1)), expected1); }
+		assertEquals(toHex(MsgPack.of(in2)), expected2);
+		{ var baos2 = baos(); MsgPack.DEFAULT.write(in2, baos2); assertEquals(toHex(bytes(baos2)), expected2); }
 	}
 
 	@Test void a02_from() throws Exception {
@@ -51,10 +51,10 @@ class MsgPack_Test extends TestBase {
 		var expected1 = "foo";
 		var expected2 = "{foo:'bar'}";
 
-		assertEquals(expected1, MsgPack.DEFAULT.to(in1, String.class));
-		assertEquals(expected1, MsgPack.DEFAULT.to(fromHex(in1), String.class));
-		assertJson(expected2, MsgPack.DEFAULT.to(in2, Map.class, String.class, String.class));
-		assertJson(expected2, MsgPack.DEFAULT.to(fromHex(in2), Map.class, String.class, String.class));
+		assertEquals(expected1, MsgPack.DEFAULT.read(in1, String.class));
+		assertEquals(expected1, MsgPack.to(fromHex(in1), String.class));
+		assertJson(expected2, MsgPack.DEFAULT.read(in2, Map.class, String.class, String.class));
+		assertJson(expected2, MsgPack.to(fromHex(in2), Map.class, String.class, String.class));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

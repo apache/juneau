@@ -37,7 +37,7 @@ public final class McpTypedHandlers {
 	 * Conversion behavior:
 	 * <ul>
 	 * 	<li>The incoming {@code Map<String,Object>} arguments are serialized to JSON and re-parsed as
-	 * 	    {@link McpTypedToolHandler#argumentType()} via {@link Json#of(Object)} / {@link Json#to(Object, Class, java.lang.reflect.Type...)}.
+	 * 	    {@link McpTypedToolHandler#argumentType()} via {@link Json#of(Object)} / {@link Json#to(String, Class)}.
 	 * 	<li>If the typed handler returns a {@link CallToolResult}, it is passed through unchanged.
 	 * 	<li>Otherwise, the return value is JSON-serialized and wrapped in a single {@link TextContent}
 	 * 	    inside a {@link CallToolResult}.
@@ -94,8 +94,8 @@ public final class McpTypedHandlers {
 		if (arguments == null || arguments.isEmpty())
 			return null;
 		try {
-			var json = Json.DEFAULT.of(arguments);
-			return Json.DEFAULT.to(json, type);
+			var json = Json.of(arguments);
+			return Json.to(json, type);
 		} catch (Exception e) {
 			throw new McpException(McpDispatcher.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());
 		}
@@ -111,7 +111,7 @@ public final class McpTypedHandlers {
 			text = s;
 		else {
 			try {
-				text = Json.DEFAULT.of(result);
+				text = Json.of(result);
 			} catch (Exception e) {
 				throw new McpException(McpDispatcher.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());
 			}

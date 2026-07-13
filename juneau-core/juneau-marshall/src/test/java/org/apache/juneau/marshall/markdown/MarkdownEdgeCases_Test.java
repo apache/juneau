@@ -35,7 +35,7 @@ class MarkdownEdgeCases_Test {
 	@Test void f01_veryLongValues() {
 		var longVal = "x".repeat(500);
 		var bean = Map.of("key", longVal);
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains(longVal), "Expected long value in output: " + md.substring(0, Math.min(200, md.length())));
 	}
 
@@ -47,11 +47,11 @@ class MarkdownEdgeCases_Test {
 		var value = "line1\nline2\nline3";
 		var bean = new LinkedHashMap<String, String>();
 		bean.put("text", value);
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		// Multi-line strings are wrapped in JSON5 backtick syntax for round-trip correctness
 		assertTrue(md.contains("`'") && md.contains("\\n"), "Expected JSON5 escaped newline in output: " + md);
 		// Verify round-trip
-		var parsed = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.to(md, Map.class);
+		var parsed = fromMarkdown(md, Map.class);
 		assertEquals(value, parsed.get("text"));
 	}
 
@@ -61,7 +61,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f03_unicodeContent() {
 		var bean = Map.of("name", "日本語", "emoji", "😀");
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains("日本語"), "Expected Japanese: " + md);
 		assertTrue(md.contains("😀"), "Expected emoji: " + md);
 	}
@@ -72,7 +72,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f04_emptyStrings() {
 		var bean = Map.of("key", "", "other", "value");
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains("| key |") || md.contains("| other |"), "Expected both keys: " + md);
 	}
 
@@ -82,7 +82,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f05_htmlInValues() {
 		var bean = Map.of("html", "<div>content</div>");
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains("<div>"), "Expected literal HTML: " + md);
 		assertTrue(md.contains("</div>"), "Expected closing tag: " + md);
 	}
@@ -93,7 +93,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f06_markdownInValues() {
 		var bean = Map.of("desc", "**bold** and [link](url)");
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains("**bold**") || md.contains("bold"), "Expected bold text: " + md);
 		assertTrue(md.contains("[link]") || md.contains("link"), "Expected link text: " + md);
 	}
@@ -107,7 +107,7 @@ class MarkdownEdgeCases_Test {
 		for (var i = 0; i < 20; i++)
 			props.put("col" + i, i);
 		var list = List.of(props);
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(list);
+		var md = toMarkdown(list);
 		assertTrue(md.contains("|---"), "Expected separator: " + md);
 		assertTrue(md.contains("col0") && md.contains("col19"), "Expected many columns: " + md);
 	}
@@ -118,7 +118,7 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f08_singleElementCollection() {
 		var list = List.of(Map.of("name", "Alice", "age", 30));
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(list);
+		var md = toMarkdown(list);
 		assertTrue(md.contains("| name |") || md.contains("| age |"), "Expected table: " + md);
 		assertTrue(md.contains("Alice"), "Expected value: " + md);
 	}
@@ -136,7 +136,7 @@ class MarkdownEdgeCases_Test {
 		var bean = new F09_Bean();
 		bean.name = "test";
 		bean.items = null;
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains("*null*") || md.contains("items"), "Expected null or items key: " + md);
 	}
 
@@ -153,7 +153,7 @@ class MarkdownEdgeCases_Test {
 		var bean = new F10_Bean();
 		bean.name = "root";
 		bean.child = bean; // self-reference
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertNotNull(md);
 		assertTrue(md.contains("root"), "Expected root name: " + md);
 	}
@@ -184,7 +184,7 @@ class MarkdownEdgeCases_Test {
 	@Test void f12_optionalProperties() {
 		var bean = new F12_Bean();
 		bean.name = o("Alice");
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		assertTrue(md.contains("Alice"), "Expected Optional value: " + md);
 	}
 
@@ -194,10 +194,20 @@ class MarkdownEdgeCases_Test {
 
 	@Test void f13_columnAlignment() {
 		var bean = Map.of("a", "1", "ab", "2", "abc", "3");
-		var md = org.apache.juneau.marshall.marshaller.Markdown.DEFAULT.of(bean);
+		var md = toMarkdown(bean);
 		// Should have valid table structure: |---|---|---|
 		var lines = md.split("\n");
 		assertTrue(lines.length >= 2, "Expected multiple lines: " + md);
 		assertTrue(lines[0].startsWith("|") && lines[0].endsWith("|"), "Expected pipe-delimited: " + lines[0]);
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Markdown is shadowed by the @Markdown annotation in this package).
+
+	private static String toMarkdown(Object o) {
+		return org.apache.juneau.marshall.marshaller.Markdown.of(o);
+	}
+
+	private static <T> T fromMarkdown(String input, Class<T> type) {
+		return org.apache.juneau.marshall.marshaller.Markdown.to(input, type);
 	}
 }

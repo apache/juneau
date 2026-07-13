@@ -62,9 +62,9 @@ class JsonlMediaType_Test {
 	@Test
 	void a04_contentNegotiation() throws Exception {
 		var a = list(JsonMap.of("k", "v"));
-		var jsonl = Jsonl.DEFAULT.of(a);
+		var jsonl = Jsonl.of(a);
 		assertNotNull(jsonl);
-		var b = (List<JsonMap>) Jsonl.DEFAULT.to(jsonl, List.class, JsonMap.class);
+		var b = (List<JsonMap>) Jsonl.to(jsonl, List.class, JsonMap.class);
 		assertBean(b, "0{k}", "{v}");
 	}
 }

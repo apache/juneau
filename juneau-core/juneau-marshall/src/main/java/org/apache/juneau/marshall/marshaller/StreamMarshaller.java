@@ -51,7 +51,7 @@ public class StreamMarshaller extends Marshaller {
 	}
 
 	/**
-	 * Same as {@link #to(Object,Class)} but reads from a byte array and thus doesn't throw an <c>IOException</c>.
+	 * Same as {@link #read(Object,Class)} but reads from a byte array and thus doesn't throw an <c>IOException</c>.
 	 *
 	 * <p>
 	 * This is the preferred parse method for simple types since you don't need to cast the results.
@@ -61,19 +61,19 @@ public class StreamMarshaller extends Marshaller {
 	 * 	Marshaller <jv>marshaller</jv>  = Json.<jsf>DEFAULT</jsf>;
 	 *
 	 * 	<jc>// Parse into a string.</jc>
-	 * 	String <jv>string</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, String.<jk>class</jk>);
+	 * 	String <jv>string</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, String.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean.</jc>
-	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, MyBean.<jk>class</jk>);
+	 * 	MyBean <jv>bean</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a bean array.</jc>
-	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, MyBean[].<jk>class</jk>);
+	 * 	MyBean[] <jv>beanArray</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, MyBean[].<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a linked-list of objects.</jc>
-	 * 	List <jv>list</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, LinkedList.<jk>class</jk>);
+	 * 	List <jv>list</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, LinkedList.<jk>class</jk>);
 	 *
 	 * 	<jc>// Parse into a map of object keys/values.</jc>
-	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .to(<jv>json</jv>, TreeMap.<jk>class</jk>);
+	 * 	Map <jv>map</jv> = <jv>marshaller</jv> .read(<jv>json</jv>, TreeMap.<jk>class</jk>);
 	 * </p>
 	 *
 	 * @param <T> The class type of the object being created.
@@ -82,7 +82,7 @@ public class StreamMarshaller extends Marshaller {
 	 * @return The parsed object.
 	 * @throws ParseException Malformed input encountered.
 	 */
-	public final <T> T to(byte[] input, Class<T> type) throws ParseException {
+	public final <T> T read(byte[] input, Class<T> type) throws ParseException {
 		try {
 			return p.parse(input, type);
 		} catch (IOException e) {
@@ -91,7 +91,7 @@ public class StreamMarshaller extends Marshaller {
 	}
 
 	/**
-	 * Same as {@link #to(Object,Type,Type...)} but reads from a byte array and thus doesn't throw an <c>IOException</c>.
+	 * Same as {@link #read(Object,Type,Type...)} but reads from a byte array and thus doesn't throw an <c>IOException</c>.
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.
@@ -106,7 +106,7 @@ public class StreamMarshaller extends Marshaller {
 	 * @throws ParseException Malformed input encountered.
 	 * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.
 	 */
-	public final <T> T to(byte[] input, Type type, Type...args) throws ParseException {
+	public final <T> T read(byte[] input, Type type, Type...args) throws ParseException {
 		try {
 			return p.parse(input, type, args);
 		} catch (IOException e) {
@@ -122,7 +122,7 @@ public class StreamMarshaller extends Marshaller {
 	 * 	The serialized object.
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
-	public final byte[] of(Object o) throws SerializeException {
+	public final byte[] write(Object o) throws SerializeException {
 		return s.serialize(o);
 	}
 }

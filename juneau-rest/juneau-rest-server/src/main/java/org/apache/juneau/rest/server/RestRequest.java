@@ -1895,7 +1895,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	private static Map<String,Object> parseUonMap(String input, Consumer<ParseException> onError) {
 		try {
-			var m = Uon.DEFAULT.to(input, JsonMap.class);
+			var m = Uon.to(input, JsonMap.class);
 			return m != null ? m : Collections.emptyMap();
 		} catch (ParseException e) {
 			onError.accept(e);
@@ -1905,7 +1905,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 	private static Map<String,Object> parseJsonMap(String input, Consumer<ParseException> onError) {
 		try {
-			var m = Json5.DEFAULT.to(input, JsonMap.class);
+			var m = Json5.to(input, JsonMap.class);
 			return m != null ? m : Collections.emptyMap();
 		} catch (ParseException e) {
 			onError.accept(e);

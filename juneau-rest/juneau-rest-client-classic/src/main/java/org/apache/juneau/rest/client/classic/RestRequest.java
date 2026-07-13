@@ -1740,7 +1740,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest serializerSessionOptionsHeader(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return header(HEADER_JuneauSerializerOptions, Json5.DEFAULT.of(properties));
+		return header(HEADER_JuneauSerializerOptions, Json5.of(properties));
 	}
 
 	/**
@@ -1754,7 +1754,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest parserSessionOptionsHeader(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return header(HEADER_JuneauParserOptions, Json5.DEFAULT.of(properties));
+		return header(HEADER_JuneauParserOptions, Json5.of(properties));
 	}
 
 	/**
@@ -1793,7 +1793,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest serializerSessionOptionsQuery(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return serializerSessionOptionsQuery(Uon.DEFAULT.of(properties));
+		return serializerSessionOptionsQuery(Uon.of(properties));
 	}
 
 	/**
@@ -1807,7 +1807,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	public RestRequest parserSessionOptionsQuery(Map<String,?> properties) {
 		if (isEmpty(properties))
 			return this;
-		return parserSessionOptionsQuery(Uon.DEFAULT.of(properties));
+		return parserSessionOptionsQuery(Uon.of(properties));
 	}
 
 	/**
@@ -2865,7 +2865,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				((Consumer) consumer).accept(w);
 				w.flush();
 			}
-			if (output instanceof java.io.Writer ow)
+			if (output instanceof Writer ow)
 				ow.flush();
 
 			// Use the serializer's primary produces() media type if no explicit Content-Type set.

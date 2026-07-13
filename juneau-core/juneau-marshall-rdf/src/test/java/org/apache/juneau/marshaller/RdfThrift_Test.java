@@ -33,8 +33,8 @@ class RdfThrift_Test extends TestBase {
 	@Test void a01_to() throws Exception {
 		var in1 = "foo";
 		var in2 = JsonMap.of("foo", "bar");
-		var out1 = RdfThrift.DEFAULT.of(in1);
-		var out2 = RdfThrift.DEFAULT.of(in2);
+		var out1 = RdfThrift.of(in1);
+		var out2 = RdfThrift.of(in2);
 
 		assertNotNull(out1);
 		assertTrue(out1.length > 0);
@@ -42,30 +42,30 @@ class RdfThrift_Test extends TestBase {
 		assertTrue(out2.length > 0);
 		// Verify the OutputStream variant also produces non-empty output
 		var baos1 = baos();
-		RdfThrift.DEFAULT.of(in1, baos1);
+		RdfThrift.DEFAULT.write(in1, baos1);
 		var baosOut = bytes(baos1);
 		assertNotNull(baosOut);
 		assertTrue(baosOut.length > 0);
 		// Verify both outputs are semantically equivalent via roundtrip
-		assertEquals(RdfThrift.DEFAULT.to(out1, String.class), RdfThrift.DEFAULT.to(baosOut, String.class));
+		assertEquals(RdfThrift.to(out1, String.class), RdfThrift.to(baosOut, String.class));
 	}
 
 	@Test void a02_from() {
 		var in1 = JsonMap.of("foo", "bar");
-		var bytes = RdfThrift.DEFAULT.of(in1);
-		var result = RdfThrift.DEFAULT.to(bytes, Map.class, String.class, String.class);
+		var bytes = RdfThrift.of(in1);
+		var result = RdfThrift.to(bytes, Map.class, String.class, String.class);
 		assertJson("{foo:'bar'}", result);
-		assertJson("{foo:'bar'}", RdfThrift.DEFAULT.to(fromHex(toHex(bytes)), Map.class, String.class, String.class));
+		assertJson("{foo:'bar'}", RdfThrift.to(fromHex(toHex(bytes)), Map.class, String.class, String.class));
 	}
 
 	@Test void a03_complexRoundtrip() throws Exception {
 		var in1 = JsonMap.of("name", "Alice", "age", 30);
-		var bytes = RdfThrift.DEFAULT.of(in1);
+		var bytes = RdfThrift.of(in1);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
 		// Verify we can get the bytes via OutputStream variant too
 		var baos2 = baos();
-		RdfThrift.DEFAULT.of(in1, baos2);
+		RdfThrift.DEFAULT.write(in1, baos2);
 		var baosOut = bytes(baos2);
 		assertNotNull(baosOut);
 		assertTrue(baosOut.length > 0);
@@ -77,14 +77,14 @@ class RdfThrift_Test extends TestBase {
 	}
 
 	@Test void a05_to_inputStream() throws Exception {
-		var bytes = RdfThrift.DEFAULT.of("foo");
-		var result = RdfThrift.DEFAULT.to(new ByteArrayInputStream(bytes), String.class);
+		var bytes = RdfThrift.of("foo");
+		var result = RdfThrift.DEFAULT.read(new ByteArrayInputStream(bytes), String.class);
 		assertEquals("foo", result);
 	}
 
 	@Test void a06_to_inputStream_type() throws Exception {
-		var bytes = RdfThrift.DEFAULT.of("foo");
-		var result = RdfThrift.DEFAULT.to(new ByteArrayInputStream(bytes), String.class, new java.lang.reflect.Type[0]);
+		var bytes = RdfThrift.of("foo");
+		var result = RdfThrift.DEFAULT.read(new ByteArrayInputStream(bytes), String.class, new java.lang.reflect.Type[0]);
 		assertEquals("foo", result);
 	}
 

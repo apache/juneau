@@ -42,19 +42,19 @@ class JsonTokenStream_Test extends TestBase {
 	@Nested class A_reader extends TestBase {
 
 		@Test void a01_emptyObject() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("{}")) {
+			try (var r = fromJsonTokens("{}")) {
 				assertSequence(r, TokenType.START_OBJECT, TokenType.END_OBJECT, TokenType.END_OF_STREAM);
 			}
 		}
 
 		@Test void a02_emptyArray() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[]")) {
+			try (var r = fromJsonTokens("[]")) {
 				assertSequence(r, TokenType.START_ARRAY, TokenType.END_ARRAY, TokenType.END_OF_STREAM);
 			}
 		}
 
 		@Test void a03_simpleObject() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("{\"a\":1,\"b\":\"hi\",\"c\":true,\"d\":null}")) {
+			try (var r = fromJsonTokens("{\"a\":1,\"b\":\"hi\",\"c\":true,\"d\":null}")) {
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(0, r.getDepth() - 1); // sanity: now inside object at depth 1
 				assertEquals(TokenType.FIELD_NAME, r.next());
@@ -79,7 +79,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a04_nestedDocument() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("{\"a\":[1,[2,3],{\"b\":4}]}")) {
+			try (var r = fromJsonTokens("{\"a\":[1,[2,3],{\"b\":4}]}")) {
 				assertSequence(r,
 					TokenType.START_OBJECT,
 					TokenType.FIELD_NAME,    // a
@@ -100,7 +100,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a05_skipChildrenOnObject() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[{\"a\":1,\"b\":[2,3]},42]")) {
+			try (var r = fromJsonTokens("[{\"a\":1,\"b\":[2,3]},42]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.START_OBJECT, r.next());
 				r.skipChildren();
@@ -114,7 +114,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a06_skipChildrenOnScalarIsNoop() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[1,2]")) {
+			try (var r = fromJsonTokens("[1,2]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				r.skipChildren();
@@ -125,7 +125,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a07_numberLexemePreserved() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[1, 1.5, -3, 1.0e10]")) {
+			try (var r = fromJsonTokens("[1, 1.5, -3, 1.0e10]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals("1", r.getNumberLexeme());
@@ -142,7 +142,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a08_stringEscapes() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[\"a\\nb\",\"\\u00e9\",\"\\\"q\\\"\"]")) {
+			try (var r = fromJsonTokens("[\"a\\nb\",\"\\u00e9\",\"\\\"q\\\"\"]")) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("a\nb", r.getString());
@@ -155,7 +155,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a09_depthTracking() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("{\"a\":[1,{\"b\":2}]}")) {
+			try (var r = fromJsonTokens("{\"a\":[1,{\"b\":2}]}")) {
 				assertEquals(0, r.getDepth());
 				assertEquals(TokenType.START_OBJECT, r.next());
 				assertEquals(1, r.getDepth());
@@ -179,32 +179,32 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void a10_capability() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("null")) {
+			try (var r = fromJsonTokens("null")) {
 				assertTrue(r.isStreaming());
 			}
 		}
 
 		@Test void a11_initialTokenIsNotAvailable() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[]")) {
+			try (var r = fromJsonTokens("[]")) {
 				assertEquals(TokenType.NOT_AVAILABLE, r.getCurrentToken());
 			}
 		}
 
 		@Test void a12_topLevelScalar() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("42")) {
+			try (var r = fromJsonTokens("42")) {
 				assertEquals(TokenType.VALUE_NUMBER, r.next());
 				assertEquals(42L, r.getNumber().longValue());
 				assertEquals(TokenType.END_OF_STREAM, r.next());
 			}
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("\"hi\"")) {
+			try (var r = fromJsonTokens("\"hi\"")) {
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("hi", r.getString());
 			}
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("true")) {
+			try (var r = fromJsonTokens("true")) {
 				assertEquals(TokenType.VALUE_BOOLEAN, r.next());
 				assertTrue(r.getBool());
 			}
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("null")) {
+			try (var r = fromJsonTokens("null")) {
 				assertEquals(TokenType.VALUE_NULL, r.next());
 			}
 		}
@@ -241,14 +241,14 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void b08_getFieldNameWrongState() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("[1]")) {
+			try (var r = fromJsonTokens("[1]")) {
 				r.next(); // START_ARRAY
 				assertThrows(IllegalStateException.class, r::getFieldName);
 			}
 		}
 
 		@Test void b09_getNumberWrongState() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("\"hi\"")) {
+			try (var r = fromJsonTokens("\"hi\"")) {
 				r.next();
 				assertThrows(IllegalStateException.class, r::getNumber);
 				assertThrows(IllegalStateException.class, r::getNumberLexeme);
@@ -256,21 +256,21 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void b10_getBooleanWrongState() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("\"hi\"")) {
+			try (var r = fromJsonTokens("\"hi\"")) {
 				r.next();
 				assertThrows(IllegalStateException.class, r::getBool);
 			}
 		}
 
 		@Test void b11_getBinaryAlwaysThrowsForJson() throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens("\"hi\"")) {
+			try (var r = fromJsonTokens("\"hi\"")) {
 				r.next();
 				assertThrows(IllegalStateException.class, r::getBinary);
 			}
 		}
 
 		private void drain(String json) throws Exception {
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens(json)) {
+			try (var r = fromJsonTokens(json)) {
 				while (r.next() != TokenType.END_OF_STREAM) {
 					// drain
 				}
@@ -282,7 +282,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c01_emptyObject() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject().endObject();
 			}
 			assertEquals("{}", sb.toString());
@@ -290,7 +290,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c02_emptyArray() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startArray().endArray();
 			}
 			assertEquals("[]", sb.toString());
@@ -298,7 +298,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c03_simpleObject() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
 				w.fieldName("b"); w.string("hi");
@@ -311,7 +311,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c04_nested() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a");
 				w.startArray();
@@ -331,7 +331,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c05_stringEscaping() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.string("a\nb");
 				w.string("\"q\"");
@@ -343,7 +343,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c06_numberOverloads() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.number(7L);
 				w.number(2.5d);
@@ -357,7 +357,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c07_stringNullEmitsNull() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.string(null);
 				w.endArray();
@@ -367,7 +367,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c08_binaryAsBase64String() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.binary(new byte[]{1, 2, 3, 4});
 				w.endArray();
@@ -377,14 +377,14 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c09_capability() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				assertTrue(w.isStreaming());
 			}
 		}
 
 		@Test void c10_doubleFieldNameRejected() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a");
 				assertThrows(IllegalStateException.class, () -> w.fieldName("b"));
@@ -393,7 +393,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c11_fieldNameOutsideObjectRejected() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				assertThrows(IllegalStateException.class, () -> w.fieldName("a"));
 				w.startArray();
 				assertThrows(IllegalStateException.class, () -> w.fieldName("a"));
@@ -402,7 +402,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c12_writeEndKindMismatch() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				assertThrows(IllegalStateException.class, w::endArray);
 			}
@@ -410,7 +410,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c13_nonFiniteDoubleRejected() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				assertThrows(IOException.class, () -> w.number(Double.NaN));
 			}
@@ -418,7 +418,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c14_writerOverWriter() throws Exception {
 			var sw = new StringWriter();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sw)) {
+			try (var w = toJsonTokens(sw)) {
 				w.startArray();
 				w.number(1);
 				w.endArray();
@@ -428,7 +428,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c15_writerOverOutputStream() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(bos)) {
+			try (var w = toJsonTokens(bos)) {
 				w.startArray();
 				w.bool(false);
 				w.endArray();
@@ -438,7 +438,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void c16_writeAfterCloseThrows() throws Exception {
 			var sb = new StringBuilder();
-			var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb);
+			var w = toJsonTokens(sb);
 			w.startArray().endArray();
 			w.close();
 			// Every mutating method must reject writes after close() with the closed-writer message.
@@ -465,7 +465,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void d01_basicRoundTrip() throws Exception {
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("greeting"); w.string("hello");
 				w.fieldName("count");    w.number(3);
@@ -480,7 +480,7 @@ class JsonTokenStream_Test extends TestBase {
 			var produced = sb.toString();
 			assertEquals("{\"greeting\":\"hello\",\"count\":3,\"flags\":[true,false,null]}", produced);
 
-			try (var r = org.apache.juneau.marshall.marshaller.Json.DEFAULT.fromTokens(produced)) {
+			try (var r = fromJsonTokens(produced)) {
 				assertSequence(r,
 					TokenType.START_OBJECT,
 					TokenType.FIELD_NAME, TokenType.VALUE_STRING,
@@ -498,7 +498,7 @@ class JsonTokenStream_Test extends TestBase {
 			// Outputs should be byte-for-byte equal because both produce compact RFC-8259 JSON with
 			// double-quoted keys and no whitespace.
 			var sb = new StringBuilder();
-			try (var w = org.apache.juneau.marshall.marshaller.Json.DEFAULT.toTokens(sb)) {
+			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
 				w.fieldName("b"); w.startArray();
@@ -783,7 +783,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void g03_readObjectViaJsonMap() throws Exception {
 			try (var r = JsonParser.DEFAULT.parseTokens("{\"a\":1,\"b\":2}")) {
-				var m = r.read(java.util.Map.class);
+				var m = r.read(Map.class);
 				assertEquals(1L, ((Number) m.get("a")).longValue());
 				assertEquals(2L, ((Number) m.get("b")).longValue());
 			}
@@ -792,7 +792,7 @@ class JsonTokenStream_Test extends TestBase {
 		@Test void g04_streamArrayOfBeans() throws Exception {
 			// Idiomatic streaming-records pattern: the canonical loop uses canRead() as the predicate.
 			var input = "[{\"name\":\"alice\",\"age\":30},{\"name\":\"bob\",\"age\":40}]";
-			var seen = new java.util.ArrayList<Bean>();
+			var seen = new ArrayList<Bean>();
 			try (var r = JsonParser.DEFAULT.parseTokens(input)) {
 				assertEquals(TokenType.START_ARRAY, r.next());
 				while (r.canRead())
@@ -878,8 +878,8 @@ class JsonTokenStream_Test extends TestBase {
 		public static class HBean {
 			public String name;
 			public int age;
-			public java.util.List<String> tags;
-			public java.util.Map<String, Integer> scores;
+			public List<String> tags;
+			public Map<String, Integer> scores;
 		}
 
 		@Test void h01_simpleScalar() throws Exception {
@@ -902,7 +902,7 @@ class JsonTokenStream_Test extends TestBase {
 			var b = new HBean();
 			b.name = "alice";
 			b.age = 30;
-			b.tags = java.util.List.of("x", "y");
+			b.tags = List.of("x", "y");
 			var sb = new StringBuilder();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(b);
@@ -914,7 +914,7 @@ class JsonTokenStream_Test extends TestBase {
 		@Test void h04_listOfBeans() throws Exception {
 			var b1 = new HBean(); b1.name = "a"; b1.age = 1;
 			var b2 = new HBean(); b2.name = "b"; b2.age = 2;
-			var beans = java.util.List.of(b1, b2);
+			var beans = List.of(b1, b2);
 			var sb = new StringBuilder();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(beans);
@@ -923,11 +923,11 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h05_compositeWithMapsAndArrays() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String, Object>();
 			m.put("a", 1);
-			m.put("b", java.util.List.of("x", "y"));
+			m.put("b", List.of("x", "y"));
 			m.put("c", new int[]{10, 20});
-			m.put("d", java.util.Map.of("nested", true));
+			m.put("d", Map.of("nested", true));
 			var sb = new StringBuilder();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(m);
@@ -943,7 +943,7 @@ class JsonTokenStream_Test extends TestBase {
 			}
 			// JsonTokenWriter's binary() base64-encodes (already covered by C_writer); object()
 			// should route a byte[] through binary(), not through walk-as-array.
-			assertEquals("\"" + java.util.Base64.getEncoder().encodeToString(bytes) + "\"", sb.toString());
+			assertEquals("\"" + Base64.getEncoder().encodeToString(bytes) + "\"", sb.toString());
 		}
 
 		@Test void h07_objectInsideTokenStream() throws Exception {
@@ -964,7 +964,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h08_sortMapsHonored() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Integer>();
+			var m = new LinkedHashMap<String, Integer>();
 			m.put("z", 1);
 			m.put("a", 2);
 			m.put("m", 3);
@@ -979,7 +979,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void h09_sortMapsDefaultOff() throws Exception {
 			// Default: insertion order preserved.
-			var m = new java.util.LinkedHashMap<String, Integer>();
+			var m = new LinkedHashMap<String, Integer>();
 			m.put("z", 1);
 			m.put("a", 2);
 			var sb = new StringBuilder();
@@ -990,7 +990,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h10_keepNullPropertiesOff() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String, Object>();
 			m.put("a", 1);
 			m.put("b", null);
 			m.put("c", 3);
@@ -1006,7 +1006,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h11_keepNullPropertiesOn() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String, Object>();
 			m.put("a", 1);
 			m.put("b", null);
 			var ser = JsonSerializer.create().keepNullProperties().build();
@@ -1018,9 +1018,9 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h12_trimEmptyMapsHonored() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String, Object>();
 			m.put("a", 1);
-			m.put("b", java.util.Map.of());
+			m.put("b", Map.of());
 			var ser = JsonSerializer.create().trimEmptyMaps().build();
 			var sb = new StringBuilder();
 			try (var w = ser.serializeTokens(sb)) {
@@ -1030,9 +1030,9 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h13_trimEmptyCollectionsHonored() throws Exception {
-			var m = new java.util.LinkedHashMap<String, Object>();
+			var m = new LinkedHashMap<String, Object>();
 			m.put("a", 1);
-			m.put("b", java.util.List.of());
+			m.put("b", List.of());
 			var ser = JsonSerializer.create().trimEmptyCollections().build();
 			var sb = new StringBuilder();
 			try (var w = ser.serializeTokens(sb)) {
@@ -1042,7 +1042,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h14_sortCollectionsHonored() throws Exception {
-			var l = java.util.List.of("c", "a", "b");
+			var l = List.of("c", "a", "b");
 			var ser = JsonSerializer.create().sortCollections().build();
 			var sb = new StringBuilder();
 			try (var w = ser.serializeTokens(sb)) {
@@ -1069,8 +1069,8 @@ class JsonTokenStream_Test extends TestBase {
 			var b = new HBean();
 			b.name = "alice";
 			b.age = 30;
-			b.tags = java.util.List.of("a", "b");
-			b.scores = new java.util.LinkedHashMap<>();
+			b.tags = List.of("a", "b");
+			b.scores = new LinkedHashMap<>();
 			b.scores.put("math", 95);
 			b.scores.put("english", 87);
 
@@ -1080,6 +1080,17 @@ class JsonTokenStream_Test extends TestBase {
 			}
 			assertEquals(JsonSerializer.DEFAULT.serializeToString(b), sb.toString());
 		}
+	}
+
+	// Helpers keep the marshaller reference fully-qualified (the simple name Json is shadowed by the @Json annotation in this package).
+	// Note: the token direction is inverted relative to of/to — the reader (toTokens) is the parse/"from" side and the writer (ofTokens) is the serialize/"to" side.
+
+	private static TokenReader fromJsonTokens(Object input) throws IOException {
+		return org.apache.juneau.marshall.marshaller.Json.toTokens(input);
+	}
+
+	private static TokenWriter toJsonTokens(Object output) throws IOException {
+		return org.apache.juneau.marshall.marshaller.Json.ofTokens(output);
 	}
 
 }

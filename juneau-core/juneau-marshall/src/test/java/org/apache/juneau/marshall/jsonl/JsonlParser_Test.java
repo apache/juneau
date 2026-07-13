@@ -54,48 +54,48 @@ class JsonlParser_Test extends TestBase {
 	@Test
 	void a01_parseToListOfBeans() throws Exception {
 		var jsonl = "{\"name\":\"Alice\",\"age\":30}\n{\"name\":\"Bob\",\"age\":25}\n{\"name\":\"Carol\",\"age\":35}";
-		var list = (List<Person>) Jsonl.DEFAULT.to(jsonl, List.class, Person.class);
+		var list = (List<Person>) Jsonl.to(jsonl, List.class, Person.class);
 		assertBean(list, "0{name,age},1{name,age},2{name,age}", "{Alice,30},{Bob,25},{Carol,35}");
 	}
 
 	@Test
 	void a02_parseToArray() throws Exception {
 		var jsonl = "{\"name\":\"Alice\",\"age\":30}\n{\"name\":\"Bob\",\"age\":25}";
-		var arr = Jsonl.DEFAULT.to(jsonl, Person[].class);
+		var arr = Jsonl.to(jsonl, Person[].class);
 		assertBean(arr, "0{name,age},1{name,age}", "{Alice,30},{Bob,25}");
 	}
 
 	@Test
 	void a03_parseSingleLine() throws Exception {
 		var jsonl = "{\"name\":\"Alice\",\"age\":30}";
-		var p = Jsonl.DEFAULT.to(jsonl, Person.class);
+		var p = Jsonl.to(jsonl, Person.class);
 		assertBean(p, "name,age", "Alice,30");
 	}
 
 	@Test
 	void a04_parseWithEmptyLines() throws Exception {
 		var jsonl = "{\"name\":\"Alice\"}\n\n\n{\"name\":\"Bob\"}";
-		var list = (List<Person>) Jsonl.DEFAULT.to(jsonl, List.class, Person.class);
+		var list = (List<Person>) Jsonl.to(jsonl, List.class, Person.class);
 		assertBean(list, "0{name},1{name}", "{Alice},{Bob}");
 	}
 
 	@Test
 	void a05_parseToListOfMaps() throws Exception {
 		var jsonl = "{\"a\":1,\"b\":2}\n{\"x\":\"y\"}";
-		var list = (List<JsonMap>) Jsonl.DEFAULT.to(jsonl, List.class, JsonMap.class);
+		var list = (List<JsonMap>) Jsonl.to(jsonl, List.class, JsonMap.class);
 		assertBean(list, "0{a,b},1{x}", "{1,2},{y}");
 	}
 
 	@Test
 	void a06_parseToListOfStrings() throws Exception {
 		var jsonl = "\"foo\"\n\"bar\"\n\"baz\"";
-		var list = (List<String>) Jsonl.DEFAULT.to(jsonl, List.class, String.class);
+		var list = (List<String>) Jsonl.to(jsonl, List.class, String.class);
 		assertEquals(list("foo", "bar", "baz"), list);
 	}
 
 	@Test
 	void a07_parseEmptyInput() throws Exception {
-		var list = (List<?>) Jsonl.DEFAULT.to("", List.class, Person.class);
+		var list = (List<?>) Jsonl.to("", List.class, Person.class);
 		assertNotNull(list);
 		assertTrue(list.isEmpty());
 	}
@@ -103,14 +103,14 @@ class JsonlParser_Test extends TestBase {
 	@Test
 	void a08_parseWithTrailingNewline() throws Exception {
 		var jsonl = "{\"name\":\"Alice\"}\n";
-		var list = (List<Person>) Jsonl.DEFAULT.to(jsonl, List.class, Person.class);
+		var list = (List<Person>) Jsonl.to(jsonl, List.class, Person.class);
 		assertBean(list, "0{name}", "{Alice}");
 	}
 
 	@Test
 	void a09_parseNestedObjects() throws Exception {
 		var jsonl = "{\"name\":\"Alice\",\"addr\":{\"city\":\"Boston\",\"zip\":\"02101\"}}";
-		var list = (List<JsonMap>) Jsonl.DEFAULT.to(jsonl, List.class, JsonMap.class);
+		var list = (List<JsonMap>) Jsonl.to(jsonl, List.class, JsonMap.class);
 		assertBean(list, "0{name,addr{city,zip}}", "{Alice,{Boston,02101}}");
 	}
 
@@ -125,6 +125,6 @@ class JsonlParser_Test extends TestBase {
 	@Test
 	void a11_parseMalformedLine() {
 		assertThrowsWithMessage(ParseException.class, "invalid", () ->
-			Jsonl.DEFAULT.to("{\"a\":1}\n{invalid json}", List.class, JsonMap.class));
+			Jsonl.to("{\"a\":1}\n{invalid json}", List.class, JsonMap.class));
 	}
 }
