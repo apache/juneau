@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Acceptance tests for the {@code @Value}-driven {@code java.version} default on
@@ -34,6 +35,7 @@ import org.junit.jupiter.api.*;
  * is set by the JVM itself; the assertion simply verifies that the JVM-supplied value is what flows
  * through {@code @Value} resolution.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class VersionMixin_ValueAdoption_Test {
 
 	private static final String SP = "java.version";

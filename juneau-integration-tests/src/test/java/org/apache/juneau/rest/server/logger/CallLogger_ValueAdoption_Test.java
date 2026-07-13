@@ -26,6 +26,7 @@ import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Acceptance tests for {@code @Value}-driven defaults on {@link CallLogger.Builder}.
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * 3-test triad per migrated field per OQA #4 — system property set, unset (default), and {@code Settings.setGlobal}.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class CallLogger_ValueAdoption_Test extends TestBase {
 
 	private static final String SP_LOGGER = "juneau.restLogger.logger";

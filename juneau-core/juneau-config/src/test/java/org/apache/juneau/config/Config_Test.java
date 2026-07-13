@@ -39,6 +39,7 @@ import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.uon.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 @SuppressWarnings({
 	"rawtypes",   // Raw types used for generic testing scenarios
@@ -49,6 +50,7 @@ import org.junit.jupiter.api.*;
 	"java:S5976", // Explicit per-case tests are clearer and self-documenting than a parameterized table; intentional.
 	"resource"    // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class Config_Test extends TestBase {
 
 	private Config.Builder cb = Config.create().store(MemoryStore.DEFAULT).name("Test.cfg");

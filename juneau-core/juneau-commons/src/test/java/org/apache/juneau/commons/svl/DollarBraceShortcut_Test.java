@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests for the {@code ${xxx}} shortcut in {@link VarResolverSession}'s tokenizer.
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.*;
  * reads from {@link Settings}). The first top-level {@code ':'} in the body is rewritten to
  * {@code ','} so Spring-idiom defaults {@code ${key:default}} resolve via {@code DefaultingVar}.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class DollarBraceShortcut_Test extends TestBase {
 
 	private static final String K1 = "DollarBraceShortcut_Test.k1";

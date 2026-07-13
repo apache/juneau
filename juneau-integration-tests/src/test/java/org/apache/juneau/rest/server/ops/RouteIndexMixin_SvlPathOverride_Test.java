@@ -22,6 +22,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Validates the {@code ${juneau.routeindex.path:options}} SVL override on
@@ -39,6 +40,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RouteIndexMixin_SvlPathOverride_Test extends TestBase {
 
 	@Rest(mixins=RouteIndexMixin.class)

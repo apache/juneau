@@ -23,6 +23,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Validates the {@code ${juneau.admin.path:admin}} SVL prefix override on
@@ -43,6 +44,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class AdminMixin_SvlPathOverride_Test extends TestBase {
 
 	@Rest(mixins=AdminMixin.class)

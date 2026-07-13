@@ -34,6 +34,7 @@ import org.apache.juneau.config.store.*;
 import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.console.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 import org.junit.jupiter.api.io.*;
 
 /**
@@ -65,6 +66,7 @@ import org.junit.jupiter.api.io.*;
  * are not safely reachable from a unit test without bringing down the JVM.
  */
 @org.apache.juneau.testing.JettyMicroserviceTest
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class Microservice_Lifecycle_Test extends TestBase {
 
 	// =================================================================================================================

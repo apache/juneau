@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Phase G regression: verifies that stable-folded {@link Var}s (per RD #10) inside
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.*;
  * (via {@code $S{...}}) because it's the easiest to control deterministically in a test —
  * env vars and manifest files are environment-dependent.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class Value_StableFolding_Test extends TestBase {
 
 	public static class SysPropBean {

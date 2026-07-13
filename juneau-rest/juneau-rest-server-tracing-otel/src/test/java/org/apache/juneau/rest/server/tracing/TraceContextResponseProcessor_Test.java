@@ -33,6 +33,7 @@ import org.apache.juneau.rest.server.processor.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.tracing.otel.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 import io.opentelemetry.api.trace.propagation.*;
 import io.opentelemetry.context.propagation.*;
@@ -54,6 +55,7 @@ import io.opentelemetry.sdk.trace.export.*;
 @SuppressWarnings({
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class TraceContextResponseProcessor_Test extends TestBase {
 
 	/** W3C {@code traceparent} value format: {@code version-traceId-spanId-flags}. */

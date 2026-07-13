@@ -28,11 +28,13 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 @SuppressWarnings({
 	"java:S4144",
 	"unused" // Test beans with intentionally unused fields (e.g. UnsupportedType)
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class Settings_Test extends TestBase {
 
 	private static final String TEST_PROP = "juneau.test.property";

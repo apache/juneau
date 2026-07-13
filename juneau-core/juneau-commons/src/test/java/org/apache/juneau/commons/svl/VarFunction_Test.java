@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests the {@link VarFunction} SPI + {@link TypedFunction} reflection-based dispatch +
@@ -30,6 +31,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"java:S5778"  // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class VarFunction_Test extends TestBase {
 
 	/** Simple typed-function: upper-case its single string arg. */

@@ -23,6 +23,7 @@ import java.io.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.testing.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Acceptance tests for the {@code @Value}-driven {@code juneau.workingDir} default on
@@ -33,6 +34,7 @@ import org.junit.jupiter.api.*;
  * {@code Settings.setGlobal} override.
  */
 @JettyMicroserviceTest
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class Microservice_ValueAdoption_Test {
 
 	private static final String SP = "juneau.workingDir";

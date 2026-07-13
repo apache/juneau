@@ -34,6 +34,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.tracing.*;
 import org.apache.juneau.rest.server.tracing.otel.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 import io.opentelemetry.api.trace.propagation.*;
 import io.opentelemetry.context.propagation.*;
@@ -52,6 +53,7 @@ import io.opentelemetry.sdk.trace.export.*;
  * {@link MockRestClient}s so the {@link OtelTracerHook} bridge captures the server-started span's
  * context and stashes the rendered headers for the response processor to write.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class TraceContextResponseProcessor_Test extends TestBase {
 
 	/** W3C {@code traceparent} value format: {@code version-traceId-spanId-flags}. */

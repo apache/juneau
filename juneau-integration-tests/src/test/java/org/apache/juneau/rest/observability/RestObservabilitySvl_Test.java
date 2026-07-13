@@ -28,6 +28,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests SVL variable support in observability annotation attributes.
@@ -41,6 +42,7 @@ import org.junit.jupiter.api.*;
  * Note: {@code MockRestClient} caches the {@link org.apache.juneau.rest.server.server.RestContext} per resource class.
  * Each scenario uses a distinct static inner class so the SVL state at build time is deterministic.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestObservabilitySvl_Test extends TestBase {
 
 	public static final class RecordingMetricsRecorder implements MetricsRecorder {

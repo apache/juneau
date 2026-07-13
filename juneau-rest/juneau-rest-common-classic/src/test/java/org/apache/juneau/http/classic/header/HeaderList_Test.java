@@ -29,10 +29,12 @@ import org.apache.juneau.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests: {@link HeaderList}, {@link HeaderListBuilder}, {@link BasicHeaderIterator}
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class HeaderList_Test extends TestBase {
 
 	private static final Header

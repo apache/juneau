@@ -27,10 +27,12 @@ import java.util.jar.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.runtime.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 @SuppressWarnings({
 	"java:S5976" // Explicit per-case tests are clearer than a single parameterized test for these distinct property-source scenarios.
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class PropertySources_Test extends TestBase {
 
 	//====================================================================================================

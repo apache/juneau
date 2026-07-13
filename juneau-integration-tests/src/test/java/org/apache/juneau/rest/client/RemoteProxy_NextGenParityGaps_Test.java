@@ -40,6 +40,7 @@ import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 import org.junit.jupiter.api.io.*;
 
 /**
@@ -78,6 +79,7 @@ import org.junit.jupiter.api.io.*;
 @SuppressWarnings({
 	"java:S114" // Snake_case fixture interface/resource names are intentional test-local naming (matches RemoteProxy_FeatureParity_Test).
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RemoteProxy_NextGenParityGaps_Test {
 
 	// =================================================================================================================

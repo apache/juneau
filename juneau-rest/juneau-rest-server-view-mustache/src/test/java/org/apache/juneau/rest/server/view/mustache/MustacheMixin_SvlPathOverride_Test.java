@@ -21,6 +21,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Validates the {@code ${juneau.mustache.path:mustache}} SVL override on
@@ -41,6 +42,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class MustacheMixin_SvlPathOverride_Test extends TestBase {
 
 	@Rest(mixins=MustacheMixin.class)

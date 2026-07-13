@@ -31,10 +31,12 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests: {@link PartList}, {@link PartList.Builder}, {@link BasicPartIterator}
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class PartList_Test extends TestBase {
 
 	private static final NameValuePair

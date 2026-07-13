@@ -27,7 +27,9 @@ import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class PropertyVars_Test extends TestBase {
 
 	//====================================================================================================

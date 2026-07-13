@@ -21,6 +21,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Validates the {@code ${juneau.echo.path:echo}} SVL override on {@link EchoMixin}.
@@ -42,6 +43,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class EchoMixin_SvlPathOverride_Test extends TestBase {
 
 	@Rest(mixins=EchoMixin.class, debug=@Debug("always"))

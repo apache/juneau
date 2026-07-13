@@ -25,6 +25,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Acceptance tests for the {@code @Value}-driven env-default fields on {@link RestContext}.
@@ -36,6 +37,7 @@ import org.junit.jupiter.api.*;
  * its own DefaultConfig-driven precedence on top of these fields and is exercised by the existing
  * {@code RestContext}-level tests; this class scopes coverage to the {@code @Value} seam itself.
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestContext_ValueAdoption_Test extends TestBase {
 
 	@Rest

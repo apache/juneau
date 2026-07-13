@@ -27,7 +27,9 @@ import java.util.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class ThrowableUtils_Test extends TestBase {
 
 	//====================================================================================================

@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.vars.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests compile-time stable-value folding for opt-in source {@link Var}s.
@@ -39,6 +40,7 @@ import org.junit.jupiter.api.*;
  * 	<li>Folded templates flip {@link VarTemplate#isLiteral()} to {@code true}.
  * </ul>
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class StableValueFolding_Test extends TestBase {
 
 	/** Counter-backed Var so we can detect dispatch vs fold. */

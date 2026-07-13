@@ -23,7 +23,9 @@ import java.util.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class MockLogger_Test extends TestBase {
 
 	@Test void a01_create() {

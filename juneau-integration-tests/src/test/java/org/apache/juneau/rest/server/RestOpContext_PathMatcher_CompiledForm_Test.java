@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Phase G regression: verifies that the {@link RestOpContext#pathMatchers} Memoizer
@@ -32,6 +33,7 @@ import org.junit.jupiter.api.*;
  * SVL-bearing op paths still resolve correctly under the compiled-form path, with
  * no extra request-time cost (resolution still happens once at context-build time).
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestOpContext_PathMatcher_CompiledForm_Test extends TestBase {
 
 	@Rest

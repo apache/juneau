@@ -24,7 +24,9 @@ import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class StringVarResolver_Test extends TestBase {
 
 	//====================================================================================================

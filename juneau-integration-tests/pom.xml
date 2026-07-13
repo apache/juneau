@@ -683,6 +683,14 @@
 						<configuration>
 							<excludedGroups>container,benchmark</excludedGroups>
 							<reportsDirectory>${project.build.directory}/surefire-reports/core</reportsDirectory>
+							<!--
+								Process-level parallelism for the in-memory core bucket: each fork is a
+								separate JVM, so per-JVM statics/system-properties/MockRestClient caches stay
+								isolated (classes run sequentially within a fork).  Container tests keep the
+								default single fork.
+							-->
+							<forkCount>4</forkCount>
+							<reuseForks>true</reuseForks>
 						</configuration>
 					</execution>
 					<execution>

@@ -23,6 +23,7 @@ import org.apache.juneau.config.*;
 import org.apache.juneau.config.store.*;
 import org.apache.juneau.test.junit.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Validates SVL substitution applied per-element to {@code @Rest(paths=...)} annotation literals.
@@ -40,6 +41,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestPathsRuntimeOverride_SVL_Test extends TestBase {
 
 	private static Config inMemoryConfig(String name, String...kvLines) {

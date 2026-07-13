@@ -29,6 +29,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Boot-and-shutdown smoke test for {@link JettyMicroservice}.
@@ -51,6 +52,7 @@ import org.junit.jupiter.api.*;
 @SuppressWarnings({
 	"serial"  // serialVersionUID not required for test classes.
 })
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class JettyMicroservice_Test {
 
 	@Rest(paths="/*")

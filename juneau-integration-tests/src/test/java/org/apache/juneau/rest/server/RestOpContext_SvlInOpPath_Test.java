@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Validates SVL substitution applied to op-level path declarations.
@@ -45,6 +46,7 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@ResourceLock(Resources.SYSTEM_PROPERTIES)
 class RestOpContext_SvlInOpPath_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
