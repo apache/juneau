@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.cbor;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -82,7 +82,7 @@ class CborEdgeCases_Test extends TestBase {
 
 	@Test
 	void h12_optionalProperties() throws Exception {
-		var m = JsonMap.of("x", opt(42));
+		var m = JsonMap.of("x", o(42));
 		var bytes = CborSerializer.DEFAULT.serialize(m);
 		var parsed = CborParser.DEFAULT.parse(bytes, JsonMap.class);
 		assertNotNull(parsed.get("x"));

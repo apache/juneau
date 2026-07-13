@@ -17,8 +17,8 @@
 package org.apache.juneau.http.classic.entity;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 
 import java.io.*;
@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.serializer.*;
  * HttpEntity for serializing POJOs as the body of HTTP requests.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
 
  * </ul>
  */

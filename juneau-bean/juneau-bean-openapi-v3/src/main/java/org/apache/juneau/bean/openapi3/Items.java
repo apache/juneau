@@ -19,9 +19,8 @@ package org.apache.juneau.bean.openapi3;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.contains;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -251,7 +250,7 @@ public class Items extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return nullIfEmpty(enum_); }
+	public List<Object> getEnum() { return nie(enum_); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -371,11 +370,11 @@ public class Items extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(ref), PROP_ref)
 			.addIf(nn(collectionFormat), PROP_collectionFormat)
 			.addIf(nn(default_), PROP_default)
-			.addIf(ne(enum_), PROP_enum)
+			.addIf(ine(enum_), PROP_enum)
 			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
 			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
 			.addIf(nn(format), PROP_format)
@@ -547,7 +546,7 @@ public class Items extends OpenApiElement {
 	 * @return This object
 	 */
 	public Items setEnum(Object...values) {
-		enum_ = listb(Object.class).sparse().addAny(enum_, values).build();
+		enum_ = lb(Object.class).sparse().addAny(enum_, values).build();
 		return this;
 	}
 
@@ -753,7 +752,7 @@ public class Items extends OpenApiElement {
 	 */
 	public Items setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw illegalArg("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
+			throw iaex("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5Serializer.DEFAULT.toString(VALID_TYPES));
 		type = value;
 		return this;
 	}

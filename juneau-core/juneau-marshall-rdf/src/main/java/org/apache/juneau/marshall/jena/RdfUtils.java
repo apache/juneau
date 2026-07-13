@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -84,7 +83,7 @@ public class RdfUtils {
 					if (rdfNs.prefix().equals(prefix))
 						return Namespace.of(prefix, rdfNs.namespaceURI());
 			}
-			throw bex("Found @Rdf.prefix annotation with no matching URI.  prefix='" + prefix + "'");
+			throw brex("Found @Rdf.prefix annotation with no matching URI.  prefix='" + prefix + "'");
 		}
 
 		// If only namespaceURI specified, need to search for prefix.

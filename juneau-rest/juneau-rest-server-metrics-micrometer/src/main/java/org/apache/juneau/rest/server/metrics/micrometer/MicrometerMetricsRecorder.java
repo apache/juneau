@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.metrics.micrometer;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
 
@@ -159,7 +159,7 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	})
 	@Override /* MetricsRecorder */
 	public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {
-		var effectiveName = ne(metricName) ? metricName : timerName;
+		var effectiveName = ine(metricName) ? metricName : timerName;
 		var builder = Timer.builder(effectiveName)
 			.tag(TAG_METHOD, defaultIfBlank(httpMethod, ""))
 			.tag(TAG_URI, defaultIfBlank(uriTemplate, ""))
@@ -183,7 +183,7 @@ public class MicrometerMetricsRecorder implements MetricsRecorder {
 	}
 
 	private static Timer.Builder applyMetricTags(Timer.Builder builder, String metricTags) {
-		if (ne(metricTags))
+		if (ine(metricTags))
 			for (var pair : metricTags.split(",")) {
 				var kv = pair.split("=", 2);
 				if (kv.length == 2)

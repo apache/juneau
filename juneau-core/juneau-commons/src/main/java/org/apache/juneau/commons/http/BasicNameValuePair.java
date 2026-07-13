@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.http;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * A simple immutable implementation of {@link NameValuePair}.

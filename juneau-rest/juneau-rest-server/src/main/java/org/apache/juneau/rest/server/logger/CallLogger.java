@@ -18,9 +18,10 @@ package org.apache.juneau.rest.server.logger;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.logger.CallLoggingDetail.*;
 
@@ -536,7 +537,7 @@ public class CallLogger {
 		if (! isEnabled(rule, req))
 			return;
 
-		var level2 = firstNonNull(rule.getLevel(), this.level);
+		var level2 = coalesce(rule.getLevel(), this.level);
 
 		if (level2 == Level.OFF)
 			return;
@@ -544,8 +545,8 @@ public class CallLogger {
 		var e = cast(Throwable.class, req.getAttribute("Exception"));
 		var execTime = cast(Long.class, req.getAttribute("ExecTime"));
 
-		var reqd = firstNonNull(rule.getRequestDetail(), requestDetail);
-		var resd = firstNonNull(rule.getResponseDetail(), responseDetail);
+		var reqd = coalesce(rule.getRequestDetail(), requestDetail);
+		var resd = coalesce(rule.getResponseDetail(), responseDetail);
 
 		var method = req.getMethod();
 		int status = res.getStatus();
@@ -621,7 +622,7 @@ public class CallLogger {
 					sb.append("\n---Request Content Hex---");
 					sb.append("\n").append(toSpacedHex(reqContent));
 				} catch (Exception e1) {
-					sb.append("\n").append(lm(e1));
+					sb.append("\n").append(localizedMessage(e1));
 				}
 			}
 
@@ -632,7 +633,7 @@ public class CallLogger {
 					sb.append("\n---Response Content Hex---");
 					sb.append("\n").append(toSpacedHex(resContent));
 				} catch (Exception e1) {
-					sb.append(lm(e1));
+					sb.append(localizedMessage(e1));
 				}
 			}
 			sb.append("\n=== END ======================================================================");
@@ -737,7 +738,7 @@ public class CallLogger {
 	 * @see RestOp#debug()
 	 */
 	protected boolean isDebug(HttpServletRequest req) {
-		return firstNonNull(cast(Boolean.class, req.getAttribute("Debug")), false);
+		return coalesce(cast(Boolean.class, req.getAttribute("Debug")), false);
 	}
 
 	/**
@@ -755,8 +756,8 @@ public class CallLogger {
 	 * @return <jk>true</jk> if logging is enabled for this request.
 	 */
 	protected boolean isEnabled(CallLoggerRule rule, HttpServletRequest req) {
-		var enabled2 = firstNonNull(rule.getEnabled(), this.enabled);
-		var enabledTest2 = firstNonNull(rule.getEnabledTest(), this.enabledTest);
+		var enabled2 = coalesce(rule.getEnabled(), this.enabled);
+		var enabledTest2 = coalesce(rule.getEnabledTest(), this.enabledTest);
 		return enabled2.isEnabled(enabledTest2.test(req));
 	}
 

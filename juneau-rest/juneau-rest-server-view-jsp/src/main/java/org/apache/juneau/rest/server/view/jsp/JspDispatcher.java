@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.jsp;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 
@@ -155,7 +155,7 @@ public class JspDispatcher implements RawTemplateDispatcher {
 		 */
 		public JspDispatcher build() {
 			if (basePath == null)
-				throw illegalArg("basePath must not be null");
+				throw iaex("basePath must not be null");
 			return new JspDispatcher(this);
 		}
 	}

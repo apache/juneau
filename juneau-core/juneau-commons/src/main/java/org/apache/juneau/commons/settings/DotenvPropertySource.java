@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -68,7 +68,7 @@ public class DotenvPropertySource implements PropertySource {
 	public PropertyLookupResult get(String name) {
 		var values = map.updateAndGet(existing -> existing != null ? existing : load(path));
 		var value = values.get(name);
-		return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(value));
+		return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(value));
 	}
 
 	@SuppressWarnings({

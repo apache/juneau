@@ -17,7 +17,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -88,7 +88,7 @@ public class RequestBeanPropertyMeta {
 		partType = b.partType;
 		schema = b.schema;
 		getter = b.getter;
-		this.serializer = opt(BeanInstantiator.createOrDefault((Class<HttpPartSerializer>) schema.getSerializer(), serializer));
+		this.serializer = o(BeanInstantiator.createOrDefault((Class<HttpPartSerializer>) schema.getSerializer(), serializer));
 		this.parser = BeanInstantiator.createOrDefault((Class<HttpPartParser>) schema.getParser(), parser);
 	}
 

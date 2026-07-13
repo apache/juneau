@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.*;
  * Interface for providing access to {@link JsonClassMeta} and {@link JsonBeanPropertyMeta} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
  * </ul>
  */
 public interface JsonMetaProvider {

@@ -17,7 +17,8 @@
 package org.apache.juneau.config.store;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
 import java.util.concurrent.*;

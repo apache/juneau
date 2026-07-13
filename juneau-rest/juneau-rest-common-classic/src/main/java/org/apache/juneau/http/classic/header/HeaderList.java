@@ -19,8 +19,8 @@ package org.apache.juneau.http.classic.header;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -60,7 +60,7 @@ import org.apache.juneau.http.HttpHeaders;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -369,10 +369,10 @@ public class HeaderList extends ControlledArrayList<Header> {
 		}
 
 		if (first == null)
-			return opte();
+			return oe();
 
 		if (rest == null)
-			return opt(first);
+			return o(first);
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -381,7 +381,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			sb.append(element.getValue());
 		}
 
-		return opt(new BasicHeader(name, sb.toString()));
+		return o(new BasicHeader(name, sb.toString()));
 	}
 
 	/**
@@ -427,10 +427,10 @@ public class HeaderList extends ControlledArrayList<Header> {
 		}
 
 		if (first == null)
-			return opte();
+			return oe();
 
 		if (rest == null)
-			return opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));
+			return o(HeaderBeanMeta.of(type).construct(name, first.getValue()));
 
 		var sb = new CharArrayBuffer(128);
 		sb.append(first.getValue());
@@ -439,7 +439,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 			sb.append(element.getValue());
 		}
 
-		return opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));
+		return o(HeaderBeanMeta.of(type).construct(name, sb.toString()));
 	}
 
 	/**
@@ -491,9 +491,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 		for (var i = 0; i < size(); i++) {
 			var x = get(i);
 			if (eq(x.getName(), name))
-				return opt(x);
+				return o(x);
 		}
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -509,9 +509,9 @@ public class HeaderList extends ControlledArrayList<Header> {
 		for (var i = size() - 1; i >= 0; i--) {
 			var x = get(i);
 			if (eq(x.getName(), name))
-				return opt(x);
+				return o(x);
 		}
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -931,7 +931,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+		return Shorts.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 
 	private Supplier<Object> resolver(Object input) {

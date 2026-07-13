@@ -39,7 +39,7 @@ import org.apache.juneau.http.classic.header.*;
  * However, some Web applications and frameworks use the 302 status code as if it were the 303.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @Response

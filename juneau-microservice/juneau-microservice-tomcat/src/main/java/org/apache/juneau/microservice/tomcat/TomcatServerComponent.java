@@ -17,11 +17,11 @@
 package org.apache.juneau.microservice.tomcat;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.collections.JsonMap.*;
 
 import java.io.*;
@@ -76,7 +76,7 @@ import jakarta.servlet.*;
  * {@code Microservice.getInstance().getBeanStore().getBean(TomcatServerComponent.class).orElseThrow()}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcatBasics">juneau-microservice-tomcat Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat">juneau-microservice-tomcat Basics</a>
  * </ul>
  *
  * @since 10.0.0
@@ -108,17 +108,17 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code availablePort} system property).
 	 */
 	@Value("${availablePort}")
-	Optional<String> availablePortEnv = opte();
+	Optional<String> availablePortEnv = oe();
 
 	/**
 	 * Env-driven sentinel for {@code juneau.serverPort}; {@link Optional#empty()} when unset (in which case
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code juneau.serverPort} system property).
 	 */
 	@Value("${juneau.serverPort}")
-	Optional<String> serverPortEnv = opte();
+	Optional<String> serverPortEnv = oe();
 
 	private static int[] parseIntArray(String csv) {
-		if (e(csv))
+		if (ie(csv))
 			return new int[0];
 		var parts = csv.split(",");
 		var out = new int[parts.length];
@@ -236,8 +236,8 @@ public class TomcatServerComponent implements MicroserviceListener {
 			//    onStop() can wait for in-flight requests to complete before the server stops.
 			//  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.
 			//  - Mark readiness ready so a freshly-(re)started service serves traffic.
-			stopTimeout.set(firstNonNull(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));
-			shutdownSettleDelay.set(firstNonNull(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
+			stopTimeout.set(coalesce(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));
+			shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
 			ReadinessState.resolve(store).markReady();
 
 			// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
@@ -262,7 +262,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				if (cls.getAnnotation(Rest.class) == null)
 					continue;
 				var pathSpecs = restPathsFor(servlet, store);
-				var source = "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : "");
+				var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");
 				for (var pathSpec : pathSpecs)
 					checkPathCollision(pathSpec, source, mountedPaths);
 				addServlet(servlet, pathSpecs);
@@ -300,7 +300,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 					t2.destroy();
 					ms.out(messages, "ServerStopped");
 				} catch (Exception e) {
-					logger.log(Level.WARNING, lm(e), e);
+					logger.log(Level.WARNING, localizedMessage(e), e);
 				} finally {
 					cleanupBaseDir();
 				}
@@ -333,7 +333,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				}
 			}
 		} catch (Exception e) {
-			logger.log(Level.WARNING, lm(e), e);
+			logger.log(Level.WARNING, localizedMessage(e), e);
 		}
 	}
 
@@ -510,7 +510,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	public URI getURI() {
 		var cp = getContextPath();
 		try {
-			return new URI(getProtocol(), null, getHostName(), getPort(), e(cp) ? null : cp, null, null);
+			return new URI(getProtocol(), null, getHostName(), getPort(), ie(cp) ? null : cp, null, null);
 		} catch (URISyntaxException e) {
 			throw toRex(e);
 		}
@@ -526,7 +526,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 
 	private File resolveBaseDir(TomcatSettings settings) {
 		var configured = settings.getBaseDir();
-		if (ne(configured)) {
+		if (ine(configured)) {
 			ownsBaseDir.set(false);
 			var f = new File(configured);
 			baseDir.set(f);

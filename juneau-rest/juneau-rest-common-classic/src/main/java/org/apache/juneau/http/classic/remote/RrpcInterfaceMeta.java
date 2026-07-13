@@ -17,8 +17,8 @@
 package org.apache.juneau.http.classic.remote;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -62,7 +62,7 @@ public class RrpcInterfaceMeta {
 		Holder<String> path2 = Holder.of("");
 		var ci = ClassInfo.of(c);
 
-		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Utils::ne).forEach(x -> path2.set(trimSlashes(x)));
+		rstream(AP.find(Remote.class, ci)).map(x -> x.inner().path()).filter(Shorts::ine).forEach(x -> path2.set(trimSlashes(x)));
 
 		Map<Method,RrpcInterfaceMethodMeta> methods2 = map();
 		ci.getPublicMethods().forEach(x -> methods2.put(x.inner(), new RrpcInterfaceMethodMeta(uri, x.inner())));

@@ -18,8 +18,8 @@ package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -63,7 +63,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceBasics">juneau-microservice Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  * </ul>
  *
  * @serial exclude

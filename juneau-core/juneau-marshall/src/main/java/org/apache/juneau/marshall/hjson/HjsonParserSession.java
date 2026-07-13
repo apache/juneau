@@ -17,7 +17,8 @@
 package org.apache.juneau.marshall.hjson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -276,7 +277,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			return convertToCollection(result, type);
 		}
 		while (true) {
-			var eType = def(type.getElementType(), object());
+			var eType = coalesce(type.getElementType(), object());
 			result.add(parseValue(t, eType));
 			t.skipWhitespaceAndComments();
 			next = t.peek();
@@ -346,7 +347,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 	private Object convertToCollection(MarshalledList list, ClassMeta<?> type) throws ExecutableException {
 		if (type == null)
 			type = object();
-		var eType = def(type.getElementType(), object());
+		var eType = coalesce(type.getElementType(), object());
 		var converted = newGenericList();
 		for (var item : list)
 			converted.add(convertToMemberType(null, item, eType));

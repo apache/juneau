@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * Microservice debug utilities.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty Basics</a>
 
  * </ul>
  *

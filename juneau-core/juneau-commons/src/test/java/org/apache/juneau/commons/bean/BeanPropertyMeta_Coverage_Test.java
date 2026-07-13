@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.net.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Coverage tests for {@link BeanPropertyMeta} on the bean-modeling-only path.

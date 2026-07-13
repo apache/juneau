@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.settings;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -87,7 +87,7 @@ public class Setting<T> extends Memoizer<T> {
 	 * @return The optional value.
 	 */
 	public Optional<T> asOptional() {
-		return opt(get());
+		return o(get());
 	}
 
 	/**

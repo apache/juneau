@@ -17,9 +17,8 @@
 package org.apache.juneau.commons.conversion;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.math.*;
@@ -301,7 +300,7 @@ public class BasicConverter extends CachingConverter {
 			return (in, memberOf, session, args) -> {
 				var s = in.toString();
 				if (s.length() != 1)
-					throw illegalArg("Cannot convert string of length {0} to char: ''{1}''", s.length(), s);
+					throw iaex("Cannot convert string of length {0} to char: ''{1}''", s.length(), s);
 				return (O) Character.valueOf(s.charAt(0));
 			};
 		if (Number.class.isAssignableFrom(inType))
@@ -353,8 +352,8 @@ public class BasicConverter extends CachingConverter {
 				return opt.map(x -> to(x, memberOf, session, args[0]));
 			}
 			if (args.length == 0)
-				return opt(in);
-			return opt(to(in, memberOf, session, args[0]));
+				return o(in);
+			return o(to(in, memberOf, session, args[0]));
 		};
 	}
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.test.junit;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -222,7 +222,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 * @since 10.0.0
 	 */
 	public Optional<WritableBeanStore> getAttachedStore() {
-		return opt(attached);
+		return o(attached);
 	}
 
 	/**
@@ -262,7 +262,7 @@ public class JuneauBeanStoreExtension implements BeforeAllCallback, AfterAllCall
 	 */
 	public Optional<TestBeanStore> getStore(Scope scope) {
 		Objects.requireNonNull(scope, "scope must not be null");
-		return opt(scope == Scope.METHOD ? currentMethodStore() : currentClassStore());
+		return o(scope == Scope.METHOD ? currentMethodStore() : currentClassStore());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

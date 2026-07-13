@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.util.*;
@@ -45,21 +45,21 @@ class RestAuthenticatorE2E_Test extends TestBase {
 	/** Root: principal=alice, roles=[root]. */
 	public static class RootAuth extends RestAuthenticator {
 		@Override public Optional<AuthResult> authenticate(RestRequest req) {
-			return opt(AuthResult.of(() -> "alice", "root"));
+			return o(AuthResult.of(() -> "alice", "root"));
 		}
 	}
 
 	/** ADD: roles-only, augments accumulated principal/roles. */
 	public static class AddRolesAuth extends RestAuthenticator {
 		@Override public Optional<AuthResult> authenticate(RestRequest req) {
-			return opt(AuthResult.ofRoles("extra"));
+			return o(AuthResult.ofRoles("extra"));
 		}
 	}
 
 	/** REPLACE: discards accumulated, sets principal=bob, roles=[admin]. */
 	public static class ReplaceAuth extends RestAuthenticator {
 		@Override public Optional<AuthResult> authenticate(RestRequest req) {
-			return opt(AuthResult.replacing(() -> "bob", "admin"));
+			return o(AuthResult.replacing(() -> "bob", "admin"));
 		}
 	}
 
@@ -154,7 +154,7 @@ class RestAuthenticatorE2E_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 
 		@Bean public Authenticator inner() {
-			return req -> opt(AuthResult.of(() -> "carol", "admin"));
+			return req -> o(AuthResult.of(() -> "carol", "admin"));
 		}
 
 		@Bean public RestAuthenticator authenticator(Authenticator inner) {

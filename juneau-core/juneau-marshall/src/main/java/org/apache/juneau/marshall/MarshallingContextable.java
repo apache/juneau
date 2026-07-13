@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.beans.*;
 import java.io.*;

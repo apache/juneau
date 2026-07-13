@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -94,7 +93,7 @@ public class HttpStringRangesHeader extends HttpHeaderBean {
 	}
 
 	public Optional<StringRanges> asStringRanges() {
-		return opt(toStringRanges());
+		return o(toStringRanges());
 	}
 
 	public StringRange getRange(int index) {

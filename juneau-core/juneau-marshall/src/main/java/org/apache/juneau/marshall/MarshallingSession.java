@@ -18,8 +18,7 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -304,18 +303,18 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	protected MarshallingSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
-		locale = opt(builder.locale).orElse(ctx.getLocale());
-		mediaType = opt(builder.mediaType).orElse(builder.mediaType);
-		timeZone = opt(builder.timeZone).orElse(builder.timeZone);
+		locale = o(builder.locale).orElse(ctx.getLocale());
+		mediaType = o(builder.mediaType).orElse(builder.mediaType);
+		timeZone = o(builder.timeZone).orElse(builder.timeZone);
 		activeView = builder.activeView;
 	}
 
 	@Override /* ConverterSession */
 	public <T> Optional<T> get(Class<T> c) {
-		if (c == TimeZone.class) return opt(c.cast(timeZone));
-		if (c == Locale.class) return opt(c.cast(locale));
-		if (c == MediaType.class) return opt(c.cast(mediaType));
-		return opte();
+		if (c == TimeZone.class) return o(c.cast(timeZone));
+		if (c == Locale.class) return o(c.cast(locale));
+		if (c == MediaType.class) return o(c.cast(mediaType));
+		return oe();
 	}
 
 	/**
@@ -742,7 +741,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		if (activeView == null)
 			return true;
 		var views = pMeta.getViews();
-		if (e(views))
+		if (ie(views))
 			return ctx.isDefaultViewInclusion();
 		return views.contains(activeView);
 	}
@@ -1049,12 +1048,12 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		try {
 			var o = m.newBean(outer);
 			if (o == null)
-				throw bex(c, "Class does not have a no-arg constructor.");
+				throw brex(c, "Class does not have a no-arg constructor.");
 			return o;
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw bex(e);
+			throw brex(e);
 		}
 	}
 
@@ -1100,7 +1099,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		if (m == null)
 			return null;
 		T bean = null;
-		if (e(m.getConstructorArgs()))
+		if (ie(m.getConstructorArgs()))
 			bean = newBean(outer, c);
 		var bm = new BeanMap<>(bean, m);
 		bm.setBeanSession(this);
@@ -1201,7 +1200,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
-			throw bex(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
+			throw brex(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
 		var bm = new BeanMap<>(o, m);
 		bm.setBeanSession(this);
 		return bm;
@@ -1408,7 +1407,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return convertToType(value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToType(value, c);
-		throw illegalArg("Unsupported targetType for convertToType: {0}", cn(targetType));
+		throw iaex("Unsupported targetType for convertToType: {0}", cn(targetType));
 	}
 
 	/**
@@ -1430,7 +1429,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return convertToMemberType(outer, value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToMemberType(outer, value, c);
-		throw illegalArg("Unsupported targetType for convertToMemberType: {0}", cn(targetType));
+		throw iaex("Unsupported targetType for convertToMemberType: {0}", cn(targetType));
 	}
 
 	/**

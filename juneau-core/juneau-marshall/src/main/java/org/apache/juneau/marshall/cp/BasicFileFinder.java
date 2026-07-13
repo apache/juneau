@@ -19,9 +19,9 @@ package org.apache.juneau.marshall.cp;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -121,7 +121,7 @@ public class BasicFileFinder implements FileFinder {
 
 	@Override /* Overridden from FileFinder */
 	public Optional<String> getString(String name, Locale locale) throws IOException {
-		return opt(read(find(name, locale).orElse(null)));
+		return o(read(find(name, locale).orElse(null)));
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class BasicFileFinder implements FileFinder {
 		name = trimSlashesAndSpaces(name);
 
 		if (isInvalidPath(name))
-			return opte();
+			return oe();
 
 		if (nn(locale))
 			localizedFiles.putIfAbsent(locale, new ConcurrentHashMap<>());
@@ -203,7 +203,7 @@ public class BasicFileFinder implements FileFinder {
 			}
 		}
 
-		return opt(lf == null ? null : lf.read());
+		return o(lf == null ? null : lf.read());
 	}
 
 	/**

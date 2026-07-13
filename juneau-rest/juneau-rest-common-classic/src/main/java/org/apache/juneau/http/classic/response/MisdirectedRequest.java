@@ -35,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
  * The request was directed at a server that is not able to produce a response (for example because of connection reuse).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude

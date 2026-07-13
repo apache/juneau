@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.*;
  * Metadata on classes specific to the URL-Encoding serializers and parsers pulled from the {@link UrlEncoding @UrlEncoding} annotation on the class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding Basics</a>
  * </ul>
  */
 public class UrlEncodingClassMeta extends ExtendedClassMeta {

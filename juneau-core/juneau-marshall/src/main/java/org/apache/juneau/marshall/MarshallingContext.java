@@ -16,14 +16,16 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.reflect.Visibility.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -169,7 +171,7 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContextBasics">Bean Context Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanContexts">Bean Context Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -599,7 +601,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 */
 		public Builder beanDictionary(Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
-			return beanDictionary(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
+			return beanDictionary(Stream.of(values).map(x -> info(x)).toArray(ClassInfo[]::new));
 		}
 
 		/**
@@ -2956,7 +2958,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		 */
 		public Builder notBeanClasses(Class<?>...values) {
 			assertArgNoNulls(ARG_values, values);
-			return notBeanClasses(Stream.of(values).map(ReflectionUtils::info).toArray(ClassInfo[]::new));
+			return notBeanClasses(Stream.of(values).map(x -> info(x)).toArray(ClassInfo[]::new));
 		}
 
 		/**
@@ -4107,7 +4109,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		ignoreUnknownBeanProperties = builder.ignoreUnknownBeanProperties;
 		ignoreUnknownEnumValues = builder.ignoreUnknownEnumValues;
 		ignoreUnknownNullBeanProperties = ! builder.disableIgnoreUnknownNullBeanProperties;
-		locale = opt(builder.locale).orElse(Locale.getDefault());
+		locale = o(builder.locale).orElse(Locale.getDefault());
 		mediaType = builder.mediaType;
 		notBeanPackages = u(new ArrayList<>(builder.notBeanPackages));
 		propertyNamer = nn(builder.propertyNamer) ? builder.propertyNamer : BasicPropertyNamer.class;
@@ -4131,7 +4133,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 		currencyFormat = builder.currencyFormat;
 		classFormat = builder.classFormat;
 		classLoader = builder.classLoader;
-		typePropertyName = opt(builder.typePropertyName).orElse("_type");
+		typePropertyName = o(builder.typePropertyName).orElse("_type");
 		useInterfaceProxies = ! builder.disableInterfaceProxies;
 		useJavaBeanIntrospector = builder.useJavaBeanIntrospector;
 		validateSchema = builder.validateSchema;

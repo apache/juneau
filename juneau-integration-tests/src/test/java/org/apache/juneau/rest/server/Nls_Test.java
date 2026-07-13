@@ -53,7 +53,7 @@ class Nls_Test extends TestBase {
 		}
 
 		public static String out(SerializerSession s) {
-			return Utils.s(s.getSessionProperties().get("TestProperty"));
+			return Shorts.s(s.getSessionProperties().get("TestProperty"));
 		}
 	}
 

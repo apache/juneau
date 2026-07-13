@@ -17,9 +17,11 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents a composite key composed of multiple values, suitable for use as a key in hash-based collections.
@@ -142,7 +144,7 @@ public class HashKey {
 	 *
 	 * <p>
 	 * Two {@code HashKey} instances are considered equal if they contain the same values in the same order.
-	 * The comparison uses deep equality checking for array elements via {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)}.
+	 * The comparison uses deep equality checking for array elements via {@link Shorts#eq(Object, Object)}.
 	 *
 	 * <p>
 	 * This method does not perform null or type checking - it assumes the caller has verified the object

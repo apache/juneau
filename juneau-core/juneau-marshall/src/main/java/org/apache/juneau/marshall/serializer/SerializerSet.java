@@ -19,8 +19,7 @@ package org.apache.juneau.marshall.serializer;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -591,7 +590,7 @@ public class SerializerSet {
 	 * @return The serializer and media type that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<SerializerMatch> getSerializerMatch(MediaType mediaType) {
-		return mediaType == null ? opte() : getSerializerMatch(mediaType.toString());
+		return mediaType == null ? oe() : getSerializerMatch(mediaType.toString());
 	}
 
 	/**
@@ -619,10 +618,10 @@ public class SerializerSet {
 	 */
 	public Optional<SerializerMatch> getSerializerMatch(String acceptHeader) {
 		if (acceptHeader == null)
-			return opte();
+			return oe();
 		SerializerMatch sm = cache.get(acceptHeader);
 		if (nn(sm))
-			return opt(sm);
+			return o(sm);
 
 		var a = MediaRanges.of(acceptHeader);
 		int match = a.match(mediaRangesList);
@@ -631,7 +630,7 @@ public class SerializerSet {
 			cache.putIfAbsent(acceptHeader, sm);
 		}
 
-		return opt(cache.get(acceptHeader));
+		return o(cache.get(acceptHeader));
 	}
 
 	/**

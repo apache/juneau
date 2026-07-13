@@ -16,9 +16,7 @@
  */
 package org.apache.juneau.microservice.resources;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;

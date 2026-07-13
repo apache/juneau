@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -107,7 +107,7 @@ public class SecurityRequirement extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(requirements), PROP_requirements)
 			.build();
 		// @formatter:on

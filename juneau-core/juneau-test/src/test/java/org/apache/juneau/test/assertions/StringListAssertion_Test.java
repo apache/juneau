@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 package org.apache.juneau.test.assertions;
-
+import static java.util.Collections.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -57,7 +58,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asString().is("[1]");
 		test(nil).asString().isNull();
 	}
@@ -73,21 +74,21 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void bb01_asStrings() {
 		var x1 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).asStrings().asJoin().is("1");
 		test(nil).asStrings().isNull();
 	}
 
 	@Test void bb02_size() {
 		var x1 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).asSize().is(1);
 		test(nil).asSize().isNull();
 	}
 
 	@Test void bb03_asTrimmed() {
 		var x = l("  a  ","  b  ");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asTrimmed().isHas("a","b");
 		test(nil).asTrimmed().isNull();
 	}
@@ -100,7 +101,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void bc02_item() {
 		var x = l("a");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asItem(0).isNotNull();
 		test(x).asItem(1).isNull();
 		test(x).asItem(-1).isNull();
@@ -109,35 +110,35 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void bc03a_sorted() {
 		var x = l("2","1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asSorted().isString("[1,2]");
 		test(nil).asSorted().isNull();
 	}
 
 	@Test void bc03b_sorted_wComparator() {
 		var x = l("2","1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asSorted(null).isString("[1,2]");
 		test(nil).asSorted(null).isNull();
 	}
 
 	@Test void bd01a_join() {
 		var x = l("1","2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asJoin().isString("12");
 		test(nil).asJoin().isNull();
 	}
 
 	@Test void bd01b_join_wDelim() {
 		var x = l("1","2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asJoin(",").isString("1,2");
 		test(nil).asJoin(",").isNull();
 	}
 
 	@Test void bd01c_join_wDelim_wXfix() {
 		var x = l("1","2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).asJoin(",","[","]").isString("[1,2]");
 		test(nil).asJoin(",","[","]").isNull();
 	}
@@ -147,24 +148,24 @@ class StringListAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ca01_exists() {
-		var x = liste(String.class);
-		var nil = listn(String.class);
+		List<String> x = emptyList();
+		var nil = nullList(String.class);
 		test(x).isExists().isExists();
 		var assertion3 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
 	}
 
 	@Test void ca02_isNull() {
-		var x = liste(String.class);
-		var nil = listn(String.class);
+		List<String> x = emptyList();
+		var nil = nullList(String.class);
 		test(nil).isNull();
 		var assertion4 = test(x);
 		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
 	}
 
 	@Test void ca03_isNotNull() {
-		var x = liste(String.class);
-		var nil = listn(String.class);
+		List<String> x = emptyList();
+		var nil = nullList(String.class);
 		test(x).isNotNull();
 		var assertion5 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
@@ -174,7 +175,7 @@ class StringListAssertion_Test extends TestBase {
 		var x1 = l("1");
 		var x1a = l(new String("1"));
 		var x2 = l("2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -194,7 +195,7 @@ class StringListAssertion_Test extends TestBase {
 		var x1 = l("1");
 		var x1a = l(new String("1"));
 		var x2 = l("2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -206,7 +207,7 @@ class StringListAssertion_Test extends TestBase {
 		var x1 = l("1");
 		var x1a = l(new String("1"));
 		var x2 = l("2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[[2]]'.  Actual='[1]'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='[1]'.");
@@ -217,7 +218,7 @@ class StringListAssertion_Test extends TestBase {
 		var x1 = l("1");
 		var x1a = l(new String("1"));
 		var x2 = l("2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -228,7 +229,7 @@ class StringListAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = l("1");
 		var x1a = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='[1](*)'.  Actual='[1](*)'.");
@@ -237,7 +238,7 @@ class StringListAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).isType(List.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.Array*'.");
@@ -247,7 +248,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.Array*'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
 		assertThrown(()->test(x).isExactType(null)).asMessage().asOneLine().is("Argument 'type' cannot be null.");
@@ -255,7 +256,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).isString("[1]");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='[1]'.");
@@ -263,9 +264,9 @@ class StringListAssertion_Test extends TestBase {
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 	@Test void cb01_isEmpty() {
-		var x1 = liste(String.class);
+		List<String> x1 = emptyList();
 		var x2 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isEmpty();
 		var assertion6 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion6::isEmpty, "Value was null.");
@@ -274,9 +275,9 @@ class StringListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb02_isNotEmpty() {
-		var x1 = liste(String.class);
+		List<String> x1 = emptyList();
 		var x2 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x2).isNotEmpty();
 		var assertion8 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion8::isNotEmpty, "Value was null.");
@@ -286,7 +287,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cb03_contains() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).isContains("1");
 		assertThrown(()->test(x).isContains("2")).asMessage().asOneLine().is("Collection did not contain expected value.  Expect='2'.  Value='[1]'.");
 		var assertion10 = test(nil);
@@ -295,7 +296,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cb04_doesNotContain() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).isNotContains("2");
 		assertThrown(()->test(x).isNotContains("1")).asMessage().asOneLine().is("Collection contained unexpected value.  Unexpected='1'.  Value='[1]'.");
 		var assertion11 = test(nil);
@@ -304,7 +305,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cb05_any() {
 		var x1 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isAny(x->x.equals("1"));
 		assertThrown(()->test(x1).isAny(x->x.equals("2"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[1]'.");
 		var assertion12 = test(nil);
@@ -313,7 +314,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cb06_all() {
 		var x1 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isAll(x->x!=null);
 		assertThrown(()->test(x1).isAll(x->x.equals("2"))).asMessage().asOneLine().is("Collection did not contain tested value.  Value='[1]'.");
 		var assertion13 = test(nil);
@@ -322,7 +323,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cb07_isSize() {
 		var x = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).isSize(1);
 		assertThrown(()->test(x).isSize(0)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=0.  Actual=1.");
 		var assertion14 = test(nil);
@@ -331,7 +332,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cc01_has() {
 		var x = l("1","2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x).isHas("1","2");
 		assertThrown(()->test(x).isHas("1")).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x).isHas("1","3")).asMessage().asOneLine().is("List did not contain expected value at index 1.  Value did not match expected.  Expect='3'.  Actual='2'.");
@@ -341,7 +342,7 @@ class StringListAssertion_Test extends TestBase {
 
 	@Test void cc02_each() {
 		var x1 = l("1","2");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		test(x1).isEach(x->x!=null,x->x!=null);
 		assertThrown(()->test(x1).isEach(x->x==null)).asMessage().asOneLine().is("Collection did not have the expected size.  Expect=1.  Actual=2.");
 		assertThrown(()->test(x1).isEach(x->x==null,x->x==null)).asMessage().asOneLine().is("List did not contain expected value at index 0.  Unexpected value: '1'.");

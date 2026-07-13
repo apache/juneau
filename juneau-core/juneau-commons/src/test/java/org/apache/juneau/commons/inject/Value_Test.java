@@ -23,9 +23,9 @@ import java.net.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Acceptance tests for the {@code @Value} annotation.

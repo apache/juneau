@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * Identifies a proxy against a REST interface.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
  * </ul>
  */
 @Documented

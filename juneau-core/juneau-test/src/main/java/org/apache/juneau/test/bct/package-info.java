@@ -209,7 +209,7 @@
  *    <jc>// Simple custom message</jc>
  *    <jsm>assertBean</jsm>(() -> <js>"User validation failed"</js>, <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  *
- *    <jc>// Formatted message using Utils.fs() for convenient message suppliers with arguments</jc>
+ *    <jc>// Formatted message using Shorts.fs() for convenient message suppliers with arguments</jc>
  *    <jsm>assertBean</jsm>(<jsm>fs</jsm>(<js>"User {0} validation failed"</js>, <js>"Alice"</js>), <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  * </p>
  *
@@ -244,6 +244,6 @@
  * @see org.apache.juneau.test.bct.BasicBeanConverter
  * @see org.apache.juneau.test.bct.BctConfig
  * @see org.apache.juneau.test.bct.BctConfigExtension
- * @see org.apache.juneau.commons.utils.Utils#fs(String, Object...)
+ * @see org.apache.juneau.commons.utils.Shorts#fs(String, Object...)
  */
 package org.apache.juneau.test.bct;

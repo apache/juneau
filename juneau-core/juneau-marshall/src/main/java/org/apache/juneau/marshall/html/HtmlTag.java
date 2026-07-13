@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.xml.*;
  * Predefined tags that occur in the serialized output of the HTML serializer.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
  * </ul>
  */
 enum HtmlTag {

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oauth.flow;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.time.*;
@@ -79,17 +79,17 @@ final class Flows {
 		String tokenType = access.getType() != null ? access.getType().getValue() : "Bearer"; // HTT: null branch unreachable; Nimbus AccessToken always has a non-null AccessTokenType
 		Instant expiresAt = computeExpiry(access);
 		Optional<String> refreshToken = tokens.getRefreshToken() != null
-			? opt(tokens.getRefreshToken().getValue())
-			: opte();
+			? o(tokens.getRefreshToken().getValue())
+			: oe();
 		Optional<Set<String>> scope = access.getScope() != null
-			? opt(new LinkedHashSet<>(access.getScope().toStringList()))
-			: opte();
-		Optional<String> idToken = opte();
+			? o(new LinkedHashSet<>(access.getScope().toStringList()))
+			: oe();
+		Optional<String> idToken = oe();
 		var custom = success.getCustomParameters();
 		if (custom != null) { // HTT: null branch unreachable; Nimbus returns an empty map (never null) for standard responses
 			var v = custom.get("id_token");
 			if (v instanceof String s)
-				idToken = opt(s);
+				idToken = o(s);
 		}
 		return new OAuthToken(access.getValue(), tokenType, expiresAt, refreshToken, scope, idToken);
 	}

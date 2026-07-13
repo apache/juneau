@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.util.*;
@@ -254,7 +254,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 		public static String nonce(String token) {
 			assertArgNotNull("token", token);
 			if (token.trim().isEmpty())
-				throw illegalArg("nonce token must not be blank");
+				throw iaex("nonce token must not be blank");
 			return "'nonce-" + token + "'";
 		}
 
@@ -269,7 +269,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 			assertArgNotNull("scheme", scheme);
 			var s = scheme.trim();
 			if (s.isEmpty())
-				throw illegalArg("scheme must not be blank");
+				throw iaex("scheme must not be blank");
 			return s.endsWith(":") ? s : s + ":";
 		}
 
@@ -285,9 +285,9 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 			assertArgNotNull("algorithm", algorithm);
 			assertArgNotNull("base64Hash", base64Hash);
 			if (algorithm.trim().isEmpty())
-				throw illegalArg("hash algorithm must not be blank");
+				throw iaex("hash algorithm must not be blank");
 			if (base64Hash.trim().isEmpty())
-				throw illegalArg("hash value must not be blank");
+				throw iaex("hash value must not be blank");
 			return "'" + algorithm.trim() + "-" + base64Hash.trim() + "'";
 		}
 
@@ -499,7 +499,7 @@ public class ContentSecurityPolicy extends HttpStringHeader {
 			assertArgNotNull("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
-				throw illegalArg("directive name must not be blank");
+				throw iaex("directive name must not be blank");
 			directives.put(n, new ArrayList<>(Arrays.asList(sources)));
 			return this;
 		}

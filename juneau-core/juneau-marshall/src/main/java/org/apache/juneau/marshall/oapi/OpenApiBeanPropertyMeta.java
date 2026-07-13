@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi Basics</a>
 
  * </ul>
  */

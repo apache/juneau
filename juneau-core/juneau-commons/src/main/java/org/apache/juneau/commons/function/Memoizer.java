@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.function;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -69,7 +69,7 @@ import java.util.function.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- * 	<li class='jm'>{@link org.apache.juneau.commons.utils.Utils#memoizer(Supplier)}
+ * 	<li class='jm'>{@link Suppliers#memoizer(Supplier)}
  * 	<li class='jc'>{@link NullableSupplier} - Base interface providing Optional-like methods
  * </ul>
  *
@@ -109,7 +109,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	public T get() {
 		Optional<T> h = cache.get();
 		if (h == null) {
-			h = opt(supplier.get());
+			h = o(supplier.get());
 			if (! cache.compareAndSet(null, h)) {
 				// Another thread beat us, use their value
 				h = cache.get();
@@ -160,7 +160,7 @@ public class Memoizer<T> implements NullableSupplier<T> {
 	 * @param value The value to cache. Can be <jk>null</jk>.
 	 */
 	public void set(T value) {
-		cache.set(opt(value));
+		cache.set(o(value));
 	}
 
 	/**

@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
 import org.apache.juneau.commons.lang.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Represents an immutable tuple containing two values.
@@ -34,7 +35,7 @@ import org.apache.juneau.commons.lang.*;
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
  * 	<li>Immutable - values cannot be changed after construction
- * 	<li>Content-based equality - uses {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)} for comparison
+ * 	<li>Content-based equality - uses {@link Shorts#eq(Object, Object)} for comparison
  * 	<li>Content-based hashing - uses {@link HashCode#of(Object...)} for hash code computation
  * 	<li>Array support - properly handles arrays with content-based equality and hashing
  * </ul>
@@ -77,7 +78,7 @@ import org.apache.juneau.commons.lang.*;
  * 	<li class='jc'>{@link Tuple3} - Three-value tuple
  * 	<li class='jc'>{@link Tuple4} - Four-value tuple
  * 	<li class='jc'>{@link Tuple5} - Five-value tuple
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsBasics">juneau-commons Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons Basics</a>
  * </ul>
  *
  * @param <A> The type of the first value in this tuple.
@@ -169,7 +170,7 @@ public class Tuple2<A,B> {
 	 * @return The first value wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<A> optA() {
-		return opt(a);
+		return o(a);
 	}
 
 	/**
@@ -187,7 +188,7 @@ public class Tuple2<A,B> {
 	 * @return The second value wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<B> optB() {
-		return opt(b);
+		return o(b);
 	}
 
 	@Override /* Overridden from Object */

@@ -26,7 +26,7 @@
  * as Markdown documents with heading-based structure.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarkdownBasics">Markdown Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Markdown">Markdown Basics</a>
  * </ul>
  */
 package org.apache.juneau.marshall.markdown;

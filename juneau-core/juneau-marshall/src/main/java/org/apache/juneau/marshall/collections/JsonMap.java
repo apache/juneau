@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.marshall.collections;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static java.util.Collections.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -115,22 +114,22 @@ public class JsonMap extends MarshalledMap {
 
 		@Override
 		public void clear() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object compute(String key, BiFunction<? super String, ? super Object, ?> remappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object computeIfAbsent(String key, Function<? super String, ?> mappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object computeIfPresent(String key, BiFunction<? super String, ? super Object, ?> remappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
@@ -148,47 +147,47 @@ public class JsonMap extends MarshalledMap {
 
 		@Override
 		public Object merge(String key, Object value, BiFunction<? super Object, ? super Object, ?> remappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object put(String key, Object val) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public void putAll(Map<? extends String, ?> m) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object putIfAbsent(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object remove(Object key) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public boolean remove(Object key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object replace(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public boolean replace(String key, Object oldValue, Object newValue) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public void replaceAll(BiFunction<? super String, ? super Object, ?> function) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
@@ -224,17 +223,17 @@ public class JsonMap extends MarshalledMap {
 
 		@Override /* Overridden from Map */
 		public Object put(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Map */
 		public Object remove(Object key) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Map */
 		public Collection<Object> values() {
-			return mape().values();
+			return emptyMap().values();
 		}
 	};
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.convention;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -43,7 +43,7 @@ import org.apache.juneau.rest.server.*;
  * 	<li class='jc'>{@link VersionMixin}
  * 	<li class='jc'>{@link VersionResource}
  * 	<li class='jc'>{@link VersionServlet}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Composition (mixins, paths)</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Composition (mixins, paths)</a>
  * </ul>
  *
  * @since 10.0.0
@@ -276,7 +276,7 @@ public class VersionProvider {
 		 * @return This object.
 		 */
 		public Builder fromJavaVersion() {
-			entries.putIfAbsent("javaVersion", opt(javaVersionDefault).orElse(UNKNOWN));
+			entries.putIfAbsent("javaVersion", o(javaVersionDefault).orElse(UNKNOWN));
 			explicit = true;
 			return this;
 		}
@@ -341,12 +341,12 @@ public class VersionProvider {
 
 		private static void ifNotEmpty(Map<String,String> attrs, String key, Consumer<String> sink) {
 			var v = attrs.get(key);
-			if (ne(v))
+			if (ine(v))
 				sink.accept(v);
 		}
 
 		private static void ifNotEmptyValue(String v, Consumer<String> sink) {
-			if (ne(v))
+			if (ine(v))
 				sink.accept(v);
 		}
 	}

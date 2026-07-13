@@ -19,9 +19,8 @@ package org.apache.juneau.rest.server.httppart;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -243,7 +242,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
+			var hasAllBlanks = l.allMatch(x -> Shorts.ie(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestQueryParam(req, name, vs.resolve(p.getValue())));
@@ -437,7 +436,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link PageArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<PageArgs> getPageArgs() { return opt(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
+	public Optional<PageArgs> getPageArgs() { return o(PageArgs.create(get("p").asInteger().orElse(null), get("l").asInteger().orElse(null))); }
 
 	/**
 	 * Locates the search query argument ({@code &amp;s=}) in the query string and returns them as a {@link SearchArgs} object.
@@ -445,7 +444,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link SearchArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<SearchArgs> getSearchArgs() { return opt(SearchArgs.create(get("s").asString().orElse(null))); }
+	public Optional<SearchArgs> getSearchArgs() { return o(SearchArgs.create(get("s").asString().orElse(null))); }
 
 	/**
 	 * Locates the sort query argument ({@code &amp;o=}) in the query string and returns them as a {@link SortArgs} object.
@@ -453,7 +452,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link SortArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<SortArgs> getSortArgs() { return opt(SortArgs.create(get("o").asString().orElse(null))); }
+	public Optional<SortArgs> getSortArgs() { return o(SortArgs.create(get("o").asString().orElse(null))); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -475,7 +474,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * @return
 	 * 	A new {@link ViewArgs} object initialized with the query arguments, or {@link Optional#empty()} if not found.
 	 */
-	public Optional<ViewArgs> getViewArgs() { return opt(ViewArgs.create(get("v").asString().orElse(null))); }
+	public Optional<ViewArgs> getViewArgs() { return o(ViewArgs.create(get("v").asString().orElse(null))); }
 
 	/**
 	 * Sets the parser to use for part values.
@@ -585,6 +584,6 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+		return Shorts.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 }

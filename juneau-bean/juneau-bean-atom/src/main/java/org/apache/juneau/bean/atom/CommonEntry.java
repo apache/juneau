@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.atom;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
 import java.util.*;
@@ -374,7 +374,7 @@ public class CommonEntry extends Common {
 	 * @return This object.
 	 */
 	public CommonEntry setUpdated(String value) {
-		setUpdated(opt(value).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(value).getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
+		setUpdated(o(value).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(value).getZonedDateTime()).map(GregorianCalendar::from).orElse(null));
 		return this;
 	}
 }

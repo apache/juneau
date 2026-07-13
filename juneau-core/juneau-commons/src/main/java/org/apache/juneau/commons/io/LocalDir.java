@@ -17,9 +17,9 @@
 package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.net.*;
 import java.nio.file.*;
@@ -149,7 +149,7 @@ public class LocalDir {
 	 */
 	public LocalDir(Class<?> clazz, String clazzPath) {
 		this.clazz = assertArgNotNull(ARG_clazz, clazz);
-		this.clazzPath = "/".equals(clazzPath) ? "/" : nullIfEmpty(trimTrailingSlashes(clazzPath));
+		this.clazzPath = "/".equals(clazzPath) ? "/" : StringUtils.nullIfEmpty(trimTrailingSlashes(clazzPath));
 		this.path = null;
 		this.hashCode = h(clazz, clazzPath);
 	}
@@ -253,7 +253,7 @@ public class LocalDir {
 		assertArgNotNull(ARG_path, path);
 		if (nn(clazz)) {
 			if (path.contains(".."))
-				throw illegalArg("Path escapes configured root directory.");
+				throw iaex("Path escapes configured root directory.");
 			String p;
 			if (clazzPath == null) {
 				// Relative to class package - keep path relative

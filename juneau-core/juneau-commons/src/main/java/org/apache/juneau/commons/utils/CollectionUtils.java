@@ -2,8 +2,8 @@ package org.apache.juneau.commons.utils;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Exceptions.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -37,11 +37,11 @@ import org.apache.juneau.commons.collections.*;
  * This class provides convenient shorthand methods for creating complex nested data structures.
  * The primary methods for building structures are:
  * <ul>
- *    <li>{@link #a(Object...)} - Creates arrays
- *    <li>{@link #ao(Object...)} - Creates Object arrays (when type inference needs help)
- *    <li>{@link #list(Object...)} / {@link #l(Object...)} - Creates modifiable lists
+ *    <li>{@link #array(Object...)} - Creates arrays
+ *    <li>{@link #objectArray(Object...)} - Creates Object arrays (when type inference needs help)
+ *    <li>{@link #list(Object...)} / {@link #fixedSizeList(Object...)} - Creates modifiable lists
  *    <li>{@link #map(Object, Object, Object, Object, Object, Object)} - Creates modifiable maps
- *    <li>{@link #m(Object, Object, Object, Object, Object, Object)} - Creates unmodifiable maps
+ *    <li>{@link #immutableMap(Object, Object, Object, Object, Object, Object)} - Creates unmodifiable maps
  * </ul>
  *
  * <h5 class='section'>Examples:</h5>
@@ -112,10 +112,10 @@ import org.apache.juneau.commons.collections.*;
  *
  * <h5 class='section'>Best Practices:</h5>
  * <ul>
- *    <li>Use {@link #a(Object...)} for arrays when type can be inferred, {@link #ao(Object...)} for Object arrays
+ *    <li>Use {@link #array(Object...)} for arrays when type can be inferred, {@link #objectArray(Object...)} for Object arrays
  *    <li>Use {@link #map(Object, Object, Object, Object, Object, Object)} when you need modifiable maps
- *    <li>Use {@link #m(Object, Object, Object, Object, Object, Object)} when you need immutable/unmodifiable maps
- *    <li>Use {@link #list(Object...)} or {@link #l(Object...)} for modifiable lists
+ *    <li>Use {@link #immutableMap(Object, Object, Object, Object, Object, Object)} when you need immutable/unmodifiable maps
+ *    <li>Use {@link #list(Object...)} or {@link #fixedSizeList(Object...)} for modifiable lists
  *    <li>Static import these methods for maximum readability: <code>import static org.apache.juneau.commons.utils.CollectionUtils.*;</code>
  * </ul>
  *
@@ -136,69 +136,6 @@ public class CollectionUtils {
 	private static final String ARG_arrays = "arrays";
 	private static final String ARG_values = "values";
 	private static final String ARG_o = "o";
-
-	/**
-	 * Creates an array of objects.
-	 *
-	 * @param <T> The component type of the array.
-	 * @param x The objects to place in the array.
-	 * @return A new array containing the specified objects.
-	 */
-	@SafeVarargs
-	public static <T> T[] a(T...x) {
-		return x;
-	}
-
-	/**
-	 * Creates a 2-dimensional array.
-	 *
-	 * <p>
-	 * This method provides a convenient way to create 2D arrays with cleaner syntax than traditional Java.
-	 * While you could technically use {@code a(a(...), a(...))}, that approach fails for single-row arrays
-	 * like {@code a(a(...))} because the type system collapses it into a 1D array.
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// 2D array with multiple rows</jc>
-	 * 	String[][] <jv>matrix</jv> = a2(
-	 * 		a(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>),
-	 * 		a(<js>"d"</js>, <js>"e"</js>, <js>"f"</js>),
-	 * 		a(<js>"g"</js>, <js>"h"</js>, <js>"i"</js>)
-	 * 	);
-	 *
-	 * 	<jc>// Single row - this works correctly with a2()</jc>
-	 * 	String[][] <jv>singleRow</jv> = a2(a(<js>"x"</js>, <js>"y"</js>, <js>"z"</js>));  <jc>// Returns String[1][3]</jc>
-	 *
-	 * 	<jc>// Without a2(), this would fail (becomes 1D array):</jc>
-	 * 	<jc>// String[] badAttempt = a(a("x", "y", "z"));  // Wrong! Returns String[3]</jc>
-	 *
-	 * 	<jc>// Empty 2D array</jc>
-	 * 	String[][] <jv>empty</jv> = a2();  <jc>// Returns String[0][]</jc>
-	 *
-	 * 	<jc>// Compare with traditional Java syntax:</jc>
-	 * 	String[][] <jv>traditional</jv> = <jk>new</jk> String[][] {
-	 * 		{<js>"a"</js>, <js>"b"</js>, <js>"c"</js>},
-	 * 		{<js>"d"</js>, <js>"e"</js>, <js>"f"</js>},
-	 * 		{<js>"g"</js>, <js>"h"</js>, <js>"i"</js>}
-	 * 	};
-	 * </p>
-	 *
-	 * <h5 class='section'>Use Cases:</h5>
-	 * <ul>
-	 * 	<li>Creating matrices or grids
-	 * 	<li>Building test data with multiple rows
-	 * 	<li>Representing tabular data
-	 * 	<li>Any scenario requiring a 2D array structure
-	 * </ul>
-	 *
-	 * @param <E> The element type of the inner arrays.
-	 * @param value The 1D arrays that will become rows in the 2D array.
-	 * @return A 2D array containing the specified rows.
-	 */
-	@SafeVarargs
-	public static <E> E[][] a2(E[]...value) {
-		return value;
-	}
 
 	/**
 	 * Traverses all elements in the specified object and accumulates them into a list.
@@ -227,7 +164,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> List<E> addAll(List<E> value, E...entries) {
-		if (nn(entries)) {
+		if (isNotNull(entries)) {
 			if (value == null)
 				value = list(entries);
 			else
@@ -246,7 +183,7 @@ public class CollectionUtils {
 	 * @return The set.
 	 */
 	public static <E> List<E> addAll(List<E> value, List<E> entries) {
-		if (nn(entries)) {
+		if (isNotNull(entries)) {
 			if (value == null)
 				value = copyOf(entries);
 			else
@@ -266,7 +203,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> Set<E> addAll(Set<E> value, E...entries) {
-		if (nn(entries)) {
+		if (isNotNull(entries)) {
 			if (value == null)
 				value = set(entries);
 			else
@@ -286,7 +223,7 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> SortedSet<E> addAll(SortedSet<E> value, E...entries) {
-		if (nn(entries)) {
+		if (isNotNull(entries)) {
 			if (value == null)
 				value = sortedSet(entries);
 			else
@@ -315,54 +252,6 @@ public class CollectionUtils {
 		System.arraycopy(array, 0, a, 0, array.length);
 		System.arraycopy(newElements, 0, a, array.length, newElements.length);
 		return a;
-	}
-
-	/**
-	 * Creates an array of objects with the return type explicitly set to {@code Object[]}.
-	 *
-	 * <p>
-	 * This method is useful when you need to force the return type to be {@code Object[]} regardless of
-	 * the actual types of the elements passed in. This is particularly helpful in scenarios where:
-	 * <ul>
-	 * 	<li>You're mixing different types in the same array
-	 * 	<li>You need to avoid type inference issues with the generic {@link #a(Object...) a()} method
-	 * 	<li>You're working with APIs that specifically require {@code Object[]}
-	 * 	<li>You want to ensure maximum flexibility in what can be stored in the array
-	 * </ul>
-	 *
-	 * <h5 class='section'>Examples:</h5>
-	 * <p class='bjava'>
-	 * 	<jc>// Mixed types - works perfectly with ao()</jc>
-	 * 	Object[] <jv>mixed</jv> = ao(<js>"string"</js>, 42, <jk>true</jk>, 3.14, <jk>null</jk>);
-	 *
-	 * 	<jc>// Force Object[] return type even for uniform types</jc>
-	 * 	Object[] <jv>strings</jv> = ao(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);  <jc>// Returns Object[], not String[]</jc>
-	 *
-	 * 	<jc>// Compare with a() which infers the most specific type:</jc>
-	 * 	String[] <jv>typed</jv> = a(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);     <jc>// Returns String[]</jc>
-	 *
-	 * 	<jc>// Useful when you need Object[] for APIs:</jc>
-	 * 	<jk>void</jk> someMethod(Object[] args) { ... }
-	 * 	someMethod(ao(<js>"test"</js>, 123, <jk>true</jk>));  <jc>// No type issues</jc>
-	 *
-	 * 	<jc>// Empty Object array</jc>
-	 * 	Object[] <jv>empty</jv> = ao();
-	 *
-	 * 	<jc>// With null values</jc>
-	 * 	Object[] <jv>withNulls</jv> = ao(<js>"value"</js>, <jk>null</jk>, 42, <jk>null</jk>);
-	 * </p>
-	 *
-	 * <h5 class='section'>When to Use:</h5>
-	 * <ul>
-	 * 	<li>Use {@link #a(Object...) a()} when you want type inference for homogeneous arrays
-	 * 	<li>Use {@code ao()} when you explicitly need {@code Object[]} or have mixed types
-	 * </ul>
-	 *
-	 * @param value The objects to place in the array.
-	 * @return A new {@code Object[]} containing the specified objects.
-	 */
-	public static Object[] ao(Object...value) {
-		return value;
 	}
 
 	/**
@@ -410,7 +299,7 @@ public class CollectionUtils {
 	})
 	public static List<Object> arrayToList(Object array) {
 		assertArgNotNull(ARG_array, array);
-		assertArg(isArray(array), "Input must be an array but was {0}", cn(array));
+		assertArg(ClassUtils.isArray(array), "Input must be an array but was {0}", ClassUtils.className(array));
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -470,57 +359,6 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Shortcut for creating a boolean array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>boolean</jk>[] <jv>myArray</jv> = <jsm>booleans</jsm>(<jk>true</jk>, <jk>false</jk>, <jk>true</jk>);
-	 * </p>
-	 *
-	 * @param value The values to initialize the array with.
-	 * @return A new boolean array.
-	 */
-	public static boolean[] booleans(boolean...value) {
-		return value;
-	}
-
-	/**
-	 * Shortcut for creating a byte array.
-	 *
-	 * <p>Accepts int values and converts them to bytes, eliminating the need for explicit byte casts.</p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>byte</jk>[] <jv>myArray</jv> = <jsm>bytes</jsm>(1, 2, 3);
-	 * </p>
-	 *
-	 * @param value The int values to convert to bytes. Values outside the byte range (-128 to 127) will be truncated.
-	 * @return A new byte array.
-	 */
-	public static byte[] bytes(int...value) {
-		var result = new byte[value.length];
-		for (var i = 0; i < value.length; i++) {
-			result[i] = (byte)value[i];
-		}
-		return result;
-	}
-
-	/**
-	 * Shortcut for creating a char array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>char</jk>[] <jv>myArray</jv> = <jsm>chars</jsm>(<js>'a'</js>, <js>'b'</js>, <js>'c'</js>);
-	 * </p>
-	 *
-	 * @param value The values to initialize the array with.
-	 * @return A new char array.
-	 */
-	public static char[] chars(char...value) {
-		return value;
-	}
-
-	/**
 	 * Combine an arbitrary number of arrays into a single array.
 	 *
 	 * @param <E> The element type.
@@ -535,7 +373,7 @@ public class CollectionUtils {
 		int l = 0;
 		E[] a1 = null;
 		for (var a : arrays) {
-			if (a1 == null && nn(a))
+			if (a1 == null && isNotNull(a))
 				a1 = a;
 			l += (a == null ? 0 : a.length);
 		}
@@ -544,7 +382,7 @@ public class CollectionUtils {
 		var a = (E[])Array.newInstance(a1.getClass().getComponentType(), l);
 		int i = 0;
 		for (var aa : arrays)
-			if (nn(aa))
+			if (isNotNull(aa))
 				for (var t : aa)
 					a[i++] = t;
 		return a;
@@ -579,7 +417,7 @@ public class CollectionUtils {
 		"rawtypes"   // Raw types necessary for generic array handling
 	})
 	public static List copyArrayToList(Object array, List list) {
-		if (nn(array)) {
+		if (isNotNull(array)) {
 			var length = Array.getLength(array);
 			for (var i = 0; i < length; i++)
 				list.add(Array.get(array, i));
@@ -721,21 +559,6 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Shortcut for creating a double array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>double</jk>[] <jv>myArray</jv> = <jsm>doubles</jsm>(1.0, 2.0, 3.0);
-	 * </p>
-	 *
-	 * @param value The values to initialize the array with.
-	 * @return A new double array.
-	 */
-	public static double[] doubles(double...value) {
-		return value;
-	}
-
-	/**
 	 * Returns the next value from an iterator, or an empty Optional if there are no more elements.
 	 *
 	 * <p>
@@ -757,8 +580,8 @@ public class CollectionUtils {
 	 */
 	public static <E> Optional<E> next(Iterator<? extends E> iterator) {
 		if (iterator == null || !iterator.hasNext())
-			return opte();
-		return opt(iterator.next());
+			return emptyOptional();
+		return optional(iterator.next());
 	}
 
 	/**
@@ -788,24 +611,9 @@ public class CollectionUtils {
 	 */
 	public static <E> Optional<E> first(Iterable<? extends E> iterable) {
 		if (iterable == null)
-			return opte();
+			return emptyOptional();
 		Iterator<? extends E> iterator = iterable.iterator();
 		return next(iterator);
-	}
-
-	/**
-	 * Shortcut for creating a float array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>float</jk>[] <jv>myArray</jv> = <jsm>floats</jsm>(1.0f, 2.0f, 3.0f);
-	 * </p>
-	 *
-	 * @param value The values to initialize the array with.
-	 * @return A new float array.
-	 */
-	public static float[] floats(float...value) {
-		return value;
 	}
 
 	/**
@@ -851,24 +659,9 @@ public class CollectionUtils {
 		if (element == null || array == null)
 			return -1;
 		for (var i = 0; i < array.length; i++)
-			if (eq(element, array[i]))
+			if (equal(element, array[i]))
 				return i;
 		return -1;
-	}
-
-	/**
-	 * Shortcut for creating an int array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>int</jk>[] <jv>myArray</jv> = <jsm>ints</jsm>(1, 2, 3);
-	 * </p>
-	 *
-	 * @param value The values to initialize the array with.
-	 * @return A new int array.
-	 */
-	public static int[] ints(int...value) {
-		return value;
 	}
 
 	/**
@@ -908,18 +701,23 @@ public class CollectionUtils {
 	 * @return <jk>true</jk> if the specified array is not null and has a length greater than zero.
 	 */
 	public static boolean isNotEmptyArray(Object[] array) {
-		return nn(array) && array.length > 0;
+		return isNotNull(array) && array.length > 0;
 	}
 
 	/**
-	 * Shortcut for creating an unmodifiable list out of an array of values.
+	 * Creates a fixed-size list backed by the specified array (via {@link Arrays#asList(Object...)}).
+	 *
+	 * <p>
+	 * The returned list is fixed-size: element values can be replaced via {@link List#set(int, Object)},
+	 * but elements cannot be added or removed. Returns <jk>null</jk> if the input array is <jk>null</jk>.
+	 * This differs from {@link #list(Object...)}, which returns a fully-modifiable {@link ArrayList}.
 	 *
 	 * @param <T> The element type.
 	 * @param values The values to add to the list.
-	 * @return An unmodifiable list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @return A fixed-size list containing the specified values, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
 	@SafeVarargs
-	public static <T> List<T> l(T...values) {
+	public static <T> List<T> fixedSizeList(T...values) {
 		return values == null ? null : Arrays.asList(values);
 	}
 
@@ -942,37 +740,7 @@ public class CollectionUtils {
 	 * @return The last element, or <jk>null</jk> if the list is <jk>null</jk> or empty.
 	 */
 	public static <E> E last(List<E> l) {
-		return e(l) ? null : l.get(l.size() - 1);
-	}
-
-	/**
-	 * Returns the element at the specified index.
-	 *
-	 * <p>
-	 * This is a null-safe convenience method that safely accesses list elements.
-	 * If the list is <jk>null</jk>, the index is negative, or the index is greater than or equal to the list size,
-	 * this method returns <jk>null</jk> instead of throwing an exception.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;String&gt; <jv>list</jv> = <jsm>l</jsm>(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 *
-	 * 	String <jv>first</jv> = <jsm>at</jsm>(<jv>list</jv>, 0);   <jc>// Returns "a"</jc>
-	 * 	String <jv>second</jv> = <jsm>at</jsm>(<jv>list</jv>, 1);  <jc>// Returns "b"</jc>
-	 * 	String <jv>outOfBounds</jv> = <jsm>at</jsm>(<jv>list</jv>, 10);  <jc>// Returns null</jc>
-	 * 	String <jv>negative</jv> = <jsm>at</jsm>(<jv>list</jv>, -1);  <jc>// Returns null</jc>
-	 * 	String <jv>nullList</jv> = <jsm>at</jsm>(<jk>null</jk>, 0);  <jc>// Returns null</jc>
-	 * </p>
-	 *
-	 * @param <E> The element type.
-	 * @param l The list. Can be <jk>null</jk>.
-	 * @param index The index to access.
-	 * @return The element at the specified index, or <jk>null</jk> if the list is <jk>null</jk>, the index is out of bounds, or negative.
-	 */
-	public static <E> E at(List<E> l, int index) {
-		if (l == null || index < 0 || index >= l.size())
-			return null;
-		return l.get(index);
+		return isEmpty(l) ? null : l.get(l.size() - 1);
 	}
 
 	/**
@@ -1007,93 +775,11 @@ public class CollectionUtils {
 	 *
 	 * @param <T> The element type.
 	 * @param values The values to add to the list.
-	 * @return A modifiable list containing the specified values.
+	 * @return A modifiable list containing the specified values, or <jk>null</jk> if the values array itself is <jk>null</jk>.
 	 */
 	@SafeVarargs
 	public static <T> List<T> list(T...values) {
-		return new ArrayList<>(l(values));
-	}
-
-	/**
-	 * Shortcut for creating an ArrayList from the specified values.
-	 *
-	 * <p>
-	 * This is a convenience method that creates a modifiable ArrayList.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;String&gt; <jv>list</jv> = al(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * </p>
-	 *
-	 * @param <T> The element type.
-	 * @param values The values to add to the list.
-	 * @return A new modifiable ArrayList containing the specified values.
-	 * @see #list(Object...)
-	 */
-	@SafeVarargs
-	public static <T> List<T> al(T...values) {
-		return new ArrayList<>(l(values));
-	}
-
-	/**
-	 * Shortcut for creating a LinkedList from the specified values.
-	 *
-	 * <p>
-	 * This is a convenience method that creates a modifiable LinkedList.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;String&gt; <jv>list</jv> = ll(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * </p>
-	 *
-	 * @param <T> The element type.
-	 * @param values The values to add to the list.
-	 * @return A new modifiable LinkedList containing the specified values.
-	 */
-	@SafeVarargs
-	public static <T> List<T> ll(T...values) {
-		return new LinkedList<>(l(values));
-	}
-
-	/**
-	 * Shortcut for creating a HashSet from the specified values.
-	 *
-	 * <p>
-	 * This is a convenience method that creates a modifiable HashSet.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Set&lt;String&gt; <jv>set</jv> = hs(<js>"a"</js>, <js>"b"</js>, <js>"c"</js>);
-	 * </p>
-	 *
-	 * @param <T> The element type.
-	 * @param values The values to add to the set.
-	 * @return A new modifiable HashSet containing the specified values.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> hs(T...values) {
-		return new HashSet<>(Arrays.asList(values));
-	}
-
-	/**
-	 * Shortcut for creating a TreeSet from the specified values.
-	 *
-	 * <p>
-	 * This is a convenience method that creates a modifiable TreeSet.
-	 * Values must be comparable.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Set&lt;String&gt; <jv>set</jv> = ts(<js>"c"</js>, <js>"a"</js>, <js>"b"</js>);  <jc>// Sorted: a, b, c</jc>
-	 * </p>
-	 *
-	 * @param <T> The element type (must be Comparable).
-	 * @param values The values to add to the set.
-	 * @return A new modifiable TreeSet containing the specified values.
-	 */
-	@SafeVarargs
-	public static <T extends Comparable<T>> SortedSet<T> ts(T...values) {
-		return new TreeSet<>(Arrays.asList(values));
+		return values == null ? null : new ArrayList<>(fixedSizeList(values));
 	}
 
 	/**
@@ -1103,41 +789,8 @@ public class CollectionUtils {
 	 * @param type The element type.
 	 * @return A new list builder.
 	 */
-	public static <E> Lists<E> listb(Class<E> type) {
+	public static <E> Lists<E> listBuilder(Class<E> type) {
 		return Lists.create(type);
-	}
-
-	/**
-	 * Shortcut for creating an empty list.
-	 *
-	 * <p>
-	 * This is a convenience method that provides a more concise syntax than {@link Collections#emptyList()}.
-	 * The "e" suffix indicates "empty".
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	List&lt;String&gt; <jv>myList</jv> = <jsm>liste</jsm>();
-	 * </p>
-	 *
-	 * @param <T> The element type.
-	 * @return An empty unmodifiable list.
-	 */
-	public static <T> List<T> liste() {
-		return Collections.emptyList();
-	}
-
-	/**
-	 * Shortcut for creating an empty list of the specified type.
-	 *
-	 * @param <T> The element type.
-	 * @param type The element type class.
-	 * @return An empty list.
-	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameter type is used for type inference, not runtime behavior
-	})
-	public static <T> List<T> liste(Class<T> type) {
-		return Collections.emptyList();
 	}
 
 	/**
@@ -1153,7 +806,7 @@ public class CollectionUtils {
 		"java:S1168",    // Intentional null return for assertion testing.
 		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
 	})
-	public static <T> List<T> listn(Class<T> type) {
+	public static <T> List<T> nullList(Class<T> type) {
 		return null;
 	}
 
@@ -1166,7 +819,7 @@ public class CollectionUtils {
 	 * @return A new modifiable list.
 	 */
 	@SafeVarargs
-	public static <E> List<E> listOf(Class<E> elementType, E...values) {
+	public static <E> List<E> listOfType(Class<E> elementType, E...values) {
 		return list(values);
 	}
 
@@ -1182,28 +835,13 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Shortcut for creating a long array.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>long</jk>[] <jv>myArray</jv> = <jsm>longs</jsm>(1L, 2L, 3L);
-	 * </p>
-	 *
-	 * @param value The values to initialize the array with.
-	 * @return A new long array.
-	 */
-	public static long[] longs(long...value) {
-		return value;
-	}
-
-	/**
 	 * Convenience method for creating an unmodifiable map.
 	 *
 	 * @param <K> The key type.
 	 * @param <V> The value type.
 	 * @return A new unmodifiable empty map.
 	 */
-	public static <K,V> Map<K,V> m() {
+	public static <K,V> Map<K,V> immutableMap() {
 		return Map.of();
 	}
 
@@ -1217,8 +855,8 @@ public class CollectionUtils {
 	 * @param v1 Value 1.
 	 * @return A new unmodifiable map.
 	 */
-	public static <K,V> Map<K,V> m(K k1, V v1) {
-		return new SimpleMap<>(a(k1), a(v1));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1) {
+		return new SimpleMap<>(array(k1), array(v1));
 	}
 
 	/**
@@ -1233,8 +871,8 @@ public class CollectionUtils {
 	 * @param v2 Value 2.
 	 * @return A new unmodifiable map.
 	 */
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2) {
-		return new SimpleMap<>(a(k1, k2), a(v1, v2));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2) {
+		return new SimpleMap<>(array(k1, k2), array(v1, v2));
 	}
 
 	/**
@@ -1251,8 +889,8 @@ public class CollectionUtils {
 	 * @param v3 Value 3.
 	 * @return A new unmodifiable map.
 	 */
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3) {
-		return new SimpleMap<>(a(k1, k2, k3), a(v1, v2, v3));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3) {
+		return new SimpleMap<>(array(k1, k2, k3), array(v1, v2, v3));
 	}
 
 	/**
@@ -1274,8 +912,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
-		return new SimpleMap<>(a(k1, k2, k3, k4), a(v1, v2, v3, v4));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+		return new SimpleMap<>(array(k1, k2, k3, k4), array(v1, v2, v3, v4));
 	}
 
 	/**
@@ -1299,8 +937,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
-		return new SimpleMap<>(a(k1, k2, k3, k4, k5), a(v1, v2, v3, v4, v5));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+		return new SimpleMap<>(array(k1, k2, k3, k4, k5), array(v1, v2, v3, v4, v5));
 	}
 
 	/**
@@ -1326,8 +964,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
-		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6), a(v1, v2, v3, v4, v5, v6));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6) {
+		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6), array(v1, v2, v3, v4, v5, v6));
 	}
 
 	/**
@@ -1355,8 +993,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
-		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7), a(v1, v2, v3, v4, v5, v6, v7));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7) {
+		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7), array(v1, v2, v3, v4, v5, v6, v7));
 	}
 
 	/**
@@ -1386,8 +1024,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
-		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8), a(v1, v2, v3, v4, v5, v6, v7, v8));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8) {
+		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7, k8), array(v1, v2, v3, v4, v5, v6, v7, v8));
 	}
 
 	/**
@@ -1419,8 +1057,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
-		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9), a(v1, v2, v3, v4, v5, v6, v7, v8, v9));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
+		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7, k8, k9), array(v1, v2, v3, v4, v5, v6, v7, v8, v9));
 	}
 
 	/**
@@ -1454,8 +1092,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S107" // Many parameters acceptable for convenience method
 	})
-	public static <K,V> Map<K,V> m(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
-		return new SimpleMap<>(a(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), a(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
+	public static <K,V> Map<K,V> immutableMap(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5, K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
+		return new SimpleMap<>(array(k1, k2, k3, k4, k5, k6, k7, k8, k9, k10), array(v1, v2, v3, v4, v5, v6, v7, v8, v9, v10));
 	}
 
 	/**
@@ -1787,7 +1425,7 @@ public class CollectionUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapb()
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapBuilder()
 	 * 		.add(<js>"foo"</js>, 1)
 	 * 		.add(<js>"bar"</js>, 2)
 	 * 		.build();
@@ -1801,7 +1439,7 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
 	})
-	public static <K,V> Maps<K,V> mapb() {
+	public static <K,V> Maps<K,V> mapBuilder() {
 		return (Maps<K,V>)Maps.create().ordered();
 	}
 
@@ -1813,7 +1451,7 @@ public class CollectionUtils {
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapb()
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapBuilder()
 	 * 		.add(<js>"foo"</js>, 1)
 	 * 		.add(<js>"bar"</js>, 2)
 	 * 		.build();
@@ -1823,7 +1461,7 @@ public class CollectionUtils {
 	 * This builder supports optional filtering to automatically exclude unwanted values:
 	 * <p class='bjava'>
 	 * 	<jc>// Build a map excluding null and empty values</jc>
-	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapb().filtered()
+	 * 	Map&lt;String,Object&gt; <jv>map</jv> = mapBuilder().filtered()
 	 * 		.add(<js>"foo"</js>, <jk>null</jk>)       <jc>// Excluded</jc>
 	 * 		.add(<js>"bar"</js>, <js>""</js>)         <jc>// Excluded</jc>
 	 * 		.add(<js>"baz"</js>, <js>"value"</js>)    <jc>// Included</jc>
@@ -1874,40 +1512,10 @@ public class CollectionUtils {
 	 * @param valueType The value type.
 	 * @return A new map builder.
 	 */
-	public static <K,V> Maps<K,V> mapb(Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Maps<K,V> mapBuilder(Class<K> keyType, Class<V> valueType) {
 		return Maps.create(keyType, valueType).ordered();
 	}
 
-	/**
-	 * Shortcut for creating an empty map of the specified types.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param keyType The key type class.
-	 * @param valueType The value type class.
-	 * @return An empty unmodifiable map.
-	 */
-	@SuppressWarnings({
-		"java:S1172" // Parameters required for type inference in public API
-	})
-	public static <K,V> Map<K,V> mape(Class<K> keyType, Class<V> valueType) {
-		return Collections.emptyMap();
-	}
-
-	/**
-	 * Shortcut for creating an empty map with generic types.
-	 *
-	 * <p>
-	 * This is a convenience method that creates an empty unmodifiable map without requiring
-	 * explicit type parameters. The types will be inferred from usage context.
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @return An empty unmodifiable map.
-	 */
-	public static <K,V> Map<K,V> mape() {
-		return Collections.emptyMap();
-	}
 	/**
 	 * Returns a null map.
 	 *
@@ -1923,7 +1531,7 @@ public class CollectionUtils {
 		"java:S1168",    // Intentional null return for assertion testing. Consider Optional.
 		"java:S1172"    // Parameters required for type inference in public API
 	})
-	public static <K,V> Map<K,V> mapn(Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Map<K,V> nullMap(Class<K> keyType, Class<V> valueType) {
 		return null;
 	}
 
@@ -1939,25 +1547,8 @@ public class CollectionUtils {
 	@SuppressWarnings({
 		"java:S1172" // Parameters required for type inference in public API
 	})
-	public static <K,V> Map<K,V> mapOf(Class<K> keyType, Class<V> valueType) {
+	public static <K,V> Map<K,V> mapOfType(Class<K> keyType, Class<V> valueType) {
 		return map();
-	}
-
-	/**
-	 * Returns <jk>null</jk> for the specified array type.
-	 *
-	 * <p>Intentional null return for assertion testing.
-	 *
-	 * @param <T> The component type.
-	 * @param type The component type class.
-	 * @return <jk>null</jk>.
-	 */
-	@SuppressWarnings({
-		"java:S1168",    // Intentional null return for assertion testing. 
-		"java:S1172"     // Parameter type is used for type inference, not runtime behavior
-	})
-	public static <T> T[] na(Class<T> type) {
-		return null;
 	}
 
 	/**
@@ -1971,11 +1562,11 @@ public class CollectionUtils {
 	 */
 	@SafeVarargs
 	public static <E> List<E> prependAll(List<E> value, E...entries) {
-		if (nn(entries)) {
+		if (isNotNull(entries)) {
 			if (value == null)
 				value = list(entries);
 			else
-				value.addAll(0, l(entries));
+				value.addAll(0, fixedSizeList(entries));
 		}
 		return value;
 	}
@@ -2103,45 +1694,13 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Shortcut for creating a modifiable set out of an array of values.
-	 *
-	 * @param <T> The element type.
-	 * @param values The values to add to the set.
-	 * @return A modifiable LinkedHashSet containing the specified values.
-	 */
-	@SafeVarargs
-	public static <T> Set<T> set(T...values) {
-		assertArgNotNull(ARG_values, values);
-		return new LinkedHashSet<>(Arrays.asList(values));
-	}
-
-	/**
-	 * Returns an empty immutable set.
-	 *
-	 * <p>
-	 * This is a convenience method that returns {@link Collections#emptySet()}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Set&lt;String&gt; <jv>empty</jv> = CollectionUtils.<jsf>sete</jsf>();  <jc>// Returns Collections.emptySet()</jc>
-	 * </p>
-	 *
-	 * @param <T> The element type.
-	 * @return An empty immutable set.
-	 * @see Collections#emptySet()
-	 */
-	public static <T> Set<T> sete() {
-		return Collections.emptySet();
-	}
-
-	/**
 	 * Convenience factory for a {@link Sets}.
 	 *
 	 * @param <E> The element type.
 	 * @param type The element type.
 	 * @return A new set builder.
 	 */
-	public static <E> Sets<E> setb(Class<E> type) {
+	public static <E> Sets<E> setBuilder(Class<E> type) {
 		return Sets.create(type).ordered();
 	}
 
@@ -2154,29 +1713,8 @@ public class CollectionUtils {
 	 * @return A new modifiable set.
 	 */
 	@SafeVarargs
-	public static <E> Set<E> setOf(Class<E> elementType, E...values) {
+	public static <E> Set<E> setOfType(Class<E> elementType, E...values) {
 		return set(values);
-	}
-
-	/**
-	 * Shortcut for creating a short array.
-	 *
-	 * <p>Accepts int values and converts them to shorts, eliminating the need for explicit short casts.</p>
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>short</jk>[] <jv>myArray</jv> = <jsm>shorts</jsm>(1, 2, 3);
-	 * </p>
-	 *
-	 * @param value The int values to convert to shorts. Values outside the short range (-32768 to 32767) will be truncated.
-	 * @return A new short array.
-	 */
-	public static short[] shorts(int...value) {
-		var result = new short[value.length];
-		for (var i = 0; i < value.length; i++) {
-			result[i] = (short)value[i];
-		}
-		return result;
 	}
 
 	/**
@@ -2452,9 +1990,9 @@ public class CollectionUtils {
 			return toList(o2.entrySet());
 		if (o instanceof Optional<?> o2)
 			return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
-		if (isArray(o))
+		if (ClassUtils.isArray(o))
 			return arrayToList(o);
-		throw rex("Could not convert object of type {0} to a list", cn(o));
+		throw rex("Could not convert object of type {0} to a list", ClassUtils.className(o));
 	}
 
 	/**
@@ -2488,7 +2026,7 @@ public class CollectionUtils {
 		var l = new ArrayList<>(Array.getLength(array));
 		for (var i = 0; i < Array.getLength(array); i++) {
 			var o = Array.get(array, i);
-			if (isArray(o))
+			if (ClassUtils.isArray(o))
 				o = toObjectList(o);
 			l.add(o);
 		}
@@ -2541,7 +2079,7 @@ public class CollectionUtils {
 
 					@Override /* Overridden from Iterator */
 					public void remove() {
-						throw unsupportedOp();
+						throw uoex();
 					}
 				};
 			}
@@ -2610,7 +2148,7 @@ public class CollectionUtils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		assertArg(isArray(array), "Arg was not an array.  Type: {0}", cn(array));
+		assertArg(ClassUtils.isArray(array), "Arg was not an array.  Type: {0}", ClassUtils.className(array));
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}
@@ -2629,7 +2167,7 @@ public class CollectionUtils {
 		var r = new String[c.size()];
 		var i = 0;
 		for (var o : c)
-			r[i++] = s(o);
+			r[i++] = stringify(o);
 		return r;
 	}
 
@@ -2650,67 +2188,313 @@ public class CollectionUtils {
 			o2.forEach(x -> traverse(x, c));
 		else if (o instanceof Stream<?> o2)
 			o2.forEach(x -> traverse(x, c));
-		else if (isArray(o))
+		else if (ClassUtils.isArray(o))
 			toStream(o).forEach(x -> traverse(x, c));
 		else
 			c.accept((T)o);
-	}
-
-	/**
-	 * Creates an unmodifiable view of the specified list.
-	 *
-	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableList(List)}.</p>
-	 *
-	 * @param <T> The element type.
-	 * @param value The list to make unmodifiable. Can be null.
-	 * @return An unmodifiable view of the list, or null if the input was null.
-	 */
-	public static <T> List<T> u(List<? extends T> value) {
-		return value == null ? null : Collections.unmodifiableList(value);
-	}
-
-	/**
-	 * Creates an unmodifiable view of the specified map.
-	 *
-	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableMap(Map)}.</p>
-	 *
-	 * @param <K> The key type.
-	 * @param <V> The value type.
-	 * @param value The map to make unmodifiable. Can be null.
-	 * @return An unmodifiable view of the map, or null if the input was null.
-	 */
-	public static <K,V> Map<K,V> u(Map<? extends K,? extends V> value) {
-		return value == null ? null : Collections.unmodifiableMap(value);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Stream utilities
 	//-----------------------------------------------------------------------------------------------------------------
 
+	//-----------------------------------------------------------------------------------------------------------------
+	// Full-named factory/query methods (canonical forms; short-named methods delegate to these)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Creates an array of objects (varargs form).
+	 *
+	 * @param <T> The component type of the array.
+	 * @param x The objects to place in the array.
+	 * @return A new array containing the specified objects.
+	 */
+	@SafeVarargs
+	public static <T> T[] array(T...x) {
+		return x;
+	}
+
+	/**
+	 * Creates a 2-dimensional array.
+	 *
+	 * @param <E> The element type of the inner arrays.
+	 * @param value The 1D arrays that will become rows in the 2D array.
+	 * @return A 2D array containing the specified rows.
+	 */
+	@SafeVarargs
+	public static <E> E[][] array2d(E[]...value) {
+		return value;
+	}
+
+	/**
+	 * Creates an Object array.
+	 *
+	 * @param value The objects to place in the array.
+	 * @return A new {@code Object[]} containing the specified objects.
+	 */
+	public static Object[] objectArray(Object...value) {
+		return value;
+	}
+
+	/**
+	 * Returns null for the specified array type.
+	 *
+	 * <p>Intentional null return for assertion testing.
+	 *
+	 * @param <T> The component type.
+	 * @param type The component type class.
+	 * @return <jk>null</jk>.
+	 */
+	@SuppressWarnings({
+		"java:S1168",  // Intentional null return for assertion testing.
+		"java:S1172"   // Parameter type is used for type inference, not runtime behavior
+	})
+	public static <T> T[] nullArray(Class<T> type) {
+		return null;
+	}
+
+	/**
+	 * Creates a LinkedList from the specified values.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the list.
+	 * @return A new modifiable LinkedList containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> List<T> linkedList(T...values) {
+		return new LinkedList<>(fixedSizeList(values));
+	}
+
+	/**
+	 * Creates a HashSet from the specified values.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the set.
+	 * @return A new modifiable HashSet containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> Set<T> hashSet(T...values) {
+		return new HashSet<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Creates an unmodifiable view of the specified list.
+	 *
+	 * @param <T> The element type.
+	 * @param value The list to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the list, or null if the input was null.
+	 */
+	public static <T> List<T> unmodifiable(List<? extends T> value) {
+		return value == null ? null : Collections.unmodifiableList(value);
+	}
+
+	/**
+	 * Creates an unmodifiable view of the specified map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param value The map to make unmodifiable. Can be null.
+	 * @return An unmodifiable view of the map, or null if the input was null.
+	 */
+	public static <K,V> Map<K,V> unmodifiable(Map<? extends K,? extends V> value) {
+		return value == null ? null : Collections.unmodifiableMap(value);
+	}
+
 	/**
 	 * Creates an unmodifiable view of the specified set.
-	 *
-	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableSet(Set)}.</p>
 	 *
 	 * @param <T> The element type.
 	 * @param value The set to make unmodifiable. Can be null.
 	 * @return An unmodifiable view of the set, or null if the input was null.
 	 */
-	public static <T> Set<T> u(Set<? extends T> value) {
+	public static <T> Set<T> unmodifiable(Set<? extends T> value) {
 		return value == null ? null : Collections.unmodifiableSet(value);
 	}
 
 	/**
 	 * Creates an unmodifiable view of the specified sorted set.
 	 *
-	 * <p>This is a null-safe wrapper around {@link Collections#unmodifiableSortedSet(SortedSet)}.</p>
-	 *
 	 * @param <T> The element type.
 	 * @param value The sorted set to make unmodifiable. Can be null.
 	 * @return An unmodifiable view of the sorted set, or null if the input was null.
 	 */
-	public static <T> SortedSet<T> u(SortedSet<T> value) {
+	public static <T> SortedSet<T> unmodifiable(SortedSet<T> value) {
 		return value == null ? null : Collections.unmodifiableSortedSet(value);
+	}
+
+	/**
+	 * Returns the element at the specified index, wrapped in an {@link Optional}.
+	 *
+	 * @param <E> The element type.
+	 * @param l The list. Can be <jk>null</jk>.
+	 * @param index The index to access.
+	 * @return An Optional containing the element, or an empty Optional if null/out-of-bounds.
+	 */
+	public static <E> Optional<E> optionalAt(List<E> l, int index) {
+		return Optional.ofNullable(elementAt(l, index));
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified map is <jk>null</jk> or empty, otherwise returns the map.
+	 *
+	 * @param <K> The key type.
+	 * @param <V> The value type.
+	 * @param val The map to check.
+	 * @return <jk>null</jk> if the map is <jk>null</jk> or empty, otherwise the map itself.
+	 */
+	@SuppressWarnings({ "java:S1168" // Intentional null return.
+	})
+	public static <K,V> Map<K,V> nullIfEmpty(Map<K,V> val) {
+		return isEmpty(val) ? null : val;
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified list is <jk>null</jk> or empty, otherwise returns the list.
+	 *
+	 * @param <E> The element type.
+	 * @param val The list to check.
+	 * @return <jk>null</jk> if the list is <jk>null</jk> or empty, otherwise the list itself.
+	 */
+	@SuppressWarnings({ "java:S1168" // Intentional null return.
+	})
+	public static <E> List<E> nullIfEmpty(List<E> val) {
+		return isEmpty(val) ? null : val;
+	}
+
+	/**
+	 * Returns <jk>null</jk> if the specified set is <jk>null</jk> or empty, otherwise returns the set.
+	 *
+	 * @param <E> The element type.
+	 * @param val The set to check.
+	 * @return <jk>null</jk> if the set is <jk>null</jk> or empty, otherwise the set itself.
+	 */
+	@SuppressWarnings({ "java:S1168" // Intentional null return.
+	})
+	public static <E> Set<E> nullIfEmpty(Set<E> val) {
+		return isEmpty(val) ? null : val;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified collection is not null and not empty.
+	 *
+	 * @param c The collection to check.
+	 * @return <jk>true</jk> if not null and not empty.
+	 */
+	public static boolean isNotEmpty(Collection<?> c) {
+		return c != null && ! c.isEmpty();
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified map is not null and not empty.
+	 *
+	 * @param m The map to check.
+	 * @return <jk>true</jk> if not null and not empty.
+	 */
+	public static boolean isNotEmpty(Map<?,?> m) {
+		return m != null && ! m.isEmpty();
+	}
+
+	/**
+	 * Returns the element at the specified index.
+	 *
+	 * @param <E> The element type.
+	 * @param l The list. Can be null.
+	 * @param index The index to access.
+	 * @return The element, or null if out-of-bounds/null list.
+	 */
+	@SuppressWarnings({ "java:S1168" // Intentional null return.
+	})
+	public static <E> E elementAt(List<E> l, int index) {
+		if (l == null || index < 0 || index >= l.size())
+			return null;
+		return l.get(index);
+	}
+
+	/**
+	 * Creates a new modifiable LinkedHashSet.
+	 *
+	 * @param <T> The element type.
+	 * @param values The values to add to the set.
+	 * @return A modifiable LinkedHashSet containing the specified values.
+	 */
+	@SafeVarargs
+	public static <T> Set<T> set(T...values) {
+		assertArgNotNull(ARG_values, values);
+		return new LinkedHashSet<>(Arrays.asList(values));
+	}
+
+	/**
+	 * Creates an int array.
+	 *
+	 * @param value The values.
+	 * @return A new int array.
+	 */
+	public static int[] intArray(int...value) { return value; }
+
+	/**
+	 * Creates a long array.
+	 *
+	 * @param value The values.
+	 * @return A new long array.
+	 */
+	public static long[] longArray(long...value) { return value; }
+
+	/**
+	 * Creates a byte array from ints.
+	 *
+	 * @param value The int values to convert to bytes.
+	 * @return A new byte array.
+	 */
+	public static byte[] byteArray(int...value) {
+		var result = new byte[value.length];
+		for (var i = 0; i < value.length; i++)
+			result[i] = (byte)value[i];
+		return result;
+	}
+
+	/**
+	 * Creates a char array.
+	 *
+	 * @param value The values.
+	 * @return A new char array.
+	 */
+	public static char[] charArray(char...value) { return value; }
+
+	/**
+	 * Creates a float array.
+	 *
+	 * @param value The values.
+	 * @return A new float array.
+	 */
+	public static float[] floatArray(float...value) { return value; }
+
+	/**
+	 * Creates a double array.
+	 *
+	 * @param value The values.
+	 * @return A new double array.
+	 */
+	public static double[] doubleArray(double...value) { return value; }
+
+	/**
+	 * Creates a boolean array.
+	 *
+	 * @param value The values.
+	 * @return A new boolean array.
+	 */
+	public static boolean[] booleanArray(boolean...value) { return value; }
+
+	/**
+	 * Creates a short array from ints.
+	 *
+	 * @param value The int values to convert to shorts.
+	 * @return A new short array.
+	 */
+	public static short[] shortArray(int...value) {
+		var result = new short[value.length];
+		for (var i = 0; i < value.length; i++)
+			result[i] = (short)value[i];
+		return result;
 	}
 
 	private CollectionUtils() {}

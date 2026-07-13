@@ -65,7 +65,7 @@ import jakarta.servlet.*;
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link JuneauServletRegistrations}
  * 	<li class='jm'>{@link RestContext#resolveTopLevelPaths(Class, Object, BeanStore)}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot Basics</a>
  * </ul>
  *
  * @since 10.0.0

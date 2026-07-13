@@ -16,14 +16,16 @@
  */
 package org.apache.juneau.config;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -53,7 +55,7 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfigBasics">juneau-config Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauConfig">juneau-config Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -503,7 +505,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * 	<br>Each call constructs a new list.
 	 */
 	public static synchronized List<String> getCandidateSystemDefaultConfigNames() {
-		var l = listOf(String.class);
+		var l = listOfType(String.class);
 
 		var s = env("juneau.configFile").orElse(null);
 		if (nn(s)) {
@@ -750,7 +752,7 @@ public class Config extends Context implements ConfigEventListener {
 	 * @return <jk>true</jk> if this section contains the specified key and the key has a non-blank value.
 	 */
 	public boolean exists(String key) {
-		return ne(get(key).as(String.class).orElse(null));
+		return ine(get(key).as(String.class).orElse(null));
 	}
 
 	/**
@@ -1040,7 +1042,7 @@ public class Config extends Context implements ConfigEventListener {
 		assertArgNotNull(ARG_key, key);
 		var sname = sname(key);
 		var skey = skey(key);
-		modifiers = nullIfEmpty(modifiers);
+		modifiers = nie(modifiers);
 
 		var s = applyMods(modifiers, serialize(value, serializer));
 
@@ -1283,7 +1285,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	void checkWrite() {
 		if (readOnly)
-			throw unsupportedOp("Cannot call this method on a read-only configuration.");
+			throw uoex("Cannot call this method on a read-only configuration.");
 	}
 
 	ConfigMap getConfigMap() { return configMap; }
@@ -1292,7 +1294,7 @@ public class Config extends Context implements ConfigEventListener {
 
 	Mod getMod(char id) {
 		var x = mods.get(id);
-		return def(x, Mod.NO_OP);
+		return coalesce(x, Mod.NO_OP);
 	}
 
 	String removeMods(String mods, String x) {

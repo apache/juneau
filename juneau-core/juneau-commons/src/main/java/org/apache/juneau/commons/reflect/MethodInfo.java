@@ -17,9 +17,11 @@
 package org.apache.juneau.commons.reflect;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.lang.annotation.*;

@@ -18,7 +18,6 @@ package org.apache.juneau.http;
 
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.http.MediaRanges.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 

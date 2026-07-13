@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -163,7 +164,7 @@ public class FluentCollectionAssertion<E,R> extends FluentObjectAssertion<Collec
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(Utils::s).toList(), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : value().stream().map(Shorts::s).toList(), returns());
 	}
 
 	@Override /* Overridden from FluentObjectAssertion */

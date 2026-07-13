@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ import java.util.*;
  */
 public final class PropertyLookupResult {
 
-	private static final PropertyLookupResult MISSING = new PropertyLookupResult(false, opte());
+	private static final PropertyLookupResult MISSING = new PropertyLookupResult(false, oe());
 
 	private final boolean present;
 	private final Optional<String> value;
@@ -69,7 +69,7 @@ public final class PropertyLookupResult {
 	 * @return A present result.
 	 */
 	public static PropertyLookupResult present(String value) {
-		return present(opt(value));
+		return present(o(value));
 	}
 
 	/**

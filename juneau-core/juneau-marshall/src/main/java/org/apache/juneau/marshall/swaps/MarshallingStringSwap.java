@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.swap.*;
  * <a class="doclink" href="https://juneau.apache.org/docs/topics/PojoCategories">POJO Categories</a>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
 
  * </ul>
  *

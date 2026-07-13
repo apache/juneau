@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -195,15 +195,15 @@ public class ServerVariable extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return nullIfEmpty(enum_); }
+	public List<Object> getEnum() { return nie(enum_); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(default_), PROP_default)
 			.addIf(nn(description), PROP_description)
-			.addIf(ne(enum_), PROP_enum)
+			.addIf(ine(enum_), PROP_enum)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -215,7 +215,7 @@ public class ServerVariable extends OpenApiElement {
 		return switch (property) {
 			case PROP_default -> setDefault(s(value));
 			case PROP_description -> setDescription(s(value));
-			case PROP_enum -> setEnum(listb(Object.class).addAny(value).sparse().build());
+			case PROP_enum -> setEnum(lb(Object.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;

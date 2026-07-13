@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -34,7 +34,7 @@ import org.apache.juneau.test.assertions.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -151,7 +151,7 @@ public class BasicStringHeader extends BasicHeader {
 
 	@Override /* Overridden from BasicHeader */
 	public Optional<String> asString() {
-		return opt(value());
+		return o(value());
 	}
 
 	@Override /* Overridden from Header */

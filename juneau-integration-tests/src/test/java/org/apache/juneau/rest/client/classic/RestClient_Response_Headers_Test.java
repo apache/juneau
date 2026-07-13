@@ -18,7 +18,7 @@ package org.apache.juneau.rest.client.classic;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;

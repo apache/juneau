@@ -16,12 +16,14 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isNotEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.server.RestServerConstants.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
@@ -296,7 +298,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return Charset.forName(v.get());
 		if (isInherited(PROPERTY_defaultCharset)) {
 			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_defaultCharset, null);
-			if (ne(rv))
+			if (ine(rv))
 				return Charset.forName(rv);
 		}
 		return Charset.forName(defaultCharsetName);
@@ -558,7 +560,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		var vr = varResolver();
 		for (var ai : getRestOpAnnotations()) {
 			var v = httpMethodFromAnnotation(ai.inner(), vr);
-			if (ne(v))
+			if (ine(v))
 				return normalizeHttpMethod(v);
 		}
 		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method(), true, "GET"));
@@ -627,7 +629,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return parseLongWithSuffix(v.get());
 		if (isInherited(PROPERTY_maxInput)) {
 			var rv = restContext().mergeReplacedStringAttribute(PROPERTY_maxInput, null);
-			if (ne(rv))
+			if (ine(rv))
 				return parseLongWithSuffix(rv);
 		}
 		return parseLongWithSuffix(defaultMaxInputString);
@@ -912,7 +914,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				httpMethod2 = AP.find(RestOp.class, methodInfo2)
 					.stream()
 					.map(x -> x.inner().method())
-					.filter(Utils::ne)
+					.filter(Shorts::ine)
 					.findFirst()
 					.orElse(null);
 				// @formatter:on
@@ -1221,10 +1223,10 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			if (!s.isEmpty()) {
 				var resolved = vr.resolve(s);
 				if (!resolved.isEmpty())
-					return opt(resolved);
+					return o(resolved);
 			}
 		}
-		return opte();
+		return oe();
 	}
 
 	private List<MediaType> collectAnnotationMediaTypes(String attr) {
@@ -1271,7 +1273,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 			return "options";
 		if (a instanceof RestOp r) {
 			var m = vr.resolve(r.method());
-			if (ne(m))
+			if (ine(m))
 				return m;
 			var s = vr.resolve(r.value());
 			if (s != null) {
@@ -1431,7 +1433,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	@Override /* Overridden from Context */
 	public Context.Builder copy() {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**

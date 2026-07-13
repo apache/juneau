@@ -24,7 +24,6 @@ import java.lang.annotation.*;
 
 import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"unchecked",  // Cast from Object to Map<String,Object> in annotation tests

@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.staticfile;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -150,7 +150,7 @@ public class BasicStaticFiles implements StaticFiles {
 		try {
 			Optional<InputStream> is = getStream(path, locale);
 			if (! is.isPresent())
-				return opte();
+				return oe();
 			var ct = mimeTypes == null ? null : mimeTypes.getContentType(getFileName(path));
 			var hdrs = new ArrayList<HttpHeader>();
 			if (ct != null)
@@ -158,7 +158,7 @@ public class BasicStaticFiles implements StaticFiles {
 			for (var h : headers)
 				if (h != null)
 					hdrs.add(h);
-			return opt(HttpResourceBean.of(StreamBody.of(is.get()), hdrs));
+			return o(HttpResourceBean.of(StreamBody.of(is.get()), hdrs));
 		} catch (IOException e) {
 			throw new InternalServerError(e);
 		}

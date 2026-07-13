@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.mock.classic;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.concurrent.*;
@@ -37,7 +37,7 @@ import org.apache.http.protocol.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
  */
 class MockHttpClientConnectionManager implements HttpClientConnectionManager {

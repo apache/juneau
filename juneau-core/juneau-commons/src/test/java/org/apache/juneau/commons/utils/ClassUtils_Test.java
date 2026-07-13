@@ -19,7 +19,7 @@ package org.apache.juneau.commons.utils;
 import static org.apache.juneau.commons.TestUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -247,31 +247,31 @@ class ClassUtils_Test {
 	@Test
 	void a007_getMatchingArgs() {
 		// Exact match - fast path returns original array
-		var paramTypes = a(String.class, Integer.class);
-		var args = a("test", 123);
+		var paramTypes = array(String.class, Integer.class);
+		var args = array("test", 123);
 		var result = getMatchingArgs(paramTypes, (Object[])args);
 		assertSame(args, result);
 		assertEquals("test", result[0]);
 		assertEquals(123, result[1]);
 
 		// Wrong order - method reorders them
-		var paramTypes2 = a(Integer.class, String.class);
-		var args2 = a("test", 123);
+		var paramTypes2 = array(Integer.class, String.class);
+		var args2 = array("test", 123);
 		var result2 = getMatchingArgs(paramTypes2, (Object[])args2);
 		assertEquals(2, result2.length);
 		assertEquals(123, result2[0]);
 		assertEquals("test", result2[1]);
 
 		// Extra args - ignored
-		var paramTypes3 = a(String.class);
-		var args3 = a("test", 123, true);
+		var paramTypes3 = array(String.class);
+		var args3 = array("test", 123, true);
 		var result3 = getMatchingArgs(paramTypes3, (Object[])args3);
 		assertEquals(1, result3.length);
 		assertEquals("test", result3[0]);
 
 		// Missing args - become null
-		var paramTypes4 = a(String.class, Integer.class, Boolean.class);
-		var args4 = a("test");
+		var paramTypes4 = array(String.class, Integer.class, Boolean.class);
+		var args4 = array("test");
 		var result4 = getMatchingArgs(paramTypes4, (Object[])args4);
 		assertEquals(3, result4.length);
 		assertEquals("test", result4[0]);
@@ -279,23 +279,23 @@ class ClassUtils_Test {
 		assertNull(result4[2]);
 
 		// Primitive types
-		var paramTypes5 = a(int.class, String.class);
-		var args5 = a("test", 123);
+		var paramTypes5 = array(int.class, String.class);
+		var args5 = array("test", 123);
 		var result5 = getMatchingArgs(paramTypes5, (Object[])args5);
 		assertEquals(2, result5.length);
 		assertEquals(123, result5[0]);
 		assertEquals("test", result5[1]);
 
 		// Type hierarchy
-		var paramTypes6 = a(Number.class, String.class);
-		var args6 = a("test", 123);
+		var paramTypes6 = array(Number.class, String.class);
+		var args6 = array("test", 123);
 		var result6 = getMatchingArgs(paramTypes6, (Object[])args6);
 		assertEquals(2, result6.length);
 		assertEquals(123, result6[0]);
 		assertEquals("test", result6[1]);
 
 		// Null args
-		var paramTypes7 = a(String.class, Integer.class);
+		var paramTypes7 = array(String.class, Integer.class);
 		var args7 = new Object[] {null, null};
 		var result7 = getMatchingArgs(paramTypes7, args7);
 		assertEquals(2, result7.length);
@@ -387,7 +387,7 @@ class ClassUtils_Test {
 		assertTrue(setAccessible(ctor));
 
 		// Should throw when null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("x", "cannot be null"), () -> {
 			setAccessible((Constructor<?>)null);
 		});
 	}
@@ -406,7 +406,7 @@ class ClassUtils_Test {
 		assertTrue(setAccessible(field));
 
 		// Should throw when null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("x", "cannot be null"), () -> {
 			setAccessible((Field)null);
 		});
 	}
@@ -421,7 +421,7 @@ class ClassUtils_Test {
 		assertTrue(setAccessible(method));
 
 		// Should throw when null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("x", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("x", "cannot be null"), () -> {
 			setAccessible((Method)null);
 		});
 	}

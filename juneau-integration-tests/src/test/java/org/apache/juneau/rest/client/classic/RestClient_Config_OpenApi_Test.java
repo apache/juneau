@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.marshall.uon.ParamFormat.*;
 
 import java.io.*;

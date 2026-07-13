@@ -16,6 +16,7 @@
  */
 package org.apache.juneau;
 
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 

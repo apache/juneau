@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -646,7 +646,7 @@ public class OidcRelyingParty {
 			sid,
 			principal,
 			roles,
-			opt(token),
+			o(token),
 			now,
 			now.plus(sessionTtl));
 
@@ -704,17 +704,17 @@ public class OidcRelyingParty {
 		assertArgNotNull("res", res);
 		var cookieValue = readCookie(req);
 		if (cookieValue == null)
-			return opte();
+			return oe();
 		var existing = sessionStore.lookup(cookieValue);
 		if (existing.isEmpty())
-			return opte();
+			return oe();
 		var tokenOpt = existing.get().token();
 		if (tokenOpt.isEmpty())
-			return opte();
+			return oe();
 		var oldToken = tokenOpt.get();
 		var refreshTokenOpt = oldToken.refreshToken();
 		if (refreshTokenOpt.isEmpty())
-			return opte();
+			return oe();
 
 		OAuthToken refreshed;
 		try {
@@ -731,7 +731,7 @@ public class OidcRelyingParty {
 			// Rotating-refresh-token reuse / revocation -> invalidate the session (fail-closed).
 			sessionStore.invalidate(cookieValue);
 			res.addHeader("Set-Cookie", buildSetCookie("", 0));
-			return opte();
+			return oe();
 		}
 
 		var old = existing.get();
@@ -742,14 +742,14 @@ public class OidcRelyingParty {
 			old.sid(),
 			old.principal(),
 			old.roles(),
-			opt(refreshed),
+			o(refreshed),
 			old.createdAt(),
 			now.plus(sessionTtl));
 		sessionStore.invalidate(cookieValue);
 		var newCookie = sessionStore.createSessionCookieValue(newSession);
 		noStore(res);
 		res.addHeader("Set-Cookie", buildSetCookie(newCookie, sessionTtl.toSeconds()));
-		return opt(newSession);
+		return o(newSession);
 	}
 
 	/**

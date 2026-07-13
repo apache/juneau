@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -84,15 +84,11 @@ public class ReflectionUtils {
 	private ReflectionUtils() {}
 
 	/**
-	 * Returns the {@link ClassInfo} wrapper for the specified class.
+	 * Returns the {@link ClassInfoTyped} wrapper for the specified class.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(MyClass.<jk>class</jk>);
-	 * </p>
-	 *
+	 * @param <T> The class type.
 	 * @param o The class to wrap. Can be <jk>null</jk>.
-	 * @return The {@link ClassInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
+	 * @return The {@link ClassInfoTyped} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
 	public static final <T> ClassInfoTyped<T> info(Class<T> o) {
 		return ClassInfo.of(o);
@@ -100,12 +96,6 @@ public class ReflectionUtils {
 
 	/**
 	 * Returns the {@link ConstructorInfo} wrapper for the specified constructor.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor();
-	 * 	ConstructorInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>c</jv>);
-	 * </p>
 	 *
 	 * @param o The constructor to wrap. Can be <jk>null</jk>.
 	 * @return The {@link ConstructorInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
@@ -117,12 +107,6 @@ public class ReflectionUtils {
 	/**
 	 * Returns the {@link FieldInfo} wrapper for the specified field.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
-	 * 	FieldInfo <jv>fi</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>f</jv>);
-	 * </p>
-	 *
 	 * @param o The field to wrap. Can be <jk>null</jk>.
 	 * @return The {@link FieldInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
@@ -133,12 +117,6 @@ public class ReflectionUtils {
 	/**
 	 * Returns the {@link MethodInfo} wrapper for the specified method.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
-	 * 	MethodInfo <jv>mi</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>m</jv>);
-	 * </p>
-	 *
 	 * @param o The method to wrap. Can be <jk>null</jk>.
 	 * @return The {@link MethodInfo} wrapper, or <jk>null</jk> if the input is <jk>null</jk>.
 	 */
@@ -148,12 +126,6 @@ public class ReflectionUtils {
 
 	/**
 	 * Returns the {@link ClassInfo} wrapper for the class of the specified object.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	MyClass <jv>obj</jv> = <jk>new</jk> MyClass();
-	 * 	ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>obj</jv>);
-	 * </p>
 	 *
 	 * @param o The object whose class to wrap. Can be <jk>null</jk>.
 	 * @return The {@link ClassInfo} wrapper for the object's class, or <jk>null</jk> if the input is <jk>null</jk>.
@@ -210,7 +182,7 @@ public class ReflectionUtils {
 		var beans = beanStore.getBeansOfType(elementType);
 
 		// Handle Map<String,T> - getBeansOfType already returns Map<String,T>
-		var inner = opt(targetType.inner()).orElse(Object.class);
+		var inner = o(targetType.inner()).orElse(Object.class);
 		if (Map.class.isAssignableFrom(inner)) {
 			// Verify it's Map<String,T> by checking the parameterized type
 			Type parameterizedType = targetType.innerType();

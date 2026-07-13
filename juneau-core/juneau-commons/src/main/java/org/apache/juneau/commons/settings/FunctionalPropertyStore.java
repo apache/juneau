@@ -17,7 +17,8 @@
 package org.apache.juneau.commons.settings;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.function.*;
 
@@ -60,7 +61,7 @@ public class FunctionalPropertyStore implements PropertyStore {
 	@Override
 	public PropertyLookupResult get(String name) {
 		var v = reader.apply(name);
-		return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(v));
+		return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(v));
 	}
 
 	@Override

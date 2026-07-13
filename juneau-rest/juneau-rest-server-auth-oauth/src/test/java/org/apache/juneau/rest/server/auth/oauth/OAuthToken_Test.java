@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -37,7 +37,7 @@ class OAuthToken_Test extends TestBase {
 
 	@Test void a01_construct_happyPath() {
 		var t = new OAuthToken("a", "Bearer", Instant.parse("2030-01-01T00:00:00Z"),
-			opt("r"), opt(Set.of("read")), opte());
+			o("r"), o(Set.of("read")), oe());
 		assertEquals("a", t.accessToken());
 		assertEquals("Bearer", t.tokenType());
 		assertEquals("r", t.refreshToken().get());
@@ -46,31 +46,31 @@ class OAuthToken_Test extends TestBase {
 
 	@Test void a02_construct_nullFieldsRejected() {
 		assertThrows(NullPointerException.class, () -> new OAuthToken(null, "Bearer", Instant.MAX,
-			opte(), opte(), opte()));
+			oe(), oe(), oe()));
 	}
 
 	@Test void b01_isExpired_pastExpiry_true() {
 		var t = new OAuthToken("a", "Bearer", Instant.parse("2020-01-01T00:00:00Z"),
-			opte(), opte(), opte());
+			oe(), oe(), oe());
 		assertTrue(t.isExpired(Instant.parse("2020-01-01T00:00:00Z"), Duration.ZERO));
 		assertTrue(t.isExpired(Instant.parse("2025-01-01T00:00:00Z"), Duration.ZERO));
 	}
 
 	@Test void b02_isExpired_futureExpiry_false() {
 		var t = new OAuthToken("a", "Bearer", Instant.parse("2030-01-01T00:00:00Z"),
-			opte(), opte(), opte());
+			oe(), oe(), oe());
 		assertFalse(t.isExpired(Instant.parse("2020-01-01T00:00:00Z"), Duration.ZERO));
 	}
 
 	@Test void b03_isExpired_skewBringsForward() {
 		var t = new OAuthToken("a", "Bearer", Instant.parse("2030-01-01T00:00:10Z"),
-			opte(), opte(), opte());
+			oe(), oe(), oe());
 		assertTrue(t.isExpired(Instant.parse("2030-01-01T00:00:00Z"), Duration.ofMinutes(1)));
 	}
 
 	@Test void c01_scope_defensivelyCopied() {
 		var src = new HashSet<>(Set.of("a"));
-		var t = new OAuthToken("a", "Bearer", Instant.MAX, opte(), Optional.of(src), opte());
+		var t = new OAuthToken("a", "Bearer", Instant.MAX, oe(), Optional.of(src), oe());
 		assertThrows(UnsupportedOperationException.class, () -> t.scope().get().add("b"));
 	}
 }

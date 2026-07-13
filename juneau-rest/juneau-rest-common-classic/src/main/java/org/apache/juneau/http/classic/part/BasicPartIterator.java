@@ -17,7 +17,7 @@
 package org.apache.juneau.http.classic.part;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -86,11 +86,11 @@ public class BasicPartIterator implements PartIterator {
 	 */
 	@Override /* Overridden from Iterator */
 	public void remove() throws UnsupportedOperationException {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(caseInsensitive, s1, s2);  // NOAI
+		return Shorts.eq(caseInsensitive, s1, s2);  // NOAI
 	}
 
 	private boolean filter(int index) {

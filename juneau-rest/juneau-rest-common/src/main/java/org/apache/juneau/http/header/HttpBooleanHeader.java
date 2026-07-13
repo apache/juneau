@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.http.header;
-
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -64,7 +62,7 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 
 	protected HttpBooleanHeader(String name, String wireValue) {
 		super(name, wireValue);
-		this.value = e(wireValue) ? null : Boolean.valueOf(bool(wireValue));
+		this.value = ie(wireValue) ? null : Boolean.valueOf(b(wireValue));
 		this.lazySupplier = null;
 		this.lazyMode = -1;
 	}
@@ -86,7 +84,7 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 	}
 
 	public Optional<Boolean> asBoolean() {
-		return opt(toBoolean());
+		return o(toBoolean());
 	}
 
 	@Override
@@ -109,6 +107,6 @@ public class HttpBooleanHeader extends HttpHeaderBean {
 		if (value != null)
 			return value;
 		var v = super.getValue();
-		return e(v) ? null : Boolean.valueOf(bool(v));
+		return ie(v) ? null : Boolean.valueOf(b(v));
 	}
 }

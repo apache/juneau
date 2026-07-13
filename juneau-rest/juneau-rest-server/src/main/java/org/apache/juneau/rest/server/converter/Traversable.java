@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.converter;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.*;

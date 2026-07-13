@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.httppart;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -87,7 +87,7 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @throws BasicHttpException If value could not be parsed.
 	 */
 	public <T> Optional<T> as(Class<T> type) {
-		return opt(req.getMarshallingSession().convertToType(getValue(), type));
+		return o(req.getMarshallingSession().convertToType(getValue(), type));
 	}
 
 	/**
@@ -96,6 +96,6 @@ public class RequestAttribute extends BasicNamedAttribute {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return opt(s(getValue()));
+		return o(s(getValue()));
 	}
 }

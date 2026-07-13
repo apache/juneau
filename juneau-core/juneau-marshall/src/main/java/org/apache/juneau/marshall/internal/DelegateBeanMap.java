@@ -17,8 +17,7 @@
 package org.apache.juneau.marshall.internal;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -92,7 +91,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			else
 				bme = this.getProperty(k);
 			if (bme == null)
-				throw bex(super.getBeanInfo().inner(), "Property ''{0}'' not found on class.", k);
+				throw brex(super.getBeanInfo().inner(), "Property ''{0}'' not found on class.", k);
 			s.add(bme);
 		});
 		return s;

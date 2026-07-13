@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.marshall.transforms;
 
-import static org.apache.juneau.TestUtils.*;
-
+import static org.apache.juneau.BasicTestUtils.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;

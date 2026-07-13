@@ -44,7 +44,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<li class='jc'>{@link StaticFilesServlet}
  * 	<li class='jc'>{@link StaticFiles}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/StaticFiles">Static files</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  * </ul>
  *
  * @since 10.0.0

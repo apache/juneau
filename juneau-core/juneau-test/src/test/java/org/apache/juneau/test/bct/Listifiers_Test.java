@@ -18,7 +18,7 @@ package org.apache.juneau.test.bct;
 
 import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -303,7 +303,7 @@ class Listifiers_Test extends TestBase {
 		@BctConfig(sortMaps = TRUE)
 		void f01_listifyMap() {
 			var listifier = Listifiers.mapListifier();
-			var input = m("z", "value1", "a", "value2"); // Unordered input
+			var input = immutableMap("z", "value1", "a", "value2"); // Unordered input (non-LinkedHashMap so the sort path applies)
 			var result = listifier.apply(null, input);
 
 			assertSize(2, result);
@@ -403,7 +403,7 @@ class Listifiers_Test extends TestBase {
 			assertList(l("a", "b"), "a", "b");
 			assertList(new LinkedHashSet<>(l("x", "y")), "x", "y");
 			assertSize(3, Stream.of(1, 2, 3));
-			assertEmpty(opte());
+			assertEmpty(oe());
 		}
 
 		@Test
@@ -416,7 +416,7 @@ class Listifiers_Test extends TestBase {
 		void g03_listifierChaining() {
 			// Test that listified objects can be processed by other listifiers
 			// Stream of optionals
-			var streamOfOptionals = Stream.of(opt("a"), opte(), opt("b"));
+			var streamOfOptionals = Stream.of(o("a"), oe(), o("b"));
 			assertSize(3, streamOfOptionals);
 		}
 	}

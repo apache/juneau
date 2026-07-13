@@ -30,7 +30,7 @@ import org.apache.catalina.startup.*;
  * are mounted explicitly by {@link TomcatServerComponent}).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcatBasics">juneau-microservice-tomcat Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat">juneau-microservice-tomcat Basics</a>
  * </ul>
  */
 public class BasicTomcatServerFactory implements TomcatServerFactory {

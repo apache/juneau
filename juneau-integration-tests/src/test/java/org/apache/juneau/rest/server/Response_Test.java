@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.utils.*;
@@ -140,7 +140,7 @@ class Response_Test extends TestBase {
 		@Response(schema=@Schema(collectionFormat="pipes"))
 		@RestGet
 		public String[] a() {
-			return CollectionUtils.a("foo","bar");
+			return Shorts.a("foo","bar");
 		}
 		@Response(schema=@Schema(type="string",format="byte"))
 		@RestGet
@@ -165,7 +165,7 @@ class Response_Test extends TestBase {
 		}
 		@RestGet
 		public void g(@Response(schema=@Schema(collectionFormat="pipes")) Holder<String[]> value) {
-			value.set(CollectionUtils.a("foo","bar"));
+			value.set(Shorts.a("foo","bar"));
 		}
 		@RestGet
 		public void h(@Response(schema=@Schema(type="string",format="byte")) Holder<byte[]> value) {

@@ -18,8 +18,6 @@ package org.apache.juneau.microservice.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.*;
@@ -27,6 +25,8 @@ import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
+
+import jakarta.servlet.*;
 
 /**
  * Verifies the {@code static Microservice.Builder} supplier path of {@link MicroserviceTest @MicroserviceTest}

@@ -21,8 +21,9 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -787,7 +788,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (pn.equals(selfValue)) {
 			e = o; // Return the object itself
 		} else {
-			e = opt(getProperty(o, pn)).orElse(null);
+			e = o(getProperty(o, pn)).orElse(null);
 		}
 		if (e == null || ! token.hasNested())
 			return stringify(e);
@@ -835,7 +836,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.computeIfAbsent(c, this::findListifier)
 			.map(x -> (Listifier)x)
 			.map(x -> (List<Object>)x.apply(this, o2))
-			.orElseThrow(() -> illegalArg("Object of type {0} could not be converted to a list.", cns(o2)));
+			.orElseThrow(() -> iaex("Object of type {0} could not be converted to a list.", cns(o2)));
 		// @formatter:on
 	}
 
@@ -900,7 +901,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (isEmpty.isPresent())
 			return isTrue(isEmpty.get()) ? 0 : 1;
 
-		throw illegalArg("Object of type {0} does not have a determinable size.", cns(o));
+		throw iaex("Object of type {0} does not have a determinable size.", cns(o));
 	}
 
 	@Override

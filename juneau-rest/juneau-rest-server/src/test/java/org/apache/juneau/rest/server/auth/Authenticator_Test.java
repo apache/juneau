@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.security.*;
@@ -39,7 +39,7 @@ class Authenticator_Test extends TestBase {
 	@Test void a01_authFilterIsAuthenticator() throws Exception {
 		AuthFilter f = new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
-				return opt(AuthResult.of(ALICE, "admin"));
+				return o(AuthResult.of(ALICE, "admin"));
 			}
 		};
 		Authenticator a = f;  // must compile
@@ -48,12 +48,12 @@ class Authenticator_Test extends TestBase {
 	}
 
 	@Test void a02_lambdaAuthenticator() throws Exception {
-		Authenticator a = req -> opt(AuthResult.ofRoles("reader"));
+		Authenticator a = req -> o(AuthResult.ofRoles("reader"));
 		assertEquals(Set.of("reader"), a.authenticate(null).orElseThrow().getRoles());
 	}
 
 	@Test void a03_emptyAndThrowContracts() {
-		Authenticator empty = req -> opte();
+		Authenticator empty = req -> oe();
 		assertTrue(empty.authenticate(null).isEmpty());
 		Authenticator bad = req -> { throw new AuthenticationException("nope"); };
 		assertThrows(AuthenticationException.class, () -> bad.authenticate(null));

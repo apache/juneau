@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.rest.client.classic;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.http.classic.HttpResponses.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
@@ -30,9 +29,10 @@ import java.util.logging.*;
 
 import org.apache.http.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.httppart.*;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Header;
 import org.apache.juneau.http.classic.response.*;
@@ -442,7 +442,7 @@ class RestClient_Config_RestClient_Test extends TestBase {
 					return Json5.DEFAULT.to(in.substring(1),c);
 				return SimplePartParser.DEFAULT.parse(type,schema,in,c);
 			} catch (Exception e) {
-				throw toRex(e);
+				throw ThrowableUtils.toRex(e);
 			}
 		}
 	}

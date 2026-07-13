@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -185,7 +185,7 @@ public enum CurrencyFormat {
 			// Fall through to symbol / display-name scan.
 		}
 		return switch (fmt) {
-			case NOT_SET, ISO_CODE -> throw illegalArg("Invalid currency code ''{0}''", value);
+			case NOT_SET, ISO_CODE -> throw iaex("Invalid currency code ''{0}''", value);
 			case SYMBOL -> findBySymbol(s, loc, value);
 			case DISPLAY_NAME -> findByDisplayName(s, loc, value);
 		};
@@ -209,7 +209,7 @@ public enum CurrencyFormat {
 
 	private static Currency resolveAmbiguousMatches(List<Currency> matches, Locale loc, String original, String kind) {
 		if (matches.isEmpty())
-			throw illegalArg("Could not resolve currency {0} ''{1}'' in locale {2}", kind, original, loc);
+			throw iaex("Could not resolve currency {0} ''{1}'' in locale {2}", kind, original, loc);
 		if (matches.size() == 1)
 			return matches.get(0);
 		// Prefer the locale's default currency when the locale has one.
@@ -220,7 +220,7 @@ public enum CurrencyFormat {
 		} catch (@SuppressWarnings("unused") IllegalArgumentException ignored) {
 			// Locale has no associated currency (e.g. Locale.ROOT, Locale.ENGLISH, Locale.JAPAN may or may not).
 		}
-		throw illegalArg("Ambiguous currency {0} ''{1}'' in locale {2}: matches {3}", kind, original, loc, matches);
+		throw iaex("Ambiguous currency {0} ''{1}'' in locale {2}: matches {3}", kind, original, loc, matches);
 	}
 
 	/**

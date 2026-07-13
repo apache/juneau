@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Property source backed by {@link System#getProperty(String)}.
@@ -26,6 +26,6 @@ public class SystemPropertyPropertySource implements PropertySource {
 	@Override
 	public PropertyLookupResult get(String name) {
 		var v = System.getProperty(name);
-		return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(v));
+		return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(v));
 	}
 }

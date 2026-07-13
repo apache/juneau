@@ -18,11 +18,10 @@ package org.apache.juneau.test.assertions;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.utils.Utils.eq;
 
 import java.io.*;
 import java.util.*;
@@ -259,7 +258,7 @@ public class FluentThrowableAssertion<T extends Throwable,R> extends FluentObjec
 			else {
 				l = list();
 				while (nn(t)) {
-					l.add(lm(t));
+					l.add(localizedMessage(t));
 					t = t.getCause();
 				}
 			}

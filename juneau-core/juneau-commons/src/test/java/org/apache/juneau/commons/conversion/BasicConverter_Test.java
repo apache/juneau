@@ -23,8 +23,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"unused",    // Test helper classes have fields read only via assertions

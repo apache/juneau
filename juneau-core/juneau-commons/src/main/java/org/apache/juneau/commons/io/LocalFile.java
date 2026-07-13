@@ -18,7 +18,7 @@ package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -160,7 +160,7 @@ public class LocalFile {
 		this.path = assertArgNotNull(ARG_path, path);
 		var fileName = path.getFileName();
 		assertArg(fileName != null, "Argument 'path' must not be a root path (must have a filename).");
-		this.name = opt(fileName).map(Object::toString).orElse(null);
+		this.name = o(fileName).map(Object::toString).orElse(null);
 	}
 
 	/**

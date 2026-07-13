@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.TestBase;
 
 /** Tests for {@link MiniJson}. */
 class MiniJson_Test extends TestBase {

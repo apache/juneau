@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.ini;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/IniBasics">INI Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Ini">INI Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -86,7 +86,7 @@ public class IniWriter extends SerializerWriter {
 	 */
 	public IniWriter comment(String text) {
 		w("# ");
-		if (ne(text)) {
+		if (ine(text)) {
 			var lines = text.split("\n");
 			for (var i = 0; i < lines.length; i++) {
 				if (i > 0)

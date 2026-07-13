@@ -18,7 +18,7 @@ package org.apache.juneau.http.classic.part;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -32,7 +32,7 @@ import org.apache.juneau.test.assertions.*;
  * A {@link NameValuePair} that consist of a single HTTP-date.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -51,7 +51,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicDatePart of(String name, Supplier<ZonedDateTime> value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
@@ -64,7 +64,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return A new {@link BasicDatePart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicDatePart of(String name, ZonedDateTime value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicDatePart(name, value);
 	}
@@ -84,7 +84,7 @@ public class BasicDatePart extends BasicPart {
 	 */
 	public BasicDatePart(String name, String value) {
 		super(name, value);
-		this.value = e(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.value = ie(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 
@@ -128,7 +128,7 @@ public class BasicDatePart extends BasicPart {
 	 * @return The part value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return opt(toZonedDateTime());
+		return o(toZonedDateTime());
 	}
 
 	@Override /* Overridden from Header */

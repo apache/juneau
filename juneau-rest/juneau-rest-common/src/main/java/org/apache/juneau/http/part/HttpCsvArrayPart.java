@@ -17,8 +17,8 @@
 package org.apache.juneau.http.part;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -120,7 +120,7 @@ public class HttpCsvArrayPart extends HttpPartBean {
 	 * @return The array value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return opt(toArray());
+		return o(toArray());
 	}
 
 	/**
@@ -129,7 +129,7 @@ public class HttpCsvArrayPart extends HttpPartBean {
 	 * @return The list value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
-		return opt(toList());
+		return o(toList());
 	}
 
 	/**

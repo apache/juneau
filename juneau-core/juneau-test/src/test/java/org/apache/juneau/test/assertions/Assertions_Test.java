@@ -16,10 +16,9 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.test.assertions.Assertions.assertThrowable;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.test.assertions.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -141,7 +140,7 @@ class Assertions_Test extends TestBase {
 	}
 
 	@Test void a24_assertOptional() {
-		assertOptional(opt(1)).isNotNull();
+		assertOptional(o(1)).isNotNull();
 	}
 
 	@Test void a25_assertStringList() {

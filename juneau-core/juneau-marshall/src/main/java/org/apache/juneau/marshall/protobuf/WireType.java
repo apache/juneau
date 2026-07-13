@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.protobuf;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The protobuf binary wire types (the low 3 bits of a field tag).
@@ -27,7 +27,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
  * occupies even when it doesn't know the field's specific scalar type.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBinaryBasics">Protobuf Binary Format Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/programming-guides/encoding/">Protocol Buffers Encoding</a>
  * </ul>
  */
@@ -81,7 +81,7 @@ public enum WireType {
 			case 3: return SGROUP;
 			case 4: return EGROUP;
 			case 5: return I32;
-			default: throw illegalArg("Invalid protobuf wire type: {0}", code);
+			default: throw iaex("Invalid protobuf wire type: {0}", code);
 		}
 	}
 

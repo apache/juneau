@@ -17,9 +17,8 @@
 package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -157,7 +156,7 @@ public class Contact extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(email), PROP_email)
 			.addIf(nn(name), PROP_name)
 			.addIf(nn(url), PROP_url)

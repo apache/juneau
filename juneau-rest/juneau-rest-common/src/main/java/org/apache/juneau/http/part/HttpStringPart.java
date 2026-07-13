@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -102,7 +102,7 @@ public class HttpStringPart extends HttpPartBean {
 	 * @return The value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<String> asString() {
-		return opt(getValue());
+		return o(getValue());
 	}
 
 	/**

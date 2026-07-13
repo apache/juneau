@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.yaml;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -1293,8 +1293,8 @@ class Yaml_Test extends TestBase {
 	@Test void x01_parseOptionalString() throws Exception {
 		String yaml = "name: hello\nage: 5";
 		var b = YamlParser.DEFAULT.parse(yaml, OptBean.class);
-		assertEquals(opt("hello"), b.name);
-		assertEquals(opt(5), b.age);
+		assertEquals(o("hello"), b.name);
+		assertEquals(o(5), b.age);
 	}
 
 	@Test void x02_parseOptionalNullValue() throws Exception {

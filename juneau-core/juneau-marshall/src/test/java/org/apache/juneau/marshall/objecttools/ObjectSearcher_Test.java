@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.objecttools;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -388,7 +389,7 @@ public class ObjectSearcher_Test extends TestBase {
 			var bb = new B[dates.length];
 			for (var i = 0; i < dates.length; i++) {
 				bb[i] = new B();
-				bb[i].f = opt(dates[i]).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(x).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
+				bb[i].f = o(dates[i]).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(x).getZonedDateTime()).map(GregorianCalendar::from).orElse(null);
 			}
 			return bb;
 		}
@@ -651,7 +652,7 @@ public class ObjectSearcher_Test extends TestBase {
 	}
 
 	@Test void d03_d2ArrayOfMaps() {
-		var in = CollectionUtils.a(
+		var in = Shorts.a(
 			m("f","foo"),
 			m("f","bar"),
 			null,

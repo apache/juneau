@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.xml;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
  * class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
  * </ul>
  */
 public class XmlClassMeta extends ExtendedClassMeta {

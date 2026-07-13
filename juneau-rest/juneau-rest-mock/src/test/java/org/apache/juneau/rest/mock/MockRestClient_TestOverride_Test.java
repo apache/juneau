@@ -19,8 +19,8 @@ package org.apache.juneau.rest.mock;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.test.junit.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.test.junit.*;
 import org.junit.jupiter.api.*;
 
 /**

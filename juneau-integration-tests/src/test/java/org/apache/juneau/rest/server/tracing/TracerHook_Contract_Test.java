@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.tracing;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;

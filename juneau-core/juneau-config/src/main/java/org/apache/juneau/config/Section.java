@@ -17,9 +17,7 @@
 package org.apache.juneau.config;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.beans.*;
 import java.lang.reflect.*;
@@ -113,7 +111,7 @@ public class Section {
 		assertArgNotNull(ARG_c, c);
 
 		if (! isPresent())
-			return opte();
+			return oe();
 
 		var keys = configMap.getKeys(name);
 
@@ -128,7 +126,7 @@ public class Section {
 			}
 		}
 
-		return opt(bm.getBean());
+		return o(bm.getBean());
 	}
 
 	/**
@@ -198,9 +196,9 @@ public class Section {
 		assertArgNotNull(ARG_c, c);
 
 		if (! c.isInterface())
-			throw illegalArg("Class ''{0}'' passed to toInterface() is not an interface.", cn(c));
+			throw iaex("Class ''{0}'' passed to toInterface() is not an interface.", cn(c));
 
-		return opt((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
+		return o((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
 			for (var pd : bi.getPropertyDescriptors()) {
 				var rm = pd.getReadMethod();
@@ -210,7 +208,7 @@ public class Section {
 				if (method.equals(wm))
 					return config.set(name + '/' + pd.getName(), args[0]);
 			}
-			throw unsupportedOp("Unsupported interface method.  method=''{0}''", method);
+			throw uoex("Unsupported interface method.  method=''{0}''", method);
 		}));
 	}
 
@@ -221,14 +219,14 @@ public class Section {
 	 */
 	public Optional<JsonMap> asMap() {
 		if (! isPresent())
-			return opte();
+			return oe();
 
 		var keys = configMap.getKeys(name);
 
 		var m = new JsonMap();
 		for (var k : keys)
 			m.put(k, config.get(name + '/' + k).as(Object.class).orElse(null));
-		return opt(m);
+		return o(m);
 	}
 
 	/**
@@ -252,7 +250,7 @@ public class Section {
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull(ARG_bean, bean);
 		if (! isPresent())
-			throw illegalArg("Section ''{0}'' not found in configuration.", name);
+			throw iaex("Section ''{0}'' not found in configuration.", name);
 
 		var keys = configMap.getKeys(name);
 

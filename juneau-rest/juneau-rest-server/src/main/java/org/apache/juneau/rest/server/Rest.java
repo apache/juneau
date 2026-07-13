@@ -30,8 +30,8 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.arg.*;
-import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.auth.*;
+import org.apache.juneau.rest.server.converter.*;
 import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.openapi.*;
@@ -48,7 +48,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * a REST resource.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
 
  * </ul>
  */
@@ -282,7 +282,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jma'>{@link #mixinDefs()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts">REST Server &mdash; Mixin Sub-Contexts</a>
 	 * </ul>
 	 *

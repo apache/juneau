@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.html5;
 
-import static org.apache.juneau.test.assertions.Verify.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.test.assertions.Verify.*;
 
 import java.lang.reflect.*;
 

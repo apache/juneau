@@ -39,7 +39,7 @@ import org.apache.juneau.http.classic.header.*;
  * <br>Most use cases do not require clients and search engines to purge the resource, and a <js>"404 Not Found"</js> may be used instead.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude

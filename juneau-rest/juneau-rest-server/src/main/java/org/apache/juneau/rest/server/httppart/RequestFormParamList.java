@@ -19,9 +19,8 @@ package org.apache.juneau.rest.server.httppart;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -165,7 +164,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 			}
 		} else {
 			c = req.getHttpServletRequest().getParts();
-			if (e(c))
+			if (ie(c))
 				m = req.getHttpServletRequest().getParameterMap();
 		}
 
@@ -283,7 +282,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));  // NOAI
+			var hasAllBlanks = l.allMatch(x -> Shorts.ie(x.getValue()));  // NOAI
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestFormParam(req, name, vs.resolve(p.getValue())));
@@ -591,6 +590,6 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+		return Shorts.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 }

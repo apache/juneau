@@ -18,8 +18,8 @@ package org.apache.juneau.commons.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.TestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
@@ -28,11 +28,11 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.Named;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S117",  // Field names use underscores for test data (e.g., b_b_a, b_a1_a); unused parameters in tests are typically intentional

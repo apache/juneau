@@ -19,9 +19,8 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;
@@ -81,7 +80,7 @@ public class RetryAfter extends HttpHeaderBean {
 			this.retryAt = null;
 		} else {
 			this.delaySeconds = null;
-			this.retryAt = e(value) ? null : parseHttpDate(value);
+			this.retryAt = ie(value) ? null : parseHttpDate(value);
 		}
 		this.supplier = null;
 	}
@@ -116,9 +115,9 @@ public class RetryAfter extends HttpHeaderBean {
 	public Optional<Integer> asInteger() {
 		if (nn(supplier)) {
 			var o = supplier.get();
-			return opt(o instanceof Integer o2 ? o2 : null);
+			return o(o instanceof Integer o2 ? o2 : null);
 		}
-		return opt(delaySeconds);
+		return o(delaySeconds);
 	}
 
 	/**
@@ -127,9 +126,9 @@ public class RetryAfter extends HttpHeaderBean {
 	public Optional<ZonedDateTime> asZonedDateTime() {
 		if (nn(supplier)) {
 			var o = supplier.get();
-			return opt(o instanceof ZonedDateTime o2 ? o2 : null);
+			return o(o instanceof ZonedDateTime o2 ? o2 : null);
 		}
-		return opt(retryAt);
+		return o(retryAt);
 	}
 
 	@Override /* HttpHeader */

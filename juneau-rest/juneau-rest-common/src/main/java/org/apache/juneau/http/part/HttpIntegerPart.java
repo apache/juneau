@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -115,7 +114,7 @@ public class HttpIntegerPart extends HttpPartBean {
 	 * @return The integer value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<Integer> asInteger() {
-		return opt(toInteger());
+		return o(toInteger());
 	}
 
 	/**
@@ -140,8 +139,8 @@ public class HttpIntegerPart extends HttpPartBean {
 	}
 
 	private static Integer toInteger(String value) {
-		if (e(value))
+		if (ie(value))
 			return null;
-		return parseInt(value, () -> illegalArg("Value ''{0}'' could not be parsed as an integer.", value));
+		return parseInt(value, () -> iaex("Value ''{0}'' could not be parsed as an integer.", value));
 	}
 }

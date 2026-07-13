@@ -17,7 +17,7 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -187,7 +187,7 @@ class MediaRanges_FindMatch_Test extends TestBase {
 	void a02_reversed(Input input) throws Exception {
 		var a = accept(input.accept);
 		var mt = Json5Parser.DEFAULT.parse(input.mediaTypes, MediaType[].class);
-		Collections.reverse(l(mt));
+		Collections.reverse(fixedSizeList(mt));  // Zero-copy view so the reversal mutates the backing mt array.
 		var r = a.match(l(mt));
 		var expected2 = input.expectedReverse == -1 ? -1 : mt.length-input.expectedReverse-1;
 		assertEquals(expected2, r);

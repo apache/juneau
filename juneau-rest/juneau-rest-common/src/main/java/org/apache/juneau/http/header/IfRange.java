@@ -18,8 +18,7 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -84,7 +83,7 @@ public class IfRange extends HttpHeaderBean {
 			this.zonedValue = null;
 		} else {
 			this.etagValue = null;
-			this.zonedValue = e(value) ? null : parseHttpDate(value);
+			this.zonedValue = ie(value) ? null : parseHttpDate(value);
 		}
 		this.supplier = null;
 	}
@@ -119,9 +118,9 @@ public class IfRange extends HttpHeaderBean {
 	public Optional<EntityTag> asEntityTag() {
 		if (nn(supplier)) {
 			var o = supplier.get();
-			return opt(o instanceof EntityTag o2 ? o2 : null);
+			return o(o instanceof EntityTag o2 ? o2 : null);
 		}
-		return opt(etagValue);
+		return o(etagValue);
 	}
 
 	/**
@@ -130,9 +129,9 @@ public class IfRange extends HttpHeaderBean {
 	public Optional<ZonedDateTime> asZonedDateTime() {
 		if (nn(supplier)) {
 			var o = supplier.get();
-			return opt(o instanceof ZonedDateTime o2 ? o2 : null);
+			return o(o instanceof ZonedDateTime o2 ? o2 : null);
 		}
-		return opt(zonedValue);
+		return o(zonedValue);
 	}
 
 	@Override /* HttpHeader */

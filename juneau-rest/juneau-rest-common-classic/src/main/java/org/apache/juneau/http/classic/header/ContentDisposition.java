@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.function.*;
 
@@ -52,7 +52,7 @@ import org.apache.juneau.http.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -84,11 +84,11 @@ public class ContentDisposition extends BasicStringRangesHeader {
 	 */
 	public static ContentDisposition attachment(String filename) {
 		if (filename == null || isBlank(filename))
-			throw illegalArg("Attachment filename must not be null or blank.");
+			throw iaex("Attachment filename must not be null or blank.");
 		for (var i = 0; i < filename.length(); i++) {
 			var c = filename.charAt(i);
 			if (c == '\r' || c == '\n')
-				throw illegalArg("Attachment filename must not contain CR or LF characters.");
+				throw iaex("Attachment filename must not contain CR or LF characters.");
 		}
 		var escaped = escapeFilenameForQuotedString(filename);
 		return ContentDisposition.of("attachment; filename=\"" + escaped + "\"");

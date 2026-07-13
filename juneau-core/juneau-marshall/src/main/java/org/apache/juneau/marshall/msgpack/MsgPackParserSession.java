@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.msgpack;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.msgpack.DataType.*;
 
 import java.io.*;
@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackSupport">MessagePack Basics</a>
 
  * </ul>
  */
@@ -197,7 +197,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)opt(parseAnything(eType.getElementType(), is, outer, pMeta));
+			return (T)o(parseAnything(eType.getElementType(), is, outer, pMeta));
 
 		setCurrentClass(sType);
 

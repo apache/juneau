@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Supported wire formats for {@link Boolean} / <code><jk>boolean</jk></code> values.
@@ -179,14 +179,14 @@ public enum BooleanFormat {
 	 */
 	public static boolean parse(String value, BooleanFormat format) {
 		if (value == null)
-			throw illegalArg("Cannot parse a null value as Boolean");
+			throw iaex("Cannot parse a null value as Boolean");
 		var s = value.trim();
 		if (s.isEmpty())
-			throw illegalArg("Cannot parse a blank value as Boolean");
+			throw iaex("Cannot parse a blank value as Boolean");
 		return switch (s.toLowerCase()) {
 			case "true", "1", "yes", "y", "on" -> true;
 			case "false", "0", "no", "n", "off" -> false;
-			default -> throw illegalArg("Invalid boolean value ''{0}'' for format {1}", value, format);
+			default -> throw iaex("Invalid boolean value ''{0}'' for format {1}", value, format);
 		};
 	}
 

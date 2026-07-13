@@ -17,10 +17,9 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
  * Represents a validator value.
@@ -33,7 +32,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
@@ -81,7 +80,7 @@ public class EntityTag {
 			if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"')
 				value = value.substring(1, value.length() - 1);
 			else
-				throw illegalArg("Invalid value for entity-tag: [{0}]", (isWeak ? ("W/" + value) : value));
+				throw iaex("Invalid value for entity-tag: [{0}]", (isWeak ? ("W/" + value) : value));
 		}
 		this.value = value;
 

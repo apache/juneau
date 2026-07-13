@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.

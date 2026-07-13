@@ -18,8 +18,8 @@ package org.apache.juneau.marshall.yaml;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -215,7 +215,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)opt(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T)o(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
 
@@ -452,7 +452,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		} else if (sType.isNumber()) {
 			return StringUtils.parseNumber(s, (Class<? extends Number>)sType.inner());
 		} else if (sType.isBoolean()) {
-			return bool(s);
+			return b(s);
 		} else if (sType.isDate()) {
 			return parseDate(s, sType);
 		} else if (sType.isCalendar()) {

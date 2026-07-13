@@ -16,16 +16,16 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests for {@link ResourceBundleUtils}.

@@ -20,9 +20,9 @@ import java.util.*;
 
 import org.apache.juneau.rest.server.management.*;
 import org.slf4j.*;
+import org.slf4j.Logger;
 
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.*;
 
 /**
  * {@link LogBackend} adapter for <a class="doclink" href="https://logback.qos.ch">Logback</a> (the SLF4J native

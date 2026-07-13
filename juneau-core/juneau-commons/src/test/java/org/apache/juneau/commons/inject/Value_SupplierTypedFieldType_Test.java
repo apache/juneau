@@ -23,9 +23,9 @@ import java.nio.file.*;
 import java.time.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Verifies the typed {@code @Value Supplier<T>} autodetect contract — the extension of the bare

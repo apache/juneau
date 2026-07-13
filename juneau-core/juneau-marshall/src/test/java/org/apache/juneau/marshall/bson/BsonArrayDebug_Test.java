@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.bson;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.*;

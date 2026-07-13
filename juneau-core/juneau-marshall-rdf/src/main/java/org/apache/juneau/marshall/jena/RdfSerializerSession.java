@@ -19,9 +19,8 @@ package org.apache.juneau.marshall.jena;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.jena.Constants.*;
 
 import java.io.*;
@@ -91,7 +90,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 	 * Maps RDF writer names to property prefixes that apply to them.
 	 */
 	// @formatter:off
-	static final Map<String,String> LANG_PROP_MAP = mapb(String.class, String.class)
+	static final Map<String,String> LANG_PROP_MAP = mb(String.class, String.class)
 		.unmodifiable()
 		.add("RDF/XML", "rdfXml.")
 		.add("RDF/XML-ABBREV", "rdfXml.")
@@ -189,7 +188,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		String s = null;
 		if (nn(uri))
 			s = uri.toString();
-		if (e(s) && nn(uri2)) // HTT - all callers pass uri2=null; uri2 fallback is dead
+		if (ie(s) && nn(uri2)) // HTT - all callers pass uri2=null; uri2 fallback is dead
 			s = uri2.toString();
 		if (s == null)
 			return null;

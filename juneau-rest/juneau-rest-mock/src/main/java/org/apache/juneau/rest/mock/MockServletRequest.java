@@ -19,11 +19,10 @@ package org.apache.juneau.rest.mock;
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.HttpHeaders.*;
 
 import java.io.*;
@@ -41,7 +40,7 @@ import jakarta.servlet.http.*;
  * A mutable implementation of {@link HttpServletRequest} for mocking purposes.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -375,7 +374,7 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* Overridden from HttpServletRequest */
 	public int getIntHeader(String name) {
 		var s = getHeader(name);
-		return e(s) ? 0 : Integer.parseInt(s);
+		return ie(s) ? 0 : Integer.parseInt(s);
 	}
 
 	@Override /* Overridden from HttpServletRequest */
@@ -440,12 +439,12 @@ public class MockServletRequest implements HttpServletRequest {
 	public String getPathInfo() {
 		if (pathInfo == null) {
 			pathInfo = getRequestURI();
-			if (ne(contextPath))
+			if (ine(contextPath))
 				pathInfo = pathInfo.substring(contextPath.length());
-			if (ne(servletPath))
+			if (ine(servletPath))
 				pathInfo = pathInfo.substring(servletPath.length());
 		}
-		return nullIfEmpty(urlDecode(pathInfo));
+		return nie(urlDecode(pathInfo));
 	}
 
 	@Override /* Overridden from HttpServletRequest */
@@ -732,7 +731,7 @@ public class MockServletRequest implements HttpServletRequest {
 	 * @return This object.
 	 */
 	public MockServletRequest pathVars(String...pairs) {
-		return pathVars(mapb(String.class, String.class).addPairs((Object[])pairs).build());
+		return pathVars(mb(String.class, String.class).addPairs((Object[])pairs).build());
 	}
 
 	/**

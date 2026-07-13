@@ -23,7 +23,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
  * An implementation of {@link StatusLine} that adds assertions methods.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 @SuppressWarnings({

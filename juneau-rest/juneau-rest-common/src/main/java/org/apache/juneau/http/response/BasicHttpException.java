@@ -17,7 +17,7 @@
 package org.apache.juneau.http.response;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;

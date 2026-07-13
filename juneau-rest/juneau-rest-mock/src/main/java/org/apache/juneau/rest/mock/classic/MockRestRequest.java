@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.mock.classic;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.security.*;
@@ -46,7 +47,7 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
  */
 @SuppressWarnings({

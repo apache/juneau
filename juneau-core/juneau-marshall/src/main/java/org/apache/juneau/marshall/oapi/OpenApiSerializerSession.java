@@ -19,8 +19,9 @@ package org.apache.juneau.marshall.oapi;
 import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
 import static org.apache.juneau.commons.httppart.HttpPartFormat.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -45,7 +46,7 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi Basics</a>
 
  * </ul>
  */
@@ -196,7 +197,7 @@ public class OpenApiSerializerSession extends UonSerializerSession {
 				type = getClassMetaForObject(value);
 		}
 
-		schema = firstNonNull(schema, DEFAULT_SCHEMA);
+		schema = coalesce(schema, DEFAULT_SCHEMA);
 
 		HttpPartDataType t = schema.getType(type);
 

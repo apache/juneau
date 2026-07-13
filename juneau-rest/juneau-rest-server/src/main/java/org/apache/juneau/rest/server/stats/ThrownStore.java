@@ -19,7 +19,8 @@ package org.apache.juneau.rest.server.stats;
 import static java.util.Comparator.*;
 import static java.util.stream.Collectors.toSet;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -193,10 +194,10 @@ public class ThrownStore {
 	 * @param builder The builder for this object.
 	 */
 	public ThrownStore(Builder builder) {
-		this.parent = opt(builder.parent);
+		this.parent = o(builder.parent);
 		this.beanStore = builder.beanStore();
 
-		this.statsImplClass = firstNonNull(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
+		this.statsImplClass = coalesce(builder.statsImplClass, parent.isPresent() ? parent.get().statsImplClass : null, null);
 
 		Set<String> s = null;
 		if (nn(builder.ignoreClasses))
@@ -236,7 +237,7 @@ public class ThrownStore {
 	 */
 	public Optional<ThrownStats> getStats(long hash) {
 		ThrownStats s = db.get(hash);
-		return opt(s == null ? null : ThrownStats.copy(s));
+		return o(s == null ? null : ThrownStats.copy(s));
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.json;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.*;
@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.*;
  * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
 
  * </ul>
  */
@@ -44,7 +44,7 @@ public class JsonClassMeta extends ExtendedClassMeta {
 		super(cm);
 
 		var wrapperAttr2 = Holder.<String>empty();
-		cm.forEachAnnotation(Json.class, x -> ne(x.wrapperAttr()), x -> wrapperAttr2.set(x.wrapperAttr()));
+		cm.forEachAnnotation(Json.class, x -> ine(x.wrapperAttr()), x -> wrapperAttr2.set(x.wrapperAttr()));
 		this.wrapperAttr = wrapperAttr2.orElse(null);
 	}
 

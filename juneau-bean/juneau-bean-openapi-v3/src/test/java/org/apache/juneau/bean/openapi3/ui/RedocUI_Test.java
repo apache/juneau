@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.openapi3.ui;
 
 import static org.apache.juneau.bean.openapi3.OpenApiBuilder.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

@@ -18,7 +18,6 @@ package org.apache.juneau.commons.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.commons.TestUtils.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,8 +26,8 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S115", // Constants use UPPER_snakeCase naming convention

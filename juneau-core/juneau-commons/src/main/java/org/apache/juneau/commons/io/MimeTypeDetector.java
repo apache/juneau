@@ -19,7 +19,7 @@ package org.apache.juneau.commons.io;
 import static org.apache.juneau.commons.collections.CacheMode.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.file.*;
 import java.util.*;
@@ -166,11 +166,11 @@ public class MimeTypeDetector {
 		})
 		public Builder addTypes(String...mimeTypesLines) {
 			for (var input : mimeTypesLines) {
-				if (ne(input)) {
+				if (ine(input)) {
 					// Split on newlines to handle both individual lines and file contents
 					var lines = input.split("\\r?\\n");
 					for (var line : lines) {
-						if (ne(line) && ! line.trim().startsWith("#")) {
+						if (ine(line) && ! line.trim().startsWith("#")) {
 							var parts = line.trim().split("\\s+");
 							if (parts.length >= 2) {
 								var mimeType = parts[0];
@@ -332,7 +332,7 @@ public class MimeTypeDetector {
 	 * @return The MIME type of the file, or the default type if unknown.
 	 */
 	public String getContentType(String fileName) {
-		if (e(fileName)) {
+		if (ie(fileName)) {
 			return defaultType;
 		}
 
@@ -359,7 +359,7 @@ public class MimeTypeDetector {
 				var path = Paths.get(fileName);
 				if (Files.exists(path)) {
 					var contentType = Files.probeContentType(path);
-					if (ne(contentType)) {
+					if (ine(contentType)) {
 						return contentType;
 					}
 			}
@@ -370,7 +370,7 @@ public class MimeTypeDetector {
 
 		// Fall back to extension-based detection
 		var extension = getFileExtension(fileName);
-		if (ne(extension)) {
+		if (ine(extension)) {
 			var mimeType = extMap.get(extension.toLowerCase());
 			if (nn(mimeType)) {
 				return mimeType;

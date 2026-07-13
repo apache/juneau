@@ -15,15 +15,14 @@
  * limitations under the License.
  */
 package org.apache.juneau.http.classic.header;
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Category of headers that consist of a single boolean value.
@@ -35,7 +34,7 @@ import org.apache.juneau.http.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -125,7 +124,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 */
 	public BasicBooleanHeader(String name, String value) {
 		super(name, value);
-		this.value = e(value) ? null : bool(value);
+		this.value = ie(value) ? null : b(value);
 		this.supplier = null;
 	}
 
@@ -153,7 +152,7 @@ public class BasicBooleanHeader extends BasicHeader {
 	 * @return The header value as a {@link Boolean} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return opt(value());
+		return o(value());
 	}
 
 	/**

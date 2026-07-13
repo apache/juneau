@@ -35,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
  * The requested resource is capable of generating only content not acceptable according to the Accept headers sent in the request.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude

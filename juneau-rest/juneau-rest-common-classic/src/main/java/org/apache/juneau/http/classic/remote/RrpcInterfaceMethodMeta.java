@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http.classic.remote;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 

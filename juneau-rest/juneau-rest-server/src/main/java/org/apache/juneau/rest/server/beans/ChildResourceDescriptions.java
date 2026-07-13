@@ -78,7 +78,7 @@ public class ChildResourceDescriptions extends ResourceDescriptions {
 			try {
 				title = e.getValue().getSwagger(req.getLocale()).map(x -> x == null ? null : x.getInfo()).map(x -> x == null ? null : x.getTitle()).orElse(null);
 			} catch (Exception e1) {
-				title = lm(e1);
+				title = localizedMessage(e1);
 			}
 			add(new ResourceDescription(e.getKey(), title));
 		}

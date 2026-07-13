@@ -18,12 +18,11 @@ package org.apache.juneau.marshall.prototext;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
-import java.io.*;
-
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -89,7 +88,7 @@ import org.apache.juneau.marshall.stream.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Prototext">Protobuf Text Format Basics</a>
  * 	<li class='link'><a class="doclink" href="https://protobuf.dev/reference/protobuf/textformat-spec">Protobuf Text Format Specification</a>
  * </ul>
  */

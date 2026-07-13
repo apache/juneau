@@ -18,8 +18,8 @@ package org.apache.juneau.http.header;
 
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -93,11 +93,11 @@ public class HttpCsvHeader extends HttpHeaderBean {
 	}
 
 	public Optional<String[]> asArray() {
-		return opt(copyOf(csvTokens()));
+		return o(copyOf(csvTokens()));
 	}
 
 	public Optional<List<String>> asList() {
-		return opt(u(l(csvTokens())));
+		return o(u(l(csvTokens())));
 	}
 
 	public boolean contains(String val) {

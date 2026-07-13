@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /** Tests for {@link RandomFunctions}. Statistical assertions are intentionally weak. */
 class RandomFunctions_Test extends TestBase {

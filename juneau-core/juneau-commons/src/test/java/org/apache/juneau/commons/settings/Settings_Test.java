@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -25,9 +25,9 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S4144",
@@ -674,7 +674,7 @@ class Settings_Test extends TestBase {
 		// Test the addSource(FunctionalPropertySource) overload
 		var source = (FunctionalPropertySource) name -> {
 			var value = System.getProperty(name);
-			return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(value));
+			return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(value));
 		};
 		System.setProperty(TEST_PROP, "system-value");
 		var settings = Settings.create()

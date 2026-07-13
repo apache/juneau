@@ -19,8 +19,8 @@ package org.apache.juneau.marshall;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.util.*;
@@ -121,7 +121,7 @@ public class MarshalledFilter implements BeanFilter {
 		public Builder applyAnnotations(List<Marshalled> annotations) {
 
 			annotations.forEach(x -> {
-				if (ne(x.typeName()))
+				if (ine(x.typeName()))
 					typeName(x.typeName());
 				if (isNotVoid(x.interceptor()))
 					interceptor(x.interceptor());
@@ -129,7 +129,7 @@ public class MarshalledFilter implements BeanFilter {
 					implClass(x.implClass());
 				if (isNotEmptyArray(x.dictionary()))
 					dictionary(x.dictionary());
-				if (ne(x.example()))
+				if (ine(x.example()))
 					example(x.example());
 			});
 			return this;

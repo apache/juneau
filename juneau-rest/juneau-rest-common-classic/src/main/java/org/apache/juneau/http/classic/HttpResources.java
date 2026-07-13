@@ -30,7 +30,7 @@ import org.apache.juneau.http.classic.resource.*;
  * Resources are simply {@link HttpEntity} objects with arbitrary additional headers.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 public class HttpResources {

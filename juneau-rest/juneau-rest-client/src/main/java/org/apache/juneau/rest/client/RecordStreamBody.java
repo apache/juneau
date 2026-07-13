@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -102,7 +102,7 @@ public final class RecordStreamBody implements HttpBody {
 		assertArgNotNull("serializer", serializer);
 		assertArgNotNull("consumer", consumer);
 		if (! (serializer instanceof RecordWritable))
-			throw illegalArg("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
+			throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
 		return new RecordStreamBody(serializer, consumer, RecordWriter.class, false);
 	}
 
@@ -129,7 +129,7 @@ public final class RecordStreamBody implements HttpBody {
 		assertArgNotNull("serializer", serializer);
 		assertArgNotNull("consumer", consumer);
 		if (! (serializer instanceof TokenWritable))
-			throw illegalArg("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
+			throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
 		return new RecordStreamBody(serializer, consumer, TokenWriter.class, false);
 	}
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.urlencoding;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 

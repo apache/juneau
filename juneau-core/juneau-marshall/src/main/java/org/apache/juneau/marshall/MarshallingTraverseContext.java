@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import org.apache.juneau.commons.collections.*;
 

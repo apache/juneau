@@ -17,8 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -660,7 +659,7 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 	public FilteredMap<K,V> addPairs(Object...pairs) {
 		assertArgNotNull(ARG_pairs, pairs);
 		if (pairs.length % 2 != 0)
-			throw illegalArg("Odd number of parameters passed into addPairs()");
+			throw iaex("Odd number of parameters passed into addPairs()");
 		for (var i = 0; i < pairs.length; i += 2)
 			add(pairs[i], pairs[i + 1]);
 		return this;

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -47,9 +47,9 @@ class InMemorySessionStore_Test extends TestBase {
 	}
 
 	private static OidcSession session(String id, String subject, String sid, Instant base) {
-		return new OidcSession(id, subject, opt(sid),
+		return new OidcSession(id, subject, o(sid),
 			new ClaimsPrincipal(subject, Map.of("sub", subject)),
-			Set.of("user"), opte(), base, base.plus(Duration.ofHours(8)));
+			Set.of("user"), oe(), base, base.plus(Duration.ofHours(8)));
 	}
 
 	@Test void a01_createThenLookup_roundTrips() {

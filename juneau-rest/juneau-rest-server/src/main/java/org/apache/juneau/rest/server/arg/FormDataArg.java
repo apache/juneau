@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.arg;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -89,7 +89,7 @@ public class FormDataArg implements RestOpArg {
 		return AP.find(FormData.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> ne(x.def()))
+			.filter(x -> ine(x.def()))
 			.findFirst()
 			.map(FormData::def);
 		// @formatter:on
@@ -140,7 +140,7 @@ public class FormDataArg implements RestOpArg {
 		schemaBuilder.applyAll(FormData.class, pi);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(pi).or(() -> opt(classLevelFormData).filter(f -> ne(f.def())).map(FormData::def)).orElse(null);
+		this.def = findDef(pi).or(() -> o(classLevelFormData).filter(f -> ine(f.def())).map(FormData::def)).orElse(null);
 		this.type = pi.getParameterType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

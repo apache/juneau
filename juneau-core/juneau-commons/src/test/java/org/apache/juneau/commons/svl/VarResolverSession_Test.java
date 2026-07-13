@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Coverage tests for {@link VarResolverSession} — focuses on the previously uncovered branches:

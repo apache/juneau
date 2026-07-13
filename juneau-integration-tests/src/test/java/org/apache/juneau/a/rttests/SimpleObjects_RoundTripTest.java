@@ -17,7 +17,7 @@
 package org.apache.juneau.a.rttests;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -54,7 +54,7 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a02_optional(RoundTrip_Tester t) throws Exception {
-		assertFalse(t.roundTrip(opte()).isPresent());
+		assertFalse(t.roundTrip(oe()).isPresent());
 	}
 
 	@ParameterizedTest
@@ -67,8 +67,8 @@ class SimpleObjects_RoundTripTest extends RoundTripTest_Base {
 	@ParameterizedTest
 	@MethodSource("testers")
 	void a04_optionalContainingString(RoundTrip_Tester t) throws Exception {
-		assertEquals("foobar", t.roundTrip(opt("foobar")).get());
-		assertEquals("", t.roundTrip(opt("")).get());
+		assertEquals("foobar", t.roundTrip(o("foobar")).get());
+		assertEquals("", t.roundTrip(o("")).get());
 	}
 
 	@ParameterizedTest

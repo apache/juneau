@@ -17,7 +17,6 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
-
 import java.beans.*;
 import java.util.*;
 

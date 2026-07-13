@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.bean;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.text.*;
 
@@ -166,7 +165,7 @@ public class LinkString implements Comparable<LinkString> {
 			try {
 				args[i] = OpenApiSerializer.DEFAULT.getSession().serialize(HttpPartType.PATH, null, args[i]);
 			} catch (SchemaValidationException | SerializeException e) { // HTT - requires OpenApiSerializer to throw during default serialization
-				throw toRex(e); // HTT
+				throw rex(e); // HTT
 			}
 		this.uri = java.net.URI.create(f(value, args));
 		return this;

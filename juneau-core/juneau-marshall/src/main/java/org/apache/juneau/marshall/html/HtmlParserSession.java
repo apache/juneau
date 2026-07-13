@@ -19,8 +19,8 @@ package org.apache.juneau.marshall.html;
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.html.HtmlTag.*;
 
 import java.io.*;
@@ -46,7 +46,7 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
 
  * </ul>
  */
@@ -170,8 +170,8 @@ public class HtmlParserSession extends XmlParserSession {
 		if (nn(beanType) && getAnnotationProvider().has(HtmlLink.class, beanType)) {
 			var uriProperty = Holder.<String>empty();
 			var nameProperty = Holder.<String>empty();
-			beanType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-			beanType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+			beanType.forEachAnnotation(HtmlLink.class, x -> ine(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+			beanType.forEachAnnotation(HtmlLink.class, x -> ine(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 			BeanMap<T> m = newBeanMap(beanType.inner());
 			m.put(uriProperty.orElse(""), href);
 			m.put(nameProperty.orElse(""), name);
@@ -204,7 +204,7 @@ public class HtmlParserSession extends XmlParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)opt(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
+			return (T)o(parseAnything(eType.getElementType(), r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 
@@ -784,7 +784,7 @@ public class HtmlParserSession extends XmlParserSession {
 					et = r.next();
 					if (et == CHARACTERS) {
 						String s = r.getText();
-						if (ne(s)) {
+						if (ine(s)) {
 							var c = r.getText().charAt(0);
 							if (c == '\u2003')
 								c = '\t';

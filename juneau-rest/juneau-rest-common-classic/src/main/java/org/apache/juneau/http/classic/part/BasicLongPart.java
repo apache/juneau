@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.http.classic.part;
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -28,7 +27,7 @@ import org.apache.juneau.test.assertions.*;
  * A {@link NameValuePair} that consists of a single long value.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -44,7 +43,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicLongPart of(String name, Long value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
@@ -60,7 +59,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return A new {@link BasicLongPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicLongPart of(String name, Supplier<Long> value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicLongPart(name, value);
 	}
@@ -93,7 +92,7 @@ public class BasicLongPart extends BasicPart {
 	 */
 	public BasicLongPart(String name, String value) {
 		super(name, value);
-		this.value = e(value) ? null : Long.valueOf(value);
+		this.value = ie(value) ? null : Long.valueOf(value);
 		this.supplier = null;
 	}
 
@@ -115,7 +114,7 @@ public class BasicLongPart extends BasicPart {
 	 * @return The part value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return opt(value());
+		return o(value());
 	}
 
 	/**

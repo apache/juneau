@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.stats;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 
@@ -84,7 +84,7 @@ public class MethodInvoker {
 	public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		if (beanStore.hasAllParams(m, o))
 			return invoke(o, beanStore.getParams(m, o));
-		throw illegalArg("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), beanStore.getMissingParams(m, o));
+		throw iaex("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), beanStore.getMissingParams(m, o));
 	}
 
 	/**

@@ -17,7 +17,7 @@
 package org.apache.juneau.http.resource;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -134,7 +134,7 @@ public final class HttpResourceBean implements HttpResource {
 	 * @return A new instance. Never <jk>null</jk>.
 	 */
 	public HttpResourceBean withHeaders(List<HttpHeader> toAdd) {
-		if (e(toAdd))
+		if (ie(toAdd))
 			return this;
 		var newHeaders = new ArrayList<>(headers);
 		for (var h : toAdd)

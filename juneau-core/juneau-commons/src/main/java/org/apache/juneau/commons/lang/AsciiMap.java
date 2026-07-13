@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Stores a Map of ASCII characters to Strings in a quick-lookup array.

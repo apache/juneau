@@ -23,9 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.annotation.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.collections.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S1186", // Empty test method intentional for framework testing

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.conversion;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -80,8 +80,8 @@ public abstract class CachingConverter implements Converter {
 	static <T> T nullDefault(Class<T> type, Class<?>... args) {
 		if (type == Optional.class) {
 			if (args.length > 0)
-				return (T) opt(nullDefault(args[0], Arrays.copyOfRange(args, 1, args.length)));
-			return (T) opte();
+				return (T) o(nullDefault(args[0], Arrays.copyOfRange(args, 1, args.length)));
+			return (T) oe();
 		}
 		if (type == OptionalInt.class)
 			return (T) OptionalInt.empty();

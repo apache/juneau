@@ -17,9 +17,9 @@
 package org.apache.juneau.http.classic.part;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -31,7 +31,7 @@ import org.apache.juneau.test.assertions.*;
  * A {@link NameValuePair} that consists of a comma-delimited list of string values.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -125,7 +125,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as an array wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String[]> asArray() {
-		return opt(copyOf(value()));
+		return o(copyOf(value()));
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class BasicCsvArrayPart extends BasicPart {
 	 * @return The part value as a {@link List} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<List<String>> asList() {
-		return opt(toList());
+		return o(toList());
 	}
 
 	/**

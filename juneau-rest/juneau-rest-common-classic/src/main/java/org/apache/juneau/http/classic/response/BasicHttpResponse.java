@@ -16,11 +16,10 @@
  */
 package org.apache.juneau.http.classic.response;
 
-import static org.apache.juneau.test.assertions.Assertions.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
+import static org.apache.juneau.test.assertions.Assertions.*;
 
 import java.net.*;
 import java.util.*;
@@ -47,7 +46,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @Marshalled(as=MarshalledAs.STRING)
@@ -459,7 +458,7 @@ public class BasicHttpResponse implements HttpResponse {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw unsupportedOp("Bean is read-only");
+			throw uoex("Bean is read-only");
 	}
 
 	/**

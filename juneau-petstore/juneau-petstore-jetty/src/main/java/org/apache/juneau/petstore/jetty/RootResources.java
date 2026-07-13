@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.widget.*;
  * deployment in {@code juneau-petstore-springboot} does not mount it.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview">juneau-petstore</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  *
  * @serial exclude

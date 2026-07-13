@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.lang;
 
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -25,9 +25,9 @@ import java.text.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S5961" // High assertion count acceptable in comprehensive test
@@ -59,7 +59,7 @@ class StringFormat_Test extends TestBase {
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
-			var toPattern = opt(fmt).map(x -> x.toPattern()).orElse(null);
+			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
 			System.out.println("toPattern(): " + toPattern);
 			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
 		}
@@ -78,7 +78,7 @@ class StringFormat_Test extends TestBase {
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
-			var toPattern = opt(fmt).map(x -> x.toPattern()).orElse(null);
+			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
 			System.out.println("toPattern(): " + toPattern);
 			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
 		}
@@ -97,7 +97,7 @@ class StringFormat_Test extends TestBase {
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
-			var toPattern = opt(fmt).map(x -> x.toPattern()).orElse(null);
+			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
 			System.out.println("toPattern(): " + toPattern);
 			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
 		}
@@ -116,7 +116,7 @@ class StringFormat_Test extends TestBase {
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
-			var toPattern = opt(fmt).map(x -> x.toPattern()).orElse(null);
+			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
 			System.out.println("toPattern(): " + toPattern);
 			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
 		}
@@ -134,7 +134,7 @@ class StringFormat_Test extends TestBase {
 		}
 		if (!expected.equals(actual)) {
 			System.out.println("Pattern: " + pattern);
-			var toPattern = opt(fmt).map(x -> x.toPattern()).orElse(null);
+			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
 			System.out.println("toPattern(): " + toPattern);
 			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
 		}

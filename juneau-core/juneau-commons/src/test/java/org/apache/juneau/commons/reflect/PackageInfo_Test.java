@@ -23,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.annotation.*;
 import java.net.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class PackageInfo_Test extends TestBase {
 

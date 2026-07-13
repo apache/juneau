@@ -16,15 +16,14 @@
  */
 package org.apache.juneau.commons.reflect;
 
-import static org.apache.juneau.commons.TestUtils.*;
 import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S117", // Local variable names use underscores for test data

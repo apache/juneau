@@ -17,6 +17,7 @@
 package org.apache.juneau.testutils.pojos;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.math.*;
 import java.util.*;

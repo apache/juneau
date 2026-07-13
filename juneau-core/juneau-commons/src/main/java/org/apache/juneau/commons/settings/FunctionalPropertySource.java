@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.function.*;
 
@@ -38,7 +38,7 @@ public interface FunctionalPropertySource extends PropertySource {
 	static FunctionalPropertySource of(UnaryOperator<String> function) {
 		return name -> {
 			var v = function.apply(name);
-			return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(v));
+			return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(v));
 		};
 	}
 }

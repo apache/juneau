@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.function.*;
 
@@ -141,7 +141,7 @@ public class ContentRange extends HttpStringHeader {
 			assertArgNotNull("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("range unit must not be blank");
+				throw iaex("range unit must not be blank");
 			unit = v;
 			return this;
 		}
@@ -159,9 +159,9 @@ public class ContentRange extends HttpStringHeader {
 		 */
 		public Builder range(long startValue, long endValue) {
 			if (startValue < 0)
-				throw illegalArg("range start must be non-negative: {0}", startValue);
+				throw iaex("range start must be non-negative: {0}", startValue);
 			if (endValue < startValue)
-				throw illegalArg("range end {0} must be >= start {1}", endValue, startValue);
+				throw iaex("range end {0} must be >= start {1}", endValue, startValue);
 			start = startValue;
 			end = endValue;
 			rangeUnsatisfied = false;
@@ -192,7 +192,7 @@ public class ContentRange extends HttpStringHeader {
 		 */
 		public Builder length(long value) {
 			if (value < 0)
-				throw illegalArg("complete-length must be non-negative: {0}", value);
+				throw iaex("complete-length must be non-negative: {0}", value);
 			completeLength = value;
 			lengthUnknown = false;
 			return this;

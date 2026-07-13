@@ -18,7 +18,7 @@ package org.apache.juneau.http.classic.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -36,7 +36,7 @@ import org.apache.juneau.test.assertions.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -109,7 +109,7 @@ public class BasicDateHeader extends BasicHeader {
 	 */
 	public BasicDateHeader(String name, String value) {
 		super(name, value);
-		this.value = e(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.value = ie(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 		this.supplier = null;
 	}
 
@@ -171,7 +171,7 @@ public class BasicDateHeader extends BasicHeader {
 	 * @return The header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return opt(value());
+		return o(value());
 	}
 
 	@Override /* Overridden from Header */

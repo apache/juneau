@@ -22,15 +22,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.http.client.config.*;
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.httppart.*;
-import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -384,27 +384,27 @@ class Path_Test extends TestBase {
 	public static class F  {
 		@RestGet(path="/")
 		public String a(RequestPathParamList path) {
-			return Utils.f("a: {0}", path.toString());
+			return Shorts.f("a: {0}", path.toString());
 		}
 		@RestGet(path="/*")
 		public String b(RequestPathParamList path) {
-			return Utils.f("b: {0}", path.toString());
+			return Shorts.f("b: {0}", path.toString());
 		}
 		@RestGet(path="/fc")
 		public String c(RequestPathParamList path) {
-			return Utils.f("c: {0}", path.toString());
+			return Shorts.f("c: {0}", path.toString());
 		}
 		@RestGet(path="/fd/{c}/{d}")
 		public String d(RequestPathParamList path) {
-			return Utils.f("d: {0}", path.toString());
+			return Shorts.f("d: {0}", path.toString());
 		}
 		@RestGet(path="/fe/{a}/{b}")
 		public String e(RequestPathParamList path) {
-			return Utils.f("e: {0}", path.toString());
+			return Shorts.f("e: {0}", path.toString());
 		}
 		@RestGet(path="/ff/{c}/{d}/*")
 		public String f(RequestPathParamList path) {
-			return Utils.f("f: {0}", path.toString());
+			return Shorts.f("f: {0}", path.toString());
 		}
 	}
 

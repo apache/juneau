@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http.classic;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -29,7 +29,7 @@ import org.apache.http.message.*;
  * A basic implementation of the {@link StatusLine} interface.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 public class BasicStatusLine implements StatusLine {
@@ -102,7 +102,7 @@ public class BasicStatusLine implements StatusLine {
 	@Override /* Overridden from StatusLine */
 	public String getReasonPhrase() {
 		if (reasonPhrase == null) {
-			ReasonPhraseCatalog rfc = firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
+			ReasonPhraseCatalog rfc = coalesce(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);
 			return rfc.getReason(statusCode, locale);
 		}
 		return reasonPhrase;
@@ -221,6 +221,6 @@ public class BasicStatusLine implements StatusLine {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw unsupportedOp("Bean is read-only");
+			throw uoex("Bean is read-only");
 	}
 }

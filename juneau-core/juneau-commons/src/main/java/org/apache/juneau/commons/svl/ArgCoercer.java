@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -93,10 +93,10 @@ final class ArgCoercer {
 		var variadic = n > 0 && paramTypes[n - 1] == String[].class;
 		var fixedCount = variadic ? n - 1 : n;
 		if (args.size() < fixedCount)
-			throw illegalArg("Function ''{0}'' expected at least {1} arg(s), got {2}",
+			throw iaex("Function ''{0}'' expected at least {1} arg(s), got {2}",
 				fnName, fixedCount, args.size());
 		if (!variadic && args.size() > n)
-			throw illegalArg("Function ''{0}'' expected at most {1} arg(s), got {2}",
+			throw iaex("Function ''{0}'' expected at most {1} arg(s), got {2}",
 				fnName, n, args.size());
 
 		var out = new Object[n];
@@ -146,7 +146,7 @@ final class ArgCoercer {
 			if (target == Object.class)
 				return s;
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw illegalArg("Function ''{0}'' arg {1}: cannot coerce ''{2}'' to {3}",
+			throw iaex("Function ''{0}'' arg {1}: cannot coerce ''{2}'' to {3}",
 				fnName, argIndex, s, target.getSimpleName());
 		}
 		// Unrecognized target type: passthrough as String.
@@ -163,7 +163,7 @@ final class ArgCoercer {
 			return true;
 		if (t.isEmpty() || t.equalsIgnoreCase("false") || t.equals("0") || t.equalsIgnoreCase("no") || t.equalsIgnoreCase("off"))
 			return false;
-		throw illegalArg("Function ''{0}'' arg {1}: cannot coerce ''{2}'' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)",
+		throw iaex("Function ''{0}'' arg {1}: cannot coerce ''{2}'' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)",
 			fnName, argIndex, s);
 	}
 
@@ -231,7 +231,7 @@ final class ArgCoercer {
 				i++;
 			if (i < len) {
 				if (body.charAt(i) != ',')
-					throw illegalArg("Function ''{0}'' arg {1}: malformed JSON array near offset {2}",
+					throw iaex("Function ''{0}'' arg {1}: malformed JSON array near offset {2}",
 						fnName, argIndex, i);
 				i++;
 			}

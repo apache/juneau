@@ -27,14 +27,14 @@ import org.junit.jupiter.api.function.*;
 /**
  * Test utility class for juneau-commons tests.
  *
- * <p>Extends {@link Utils} to include test-only assertion helpers.
+ * <p>Extends {@link Shorts} to include test-only assertion helpers.
  * Use {@code import static org.apache.juneau.commons.TestUtils.*;} to pull in
- * all utility methods from both this class and the inherited {@link Utils} methods.</p>
+ * all utility methods from both this class and the inherited {@link Shorts} methods.</p>
  */
 @SuppressWarnings({
 	"java:S1172"  // Test utility methods may have unused parameters for consistent signatures
 })
-public class TestUtils extends Utils {
+public class TestUtils extends Shorts {
 
 	/**
 	 * Asserts that the given executable throws an exception of the expected type

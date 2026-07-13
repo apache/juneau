@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -101,7 +101,7 @@ public final class ResponseHeader {
 	 * @return An optional containing the first header value, or empty if absent.
 	 */
 	public Optional<String> asOptional() {
-		return opt(getValue());
+		return o(getValue());
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.markdown;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -310,7 +310,7 @@ class MarkdownSerializer_Test {
 	@Test void k06_serializeOptionalEmptyInBean() {
 		// Optional.empty() property → serializeAnything Optional.isEmpty() branch (null path)
 		var bean = new KOptional();
-		bean.name = opte();
+		bean.name = oe();
 		var md = MarkdownSerializer.DEFAULT.serialize(bean);
 		assertNotNull(md);
 		// Empty Optional renders as null value (null marker or omitted key)
@@ -472,14 +472,14 @@ class MarkdownSerializer_Test {
 
 	@Test void p02_serializeOptionalPresent() {
 		// Optional.of("hello") as root → serializeAnything isOptional=true, isEmpty=false (lines 172, 174 false)
-		var md = MarkdownSerializer.DEFAULT.serialize(opt("hello"));
+		var md = MarkdownSerializer.DEFAULT.serialize(o("hello"));
 		assertNotNull(md);
 		assertTrue(md.contains("hello"), "Expected value in output: " + md);
 	}
 
 	@Test void p03_serializeOptionalEmpty() {
 		// Optional.empty() as root → serializeAnything isOptional=true, isEmpty=true (lines 172, 174 true)
-		var md = MarkdownSerializer.DEFAULT.serialize(opte());
+		var md = MarkdownSerializer.DEFAULT.serialize(oe());
 		assertNotNull(md);
 		assertTrue(md.contains("*null*"), "Expected null marker: " + md);
 	}

@@ -17,9 +17,8 @@
 package org.apache.juneau.http.classic.header;
 
 import static java.time.format.DateTimeFormatter.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.time.*;
 import java.util.*;
@@ -64,7 +63,7 @@ import org.apache.juneau.http.*;
  * In the latter example, the delay is 2 minutes.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -199,9 +198,9 @@ public class RetryAfter extends BasicDateHeader {
 	public Optional<Integer> asInteger() {
 		if (nn(supplier)) {
 			Object o = supplier.get();
-			return opt(o instanceof Integer o2 ? o2 : null);
+			return o(o instanceof Integer o2 ? o2 : null);
 		}
-		return opt(value);
+		return o(value);
 	}
 
 	@Override /* Overridden from Header */

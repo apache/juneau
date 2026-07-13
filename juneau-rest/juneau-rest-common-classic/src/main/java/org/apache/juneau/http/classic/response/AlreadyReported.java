@@ -35,7 +35,7 @@ import org.apache.juneau.http.classic.header.*;
  * The members of a DAV binding have already been enumerated in a preceding part of the (multistatus) response, and are not being included again.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @Response

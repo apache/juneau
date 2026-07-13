@@ -18,9 +18,10 @@ package org.apache.juneau.marshall.serializer;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -941,7 +942,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Object serialize(Object o) throws SerializeException {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**
@@ -1003,7 +1004,7 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public String serializeToString(Object o) throws SerializeException {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**
@@ -1525,9 +1526,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		if (nn(listener))
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
-		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t));
+		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t));
 		if (! isIgnoreInvocationExceptionsOnGetters())
-			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t))
+			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t))
 				.initCause(t);
 	}
 

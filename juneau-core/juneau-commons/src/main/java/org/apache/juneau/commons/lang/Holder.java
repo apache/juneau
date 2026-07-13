@@ -17,13 +17,14 @@
 package org.apache.juneau.commons.lang;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * A generic mutable value wrapper.
@@ -351,7 +352,7 @@ public class Holder<T> {
 	}
 
 	/**
-	 * Checks if the current value equals the specified value using {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)}.
+	 * Checks if the current value equals the specified value using {@link Shorts#eq(Object, Object)}.
 	 *
 	 * <p>
 	 * This method uses {@code eq()} for equality comparison, which handles <jk>null</jk> values safely
@@ -375,7 +376,7 @@ public class Holder<T> {
 	 * </p>
 	 *
 	 * @param other The value to compare with. Can be <jk>null</jk>.
-	 * @return <jk>true</jk> if the values are equal according to {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)}.
+	 * @return <jk>true</jk> if the values are equal according to {@link Shorts#eq(Object, Object)}.
 	 */
 	public boolean is(T other) {
 		return eq(t, other);

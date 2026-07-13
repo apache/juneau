@@ -17,10 +17,10 @@
 package org.apache.juneau.rest.server.swagger;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.server.RestOpAnnotation.*;
 import static org.apache.juneau.rest.server.httppart.RestPartType.*;
 
@@ -163,11 +163,11 @@ public class BasicSwaggerProviderSession {
 	}
 
 	private static MarshalledList nullIfEmpty(MarshalledList l) {
-		return e(l) ? null : l;
+		return ie(l) ? null : l;
 	}
 
 	private static MarshalledMap nullIfEmpty(MarshalledMap m) {
-		return e(m) ? null : m;
+		return ie(m) ? null : m;
 	}
 
 	static String joinnl(String[]...s) {
@@ -231,9 +231,9 @@ public class BasicSwaggerProviderSession {
 
 		var ap = this.context.getMarshallingContext().getAnnotationProvider();
 
-		Predicate<String> ne = Utils::ne;
-		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Collection<?>> nec = Shorts::ine;
+		Predicate<Map<?,?>> nem = Shorts::ine;
 
 		// Load swagger JSON from classpath.
 		var omSwagger = Json5.DEFAULT.to(is, Json5Map.class);
@@ -747,7 +747,7 @@ public class BasicSwaggerProviderSession {
 						// @formatter:on
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {
-						LOG.warning("Could not serialize to media type [{}]: {}", mt, lm(e));  // NOT DEBUG
+						LOG.warning("Could not serialize to media type [{}]: {}", mt, localizedMessage(e));  // NOT DEBUG
 					}
 				}
 			}
@@ -792,7 +792,7 @@ public class BasicSwaggerProviderSession {
 	@SafeVarargs
 	private static final <T> T firstNonEmpty(T...t) {
 		for (var oo : t)
-			if (ne(oo))
+			if (ine(oo))
 				return oo;
 		return null;
 	}
@@ -801,7 +801,7 @@ public class BasicSwaggerProviderSession {
 	 * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.
 	 */
 	private static MarshalledMap fixSwaggerExtensions(MarshalledMap om) {
-		Predicate<Object> nn = Utils::nn;
+		Predicate<Object> nn = Shorts::nn;
 		// @formatter:off
 		om
 			.appendIf(nn, SWAGGER_discriminator, om.remove(JSONSCHEMA_x_discriminator))
@@ -873,7 +873,7 @@ public class BasicSwaggerProviderSession {
 		if (ExternalDocsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<String> ne = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		return om
 			.appendIf(ne, SWAGGER_description, resolve(a.description()))
@@ -889,7 +889,7 @@ public class BasicSwaggerProviderSession {
 		for (var aa : a) {
 			var name = StringUtils.firstNonEmpty(aa.name(), aa.value());
 			if (isEmpty(name))
-				throw illegalArg("@Header used without name or value.");
+				throw iaex("@Header used without name or value.");
 			merge(om.getMap(name, true), aa.schema());
 		}
 		return om;
@@ -899,11 +899,11 @@ public class BasicSwaggerProviderSession {
 		if (ItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<String> ne = Utils::ne;
-		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::nm1;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Collection<?>> nec = Shorts::ine;
+		Predicate<Map<?,?>> nem = Shorts::ine;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = Shorts::nm1;
 		// @formatter:off
 		return om
 			.appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())
@@ -932,7 +932,7 @@ public class BasicSwaggerProviderSession {
 		if (ResponseAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<Map<?,?>> nem = Utils::ne;
+		Predicate<Map<?,?>> nem = Shorts::ine;
 		if (! SchemaAnnotation.empty(a.schema()))
 			merge(om, a.schema());
 		// @formatter:off
@@ -952,11 +952,11 @@ public class BasicSwaggerProviderSession {
 			if (SchemaAnnotation.empty(a))
 				return om;
 			om = newMap(om);
-			Predicate<String> ne = Utils::ne;
-			Predicate<Collection<?>> nec = Utils::ne;
-			Predicate<Map<?,?>> nem = Utils::ne;
-			Predicate<Boolean> nf = Utils::isTrue;
-			Predicate<Long> nm1 = Utils::nm1;
+			Predicate<String> ne = Shorts::ine;
+			Predicate<Collection<?>> nec = Shorts::ine;
+			Predicate<Map<?,?>> nem = Shorts::ine;
+			Predicate<Boolean> nf = ObjectUtils::isTrue;
+			Predicate<Long> nm1 = Shorts::nm1;
 			// @formatter:off
 			return om
 				.appendIf(ne, SWAGGER_allOf, joinnl(a.allOf()))
@@ -992,7 +992,7 @@ public class BasicSwaggerProviderSession {
 			;
 			// @formatter:on
 		} catch (ParseException e) {
-			throw illegalArg(e);
+			throw iaex(e);
 		}
 	}
 
@@ -1000,10 +1000,10 @@ public class BasicSwaggerProviderSession {
 		if (SubItemsAnnotation.empty(a))
 			return om;
 		om = newMap(om);
-		Predicate<String> ne = Utils::ne;
-		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::nm1;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Collection<?>> nec = Shorts::ine;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = Shorts::nm1;
 		// @formatter:off
 		return om
 			.appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())
@@ -1099,7 +1099,7 @@ public class BasicSwaggerProviderSession {
 
 	private static MarshalledMap pushupSchemaFields(RestPartType type, MarshalledMap param, MarshalledMap schema) {
 		// @formatter:off
-		Predicate<Object> ne = Utils::ne;
+		Predicate<Object> ne = Shorts::ine;
 		if (nn(schema) && ! schema.isEmpty()) {
 			if (type == BODY || type == RESPONSE) {
 				param
@@ -1210,7 +1210,7 @@ public class BasicSwaggerProviderSession {
 	private MarshalledMap toMap(Contact a) {
 		if (ContactAnnotation.empty(a))
 			return null;
-		Predicate<String> ne = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		var om = Json5Map.create()
 			.appendIf(ne, SWAGGER_name, resolve(a.name()))
@@ -1223,7 +1223,7 @@ public class BasicSwaggerProviderSession {
 	private MarshalledMap toMap(ExternalDocs a) {
 		if (ExternalDocsAnnotation.empty(a))
 			return null;
-		Predicate<String> ne = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		var om = Json5Map.create()
 			.appendIf(ne, SWAGGER_description, resolve(joinnl(a.description())))
@@ -1235,7 +1235,7 @@ public class BasicSwaggerProviderSession {
 	private MarshalledMap toMap(License a) {
 		if (LicenseAnnotation.empty(a))
 			return null;
-		Predicate<String> ne = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		var om = Json5Map.create()
 			.appendIf(ne, SWAGGER_name, resolve(a.name()))
@@ -1246,8 +1246,8 @@ public class BasicSwaggerProviderSession {
 
 	private MarshalledMap toMap(Tag a) {
 		var om = Json5Map.create();
-		Predicate<String> ne = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Map<?,?>> nem = Shorts::ine;
 		// @formatter:off
 		om
 			.appendIf(ne, SWAGGER_name, resolve(a.name()))

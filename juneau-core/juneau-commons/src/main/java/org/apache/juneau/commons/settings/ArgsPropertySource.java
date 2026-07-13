@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.function.*;
 
@@ -49,7 +49,7 @@ public class ArgsPropertySource implements PropertySource {
 
 	public static Args createDefaultArgs() {
 		var s = System.getProperty("sun.java.command");
-		if (ne(s)) {
+		if (ine(s)) {
 			var i = s.indexOf(' ');
 			return new Args(i == -1 ? "" : s.substring(i + 1));
 		}
@@ -70,7 +70,7 @@ public class ArgsPropertySource implements PropertySource {
 		}
 		var values = args.getAll(name);
 		if (! values.isEmpty())
-			return PropertyLookupResult.present(opt(String.join(",", values)));
+			return PropertyLookupResult.present(o(String.join(",", values)));
 		var v = args.get(name);
 		return v.isPresent() ? PropertyLookupResult.present(v) : PropertyLookupResult.missing();
 	}

@@ -17,13 +17,11 @@
 package org.apache.juneau.commons.logging;
 
 import static java.util.logging.Level.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
-
-import org.apache.juneau.commons.utils.*;
 
 /**
  * Extended logger that provides convenience methods for logging formatted messages.
@@ -35,14 +33,14 @@ import org.apache.juneau.commons.utils.*;
  * <ul>
  * 	<li>Type compatibility - extends Logger for use anywhere a Logger is expected
  * 	<li>Flexibility - can wrap existing logger instances
- * 	<li>Convenience methods for formatted logging using {@link org.apache.juneau.commons.utils.Utils#fs(String, Object...)}
+ * 	<li>Convenience methods for formatted logging using {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
  * </ul>
  *
  * <h5 class='section'>Features:</h5>
  * <ul>
  * 	<li>All standard {@link java.util.logging.Logger} functionality via delegation
  * 	<li>Convenience methods for formatted logging at all log levels
- * 	<li>Lazy evaluation of formatted messages using {@link Utils#fs(String, Object...)}
+ * 	<li>Lazy evaluation of formatted messages using {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
  * 	<li>Support for both MessageFormat-style and printf-style formatting
  * </ul>
  *
@@ -68,8 +66,8 @@ import org.apache.juneau.commons.utils.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='jc'>{@link org.apache.juneau.commons.utils.Utils#fs(String, Object...)}
- * 	<li class='jc'>{@link org.apache.juneau.commons.utils.Utils#f(String, Object...)}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}
  * 	<li class='jc'>{@link java.util.logging.Logger}
  * </ul>
  */

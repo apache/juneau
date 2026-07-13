@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.arg;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -78,7 +78,7 @@ public class PathRemainderArg implements RestOpArg {
 		return AP.find(PathRemainder.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> ne(x.def()))
+			.filter(x -> ine(x.def()))
 			.findFirst()
 			.map(PathRemainder::def);
 		// @formatter:on

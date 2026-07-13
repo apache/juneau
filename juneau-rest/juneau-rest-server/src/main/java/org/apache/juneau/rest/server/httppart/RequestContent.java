@@ -17,9 +17,9 @@
 package org.apache.juneau.rest.server.httppart;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -395,9 +395,9 @@ public class RequestContent {
 	 */
 	public Optional<ParserMatch> getParserMatch() {
 		if (nn(mediaType) && nn(parser))
-			return opt(new ParserMatch(mediaType, parser));
+			return o(new ParserMatch(mediaType, parser));
 		var mt = getMediaType();
-		return opt(mt).flatMap(parsers::getParserMatch);
+		return o(mt).flatMap(parsers::getParserMatch);
 	}
 
 	/**
@@ -488,7 +488,7 @@ public class RequestContent {
 	private Encoder getEncoder() throws UnsupportedMediaType {
 		if (encoder == null) {
 			var ce = req.getHeaderParam("content-encoding").orElse(null);
-			if (ne(ce)) {
+			if (ine(ce)) {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
@@ -512,7 +512,7 @@ public class RequestContent {
 		} catch (UnsupportedMediaType e) {
 			throw e;
 		} catch (SchemaValidationException e) {
-			throw new BadRequest("Validation failed on request content. " + lm(e));
+			throw new BadRequest("Validation failed on request content. " + localizedMessage(e));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not convert request content content to class type ''{0}''.", cm);
 		} catch (IOException e) {

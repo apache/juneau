@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.test.assertions;
 
+import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

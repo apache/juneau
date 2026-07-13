@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"resource" // NoCloseOutputStream wrappers intentionally not closed in unit tests

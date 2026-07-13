@@ -17,7 +17,7 @@
 package org.apache.juneau.http.classic.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  */
@@ -92,11 +92,11 @@ public class BasicHeaderIterator implements HeaderIterator {
 	 */
 	@Override /* Overridden from HeaderIterator */
 	public void remove() {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+		return Shorts.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 
 	private boolean filter(int index) {

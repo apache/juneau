@@ -18,8 +18,8 @@ package org.apache.juneau.microservice.resources;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -239,7 +239,7 @@ public class LogEntryFormatter extends Formatter {
 			if (c == 1) {
 				msg = '[' + hash + '.' + c + "] " + msg;
 			} else {
-				msg = '[' + hash + '.' + c + "] " + msg + ", " + lm(t);
+				msg = '[' + hash + '.' + c + "] " + msg + ", " + localizedMessage(t);
 				t = null;
 			}
 		}

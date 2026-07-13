@@ -17,8 +17,8 @@
 package org.apache.juneau.marshall.csv;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -156,11 +156,11 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T) opt(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T) o(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		// Read header row
 		var headers = r.readRow();
-		if (e(headers))
+		if (ie(headers))
 			return null;
 
 		Object o = null;
@@ -366,7 +366,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 	 * CSV-specific parsing for byte[] and primitive arrays. Returns null if not applicable.
 	 */
 	private Object parseCsvCellValue(String val, ClassMeta<?> eType) throws ParseException {
-		if (e(val))
+		if (ie(val))
 			return null;
 		if (eType.isByteArray()) {
 			if (byteArrayFormat == CsvByteArrayCellFormat.SEMICOLON_DELIMITED) {

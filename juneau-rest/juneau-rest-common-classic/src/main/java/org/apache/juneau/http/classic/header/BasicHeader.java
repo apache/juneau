@@ -17,7 +17,7 @@
 package org.apache.juneau.http.classic.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -25,9 +25,9 @@ import java.util.function.*;
 
 import org.apache.http.*;
 import org.apache.http.message.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Superclass of all headers defined in this package.
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -106,7 +106,7 @@ public class BasicHeader implements Header, Serializable {
 		"unchecked" // Type erasure requires cast for supplier
 	})
 	public BasicHeader(String name, Object value) {
-		assertArg(Utils.ne(name), "Name cannot be empty on header.");  // NOAI
+		assertArg(Shorts.ine(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;
 		this.value = value instanceof Supplier ? null : value;
 		this.stringValue = s(value);
@@ -126,7 +126,7 @@ public class BasicHeader implements Header, Serializable {
 	 * @throws IllegalArgumentException If name is <jk>null</jk> or empty.
 	 */
 	public BasicHeader(String name, Supplier<Object> value) {
-		assertArg(Utils.ne(name), "Name cannot be empty on header.");  // NOAI
+		assertArg(Shorts.ine(name), "Name cannot be empty on header.");  // NOAI
 		this.name = name;
 		this.value = null;
 		this.stringValue = null;
@@ -181,7 +181,7 @@ public class BasicHeader implements Header, Serializable {
 	 * @return The value of this header as a string, or {@link Optional#empty()} if the value is <jk>null</jk>
 	 */
 	public Optional<String> asString() {
-		return opt(getValue());
+		return o(getValue());
 	}
 
 	@Override /* Overridden from Object */

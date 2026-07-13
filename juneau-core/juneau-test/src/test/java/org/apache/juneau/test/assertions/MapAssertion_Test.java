@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 package org.apache.juneau.test.assertions;
-
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -58,7 +58,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = m("a",1);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).asString().is("{a=1}");
 		test(nil).asString().isNull();
 	}
@@ -74,7 +74,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void bb01_value() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).asValue("a").asInteger().is(1);
 		test(x).asValue("z").asInteger().isNull();
 		test(nil).asValue("a").asInteger().isNull();
@@ -82,7 +82,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void bb02_values() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).asValues("b","a").isHas(2,1);
 		test(x).asValues((String)null).isHas((Integer)null);
 		test(nil).asValues("a","b").isNull();
@@ -90,7 +90,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void bb03_extract() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).asValueMap("a").isString("{a=1}");
 		test(x).asValueMap((String)null).isString("{null=null}");
 		test(nil).asValueMap("a").isNull();
@@ -98,7 +98,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void bb04_size() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).asSize().is(2);
 		test(nil).asSize().isNull();
 	}
@@ -109,7 +109,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = m();
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isExists().isExists();
 		var assertion3 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
@@ -117,7 +117,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void ca02_isNull() {
 		var x = m();
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		assertMap(nil).isNull();
 		var assertion4 = test(x);
 		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
@@ -125,7 +125,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void ca03_isNotNull() {
 		var x = m();
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isNotNull();
 		var assertion5 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
@@ -135,7 +135,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = m(1,2);
 		var x1a = m(1,2);
 		var x2 = m(2,3);
-		var nil = mapn(Integer.class, Integer.class);
+		var nil = nullMap(Integer.class, Integer.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -155,7 +155,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = m(1,2);
 		var x1a = m(1,2);
 		var x2 = m(3,4);
-		var nil = mapn(Integer.class, Integer.class);
+		var nil = nullMap(Integer.class, Integer.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -167,7 +167,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = m(1,2);
 		var x1a = m(1,2);
 		var x2 = m(3,4);
-		var nil = mapn(Integer.class, Integer.class);
+		var nil = nullMap(Integer.class, Integer.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[{3=4}]'.  Actual='{1=2}'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='{1=2}'.");
@@ -178,7 +178,7 @@ class MapAssertion_Test extends TestBase {
 		var x1 = m(1,2);
 		var x1a = m(1,2);
 		var x2 = m(3,4);
-		var nil = mapn(Integer.class, Integer.class);
+		var nil = nullMap(Integer.class, Integer.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -189,7 +189,7 @@ class MapAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = m(1,2);
 		var x1a = m(1,2);
-		var nil = mapn(Integer.class, Integer.class);
+		var nil = nullMap(Integer.class, Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='{1=2}(*)'.  Actual='{1=2}(*)'.");
@@ -198,7 +198,7 @@ class MapAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = m(1,2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isType(Map.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='*'.");
@@ -207,8 +207,8 @@ class MapAssertion_Test extends TestBase {
 	}
 
 	@Test void ca13_isExactType() {
-		var x = m(1,2);
-		var nil = mapn(Object.class, Object.class);
+		var x = immutableMap(1,2);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isExactType(SimpleMap.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.Object'.  Actual='*'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().isMatches("Unexpected type.  Expect='java.lang.String'.  Actual='*'.");
@@ -218,7 +218,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = m(1,2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isString("{1=2}");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='{1=2}'.");
@@ -228,7 +228,7 @@ class MapAssertion_Test extends TestBase {
 	@Test void cb01_isEmpty() {
 		var x1 = m();
 		var x2 = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x1).isEmpty();
 		var assertion6 = test(x2);
 		assertThrows(BasicAssertionError.class, assertion6::isEmpty, "Map was not empty.");
@@ -239,7 +239,7 @@ class MapAssertion_Test extends TestBase {
 	@Test void cb02_isNotEmpty() {
 		var x1 = m();
 		var x2 = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x2).isNotEmpty();
 		var assertion8 = test(x1);
 		assertThrows(BasicAssertionError.class, assertion8::isNotEmpty, "Map was empty.");
@@ -249,7 +249,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void cb03_containsKey() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isContainsKey("a");
 		assertThrown(()->test(x).isContainsKey("x")).asMessage().asOneLine().is("Map did not contain expected key.  Expected key='x'.  Value='{a=1, b=2}'.");
 		var assertion10 = test(nil);
@@ -258,7 +258,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void cb04_doesNotContainKey() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isNotContainsKey("x");
 		assertThrown(()->test(x).isNotContainsKey("a")).asMessage().asOneLine().is("Map contained unexpected key.  Unexpected key='a'.  Value='{a=1, b=2}'.");
 		var assertion11 = test(nil);
@@ -267,7 +267,7 @@ class MapAssertion_Test extends TestBase {
 
 	@Test void cb05_isSize() {
 		var x = m("a",1,"b",2);
-		var nil = mapn(Object.class, Object.class);
+		var nil = nullMap(Object.class, Object.class);
 		test(x).isSize(2);
 		assertThrown(()->test(x).isSize(1)).asMessage().asOneLine().is("Map did not have the expected size.  Expect=1.  Actual=2.");
 		var assertion12 = test(nil);

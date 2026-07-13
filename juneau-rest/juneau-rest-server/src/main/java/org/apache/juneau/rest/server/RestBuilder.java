@@ -56,7 +56,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.servlet.RestServlet.Builder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.servlet.RestResource.Builder}
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.servlet.RestMixin.Builder}
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
  * </ul>
  *
  * @param <SELF> The concrete builder type (self type).

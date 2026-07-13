@@ -18,7 +18,7 @@ package org.apache.juneau.marshall.parser;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.nio.charset.*;
 

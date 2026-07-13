@@ -16,9 +16,11 @@
  */
 package org.apache.juneau.commons.logging;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.text.*;
 import java.util.*;
@@ -32,7 +34,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * <p>
  * This class extends {@link java.util.logging.LogRecord java.util.logging.LogRecord} and overrides {@link #getMessage()} to use
- * {@link org.apache.juneau.commons.utils.Utils#f(String, Object...)} for lazy formatting.
+ * {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} for lazy formatting.
  * The message is only formatted when {@link #getMessage()} is actually called.
  *
  * <h5 class='section'>Usage:</h5>
@@ -44,7 +46,7 @@ import org.apache.juneau.commons.utils.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link Logger}
- * 	<li class='jc'>{@link org.apache.juneau.commons.utils.Utils#f(String, Object...)}
+ * 	<li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}
  * 	<li class='jc'>{@link java.util.logging.LogRecord}
  * </ul>
  */
@@ -96,7 +98,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 *
 	 * <p>
 	 * If parameters were set via {@link #setParameters(Object[])}, the message is formatted
-	 * using {@link org.apache.juneau.commons.utils.Utils#f(String, Object...)} on first access.
+	 * using {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} on first access.
 	 *
 	 * @return The log message, formatted if parameters are present.
 	 */
@@ -139,15 +141,15 @@ public class LogRecord extends java.util.logging.LogRecord {
 			var c = e.getClassName();
 			var m = e.getMethodName();
 			// Skip internal classes, logging classes, lambda methods/classes, and synthetic methods
-			if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class)) || eq(c, cn(Utils.class))
+			if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class))
 				|| c.startsWith("java.util.logging.")
 				|| (m != null && (m.contains("lambda$") || m.startsWith("access$")))
 				|| c.contains("$$Lambda$") || (c.contains("/") && c.contains("$Lambda"))) {
 				continue;
 			}
-			return opt(e);
+			return o(e);
 		}
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -262,7 +264,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 			case KEY_class -> getSourceClassName();
 			case KEY_method -> getSourceMethodName();
 			case KEY_thread, KEY_threadid -> s(getThreadID());
-			case KEY_exception -> opt(getThrown()).map(x -> x.getMessage()).orElse("");
+			case KEY_exception -> o(getThrown()).map(x -> x.getMessage()).orElse("");
 			default -> "";
 		};
 

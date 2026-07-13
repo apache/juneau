@@ -17,8 +17,7 @@
 package org.apache.juneau.marshall.xml;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
 import java.util.*;
@@ -33,7 +32,7 @@ import org.apache.juneau.marshall.*;
  * class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
  * </ul>
  */
 public class XmlBeanMeta extends ExtendedBeanMeta {
@@ -65,7 +64,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 					contentFormat = VOID;
 					defaultFormat.set(VOID);
 				} else
-					throw bex(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
+					throw brex(c, "Invalid format specified in @Xml annotation on bean: {0}.  Must be one of the following: DEFAULT,ATTRS,ELEMENTS,VOID", x.format());
 			});
 
 			beanMeta.getProperties().values().forEach(p -> {
@@ -84,17 +83,17 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 						elements.put(p.getName(), p);
 				} else if (xf == ATTRS) {
 					if (nn(attrsProperty))
-						throw bex(c, "Multiple instances of ATTRS properties defined on class.  Only one property can be designated as such.");
+						throw brex(c, "Multiple instances of ATTRS properties defined on class.  Only one property can be designated as such.");
 					if (! pcm.isMapOrBean())
-						throw bex(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
+						throw brex(c, "Invalid type for ATTRS property.  Only properties of type Map and bean can be used.");
 					attrsProperty = p;
 				} else if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS, TEXT, TEXT_PWS, XMLTEXT)) {
 					if (xf.isOneOf(ELEMENTS, MIXED, MIXED_PWS) && ! pcm.isCollectionOrArray())
-						throw bex(c, "Invalid type for {0} property.  Only properties of type Collection and array can be used.", xf);
+						throw brex(c, "Invalid type for {0} property.  Only properties of type Collection and array can be used.", xf);
 					if (nn(contentProperty)) {
 						if (xf == contentFormat)
-							throw bex(c, "Multiple instances of {0} properties defined on class.  Only one property can be designated as such.", xf);
-						throw bex(c, "{0} and {1} properties found on the same bean.  Only one property can be designated as such.", contentFormat, xf);
+							throw brex(c, "Multiple instances of {0} properties defined on class.  Only one property can be designated as such.", xf);
+						throw brex(c, "{0} and {1} properties found on the same bean.  Only one property can be designated as such.", contentFormat, xf);
 					}
 					contentProperty = p;
 					contentFormat = xf;
@@ -103,7 +102,7 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 				String n = mp.getXmlBeanPropertyMeta(p).getChildName();
 				if (nn(n)) {
 					if (collapsedProperties.containsKey(n) && collapsedProperties.get(n) != p)
-						throw bex(c, "Multiple properties found with the child name ''{0}''.", n);
+						throw brex(c, "Multiple properties found with the child name ''{0}''.", n);
 					collapsedProperties.put(n, p);
 				}
 			});
@@ -144,13 +143,13 @@ public class XmlBeanMeta extends ExtendedBeanMeta {
 		// Do some validation.
 		if (nn(contentProperty) || contentFormat == XmlFormat.VOID) {
 			if (! elements.isEmpty())
-				throw bex(c, "{0} and ELEMENT properties found on the same bean.  These cannot be mixed.", contentFormat);
+				throw brex(c, "{0} and ELEMENT properties found on the same bean.  These cannot be mixed.", contentFormat);
 			if (! collapsedProperties.isEmpty())
-				throw bex(c, "{0} and COLLAPSED properties found on the same bean.  These cannot be mixed.", contentFormat);
+				throw brex(c, "{0} and COLLAPSED properties found on the same bean.  These cannot be mixed.", contentFormat);
 		}
 
 		if (! collapsedProperties.isEmpty() && ! Collections.disjoint(elements.keySet(), collapsedProperties.keySet()))
-			throw bex(c, "Child element name conflicts found with another property.");
+			throw brex(c, "Child element name conflicts found with another property.");
 	}
 
 	/**

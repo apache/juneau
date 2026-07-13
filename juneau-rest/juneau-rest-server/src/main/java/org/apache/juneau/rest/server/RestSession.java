@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.rest.server;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -428,7 +429,7 @@ public class RestSession extends ContextSession {
 	})
 	public Map<String,String> getPathVars() {
 		var m = (Map<String,String>)req.getAttribute(REST_PATHVARS_ATTR);
-		return m == null ? mape() : m;
+		return m == null ? emptyMap() : m;
 	}
 
 	/**

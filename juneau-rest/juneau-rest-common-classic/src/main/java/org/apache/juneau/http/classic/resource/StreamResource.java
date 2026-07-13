@@ -27,7 +27,7 @@ import org.apache.juneau.http.classic.header.*;
  * A streamed, non-repeatable resource that obtains its content from an {@link InputStream}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 public class StreamResource extends BasicResource {

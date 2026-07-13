@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.marshall.json5;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static java.util.Collections.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -84,12 +83,12 @@ public class Json5Map extends MarshalledMap {
 
 		@Override
 		public Object put(String key, Object val) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object remove(Object key) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 	}
 
@@ -120,17 +119,17 @@ public class Json5Map extends MarshalledMap {
 
 		@Override /* Overridden from Map */
 		public Object put(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Map */
 		public Object remove(Object key) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Map */
 		public Collection<Object> values() {
-			return mape().values();
+			return emptyMap().values();
 		}
 	};
 

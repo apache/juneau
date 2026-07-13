@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -120,7 +120,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void b01_optionalRootPresent() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(opt(new Bean("a", 1)));
+		var bytes = ParquetSerializer.DEFAULT.serialize(o(new Bean("a", 1)));
 		var out = (List<Bean>) ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
 		assertEquals(1, out.size());
 		assertEquals("a", out.get(0).name);
@@ -128,7 +128,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void b02_optionalRootEmpty() throws Exception {
-		var bytes = ParquetSerializer.DEFAULT.serialize(opte());
+		var bytes = ParquetSerializer.DEFAULT.serialize(oe());
 		assertNotNull(bytes);
 		var out = ParquetParser.DEFAULT.parse(bytes, List.class, Bean.class);
 		assertTrue(((List<?>) out).isEmpty());
@@ -143,7 +143,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 
 	@Test
 	void b03_optionalPropertyPresentAndEmpty() throws Exception {
-		var in = list(new OptBean("a", opt("aa")), new OptBean("b", opte()));
+		var in = list(new OptBean("a", o("aa")), new OptBean("b", oe()));
 		var bytes = ParquetSerializer.DEFAULT.serialize(in);
 		var out = (List<OptBean>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBean.class);
 		assertEquals(2, out.size());
@@ -1263,8 +1263,8 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 		// A bean with a nested Optional property -> computeDefValue walks Optional.value path.
 		// Row with present Optional, row with empty Optional, row with null intermediate.
 		var in = list(
-			new OptBeanOuter("a", new OptNestedBean(opt("x"))),
-			new OptBeanOuter("b", new OptNestedBean(opte())),
+			new OptBeanOuter("a", new OptNestedBean(o("x"))),
+			new OptBeanOuter("b", new OptNestedBean(oe())),
 			new OptBeanOuter("c", null));
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
 		var out = (java.util.List<OptBeanOuter>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBeanOuter.class);
@@ -1303,7 +1303,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m05_flattenListOptionalElements() throws Exception {
 		// List column with Optional<String> elements -> flattenListValues Optional.value branch (line 785).
-		var in = list(new ListOptBean("a", list(opt("x"), opte(), opt("z"))));
+		var in = list(new ListOptBean("a", list(o("x"), oe(), o("z"))));
 		var bytes = ParquetSerializer.DEFAULT.serialize(in);
 		assertNotNull(bytes);
 		assertTrue(bytes.length > 0);
@@ -1367,7 +1367,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 	@Test
 	void m08_getValueByPathOptional() throws Exception {
 		// Bean with Optional<String> tag -> getValueByPath hits Optional.value branch (line 819).
-		var in = list(new PathOptBean("a", opt("t1")), new PathOptBean("b", opte()));
+		var in = list(new PathOptBean("a", o("t1")), new PathOptBean("b", oe()));
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
 		assertNotNull(bytes);
 	}

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -113,14 +113,14 @@ class RestContext_Precedence_Test extends TestBase {
 			if (o.isPresent())
 				return o;
 			var bound = springLookup(beanType, name).orElse(null);
-			return bound == null ? opte() : opt(() -> bound);
+			return bound == null ? oe() : o(() -> bound);
 		}
 
 		private <T> Optional<T> springLookup(Class<T> beanType, String name) {
 			// "Spring" bindings are unnamed only — anything else falls through.
 			if (name != null && !name.isEmpty())
-				return opte();
-			return opt((T) springBindings.get(beanType));
+				return oe();
+			return o((T) springBindings.get(beanType));
 		}
 	}
 

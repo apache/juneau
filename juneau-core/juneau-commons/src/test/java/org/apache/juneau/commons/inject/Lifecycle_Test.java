@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Lifecycle integration tests for {@code @PostConstruct} / {@code @PreDestroy}

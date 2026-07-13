@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;

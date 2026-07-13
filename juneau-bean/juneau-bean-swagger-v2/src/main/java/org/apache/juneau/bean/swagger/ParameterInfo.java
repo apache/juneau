@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -404,7 +403,7 @@ public class ParameterInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
+	public Set<Object> getEnum() { return nie(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -587,12 +586,12 @@ public class ParameterInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(allowEmptyValue), PROP_allowEmptyValue)
 			.addIf(nn(collectionFormat), PROP_collectionFormat)
 			.addIf(nn(default_), PROP_default)
 			.addIf(nn(description), PROP_description)
-			.addIf(ne(enum_), PROP_enum)
+			.addIf(ine(enum_), PROP_enum)
 			.addIf(nn(example), PROP_example)
 			.addIf(nn(examples), PROP_examples)
 			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
@@ -785,7 +784,7 @@ public class ParameterInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public ParameterInfo setEnum(Object...value) {
-		setEnum(setb(Object.class).sparse().addAny(value).build());
+		setEnum(stb(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 

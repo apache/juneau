@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -103,7 +103,7 @@ public class MapStore implements PropertyStore {
 			var newMap = new ConcurrentHashMap<String,Optional<String>>();
 			m = map.compareAndSet(null, newMap) ? newMap : map.get();  // Not easily testable.
 		}
-		m.put(key, opt(value));
+		m.put(key, o(value));
 	}
 
 	/**

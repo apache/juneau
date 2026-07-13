@@ -26,7 +26,7 @@ import org.apache.juneau.commons.*;
  * Utility classes and methods for the {@link Cbor @Cbor} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/CborBasics">CBOR Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR Basics</a>
  * </ul>
  */
 public class CborAnnotation {

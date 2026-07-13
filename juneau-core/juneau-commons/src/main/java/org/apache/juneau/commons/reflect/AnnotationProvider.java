@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -351,14 +351,14 @@ public class AnnotationProvider {
 
 					ci.getPublicMethod(x -> x.hasName("onClass")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(Class[].class))
-							throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));
+							throw brex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));
 						for (var c : (Class<?>[])mi.accessible().invoke(a))
 							runtimeAnnotations.append(c.getName(), annotationToStore);
 					});
 
 					ci.getPublicMethod(x -> x.hasName("on")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(String[].class))
-							throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));
+							throw brex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));
 						for (var s : (String[])mi.accessible().invoke(a))
 							runtimeAnnotations.append(s, annotationToStore);
 					});
@@ -366,7 +366,7 @@ public class AnnotationProvider {
 				} catch (BeanRuntimeException e) {
 					throw e;
 				} catch (Exception e) {
-					throw bex(e, (Class<?>)null, "Invalid annotation @{0} used in runtime annotations.", cn(a));
+					throw brex(e, (Class<?>)null, "Invalid annotation @{0} used in runtime annotations.", cn(a));
 				}
 			}
 			return this;
@@ -390,7 +390,7 @@ public class AnnotationProvider {
 		 * @return A new immutable {@link AnnotationProvider} instance.
 		 */
 		public AnnotationProvider build() {
-			if (e(runtimeAnnotations))
+			if (ie(runtimeAnnotations))
 				return INSTANCE;
 			return new AnnotationProvider(this);
 		}
@@ -512,7 +512,7 @@ public class AnnotationProvider {
 			.logOnExit(builder.logOnExit, "AnnotationProvider.cache")
 			.build();
 
-		this.annotationMap = opt(builder.runtimeAnnotations).map(ReflectionMap.Builder::build).orElse(null);
+		this.annotationMap = o(builder.runtimeAnnotations).map(ReflectionMap.Builder::build).orElse(null);
 		// @formatter:on
 	}
 
@@ -1031,7 +1031,7 @@ public class AnnotationProvider {
 		else if (element instanceof FieldInfo || element instanceof ConstructorInfo)
 			t = l(a(SELF));
 		else {
-			assertType(ParameterInfo.class, element, () -> unsupportedOp());
+			assertType(ParameterInfo.class, element, () -> uoex());
 			t = l(a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE));
 		}
 
@@ -1097,20 +1097,20 @@ public class AnnotationProvider {
 	private List load(Object o) {
 		if (o instanceof Class o2) {
 			var ci = ClassInfo.of(o2);
-			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+			return annotationMap == null ? emptyList() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
 		}
 		if (o instanceof Method o2) {
 			var mi = info(o2);
-			return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
+			return annotationMap == null ? emptyList() : annotationMap.find(mi.inner()).map(a -> ai(mi, a)).toList();
 		}
 		if (o instanceof Field o2) {
 			var fi = info(o2);
-			return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
+			return annotationMap == null ? emptyList() : annotationMap.find(fi.inner()).map(a -> ai(fi, a)).toList();
 		}
 		if (o instanceof Constructor o2) {
 			var ci = info(o2);
-			return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
+			return annotationMap == null ? emptyList() : annotationMap.find(ci.inner()).map(a -> ai(ci, a)).toList();
 		}
-		throw unsupportedOp();
+		throw uoex();
 	}
 }

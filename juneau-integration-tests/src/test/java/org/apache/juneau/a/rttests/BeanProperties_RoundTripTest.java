@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.a.rttests;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import java.util.*;
@@ -60,7 +60,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void a02_listOfArrayOfLongs(RoundTrip_Tester t) throws Exception {
 		var o = new A02();
-		o.f1 = CollectionUtils.<Long[]>l(a(123L));
+		o.f1 = Shorts.<Long[]>l(a(123L));
 		o = t.roundTrip(o);
 		assertBean(o, "f1{0{0}}", "{{123}}");
 	}
@@ -87,7 +87,7 @@ class BeanProperties_RoundTripTest extends RoundTripTest_Base {
 	@MethodSource("testers")
 	void a04_listOf2dArrayOfLongs(RoundTrip_Tester t) throws Exception {
 		var o = new A04();
-		o.f1 = CollectionUtils.<Long[][]>l(a2(a(123L)));
+		o.f1 = Shorts.<Long[][]>l(a2(a(123L)));
 		o = t.roundTrip(o);
 		assertBean(o, "f1{0{0{0}}}", "{{{123}}}");
 	}

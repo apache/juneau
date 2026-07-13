@@ -18,8 +18,8 @@ package org.apache.juneau.commons.inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Coverage for {@code @Primary} and {@code @Order} / {@code @Bean#priority()} ordering.

@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -60,7 +60,7 @@ import org.apache.juneau.marshall.httppart.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  *
  * @param <T> The header bean type.
@@ -135,7 +135,7 @@ public class HeaderBeanMeta<T> {
 	public T construct(String name, Object value) {
 
 		if (constructor == null)
-			throw unsupportedOp("Constructor for type {0} could not be found.", cn(type));
+			throw uoex("Constructor for type {0} could not be found.", cn(type));
 
 		if (name == null)
 			name = schema.getName();
@@ -146,7 +146,7 @@ public class HeaderBeanMeta<T> {
 			args[0] = pt[0] == String.class ? s(value) : value;
 		} else {
 			if (name == null)
-				throw unsupportedOp("Constructor for type {0} requires a name as the first argument.", cn(type));
+				throw uoex("Constructor for type {0} requires a name as the first argument.", cn(type));
 			args[0] = name;
 			args[1] = pt[1] == String.class ? s(value) : value;
 		}

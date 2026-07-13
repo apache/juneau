@@ -17,7 +17,6 @@
 package org.apache.juneau.marshall.json;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -90,7 +89,7 @@ class Json_Test extends TestBase{
 		l.add("2");
 		l.add("3");
 		var o = a(m, l);
-		var o2 = a(o, "foo", "bar", Integer.valueOf(1), bool(false), Float.valueOf(1.2f), null);
+		var o2 = a(o, "foo", "bar", Integer.valueOf(1), b(false), Float.valueOf(1.2f), null);
 		assertEquals("[[{J:'f1',B:'b',C:'c'},['1','2','3']],'foo','bar',1,false,1.2,null]", s1.serialize(o2));
 	}
 

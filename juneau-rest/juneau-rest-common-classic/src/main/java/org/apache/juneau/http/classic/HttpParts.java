@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.http.classic;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.time.*;
@@ -36,7 +35,7 @@ import org.apache.juneau.marshall.*;
  * Standard predefined HTTP parts.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -51,29 +50,29 @@ public class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ine(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ine(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ine(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ne(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ne(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ine(y.name()), y -> n.set(y.name()));
 		return n.orElse(null);
 	};
 
@@ -309,7 +308,7 @@ public class HttpParts {
 			case HEADER -> type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);
 			case PATH -> type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);
 			case QUERY -> type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);
-			default -> opte();
+			default -> oe();
 		};
 	}
 

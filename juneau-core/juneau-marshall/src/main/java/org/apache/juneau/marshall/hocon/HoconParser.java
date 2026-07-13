@@ -63,7 +63,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HoconBasics">hocon-basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HoconSupport">hocon-basics</a>
  * </ul>
  */
 @SuppressWarnings({

@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.stats;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -135,7 +135,7 @@ public class ThrownStats {
 		 * @return This object.
 		 */
 		public Builder type(Class<? extends ThrownStats> value) {
-			implType = opt(value).isPresent() ? value : ThrownStats.class;
+			implType = o(value).isPresent() ? value : ThrownStats.class;
 			return this;
 		}
 	}
@@ -169,7 +169,7 @@ public class ThrownStats {
 		this.thrownClass = x.thrownClass;
 		this.firstMessage = x.firstMessage;
 		this.stackTrace = u(copyOf(x.stackTrace));
-		this.causedBy = opt(x.causedBy.isPresent() ? ThrownStats.copy(x.causedBy.get()) : null);
+		this.causedBy = o(x.causedBy.isPresent() ? ThrownStats.copy(x.causedBy.get()) : null);
 		this.hash = x.hash;
 		this.count = new AtomicInteger(x.count.get());
 		this.firstOccurrence = new AtomicLong(x.firstOccurrence.get());
@@ -196,7 +196,7 @@ public class ThrownStats {
 		this.thrownClass = builder.throwable.getClass();
 		this.firstMessage = builder.throwable.getMessage();
 		this.stackTrace = u(copyOf(builder.stackTrace));
-		this.causedBy = opt(builder.causedBy);
+		this.causedBy = o(builder.causedBy);
 		this.hash = builder.hash;
 		this.count = new AtomicInteger(0);
 		long ct = System.currentTimeMillis();

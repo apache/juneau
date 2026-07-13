@@ -18,18 +18,18 @@ package org.apache.juneau.microservice.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import jakarta.servlet.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.test.junit.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.test.junit.*;
 import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.*;
+
+import jakarta.servlet.*;
 
 /**
  * End-to-end tests for {@link MicroserviceTest @MicroserviceTest} / {@link MicroserviceExtension}: boots a real

@@ -18,8 +18,8 @@ package org.apache.juneau.commons.function;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class ThrowingFunction_Test extends TestBase {
 

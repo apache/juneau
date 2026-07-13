@@ -17,16 +17,15 @@
 package org.apache.juneau.marshall.bson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
+import java.io.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
-import java.io.*;
-
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
@@ -94,7 +93,7 @@ import org.apache.juneau.marshall.stream.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  * </ul>
  */
 @SuppressWarnings({

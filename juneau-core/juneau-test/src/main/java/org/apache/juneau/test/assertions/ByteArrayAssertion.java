@@ -20,7 +20,7 @@ import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.ThrowingFunction;
+import org.apache.juneau.commons.function.*;
 
 
 /**

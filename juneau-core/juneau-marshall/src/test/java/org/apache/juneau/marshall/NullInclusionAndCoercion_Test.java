@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -158,8 +158,8 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	//====================================================================================================
 
 	public static class B1 {
-		public Optional<String> a = opte();
-		public Optional<String> b = opt("x");
+		public Optional<String> a = oe();
+		public Optional<String> b = o("x");
 		public OptionalInt c = OptionalInt.empty();
 		public OptionalInt d = OptionalInt.of(7);
 		public OptionalLong e = OptionalLong.of(9L);
@@ -473,7 +473,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		@MarshalledProp(nulls = Nulls.EMPTY)
 		public Optional<String> b;
 		@MarshalledProp(nulls = Nulls.DEFAULT)
-		public Optional<String> c = opt("seed");
+		public Optional<String> c = o("seed");
 		public OptionalInt d;
 		public OptionalLong e;
 		public OptionalDouble f;
@@ -517,7 +517,7 @@ class NullInclusionAndCoercion_Test extends TestBase {
 	//====================================================================================================
 
 	public static class G1 {
-		public Optional<String> a = opte();  // non-null but ignorable → reaches canIgnoreValue
+		public Optional<String> a = oe();  // non-null but ignorable → reaches canIgnoreValue
 		public String b = "keep";
 	}
 
@@ -550,8 +550,8 @@ class NullInclusionAndCoercion_Test extends TestBase {
 
 	@Test void h02_convert_fromOptionalInputs() throws Exception {
 		var bc = MarshallingContext.DEFAULT;
-		assertEquals(OptionalInt.of(9), bc.convertToType(opt(9), OptionalInt.class));
-		assertEquals(OptionalLong.empty(), bc.convertToType(opte(), OptionalLong.class));
+		assertEquals(OptionalInt.of(9), bc.convertToType(o(9), OptionalInt.class));
+		assertEquals(OptionalLong.empty(), bc.convertToType(oe(), OptionalLong.class));
 		assertEquals(OptionalLong.of(4L), bc.convertToType(OptionalInt.of(4), OptionalLong.class));
 		assertEquals(OptionalInt.of(3), bc.convertToType(OptionalLong.of(3L), OptionalInt.class));
 		assertEquals(OptionalInt.of(2), bc.convertToType(OptionalDouble.of(2.0), OptionalInt.class));
@@ -560,11 +560,11 @@ class NullInclusionAndCoercion_Test extends TestBase {
 		assertEquals(OptionalLong.empty(), bc.convertToType(OptionalInt.empty(), OptionalLong.class));
 		assertEquals(OptionalInt.empty(), bc.convertToType(OptionalLong.empty(), OptionalInt.class));
 		assertEquals(OptionalInt.empty(), bc.convertToType(OptionalDouble.empty(), OptionalInt.class));
-		assertEquals(OptionalDouble.empty(), bc.convertToType(opte(), OptionalDouble.class));
+		assertEquals(OptionalDouble.empty(), bc.convertToType(oe(), OptionalDouble.class));
 	}
 
 	@Test void h03_convert_unwrappedToNull_yieldsEmpty() throws Exception {
 		// Optional containing a blank string → unwraps then coerces to a null number → empty primitive optional.
-		assertEquals(OptionalInt.empty(), MarshallingContext.DEFAULT.convertToType(opt(""), OptionalInt.class));
+		assertEquals(OptionalInt.empty(), MarshallingContext.DEFAULT.convertToType(o(""), OptionalInt.class));
 	}
 }

@@ -18,9 +18,8 @@ package org.apache.juneau.marshall.csv;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.time.*;
@@ -253,7 +252,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 				l = Collections.singleton(o);
 			}
 
-			if (ne(l)) {
+			if (ine(l)) {
 				var firstOpt = first(l);
 				if (!firstOpt.isPresent())
 					return;
@@ -290,7 +289,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 						w.writeEntry(x.getName());
 					});
 					// Always append _type when addBeanTypes or addRootType to support polymorphic parsing
-					if (addTypeColumn && ne(typeColName)) {
+					if (addTypeColumn && ine(typeColName)) {
 						w.w(',');
 						w.writeEntry(typeColName);
 					}
@@ -304,7 +303,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 								addComma2.ifSet(() -> w.w(',')).set();
 								w.writeEntry(nullValue);
 							});
-							if (addTypeColumn && ne(typeColName)) {
+							if (addTypeColumn && ine(typeColName)) {
 								w.w(',');
 								w.writeEntry("");
 							}
@@ -324,7 +323,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 								if (value instanceof String s) value = toString(s);
 								w.writeEntry(value != null ? value : nullValue);
 							});
-							if (addTypeColumn && ne(typeColName)) {
+							if (addTypeColumn && ine(typeColName)) {
 								var typeName = getBeanTypeName(this, eType, aType, null);
 								w.w(',');
 								w.writeEntry(typeName != null ? typeName : "");
@@ -348,7 +347,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 							keyVal = x;
 						w.writeEntry(keyVal);
 					});
-					if (addTypeColumn && ne(typeColName)) {
+					if (addTypeColumn && ine(typeColName)) {
 						w.w(',');
 						w.writeEntry(typeColName);
 					}
@@ -366,7 +365,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 							if (value instanceof String s) value = toString(s);
 							w.writeEntry(value != null ? value : nullValue);
 						});
-						if (addTypeColumn && ne(typeColName)) {
+						if (addTypeColumn && ine(typeColName)) {
 							var typeName = getBeanTypeName(this, eType, aType, null);
 							w.w(',');
 							w.writeEntry(typeName != null ? typeName : "");
@@ -376,7 +375,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 				} else {
 					// Simple value path: single "value" column + optional _type
 					w.writeEntry("value");
-					if (addTypeColumn && ne(typeColName)) {
+					if (addTypeColumn && ine(typeColName)) {
 						w.w(',');
 						w.writeEntry(typeColName);
 					}
@@ -386,7 +385,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 						value = formatForCsvCell(value);
 						// Use toString() to respect trimStrings setting
 						w.writeEntry(value != null ? toString(value) : nullValue);
-						if (addTypeColumn && ne(typeColName)) {
+						if (addTypeColumn && ine(typeColName)) {
 							if (x != null) {
 								var aType = getClassMetaForObject(x);
 								var typeName = getBeanTypeName(this, eType, aType, null);

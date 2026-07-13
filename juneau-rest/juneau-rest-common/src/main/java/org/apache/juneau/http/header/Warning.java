@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -164,19 +164,19 @@ public class Warning extends HttpStringHeader {
 			assertArgNotNull("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("warning value must not be blank");
+				throw iaex("warning value must not be blank");
 			warnings.add(v);
 			return this;
 		}
 
 		private static String render(int code, String agent, String text, String date) {
 			if (code < 0 || code > 999)
-				throw illegalArg("warn-code must be in the range 0-999: {0}", code);
+				throw iaex("warn-code must be in the range 0-999: {0}", code);
 			assertArgNotNull("agent", agent);
 			assertArgNotNull("text", text);
 			var a = agent.trim();
 			if (a.isEmpty())
-				throw illegalArg("warn-agent must not be blank");
+				throw iaex("warn-agent must not be blank");
 			var sb = new StringBuilder();
 			sb.append(String.format("%03d", code)).append(' ').append(a).append(' ').append(q(text));
 			if (date != null)

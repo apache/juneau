@@ -17,8 +17,8 @@
 package org.apache.juneau.commons.runtime;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -183,7 +183,7 @@ public class ManifestFile {
 	 * @return The value, or empty if the key is unset.
 	 */
 	public Optional<String> get(String key) {
-		return opt(mainAttributes.get(key));
+		return o(mainAttributes.get(key));
 	}
 
 	/**
@@ -195,7 +195,7 @@ public class ManifestFile {
 	 */
 	public Optional<String> get(String section, String key) {
 		var s = sections.get(section);
-		return s == null ? opte() : opt(s.get(key));
+		return s == null ? oe() : o(s.get(key));
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -100,7 +100,7 @@ public class HttpMediaRangesHeader extends HttpHeaderBean {
 	 * @return Parsed {@link MediaRanges}, or {@code null} if the wire value is absent.
 	 */
 	public Optional<MediaRanges> asMediaRanges() {
-		return opt(toMediaRanges());
+		return o(toMediaRanges());
 	}
 
 	/**

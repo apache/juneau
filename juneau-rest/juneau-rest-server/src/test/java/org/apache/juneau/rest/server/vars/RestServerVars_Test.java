@@ -16,19 +16,17 @@
  */
 package org.apache.juneau.rest.server.vars;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
 import java.util.*;
-import org.junit.jupiter.api.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.bean.swagger.Info;
-import org.apache.juneau.bean.swagger.Operation;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
@@ -36,6 +34,8 @@ import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
+import org.junit.jupiter.api.*;
+
 /**
  * Branch-coverage unit tests for the SVL variable classes in {@code org.apache.juneau.rest.server.vars}.
  *
@@ -86,7 +86,7 @@ class RestServerVars_Test extends TestBase {
 		doReturn(String.class).when(ctx).getResourceClass();
 		when(req.getContext()).thenReturn(ctx);
 		var attr = mock(RequestAttribute.class);
-		when(attr.asString()).thenReturn(opte());
+		when(attr.asString()).thenReturn(oe());
 		when(req.getAttributes().get(any())).thenReturn(attr);
 		return req;
 	}
@@ -109,55 +109,55 @@ class RestServerVars_Test extends TestBase {
 
 	@Test void a04_fileVar_resolve_returnsNullWhenFileNotFound() throws Exception {
 		var req = deepStubReq();
-		when(req.getContext().getStaticFiles().getString(any(), any())).thenReturn(opte());
+		when(req.getContext().getStaticFiles().getString(any(), any())).thenReturn(oe());
 		assertNull(new FileVar().resolve(sessionWith(req), "missing.txt"));
 	}
 
 	@Test void a05_fileVar_resolve_plainTextUnchanged() throws Exception {
 		var req = deepStubReq();
-		when(req.getContext().getStaticFiles().getString(any(), any())).thenReturn(opt("plain content"));
+		when(req.getContext().getStaticFiles().getString(any(), any())).thenReturn(o("plain content"));
 		assertEquals("plain content", new FileVar().resolve(sessionWith(req), "test.txt"));
 	}
 
 	@Test void a06_fileVar_resolve_stripsHtmlComments() throws Exception {
 		var req = deepStubReq();
 		when(req.getContext().getStaticFiles().getString(any(), any()))
-			.thenReturn(opt("<!-- comment -->content"));
+			.thenReturn(o("<!-- comment -->content"));
 		assertEquals("content", new FileVar().resolve(sessionWith(req), "test.html"));
 	}
 
 	@Test void a07_fileVar_resolve_stripsXhtmlComments() throws Exception {
 		var req = deepStubReq();
 		when(req.getContext().getStaticFiles().getString(any(), any()))
-			.thenReturn(opt("<!-- x -->body"));
+			.thenReturn(o("<!-- x -->body"));
 		assertEquals("body", new FileVar().resolve(sessionWith(req), "test.xhtml"));
 	}
 
 	@Test void a08_fileVar_resolve_stripsXmlComments() throws Exception {
 		var req = deepStubReq();
 		when(req.getContext().getStaticFiles().getString(any(), any()))
-			.thenReturn(opt("<!-- x -->body"));
+			.thenReturn(o("<!-- x -->body"));
 		assertEquals("body", new FileVar().resolve(sessionWith(req), "test.xml"));
 	}
 
 	@Test void a09_fileVar_resolve_stripsJsonBlockComments() throws Exception {
 		var req = deepStubReq();
 		when(req.getContext().getStaticFiles().getString(any(), any()))
-			.thenReturn(opt("/* comment */content"));
+			.thenReturn(o("/* comment */content"));
 		assertEquals("content", new FileVar().resolve(sessionWith(req), "test.json"));
 	}
 
 	@Test void a10_fileVar_resolve_stripsJavascriptComments() throws Exception {
 		var req = deepStubReq();
 		when(req.getContext().getStaticFiles().getString(any(), any()))
-			.thenReturn(opt("/* comment */content"));
+			.thenReturn(o("/* comment */content"));
 		assertEquals("content", new FileVar().resolve(sessionWith(req), "test.javascript"));
 	}
 
 	@Test void a11_fileVar_resolve_stripsCssComments() throws Exception {
 		var req = deepStubReq();
 		when(req.getContext().getStaticFiles().getString(any(), any()))
-			.thenReturn(opt("/* comment */content"));
+			.thenReturn(o("/* comment */content"));
 		assertEquals("content", new FileVar().resolve(sessionWith(req), "test.css"));
 	}
 
@@ -347,7 +347,7 @@ class RestServerVars_Test extends TestBase {
 	@Test void d15_requestVar_resolve_unknownKeyFallsBackToAttribute() {
 		var req = deepStubReq();
 		var attr = mock(RequestAttribute.class);
-		when(attr.asString()).thenReturn(opt("attrval"));
+		when(attr.asString()).thenReturn(o("attrval"));
 		when(req.getAttributes().get("unknownKey")).thenReturn(attr);
 		assertEquals("attrval", new RequestVar().resolve(sessionWith(req), "unknownKey"));
 	}
@@ -377,7 +377,7 @@ class RestServerVars_Test extends TestBase {
 	@Test void e05_serializedRequestAttrVar_resolveTo_serializerNotFound_noOutput() throws Exception {
 		var req = mock(RestRequest.class, RETURNS_DEEP_STUBS);
 		when(req.getAttribute(any())).thenReturn(mock(RequestAttribute.class));
-		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(opte());
+		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(oe());
 		var w = new StringWriter();
 		new SerializedRequestAttrVar().resolveTo(sessionWith(req), w, "text/plain,myKey");
 		assertEquals("", w.toString());
@@ -514,7 +514,7 @@ class RestServerVars_Test extends TestBase {
 		var req = mock(RestRequest.class);
 		var attr = mock(RequestAttribute.class);
 		when(req.getAttribute("key")).thenReturn(attr);
-		when(attr.asString()).thenReturn(opt("attrval"));
+		when(attr.asString()).thenReturn(o("attrval"));
 		assertEquals("attrval", new RequestAttributeVar().resolve(sessionWith(req), "key"));
 	}
 
@@ -522,7 +522,7 @@ class RestServerVars_Test extends TestBase {
 		var req = mock(RestRequest.class);
 		var attr = mock(RequestAttribute.class);
 		when(req.getAttribute("key")).thenReturn(attr);
-		when(attr.asString()).thenReturn(opte());
+		when(attr.asString()).thenReturn(oe());
 		assertNull(new RequestAttributeVar().resolve(sessionWith(req), "key"));
 	}
 
@@ -544,7 +544,7 @@ class RestServerVars_Test extends TestBase {
 
 	@Test void j04_openApiVar_resolve_returnsNullWhenKeyNotFound() {
 		var req = mock(RestRequest.class);
-		when(req.getOpenApi()).thenReturn(opte());
+		when(req.getOpenApi()).thenReturn(oe());
 		assertNull(new OpenApiVar().resolve(sessionWith(req), "nonexistent.key"));
 	}
 
@@ -566,94 +566,94 @@ class RestServerVars_Test extends TestBase {
 
 	@Test void k04_requestSwaggerVar_resolve_title() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setTitle("MyAPI"))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setTitle("MyAPI"))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertEquals("MyAPI", new RequestSwaggerVar().resolve(sessionWith(req), "title"));
 	}
 
 	@Test void k05_requestSwaggerVar_resolve_description() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setDescription("A desc"))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setDescription("A desc"))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertEquals("A desc", new RequestSwaggerVar().resolve(sessionWith(req), "description"));
 	}
 
 	@Test void k06_requestSwaggerVar_resolve_version() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setVersion("2.0"))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setVersion("2.0"))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertEquals("2.0", new RequestSwaggerVar().resolve(sessionWith(req), "version"));
 	}
 
 	@Test void k07_requestSwaggerVar_resolve_license() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setLicense(new License().setName("Apache 2.0")))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setLicense(new License().setName("Apache 2.0")))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertNotNull(new RequestSwaggerVar().resolve(sessionWith(req), "license"));
 	}
 
 	@Test void k08_requestSwaggerVar_resolve_contact() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setContact(new Contact().setName("Admin")))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setContact(new Contact().setName("Admin")))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertNotNull(new RequestSwaggerVar().resolve(sessionWith(req), "contact"));
 	}
 
 	@Test void k09_requestSwaggerVar_resolve_siteName() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setSiteName("MySite"))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setSiteName("MySite"))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertEquals("MySite", new RequestSwaggerVar().resolve(sessionWith(req), "siteName"));
 	}
 
 	@Test void k10_requestSwaggerVar_resolve_termsOfService() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setInfo(new Info().setTermsOfService("TOS"))));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setInfo(new Info().setTermsOfService("TOS"))));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertEquals("TOS", new RequestSwaggerVar().resolve(sessionWith(req), "termsOfService"));
 	}
 
 	@Test void k11_requestSwaggerVar_resolve_operationDescription() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opte());
-		when(req.getOperationSwagger()).thenReturn(opt(new Operation().setDescription("Op desc")));
+		when(req.getSwagger()).thenReturn(oe());
+		when(req.getOperationSwagger()).thenReturn(o(new Operation().setDescription("Op desc")));
 		assertEquals("Op desc", new RequestSwaggerVar().resolve(sessionWith(req), "operationDescription"));
 	}
 
 	@Test void k12_requestSwaggerVar_resolve_operationSummary() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opte());
-		when(req.getOperationSwagger()).thenReturn(opt(new Operation().setSummary("Op summary")));
+		when(req.getSwagger()).thenReturn(oe());
+		when(req.getOperationSwagger()).thenReturn(o(new Operation().setSummary("Op summary")));
 		assertEquals("Op summary", new RequestSwaggerVar().resolve(sessionWith(req), "operationSummary"));
 	}
 
 	@Test void k13_requestSwaggerVar_resolve_unknownKeyReturnsNull() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opte());
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(oe());
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertNull(new RequestSwaggerVar().resolve(sessionWith(req), "unknownKey"));
 	}
 
 	@Test void k14_requestSwaggerVar_resolve_noSwaggerReturnsNullForTitle() throws Exception {
 		var req = mock(RestRequest.class);
-		when(req.getSwagger()).thenReturn(opte());
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(oe());
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertNull(new RequestSwaggerVar().resolve(sessionWith(req), "title"));
 	}
 
 	@Test void k15_requestSwaggerVar_resolve_externalDocs() throws Exception {
 		var req = mock(RestRequest.class);
 		var extDocs = new ExternalDocumentation().setDescription("See more");
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setExternalDocs(extDocs)));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setExternalDocs(extDocs)));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertNotNull(new RequestSwaggerVar().resolve(sessionWith(req), "externalDocs"));
 	}
 
 	@Test void k16_requestSwaggerVar_resolve_tags() throws Exception {
 		var req = mock(RestRequest.class);
 		var swaggerTag = new org.apache.juneau.bean.swagger.Tag().setName("foo");
-		when(req.getSwagger()).thenReturn(opt(new Swagger().setTags(swaggerTag)));
-		when(req.getOperationSwagger()).thenReturn(opte());
+		when(req.getSwagger()).thenReturn(o(new Swagger().setTags(swaggerTag)));
+		when(req.getOperationSwagger()).thenReturn(oe());
 		assertNotNull(new RequestSwaggerVar().resolve(sessionWith(req), "tags"));
 	}
 }

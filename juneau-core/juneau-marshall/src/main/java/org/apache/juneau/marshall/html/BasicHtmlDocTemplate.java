@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.marshall.html;
 
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.html.AsideFloat.*;
 
 import java.util.*;
@@ -32,7 +33,7 @@ import org.apache.juneau.commons.utils.*;
  * This class can be subclassed to customize page rendering.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -100,7 +101,7 @@ public class BasicHtmlDocTemplate implements HtmlDocTemplate {
 				w = new HtmlWriter(w) {
 					@Override
 					public HtmlWriter text(Object value, boolean preserveWhitespace) {
-						return super.text(session.resolve(Utils.s(value)), preserveWhitespace);
+						return super.text(session.resolve(Shorts.s(value)), preserveWhitespace);
 					}
 				};
 			}

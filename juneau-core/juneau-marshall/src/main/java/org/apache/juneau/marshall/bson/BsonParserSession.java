@@ -17,7 +17,8 @@
 package org.apache.juneau.marshall.bson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -38,7 +39,7 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -244,7 +245,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		// Skip when convertToMemberType already produced normal form (e.g. Class from String).
 		if (nn(swap) && nn(result) && swap.isSwappedObject(result))
 			result = unswap(swap, result, eType);
-		return (T)(wrapInOptional ? opt(result) : result);
+		return (T)(wrapInOptional ? o(result) : result);
 	}
 
 	private BeanMap<?> applyTypeProperty(BeanMap<?> beanMap, String typeName, ClassMeta<?> eType) throws ExecutableException {
@@ -278,7 +279,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 			var instance = sType.canCreateNewInstance(outer) ? sType.newInstance(outer) : null;
 			coll = (instance instanceof Collection c) ? c : newGenericList();
 		}
-		var elementType = def(sType.getElementType(), object());
+		var elementType = coalesce(sType.getElementType(), object());
 
 		while (!is.isDocumentEnd()) {
 			var et = is.readElementType();
@@ -288,7 +289,7 @@ public class BsonParserSession extends InputStreamParserSession implements Recor
 		is.readDocumentTerminator();
 
 		Object result = sType.isArray() || sType.isArgs() ? toArray(sType, coll) : coll;
-		return eType.isOptional() ? opt(result) : result;
+		return eType.isOptional() ? o(result) : result;
 	}
 
 	@Override

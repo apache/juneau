@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.bson;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.bson.DataType.*;
 
 import java.io.*;
@@ -40,7 +40,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  * </ul>
  */
 @SuppressWarnings({

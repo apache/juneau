@@ -18,9 +18,7 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.math.*;
 import java.time.*;
@@ -377,7 +375,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 	 */
 	private static Object emptyOptional(Class<?> propertyClass, ClassMeta<?> propertyMeta) {
 		if (Optional.class.equals(propertyClass))
-			return (propertyMeta != null && propertyMeta.isOptional()) ? propertyMeta.getOptionalDefault() : opte();
+			return (propertyMeta != null && propertyMeta.isOptional()) ? propertyMeta.getOptionalDefault() : oe();
 		if (OptionalInt.class.equals(propertyClass))
 			return OptionalInt.empty();
 		if (OptionalLong.class.equals(propertyClass))
@@ -515,7 +513,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		if (nn(b.setter))
 			for (var ai : ap.find(Schema.class, b.setter))
 				merged = applyToMap(merged, ai.inner());
-		if (e(merged))
+		if (ie(merged))
 			return;
 		var validator = factory.create(merged, propertyClass(b));
 		if (validator == null)
@@ -557,7 +555,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-		if (e(m))
+		if (ie(m))
 			return acc;
 		if (acc == null)
 			return new JsonMap(m);
@@ -601,13 +599,13 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		if (ci.isAssignableTo(ObjectSwap.class)) {
 			var ps = BeanInstantiator.of(ObjectSwap.class).type(ci).run();
 			if (nn(ps.forMediaTypes()))
-				throw unsupportedOp("Media types on swaps not yet supported on bean properties.");
+				throw uoex("Media types on swaps not yet supported on bean properties.");
 			if (nn(ps.withTemplate()))
-				throw unsupportedOp("Templates on swaps not yet supported on bean properties.");
+				throw uoex("Templates on swaps not yet supported on bean properties.");
 			return ps;
 		}
 		if (ci.isAssignableTo(Surrogate.class))
-			throw unsupportedOp("Surrogate swaps not yet supported on bean properties.");
+			throw uoex("Surrogate swaps not yet supported on bean properties.");
 		throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
 	}
 

@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.xml.*;
  * <p>Contains a marshall-compatible subset of the methods available in the full {@code TestUtils}
  * in {@code juneau-integration-tests}.  Methods that depend on {@code juneau-rest-*} modules are excluded.</p>
  */
-public class TestUtils extends Utils {
+public class TestUtils extends Shorts {
 
 	public static String assertJson(String expected, Object value) {
 		assertEquals(expected, json5(value));

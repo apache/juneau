@@ -18,7 +18,7 @@ package org.apache.juneau.marshall.swaps;
 
 import static java.time.temporal.ChronoField.*;
 import static java.time.temporal.TemporalQueries.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.time.format.*;
@@ -32,7 +32,7 @@ import java.time.temporal.*;
  * should be able to be passed to any <code>Temporal.from(TemporalAccessor)</code> static method (such as {@link ZonedDateTime#from(TemporalAccessor)}).
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
  * </ul>
  */
 public class DefaultingTemporalAccessor implements TemporalAccessor {

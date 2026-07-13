@@ -23,7 +23,7 @@ import org.apache.juneau.marshall.*;
  * Interface for providing access to {@link BsonClassMeta} and {@link BsonBeanPropertyMeta} objects.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  * </ul>
  */
 public interface BsonMetaProvider {

@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server.swagger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.function;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -127,7 +127,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The first object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<A> optA() {
-		return opt(a);
+		return o(a);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The second object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<B> optB() {
-		return opt(b);
+		return o(b);
 	}
 
 	/**
@@ -145,7 +145,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The third object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<C> optC() {
-		return opt(c);
+		return o(c);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class Tuple4<A,B,C,D> {
 	 * @return The fourth object wrapped in an Optional, or Optional.empty() if the value is null.
 	 */
 	public Optional<D> optD() {
-		return opt(d);
+		return o(d);
 	}
 
 	@Override /* Overridden from Object */

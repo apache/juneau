@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.parser;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.text.*;

@@ -18,13 +18,13 @@ package org.apache.juneau.commons.reflect;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.*;
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassInfo.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -987,7 +987,7 @@ public class ClassInfo_Test extends TestBase {
 		check("", pTypeGenericArgInfo.getDeclaredInterfaces());
 
 		// Test line 190/235: inner == null case
-		// When inner is null, opt(inner) returns empty, so orElse(liste()) returns empty list
+		// When inner is null, opt(inner) returns empty, so orElse(emptyList()) returns empty list
 		var ci = ClassInfo.of((Class<?>)null, pType);
 		var declaredInterfaces = ci.getDeclaredInterfaces();
 		assertNotNull(declaredInterfaces);

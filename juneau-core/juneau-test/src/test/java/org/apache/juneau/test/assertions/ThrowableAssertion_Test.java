@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -68,7 +68,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = throwable("1");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x).asString().is("java.lang.RuntimeException: 1");
 		test(nil).asString().isNull();
 	}
@@ -85,7 +85,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb01_message() {
 		var x1 = throwable("1");
 		var x2 = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asMessage().is("1");
 		test(x2).asMessage().isNull();
 		test(nil).asMessage().isNull();
@@ -94,7 +94,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb02_messages() {
 		var x1 = throwable("1");
 		var x2 = throwable(x1);
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asMessages().isString("[1]");
 		test(x2).asMessages().isString("[java.lang.RuntimeException: 1,1]");
 		test(nil).asMessages().isNull();
@@ -103,7 +103,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb03_localizedMessage() {
 		var x1 = throwable("1");
 		var x2 = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asLocalizedMessage().is("1");
 		test(x2).asLocalizedMessage().isNull();
 		test(nil).asLocalizedMessage().isNull();
@@ -112,7 +112,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb04_localizedMessages() {
 		var x1 = throwable("1");
 		var x2 = throwable(x1);
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asLocalizedMessages().isString("[1]");
 		test(x2).asLocalizedMessages().isString("[java.lang.RuntimeException: 1,1]");
 		test(nil).asLocalizedMessages().isNull();
@@ -120,7 +120,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void bb05_stackTrace() {
 		var x1 = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asStackTrace().asJoin().isContains("RuntimeException");
 		test(nil).asStackTrace().isNull();
 	}
@@ -128,7 +128,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb06a_causedBy() {
 		var x1 = throwable(throwable("1"));
 		var x2 = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asCausedBy().asMessage().is("1");
 		test(x2).asMessage().isNull();
 		test(nil).asCausedBy().asMessage().isNull();
@@ -137,7 +137,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb06b_causedBy_wType() {
 		var x1 = throwable(throwable("1"));
 		var x2 = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asCausedBy(RuntimeException.class).asMessage().is("1");
 		test(x2).asCausedBy(RuntimeException.class).isNull();
 		test(nil).asCausedBy(RuntimeException.class).isNull();
@@ -147,7 +147,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void bb07_find() {
 		var x1 = throwable(new IOException());
 		var x2 = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).asFind(RuntimeException.class).isExists();
 		test(x1).asFind(IOException.class).isExists();
 		test(x1).asFind(Exception.class).isExists();
@@ -163,7 +163,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x).isExists().isExists();
 		var assertion1 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion1::isExists, "Exception was not thrown.");
@@ -171,7 +171,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca02_isNull() {
 		var x = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(nil).isNull();
 		var assertion2 = test(x);
 		assertThrows(BasicAssertionError.class, assertion2::isNull, "Value was not null.");
@@ -179,7 +179,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca03_isNotNull() {
 		var x = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x).isNotNull();
 		var assertion3 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion3::isNotNull, "Value was null.");
@@ -189,7 +189,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -209,7 +209,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -221,7 +221,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[java.lang.RuntimeException: 2]'.  Actual='java.lang.RuntimeException: 1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='java.lang.RuntimeException: 1'.");
@@ -232,7 +232,7 @@ class ThrowableAssertion_Test extends TestBase {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
 		var x2 = throwable("2");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -243,7 +243,7 @@ class ThrowableAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = throwable("1");
 		var x1a = throwable("1");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='java.lang.RuntimeException: 1(RuntimeException@*)'.  Actual='java.lang.RuntimeException: 1(RuntimeException@*)'.");
@@ -252,7 +252,7 @@ class ThrowableAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x).isType(Exception.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Exception was not expected type.  Expect='java.lang.String'.  Actual='java.lang.RuntimeException'.");
@@ -262,7 +262,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = throwable();
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x).isExactType(RuntimeException.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Exception was not expected type.  Expect='java.lang.Object'.  Actual='java.lang.RuntimeException'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Exception was not expected type.  Expect='java.lang.String'.  Actual='java.lang.RuntimeException'.");
@@ -272,7 +272,7 @@ class ThrowableAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = throwable("1");
-		var nil = no(Throwable.class);
+		var nil = nullObject(Throwable.class);
 		test(x).isString("java.lang.RuntimeException: 1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='java.lang.RuntimeException: 1'.");

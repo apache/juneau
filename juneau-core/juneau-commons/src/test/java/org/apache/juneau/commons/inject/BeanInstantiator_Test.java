@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.commons.inject;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -29,9 +28,8 @@ import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.logging.Logger;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.Utils;
+import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S1172", // Unused parameters in tests are intentional
@@ -2413,7 +2411,7 @@ class BeanInstantiator_Test extends TestBase {
 			// Test Optional-like methods inherited from NullableSupplier
 			assertTrue(supplier.isPresent());
 
-			var mapped = supplier.map(Utils::cns);
+			var mapped = supplier.map(Shorts::cns);
 			assertEquals("SimpleBean", mapped.orElse(null));
 		}
 	}
@@ -3271,7 +3269,7 @@ class BeanInstantiator_Test extends TestBase {
 		void m15_asOptionalMap() {
 			var result = bc(SimpleBean.class)
 				.asOptional()
-				.map(Utils::cns);
+				.map(Shorts::cns);
 
 			assertEquals("SimpleBean", result.get());
 		}

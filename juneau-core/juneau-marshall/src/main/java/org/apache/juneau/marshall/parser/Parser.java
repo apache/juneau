@@ -17,9 +17,9 @@
 package org.apache.juneau.marshall.parser;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -670,7 +670,7 @@ public class Parser extends MarshallingContextable {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T doParse(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**

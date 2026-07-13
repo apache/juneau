@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.lang.*;
@@ -78,7 +78,7 @@ class Swagger_Test extends TestBase {
 		@Override /* FileFinder */
 		public Optional<InputStream> getStream(String name, Locale locale) throws IOException {
 			if (name.endsWith(".json"))
-				return opt(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
+				return o(SwaggerProvider.class.getResourceAsStream("BasicRestInfoProviderTest_swagger.json"));
 			return super.getStream(name, locale);
 		}
 	}

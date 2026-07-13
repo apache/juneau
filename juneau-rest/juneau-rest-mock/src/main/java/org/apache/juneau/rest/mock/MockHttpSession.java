@@ -32,7 +32,7 @@ import jakarta.servlet.http.*;
  * {@link org.apache.juneau.rest.mock.classic.MockRestRequest#httpSession(HttpSession)} method.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
  */
 public class MockHttpSession implements HttpSession {

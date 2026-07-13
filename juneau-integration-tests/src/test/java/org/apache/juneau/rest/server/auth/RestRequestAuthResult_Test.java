@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -37,7 +37,7 @@ class RestRequestAuthResult_Test extends TestBase {
 
 	public static class AliceAuth extends RestAuthenticator {
 		@Override public Optional<AuthResult> authenticate(RestRequest req) {
-			return opt(AuthResult.of(() -> "alice", "admin", "user"));
+			return o(AuthResult.of(() -> "alice", "admin", "user"));
 		}
 	}
 
@@ -85,7 +85,7 @@ class RestRequestAuthResult_Test extends TestBase {
 
 	public static class RolesOnlyAuth extends RestAuthenticator {
 		@Override public Optional<AuthResult> authenticate(RestRequest req) {
-			return opt(AuthResult.ofRoles("editor"));
+			return o(AuthResult.ofRoles("editor"));
 		}
 	}
 

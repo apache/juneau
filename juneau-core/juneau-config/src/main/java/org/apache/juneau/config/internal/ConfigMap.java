@@ -18,10 +18,10 @@ package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.config.event.ConfigEventType.*;
 
 import java.io.*;
@@ -198,12 +198,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private static void checkKeyName(String s) {
 		if (! isValidKeyName(s))
-			throw illegalArg("Invalid key name: ''{0}''", s);
+			throw iaex("Invalid key name: ''{0}''", s);
 	}
 
 	private static void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw illegalArg("Invalid section name: ''{0}''", s);
+			throw iaex("Invalid section name: ''{0}''", s);
 	}
 
 	private static boolean isValidConfigName(String s) {
@@ -322,7 +322,7 @@ public class ConfigMap implements ConfigStoreListener {
 		try (var x = lock.read()) {
 			imports.forEach(y -> m.putAll(y.getConfigMap().asMap()));
 			entries.values().forEach(z -> {
-				var m2 = mapOf(String.class, String.class);
+				var m2 = mapOfType(String.class, String.class);
 				z.entries.values().forEach(y -> m2.put(y.key, y.value));
 				m.put(z.name, m2);
 			});
@@ -383,7 +383,7 @@ public class ConfigMap implements ConfigStoreListener {
 			var ce = cs == null ? null : cs.entries.get(key);
 
 			if (ce == null)
-				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(Utils::nn).findFirst().orElse(null);
+				ce = imports.stream().map(y -> y.getConfigMap().getEntry(section, key)).filter(Shorts::nn).findFirst().orElse(null);
 
 			return ce;
 		}
@@ -446,7 +446,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * 	An unmodifiable set of keys.
 	 */
 	public Set<String> getSections() {
-		var s = imports.isEmpty() ? entries.keySet() : setOf(String.class);
+		var s = imports.isEmpty() ? entries.keySet() : setOfType(String.class);
 		if (! imports.isEmpty()) {
 			imports.forEach(x -> s.addAll(x.getConfigMap().getSections()));
 			s.addAll(entries.keySet());
@@ -556,7 +556,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap removeImport(String section, String importName) {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**
@@ -639,7 +639,7 @@ public class ConfigMap implements ConfigStoreListener {
 	 * @return This object.
 	 */
 	public ConfigMap setImport(String section, String importName, List<String> preLines) {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**
@@ -842,7 +842,7 @@ public class ConfigMap implements ConfigStoreListener {
 		imports.forEach(Import::unregisterAll);
 		imports.clear();
 
-		var imports2 = mapOf(String.class, ConfigMap.class);
+		var imports2 = mapOfType(String.class, ConfigMap.class);
 
 		List<String> lines = new LinkedList<>();
 		try (var scanner = new Scanner(contents)) {
@@ -925,7 +925,7 @@ public class ConfigMap implements ConfigStoreListener {
 
 		var state = S1;
 
-		var sections = listOf(ConfigSection.class);
+		var sections = listOfType(ConfigSection.class);
 
 		for (var i = last; i >= 0; i--) {
 			var l = lines.get(i);

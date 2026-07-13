@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.commons.utils.Shorts.eq;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.Utils.eq;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

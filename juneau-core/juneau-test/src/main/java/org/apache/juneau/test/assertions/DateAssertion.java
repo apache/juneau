@@ -21,7 +21,7 @@ import java.time.temporal.*;
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.commons.function.ThrowingFunction;
+import org.apache.juneau.commons.function.*;
 
 
 /**

@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -166,7 +166,7 @@ public class MediaType extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Encoding> getEncoding() { return nullIfEmpty(encoding); }
+	public Map<String,Encoding> getEncoding() { return nie(encoding); }
 
 	/**
 	 * Bean property getter:  <property>x-example</property>.
@@ -184,7 +184,7 @@ public class MediaType extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Example> getExamples() { return nullIfEmpty(examples); }
+	public Map<String,Example> getExamples() { return nie(examples); }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -196,9 +196,9 @@ public class MediaType extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
-			.addIf(ne(encoding), PROP_encoding)
-			.addIf(ne(examples), PROP_examples)
+		var s = stb(String.class)
+			.addIf(ine(encoding), PROP_encoding)
+			.addIf(ine(examples), PROP_examples)
 			.addIf(nn(schema), PROP_schema)
 			.addIf(nn(example), PROP_xExample)
 			.build();

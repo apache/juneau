@@ -17,7 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -295,7 +295,7 @@ public class ComboInput<T> {
 	public void verify(T o, String testName) {
 		for (var f : verify) {
 			var s = f.apply(o);
-			if (ne(s)) {
+			if (ine(s)) {
 				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
 			}
 		}

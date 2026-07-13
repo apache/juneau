@@ -20,7 +20,7 @@ import static java.util.Collections.list;
 import static java.util.Spliterators.*;
 import static java.util.stream.StreamSupport.stream;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctConfiguration.*;
 
 import java.util.*;

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.util.*;
@@ -73,7 +73,7 @@ public final class AuthResultAccumulator {
 	 */
 	public Optional<AuthResult> result() {
 		if (! any || principal == null)
-			return opte();
-		return opt(AuthResult.of(principal, roles));
+			return oe();
+		return o(AuthResult.of(principal, roles));
 	}
 }

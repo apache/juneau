@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 package org.apache.juneau.marshall.transforms;
-
-import static org.apache.juneau.test.assertions.Verify.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.assertions.Verify.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -114,7 +114,7 @@ class ByteArrayBase64Swap_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.verify(x -> verify(x).isType(List.class))
 			.verify(x -> verify(x.get(0)).isType(byte[].class))
 			.build(),
-		tester(4, "MapOfByteArrays", getType(Map.class,String.class,byte[].class), mapb(String.class,byte[].class).add("foo",bytes(1,2,3)).add("bar",null).add(null,bytes(4,5,6)).add("null",bytes(7,8,9)).build())
+		tester(4, "MapOfByteArrays", getType(Map.class,String.class,byte[].class), mapBuilder(String.class,byte[].class).add("foo",bytes(1,2,3)).add("bar",null).add(null,bytes(4,5,6)).add("null",bytes(7,8,9)).build())
 			.json5("{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}")
 			.json5T("{foo:'AQID',bar:null,null:'BAUG','null':'BwgJ'}")
 			.json5R("{\n\tfoo: 'AQID',\n\tbar: null,\n\tnull: 'BAUG',\n\t'null': 'BwgJ'\n}")

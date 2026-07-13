@@ -195,6 +195,10 @@
 						<!-- ServiceLoader provider files - plain text, no comment syntax for license headers -->
 						<exclude>**/META-INF/services/**</exclude>
 
+						<!-- OpenRewrite recipe files - YAML has no comment syntax for ASF license headers -->
+						<exclude>**/META-INF/rewrite/**</exclude>
+						<exclude>rewrite.yml</exclude>
+
 						<!-- Performance baseline data file - plain text metrics, no license header syntax -->
 					<exclude>**/perf-baseline.txt</exclude>
 					<exclude>**/test-run-history.tsv</exclude>
@@ -331,6 +335,28 @@
 					<configuration>
 						<arguments>-Daether.checksums.algorithms=MD5,SHA-1,SHA-512</arguments>
 					</configuration>
+				</plugin>
+
+				<plugin>
+					<groupId>org.openrewrite.maven</groupId>
+					<artifactId>rewrite-maven-plugin</artifactId>
+					<version>5.42.0</version>
+					<configuration>
+						<activeRecipes/>
+						<exportDatatables>false</exportDatatables>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.openrewrite</groupId>
+							<artifactId>rewrite-java</artifactId>
+							<version>8.38.0</version>
+						</dependency>
+						<dependency>
+							<groupId>org.openrewrite</groupId>
+							<artifactId>rewrite-java-17</artifactId>
+							<version>8.38.0</version>
+						</dependency>
+					</dependencies>
 				</plugin>
 
 			</plugins>

@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 package org.apache.juneau;
-
-import static org.apache.juneau.test.assertions.Verify.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.assertions.Verify.*;
 
 import java.util.*;
 

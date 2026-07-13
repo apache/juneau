@@ -17,9 +17,9 @@
 package org.apache.juneau.test.assertions;
 
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -69,7 +69,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x).asString().is("2000-06-01T12:34:56Z");
 		test(nil).asString().isNull();
 	}
@@ -89,7 +89,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x).isExists().isExists();
 		var assertion3 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
@@ -97,7 +97,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 
 	@Test void ca02_isNull() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(nil).isNull();
 		var assertion4 = test(x);
 		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
@@ -105,7 +105,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 
 	@Test void ca03_isNotNull() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x).isNotNull();
 		var assertion5 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
@@ -115,7 +115,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -135,7 +135,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -147,7 +147,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2010-06-01T12:34:56Z]'.  Actual='2000-06-01T12:34:56Z'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='2000-06-01T12:34:56Z'.");
@@ -158,7 +158,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -169,7 +169,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = MID1;
 		var x1a = MID1a;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='2000-06-01T12:34:56Z(ZonedDateTime@*)'.  Actual='2000-06-01T12:34:56Z(ZonedDateTime@*)'.");
@@ -178,7 +178,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x).isType(ZonedDateTime.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.time.ZonedDateTime'.");
@@ -188,7 +188,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x).isExactType(ZonedDateTime.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.time.ZonedDateTime'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.time.ZonedDateTime'.");
@@ -198,7 +198,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x).isString("2000-06-01T12:34:56Z");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='2000-06-01T12:34:56Z'.");
@@ -208,7 +208,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cb01_isGt() {
 		var x1 = MIN;
 		var x2 = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().is("Value was not greater than expected.  Expect='2000-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
@@ -221,7 +221,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cb02_isGte() {
 		var x1 = MIN;
 		var x2 = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().is("Value was not greater than or equals to expected.  Expect='2000-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
@@ -234,7 +234,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cb03_isLt() {
 		var x1 = MIN;
 		var x2 = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='1900-06-01T12:34:56Z'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().is("Value was not less than expected.  Expect='1900-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
@@ -247,7 +247,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cb04_isLte() {
 		var x1 = MIN;
 		var x2 = MID1;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().is("Value was not less than or equals to expected.  Expect='1900-06-01T12:34:56Z'.  Actual='2000-06-01T12:34:56Z'.");
@@ -262,7 +262,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 		var x2 = MID1;
 		var x3 = MID2;
 		var x4 = MAX;
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
@@ -277,7 +277,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cc01_is_wChrono() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x1a = zdt("1950-01-01T12:35:55Z");
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).is(x1a, HOURS);
 		test(x1).is(x1a, MINUTES);
 		test(nil).is(nil, MINUTES);
@@ -290,7 +290,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cc02_isAfter() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x2).isAfter(x1);
 		assertThrown(()->test(x1).isAfter(x2)).asMessage().isContains("Value was not after expected.");
 		var assertion16 = test(x1);
@@ -302,7 +302,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cc03_isAfterNow() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x2).isAfterNow();
 		assertThrown(()->test(x1).isAfterNow()).asMessage().isContains("Value was not after expected.");
 		assertThrown(()->test(nil).isAfterNow()).asMessage().isContains("Value was null.");
@@ -311,7 +311,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cc04_isBefore() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isBefore(x2);
 		assertThrown(()->test(x2).isBefore(x1)).asMessage().isContains("Value was not before expected.");
 		var assertion18 = test(x1);
@@ -323,7 +323,7 @@ class ZonedDateTimeAssertion_Test extends TestBase {
 	@Test void cc05_isBeforeNow() {
 		var x1 = zdt("1950-01-01T12:34:56Z");
 		var x2 = zdt("2050-01-01T12:34:56Z");
-		var nil = no(ZonedDateTime.class);
+		var nil = nullObject(ZonedDateTime.class);
 		test(x1).isBeforeNow();
 		assertThrown(()->test(x2).isBeforeNow()).asMessage().isContains("Value was not before expected.");
 		assertThrown(()->test(nil).isBeforeNow()).asMessage().isContains("Value was null.");

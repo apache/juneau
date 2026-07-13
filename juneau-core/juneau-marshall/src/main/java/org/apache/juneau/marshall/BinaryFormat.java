@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -124,7 +124,7 @@ public enum BinaryFormat {
 			try {
 				return Base64.getUrlDecoder().decode(s);
 			} catch (IllegalArgumentException e) {
-				throw illegalArg("Invalid binary value ''{0}'' for format {1}: {2}", s, this, e.getMessage());
+				throw iaex("Invalid binary value ''{0}'' for format {1}: {2}", s, this, e.getMessage());
 			}
 		}
 		// Format-agnostic parsing: sniff the wire shape and decode accordingly, regardless of the
@@ -140,7 +140,7 @@ public enum BinaryFormat {
 		try {
 			return base64Decode(s);
 		} catch (IllegalArgumentException e) {
-			throw illegalArg("Invalid binary value ''{0}'' for format {1}: {2}", s, this, e.getMessage());
+			throw iaex("Invalid binary value ''{0}'' for format {1}: {2}", s, this, e.getMessage());
 		}
 	}
 

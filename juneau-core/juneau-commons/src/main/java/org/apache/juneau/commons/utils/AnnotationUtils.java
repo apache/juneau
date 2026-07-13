@@ -18,7 +18,8 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -94,7 +95,7 @@ public class AnnotationUtils {
 	public static Stream<Annotation> streamRepeated(Annotation a) {
 		var ci = info(a.annotationType());
 		var mi = ci.getRepeatedAnnotationMethod();
-		if (nn(mi)) {
+		if (isNotNull(mi)) {
 			Annotation[] annotations = mi.invoke(a);
 			return Arrays.stream(annotations);
 		}
@@ -105,7 +106,7 @@ public class AnnotationUtils {
 		if (a1.length != a2.length)
 			return false;
 		for (var i = 0; i < a1.length; i++)
-			if (neq(a1[i], a2[i]))
+			if (notEqual(a1[i], a2[i]))
 				return false;
 		return true;
 	}
@@ -153,14 +154,14 @@ public class AnnotationUtils {
 	}
 
 	private static Stream<Method> getAnnotationMethods(Class<? extends Annotation> type) {
-		return l(type.getDeclaredMethods()).stream();
+		return fixedSizeList(type.getDeclaredMethods()).stream();
 	}
 
 	private static int hashMember(String name, Object value) {
 		int part1 = name.hashCode() * 127;
 		if (value == null)
 			return part1;
-		if (isArray(value))
+		if (ClassUtils.isArray(value))
 			return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);
 		if (value instanceof Annotation value2)
 			return part1 ^ hash(value2);
@@ -175,7 +176,7 @@ public class AnnotationUtils {
 		if (type.isArray())
 			return arrayMemberEquals(type.getComponentType(), o1, o2);
 		if (type.isAnnotation())
-			return eq((Annotation)o1, (Annotation)o2);
+			return equal((Annotation)o1, (Annotation)o2);
 		return o1.equals(o2);
 	}
 }

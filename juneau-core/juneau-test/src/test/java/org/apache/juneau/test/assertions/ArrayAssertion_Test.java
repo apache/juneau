@@ -15,13 +15,10 @@
  * limitations under the License.
  */
 package org.apache.juneau.test.assertions;
-
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.eq;
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.function.*;

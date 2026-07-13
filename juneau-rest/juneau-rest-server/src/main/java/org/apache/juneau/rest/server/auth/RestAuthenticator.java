@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -95,10 +95,10 @@ public abstract class RestAuthenticator {
 	 */
 	public static final class Null extends RestAuthenticator {
 		@Override public Optional<AuthResult> authenticate(RestRequest req) {
-			return opte();
+			return oe();
 		}
 		@Override Optional<AuthResult> authenticateRaw(HttpServletRequest req) {
-			return opte();
+			return oe();
 		}
 	}
 }

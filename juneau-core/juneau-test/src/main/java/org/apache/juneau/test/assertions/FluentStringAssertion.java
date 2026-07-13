@@ -17,10 +17,8 @@
 package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.contains;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;

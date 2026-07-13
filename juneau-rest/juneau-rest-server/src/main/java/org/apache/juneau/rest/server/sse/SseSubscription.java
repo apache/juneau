@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.sse;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -39,7 +39,7 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 
 	SseSubscription(String id, int queueSize, Consumer<String> closeCallback) {
 		if (isEmpty(id))
-			throw illegalArg("id cannot be null or empty.");
+			throw iaex("id cannot be null or empty.");
 		this.id = id;
 		this.queue = new LinkedBlockingDeque<>(queueSize);
 		this.closeCallback = assertArgNotNull("closeCallback", closeCallback);

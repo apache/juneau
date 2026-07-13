@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Represents a parsed <l>Client-Version</l> HTTP request header.
@@ -42,7 +42,7 @@ import org.apache.juneau.http.*;
  * known client versions.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude
@@ -168,7 +168,7 @@ public class ClientVersion extends BasicStringHeader {
 	 * @return The header value as a {@link Version} object, or {@link Optional#empty()} if the value is <jk>null</jk>.
 	 */
 	public Optional<Version> asVersion() {
-		return opt(value);
+		return o(value);
 	}
 
 	@Override /* Overridden from Header */

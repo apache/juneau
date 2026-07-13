@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.swap;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -95,7 +95,7 @@ import org.apache.juneau.marshall.serializer.*;
  * The normal object representation of an object.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
 
  * </ul>
  *
@@ -147,8 +147,8 @@ public abstract class ObjectSwap<T,S> {
 	protected ObjectSwap(Class<T> normalClass, Class<?> swapClass) {
 		this.normalClass = normalClass;
 		this.swapClass = swapClass;
-		normalClassInfo = opt(normalClass).map(x -> info(x)).orElse(null);
-		swapClassInfo = opt(swapClass).map(x -> info(x)).orElse(null);
+		normalClassInfo = o(normalClass).map(x -> info(x)).orElse(null);
+		swapClassInfo = o(swapClass).map(x -> info(x)).orElse(null);
 		this.forMediaTypes = forMediaTypes();
 		this.template = withTemplate();
 	}

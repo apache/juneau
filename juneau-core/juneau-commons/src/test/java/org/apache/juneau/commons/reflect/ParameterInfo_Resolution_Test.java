@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.inject.Named;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Coverage tests for {@link ParameterInfo} — focuses on:

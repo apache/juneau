@@ -19,8 +19,8 @@ package org.apache.juneau.commons.http;
 import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Unit tests for {@link HeaderValueParser}, {@link HeaderElement}, {@link BasicNameValuePair},

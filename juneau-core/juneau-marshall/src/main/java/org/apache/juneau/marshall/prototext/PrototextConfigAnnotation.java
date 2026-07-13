@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.*;
  * Utility classes and methods for the {@link PrototextConfig @PrototextConfig} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Prototext">Protobuf Text Format Basics</a>
  * </ul>
  */
 public class PrototextConfigAnnotation {

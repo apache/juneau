@@ -17,13 +17,12 @@
 package org.apache.juneau.rest.server.observation;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.tracing.*;
-import org.apache.juneau.rest.server.tracing.Scope;
 
 /**
  * Factory for custom (non-request) {@link Observation}s, composing a {@link MetricsRecorder} and a

@@ -15,9 +15,8 @@
  * limitations under the License.
  */
 package org.apache.juneau.marshall.transforms;
-
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.assertions.Verify.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;

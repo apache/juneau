@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.test.client;
 
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.utest.utils.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,14 +26,14 @@ import java.util.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.logger.*;
-import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.marshall.testutils.pojos.ImplicitSwappedObject;
 import org.apache.juneau.marshall.testutils.pojos.SwappedObject;
 import org.apache.juneau.marshall.testutils.pojos.TypedBean;
 import org.apache.juneau.marshall.testutils.pojos.TypedBeanImpl;
+import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.logger.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.testutils.pojos.*;
 
 import jakarta.servlet.http.*;

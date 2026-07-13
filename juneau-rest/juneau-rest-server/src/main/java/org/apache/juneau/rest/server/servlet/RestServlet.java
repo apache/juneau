@@ -19,8 +19,8 @@ package org.apache.juneau.rest.server.servlet;
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.logging.Level.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.text.*;
@@ -60,7 +60,7 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
  * </ul>
  *
  * @serial exclude
@@ -194,7 +194,7 @@ public abstract class RestServlet extends HttpServlet {
 		// @formatter:off
 		return rstream(AP.find(Rest.class, ci))
 			.map(x -> x.inner().path())
-			.filter(Utils::ne)
+			.filter(Shorts::ine)
 			.map(StringUtils::trimSlashes)
 			.findFirst()
 			.orElse("");
@@ -334,7 +334,7 @@ public abstract class RestServlet extends HttpServlet {
 			getContext().execute(this, r1, r2);
 
 		} catch (Exception e) {
-			r2.sendError(SC_INTERNAL_SERVER_ERROR, lm(e));
+			r2.sendError(SC_INTERNAL_SERVER_ERROR, localizedMessage(e));
 		}
 	}
 

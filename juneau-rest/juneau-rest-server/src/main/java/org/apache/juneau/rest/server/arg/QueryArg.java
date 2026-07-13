@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.arg;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -88,7 +88,7 @@ public class QueryArg implements RestOpArg {
 		return AP.find(Query.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> ne(x.def()))
+			.filter(x -> ine(x.def()))
 			.findFirst()
 			.map(Query::def);
 		// @formatter:on
@@ -133,7 +133,7 @@ public class QueryArg implements RestOpArg {
 		schemaBuilder.applyAll(Query.class, pi);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(pi).or(() -> opt(classLevelQuery).filter(q -> ne(q.def())).map(Query::def)).orElse(null);
+		this.def = findDef(pi).or(() -> o(classLevelQuery).filter(q -> ine(q.def())).map(Query::def)).orElse(null);
 		this.type = pi.getParameterType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

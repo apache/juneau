@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.test.junit.testsupport;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -96,24 +96,24 @@ public final class StubExtensionContext {
 		public Object invoke(Object proxy, Method method, Object[] args) {
 			var name = method.getName();
 			return switch (name) {
-				case "getParent" -> opt(state.parent);
+				case "getParent" -> o(state.parent);
 				case "getRoot" -> state.parent == null ? proxy : state.parent.getRoot();
 				case "getUniqueId" -> "stub:" + (state.testClass == null ? "?" : state.testClass.getName());
 				case "getDisplayName" -> "stub:" + (state.testClass == null ? "?" : state.testClass.getName());
 				case "getTags" -> Set.of();
-				case "getElement" -> opt((Object) state.testClass);
-				case "getTestClass" -> opt((Object) state.testClass);
+				case "getElement" -> o((Object) state.testClass);
+				case "getTestClass" -> o((Object) state.testClass);
 				case "getRequiredTestClass" -> Objects.requireNonNull(state.testClass, "no test class");
 				case "getEnclosingTestClasses" -> List.of();
-				case "getTestInstanceLifecycle" -> opte();
-				case "getTestInstance" -> opt(state.testInstance);
+				case "getTestInstanceLifecycle" -> oe();
+				case "getTestInstance" -> o(state.testInstance);
 				case "getRequiredTestInstance" -> Objects.requireNonNull(state.testInstance, "no test instance");
-				case "getTestInstances" -> opte();
+				case "getTestInstances" -> oe();
 				case "getRequiredTestInstances" -> throw new UnsupportedOperationException("getRequiredTestInstances");
-				case "getTestMethod" -> opte();
+				case "getTestMethod" -> oe();
 				case "getRequiredTestMethod" -> throw new UnsupportedOperationException("getRequiredTestMethod");
-				case "getExecutionException" -> opte();
-				case "getConfigurationParameter" -> opte();
+				case "getExecutionException" -> oe();
+				case "getConfigurationParameter" -> oe();
 				case "publishReportEntry", "publishFile", "publishDirectory" -> null;
 				case "getStore" -> storeFor(args);
 				case "getExecutionMode" -> throw new UnsupportedOperationException("getExecutionMode");

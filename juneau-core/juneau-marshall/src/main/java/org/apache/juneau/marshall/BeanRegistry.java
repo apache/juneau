@@ -18,9 +18,9 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -166,7 +166,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 						if (x instanceof Class<?> x2)
 							addClass(info(x2));
 						else
-							throw bex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
+							throw brex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
 					});
 				} else if (ci.isAssignableTo(Map.class)) {
 					Map<?,?> m = BeanInstantiator.of(Map.class).type(ci).preferZeroArgConstructor().run();
@@ -178,7 +178,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
-							throw bex("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", ci.getName(), cn(v));
+							throw brex("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", ci.getName(), cn(v));
 						addToMap(typeName, val);
 					});
 				} else {
@@ -186,9 +186,9 @@ public class BeanRegistry implements BeanRegistryLookup {
 					var typeName = ap.find(Marshalled.class, ci)
 						.stream()
 						.map(x -> x.inner().typeName())
-						.filter(Utils::ne)
+						.filter(Shorts::ine)
 						.findFirst()
-						.orElseThrow(() -> bex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Marshalled(typeName) annotation defined.", ci.getName()));
+						.orElseThrow(() -> brex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Marshalled(typeName) annotation defined.", ci.getName()));
 					// @formatter:on
 					addToMap(typeName, bc.getClassMeta(ci.inner()));
 				}
@@ -196,7 +196,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 		} catch (BeanRuntimeException e) {
 			throw e;
 		} catch (Exception e) {
-			throw bex(e);
+			throw brex(e);
 		}
 	}
 
@@ -208,7 +208,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 	private ClassMeta<?> getTypedClassMeta(Object array) {
 		var len = Array.getLength(array);
 		if (len == 0)
-			throw bex("Map entry had an empty array value.");
+			throw brex("Map entry had an empty array value.");
 		var type = (Type)Array.get(array, 0);
 		var args = new Type[len - 1];
 		for (var i = 1; i < len; i++)

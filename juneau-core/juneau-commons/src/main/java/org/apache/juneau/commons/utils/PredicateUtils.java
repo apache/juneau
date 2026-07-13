@@ -43,17 +43,6 @@ public final class PredicateUtils {
 	/**
 	 * Returns a function that prints the input value to stderr and returns it unchanged.
 	 *
-	 * <p>
-	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek())}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	list.stream()
-	 * 		.map(peek())
-	 * 		.filter(x -&gt; x != <jk>null</jk>)
-	 * 		.collect(Collectors.toList());
-	 * </p>
-	 *
 	 * @param <T> The type of value.
 	 * @return A function that prints and returns the value.
 	 */
@@ -66,17 +55,6 @@ public final class PredicateUtils {
 
 	/**
 	 * Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.
-	 *
-	 * <p>
-	 * Useful for debugging streams by inserting into a stream pipeline with {@code .map(peek(...))}.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	list.stream()
-	 * 		.map(peek(<js>"Processing: {0}"</js>, x -&gt; x.getName()))
-	 * 		.filter(x -&gt; x != <jk>null</jk>)
-	 * 		.collect(Collectors.toList());
-	 * </p>
 	 *
 	 * @param <T> The type of value.
 	 * @param message A format string using {@code {0}} as placeholder for the formatted value.
@@ -92,7 +70,7 @@ public final class PredicateUtils {
 
 	/**
 	 * Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.
-
+	 *
 	 * @param <T> The type being tested.
 	 * @param predicate The predicate.
 	 * @param value The value to test.

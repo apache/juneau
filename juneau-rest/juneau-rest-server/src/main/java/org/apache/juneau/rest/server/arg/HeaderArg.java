@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.arg;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -126,7 +126,7 @@ public class HeaderArg implements RestOpArg {
 		// @formatter:on
 		if (fromAnnotation.isPresent())
 			return fromAnnotation;
-		return opt(nameFromTypeNameField(pi));
+		return o(nameFromTypeNameField(pi));
 	}
 
 	private static String nameFromTypeNameField(ParameterInfo pi) {
@@ -150,7 +150,7 @@ public class HeaderArg implements RestOpArg {
 		return AP.find(Header.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> ne(x.def()))
+			.filter(x -> ine(x.def()))
 			.findFirst()
 			.map(Header::def);
 		// @formatter:on
@@ -195,7 +195,7 @@ public class HeaderArg implements RestOpArg {
 		schemaBuilder.applyAll(Header.class, pi);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(pi).or(() -> opt(classLevelHeader).filter(h -> ne(h.def())).map(Header::def)).orElse(null);
+		this.def = findDef(pi).or(() -> o(classLevelHeader).filter(h -> ine(h.def())).map(Header::def)).orElse(null);
 		this.type = pi.getParameterType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

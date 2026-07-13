@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Represents an OSGi-style version range like <js>"1.2"</js> or <js>"[1.0,2.0)"</js>.
@@ -73,7 +73,7 @@ public class VersionRange {
 	 * @return <jk>true</jk> if the specified version string matches this version range.
 	 */
 	public boolean matches(String v) {
-		if (e(v))
+		if (ie(v))
 			return (minVersion == null && maxVersion == null);
 		var ver = new Version(v);
 		return (minVersion == null || ver.isAtLeast(minVersion, minExclusive))

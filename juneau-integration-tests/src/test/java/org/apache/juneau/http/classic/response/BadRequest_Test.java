@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.classic.response;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.HttpResponses.*;
 import static org.apache.juneau.http.classic.response.BadRequest.*;
 import static org.junit.jupiter.api.Assertions.*;

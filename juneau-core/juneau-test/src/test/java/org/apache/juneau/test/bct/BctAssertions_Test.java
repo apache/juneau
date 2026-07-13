@@ -18,7 +18,7 @@ package org.apache.juneau.test.bct;
 
 import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -753,7 +753,7 @@ class BctAssertions_Test extends TestBase {
 			assertEmpty(l());
 			assertEmpty(new HashMap<>());
 			assertEmpty(new HashSet<>());
-			assertEmpty(opte());
+			assertEmpty(oe());
 		}
 
 		@Test
@@ -762,7 +762,7 @@ class BctAssertions_Test extends TestBase {
 			assertNotEmpty(l("item"));
 			assertNotEmpty(m("key", "value"));
 			assertNotEmpty(Set.of("element"));
-			assertNotEmpty(opt("value"));
+			assertNotEmpty(o("value"));
 		}
 
 		@Test

@@ -16,10 +16,9 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.UriRelativity.*;
 import static org.apache.juneau.marshall.UriResolution.*;
 
@@ -142,7 +141,7 @@ public class UriResolver {
 
 		try {
 			var uri = s(o);
-			uri = nullIfEmpty(uri);
+			uri = nie(uri);
 			var needsNormalize = hasDotSegments(uri) && nn(resolution);
 
 			// Absolute paths are not changed.

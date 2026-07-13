@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.lang.reflect.*;

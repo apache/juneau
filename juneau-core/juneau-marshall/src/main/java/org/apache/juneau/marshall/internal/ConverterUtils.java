@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.internal;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
@@ -109,7 +109,7 @@ public class ConverterUtils {
 	 * @return A new {@link Lists} containing the converted elements.
 	 */
 	public static <T> Lists<T> toListBuilder(Object value, Class<T> type) {
-		return listb(type).elementFunction(o -> MarshallingContextConverter.INSTANCE.to(o, type)).addAny(value);
+		return lb(type).elementFunction(o -> MarshallingContextConverter.INSTANCE.to(o, type)).addAny(value);
 	}
 
 	/**
@@ -131,7 +131,7 @@ public class ConverterUtils {
 	 * @return A new {@link Maps} containing the converted entries.
 	 */
 	public static <K,V> Maps<K,V> toMapBuilder(Object value, Class<K> keyType, Class<V> valueType) {
-		return mapb(keyType, valueType)
+		return mb(keyType, valueType)
 			.keyFunction(o -> MarshallingContextConverter.INSTANCE.to(o, keyType))
 			.valueFunction(o -> MarshallingContextConverter.INSTANCE.to(o, valueType))
 			.addAny(value);
@@ -158,6 +158,6 @@ public class ConverterUtils {
 	 * @return A new {@link Sets} containing the converted elements.
 	 */
 	public static <T> Sets<T> toSetBuilder(Object value, Class<T> type) {
-		return setb(type).elementFunction(o -> MarshallingContextConverter.INSTANCE.to(o, type)).addAny(value);
+		return stb(type).elementFunction(o -> MarshallingContextConverter.INSTANCE.to(o, type)).addAny(value);
 	}
 }

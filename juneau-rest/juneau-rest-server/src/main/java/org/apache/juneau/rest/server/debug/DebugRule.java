@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.debug;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.function.*;
 import java.util.logging.*;

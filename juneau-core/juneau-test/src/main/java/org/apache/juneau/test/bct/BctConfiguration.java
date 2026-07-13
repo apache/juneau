@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.test.bct;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.inject.*;
@@ -341,7 +342,7 @@ public class BctConfiguration {
 	 * @return The bean converter to use for the current thread.
 	 */
 	static BeanConverter getConverter() {
-		return opt(BctConfiguration.CONVERTER_OVERRIDE.get()).orElseGet(CONVERTER_SUPPLIER.get());
+		return o(BctConfiguration.CONVERTER_OVERRIDE.get()).orElseGet(CONVERTER_SUPPLIER.get());
 	}
 
 	/**

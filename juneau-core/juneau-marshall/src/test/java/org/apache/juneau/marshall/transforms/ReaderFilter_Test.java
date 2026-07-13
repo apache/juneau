@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.transforms;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;

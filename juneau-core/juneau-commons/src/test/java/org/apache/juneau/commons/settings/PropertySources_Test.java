@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.settings;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -24,9 +24,9 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.jar.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.runtime.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S5976" // Explicit per-case tests are clearer than a single parameterized test for these distinct property-source scenarios.
@@ -49,14 +49,14 @@ class PropertySources_Test extends TestBase {
 
 	@Test
 	void a03_result_present_withOptionalValue() {
-		var r = PropertyLookupResult.present(opt("hello"));
+		var r = PropertyLookupResult.present(o("hello"));
 		assertTrue(r.isPresent());
 		assertEquals("hello", r.value().orElse(null));
 	}
 
 	@Test
 	void a04_result_present_withOptionalEmpty() {
-		var r = PropertyLookupResult.present(opte());
+		var r = PropertyLookupResult.present(oe());
 		assertTrue(r.isPresent());
 		assertFalse(r.value().isPresent());
 	}

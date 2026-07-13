@@ -18,9 +18,9 @@ package org.apache.juneau.commons.svl.functions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /** Tests for {@link RegexFunctions}. */
 class RegexFunctions_Test extends TestBase {

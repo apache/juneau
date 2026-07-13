@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.json;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -120,7 +120,7 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
  * 	<li class='link'>{@link Json5Serializer} - For JSON5-style output (single quotes, etc.)
  * </ul>
  */

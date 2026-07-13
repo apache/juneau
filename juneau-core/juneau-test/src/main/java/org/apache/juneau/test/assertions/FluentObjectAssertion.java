@@ -18,8 +18,9 @@ package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -501,7 +502,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	 * @return The value wrapped in an {@link Optional}.
 	 */
 	protected Optional<T> opt() {
-		return Utils.opt(value);  // NOAI
+		return Shorts.o(value);  // NOAI
 	}
 
 	/**

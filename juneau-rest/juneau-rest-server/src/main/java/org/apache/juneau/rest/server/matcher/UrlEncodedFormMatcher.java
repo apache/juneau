@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.matcher;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import jakarta.servlet.http.*;
 
@@ -24,7 +24,7 @@ import jakarta.servlet.http.*;
  * Predefined matcher for matching requests with content type <js>"application/x-www-form-urlencoded"</js>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method Basics</a>
  * </ul>
  */
 public class UrlEncodedFormMatcher extends RestMatcher {

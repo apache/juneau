@@ -17,9 +17,9 @@
 package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isNotEmpty;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -49,7 +49,7 @@ import jakarta.servlet.*;
  * (path prefix matcher) is always populated at startup; only the full context build is deferred.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
  * </ul>
  */
 public class RestChildren {
@@ -341,18 +341,18 @@ public class RestChildren {
 				var pm = rc.getPathMatcher();  // Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).
 				UrlPathMatch uppm = pm == null ? null : pm.match(builder.getUrlPath());
 				if (nn(uppm))
-					return opt(RestChildMatch.create(uppm, rc));
+					return o(RestChildMatch.create(uppm, rc));
 			}
 			// Check lazy entries.
 			for (var e : lazyEntries.values()) {
 				UrlPathMatch uppm = e.pathMatcher.match(builder.getUrlPath());
 				if (nn(uppm)) {
 					var rc = e.materialize();
-					return opt(RestChildMatch.create(uppm, rc));
+					return o(RestChildMatch.create(uppm, rc));
 				}
 			}
 		}
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -589,7 +589,7 @@ public class RestChildren {
 
 	private RestContext addChildInternal(Class<?> resourceClass, Object resourceInstance, String pathOverride, boolean replace) throws ServletException {
 		if (parent == null || beanStore == null)
-			throw illegalState("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");
+			throw isex("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");
 		RestContext cc;
 		try {
 			cc = buildChildContext(parent, beanStore, servletConfig, resourceClass, resourceInstance, pathOverride);
@@ -602,7 +602,7 @@ public class RestChildren {
 			if (children.containsKey(key)) {
 				if (! replace) {
 					destroyQuietly(cc);
-					throw illegalState("Child resource already registered at path ''{0}''.", key);
+					throw isex("Child resource already registered at path ''{0}''.", key);
 				}
 				replaced = children.get(key);
 				var withoutExisting = new LinkedHashMap<>(children);

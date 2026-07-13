@@ -16,9 +16,7 @@
  */
 package org.apache.juneau.marshall.serializer;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-
+import static org.apache.juneau.BasicTestUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.function.*;

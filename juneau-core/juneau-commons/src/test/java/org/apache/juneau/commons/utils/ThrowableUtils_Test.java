@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.commons.utils;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,9 +24,9 @@ import java.io.*;
 import java.sql.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class ThrowableUtils_Test extends TestBase {
 
@@ -45,7 +46,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a001_bex_withClass() {
-		BeanRuntimeException ex = bex(String.class, "Error in class {0}", "TestClass");
+		BeanRuntimeException ex = brex(String.class, "Error in class {0}", "TestClass");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Error in class TestClass"));
 		assertTrue(ex.getMessage().contains("java.lang.String")); // Class name is in message
@@ -56,7 +57,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a002_bex_withMessage() {
-		BeanRuntimeException ex = bex("Error message {0}", "test");
+		BeanRuntimeException ex = brex("Error message {0}", "test");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Error message test"));
 	}
@@ -67,7 +68,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a003_bex_withCause() {
 		var cause = new IOException("root cause");
-		BeanRuntimeException ex = bex(cause);
+		BeanRuntimeException ex = brex(cause);
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 	}
@@ -78,7 +79,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a004_bex_withCauseAndClass() {
 		var cause = new IOException("root cause");
-		BeanRuntimeException ex = bex(cause, String.class, "Error in {0}", "TestClass");
+		BeanRuntimeException ex = brex(cause, String.class, "Error in {0}", "TestClass");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Error in TestClass"));
@@ -94,7 +95,7 @@ class ThrowableUtils_Test extends TestBase {
 		// Note: bex(Throwable, String, ...) calls new BeanRuntimeException(f(msg, args), cause)
 		// but BeanRuntimeException doesn't have a (String, Throwable) constructor,
 		// so it matches BeanRuntimeException(String) and the cause is lost
-		BeanRuntimeException ex = bex(cause, "Error message {0}", "test");
+		BeanRuntimeException ex = brex(cause, "Error message {0}", "test");
 		assertNotNull(ex);
 		// The cause is not preserved because BeanRuntimeException(String) constructor is used
 		assertTrue(ex.getMessage().contains("Error message test"));
@@ -260,7 +261,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_illegalArg_withMessage() {
-		IllegalArgumentException ex = illegalArg("Invalid parameter {0}", "userId");
+		IllegalArgumentException ex = iaex("Invalid parameter {0}", "userId");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Invalid parameter userId"));
 		assertNull(ex.getCause());
@@ -272,7 +273,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a012_illegalArg_withCause() {
 		var cause = new IOException("root cause");
-		IllegalArgumentException ex = illegalArg(cause);
+		IllegalArgumentException ex = iaex(cause);
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 	}
@@ -283,7 +284,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a013_illegalArg_withCauseAndMessage() {
 		var cause = new IOException("root cause");
-		IllegalArgumentException ex = illegalArg(cause, "Invalid parameter {0}", "userId");
+		IllegalArgumentException ex = iaex(cause, "Invalid parameter {0}", "userId");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Invalid parameter userId"));
@@ -329,7 +330,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a017_lm() {
 		var ex = new RuntimeException("test message");
-		String localized = lm(ex);
+		String localized = localizedMessage(ex);
 		assertEquals("test message", localized);
 		assertEquals(ex.getLocalizedMessage(), localized);
 	}
@@ -375,19 +376,19 @@ class ThrowableUtils_Test extends TestBase {
 	void a021_toRex() {
 		// Test with RuntimeException (should return same)
 		var re = new RuntimeException("test");
-		RuntimeException result1 = toRex(re);
+		RuntimeException result1 = toRuntimeException(re);
 		assertSame(re, result1);
 
 		// Test with IOException (should wrap)
 		var io = new IOException("io error");
-		RuntimeException result2 = toRex(io);
+		RuntimeException result2 = toRuntimeException(io);
 		assertNotNull(result2);
 		assertSame(io, result2.getCause());
 		assertInstanceOf(RuntimeException.class, result2);
 
 		// Test with Exception (should wrap)
 		var ex = new Exception("exception");
-		RuntimeException result3 = toRex(ex);
+		RuntimeException result3 = toRuntimeException(ex);
 		assertNotNull(result3);
 		assertSame(ex, result3.getCause());
 		assertInstanceOf(RuntimeException.class, result3);
@@ -398,7 +399,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a022_unsupportedOp() {
-		UnsupportedOperationException ex = unsupportedOp();
+		UnsupportedOperationException ex = uoex();
 		assertNotNull(ex);
 		assertEquals("Not supported.", ex.getMessage());
 		assertNull(ex.getCause());
@@ -409,7 +410,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a023_unsupportedOp_withMessage() {
-		UnsupportedOperationException ex = unsupportedOp("Operation {0} is not supported for type {1}", "delete", "User");
+		UnsupportedOperationException ex = uoex("Operation {0} is not supported for type {1}", "delete", "User");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Operation delete is not supported for type User"));
 		assertNull(ex.getCause());
@@ -421,7 +422,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a024_unsupportedOp_withCause() {
 		var cause = new IllegalStateException("Locked");
-		UnsupportedOperationException ex = unsupportedOp(cause);
+		UnsupportedOperationException ex = uoex(cause);
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 	}
@@ -432,7 +433,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a025_unsupportedOp_withCauseAndMessage() {
 		var cause = new IllegalStateException("Locked");
-		UnsupportedOperationException ex = unsupportedOp(cause, "Cannot {0} on {1}", "delete", "immutable collection");
+		UnsupportedOperationException ex = uoex(cause, "Cannot {0} on {1}", "delete", "immutable collection");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Cannot delete on immutable collection"));
@@ -443,7 +444,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a026_unsupportedOpReadOnly() {
-		UnsupportedOperationException ex = unsupportedOpReadOnly();
+		UnsupportedOperationException ex = uoroex();
 		assertNotNull(ex);
 		assertEquals("Object is read only.", ex.getMessage());
 		assertNull(ex.getCause());
@@ -548,7 +549,7 @@ class ThrowableUtils_Test extends TestBase {
 	void a033_lm_nullMessage() {
 		// Throwable with no message → getLocalizedMessage() returns null
 		var ex = new RuntimeException((String)null);
-		assertNull(lm(ex));
+		assertNull(localizedMessage(ex));
 	}
 
 	@Test
@@ -556,7 +557,7 @@ class ThrowableUtils_Test extends TestBase {
 		// Message longer than 2000 chars triggers truncation
 		var longMsg = "x".repeat(2500);
 		var ex = new RuntimeException(longMsg);
-		var result = lm(ex);
+		var result = localizedMessage(ex);
 		assertTrue(result.contains("<truncated-500-chars>"));
 		assertEquals(longMsg.substring(0, 1000), result.substring(0, 1000));
 		assertEquals(longMsg.substring(longMsg.length() - 1000), result.substring(result.length() - 1000));
@@ -571,7 +572,7 @@ class ThrowableUtils_Test extends TestBase {
 		System.setProperty("juneau.enableVerboseExceptions", "true");
 		try {
 			// Any method that calls log() will trigger the verbose branch if it re-reads the setting
-			var ex = illegalArg("test {0}", "verbose");
+			var ex = iaex("test {0}", "verbose");
 			assertNotNull(ex);
 		} finally {
 			System.clearProperty("juneau.enableVerboseExceptions");

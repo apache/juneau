@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.vars;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.Tag;
@@ -96,7 +96,7 @@ class RequestSwaggerVar_Test extends TestBase {
 	}
 
 	@Test void a06_contact() throws Exception {
-		// Contact serialized via Utils.s(...) -> JSON5-ish text containing at least the email.
+		// Contact serialized via Shorts.s(...) -> JSON5-ish text containing at least the email.
 		clientA.get("/key/contact").run()
 			.assertStatus(200)
 			.assertContent().asString().isContains("c-name");

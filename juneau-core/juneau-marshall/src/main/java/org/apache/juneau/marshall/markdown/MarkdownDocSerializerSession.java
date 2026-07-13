@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.markdown;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -117,12 +117,12 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	@Override /* Overridden from MarkdownSerializerSession */
 	protected void doSerialize(SerializerPipe pipe, Object o) throws IOException, SerializeException {
 		try (var w = getMarkdownWriter(pipe)) {
-			if (ne(headerContent)) {
+			if (ine(headerContent)) {
 				w.append(headerContent);
 				w.blankLine();
 			}
 
-			if (ne(title)) {
+			if (ine(title)) {
 				w.heading(headingLevel, title);
 				w.blankLine();
 			}
@@ -153,7 +153,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 			}
 		}
 
-			if (ne(footerContent)) {
+			if (ine(footerContent)) {
 				w.blankLine();
 				w.append(footerContent);
 			}

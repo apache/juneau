@@ -18,7 +18,7 @@ package org.apache.juneau.marshall.yaml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -38,7 +38,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlBasics">YAML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/YamlSupport">YAML Basics</a>
  * </ul>
  */
 @SuppressWarnings({

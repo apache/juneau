@@ -18,8 +18,8 @@ package org.apache.juneau.rest.client.classic.remote;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.remote.RemoteUtils.*;
 import static org.apache.juneau.marshall.Constants.*;
 
@@ -43,8 +43,8 @@ import org.apache.juneau.rest.common.utils.*;
  * Captures the information in {@link RemoteOp @RemoteOp} annotations for caching and reuse.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 public class RemoteOperationMeta {
@@ -87,7 +87,7 @@ public class RemoteOperationMeta {
 		path = pathValue.orElse("").trim();
 
 			Holder<String> value = Holder.empty();
-			al.stream().filter(x -> x.isType(RemoteOp.class) && ne(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
+			al.stream().filter(x -> x.isType(RemoteOp.class) && ine(((RemoteOp)x.inner()).value().trim())).forEach(x -> value.set(((RemoteOp)x.inner()).value().trim()));
 
 			if (value.isPresent()) {
 				var v = value.get();
@@ -99,14 +99,14 @@ public class RemoteOperationMeta {
 					path = v.substring(i).trim();
 				}
 			} else {
-				al.stream().filter(x -> ! x.isType(RemoteOp.class) && ne(x.getValue(String.class, "value").filter(NOT_EMPTY).orElse("").trim()))
+				al.stream().filter(x -> ! x.isType(RemoteOp.class) && ine(x.getValue(String.class, "value").filter(NOT_EMPTY).orElse("").trim()))
 					.forEach(x -> value.set(x.getValue(String.class, "value").filter(NOT_EMPTY).get().trim()));
 				if (value.isPresent())
 					path = value.get();
 			}
 
 			if (path.isEmpty()) {
-				path = HttpUtils.detectHttpPath(m, nullIfEmpty(httpMethod));
+				path = HttpUtils.detectHttpPath(m, nie(httpMethod));
 			}
 			if (httpMethod.isEmpty())
 				httpMethod = HttpUtils.detectHttpMethod(m, true, defaultMethod);
@@ -177,7 +177,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(FormData.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ine(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}
@@ -186,7 +186,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(Header.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ine(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}
@@ -204,7 +204,7 @@ public class RemoteOperationMeta {
 			// @formatter:off
 			rstream(AP.find(Query.class, mi))
 				.map(AnnotationInfo::inner)
-				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ne(x.def()))
+				.filter(x -> isAnyNotEmpty(x.name(), x.value()) && ine(x.def()))
 				.forEach(x -> defaults.put(firstNonEmpty(x.name(), x.value()), x.def()));
 			// @formatter:on
 		}

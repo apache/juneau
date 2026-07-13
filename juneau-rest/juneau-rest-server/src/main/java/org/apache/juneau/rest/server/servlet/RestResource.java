@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.servlet;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.text.*;
 import java.util.concurrent.atomic.*;
@@ -38,7 +38,7 @@ import jakarta.servlet.http.*;
  * but you want this resource to be deployed as a child instead.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
  * </ul>
  */
 public abstract class RestResource {

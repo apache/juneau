@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.test.junit.testsupport;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -64,9 +64,9 @@ public final class StubParameterContext implements ParameterContext {
 
 	@Override public Parameter getParameter() { return parameter; }
 	@Override public int getIndex() { return 0; }
-	@Override public Optional<Object> getTarget() { return opte(); }
+	@Override public Optional<Object> getTarget() { return oe(); }
 	@Override public boolean isAnnotated(Class<? extends Annotation> annotationType) { return false; }
-	@Override public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) { return opte(); }
+	@Override public <A extends Annotation> Optional<A> findAnnotation(Class<A> annotationType) { return oe(); }
 	@Override public <A extends Annotation> List<A> findRepeatableAnnotations(Class<A> annotationType) { return List.of(); }
 
 	/**

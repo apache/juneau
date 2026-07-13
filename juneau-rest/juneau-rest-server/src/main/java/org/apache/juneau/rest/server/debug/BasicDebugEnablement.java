@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.debug;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.server.RestOpAnnotation.*;
 
 import java.util.*;
@@ -92,7 +92,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 				rstream(ap.find(x))
 					.filter(REST_OP_GROUP)
 					.flatMap(ai -> ai.getValue(String.class, "debug").stream())
-					.filter(Utils::ne)
+					.filter(Shorts::ine)
 					.map(varResolver::resolve)
 					.map(Enablement::fromString)
 					.filter(Objects::nonNull)
@@ -110,7 +110,7 @@ public class BasicDebugEnablement extends DebugEnablement {
 				if (v.isEmpty())
 					v = "ALWAYS";
 				if (! k.isEmpty())
-					opt(Enablement.fromString(v)).ifPresent(en -> b.enable(en, k));
+					o(Enablement.fromString(v)).ifPresent(en -> b.enable(en, k));
 			}
 		});
 		// @formatter:on

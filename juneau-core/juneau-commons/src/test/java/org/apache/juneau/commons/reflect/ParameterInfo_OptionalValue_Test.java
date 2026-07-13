@@ -20,10 +20,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Acceptance tests for {@code @Value Optional<T>} wrapping parity between

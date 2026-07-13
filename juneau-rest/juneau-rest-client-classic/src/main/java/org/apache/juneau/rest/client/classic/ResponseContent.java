@@ -17,9 +17,10 @@
 package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -29,7 +30,6 @@ import java.util.regex.*;
 
 import org.apache.http.*;
 import org.apache.http.conn.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.utils.*;
@@ -43,6 +43,7 @@ import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.marshall.stream.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Represents the body of an HTTP response.
@@ -57,7 +58,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
  * or the RFC 6901 form <c>getContent().as(JsonMap.<jk>class</jk>).at(<jv>pointer</jv>)</c>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -127,7 +128,7 @@ public class ResponseContent implements HttpEntity {
 		this.request = request;
 		this.response = response;
 		this.parser = parser;
-		this.entity = firstNonNull(response.asHttpResponse().getEntity(), NULL_ENTITY);
+		this.entity = coalesce(response.asHttpResponse().getEntity(), NULL_ENTITY);
 	}
 
 	/**
@@ -1309,7 +1310,7 @@ public class ResponseContent implements HttpEntity {
 		try {
 			return asString();
 		} catch (RestCallException e) {
-			return lm(e);
+			return localizedMessage(e);
 		}
 	}
 

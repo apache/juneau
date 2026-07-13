@@ -20,8 +20,8 @@ import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S5961" // High assertion count acceptable in comprehensive test
@@ -43,7 +43,7 @@ class AssertionUtils_Test extends TestBase {
 			assertArg(false, "Test message");
 		});
 
-		assertThrowsWithMessage(IllegalArgumentException.class, l("Test message", "arg1"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("Test message", "arg1"), () -> {
 			assertArg(false, "Test message {0}", "arg1");
 		});
 
@@ -75,7 +75,7 @@ class AssertionUtils_Test extends TestBase {
 		assertEquals(d, result4);
 
 		// Should throw when value is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "cannot be null"), () -> {
 			assertArgNotNull("arg", null);
 		});
 	}
@@ -91,17 +91,17 @@ class AssertionUtils_Test extends TestBase {
 		assertSame(value, result);
 
 		// Should throw when value is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "cannot be null"), () -> {
 			assertArgNotNullOrBlank("arg", null);
 		});
 
 		// Should throw when value is empty
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be blank"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "cannot be blank"), () -> {
 			assertArgNotNullOrBlank("arg", "");
 		});
 
 		// Should throw when value is whitespace
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be blank"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "cannot be blank"), () -> {
 			assertArgNotNullOrBlank("arg", "   ");
 		});
 
@@ -123,12 +123,12 @@ class AssertionUtils_Test extends TestBase {
 		assertArgsNotNull("arg1", "value1", "arg2", "value2");
 
 		// Should throw when first is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg1", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg1", "cannot be null"), () -> {
 			assertArgsNotNull("arg1", null, "arg2", "value2");
 		});
 
 		// Should throw when second is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg2", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg2", "cannot be null"), () -> {
 			assertArgsNotNull("arg1", "value1", "arg2", null);
 		});
 
@@ -206,7 +206,7 @@ class AssertionUtils_Test extends TestBase {
 	@Test
 	void a008_assertClassArrayArgIsType() {
 		// Should not throw when all classes are assignable
-		var classes = a(String.class, Object.class);
+		var classes = array(String.class, Object.class);
 		var result = assertClassArrayArgIsType("arg", Object.class, classes);
 		assertSame(classes, result);
 
@@ -216,24 +216,24 @@ class AssertionUtils_Test extends TestBase {
 		assertSame(emptyClasses, result2);
 
 		// Should not throw with subclasses
-		var subclasses = a(Integer.class, Double.class);
+		var subclasses = array(Integer.class, Double.class);
 		var result3 = assertClassArrayArgIsType("arg", Number.class, subclasses);
 		assertSame(subclasses, result3);
 
 		// Should not throw with same class
-		var sameClasses = a(String.class);
+		var sameClasses = array(String.class);
 		var result4 = assertClassArrayArgIsType("arg", String.class, sameClasses);
 		assertSame(sameClasses, result4);
 
 		// Should throw when class is not assignable
-		var invalidClasses = a(String.class, Integer.class);
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "String"), () -> {
+		var invalidClasses = array(String.class, Integer.class);
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "String"), () -> {
 			assertClassArrayArgIsType("arg", Number.class, invalidClasses);
 		});
 
 		// Should throw with index information
-		var invalidClasses2 = a(String.class, Integer.class, Double.class);
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "index", "0"), () -> {
+		var invalidClasses2 = array(String.class, Integer.class, Double.class);
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "index", "0"), () -> {
 			assertClassArrayArgIsType("arg", Number.class, invalidClasses2);
 		});
 	}
@@ -274,11 +274,11 @@ class AssertionUtils_Test extends TestBase {
 		assertSame(obj1, result2);
 
 		// Should throw when value doesn't match
-		assertThrowsWithMessage(AssertionError.class, l("Invalid value specified", "test"), () -> {
+		assertThrowsWithMessage(AssertionError.class, fixedSizeList("Invalid value specified", "test"), () -> {
 			assertOneOf("test", "other");
 		});
 
-		assertThrowsWithMessage(AssertionError.class, l("Invalid value specified", "test"), () -> {
+		assertThrowsWithMessage(AssertionError.class, fixedSizeList("Invalid value specified", "test"), () -> {
 			assertOneOf("test", "a", "b", "c");
 		});
 
@@ -316,17 +316,17 @@ class AssertionUtils_Test extends TestBase {
 		assertSame(intValue2, result3);
 
 		// Should throw when type is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("type", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("type", "cannot be null"), () -> {
 			assertType(null, "test");
 		});
 
 		// Should throw when object is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("o", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("o", "cannot be null"), () -> {
 			assertType(String.class, null);
 		});
 
 		// Should throw when object is not an instance
-		assertThrowsWithMessage(IllegalArgumentException.class, l("Object is not an instance of", "String", "Integer"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("Object is not an instance of", "String", "Integer"), () -> {
 			assertType(String.class, 123);
 		});
 
@@ -346,12 +346,12 @@ class AssertionUtils_Test extends TestBase {
 		assertSame(value, result);
 
 		// Should throw when type is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("type", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("type", "cannot be null"), () -> {
 			assertType(null, "test", () -> new IllegalStateException("Custom"));
 		});
 
 		// Should throw when object is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("o", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("o", "cannot be null"), () -> {
 			assertType(String.class, null, () -> new IllegalStateException("Custom"));
 		});
 
@@ -382,7 +382,7 @@ class AssertionUtils_Test extends TestBase {
 	@Test
 	void a012_assertVarargsNotNull() {
 		// Should not throw when array and elements are not null
-		var array = a("a", "b", "c");
+		var array = array("a", "b", "c");
 		var result = assertArgNoNulls("arg", array);
 		assertSame(array, result);
 
@@ -392,28 +392,28 @@ class AssertionUtils_Test extends TestBase {
 		assertSame(emptyArray, result2);
 
 		// Should work with integer array
-		var intArray = a(1, 2, 3);
+		var intArray = array(1, 2, 3);
 		var result3 = assertArgNoNulls("arg", intArray);
 		assertSame(intArray, result3);
 
 		// Should work with object array
-		var objArray = a(new Object(), new Object());
+		var objArray = array(new Object(), new Object());
 		var result4 = assertArgNoNulls("arg", objArray);
 		assertSame(objArray, result4);
 
 		// Should throw when array is null
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "cannot be null"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "cannot be null"), () -> {
 			assertArgNoNulls("arg", (String[])null);
 		});
 
 		// Should throw when element is null
-		var nullElementArray = a("a", null, "c");
-		assertThrowsWithMessage(IllegalArgumentException.class, l("arg", "parameter", "1"), () -> {
+		var nullElementArray = array("a", null, "c");
+		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("arg", "parameter", "1"), () -> {
 			assertArgNoNulls("arg", nullElementArray);
 		});
 
 		// Should fail on first null when multiple elements are null
-		var multipleNullArray = a("a", null, null, "d");
+		var multipleNullArray = array("a", null, null, "d");
 		assertThrowsWithMessage(IllegalArgumentException.class, "1", () -> {
 			assertArgNoNulls("arg", multipleNullArray);
 		});

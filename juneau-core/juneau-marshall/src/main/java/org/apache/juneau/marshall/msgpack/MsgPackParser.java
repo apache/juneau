@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.msgpack;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -60,7 +60,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackBasics">MessagePack Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MessagePackSupport">MessagePack Basics</a>
 
  * </ul>
  */

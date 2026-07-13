@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 package org.apache.juneau.examples.core.config.store;
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;

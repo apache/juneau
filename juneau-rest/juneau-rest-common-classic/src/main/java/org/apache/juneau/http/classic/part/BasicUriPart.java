@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -28,7 +28,7 @@ import org.apache.http.*;
  * A {@link NameValuePair} that consists of a single URL value.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -47,7 +47,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicUriPart of(String name, Supplier<URI> value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
@@ -60,7 +60,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return A new {@link BasicUriPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicUriPart of(String name, URI value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicUriPart(name, value);
 	}
@@ -80,7 +80,7 @@ public class BasicUriPart extends BasicPart {
 	 */
 	public BasicUriPart(String name, String value) {
 		super(name, value);
-		this.value = e(value) ? null : URI.create(value);
+		this.value = ie(value) ? null : URI.create(value);
 		this.supplier = null;
 	}
 
@@ -114,7 +114,7 @@ public class BasicUriPart extends BasicPart {
 	 * @return The part value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return opt(value());
+		return o(value());
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
@@ -203,7 +203,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 	void g01_uriAuthority_set() throws Exception {
 		System.setProperty("RestContext.uriAuthority", "https://example.org");
 		Optional<String> v = fld(ctx(), "defaultUriAuthority");
-		assertEquals(opt("https://example.org"), v);
+		assertEquals(o("https://example.org"), v);
 	}
 
 	@Test
@@ -216,7 +216,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 	void g03_uriAuthority_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.uriAuthority", "https://global.example.org");
 		Optional<String> v = fld(ctx(), "defaultUriAuthority");
-		assertEquals(opt("https://global.example.org"), v);
+		assertEquals(o("https://global.example.org"), v);
 	}
 
 	// -------------------- defaultUriContext (Optional<String>) --------------------
@@ -225,7 +225,7 @@ class RestContext_ValueAdoption_Test extends TestBase {
 	void h01_uriContext_set() throws Exception {
 		System.setProperty("RestContext.uriContext", "/api");
 		Optional<String> v = fld(ctx(), "defaultUriContext");
-		assertEquals(opt("/api"), v);
+		assertEquals(o("/api"), v);
 	}
 
 	@Test
@@ -238,6 +238,6 @@ class RestContext_ValueAdoption_Test extends TestBase {
 	void h03_uriContext_setGlobal() throws Exception {
 		Settings.get().setGlobal("RestContext.uriContext", "/global");
 		Optional<String> v = fld(ctx(), "defaultUriContext");
-		assertEquals(opt("/global"), v);
+		assertEquals(o("/global"), v);
 	}
 }

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.junit.jupiter.api.Assertions.*;

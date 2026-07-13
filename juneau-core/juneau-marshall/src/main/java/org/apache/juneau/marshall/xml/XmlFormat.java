@@ -20,7 +20,7 @@ package org.apache.juneau.marshall.xml;
  * XML format to use when serializing a POJO.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
 
  * </ul>
  */

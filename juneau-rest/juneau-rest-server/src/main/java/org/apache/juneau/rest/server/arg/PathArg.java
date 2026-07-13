@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.arg;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.Constants.*;
 
 import java.lang.reflect.*;
@@ -86,7 +86,7 @@ public class PathArg implements RestOpArg {
 		return AP.find(Path.class, pi)
 			.stream()
 			.map(AnnotationInfo::inner)
-			.filter(x -> ne(x.def()) && neq(NONE, x.def()))
+			.filter(x -> ine(x.def()) && neq(NONE, x.def()))
 			.findFirst()
 			.map(Path::def);
 		// @formatter:on
@@ -131,7 +131,7 @@ public class PathArg implements RestOpArg {
 		schemaBuilder.applyAll(Path.class, paramInfo);
 		this.schema = schemaBuilder.build();
 
-		this.def = findDef(paramInfo).or(() -> opt(classLevelPath).filter(p -> ne(p.def()) && neq(NONE, p.def())).map(Path::def)).orElse(null);
+		this.def = findDef(paramInfo).or(() -> o(classLevelPath).filter(p -> ine(p.def()) && neq(NONE, p.def())).map(Path::def)).orElse(null);
 		this.type = paramInfo.getParameterType().innerType();
 		@SuppressWarnings({
 			"unchecked" // Type erasure on reflective/generic cast; element type is verified at call site

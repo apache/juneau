@@ -18,18 +18,19 @@ package org.apache.juneau.rest.server;
 
 import static jakarta.servlet.http.HttpServletResponse.*;
 import static java.util.Collections.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.utils.Utils.eq;
 import static org.apache.juneau.rest.server.RestOpAnnotation.*;
 import static org.apache.juneau.rest.server.RestServerConstants.*;
 import static org.apache.juneau.rest.server.processor.ResponseProcessor.*;
@@ -587,7 +588,7 @@ public class RestContext extends Context {
 		}
 
 		@Override /* Overridden from ServletConfig */
-		public Enumeration<String> getInitParameterNames() { return opt(inner).map(ServletConfig::getInitParameterNames).orElseGet(() -> new Vector<String>().elements()); }
+		public Enumeration<String> getInitParameterNames() { return o(inner).map(ServletConfig::getInitParameterNames).orElseGet(() -> new Vector<String>().elements()); }
 
 		@Override /* Overridden from ServletConfig */
 		public ServletContext getServletContext() {
@@ -601,7 +602,7 @@ public class RestContext extends Context {
 		}
 
 		@Override /* Overridden from ServletConfig */
-		public String getServletName() { return opt(inner).map(ServletConfig::getServletName).orElse(null); }
+		public String getServletName() { return o(inner).map(ServletConfig::getServletName).orElse(null); }
 
 	}
 
@@ -1154,7 +1155,7 @@ public class RestContext extends Context {
 		// unnamed VarResolver slot is reserved for the full runtime resolver default supplier.
 		var vr = bs.getBean(VarResolver.class, PROP_bootstrapVarResolver).orElseGet(this::getBootstrapVarResolver);
 		var cfv = Holder.<String>empty();
-		rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass()))).map(x -> x.inner().config()).filter(Utils::ne).forEach(x -> cfv.set(vr.resolve(x)));
+		rstream(AnnotationProvider.INSTANCE.find(Rest.class, info(resourceClass()))).map(x -> x.inner().config()).filter(Shorts::ine).forEach(x -> cfv.set(vr.resolve(x)));
 		var cf = cfv.orElse("");
 		if (v.isEmpty() && "SYSTEM_DEFAULT".equals(cf))
 			v.set(Config.getSystemDefault());
@@ -1250,21 +1251,21 @@ public class RestContext extends Context {
 		var bs = beanStore();
 		var bean = bs.getBean(RestAuthenticator.class).orElse(null);
 		if (bean != null)
-			return opt(bean);
+			return o(bean);
 		var annoClass = getRestAnnotationsForProperty(PROPERTY_authenticator)
 			.map(ai -> ai.inner().authenticator())
 			.filter(x -> x != RestAuthenticator.Null.class)
 			.reduce((first, second) -> second)
 			.orElse(null);
 		if (annoClass != null)
-			return opt(BeanInstantiator.of(RestAuthenticator.class, bs).type(annoClass).noBuilder().run());
+			return o(BeanInstantiator.of(RestAuthenticator.class, bs).type(annoClass).noBuilder().run());
 		var fromMethod = bs.createBeanFromMethod(RestAuthenticator.class, resource().get(), RestContext::isBeanMethod).orElse(null);
 		if (fromMethod != null)
-			return opt(fromMethod);
+			return o(fromMethod);
 		if (resource().get() instanceof RestServlet rs) {
 			var fromOverride = rs.createAuthenticator(bs);
 			if (fromOverride != null)
-				return opt(fromOverride);
+				return o(fromOverride);
 		}
 		return Optional.<RestAuthenticator>empty();
 	});
@@ -1750,7 +1751,7 @@ public class RestContext extends Context {
 	private final Memoizer<HttpPartParser.Creator> partParserCreator = memoizer(() -> {
 		var bs = beanStore();
 		Holder<HttpPartParser.Creator> v = Holder.of(HttpPartParser.creator().type(OpenApiParser.class));
-		opt(resource().get() instanceof HttpPartParser x ? x : null).ifPresent(x -> v.get().impl(x));
+		o(resource().get() instanceof HttpPartParser x ? x : null).ifPresent(x -> v.get().impl(x));
 		bs.createBeanFromMethod(HttpPartParser.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
 		return v.get();
@@ -1779,7 +1780,7 @@ public class RestContext extends Context {
 	private final Memoizer<HttpPartSerializer.Creator> partSerializerCreator = memoizer(() -> {
 		var bs = beanStore();
 		Holder<HttpPartSerializer.Creator> v = Holder.of(HttpPartSerializer.creator().type(OpenApiSerializer.class));
-		opt(resource().get() instanceof HttpPartSerializer x ? x : null).ifPresent(x -> v.get().impl(x));
+		o(resource().get() instanceof HttpPartSerializer x ? x : null).ifPresent(x -> v.get().impl(x));
 		bs.createBeanFromMethod(HttpPartSerializer.class, resource().get(), RestContext::isBeanMethod).ifPresent(x -> v.get().impl(x));
 		v.get().apply(annotationWork);
 		return v.get();
@@ -2587,7 +2588,7 @@ public class RestContext extends Context {
 			// @formatter:off
 			rci2.getAllFields().stream()
 				.filter(x -> x.hasAnnotation(Bean.class))
-				.forEach(x -> opt(x.get(resource.get())).ifPresent(
+				.forEach(x -> o(x.get(resource.get())).ifPresent(
 					y -> beanStore.add(
 						x.getFieldType().inner(),
 						y,
@@ -2990,11 +2991,11 @@ public class RestContext extends Context {
 	private <E extends Enum<E>> Optional<E> parseEnumConstant(Class<E> enumClass, String resolved) {
 		var t = leadingEnumToken(trim(emptyIfNull(resolved)));
 		if (isEmpty(t))
-			return opte();
+			return oe();
 		try {
-			return opt(Enum.valueOf(enumClass, t));
+			return o(Enum.valueOf(enumClass, t));
 		} catch (IllegalArgumentException ignored) {
-			return opte();
+			return oe();
 		}
 	}
 
@@ -3583,7 +3584,7 @@ public class RestContext extends Context {
 				var uppm = pathMatcher.match(upi2);
 			if (nn(uppm) && ! uppm.hasEmptyVars()) {
 				sb.pathVars(uppm.getVars());
-				var pathInfo = opt(validatePathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))).orElse("\u0000");
+				var pathInfo = o(validatePathInfo(nie(urlDecode(uppm.getSuffix())))).orElse("\u0000");
 				var servletPath = validateServletPath(uppm.getPrefix());
 				sb.req(new HttpServletRequestWrapper(sb.req()) {
 					@Override
@@ -3609,7 +3610,7 @@ public class RestContext extends Context {
 				var rc = childMatch.get().getChildContext();
 				if (! uppm.hasEmptyVars()) {
 					sb.pathVars(uppm.getVars());
-					var pathInfo = opt(validatePathInfo(nullIfEmpty(urlDecode(uppm.getSuffix())))).orElse("\u0000");
+					var pathInfo = o(validatePathInfo(nie(urlDecode(uppm.getSuffix())))).orElse("\u0000");
 					var servletPath = validateServletPath(sb.req().getServletPath() + uppm.getPrefix());
 					var childRequest = new HttpServletRequestWrapper(sb.req()) {
 						@Override
@@ -4158,7 +4159,7 @@ public class RestContext extends Context {
 			try {
 				var provider = getSwaggerProvider();
 				if (provider == null)
-					return opte();
+					return oe();
 				s = provider.getSwagger(this, locale);
 				if (nn(s))
 					swaggerCache.put(locale, s);
@@ -4166,7 +4167,7 @@ public class RestContext extends Context {
 				throw new InternalServerError(e);
 			}
 		}
-		return opt(s);
+		return o(s);
 	}
 
 	/**
@@ -4194,7 +4195,7 @@ public class RestContext extends Context {
 			try {
 				var provider = getOpenApiProvider();
 				if (provider == null)
-					return opte();
+					return oe();
 				o = provider.getOpenApi(this, locale);
 				if (nn(o))
 					openApiCache.put(locale, o);
@@ -4202,7 +4203,7 @@ public class RestContext extends Context {
 				throw new InternalServerError(e);
 			}
 		}
-		return opt(o);
+		return o(o);
 	}
 
 	/**

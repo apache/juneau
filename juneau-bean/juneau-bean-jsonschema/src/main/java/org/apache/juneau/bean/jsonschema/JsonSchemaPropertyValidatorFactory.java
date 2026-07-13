@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -48,7 +48,7 @@ public final class JsonSchemaPropertyValidatorFactory implements PropertyValidat
 
 	@Override
 	public PropertyValidator create(Map<String,Object> schemaMap, Class<?> propertyType) {
-		if (e(schemaMap))
+		if (ie(schemaMap))
 			return null;
 		var jm = (schemaMap instanceof JsonMap m) ? m : new JsonMap(schemaMap);
 		var schema = JsonSchemaBeanGenerator.toBean(jm);

@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -138,7 +138,7 @@ public class Range extends HttpStringHeader {
 			assertArgNotNull("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("range unit must not be blank");
+				throw iaex("range unit must not be blank");
 			unit = v;
 			return this;
 		}
@@ -153,9 +153,9 @@ public class Range extends HttpStringHeader {
 		 */
 		public Builder range(long startValue, long endValue) {
 			if (startValue < 0)
-				throw illegalArg("range start must be non-negative: {0}", startValue);
+				throw iaex("range start must be non-negative: {0}", startValue);
 			if (endValue < startValue)
-				throw illegalArg("range end {0} must be >= start {1}", endValue, startValue);
+				throw iaex("range end {0} must be >= start {1}", endValue, startValue);
 			return spec(startValue + "-" + endValue);
 		}
 
@@ -168,7 +168,7 @@ public class Range extends HttpStringHeader {
 		 */
 		public Builder from(long startValue) {
 			if (startValue < 0)
-				throw illegalArg("range start must be non-negative: {0}", startValue);
+				throw iaex("range start must be non-negative: {0}", startValue);
 			return spec(startValue + "-");
 		}
 
@@ -181,7 +181,7 @@ public class Range extends HttpStringHeader {
 		 */
 		public Builder suffix(long length) {
 			if (length < 0)
-				throw illegalArg("suffix length must be non-negative: {0}", length);
+				throw iaex("suffix length must be non-negative: {0}", length);
 			return spec("-" + length);
 		}
 
@@ -196,7 +196,7 @@ public class Range extends HttpStringHeader {
 			assertArgNotNull("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("range spec must not be blank");
+				throw iaex("range spec must not be blank");
 			specs.add(v);
 			return this;
 		}

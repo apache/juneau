@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.test.bct;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -32,7 +32,7 @@ import org.opentest4j.*;
  *
  * <h5 class='section'>See Also:</h5>
  * <ul>
- *   <li class='jc'>{@link org.apache.juneau.commons.utils.Utils} - General utility methods
+ *   <li class='jc'>{@link org.apache.juneau.commons.utils.Shorts} - Terse aliases for the domain utility methods
  *   <li class='jc'>{@link org.apache.juneau.commons.utils.AssertionUtils} - Argument validation methods
  *   <li class='jc'>{@link org.apache.juneau.commons.utils.StringUtils} - String manipulation methods
  * </ul>
@@ -60,7 +60,7 @@ public class BctUtils {
 	 * @return A new {@link AssertionFailedError} with formatted message and values.
 	 */
 	public static AssertionFailedError assertEqualsFailed(Object expected, Object actual, Supplier<String> messageSupplier) {
-		return new AssertionFailedError(opt(messageSupplier).map(x -> x.get()).orElse("Equals assertion failed.") + f(" ==> expected: <%s> but was: <%s>", expected, actual), expected, actual);
+		return new AssertionFailedError(o(messageSupplier).map(x -> x.get()).orElse("Equals assertion failed.") + f(" ==> expected: <%s> but was: <%s>", expected, actual), expected, actual);
 	}
 
 	/**

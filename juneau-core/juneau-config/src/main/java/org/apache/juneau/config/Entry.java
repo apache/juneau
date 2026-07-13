@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.config;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.BinaryFormat.*;
 
 import java.lang.reflect.*;
@@ -113,7 +112,7 @@ public class Entry {
 	})
 	public <T> Optional<T> as(Parser parser, Type type, Type...args) {
 		if (isNull())
-			return opte();
+			return oe();
 
 		try {
 			var v = toString();
@@ -132,9 +131,9 @@ public class Entry {
 			if (type == JsonList.class)
 				return (Optional<T>)asList();
 			if (isEmpty())
-				return opte();
+				return oe();
 			if (isSimpleType(type))
-				return opt((T)config.marshallingSession.convertToType(v, (Class<?>)type));
+				return o((T)config.marshallingSession.convertToType(v, (Class<?>)type));
 
 			if (parser instanceof JsonParser) {
 				var s1 = firstNonWhitespaceChar(v);
@@ -143,9 +142,9 @@ public class Entry {
 				else if (s1 != '[' && s1 != '{' && ! "null".equals(v))
 					v = '\'' + v + '\'';
 			}
-			return opt(parser.parse(v, type, args));
+			return o(parser.parse(v, type, args));
 		} catch (ParseException e) {
-			throw bex(e, (Class<?>)null, "Value could not be parsed.");
+			throw brex(e, (Class<?>)null, "Value could not be parsed.");
 		}
 	}
 
@@ -216,7 +215,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return opt(isEmpty() ? null : (Boolean)Boolean.parseBoolean(toString()));
+		return o(isEmpty() ? null : (Boolean)Boolean.parseBoolean(toString()));
 	}
 
 	/**
@@ -229,18 +228,18 @@ public class Entry {
 	 */
 	public Optional<byte[]> asBytes() {
 		if (isNull())
-			return opte();
+			return oe();
 		var s = toString();
 		if (s.indexOf('\n') != -1)
 			s = s.replace("\n", "");
 		try {
 			if (config.binaryFormat == HEX)
-				return opt(fromHex(s));
+				return o(fromHex(s));
 			if (config.binaryFormat == SPACED_HEX)
-				return opt(fromSpacedHex(s));
-			return opt(base64Decode(s));
+				return o(fromSpacedHex(s));
+			return o(base64Decode(s));
 		} catch (Exception e) {
-			throw bex(e, (Class<?>)null, "Value could not be converted to a byte array.");
+			throw brex(e, (Class<?>)null, "Value could not be converted to a byte array.");
 		}
 	}
 
@@ -259,7 +258,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Double> asDouble() {
-		return opt(isEmpty() ? null : Double.valueOf(toString()));
+		return o(isEmpty() ? null : Double.valueOf(toString()));
 	}
 
 	/**
@@ -277,7 +276,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Float> asFloat() {
-		return opt(isEmpty() ? null : Float.valueOf(toString()));
+		return o(isEmpty() ? null : Float.valueOf(toString()));
 	}
 
 	/**
@@ -311,7 +310,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Integer> asInteger() {
-		return opt(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
+		return o(isEmpty() ? null : (Integer)parseIntWithSuffix(toString()));
 	}
 
 	/**
@@ -342,7 +341,7 @@ public class Entry {
 	 */
 	public Optional<JsonList> asList(Parser parser) throws ParseException {
 		if (isNull())
-			return opte();
+			return oe();
 		if (parser == null)
 			parser = config.parser;
 		var s = toString();
@@ -351,7 +350,7 @@ public class Entry {
 			if (s1 != '[' && ! "null".equals(s))
 				s = '[' + s + ']';
 		}
-		return opt(JsonList.ofString(s, parser));
+		return o(JsonList.ofString(s, parser));
 	}
 
 	/**
@@ -385,7 +384,7 @@ public class Entry {
 	 * @return The value, or {@link Optional#empty()} if the value does not exist or the value is empty.
 	 */
 	public Optional<Long> asLong() {
-		return opt(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
+		return o(isEmpty() ? null : (Long)parseLongWithSuffix(toString()));
 	}
 
 	/**
@@ -416,7 +415,7 @@ public class Entry {
 	 */
 	public Optional<JsonMap> asMap(Parser parser) throws ParseException {
 		if (isNull())
-			return opte();
+			return oe();
 		if (parser == null)
 			parser = config.parser;
 		var s = toString();
@@ -425,7 +424,7 @@ public class Entry {
 			if (s1 != '{' && ! "null".equals(s))
 				s = '{' + s + '}';
 		}
-		return opt(JsonMap.ofString(s, parser));
+		return o(JsonMap.ofString(s, parser));
 	}
 
 	/**
@@ -434,7 +433,7 @@ public class Entry {
 	 * @return This entry as a string, or {@link Optional#empty()} if the entry does not exist.
 	 */
 	public Optional<String> asString() {
-		return opt(isPresent() ? config.varSession.resolve(value) : null);
+		return o(isPresent() ? config.varSession.resolve(value) : null);
 	}
 
 	/**
@@ -447,18 +446,18 @@ public class Entry {
 	 */
 	public Optional<String[]> asStringArray() {
 		if (! isPresent())
-			return opte();
+			return oe();
 		var v = toString();
 		var s1 = firstNonWhitespaceChar(v);
 		var s2 = lastNonWhitespaceChar(v);
 		if (s1 == '[' && s2 == ']' && config.parser instanceof JsonParser parser2) {
 			try {
-				return opt(parser2.parse(v, String[].class));
+				return o(parser2.parse(v, String[].class));
 			} catch (ParseException e) {
-				throw bex(e);
+				throw brex(e);
 			}
 		}
-		return opt(StringUtils.splita(v));
+		return o(StringUtils.splita(v));
 	}
 
 	/**
@@ -560,7 +559,7 @@ public class Entry {
 		return isPresent() ? config.varSession.resolve(value) : null;
 	}
 
-	private boolean isEmpty() { return Utils.e(value); }  // NOAI
+	private boolean isEmpty() { return Shorts.ie(value); }  // NOAI
 
 	private boolean isNull() { return value == null; }
 }

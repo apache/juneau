@@ -18,7 +18,7 @@ package org.apache.juneau.http.part;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -83,7 +83,7 @@ public class HttpDatePart extends HttpPartBean {
 	 */
 	public HttpDatePart(String name, String value) {
 		super(name, value);
-		this.typedValue = e(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
+		this.typedValue = ie(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);
 		this.typedSupplier = null;
 	}
 
@@ -120,7 +120,7 @@ public class HttpDatePart extends HttpPartBean {
 	 * @return The date value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return opt(toZonedDateTime());
+		return o(toZonedDateTime());
 	}
 
 	/**

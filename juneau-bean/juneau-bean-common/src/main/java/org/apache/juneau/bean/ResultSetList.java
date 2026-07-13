@@ -65,7 +65,7 @@ public class ResultSetList extends LinkedList<Map<String,Object>> {
 				default -> rs.getObject(col);
 			};
 		} catch (Exception e) {
-			return lm(e);
+			return localizedMessage(e);
 		}
 	}
 

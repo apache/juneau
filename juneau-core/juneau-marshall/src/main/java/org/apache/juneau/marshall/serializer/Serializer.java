@@ -16,11 +16,12 @@
  */
 package org.apache.juneau.marshall.serializer;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
 import java.net.*;
@@ -1145,7 +1146,7 @@ public class Serializer extends MarshallingTraverseContext {
 	 * 	Never <jk>null</jk>.
 	 */
 	public Map<String,String> getResponseHeaders(SerializerSession session) {
-		return mape();
+		return emptyMap();
 	}
 
 	@Override /* Overridden from Context */
@@ -1227,7 +1228,7 @@ public class Serializer extends MarshallingTraverseContext {
 	 * @throws SerializeException Problem occurred trying to serialize object.
 	 */
 	protected void doSerialize(SerializerSession session, SerializerPipe pipe, Object o) throws IOException, SerializeException {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**

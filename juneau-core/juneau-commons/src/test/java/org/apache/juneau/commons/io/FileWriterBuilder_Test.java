@@ -22,8 +22,8 @@ import java.io.*;
 import java.nio.charset.*;
 import java.nio.file.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class FileWriterBuilder_Test extends TestBase {
 

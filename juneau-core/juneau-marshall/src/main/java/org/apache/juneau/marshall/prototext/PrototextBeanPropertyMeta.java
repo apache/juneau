@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.marshall.prototext;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
@@ -28,7 +27,7 @@ import org.apache.juneau.marshall.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBasics">Protobuf Text Format Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Prototext">Protobuf Text Format Basics</a>
  * </ul>
  */
 public class PrototextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
@@ -49,7 +48,7 @@ public class PrototextBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 	public PrototextBeanPropertyMeta(BeanPropertyMeta bpm, PrototextMetaProvider mp) {
 		super(bpm);
 		var first = getBeanPropertyMeta().getAnnotations(Prototext.class).findFirst();
-		var c = first.map(ai -> nullIfEmpty(trim(ai.inner().comment()))).orElse("");
+		var c = first.map(ai -> nie(trim(ai.inner().comment()))).orElse("");
 		this.comment = emptyIfNull(c);
 	}
 

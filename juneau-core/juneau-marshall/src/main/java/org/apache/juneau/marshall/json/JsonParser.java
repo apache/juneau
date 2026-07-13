@@ -17,16 +17,15 @@
 package org.apache.juneau.marshall.json;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.marshall.*;
-import java.io.*;
-
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.parser.*;
@@ -118,7 +117,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
  * 	<li class='link'>{@link Json5Parser} - For JSON5 syntax (single quotes, comments, etc.)
  * </ul>
  */

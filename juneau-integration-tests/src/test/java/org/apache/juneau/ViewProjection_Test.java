@@ -17,14 +17,13 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.marshall.MarshalledPropApplyAnnotation.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
-
-import static org.apache.juneau.marshall.MarshalledPropApplyAnnotation.create;
 
 /**
  * Integration-suite coverage tests for view-based property projection.

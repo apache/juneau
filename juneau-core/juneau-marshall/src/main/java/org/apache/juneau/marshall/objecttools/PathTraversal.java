@@ -17,8 +17,8 @@
 package org.apache.juneau.marshall.objecttools;
 
 import static java.net.HttpURLConnection.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -192,7 +192,7 @@ public class PathTraversal {
 			url = "";
 
 		// Strip off leading slash if present.
-		if (ne(url) && url.charAt(0) == '/')
+		if (ine(url) && url.charAt(0) == '/')
 			url = url.substring(1);
 
 		return url;

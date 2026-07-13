@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -278,7 +278,7 @@ class RestAnnotation_Test extends TestBase {
 
 	public static class Z01_Authenticator extends org.apache.juneau.rest.server.auth.RestAuthenticator {
 		@Override public java.util.Optional<org.apache.juneau.rest.server.auth.AuthResult> authenticate(RestRequest req) {
-			return opte();
+			return oe();
 		}
 	}
 

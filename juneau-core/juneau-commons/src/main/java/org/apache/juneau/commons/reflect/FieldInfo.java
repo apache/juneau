@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -197,7 +198,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		return safe(() -> {
 			inner.setAccessible(true);
 			return (T)inner.get(o);
-		}, e -> bex(e));
+		}, e -> brex(e));
 	}
 
 	@Override /* Annotatable */
@@ -450,7 +451,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 		safe((Snippet)() -> {
 			inner.setAccessible(true);
 			inner.set(o, value);
-		}, e -> bex(e));
+		}, e -> brex(e));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -614,8 +615,8 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 				// VarResolver substitutes "" for a missing key with no default. Collapse both to
 				// Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
 				set(bean, (resolved == null || (resolved instanceof String s && s.isEmpty()))
-					? opte()
-					: opt(resolved));
+					? oe()
+					: o(resolved));
 			} else {
 				set(bean, resolved);
 			}
@@ -641,7 +642,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 				elementType = ptUnwrapped.getComponentType().inner();
 			} else {
 				Type parameterizedType = fieldType.innerType();
-				var inner2 = opt(ptUnwrapped.inner()).orElse(Object.class);
+				var inner2 = o(ptUnwrapped.inner()).orElse(Object.class);
 
 				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
 					if (parameterizedType instanceof ParameterizedType pt2) {
@@ -663,7 +664,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 
 		Object value;
 		if (nn(collectionValue)) {
-			value = fieldType.is(Optional.class) ? opt(collectionValue) : collectionValue;
+			value = fieldType.is(Optional.class) ? o(collectionValue) : collectionValue;
 		} else {
 			// Handle single bean
 			var ptc = ptUnwrapped.inner();

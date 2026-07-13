@@ -17,11 +17,11 @@
 package org.apache.juneau.marshall;
 
 import static java.util.Collections.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -234,7 +234,7 @@ public abstract class ContextSession {
 	protected ContextSession(Builder<?> builder) {
 		assertArgNotNull(ARG_builder, builder);
 		ctx = builder.ctx;
-		debug = opt(builder.debug).orElse(ctx.isDebug());
+		debug = o(builder.debug).orElse(ctx.isDebug());
 		unmodifiable = builder.unmodifiable;
 		var sp = builder.properties.get();
 		if (unmodifiable) {
@@ -266,7 +266,7 @@ public abstract class ContextSession {
 	 */
 	public void checkForWarnings() {
 		if (debug && ! getWarnings().isEmpty())
-			throw bex("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
+			throw brex("Warnings occurred in session: \n" + join(getWarnings(), "\n"));
 	}
 
 	/**

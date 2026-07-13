@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.marshall.collections;
-
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -269,7 +267,7 @@ public class MarshalledNode {
 	})
 	public MarshalledNode put(String name, Object value) {
 		if (! isObject())
-			throw illegalState("put(String,Object) is only valid on an object node.");
+			throw isex("put(String,Object) is only valid on an object node.");
 		((Map<String,Object>)this.value).put(name, value);
 		return this;
 	}
@@ -286,7 +284,7 @@ public class MarshalledNode {
 	})
 	public MarshalledNode add(Object value) {
 		if (! isArray())
-			throw illegalState("add(Object) is only valid on an array node.");
+			throw isex("add(Object) is only valid on an array node.");
 		((List<Object>)this.value).add(value);
 		return this;
 	}
@@ -329,7 +327,7 @@ public class MarshalledNode {
 	 */
 	public Optional<MarshalledNode> find(String pointer) {
 		var o = JsonPointer.of(pointer).evalOrMissing(value);
-		return JsonPointer.isMissing(o) ? opte() : opt(new MarshalledNode(o));
+		return JsonPointer.isMissing(o) ? oe() : o(new MarshalledNode(o));
 	}
 
 	/**
@@ -350,7 +348,7 @@ public class MarshalledNode {
 	public MarshalledNode set(String pointer, Object value) {
 		var p = JsonPointer.of(pointer);
 		if (p.isRoot())
-			throw illegalArg("Cannot set the whole document via the root pointer on a node.");
+			throw iaex("Cannot set the whole document via the root pointer on a node.");
 		p.set(this.value, value);
 		return this;
 	}

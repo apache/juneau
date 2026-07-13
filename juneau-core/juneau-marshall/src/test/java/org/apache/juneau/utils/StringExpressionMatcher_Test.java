@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.*;

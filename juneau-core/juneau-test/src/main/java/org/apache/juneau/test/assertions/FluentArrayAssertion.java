@@ -18,8 +18,8 @@ package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -244,7 +244,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	 * @return A new fluent string assertion.
 	 */
 	public FluentStringListAssertion<R> asStrings() {
-		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(Utils::s).toList(), returns());
+		return new FluentStringListAssertion<>(this, valueIsNull() ? null : stream(value()).map(Shorts::s).toList(), returns());
 	}
 
 	/**

@@ -18,9 +18,9 @@ package org.apache.juneau.a.rttests;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.XmlTestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -103,7 +103,7 @@ public class RoundTrip_Tester {
 		label = "[" + b.index + "] " + b.label;
 
 		var bs = b.s;
-		var bp = opt(b.p);
+		var bp = o(b.p);
 
 		if (! (b.implClasses.isEmpty() && b.pojoSwaps.length == 0 && b.dictionary.length == 0 && b.annotatedClasses.length == 0)) {
 			bs = bs.copy();

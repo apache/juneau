@@ -53,7 +53,7 @@ public class DateUtils {
 				}
 				return DateTimeFormatter.ofPattern(pattern);
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				throw toRex(e);
+				throw toRuntimeException(e);
 			}
 		})
 		.build();

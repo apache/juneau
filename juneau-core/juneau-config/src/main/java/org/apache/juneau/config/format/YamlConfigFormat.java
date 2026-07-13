@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.config.format;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -95,13 +94,13 @@ public class YamlConfigFormat implements ConfigFormat {
 			var section = section(stack);
 			if (! eq(section, lastSection)) {
 				appendPreLines(sb, preLines);
-				if (ne(section))
+				if (ine(section))
 					sb.append('[').append(section).append(']').append('\n');
 				lastSection = section;
 			}
 			appendPreLines(sb, preLines);
 			sb.append(key).append(" = ").append(value);
-			if (ne(comment))
+			if (ine(comment))
 				sb.append(" # ").append(comment);
 			sb.append('\n');
 		}
@@ -126,7 +125,7 @@ public class YamlConfigFormat implements ConfigFormat {
 				var entry = map.getEntry(section, key);
 				var value = entry == null ? "" : emptyIfNull(entry.getValue());
 				indent(sb, segments.size()).append(key).append(": ").append(quoteIfNeeded(value));
-				if (entry != null && ne(entry.getComment()))
+				if (entry != null && ine(entry.getComment()))
 					sb.append(" # ").append(entry.getComment());
 				sb.append('\n');
 			}

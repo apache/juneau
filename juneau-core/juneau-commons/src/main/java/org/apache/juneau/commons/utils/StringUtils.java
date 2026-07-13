@@ -18,14 +18,17 @@ package org.apache.juneau.commons.utils;
 
 import static java.lang.Character.*;
 import static java.nio.charset.StandardCharsets.*;
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.CollectionUtils.toList;
+import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -107,7 +110,7 @@ public class StringUtils {
 	public static final String NEWLINE = "\n";
 
 	/** Predicate that filters out {@code null} and empty strings. */
-	public static final Predicate<String> NOT_EMPTY = Utils::ne;
+	public static final Predicate<String> NOT_EMPTY = ObjectUtils::isNotEmpty;
 
 	/** Characters that can appear anywhere in a numeric literal. */
 	public static final AsciiSet NUMBER_CHARS = AsciiSet.of("-xX.+-#pP0123456789abcdefABCDEF");
@@ -279,7 +282,7 @@ public class StringUtils {
 	 * @return The same StringBuilder instance for method chaining, or a new StringBuilder if <c>sb</c> was <jk>null</jk> and an append occurred, or <jk>null</jk> if <c>sb</c> was <jk>null</jk> and no append occurred.
 	 */
 	public static StringBuilder appendIfNotEmpty(StringBuilder sb, String str) {
-		if (ne(str)) {
+		if (isNotEmpty(str)) {
 			if (sb == null)
 				sb = new StringBuilder();
 			sb.append(str);
@@ -754,7 +757,7 @@ public class StringUtils {
 	 * @see #containsAny(String, CharSequence...)
 	 */
 	public static boolean contains(String value, CharSequence substring) {
-		return nn(value) && value.contains(substring);
+		return isNotNull(value) && value.contains(substring);
 	}
 
 	/**
@@ -778,7 +781,7 @@ public class StringUtils {
 	 * @see #containsAny(String, String...)
 	 */
 	public static boolean contains(String s, String substring) {
-		return nn(s) && s.contains(substring);
+		return s != null && substring != null && s.contains(substring);
 	}
 
 	/**
@@ -1167,7 +1170,7 @@ public class StringUtils {
 				return i;
 			i++;
 		}
-		if (eq(s1.length(), s2.length()))
+		if (equal(s1.length(), s2.length()))
 			return -1;
 		return i;
 	}
@@ -1203,7 +1206,7 @@ public class StringUtils {
 				return i;
 			i++;
 		}
-		if (eq(s1.length(), s2.length()))
+		if (equal(s1.length(), s2.length()))
 			return -1;
 		return i;
 	}
@@ -1258,7 +1261,7 @@ public class StringUtils {
 		// Generate alternate code (simplified - full implementation would have different rules)
 		var alternate = primary;
 
-		return a(primary, alternate);
+		return array(primary, alternate);
 	}
 
 	/**
@@ -1269,6 +1272,11 @@ public class StringUtils {
 	 */
 	public static String emptyIfNull(String str) {
 		return str == null ? "" : str;
+	}
+
+	/** Returns the string representation of an object, or <jk>""</jk> if the object is <jk>null</jk>. */
+	public static String emptyIfNull(Object value) {
+		return value == null ? "" : value.toString();
 	}
 
 	/**
@@ -1293,7 +1301,7 @@ public class StringUtils {
 	 * @see String#endsWith(String)
 	 */
 	public static boolean endsWith(String s, char c) {
-		if (nn(s)) {
+		if (isNotNull(s)) {
 			var i = s.length();
 			if (i > 0)
 				return s.charAt(i - 1) == c;
@@ -1323,7 +1331,7 @@ public class StringUtils {
 	 * @see String#endsWith(String)
 	 */
 	public static boolean endsWith(String s, String suffix) {
-		return s != null && s.endsWith(suffix);
+		return s != null && suffix != null && s.endsWith(suffix);
 	}
 
 	/**
@@ -1351,7 +1359,7 @@ public class StringUtils {
 	 * @see #endsWithAny(String, String...)
 	 */
 	public static boolean endsWithAny(String s, char...c) {
-		if (nn(s)) {
+		if (isNotNull(s)) {
 			var i = s.length();
 			if (i > 0) {
 				var c2 = s.charAt(i - 1);
@@ -1486,7 +1494,7 @@ public class StringUtils {
 	 * @param b Object 2.
 	 * @return <jk>true</jk> if both objects are equal ignoring case.
 	 * @see #equalsIgnoreCase(String, String)
-	 * @see Utils#eqic(Object, Object)
+	 * @see org.apache.juneau.commons.utils.ObjectUtils#equalIgnoreCase(Object, Object)
 	 */
 	public static boolean equalsIgnoreCase(Object a, Object b) {
 		if (a == null && b == null)
@@ -1519,7 +1527,7 @@ public class StringUtils {
 	 * @param str2 The second string.
 	 * @return <jk>true</jk> if the strings are equal ignoring case, <jk>false</jk> otherwise.
 	 * @see #equalsIgnoreCase(Object, Object)
-	 * @see Utils#eqic(String, String)
+	 * @see #equalsIgnoreCase(String, String)
 	 */
 	public static boolean equalsIgnoreCase(String str1, String str2) {
 		if (Objects.equals(str1, str2))
@@ -1788,13 +1796,16 @@ public class StringUtils {
 	 * @param str The string to extract emails from. Can be <jk>null</jk>.
 	 * @return A list of email addresses found in the input, or an empty list if the string is <jk>null</jk> or empty.
 	 */
+	@SuppressWarnings({
+		"java:S8786" // Possessive, overlap-free regex ((?:label\.)++TLD with a dot-less label class) does not backtrack; matching is linear. S8786 is a false positive here.
+	})
 	public static List<String> extractEmails(String str) {
 		if (isEmpty(str))
 			return Collections.emptyList();
 
 		var result = new ArrayList<String>();
 		// Email regex pattern (same as isEmail but without ^ and $ anchors)
-		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}");
+		var pattern = Pattern.compile("[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\\.)++[a-zA-Z]{2,}");
 		var matcher = pattern.matcher(str);
 		while (matcher.find()) {
 			result.add(matcher.group());
@@ -1967,7 +1978,7 @@ public class StringUtils {
 	 *
 	 * <p>
 	 * This method iterates through the provided strings and returns the first one that is not <jk>null</jk>
-	 * and not empty (as determined by {@link Utils#ne(CharSequence)}).
+	 * and not empty (as determined by {@link #isNotEmpty(CharSequence)}).
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -1980,11 +1991,11 @@ public class StringUtils {
 	 * @param s The strings to test.
 	 * @return The first non-empty string in the list, or <jk>null</jk> if they were all <jk>null</jk> or empty.
 	 * @see #firstNonBlank(String...)
-	 * @see Utils#ne(CharSequence)
+	 * @see #isNotEmpty(CharSequence)
 	 */
 	public static String firstNonEmpty(String...s) {
 		for (var ss : s)
-			if (ne(ss))
+			if (isNotEmpty(ss))
 				return ss;
 		return null;
 	}
@@ -2011,7 +2022,7 @@ public class StringUtils {
 	 * @see Character#isWhitespace(char)
 	 */
 	public static char firstNonWhitespaceChar(String s) {
-		if (nn(s))
+		if (isNotNull(s))
 			for (var i = 0; i < s.length(); i++)
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
@@ -2065,7 +2076,7 @@ public class StringUtils {
 				m = i + 1;
 			}
 		}
-		if (nn(sb)) {
+		if (isNotNull(sb)) {
 			sb.append(in.substring(m));
 			return sb.toString();
 		}
@@ -2251,7 +2262,7 @@ public class StringUtils {
 						if (val == null)
 							out.append('{').append(key).append('}');
 						else {
-							var v = r(val);
+							var v = readable(val);
 							// If the replacement also contains variables, replace them now.
 							if (v.indexOf('{') != -1)
 								v = formatNamed(v, resolver);
@@ -2304,7 +2315,7 @@ public class StringUtils {
 			var val = m.get(key);
 			// Check if key actually exists: either containsKey is true, or val is non-null
 			// This handles both regular maps and BeanMaps correctly
-			var keyExists = m.containsKey(key) || nn(val);
+			var keyExists = m.containsKey(key) || isNotNull(val);
 			return keyExists ? val : null;
 		});
 	}
@@ -2675,7 +2686,7 @@ public class StringUtils {
 			end = lines.length;
 		var sb = new StringBuilder();
 		var format = String.format("%%0%dd", digits);
-		for (var l : l(lines).subList(start - 1, end))
+		for (var l : fixedSizeList(lines).subList(start - 1, end))
 			sb.append(String.format(format, start++)).append(": ").append(l).append("\n");
 		return sb.toString();
 	}
@@ -3254,6 +3265,9 @@ public class StringUtils {
 	 * @param allowLeadingZeros Whether the integer part may contain leading zeros.
 	 * @return The length of the matched prefix, or {@code -1} if the string does not start with a valid number.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Inherent branching in a hand-written JSON-number-grammar scanner (sign, integer part, optional fraction, optional exponent); splitting would harm readability.
+	})
 	public static int matchNumberPrefix(String s, boolean allowLeadingZeros) {
 		var len = s.length();
 		var i = 0;
@@ -3342,13 +3356,16 @@ public class StringUtils {
 	 * @param str The string to check.
 	 * @return <jk>true</jk> if the string is a valid email address.
 	 */
+	@SuppressWarnings({
+		"java:S8786" // Possessive, overlap-free regex ((?:label\.)++TLD with a dot-less label class) does not backtrack; matching is linear. S8786 is a false positive here.
+	})
 	public static boolean isEmail(String str) {
 		if (isEmpty(str))
 			return false;
 		// Basic email regex: local@domain
 		// Allows letters, digits, dots, underscores, hyphens, and plus signs in local part
 		// Domain must have at least one dot and valid TLD
-		return str.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$");
+		return str.matches("^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\\.)++[a-zA-Z]{2,}$");
 	}
 
 	/**
@@ -3369,6 +3386,16 @@ public class StringUtils {
 	}
 
 	/**
+	 * Checks if a character sequence is null or empty.
+	 *
+	 * @param str The character sequence to check.
+	 * @return <jk>true</jk> if the character sequence is null or empty.
+	 */
+	public static boolean isEmpty(CharSequence str) {
+		return str == null || str.isEmpty();
+	}
+
+	/**
 	 * Checks if a string is non-null and not empty.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -3382,6 +3409,16 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the string is non-null and not empty.
 	 */
 	public static boolean isNotEmpty(String str) {
+		return !isEmpty(str);
+	}
+
+	/**
+	 * Checks if a character sequence is non-null and not empty.
+	 *
+	 * @param str The character sequence to check.
+	 * @return <jk>true</jk> if the character sequence is non-null and not empty.
+	 */
+	public static boolean isNotEmpty(CharSequence str) {
 		return !isEmpty(str);
 	}
 
@@ -3576,7 +3613,7 @@ public class StringUtils {
 	public static boolean isOneOf(String s, String...values) {
 		assertArgNotNull(ARG_values, values);
 		for (var value : values)
-			if (eq(s, value))
+			if (equal(s, value))
 				return true;
 		return false;
 	}
@@ -4079,7 +4116,7 @@ public class StringUtils {
 		if (tokens == null)
 			return null;
 		if (tokens.length == 1)
-			return emptyIfNull(s(tokens[0]));
+			return emptyIfNull(stringify(tokens[0]));
 		return StringUtils.join(tokens, d, new StringBuilder()).toString();
 	}
 
@@ -4146,7 +4183,7 @@ public class StringUtils {
 		for (int i = 0, j = tokens.size(); i < j; i++) {
 			if (i > 0)
 				sb.append(d);
-			sb.append(escapeChars(s(tokens.get(i)), as));
+			sb.append(escapeChars(stringify(tokens.get(i)), as));
 		}
 		return sb.toString();
 	}
@@ -4253,7 +4290,7 @@ public class StringUtils {
 	 * 	of only whitespace.
 	 */
 	public static char lastNonWhitespaceChar(String s) {
-		if (nn(s))
+		if (isNotNull(s))
 			for (var i = s.length() - 1; i >= 0; i--)
 				if (! isWhitespace(s.charAt(i)))
 					return s.charAt(i);
@@ -4385,7 +4422,7 @@ public class StringUtils {
 	 * @param s The string to convert.
 	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @see #upperCase(String)
-	 * @see Utils#lc(String)
+	 * @see #lowerCase(String)
 	 */
 	public static String lowerCase(String s) {
 		return s == null ? null : s.toLowerCase();
@@ -5173,7 +5210,7 @@ public class StringUtils {
 			return null;
 		if (s.length() == 1)
 			return s.charAt(0);
-		throw illegalArg("Invalid character: ''{0}''", s);
+		throw iaex("Invalid character: ''{0}''", s);
 	}
 
 	/**
@@ -5650,7 +5687,7 @@ public class StringUtils {
 	 */
 	public static String randomAlphabetic(int length) {
 		if (length < 0)
-			throw new IllegalArgumentException("Length must be non-negative: " + length);
+			throw iaex("Length must be non-negative: " + length);
 		var sb = new StringBuilder(length);
 		for (var i = 0; i < length; i++) {
 			var c = RANDOM.nextInt(52);
@@ -5678,7 +5715,7 @@ public class StringUtils {
 	 */
 	public static String randomAlphanumeric(int length) {
 		if (length < 0)
-			throw new IllegalArgumentException("Length must be non-negative: " + length);
+			throw iaex("Length must be non-negative: " + length);
 		var sb = new StringBuilder(length);
 		for (var i = 0; i < length; i++) {
 			var c = RANDOM.nextInt(62);
@@ -5708,7 +5745,7 @@ public class StringUtils {
 	 */
 	public static String randomAscii(int length) {
 		if (length < 0)
-			throw new IllegalArgumentException("Length must be non-negative: " + length);
+			throw iaex("Length must be non-negative: " + length);
 		var sb = new StringBuilder(length);
 		for (var i = 0; i < length; i++) {
 			sb.append((char)(32 + RANDOM.nextInt(95))); // 95 printable ASCII chars (32-126)
@@ -5732,7 +5769,7 @@ public class StringUtils {
 	 */
 	public static String randomNumeric(int length) {
 		if (length < 0)
-			throw new IllegalArgumentException("Length must be non-negative: " + length);
+			throw iaex("Length must be non-negative: " + length);
 		var sb = new StringBuilder(length);
 		for (var i = 0; i < length; i++) {
 			sb.append((char)('0' + RANDOM.nextInt(10)));
@@ -5758,9 +5795,9 @@ public class StringUtils {
 	 */
 	public static String randomString(int length, String chars) {
 		if (length < 0)
-			throw new IllegalArgumentException("Length must be non-negative: " + length);
+			throw iaex("Length must be non-negative: " + length);
 		if (chars == null || chars.isEmpty())
-			throw new IllegalArgumentException("Character set must not be null or empty");
+			throw iaex("Character set must not be null or empty");
 		var sb = new StringBuilder(length);
 		var charsLen = chars.length();
 		for (var i = 0; i < length; i++) {
@@ -6649,9 +6686,9 @@ public class StringUtils {
 	public static Map<String,String> splitMap(String s, boolean trim) {
 
 		if (s == null)
-			return mape();
+			return emptyMap();
 		if (isEmpty(s))
-			return mape();
+			return emptyMap();
 
 		var m = new LinkedHashMap<String,String>();
 
@@ -6719,7 +6756,7 @@ public class StringUtils {
 		if (isEmpty(s))
 			return new String[0];
 		if (s.indexOf(',') == -1)
-			return a(s);
+			return array(s);
 
 		var l = new LinkedList<String>();
 		var sArray = s.toCharArray();
@@ -6822,8 +6859,8 @@ public class StringUtils {
 		"java:S3776" // Cognitive complexity acceptable for nested inner string splitting
 	})
 	public static List<String> splitNestedInner(String s) {
-		assertArg(nn(s), "String was null.");
-		assertArg(ne(s), "String was empty.");
+		assertArg(isNotNull(s), "String was null.");
+		assertArg(isNotEmpty(s), "String was empty.");
 
 		// S1: Looking for '{'
 		// S2: Found '{', looking for '}'
@@ -6863,9 +6900,9 @@ public class StringUtils {
 		}
 
 		if (start == -1)
-			throw illegalArg("Start character '{' not found in string:  {0}", s);
+			throw iaex("Start character '{' not found in string:  {0}", s);
 		if (end == -1)
-			throw illegalArg("End character '}' not found in string  {0}", s);
+			throw iaex("End character '}' not found in string  {0}", s);
 		return splitNested(s.substring(start, end));
 	}
 
@@ -6913,10 +6950,10 @@ public class StringUtils {
 		s = s.trim();
 
 		if (isEmpty(s))
-			return a();
+			return array();
 
 		if (! containsAny(s, ' ', '\t', '\'', '"'))
-			return a(s);
+			return array(s);
 
 		// S1: Looking for start of token.
 		// S2: Found ', looking for end '
@@ -6971,7 +7008,7 @@ public class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw illegalArg("Unmatched string quotes: {0}", s);
+			throw iaex("Unmatched string quotes: {0}", s);
 		return l.toArray(new String[l.size()]);
 	}
 
@@ -6983,7 +7020,7 @@ public class StringUtils {
 	 * @return <jk>true</jk> if the specified string is not <jk>null</jk> and starts with the specified character.
 	 */
 	public static boolean startsWith(String s, char c) {
-		if (nn(s)) {
+		if (isNotNull(s)) {
 			var i = s.length();
 			if (i > 0)
 				return s.charAt(0) == c;
@@ -7223,7 +7260,7 @@ public class StringUtils {
 	public static String toCdl(Object o) {
 		if (o == null)
 			return null;
-		if (isArray(o)) {
+		if (ClassUtils.isArray(o)) {
 			var sb = new StringBuilder();
 			for (int i = 0, j = Array.getLength(o); i < j; i++) {
 				if (i > 0)
@@ -7449,7 +7486,7 @@ public class StringUtils {
 		try {
 			return new URI(o.toString());
 		} catch (URISyntaxException e) {
-			throw toRex(e);
+			throw toRuntimeException(e);
 		}
 	}
 
@@ -7501,7 +7538,7 @@ public class StringUtils {
 		if (fromChars == null || toChars == null || fromChars.isEmpty() || toChars.isEmpty())
 			return str;
 		if (fromChars.length() != toChars.length())
-			throw new IllegalArgumentException("fromChars and toChars must have the same length");
+			throw iaex("fromChars and toChars must have the same length");
 
 		var sb = new StringBuilder(str.length());
 		for (var i = 0; i < str.length(); i++) {
@@ -7534,8 +7571,8 @@ public class StringUtils {
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
 	public static String trimEnd(String s) {
-		if (nn(s))
-			while (ne(s) && isWhitespace(s.charAt(s.length() - 1)))
+		if (isNotNull(s))
+			while (isNotEmpty(s) && isWhitespace(s.charAt(s.length() - 1)))
 				s = s.substring(0, s.length() - 1);
 		return s;
 	}
@@ -7549,7 +7586,7 @@ public class StringUtils {
 	public static String trimLeadingSlashes(String s) {
 		if (s == null)
 			return null;
-		while (ne(s) && s.charAt(0) == '/')
+		while (isNotEmpty(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -7567,7 +7604,7 @@ public class StringUtils {
 			return s;
 		while (endsWith(s, '/'))
 			s = s.substring(0, s.length() - 1);
-		while (ne(s) && s.charAt(0) == '/')
+		while (isNotEmpty(s) && s.charAt(0) == '/')
 			s = s.substring(1);
 		return s;
 	}
@@ -7581,9 +7618,9 @@ public class StringUtils {
 	public static String trimSlashesAndSpaces(String s) {
 		if (s == null)
 			return null;
-		while (ne(s) && (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
+		while (isNotEmpty(s) && (s.charAt(s.length() - 1) == '/' || isWhitespace(s.charAt(s.length() - 1))))
 			s = s.substring(0, s.length() - 1);
-		while (ne(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
+		while (isNotEmpty(s) && (s.charAt(0) == '/' || isWhitespace(s.charAt(0))))
 			s = s.substring(1);
 		return s;
 	}
@@ -7595,8 +7632,8 @@ public class StringUtils {
 	 * @return The trimmed string, or <jk>null</jk> if the string was <jk>null</jk>.
 	 */
 	public static String trimStart(String s) {
-		if (nn(s))
-			while (ne(s) && isWhitespace(s.charAt(0)))
+		if (isNotNull(s))
+			while (isNotEmpty(s) && isWhitespace(s.charAt(0)))
 				s = s.substring(1);
 		return s;
 	}
@@ -7750,7 +7787,7 @@ public class StringUtils {
 	 * @param s The string to convert.
 	 * @return The uppercase string, or <jk>null</jk> if the input was <jk>null</jk>.
 	 * @see #lowerCase(String)
-	 * @see Utils#uc(String)
+	 * @see #upperCase(String)
 	 */
 	public static String upperCase(String s) {
 		return s == null ? null : s.toUpperCase();
@@ -7848,7 +7885,7 @@ public class StringUtils {
 		if (o == null)
 			return null;
 
-		var s = s(o);
+		var s = stringify(o);
 
 		var needsEncode = false;
 		for (var i = 0; i < s.length() && ! needsEncode; i++)
@@ -7998,9 +8035,9 @@ public class StringUtils {
 		if (isEmpty(str))
 			return str;
 		if (wrapLength <= 0)
-			throw illegalArg("wrapLength must be > 0: {0}", wrapLength);
+			throw iaex("wrapLength must be > 0: {0}", wrapLength);
 		if (newline == null)
-			throw illegalArg("newline cannot be null");
+			throw iaex("newline cannot be null");
 
 		var result = new StringBuilder();
 		var lines = str.split("\r?\n", -1);  // Preserve empty lines
@@ -8315,7 +8352,7 @@ public class StringUtils {
 		list.add(readifier(File.class, (File x) -> safe(() -> read(x))));
 		list.add(readifier(byte[].class, x -> toHex(x)));
 		list.add(readifier(Enum.class, x -> ((Enum<?>)x).name()));
-		list.add(readifier(Class.class, Utils::cns));
+		list.add(readifier(Class.class, ClassUtils::classNameSimple));
 		list.add(readifier(Constructor.class, x -> ConstructorInfo.of(x).getNameFull()));
 		list.add(readifier(Method.class, x -> MethodInfo.of(x).getNameFull()));
 		list.add(readifier(Field.class, x -> FieldInfo.of(x).toString()));
@@ -8587,6 +8624,75 @@ public class StringUtils {
 		words.add(sb.toString());
 
 		return words;
+	}
+
+	/**
+	 * Null-safe startsWith (both args null-checked).
+	 *
+	 * @param s The string to test.
+	 * @param prefix The prefix to test for.
+	 * @return <jk>true</jk> if s starts with prefix (both non-null).
+	 */
+	public static boolean startsWith(String s, String prefix) {
+		return s != null && prefix != null && s.startsWith(prefix);
+	}
+
+	/**
+	 * Returns the string, or blank ("") if null.
+	 *
+	 * @param value The string value.
+	 * @return The value, or "" if null.
+	 */
+	public static String blankIfNull(String value) { return value == null ? "" : value; }
+
+	/**
+	 * Creates a new {@link StringBuilder} initialized with the stringified form of the specified value.
+	 *
+	 * <p>
+	 * The value is rendered via {@link ObjectUtils#stringify(Object)} (a <jk>null</jk> value renders as
+	 * the literal string {@code "null"}). Using the stringified form avoids the
+	 * {@link StringBuilder#StringBuilder(int) StringBuilder(int capacity)} footgun that would otherwise
+	 * apply when passing a numeric value.
+	 *
+	 * @param value The initial value. Can be <jk>null</jk>.
+	 * @return A new StringBuilder containing the stringified value.
+	 */
+	public static StringBuilder newStringBuilder(Object value) { return new StringBuilder(value == null ? "null" : stringify(value)); }
+
+	/**
+	 * Creates a new {@link StringBuilder} with the stringified form of each specified value appended in order.
+	 *
+	 * <p>
+	 * Each value is rendered via {@link ObjectUtils#stringify(Object)} (a <jk>null</jk> value renders as
+	 * the literal string {@code "null"}). With no arguments, an empty builder is returned.
+	 *
+	 * @param values The values to append in order. Individual values can be <jk>null</jk>.
+	 * @return A new StringBuilder containing the appended values.
+	 */
+	public static StringBuilder newStringBuilder(Object...values) {
+		var b = new StringBuilder();
+		for (var v : values)
+			b.append(stringify(v));
+		return b;
+	}
+
+	/**
+	 * Inverse of {@link #equalsIgnoreCase(String, String)}.
+	 *
+	 * @param s1 String 1.
+	 * @param s2 String 2.
+	 * @return <jk>true</jk> if the strings are not equal ignoring case.
+	 */
+	public static boolean notEqualsIgnoreCase(String s1, String s2) { return ! equalsIgnoreCase(s1, s2); }
+
+	/**
+	 * Returns the specified string, or <jk>null</jk> if that string is <jk>null</jk> or empty.
+	 *
+	 * @param value The string value to check.
+	 * @return The string value, or <jk>null</jk> if the string is <jk>null</jk> or empty.
+	 */
+	public static String nullIfEmpty(String value) {
+		return isEmpty(value) ? null : value;
 	}
 
 	/**

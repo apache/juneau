@@ -55,6 +55,9 @@ import org.apache.logging.log4j.core.config.*;
  */
 public class Log4j2LogBackend implements LogBackend {
 
+	@SuppressWarnings({
+		"resource" // Shared Log4j2 LoggerContext owned by LogManager/caller - not closed here.
+	})
 	private final LoggerContext context;
 
 	/**

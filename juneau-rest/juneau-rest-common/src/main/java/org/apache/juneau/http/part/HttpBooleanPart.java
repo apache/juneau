@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -79,7 +79,7 @@ public class HttpBooleanPart extends HttpPartBean {
 	 */
 	public HttpBooleanPart(String name, String value) {
 		super(name, value);
-		this.typedValue = e(value) ? null : Boolean.valueOf(bool(value));
+		this.typedValue = ie(value) ? null : Boolean.valueOf(b(value));
 		this.typedSupplier = null;
 	}
 
@@ -116,7 +116,7 @@ public class HttpBooleanPart extends HttpPartBean {
 	 * @return The boolean value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<Boolean> asBoolean() {
-		return opt(toBoolean());
+		return o(toBoolean());
 	}
 
 	/**

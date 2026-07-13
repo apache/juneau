@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.prototext;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -395,7 +395,7 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void g01_optionalProperty_present() throws Exception {
 		// Hits isOptional branch in serializeAnything (via map of Optional<String>).
 		var m = new LinkedHashMap<String, Object>();
-		m.put("opt", opt("value"));
+		m.put("opt", o("value"));
 		var proto = PrototextSerializer.DEFAULT.serialize(m);
 		assertNotNull(proto);
 		assertTrue(proto.contains("value"));
@@ -404,7 +404,7 @@ class PrototextSerializerSession_Test extends TestBase {
 	@Test void g02_optionalProperty_empty() throws Exception {
 		// Optional.empty() -> serializeAnything handles via getOptionalValue (returns null).
 		var m = new LinkedHashMap<String, Object>();
-		m.put("opt", opte());
+		m.put("opt", oe());
 		var proto = PrototextSerializer.DEFAULT.serialize(m);
 		assertNotNull(proto);
 	}

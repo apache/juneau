@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -185,7 +185,7 @@ public class Response extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,MediaType> getContent() { return nullIfEmpty(content); }
+	public Map<String,MediaType> getContent() { return nie(content); }
 
 	/**
 	 * Returns the content with the specified media type.
@@ -224,7 +224,7 @@ public class Response extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
+	public Map<String,HeaderInfo> getHeaders() { return nie(headers); }
 
 	/**
 	 * Returns the link with the specified name.
@@ -242,16 +242,16 @@ public class Response extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Link> getLinks() { return nullIfEmpty(links); }
+	public Map<String,Link> getLinks() { return nie(links); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
-			.addIf(ne(content), PROP_content)
+		var s = stb(String.class)
+			.addIf(ine(content), PROP_content)
 			.addIf(nn(description), PROP_description)
-			.addIf(ne(headers), PROP_headers)
-			.addIf(ne(links), PROP_links)
+			.addIf(ine(headers), PROP_headers)
+			.addIf(ine(links), PROP_links)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

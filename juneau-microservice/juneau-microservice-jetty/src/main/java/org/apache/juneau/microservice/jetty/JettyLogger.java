@@ -17,7 +17,8 @@
 package org.apache.juneau.microservice.jetty;
 
 import static java.util.logging.Level.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.util.logging.*;
 import java.util.logging.Logger;
@@ -43,7 +44,7 @@ import org.slf4j.spi.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty Basics</a>
  * </ul>
  */
 public class JettyLogger implements LocationAwareLogger {

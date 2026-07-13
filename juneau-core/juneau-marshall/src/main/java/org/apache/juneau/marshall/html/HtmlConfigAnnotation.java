@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.*;
  * Utility classes and methods for the {@link HtmlConfig @HtmlConfig} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
  * </ul>
  */
 public class HtmlConfigAnnotation {

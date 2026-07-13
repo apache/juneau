@@ -18,9 +18,9 @@ package org.apache.juneau.commons.inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Phase G regression: verifies that stable-folded {@link Var}s (per RD #10) inside

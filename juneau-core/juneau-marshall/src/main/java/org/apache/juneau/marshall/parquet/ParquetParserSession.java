@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
 import java.io.*;
@@ -218,7 +218,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		if (rows.size() == 1 && rows.get(0) instanceof Map<?, ?> m && m.containsKey("value") && targetWantsScalar) {
 			var inner = m.get("value");
 			if (type.isOptional())
-				return (T)opt(convertToType(inner, type.getElementType()));
+				return (T)o(convertToType(inner, type.getElementType()));
 			if (type.isArray()) {
 				var list = new ArrayList<>(List.of(inner));
 				return (T)convertToType(list, type);
@@ -264,9 +264,9 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		}
 		if (type.isOptional()) {
 			if (rows.isEmpty())
-				return (T)opte();
+				return (T)oe();
 			var inner = unwrapValueHolder(rows.get(0), type.getElementType());
-			return (T)opt(inner);
+			return (T)o(inner);
 		}
 		if (type.isArray()) {
 			var componentMeta = type.getElementType();
@@ -724,7 +724,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	/** Returns true if rows are key-value pairs (Map with non-String keys format). */
 	private static boolean isKeyValuePairFormat(List<?> rows) {
-		if (e(rows))
+		if (ie(rows))
 			return false;
 		var first = (Map<?,?>) rows.get(0);
 		return first.containsKey("key") && first.containsKey("value") && first.size() == 2;

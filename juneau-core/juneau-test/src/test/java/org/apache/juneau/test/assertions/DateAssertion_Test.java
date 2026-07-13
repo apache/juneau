@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -71,7 +72,7 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).asString().isMatches("*2000*");
 		test(nil).asString().isNull();
 	}
@@ -87,14 +88,14 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void bc04a_asEpochMillis() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).asEpochMillis().is(959862896000L);
 		test(nil).asEpochMillis().isNull();
 	}
 
 	@Test void bc04b_asEpochSeconds() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).asEpochSeconds().is(959862896L);
 		test(nil).asEpochSeconds().isNull();
 	}
@@ -105,7 +106,7 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).isExists().isExists();
 		var assertion3 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
@@ -113,7 +114,7 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void ca02_isNull() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(nil).isNull();
 		var assertion4 = test(x);
 		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
@@ -121,7 +122,7 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void ca03_isNotNull() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).isNotNull();
 		var assertion5 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion5::isNotNull, "Value was null.");
@@ -131,7 +132,7 @@ class DateAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -151,7 +152,7 @@ class DateAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -163,7 +164,7 @@ class DateAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[*2010*]'.  Actual='*2000*'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().isMatches("Expected value not found.  Expect='[]'.  Actual='*2000*'.");
@@ -174,7 +175,7 @@ class DateAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -185,7 +186,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = MID1;
 		var x1a = MID1a;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='*2000*(Date@*)'.  Actual='*2000*(Date@*)'.");
@@ -194,7 +195,7 @@ class DateAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).isType(Date.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.Date'.");
@@ -204,7 +205,7 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).isExactType(Date.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.util.Date'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.util.Date'.");
@@ -214,7 +215,7 @@ class DateAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x).isString(r(x));
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().isMatches("String differed at position 0.  Expect='bad'.  Actual='*2000*'.");
@@ -224,7 +225,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cb01_isGt() {
 		var x1 = MID1;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x2).isGt(x1);
 		assertThrown(()->test(x1).isGt(x1)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2000*'.  Actual='*2000*'.");
 		assertThrown(()->test(x1).isGt(x2)).asMessage().asOneLine().isMatches("Value was not greater than expected.  Expect='*2010*'.  Actual='*2000*'.");
@@ -237,7 +238,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cb02_isGte() {
 		var x1 = MID1;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x2).isGte(x1);
 		test(x1).isGte(x1);
 		assertThrown(()->test(x1).isGte(x2)).asMessage().asOneLine().isMatches("Value was not greater than or equals to expected.  Expect='*2010*'.  Actual='*2000*'.");
@@ -250,7 +251,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cb03_isLt() {
 		var x1 = MID1;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isLt(x2);
 		assertThrown(()->test(x1).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000*'.  Actual='*2000*'.");
 		assertThrown(()->test(x2).isLt(x1)).asMessage().asOneLine().isMatches("Value was not less than expected.  Expect='*2000*'.  Actual='*2010*'.");
@@ -263,7 +264,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cb04_isLte() {
 		var x1 = MID1;
 		var x2 = MID2;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isLte(x2);
 		test(x1).isLte(x1);
 		assertThrown(()->test(x2).isLte(x1)).asMessage().asOneLine().isMatches("Value was not less than or equals to expected.  Expect='*2000*'.  Actual='*2010*'.");
@@ -278,7 +279,7 @@ class DateAssertion_Test extends TestBase {
 		var x2 = MID1;
 		var x3 = MID2;
 		var x4 = MAX;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isBetween(x1, x3);
 		test(x2).isBetween(x1, x3);
 		test(x3).isBetween(x1, x3);
@@ -294,7 +295,7 @@ class DateAssertion_Test extends TestBase {
 		var x1 = MID1;
 		var x1a = MID1a;
 		var x2 = MIN;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).is(x1, ChronoUnit.DAYS);
 		test(x1).is(x1a, ChronoUnit.DAYS);
 		assertThrown(()->test(nil).is(nil, ChronoUnit.DAYS)).asMessage().isContains("Value was null.");
@@ -306,7 +307,7 @@ class DateAssertion_Test extends TestBase {
 		var x1 = MIN;
 		var x2 = MID1;
 		var x3 = MAX;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x3).isAfter(x2);
 		var assertion16 = test(x1);
 		assertThrows(IllegalArgumentException.class, ()->assertion16.isAfter(nil), "Argument 'value' cannot be null.");
@@ -318,7 +319,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cc03_isAfterNow() {
 		var x1 = MIN;
 		var x2 = MAX;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x2).isAfterNow();
 		assertThrown(()->test(x1).isAfterNow()).asMessage().isContains("Value was not after expected.");
 		assertThrown(()->test(nil).isAfterNow()).asMessage().isContains("Value was null.");
@@ -327,7 +328,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cc04_isBefore() {
 		var x1 = MIN;
 		var x2 = MID1;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isBefore(x2);
 		var assertion18 = test(x1);
 		assertThrows(IllegalArgumentException.class, ()->assertion18.isBefore(nil), "Argument 'value' cannot be null.");
@@ -339,7 +340,7 @@ class DateAssertion_Test extends TestBase {
 	@Test void cc05_isBeforeNow() {
 		var x1 = MIN;
 		var x2 = MAX;
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		test(x1).isBeforeNow();
 		assertThrown(()->test(x2).isBeforeNow()).asMessage().isContains("Value was not before expected.");
 		assertThrown(()->test(nil).isBeforeNow()).asMessage().isContains("Value was null.");

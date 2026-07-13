@@ -18,7 +18,8 @@ package org.apache.juneau.rest.server.util;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 import java.util.regex.*;
@@ -89,7 +90,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 
 		PathMatcher(String patternString) {
 			super(patternString);
-			if (e(patternString)) {
+			if (ie(patternString)) {
 				this.pattern = "/";
 			} else if (patternString.charAt(0) != '/') {
 				this.pattern = '/' + patternString;

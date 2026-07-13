@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
 import java.util.*;
@@ -180,7 +180,7 @@ public class ProxyAuthorization extends HttpStringHeader {
 			assertArgNotNull("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("scheme must not be blank");
+				throw iaex("scheme must not be blank");
 			scheme = v;
 			return this;
 		}
@@ -365,7 +365,7 @@ public class ProxyAuthorization extends HttpStringHeader {
 			assertArgNotNull("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
-				throw illegalArg("auth-param name must not be blank");
+				throw iaex("auth-param name must not be blank");
 			return n;
 		}
 

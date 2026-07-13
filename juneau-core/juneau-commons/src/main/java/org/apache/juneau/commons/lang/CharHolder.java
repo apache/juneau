@@ -17,7 +17,9 @@
 package org.apache.juneau.commons.lang;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import org.apache.juneau.commons.utils.*;
 
 /**
  * A simple mutable character value.
@@ -215,7 +217,7 @@ public class CharHolder extends Holder<Character> {
 	 * Checks if the current value is equal to the specified character.
 	 *
 	 * <p>
-	 * Uses {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
+	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison, which handles nulls safely.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -236,7 +238,7 @@ public class CharHolder extends Holder<Character> {
 	 * Checks if the current value matches any of the specified characters.
 	 *
 	 * <p>
-	 * Uses {@link org.apache.juneau.commons.utils.Utils#eq(Object, Object)} for deep equality comparison of each character.
+	 * Uses {@link Shorts#eq(Object, Object)} for deep equality comparison of each character.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -275,7 +277,7 @@ public class CharHolder extends Holder<Character> {
 	 * @return <jk>true</jk> if the current value matches any character in the string.
 	 */
 	public boolean isAny(String values) {
-		if (e(values))
+		if (ie(values))
 			return false;
 		var current = get();
 		if (current == null)

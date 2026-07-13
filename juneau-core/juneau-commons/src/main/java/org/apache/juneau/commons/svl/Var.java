@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.svl;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -48,7 +48,7 @@ import java.io.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Simple Variable Language Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -81,7 +81,7 @@ public abstract class Var {
 			// Need to make sure only ASCII characters are used.
 			var c = name.charAt(i);
 			if (c < 'A' || c > 'z' || (c > 'Z' && c < 'a'))
-				throw illegalArg("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
+				throw iaex("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");
 		}
 	}
 

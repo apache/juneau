@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Exceptions.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 
 import java.util.*;
 
@@ -89,7 +89,7 @@ public class AssertionUtils {
 	 */
 	public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {
 		if (! expression)
-			throw illegalArg(msg, args);
+			throw iaex(msg, args);
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class AssertionUtils {
 	 */
 	public static final void assertState(boolean expression, String msg, Object...args) throws IllegalStateException {
 		if (! expression)
-			throw illegalState(msg, args);
+			throw isex(msg, args);
 	}
 
 	/**
@@ -146,7 +146,7 @@ public class AssertionUtils {
 	 */
 	public static final <T> T assertNotNull(T o, String msg, Object...args) throws IllegalStateException {
 		if (o == null)
-			throw illegalState(msg, args);
+			throw isex(msg, args);
 		return o;
 	}
 
@@ -292,7 +292,7 @@ public class AssertionUtils {
 		assertArgNotNull(ARG_type, type);
 		assertArgNotNull(ARG_o, o);
 		if (! type.isInstance(o))
-			throw illegalArg("Object is not an instance of {0}: {1}", cn(type), cn(o));
+			throw iaex("Object is not an instance of {0}: {1}", ClassUtils.className(type), ClassUtils.className(o));
 		return (T)o;
 	}
 
@@ -345,7 +345,7 @@ public class AssertionUtils {
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (var i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
-				throw illegalArg("Arg {0} did not have arg of type {1} at index {2}: {3}", name, cn(type), i, cn(value[i]));
+				throw iaex("Arg {0} did not have arg of type {1} at index {2}: {3}", name, ClassUtils.className(type), i, ClassUtils.className(value[i]));
 		return (Class<E>[])value;
 	}
 
@@ -361,7 +361,7 @@ public class AssertionUtils {
 	@SafeVarargs
 	public static final <T> T assertOneOf(T actual, T...expected) {
 		for (var e : expected) {
-			if (eq(actual, e))
+			if (equal(actual, e))
 				return actual;
 		}
 		throw new AssertionError("Invalid value specified: " + actual);
@@ -379,7 +379,7 @@ public class AssertionUtils {
 	public static final <T> T[] assertArgNoNulls(String name, T[] o) throws IllegalArgumentException {
 		assertArgNotNull(name, o);
 		for (var i = 0; i < o.length; i++)
-			assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
+			assertArg(isNotNull(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
 		return o;
 	}
 
@@ -407,7 +407,7 @@ public class AssertionUtils {
 		assertArgNotNull(name, collection);
 		var i = 0;
 		for (var element : collection)
-			assertArg(nn(element), "Argument ''{0}'' element at index {1} cannot be null.", name, i++);
+			assertArg(isNotNull(element), "Argument ''{0}'' element at index {1} cannot be null.", name, i++);
 		return collection;
 	}
 

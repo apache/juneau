@@ -18,7 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -498,7 +498,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getConsumes() { return nullIfEmpty(consumes); }
+	public Set<MediaType> getConsumes() { return nie(consumes); }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -579,7 +579,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<ParameterInfo> getParameters() { return nullIfEmpty(parameters); }
+	public List<ParameterInfo> getParameters() { return nie(parameters); }
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
@@ -589,7 +589,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getProduces() { return nullIfEmpty(produces); }
+	public Set<MediaType> getProduces() { return nie(produces); }
 
 	/**
 	 * Returns the response info with the given status code.
@@ -620,7 +620,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() { return nullIfEmpty(responses); }
+	public Map<String,ResponseInfo> getResponses() { return nie(responses); }
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -630,7 +630,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getSchemes() { return nullIfEmpty(schemes); }
+	public Set<String> getSchemes() { return nie(schemes); }
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -640,7 +640,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Map<String,List<String>>> getSecurity() { return nullIfEmpty(security); }
+	public List<Map<String,List<String>>> getSecurity() { return nie(security); }
 
 	/**
 	 * Bean property getter:  <property>summary</property>.
@@ -661,7 +661,7 @@ public class Operation extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getTags() { return nullIfEmpty(tags); }
+	public Set<String> getTags() { return nie(tags); }
 
 	/**
 	 * Bean property getter:  <property>deprecated</property>.
@@ -676,19 +676,19 @@ public class Operation extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
-			.addIf(ne(consumes), PROP_consumes)
+		var s = stb(String.class)
+			.addIf(ine(consumes), PROP_consumes)
 			.addIf(nn(deprecated), PROP_deprecated)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(externalDocs), PROP_externalDocs)
 			.addIf(nn(operationId), PROP_operationId)
-			.addIf(ne(parameters), PROP_parameters)
-			.addIf(ne(produces), PROP_produces)
-			.addIf(ne(responses), PROP_responses)
-			.addIf(ne(schemes), PROP_schemes)
-			.addIf(ne(security), PROP_security)
+			.addIf(ine(parameters), PROP_parameters)
+			.addIf(ine(produces), PROP_produces)
+			.addIf(ine(responses), PROP_responses)
+			.addIf(ine(schemes), PROP_schemes)
+			.addIf(ine(security), PROP_security)
 			.addIf(nn(summary), PROP_summary)
-			.addIf(ne(tags), PROP_tags)
+			.addIf(ine(tags), PROP_tags)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -945,7 +945,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setSchemes(String...value) {
-		setSchemes(setb(String.class).sparse().add(value).build());
+		setSchemes(stb(String.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -1029,7 +1029,7 @@ public class Operation extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Operation setTags(String...value) {
-		setTags(setb(String.class).sparse().add(value).build());
+		setTags(stb(String.class).sparse().add(value).build());
 		return this;
 	}
 

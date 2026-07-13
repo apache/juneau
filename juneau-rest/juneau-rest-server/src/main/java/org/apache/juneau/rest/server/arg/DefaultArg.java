@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.arg;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;

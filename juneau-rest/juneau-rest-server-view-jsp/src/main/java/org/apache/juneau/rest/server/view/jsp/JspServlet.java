@@ -53,7 +53,7 @@ import org.apache.juneau.rest.server.view.*;
  * 	<li class='jc'>{@link JspMixin}
  * 	<li class='jc'>{@link ViewServlet}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JspViewSupport">JSP View Support</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  * </ul>
  *
  * @serial exclude

@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.jsonschema;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.math.*;
@@ -192,7 +192,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 
 	private static void validateEnum(JsonSchema s, Object value) {
 		var enums = s.getEnum();
-		if (e(enums))
+		if (ie(enums))
 			return;
 		for (var e : enums) {
 			if (jsonEquals(e, value))
@@ -217,7 +217,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			return;
 		}
 		var arr = s.getTypeAsJsonTypeArray();
-		if (e(arr))
+		if (ie(arr))
 			return;
 		for (var t : arr) {
 			if (matchesType(t, value))

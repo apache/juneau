@@ -17,7 +17,8 @@
 package org.apache.juneau.rest.server.debug;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.Enablement.*;
 
 import java.util.function.*;
@@ -205,7 +206,7 @@ public abstract class DebugEnablement {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends DebugEnablement> value) {
-			implType = opt(value).isPresent() ? value : BasicDebugEnablement.class;
+			implType = o(value).isPresent() ? value : BasicDebugEnablement.class;
 			return this;
 		}
 	}
@@ -242,9 +243,9 @@ public abstract class DebugEnablement {
 	 */
 	protected DebugEnablement(BeanStore beanStore) {
 		var builder = init(beanStore);
-		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
+		this.defaultEnablement = coalesce(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader(HEADER_Debug)));
+		this.conditionalPredicate = coalesce(builder.conditional, x -> eqic("true", x.getHeader(HEADER_Debug)));
 	}
 
 	/**
@@ -253,9 +254,9 @@ public abstract class DebugEnablement {
 	 * @param builder The builder for this enablement.
 	 */
 	protected DebugEnablement(Builder builder) {
-		this.defaultEnablement = firstNonNull(builder.defaultEnablement, NEVER);
+		this.defaultEnablement = coalesce(builder.defaultEnablement, NEVER);
 		this.enablementMap = builder.mapBuilder.build();
-		this.conditionalPredicate = firstNonNull(builder.conditional, x -> eqic("true", x.getHeader(HEADER_Debug)));
+		this.conditionalPredicate = coalesce(builder.conditional, x -> eqic("true", x.getHeader(HEADER_Debug)));
 
 	}
 

@@ -22,11 +22,11 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.jar.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.runtime.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class PropertyVars_Test extends TestBase {
 

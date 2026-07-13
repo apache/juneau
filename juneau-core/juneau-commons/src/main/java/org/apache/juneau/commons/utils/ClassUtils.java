@@ -18,7 +18,8 @@ package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -370,7 +371,7 @@ public class ClassUtils {
 		for (var i = 0; i < paramTypes.length; i++) {
 			var pt = info(paramTypes[i]).getWrapperIfPrimitive();
 			for (var arg : args) {
-				if (nn(arg) && pt.isAssignableFrom(arg.getClass())) {
+				if (isNotNull(arg) && pt.isAssignableFrom(arg.getClass())) {
 					params[i] = arg;
 					break;
 				}
@@ -481,7 +482,7 @@ public class ClassUtils {
 		"rawtypes" // Raw types necessary for generic void check
 	})
 	public static boolean isVoid(Class c) {
-		return c == null || c == void.class || c == Void.class || cns(c).equalsIgnoreCase("void");
+		return c == null || c == void.class || c == Void.class || classNameSimple(c).equalsIgnoreCase("void");
 	}
 
 	/**
@@ -555,4 +556,21 @@ public class ClassUtils {
 		}
 		return b;
 	}
+
+	/**
+	 * Casts the object to the specified type, returning null if not an instance.
+	 *
+	 * @param <T> The type to cast to.
+	 * @param c The type to cast to.
+	 * @param o The object to cast.
+	 * @return The cast object, or null if the object was null or not an instance of c.
+	 */
+	@SuppressWarnings({ "java:S1168" // Intentional null return.
+	})
+	public static <T> T castTo(Class<T> c, Object o) {
+		return o != null && c.isInstance(o) ? c.cast(o) : null;
+	}
+
+	/** Returns true if the object is a non-null array. */
+	public static boolean isArray(Object o) { return o != null && o.getClass().isArray(); }
 }

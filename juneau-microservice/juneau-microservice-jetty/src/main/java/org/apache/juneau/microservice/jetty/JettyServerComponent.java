@@ -17,11 +17,11 @@
 package org.apache.juneau.microservice.jetty;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.collections.JsonMap.*;
 
 import java.io.*;
@@ -71,7 +71,7 @@ import jakarta.servlet.*;
  * {@code Microservice.getInstance().getBeanStore().getBean(JettyServerComponent.class).orElseThrow()}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJettyBasics">juneau-microservice-jetty Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty Basics</a>
  * </ul>
  *
  * @since 10.0.0
@@ -102,17 +102,17 @@ public class JettyServerComponent implements MicroserviceListener {
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code availablePort} system property).
 	 */
 	@Value("${availablePort}")
-	Optional<String> availablePortEnv = opte();
+	Optional<String> availablePortEnv = oe();
 
 	/**
 	 * Env-driven sentinel for {@code juneau.serverPort}; {@link Optional#empty()} when unset (in which case
 	 * {@link #onStart(Microservice)} publishes the bound port back as the {@code juneau.serverPort} system property).
 	 */
 	@Value("${juneau.serverPort}")
-	Optional<String> serverPortEnv = opte();
+	Optional<String> serverPortEnv = oe();
 
 	private static int[] parseIntArray(String csv) {
-		if (e(csv))
+		if (ie(csv))
 			return new int[0];
 		var parts = csv.split(",");
 		var out = new int[parts.length];
@@ -222,7 +222,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				var factory = store.getBean(JettyServerFactory.class).orElseGet(BasicJettyServerFactory::new);
 				var jettyXml = settings.getJettyXml();
 				var jettyConfig = cf.get("Jetty/config").orElseGet(() -> mf.get("Jetty-Config").orElse("jetty.xml"));
-				var resolveVars = firstNonNull(settings.getJettyXmlResolveVars(), cf.get("Jetty/resolveVars").asBoolean().orElse(false));
+				var resolveVars = coalesce(settings.getJettyXmlResolveVars(), cf.get("Jetty/resolveVars").asBoolean().orElse(false));
 				boolean resolveVars2 = isTrue(resolveVars);
 
 				if (jettyXml == null)
@@ -257,7 +257,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				server.get().setStopTimeout(Math.max(0L, stopTimeoutOverride.toMillis()));
 			else if (server.get().getStopTimeout() <= 0L)
 				server.get().setStopTimeout(DEFAULT_STOP_TIMEOUT.toMillis());
-			shutdownSettleDelay.set(firstNonNull(settings.getShutdownSettleDelay(), cf.get("Jetty/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
+			shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Jetty/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));
 			ReadinessState.resolve(store).markReady();
 
 			// Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.
@@ -305,7 +305,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				if (cls.getAnnotation(Rest.class) == null)
 					continue;
 				var pathSpecs = restPathsFor(servlet, store);
-				var source = "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : "");
+				var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");
 				for (var pathSpec : pathSpecs)
 					checkPathCollision(pathSpec, source, mountedPaths);
 				addServlet(servlet, pathSpecs);
@@ -341,7 +341,7 @@ public class JettyServerComponent implements MicroserviceListener {
 					s.stop();
 					ms.out(messages, "ServerStopped");
 				} catch (Exception e) {
-					logger.log(Level.WARNING, lm(e), e);
+					logger.log(Level.WARNING, localizedMessage(e), e);
 				}
 			}
 		};

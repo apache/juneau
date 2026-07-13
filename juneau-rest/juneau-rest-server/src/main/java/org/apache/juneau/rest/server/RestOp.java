@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.swagger.*;
  * Identifies a REST operation Java method on a {@link RestServlet} implementation class.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method Basics</a>
 
  * </ul>
  */

@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.time.*;
@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.regex.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
@@ -35,6 +34,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.rest.client.classic.assertion.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Represents a single header on an HTTP response.
@@ -44,7 +44,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
  * other convenience methods.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -109,7 +109,7 @@ public class ResponseHeader extends BasicHeader {
 	 */
 	public <T> Optional<T> as(ClassMeta<T> type) {
 		try {
-			return opt(parser.parse(HEADER, schema, getValue(), type));
+			return o(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
 			throw rex(e, "Could not parse response header {0}.", getName());
 		}

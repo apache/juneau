@@ -49,7 +49,7 @@ import org.apache.juneau.marshall.json.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
  * 	<li class='link'>{@link JsonParser} - For strict RFC 8259 JSON only
  * </ul>
  */

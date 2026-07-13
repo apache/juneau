@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -72,11 +72,11 @@ public final class RandomFunctions {
 	public static class RandInt extends TypedFunction {
 		@Override public String name() { return "randInt"; }
 		public String invoke(int max) {
-			if (max <= 0) throw illegalArg("randInt: max must be > 0");
+			if (max <= 0) throw iaex("randInt: max must be > 0");
 			return String.valueOf(ThreadLocalRandom.current().nextInt(max));
 		}
 		public String invoke(int min, int max) {
-			if (min > max) throw illegalArg("randInt: min ({0}) must be <= max ({1})", min, max);
+			if (min > max) throw iaex("randInt: min ({0}) must be <= max ({1})", min, max);
 			return String.valueOf(ThreadLocalRandom.current().nextLong(min, (long) max + 1));
 		}
 	}
@@ -85,7 +85,7 @@ public final class RandomFunctions {
 	public static class RandLong extends TypedFunction {
 		@Override public String name() { return "randLong"; }
 		public String invoke(long min, long max) {
-			if (min > max) throw illegalArg("randLong: min ({0}) must be <= max ({1})", min, max);
+			if (min > max) throw iaex("randLong: min ({0}) must be <= max ({1})", min, max);
 			if (max == Long.MAX_VALUE)
 				return String.valueOf(ThreadLocalRandom.current().nextLong(min, max));
 			return String.valueOf(ThreadLocalRandom.current().nextLong(min, max + 1));
@@ -104,7 +104,7 @@ public final class RandomFunctions {
 		@Override public String name() { return "randString"; }
 		public String invoke(int length) { return invoke(length, ALPHA_NUM); }
 		public String invoke(int length, String charset) {
-			if (length < 0) throw illegalArg("randString: length must be >= 0");
+			if (length < 0) throw iaex("randString: length must be >= 0");
 			if (charset == null || charset.isEmpty()) charset = ALPHA_NUM;
 			var rnd = ThreadLocalRandom.current();
 			var sb = new StringBuilder(length);
@@ -118,7 +118,7 @@ public final class RandomFunctions {
 	public static class RandChoice extends TypedFunction {
 		@Override public String name() { return "randChoice"; }
 		public String invoke(String[] options) {
-			if (options.length == 0) throw illegalArg("randChoice: at least one option required");
+			if (options.length == 0) throw iaex("randChoice: at least one option required");
 			return options[ThreadLocalRandom.current().nextInt(options.length)];
 		}
 	}

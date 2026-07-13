@@ -18,8 +18,8 @@ package org.apache.juneau.commons.svl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests {@link VarResolver#compile(String)} and {@link VarTemplate} basic resolve semantics.

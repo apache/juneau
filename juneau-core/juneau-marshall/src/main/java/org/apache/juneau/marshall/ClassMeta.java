@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.ClassMeta.Category.*;
 
 import java.io.*;
@@ -164,8 +164,8 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	private final NullableSupplier<org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<T>> beanMeta;
 
 	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
-		Optional<ClassMeta<?>> optKeyType() { return opt(keyType()); }
-		Optional<ClassMeta<?>> optValueType() { return opt(valueType()); }
+		Optional<ClassMeta<?>> optKeyType() { return o(keyType()); }
+		Optional<ClassMeta<?>> optValueType() { return o(valueType()); }
 	}
 
 	/**
@@ -457,7 +457,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	public ClassMeta<?> getArg(int index) {
 		if (nn(args) && index >= 0 && index < args.size())
 			return args.get(index);
-		throw bex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.size());
+		throw brex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.size());
 	}
 
 	/**
@@ -676,9 +676,9 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	@Override
 	public Optional<?> getOptionalDefault() {
 		if (isPrimitiveOptional())
-			return opte();
+			return oe();
 		if (isOptional())
-			return opt(getElementType().getOptionalDefault());
+			return o(getElementType().getOptionalDefault());
 		return null;
 	}
 
@@ -764,7 +764,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		"unchecked" // Type erasure requires cast to Optional<T2>
 	})
 	public <T2> Optional<T2> getProperty(String name, Function<ClassMeta<?>,T2> function) {
-		return (Optional<T2>)properties.get(name, () -> opt(function.apply(this)));
+		return (Optional<T2>)properties.get(name, () -> o(function.apply(this)));
 	}
 
 	/**
@@ -1645,7 +1645,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			ex = marshalledFilter.map(x -> x.getExample()).orElse(null);
 
 		if (ex == null && nn(marshallingContext))
-			ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Utils::ne).findFirst().orElse(null);
+			ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -> x.inner().value()).filter(Shorts::ine).findFirst().orElse(null);
 
 		if (ex == null) {
 			if (isAny(boolean.class, Boolean.class)) {

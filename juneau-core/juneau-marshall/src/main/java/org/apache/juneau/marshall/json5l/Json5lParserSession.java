@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Json5lBasics">JSON5L Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Json5l">JSON5L Basics</a>
  * </ul>
  */
 @SuppressWarnings({

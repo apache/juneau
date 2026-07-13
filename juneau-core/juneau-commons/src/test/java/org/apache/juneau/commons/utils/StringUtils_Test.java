@@ -16,17 +16,15 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.contains;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.StringUtils.indexOf;
 import static org.apache.juneau.commons.utils.StringUtils.reverse;
 import static org.apache.juneau.commons.utils.StringUtils.toStringArray;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -34,9 +32,9 @@ import java.math.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S5961", // High assertion count acceptable in comprehensive test
@@ -450,11 +448,11 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_cdlToList() {
-		assertEquals(l("a", "b", "c"), cdlToList("a,b,c"));
-		assertEquals(l("a", "b", "c"), cdlToList(" a , b , c "));
-		assertEquals(l(), cdlToList(null));
-		assertEquals(l(), cdlToList(""));
-		assertEquals(l("a"), cdlToList("a"));
+		assertEquals(fixedSizeList("a", "b", "c"), cdlToList("a,b,c"));
+		assertEquals(fixedSizeList("a", "b", "c"), cdlToList(" a , b , c "));
+		assertEquals(fixedSizeList(), cdlToList(null));
+		assertEquals(fixedSizeList(), cdlToList(""));
+		assertEquals(fixedSizeList("a"), cdlToList("a"));
 	}
 
 	//====================================================================================================
@@ -462,11 +460,11 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a015_cdlToSet() {
-		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet("a,b,c"));
-		assertEquals(new LinkedHashSet<>(l("a", "b", "c")), cdlToSet(" a , b , c "));
+		assertEquals(new LinkedHashSet<>(fixedSizeList("a", "b", "c")), cdlToSet("a,b,c"));
+		assertEquals(new LinkedHashSet<>(fixedSizeList("a", "b", "c")), cdlToSet(" a , b , c "));
 		assertEquals(set(), cdlToSet(null));
 		assertEquals(set(), cdlToSet(""));
-		assertEquals(new LinkedHashSet<>(l("a")), cdlToSet("a"));
+		assertEquals(new LinkedHashSet<>(fixedSizeList("a")), cdlToSet("a"));
 	}
 
 	//====================================================================================================
@@ -830,13 +828,13 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a032_distinct() {
 		assertList(distinct(null));
-		assertList(distinct(a()));
-		assertList(distinct(a("foo", "bar", "baz")), "foo", "bar", "baz");
-		assertList(distinct(a("foo", "bar", "foo", "baz", "bar")), "foo", "bar", "baz");
-		assertList(distinct(a("a", "a", "a", "a")), "a");
-		assertList(distinct(a("x", "y", "x", "z", "y", "x")), "x", "y", "z");
-		assertList(distinct(a("test")), "test");
-		assertList(distinct(a("", "", "foo", "", "bar")), "", "foo", "bar");
+		assertList(distinct(array()));
+		assertList(distinct(array("foo", "bar", "baz")), "foo", "bar", "baz");
+		assertList(distinct(array("foo", "bar", "foo", "baz", "bar")), "foo", "bar", "baz");
+		assertList(distinct(array("a", "a", "a", "a")), "a");
+		assertList(distinct(array("x", "y", "x", "z", "y", "x")), "x", "y", "z");
+		assertList(distinct(array("test")), "test");
+		assertList(distinct(array("", "", "foo", "", "bar")), "", "foo", "bar");
 	}
 
 	//====================================================================================================
@@ -1349,14 +1347,14 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a052_filter() {
 		assertList(filter(null, NOT_EMPTY));
-		assertList(filter(a(), NOT_EMPTY));
-		assertList(filter(a("foo", "", "bar", null, "baz"), NOT_EMPTY), "foo", "bar", "baz");
-		assertList(filter(a("foo", "", "bar", null, "baz"), null));
-		assertList(filter(a("hello", "world", "test"), s -> s.length() > 4), "hello", "world");
-		assertList(filter(a("a", "bb", "ccc", "dddd"), s -> s.length() == 2), "bb");
-		assertList(filter(a("foo", "bar", "baz"), s -> s.startsWith("b")), "bar", "baz");
-		assertList(filter(a("test"), s -> false));
-		assertList(filter(a("test"), s -> true), "test");
+		assertList(filter(array(), NOT_EMPTY));
+		assertList(filter(array("foo", "", "bar", null, "baz"), NOT_EMPTY), "foo", "bar", "baz");
+		assertList(filter(array("foo", "", "bar", null, "baz"), null));
+		assertList(filter(array("hello", "world", "test"), s -> s.length() > 4), "hello", "world");
+		assertList(filter(array("a", "bb", "ccc", "dddd"), s -> s.length() == 2), "bb");
+		assertList(filter(array("foo", "bar", "baz"), s -> s.startsWith("b")), "bar", "baz");
+		assertList(filter(array("test"), s -> false));
+		assertList(filter(array("test"), s -> true), "test");
 	}
 
 	//====================================================================================================
@@ -2310,11 +2308,11 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a086_isDecimal() {
-		var valid = a("+1", "-1", "0x123", "0X123", "0xdef", "0XDEF", "#def", "#DEF", "0123", "123", "0");
+		var valid = array("+1", "-1", "0x123", "0X123", "0xdef", "0XDEF", "#def", "#DEF", "0123", "123", "0");
 		for (var s : valid)
 			assertTrue(isDecimal(s), "Should be valid: " + s);
 
-		var invalid = a(null, "", "a", "+", "-", ".", "0xdeg", "0XDEG", "#deg", "#DEG", "0128", "012A");
+		var invalid = array(null, "", "a", "+", "-", ".", "0xdeg", "0XDEG", "#deg", "#DEG", "0128", "012A");
 		for (var s : invalid)
 			assertFalse(isDecimal(s), "Should be invalid: " + s);
 	}
@@ -2412,12 +2410,12 @@ class StringUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a091_isFloat() {
-		var valid = a("+1.0", "-1.0", ".0", "NaN", "Infinity", "1e1", "-1e-1", "+1e+1", "-1.1e-1", "+1.1e+1", "1.1f", "1.1F", "1.1d", "1.1D", "0x1.fffffffffffffp1023", "0x1.FFFFFFFFFFFFFP1023", "1.0",
+		var valid = array("+1.0", "-1.0", ".0", "NaN", "Infinity", "1e1", "-1e-1", "+1e+1", "-1.1e-1", "+1.1e+1", "1.1f", "1.1F", "1.1d", "1.1D", "0x1.fffffffffffffp1023", "0x1.FFFFFFFFFFFFFP1023", "1.0",
 			"0.5", "123.456");
 		for (var s : valid)
 			assertTrue(isFloat(s), "Should be valid: " + s);
 
-		var invalid = a(null, "", "a", "+", "-", ".", "a", "+a", "11a");
+		var invalid = array(null, "", "a", "+", "-", ".", "a", "+a", "11a");
 		for (var s : invalid)
 			assertFalse(isFloat(s), "Should be invalid: " + s);
 	}
@@ -3414,33 +3412,33 @@ class StringUtils_Test extends TestBase {
 	void a111_join() {
 		// join(Collection<?>)
 		assertNull(join((Collection<?>)null));
-		assertEquals("1", join(l(a(1))));
-		assertEquals("1,2", join(l(a(1, 2))));
+		assertEquals("1", join(fixedSizeList(array(1))));
+		assertEquals("1,2", join(fixedSizeList(array(1, 2))));
 
 		// join(Collection<?>, char)
 		assertNull(join((Collection<?>)null, ','));
-		assertEquals("1", join(l(a(1)), ','));
-		assertEquals("1,2", join(l(a(1, 2)), ','));
+		assertEquals("1", join(fixedSizeList(array(1)), ','));
+		assertEquals("1,2", join(fixedSizeList(array(1, 2)), ','));
 
 		// join(Collection<?>, String)
 		assertNull(join((Collection<?>)null, ","));
-		assertEquals("1", join(l(a(1)), ","));
-		assertEquals("1,2", join(l(a(1, 2)), ","));
+		assertEquals("1", join(fixedSizeList(array(1)), ","));
+		assertEquals("1,2", join(fixedSizeList(array(1, 2)), ","));
 
 		// join(int[], char)
 		assertNull(join((int[])null, ','));
-		assertEquals("1", join(ints(1), ','));
-		assertEquals("1,2", join(ints(1, 2), ','));
+		assertEquals("1", join(CollectionUtils.intArray(1), ','));
+		assertEquals("1,2", join(CollectionUtils.intArray(1, 2), ','));
 
 		// join(Object[], char)
 		assertNull(join((Object[])null, ','));
-		assertEquals("1", join(a(1), ','));
-		assertEquals("1,2", join(a(1, 2), ','));
+		assertEquals("1", join(array(1), ','));
+		assertEquals("1,2", join(array(1, 2), ','));
 
 		// join(Object[], String)
 		assertNull(join((Object[])null, ","));
-		assertEquals("1", join(a(1), ","));
-		assertEquals("1,2", join(a(1, 2), ","));
+		assertEquals("1", join(array(1), ","));
+		assertEquals("1,2", join(array(1, 2), ","));
 
 		// join(String...)
 		assertEquals("", join());
@@ -3489,9 +3487,9 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a112_joine() {
 		assertNull(joine(null, ','));
-		assertEquals("x\\,y,z", joine(l(a("x,y", "z")), ','));
-		assertEquals("a,b", joine(l(a("a", "b")), ','));
-		assertEquals("a\\|b", joine(l(a("a|b")), '|'));
+		assertEquals("x\\,y,z", joine(fixedSizeList(array("x,y", "z")), ','));
+		assertEquals("a,b", joine(fixedSizeList(array("a", "b")), ','));
+		assertEquals("a\\|b", joine(fixedSizeList(array("a|b")), '|'));
 	}
 
 	//====================================================================================================
@@ -3532,9 +3530,9 @@ class StringUtils_Test extends TestBase {
 	void a114_joinnl() {
 		assertNull(joinnl(null));
 		assertEquals("", joinnl(new Object[0]));
-		assertEquals("a", joinnl(a("a")));
-		assertEquals("a\nb", joinnl(a("a", "b")));
-		assertEquals("1\n2\n3", joinnl(a(1, 2, 3)));
+		assertEquals("a", joinnl(array("a")));
+		assertEquals("a\nb", joinnl(array("a", "b")));
+		assertEquals("1\n2\n3", joinnl(array(1, 2, 3)));
 	}
 
 	//====================================================================================================
@@ -3696,13 +3694,13 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a123_mapped() {
 		assertList(mapped(null, String::toUpperCase));
-		assertList(mapped(a(), String::toUpperCase));
-		assertList(mapped(a("foo", "bar", "baz"), String::toUpperCase), "FOO", "BAR", "BAZ");
-		assertList(mapped(a("FOO", "BAR", "BAZ"), String::toLowerCase), "foo", "bar", "baz");
-		assertList(mapped(a("foo", "bar", "baz"), s -> "prefix-" + s), "prefix-foo", "prefix-bar", "prefix-baz");
-		assertList(mapped(a("hello", "world"), s -> s.substring(0, 1)), "h", "w");
-		assertList(mapped(a("test"), null), "test");
-		assertList(mapped(a("a", "b", "c"), s -> s + s), "aa", "bb", "cc");
+		assertList(mapped(array(), String::toUpperCase));
+		assertList(mapped(array("foo", "bar", "baz"), String::toUpperCase), "FOO", "BAR", "BAZ");
+		assertList(mapped(array("FOO", "BAR", "BAZ"), String::toLowerCase), "foo", "bar", "baz");
+		assertList(mapped(array("foo", "bar", "baz"), s -> "prefix-" + s), "prefix-foo", "prefix-bar", "prefix-baz");
+		assertList(mapped(array("hello", "world"), s -> s.substring(0, 1)), "h", "w");
+		assertList(mapped(array("test"), null), "test");
+		assertList(mapped(array("a", "b", "c"), s -> s + s), "aa", "bb", "cc");
 	}
 
 	//====================================================================================================
@@ -4405,7 +4403,7 @@ class StringUtils_Test extends TestBase {
 
 		// Invalid input invokes the supplier and the supplier's exception is thrown.
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> parseInt("invalid", () -> illegalArg("Bad int: {0}", "invalid")));
+			() -> parseInt("invalid", () -> Shorts.iaex("Bad int: {0}", "invalid")));
 		assertEquals("Bad int: invalid", ex.getMessage());
 
 		// Custom RuntimeException subtype is preserved by the generic signature.
@@ -4451,7 +4449,7 @@ class StringUtils_Test extends TestBase {
 
 		// Invalid input invokes the supplier and the supplier's exception is thrown.
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> parseIntWithSuffix("1X", () -> illegalArg("Bad size: {0}", "1X")));
+			() -> parseIntWithSuffix("1X", () -> Shorts.iaex("Bad size: {0}", "1X")));
 		assertEquals("Bad size: 1X", ex.getMessage());
 	}
 
@@ -4481,7 +4479,7 @@ class StringUtils_Test extends TestBase {
 
 		// Invalid input invokes the supplier and the supplier's exception is thrown.
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> parseLong("invalid", () -> illegalArg("Bad long: {0}", "invalid")));
+			() -> parseLong("invalid", () -> Shorts.iaex("Bad long: {0}", "invalid")));
 		assertEquals("Bad long: invalid", ex.getMessage());
 	}
 
@@ -4916,11 +4914,11 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a163_readable() {
 		assertNull(readable(null));
-		assertEquals("[a,b,c]", readable(l("a", "b", "c")));
-		assertEquals("{foo=bar}", readable(m("foo", "bar")));
-		assertEquals("[1,2,3]", readable(ints(1, 2, 3)));
-		assertEquals("test", readable(opt("test")));
-		assertNull(readable(opte()));
+		assertEquals("[a,b,c]", readable(fixedSizeList("a", "b", "c")));
+		assertEquals("{foo=bar}", readable(immutableMap("foo", "bar")));
+		assertEquals("[1,2,3]", readable(CollectionUtils.intArray(1, 2, 3)));
+		assertEquals("test", readable(o("test")));
+		assertNull(readable(oe()));
 
 		// Test Iterable (not Collection) - triggers code path
 		var customIterable = new Iterable<String>() {
@@ -5376,13 +5374,13 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a181_sort() {
 		assertList(sort(null));
-		assertList(sort(a()));
-		assertList(sort(a("c", "a", "b")), "a", "b", "c");
-		assertList(sort(a("zebra", "apple", "banana")), "apple", "banana", "zebra");
-		assertList(sort(a("3", "1", "2")), "1", "2", "3");
-		assertList(sort(a("test")), "test");
-		assertList(sort(a("Z", "a", "B")), "B", "Z", "a");
-		assertList(sort(a("foo", "bar", "baz")), "bar", "baz", "foo");
+		assertList(sort(array()));
+		assertList(sort(array("c", "a", "b")), "a", "b", "c");
+		assertList(sort(array("zebra", "apple", "banana")), "apple", "banana", "zebra");
+		assertList(sort(array("3", "1", "2")), "1", "2", "3");
+		assertList(sort(array("test")), "test");
+		assertList(sort(array("Z", "a", "B")), "B", "Z", "a");
+		assertList(sort(array("foo", "bar", "baz")), "bar", "baz", "foo");
 	}
 
 	//====================================================================================================
@@ -5391,13 +5389,13 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a182_sortIgnoreCase() {
 		assertList(sortIgnoreCase(null));
-		assertList(sortIgnoreCase(a()));
-		assertList(sortIgnoreCase(a("c", "a", "b")), "a", "b", "c");
-		assertList(sortIgnoreCase(a("Zebra", "apple", "Banana")), "apple", "Banana", "Zebra");
-		assertList(sortIgnoreCase(a("Z", "a", "B")), "a", "B", "Z");
-		assertList(sortIgnoreCase(a("test")), "test");
-		assertList(sortIgnoreCase(a("FOO", "bar", "Baz")), "bar", "Baz", "FOO");
-		assertList(sortIgnoreCase(a("zebra", "APPLE", "banana")), "APPLE", "banana", "zebra");
+		assertList(sortIgnoreCase(array()));
+		assertList(sortIgnoreCase(array("c", "a", "b")), "a", "b", "c");
+		assertList(sortIgnoreCase(array("Zebra", "apple", "Banana")), "apple", "Banana", "Zebra");
+		assertList(sortIgnoreCase(array("Z", "a", "B")), "a", "B", "Z");
+		assertList(sortIgnoreCase(array("test")), "test");
+		assertList(sortIgnoreCase(array("FOO", "bar", "Baz")), "bar", "Baz", "FOO");
+		assertList(sortIgnoreCase(array("zebra", "APPLE", "banana")), "APPLE", "banana", "zebra");
 	}
 
 	//====================================================================================================

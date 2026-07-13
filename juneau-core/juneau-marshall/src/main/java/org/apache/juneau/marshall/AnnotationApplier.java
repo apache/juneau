@@ -18,8 +18,8 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.nio.charset.*;
@@ -152,7 +152,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> cdl(String in) {
-		return Arrays.stream(splita(vr.resolve(in))).filter(Utils::ne);
+		return Arrays.stream(splita(vr.resolve(in))).filter(Shorts::ine);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<Class<?>[]> classes(Class<?>[] in) {
-		return opt(in.length == 0 ? null : in);
+		return o(in.length == 0 ? null : in);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An array with resolved strings.
 	 */
 	protected Stream<String> stream(String[] in) {
-		return Arrays.stream(in).map(vr::resolve).filter(Utils::ne);
+		return Arrays.stream(in).map(vr::resolve).filter(Shorts::ine);
 	}
 
 	/**
@@ -222,7 +222,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 */
 	protected Optional<String> string(String in) {
 		in = vr.resolve(in);
-		return opt(isEmpty(in) ? null : in);
+		return o(isEmpty(in) ? null : in);
 	}
 
 	/**
@@ -235,7 +235,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return The array wrapped in an {@link Optional}.
 	 */
 	protected Optional<String[]> strings(String[] in) {
-		return opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::ne).toArray(String[]::new));
+		return o(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Shorts::ine).toArray(String[]::new));
 	}
 
 	/**
@@ -246,7 +246,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 	 * @return An optional containing the specified value.
 	 */
 	protected <T> Optional<Class<T>> type(Class<T> in) {
-		return opt(in).filter(NOT_VOID);
+		return o(in).filter(NOT_VOID);
 	}
 
 	/**

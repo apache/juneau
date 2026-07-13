@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.objecttools;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Arguments passed to {@link ObjectPaginator}.
@@ -38,7 +38,7 @@ public class PageArgs {
 	public static PageArgs create(Integer position, Integer limit) {
 		if (position == null && limit == null)
 			return null;
-		return new PageArgs(opt(position).orElse(0), opt(limit).orElse(-1));
+		return new PageArgs(o(position).orElse(0), o(limit).orElse(-1));
 	}
 
 	final int position;

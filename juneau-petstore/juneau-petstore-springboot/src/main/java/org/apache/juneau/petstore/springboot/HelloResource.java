@@ -30,7 +30,7 @@ import org.springframework.beans.factory.annotation.*;
  * {@code BasicSpringRestServletGroup} (i.e. {@code SpringRestServlet}), which lets child resources be Spring beans.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview">juneau-petstore</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */
 @Rest(

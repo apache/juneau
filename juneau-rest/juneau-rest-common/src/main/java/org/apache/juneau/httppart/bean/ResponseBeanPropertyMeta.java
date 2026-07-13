@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.httppart.bean;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -114,7 +114,7 @@ public class ResponseBeanPropertyMeta {
 	 *
 	 * @return The HTTP part name, or <jk>null</jk> if it doesn't have a part name.
 	 */
-	public Optional<String> getPartName() { return opt(schema.getName()); }
+	public Optional<String> getPartName() { return o(schema.getName()); }
 
 	/**
 	 * Returns the HTTP part type for this property (query parameter for example).

@@ -16,10 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
-
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -88,7 +86,7 @@ public class HttpLongHeader extends HttpHeaderBean {
 	}
 
 	public Optional<Long> asLong() {
-		return opt(toLong());
+		return o(toLong());
 	}
 
 	@Override
@@ -111,6 +109,6 @@ public class HttpLongHeader extends HttpHeaderBean {
 	private static Long toLong(String value) {
 		if (value == null)
 			return null;
-		return parseLong(value, () -> illegalArg("Value ''{0}'' could not be parsed as a long.", value));
+		return parseLong(value, () -> iaex("Value ''{0}'' could not be parsed as a long.", value));
 	}
 }

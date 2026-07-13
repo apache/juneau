@@ -18,8 +18,8 @@ package org.apache.juneau.commons.collections;
 
 import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -312,7 +312,7 @@ public class Sets<E> {
 		"java:S1168"  // Intentional null when sparse+empty — null is the absent/not-set sentinel used by callers (e.g. OpenAPI bean setters)
 	})
 	public Set<E> build() {
-		if (sparse && e(set))
+		if (sparse && ie(set))
 			return null;
 
 		Set<E> set2 = null;

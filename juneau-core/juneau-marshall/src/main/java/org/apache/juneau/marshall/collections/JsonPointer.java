@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.collections;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -89,11 +89,11 @@ public class JsonPointer {
 
 	private static List<String> parse(String pointer) {
 		if (pointer == null)
-			throw illegalArg("JSON Pointer cannot be null.");
+			throw iaex("JSON Pointer cannot be null.");
 		if (pointer.isEmpty())
 			return List.of();
 		if (pointer.charAt(0) != '/')
-			throw illegalArg("Invalid JSON Pointer ''{0}'': a non-empty pointer must begin with ''/''.", pointer);
+			throw iaex("Invalid JSON Pointer ''{0}'': a non-empty pointer must begin with ''/''.", pointer);
 		var parts = pointer.split("/", -1);
 		var tokens = new ArrayList<String>(parts.length - 1);
 		for (var i = 1; i < parts.length; i++)
@@ -236,14 +236,14 @@ public class JsonPointer {
 			}
 			var idx = toArrayIndex(token);
 			if (idx < 0 || idx > list.size())
-				throw illegalArg("Invalid JSON Pointer array index ''{0}'' for a list of size {1}.", token, list.size());
+				throw iaex("Invalid JSON Pointer array index ''{0}'' for a list of size {1}.", token, list.size());
 			if (idx == list.size())
 				list.add(value);
 			else
 				list.set(idx, value);
 			return;
 		}
-		throw illegalArg("Cannot set value at token ''{0}'' on a non-container value.", token);
+		throw iaex("Cannot set value at token ''{0}'' on a non-container value.", token);
 	}
 
 	private static Object rawRemove(Object container, String token) {

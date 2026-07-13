@@ -17,8 +17,9 @@
 package org.apache.juneau.marshall.cbor;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
+import java.io.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
@@ -26,8 +27,6 @@ import java.util.concurrent.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
-import java.io.*;
-
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
@@ -90,7 +89,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/CborBasics">CBOR Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor">CBOR Basics</a>
  * 	<li class='link'><a class="doclink" href="https://www.rfc-editor.org/rfc/rfc8949.html">RFC 8949</a>
  * </ul>
  */

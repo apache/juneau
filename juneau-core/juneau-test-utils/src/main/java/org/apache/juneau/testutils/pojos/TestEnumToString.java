@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.testutils.pojos;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 public enum TestEnumToString {
 

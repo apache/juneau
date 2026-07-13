@@ -25,7 +25,7 @@ import java.lang.annotation.*;
  * Identifies the default XML namespaces at the package level.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
  * </ul>
  */
 @Documented

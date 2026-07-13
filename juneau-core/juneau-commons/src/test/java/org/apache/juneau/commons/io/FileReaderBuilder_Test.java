@@ -24,8 +24,8 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.

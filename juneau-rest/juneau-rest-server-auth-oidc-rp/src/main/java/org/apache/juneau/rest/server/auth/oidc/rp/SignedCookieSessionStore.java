@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
 import java.time.*;
@@ -195,34 +195,34 @@ public class SignedCookieSessionStore implements SessionStore {
 		try {
 			var jwt = SignedJWT.parse(cookieValue);
 			if (! jwt.verify(new MACVerifier(signingKey)))
-				return opte();
+				return oe();
 			var claims = jwt.getJWTClaimsSet();
 			var exp = claims.getExpirationTime();
 			if (exp == null || ! clock.instant().isBefore(exp.toInstant()))
-				return opte();
+				return oe();
 			var subject = claims.getSubject();
 			var name = claims.getStringClaim(CLAIM_NAME);
 			if (subject == null || name == null)
-				return opte();
+				return oe();
 			var roles = new LinkedHashSet<String>();
 			var rolesClaim = claims.getStringListClaim(CLAIM_ROLES);
 			if (rolesClaim != null)
 				roles.addAll(rolesClaim);
 			Map<String,Object> principalClaims = (Map<String,Object>) claims.getClaim(CLAIM_CLAIMS);
 			var principal = new ClaimsPrincipal(name, principalClaims);
-			var sid = opt(claims.getStringClaim(CLAIM_SID));
+			var sid = o(claims.getStringClaim(CLAIM_SID));
 			var createdAt = claims.getIssueTime() != null ? claims.getIssueTime().toInstant() : clock.instant();
-			return opt(new OidcSession(
+			return o(new OidcSession(
 				claims.getJWTID(),
 				subject,
 				sid,
 				principal,
 				roles,
-				opte(),
+				oe(),
 				createdAt,
 				exp.toInstant()));
 		} catch (java.text.ParseException | JOSEException | RuntimeException e) {
-			return opte();
+			return oe();
 		}
 	}
 

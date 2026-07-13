@@ -20,9 +20,9 @@ import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.function.*;
 import org.apache.juneau.http.classic.response.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Used for fluent assertion calls against a response {@link StatusLine} object.
@@ -92,7 +92,7 @@ import org.apache.juneau.http.classic.response.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauEcosystemOverview">Juneau Ecosystem Overview</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  *
  * @param <R> The return type.

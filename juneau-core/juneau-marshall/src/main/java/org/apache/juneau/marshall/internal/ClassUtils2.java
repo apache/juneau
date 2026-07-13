@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.internal;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Class-related utility methods.

@@ -18,7 +18,7 @@ package org.apache.juneau.test.bct;
 
 import static org.apache.juneau.commons.lang.TriState.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BasicBeanConverter.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.apache.juneau.test.bct.BctUtils.*;
@@ -104,8 +104,8 @@ class BasicBeanConverter_Test extends TestBase {
 		void a06_addSwapper_addsCustomSwapper() {
 			var converter = BasicBeanConverter.builder().defaultSettings().addSwapper(Optional.class, (conv, opt) -> ((Optional<?>)opt).orElse(null)).build();
 
-			assertEquals("test", converter.stringify(opt("test")));
-			assertEquals("<null>", converter.stringify(opte()));
+			assertEquals("test", converter.stringify(o("test")));
+			assertEquals("<null>", converter.stringify(oe()));
 		}
 
 		@Test

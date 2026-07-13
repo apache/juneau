@@ -18,7 +18,7 @@ package org.apache.juneau.test.assertions;
 
 import static java.util.Arrays.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;

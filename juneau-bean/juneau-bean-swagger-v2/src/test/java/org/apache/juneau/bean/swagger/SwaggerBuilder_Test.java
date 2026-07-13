@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.bean.swagger;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;

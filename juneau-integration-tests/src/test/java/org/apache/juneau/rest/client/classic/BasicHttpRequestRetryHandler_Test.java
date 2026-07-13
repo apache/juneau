@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.http.classic.HttpResponses.*;
 
 import java.io.*;

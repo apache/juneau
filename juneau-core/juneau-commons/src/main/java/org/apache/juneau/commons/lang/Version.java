@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.lang;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -144,8 +144,8 @@ public class Version implements Comparable<Version> {
 	 */
 	public Optional<Integer> getPart(int index) {
 		if (index < 0 || parts.length <= index)
-			return opte();
-		return opt(parts[index]);
+			return oe();
+		return o(parts[index]);
 	}
 
 	@Override /* Overridden from Object */

@@ -16,17 +16,16 @@
  */
 package org.apache.juneau.http.classic.resource;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * A basic {@link org.apache.juneau.http.classic.resource.HttpResource} implementation with additional features.
@@ -44,7 +43,7 @@ import org.apache.juneau.http.classic.header.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @BeanIgnore /* Use toString() to serialize */
@@ -117,7 +116,7 @@ public class BasicResource implements HttpResource {
 			if (nn(h)) {
 				var n = h.getName();
 				var v = h.getValue();
-				if (ne(n)) {
+				if (ine(n)) {
 					if (eqic(n, "content-type"))
 						setContentType(v);
 					else if (eqic(n, "content-encoding"))
@@ -403,7 +402,7 @@ public class BasicResource implements HttpResource {
 			if (nn(h)) {
 				var n = h.getName();
 				var v = h.getValue();
-				if (ne(n)) {
+				if (ine(n)) {
 					if (eqic(n, "content-type"))
 						setContentType(v);
 					else if (eqic(n, "content-encoding"))
@@ -453,6 +452,6 @@ public class BasicResource implements HttpResource {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw unsupportedOp("Bean is read-only");
+			throw uoex("Bean is read-only");
 	}
 }

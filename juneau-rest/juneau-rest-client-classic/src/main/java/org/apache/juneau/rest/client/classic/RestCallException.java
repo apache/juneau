@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.rest.client.classic;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 
@@ -28,7 +29,7 @@ import org.apache.juneau.http.classic.header.*;
  * Exception representing a <c>400+</c> HTTP response code against a remote resource or other exception.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  *
  * @serial exclude

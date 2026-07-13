@@ -18,7 +18,8 @@ package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -534,9 +535,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType, String name) {
 		var typeMap = defaults.get(beanType);
 		if (typeMap == null)
-			return opte();
+			return oe();
 		var supplier = typeMap.get(emptyIfNull(name));
-		return supplier == null ? opte() : opt((Supplier<T>) supplier);
+		return supplier == null ? oe() : o((Supplier<T>) supplier);
 	}
 
 	/**
@@ -582,10 +583,10 @@ public class BasicBeanStore implements WritableBeanStore {
 	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
 		var v = (Class<? extends T>) typeBindings.get(beanType);
 		if (nn(v))
-			return opt(v);
+			return o(v);
 		if (nn(parent))
 			return parent.getBeanType(beanType);
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -638,7 +639,7 @@ public class BasicBeanStore implements WritableBeanStore {
 			var key = emptyIfNull(name);
 			var supplier = typeMap.get(key);
 			if (nn(supplier))
-				return opt((Supplier<T>)supplier);
+				return o((Supplier<T>)supplier);
 		}
 		// (3) Regular parent fallback.
 		if (nn(parent)) {
@@ -652,9 +653,9 @@ public class BasicBeanStore implements WritableBeanStore {
 			var key = emptyIfNull(name);
 			var supplier = defaultMap.get(key);
 			if (nn(supplier))
-				return opt((Supplier<T>)supplier);
+				return o((Supplier<T>)supplier);
 		}
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -929,7 +930,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		if (nn(em))
 			em.forEach((name, meta) -> { if (meta.primary) primaryNames.add(name); });
 		if (primaryNames.isEmpty())
-			return opte();
+			return oe();
 		if (primaryNames.size() > 1)
 			throw new BeanCreationException("Multiple @Primary candidates of type " + beanType.getName());
 		var primaryName = primaryNames.iterator().next();

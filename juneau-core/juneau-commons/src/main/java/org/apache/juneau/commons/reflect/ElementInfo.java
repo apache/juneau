@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;

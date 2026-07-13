@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.parquet;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -183,7 +183,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 	void a15_optionalRawElementNull() {
 		// Raw Optional -> element type null -> Object fallback (line 194/195), plus Optional sample unwrap.
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
-		var s = b.buildSchema(MC.getClassMeta(Optional.class), opt("x"));
+		var s = b.buildSchema(MC.getClassMeta(Optional.class), o("x"));
 		assertFalse(s.isEmpty());
 	}
 
@@ -191,7 +191,7 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 	void a16_optionalEmptySample() {
 		// Optional sample present but empty: null inner sample via orElse (line 196 true branch, null inner).
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, false);
-		var s = b.buildSchema(MC.getClassMeta(Optional.class), opte());
+		var s = b.buildSchema(MC.getClassMeta(Optional.class), oe());
 		assertFalse(s.isEmpty());
 	}
 

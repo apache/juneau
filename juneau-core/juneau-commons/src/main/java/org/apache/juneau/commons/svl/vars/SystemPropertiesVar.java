@@ -39,7 +39,7 @@ import org.apache.juneau.commons.svl.*;
  * <br>Likewise, if the arguments contain any variables, those will be resolved before they are passed to this var.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Simple Variable Language Basics</a>
  * </ul>
  */
 public class SystemPropertiesVar extends DefaultingVar {

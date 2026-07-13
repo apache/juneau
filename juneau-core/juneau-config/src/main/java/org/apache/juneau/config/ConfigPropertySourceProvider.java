@@ -33,7 +33,7 @@ import org.apache.juneau.commons.settings.*;
  * first {@code get(name)} invocation. This is deliberate — calling {@code getSystemDefault()} from
  * inside {@link #create()} would create a static-initialization cycle because
  * {@code Settings.<clinit>} fires the ServiceLoader at class-load time, and {@code Config}'s
- * static initializers transitively reference {@link Settings} (through {@code Cache} / {@code Utils.env(...)})
+ * static initializers transitively reference {@link Settings} (through {@code Cache} / {@code SystemUtils.env(...)})
  * which would re-enter the {@code Settings.<clinit>} block.
  *
  * <p>
@@ -61,7 +61,7 @@ public class ConfigPropertySourceProvider implements PropertySourceProvider {
 	public PropertySource create() {
 		// Return a lazy wrapper.  Resolving Config.getSystemDefault() eagerly here would trigger
 		// Config.<clinit>, which can transitively re-enter Settings.<clinit> through Cache /
-		// Utils.env(...) — the SPI registration is invoked from inside the Settings static init
+		// SystemUtils.env(...) — the SPI registration is invoked from inside the Settings static init
 		// block, so any cycle here surfaces as ExceptionInInitializerError.
 		return new LazyConfigPropertySource();
 	}

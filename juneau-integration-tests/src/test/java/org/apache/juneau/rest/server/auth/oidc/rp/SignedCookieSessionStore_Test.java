@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
@@ -45,10 +45,10 @@ class SignedCookieSessionStore_Test extends TestBase {
 	private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
 
 	private static OidcSession session(Instant now, String sid) {
-		return new OidcSession("id-1", "alice", opt(sid),
+		return new OidcSession("id-1", "alice", o(sid),
 			new ClaimsPrincipal("alice", Map.of("sub", "alice", "email", "alice@example.com")),
 			new LinkedHashSet<>(List.of("user", "admin")),
-			opte(), now, now.plus(Duration.ofHours(8)));
+			oe(), now, now.plus(Duration.ofHours(8)));
 	}
 
 	@Test void a01_roundTrip_recoversClaimsAndRoles() {

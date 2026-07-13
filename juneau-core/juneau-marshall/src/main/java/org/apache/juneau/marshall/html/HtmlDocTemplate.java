@@ -58,7 +58,7 @@ package org.apache.juneau.marshall.html;
  * This interface allows you to control how these sections get rendered.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
  * </ul>
  */
 @SuppressWarnings({

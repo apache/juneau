@@ -16,10 +16,11 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.function.*;
 
@@ -159,10 +160,10 @@ public class UriContext {
 	 */
 	public UriContext(String s) throws ParseException {
 		var m = Json5Map.ofString(s);
-		this.authority = nullIfEmpty(trimSlashes(m.getString(PROP_authority)));
-		this.contextRoot = nullIfEmpty(trimSlashes(m.getString(PROP_contextRoot)));
-		this.servletPath = nullIfEmpty(trimSlashes(m.getString(PROP_servletPath)));
-		this.pathInfo = nullIfEmpty(trimSlashes(m.getString(PROP_pathInfo)));
+		this.authority = nie(trimSlashes(m.getString(PROP_authority)));
+		this.contextRoot = nie(trimSlashes(m.getString(PROP_contextRoot)));
+		this.servletPath = nie(trimSlashes(m.getString(PROP_servletPath)));
+		this.pathInfo = nie(trimSlashes(m.getString(PROP_pathInfo)));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 		this.rContextRoot = memoize(this::findRContextRoot);
 		this.rResource = memoize(this::findRResource);
@@ -192,10 +193,10 @@ public class UriContext {
 	 */
 	@BeanCtor
 	public UriContext(@Name("authority") String authority, @Name("contextRoot") String contextRoot, @Name("servletPath") String servletPath, @Name("pathInfo") String pathInfo) {
-		this.authority = nullIfEmpty(trimSlashes(authority));
-		this.contextRoot = nullIfEmpty(trimSlashes(contextRoot));
-		this.servletPath = nullIfEmpty(trimSlashes(servletPath));
-		this.pathInfo = nullIfEmpty(trimSlashes(pathInfo));
+		this.authority = nie(trimSlashes(authority));
+		this.contextRoot = nie(trimSlashes(contextRoot));
+		this.servletPath = nie(trimSlashes(servletPath));
+		this.pathInfo = nie(trimSlashes(pathInfo));
 		this.parentPath = this.pathInfo == null || this.pathInfo.indexOf('/') == -1 ? null : this.pathInfo.substring(0, this.pathInfo.lastIndexOf('/'));
 		this.rContextRoot = memoize(this::findRContextRoot);
 		this.rResource = memoize(this::findRResource);

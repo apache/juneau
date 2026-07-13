@@ -16,29 +16,31 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+
+import static org.apache.juneau.commons.utils.Exceptions.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.function.*;
 
+import org.apache.juneau.commons.function.*;
 import org.apache.juneau.commons.logging.*;
-import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.commons.settings.*;
 
 /**
- * Various utility methods for creating and working with throwables.
+ * Various utility methods for working with throwables.
  *
  * <p>
- * All factory methods in this class (e.g. {@link #illegalArg(String, Object...)}, {@link #rex(String, Object...)},
- * {@link #bex(String, Object...)}, etc.) route through an internal {@code log()} method that checks the
- * {@code juneau.enableVerboseExceptions} system property.  When that property is set to {@code true}, the
- * created exception's stack trace is printed to stderr immediately at the point of creation, even if the
- * exception is later caught and swallowed.
+ * Exception <i>factory</i> methods (terse {@code rex}/{@code brex}/{@code iaex}/{@code isex}/{@code uoex}/
+ * {@code uoroex}/{@code ioex}/{@code exex} constructors) live on {@link org.apache.juneau.commons.utils.Shorts}
+ * and construct their exceptions directly with no side-effects.  This class retains only throwable
+ * <i>inspection</i>/<i>handling</i> helpers (stack-trace rendering, cause walking, safe-run wrappers, casting).
  *
- * <h5 class='section'>Example — enabling at startup:</h5>
- * <p class='bjava'>
- * 	System.<jsf>setProperty</jsf>(<js>"juneau.enableVerboseExceptions"</js>, <js>"true"</js>);
- * </p>
+ * <p>
+ * The opt-in {@link #log(Throwable)} helper checks the {@code juneau.enableVerboseExceptions} setting and, when
+ * enabled, prints the throwable's stack trace to the logger.  It is <b>not</b> invoked automatically by any
+ * factory — callers that want verbose logging at a specific site must call it explicitly.
  *
  * <h5 class='section'>Example — enabling for a single test thread:</h5>
  * <p class='bjava'>
@@ -61,7 +63,7 @@ public class ThrowableUtils {
 	static final Setting<Boolean> VERBOSE = Settings.get().get("juneau.enableVerboseExceptions").asBoolean();
 
 	/**
-	 * Interface used with {@link Utils#safeSupplier(SupplierWithThrowable)}.
+	 * Interface used with {@link #safeSupplier(SupplierWithThrowable)}.
 	 *
 	 * @param <T> The supplier type.
 	 */
@@ -78,128 +80,6 @@ public class ThrowableUtils {
 		 * @throws Throwable if supplier threw an exception.
 		 */
 		T get() throws Throwable;
-	}
-
-	/**
-	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
-	 *
-	 * @param c The class associated with the exception.
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link BeanRuntimeException}.
-	 */
-	public static BeanRuntimeException bex(Class<?> c, String msg, Object...args) {
-		return log(new BeanRuntimeException(c, msg, args));
-	}
-
-	/**
-	 * Shortcut for creating a {@link BeanRuntimeException} with a message and associated class.
-	 *
-	 * <p>
-	 * Same as the {@code bex(Class, String, Object...)} method but accepts a {@link ClassInfo} instead of a {@link Class}.
-	 *
-	 * @param c The class info associated with the exception.
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link BeanRuntimeException}.
-	 */
-	public static BeanRuntimeException bex(ClassInfo c, String msg, Object...args) {
-		return log(new BeanRuntimeException(c.inner(), msg, args));
-	}
-
-	/**
-	 * Creates a {@link RuntimeException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new RuntimeException with the formatted message.
-	 */
-	public static BeanRuntimeException bex(String msg, Object...args) {
-		return log(new BeanRuntimeException(msg, args));
-	}
-
-	/**
-	 * Creates a {@link RuntimeException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new RuntimeException wrapping the given cause.
-	 */
-	public static BeanRuntimeException bex(Throwable cause) {
-		return log(new BeanRuntimeException(cause));
-	}
-
-	/**
-	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
-	 *
-	 * @param e The cause of the exception.
-	 * @param c The class associated with the exception.
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link BeanRuntimeException}.
-	 */
-	public static BeanRuntimeException bex(Throwable e, Class<?> c, String msg, Object...args) {
-		return log(new BeanRuntimeException(e, c, msg, args));
-	}
-
-	/**
-	 * Shortcut for creating a {@link BeanRuntimeException} with a cause, message, and associated class.
-	 *
-	 * <p>
-	 * Same as the {@code bex(Throwable, Class, String, Object...)} method but accepts a {@link ClassInfo} instead of a {@link Class}.
-	 *
-	 * @param e The cause of the exception.
-	 * @param c The class info associated with the exception.
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link BeanRuntimeException}.
-	 */
-	public static BeanRuntimeException bex(Throwable e, ClassInfo c, String msg, Object...args) {
-		return log(new BeanRuntimeException(e, c.inner(), msg, args));
-	}
-
-	/**
-	 * Creates a {@link RuntimeException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new RuntimeException with the formatted message and cause.
-	 */
-	public static BeanRuntimeException bex(Throwable cause, String msg, Object...args) {
-		return log(new BeanRuntimeException(f(msg, args), cause));
-	}
-
-	/**
-	 * Shortcut for creating an {@link ExecutableException} with a message.
-	 *
-	 * @param msg The message.
-	 * @param args Optional {@link String#format(String, Object...)} arguments.
-	 * @return A new {@link ExecutableException}.
-	 */
-	public static ExecutableException exex(String msg, Object...args) {
-		return log(new ExecutableException(msg, args));
-	}
-
-	/**
-	 * Creates an {@link ExecutableException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new ExecutableException wrapping the given cause.
-	 */
-	public static ExecutableException exex(Throwable cause) {
-		return log(new ExecutableException(cause));
-	}
-
-	/**
-	 * Creates an {@link ExecutableException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new ExecutableException with the formatted message and cause.
-	 */
-	public static ExecutableException exex(Throwable cause, String msg, Object...args) {
-		return log(new ExecutableException(cause, msg, args));
 	}
 
 	/**
@@ -223,12 +103,12 @@ public class ThrowableUtils {
 	 * @return An {@link Optional} containing the cause if found, or empty if not found.
 	 */
 	public static <T extends Throwable> Optional<T> findCause(Throwable e, Class<T> cause) {
-		while (nn(e)) {
+		while (isNotNull(e)) {
 			if (cause.isInstance(e))
-				return opt(cause.cast(e));
+				return optional(cause.cast(e));
 			e = e.getCause();
 		}
-		return opte();
+		return emptyOptional();
 	}
 
 	/**
@@ -329,7 +209,7 @@ public class ThrowableUtils {
 	 * @return The exception, or <jk>null</jk> if not found.
 	 */
 	public static <T extends Throwable> T getThrowableCause(Class<T> c, Throwable t) {
-		while (nn(t)) {
+		while (isNotNull(t)) {
 			t = t.getCause();
 			if (c.isInstance(t))
 				return c.cast(t);
@@ -346,7 +226,7 @@ public class ThrowableUtils {
 	 */
 	public static int hash(Throwable t, String stopClass) {
 		var i = 0;
-		while (nn(t)) {
+		while (isNotNull(t)) {
 			for (var e : t.getStackTrace()) {
 				if (e.getClassName().equals(stopClass))
 					break;
@@ -359,97 +239,21 @@ public class ThrowableUtils {
 	}
 
 	/**
-	 * Creates an {@link IllegalArgumentException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new IllegalArgumentException with the formatted message.
-	 */
-	public static IllegalArgumentException illegalArg(String msg, Object...args) {
-		return log(new IllegalArgumentException(f(msg, args)));
-	}
-
-	private static <T extends Throwable> T log(T exception) {
-		if (Boolean.TRUE.equals(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));
-		return exception;
-	}
-
-	/**
-	 * Creates an {@link IllegalStateException} with a formatted message.
+	 * Opt-in verbose logger for a throwable.
 	 *
 	 * <p>
-	 * This is a convenience method for creating state exceptions with formatted messages.
-	 * The message is formatted using {@link Utils#f(String, Object...)}.
+	 * When the {@code juneau.enableVerboseExceptions} setting is {@code true}, logs the throwable's stack trace
+	 * as a warning; otherwise does nothing.  Returns the same throwable to allow inline use (e.g.
+	 * {@code throw log(iaex("..."))}).  This is never invoked automatically — call it explicitly at sites where
+	 * verbose logging is desired.
 	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jk>throw</jk> <jsm>illegalState</jsm>(<js>"Invalid state: {0}"</js>, <jv>state</jv>);
-	 * </p>
-	 *
-	 * @param msg The message format string.
-	 * @param args The arguments for the message format string.
-	 * @return A new IllegalStateException with the formatted message.
-	 * @see Utils#f(String, Object...)
-	 * @see #illegalArg(String, Object...)
+	 * @param <T> The throwable type.
+	 * @param exception The throwable to (optionally) log.
+	 * @return The same throwable.
 	 */
-	public static IllegalStateException illegalState(String msg, Object...args) {
-		return log(new IllegalStateException(f(msg, args)));
-	}
-
-
-	/**
-	 * Creates an {@link IllegalArgumentException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new IllegalArgumentException wrapping the given cause.
-	 */
-	public static IllegalArgumentException illegalArg(Throwable cause) {
-		return log(new IllegalArgumentException(cause));
-	}
-
-	/**
-	 * Creates an {@link IllegalArgumentException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new IllegalArgumentException with the formatted message and cause.
-	 */
-	public static IllegalArgumentException illegalArg(Throwable cause, String msg, Object...args) {
-		return log(new IllegalArgumentException(f(msg, args), cause));
-	}
-
-	/**
-	 * Creates an {@link java.io.IOException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new IOException with the formatted message.
-	 */
-	public static java.io.IOException ioex(String msg, Object...args) {
-		return log(new java.io.IOException(f(msg, args)));
-	}
-
-	/**
-	 * Creates an {@link java.io.IOException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new IOException wrapping the given cause.
-	 */
-	public static java.io.IOException ioex(Throwable cause) {
-		return log(new java.io.IOException(cause));
-	}
-
-	/**
-	 * Creates an {@link java.io.IOException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new IOException with the formatted message and cause.
-	 */
-	public static java.io.IOException ioex(Throwable cause, String msg, Object...args) {
-		return log(new java.io.IOException(f(msg, args), cause));
+	public static <T extends Throwable> T log(T exception) {
+		if (Boolean.TRUE.equals(VERBOSE.orElse(false))) LOG.warning(exception, getStackTrace(exception));
+		return exception;
 	}
 
 	/**
@@ -463,7 +267,7 @@ public class ThrowableUtils {
 	 * @param t The throwable.
 	 * @return The localized message of the throwable, truncated if necessary.
 	 */
-	public static String lm(Throwable t) {
+	public static String localizedMessage(Throwable t) {
 		String msg = t.getLocalizedMessage();
 		if (msg == null)
 			return null;
@@ -473,97 +277,144 @@ public class ThrowableUtils {
 		return msg.substring(0, 1000) + "<truncated-" + truncated + "-chars>" + msg.substring(msg.length() - 1000);
 	}
 
-	/**
-	 * Creates a {@link RuntimeException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new RuntimeException with the formatted message.
-	 */
-	public static RuntimeException rex(String msg, Object...args) {
-		return log(new RuntimeException(f(msg, args)));
+	/** Wraps or casts to RuntimeException. */
+	public static RuntimeException toRuntimeException(Throwable cause) {
+		return castException(RuntimeException.class, cause);
 	}
 
 	/**
-	 * Creates a {@link RuntimeException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new RuntimeException wrapping the given cause.
-	 */
-	public static RuntimeException rex(Throwable cause) {
-		return log(new RuntimeException(cause));
-	}
-
-	/**
-	 * Creates a {@link RuntimeException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new RuntimeException with the formatted message and cause.
-	 */
-	public static RuntimeException rex(Throwable cause, String msg, Object...args) {
-		return log(new RuntimeException(f(msg, args), cause));
-	}
-
-	/**
-	 * Creates a new {@link RuntimeException}.
+	 * Creates a new {@link RuntimeException} from the specified cause (or returns it if already one).
 	 *
 	 * @param cause The caused-by exception.
 	 * @return A new {@link RuntimeException}, or the same exception if it's already of that type.
 	 */
 	public static RuntimeException toRex(Throwable cause) {
-		return castException(RuntimeException.class, cause);
+		return toRuntimeException(cause);
 	}
 
-	/**
-	 * Creates an {@link UnsupportedOperationException} with a default message.
-	 *
-	 * @return A new UnsupportedOperationException with the message "Not supported."
-	 */
-	public static UnsupportedOperationException unsupportedOp() {
-		return log(new UnsupportedOperationException("Not supported."));
+	/** Runs a snippet; wraps any checked throwable in {@link RuntimeException}. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static void safe(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw toRuntimeException(t);
+		}
 	}
 
-	/**
-	 * Creates an {@link UnsupportedOperationException}.
-	 *
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new UnsupportedOperationException with the formatted message.
-	 */
-	public static UnsupportedOperationException unsupportedOp(String msg, Object...args) {
-		return log(new UnsupportedOperationException(f(msg, args)));
+	/** Runs a snippet; maps any checked throwable via the provided function. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static void safe(Snippet snippet, Function<Throwable, RuntimeException> exceptionMapper) {
+		try {
+			snippet.run();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw exceptionMapper.apply(t);
+		}
 	}
 
-	/**
-	 * Creates an {@link UnsupportedOperationException} wrapping the given throwable.
-	 *
-	 * @param cause The cause of the exception.
-	 * @return A new UnsupportedOperationException wrapping the given cause.
-	 */
-	public static UnsupportedOperationException unsupportedOp(Throwable cause) {
-		return log(new UnsupportedOperationException(cause));
+	/** Executes a supplier; wraps any checked exception in {@link RuntimeException}. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static <T> T safe(ThrowingSupplier<T> s) {
+		try {
+			return s.get();
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception | Error e) {
+			throw rex(e);
+		}
 	}
 
-	/**
-	 * Creates an {@link UnsupportedOperationException} with a cause.
-	 *
-	 * @param cause The cause of the exception.
-	 * @param msg The exception message.
-	 * @param args The arguments to substitute into the message.
-	 * @return A new UnsupportedOperationException with the formatted message and cause.
-	 */
-	public static UnsupportedOperationException unsupportedOp(Throwable cause, String msg, Object...args) {
-		return log(new UnsupportedOperationException(f(msg, args), cause));
+	/** Executes a supplier; maps any checked exception via the provided function. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static <T> T safe(ThrowingSupplier<T> s, Function<Throwable, RuntimeException> exceptionMapper) {
+		try {
+			return s.get();
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception | Error e) {
+			throw exceptionMapper.apply(e);
+		}
 	}
 
-	/**
-	 * Creates an {@link UnsupportedOperationException} for read-only objects.
-	 *
-	 * @return A new UnsupportedOperationException with the message "Object is read only."
-	 */
-	public static UnsupportedOperationException unsupportedOpReadOnly() {
-		return log(new UnsupportedOperationException("Object is read only."));
+	/** Runs a snippet, silently ignoring any exception. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static void runQuietly(Snippet snippet) {
+		try {
+			snippet.run();
+		} catch (@SuppressWarnings("unused") Throwable t) { /* Ignore */ }
+	}
+
+	/** Executes a supplier; returns the result or a fallback value produced by the exception function. */
+	public static <T> T safeCatch(ThrowingSupplier<T> s, Function<Throwable,T> exceptionFunction) {
+		try {
+			return s.get();
+		} catch (Exception e) {
+			return exceptionFunction.apply(e);
+		}
+	}
+
+	/** Executes a supplier; returns an {@link Optional} of the result, or empty if an exception is thrown. */
+	public static <T> Optional<T> safeOpt(ThrowingSupplier<T> s) {
+		try {
+			return Optional.ofNullable(s.get());
+		} catch (@SuppressWarnings("unused") Exception e) {
+			return Optional.empty();
+		}
+	}
+
+	/** Executes a supplier; returns an {@link Optional} of the result or the exception function's value. */
+	public static <T> Optional<T> safeOptCatch(ThrowingSupplier<T> s, Function<Throwable,T> exceptionFunction) {
+		try {
+			return Optional.ofNullable(s.get());
+		} catch (Exception e) {
+			return Optional.ofNullable(exceptionFunction.apply(e));
+		}
+	}
+
+	/** Executes a supplier; returns the result or {@code null} if an exception is thrown. */
+	public static <T> T safeOrNull(ThrowingSupplier<T> s) {
+		return safeOpt(s).orElse(null);
+	}
+
+	/** Executes a {@link SupplierWithThrowable}; wraps any checked throwable in {@link RuntimeException}. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw toRuntimeException(t);
+		}
+	}
+
+	/** Executes a {@link SupplierWithThrowable}; maps any checked throwable via the provided function. */
+	@SuppressWarnings({
+		"java:S1181" // Need to catch Throwable to handle all exception types including Error
+	})
+	public static <T> T safeSupplier(SupplierWithThrowable<T> supplier, Function<Throwable, RuntimeException> exceptionMapper) {
+		try {
+			return supplier.get();
+		} catch (RuntimeException t) {
+			throw t;
+		} catch (Throwable t) {
+			throw exceptionMapper.apply(t);
+		}
 	}
 }

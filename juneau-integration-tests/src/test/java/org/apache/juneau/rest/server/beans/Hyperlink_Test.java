@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.beans;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -40,7 +40,7 @@ class Hyperlink_Test extends TestBase {
 		}
 	@RestGet
 	public Hyperlink[] b() {
-		return CollectionUtils.a(a(),a());
+		return Shorts.a(a(),a());
 	}
 		@RestGet
 		public Collection<Hyperlink> c() {

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 
@@ -35,7 +35,7 @@ import java.io.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Simple Variable Language Basics</a>
  * </ul>
  */
 public abstract class SimpleVar extends Var {
@@ -51,6 +51,6 @@ public abstract class SimpleVar extends Var {
 
 	@Override /* Overridden from Var */
 	public void resolveTo(VarResolverSession session, Writer w, String arg) throws Exception {
-		throw unsupportedOp("Cannot call streamTo() on SimpleVar class");
+		throw uoex("Cannot call streamTo() on SimpleVar class");
 	}
 }

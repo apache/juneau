@@ -17,15 +17,14 @@
 package org.apache.juneau.test.assertions;
 
 import static java.util.regex.Pattern.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.AssertionPredicates.and;
 import static org.apache.juneau.test.assertions.AssertionPredicates.eq;
 import static org.apache.juneau.test.assertions.AssertionPredicates.eqic;
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
 import static org.apache.juneau.test.assertions.AssertionPredicates.not;
 import static org.apache.juneau.test.assertions.AssertionPredicates.or;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.regex.*;
@@ -39,7 +38,7 @@ class AssertionPredicates_Test extends TestBase {
 	// Basic tests
 	//------------------------------------------------------------------------------------------------------------------
 
-	private static StringAssertion a1 = assertString("foo").setSilent(), a2 = assertString(opte()).setSilent();
+	private static StringAssertion a1 = assertString("foo").setSilent(), a2 = assertString(oe()).setSilent();
 
 	@Test void a01_any() {
 		assertDoesNotThrow(()->a1.is(any()));

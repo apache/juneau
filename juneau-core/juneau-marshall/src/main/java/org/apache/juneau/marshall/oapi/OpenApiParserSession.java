@@ -19,9 +19,9 @@ package org.apache.juneau.marshall.oapi;
 import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;
 import static org.apache.juneau.commons.httppart.HttpPartDataType.*;
 import static org.apache.juneau.commons.httppart.HttpPartFormat.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi Basics</a>
 
  * </ul>
  */
@@ -131,7 +131,7 @@ public class OpenApiParserSession extends UonParserSession {
 		if (type == null)
 			type = (ClassMeta<T>)object();
 
-		schema = firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);
+		schema = coalesce(schema, getSchema(), DEFAULT_SCHEMA);
 
 		T t = parseInner(partType, schema, in, type);
 		if (t == null && type.isPrimitive())
@@ -139,7 +139,7 @@ public class OpenApiParserSession extends UonParserSession {
 		schema.validateOutput(t);
 
 		if (isOptional)
-			t = (T)opt(t);
+			t = (T)o(t);
 
 		return t;
 	}
@@ -168,7 +168,7 @@ public class OpenApiParserSession extends UonParserSession {
 				sType = type;
 
 			if (sType.isOptional())
-				return (T)opt(parseInner(partType, schema, in, sType.getElementType()));
+				return (T)o(parseInner(partType, schema, in, sType.getElementType()));
 
 			var t = schema.getType(sType);
 			if (partType == null)
@@ -184,7 +184,7 @@ public class OpenApiParserSession extends UonParserSession {
 						return toType(base64Decode(in), type);
 					if (f == DATE || f == DATE_TIME) {
 						var in2 = in;
-						return toType(opt(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in2).getZonedDateTime()).map(GregorianCalendar::from).orElse(null), type);
+						return toType(o(in).filter(x1 -> ! isBlank(x1)).map(x -> GranularZonedDateTime.of(in2).getZonedDateTime()).map(GregorianCalendar::from).orElse(null), type);
 					}
 					if (f == BINARY)
 						return toType(fromHex(in), type);

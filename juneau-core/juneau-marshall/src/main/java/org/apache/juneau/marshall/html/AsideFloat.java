@@ -20,7 +20,7 @@ package org.apache.juneau.marshall.html;
  * Identifies possible float values for {@link HtmlDocSerializer.Builder#asideFloat(AsideFloat)}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
  * </ul>
  */
 public enum AsideFloat {

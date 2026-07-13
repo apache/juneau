@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.urlencoding;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;

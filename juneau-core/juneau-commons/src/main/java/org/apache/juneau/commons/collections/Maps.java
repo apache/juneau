@@ -17,8 +17,8 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -35,7 +35,7 @@ import java.util.function.*;
  *
  * <p>
  * Instances of this builder can be created using {@link #create(Class, Class)} or the convenience method
- * {@link org.apache.juneau.commons.utils.CollectionUtils#mapb(Class, Class)}.
+ * {@link org.apache.juneau.commons.utils.CollectionUtils#mapBuilder(Class, Class)}.
  *
  * <h5 class='section'>Features:</h5>
  * <ul class='spaced-list'>
@@ -55,19 +55,19 @@ import java.util.function.*;
  * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
  *
  * 	<jc>// Basic usage - returns Map</jc>
- * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.add(<js>"one"</js>, 1)
  * 		.add(<js>"two"</js>, 2)
  * 		.add(<js>"three"</js>, 3)
  * 		.build();
  *
  * 	<jc>// Using pairs - returns Map</jc>
- * 	Map&lt;String,String&gt; <jv>props</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 	Map&lt;String,String&gt; <jv>props</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
  * 		.addPairs(<js>"host"</js>, <js>"localhost"</js>, <js>"port"</js>, <js>"8080"</js>)
  * 		.build();
  *
  * 	<jc>// With sorting by key - returns Map</jc>
- * 	Map&lt;String,Integer&gt; <jv>sorted</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	Map&lt;String,Integer&gt; <jv>sorted</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.add(<js>"zebra"</js>, 3)
  * 		.add(<js>"apple"</js>, 1)
  * 		.add(<js>"banana"</js>, 2)
@@ -75,7 +75,7 @@ import java.util.function.*;
  * 		.build();  <jc>// Returns TreeMap with natural key order</jc>
  *
  * 	<jc>// Immutable map - returns Map</jc>
- * 	Map&lt;String,String&gt; <jv>config</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 	Map&lt;String,String&gt; <jv>config</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
  * 		.add(<js>"env"</js>, <js>"prod"</js>)
  * 		.add(<js>"region"</js>, <js>"us-west"</js>)
  * 		.unmodifiable()
@@ -83,23 +83,23 @@ import java.util.function.*;
  *
  * 	<jc>// From multiple sources - returns Map</jc>
  * 	Map&lt;String,Integer&gt; <jv>existing</jv> = Map.of(<js>"a"</js>, 1, <js>"b"</js>, 2);
- * 	Map&lt;String,Integer&gt; <jv>combined</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	Map&lt;String,Integer&gt; <jv>combined</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.addAll(<jv>existing</jv>)
  * 		.add(<js>"c"</js>, 3)
  * 		.build();
  *
  * 	<jc>// Sparse mode - returns null when empty</jc>
- * 	Map&lt;String,String&gt; <jv>maybeNull</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+ * 	Map&lt;String,String&gt; <jv>maybeNull</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
  * 		.sparse()
  * 		.build();  <jc>// Returns null, not empty map</jc>
  *
  * 	<jc>// FluentMap wrapper - use buildFluent()</jc>
- * 	FluentMap&lt;String,Integer&gt; <jv>fluent</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	FluentMap&lt;String,Integer&gt; <jv>fluent</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.add(<js>"one"</js>, 1)
  * 		.buildFluent();
  *
  * 	<jc>// FilteredMap - use buildFiltered()</jc>
- * 	FilteredMap&lt;String,Integer&gt; <jv>filtered</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+ * 	FilteredMap&lt;String,Integer&gt; <jv>filtered</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
  * 		.filtered((k, v) -&gt; v &gt; 0)
  * 		.add(<js>"a"</js>, 5)
  * 		.add(<js>"b"</js>, -1)  <jc>// Filtered out</jc>
@@ -288,7 +288,7 @@ public class Maps<K,V> {
 	public Maps<K,V> addPairs(Object...pairs) {
 		assertArgNotNull(ARG_pairs, pairs);
 		if (pairs.length % 2 != 0)
-			throw illegalArg("Odd number of parameters passed into Maps.addPairs(...)");
+			throw iaex("Odd number of parameters passed into Maps.addPairs(...)");
 		for (var i = 0; i < pairs.length; i += 2)
 			add((K)pairs[i], (V)pairs[i + 1]);
 		return this;
@@ -319,7 +319,7 @@ public class Maps<K,V> {
 	})
 	public Map<K,V> build() {
 
-		if (sparse && e(map))
+		if (sparse && ie(map))
 			return null;
 
 		Map<K,V> map2;
@@ -364,7 +364,7 @@ public class Maps<K,V> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FluentMap&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	FluentMap&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, 1)
 	 * 		.add(<js>"two"</js>, 2)
 	 * 		.buildFluent();
@@ -392,7 +392,7 @@ public class Maps<K,V> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FilteredMap&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	FilteredMap&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.filtered((k, v) -&gt; v != <jk>null</jk> &amp;&amp; v &gt; 0)
 	 * 		.add(<js>"a"</js>, 5)
 	 * 		.add(<js>"b"</js>, -1)  <jc>// Will be filtered out</jc>
@@ -482,7 +482,7 @@ public class Maps<K,V> {
 	 * <p class='bjava'>
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
-	 * 	FluentMap&lt;String,Object&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
+	 * 	FluentMap&lt;String,Object&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Object.<jk>class</jk>)
 	 * 		.filtered()
 	 * 		.add(<js>"name"</js>, <js>"John"</js>)
 	 * 		.add(<js>"age"</js>, -1)              <jc>// Filtered out at build time</jc>
@@ -525,7 +525,7 @@ public class Maps<K,V> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Keep only non-null, non-empty string values</jc>
-	 * 	Map&lt;String,String&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
+	 * 	Map&lt;String,String&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, String.<jk>class</jk>)
 	 * 		.filtered((k, v) -&gt; v != <jk>null</jk> &amp;&amp; !v.equals(<js>""</js>))
 	 * 		.add(<js>"a"</js>, <js>"foo"</js>)
 	 * 		.add(<js>"b"</js>, <jk>null</jk>)     <jc>// Filtered out at build time</jc>
@@ -533,7 +533,7 @@ public class Maps<K,V> {
 	 * 		.build();
 	 *
 	 * 	<jc>// Multiple filters combined with AND</jc>
-	 * 	Map&lt;String,Integer&gt; <jv>map2</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	Map&lt;String,Integer&gt; <jv>map2</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.filtered((k, v) -&gt; v != <jk>null</jk>)           <jc>// First filter</jc>
 	 * 		.filtered((k, v) -&gt; v &gt; 0)                    <jc>// Second filter (ANDed with first)</jc>
 	 * 		.filtered((k, v) -&gt; ! k.startsWith(<js>"_"</js>)) <jc>// Third filter (ANDed with previous)</jc>
@@ -629,14 +629,14 @@ public class Maps<K,V> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Create a thread-safe map using ConcurrentHashMap</jc>
-	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, 1)
 	 * 		.add(<js>"two"</js>, 2)
 	 * 		.concurrent()
 	 * 		.build();
 	 *
 	 * 	<jc>// Create a thread-safe ordered map</jc>
-	 * 	Map&lt;String,Integer&gt; <jv>map2</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	Map&lt;String,Integer&gt; <jv>map2</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.ordered()
 	 * 		.concurrent()
 	 * 		.add(<js>"one"</js>, 1)
@@ -669,7 +669,7 @@ public class Maps<K,V> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Conditionally create a thread-safe map</jc>
-	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.add(<js>"one"</js>, 1)
 	 * 		.concurrent(<jv>needsThreadSafety</jv>)
 	 * 		.build();
@@ -698,7 +698,7 @@ public class Maps<K,V> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Create an ordered map (preserves insertion order)</jc>
-	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.ordered()
 	 * 		.add(<js>"one"</js>, 1)
 	 * 		.add(<js>"two"</js>, 2)
@@ -727,7 +727,7 @@ public class Maps<K,V> {
 	 * 	<jk>import static</jk> org.apache.juneau.commons.utils.CollectionUtils.*;
 	 *
 	 * 	<jc>// Conditionally create an ordered map</jc>
-	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapb</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
+	 * 	Map&lt;String,Integer&gt; <jv>map</jv> = <jsm>mapBuilder</jsm>(String.<jk>class</jk>, Integer.<jk>class</jk>)
 	 * 		.ordered(<jv>preserveOrder</jv>)
 	 * 		.add(<js>"one"</js>, 1)
 	 * 		.build();

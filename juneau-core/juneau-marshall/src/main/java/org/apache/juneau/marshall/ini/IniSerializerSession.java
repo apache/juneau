@@ -17,8 +17,7 @@
 package org.apache.juneau.marshall.ini;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.time.*;
@@ -154,7 +153,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			BeanPropertyMeta pMeta = e.getKey();
 			if (ctx.useComments) {
 				var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);
-				if (ne(iniMeta.getComment()))
+				if (ine(iniMeta.getComment()))
 					w.comment(iniMeta.getComment());
 			}
 			writeKeyValue(w, pMeta.getName(), e.getValue(), pMeta);
@@ -165,7 +164,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			BeanPropertyMeta pMeta = e.getKey();
 			Object value = e.getValue();
 			var iniMeta = ctx.getIniBeanPropertyMeta(pMeta);
-			var key = ne(iniMeta.getSection()) ? iniMeta.getSection() : pMeta.getName();
+			var key = ine(iniMeta.getSection()) ? iniMeta.getSection() : pMeta.getName();
 			var cMeta = (ClassMeta<?>) pMeta.getBeanInfo();
 			var newPath = sectionPath.isEmpty() ? key : sectionPath + SECTION_PATH_DELIMITER + key;
 
@@ -182,17 +181,17 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 						w.section(newPath);
 						serializeMapSection(w, map, aType);
 					} else {
-						if (ctx.useComments && ne(iniMeta.getComment()))
+						if (ctx.useComments && ine(iniMeta.getComment()))
 							w.comment(iniMeta.getComment());
 						writeKeyValue(w, pMeta.getName(), value, pMeta);
 					}
 				} else if (aType.isCollection() || aType.isArray()) {
-					if (ctx.useComments && ne(iniMeta.getComment()))
+					if (ctx.useComments && ine(iniMeta.getComment()))
 						w.comment(iniMeta.getComment());
 					writeKeyValue(w, pMeta.getName(), value, pMeta);
 				}
 			} else if (isKeepNullProperties()) {
-				if (ctx.useComments && ne(iniMeta.getComment()))
+				if (ctx.useComments && ine(iniMeta.getComment()))
 					w.comment(iniMeta.getComment());
 				writeKeyValue(w, pMeta.getName(), null, pMeta);
 			}
@@ -303,7 +302,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 	}
 
 	private static boolean needsQuoting(String s) {
-		if (e(s))
+		if (ie(s))
 			return true;
 		if (s.equals("null") || s.equalsIgnoreCase("true") || s.equalsIgnoreCase("false"))
 			return true;

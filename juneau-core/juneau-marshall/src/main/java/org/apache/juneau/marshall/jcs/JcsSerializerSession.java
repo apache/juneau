@@ -17,16 +17,15 @@
 package org.apache.juneau.marshall.jcs;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.io.*;
 import java.math.*;
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.lang.*;
-import java.io.*;
-
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.serializer.*;

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth.oauth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
@@ -138,7 +138,7 @@ class OAuthFlowBranch_Test extends TestBase {
 	@Test void b03_acquire_cacheHit_returnsWithoutNetwork() {
 		var cache = BoundedLruTokenCache.create();
 		var seeded = new OAuthToken("at", "Bearer", Instant.parse("2099-01-01T00:00:00Z"),
-			opte(), opte(), opte());
+			oe(), oe(), oe());
 		// Build the flow first to discover the cache key pattern.
 		var f = OAuthClientCredentialsFlow.create()
 			.tokenEndpoint(URI.create("http://127.0.0.1:1/token"))

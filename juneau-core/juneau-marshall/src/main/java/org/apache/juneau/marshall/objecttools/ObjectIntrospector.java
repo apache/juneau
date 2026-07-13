@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.objecttools;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.lang.reflect.*;

@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.swap.*;
  * Transforms {@link URL} objects to and from {@link String Strings}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
  * </ul>
  */
 public class UrlSwap extends StringSwap<URL> {

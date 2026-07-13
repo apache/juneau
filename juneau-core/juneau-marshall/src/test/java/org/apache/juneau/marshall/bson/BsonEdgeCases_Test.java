@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.bson;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -92,7 +92,7 @@ class BsonEdgeCases_Test extends TestBase {
 	void a06_optionalWrappedRoundTrip() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
-		var bytes = s.serialize(opt(42));
+		var bytes = s.serialize(o(42));
 		var result = p.parse(bytes, java.util.Optional.class);
 		assertNotNull(result);
 		assertTrue(result.isPresent());

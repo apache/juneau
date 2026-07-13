@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -235,7 +234,7 @@ public class SecurityScheme extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getScopes() { return nullIfEmpty(scopes); }
+	public Map<String,String> getScopes() { return nie(scopes); }
 
 	/**
 	 * Bean property getter:  <property>tokenUrl</property>.
@@ -260,13 +259,13 @@ public class SecurityScheme extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(authorizationUrl), PROP_authorizationUrl)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(flow), PROP_flow)
 			.addIf(nn(in), PROP_in)
 			.addIf(nn(name), PROP_name)
-			.addIf(ne(scopes), PROP_scopes)
+			.addIf(ine(scopes), PROP_scopes)
 			.addIf(nn(tokenUrl), PROP_tokenUrl)
 			.addIf(nn(type), PROP_type)
 			.build();

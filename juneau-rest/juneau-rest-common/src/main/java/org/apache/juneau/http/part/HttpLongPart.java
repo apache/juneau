@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.http.part;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -115,7 +114,7 @@ public class HttpLongPart extends HttpPartBean {
 	 * @return The long value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return opt(toLong());
+		return o(toLong());
 	}
 
 	/**
@@ -140,8 +139,8 @@ public class HttpLongPart extends HttpPartBean {
 	}
 
 	private static Long toLong(String value) {
-		if (e(value))
+		if (ie(value))
 			return null;
-		return parseLong(value, () -> illegalArg("Value ''{0}'' could not be parsed as a long.", value));
+		return parseLong(value, () -> iaex("Value ''{0}'' could not be parsed as a long.", value));
 	}
 }

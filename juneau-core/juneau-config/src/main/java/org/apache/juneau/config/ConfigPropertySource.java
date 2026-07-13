@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.config;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.settings.*;
 
@@ -42,7 +42,7 @@ public class ConfigPropertySource implements PropertySource {
 			return PropertyLookupResult.missing();
 		try {
 			var value = config.getString(name);
-			return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(value));
+			return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(value));
 		} catch (@SuppressWarnings("unused") Exception unused) {
 			return PropertyLookupResult.missing();
 		}

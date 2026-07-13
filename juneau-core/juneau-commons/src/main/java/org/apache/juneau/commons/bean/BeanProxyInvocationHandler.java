@@ -17,8 +17,7 @@
 package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -159,6 +158,6 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return null;
 		}
 
-		throw unsupportedOp("Unsupported bean method.  method=''{0}''", method);
+		throw uoex("Unsupported bean method.  method=''{0}''", method);
 	}
 }

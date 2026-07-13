@@ -18,7 +18,7 @@ package org.apache.juneau.commons.inject;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -223,7 +223,7 @@ public interface BeanStore {
 	 * @see BeanInstantiator BeanInstantiator — for instantiating a bean from its own constructors, builders, or factory methods
 	 */
 	default <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -257,7 +257,7 @@ public interface BeanStore {
 	 * @return The implementation class, or {@link Optional#empty()} if no binding exists.
 	 */
 	default <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
-		return opte();
+		return oe();
 	}
 
 	/**

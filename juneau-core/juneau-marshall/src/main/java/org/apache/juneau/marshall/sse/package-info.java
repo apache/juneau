@@ -33,7 +33,7 @@
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG HTML §9.2 — Server-sent events</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SseBasics">SSE Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE Basics</a>
  * </ul>
  */
 package org.apache.juneau.marshall.sse;

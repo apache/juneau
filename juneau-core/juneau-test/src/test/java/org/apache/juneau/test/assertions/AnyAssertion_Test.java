@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
-import static org.apache.juneau.test.assertions.Assertions.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
+import static org.apache.juneau.test.assertions.Assertions.*;
+
 import java.time.*;
 import java.util.*;
 
@@ -73,7 +75,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x).asString().is("1");
 		test(nil).asString().isNull();
 	}
@@ -163,7 +165,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb10_asBoolean() {
 		var x1 = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		var x2 = "";
 		test(x1).asBoolean().isString("true");
 		test(nil).asBoolean().isNull();
@@ -180,7 +182,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb12_asCollection() {
 		var x1 = l(1);
-		var nil = listn(Integer.class);
+		var nil = nullList(Integer.class);
 		var x2 = "";
 		test(x1).asCollection().isString("[1]");
 		test(nil).asCollection().isNull();
@@ -189,7 +191,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb13_asCollection_wType() {
 		var x1 = l(1);
-		var nil = listn(Integer.class);
+		var nil = nullList(Integer.class);
 		var x2 = "";
 		test(x1).asCollection(Integer.class).isString("[1]");
 		test(nil).asCollection(Integer.class).isNull();
@@ -199,7 +201,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb14_asComparable() {
 		var x1 = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		var x2 = list();
 		test(x1).asComparable().isString("1");
 		test(nil).asComparable().isNull();
@@ -208,7 +210,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb15_asDate() {
 		var x1 = date("2000-06-01T12:34:56Z");
-		var nil = no(Date.class);
+		var nil = nullObject(Date.class);
 		var x2 = "";
 		test(x1).asDate().asString().isMatches("*2000*");
 		test(nil).asDate().isNull();
@@ -217,7 +219,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb16_asInteger() {
 		var x1 = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		var x2 = "";
 		test(x1).asInteger().isString("1");
 		test(nil).asInteger().isNull();
@@ -226,7 +228,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb17_asLong() {
 		var x1 = 1L;
-		var nil = no(Long.class);
+		var nil = nullObject(Long.class);
 		var x2 = "";
 		test(x1).asLong().isString("1");
 		test(nil).asLong().isNull();
@@ -235,7 +237,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb18_asList() {
 		var x1 = l(1);
-		var nil = listn(Integer.class);
+		var nil = nullList(Integer.class);
 		var x2 = "";
 		test(x1).asList().isString("[1]");
 		test(nil).asList().isNull();
@@ -244,7 +246,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb19_asList_wType() {
 		var x1 = l(1);
-		var nil = listn(Integer.class);
+		var nil = nullList(Integer.class);
 		var x2 = "";
 		test(x1).asList(Integer.class).isString("[1]");
 		test(nil).asList(Integer.class).isNull();
@@ -281,7 +283,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb23_asBean_wType() {
 		var x1 = A1;
-		var nil = no(A1.class);
+		var nil = nullObject(A1.class);
 		var x2 = "";
 		test(x1).asBean().isString("a=1,b=2");
 		test(nil).asBean(A1.class).isNull();
@@ -291,7 +293,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb24_asBeanList() {
 		var x1 = l(A1);
-		var nil = listn(A1.class);
+		var nil = nullList(A1.class);
 		var x2 = "";
 		test(x1).asBeanList(A1.class).isString("[a=1,b=2]");
 		test(nil).asBeanList(A1.class).isNull();
@@ -301,7 +303,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb25_asZonedDateTime() {
 		var x1 = zdt("2000-06-01T12:34:56Z");
-		var nil = no(Object.class);
+		var nil = nullObject(Object.class);
 		var x2 = "";
 		test(x1).asZonedDateTime().asString().isMatches("2000*");
 		test(nil).asZonedDateTime().isNull();
@@ -310,7 +312,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void bb26_asStringList() {
 		var x1 = l("1");
-		var nil = listn(String.class);
+		var nil = nullList(String.class);
 		var x2 = "";
 		test(x1).asStringList().isString("[1]");
 		test(nil).asStringList().isNull();
@@ -323,21 +325,21 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x).isExists().isExists();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isExists());
 	}
 
 	@Test void ca02_isNull() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(nil).isNull();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was not null.", ()->test(x).isNull());
 	}
 
 	@Test void ca03_isNotNull() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x).isNotNull();
 		assertThrowsWithMessage(BasicAssertionError.class, "Value was null.", ()->test(nil).isNotNull());
 	}
@@ -346,7 +348,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -366,7 +368,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -378,7 +380,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[2]'.  Actual='1'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='1'.");
@@ -389,7 +391,7 @@ class AnyAssertion_Test extends TestBase {
 		var x1 = 1;
 		var x1a = 1;
 		var x2 = 2;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -400,7 +402,7 @@ class AnyAssertion_Test extends TestBase {
 	@Test void ca08_isSame() {
 		var x1 = Integer.valueOf(999);
 		var x1a = Integer.valueOf(999);
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(x1).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='999(Integer@*)'.  Actual='999(Integer@*)'.");
@@ -409,7 +411,7 @@ class AnyAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x).isType(Integer.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -419,7 +421,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x).isExactType(Integer.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Integer'.");
 		assertThrown(()->test(x).isExactType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Integer'.");
@@ -429,7 +431,7 @@ class AnyAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = 1;
-		var nil = no(Integer.class);
+		var nil = nullObject(Integer.class);
 		test(x).isString("1");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='1'.");

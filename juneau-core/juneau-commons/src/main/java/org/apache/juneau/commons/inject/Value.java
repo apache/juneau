@@ -68,7 +68,7 @@ import java.lang.annotation.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotationBasics">@Value Annotation Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">@Value Annotation Basics</a>
  * </ul>
  */
 @Documented

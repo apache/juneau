@@ -25,7 +25,6 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.metrics.*;
 import org.apache.juneau.rest.server.tracing.*;
-import org.apache.juneau.rest.server.tracing.Scope;
 import org.junit.jupiter.api.*;
 
 /**

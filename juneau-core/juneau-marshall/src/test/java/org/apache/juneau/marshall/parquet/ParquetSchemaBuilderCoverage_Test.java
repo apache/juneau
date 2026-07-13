@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
@@ -76,7 +76,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 	public static class Nested {
 		public String name;
 		public AllScalars inner;
-		public Optional<String> maybe = opte();
+		public Optional<String> maybe = oe();
 		public List<String> tags;
 		public List<List<Integer>> matrix;
 		public int[] nums;
@@ -104,7 +104,7 @@ class ParquetSchemaBuilderCoverage_Test extends TestBase {
 		var n = new Nested();
 		n.name = "n";
 		n.inner = AllScalars.sample();
-		n.maybe = opt("y");
+		n.maybe = o("y");
 		n.tags = list("a", "b");
 		n.matrix = list(list(1, 2), list(3));
 		n.nums = new int[]{9, 8};

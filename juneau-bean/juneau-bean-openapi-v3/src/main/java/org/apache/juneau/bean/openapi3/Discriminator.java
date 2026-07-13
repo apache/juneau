@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -147,7 +147,7 @@ public class Discriminator extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getMapping() { return nullIfEmpty(mapping); }
+	public Map<String,String> getMapping() { return nie(mapping); }
 
 	/**
 	 * Bean property getter:  <property>propertyName</property>.
@@ -162,8 +162,8 @@ public class Discriminator extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
-			.addIf(ne(mapping), PROP_mapping)
+		var s = stb(String.class)
+			.addIf(ine(mapping), PROP_mapping)
 			.addIf(nn(propertyName), PROP_propertyName)
 			.build();
 		// @formatter:on

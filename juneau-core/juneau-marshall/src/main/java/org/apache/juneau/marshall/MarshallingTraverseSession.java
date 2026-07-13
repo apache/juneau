@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.marshall;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.text.*;
 import java.util.*;
@@ -130,7 +130,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 
 		String toString(boolean simple) {
 			var sb = new StringBuilder().append('[').append(depth).append(']').append(' ');
-			sb.append(e(name) ? "<noname>" : name).append(':');
+			sb.append(ie(name) ? "<noname>" : name).append(':');
 			sb.append(aType.toString(simple));
 			if (aType != aType.getSerializedClassMeta(MarshallingTraverseSession.this))
 				sb.append('/').append(aType.getSerializedClassMeta(MarshallingTraverseSession.this).toString(simple));
@@ -163,7 +163,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 		if (isDetectRecursions() || isDebug()) {
 			set = new IdentityHashMap<>();
 		} else {
-			set = mape();
+			set = emptyMap();
 		}
 	}
 
@@ -182,8 +182,8 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 * @return A map, typically containing something like <c>{line:123,column:456,currentProperty:"foobar"}</c>
 	 */
 	public final JsonMap getLastLocation() {
-		Predicate<Object> nn = Utils::nn;
-		Predicate<Collection<?>> nec = Utils::ne;
+		Predicate<Object> nn = Shorts::nn;
+		Predicate<Collection<?>> nec = Shorts::ine;
 		// @formatter:off
 		return JsonMap
 			.create()

@@ -18,8 +18,8 @@ package org.apache.juneau.commons.lang;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class WeightedAverage_Test extends TestBase {
 

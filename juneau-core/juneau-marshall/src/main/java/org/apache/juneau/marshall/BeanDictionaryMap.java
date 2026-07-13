@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -86,7 +85,7 @@ public class BeanDictionaryMap extends LinkedHashMap<String,Object> {
 				return;
 			}
 		}
-		throw bex("Invalid object type passed to BeanDictionaryMap: ''{0}''.  Only objects of type Class or Object[] containing Class or Object[] objects can be used.", cn(o));
+		throw brex("Invalid object type passed to BeanDictionaryMap: ''{0}''.  Only objects of type Class or Object[] containing Class or Object[] objects can be used.", cn(o));
 	}
 
 	/**

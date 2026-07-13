@@ -18,8 +18,8 @@ package org.apache.juneau.marshall.json;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
 
  * </ul>
  */
@@ -171,7 +171,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)opt(parseAnything(eType.getElementType(), r, outer, pMeta));
+			return (T)o(parseAnything(eType.getElementType(), r, outer, pMeta));
 
 		setCurrentClass(sType);
 		var wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();
@@ -285,7 +285,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	private Boolean parseBoolean(ParserReader r) throws IOException, ParseException {
 		int c = r.peek();
 		if (c == '\'' || c == '"')
-			return bool(parseString(r));
+			return b(parseString(r));
 		if (c == 't') {
 			parseKeyword("true", r);
 			return Boolean.TRUE;

@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -376,7 +376,7 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The callbacks map.
 	 */
-	public Map<String,Callback> getCallbacks() { return nullIfEmpty(callbacks); }
+	public Map<String,Callback> getCallbacks() { return nie(callbacks); }
 
 	/**
 	 * Returns the deprecated flag.
@@ -427,7 +427,7 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The parameters list.
 	 */
-	public List<Parameter> getParameters() { return nullIfEmpty(parameters); }
+	public List<Parameter> getParameters() { return nie(parameters); }
 
 	/**
 	 * Returns the request body.
@@ -462,21 +462,21 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The responses map.
 	 */
-	public Map<String,Response> getResponses() { return nullIfEmpty(responses); }
+	public Map<String,Response> getResponses() { return nie(responses); }
 
 	/**
 	 * Returns the security requirements list.
 	 *
 	 * @return The security requirements list.
 	 */
-	public List<SecurityRequirement> getSecurity() { return nullIfEmpty(security); }
+	public List<SecurityRequirement> getSecurity() { return nie(security); }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() { return nullIfEmpty(servers); }
+	public List<Server> getServers() { return nie(servers); }
 
 	/**
 	 * Returns the summary.
@@ -490,24 +490,24 @@ public class Operation extends OpenApiElement {
 	 *
 	 * @return The tags list.
 	 */
-	public List<String> getTags() { return nullIfEmpty(tags); }
+	public List<String> getTags() { return nie(tags); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
-			.addIf(ne(callbacks), PROP_callbacks)
+		var s = stb(String.class)
+			.addIf(ine(callbacks), PROP_callbacks)
 			.addIf(nn(deprecated), PROP_deprecated)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(externalDocs), PROP_externalDocs)
 			.addIf(nn(operationId), PROP_operationId)
-			.addIf(ne(parameters), PROP_parameters)
+			.addIf(ine(parameters), PROP_parameters)
 			.addIf(nn(requestBody), PROP_requestBody)
-			.addIf(ne(responses), PROP_responses)
-			.addIf(ne(security), PROP_security)
-			.addIf(ne(servers), PROP_servers)
+			.addIf(ine(responses), PROP_responses)
+			.addIf(ine(security), PROP_security)
+			.addIf(ine(servers), PROP_servers)
 			.addIf(nn(summary), PROP_summary)
-			.addIf(ne(tags), PROP_tags)
+			.addIf(ine(tags), PROP_tags)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

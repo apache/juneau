@@ -17,7 +17,8 @@
 package org.apache.juneau.rest.server.logger;
 
 import static java.util.logging.Level.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.logger.CallLoggingDetail.*;
 

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.http.classic.HttpResources.*;
@@ -27,10 +27,10 @@ import org.apache.http.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.junit.jupiter.api.*;
 
 class RestClient_Body_Test extends TestBase {

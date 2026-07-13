@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -75,7 +74,7 @@ public class HttpMediaTypeHeader extends HttpHeaderBean {
 	}
 
 	public Optional<MediaType> asMediaType() {
-		return opt(toMediaType());
+		return o(toMediaType());
 	}
 
 	public String getParameter(String name) {

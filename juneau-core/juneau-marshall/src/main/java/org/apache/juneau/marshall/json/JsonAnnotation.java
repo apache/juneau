@@ -26,7 +26,7 @@ import org.apache.juneau.commons.*;
  * Utility classes and methods for the {@link Json @Json} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
  * </ul>
  */
 public class JsonAnnotation {

@@ -15,11 +15,10 @@
  * limitations under the License.
  */
 package org.apache.juneau.test.assertions;
-
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.eq;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -131,7 +130,7 @@ class BeanListAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void ca01_exists() {
-		var x = CollectionUtils.<A>l();
+		var x = Shorts.<A>l();
 		var nil = (List<A>)null;
 		test(x).isExists().isExists();
 		var assertion1 = test(nil);
@@ -139,7 +138,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca02_isNull() {
-		var x = CollectionUtils.<A>l();
+		var x = Shorts.<A>l();
 		var nil = (List<A>)null;
 		test(nil).isNull();
 		var assertion2 = test(x);
@@ -147,7 +146,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void ca03_isNotNull() {
-		var x = CollectionUtils.<A>l();
+		var x = Shorts.<A>l();
 		var nil = (List<A>)null;
 		test(x).isNotNull();
 		var assertion3 = test(nil);
@@ -247,7 +246,7 @@ class BeanListAssertion_Test extends TestBase {
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 	@Test void cb01_isEmpty() {
-		var x1 = CollectionUtils.<A>l();
+		var x1 = Shorts.<A>l();
 		var x2 = l(A1);
 		var nil = (List<A>)null;
 		test(x1).isEmpty();
@@ -258,7 +257,7 @@ class BeanListAssertion_Test extends TestBase {
 	}
 
 	@Test void cb02_isNotEmpty() {
-		var x1 = CollectionUtils.<A>l();
+		var x1 = Shorts.<A>l();
 		var x2 = l(A1);
 		var nil = (List<A>)null;
 		test(x2).isNotEmpty();

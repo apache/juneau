@@ -17,9 +17,8 @@
 package org.apache.juneau.rest.server.util;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -47,7 +46,7 @@ public class UrlPath {
 	 */
 	public static UrlPath of(String path) {
 		if (nn(path) && ! path.startsWith("/"))
-			throw illegalArg("Invalid path specified. Must be null or start with '/' per HttpServletRequest.getPathInfo().");
+			throw iaex("Invalid path specified. Must be null or start with '/' per HttpServletRequest.getPathInfo().");
 		return new UrlPath(path);
 	}
 
@@ -77,11 +76,11 @@ public class UrlPath {
 	 */
 	public Optional<String> getFileName() {
 		if (parts.length == 0)
-			return opte();
+			return oe();
 		String p = parts[parts.length - 1];
 		if (p.indexOf('.') == -1)
-			return opte();
-		return opt(p);
+			return oe();
+		return o(p);
 	}
 
 	/**

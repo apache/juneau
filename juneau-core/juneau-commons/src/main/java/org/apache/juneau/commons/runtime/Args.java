@@ -17,12 +17,12 @@
 package org.apache.juneau.commons.runtime;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
-import org.apache.juneau.commons.utils.Utils;
+import org.apache.juneau.commons.utils.*;
 
 /**
  * Lean parser for command-line arguments passed in through a {@code main(String[] args)} method.
@@ -124,8 +124,8 @@ public class Args {
 	 */
 	public Optional<String> get(int index) {
 		if (index < 0 || index >= positional.size())
-			return opte();
-		return opt(positional.get(index));
+			return oe();
+		return o(positional.get(index));
 	}
 
 	/**
@@ -140,9 +140,9 @@ public class Args {
 	 */
 	public Optional<String> get(String key) {
 		var v = options.get(normalize(key));
-		if (e(v))
-			return opte();
-		return opt(v.get(0));
+		if (ie(v))
+			return oe();
+		return o(v.get(0));
 	}
 
 	/**
@@ -381,7 +381,7 @@ public class Args {
 				if (allowShortFlags)
 					p.add("-");
 			}
-			p.removeIf(Utils::e);
+			p.removeIf(Shorts::ie);
 			p.sort((a,b) -> Integer.compare(b.length(), a.length()));
 			return p;
 		}
@@ -395,7 +395,7 @@ public class Args {
 		}
 
 		private String normalizeKey(String key) {
-			if (ne(key) && ! caseSensitive)
+			if (ine(key) && ! caseSensitive)
 				return key.toLowerCase(Locale.ROOT);
 			return key;
 		}

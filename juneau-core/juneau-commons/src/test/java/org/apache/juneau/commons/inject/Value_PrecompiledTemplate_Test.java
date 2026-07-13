@@ -18,10 +18,10 @@ package org.apache.juneau.commons.inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Phase G regression: verifies that {@code @Value("${...}")} expressions are tokenized

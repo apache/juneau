@@ -17,8 +17,8 @@
 package org.apache.juneau.marshall.serializer;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -97,7 +97,7 @@ public class SerializerPipe implements Closeable {
 			if (autoClose)
 				IoUtils.close(writer, outputStream);
 		} catch (IOException e) {
-			throw bex(e);
+			throw brex(e);
 		}
 	}
 

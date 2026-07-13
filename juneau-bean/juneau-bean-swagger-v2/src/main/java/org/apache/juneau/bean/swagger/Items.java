@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -247,7 +246,7 @@ public class Items extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
+	public Set<Object> getEnum() { return nie(enum_); }
 
 	/**
 	 * Bean property getter:  <property>exclusiveMaximum</property>.
@@ -367,11 +366,11 @@ public class Items extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(ref), PROP_$ref)
 			.addIf(nn(collectionFormat), PROP_collectionFormat)
 			.addIf(nn(default_), PROP_default)
-			.addIf(ne(enum_), PROP_enum)
+			.addIf(ine(enum_), PROP_enum)
 			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
 			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
 			.addIf(nn(format), PROP_format)
@@ -427,7 +426,7 @@ public class Items extends SwaggerElement {
 		return switch (property) {
 			case PROP_collectionFormat -> setCollectionFormat(s(value));
 			case PROP_default -> setDefault(value);
-			case PROP_enum -> setEnum(listb(Object.class).addAny(value).sparse().build());
+			case PROP_enum -> setEnum(lb(Object.class).addAny(value).sparse().build());
 			case PROP_exclusiveMaximum -> setExclusiveMaximum(toBoolean(value));
 			case PROP_exclusiveMinimum -> setExclusiveMinimum(toBoolean(value));
 			case PROP_format -> setFormat(s(value));

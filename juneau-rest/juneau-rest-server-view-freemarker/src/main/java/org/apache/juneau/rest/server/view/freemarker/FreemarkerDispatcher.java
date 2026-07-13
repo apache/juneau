@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 import java.util.*;
@@ -303,7 +303,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 			bp = "/" + bp;
 		if (resolved.startsWith(bp))
 			return resolved.substring(bp.length());
-		throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
+		throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
 	}
 
 	/**
@@ -388,7 +388,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		 */
 		public FreemarkerDispatcher build() {
 			if (basePath == null)
-				throw illegalArg("basePath must not be null");
+				throw iaex("basePath must not be null");
 			return new FreemarkerDispatcher(this);
 		}
 	}

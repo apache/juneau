@@ -22,8 +22,8 @@ import static org.apache.juneau.bean.html5.HtmlBuilder.a;
 import static org.apache.juneau.bean.html5.HtmlBuilder.tr;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -31,7 +31,7 @@ import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.swagger.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.commons.logging.Logger;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -409,7 +409,7 @@ public class SwaggerUI extends ObjectSwap<Swagger,Div> {
 	 */
 	@Override
 	public MediaType[] forMediaTypes() {
-		return CollectionUtils.a(MediaType.HTML);
+		return Shorts.a(MediaType.HTML);
 	}
 
 	@Override

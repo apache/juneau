@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.commons.settings;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.charset.*;
 import java.util.*;
@@ -187,7 +187,7 @@ public class Settings {
 		v = SYSTEM_ENV_SOURCE.get(property.replace('.', '_').toUpperCase());
 		if (v.isPresent())
 			return v.value();  // Not testable
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -516,7 +516,7 @@ public class Settings {
 		v = globalStore.get().get(name);
 		if (v.isPresent())
 			return v.value();
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -597,7 +597,7 @@ public class Settings {
 	 */
 	public Settings setGlobal(String name, String value) {
 		assertArgNotNull(ARG_name, name);
-		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).set(name, value);
+		globalStore.orElseThrow(()->isex(MSG_globalDisabled)).set(name, value);
 		return this;
 	}
 
@@ -614,7 +614,7 @@ public class Settings {
 	 */
 	public void unsetGlobal(String name) {
 		assertArgNotNull(ARG_name, name);
-		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).unset(name);
+		globalStore.orElseThrow(()->isex(MSG_globalDisabled)).unset(name);
 	}
 
 	/**
@@ -705,7 +705,7 @@ public class Settings {
 	 * @see #unsetGlobal(String)
 	 */
 	public Settings clearGlobal() {
-		globalStore.orElseThrow(()->illegalState(MSG_globalDisabled)).clear();
+		globalStore.orElseThrow(()->isex(MSG_globalDisabled)).clear();
 		return this;
 	}
 

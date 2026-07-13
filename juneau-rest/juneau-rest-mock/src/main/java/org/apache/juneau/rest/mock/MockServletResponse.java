@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.mock;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.time.*;
@@ -33,7 +33,7 @@ import jakarta.servlet.http.*;
  * An implementation of {@link HttpServletResponse} for mocking purposes.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
 */
 @SuppressWarnings({

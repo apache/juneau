@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -452,14 +452,14 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getAllOf() { return nullIfEmpty(allOf); }
+	public List<Object> getAllOf() { return nie(allOf); }
 
 	/**
 	 * Bean property getter:  <property>allOf</property>.
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getAnyOf() { return nullIfEmpty(anyOf); }
+	public List<Object> getAnyOf() { return nie(anyOf); }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -497,7 +497,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getEnum() { return nullIfEmpty(enum_); }
+	public List<Object> getEnum() { return nie(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -623,7 +623,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Object> getOneOf() { return nullIfEmpty(oneOf); }
+	public List<Object> getOneOf() { return nie(oneOf); }
 
 	/**
 	 * Bean property getter:  <property>pattern</property>.
@@ -662,7 +662,7 @@ public class SchemaInfo extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<String> getRequired() { return nullIfEmpty(required); }
+	public List<String> getRequired() { return nie(required); }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -702,16 +702,16 @@ public class SchemaInfo extends OpenApiElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(ref), PROP_ref)
 			.addIf(nn(additionalProperties), PROP_additionalProperties)
-			.addIf(ne(allOf), PROP_allOf)
-			.addIf(ne(anyOf), PROP_anyOf)
+			.addIf(ine(allOf), PROP_allOf)
+			.addIf(ine(anyOf), PROP_anyOf)
 			.addIf(nn(default_), PROP_default)
 			.addIf(nn(deprecated), PROP_deprecated)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(discriminator), PROP_discriminator)
-			.addIf(ne(enum_), PROP_enum)
+			.addIf(ine(enum_), PROP_enum)
 			.addIf(nn(example), PROP_example)
 			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
 			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
@@ -729,11 +729,11 @@ public class SchemaInfo extends OpenApiElement {
 			.addIf(nn(multipleOf), PROP_multipleOf)
 			.addIf(nn(not), PROP_not)
 			.addIf(nn(nullable), PROP_nullable)
-			.addIf(ne(oneOf), PROP_oneOf)
+			.addIf(ine(oneOf), PROP_oneOf)
 			.addIf(nn(pattern), PROP_pattern)
 			.addIf(nn(properties), PROP_properties)
 			.addIf(nn(readOnly), PROP_readOnly)
-			.addIf(ne(required), PROP_required)
+			.addIf(ine(required), PROP_required)
 			.addIf(nn(title), PROP_title)
 			.addIf(nn(type), PROP_type)
 			.addIf(nn(uniqueItems), PROP_uniqueItems)
@@ -793,13 +793,13 @@ public class SchemaInfo extends OpenApiElement {
 		return switch (property) {
 			case PROP_ref -> setRef(value);
 			case PROP_additionalProperties -> setAdditionalProperties(toType(value, SchemaInfo.class));
-			case PROP_allOf -> setAllOf(listb(Object.class).addAny(value).sparse().build());
-			case PROP_anyOf -> setAnyOf(listb(Object.class).addAny(value).sparse().build());
+			case PROP_allOf -> setAllOf(lb(Object.class).addAny(value).sparse().build());
+			case PROP_anyOf -> setAnyOf(lb(Object.class).addAny(value).sparse().build());
 			case PROP_default -> setDefault(value);
 			case PROP_deprecated -> setDeprecated(toBoolean(value));
 			case PROP_description -> setDescription(s(value));
 			case PROP_discriminator -> setDiscriminator(toType(value, Discriminator.class));
-			case PROP_enum -> setEnum(listb(Object.class).addAny(value).sparse().build());
+			case PROP_enum -> setEnum(lb(Object.class).addAny(value).sparse().build());
 			case PROP_example -> setExample(value);
 			case PROP_exclusiveMaximum -> setExclusiveMaximum(toBoolean(value));
 			case PROP_exclusiveMinimum -> setExclusiveMinimum(toBoolean(value));
@@ -817,11 +817,11 @@ public class SchemaInfo extends OpenApiElement {
 			case PROP_multipleOf -> setMultipleOf(toNumber(value));
 			case PROP_not -> setNot(toType(value, SchemaInfo.class));
 			case PROP_nullable -> setNullable(toBoolean(value));
-			case PROP_oneOf -> setOneOf(listb(Object.class).addAny(value).sparse().build());
+			case PROP_oneOf -> setOneOf(lb(Object.class).addAny(value).sparse().build());
 			case PROP_pattern -> setPattern(s(value));
 			case PROP_properties -> setProperties(toMapBuilder(value, String.class, SchemaInfo.class).sparse().build());
 			case PROP_readOnly -> setReadOnly(toBoolean(value));
-			case PROP_required -> setRequired(listb(String.class).addAny(value).sparse().build());
+			case PROP_required -> setRequired(lb(String.class).addAny(value).sparse().build());
 			case PROP_title -> setTitle(s(value));
 			case PROP_type -> setType(s(value));
 			case PROP_uniqueItems -> setUniqueItems(toBoolean(value));

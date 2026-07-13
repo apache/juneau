@@ -15,9 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.http.header;
-
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -65,7 +63,7 @@ public class HttpUriHeader extends HttpHeaderBean {
 
 	protected HttpUriHeader(String name, String value) {
 		super(name, value);
-		this.cachedUri = e(value) ? null : URI.create(value);
+		this.cachedUri = ie(value) ? null : URI.create(value);
 		this.lazySupplier = null;
 		this.lazyMode = -1;
 	}
@@ -87,7 +85,7 @@ public class HttpUriHeader extends HttpHeaderBean {
 	}
 
 	public Optional<URI> asUri() {
-		return opt(toUri());
+		return o(toUri());
 	}
 
 	@Override
@@ -106,6 +104,6 @@ public class HttpUriHeader extends HttpHeaderBean {
 		if (cachedUri != null)
 			return cachedUri;
 		var v = super.getValue();
-		return e(v) ? null : URI.create(v);
+		return ie(v) ? null : URI.create(v);
 	}
 }

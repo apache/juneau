@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.http.classic.header;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 
 import java.io.*;
 import java.util.function.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;

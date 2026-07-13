@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -48,7 +48,7 @@ class RestAuthenticator_Test extends TestBase {
 	}
 
 	@Test void a01_ofAdaptsAuthenticator() {
-		Authenticator inner = r -> opt(AuthResult.of(ALICE, "admin"));
+		Authenticator inner = r -> o(AuthResult.of(ALICE, "admin"));
 		var ra = RestAuthenticator.of(inner);
 		var result = ra.authenticateRaw(req()).orElseThrow();
 		assertSame(ALICE, result.getPrincipal());
@@ -69,7 +69,7 @@ class RestAuthenticator_Test extends TestBase {
 	}
 
 	@Test void a04_ofEmptyResult() {
-		Authenticator inner = r -> opte();
+		Authenticator inner = r -> oe();
 		var ra = RestAuthenticator.of(inner);
 		assertTrue(ra.authenticateRaw(req()).isEmpty());
 	}
@@ -78,7 +78,7 @@ class RestAuthenticator_Test extends TestBase {
 		// A subclass that does NOT override authenticateRaw exercises the base delegate (cast → authenticate(RestRequest)).
 		var ra = new RestAuthenticator() {
 			@Override public Optional<AuthResult> authenticate(RestRequest r) {
-				return opt(AuthResult.of(ALICE, "user"));
+				return o(AuthResult.of(ALICE, "user"));
 			}
 		};
 		var result = ra.authenticateRaw(mock(RestRequest.class)).orElseThrow();

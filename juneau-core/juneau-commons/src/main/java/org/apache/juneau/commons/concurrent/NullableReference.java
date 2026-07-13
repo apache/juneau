@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.concurrent;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -270,6 +270,6 @@ public class NullableReference<V> extends AtomicReference<V> {
 	 * @return An Optional containing the value if present, otherwise an empty Optional.
 	 */
 	public Optional<V> toOptional() {
-		return opt(get());
+		return o(get());
 	}
 }

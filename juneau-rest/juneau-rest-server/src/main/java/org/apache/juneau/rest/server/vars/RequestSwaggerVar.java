@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 
 import org.apache.juneau.bean.swagger.*;
-import org.apache.juneau.bean.swagger.Info;
 import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
@@ -103,7 +102,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 			char c = charAt(key, 0);
 			if (c == 'c') {
 				if ("contact".equals(key))
-					return swagger.map(Swagger::getInfo).map(Info::getContact).map(Utils::s).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getContact).map(Shorts::s).orElse(null);
 			} else if (c == 'd') {
 				if ("description".equals(key))
 					return swagger.map(Swagger::getInfo).map(Info::getDescription).orElse(null);
@@ -112,7 +111,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 					return swagger.map(Swagger::getExternalDocs).map(ExternalDocumentation::toString).orElse(null);
 			} else if (c == 'l') {
 				if ("license".equals(key))
-					return swagger.map(Swagger::getInfo).map(Info::getLicense).map(Utils::s).orElse(null);
+					return swagger.map(Swagger::getInfo).map(Info::getLicense).map(Shorts::s).orElse(null);
 			} else if (c == 'o') {
 				if ("operationDescription".equals(key))
 					return methodSwagger.map(Operation::getDescription).orElse(null);

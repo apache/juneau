@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.sse;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.concurrent.*;
 import java.util.logging.*;
@@ -51,7 +51,7 @@ public class SseBroadcaster {
 	 */
 	public SseBroadcaster(int queueSize) {
 		if (queueSize <= 0)
-			throw illegalArg("queueSize must be greater than 0.");
+			throw iaex("queueSize must be greater than 0.");
 		this.queueSize = queueSize;
 		subscriptions = new ConcurrentHashMap<>();
 	}
@@ -67,7 +67,7 @@ public class SseBroadcaster {
 	})
 	public SseSubscription subscribe(String id) {
 		if (isEmpty(id))
-			throw illegalArg("id cannot be null or empty.");
+			throw iaex("id cannot be null or empty.");
 		var subscription = new SseSubscription(id, queueSize, this::removeSubscriber);
 		var previous = subscriptions.put(id, subscription);
 		if (previous != null)

@@ -17,8 +17,8 @@
 package org.apache.juneau.marshall.jena;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.jena.Constants.*;
 
 import java.io.*;
@@ -246,7 +246,7 @@ public class RdfParserSession extends ReaderParserSession {
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)opt(parseAnything(eType.getElementType(), n, outer, pMeta));
+			return (T)o(parseAnything(eType.getElementType(), n, outer, pMeta));
 
 		setCurrentClass(sType);
 
@@ -503,7 +503,7 @@ public class RdfParserSession extends ReaderParserSession {
 		}
 
 		if (roots.isEmpty())
-			return type.isOptional() ? (T)opte() : null;
+			return type.isOptional() ? (T)oe() : null;
 
 		if (roots.size() > 1)
 			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());

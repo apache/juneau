@@ -17,7 +17,7 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -250,7 +250,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder maxAge(long seconds) {
 			if (seconds < 0)
-				throw illegalArg("max-age must be non-negative: {0}", seconds);
+				throw iaex("max-age must be non-negative: {0}", seconds);
 			maxAge = seconds;
 			return this;
 		}
@@ -276,7 +276,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder sMaxAge(long seconds) {
 			if (seconds < 0)
-				throw illegalArg("s-maxage must be non-negative: {0}", seconds);
+				throw iaex("s-maxage must be non-negative: {0}", seconds);
 			sMaxAge = seconds;
 			return this;
 		}
@@ -302,7 +302,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder staleWhileRevalidate(long seconds) {
 			if (seconds < 0)
-				throw illegalArg("stale-while-revalidate must be non-negative: {0}", seconds);
+				throw iaex("stale-while-revalidate must be non-negative: {0}", seconds);
 			staleWhileRevalidate = seconds;
 			return this;
 		}
@@ -316,7 +316,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder staleIfError(long seconds) {
 			if (seconds < 0)
-				throw illegalArg("stale-if-error must be non-negative: {0}", seconds);
+				throw iaex("stale-if-error must be non-negative: {0}", seconds);
 			staleIfError = seconds;
 			return this;
 		}
@@ -336,7 +336,7 @@ public class CacheControl extends HttpStringHeader {
 			assertArgNotNull(ARG_value, value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("cache-control extension must not be blank");
+				throw iaex("cache-control extension must not be blank");
 			extensions.add(v);
 			return this;
 		}

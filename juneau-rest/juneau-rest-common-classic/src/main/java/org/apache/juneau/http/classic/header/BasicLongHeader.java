@@ -16,16 +16,15 @@
  */
 package org.apache.juneau.http.classic.header;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Category of headers that consist of a single long value.
@@ -37,7 +36,7 @@ import org.apache.juneau.http.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -156,7 +155,7 @@ public class BasicLongHeader extends BasicHeader {
 	 * @return The header value as a {@link Long} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<Long> asLong() {
-		return opt(value());
+		return o(value());
 	}
 
 	/**
@@ -207,7 +206,7 @@ public class BasicLongHeader extends BasicHeader {
 	private static Long parse(String value) {
 		if (value == null)
 			return null;
-		return parseLong(value, () -> illegalArg("Value ''{0}'' could not be parsed as a long.", value));
+		return parseLong(value, () -> iaex("Value ''{0}'' could not be parsed as a long.", value));
 	}
 
 	private Long value() {

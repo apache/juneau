@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -516,7 +515,7 @@ public class Swagger extends SwaggerElement {
 		try {
 			return new PathTraversal(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw bex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
+			throw brex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
 		}
 	}
 
@@ -561,7 +560,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getConsumes() { return nullIfEmpty(consumes); }
+	public Set<MediaType> getConsumes() { return nie(consumes); }
 
 	/**
 	 * Bean property getter:  <property>definitions</property>.
@@ -571,7 +570,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,JsonMap> getDefinitions() { return nullIfEmpty(definitions); }
+	public Map<String,JsonMap> getDefinitions() { return nie(definitions); }
 
 	/**
 	 * Bean property getter:  <property>externalDocs</property>.
@@ -613,7 +612,7 @@ public class Swagger extends SwaggerElement {
 	public Operation getOperation(String path, String operation) {
 		assertArgNotNull(ARG_path, path);
 		assertArgNotNull(ARG_operation, operation);
-		return opt(getPath(path)).map(x -> x.get(operation)).orElse(null);
+		return o(getPath(path)).map(x -> x.get(operation)).orElse(null);
 	}
 
 	/**
@@ -629,7 +628,7 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull(ARG_path, path);
 		assertArgNotNull(ARG_method, method);
 		assertArgNotNull(ARG_in, in);
-		return opt(getPath(path)).map(x -> x.get(method)).map(x -> x.getParameter(in, name)).orElse(null);
+		return o(getPath(path)).map(x -> x.get(method)).map(x -> x.getParameter(in, name)).orElse(null);
 	}
 
 	/**
@@ -640,7 +639,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ParameterInfo> getParameters() { return nullIfEmpty(parameters); }
+	public Map<String,ParameterInfo> getParameters() { return nie(parameters); }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path);</c>
@@ -650,7 +649,7 @@ public class Swagger extends SwaggerElement {
 	 */
 	public OperationMap getPath(String path) {
 		assertArgNotNull(ARG_path, path);
-		return opt(getPaths()).map(x -> x.get(path)).orElse(null);
+		return o(getPaths()).map(x -> x.get(path)).orElse(null);
 	}
 
 	/**
@@ -661,7 +660,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,OperationMap> getPaths() { return nullIfEmpty(paths); }
+	public Map<String,OperationMap> getPaths() { return nie(paths); }
 
 	/**
 	 * Bean property getter:  <property>produces</property>.
@@ -671,7 +670,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<MediaType> getProduces() { return nullIfEmpty(produces); }
+	public Set<MediaType> getProduces() { return nie(produces); }
 
 	/**
 	 * Shortcut for calling <c>getPaths().get(path).get(operation).getResponse(status);</c>
@@ -697,7 +696,7 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNull(ARG_path, path);
 		assertArgNotNull(ARG_operation, operation);
 		assertArgNotNull(ARG_status, status);
-		return opt(getPath(path)).map(x -> x.get(operation)).map(x -> x.getResponse(status)).orElse(null);
+		return o(getPath(path)).map(x -> x.get(operation)).map(x -> x.getResponse(status)).orElse(null);
 	}
 
 	/**
@@ -708,7 +707,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ResponseInfo> getResponses() { return nullIfEmpty(responses); }
+	public Map<String,ResponseInfo> getResponses() { return nie(responses); }
 
 	/**
 	 * Bean property getter:  <property>schemes</property>.
@@ -718,7 +717,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getSchemes() { return nullIfEmpty(schemes); }
+	public Set<String> getSchemes() { return nie(schemes); }
 
 	/**
 	 * Bean property getter:  <property>security</property>.
@@ -728,7 +727,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public List<Map<String,List<String>>> getSecurity() { return nullIfEmpty(security); }
+	public List<Map<String,List<String>>> getSecurity() { return nie(security); }
 
 	/**
 	 * Bean property getter:  <property>securityDefinitions</property>.
@@ -738,7 +737,7 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SecurityScheme> getSecurityDefinitions() { return nullIfEmpty(securityDefinitions); }
+	public Map<String,SecurityScheme> getSecurityDefinitions() { return nie(securityDefinitions); }
 
 	/**
 	 * Bean property getter:  <property>swagger</property>.
@@ -758,27 +757,27 @@ public class Swagger extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Tag> getTags() { return nullIfEmpty(tags); }
+	public Set<Tag> getTags() { return nie(tags); }
 
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(basePath), PROP_basePath)
-			.addIf(ne(consumes), PROP_consumes)
-			.addIf(ne(definitions), PROP_definitions)
+			.addIf(ine(consumes), PROP_consumes)
+			.addIf(ine(definitions), PROP_definitions)
 			.addIf(nn(externalDocs), PROP_externalDocs)
 			.addIf(nn(host), PROP_host)
 			.addIf(nn(info), PROP_info)
-			.addIf(ne(parameters), PROP_parameters)
-			.addIf(ne(paths), PROP_paths)
-			.addIf(ne(produces), PROP_produces)
-			.addIf(ne(responses), PROP_responses)
-			.addIf(ne(schemes), PROP_schemes)
-			.addIf(ne(security), PROP_security)
-			.addIf(ne(securityDefinitions), PROP_securityDefinitions)
+			.addIf(ine(parameters), PROP_parameters)
+			.addIf(ine(paths), PROP_paths)
+			.addIf(ine(produces), PROP_produces)
+			.addIf(ine(responses), PROP_responses)
+			.addIf(ine(schemes), PROP_schemes)
+			.addIf(ine(security), PROP_security)
+			.addIf(ine(securityDefinitions), PROP_securityDefinitions)
 			.addIf(nn(swagger), PROP_swagger)
-			.addIf(ne(tags), PROP_tags)
+			.addIf(ine(tags), PROP_tags)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -863,7 +862,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setConsumes(MediaType...value) {
-		setConsumes(setb(MediaType.class).sparse().add(value).build());
+		setConsumes(stb(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -1005,7 +1004,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setProduces(MediaType...value) {
-		setProduces(setb(MediaType.class).sparse().add(value).build());
+		setProduces(stb(MediaType.class).sparse().add(value).build());
 		return this;
 	}
 
@@ -1064,7 +1063,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setSchemes(String...value) {
-		setSchemes(setb(String.class).sparse().addJson(value).build());
+		setSchemes(stb(String.class).sparse().addJson(value).build());
 		return this;
 	}
 
@@ -1159,7 +1158,7 @@ public class Swagger extends SwaggerElement {
 	 * @return This object.
 	 */
 	public Swagger setTags(Tag...value) {
-		setTags(setb(Tag.class).sparse().add(value).build());
+		setTags(stb(Tag.class).sparse().add(value).build());
 		return this;
 	}
 

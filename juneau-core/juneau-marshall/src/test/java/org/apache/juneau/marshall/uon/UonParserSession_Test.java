@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.*;
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.Builder;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.*;

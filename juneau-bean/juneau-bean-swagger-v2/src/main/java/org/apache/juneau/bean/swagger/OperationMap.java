@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.bean.swagger;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.util.*;
 
@@ -92,7 +92,7 @@ public class OperationMap extends TreeMap<String,Operation> {
 
 	private static final Comparator<String> OP_SORTER = new Comparator<>() {
 		// @formatter:off
-		private final Map<String,String> methods = mapb(String.class, String.class)
+		private final Map<String,String> methods = mb(String.class, String.class)
 			.add("get", "0")
 			.add("put", "1")
 			.add("post", "2")

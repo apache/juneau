@@ -17,9 +17,8 @@
 package org.apache.juneau.rest.client.remote;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.Constants.*;
 
 import java.io.*;
@@ -882,7 +881,7 @@ public final class RemoteClient {
 		private Object processBody(RestRequest req, Class<?> returnType, Type genericReturnType, Method method, boolean throwOnError, String acceptFallback) throws Exception {
 			if (returnType == Optional.class) {
 				var inner = innerType(genericReturnType);
-				return opt(processBodyValue(req, rawClass(inner), inner, method, throwOnError, acceptFallback));
+				return o(processBodyValue(req, rawClass(inner), inner, method, throwOnError, acceptFallback));
 			}
 			if (returnType == CompletableFuture.class || returnType == Future.class) {
 				var inner = innerType(genericReturnType);

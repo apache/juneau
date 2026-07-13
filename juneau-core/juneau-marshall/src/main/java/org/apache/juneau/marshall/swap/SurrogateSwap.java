@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.swap;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.serializer.*;
  * Specialized {@link ObjectSwap} for {@link Surrogate} classes.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
  * </ul>
  *
  * @param <T> The class type that this transform applies to.

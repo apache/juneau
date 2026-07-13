@@ -19,8 +19,7 @@ package org.apache.juneau.marshall.parser;
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -585,7 +584,7 @@ public class ParserSet {
 	 * @return The parser and media type that matched the media type, or {@link Optional#empty()} if no match was made.
 	 */
 	public Optional<ParserMatch> getParserMatch(MediaType mediaType) {
-		return mediaType == null ? opte() : getParserMatch(mediaType.toString());
+		return mediaType == null ? oe() : getParserMatch(mediaType.toString());
 	}
 
 	/**
@@ -599,10 +598,10 @@ public class ParserSet {
 	 */
 	public Optional<ParserMatch> getParserMatch(String contentTypeHeader) {
 		if (contentTypeHeader == null)
-			return opte();
+			return oe();
 		ParserMatch pm = cache.get(contentTypeHeader);
 		if (nn(pm))
-			return opt(pm);
+			return o(pm);
 
 		var ct = MediaType.of(contentTypeHeader);
 		int match = ct.match(l(mediaTypes));
@@ -612,7 +611,7 @@ public class ParserSet {
 			cache.putIfAbsent(contentTypeHeader, pm);
 		}
 
-		return opt(cache.get(contentTypeHeader));
+		return o(cache.get(contentTypeHeader));
 	}
 
 	/**

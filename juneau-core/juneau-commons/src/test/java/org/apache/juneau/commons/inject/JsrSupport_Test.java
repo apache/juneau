@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.lang.annotation.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Direct tests for {@link JsrSupport} FQN-based matchers.

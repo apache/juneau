@@ -21,7 +21,7 @@ package org.apache.juneau.marshall.bson;
  * <a class="doclink" href="https://bsonspec.org/spec.html">BSON Specification 1.1</a>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  * </ul>
  */
 public enum DataType {

@@ -18,8 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -92,7 +91,7 @@ public abstract class SwaggerElement {
 	@BeanProp("*")
 	public Object get(String property) {
 		assertArgNotNull(ARG_property, property);
-		return opt(extra).map(x -> x.get(property)).orElse(null);
+		return o(extra).map(x -> x.get(property)).orElse(null);
 	}
 
 	/**

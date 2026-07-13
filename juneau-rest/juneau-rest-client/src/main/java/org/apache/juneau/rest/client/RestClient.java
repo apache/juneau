@@ -18,7 +18,7 @@ package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -234,7 +234,7 @@ public final class RestClient implements Closeable {
 	 * @return The configured default serializer, or {@link Optional#empty()} if none was set.
 	 */
 	public Optional<Serializer> getDefaultSerializer() {
-		return opt(defaultSerializer);
+		return o(defaultSerializer);
 	}
 
 	/**
@@ -261,7 +261,7 @@ public final class RestClient implements Closeable {
 			if (p.isPresent())
 				return p;
 		}
-		return opt(defaultParser);
+		return o(defaultParser);
 	}
 
 	/**
@@ -283,7 +283,7 @@ public final class RestClient implements Closeable {
 	 */
 	public Optional<Serializer> getSerializerForMediaType(String mediaType) {
 		if (mediaType == null || mediaType.isEmpty() || serializers == null)
-			return opte();
+			return oe();
 		return serializers.getSerializer(mediaType);
 	}
 
@@ -304,7 +304,7 @@ public final class RestClient implements Closeable {
 	 */
 	public Optional<Parser> getParserForMediaType(String mediaType) {
 		if (mediaType == null || mediaType.isEmpty() || parsers == null)
-			return opte();
+			return oe();
 		return parsers.getParser(mediaType);
 	}
 

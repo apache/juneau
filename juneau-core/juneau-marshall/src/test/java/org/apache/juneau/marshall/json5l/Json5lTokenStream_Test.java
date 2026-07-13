@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.json5l;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;

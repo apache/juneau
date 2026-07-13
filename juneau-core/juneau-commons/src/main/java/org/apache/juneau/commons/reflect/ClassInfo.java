@@ -16,18 +16,20 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Stream.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.utils.AnnotationUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.list;
 import static org.apache.juneau.commons.utils.CollectionUtils.toList;
-import static org.apache.juneau.commons.utils.PredicateUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -104,7 +106,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 
 	// @formatter:off
 	private static final Map<Class,Object> primitiveDefaultMap =
-		mapb(Class.class,Object.class)
+		mapBuilder(Class.class,Object.class)
 			.unmodifiable()
 			.add(Boolean.TYPE, false)
 			.add(Character.TYPE, (char)0)
@@ -236,32 +238,32 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		this.isParameterizedType = innerType instanceof ParameterizedType;
 		this.dimensions = memoize(this::findDimensions);
 		this.componentType = memoize(this::findComponentType);
-		this.packageInfo = memoize(() -> opt(inner).map(Class::getPackage).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
+		this.packageInfo = memoize(() -> o(inner).map(Class::getPackage).filter(p -> p != null).map(PackageInfo::of).orElse(null));  // PackageInfo may be null for primitive types and arrays.
 		this.parents = memoize(this::findParents);
-		this.declaredAnnotations = memoize(() -> (List)opt(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(liste()).stream().flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
+		this.declaredAnnotations = memoize(() -> (List)o(inner).map(x -> u(l(x.getDeclaredAnnotations()))).orElse(emptyList()).stream().flatMap(a -> streamRepeated(a)).map(a -> ai(this, a)).toList());
 		this.nameFull = memoize(() -> getNameFormatted(FULL, true, '$', BRACKETS));
 		this.nameShort = memoize(() -> getNameFormatted(SHORT, true, '$', BRACKETS));
 		this.nameReadable = memoize(() -> getNameFormatted(SIMPLE, false, '$', WORD));
 		this.toString = memoize(this::findToString);
-		this.declaredInterfaces = memoize(() -> opt(inner).map(x -> stream(x.getGenericInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(liste()));
+		this.declaredInterfaces = memoize(() -> o(inner).map(x -> stream(x.getGenericInterfaces()).map(ClassInfo::of).map(ClassInfo.class::cast).toList()).orElse(emptyList()));
 		this.interfaces = memoize(() -> getParents().stream().flatMap(x -> x.getDeclaredInterfaces().stream()).flatMap(ci2 -> concat(Stream.of(ci2), ci2.getInterfaces().stream())).distinct().toList());
 		this.allParents = memoize(() -> concat(getParents().stream(), getInterfaces().stream()).toList());
 		this.parentsAndInterfaces = memoize(this::findParentsAndInterfaces);
 		this.annotationInfos = memoize(this::findAnnotations);
-		this.recordComponents = memoize(() -> opt(inner).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(liste()));
-		this.genericInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getGenericInterfaces()))).orElse(liste()));
-		this.typeParameters = memoize(() -> opt(inner).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(liste()));
-		this.annotatedInterfaces = memoize(() -> opt(inner).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(liste()));
-		this.signers = memoize(() -> opt(inner).map(Class::getSigners).map(x -> u(l(x))).orElse(liste()));
-		this.publicMethods = memoize(() -> opt(inner).map(x -> stream(x.getMethods()).filter(m -> neq(m.getDeclaringClass(), Object.class)).map(this::getMethod).sorted().toList()).orElse(liste()));
-		this.declaredMethods = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> neq("$jacocoInit", m.getName())).map(this::getMethod).sorted().toList()).orElse(liste()));
+		this.recordComponents = memoize(() -> o(inner).filter(Class::isRecord).map(x -> u(l(x.getRecordComponents()))).orElse(emptyList()));
+		this.genericInterfaces = memoize(() -> o(inner).map(x -> u(l(x.getGenericInterfaces()))).orElse(emptyList()));
+		this.typeParameters = memoize(() -> o(inner).map(x -> u(l((TypeVariable<?>[])x.getTypeParameters()))).orElse(emptyList()));
+		this.annotatedInterfaces = memoize(() -> o(inner).map(x -> u(l(x.getAnnotatedInterfaces()))).orElse(emptyList()));
+		this.signers = memoize(() -> o(inner).map(Class::getSigners).map(x -> u(l(x))).orElse(emptyList()));
+		this.publicMethods = memoize(() -> o(inner).map(x -> stream(x.getMethods()).filter(m -> neq(m.getDeclaringClass(), Object.class)).map(this::getMethod).sorted().toList()).orElse(emptyList()));
+		this.declaredMethods = memoize(() -> o(inner).map(x -> stream(x.getDeclaredMethods()).filter(m -> neq("$jacocoInit", m.getName())).map(this::getMethod).sorted().toList()).orElse(emptyList()));
 		this.allMethods = memoize(() -> allParents.get().stream().flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.allMethodsTopDown = memoize(() -> rstream(getAllParents()).flatMap(c2 -> c2.getDeclaredMethods().stream()).toList());
 		this.publicFields = memoize(() -> parents.get().stream().flatMap(c2 -> c2.getDeclaredFields().stream()).filter(f -> f.isPublic() && neq("$jacocoData", f.getName())).collect(toMap(FieldInfo::getName, x -> x, (a, b) -> a, LinkedHashMap::new)).values().stream().sorted().toList());
-		this.declaredFields = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> neq("$jacocoData", f.getName())).map(this::getField).sorted().toList()).orElse(liste()));
+		this.declaredFields = memoize(() -> o(inner).map(x -> stream(x.getDeclaredFields()).filter(f -> neq("$jacocoData", f.getName())).map(this::getField).sorted().toList()).orElse(emptyList()));
 		this.allFields = memoize(() -> rstream(allParents.get()).flatMap(c2 -> c2.getDeclaredFields().stream()).toList());
-		this.publicConstructors = memoize(() -> opt(inner).map(x -> stream(x.getConstructors()).map(this::getConstructor).sorted().toList()).orElse(liste()));
-		this.declaredConstructors = memoize(() -> opt(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructor).sorted().toList()).orElse(liste()));
+		this.publicConstructors = memoize(() -> o(inner).map(x -> stream(x.getConstructors()).map(this::getConstructor).sorted().toList()).orElse(emptyList()));
+		this.declaredConstructors = memoize(() -> o(inner).map(x -> stream(x.getDeclaredConstructors()).map(this::getConstructor).sorted().toList()).orElse(emptyList()));
 		this.repeatedAnnotationMethod = memoize(this::findRepeatedAnnotationMethod);
 		this.methodCache = Cache.of(Method.class, MethodInfo.class).build();
 		this.fieldCache = Cache.of(Field.class, FieldInfo.class).build();
@@ -789,7 +791,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The declared constructor that matches the specified predicate.
 	 */
 	public Optional<ConstructorInfo> getDeclaredConstructor(Predicate<ConstructorInfo> filter) {
-		return declaredConstructors.get().stream().filter(x -> test(filter, x)).findFirst();
+		return declaredConstructors.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -808,7 +810,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The declared field, or <jk>null</jk> if not found.
 	 */
 	public Optional<FieldInfo> getDeclaredField(Predicate<FieldInfo> filter) {
-		return declaredFields.get().stream().filter(x -> test(filter, x)).findFirst();
+		return declaredFields.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -864,7 +866,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public Optional<MethodInfo> getDeclaredMethod(Predicate<MethodInfo> filter) {
-		return declaredMethods.get().stream().filter(x -> test(filter, x)).findFirst();
+		return declaredMethods.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -1071,7 +1073,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public Optional<MethodInfo> getMethod(Predicate<MethodInfo> filter) {
-		return allMethods.get().stream().filter(x -> test(filter, x)).findFirst();
+		return allMethods.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -1320,7 +1322,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 */
 	public Optional<ConstructorInfo> getNoArgConstructor(Visibility v) {
 		if (isAbstract())
-			return opte();
+			return oe();
 		int expectedParams = isNonStaticMemberClass() ? 1 : 0;
 		// @formatter:off
 		return getDeclaredConstructors().stream()
@@ -1426,7 +1428,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 		} else if (actualType instanceof ParameterizedType actualType2) {
 			return (Class<?>)actualType2.getRawType();
 		}
-		throw illegalArg("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
+		throw iaex("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
 	}
 
 	/**
@@ -1604,7 +1606,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The public constructor that matches the specified predicate.
 	 */
 	public Optional<ConstructorInfo> getPublicConstructor(Predicate<ConstructorInfo> filter) {
-		return publicConstructors.get().stream().filter(x -> test(filter, x)).findFirst();
+		return publicConstructors.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -1621,7 +1623,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The public field, or <jk>null</jk> if not found.
 	 */
 	public Optional<FieldInfo> getPublicField(Predicate<FieldInfo> filter) {
-		return publicFields.get().stream().filter(x -> test(filter, x)).findFirst();
+		return publicFields.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -1644,7 +1646,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * @return The first matching method, or <jk>null</jk> if no methods matched.
 	 */
 	public Optional<MethodInfo> getPublicMethod(Predicate<MethodInfo> filter) {
-		return publicMethods.get().stream().filter(x -> test(filter, x)).findFirst();
+		return publicMethods.get().stream().filter(x -> t(filter, x)).findFirst();
 	}
 
 	/**
@@ -3005,7 +3007,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public boolean isInjectCollectionType() {
 		if (isArray())
 			return true;
-		var inner2 = opt(this.inner()).orElse(Object.class);
+		var inner2 = o(this.inner()).orElse(Object.class);
 		// Only match the exact interfaces, not their implementations (matches Spring's behavior)
 		return eq(inner2, List.class) || eq(inner2, Set.class) || eq(inner2, Map.class);
 	}

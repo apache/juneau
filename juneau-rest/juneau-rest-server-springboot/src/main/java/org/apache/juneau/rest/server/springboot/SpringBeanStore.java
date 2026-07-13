@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -49,7 +50,7 @@ import org.springframework.context.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics">juneau-rest-server-springboot Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot">juneau-rest-server-springboot Basics</a>
  * 	<li class='jc'>{@link BasicBeanStore}
  * 	<li class='jic'>{@link BeanStore}
  * </ul>
@@ -112,10 +113,10 @@ public class SpringBeanStore extends BasicBeanStore {
 		// Fall back to Spring context
 		if (nn(appContext)) {
 			var bean = safeOpt(() -> appContext.getBeanProvider(beanType).getIfAvailable()).orElse(null);
-			return bean != null ? opt(bean) : opte();
+			return bean != null ? o(bean) : oe();
 		}
 
-		return opte();
+		return oe();
 	}
 
 	@Override
@@ -128,10 +129,10 @@ public class SpringBeanStore extends BasicBeanStore {
 		// Fall back to Spring context
 		if (nn(appContext) && nn(name) && safeOpt(() -> appContext.containsBean(name)).orElse(false)) {
 			var bean = safeOpt(() -> appContext.getBean(name, beanType)).orElse(null);
-			return bean != null ? opt(bean) : opte();
+			return bean != null ? o(bean) : oe();
 		}
 
-		return opte();
+		return oe();
 	}
 
 	@Override
@@ -192,12 +193,12 @@ public class SpringBeanStore extends BasicBeanStore {
 				var provider = providerOpt.get();
 				// Only return a supplier if the bean actually exists in Spring
 				if (provider.getIfAvailable() != null) {
-					return opt(provider::getIfAvailable);
+					return o(provider::getIfAvailable);
 				}
 			}
 		}
 
-		return opte();
+		return oe();
 	}
 
 	@Override
@@ -217,17 +218,17 @@ public class SpringBeanStore extends BasicBeanStore {
 			if (providerOpt.isPresent()) {
 				var provider = providerOpt.get();
 				if (provider.getIfAvailable() != null)
-					return opt(provider::getIfAvailable);
+					return o(provider::getIfAvailable);
 			}
-			return opte();
+			return oe();
 		}
 
 		// Return a supplier that delegates to Spring context
 		if (nn(appContext) && nn(name) && safeOpt(() -> appContext.containsBean(name) && appContext.isTypeMatch(name, beanType)).orElse(false)) {
-			return opt(() -> safeOpt(() -> appContext.getBean(name, beanType)).orElse(null));
+			return o(() -> safeOpt(() -> appContext.getBean(name, beanType)).orElse(null));
 		}
 
-		return opte();
+		return oe();
 	}
 }
 

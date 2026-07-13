@@ -21,7 +21,7 @@ import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.junit.jupiter.api.*;

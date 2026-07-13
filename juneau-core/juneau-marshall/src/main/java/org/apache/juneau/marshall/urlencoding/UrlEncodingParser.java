@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.urlencoding;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -48,7 +48,7 @@ import org.apache.juneau.marshall.uon.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics">URL-Encoding Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport">URL-Encoding Basics</a>
  * </ul>
  */
 @SuppressWarnings({

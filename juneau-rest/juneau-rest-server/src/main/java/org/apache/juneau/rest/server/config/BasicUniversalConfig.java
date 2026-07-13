@@ -140,7 +140,7 @@ import org.apache.juneau.rest.server.servlet.*;
  * 		<li class='jc'>{@link BasicRestResource}
  * 		<li class='jc'>{@link BasicRestResourceGroup}
  *	</ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics">@Rest-Annotated Class Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses">@Rest-Annotated Class Basics</a>
  * </ul>
  */
 // @formatter:off

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.swagger;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -91,7 +91,7 @@ public interface SwaggerProvider {
 		 * @return The file finder.
 		 */
 		public Optional<FileFinder> fileFinder() {
-			return opt(fileFinder).map(Supplier::get);
+			return o(fileFinder).map(Supplier::get);
 		}
 
 		/**
@@ -122,7 +122,7 @@ public interface SwaggerProvider {
 		 * @return The JSON schema generator.
 		 */
 		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
-			return opt(jsonSchemaGenerator).map(Supplier::get);
+			return o(jsonSchemaGenerator).map(Supplier::get);
 		}
 
 		/**
@@ -142,7 +142,7 @@ public interface SwaggerProvider {
 		 * @return The messages.
 		 */
 		public Optional<Messages> messages() {
-			return opt(messages).map(Supplier::get);
+			return o(messages).map(Supplier::get);
 		}
 
 		/**
@@ -163,7 +163,7 @@ public interface SwaggerProvider {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends SwaggerProvider> value) {
-			implType = opt(value).isPresent() ? value : BasicSwaggerProvider.class;
+			implType = o(value).isPresent() ? value : BasicSwaggerProvider.class;
 			return this;
 		}
 
@@ -173,7 +173,7 @@ public interface SwaggerProvider {
 		 * @return The var resolver.
 		 */
 		public Optional<VarResolver> varResolver() {
-			return opt(varResolver).map(Supplier::get);
+			return o(varResolver).map(Supplier::get);
 		}
 
 		/**

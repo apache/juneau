@@ -18,7 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -212,7 +212,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getExamples() { return nullIfEmpty(examples); }
+	public Map<String,Object> getExamples() { return nie(examples); }
 
 	/**
 	 * Returns the header information with the specified name.
@@ -233,7 +233,7 @@ public class ResponseInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
+	public Map<String,HeaderInfo> getHeaders() { return nie(headers); }
 
 	/**
 	 * Bean property getter:  <property>schema</property>.
@@ -248,10 +248,10 @@ public class ResponseInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(description), PROP_description)
-			.addIf(ne(examples), PROP_examples)
-			.addIf(ne(headers), PROP_headers)
+			.addIf(ine(examples), PROP_examples)
+			.addIf(ine(headers), PROP_headers)
 			.addIf(nn(schema), PROP_schema)
 			.build();
 		// @formatter:on

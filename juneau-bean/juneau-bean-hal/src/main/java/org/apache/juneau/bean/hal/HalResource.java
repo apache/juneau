@@ -18,7 +18,7 @@ package org.apache.juneau.bean.hal;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -251,7 +251,7 @@ public class HalResource {
 	@BeanProp("*")
 	public Object get(String property) {
 		assertArgNotNull(ARG_property, property);
-		return opt(properties).map(x -> x.get(property)).orElse(null);
+		return o(properties).map(x -> x.get(property)).orElse(null);
 	}
 
 	/**

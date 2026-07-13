@@ -18,8 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -164,7 +163,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addSecurity(Collection<SecurityRequirement> values) {
-		security = listb(SecurityRequirement.class).sparse().addAny(security, values).build();
+		security = lb(SecurityRequirement.class).sparse().addAny(security, values).build();
 		return this;
 	}
 
@@ -180,7 +179,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi addSecurity(SecurityRequirement...values) {
-		security = listb(SecurityRequirement.class).sparse().addAll(security).addAny((Object)values).build();
+		security = lb(SecurityRequirement.class).sparse().addAll(security).addAny((Object)values).build();
 		return this;
 	}
 
@@ -280,7 +279,7 @@ public class OpenApi extends OpenApiElement {
 		try {
 			return new PathTraversal(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw bex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
+			throw brex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
 		}
 	}
 
@@ -340,34 +339,34 @@ public class OpenApi extends OpenApiElement {
 	 *
 	 * @return The security requirements list.
 	 */
-	public List<SecurityRequirement> getSecurity() { return nullIfEmpty(security); }
+	public List<SecurityRequirement> getSecurity() { return nie(security); }
 
 	/**
 	 * Returns the servers list.
 	 *
 	 * @return The servers list.
 	 */
-	public List<Server> getServers() { return nullIfEmpty(servers); }
+	public List<Server> getServers() { return nie(servers); }
 
 	/**
 	 * Returns the tags list.
 	 *
 	 * @return The tags list.
 	 */
-	public List<Tag> getTags() { return nullIfEmpty(tags); }
+	public List<Tag> getTags() { return nie(tags); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(components), PROP_components)
 			.addIf(nn(externalDocs), PROP_externalDocs)
 			.addIf(nn(info), PROP_info)
 			.addIf(nn(openapi), PROP_openapi)
 			.addIf(nn(paths), PROP_paths)
-			.addIf(ne(security), PROP_security)
-			.addIf(ne(servers), PROP_servers)
-			.addIf(ne(tags), PROP_tags)
+			.addIf(ine(security), PROP_security)
+			.addIf(ine(servers), PROP_servers)
+			.addIf(ine(tags), PROP_tags)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());
@@ -382,9 +381,9 @@ public class OpenApi extends OpenApiElement {
 			case PROP_info -> setInfo(toType(value, Info.class));
 			case PROP_openapi -> setOpenapi(s(value));
 			case PROP_paths -> setPaths(toMapBuilder(value, String.class, PathItem.class).sparse().build());
-			case PROP_security -> setSecurity(listb(SecurityRequirement.class).addAny(value).sparse().build());
-			case PROP_servers -> setServers(listb(Server.class).addAny(value).sparse().build());
-			case PROP_tags -> setTags(listb(Tag.class).addAny(value).sparse().build());
+			case PROP_security -> setSecurity(lb(SecurityRequirement.class).addAny(value).sparse().build());
+			case PROP_servers -> setServers(lb(Server.class).addAny(value).sparse().build());
+			case PROP_tags -> setTags(lb(Tag.class).addAny(value).sparse().build());
 			default -> {
 				super.set(property, value);
 				yield this;
@@ -498,7 +497,7 @@ public class OpenApi extends OpenApiElement {
 	 * @return This object.
 	 */
 	public OpenApi setTags(Tag...value) {
-		setTags(listb(Tag.class).add(value).sparse().build());
+		setTags(lb(Tag.class).add(value).sparse().build());
 		return this;
 	}
 

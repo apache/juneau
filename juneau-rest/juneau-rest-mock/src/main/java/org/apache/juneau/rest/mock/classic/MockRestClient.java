@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.mock.classic;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.marshall.Enablement.*;
 import static org.apache.juneau.rest.server.util.RestUtils.*;
 
@@ -220,7 +220,7 @@ import jakarta.servlet.http.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -364,7 +364,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @return This object.
 		 */
 		public Builder pathVars(String...pairs) {
-			return pathVars(mapb(String.class, String.class).addPairs((Object[])pairs).build());
+			return pathVars(mb(String.class, String.class).addPairs((Object[])pairs).build());
 		}
 
 		/**

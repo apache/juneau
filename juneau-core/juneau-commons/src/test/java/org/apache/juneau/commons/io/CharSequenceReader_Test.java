@@ -18,8 +18,8 @@ package org.apache.juneau.commons.io;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"resource" // Readers intentionally not closed in unit tests

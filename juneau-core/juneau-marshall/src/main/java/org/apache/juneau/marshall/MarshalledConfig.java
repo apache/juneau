@@ -109,7 +109,7 @@ public @interface MarshalledConfig {
 	 * 	<li class='ja'>{@link MarshalledProp#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#beanDictionary(Class...)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics">Bean Dictionary Basics</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaries">Bean Dictionary Basics</a>
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -200,7 +200,7 @@ public @interface MarshalledConfig {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps">Per-media-type Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OneWaySwaps">One-way Swaps</a>
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapAnnotation">@Swap Annotation</a>

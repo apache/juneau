@@ -16,10 +16,8 @@
  */
 package org.apache.juneau.http.header;
 
-
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -88,7 +86,7 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 	}
 
 	public Optional<Integer> asInteger() {
-		return opt(toInteger());
+		return o(toInteger());
 	}
 
 	@Override
@@ -111,6 +109,6 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 	private static Integer toInteger(String value) {
 		if (value == null)
 			return null;
-		return parseInt(value, () -> illegalArg("Value ''{0}'' could not be parsed as an integer.", value));
+		return parseInt(value, () -> iaex("Value ''{0}'' could not be parsed as an integer.", value));
 	}
 }

@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.http.classic;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
@@ -30,12 +29,12 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.oapi.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.junit.jupiter.api.*;
 
 class SerializedHttpEntity_Test extends TestBase {

@@ -17,8 +17,7 @@
 package org.apache.juneau.marshall.xml;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.collections.*;
@@ -30,7 +29,7 @@ import org.apache.juneau.marshall.*;
  * on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
  * </ul>
  */
 public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
@@ -132,18 +131,18 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		String cen = xml.childName();
 		if ((! cen.isEmpty()) && (! isCollection))
-			throw bex(cmProperty.inner(), "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
+			throw brex(cmProperty.inner(), "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
 
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
 				if (cen.isEmpty() && nn(xmlMetaProvider))
 					cen = xmlMetaProvider.getXmlClassMeta(cmProperty).getChildName();
-			if (e(cen))
+			if (ie(cen))
 				cen = cmProperty.getElementType().getBeanDictionaryName();
-			if (e(cen))
+			if (ie(cen))
 				cen = name;
 			} else {
-				throw bex(cmBean.inner(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
+				throw brex(cmBean.inner(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty())
 				cen = cmProperty.getBeanDictionaryName();

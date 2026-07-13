@@ -19,7 +19,7 @@ package org.apache.juneau.http.header;
 
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -67,7 +67,7 @@ public class HttpDateHeader extends HttpHeaderBean {
 
 	protected HttpDateHeader(String name, String value) {
 		super(name, (String)null);
-		this.cachedZdt = e(value) ? null : parseHttpDate(value);
+		this.cachedZdt = ie(value) ? null : parseHttpDate(value);
 		this.lazySupplier = null;
 		this.lazyMode = -1;
 	}
@@ -94,7 +94,7 @@ public class HttpDateHeader extends HttpHeaderBean {
 	}
 
 	public Optional<ZonedDateTime> asZonedDateTime() {
-		return opt(toZonedDateTime());
+		return o(toZonedDateTime());
 	}
 
 	@Override
@@ -119,7 +119,7 @@ public class HttpDateHeader extends HttpHeaderBean {
 		if (cachedZdt != null)
 			return cachedZdt;
 		var v = super.getValue();
-		return e(v) ? null : parseHttpDate(v);
+		return ie(v) ? null : parseHttpDate(v);
 	}
 
 	private static ZonedDateTime parseHttpDate(String value) {

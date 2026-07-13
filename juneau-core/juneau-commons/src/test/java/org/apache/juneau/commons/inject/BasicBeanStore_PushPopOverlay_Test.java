@@ -18,8 +18,8 @@ package org.apache.juneau.commons.inject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests for {@link BasicBeanStore#pushOverlay(BeanStore)} / {@link BasicBeanStore#popOverlay(Snapshot)}.

@@ -19,11 +19,11 @@ package org.apache.juneau.rest.server;
 import static java.time.format.DateTimeFormatter.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
 
 import java.io.*;
@@ -40,7 +40,6 @@ import java.util.*;
 import java.util.function.*;
 import java.util.stream.*;
 
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.bean.openapi3.OpenApi;
 import org.apache.juneau.bean.swagger.Operation;
 import org.apache.juneau.bean.swagger.Swagger;
@@ -59,7 +58,6 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.cp.Messages;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -73,6 +71,7 @@ import org.apache.juneau.rest.server.guard.*;
 import org.apache.juneau.rest.server.httppart.*;
 import org.apache.juneau.rest.server.logger.*;
 import org.apache.juneau.rest.server.util.*;
+import org.apache.juneau.test.assertions.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -485,14 +484,14 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var ifMatch = getHeaderParam(IfMatch.NAME).orElse(null);
 		if (nn(ifMatch)) {
 			if (! matchesAnyStrong(EntityTags.of(ifMatch), resTag))
-				return opt(preconditionFailed(IfMatch.NAME));
+				return o(preconditionFailed(IfMatch.NAME));
 		} else {
 			// RFC 7232 §6 step 2: If-Unmodified-Since (only when If-Match absent).
 			var ius = getHeaderParam(IfUnmodifiedSince.NAME).orElse(null);
 			if (nn(ius)) {
 				var iusDate = parseHttpDate(ius);
 				if (nn(iusDate) && nn(resLastMod) && resLastMod.toInstant().isAfter(iusDate.toInstant()))
-					return opt(preconditionFailed(IfUnmodifiedSince.NAME));
+					return o(preconditionFailed(IfUnmodifiedSince.NAME));
 			}
 		}
 
@@ -500,7 +499,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		var ifNoneMatch = getHeaderParam(IfNoneMatch.NAME).orElse(null);
 		if (nn(ifNoneMatch)) {
 			if (matchesAnyWeak(EntityTags.of(ifNoneMatch), resTag))
-				return opt(notModified());
+				return o(notModified());
 		} else {
 			// RFC 7232 §6 step 4: If-Modified-Since (only when If-None-Match absent; only for GET/HEAD).
 			if (isSafeMethod()) {
@@ -508,12 +507,12 @@ public class RestRequest extends HttpServletRequestWrapper {
 				if (nn(ims)) {
 					var imsDate = parseHttpDate(ims);
 					if (nn(imsDate) && nn(resLastMod) && ! resLastMod.toInstant().isAfter(imsDate.toInstant()))
-						return opt(notModified());
+						return o(notModified());
 				}
 			}
 		}
 
-		return opte();
+		return oe();
 	}
 
 	private boolean isSafeMethod() {
@@ -1120,9 +1119,9 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		var swagger2 = getSwagger();
 		if (! swagger2.isPresent())
-			return opte();
+			return oe();
 
-		return opt(swagger2.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
+		return o(swagger2.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
 	}
 
 	/**
@@ -1468,8 +1467,8 @@ public class RestRequest extends HttpServletRequestWrapper {
 	public Optional<TimeZone> getTimeZone() {
 		var tz = headers.get("Time-Zone").asString().orElse(null);
 		if (nn(tz))
-			return opt(TimeZone.getTimeZone(tz));
-		return opte();
+			return o(TimeZone.getTimeZone(tz));
+		return oe();
 	}
 
 	/**
@@ -1759,7 +1758,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return This object.
 	 */
 	public RestRequest setSerializerSessionProperties(Map<String,Object> values) {
-		if (ne(values)) {
+		if (ine(values)) {
 			if (serializerSessionProperties == null)
 				serializerSessionProperties = new LinkedHashMap<>();
 			serializerSessionProperties.putAll(values);
@@ -1774,7 +1773,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * @return This object.
 	 */
 	public RestRequest setParserSessionProperties(Map<String,Object> values) {
-		if (ne(values)) {
+		if (ine(values)) {
 			if (parserSessionProperties == null)
 				parserSessionProperties = new LinkedHashMap<>();
 			parserSessionProperties.putAll(values);
@@ -1876,7 +1875,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	private static Map<String,Object> mergeSessionMaps(Map<String,Object>...maps) {
 		Map<String,Object> result = null;
 		for (var map : maps) {
-			if (ne(map)) {
+			if (ine(map)) {
 				if (result == null)
 					result = new LinkedHashMap<>(map);
 				else
@@ -1999,7 +1998,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 				sb.append("---Content Hex---\n");
 				sb.append(content.asSpacedHex()).append("\n");
 			} catch (Exception e1) {
-				sb.append(lm(e1));
+				sb.append(localizedMessage(e1));
 			}
 		}
 		return sb.toString();

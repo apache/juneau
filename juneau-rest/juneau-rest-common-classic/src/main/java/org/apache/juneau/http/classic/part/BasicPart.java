@@ -17,17 +17,16 @@
 package org.apache.juneau.http.classic.part;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Implementation of {@link NameValuePair} for serializing POJOs as URL-encoded form post entries.
@@ -45,7 +44,7 @@ import org.apache.juneau.marshall.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @Marshalled(as=MarshalledAs.STRING)

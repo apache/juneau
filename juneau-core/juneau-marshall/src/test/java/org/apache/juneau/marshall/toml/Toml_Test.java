@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.toml;
 
-import static org.apache.juneau.TestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;

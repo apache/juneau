@@ -17,9 +17,8 @@
 package org.apache.juneau.http.remote;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -99,7 +98,7 @@ public final class RrpcInterfaceMeta {
 
 	private RrpcInterfaceMeta(Class<?> iface, boolean includeUnannotated) {
 		if (!iface.isInterface())
-			throw illegalArg("Class {0} is not an interface", iface.getName());
+			throw iaex("Class {0} is not an interface", iface.getName());
 		var remote = iface.getAnnotation(Remote.class);
 
 		this.iface = iface;
@@ -229,9 +228,9 @@ public final class RrpcInterfaceMeta {
 	public static RrpcInterfaceMeta of(Class<?> iface) {
 		assertArgNotNull("iface", iface);
 		if (!iface.isInterface())
-			throw illegalArg("Class {0} is not an interface", iface.getName());
+			throw iaex("Class {0} is not an interface", iface.getName());
 		if (iface.getAnnotation(Remote.class) == null)
-			throw illegalArg("Class {0} is not annotated with @Remote", iface.getName());
+			throw iaex("Class {0} is not annotated with @Remote", iface.getName());
 		return CACHE.computeIfAbsent(iface, RrpcInterfaceMeta::new);
 	}
 
@@ -453,38 +452,38 @@ public final class RrpcInterfaceMeta {
 	private static Optional<RrpcInterfaceMethodMeta> buildMethodMeta(Method m) {
 		if (m.isAnnotationPresent(RemoteGet.class)) {
 			var a = m.getAnnotation(RemoteGet.class);
-			return opt(simpleMeta(m, "GET", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+			return o(simpleMeta(m, "GET", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
 				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
 				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemotePost.class)) {
 			var a = m.getAnnotation(RemotePost.class);
-			return opt(simpleMeta(m, "POST", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+			return o(simpleMeta(m, "POST", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
 				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
 				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemotePut.class)) {
 			var a = m.getAnnotation(RemotePut.class);
-			return opt(simpleMeta(m, "PUT", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+			return o(simpleMeta(m, "PUT", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
 				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
 				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemotePatch.class)) {
 			var a = m.getAnnotation(RemotePatch.class);
-			return opt(simpleMeta(m, "PATCH", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+			return o(simpleMeta(m, "PATCH", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
 				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
 				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemoteDelete.class)) {
 			var a = m.getAnnotation(RemoteDelete.class);
-			return opt(simpleMeta(m, "DELETE", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
+			return o(simpleMeta(m, "DELETE", a.path(), a.value(), a.returns(), a.headers(), a.queryData(), a.formData(), a.baseUrl(),
 				new RrpcInterfaceMethodMeta.Policy(a.interceptors(), a.timeout(), a.retries(), a.retryNonIdempotent(), a.throwOnError()),
 				neg(a.accept(), a.contentType())));
 		}
 		if (m.isAnnotationPresent(RemoteOp.class))
-			return opt(buildRemoteOpMeta(m, m.getAnnotation(RemoteOp.class)));
+			return o(buildRemoteOpMeta(m, m.getAnnotation(RemoteOp.class)));
 
-		return opte();
+		return oe();
 	}
 
 	/**
@@ -528,7 +527,7 @@ public final class RrpcInterfaceMeta {
 		if (method.isEmpty())
 			method = HttpUtils.detectHttpMethod(m, true, "GET");
 		if (!isOneOf(method, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
-			throw illegalArg("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
+			throw iaex("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
 		return new RrpcInterfaceMethodMeta(m, method, trimSlashes(path), returnType,
 			parseConstantParts(a.headers(), ':'),
 			parseConstantParts(a.queryData(), '='),

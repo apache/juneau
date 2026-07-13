@@ -18,8 +18,8 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -167,15 +167,15 @@ public class Server extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,ServerVariable> getVariables() { return nullIfEmpty(variables); }
+	public Map<String,ServerVariable> getVariables() { return nie(variables); }
 
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(url), PROP_url)
-			.addIf(ne(variables), PROP_variables)
+			.addIf(ine(variables), PROP_variables)
 			.build();
 		// @formatter:on
 		return new MultiSet<>(s, super.keySet());

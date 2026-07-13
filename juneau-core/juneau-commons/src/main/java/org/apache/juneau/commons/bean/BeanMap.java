@@ -18,10 +18,9 @@ package org.apache.juneau.commons.bean;
 
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.utils.Utils.emptyIfNull;
 
 import java.util.*;
 import java.util.function.*;
@@ -138,7 +137,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	public BeanMap(T bean, BeanMeta<T> meta) {
 		this.bean = bean;
 		this.meta = meta;
-		if (ne(meta.getConstructorArgs()))
+		if (ine(meta.getConstructorArgs()))
 			propertyCache = new TreeMap<>();
 		this.typePropertyName = meta.getTypePropertyName();
 	}
@@ -173,7 +172,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (p == null) {
 			if (meta.getConfig().isIgnoreUnknownBeanProperties())
 				return;
-			throw bex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
+			throw brex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
 		}
 		p.add(this, property, value);
 	}
@@ -188,7 +187,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			try {
 				return meta.getDynaProperty().getDynaMap(bean).containsKey(key);
 			} catch (Exception e) {
-				throw bex(e);
+				throw brex(e);
 			}
 		}
 		return false;
@@ -211,7 +210,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 					try {
 						x.getDynaMap(bean).entrySet().forEach(y -> s.add(new BeanMapEntry(this, x, y.getKey())));
 					} catch (Exception e) {
-						throw bex(e);
+						throw brex(e);
 					}
 				} else {
 					s.add(new BeanMapEntry(this, x, x.getName()));
@@ -251,7 +250,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 					@Override /* Overridden from Iterator */
 					public void remove() {
-						throw unsupportedOp("Cannot remove item from iterator.");
+						throw uoex("Cannot remove item from iterator.");
 					}
 				};
 			}
@@ -493,7 +492,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 */
 	public T getBean(boolean create) {
 		/** If this is a read-only bean, then we need to create it. */
-		if (bean == null && create && ne(meta.getConstructorArgs())) {
+		if (bean == null && create && ine(meta.getConstructorArgs())) {
 			var props = meta.getConstructorArgs();
 			var c = meta.getConstructor();
 			var args = new Object[props.size()];
@@ -521,10 +520,10 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache.forEach(this::put);
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw bex(e, meta.getBeanInfo().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
+				throw brex(e, meta.getBeanInfo().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
 					Arrays.toString(getClasses(args)));
 			} catch (Exception e) {
-				throw bex(e);
+				throw brex(e);
 			}
 		}
 		return bean;
@@ -736,7 +735,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			p = getPropertyMeta("*");
 			if (p == null)
-				throw bex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
+				throw brex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
 		}
 		return p.set(this, property, value);
 	}

@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.encoders;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.zip.*;

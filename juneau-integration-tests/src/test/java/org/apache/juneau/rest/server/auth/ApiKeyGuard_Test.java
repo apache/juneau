@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.security.*;
 import java.util.*;
@@ -50,7 +50,7 @@ class ApiKeyGuard_Test extends TestBase {
 		"bob-key",   () -> "bob"
 	);
 
-	private static final ApiKeyStore STORE = key -> opt(KEYS.get(key));
+	private static final ApiKeyStore STORE = key -> o(KEYS.get(key));
 
 	private static final ApiKeyStore THROWING_STORE = key -> {
 		throw new IllegalStateException("store boom");

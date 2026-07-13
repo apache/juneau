@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.rest;
 
-import org.apache.juneau.commons.inject.Bean;
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.service.*;
@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/FreemarkerViewSupport">FreeMarker View Support</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview">juneau-petstore</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */
 @Rest(

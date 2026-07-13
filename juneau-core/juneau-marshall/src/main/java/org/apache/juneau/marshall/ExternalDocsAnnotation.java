@@ -150,7 +150,7 @@ public class ExternalDocsAnnotation {
 			return m;
 		if (m == null)
 			m = new JsonMap();
-		Predicate<String> ne = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
 		// @formatter:off
 		return m
 			.appendIf(ne, "description", joinnl(a.description()))

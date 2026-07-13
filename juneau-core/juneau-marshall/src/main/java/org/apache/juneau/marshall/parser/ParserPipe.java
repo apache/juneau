@@ -17,9 +17,8 @@
 package org.apache.juneau.marshall.parser;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -175,7 +174,7 @@ public class ParserPipe implements Closeable {
 			if (doClose)
 				IoUtils.close(reader, inputStream);
 		} catch (IOException e) {
-			throw bex(e);
+			throw brex(e);
 		}
 	}
 

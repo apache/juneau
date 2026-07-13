@@ -22,9 +22,9 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Phase G regression: verifies the field-type autodetect contract for {@code @Value} —

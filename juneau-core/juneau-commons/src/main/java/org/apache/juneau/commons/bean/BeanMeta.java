@@ -16,14 +16,17 @@
  */
 package org.apache.juneau.commons.bean;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.bean.BeanMeta.MethodType.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.beans.*;
 import java.io.*;
@@ -91,8 +94,8 @@ public class BeanMeta<T> {
 	 * @param notABeanReason The reason why the class is not a bean, or <jk>null</jk> if it is a bean.
 	 */
 	public record BeanMetaValue<T>(BeanMeta<T> beanMeta, String notABeanReason) {
-		public Optional<BeanMeta<T>> optBeanMeta() { return opt(beanMeta()); }
-		Optional<String> optNotABeanReason() { return opt(notABeanReason()); }
+		public Optional<BeanMeta<T>> optBeanMeta() { return o(beanMeta()); }
+		Optional<String> optNotABeanReason() { return o(notABeanReason()); }
 	}
 
 	/**
@@ -290,13 +293,13 @@ public class BeanMeta<T> {
 	private static String name(AnnotationInfo<?> ai) {
 		if (ai.isType(BeanProp.class)) {
 			var p = ai.cast(BeanProp.class).inner();
-			if (ne(p.name()))
+			if (ine(p.name()))
 				return p.name();
-			if (ne(p.value()))
+			if (ine(p.value()))
 				return p.value();
 		} else {
 			var n = ai.cast(Name.class).inner();
-			if (ne(n.value()))
+			if (ine(n.value()))
 				return n.value();
 		}
 		return null;
@@ -426,9 +429,9 @@ public class BeanMeta<T> {
 		this.config = config;
 		marshallingContext = mc;
 		beanFilter = bf;
-		implClassConstructor = opt(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
+		implClassConstructor = o(implClass).map(x -> x.getPublicConstructor(x2 -> x2.hasNumParameters(0)).orElse(null)).orElse(null);
 		fluentSetters = config.isFindFluentSetters() || (nn(bf) && bf.isFluentSetters());
-		stopClass = opt(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
+		stopClass = o(bf).map(x -> x.getStopClass()).orElse(info(Object.class));
 		beanRegistry = memoize(this::findBeanRegistry);
 		classHierarchy = memoize(this::findClassHierarchy);
 		beanConstructor = findBeanConstructor();
@@ -446,7 +449,7 @@ public class BeanMeta<T> {
 		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistryLookup>map();  // Per-property BeanRegistry side-map.
 		var unsortedPropertiesTemp = false;
 		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
-		var propertyNamer = opt(bf).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
+		var propertyNamer = o(bf).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 
 		// resolveTypePropertyName may return null on the commons-side NOOP path; fall back to the configured default.
 		var resolvedTypePropertyName = config.getBeanMetaInitializer().resolveTypePropertyName(config, classInfo);
@@ -456,8 +459,8 @@ public class BeanMeta<T> {
 		if (! beanConstructor.constructor().isPresent() && bf == null && config.isBeansRequireDefaultConstructor() && ! ci.isRecord())
 			notABeanReasonTemp = "Class does not have the required no-arg constructor";
 
-		var bfo = opt(bf);
-		var fixedBeanProps = bfo.map(x -> x.getProperties()).orElse(sete());
+		var bfo = o(bf);
+		var fixedBeanProps = bfo.map(x -> x.getProperties()).orElse(emptySet());
 
 		try {
 			Map<String,BeanPropertyMeta.Builder> normalProps = map();  // NOAI
@@ -526,18 +529,18 @@ public class BeanMeta<T> {
 			var typeVarImpls = TypeVariables.of(c);
 
 			// Eliminate invalid properties, and set the contents of getterProps and setterProps.
-			var readOnlyProps = bfo.map(x -> x.getReadOnlyProperties()).orElse(sete());
-			var writeOnlyProps = bfo.map(x -> x.getWriteOnlyProperties()).orElse(sete());
+			var readOnlyProps = bfo.map(x -> x.getReadOnlyProperties()).orElse(emptySet());
+			var writeOnlyProps = bfo.map(x -> x.getWriteOnlyProperties()).orElse(emptySet());
 			for (var i = normalProps.values().iterator(); i.hasNext();) {
 				var p = i.next();
 				validateAndRegisterProperty(p, c, typeVarImpls, readOnlyProps, writeOnlyProps, i, getterPropsMap, setterPropsMap);
 			}
 
 			// Check for missing properties.
-			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw bex(c, "The property ''{0}'' was defined on the @BeanType(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple()); });
+			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw brex(c, "The property ''{0}'' was defined on the @BeanType(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple()); });
 
 			// For records with renamed properties, remap constructor args to use the actual property names.
-			if (ci.isRecord() && ne(beanConstructor.args())) {
+			if (ci.isRecord() && ine(beanConstructor.args())) {
 				var components = ci.getRecordComponents();
 				var remappedArgs = new ArrayList<String>(beanConstructor.args().size());
 				for (int idx = 0; idx < beanConstructor.args().size(); idx++) {
@@ -562,7 +565,7 @@ public class BeanMeta<T> {
 			for (var fp : beanConstructor.args()) {
 				var m = normalProps.get(fp);
 				if (m == null)
-					throw bex(c, "The property ''{0}'' was defined on the @BeanCtor(properties=X) annotation but was not found on the class definition.", fp);
+					throw brex(c, "The property ''{0}'' was defined on the @BeanCtor(properties=X) annotation but was not found on the class definition.", fp);
 				m.setAsConstructorArg();
 			}
 
@@ -675,7 +678,7 @@ public class BeanMeta<T> {
 				i.remove();
 			}
 		} catch (Exception e) {
-			throw bex(c, lm(e));
+			throw brex(c, localizedMessage(e));
 		}
 	}
 
@@ -1146,20 +1149,20 @@ public class BeanMeta<T> {
 		if (l.isEmpty())
 			l = ci.getDeclaredConstructors().stream().filter(x -> ap.has(BeanCtor.class, x)).toList();
 		if (l.size() > 1)
-			throw bex(ci, "Multiple instances of '@BeanCtor' found.");
+			throw brex(ci, "Multiple instances of '@BeanCtor' found.");
 		if (l.size() == 1) {
-			var con = first(l).orElseThrow(() -> bex(ci, "No constructor found.")).accessible();
-			var args = ap.find(BeanCtor.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(liste());
+			var con = first(l).orElseThrow(() -> brex(ci, "No constructor found.")).accessible();
+			var args = ap.find(BeanCtor.class, con).stream().map(x -> x.inner().properties()).filter(StringUtils::isNotBlank).map(x -> split(x)).findFirst().orElse(emptyList());
 			if (! con.hasNumParameters(args.size())) {
-				if (ne(args))
-					throw bex(ci, "Number of properties defined in '@BeanCtor' annotation does not match number of parameters in constructor.");
+				if (ine(args))
+					throw brex(ci, "Number of properties defined in '@BeanCtor' annotation does not match number of parameters in constructor.");
 				args = con.getParameters().stream().map(x -> x.getName()).toList();
 				for (int i = 0; i < args.size(); i++) {
 					if (isBlank(args.get(i)))
-						throw bex(ci, "Could not find name for parameter #{0} of constructor ''{1}''", i, con.getNameFull());
+						throw brex(ci, "Could not find name for parameter #{0} of constructor ''{1}''", i, con.getNameFull());
 				}
 			}
-			return new BeanConstructor(opt(con), args);
+			return new BeanConstructor(o(con), args);
 		}
 
 		if (ci.isRecord()) {
@@ -1167,17 +1170,17 @@ public class BeanMeta<T> {
 			var paramTypes = components.stream().map(java.lang.reflect.RecordComponent::getType).toArray(Class[]::new);
 			var rcon = ci.getPublicConstructor(x -> x.hasParameterTypes(paramTypes)).orElse(null);
 			if (rcon != null)
-				return new BeanConstructor(opt(rcon.accessible()), components.stream().map(java.lang.reflect.RecordComponent::getName).toList());
+				return new BeanConstructor(o(rcon.accessible()), components.stream().map(java.lang.reflect.RecordComponent::getName).toList());
 		}
 
 		if (implClassConstructor != null)
-			return new BeanConstructor(opt(implClassConstructor.accessible()), liste());
+			return new BeanConstructor(o(implClassConstructor.accessible()), emptyList());
 
 		var con = ci.getNoArgConstructor(config.getBeanMetaInitializer().hasBeanRegistrationAnnotation(config, classInfo) ? Visibility.PRIVATE : vis).orElse(null);
 		if (con != null)
-			return new BeanConstructor(opt(con.accessible()), liste());
+			return new BeanConstructor(o(con.accessible()), emptyList());
 
-		return new BeanConstructor(opte(), liste());
+		return new BeanConstructor(oe(), emptyList());
 	}
 
 	/**
@@ -1292,7 +1295,7 @@ public class BeanMeta<T> {
 		var ap = config.getAnnotationProvider();
 		var ci = classInfo;
 		var v = config.getBeanMethodVisibility();
-		var pn = opt(beanFilter).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
+		var pn = o(beanFilter).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 		var suppressedFromBeanIgnoredFields = findSuppressedPropertyNamesFromIgnoredFields(pn);
 
 		classHierarchy.get().forEach(c2 -> {
@@ -1304,7 +1307,7 @@ public class BeanMeta<T> {
 				if (m.isStatic() || m.isBridge() || m.getParameterCount() > 2
 					|| mm.stream().anyMatch(m2 -> ap.has(BeanIgnore.class, m2, SELF))
 					|| mm.stream().anyMatch(m2 -> ap.find(Transient.class, m2, SELF).stream().map(x -> x.inner().value()).findFirst().orElse(false))
-					|| ! (m.isVisible(v) || ne(beanps) || ne(names)))
+					|| ! (m.isVisible(v) || ine(beanps) || ine(names)))
 					continue;
 
 				var n = m.getNameSimple();
@@ -1380,7 +1383,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw bex(ci, "Found @BeanProp(\"*\") but could not determine method type on method ''{0}''.", m.getNameSimple());
+					throw brex(ci, "Found @BeanProp(\"*\") but could not determine method type on method ''{0}''.", m.getNameSimple());
 
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())

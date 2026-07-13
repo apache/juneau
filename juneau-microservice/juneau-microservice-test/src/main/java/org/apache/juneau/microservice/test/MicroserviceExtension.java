@@ -18,11 +18,12 @@ package org.apache.juneau.microservice.test;
 
 import java.lang.reflect.*;
 import java.net.*;
+
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.test.junit.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
 import org.apache.juneau.rest.client.*;
+import org.apache.juneau.test.junit.*;
 import org.eclipse.jetty.server.*;
 import org.junit.jupiter.api.extension.*;
 

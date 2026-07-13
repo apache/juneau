@@ -24,7 +24,7 @@ import org.apache.juneau.commons.*;
  * Utility classes and methods for the {@link Bson @Bson} annotation.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  * </ul>
  */
 public class BsonAnnotation {

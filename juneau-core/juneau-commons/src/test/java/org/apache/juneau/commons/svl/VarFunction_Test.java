@@ -20,8 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests the {@link VarFunction} SPI + {@link TypedFunction} reflection-based dispatch +

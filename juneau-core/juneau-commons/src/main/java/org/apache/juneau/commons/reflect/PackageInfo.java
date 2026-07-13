@@ -16,9 +16,11 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static java.util.Collections.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 import java.net.*;
@@ -129,7 +131,7 @@ public class PackageInfo implements Annotatable {
 		assertArgNotNull(ARG_inner, inner);
 		this.inner = inner;
 		this.annotations = memoize(
-			() -> opt(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(liste()));
+			() -> o(inner).map(pkg -> stream(pkg.getAnnotations()).flatMap(AnnotationUtils::streamRepeated).map(a -> AnnotationInfo.of(this, a)).toList()).orElse(emptyList()));
 	}
 
 	/**

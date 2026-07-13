@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.client;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -1161,7 +1161,7 @@ class RestClientFeatures_Test {
 				assertTrue(h.isPresent());
 				assertEquals("my-value", h.getValue());
 				assertEquals("my-value", h.orElse("default"));
-				assertEquals(opt("my-value"), h.asOptional());
+				assertEquals(o("my-value"), h.asOptional());
 			}
 		}
 	}
@@ -1177,7 +1177,7 @@ class RestClientFeatures_Test {
 				assertFalse(h.isPresent());
 				assertNull(h.getValue());
 				assertEquals("default", h.orElse("default"));
-				assertEquals(opte(), h.asOptional());
+				assertEquals(oe(), h.asOptional());
 				assertEquals(-1, h.asInteger());
 				assertEquals(-1L, h.asLong());
 				assertTrue(h.getValues().isEmpty());

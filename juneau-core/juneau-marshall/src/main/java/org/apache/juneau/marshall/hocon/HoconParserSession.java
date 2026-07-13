@@ -17,7 +17,8 @@
 package org.apache.juneau.marshall.hocon;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -460,7 +461,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
 				var list = newGenericList();
-				var elType = (type != null && type.isCollectionOrArray()) ? def(type.getElementType(), object()) : object();
+				var elType = (type != null && type.isCollectionOrArray()) ? coalesce(type.getElementType(), object()) : object();
 				for (var el : arr.getElements()) {
 					list.add(hoconToMap(el, elType));
 				}

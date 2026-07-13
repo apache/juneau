@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -154,7 +154,7 @@ public enum UuidFormat {
 		try {
 			return UUID.fromString(s);
 		} catch (IllegalArgumentException e) {
-			throw illegalArg("Invalid UUID value ''{0}'' for format {1}: {2}", value, format, e.getMessage());
+			throw iaex("Invalid UUID value ''{0}'' for format {1}: {2}", value, format, e.getMessage());
 		}
 	}
 

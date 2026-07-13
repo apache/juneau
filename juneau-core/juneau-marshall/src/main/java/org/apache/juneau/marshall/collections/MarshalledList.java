@@ -17,9 +17,7 @@
 package org.apache.juneau.marshall.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.PredicateUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -73,37 +71,37 @@ public class MarshalledList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public boolean add(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public void add(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public boolean addAll(Collection<?> c) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public boolean addAll(int location, Collection<?> c) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public void addFirst(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public void addLast(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public void clear() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
@@ -126,107 +124,107 @@ public class MarshalledList extends LinkedList<Object> {
 
 		@Override /* Overridden from Queue */
 		public boolean offer(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public boolean offerFirst(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public boolean offerLast(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Queue */
 		public Object poll() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public Object pollFirst() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public Object pollLast() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public Object pop() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public void push(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Queue */
 		public Object remove() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public boolean remove(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public boolean removeAll(Collection<?> c) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public Object removeFirst() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public boolean removeFirstOccurrence(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Collection */
 		public boolean removeIf(Predicate<? super Object> filter) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public Object removeLast() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Deque */
 		public boolean removeLastOccurrence(Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public void replaceAll(UnaryOperator<Object> operator) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public boolean retainAll(Collection<?> c) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public void sort(Comparator<? super Object> c) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
@@ -238,7 +236,7 @@ public class MarshalledList extends LinkedList<Object> {
 			return new Iterator<>() {
 				@Override public boolean hasNext() { return it.hasNext(); }
 				@Override public Object next() { return it.next(); }
-				@Override public void remove() { throw unsupportedOpReadOnly(); }
+				@Override public void remove() { throw uoroex(); }
 				@Override public void forEachRemaining(Consumer<? super Object> action) { it.forEachRemaining(action); }
 			};
 		}
@@ -251,9 +249,9 @@ public class MarshalledList extends LinkedList<Object> {
 				@Override public Object previous() { return it.previous(); }
 				@Override public int nextIndex() { return it.nextIndex(); }
 				@Override public int previousIndex() { return it.previousIndex(); }
-				@Override public void remove() { throw unsupportedOpReadOnly(); }
-				@Override public void set(Object e) { throw unsupportedOpReadOnly(); }
-				@Override public void add(Object e) { throw unsupportedOpReadOnly(); }
+				@Override public void remove() { throw uoroex(); }
+				@Override public void set(Object e) { throw uoroex(); }
+				@Override public void add(Object e) { throw uoroex(); }
 				@Override public void forEachRemaining(Consumer<? super Object> action) { it.forEachRemaining(action); }
 			};
 		}
@@ -275,7 +273,7 @@ public class MarshalledList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public void add(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
@@ -285,12 +283,12 @@ public class MarshalledList extends LinkedList<Object> {
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
@@ -508,7 +506,7 @@ public class MarshalledList extends LinkedList<Object> {
 	 * @return This object.
 	 */
 	public <T> MarshalledList appendIf(Predicate<T> test, T value) {
-		return appendIf(test(test, value), value);
+		return appendIf(t(test, value), value);
 	}
 
 	/**

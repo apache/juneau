@@ -18,7 +18,7 @@ package org.apache.juneau.utils;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.commons.TestBase;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
 

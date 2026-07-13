@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.net.*;
@@ -190,7 +190,7 @@ public class Encoding extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,HeaderInfo> getHeaders() { return nullIfEmpty(headers); }
+	public Map<String,HeaderInfo> getHeaders() { return nie(headers); }
 
 	/**
 	 * Bean property getter:  <property>style</property>.
@@ -202,11 +202,11 @@ public class Encoding extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(allowReserved), PROP_allowReserved)
 			.addIf(nn(contentType), PROP_contentType)
 			.addIf(nn(explode), PROP_explode)
-			.addIf(ne(headers), PROP_headers)
+			.addIf(ine(headers), PROP_headers)
 			.addIf(nn(style), PROP_style)
 			.build();
 		// @formatter:on

@@ -23,11 +23,12 @@ import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.list;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.utils.Utils.eq;
 import static org.apache.juneau.marshall.Constants.*;
 
 import java.lang.annotation.*;
@@ -84,7 +85,7 @@ import org.apache.juneau.marshall.parser.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -235,7 +236,7 @@ public class HttpPartSchema {
 			"java:S100" // Method name uses underscore suffix to avoid Java keyword conflict
 		})
 		public Builder default_(String value) {
-			if (ne(value))
+			if (ine(value))
 				default_ = value;
 			return this;
 		}
@@ -697,7 +698,7 @@ public class HttpPartSchema {
 		 */
 		public Builder collectionFormat(String value) {
 			try {
-				if (ne(value))
+				if (ine(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
 				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
@@ -1245,7 +1246,7 @@ public class HttpPartSchema {
 		 */
 		public Builder format(String value) {
 			try {
-				if (ne(value))
+				if (ine(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
 				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
@@ -1879,7 +1880,7 @@ public class HttpPartSchema {
 		 * @return This object.
 		 */
 		public Builder name(String value) {
-			if (ne(value))
+			if (ine(value))
 				name = value;
 			return this;
 		}
@@ -1998,7 +1999,7 @@ public class HttpPartSchema {
 		 */
 		public Builder pattern(String value) {
 			try {
-				if (ne(value))
+				if (ine(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
 				throw new BasicRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
@@ -2455,7 +2456,7 @@ public class HttpPartSchema {
 		 */
 		public Builder type(String value) {
 			try {
-				if (ne(value))
+				if (ine(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
 				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
@@ -2599,7 +2600,7 @@ public class HttpPartSchema {
 		}
 
 		private static Boolean resolve(String newValue, Boolean oldValue) {
-			return isEmpty(newValue) ? oldValue : bool(newValue);
+			return isEmpty(newValue) ? oldValue : b(newValue);
 		}
 
 		private static Long resolve(String newValue, Long oldValue) {
@@ -2753,7 +2754,7 @@ public class HttpPartSchema {
 
 			// Handle exclusiveMaximum with fallback from Draft 2020-12 to Draft 04
 			String exMaxVal = a.exclusiveMaximumValue();
-			if (ne(exMaxVal)) {
+			if (ine(exMaxVal)) {
 				exclusiveMaximumValue(toNumber(exMaxVal));
 			} else if (a.exclusiveMaximum() || a.emax()) {
 				exclusiveMaximum(true);
@@ -2761,7 +2762,7 @@ public class HttpPartSchema {
 
 			// Handle exclusiveMinimum with fallback from Draft 2020-12 to Draft 04
 			String exMinVal = a.exclusiveMinimumValue();
-			if (ne(exMinVal)) {
+			if (ine(exMinVal)) {
 				exclusiveMinimumValue(toNumber(exMinVal));
 			} else if (a.exclusiveMinimum() || a.emin()) {
 				exclusiveMinimum(true);
@@ -3553,7 +3554,7 @@ public class HttpPartSchema {
 	static final Number toNumber(String...s) {
 		try {
 			for (var ss : s)
-				if (ne(ss))
+				if (ine(ss))
 					return parseNumber(ss, Number.class);
 			return null;
 		} catch (ParseException e) {
@@ -3701,7 +3702,7 @@ public class HttpPartSchema {
 
 		// Validation.
 		var errors = list();
-		var notAllowed = listb(String.class);
+		var notAllowed = lb(String.class);
 		var invalidFormat = false;
 
 		// @formatter:off
@@ -4148,10 +4149,10 @@ public class HttpPartSchema {
 
 	protected FluentMap<String,Object> properties() {
 		// @formatter:off
-		Predicate<Object> ne = x -> ne(s(x));
+		Predicate<Object> ne = x -> ine(s(x));
 		Predicate<Object> nf = x -> x instanceof Boolean x2 && x2;
 		Predicate<Object> nm1 = x -> x instanceof Number x2 && x2.intValue() != -1;
-		Predicate<Object> nn = Utils::nn;
+		Predicate<Object> nn = Shorts::nn;
 		return mapb_so().sorted().buildFluent()
 			.ai(ne, PROP_name, name)
 			.ai(ne, PROP_type, type)
@@ -4328,7 +4329,7 @@ public class HttpPartSchema {
 	}
 
 	private boolean isValidAllowEmpty(String x) {
-		return allowEmptyValue || ne(x);
+		return allowEmptyValue || ine(x);
 	}
 
 	private boolean isValidConst(String x) {

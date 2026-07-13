@@ -17,8 +17,8 @@
 package org.apache.juneau.http.header;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -83,11 +83,11 @@ public class ContentDisposition extends HttpStringRangesHeader {
 	 */
 	public static ContentDisposition attachment(String filename) {
 		if (isBlank(filename))
-			throw illegalArg("Attachment filename must not be null or blank.");
+			throw iaex("Attachment filename must not be null or blank.");
 		for (var i = 0; i < filename.length(); i++) {
 			var c = filename.charAt(i);
 			if (c == '\r' || c == '\n')
-				throw illegalArg("Attachment filename must not contain CR or LF characters.");
+				throw iaex("Attachment filename must not contain CR or LF characters.");
 		}
 		var sb = new StringBuilder(filename.length() + 8);
 		for (var i = 0; i < filename.length(); i++) {
@@ -157,7 +157,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 			assertArgNotNull("value", value);
 			var v = value.trim();
 			if (v.isEmpty())
-				throw illegalArg("disposition-type must not be blank");
+				throw iaex("disposition-type must not be blank");
 			type = v;
 			return this;
 		}
@@ -258,7 +258,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 		 */
 		public Builder size(long value) {
 			if (value < 0)
-				throw illegalArg("size must be non-negative: {0}", value);
+				throw iaex("size must be non-negative: {0}", value);
 			return tokenParam("size", Long.toString(value));
 		}
 
@@ -293,7 +293,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 			assertArgNotNull("name", name);
 			var n = name.trim();
 			if (n.isEmpty())
-				throw illegalArg("parameter name must not be blank");
+				throw iaex("parameter name must not be blank");
 			return n;
 		}
 

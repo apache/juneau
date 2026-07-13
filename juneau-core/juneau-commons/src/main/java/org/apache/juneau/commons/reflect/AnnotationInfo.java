@@ -16,13 +16,15 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.util.*;
@@ -761,7 +763,7 @@ public class AnnotationInfo<T extends Annotation> {
 	public FluentMap<String,Object> properties() {
 		// @formatter:off
 		var ca = info(a.annotationType());
-		var ja = mapb().sorted().buildFluent();  // NOAI
+		var ja = mapBuilder().sorted().buildFluent();  // NOAI
 		ca.getDeclaredMethods().forEach(x -> safeOptCatch(() -> {
 			var val = x.invoke(a);
 			var d = x.inner().getDefaultValue();
@@ -769,7 +771,7 @@ public class AnnotationInfo<T extends Annotation> {
 			if (neq(val, d) && ! (isArray(val) && length(val) == 0 && isArray(d) && length(d) == 0))
 				return val;
 			return null;
-		}, e -> lm(e)).ifPresent(v -> ja.a(x.getName(), v)));
+		}, e -> localizedMessage(e)).ifPresent(v -> ja.a(x.getName(), v)));
 		return filteredBeanPropertyMap()
 			.a(s(annotatable.getAnnotatableType()), annotatable.getLabel())
 			.a("@" + ca.getNameSimple(), ja);

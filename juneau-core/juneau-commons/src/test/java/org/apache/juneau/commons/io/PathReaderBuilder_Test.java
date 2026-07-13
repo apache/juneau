@@ -25,8 +25,8 @@ import java.nio.charset.*;
 import java.nio.file.*;
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 /**
  * Tests {@link PathReaderBuilder}.
  */

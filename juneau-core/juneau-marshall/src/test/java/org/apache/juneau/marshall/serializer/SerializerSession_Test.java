@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.serializer;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -1234,7 +1234,7 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.DEFAULT.createSession().build();
 		var method = SerializerSession.class.getDeclaredMethod("getExpectedRootType", Object.class);
 		method.setAccessible(true);
-		var result = method.invoke(s, opt("hello"));
+		var result = method.invoke(s, o("hello"));
 		assertNotNull(result);
 	}
 

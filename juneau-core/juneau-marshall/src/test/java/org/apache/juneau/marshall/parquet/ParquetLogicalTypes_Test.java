@@ -21,10 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.math.*;
 import java.time.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
-import java.util.stream.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

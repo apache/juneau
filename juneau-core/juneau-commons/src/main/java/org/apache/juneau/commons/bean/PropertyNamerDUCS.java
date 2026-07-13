@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.bean;
 
 import static java.lang.Character.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Converts property names to dashed-upper-case-start format.
@@ -40,7 +40,7 @@ public class PropertyNamerDUCS implements PropertyNamer {
 		"java:S3776" // Cognitive complexity acceptable for property name conversion logic
 	})
 	public String getPropertyName(String name) {
-		if (e(name))
+		if (ie(name))
 			return name;
 
 		var numUCs = 0;

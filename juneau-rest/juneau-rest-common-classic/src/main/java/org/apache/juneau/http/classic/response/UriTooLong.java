@@ -36,7 +36,7 @@ import org.apache.juneau.http.classic.header.*;
  * <br>Often the result of too much data being encoded as a query-string of a GET request, in which case it should be converted to a POST request.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  *
  * @serial exclude

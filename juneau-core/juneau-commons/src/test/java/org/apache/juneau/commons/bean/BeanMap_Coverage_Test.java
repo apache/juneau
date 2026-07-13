@@ -20,11 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Coverage tests for {@link BeanMap} on the bean-modeling-only path (no marshalling context).

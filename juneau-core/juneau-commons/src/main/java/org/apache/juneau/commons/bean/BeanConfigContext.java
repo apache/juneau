@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.commons.bean;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.beans.*;
 import java.io.*;
@@ -724,7 +724,7 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder notBeanPackageNames(Collection<String> values) {
-			notBeanPackageNames = new LinkedHashSet<>(values == null ? sete() : values);
+			notBeanPackageNames = new LinkedHashSet<>(values == null ? emptySet() : values);
 			return this;
 		}
 
@@ -735,7 +735,7 @@ public final class BeanConfigContext {
 		 * @return This object.
 		 */
 		public Builder notBeanPackagePrefixes(Collection<String> values) {
-			notBeanPackagePrefixes = new LinkedHashSet<>(values == null ? sete() : values);
+			notBeanPackagePrefixes = new LinkedHashSet<>(values == null ? emptySet() : values);
 			return this;
 		}
 
@@ -749,7 +749,7 @@ public final class BeanConfigContext {
 			"java:S4968" // '? extends Class<?>' is not redundant for the nested generic: it admits Collection<Class<X>> (e.g. List<Class<String>>); narrowing to Collection<Class<?>> would be a source-incompatible API reduction.
 		})
 		public Builder notBeanClasses(Collection<? extends Class<?>> values) {
-			notBeanClasses = new LinkedHashSet<>(values == null ? sete() : values);
+			notBeanClasses = new LinkedHashSet<>(values == null ? emptySet() : values);
 			return this;
 		}
 

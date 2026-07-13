@@ -17,10 +17,12 @@
 package org.apache.juneau.commons.utils;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Exceptions.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -61,7 +63,7 @@ public class FileUtils {
 	public static void create(File f) {
 		if (f.exists())
 			return;
-		safe(() -> opt(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file ''{0}''", f.getAbsolutePath())));
+		safe(() -> optional(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file ''{0}''", f.getAbsolutePath())));
 	}
 
 	/**
@@ -126,7 +128,7 @@ public class FileUtils {
 			return true;
 		if (f.isDirectory()) {
 			var cf = f.listFiles();
-			if (nn(cf))
+			if (isNotNull(cf))
 				for (var c : cf)
 					deleteFile(c);
 		}
@@ -223,12 +225,12 @@ public class FileUtils {
 		assertArgNotNull(ARG_f, f);
 		if (f.exists()) {
 			if (clean) {
-				opt(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory ''{0}''", f.getAbsolutePath()));
+				optional(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory ''{0}''", f.getAbsolutePath()));
 			} else {
 				return f;
 			}
 		}
-		opt(f.mkdirs()).filter(x -> x).orElseThrow(() -> rex("Could not create directory ''{0}''", f.getAbsolutePath()));
+		optional(f.mkdirs()).filter(x -> x).orElseThrow(() -> rex("Could not create directory ''{0}''", f.getAbsolutePath()));
 		return f;
 	}
 
@@ -285,27 +287,27 @@ public class FileUtils {
 		assertArgNotNull(ARG_rootDir, rootDir);
 		var root = canonicalizeRoot(rootDir.toPath());
 		if (userPath == null || userPath.isEmpty())
-			return opt(root.toFile());
+			return optional(root.toFile());
 		Path target;
 		try {
 			target = root.resolve(userPath).normalize();
 		} catch (@SuppressWarnings("unused") InvalidPathException e) {
-			throw illegalArg(MSG_pathEscape);
+			throw iaex(MSG_pathEscape);
 		}
 		if (! target.startsWith(root))
-			throw illegalArg(MSG_pathEscape);
+			throw iaex(MSG_pathEscape);
 		var f = target.toFile();
 		if (! f.exists())
-			return opte();
+			return emptyOptional();
 		try {
 			if (! target.toRealPath().startsWith(root))
-				throw illegalArg(MSG_pathEscape);
+				throw iaex(MSG_pathEscape);
 		} catch (@SuppressWarnings("unused") NoSuchFileException e) {
-			return opte();
+			return emptyOptional();
 		} catch (IOException e) {
 			throw rex(e, "Could not canonicalize ''{0}''", target);
 		}
-		return opt(f);
+		return optional(f);
 	}
 
 	/**
@@ -343,10 +345,10 @@ public class FileUtils {
 	public static String resolveVirtualPathSafely(String basePath, String userPath) {
 		assertArgNotNull(ARG_basePath, basePath);
 		if (basePath.isBlank())
-			throw illegalArg("basePath must not be blank.");
+			throw iaex("basePath must not be blank.");
 		var bp = normalizeVirtualPath(basePath);
 		if (bp == null)
-			throw illegalArg("basePath escapes its own root.");
+			throw iaex("basePath escapes its own root.");
 		if (! bp.endsWith("/"))
 			bp = bp + "/";
 		if (userPath == null || userPath.isEmpty())
@@ -354,7 +356,7 @@ public class FileUtils {
 		var up = userPath.startsWith("/") ? userPath.substring(1) : userPath;
 		var combined = normalizeVirtualPath(bp + up);
 		if (combined == null || ! combined.startsWith(bp))
-			throw illegalArg(MSG_pathEscape);
+			throw iaex(MSG_pathEscape);
 		return combined;
 	}
 
@@ -419,10 +421,10 @@ public class FileUtils {
 		var l = System.currentTimeMillis();
 		if (lm == l)
 			l++;
-		opt(f.setLastModified(l)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
+		optional(f.setLastModified(l)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
 
 		// Linux only gives 1s precision, so set the date 1s into the future.
 		if (lm == f.lastModified())
-			opt(f.setLastModified(l + 1000)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
+			optional(f.setLastModified(l + 1000)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
 	}
 }

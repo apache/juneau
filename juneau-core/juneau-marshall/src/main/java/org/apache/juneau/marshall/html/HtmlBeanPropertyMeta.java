@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.html;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.inject.*;
@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.*;
  * annotation on the bean property.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
 
  * </ul>
  */

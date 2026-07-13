@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.commons.svl;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 /**
  * Interface for the resolution of vars that can have one or more keys where the first non-null resolution is returned.
@@ -33,7 +33,7 @@ import static org.apache.juneau.commons.utils.Utils.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics">Simple Variable Language Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage">Simple Variable Language Basics</a>
  * </ul>
  */
 public abstract class MultipartResolvingVar extends SimpleVar {

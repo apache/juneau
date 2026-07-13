@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.reflect;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 

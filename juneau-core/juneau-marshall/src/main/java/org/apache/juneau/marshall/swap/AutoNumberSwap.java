@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.swap;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ClassUtils2.*;
 
 import java.lang.reflect.*;
@@ -100,7 +100,7 @@ import org.apache.juneau.marshall.serializer.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
  * </ul>
  *
  * @param <T> The normal class type.

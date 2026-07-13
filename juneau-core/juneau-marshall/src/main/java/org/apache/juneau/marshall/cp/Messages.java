@@ -17,11 +17,12 @@
 package org.apache.juneau.marshall.cp;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.apache.juneau.commons.utils.ResourceBundleUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -254,7 +255,7 @@ public class Messages extends ResourceBundle {
 				Messages.Builder x = null;
 
 				for (var i = mbl.length - 1; i >= 0; i--) {
-					var c = firstNonNull(mbl[i].getA(), forClass);
+					var c = coalesce(mbl[i].getA(), forClass);
 					var value = mbl[i].getB();
 					if (isProbablyJsonObject(value, true)) {
 						MessagesString ms;

@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Coverage tests for {@link BeanMeta} on the bean-modeling-only path.

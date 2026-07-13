@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.marshall.json5;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -83,7 +83,7 @@ public class Json5List extends MarshalledList {
 
 		@Override /* Overridden from List */
 		public void add(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
@@ -91,12 +91,12 @@ public class Json5List extends MarshalledList {
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 	}
 
@@ -116,7 +116,7 @@ public class Json5List extends MarshalledList {
 
 		@Override /* Overridden from List */
 		public void add(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
@@ -126,12 +126,12 @@ public class Json5List extends MarshalledList {
 
 		@Override /* Overridden from List */
 		public Object remove(int location) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
 		public Object set(int location, Object object) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from List */
@@ -226,7 +226,7 @@ public class Json5List extends MarshalledList {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public static Json5List ofJson5OrCdl(String s) throws ParseException {
-		if (Utils.e(s))  // NOAI
+		if (Shorts.ie(s))  // NOAI
 			return new Json5List();
 		if (! isProbablyJsonArray(s, true))
 			return new Json5List((Object[])splita(s.trim(), ','));

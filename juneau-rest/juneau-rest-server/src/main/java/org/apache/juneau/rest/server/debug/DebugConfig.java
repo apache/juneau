@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.server.debug;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.Method;
 import java.util.*;

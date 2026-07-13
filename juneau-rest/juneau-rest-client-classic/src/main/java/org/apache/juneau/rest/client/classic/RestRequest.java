@@ -18,10 +18,10 @@ package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
@@ -104,7 +104,7 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -161,7 +161,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				value = x3.copyWith(getPartSerializerSession(), null).getValue();
 			} else {
 				var v = x.getValue();
-				value = (e(v) && skipIfEmpty) ? null : v;
+				value = (ie(v) && skipIfEmpty) ? null : v;
 			}
 		}
 
@@ -172,7 +172,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		public String getValue() { return value; }
 
 		boolean isValid() {
-			return !(e(name) || value == null);
+			return !(ie(name) || value == null);
 		}
 	}
 
@@ -2607,7 +2607,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		var h = request.getFirstHeader("Content-Type");
 		if (nn(h)) {
 			var s = h.getValue();
-			if (ne(s))
+			if (ine(s))
 				return ContentType.of(s);
 		}
 		return def;
@@ -2624,7 +2624,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return A new header.
 	 */
 	protected Header createHeader(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {
-		if (e(name))
+		if (ie(name))
 			return null;
 		if (skipIfEmpty == null)
 			skipIfEmpty = client.isSkipEmptyHeaderData();
@@ -2662,7 +2662,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * @return A new part.
 	 */
 	protected NameValuePair createPart(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {
-		if (e(name))
+		if (ie(name))
 			return null;
 		if (skipIfEmpty == null) {
 			if (type == QUERY)
@@ -2689,10 +2689,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && e(s(value))))
+			if (! (skipIfEmpty && ie(s(value))))
 				return formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -2718,7 +2718,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 
 		if (skipIfEmpty)
-			l.removeIf(x -> e(x.getValue()));
+			l.removeIf(x -> ie(x.getValue()));
 
 		formData.append(l);
 
@@ -2732,10 +2732,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = e(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
+		var isMulti = ie(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && e(s(value))))
+			if (! (skipIfEmpty && ie(s(value))))
 				return header(createHeader(name, value, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -2760,7 +2760,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 
 		if (skipIfEmpty)
-			l.removeIf(x -> e(x.getValue()));
+			l.removeIf(x -> ie(x.getValue()));
 
 		headerData.append(l);
 
@@ -2770,7 +2770,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	boolean isLoggingSuppressed() { return suppressLogging; }
 
 	RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {
-		var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti)
 			return pathData(createPart(name, value, PATH, serializer, schema, false));
@@ -2800,10 +2800,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {
-		var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
+		var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);
 
 		if (! isMulti) {
-			if (! (skipIfEmpty && e(s(value))))
+			if (! (skipIfEmpty && ie(s(value))))
 				return queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));
 			return this;
 		}
@@ -2829,7 +2829,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		}
 
 		if (skipIfEmpty)
-			l.removeIf(x -> e(x.getValue()));
+			l.removeIf(x -> ie(x.getValue()));
 
 		queryData.append(l);
 
@@ -2844,15 +2844,15 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {
 		if (serializer == null)
-			throw illegalArg("No serializer registered for cursor-streamed request body.");
+			throw iaex("No serializer registered for cursor-streamed request body.");
 		try {
 			var consumer = body.getConsumer();
 			var writerKind = body.getWriterKind();
 
 			if (writerKind == TokenWriter.class && !(serializer instanceof TokenWritable))
-				throw illegalArg("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
+				throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
 			if (writerKind == RecordWriter.class && !(serializer instanceof RecordWritable))
-				throw illegalArg("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
+				throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
 
 			var buf = new ByteArrayOutputStream();
 			Object output = serializer.isWriterSerializer()

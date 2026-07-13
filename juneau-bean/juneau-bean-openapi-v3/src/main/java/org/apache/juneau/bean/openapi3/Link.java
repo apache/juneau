@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -183,7 +183,7 @@ public class Link extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,Object> getParameters() { return nullIfEmpty(parameters); }
+	public Map<String,Object> getParameters() { return nie(parameters); }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -209,11 +209,11 @@ public class Link extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(operationId), PROP_operationId)
 			.addIf(nn(operationRef), PROP_operationRef)
-			.addIf(ne(parameters), PROP_parameters)
+			.addIf(ine(parameters), PROP_parameters)
 			.addIf(nn(requestBody), PROP_requestBody)
 			.addIf(nn(server), PROP_server)
 			.build();

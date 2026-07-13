@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.server.httppart;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -138,7 +138,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires unchecked cast
 		})
-		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(mape());
+		var parentVars = (Map<String,String>)req.getAttribute("juneau.pathVars").orElse(emptyMap());
 		for (var e : parentVars.entrySet())
 			add(e.getKey(), e.getValue());
 
@@ -227,7 +227,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
+			var hasAllBlanks = l.allMatch(x -> Shorts.ie(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestPathParam(req, name, vs.resolve(p.getValue())));
@@ -588,6 +588,6 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+		return Shorts.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 }

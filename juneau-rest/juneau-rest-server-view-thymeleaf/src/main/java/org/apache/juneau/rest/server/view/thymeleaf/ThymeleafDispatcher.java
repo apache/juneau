@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.thymeleaf;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.io.*;
 
@@ -256,7 +256,7 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 			bp = "/" + bp;
 		if (resolved.startsWith(bp))
 			return resolved.substring(bp.length());
-		throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
+		throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
 	}
 
 	/**
@@ -339,7 +339,7 @@ public class ThymeleafDispatcher implements RawTemplateDispatcher {
 		 */
 		public ThymeleafDispatcher build() {
 			if (basePath == null)
-				throw illegalArg("basePath must not be null");
+				throw iaex("basePath must not be null");
 			return new ThymeleafDispatcher(this);
 		}
 	}

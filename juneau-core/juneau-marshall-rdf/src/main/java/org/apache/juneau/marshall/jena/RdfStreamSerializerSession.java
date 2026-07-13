@@ -19,8 +19,8 @@ package org.apache.juneau.marshall.jena;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.jena.Constants.*;
 
 import java.io.*;
@@ -264,7 +264,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		String s = null;
 		if (nn(uri))
 			s = uri.toString();
-		if (e(s) && nn(uri2))
+		if (ie(s) && nn(uri2))
 			s = uri2.toString();
 		if (s == null)
 			return null;

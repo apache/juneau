@@ -17,8 +17,8 @@
 package org.apache.juneau.http;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.function.*;
 
@@ -98,11 +98,11 @@ public record HttpProtocolVersion(String protocol, int major, int minor) {
 		assertArgNotNull("s", s);
 		var slash = s.indexOf('/');
 		if (slash < 0)
-			throw illegalArg("Invalid protocol version: {0}", s);
+			throw iaex("Invalid protocol version: {0}", s);
 		var protocol = s.substring(0, slash);
 		var rest = s.substring(slash + 1);
 		var dot = rest.indexOf('.');
-		Supplier<RuntimeException> err = () -> illegalArg("Invalid protocol version: {0}", s);
+		Supplier<RuntimeException> err = () -> iaex("Invalid protocol version: {0}", s);
 		if (dot < 0)
 			return new HttpProtocolVersion(protocol, parseInt(rest, err), 0);
 		return new HttpProtocolVersion(protocol, parseInt(rest.substring(0, dot), err), parseInt(rest.substring(dot + 1), err));

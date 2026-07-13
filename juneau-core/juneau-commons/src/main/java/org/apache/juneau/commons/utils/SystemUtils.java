@@ -55,4 +55,27 @@ public class SystemUtils {
 	public static void shutdownMessage(Supplier<String> message) {
 		SHUTDOWN_MESSAGES.add(message);
 	}
+
+	/**
+	 * Looks up a system property or environment variable.
+	 *
+	 * @param name The property name.
+	 * @return A StringSetting wrapping the value.
+	 */
+	public static StringSetting env(String name) {
+		return Settings.get().get(name);
+	}
+
+	/**
+	 * Looks up a system property or environment variable, returning a default if not found.
+	 *
+	 * @param <T> The type to convert the value to.
+	 * @param name The property name.
+	 * @param def The default value.
+	 * @return The found value, or the default.
+	 */
+	public static <T> T env(String name, T def) {
+		var s = Settings.get();
+		return s != null ? s.get(name, def) : def;
+	}
 }

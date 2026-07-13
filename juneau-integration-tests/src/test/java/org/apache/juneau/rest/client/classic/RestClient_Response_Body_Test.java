@@ -16,11 +16,11 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.test.assertions.Assertions.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
+import static org.apache.juneau.test.assertions.Assertions.*;
 import static org.apache.juneau.test.bct.BctAssertions.assertBean;
 import static org.apache.juneau.test.bct.BctAssertions.assertList;
 import static org.apache.juneau.test.bct.BctAssertions.assertString;

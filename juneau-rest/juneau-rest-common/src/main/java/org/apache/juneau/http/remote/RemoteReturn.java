@@ -21,7 +21,7 @@ package org.apache.juneau.http.remote;
  * {@link RemoteGet}, {@link RemotePost}, {@link RemotePut}, {@link RemotePatch}, and {@link RemoteDelete}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
  * </ul>
  */
 public enum RemoteReturn {

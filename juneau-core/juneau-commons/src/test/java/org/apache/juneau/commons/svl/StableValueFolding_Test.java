@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.vars.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests compile-time stable-value folding for opt-in source {@link Var}s.

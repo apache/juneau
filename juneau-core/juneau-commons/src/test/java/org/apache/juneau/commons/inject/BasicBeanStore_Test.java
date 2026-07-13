@@ -16,17 +16,17 @@
  */
 package org.apache.juneau.commons.inject;
 
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S4144", // Identical test methods intentional for testing different scenarios
@@ -1241,12 +1241,12 @@ class BasicBeanStore_Test extends TestBase {
 	@Test
 	void v02_toString_nonBasicOverridingParent_usesStringForm() {
 		var overriding = new BeanStore() {
-			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return opte(); }
-			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return opte(); }
+			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t) { return oe(); }
+			@Override public <T> Optional<java.util.function.Supplier<T>> getBeanSupplier(Class<T> t, String n) { return oe(); }
 			@Override public boolean hasBean(Class<?> t) { return false; }
 			@Override public boolean hasBean(Class<?> t, String n) { return false; }
-			@Override public <T> Optional<T> getBean(Class<T> t) { return opte(); }
-			@Override public <T> Optional<T> getBean(Class<T> t, String n) { return opte(); }
+			@Override public <T> Optional<T> getBean(Class<T> t) { return oe(); }
+			@Override public <T> Optional<T> getBean(Class<T> t, String n) { return oe(); }
 			@Override public <T> java.util.Map<String, T> getBeansOfType(Class<T> t) { return java.util.Map.of(); }
 		};
 		var store = new BasicBeanStore(null, overriding);

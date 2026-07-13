@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.function.*;
 
@@ -42,7 +41,7 @@ import org.apache.juneau.marshall.urlencoding.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -165,7 +164,7 @@ public class SerializedPart extends BasicPart {
 			var def = schema2.getDefault();
 			if (v == null && ((def == null && ! schema2.isRequired()) || (def == null && schema2.isAllowEmptyValue())))
 				return null;
-			if (e(s(v)) && skipIfEmpty && def == null)
+			if (ie(s(v)) && skipIfEmpty && def == null)
 				return null;
 			return serializer == null ? s(v) : serializer.serialize(type, schema2, v);
 		} catch (SchemaValidationException e) {

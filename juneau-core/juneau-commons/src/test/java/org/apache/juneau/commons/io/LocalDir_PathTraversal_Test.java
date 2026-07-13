@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assumptions.*;
 import java.io.*;
 import java.nio.file.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Path-traversal (CWE-22) boundary tests for {@link LocalDir#resolve(String)}.

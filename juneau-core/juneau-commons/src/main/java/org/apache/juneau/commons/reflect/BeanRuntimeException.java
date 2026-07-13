@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.reflect;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.text.*;

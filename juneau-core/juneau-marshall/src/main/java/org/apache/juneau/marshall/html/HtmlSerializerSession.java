@@ -19,9 +19,10 @@ package org.apache.juneau.marshall.html;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.xml.XmlSerializerSession.ContentResult.*;
 
 import java.io.*;
@@ -46,7 +47,7 @@ import org.apache.juneau.marshall.xml.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics">HTML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport">HTML Basics</a>
 
  * </ul>
  */
@@ -713,7 +714,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		} catch (StackOverflowError t) {
 			throw t;
 		} catch (Exception t) {
-			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), lm(t));
+			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), localizedMessage(t));
 		}
 
 		String link = getLink(ppMeta);
@@ -929,7 +930,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 			HtmlClassMeta cHtml = getHtmlClassMeta(sType);
 			HtmlBeanPropertyMeta bpHtml = getHtmlBeanPropertyMeta(pMeta);
 
-			HtmlRender render = firstNonNull(bpHtml.getRender(), cHtml.getRender());
+			HtmlRender render = coalesce(bpHtml.getRender(), cHtml.getRender());
 
 			if (nn(render)) {
 				Object o2 = render.getContent(this, o);
@@ -964,8 +965,8 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				if (getAnnotationProvider().has(HtmlLink.class, aType)) {
 					var uriProperty = Holder.<String>empty();
 					var nameProperty = Holder.<String>empty();
-					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
-					aType.forEachAnnotation(HtmlLink.class, x -> ne(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> ine(x.uriProperty()), x -> uriProperty.set(x.uriProperty()));
+					aType.forEachAnnotation(HtmlLink.class, x -> ine(x.nameProperty()), x -> nameProperty.set(x.nameProperty()));
 					Object urlProp = m.get(uriProperty.orElse(""));
 					Object nameProp = m.get(nameProperty.orElse(""));
 

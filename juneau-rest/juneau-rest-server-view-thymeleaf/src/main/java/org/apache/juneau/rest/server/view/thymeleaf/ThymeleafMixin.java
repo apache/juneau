@@ -126,7 +126,7 @@ import org.thymeleaf.templatemode.*;
  * 	<li class='jc'>{@link ThymeleafView}
  * 	<li class='jc'>{@link ThymeleafViewRenderer}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ThymeleafViewSupport">Thymeleaf View Support</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths">REST Server &mdash; Mixins and Multi-Mount Paths</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition">REST Server &mdash; Mixins and Multi-Mount Paths</a>
  * </ul>
  *
  * @since 10.0.0

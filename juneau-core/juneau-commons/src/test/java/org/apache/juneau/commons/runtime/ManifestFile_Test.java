@@ -23,8 +23,8 @@ import java.util.*;
 import java.util.jar.*;
 import java.util.jar.Attributes.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class ManifestFile_Test extends TestBase {
 

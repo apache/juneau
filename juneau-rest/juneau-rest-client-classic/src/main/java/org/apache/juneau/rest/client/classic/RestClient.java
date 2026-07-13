@@ -23,12 +23,10 @@ import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.isEmpty;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.utils.Utils.emptyIfNull;
 import static org.apache.juneau.http.HttpMethod.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
@@ -77,7 +75,6 @@ import org.apache.juneau.commons.http.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.reflect.*;
-import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.http.classic.part.*;
@@ -971,7 +968,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * Refer to the following documentation on both flavors:
  *
  * <ul class='doctree'>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestRpc">REST/RPC</a>
  * </ul>
  *
@@ -1066,7 +1063,7 @@ import org.apache.juneau.rest.client.classic.remote.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -4604,7 +4601,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF rootUrl(Object value) {
 			var s = s(value);
-			if (ne(s))
+			if (ine(s))
 				s = s.replaceAll("\\/$", "");
 			if (isEmpty(s))
 				rootUrl = null;
@@ -4639,7 +4636,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		</p>
 		 * 	<li>
 		 * 		<b>Refreshable cached value</b> &mdash; Use {@link Memoizer Memoizer}
-		 * 		(via {@link Utils#memoizer(java.util.function.Supplier) Utils.memoizer()})
+		 * 		(via {@link Suppliers#memoizer(java.util.function.Supplier) Suppliers.memoizer()})
 		 * 		when computing the URL is expensive (e.g. service discovery) and you want it cached until explicitly refreshed:
 		 * 		<p class='bjava'>
 		 * 			Memoizer&lt;String&gt; <jv>url</jv> = <jsm>memoizer</jsm>(() -&gt; serviceDiscovery.<jsm>findUrl</jsm>(<js>"my-service"</js>));
@@ -6203,10 +6200,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			throw new RestCallException(null, null, "Invalid format for call string.  State={0}", state);
 
 		try {
-			var req = request(method, uri, ne(content));
+			var req = request(method, uri, ine(content));
 			if (nn(headers))
 				Json5Map.ofString(headers).forEach((k, v) -> req.header(stringHeader(k, s(v))));
-			if (ne(content))
+			if (ine(content))
 				req.contentString(content);
 			return req;
 		} catch (ParseException e) {
@@ -6769,7 +6766,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.
@@ -6786,7 +6783,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * Same as {@link #getRemote(Class)} except explicitly specifies the URI of the REST interface.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
 	 * </ul>
 	 *
 	 * @param <T> The interface to create a proxy for.
@@ -6804,7 +6801,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * Same as {@link #getRemote(Class, Object)} but allows you to override the serializer and parser used.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
 	 * </ul>
 
 	 * @param <T> The interface to create a proxy for.

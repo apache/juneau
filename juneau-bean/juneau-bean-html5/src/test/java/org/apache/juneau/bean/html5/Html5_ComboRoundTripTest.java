@@ -15,13 +15,12 @@
  * limitations under the License.
  */
 package org.apache.juneau.bean.html5;
-
-import static org.apache.juneau.test.assertions.Verify.*;
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-import static org.apache.juneau.bean.html5.HtmlBuilder.map;
+import static org.apache.juneau.bean.html5.HtmlBuilder.tr;
 import static org.apache.juneau.bean.html5.HtmlBuilder.u;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.a;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.a;
+import static org.apache.juneau.test.assertions.Verify.*;
 
 import java.lang.reflect.*;
 import java.util.*;

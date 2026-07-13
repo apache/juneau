@@ -19,8 +19,7 @@ package org.apache.juneau.rest.server.httppart;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -241,7 +240,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 		for (var p : pairs) {
 			var name = p.getName();
 			var l = stream(name);
-			var hasAllBlanks = l.allMatch(x -> Utils.e(x.getValue()));
+			var hasAllBlanks = l.allMatch(x -> Shorts.ie(x.getValue()));
 			if (hasAllBlanks) {
 				removeAll(getAll(name));
 				add(new RequestHeader(req, name, vs.resolve(p.getValue())));
@@ -518,7 +517,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	}
 
 	private boolean eq(String s1, String s2) {
-		return Utils.eq(! caseSensitive, s1, s2);  // NOAI
+		return Shorts.eq(! caseSensitive, s1, s2);  // NOAI
 	}
 
 	private String key(String name) {

@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.jsonapi;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -246,9 +246,9 @@ public class JsonApiDocument {
 	 */
 	public JsonApiDocument validate() {
 		if (data != null && errors != null)
-			throw illegalState("JSON:API document must not contain both 'data' and 'errors'.");
+			throw isex("JSON:API document must not contain both 'data' and 'errors'.");
 		if (data == null && errors == null && meta == null)
-			throw illegalState("JSON:API document must contain at least one of 'data', 'errors', or 'meta'.");
+			throw isex("JSON:API document must contain at least one of 'data', 'errors', or 'meta'.");
 		return this;
 	}
 

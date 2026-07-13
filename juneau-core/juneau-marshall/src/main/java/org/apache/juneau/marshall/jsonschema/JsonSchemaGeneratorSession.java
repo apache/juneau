@@ -18,7 +18,7 @@ package org.apache.juneau.marshall.jsonschema;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.jsonschema.TypeCategory.*;
 
 import java.lang.reflect.*;
@@ -371,7 +371,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 
 		out.append(jscm.getSchema());
 
-		Predicate<String> ne = Utils::ne;
+		Predicate<String> ne = Shorts::ine;
 		out.appendIfAbsentIf(ne, PROP_type, type);
 		out.appendIfAbsentIf(ne, PROP_format, format);
 
@@ -417,7 +417,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 
 		out.append(jscm.getSchema());
 
-		Predicate<Object> neo = Utils::ne;
+		Predicate<Object> neo = Shorts::ine;
 		out.appendIfAbsentIf(neo, "description", description);
 		out.appendIfAbsentIf(neo, "example", example);
 

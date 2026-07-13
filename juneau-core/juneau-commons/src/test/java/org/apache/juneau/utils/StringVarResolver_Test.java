@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.utils;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.apache.juneau.commons.TestBase;
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
+import org.apache.juneau.commons.utils.*;
 import org.junit.jupiter.api.*;
 
 class StringVarResolver_Test extends TestBase {
@@ -169,7 +170,7 @@ class StringVarResolver_Test extends TestBase {
 	@Test void a07_test$E() {
 		var t = "$E{PATH}";
 
-		assertFalse(org.apache.juneau.commons.utils.Utils.e(VarResolver.DEFAULT.resolve(t)));  // NOAI
+		assertFalse(Shorts.ie(VarResolver.DEFAULT.resolve(t)));  // NOAI
 	}
 
 	//====================================================================================================

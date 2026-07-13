@@ -17,14 +17,13 @@
 package org.apache.juneau.rest.server.httppart;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.time.*;
 import java.util.*;
 import java.util.regex.*;
 
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.part.*;
@@ -34,6 +33,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Represents a single HTTP part on an HTTP request.
@@ -123,14 +123,14 @@ public class RequestHttpPart {
 				var cc = HttpParts.getConstructor(type).orElse(null);
 				if (nn(cc)) {
 					if (! isPresent())
-						return opte();
+						return oe();
 					if (cc.hasParameterTypes(String.class))
-						return opt(cc.newInstance(get()));
+						return o(cc.newInstance(get()));
 					if (cc.hasParameterTypes(String.class, String.class))
-						return opt(cc.newInstance(getName(), get()));
+						return o(cc.newInstance(getName(), get()));
 				}
 			}
-			return opt(parser.parse(HEADER, schema, orElse(null), type));
+			return o(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
 			throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());
 		}
@@ -404,7 +404,7 @@ public class RequestHttpPart {
 	 * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.
 	 */
 	public Optional<String> asString() {
-		return opt(getValue());
+		return o(getValue());
 	}
 
 	/**

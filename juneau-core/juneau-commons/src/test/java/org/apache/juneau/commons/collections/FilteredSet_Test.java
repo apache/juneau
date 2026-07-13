@@ -16,10 +16,9 @@
  */
 package org.apache.juneau.commons.collections;
 
-import static org.apache.juneau.commons.TestUtils.*;
+import static org.apache.juneau.commons.TestAssertions.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.TestAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -27,8 +26,8 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"unused" // Unused parameters/variables kept for consistent method signatures across test utilities.

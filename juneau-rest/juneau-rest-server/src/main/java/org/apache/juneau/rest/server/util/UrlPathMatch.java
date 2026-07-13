@@ -16,9 +16,10 @@
  */
 package org.apache.juneau.rest.server.util;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -56,7 +57,7 @@ public class UrlPathMatch {
 	protected UrlPathMatch(String path, int matchedParts, String[] keys, String[] values) {
 		this.path = path;
 		this.matchedParts = matchedParts;
-		this.vars = keys == null ? mape() : new SimpleMap<>(keys, values);
+		this.vars = keys == null ? emptyMap() : new SimpleMap<>(keys, values);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class UrlPathMatch {
 			if (c == -1)
 				c = path.length();
 		}
-		return Utils.nullIfEmpty(path.substring(0, c));
+		return StringUtils.nullIfEmpty(path.substring(0, c));
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class UrlPathMatch {
 	 */
 	public String getRemainder() {
 		var suffix = getSuffix();
-		if (ne(suffix) && suffix.charAt(0) == '/')
+		if (ine(suffix) && suffix.charAt(0) == '/')
 			suffix = suffix.substring(1);
 		return suffix;
 	}

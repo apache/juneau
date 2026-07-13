@@ -30,7 +30,7 @@ import jakarta.servlet.*;
  * {@link JettyConfiguration}, and mounts {@link RootResources} as the root servlet.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview">juneau-petstore</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */
 public class App {

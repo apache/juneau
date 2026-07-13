@@ -17,17 +17,16 @@
 package org.apache.juneau.http.classic.entity;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.http.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.http.classic.header.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * A basic {@link org.apache.http.HttpEntity} implementation with additional features.
@@ -45,7 +44,7 @@ import org.apache.juneau.http.classic.header.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @BeanIgnore
@@ -413,7 +412,7 @@ public class BasicHttpEntity implements HttpEntity {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw unsupportedOp("Bean is read-only");
+			throw uoex("Bean is read-only");
 	}
 
 	/**

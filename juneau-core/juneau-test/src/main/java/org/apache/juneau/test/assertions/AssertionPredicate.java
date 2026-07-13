@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.text.*;
 import java.util.function.*;

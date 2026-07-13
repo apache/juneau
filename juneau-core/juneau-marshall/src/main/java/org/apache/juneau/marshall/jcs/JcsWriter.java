@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.jcs;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 

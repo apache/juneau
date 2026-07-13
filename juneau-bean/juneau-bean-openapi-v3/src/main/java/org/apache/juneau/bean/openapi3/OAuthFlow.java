@@ -18,7 +18,7 @@ package org.apache.juneau.bean.openapi3;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -178,7 +178,7 @@ public class OAuthFlow extends OpenApiElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,String> getScopes() { return nullIfEmpty(scopes); }
+	public Map<String,String> getScopes() { return nie(scopes); }
 
 	/**
 	 * Bean property getter:  <property>description</property>.
@@ -193,10 +193,10 @@ public class OAuthFlow extends OpenApiElement {
 	@Override /* Overridden from OpenApiElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(authorizationUrl), PROP_authorizationUrl)
 			.addIf(nn(refreshUrl), PROP_refreshUrl)
-			.addIf(ne(scopes), PROP_scopes)
+			.addIf(ine(scopes), PROP_scopes)
 			.addIf(nn(tokenUrl), PROP_tokenUrl)
 			.build();
 		// @formatter:on

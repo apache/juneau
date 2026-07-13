@@ -17,6 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.jsonschema.SchemaUtils.*;
 
 import java.lang.annotation.*;
@@ -1599,11 +1600,11 @@ public class SchemaAnnotation {
 		var m = new JsonMap();
 		if (SchemaAnnotation.empty(a))
 			return m;
-		Predicate<String> ne = Utils::ne;
-		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::nm1;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Collection<?>> nec = Shorts::ine;
+		Predicate<Map<?,?>> nem = Shorts::ine;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = Shorts::nm1;
 
 		// Handle exclusiveMaximum with Draft 2020-12 fallback
 		String exclusiveMaximumValue;
@@ -1702,11 +1703,11 @@ public class SchemaAnnotation {
 			return m;
 		if (m == null)
 			m = new JsonMap();
-		Predicate<String> ne = Utils::ne;
-		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Map<?,?>> nem = Utils::ne;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::nm1;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Collection<?>> nec = Shorts::ine;
+		Predicate<Map<?,?>> nem = Shorts::ine;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = Shorts::nm1;
 		return m.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf()).appendIf(ne, PROP_default, joinnl(a.default_(), a.df())).appendFirst(nec, PROP_enum, parseSet(a.enum_()), parseSet(a.e()))
 			.appendFirst(ne, PROP_format, a.format(), a.f()).appendIf(nf, PROP_exclusiveMaximum, a.exclusiveMaximum() || a.emax()).appendIf(nf, PROP_exclusiveMinimum, a.exclusiveMinimum() || a.emin())
 			.appendIf(nem, PROP_items, SubItemsAnnotation.merge(m.getMap(PROP_items), a.items())).appendFirst(ne, PROP_maximum, a.maximum(), a.max()).appendFirst(nm1, PROP_maxItems, a.maxItems(), a.maxi())

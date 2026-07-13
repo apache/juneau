@@ -18,8 +18,9 @@ package org.apache.juneau.test.bct;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.apache.juneau.test.bct.BctUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -236,7 +237,7 @@ public class BctAssertions {
 	 *    <jc>// With custom error message</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>, () -> <js>"User validation failed"</js>);
 	 *
-	 *    <jc>// With formatted message using Utils.fs() for convenient message suppliers with arguments</jc>
+	 *    <jc>// With formatted message using Shorts.fs() for convenient message suppliers with arguments</jc>
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>, <jsm>fs</jsm>(<js>"User {0} validation failed"</js>, <js>"John"</js>));
 	 * </p>
 	 *
@@ -384,7 +385,7 @@ public class BctAssertions {
 	 * </ol>
 	 *
 	 * @param message Optional custom error message supplier. If provided, will be composed with the default assertion message.
-	 *                Use {@link org.apache.juneau.commons.utils.Utils#fs(String, Object...) Utils.fs()} to conveniently
+	 *                Use {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...) Shorts.fs()} to conveniently
 	 *                create message suppliers with format arguments (e.g., <code>fs("User {0} validation failed", userName)</code>).
 	 * @param actual The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
@@ -394,7 +395,7 @@ public class BctAssertions {
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
 	 * @see BctConfiguration#set(BeanConverter)
-	 * @see org.apache.juneau.commons.utils.Utils#fs(String, Object...)
+	 * @see org.apache.juneau.commons.utils.Shorts#fs(String, Object...)
 	 */
 	public static void assertBean(Supplier<String> message, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Actual was null.");

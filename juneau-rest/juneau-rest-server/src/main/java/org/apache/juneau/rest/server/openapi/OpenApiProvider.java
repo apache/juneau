@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.openapi;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -95,7 +95,7 @@ public interface OpenApiProvider {
 		 * @return The file finder.
 		 */
 		public Optional<FileFinder> fileFinder() {
-			return opt(fileFinder).map(Supplier::get);
+			return o(fileFinder).map(Supplier::get);
 		}
 
 		/**
@@ -126,7 +126,7 @@ public interface OpenApiProvider {
 		 * @return The JSON schema generator.
 		 */
 		public Optional<JsonSchemaGenerator> jsonSchemaGenerator() {
-			return opt(jsonSchemaGenerator).map(Supplier::get);
+			return o(jsonSchemaGenerator).map(Supplier::get);
 		}
 
 		/**
@@ -146,7 +146,7 @@ public interface OpenApiProvider {
 		 * @return The messages.
 		 */
 		public Optional<Messages> messages() {
-			return opt(messages).map(Supplier::get);
+			return o(messages).map(Supplier::get);
 		}
 
 		/**
@@ -167,7 +167,7 @@ public interface OpenApiProvider {
 		 * @return  This object.
 		 */
 		public Builder type(Class<? extends OpenApiProvider> value) {
-			implType = opt(value).isPresent() ? value : BasicOpenApiProvider.class;
+			implType = o(value).isPresent() ? value : BasicOpenApiProvider.class;
 			return this;
 		}
 
@@ -177,7 +177,7 @@ public interface OpenApiProvider {
 		 * @return The var resolver.
 		 */
 		public Optional<VarResolver> varResolver() {
-			return opt(varResolver).map(Supplier::get);
+			return o(varResolver).map(Supplier::get);
 		}
 
 		/**

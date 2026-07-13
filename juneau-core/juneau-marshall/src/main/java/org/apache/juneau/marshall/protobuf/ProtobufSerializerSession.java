@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.protobuf;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.math.*;
@@ -26,7 +26,7 @@ import java.time.temporal.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.commons.utils.Utils;
+import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.swap.*;
@@ -39,7 +39,7 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBinaryBasics">Protobuf Binary Format Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -127,7 +127,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 
 		// Collect non-null property values keyed by name (presence model:  null => omit).
 		var values = new HashMap<String,Object>();
-		m.forEachValue(Utils::nn, (pMeta, key, value, thrown) -> {
+		m.forEachValue(Shorts::nn, (pMeta, key, value, thrown) -> {
 			if (nn(thrown))
 				onBeanGetterException(pMeta, thrown);
 			else

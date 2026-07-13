@@ -794,10 +794,10 @@ public class SubItemsAnnotation {
 			return om;
 		if (om == null)
 			om = new JsonMap();
-		Predicate<String> ne = Utils::ne;
-		Predicate<Collection<?>> nec = Utils::ne;
-		Predicate<Boolean> nf = Utils::isTrue;
-		Predicate<Long> nm1 = Utils::nm1;
+		Predicate<String> ne = Shorts::ine;
+		Predicate<Collection<?>> nec = Shorts::ine;
+		Predicate<Boolean> nf = ObjectUtils::isTrue;
+		Predicate<Long> nm1 = Shorts::nm1;
 		// @formatter:off
 		return om
 			.appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf())

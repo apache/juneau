@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.swagger;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.marshall.parser.*;
 

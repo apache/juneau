@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.auth;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.security.*;
@@ -240,7 +240,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 
 		// No filters match this path — does not apply.
 		if (matchingEntries.isEmpty())
-			return opte();
+			return oe();
 
 		var acc = new AuthResultAccumulator();
 		List<AuthenticationException> failures = null;
@@ -260,7 +260,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 			return folded;
 		if (failures != null)
 			throw aggregate(failures);
-		return opte();
+		return oe();
 	}
 
 	/** Builds the effective request path relative to the context root. */

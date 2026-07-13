@@ -20,8 +20,9 @@ import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -334,13 +335,13 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (nn(contentSchema))
 			return contentSchema;
 		if (nn(responseBeanMeta))
-			contentSchema = opt(responseBeanMeta.getSchema());
+			contentSchema = o(responseBeanMeta.getSchema());
 		else {
 			var rbm = opContext.getResponseBeanMeta(getContent(Object.class));
 			if (nn(rbm))
-				contentSchema = opt(rbm.getSchema());
+				contentSchema = o(rbm.getSchema());
 			else
-				contentSchema = opte();
+				contentSchema = oe();
 		}
 		return contentSchema;
 	}
@@ -404,7 +405,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 			var encoders = request.getOpContext().getEncoders();
 
 			var ae = request.getHeaderParam("Accept-Encoding").orElse(null);
-			if (ne(ae)) {
+			if (ine(ae)) {
 				var match = encoders.getEncoderMatch(ae);
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
@@ -489,7 +490,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		if (nn(serializerMatch))
 			return serializerMatch;
 		if (nn(serializer)) {
-			serializerMatch = opt(new SerializerMatch(getMediaType(), serializer));
+			serializerMatch = o(new SerializerMatch(getMediaType(), serializer));
 		} else {
 			serializerMatch = opContext.getSerializers().getSerializerMatch(request.getHeaderParam("Accept").orElse("*/*"));
 		}
@@ -615,14 +616,14 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link org.apache.juneau.rest.server.Rest#responseProcessors()}
-	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics">@RestOp-Annotated Method Basics</a>
+	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods">@RestOp-Annotated Method Basics</a>
 	 * </ul>
 	 *
 	 * @param output The output to serialize to the connection.
 	 * @return This object.
 	 */
 	public RestResponse setContent(Object output) {
-		this.content = opt(output);
+		this.content = o(output);
 		return this;
 	}
 
@@ -636,7 +637,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * @return This object.
 	 */
 	public RestResponse setContentSchema(HttpPartSchema schema) {
-		this.contentSchema = opt(schema);
+		this.contentSchema = o(schema);
 		return this;
 	}
 

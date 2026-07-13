@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.test.client;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.http.*;
@@ -39,15 +40,15 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.msgpack.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.marshall.uon.*;
-import org.apache.juneau.marshall.urlencoding.*;
-import org.apache.juneau.marshall.xml.*;
-import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.marshall.testutils.pojos.ImplicitSwappedObject;
 import org.apache.juneau.marshall.testutils.pojos.SwappedObject;
 import org.apache.juneau.marshall.testutils.pojos.TypedBean;
 import org.apache.juneau.marshall.testutils.pojos.TypedBeanImpl;
+import org.apache.juneau.marshall.uon.*;
+import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.xml.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;

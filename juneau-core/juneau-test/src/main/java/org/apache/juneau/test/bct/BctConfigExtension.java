@@ -17,8 +17,8 @@
 package org.apache.juneau.test.bct;
 
 import static org.apache.juneau.commons.lang.TriState.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.test.bct.BctConfiguration.*;
 
 import java.util.*;

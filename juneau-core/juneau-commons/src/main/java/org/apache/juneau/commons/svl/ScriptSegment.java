@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.svl;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -68,7 +68,7 @@ final class ScriptSegment extends TemplateSegment {
 	@Override
 	void resolve(VarResolverSession session, StringBuilder out) {
 		if (cachedFn == null)
-			throw illegalArg("No such function ''{0}''", name);
+			throw iaex("No such function ''{0}''", name);
 
 		// Resolve each arg template to a String, then dispatch to the function. TypedFunction
 		// handles ArgCoercer.coerce(...) internally; direct VarFunction implementations get the
@@ -80,7 +80,7 @@ final class ScriptSegment extends TemplateSegment {
 		var n = args.size();
 		if (n < cachedFn.minArity() || n > cachedFn.maxArity()) {
 			var maxStr = cachedFn.maxArity() == Integer.MAX_VALUE ? "any" : String.valueOf(cachedFn.maxArity());
-			throw illegalArg("Function ''{0}'' expected {1}..{2} arg(s), got {3}",
+			throw iaex("Function ''{0}'' expected {1}..{2} arg(s), got {3}",
 				name, cachedFn.minArity(), maxStr, n);
 		}
 

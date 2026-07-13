@@ -17,8 +17,8 @@
 package org.apache.juneau.config.internal;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -53,7 +53,7 @@ public class ConfigMapEntry {
 		var m1 = key2.indexOf('<');
 		var m2 = key2.indexOf('>');
 
-		modifiers = nullIfEmpty((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
+		modifiers = nie((m1 > -1 && m2 > m1) ? key2.substring(m1 + 1, m2) : null);
 
 		this.key = m1 == -1 ? key2 : key2.substring(0, m1);
 
@@ -157,7 +157,7 @@ public class ConfigMapEntry {
 				}
 			}
 
-			if (ne(comment))
+			if (ine(comment))
 				w.append(" # ").append(comment);
 
 			w.append('\n');

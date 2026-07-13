@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.marshall.cp;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -91,7 +90,7 @@ public class ContextBeanCreator<T> {
 	 * @return An optional containing the builder if it exists.
 	 */
 	public <B extends Context.Builder<?>> Optional<B> builder(Class<B> c) {
-		return opt(c.isInstance(builder) ? c.cast(builder) : null);
+		return o(c.isInstance(builder) ? c.cast(builder) : null);
 	}
 
 	/**
@@ -178,7 +177,7 @@ public class ContextBeanCreator<T> {
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>)value);
 		if (builder == null)
-			throw illegalArg("Creator for class {0} not found.", cn(value));
+			throw iaex("Creator for class {0} not found.", cn(value));
 		return this;
 	}
 }

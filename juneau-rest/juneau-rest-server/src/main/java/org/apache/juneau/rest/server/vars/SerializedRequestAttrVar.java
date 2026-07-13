@@ -16,9 +16,8 @@
  */
 package org.apache.juneau.rest.server.vars;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 
@@ -65,7 +64,7 @@ public class SerializedRequestAttrVar extends StreamedVar {
 	public void resolveTo(VarResolverSession session, Writer w, String key) throws Exception {
 		var i = key.indexOf(',');
 		if (i == -1)
-			throw illegalArg("Invalid format for $SA var. Must be of the format $SA{contentType,key[,defaultValue]}");
+			throw iaex("Invalid format for $SA var. Must be of the format $SA{contentType,key[,defaultValue]}");
 		var s2 = splita(key);
 		var req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 		var o = req.getAttribute(key).orElse(key);

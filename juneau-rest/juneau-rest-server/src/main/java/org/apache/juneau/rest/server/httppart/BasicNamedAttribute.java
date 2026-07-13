@@ -16,14 +16,14 @@
  */
 package org.apache.juneau.rest.server.httppart;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.function.*;
 
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Implementation of a named object.

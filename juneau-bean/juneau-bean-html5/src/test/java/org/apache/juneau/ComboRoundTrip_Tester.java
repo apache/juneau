@@ -17,7 +17,7 @@
 package org.apache.juneau;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -264,7 +264,7 @@ public class ComboRoundTrip_Tester<T> {
 	private void verify(T o, String testName) {
 		for (var v : verify) {
 			var s = v.apply(o);
-			if (ne(s)) {
+			if (ine(s)) {
 				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
 			}
 		}

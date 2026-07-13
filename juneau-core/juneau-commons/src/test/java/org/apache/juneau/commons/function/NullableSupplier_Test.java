@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class NullableSupplier_Test extends TestBase {
 

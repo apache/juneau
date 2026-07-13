@@ -19,11 +19,11 @@ package org.apache.juneau.config.store;
 import static java.nio.file.StandardOpenOption.*;
 import static java.nio.file.StandardWatchEventKinds.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.*;
@@ -482,7 +482,7 @@ public class FileStore extends ConfigStore {
 		var exists = Files.exists(p);
 
 		// Don't create the file if we're not going to match.
-		if ((! exists) && ne(expectedContents))
+		if ((! exists) && ine(expectedContents))
 			return "";
 
 		if (isWritable(p)) {

@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -58,7 +59,7 @@ import org.springframework.core.env.*;
  * Spring context is built (e.g. from a user-provided microservice {@code Config}) still win.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotationBasics">{@code @Value} basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation">{@code @Value} basics</a>
  * 	<li class='jc'>{@link SpringBeanStore}
  * </ul>
  */
@@ -126,7 +127,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		if (PROFILES_ACTIVE_KEY.equals(name) && ! e.containsProperty(name)) {
 			var active = e.getActiveProfiles();
 			if (active.length > 0)  // getActiveProfiles() never returns null per the Environment contract.
-				return org.apache.juneau.commons.settings.PropertyLookupResult.present(opt(String.join(",", active)));
+				return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(String.join(",", active)));
 			return org.apache.juneau.commons.settings.PropertyLookupResult.missing();
 		}
 		if (! e.containsProperty(name))
@@ -134,7 +135,7 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		// Spring's getProperty() returns null only for unresolved placeholders, which
 		// containsProperty() already filtered out.  Wrap defensively anyway.
 		var v = e.getProperty(name);
-		return org.apache.juneau.commons.settings.PropertyLookupResult.present(opt(v));
+		return org.apache.juneau.commons.settings.PropertyLookupResult.present(o(v));
 	}
 
 	/** The Juneau config-profile activation key that piggybacks on Spring's active profiles. */

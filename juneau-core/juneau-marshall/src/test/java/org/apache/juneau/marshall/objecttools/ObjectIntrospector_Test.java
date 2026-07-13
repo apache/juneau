@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.objecttools;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -28,7 +28,7 @@ class ObjectIntrospector_Test extends TestBase {
 	// testBasic
 	//====================================================================================================
 	@Test void a01_Basic() throws Exception {
-		var in = no(String.class);
+		var in = nullObject(String.class);
 
 		var r = new ObjectIntrospector(in, null).invokeMethod("substring(int,int)", "[3,6]");
 		assertNull(r);

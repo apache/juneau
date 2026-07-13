@@ -17,8 +17,8 @@
 package org.apache.juneau.rest.server.auth.saml;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -201,13 +201,13 @@ public class SamlAuthFilter extends AuthFilter {
 	@Override /* Overridden from AuthFilter */
 	public Optional<AuthResult> authenticate(HttpServletRequest req) throws AuthenticationException {
 		if (!matchesPath(req))
-			return opte();
+			return oe();
 		var raw = req.getParameter(SAML_RESPONSE_PARAM);
 		if (isEmpty(raw))
-			return opte();
+			return oe();
 		var xml = decodeSamlResponse(raw);
 		var principal = runValidator(xml);
-		return opt(AuthResult.of(principal, extractRoles(principal)));
+		return o(AuthResult.of(principal, extractRoles(principal)));
 	}
 
 	private boolean matchesPath(HttpServletRequest req) {

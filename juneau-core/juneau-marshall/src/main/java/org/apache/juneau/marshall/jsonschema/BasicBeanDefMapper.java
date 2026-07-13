@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.jsonschema;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.text.*;

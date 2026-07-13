@@ -34,7 +34,7 @@ import org.apache.juneau.marshall.protobuf.ProtobufFieldEntry.*;
  * numbering is stable regardless of {@code BeanMeta} ordering), skipping the reserved <c>19000&ndash;19999</c> band.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ProtobufBinaryBasics">Protobuf Binary Format Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Protobuf">Protobuf Binary Format Basics</a>
  * </ul>
  */
 public class ProtobufClassMeta extends ExtendedClassMeta {

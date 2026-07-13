@@ -23,8 +23,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.marshall.testutils.pojos.ABean;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 class PathRemainder_Test extends TestBase {

@@ -18,8 +18,8 @@ package org.apache.juneau.marshall.encoders;
 
 import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -167,7 +167,7 @@ public class EncoderSet {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else if (! cns(v).equals("NoInherit")) {
-					throw illegalArg("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));
+					throw iaex("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));
 				}
 			}
 			entries.addAll(0, l);
@@ -263,7 +263,7 @@ public class EncoderSet {
 				} else if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else {
-					throw illegalArg("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));
+					throw iaex("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));
 				}
 			}
 			entries = l;

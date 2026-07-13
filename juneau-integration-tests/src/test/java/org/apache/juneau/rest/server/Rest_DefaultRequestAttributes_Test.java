@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server;
 
 import static java.util.Collections.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 

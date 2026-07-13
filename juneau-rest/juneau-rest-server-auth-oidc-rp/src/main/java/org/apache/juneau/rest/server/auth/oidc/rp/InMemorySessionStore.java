@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.auth.oidc.rp;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -111,12 +111,12 @@ public class InMemorySessionStore implements SessionStore {
 		synchronized (lock) {
 			var s = byId.get(cookieValue);
 			if (s == null)
-				return opte();
+				return oe();
 			if (s.isExpired(clock.instant())) {
 				removeById(cookieValue);
-				return opte();
+				return oe();
 			}
-			return opt(s);
+			return o(s);
 		}
 	}
 

@@ -26,8 +26,8 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests {@link IoUtils}.

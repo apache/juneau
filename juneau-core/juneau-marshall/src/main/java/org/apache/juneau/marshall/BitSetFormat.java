@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -173,20 +173,20 @@ public enum BitSetFormat {
 				}
 			}
 		} catch (IllegalArgumentException e) {
-			throw illegalArg("Invalid BitSet value ''{0}'' for format {1}: {2}", value, fmt, e.getMessage());
+			throw iaex("Invalid BitSet value ''{0}'' for format {1}: {2}", value, fmt, e.getMessage());
 		}
 		return bs;
 	}
 
 	private static byte[] parseHex(String s) {
 		if ((s.length() & 1) != 0)
-			throw illegalArg("Hex string must have an even number of characters");
+			throw iaex("Hex string must have an even number of characters");
 		var out = new byte[s.length() / 2];
 		for (var i = 0; i < out.length; i++) {
 			var hi = Character.digit(s.charAt(i * 2), 16);
 			var lo = Character.digit(s.charAt(i * 2 + 1), 16);
 			if (hi < 0 || lo < 0)
-				throw illegalArg("Invalid hex character");
+				throw iaex("Invalid hex character");
 			out[i] = (byte) ((hi << 4) | lo);
 		}
 		return out;

@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.marshall.xml;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.util.*;
@@ -32,7 +32,7 @@ import org.apache.juneau.commons.lang.*;
  * XML utility methods.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
 
  * </ul>
  */
@@ -509,7 +509,7 @@ public class XmlUtils {
 					if (xmlNs.prefix().equals(prefix))
 						return Namespace.of(prefix, xmlNs.namespaceURI());
 			}
-			throw bex("Found @Xml.prefix annotation with no matching URI.  prefix=''{0}''", prefix);
+			throw brex("Found @Xml.prefix annotation with no matching URI.  prefix=''{0}''", prefix);
 		}
 
 		// If only namespaceURI specified, need to search for prefix. // HTT: reached only via XmlSerializer when @Xml has namespace but no prefix; not exercised by unit tests

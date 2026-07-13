@@ -18,9 +18,9 @@ package org.apache.juneau.commons.svl;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.settings.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests for the {@code ${xxx}} shortcut in {@link VarResolverSession}'s tokenizer.

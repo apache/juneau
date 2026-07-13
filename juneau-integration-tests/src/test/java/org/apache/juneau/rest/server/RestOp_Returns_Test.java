@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.http.classic.HttpResources.*;
 import static org.apache.juneau.http.classic.HttpResponses.*;

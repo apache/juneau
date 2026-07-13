@@ -21,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.file.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
-import org.apache.juneau.commons.TestBase;
 
 /**
  * Tests for {@link FileUtils}.

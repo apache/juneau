@@ -21,7 +21,7 @@ import static org.apache.juneau.commons.httppart.HttpPartType.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.httppart.bean.MethodInfoUtils.*;
 
 import java.io.*;
@@ -178,8 +178,8 @@ public class ResponseBeanMeta {
 	ResponseBeanMeta(Builder b) {
 		cm = b.cm;
 		code = b.code;
-		partSerializer = opt(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
-		partParser = opt(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
+		partSerializer = o(b.partSerializer).map(x -> HttpPartSerializer.creator().type(x).apply(b.annotations).create());
+		partParser = o(b.partParser).map(x -> HttpPartParser.creator().type(x).apply(b.annotations).create());
 		schema = b.schema.build();
 
 		Map<String,ResponseBeanPropertyMeta> properties2 = map();
@@ -193,7 +193,7 @@ public class ResponseBeanMeta {
 		this.headerMethods = u(hm);
 
 		contentMethod = b.contentMethod == null ? null : b.contentMethod.schema(schema).build(partSerializer, partParser);
-		statusMethod = b.statusMethod == null ? null : b.statusMethod.build(opte(), opte());
+		statusMethod = b.statusMethod == null ? null : b.statusMethod.build(oe(), oe());
 
 		var cMethod = contentMethod;
 		if (cMethod != null) {

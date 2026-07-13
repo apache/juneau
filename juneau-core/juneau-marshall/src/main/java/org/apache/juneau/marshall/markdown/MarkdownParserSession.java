@@ -16,7 +16,8 @@
  */
 package org.apache.juneau.marshall.markdown;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
@@ -167,7 +168,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T) opt(parseAnything(lines, eType.getElementType(), outer, pMeta));
+			return (T) o(parseAnything(lines, eType.getElementType(), outer, pMeta));
 
 		// Skip blank lines and handle empty input
 		var nonBlank = lines.stream().filter(l -> !l.isBlank()).toList();
@@ -421,7 +422,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		int typeColIndex = headers.indexOf(CONST_type);
 		if (typeColIndex >= 0 && typeColIndex < cells.size()) {
 			var typeName = cells.get(typeColIndex);
-			if (ne(typeName)) {
+			if (ine(typeName)) {
 				var registry = eType != null ? eType.getBeanRegistry() : null;
 				var resolved = registry != null ? registry.getClassMeta(typeName) : null;
 				if (resolved != null)

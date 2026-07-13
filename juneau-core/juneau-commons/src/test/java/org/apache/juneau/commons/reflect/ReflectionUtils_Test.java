@@ -16,12 +16,13 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"java:S1186", // Empty test method intentional for framework testing
@@ -43,12 +44,12 @@ class ReflectionUtils_Test extends TestBase {
 	@Test
 	void a001_info_class() {
 		// Non-null class
-		ClassInfo ci = ReflectionUtils.info(TestClass.class);
+		ClassInfo ci = info(TestClass.class);
 		assertNotNull(ci);
 		assertEquals(TestClass.class, ci.inner());
 
 		// Null class - ClassInfo.of(null) throws IllegalArgumentException
-		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Class<?>)null));
+		assertThrows(IllegalArgumentException.class, () -> info((Class<?>)null));
 	}
 
 	//====================================================================================================
@@ -58,12 +59,12 @@ class ReflectionUtils_Test extends TestBase {
 	void a002_info_constructor() throws Exception {
 		// Non-null constructor
 		Constructor<?> ctor = TestClass.class.getConstructor();
-		ConstructorInfo ci = ReflectionUtils.info(ctor);
+		ConstructorInfo ci = info(ctor);
 		assertNotNull(ci);
 		assertEquals(ctor, ci.inner());
 
 		// Null constructor - ConstructorInfo.of(null) throws IllegalArgumentException
-		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Constructor<?>)null));
+		assertThrows(IllegalArgumentException.class, () -> info((Constructor<?>)null));
 	}
 
 	//====================================================================================================
@@ -73,12 +74,12 @@ class ReflectionUtils_Test extends TestBase {
 	void a003_info_field() throws Exception {
 		// Non-null field
 		Field field = TestClass.class.getField("field");
-		FieldInfo fi = ReflectionUtils.info(field);
+		FieldInfo fi = info(field);
 		assertNotNull(fi);
 		assertEquals(field, fi.inner());
 
 		// Null field - FieldInfo.of(null) throws IllegalArgumentException
-		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Field)null));
+		assertThrows(IllegalArgumentException.class, () -> info((Field)null));
 	}
 
 	//====================================================================================================
@@ -88,12 +89,12 @@ class ReflectionUtils_Test extends TestBase {
 	void a004_info_method() throws Exception {
 		// Non-null method
 		Method method = TestClass.class.getMethod("method");
-		MethodInfo mi = ReflectionUtils.info(method);
+		MethodInfo mi = info(method);
 		assertNotNull(mi);
 		assertEquals(method, mi.inner());
 
 		// Null method - MethodInfo.of(null) throws IllegalArgumentException
-		assertThrows(IllegalArgumentException.class, () -> ReflectionUtils.info((Method)null));
+		assertThrows(IllegalArgumentException.class, () -> info((Method)null));
 	}
 
 	//====================================================================================================
@@ -103,15 +104,15 @@ class ReflectionUtils_Test extends TestBase {
 	void a005_info_object() {
 		// Non-null object
 		TestClass obj = new TestClass();
-		ClassInfo ci = ReflectionUtils.info(obj);
+		ClassInfo ci = info(obj);
 		assertNotNull(ci);
 		assertEquals(TestClass.class, ci.inner());
 
 		// Null object - ClassInfo.of(null) calls object.getClass() which throws NPE
-		assertThrows(NullPointerException.class, () -> ReflectionUtils.info((Object)null));
+		assertThrows(NullPointerException.class, () -> info((Object)null));
 
 		// Class object
-		ClassInfo ciClass = ReflectionUtils.info(TestClass.class);
+		ClassInfo ciClass = info(TestClass.class);
 		assertNotNull(ciClass);
 		assertEquals(TestClass.class, ciClass.inner());
 	}

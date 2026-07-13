@@ -17,8 +17,7 @@
 package org.apache.juneau.rest.client.classic;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.text.*;
@@ -29,13 +28,13 @@ import org.apache.http.*;
 import org.apache.http.message.*;
 import org.apache.http.params.*;
 import org.apache.http.util.*;
-import org.apache.juneau.test.assertions.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.httppart.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.classic.assertion.*;
+import org.apache.juneau.test.assertions.*;
 
 /**
  * Represents a response from a remote REST resource.
@@ -71,7 +70,7 @@ import org.apache.juneau.rest.client.classic.assertion.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -533,7 +532,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 		String s = null;
 		if (ct.isPresent())
 			s = ct.get().getParameter("charset");
-		return e(s) ? "utf-8" : s;
+		return ie(s) ? "utf-8" : s;
 	}
 
 	/**

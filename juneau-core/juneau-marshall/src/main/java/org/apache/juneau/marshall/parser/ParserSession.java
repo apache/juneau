@@ -17,9 +17,9 @@
 package org.apache.juneau.marshall.parser;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.lang.reflect.*;
@@ -659,9 +659,9 @@ public class ParserSession extends MarshallingSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));
 		} finally {
 			checkForWarnings();
 		}
@@ -694,9 +694,9 @@ public class ParserSession extends MarshallingSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (IOException e) {
-			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
+			throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));
 		} finally {
 			checkForWarnings();
 		}
@@ -770,7 +770,7 @@ public class ParserSession extends MarshallingSession {
 		} catch (@SuppressWarnings("unused") StackOverflowError e) {
 			throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");
 		} catch (Exception e) {
-			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));
+			throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));
 		} finally {
 			checkForWarnings();
 		}
@@ -839,10 +839,10 @@ public class ParserSession extends MarshallingSession {
 				throw e;
 			if (bodyThrown instanceof IOException e)
 				throw e;
-			throw new ParseException(this, bodyThrown, "Exception occurred.  exception={0}, message={1}.", cns(bodyThrown), lm(bodyThrown));
+			throw new ParseException(this, bodyThrown, "Exception occurred.  exception={0}, message={1}.", cns(bodyThrown), localizedMessage(bodyThrown));
 		}
 		if (completeThrown != null)
-			throw new ParseException(this, completeThrown, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(completeThrown), lm(completeThrown));
+			throw new ParseException(this, completeThrown, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(completeThrown), localizedMessage(completeThrown));
 	}
 
 	private static <T> Exception drainToConsumer(BeanConsumer<T> consumer, List<T> list) {
@@ -1041,7 +1041,7 @@ public class ParserSession extends MarshallingSession {
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	protected <E> Collection<E> doParseIntoCollection(ParserPipe pipe, Collection<E> c, Type elementType) throws Exception {
-		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
+		throw uoex("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
 
 	/**
@@ -1063,7 +1063,7 @@ public class ParserSession extends MarshallingSession {
 		"java:S112" // throws Exception intentional - callback/lifecycle method
 	})
 	protected <K,V> Map<K,V> doParseIntoMap(ParserPipe pipe, Map<K,V> m, Type keyType, Type valueType) throws Exception {
-		throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));
+		throw uoex("Parser ''{0}'' does not support this method.", cn(getClass()));
 	}
 
 	/**
@@ -1329,7 +1329,7 @@ public class ParserSession extends MarshallingSession {
 		if (nn(listener))
 			listener.onBeanSetterException(this, t, p);
 		var prefix = "";
-		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t));
+		addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t));
 	}
 
 	/**

@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.rest.mock;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.StringUtils.emptyIfNull;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.util.*;
  * Used to resolve incoming URLS to the various URL artifacts of <l>HttpServletRequest</l>.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMockBasics">juneau-rest-mock Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestMock">juneau-rest-mock Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -88,7 +88,7 @@ public class MockPathResolver {
 		try {
 			init(target, contextPath, servletPath, pathToResolve, pathVars);
 		} catch (Exception e) {
-			error = lm(e);
+			error = localizedMessage(e);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class MockPathResolver {
 		pathToResolve = emptyIfNull(pathToResolve);
 
 		if (! (pathToResolve.startsWith("http://") || pathToResolve.startsWith("https://"))) {
-			pathToResolve = fixSegment(pathToResolve, mape());
+			pathToResolve = fixSegment(pathToResolve, emptyMap());
 			this.uri = target + contextPath + servletPath + pathToResolve;
 			this.target = target;
 			this.contextPath = contextPath;

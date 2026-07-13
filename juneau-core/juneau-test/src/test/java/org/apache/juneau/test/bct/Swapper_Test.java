@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.test.bct;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -207,8 +206,8 @@ class Swapper_Test extends TestBase {
 
 			var converter = BasicBeanConverter.DEFAULT;
 
-			assertEquals("value", optionalSwapper.apply(converter, opt("value")));
-			assertEquals("EMPTY", optionalSwapper.apply(converter, opte()));
+			assertEquals("value", optionalSwapper.apply(converter, o("value")));
+			assertEquals("EMPTY", optionalSwapper.apply(converter, oe()));
 		}
 
 		@Test

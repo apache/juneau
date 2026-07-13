@@ -17,7 +17,7 @@
 package org.apache.juneau.httppart.bean;
 
 import static org.apache.juneau.commons.httppart.HttpPartType.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.httppart.*;
@@ -100,7 +100,7 @@ class HttpPartBeanMeta_Test {
 	private ResponseBeanPropertyMeta buildRespMeta(String methodName) throws Exception {
 		var m = MethodInfo.of(RespInterface.class.getMethod(methodName));
 		var b = ResponseBeanPropertyMeta.create(HEADER, m);
-		return b.build(opte(), opte());
+		return b.build(oe(), oe());
 	}
 
 	@Test
@@ -126,7 +126,7 @@ class HttpPartBeanMeta_Test {
 		var schema = HttpPartSchema.create().name("x-status").build();
 		var m = MethodInfo.of(RespInterface.class.getMethod("getStatus"));
 		var b = ResponseBeanPropertyMeta.create(HEADER, schema, m);
-		var meta = b.build(opte(), opte());
+		var meta = b.build(oe(), oe());
 		assertTrue(meta.getPartName().isPresent());
 		assertEquals("x-status", meta.getPartName().orElseThrow());
 	}
@@ -149,7 +149,7 @@ class HttpPartBeanMeta_Test {
 		var m = MethodInfo.of(RespInterface.class.getMethod("getStatus"));
 		var b = ResponseBeanPropertyMeta.create(HEADER, m);
 		b.name("overridden");   // exercises the name() setter (lines 54-56)
-		var meta = b.build(opte(), opte());
+		var meta = b.build(oe(), oe());
 		assertNotNull(meta);
 	}
 

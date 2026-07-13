@@ -15,8 +15,7 @@
  * limitations under the License.
  */
 package org.apache.juneau.http.classic.header;
-
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -32,7 +31,7 @@ import java.util.function.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -105,7 +104,7 @@ public class BasicUriHeader extends BasicHeader {
 	 */
 	public BasicUriHeader(String name, String value) {
 		super(name, value);
-		this.value = e(value) ? null : URI.create(value);
+		this.value = ie(value) ? null : URI.create(value);
 		this.supplier = null;
 	}
 
@@ -148,7 +147,7 @@ public class BasicUriHeader extends BasicHeader {
 	 * @return The header value as a {@link URI} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return opt(value());
+		return o(value());
 	}
 
 	@Override /* Overridden from Header */

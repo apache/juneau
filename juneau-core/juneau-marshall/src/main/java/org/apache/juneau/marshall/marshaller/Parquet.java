@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.parquet.*;
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ParquetBasics">Parquet Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Parquet">Parquet Basics</a>
  * 	<li class='link'>{doc jm.Marshallers}
  * </ul>
  */

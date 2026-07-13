@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.classic.part;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -28,7 +28,7 @@ import org.apache.juneau.test.assertions.*;
  * A {@link NameValuePair} that consists of a single string value.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -44,7 +44,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or value is <jk>null</jk>.
 	 */
 	public static BasicStringPart of(String name, String value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicStringPart(name, value);
 	}
@@ -60,7 +60,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return A new {@link BasicStringPart} object, or <jk>null</jk> if the name or supplier is <jk>null</jk>.
 	 */
 	public static BasicStringPart of(String name, Supplier<String> value) {
-		if (e(name) || value == null)
+		if (ie(name) || value == null)
 			return null;
 		return new BasicStringPart(name, value);
 	}
@@ -108,7 +108,7 @@ public class BasicStringPart extends BasicPart {
 	 * @return The part value as a {@link String} wrapped in an {@link Optional}.  Never <jk>null</jk>.
 	 */
 	public Optional<String> asString() {
-		return opt(value());
+		return o(value());
 	}
 
 	@Override /* Overridden from Header */

@@ -18,7 +18,7 @@ package org.apache.juneau.bean.swagger;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.internal.ConverterUtils.*;
 
 import java.util.*;
@@ -399,7 +399,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<SchemaInfo> getAllOf() { return nullIfEmpty(allOf); }
+	public Set<SchemaInfo> getAllOf() { return nie(allOf); }
 
 	/**
 	 * Bean property getter:  <property>default</property>.
@@ -430,7 +430,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<Object> getEnum() { return nullIfEmpty(enum_); }
+	public Set<Object> getEnum() { return nie(enum_); }
 
 	/**
 	 * Bean property getter:  <property>example</property>.
@@ -549,7 +549,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Map<String,SchemaInfo> getProperties() { return nullIfEmpty(properties); }
+	public Map<String,SchemaInfo> getProperties() { return nie(properties); }
 
 	/**
 	 * Bean property getter:  <property>readOnly</property>.
@@ -581,7 +581,7 @@ public class SchemaInfo extends SwaggerElement {
 	 *
 	 * @return The property value, or <jk>null</jk> if it is not set.
 	 */
-	public Set<String> getRequiredProperties() { return nullIfEmpty(requiredProperties); }
+	public Set<String> getRequiredProperties() { return nie(requiredProperties); }
 
 	/**
 	 * Bean property getter:  <property>title</property>.
@@ -614,14 +614,14 @@ public class SchemaInfo extends SwaggerElement {
 	@Override /* Overridden from SwaggerElement */
 	public Set<String> keySet() {
 		// @formatter:off
-		var s = setb(String.class)
+		var s = stb(String.class)
 			.addIf(nn(ref), PROP_ref)
 			.addIf(nn(additionalProperties), PROP_additionalProperties)
-			.addIf(ne(allOf), PROP_allOf)
+			.addIf(ine(allOf), PROP_allOf)
 			.addIf(nn(default_), PROP_default)
 			.addIf(nn(description), PROP_description)
 			.addIf(nn(discriminator), PROP_discriminator)
-			.addIf(ne(enum_), PROP_enum)
+			.addIf(ine(enum_), PROP_enum)
 			.addIf(nn(example), PROP_example)
 			.addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)
 			.addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)
@@ -638,10 +638,10 @@ public class SchemaInfo extends SwaggerElement {
 			.addIf(nn(minimum), PROP_minimum)
 			.addIf(nn(multipleOf), PROP_multipleOf)
 			.addIf(nn(pattern), PROP_pattern)
-			.addIf(ne(properties), PROP_properties)
+			.addIf(ine(properties), PROP_properties)
 			.addIf(nn(readOnly), PROP_readOnly)
 			.addIf(nn(required), PROP_required)
-			.addIf(ne(requiredProperties), PROP_requiredProperties)
+			.addIf(ine(requiredProperties), PROP_requiredProperties)
 			.addIf(nn(title), PROP_title)
 			.addIf(nn(type), PROP_type)
 			.addIf(nn(uniqueItems), PROP_uniqueItems)
@@ -721,7 +721,7 @@ public class SchemaInfo extends SwaggerElement {
 			case PROP_readOnly -> setReadOnly(toBoolean(value));
 			case PROP_ref -> setRef(s(value));
 			case PROP_required -> setRequired(toBoolean(value));
-			case PROP_requiredProperties -> setRequiredProperties(listb(String.class).addAny(value).sparse().build());
+			case PROP_requiredProperties -> setRequiredProperties(lb(String.class).addAny(value).sparse().build());
 			case PROP_title -> setTitle(s(value));
 			case PROP_type -> setType(s(value));
 			case PROP_uniqueItems -> setUniqueItems(toBoolean(value));
@@ -771,7 +771,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setAllOf(SchemaInfo...value) {
-		setAllOf(setb(SchemaInfo.class).sparse().addAny((Object[])value).build());
+		setAllOf(stb(SchemaInfo.class).sparse().addAny((Object[])value).build());
 		return this;
 	}
 
@@ -842,7 +842,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setEnum(Object...value) {
-		setEnum(setb(Object.class).sparse().addAny(value).build());
+		setEnum(stb(Object.class).sparse().addAny(value).build());
 		return this;
 	}
 
@@ -1155,7 +1155,7 @@ public class SchemaInfo extends SwaggerElement {
 	 * @return This object.
 	 */
 	public SchemaInfo setRequiredProperties(String...value) {
-		setRequiredProperties(setb(String.class).sparse().addAny((Object[])value).build());
+		setRequiredProperties(stb(String.class).sparse().addAny((Object[])value).build());
 		return this;
 	}
 

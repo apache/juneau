@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 
@@ -108,7 +108,7 @@ public final class FreemarkerView implements View {
 	 */
 	public static FreemarkerView of(String templateName) {
 		if (isBlank(templateName))
-			throw illegalArg("templateName must not be null or blank");
+			throw iaex("templateName must not be null or blank");
 		return new FreemarkerView(templateName, Map.of(), Map.of());
 	}
 
@@ -139,9 +139,9 @@ public final class FreemarkerView implements View {
 	 */
 	public FreemarkerView attr(String key, Object value) {
 		if (isBlank(key))
-			throw illegalArg("attribute key must not be null or blank");
+			throw iaex("attribute key must not be null or blank");
 		if (value == null)
-			throw illegalArg("attribute value must not be null (attribute ''{0}'')", key);
+			throw iaex("attribute value must not be null (attribute ''{0}'')", key);
 		var copy = new LinkedHashMap<>(attributes);
 		copy.put(key, value);
 		return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);
@@ -163,9 +163,9 @@ public final class FreemarkerView implements View {
 		var copy = new LinkedHashMap<>(attributes);
 		values.forEach((k, v) -> {
 			if (isBlank(k))
-				throw illegalArg("attribute key must not be null or blank");
+				throw iaex("attribute key must not be null or blank");
 			if (v == null)
-				throw illegalArg("attribute value must not be null (attribute ''{0}'')", k);
+				throw iaex("attribute value must not be null (attribute ''{0}'')", k);
 			copy.put(k, v);
 		});
 		return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);
@@ -188,9 +188,9 @@ public final class FreemarkerView implements View {
 	 */
 	public FreemarkerView header(String name, String value) {
 		if (isBlank(name))
-			throw illegalArg("header name must not be null or blank");
+			throw iaex("header name must not be null or blank");
 		if (value == null)
-			throw illegalArg("header value must not be null (header ''{0}'')", name);
+			throw iaex("header value must not be null (header ''{0}'')", name);
 		var copy = new LinkedHashMap<>(responseHeaders);
 		copy.put(name, value);
 		return new FreemarkerView(templateName, attributes, Map.copyOf(copy));

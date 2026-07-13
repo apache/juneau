@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 @SuppressWarnings({
 	"resource", // Streams intentionally not closed in unit tests

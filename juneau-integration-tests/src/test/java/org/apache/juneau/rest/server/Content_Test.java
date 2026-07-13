@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.rest.server;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.http.classic.header.ContentType.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,19 +24,19 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
-import org.apache.juneau.*;
+import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
+import org.apache.juneau.marshall.testutils.pojos.XBeans;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.marshall.urlencoding.*;
 import org.apache.juneau.marshall.urlencoding.UrlEncoding;
 import org.apache.juneau.rest.mock.classic.*;
-import org.apache.juneau.marshall.testutils.pojos.ABean;
-import org.apache.juneau.marshall.testutils.pojos.XBeans;
 import org.apache.juneau.testutils.pojos.*;
 import org.junit.jupiter.api.*;
 
@@ -979,7 +978,7 @@ class Content_Test extends TestBase {
 			.assertStatus(200)
 			.assertContent("null");
 
-		var body2 = Json5.DEFAULT.of(l(opt(ABean.get())));
+		var body2 = Json5.DEFAULT.of(l(o(ABean.get())));
 		j.post("/d", body2, APPLICATION_JSON)
 			.run()
 			.assertStatus(200)

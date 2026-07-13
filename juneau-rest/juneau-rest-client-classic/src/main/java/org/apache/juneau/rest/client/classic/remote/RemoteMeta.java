@@ -18,9 +18,8 @@ package org.apache.juneau.rest.client.classic.remote;
 
 import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 
 import java.lang.reflect.*;
@@ -39,8 +38,8 @@ import org.apache.juneau.http.remote.*;
  * caching and reuse.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics">REST Proxy Basics</a>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics">juneau-rest-client Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies">REST Proxy Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient">juneau-rest-client Basics</a>
  * </ul>
  */
 public class RemoteMeta {
@@ -72,15 +71,15 @@ public class RemoteMeta {
 		var headers2 = HeaderList.create().resolving();
 
 		for (var r : remotes) {
-			if (ne(r.path()))
+			if (ine(r.path()))
 				path = trimSlashes(resolve(r.path()));
-			else if (ne(r.value()))
+			else if (ine(r.value()))
 				path = trimSlashes(resolve(r.value()));
 			for (var h : r.headers())
 				headers2.append(stringHeader(resolve(h)));
-			if (ne(r.version()))
+			if (ine(r.version()))
 				clientVersion = resolve(r.version());
-			if (ne(r.versionHeader()))
+			if (ine(r.versionHeader()))
 				versionHeader = resolve(r.versionHeader());
 			if (isNotVoid(r.headerList()) && HeaderList.class.isAssignableFrom(r.headerList())) {
 				try {

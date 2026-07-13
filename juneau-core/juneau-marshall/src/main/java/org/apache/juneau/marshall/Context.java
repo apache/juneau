@@ -19,8 +19,9 @@ package org.apache.juneau.marshall;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -535,7 +536,7 @@ public abstract class Context {
 				else if (x instanceof MethodInfo x2)
 					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
 				else
-					illegalArg("Invalid type passed to applyAnnotations:  {0}", cn(x));
+					iaex("Invalid type passed to applyAnnotations:  {0}", cn(x));
 			});
 			return work;
 		}
@@ -564,7 +565,7 @@ public abstract class Context {
 		 * @return An {@link Optional} containing this builder cast to the subtype, or empty if not an instance.
 		 */
 		public <T extends Builder<?>> Optional<T> asSubtype(Class<T> subtype) {
-			return opt(assertArgNotNull(ARG_subtype, subtype).isInstance(this) ? subtype.cast(this) : null);
+			return o(assertArgNotNull(ARG_subtype, subtype).isInstance(this) ? subtype.cast(this) : null);
 		}
 
 		/**
@@ -703,7 +704,7 @@ public abstract class Context {
 		 *
 		 * @return The context class if it was specified.
 		 */
-		public Optional<Class<?>> getType() { return opt(type); }
+		public Optional<Class<?>> getType() { return o(type); }
 
 		/**
 		 * Returns the hashkey of this builder.
@@ -956,7 +957,7 @@ public abstract class Context {
 	 * @return A new Builder object.
 	 */
 	public Builder copy() {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**
@@ -969,7 +970,7 @@ public abstract class Context {
 	 * @return A new session builder.
 	 */
 	public ContextSession.Builder createSession() {
-		throw unsupportedOp();
+		throw uoex();
 	}
 
 	/**

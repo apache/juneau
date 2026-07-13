@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * Supported wire formats for {@link Class} values.
@@ -222,7 +222,7 @@ public enum ClassFormat {
 		try {
 			return resolveWithArraySuffix(s, cl);
 		} catch (ClassNotFoundException firstAttempt) {
-			throw illegalArg("Could not resolve class ''{0}'' for format {1}: {2}", value, format, firstAttempt.getMessage());
+			throw iaex("Could not resolve class ''{0}'' for format {1}: {2}", value, format, firstAttempt.getMessage());
 		}
 	}
 

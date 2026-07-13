@@ -16,14 +16,15 @@
  */
 package org.apache.juneau.marshall.json5;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.stream.*;
 import org.junit.jupiter.api.*;

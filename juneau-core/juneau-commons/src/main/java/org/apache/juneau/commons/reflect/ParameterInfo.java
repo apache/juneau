@@ -16,12 +16,12 @@
  */
 package org.apache.juneau.commons.reflect;
 
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;
 import static org.apache.juneau.commons.reflect.ClassNameFormat.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.annotation.*;
 import java.lang.reflect.*;
@@ -748,7 +748,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			}
 		}
 
-		return opt(inner).filter(x -> x.isNamePresent()).filter(x -> ! DISABLE_PARAM_NAME_DETECTION.get()).map(x -> x.getName()).orElse(null);
+		return o(inner).filter(x -> x.isNamePresent()).filter(x -> ! DISABLE_PARAM_NAME_DETECTION.get()).map(x -> x.getName()).orElse(null);
 	}
 
 	private String findQualifierInternal() {
@@ -909,8 +909,8 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			// to Optional.empty() so @Value("${maybe}") Optional<T> behaves the same as Spring's.
 			if (pt.is(Optional.class))
 				return (resolved == null || (resolved instanceof String s && s.isEmpty()))
-					? opte()
-					: opt(resolved);
+					? oe()
+					: o(resolved);
 			return resolved;
 		}
 
@@ -972,7 +972,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 				}
 
 				// Handle List<T> or Set<T>
-				var inner2 = opt(ptu.inner()).orElse(Object.class);
+				var inner2 = o(ptu.inner()).orElse(Object.class);
 				if (eq(inner2, List.class) || eq(inner2, Set.class)) {
 					if (parameterizedType instanceof ParameterizedType pt2) {
 						var typeArgs = pt2.getActualTypeArguments();
@@ -993,7 +993,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			collectionValue = ReflectionUtils.resolveCollectionValue(elementType, beanStore, ptu);
 		}
 		if (nn(collectionValue))
-			return pt.is(Optional.class) ? opt(collectionValue) : collectionValue;
+			return pt.is(Optional.class) ? o(collectionValue) : collectionValue;
 
 		// Handle single bean
 		var ptc = ptu.inner();
@@ -1007,7 +1007,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 			if (r.isEmpty()) {
 				for (var r2 : otherBeans)
 					if (canAccept(r2)) {
-						r = opt(r2);
+						r = o(r2);
 						break;
 					}
 			}

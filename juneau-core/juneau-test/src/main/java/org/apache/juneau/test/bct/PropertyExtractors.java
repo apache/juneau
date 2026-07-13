@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.test.bct;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -231,7 +233,7 @@ public class PropertyExtractors {
 			return safe(() -> {
 				if (o == null)
 					return null;
-				var f = no(Field.class);
+				var f = nullObject(Field.class);
 				var c = o.getClass();
 				var n = Character.toUpperCase(name.charAt(0)) + name.substring(1);
 				var m = Arrays.stream(c.getMethods()).filter(x -> x.getName().equals("is" + n) && x.getParameterCount() == 0).findFirst().orElse(null);

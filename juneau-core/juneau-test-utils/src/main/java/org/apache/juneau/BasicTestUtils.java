@@ -17,6 +17,7 @@
 package org.apache.juneau;
 
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -40,7 +41,7 @@ import org.junit.jupiter.api.*;
  * This class lives in the {@code juneau-test-utils} module, which depends only on {@code juneau-commons} and JUnit, so
  * it never introduces a {@code juneau-marshall} dependency onto its consumers.
  */
-public abstract class BasicTestUtils extends Utils {
+public abstract class BasicTestUtils extends Shorts {
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
 
@@ -175,5 +176,16 @@ public abstract class BasicTestUtils extends Utils {
 	 */
 	public static URL url(String value) {
 		return safe(()->new URI(value).toURL());
+	}
+
+	/**
+	 * Returns an empty array of the specified type.
+	 *
+	 * @param <T> The component type.
+	 * @param t The component type.
+	 * @return A new empty array of the specified type.
+	 */
+	public static <T> T[] ea(Class<T> t) {
+		return CollectionUtils.array(t, 0);
 	}
 }

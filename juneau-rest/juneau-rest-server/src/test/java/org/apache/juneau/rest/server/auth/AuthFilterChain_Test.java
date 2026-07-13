@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.rest.server.auth;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 import java.io.*;
@@ -77,7 +77,7 @@ class AuthFilterChain_Test extends TestBase {
 	private static AuthFilter succeeds(Principal principal, String... roles) {
 		return new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
-				return opt(AuthResult.of(principal, roles));
+				return o(AuthResult.of(principal, roles));
 			}
 		};
 	}
@@ -86,7 +86,7 @@ class AuthFilterChain_Test extends TestBase {
 	private static AuthFilter empty() {
 		return new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
-				return opte();
+				return oe();
 			}
 		};
 	}
@@ -132,7 +132,7 @@ class AuthFilterChain_Test extends TestBase {
 		AuthFilter shouldNotRun = new AuthFilter() {
 			@Override public Optional<AuthResult> authenticate(HttpServletRequest req) {
 				called.set(true);
-				return opte();
+				return oe();
 			}
 		};
 		var chain = AuthFilterChain.create(null)

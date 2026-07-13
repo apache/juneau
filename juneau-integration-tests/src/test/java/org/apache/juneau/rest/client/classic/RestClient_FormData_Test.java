@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.rest.client.classic;
 
-import static org.apache.juneau.TestUtils.*;
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.http.classic.HttpParts.*;
 import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
 
@@ -29,11 +28,11 @@ import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.marshall.uon.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.marshall.testutils.pojos.ABean;
 import org.apache.juneau.utest.utils.*;
 import org.junit.jupiter.api.*;
 

@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 
 import java.io.*;
 import java.util.*;

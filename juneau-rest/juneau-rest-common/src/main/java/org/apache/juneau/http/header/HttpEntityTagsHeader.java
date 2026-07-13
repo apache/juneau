@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.header;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -86,7 +86,7 @@ public class HttpEntityTagsHeader extends HttpHeaderBean {
 	}
 
 	public Optional<EntityTags> asEntityTags() {
-		return opt(toEntityTags());
+		return o(toEntityTags());
 	}
 
 	@Override

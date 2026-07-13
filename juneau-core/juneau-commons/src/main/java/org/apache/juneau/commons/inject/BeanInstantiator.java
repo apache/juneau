@@ -18,12 +18,12 @@ package org.apache.juneau.commons.inject;
 
 import static java.util.Collections.*;
 import static java.util.Comparator.*;
+import static org.apache.juneau.commons.function.Suppliers.*;
 import static org.apache.juneau.commons.reflect.ElementFlag.*;
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -299,7 +299,7 @@ public class BeanInstantiator<T> {
 	 * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if the type is <jk>null</jk> or instantiation fails.
 	 */
 	public static <T> Optional<T> optionalOf(Class<T> beanType) {
-		return beanType == null ? opte() : of(beanType).asOptional();
+		return beanType == null ? oe() : of(beanType).asOptional();
 	}
 
 	/**
@@ -351,9 +351,9 @@ public class BeanInstantiator<T> {
 	 */
 	public Optional<T> asOptional() {
 		try {
-			return opt(run());
+			return o(run());
 		} catch (@SuppressWarnings("unused") ExecutableException e) {
-			return opte();
+			return oe();
 		}
 	}
 
@@ -1710,7 +1710,7 @@ public class BeanInstantiator<T> {
 			var buildMethod = info(builder2.getClass()).getPublicMethods().stream()
 				.filter(x -> x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))
 				.filter(x -> buildMethodNames.contains(x.getNameSimple()))
-				.filter(x -> opt(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
+				.filter(x -> o(x).map(x2 -> x2.getReturnType()).filter(x2 -> x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType
 				.filter(x -> x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)
 				.sorted(methodComparator)
 				.findFirst();
@@ -2010,7 +2010,7 @@ public class BeanInstantiator<T> {
 
 		// This should never happen if beanSubType validation is correct, but check anyway
 		if (result.isEmpty() || !result.get(result.size() - 1).is(beanType.inner())) {
-			throw illegalArg("beanType {0} was not found in the parent hierarchy of beanSubType {1}. This indicates a validation error.", beanType.getName(), beanSubType.getName());
+			throw iaex("beanType {0} was not found in the parent hierarchy of beanSubType {1}. This indicates a validation error.", beanType.getName(), beanSubType.getName());
 		}
 
 		return result;

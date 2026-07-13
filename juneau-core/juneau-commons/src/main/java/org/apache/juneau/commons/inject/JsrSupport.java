@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.commons.inject;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -85,7 +85,7 @@ public final class JsrSupport {
 	 */
 	public static boolean isInjectAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JUNEAU_INJECT, JAKARTA_INJECT, JAVAX_INJECT, SPRING_AUTOWIRED);
+		return eqa(name, JUNEAU_INJECT, JAKARTA_INJECT, JAVAX_INJECT, SPRING_AUTOWIRED);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public final class JsrSupport {
 	 */
 	public static boolean isNamedAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JUNEAU_NAMED, JAKARTA_NAMED, JAVAX_NAMED);
+		return eqa(name, JUNEAU_NAMED, JAKARTA_NAMED, JAVAX_NAMED);
 	}
 
 	/**
@@ -102,7 +102,7 @@ public final class JsrSupport {
 	public static boolean isQualifierMeta(AnnotationInfo<?> annotation) {
 		return Arrays.stream(annotation.annotationType().getAnnotations())
 			.map(a -> a.annotationType().getName())
-			.anyMatch(n -> eqAny(n, JUNEAU_QUALIFIER, JAKARTA_QUALIFIER, JAVAX_QUALIFIER));
+			.anyMatch(n -> eqa(n, JUNEAU_QUALIFIER, JAKARTA_QUALIFIER, JAVAX_QUALIFIER));
 	}
 
 	/**
@@ -110,14 +110,14 @@ public final class JsrSupport {
 	 */
 	public static boolean isSingletonAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JUNEAU_SINGLETON, JAKARTA_SINGLETON, JAVAX_SINGLETON);
+		return eqa(name, JUNEAU_SINGLETON, JAKARTA_SINGLETON, JAVAX_SINGLETON);
 	}
 
 	/**
 	 * Returns <jk>true</jk> if the class is a supported provider interface.
 	 */
 	public static boolean isProviderType(Class<?> type) {
-		return type != null && eqAny(type.getName(), JUNEAU_PROVIDER, JAKARTA_PROVIDER, JAVAX_PROVIDER);
+		return type != null && eqa(type.getName(), JUNEAU_PROVIDER, JAKARTA_PROVIDER, JAVAX_PROVIDER);
 	}
 
 	/**
@@ -125,7 +125,7 @@ public final class JsrSupport {
 	 */
 	public static boolean isPostConstructAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JUNEAU_POSTCONSTRUCT, JAKARTA_POSTCONSTRUCT, JAVAX_POSTCONSTRUCT);
+		return eqa(name, JUNEAU_POSTCONSTRUCT, JAKARTA_POSTCONSTRUCT, JAVAX_POSTCONSTRUCT);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public final class JsrSupport {
 	 */
 	public static boolean isPreDestroyAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JUNEAU_PREDESTROY, JAKARTA_PREDESTROY, JAVAX_PREDESTROY);
+		return eqa(name, JUNEAU_PREDESTROY, JAKARTA_PREDESTROY, JAVAX_PREDESTROY);
 	}
 
 	/**
@@ -164,7 +164,7 @@ public final class JsrSupport {
 	 */
 	public static boolean isValueAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JUNEAU_VALUE, SPRING_VALUE);
+		return eqa(name, JUNEAU_VALUE, SPRING_VALUE);
 	}
 
 	/**
@@ -197,6 +197,6 @@ public final class JsrSupport {
 	 */
 	public static boolean isValidAnnotation(AnnotationInfo<?> annotation) {
 		var name = annotation.getName();
-		return eqAny(name, JAKARTA_VALID, JAVAX_VALID, SPRING_VALIDATED);
+		return eqa(name, JAKARTA_VALID, JAVAX_VALID, SPRING_VALIDATED);
 	}
 }

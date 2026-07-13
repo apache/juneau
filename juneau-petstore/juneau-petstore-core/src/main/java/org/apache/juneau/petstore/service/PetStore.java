@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.petstore.service;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -40,7 +40,7 @@ import org.apache.juneau.petstore.dto.*;
  * state back to the seeded baseline.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview">juneau-petstore</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
  */
 public class PetStore {
@@ -99,7 +99,7 @@ public class PetStore {
 				return Json5Parser.DEFAULT.parse(reader, List.class, elementType);
 			}
 		} catch (Exception e) {
-			throw bex(e, "Failed to load petstore seed resource ''{0}''", resourcePath);
+			throw brex(e, "Failed to load petstore seed resource ''{0}''", resourcePath);
 		}
 	}
 
@@ -137,7 +137,7 @@ public class PetStore {
 	 */
 	public Pet createPet(Pet pet) {
 		if (pet == null)
-			throw illegalArg("Pet must not be null");
+			throw iaex("Pet must not be null");
 		var id = nextPetId.incrementAndGet();
 		pet.setId(id);
 		pets.put(id, pet);
@@ -153,7 +153,7 @@ public class PetStore {
 	 */
 	public Pet updatePet(Pet pet) {
 		if (pet == null)
-			throw illegalArg("Pet must not be null");
+			throw iaex("Pet must not be null");
 		if (! pets.containsKey(pet.getId()))
 			throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());
 		pets.put(pet.getId(), pet);
@@ -205,7 +205,7 @@ public class PetStore {
 	 */
 	public Order createOrder(Order order) {
 		if (order == null)
-			throw illegalArg("Order must not be null");
+			throw iaex("Order must not be null");
 		var id = nextOrderId.incrementAndGet();
 		order.setId(id);
 		orders.put(id, order);
@@ -221,7 +221,7 @@ public class PetStore {
 	 */
 	public Order updateOrder(Order order) {
 		if (order == null)
-			throw illegalArg("Order must not be null");
+			throw iaex("Order must not be null");
 		if (! orders.containsKey(order.getId()))
 			throw new PetstoreNotFoundException("Order not found: id=" + order.getId());
 		orders.put(order.getId(), order);
@@ -271,11 +271,11 @@ public class PetStore {
 	 */
 	public User createUser(User user) {
 		if (user == null)
-			throw illegalArg("User must not be null");
+			throw iaex("User must not be null");
 		if (user.getUsername() == null)
-			throw illegalArg("User username must not be null");
+			throw iaex("User username must not be null");
 		if (users.putIfAbsent(user.getUsername(), user) != null)
-			throw illegalArg("User already exists: username=''{0}''", user.getUsername());
+			throw iaex("User already exists: username=''{0}''", user.getUsername());
 		return user;
 	}
 
@@ -288,7 +288,7 @@ public class PetStore {
 	 */
 	public User updateUser(User user) {
 		if (user == null)
-			throw illegalArg("User must not be null");
+			throw iaex("User must not be null");
 		if (! users.containsKey(user.getUsername()))
 			throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());
 		users.put(user.getUsername(), user);

@@ -16,25 +16,25 @@
  */
 package org.apache.juneau.commons.utils;
 
-import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.commons.TestAssertions.*;
+import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.collections.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class CollectionUtils_Test extends TestBase {
 
 	//====================================================================================================
-	// a(T...)
+	// array(T...)
 	//====================================================================================================
 	@Test
 	void a001_a() {
-		String[] result = a("a", "b", "c");
+		String[] result = array("a", "b", "c");
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals("a", result[0]);
@@ -42,7 +42,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", result[2]);
 
 		// Empty array
-		String[] empty = a();
+		String[] empty = array();
 		assertNotNull(empty);
 		assertEquals(0, empty.length);
 	}
@@ -52,7 +52,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a002_a2() {
-		String[][] result = a2(a("a", "b"), a("c", "d"));
+		String[][] result = array2d(array("a", "b"), array("c", "d"));
 		assertNotNull(result);
 		assertEquals(2, result.length);
 		assertEquals(2, result[0].length);
@@ -62,12 +62,12 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("d", result[1][1]);
 
 		// Single row
-		String[][] single = a2(a("x", "y", "z"));
+		String[][] single = array2d(array("x", "y", "z"));
 		assertEquals(1, single.length);
 		assertEquals(3, single[0].length);
 
 		// Empty
-		String[][] empty = a2();
+		String[][] empty = array2d();
 		assertNotNull(empty);
 		assertEquals(0, empty.length);
 	}
@@ -207,7 +207,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a009_ao() {
-		Object[] result = ao("string", 42, true, 3.14, null);
+		Object[] result = objectArray("string", 42, true, 3.14, null);
 		assertNotNull(result);
 		assertEquals(5, result.length);
 		assertEquals("string", result[0]);
@@ -217,7 +217,7 @@ class CollectionUtils_Test extends TestBase {
 		assertNull(result[4]);
 
 		// Empty
-		Object[] empty = ao();
+		Object[] empty = objectArray();
 		assertNotNull(empty);
 		assertEquals(0, empty.length);
 	}
@@ -284,7 +284,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a013_booleans() {
-		boolean[] result = booleans(true, false, true);
+		boolean[] result = booleanArray(true, false, true);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertTrue(result[0]);
@@ -297,7 +297,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_bytes() {
-		byte[] result = bytes(1, 2, 3);
+		byte[] result = byteArray(1, 2, 3);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals(1, result[0]);
@@ -310,7 +310,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a015_chars() {
-		char[] result = chars('a', 'b', 'c');
+		char[] result = charArray('a', 'b', 'c');
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals('a', result[0]);
@@ -323,8 +323,8 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a016_combine() {
-		var s1 = a("a");
-		var s2 = a("b");
+		var s1 = array("a");
+		var s2 = array("b");
 
 		assertList(combine(s1, s2), "a", "b");
 		assertList(combine(s1), "a");
@@ -536,7 +536,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a030_doubles() {
-		double[] result = doubles(1.0, 2.0, 3.0);
+		double[] result = doubleArray(1.0, 2.0, 3.0);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals(1.0, result[0]);
@@ -550,10 +550,10 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a031_first() {
 		var list = list("a", "b", "c");
-		assertEquals(opt("a"), first(list));
+		assertEquals(o("a"), first(list));
 
-		assertEquals(opte(), first(null));
-		assertEquals(opte(), first(list()));
+		assertEquals(oe(), first(null));
+		assertEquals(oe(), first(list()));
 
 		// Test with Set
 		var set = set(1, 2, 3);
@@ -566,7 +566,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a032_floats() {
-		float[] result = floats(1.0f, 2.0f, 3.0f);
+		float[] result = floatArray(1.0f, 2.0f, 3.0f);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals(1.0f, result[0]);
@@ -621,7 +621,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a036_ints() {
-		int[] result = ints(1, 2, 3);
+		int[] result = intArray(1, 2, 3);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals(1, result[0]);
@@ -650,17 +650,17 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// l(T...)
+	// fixedSizeList(T...)
 	//====================================================================================================
 	@Test
 	void a039_l() {
-		List<String> result = l("a", "b", "c");
+		List<String> result = fixedSizeList("a", "b", "c");
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertEquals("a", result.get(0));
 		assertThrows(UnsupportedOperationException.class, () -> result.add("d"));
 
-		assertNull(l((String[])null));
+		assertNull(fixedSizeList((String[])null));
 	}
 
 	//====================================================================================================
@@ -714,11 +714,11 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// listb(Class<E>, Converter...)
+	// listBuilder(Class<E>, Converter...)
 	//====================================================================================================
 	@Test
-	void a044_listb() {
-		Lists<String> builder = listb(String.class);
+	void a044_listBuilder() {
+		Lists<String> builder = listBuilder(String.class);
 		assertNotNull(builder);
 		List<String> result = builder.add("a").add("b").build();
 		assertEquals(2, result.size());
@@ -727,41 +727,19 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// liste()
+	// nullList(Class<T>)
 	//====================================================================================================
 	@Test
-	void a045_liste() {
-		List<String> result = liste();
-		assertNotNull(result);
-		assertTrue(result.isEmpty());
-		assertThrows(UnsupportedOperationException.class, () -> result.add("a"));
+	void a047_nullList() {
+		assertNull(nullList(String.class));
 	}
 
 	//====================================================================================================
-	// liste(Class<T>)
+	// listOfType(Class<E>, E...)
 	//====================================================================================================
 	@Test
-	void a046_liste_class() {
-		List<String> result = liste(String.class);
-		assertNotNull(result);
-		assertTrue(result.isEmpty());
-		assertThrows(UnsupportedOperationException.class, () -> result.add("a"));
-	}
-
-	//====================================================================================================
-	// listn(Class<T>)
-	//====================================================================================================
-	@Test
-	void a047_listn() {
-		assertNull(listn(String.class));
-	}
-
-	//====================================================================================================
-	// listOf(Class<E>, E...)
-	//====================================================================================================
-	@Test
-	void a048_listOf() {
-		List<String> result = listOf(String.class, "a", "b", "c");
+	void a048_listOfType() {
+		List<String> result = listOfType(String.class, "a", "b", "c");
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertEquals("a", result.get(0));
@@ -784,7 +762,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a050_longs() {
-		long[] result = longs(1L, 2L, 3L);
+		long[] result = longArray(1L, 2L, 3L);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals(1L, result[0]);
@@ -793,74 +771,74 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// m() - all overloads
+	// immutableMap() - all overloads
 	//====================================================================================================
 	@Test
 	void a051_m() {
 		// Empty
-		Map<String, Integer> empty = m();
+		Map<String, Integer> empty = immutableMap();
 		assertNotNull(empty);
 		assertTrue(empty.isEmpty());
 		assertThrows(UnsupportedOperationException.class, () -> empty.put("x", 1));
 
 		// 1 pair
-		Map<String, Integer> m1 = m("a", 1);
+		Map<String, Integer> m1 = immutableMap("a", 1);
 		assertEquals(1, m1.size());
 		assertEquals(1, m1.get("a"));
 
 		// 2 pairs
-		Map<String, Integer> m2 = m("a", 1, "b", 2);
+		Map<String, Integer> m2 = immutableMap("a", 1, "b", 2);
 		assertEquals(2, m2.size());
 		assertEquals(1, m2.get("a"));
 		assertEquals(2, m2.get("b"));
 
 		// 3 pairs
-		Map<String, Integer> m3 = m("a", 1, "b", 2, "c", 3);
+		Map<String, Integer> m3 = immutableMap("a", 1, "b", 2, "c", 3);
 		assertEquals(3, m3.size());
 
 		// 4 pairs
-		Map<String, Integer> m4 = m("a", 1, "b", 2, "c", 3, "d", 4);
+		Map<String, Integer> m4 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4);
 		assertEquals(4, m4.size());
 
 		// 5 pairs
-		Map<String, Integer> m5 = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
+		Map<String, Integer> m5 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
 		assertEquals(5, m5.size());
 
 		// 6 pairs
-		Map<String, Integer> m6 = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
+		Map<String, Integer> m6 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6);
 		assertEquals(6, m6.size());
 
 		// 7 pairs
-		Map<String, Integer> m7 = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
+		Map<String, Integer> m7 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7);
 		assertEquals(7, m7.size());
 
 		// 8 pairs
-		Map<String, Integer> m8 = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
+		Map<String, Integer> m8 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8);
 		assertEquals(8, m8.size());
 
 		// 9 pairs
-		Map<String, Integer> m9 = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
+		Map<String, Integer> m9 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9);
 		assertEquals(9, m9.size());
 
 		// 10 pairs
-		Map<String, Integer> m10 = m("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
+		Map<String, Integer> m10 = immutableMap("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 		assertEquals(10, m10.size());
 
 		// Null handling
-		Map<String, Integer> nullKey = m(null, 1);
+		Map<String, Integer> nullKey = immutableMap(null, 1);
 		assertEquals(1, nullKey.get(null));
 
-		Map<String, Integer> nullValue = m("a", null);
+		Map<String, Integer> nullValue = immutableMap("a", null);
 		assertNull(nullValue.get("a"));
 		assertTrue(nullValue.containsKey("a"));
 
 		// Duplicate key detection
 		assertThrowsWithMessage(IllegalArgumentException.class, "Duplicate key found: key1", () -> {
-			m("key1", "value1", "key2", "value2", "key1", "value3");
+			immutableMap("key1", "value1", "key2", "value2", "key1", "value3");
 		});
 
 		// Insertion order preservation
-		Map<String, Integer> ordered = m("z", 1, "a", 2, "m", 3, "b", 4);
+		Map<String, Integer> ordered = immutableMap("z", 1, "a", 2, "m", 3, "b", 4);
 		var keys = new ArrayList<>(ordered.keySet());
 		assertEquals(list("z", "a", "m", "b"), keys);
 
@@ -899,7 +877,7 @@ class CollectionUtils_Test extends TestBase {
 		Map<String, Integer> m4 = map("a", 1, "b", 2, "c", 3, "d", 4);
 		assertEquals(4, m4.size());
 		var keys = new ArrayList<>(m4.keySet());
-		assertEquals(l("a", "b", "c", "d"), keys);
+		assertEquals(fixedSizeList("a", "b", "c", "d"), keys);
 
 		// 5 pairs
 		Map<String, Integer> m5 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5);
@@ -927,7 +905,7 @@ class CollectionUtils_Test extends TestBase {
 		// 10 pairs
 		Map<String, Integer> m10 = map("a", 1, "b", 2, "c", 3, "d", 4, "e", 5, "f", 6, "g", 7, "h", 8, "i", 9, "j", 10);
 		assertEquals(10, m10.size());
-		assertEquals(l("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(m10.keySet()));
+		assertEquals(fixedSizeList("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"), new ArrayList<>(m10.keySet()));
 
 		// Null values
 		Map<String, String> nullVals = map("a", "val1", "b", null, "c", "val3", "d", null);
@@ -936,11 +914,11 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// mapb()
+	// mapBuilder()
 	//====================================================================================================
 	@Test
-	void a053_mapb() {
-		Maps<String, Object> builder = mapb();
+	void a053_mapBuilder() {
+		Maps<String, Object> builder = mapBuilder();
 		assertNotNull(builder);
 		Map<String, Object> result = builder.add("a", 1).add("b", 2).build();
 		assertEquals(2, result.size());
@@ -949,41 +927,30 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// mapb(Class<K>, Class<V>, Converter...)
+	// mapBuilder(Class<K>, Class<V>, Converter...)
 	//====================================================================================================
 	@Test
 	void a054_mapb_class() {
-		Maps<String, Integer> builder = mapb(String.class, Integer.class);
+		Maps<String, Integer> builder = mapBuilder(String.class, Integer.class);
 		assertNotNull(builder);
 		Map<String, Integer> result = builder.add("a", 1).build();
 		assertEquals(1, result.size());
 	}
 
 	//====================================================================================================
-	// mape(Class<K>, Class<V>)
+	// nullMap(Class<K>, Class<V>)
 	//====================================================================================================
 	@Test
-	void a055_mape() {
-		Map<String, Integer> result = mape(String.class, Integer.class);
-		assertNotNull(result);
-		assertTrue(result.isEmpty());
-		assertThrows(UnsupportedOperationException.class, () -> result.put("a", 1));
+	void a056_nullMap() {
+		assertNull(nullMap(String.class, Integer.class));
 	}
 
 	//====================================================================================================
-	// mapn(Class<K>, Class<V>)
+	// mapOfType(Class<K>, Class<V>)
 	//====================================================================================================
 	@Test
-	void a056_mapn() {
-		assertNull(mapn(String.class, Integer.class));
-	}
-
-	//====================================================================================================
-	// mapOf(Class<K>, Class<V>)
-	//====================================================================================================
-	@Test
-	void a057_mapOf() {
-		Map<String, Integer> result = mapOf(String.class, Integer.class);
+	void a057_mapOfType() {
+		Map<String, Integer> result = mapOfType(String.class, Integer.class);
 		assertNotNull(result);
 		assertTrue(result.isEmpty());
 		result.put("a", 1); // Modifiable
@@ -1065,7 +1032,7 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// set(T...)
+	// newSet(T...)
 	//====================================================================================================
 	@Test
 	void a063_set() {
@@ -1080,11 +1047,11 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// setb(Class<E>, Converter...)
+	// setBuilder(Class<E>, Converter...)
 	//====================================================================================================
 	@Test
-	void a064_setb() {
-		Sets<String> builder = setb(String.class);
+	void a064_setBuilder() {
+		Sets<String> builder = setBuilder(String.class);
 		assertNotNull(builder);
 		Set<String> result = builder.add("a").add("b").build();
 		assertEquals(2, result.size());
@@ -1093,11 +1060,11 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// setOf(Class<E>, E...)
+	// setOfType(Class<E>, E...)
 	//====================================================================================================
 	@Test
-	void a065_setOf() {
-		Set<String> result = setOf(String.class, "a", "b", "c");
+	void a065_setOfType() {
+		Set<String> result = setOfType(String.class, "a", "b", "c");
 		assertNotNull(result);
 		assertEquals(3, result.size());
 		assertTrue(result.contains("a"));
@@ -1108,7 +1075,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a066_shorts() {
-		short[] result = shorts(1, 2, 3);
+		short[] result = shortArray(1, 2, 3);
 		assertNotNull(result);
 		assertEquals(3, result.length);
 		assertEquals(1, result[0]);
@@ -1324,11 +1291,11 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(2, result5.size());
 
 		// Optional - empty
-		List<?> result6 = toList(opte());
+		List<?> result6 = toList(oe());
 		assertTrue(result6.isEmpty());
 
 		// Optional - present
-		List<?> result7 = toList(opt("test"));
+		List<?> result7 = toList(o("test"));
 		assertEquals(1, result7.size());
 		assertEquals("test", result7.get(0));
 
@@ -1375,14 +1342,14 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a081_toSortedSet() {
-		Set<String> input = new LinkedHashSet<>(l("c", "a", "b"));
+		Set<String> input = new LinkedHashSet<>(fixedSizeList("c", "a", "b"));
 		SortedSet<String> result = toSortedSet(input);
 		assertNotNull(result);
-		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
+		assertEquals(fixedSizeList("a", "b", "c"), new ArrayList<>(result));
 
-		Set<Integer> input2 = new LinkedHashSet<>(l(3, 1, 2));
+		Set<Integer> input2 = new LinkedHashSet<>(fixedSizeList(3, 1, 2));
 		SortedSet<Integer> result2 = toSortedSet(input2);
-		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
+		assertEquals(fixedSizeList(1, 2, 3), new ArrayList<>(result2));
 
 		assertNotNull(toSortedSet((Set<String>)null));
 		assertTrue(toSortedSet((Set<String>)null).isEmpty());
@@ -1469,11 +1436,11 @@ class CollectionUtils_Test extends TestBase {
 		Collection<String> col = list("c", "a", "b");
 		SortedSet<String> result = toSortedSet(col);
 		assertNotNull(result);
-		assertEquals(l("a", "b", "c"), new ArrayList<>(result));
+		assertEquals(fixedSizeList("a", "b", "c"), new ArrayList<>(result));
 
 		Collection<Integer> col2 = list(3, 1, 2);
 		SortedSet<Integer> result2 = toSortedSet(col2);
-		assertEquals(l(1, 2, 3), new ArrayList<>(result2));
+		assertEquals(fixedSizeList(1, 2, 3), new ArrayList<>(result2));
 
 		// Test line 2117: null returns empty TreeSet
 		assertNotNull(toSortedSet((Collection<String>)null));
@@ -1528,10 +1495,10 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a089_u_list() {
 		List<String> list = list("a", "b");
-		List<String> result = u(list);
+		List<String> result = unmodifiable(list);
 		assertNotNull(result);
 		assertThrows(UnsupportedOperationException.class, () -> result.add("c"));
-		assertNull(u((List<String>)null));
+		assertNull(unmodifiable((List<String>)null));
 	}
 
 	//====================================================================================================
@@ -1540,10 +1507,10 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a090_u_map() {
 		Map<String, Integer> map = map("a", 1);
-		Map<String, Integer> result = u(map);
+		Map<String, Integer> result = unmodifiable(map);
 		assertNotNull(result);
 		assertThrows(UnsupportedOperationException.class, () -> result.put("b", 2));
-		assertNull(u((Map<String, Integer>)null));
+		assertNull(unmodifiable((Map<String, Integer>)null));
 	}
 
 	//====================================================================================================
@@ -1552,18 +1519,18 @@ class CollectionUtils_Test extends TestBase {
 	@Test
 	void a091_u_set() {
 		Set<String> set = set("a", "b");
-		Set<String> result = u(set);
+		Set<String> result = unmodifiable(set);
 		assertNotNull(result);
 		assertThrows(UnsupportedOperationException.class, () -> result.add("c"));
-		assertNull(u((Set<String>)null));
+		assertNull(unmodifiable((Set<String>)null));
 	}
 
 	//====================================================================================================
-	// al(T...) - ArrayList creation
+	// list(T...) - modifiable list creation (formerly al/arrayList, now consolidated into list)
 	//====================================================================================================
 	@Test
 	void a092_al() {
-		List<String> list = al("a", "b", "c");
+		List<String> list = list("a", "b", "c");
 		assertNotNull(list);
 		assertEquals(3, list.size());
 		assertEquals("a", list.get(0));
@@ -1571,7 +1538,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", list.get(2));
 
 		// Empty list
-		List<String> empty = al();
+		List<String> empty = list();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1585,7 +1552,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a093_ll() {
-		List<String> list = ll("a", "b", "c");
+		List<String> list = linkedList("a", "b", "c");
 		assertNotNull(list);
 		assertEquals(3, list.size());
 		assertEquals("a", list.get(0));
@@ -1593,7 +1560,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", list.get(2));
 
 		// Empty list
-		List<String> empty = ll();
+		List<String> empty = linkedList();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1607,7 +1574,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a094_hs() {
-		Set<String> set = hs("a", "b", "c");
+		Set<String> set = hashSet("a", "b", "c");
 		assertNotNull(set);
 		assertEquals(3, set.size());
 		assertTrue(set.contains("a"));
@@ -1615,7 +1582,7 @@ class CollectionUtils_Test extends TestBase {
 		assertTrue(set.contains("c"));
 
 		// Empty set
-		Set<String> empty = hs();
+		Set<String> empty = hashSet();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1629,11 +1596,11 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// ts(T...) - TreeSet creation
+	// sortedSet(E...) - TreeSet creation (formerly ts/treeSet varargs, now consolidated into sortedSet)
 	//====================================================================================================
 	@Test
 	void a095_ts() {
-		SortedSet<String> set = ts("c", "a", "b");
+		SortedSet<String> set = sortedSet("c", "a", "b");
 		assertNotNull(set);
 		assertEquals(3, set.size());
 		// TreeSet is sorted
@@ -1641,7 +1608,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals("c", set.last());
 
 		// Empty set
-		SortedSet<String> empty = ts();
+		SortedSet<String> empty = sortedSet();
 		assertNotNull(empty);
 		assertEquals(0, empty.size());
 
@@ -1655,7 +1622,7 @@ class CollectionUtils_Test extends TestBase {
 		assertEquals(4, set.size());
 
 		// Sorted order
-		SortedSet<Integer> intSet = ts(3, 1, 2);
+		SortedSet<Integer> intSet = sortedSet(3, 1, 2);
 		assertEquals(1, intSet.first());
 		assertEquals(3, intSet.last());
 	}

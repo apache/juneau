@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.jena;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -1069,7 +1069,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void k15_stream_optional_thrift() throws Exception {
 			// Optional serialized and parsed via Thrift — covers isOptional() branch in stream sessions
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build()
-				.serialize(opt("opt-val"));
+				.serialize(o("opt-val"));
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
 				.parse(bytes, Optional.class);
 			assertNotNull(result);
@@ -1514,7 +1514,7 @@ class RdfSerializer_Test extends TestBase {
 		@Test void l01_serialize_optional() throws Exception {
 			// Serialize Optional<String> — covers isOptional(aType) branch (line 220) in serializeAnything
 			var s = RdfSerializer.create().ntriple().build();
-			var result = s.serialize(opt("opt-value"));
+			var result = s.serialize(o("opt-value"));
 			assertNotNull(result);
 			assertFalse(result.isBlank());
 		}

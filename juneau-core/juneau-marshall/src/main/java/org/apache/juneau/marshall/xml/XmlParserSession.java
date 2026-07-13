@@ -18,9 +18,8 @@ package org.apache.juneau.marshall.xml;
 
 import static javax.xml.stream.XMLStreamConstants.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 
 import java.io.*;
@@ -46,7 +45,7 @@ import org.apache.juneau.marshall.swap.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
 
  * </ul>
  */
@@ -904,7 +903,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 			sType = eType;
 
 		if (sType.isOptional())
-			return (T)opt(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
+			return (T)o(parseAnything(eType.getElementType(), currAttr, r, outer, isRoot, pMeta));
 
 		setCurrentClass(sType);
 

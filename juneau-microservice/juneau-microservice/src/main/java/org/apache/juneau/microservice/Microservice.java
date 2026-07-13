@@ -19,8 +19,9 @@ package org.apache.juneau.microservice;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.FileUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -93,7 +94,7 @@ import org.apache.juneau.microservice.resources.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceBasics">juneau-microservice Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  * </ul>
  */
 @SuppressWarnings({
@@ -145,7 +146,7 @@ public class Microservice implements ConfigEventListener {
 		 */
 		@Inject
 		public void initWorkingDirFromEnv(@Value("${juneau.workingDir}") String workingDirEnv) {
-			if (workingDir == null && ne(workingDirEnv))
+			if (workingDir == null && ine(workingDirEnv))
 				workingDir = new File(workingDirEnv);
 		}
 
@@ -813,11 +814,11 @@ public class Microservice implements ConfigEventListener {
 		// --------------------------------------------------------------------------------
 		// Initialize console commands.
 		// --------------------------------------------------------------------------------
-		this.consoleEnabled = firstNonNull(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
+		this.consoleEnabled = coalesce(builder.consoleEnabled, config.get("Console/enabled").asBoolean().orElse(false));
 		if (consoleEnabled) {
 			var c = System.console();
-			this.consoleReader = firstNonNull(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
-			this.consoleWriter = firstNonNull(builder.consoleWriter, c == null ? createLoggerConsoleWriter() : c.writer());
+			this.consoleReader = coalesce(builder.consoleReader, new Scanner(c == null ? new InputStreamReader(System.in) : c.reader()));
+			this.consoleWriter = coalesce(builder.consoleWriter, c == null ? createLoggerConsoleWriter() : c.writer());
 
 			// @Bean-supplied console commands (registered first, then overridable by builder/config below).
 			for (var cc : beanStore.getBeansOfType(ConsoleCommand.class).values())
@@ -830,7 +831,7 @@ public class Microservice implements ConfigEventListener {
 					var cc = (ConsoleCommand)Class.forName(s).getDeclaredConstructor().newInstance();
 					consoleCommandMap.put(cc.getName(), cc);
 				} catch (Exception e) {
-					getConsoleWriter().println("Could not create console command '" + s + "', " + lm(e));
+					getConsoleWriter().println("Could not create console command '" + s + "', " + localizedMessage(e));
 				}
 			}
 			consoleThread = new Thread("ConsoleThread") {
@@ -1171,18 +1172,18 @@ public class Microservice implements ConfigEventListener {
 		if (logger.get() == null) {
 			LogManager.getLogManager().reset();
 			logger.set(Logger.getLogger(""));
-			var logFile = firstNonNull(logConfig.logFile, config.get("Logging/logFile").orElse(null));
+			var logFile = coalesce(logConfig.logFile, config.get("Logging/logFile").orElse(null));
 
-			if (ne(logFile)) {
-				var logDir = firstNonNull(logConfig.logDir, config.get("Logging/logDir").orElse("."));
+			if (ine(logFile)) {
+				var logDir = coalesce(logConfig.logDir, config.get("Logging/logDir").orElse("."));
 				var logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
 				System.setProperty("juneau.logDir", logDir);
 
-				var append = firstNonNull(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
-				var limit = firstNonNull(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
-				var count = firstNonNull(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
+				var append = coalesce(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));
+				var limit = coalesce(logConfig.limit, config.get("Logging/limit").asInteger().orElse(1024 * 1024));
+				var count = coalesce(logConfig.count, config.get("Logging/count").asInteger().orElse(1));
 
 				var fh = new FileHandler(logDir + '/' + logFile, limit, count, append);
 
@@ -1194,11 +1195,11 @@ public class Microservice implements ConfigEventListener {
 					f = new LogEntryFormatter(format, dateFormat, useStackTraceHashes);
 				}
 				fh.setFormatter(f);
-				fh.setLevel(firstNonNull(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
+				fh.setLevel(coalesce(logConfig.fileLevel, config.get("Logging/fileLevel").as(Level.class).orElse(Level.INFO)));
 				logger.get().addHandler(fh);
 
 				var ch = new ConsoleHandler();
-				ch.setLevel(firstNonNull(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
+				ch.setLevel(coalesce(logConfig.consoleLevel, config.get("Logging/consoleLevel").as(Level.class).orElse(Level.WARNING)));
 				ch.setFormatter(f);
 				logger.get().addHandler(ch);
 			}
@@ -1352,7 +1353,7 @@ public class Microservice implements ConfigEventListener {
 			// @PreDestroy errors should not prevent the rest of the shutdown sequence; surface via logger.
 			var lg = getLogger();
 			if (nn(lg))
-				lg.log(Level.WARNING, lm(e), e);
+				lg.log(Level.WARNING, localizedMessage(e), e);
 		}
 		return this;
 	}
@@ -1409,7 +1410,7 @@ public class Microservice implements ConfigEventListener {
 	protected PrintWriter getConsoleWriter() { return consoleWriter; }
 
 	private PrintWriter createLoggerConsoleWriter() {
-		var fallbackLogger = firstNonNull(getLogger(), Logger.getLogger(cn(this)));
+		var fallbackLogger = coalesce(getLogger(), Logger.getLogger(cn(this)));
 		return new PrintWriter(new Writer() {
 			private final StringBuilder buffer = new StringBuilder();
 			@Override

@@ -18,7 +18,7 @@ package org.apache.juneau.rest.server;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.charset.*;

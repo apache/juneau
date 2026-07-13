@@ -16,9 +16,9 @@
  */
 package org.apache.juneau.bean.jsonschema;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.io.*;
 import java.net.*;
@@ -61,7 +61,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 	public JsonSchemaMap add(JsonSchema...schemas) {
 		for (var schema : schemas) {
 			if (schema.getId() == null)
-				throw illegalArg("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
+				throw iaex("Schema with no ID passed to JsonSchemaMap.add(Schema...)");
 			put(schema.getId(), schema);
 			schema.setSchemaMap(this);
 		}

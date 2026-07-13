@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.swap.*;
  * parse the resulting string back into a bean.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics">Swap Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps">Swap Basics</a>
 
  * </ul>
  */

@@ -16,10 +16,10 @@
  */
 package org.apache.juneau.test.assertions;
 
-import static org.apache.juneau.test.assertions.AssertionPredicate.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.test.assertions.AssertionPredicate.*;
 
 import java.text.*;
 import java.util.*;
@@ -63,7 +63,7 @@ public class AssertionPredicates {
 	private static final String ARG_type = "type";
 	private static final String ARG_value = "value";
 
-	private static final Function<Object,String> TYPENAME = Utils::cn;
+	private static final Function<Object,String> TYPENAME = Shorts::cn;
 
 	private static final Messages MESSAGES = Messages.of(AssertionPredicates.class, "Messages");
 	private static final String MSG_valueWasNull = MESSAGES.getString("valueWasNull");
@@ -159,7 +159,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eqic(String value) {
-		return test(x -> Utils.eqic(s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);  // NOAI
+		return test(x -> Shorts.eqic(s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);  // NOAI
 	}
 
 	/**

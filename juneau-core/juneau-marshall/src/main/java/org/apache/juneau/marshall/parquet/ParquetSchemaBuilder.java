@@ -16,8 +16,7 @@
  */
 package org.apache.juneau.marshall.parquet;
 
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
 import java.time.*;
@@ -205,7 +204,7 @@ public final class ParquetSchemaBuilder {
 	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
 		if (bm == null) // HTT: addBeanSchema is only called after isBean() check; getBeanMeta() is non-null
-			throw illegalArg("Class ''{0}'' is not a bean", cm.getName());
+			throw iaex("Class ''{0}'' is not a bean", cm.getName());
 		var beanClass = cm.inner();
 		// Recursion reached here indirectly (e.g. through Optional/collection of the same type) at the depth
 		// limit: keep the legacy String back-reference placeholder so the enclosing group's child count stays
@@ -313,11 +312,11 @@ public final class ParquetSchemaBuilder {
 	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null) // HTT: ClassMeta always provides an element type (at least Object) for list types
-			throw illegalArg("List element type cannot be determined for ''{0}''", cm.getName());
+			throw iaex("List element type cannot be determined for ''{0}''", cm.getName());
 		// Resolve element type from sample when generics are erased (et is Object) for proper list-of-bean
 		// expansion into leaf columns (e.g. members.list.element.name, members.list.element.age)
 		var sampleCollection = extractSampleCollection(sampleBean);
-		if (ne(sampleCollection)) {
+		if (ine(sampleCollection)) {
 			var first = sampleCollection.iterator().next();
 			if (first != null)
 				et = marshallingContext.getClassMeta(first.getClass());
@@ -326,7 +325,7 @@ public final class ParquetSchemaBuilder {
 		elements.add(new ParquetSchemaElement(name, null, null, isRoot ? null : OPTIONAL, 1, CONVERTED_LIST, null, null, null, null));
 		elements.add(new ParquetSchemaElement("list", null, null, REPEATED, 1, null, null, null, null, null));
 		Object elementSample = null;
-		if (ne(sampleCollection))
+		if (ine(sampleCollection))
 			elementSample = sampleCollection.iterator().next();
 		addSchemaElements(elements, et, "element", listPath + ".list", false, elementSample, typesInProgress);
 	}

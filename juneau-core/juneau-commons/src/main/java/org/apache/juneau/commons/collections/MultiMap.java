@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.stream.*;
@@ -377,22 +377,22 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	// Unsupported operations
 	@Override
 	public V put(K key, V value) {
-		throw unsupportedOp("put() not supported on MultiMap. Use underlying maps directly.");
+		throw uoex("put() not supported on MultiMap. Use underlying maps directly.");
 	}
 
 	@Override
 	public V remove(Object key) {
-		throw unsupportedOp("remove() not supported on MultiMap. Use underlying maps directly.");
+		throw uoex("remove() not supported on MultiMap. Use underlying maps directly.");
 	}
 
 	@Override
 	public void putAll(Map<? extends K, ? extends V> m) {
-		throw unsupportedOp("putAll() not supported on MultiMap. Use underlying maps directly.");
+		throw uoex("putAll() not supported on MultiMap. Use underlying maps directly.");
 	}
 
 	@Override
 	public void clear() {
-		throw unsupportedOp("clear() not supported on MultiMap. Use underlying maps directly.");
+		throw uoex("clear() not supported on MultiMap. Use underlying maps directly.");
 	}
 
 	/**
@@ -433,7 +433,7 @@ public class MultiMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof Map o2) && Utils.eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
+		return (o instanceof Map o2) && Shorts.eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
 	}
 
 	/**

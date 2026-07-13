@@ -19,7 +19,8 @@ package org.apache.juneau.marshall.xml;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.marshall.xml.XmlFormat.*;
 import static org.apache.juneau.marshall.xml.XmlSerializerSession.ContentResult.*;
 import static org.apache.juneau.marshall.xml.XmlSerializerSession.JsonType.*;
@@ -29,7 +30,7 @@ import java.lang.reflect.*;
 import java.time.*;
 import java.time.temporal.*;
 import java.util.*;
-import java.util.AbstractMap.SimpleEntry;
+import java.util.AbstractMap.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.bean.*;
@@ -46,7 +47,7 @@ import org.apache.juneau.marshall.stream.*;
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlBasics">XML Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/XmlSupport">XML Basics</a>
 
  * </ul>
  */
@@ -381,8 +382,8 @@ public class XmlSerializerSession extends WriterSerializerSession implements Rec
 		if (nn(p.getThrown()))
 			onBeanGetterException(pMeta, p.getThrown());
 		if (canIgnoreValue(pMeta, key, value))
-			return opte();
-		return opt(new SimpleEntry<>(key, value));
+			return oe();
+		return o(new SimpleEntry<>(key, value));
 	}
 
 	@SuppressWarnings({

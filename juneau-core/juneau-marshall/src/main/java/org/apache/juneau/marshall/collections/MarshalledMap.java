@@ -16,13 +16,13 @@
  */
 package org.apache.juneau.marshall.collections;
 
+import static java.util.Collections.*;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.ClassUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.toStringArray;
-import static org.apache.juneau.commons.utils.PredicateUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -75,22 +75,22 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public void clear() {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object compute(String key, BiFunction<? super String, ? super Object, ?> remappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object computeIfAbsent(String key, Function<? super String, ?> mappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object computeIfPresent(String key, BiFunction<? super String, ? super Object, ?> remappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
@@ -108,47 +108,47 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 		@Override
 		public Object merge(String key, Object value, BiFunction<? super Object, ? super Object, ?> remappingFunction) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object put(String key, Object val) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public void putAll(Map<? extends String, ?> m) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object putIfAbsent(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object remove(Object key) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public boolean remove(Object key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public Object replace(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public boolean replace(String key, Object oldValue, Object newValue) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
 		public void replaceAll(BiFunction<? super String, ? super Object, ?> function) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override
@@ -184,17 +184,17 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 		@Override /* Overridden from Map */
 		public Object put(String key, Object value) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Map */
 		public Object remove(Object key) {
-			throw unsupportedOpReadOnly();
+			throw uoroex();
 		}
 
 		@Override /* Overridden from Map */
 		public Collection<Object> values() {
-			return mape().values();
+			return emptyMap().values();
 		}
 	};
 
@@ -321,7 +321,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 */
 	public MarshalledMap(CharSequence in, Parser p) throws ParseException {
 		this(assertArgNotNull("p", p).getMarshallingContext().getSession());
-		if (ne(in))
+		if (ine(in))
 			p.parseIntoMap(in, this, bs().string(), bs().object());
 	}
 
@@ -404,7 +404,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	})
 	public <T> MarshalledMap appendFirst(Predicate<T> test, String key, T...values) {
 		for (var v : values)
-			if (test(test, v))
+			if (t(test, v))
 				return append(key, v);
 		return this;
 	}
@@ -433,7 +433,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 	 * @return This object.
 	 */
 	public <T> MarshalledMap appendIf(Predicate<T> test, String key, T value) {
-		return appendIf(test(test, value), key, value);
+		return appendIf(t(test, value), key, value);
 	}
 
 	/**
@@ -629,7 +629,7 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 
 					@Override /* Overridden from Iterator */
 					public void remove() {
-						throw unsupportedOpReadOnly();
+						throw uoroex();
 					}
 				};
 			}
@@ -1611,10 +1611,10 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw bex(e, cm.inner(), "Error occurred attempting to cast to an object of type ''{0}''", cn(cm));
+			throw brex(e, cm.inner(), "Error occurred attempting to cast to an object of type ''{0}''", cn(cm));
 		}
 
-		throw bex(cm.inner(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cn(cm));
+		throw brex(cm.inner(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cn(cm));
 	}
 
 	private PathTraversal getPathTraversal() {

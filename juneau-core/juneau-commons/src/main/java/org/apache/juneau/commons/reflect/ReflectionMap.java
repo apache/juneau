@@ -18,9 +18,8 @@ package org.apache.juneau.commons.reflect;
 
 import static java.lang.Character.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -263,7 +262,7 @@ public class ReflectionMap<V> {
 		 * @throws RuntimeException If the key pattern is invalid or empty.
 		 */
 		public Builder<V> append(String key, V value) {
-			if (Utils.e(key))  // NOAI
+			if (Shorts.ie(key))  // NOAI
 				throw rex("Invalid reflection signature: [{0}]", key);
 			try {
 				splitNames(key, k -> {
@@ -512,7 +511,7 @@ public class ReflectionMap<V> {
 		protected FluentMap<String,Object> properties() {
 			// @formatter:off
 			return filteredBeanPropertyMap()
-				.a(PROP_args, opt(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
+				.a(PROP_args, o(args).map(x -> '[' + toCdl(x) + "]").orElse(null))
 				.a(PROP_fullClassName, fullClassName)
 				.a(PROP_methodName, methodName)
 				.a(PROP_simpleClassName, simpleClassName)

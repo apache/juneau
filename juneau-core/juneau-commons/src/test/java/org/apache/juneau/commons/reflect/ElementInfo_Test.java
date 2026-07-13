@@ -21,8 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 
+import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 
 @SuppressWarnings({

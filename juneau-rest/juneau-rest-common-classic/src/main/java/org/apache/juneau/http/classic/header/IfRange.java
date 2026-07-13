@@ -17,8 +17,7 @@
 package org.apache.juneau.http.classic.header;
 
 import static java.time.format.DateTimeFormatter.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
@@ -68,7 +67,7 @@ import org.apache.juneau.http.header.*;
  * If the entity tag does not match, then the server SHOULD return the entire entity using a 200 (OK) response.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics">juneau-rest-common Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon">juneau-rest-common Basics</a>
  * 	<li class='extlink'><a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html">Hypertext Transfer Protocol -- HTTP/1.1</a>
  * </ul>
  *
@@ -208,9 +207,9 @@ public class IfRange extends BasicDateHeader {
 	public Optional<EntityTag> asEntityTag() {
 		if (nn(supplier)) {
 			Object o = supplier.get();
-			return opt(o instanceof EntityTag o2 ? o2 : null);
+			return o(o instanceof EntityTag o2 ? o2 : null);
 		}
-		return opt(value);
+		return o(value);
 	}
 
 	@Override /* Overridden from Header */

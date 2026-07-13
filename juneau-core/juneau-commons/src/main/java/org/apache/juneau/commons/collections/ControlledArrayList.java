@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.function.*;
@@ -262,7 +262,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 			@Override
 			public void remove() {
-				throw unsupportedOp();
+				throw uoex();
 			}
 		};
 	}
@@ -282,7 +282,7 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 			@Override
 			public void add(E e) {
-				throw unsupportedOp();
+				throw uoex();
 			}
 
 			@Override
@@ -322,12 +322,12 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 
 			@Override
 			public void remove() {
-				throw unsupportedOp();
+				throw uoex();
 			}
 
 			@Override
 			public void set(E e) {
-				throw unsupportedOp();
+				throw uoex();
 			}
 		};
 	}
@@ -579,6 +579,6 @@ public class ControlledArrayList<E> extends ArrayList<E> {
 	 */
 	protected final void assertModifiable() {
 		if (unmodifiable)
-			throw unsupportedOp("List is read-only");
+			throw uoex("List is read-only");
 	}
 }

@@ -17,8 +17,9 @@
 package org.apache.juneau.bean.openapi3.ui;
 
 import static org.apache.juneau.bean.html5.HtmlBuilder.*;
+import static org.apache.juneau.bean.html5.HtmlBuilder.a;
 import static org.apache.juneau.commons.http.MediaType.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.bean.openapi3.*;

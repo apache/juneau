@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 package org.apache.juneau.test.assertions;
-
-import static org.apache.juneau.test.assertions.AssertionPredicates.ne;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.assertions.AssertionPredicates.*;
 import static org.apache.juneau.test.assertions.Assertions.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -55,7 +55,7 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ba01a_asString() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x).asString().is("true");
 		test(nil).asString().isNull();
 	}
@@ -74,7 +74,7 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca01_exists() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x).isExists().isExists();
 		var assertion3 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion3::isExists, "Value was null.");
@@ -82,7 +82,7 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca02_isNull() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(nil).isNull();
 		var assertion4 = test(x);
 		assertThrows(BasicAssertionError.class, assertion4::isNull, "Value was not null.");
@@ -90,7 +90,7 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca03_isNotNull() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x).isNotNull();
 		var assertion9 = test(nil);
 		assertThrows(BasicAssertionError.class, assertion9::isNotNull, "Value was null.");
@@ -100,7 +100,7 @@ class BooleanAssertion_Test extends TestBase {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x1).is(x1);
 		test(x1).is(x1a);
 		test(nil).is(nil);
@@ -120,7 +120,7 @@ class BooleanAssertion_Test extends TestBase {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x1).isNot(x2);
 		test(x1).isNot(nil);
 		test(nil).isNot(x1);
@@ -132,7 +132,7 @@ class BooleanAssertion_Test extends TestBase {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x1).isAny(x1a, x2);
 		assertThrown(()->test(x1).isAny(x2)).asMessage().asOneLine().is("Expected value not found.  Expect='[false]'.  Actual='true'.");
 		assertThrown(()->test(x1).isAny()).asMessage().asOneLine().is("Expected value not found.  Expect='[]'.  Actual='true'.");
@@ -143,7 +143,7 @@ class BooleanAssertion_Test extends TestBase {
 		var x1 = true;
 		var x1a = true;
 		var x2 = false;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x1).isNotAny(x2);
 		test(x1).isNotAny();
 		test(nil).isNotAny(x2);
@@ -153,9 +153,9 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca08_isSame() {
 		// Note that even the following returns the same object sometimes.
-		var x1 = bool(new String("true"));
-		var x1a = bool(new String("true"));
-		var nil = no(Boolean.class);
+		var x1 = b(new String("true"));
+		var x1a = b(new String("true"));
+		var nil = nullObject(Boolean.class);
 		test(x1).isSame(x1);
 		test(nil).isSame(nil);
 		assertThrown(()->test(nil).isSame(x1a)).asMessage().asOneLine().isMatches("Not the same value.  Expect='true(Boolean@*)'.  Actual='null(null)'.");
@@ -163,7 +163,7 @@ class BooleanAssertion_Test extends TestBase {
 	}
 	@Test void ca12_isType() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x).isType(Boolean.class);
 		test(x).isType(Object.class);
 		assertThrown(()->test(x).isType(String.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.String'.  Actual='java.lang.Boolean'.");
@@ -173,7 +173,7 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca13_isExactType() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x).isExactType(Boolean.class);
 		assertThrown(()->test(x).isExactType(Object.class)).asMessage().asOneLine().is("Unexpected type.  Expect='java.lang.Object'.  Actual='java.lang.Boolean'.");
 		assertThrown(()->test(nil).isExactType(String.class)).asMessage().asOneLine().is("Value was null.");
@@ -182,7 +182,7 @@ class BooleanAssertion_Test extends TestBase {
 
 	@Test void ca14_isString() {
 		var x = true;
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(x).isString("true");
 		test(nil).isString(null);
 		assertThrown(()->test(x).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='true'.");
@@ -190,7 +190,7 @@ class BooleanAssertion_Test extends TestBase {
 		assertThrown(()->test(nil).isString("bad")).asMessage().asOneLine().is("String differed at position 0.  Expect='bad'.  Actual='null'.");
 	}
 	@Test void cc01_isTrue() {
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(true).isTrue();
 		var assertion5 = test(false);
 		assertThrows(BasicAssertionError.class, assertion5::isTrue, "Value was false.");
@@ -199,7 +199,7 @@ class BooleanAssertion_Test extends TestBase {
 	}
 
 	@Test void cc02_isFalse() {
-		var nil = no(Boolean.class);
+		var nil = nullObject(Boolean.class);
 		test(false).isFalse();
 		var assertion7 = test(true);
 		assertThrows(BasicAssertionError.class, assertion7::isFalse, "Value was true.");

@@ -18,8 +18,8 @@ package org.apache.juneau.marshall.utils;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
 
 import java.text.*;
 import java.util.*;
@@ -237,7 +237,7 @@ public class StringExpressionMatcher {
 		"java:S3776"    // Cognitive complexity acceptable for parser state machine
 	})
 	private Exp parse(String expression) throws ParseException {
-		if (b(expression))
+		if (ib(expression))
 			return new Never();
 
 		expression = expression.trim();

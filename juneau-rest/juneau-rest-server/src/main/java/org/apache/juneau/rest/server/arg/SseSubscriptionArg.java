@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.rest.server.arg;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -49,7 +49,7 @@ public class SseSubscriptionArg extends SimpleRestOperationArg {
 	protected SseSubscriptionArg() {
 		super(opSession -> {
 			var broadcaster = opSession.getBeanStore().getBean(SseBroadcaster.class).orElseGet(() -> opSession.getBeanStore().add(SseBroadcaster.class, SseBroadcaster.create()));
-			var id = opt(opSession.getRequest().getHttpServletRequest().getRequestId()).orElse(UUID.randomUUID().toString());
+			var id = o(opSession.getRequest().getHttpServletRequest().getRequestId()).orElse(UUID.randomUUID().toString());
 			return broadcaster.subscribe(id);
 		});
 	}

@@ -16,8 +16,8 @@
  */
 package org.apache.juneau.marshall.hocon;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.util.*;
 import java.util.function.*;

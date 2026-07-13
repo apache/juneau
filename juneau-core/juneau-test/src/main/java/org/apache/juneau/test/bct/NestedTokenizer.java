@@ -18,9 +18,9 @@ package org.apache.juneau.test.bct;
 
 import static java.util.Collections.*;
 import static java.util.stream.Collectors.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
-import static org.apache.juneau.commons.utils.Utils.eq;
+import static org.apache.juneau.commons.utils.ObjectUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.Shorts.eq;
 import static org.apache.juneau.test.bct.NestedTokenizer.ParseState.*;
 
 import java.util.*;
@@ -95,7 +95,7 @@ class NestedTokenizer {
 		 * @param value The token value
 		 */
 		public Token(String value) {
-			this.value = def(value, "");
+			this.value = coalesce(value, "");
 		}
 
 		@Override
@@ -162,9 +162,9 @@ class NestedTokenizer {
 	})
 	public static List<Token> tokenize(String in) {
 		if (in == null)
-			throw illegalArg("Input was null.");
+			throw iaex("Input was null.");
 		if (in.isBlank())
-			throw illegalArg("Input was empty.");
+			throw iaex("Input was empty.");
 
 		var length = in.length();
 		var pos = 0;
@@ -213,7 +213,7 @@ class NestedTokenizer {
 						var value = currentValue.toString().trim();
 						var nestedContent = in.substring(nestedStart, pos);
 						var token = new Token(value);
-						if (nb(nestedContent)) {
+						if (inb(nestedContent)) {
 							token.setNested(tokenize(nestedContent));
 						}
 						tokens.add(token);

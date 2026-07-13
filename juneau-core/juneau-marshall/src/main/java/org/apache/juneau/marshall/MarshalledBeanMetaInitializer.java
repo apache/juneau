@@ -17,7 +17,7 @@
 package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
@@ -68,11 +68,11 @@ final class MarshalledBeanMetaInitializer implements BeanMetaInitializer {
 		MarshallingContext mc = (MarshallingContext) marshallingContext;
 
 		// Bean dictionary on bean filter.
-		var beanDictionaryClasses = opt(beanFilter).map(x -> new ArrayList<>(x.getBeanDictionary())).orElse(new ArrayList<>());
+		var beanDictionaryClasses = o(beanFilter).map(x -> new ArrayList<>(x.getBeanDictionary())).orElse(new ArrayList<>());
 
 		// Bean dictionary from @Marshalled(typeName) annotation.
 		var ba = config.getAnnotationProvider().find(Marshalled.class, classInfo);
-		ba.stream().map(x -> x.inner().typeName()).filter(Utils::ne).findFirst().ifPresent(x -> beanDictionaryClasses.add(classInfo));
+		ba.stream().map(x -> x.inner().typeName()).filter(Shorts::ine).findFirst().ifPresent(x -> beanDictionaryClasses.add(classInfo));
 
 		return new BeanRegistry(mc, null, beanDictionaryClasses);
 	}
@@ -143,7 +143,7 @@ final class MarshalledBeanMetaInitializer implements BeanMetaInitializer {
 	public String resolveTypePropertyName(BeanConfigContext config, ClassInfo classInfo) {
 		return config.getAnnotationProvider().find(Marshalled.class, classInfo).stream()
 			.map(x -> x.inner().typePropertyName())
-			.filter(Utils::ne)
+			.filter(Shorts::ine)
 			.findFirst()
 			.orElse(null);
 	}

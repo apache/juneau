@@ -17,7 +17,7 @@
 package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -200,7 +200,7 @@ public class PathReaderBuilder {
 		if (! allowNoFile && ! Files.exists(path)) {
 			throw new NoSuchFileException(path.toString());
 		}
-		return allowNoFile ? new StringReader("") : Files.newBufferedReader(path, opt(charset).orElse(Charset.defaultCharset()));
+		return allowNoFile ? new StringReader("") : Files.newBufferedReader(path, o(charset).orElse(Charset.defaultCharset()));
 	}
 
 	/**

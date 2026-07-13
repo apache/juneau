@@ -18,7 +18,7 @@ package org.apache.juneau.commons.collections;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -155,7 +155,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 		@Override /* Map.Entry */
 		public V setValue(V val) {
-			throw unsupportedOp("Map is unmodifiable");
+			throw uoex("Map is unmodifiable");
 		}
 
 		@Override
@@ -165,7 +165,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 
 		@Override
 		public boolean equals(Object o) {
-			return (o instanceof Map.Entry<?,?> o2) && Utils.eq(this, o2, (x,y) -> Utils.eq(x.getKey(), y.getKey()) && Utils.eq(x.getValue(), y.getValue()));
+			return (o instanceof Map.Entry<?,?> o2) && Shorts.eq(this, o2, (x,y) -> Shorts.eq(x.getKey(), y.getKey()) && Shorts.eq(x.getValue(), y.getValue()));
 		}
 
 		@Override
@@ -223,8 +223,8 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 		// Check for duplicate keys
 		for (var i = 0; i < keys.length; i++) {
 			for (var j = i + 1; j < keys.length; j++) {
-				if (Utils.eq(keys[i], keys[j])) {
-					throw illegalArg("Duplicate key found: {0}", keys[i]);
+				if (Shorts.eq(keys[i], keys[j])) {
+					throw iaex("Duplicate key found: {0}", keys[i]);
 				}
 			}
 		}
@@ -288,7 +288,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	@Override /* Map */
 	public V get(Object key) {
 		for (var i = 0; i < keys.length; i++)
-			if (Utils.eq(keys[i], key))
+			if (Shorts.eq(keys[i], key))
 				return values2[i];
 		return null;
 	}
@@ -326,7 +326,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override /* Map */
 	public V put(K key, V value) {
-		throw unsupportedOp("Map is unmodifiable");
+		throw uoex("Map is unmodifiable");
 	}
 
 	/**
@@ -358,7 +358,7 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		return (o instanceof Map o2) && Utils.eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
+		return (o instanceof Map o2) && Shorts.eq(this, o2, (x, y) -> x.entrySet().equals(y.entrySet()));
 	}
 
 	/**

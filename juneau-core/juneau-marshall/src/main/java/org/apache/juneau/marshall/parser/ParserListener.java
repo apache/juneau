@@ -43,7 +43,7 @@ public class ParserListener {
 	 * @param p The bean property we had an issue on.
 	 */
 	public void onBeanSetterException(ParserSession session, Throwable t, BeanPropertyMeta p) {
-		onError(session, t, String.format("Could not call setValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), lm(t)));
+		onError(session, t, String.format("Could not call setValue() on property '%s' of class '%s', exception = %s", p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t)));
 	}
 
 	/**

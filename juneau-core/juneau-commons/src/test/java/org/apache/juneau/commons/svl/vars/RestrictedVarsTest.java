@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.svl.*;
 import org.junit.jupiter.api.*;
-import org.apache.juneau.commons.TestBase;
 
 class RestrictedVarsTest extends TestBase {
 

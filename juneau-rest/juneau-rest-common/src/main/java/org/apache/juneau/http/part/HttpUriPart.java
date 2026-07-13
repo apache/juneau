@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.http.part;
 
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
@@ -80,7 +80,7 @@ public class HttpUriPart extends HttpPartBean {
 	 */
 	public HttpUriPart(String name, String value) {
 		super(name, value);
-		this.typedValue = e(value) ? null : URI.create(value);
+		this.typedValue = ie(value) ? null : URI.create(value);
 		this.typedSupplier = null;
 	}
 
@@ -117,7 +117,7 @@ public class HttpUriPart extends HttpPartBean {
 	 * @return The URI value, wrapped in an {@link Optional}. Never <jk>null</jk>.
 	 */
 	public Optional<URI> asUri() {
-		return opt(toUri());
+		return o(toUri());
 	}
 
 	/**

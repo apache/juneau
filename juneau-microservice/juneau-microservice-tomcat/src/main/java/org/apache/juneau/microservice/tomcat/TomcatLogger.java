@@ -17,7 +17,7 @@
 package org.apache.juneau.microservice.tomcat;
 
 import static java.util.logging.Level.*;
-import static org.apache.juneau.commons.utils.Utils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.logging.*;
 
@@ -37,7 +37,7 @@ import org.apache.juli.logging.*;
  * <c>warn</c>&rarr;{@link Level#WARNING WARNING}, and <c>error</c>/<c>fatal</c>&rarr;{@link Level#SEVERE SEVERE}.
  *
  * <h5 class='section'>See Also:</h5><ul>
- * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcatBasics">juneau-microservice-tomcat Basics</a>
+ * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat">juneau-microservice-tomcat Basics</a>
  * </ul>
  *
  * @since 10.0.0

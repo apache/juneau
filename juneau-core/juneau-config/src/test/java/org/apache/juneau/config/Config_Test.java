@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.config;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.TestUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
