@@ -55,7 +55,7 @@ import org.opentest4j.*;
  *    <dt><b>{@link #assertBeans(Collection, String, String...)}</b></dt>
  *    <dd>Tests collections of objects by extracting and comparing specific fields</dd>
  *
- *    <dt><b>{@link #assertMapped(Object, java.util.function.BiFunction, String, String)}</b></dt>
+ *    <dt><b>{@link #assertMapped(Object, BiFunction, String, String)}</b></dt>
  *    <dd>Tests custom property access using BiFunction for non-standard objects</dd>
  *
  *    <dt><b>{@link #assertList(List, Object...)}</b></dt>
@@ -385,7 +385,7 @@ public class BctAssertions {
 	 * </ol>
 	 *
 	 * @param message Optional custom error message supplier. If provided, will be composed with the default assertion message.
-	 *                Use {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...) Shorts.fs()} to conveniently
+	 *                Use {@link Shorts#fs(String, Object...) Shorts.fs()} to conveniently
 	 *                create message suppliers with format arguments (e.g., <code>fs("User {0} validation failed", userName)</code>).
 	 * @param actual The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
@@ -395,7 +395,7 @@ public class BctAssertions {
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
 	 * @see BctConfiguration#set(BeanConverter)
-	 * @see org.apache.juneau.commons.utils.Shorts#fs(String, Object...)
+	 * @see Shorts#fs(String, Object...)
 	 */
 	public static void assertBean(Supplier<String> message, Object actual, String fields, String expected) {
 		assertNotNull(actual, "Actual was null.");

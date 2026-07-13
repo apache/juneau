@@ -34,7 +34,7 @@ import org.apache.juneau.http.remote.*;
  * Contains the meta-data about a REST proxy class.
  *
  * <p>
- * Captures the information in {@link org.apache.juneau.http.remote.Remote @Remote} and {@link org.apache.juneau.http.remote.RemoteOp @RemoteOp} annotations for
+ * Captures the information in {@link Remote @Remote} and {@link RemoteOp @RemoteOp} annotations for
  * caching and reuse.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -55,7 +55,7 @@ public class RemoteMeta {
 	/**
 	 * Constructor.
 	 *
-	 * @param c The interface class annotated with a {@link org.apache.juneau.http.remote.Remote @Remote} annotation (optional).
+	 * @param c The interface class annotated with a {@link Remote @Remote} annotation (optional).
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for remote interface metadata construction dispatch

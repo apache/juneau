@@ -39,7 +39,7 @@ import java.lang.annotation.*;
  * 	<li>{@link java.io.File} &mdash; <b>streamed</b> from disk; the {@link #fileName()} defaults to the file's name.
  * 	<li>{@link java.io.InputStream} &mdash; <b>streamed</b> (one-shot; makes the request body non-repeatable).
  * 	<li>{@link java.io.Reader} &mdash; <b>streamed</b> as UTF-8 (one-shot; not drained during request building).
- * 	<li>An {@link org.apache.juneau.http.HttpBody} &mdash; used directly.
+ * 	<li>An {@link HttpBody} &mdash; used directly.
  * 	<li>Any other object (a bean) &mdash; serialized with the client's default serializer (e.g. JSON).
  * </ul>
  *

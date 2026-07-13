@@ -40,14 +40,14 @@ public final class RestServerConstants {
 	/**
 	 * The {@code "allowedParserOptions"} annotation attribute name — used in {@code noInherit} matching.
 	 *
-	 * @see org.apache.juneau.rest.server.Rest#allowedParserOptions()
+	 * @see Rest#allowedParserOptions()
 	 */
 	public static final String PROPERTY_allowedParserOptions = "allowedParserOptions";
 
 	/**
 	 * The {@code "allowedSerializerOptions"} annotation attribute name — used in {@code noInherit} matching.
 	 *
-	 * @see org.apache.juneau.rest.server.Rest#allowedSerializerOptions()
+	 * @see Rest#allowedSerializerOptions()
 	 */
 	public static final String PROPERTY_allowedSerializerOptions = "allowedSerializerOptions";
 
@@ -77,7 +77,7 @@ public final class RestServerConstants {
 	 * parent resource into deferred (first-invocation) construction of its {@code @Rest(children=...)} sub-resources
 	 * instead of the default eager construction at startup.
 	 *
-	 * @see org.apache.juneau.rest.server.Rest#lazyChildren()
+	 * @see Rest#lazyChildren()
 	 */
 	public static final String PROPERTY_lazyChildren = "lazyChildren";
 
@@ -240,8 +240,8 @@ public final class RestServerConstants {
 	 * {@code "true"} opts the resource in and requires a wired backend (startup-fail if missing); {@code "false"} short-circuits
 	 * the observability block entirely; {@code ""} (default) inherits / uses the existing silent-no-op behavior.
 	 *
-	 * @see org.apache.juneau.rest.server.Rest#observability()
-	 * @see org.apache.juneau.rest.server.RestOp#observability()
+	 * @see Rest#observability()
+	 * @see RestOp#observability()
 	 */
 	public static final String PROPERTY_observability = "observability";
 
@@ -250,7 +250,7 @@ public final class RestServerConstants {
 	 * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Empty string (default) uses
 	 * the recorder's own default name derivation.
 	 *
-	 * @see org.apache.juneau.rest.server.RestOp#metricName()
+	 * @see RestOp#metricName()
 	 */
 	public static final String PROPERTY_metricName = "metricName";
 
@@ -260,7 +260,7 @@ public final class RestServerConstants {
 	 * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means
 	 * no additional tags.
 	 *
-	 * @see org.apache.juneau.rest.server.RestOp#metricTags()
+	 * @see RestOp#metricTags()
 	 */
 	public static final String PROPERTY_metricTags = "metricTags";
 

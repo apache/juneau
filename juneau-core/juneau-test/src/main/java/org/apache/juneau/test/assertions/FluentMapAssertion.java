@@ -301,7 +301,7 @@ public class FluentMapAssertion<K,V,R> extends FluentObjectAssertion<Map<K,V>,R>
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentMapAssertion<K,V,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentMapAssertion<K,V,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -187,7 +187,7 @@ public class AnyAssertion<T> extends FluentAnyAssertion<T,AnyAssertion<T>> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public AnyAssertion<T> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public AnyAssertion<T> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

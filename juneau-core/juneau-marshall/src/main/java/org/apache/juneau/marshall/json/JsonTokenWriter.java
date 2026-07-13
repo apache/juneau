@@ -74,7 +74,7 @@ public class JsonTokenWriter implements TokenWriter {
 	 * @param simpleAttrs If <jk>true</jk>, field names are emitted unquoted when they are valid
 	 * 	JavaScript identifiers and not reserved words.  This is the JSON5 "lax attribute" mode;
 	 * 	strict RFC-8259 JSON keeps this <jk>false</jk>.
-	 * @param walk The {@link org.apache.juneau.marshall.stream.PojoWalker.Options walk options} used by
+	 * @param walk The {@link PojoWalker.Options walk options} used by
 	 * 	{@link #object(Object) object(Object)} when walking a value graph.
 	 * @param disableObject If <jk>true</jk>, {@link #object(Object) object(Object)} throws
 	 * 	{@link UnsupportedOperationException} with a format-specific message.  Used by formats
@@ -82,6 +82,7 @@ public class JsonTokenWriter implements TokenWriter {
 	 * 	{@link org.apache.juneau.marshall.jcs.JcsSerializer}) where the cursor's POJO walker would
 	 * 	emit ordinary JSON instead of the format's special form.
 	 */
+	@SuppressWarnings("javadoc")
 	public record Settings(
 			boolean useWhitespace,
 			int maxIndent,

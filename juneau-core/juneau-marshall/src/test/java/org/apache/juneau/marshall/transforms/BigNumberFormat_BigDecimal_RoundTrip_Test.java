@@ -292,7 +292,7 @@ class BigNumberFormat_BigDecimal_RoundTrip_Test extends TestBase {
 	 */
 	private static boolean truncatesFractionalBigDecimal(RoundTrip_Tester t, BigNumberFormat fmt, boolean isTopLevel) {
 		var s = t.getSerializer();
-		var affected = s instanceof org.apache.juneau.marshall.toml.TomlSerializer || s instanceof org.apache.juneau.marshall.prototext.PrototextSerializer;
+		var affected = s instanceof TomlSerializer || s instanceof PrototextSerializer;
 		if (!affected)
 			return false;
 		if (isTopLevel)

@@ -74,7 +74,7 @@ import org.apache.juneau.commons.inject.*;
 	"java:S115", // Constants use UPPER_snakeCase naming convention
 	"java:S1452"  // Wildcard required - List<AnnotationInfo<? extends Annotation>>, List<TypeVariable<?>>
 })
-public class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
+public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Type, Comparable<ClassInfo> {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_type = "type";
@@ -705,7 +705,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * <p>
 	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.commons.reflect.AnnotationProvider}.
+	 * {@link AnnotationProvider}.
 	 *
 	 * @return An unmodifiable list of all annotation infos.
 	 */
@@ -725,7 +725,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * <p>
 	 * This does NOT include runtime annotations. For runtime annotation support, use
-	 * {@link org.apache.juneau.commons.reflect.AnnotationProvider}.
+	 * {@link AnnotationProvider}.
 	 *
 	 * @param <A> The annotation type.
 	 * @param type The annotation type to filter by.
@@ -772,7 +772,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * Repeatable annotations (those marked with {@link Repeatable @Repeatable}) are automatically
 	 * expanded into their individual annotation instances. For example, if a class has multiple {@code @Marshalled} annotations,
 	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *
@@ -1597,7 +1597,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 *
 	 * @return The {@link ProtectionDomain} of this class, or <jk>null</jk> if the class does not have a protection domain.
 	 */
-	public java.security.ProtectionDomain getProtectionDomain() { return inner == null ? null : inner.getProtectionDomain(); }
+	public ProtectionDomain getProtectionDomain() { return inner == null ? null : inner.getProtectionDomain(); }
 
 	/**
 	 * Returns the first matching public constructor on this class.
@@ -2175,11 +2175,11 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	public boolean isCollectionOrArray() { return nn(inner) && (Collection.class.isAssignableFrom(inner) || inner.isArray()); }
 
 	/**
-	 * Returns <jk>true</jk> if this class is assignable to {@link java.util.Date} or {@link java.util.Calendar}.
+	 * Returns <jk>true</jk> if this class is assignable to {@link Date} or {@link Calendar}.
 	 *
-	 * @return <jk>true</jk> if this class is assignable to {@link java.util.Date} or {@link java.util.Calendar}.
+	 * @return <jk>true</jk> if this class is assignable to {@link Date} or {@link Calendar}.
 	 */
-	public boolean isDateOrCalendar() { return isAssignableToAny(java.util.Date.class, java.util.Calendar.class); }
+	public boolean isDateOrCalendar() { return isAssignableToAny(Date.class, Calendar.class); }
 
 	/**
 	 * Returns <jk>true</jk> if this class is a decimal number type ({@link Float}, {@link Double}, <jk>float</jk>, or <jk>double</jk>).
@@ -2512,7 +2512,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * Returns <jk>true</jk> if this class is a record class.
 	 *
 	 * <p>
-	 * A record class is a final class that extends {@link java.lang.Record}.
+	 * A record class is a final class that extends {@link Record}.
 	 *
 	 * @return <jk>true</jk> if this class is a record class.
 	 */
@@ -2767,7 +2767,7 @@ public class ClassInfo extends ElementInfo implements Annotatable, Type, Compara
 	 * Finds all annotations on this class and parent classes/interfaces in child-to-parent order.
 	 *
 	 * <p>
-	 * This is similar to {@link org.apache.juneau.commons.reflect.AnnotationProvider#xfind(Class)} but without runtime annotations.
+	 * This is similar to {@link AnnotationProvider#xfind(Class)} but without runtime annotations.
 	 *
 	 * <p>
 	 * Order of traversal:

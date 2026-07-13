@@ -221,7 +221,7 @@ public class Holder<T> {
 	 * value, otherwise returns an empty {@link Holder}.
 	 *
 	 * <p>
-	 * This method is analogous to {@link java.util.Optional#filter(Predicate)}.
+	 * This method is analogous to {@link Optional#filter(Predicate)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
@@ -249,7 +249,7 @@ public class Holder<T> {
 	 *
 	 * <p>
 	 * This method is similar to {@link #map(Function)}, but the mapping function returns a {@link Holder} rather
-	 * than a simple value. This is analogous to {@link java.util.Optional#flatMap(Function)}.
+	 * than a simple value. This is analogous to {@link Optional#flatMap(Function)}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

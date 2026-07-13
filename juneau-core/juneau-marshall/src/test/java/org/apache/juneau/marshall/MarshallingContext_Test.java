@@ -330,11 +330,11 @@ class BeanContext_Test extends TestBase {
 	}
 
 	@Test void i16_findConversion_dateToCalendar() {
-		assertNotNull(MarshallingContext.DEFAULT.findConversion(java.util.Date.class, Calendar.class));
+		assertNotNull(MarshallingContext.DEFAULT.findConversion(Date.class, Calendar.class));
 	}
 
 	@Test void i17_findConversion_calendarToDate() {
-		assertNotNull(MarshallingContext.DEFAULT.findConversion(Calendar.class, java.util.Date.class));
+		assertNotNull(MarshallingContext.DEFAULT.findConversion(Calendar.class, Date.class));
 	}
 
 	@Test void i18_findConversion_byteArrayToInputStream() {
@@ -508,14 +508,14 @@ class BeanContext_Test extends TestBase {
 
 	@SuppressWarnings("unchecked")
 	@Test void k16_invokeConversion_dateToCalendar() {
-		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(java.util.Date.class, Calendar.class);
+		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Date.class, Calendar.class);
 		assertNotNull(conv);
-		assertNotNull(conv.to(new java.util.Date(0), null, null));
+		assertNotNull(conv.to(new Date(0), null, null));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Test void k17_invokeConversion_calendarToDate() {
-		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Calendar.class, java.util.Date.class);
+		var conv = (Conversion<Object,Object>) MarshallingContext.DEFAULT.findConversion(Calendar.class, Date.class);
 		assertNotNull(conv);
 		assertNotNull(conv.to(new GregorianCalendar(2024, 0, 1), null, null));
 	}

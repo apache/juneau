@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Parameters for {@value org.apache.juneau.bean.mcp.McpMethods#TOOLS_CALL}.
+ * Parameters for {@value McpMethods#TOOLS_CALL}.
  */
 @Marshalled
 public class CallToolRequest {

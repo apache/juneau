@@ -30,7 +30,7 @@ import java.util.*;
  * <p>
  * Precedence:
  * <ol>
- * 	<li>Per-property {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)}.
+ * 	<li>Per-property {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)}.
  * 	<li>Context-level default on {@link org.apache.juneau.marshall.parser.Parser.Builder#nulls(Nulls)}.
  * 	<li>{@link #LEAVE} when neither is set.
  * </ol>
@@ -64,8 +64,8 @@ public enum Nulls {
 	 * Substitute the type's "empty" value:
 	 * <ul>
 	 * 	<li>{@link String} → {@code ""}
-	 * 	<li>{@link java.util.Collection} → empty collection (preserves declared type when possible)
-	 * 	<li>{@link java.util.Map} → empty map
+	 * 	<li>{@link Collection} → empty collection (preserves declared type when possible)
+	 * 	<li>{@link Map} → empty map
 	 * 	<li>Array → zero-length array of the declared element type
 	 * 	<li>{@link Optional} / {@link OptionalInt} / {@link OptionalLong} / {@link OptionalDouble} →
 	 * 		the corresponding {@code empty()} sentinel

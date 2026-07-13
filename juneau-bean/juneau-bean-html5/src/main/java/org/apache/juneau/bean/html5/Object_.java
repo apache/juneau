@@ -98,8 +98,8 @@ import org.apache.juneau.marshall.*;
  */
 @Marshalled(typeName = "object")
 @SuppressWarnings({
-	"java:S100", // Class name uses underscore suffix to avoid conflict with java.lang.Object
-	"java:S101" // Class name uses underscore suffix to avoid conflict with java.lang.Object
+	"java:S100", // Class name uses underscore suffix to avoid conflict with Object
+	"java:S101" // Class name uses underscore suffix to avoid conflict with Object
 })
 public class Object_ extends HtmlElementMixed {
 

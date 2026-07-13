@@ -25,9 +25,9 @@ import java.util.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#currencyFormat(CurrencyFormat)},
- * {@link org.apache.juneau.marshall.Marshalled#currencyFormat()},
- * {@link org.apache.juneau.marshall.MarshalledProp#currencyFormat()}, and
- * {@link org.apache.juneau.marshall.MarshalledConfig#currencyFormat()} to control how {@link Currency}
+ * {@link Marshalled#currencyFormat()},
+ * {@link MarshalledProp#currencyFormat()}, and
+ * {@link MarshalledConfig#currencyFormat()} to control how {@link Currency}
  * values are written to text-based wire formats.
  *
  * <p>
@@ -51,9 +51,9 @@ import java.util.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.marshall.MarshalledProp#currencyFormat() @MarshalledProp(currencyFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.marshall.Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.marshall.MarshalledConfig#currencyFormat() @MarshalledConfig(currencyFormat=…)} on
+ * 	<li>{@link MarshalledProp#currencyFormat() @MarshalledProp(currencyFormat=…)} on the bean property.
+ * 	<li>{@link Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.
+ * 	<li>{@link MarshalledConfig#currencyFormat() @MarshalledConfig(currencyFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#currencyFormat(CurrencyFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.currencyFormat</c>.

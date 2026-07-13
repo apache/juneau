@@ -26,9 +26,9 @@ import java.util.stream.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#bitSetFormat(BitSetFormat)},
- * {@link org.apache.juneau.marshall.Marshalled#bitSetFormat()},
- * {@link org.apache.juneau.marshall.MarshalledProp#bitSetFormat()}, and
- * {@link org.apache.juneau.marshall.MarshalledConfig#bitSetFormat()} to control how {@link BitSet} values
+ * {@link Marshalled#bitSetFormat()},
+ * {@link MarshalledProp#bitSetFormat()}, and
+ * {@link MarshalledConfig#bitSetFormat()} to control how {@link BitSet} values
  * are written to text-based wire formats.
  *
  * <p>
@@ -36,9 +36,9 @@ import java.util.stream.*;
  *
  * <h5 class='topic'>Precedence (highest to lowest)</h5>
  * <ol>
- * 	<li>{@link org.apache.juneau.marshall.MarshalledProp#bitSetFormat() @MarshalledProp(bitSetFormat=…)} on the bean property.
- * 	<li>{@link org.apache.juneau.marshall.Marshalled#bitSetFormat() @Marshalled(bitSetFormat=…)} on the bean class.
- * 	<li>{@link org.apache.juneau.marshall.MarshalledConfig#bitSetFormat() @MarshalledConfig(bitSetFormat=…)} on
+ * 	<li>{@link MarshalledProp#bitSetFormat() @MarshalledProp(bitSetFormat=…)} on the bean property.
+ * 	<li>{@link Marshalled#bitSetFormat() @Marshalled(bitSetFormat=…)} on the bean class.
+ * 	<li>{@link MarshalledConfig#bitSetFormat() @MarshalledConfig(bitSetFormat=…)} on
  * 		<code><ja>@Rest</ja></code>-annotated classes / methods.
  * 	<li>Programmatic {@link MarshallingContext.Builder#bitSetFormat(BitSetFormat)}.
  * 	<li>Environment variable <c>MarshallingContext.bitSetFormat</c>.

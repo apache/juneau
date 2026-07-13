@@ -24,7 +24,7 @@ import java.util.function.*;
  * A functional interface representing a function that accepts five arguments and produces a result.
  *
  * <p>
- * This interface extends the standard Java {@link java.util.function.Function} pattern to support
+ * This interface extends the standard Java {@link Function} pattern to support
  * five-argument functions. It's useful when you need to pass functions with five parameters to methods
  * that expect functional interfaces, such as in stream operations, builders, or callback patterns.
  *

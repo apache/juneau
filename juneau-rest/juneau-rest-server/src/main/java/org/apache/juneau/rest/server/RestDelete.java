@@ -132,7 +132,7 @@ public @interface RestDelete {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}
+	 * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -347,7 +347,7 @@ public @interface RestDelete {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via
+	 * For programmatic equivalents, contribute a {@link EncoderSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

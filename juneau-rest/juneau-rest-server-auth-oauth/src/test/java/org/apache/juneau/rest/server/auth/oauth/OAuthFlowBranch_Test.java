@@ -292,7 +292,7 @@ class OAuthFlowBranch_Test extends TestBase {
 			.tokenEndpoint(URI.create("https://x.example.com/token"))
 			.clientId("id")
 			.clientSecret("secret")
-			.cacheSkew(java.time.Duration.ofSeconds(-1)));
+			.cacheSkew(Duration.ofSeconds(-1)));
 	}
 
 	@Test void h02_clientCredentials_zeroCacheSkewAccepted() {
@@ -300,7 +300,7 @@ class OAuthFlowBranch_Test extends TestBase {
 			.tokenEndpoint(URI.create("https://x.example.com/token"))
 			.clientId("id")
 			.clientSecret("secret")
-			.cacheSkew(java.time.Duration.ZERO)
+			.cacheSkew(Duration.ZERO)
 			.build());
 	}
 
@@ -342,7 +342,7 @@ class OAuthFlowBranch_Test extends TestBase {
 
 	@Test void k01_oidcMetadata_nullSupportedScopes_defaultsToEmpty() {
 		var md = new OidcMetadata(
-			java.net.URI.create("https://idp.example.com"),
+			URI.create("https://idp.example.com"),
 			null, null, null, null, null, null,
 			null, java.util.Map.of());
 		assertTrue(md.supportedScopes().isEmpty());
@@ -350,7 +350,7 @@ class OAuthFlowBranch_Test extends TestBase {
 
 	@Test void k02_oidcMetadata_nullExtras_defaultsToEmpty() {
 		var md = new OidcMetadata(
-			java.net.URI.create("https://idp.example.com"),
+			URI.create("https://idp.example.com"),
 			null, null, null, null, null, null,
 			java.util.Set.of(), null);
 		assertTrue(md.extras().isEmpty());

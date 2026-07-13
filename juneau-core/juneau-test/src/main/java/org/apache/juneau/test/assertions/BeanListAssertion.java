@@ -175,7 +175,7 @@ public class BeanListAssertion<E> extends FluentBeanListAssertion<E,BeanListAsse
 	}
 
 	@Override /* Overridden from Assertion */
-	public BeanListAssertion<E> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public BeanListAssertion<E> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

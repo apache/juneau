@@ -28,7 +28,7 @@ import org.apache.juneau.commons.svl.*;
  *
  * <p>
  * All functions exchange epoch milliseconds as the integration currency. Formatting and parsing
- * use {@link java.time.format.DateTimeFormatter} patterns for the explicit-pattern variants;
+ * use {@link DateTimeFormatter} patterns for the explicit-pattern variants;
  * the no-pattern variants use ISO-8601 ({@code Instant.toString()} on the way out, the ISO
  * detection chain on the way in).
  */

@@ -45,8 +45,9 @@ public class MsgPackTokenWriter implements TokenWriter {
 	/**
 	 * Cursor-level settings honored by {@link MsgPackTokenWriter}.
 	 *
-	 * @param walk The {@link org.apache.juneau.marshall.stream.PojoWalker.Options walk options} used by {@link #object(Object)}.
+	 * @param walk The {@link PojoWalker.Options walk options} used by {@link #object(Object)}.
 	 */
+	@SuppressWarnings("javadoc")
 	public record Settings(PojoWalker.Options walk) {
 
 		/** Default canonical setting: default walk options. */

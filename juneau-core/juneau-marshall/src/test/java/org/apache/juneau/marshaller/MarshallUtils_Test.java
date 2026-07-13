@@ -167,14 +167,14 @@ class MarshallUtils_Test extends TestBase {
 	}
 
 	@Test void d02_parseObjectParameterizedType_binaryFormats() throws Exception {
-		var bytes = msgPack(java.util.List.of(1, 2, 3));
+		var bytes = msgPack(List.of(1, 2, 3));
 		List<Integer> r = msgPack((Object) bytes, List.class, Integer.class);
 		assertEquals(3, r.size());
 
-		var cborBytes = cbor(java.util.List.of(1, 2, 3));
+		var cborBytes = cbor(List.of(1, 2, 3));
 		assertNotNull(cbor((Object) cborBytes, List.class, Integer.class));
 
-		var bsonBytes = bson(java.util.List.of(1, 2, 3));
+		var bsonBytes = bson(List.of(1, 2, 3));
 		assertNotNull(bson((Object) bsonBytes, List.class, Integer.class));
 	}
 
@@ -240,24 +240,24 @@ class MarshallUtils_Test extends TestBase {
 		assertNotNull(jsonl("1\n2\n3\n", List.class, Integer.class));
 		assertNotNull(jcs("[1,2,3]", List.class, Integer.class));
 		assertNotNull(hjson("[1,2,3]", List.class, Integer.class));
-		assertNotNull(xml(xml(java.util.List.of(1, 2, 3)), List.class, Integer.class));
-		assertNotNull(html(html(java.util.List.of(1, 2, 3)), List.class, Integer.class));
+		assertNotNull(xml(xml(List.of(1, 2, 3)), List.class, Integer.class));
+		assertNotNull(html(html(List.of(1, 2, 3)), List.class, Integer.class));
 		assertNotNull(uon("@(1,2,3)", List.class, Integer.class));
-		assertNotNull(urlEncoding(urlEncoding(java.util.List.of(1, 2, 3)), List.class, Integer.class));
+		assertNotNull(urlEncoding(urlEncoding(List.of(1, 2, 3)), List.class, Integer.class));
 		assertNotNull(yaml("[1,2,3]", List.class, Integer.class));
-		assertNotNull(plainText(plainText(java.util.List.of(1, 2, 3)), List.class, Integer.class));
-		assertNotNull(openApi(openApi(java.util.List.of(1, 2, 3)), List.class, Integer.class));
+		assertNotNull(plainText(plainText(List.of(1, 2, 3)), List.class, Integer.class));
+		assertNotNull(openApi(openApi(List.of(1, 2, 3)), List.class, Integer.class));
 	}
 
 	@Test void e06_parseBinaryParameterizedType_byteArrays() throws Exception {
-		var mpBytes = msgPack(java.util.List.of(1, 2, 3));
+		var mpBytes = msgPack(List.of(1, 2, 3));
 		List<Integer> mpResult = msgPack(mpBytes, List.class, Integer.class);
 		assertEquals(3, mpResult.size());
 
-		var cborBytes = cbor(java.util.List.of(1, 2, 3));
+		var cborBytes = cbor(List.of(1, 2, 3));
 		assertNotNull(cbor(cborBytes, List.class, Integer.class));
 
-		var bsonBytes = bson(java.util.List.of(1, 2, 3));
+		var bsonBytes = bson(List.of(1, 2, 3));
 		assertNotNull(bson(bsonBytes, List.class, Integer.class));
 	}
 

@@ -157,7 +157,7 @@ public class FluentIntegerAssertion<R> extends FluentComparableAssertion<Integer
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentIntegerAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentIntegerAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

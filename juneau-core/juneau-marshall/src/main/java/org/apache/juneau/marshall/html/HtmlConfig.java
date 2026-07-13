@@ -62,7 +62,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#addBeanTypesHtml()}
+	 * 	<li class='jm'>{@link HtmlSerializer.Builder#addBeanTypesHtml()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -111,7 +111,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#addKeyValueTableHeaders()}
+	 * 	<li class='jm'>{@link HtmlSerializer.Builder#addKeyValueTableHeaders()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -125,7 +125,7 @@ public @interface HtmlConfig {
 	 * Disables the feature where if the URL has a label parameter (e.g. <js>"?label=foobar"</js>), then use that as the anchor text of the link.
 	 *
 	 * <p>
-	 * The parameter name can be changed via the {@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#labelParameter(String)} property.
+	 * The parameter name can be changed via the {@link HtmlSerializer.Builder#labelParameter(String)} property.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs.
@@ -163,7 +163,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#disableDetectLabelParameters()}
+	 * 	<li class='jm'>{@link HtmlSerializer.Builder#disableDetectLabelParameters()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -175,7 +175,7 @@ public @interface HtmlConfig {
 	 *
 	 * <p>
 	 * Disables the feature where if a string looks like a URL (i.e. starts with <js>"http://"</js> or <js>"https://"</js>, then treat it like a URL
-	 * and make it into a hyperlink based on the rules specified by {@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#uriAnchorText(AnchorText)}.
+	 * and make it into a hyperlink based on the rules specified by {@link HtmlSerializer.Builder#uriAnchorText(AnchorText)}.
 	 *
 	 * <p>
 	 * The following shows the difference between the two generated outputs:
@@ -212,7 +212,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#disableDetectLinksInStrings()}
+	 * 	<li class='jm'>{@link HtmlSerializer.Builder#disableDetectLinksInStrings()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -233,7 +233,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#labelParameter(String)}
+	 * 	<li class='jm'>{@link HtmlSerializer.Builder#labelParameter(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -274,7 +274,7 @@ public @interface HtmlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlSerializer.Builder#uriAnchorText(AnchorText)}
+	 * 	<li class='jm'>{@link HtmlSerializer.Builder#uriAnchorText(AnchorText)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

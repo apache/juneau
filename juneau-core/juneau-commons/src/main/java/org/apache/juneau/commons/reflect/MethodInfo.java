@@ -88,7 +88,7 @@ import org.apache.juneau.commons.utils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
+public final class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>, Annotatable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_declaringClass = "declaringClass";
@@ -246,7 +246,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * Repeatable annotations (those marked with {@link Repeatable @Repeatable}) are automatically
 	 * expanded into their individual annotation instances. For example, if a method has multiple {@code @Marshalled} annotations,
 	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *
@@ -272,7 +272,7 @@ public class MethodInfo extends ExecutableInfo implements Comparable<MethodInfo>
 	 *
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
-	 * If the specified annotation type is repeatable (marked with {@link java.lang.annotation.Repeatable @Repeatable}),
+	 * If the specified annotation type is repeatable (marked with {@link Repeatable @Repeatable}),
 	 * this method automatically expands container annotations into individual instances. This allows you to filter for
 	 * a repeatable annotation and get back all individual occurrences without manually handling the container.
 	 *

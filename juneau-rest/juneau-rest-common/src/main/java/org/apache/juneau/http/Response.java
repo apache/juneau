@@ -65,7 +65,7 @@ public @interface Response {
 	 *
 	 * <p>
 	 * Intended as a brief, single-line description suitable for AI/LLM consumption, compact documentation,
-	 * or any context where brevity matters. See {@link org.apache.juneau.commons.Schema#summary()}
+	 * or any context where brevity matters. See {@link Schema#summary()}
 	 * for the canonical definition.
 	 *
 	 * @return The annotation value.

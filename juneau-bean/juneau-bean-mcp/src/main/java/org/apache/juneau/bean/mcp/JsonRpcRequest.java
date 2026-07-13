@@ -33,7 +33,7 @@ public class JsonRpcRequest {
 	private Object params;
 
 	/**
-	 * JSON-RPC protocol version (typically {@value org.apache.juneau.bean.mcp.McpProtocol#JSON_RPC_2_0}).
+	 * JSON-RPC protocol version (typically {@value McpProtocol#JSON_RPC_2_0}).
 	 *
 	 * @return The version token, or {@code null} if not set.
 	 */

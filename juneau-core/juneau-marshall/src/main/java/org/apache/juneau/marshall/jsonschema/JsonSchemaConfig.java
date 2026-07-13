@@ -70,7 +70,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -109,7 +109,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#addDescriptionsTo(TypeCategory...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -133,7 +133,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedDescriptions()}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#allowNestedDescriptions()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -157,7 +157,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#allowNestedExamples()}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#allowNestedExamples()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -175,11 +175,11 @@ public @interface JsonSchemaConfig {
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
-	 * 		This setting is ignored if {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
+	 * 		This setting is ignored if {@link JsonSchemaGenerator.Builder#useBeanDefs()} is not enabled.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#beanDefMapper(Class)}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#beanDefMapper(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -272,7 +272,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#ignoreTypes(String...)}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#ignoreTypes(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -366,7 +366,7 @@ public @interface JsonSchemaConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder#useBeanDefs()}
+	 * 	<li class='jm'>{@link JsonSchemaGenerator.Builder#useBeanDefs()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

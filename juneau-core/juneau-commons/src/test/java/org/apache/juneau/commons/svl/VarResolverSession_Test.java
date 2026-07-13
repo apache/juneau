@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code containsVars(Collection|Map|Object)} short-circuit branches
  * 	<li>{@link VarResolverSession#resolve(String[])} array overload
  * 	<li>{@link VarResolverSession#resolve(Object)} for Sets, Lists, Maps including custom collection classes
- * 	<li>{@link VarResolverSession#resolveTo(String, java.io.Writer)} null/empty paths
+ * 	<li>{@link VarResolverSession#resolveTo(String, Writer)} null/empty paths
  * 	<li>{@link VarResolverSession#getVar(String)} resolution
  * 	<li>{@link VarResolverSession#bean(Class, Object)} / {@link VarResolverSession#getBean(Class)} / fallback to context store
  * </ul>

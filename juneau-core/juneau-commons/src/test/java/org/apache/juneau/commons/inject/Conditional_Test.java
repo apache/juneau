@@ -401,7 +401,7 @@ class Conditional_Test extends TestBase {
 	// and verify the skip still happens (the captured handler is asserted on too).
 	//------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.commons.inject.Configuration
+	@Configuration
 	@ConditionalOnClass("definitely.does.not.Exist")
 	public static class ClassLevelOnClassMissingConfig {
 		public ClassLevelOnClassMissingConfig() { /* intentionally empty */ }

@@ -146,7 +146,7 @@ public class LongAssertion extends FluentLongAssertion<LongAssertion> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public LongAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public LongAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

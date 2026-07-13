@@ -34,7 +34,7 @@ import jakarta.servlet.http.*;
  * {@link RestAuthenticator.Null} sentinel.
  *
  * <p>
- * A mock {@link HttpServletRequest} is not a {@link org.apache.juneau.rest.server.RestRequest}, so these tests
+ * A mock {@link HttpServletRequest} is not a {@link RestRequest}, so these tests
  * exercise the package-private {@code authenticateRaw} entry point that the adapter / sentinel override.
  *
  * @since 10.0.0

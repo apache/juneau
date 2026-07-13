@@ -73,7 +73,7 @@ class Swagger_RestOp_Parameters extends TestBase {
 			return contentType.getValue();
 		}
 		@RestOp
-		public String date(org.apache.juneau.http.classic.header.Date date) {
+		public String date(Date date) {
 			return date.getValue();
 		}
 		@RestOp

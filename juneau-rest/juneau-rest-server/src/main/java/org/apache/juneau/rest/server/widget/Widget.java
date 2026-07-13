@@ -164,7 +164,7 @@ public abstract class Widget implements HtmlWidget {
 	 * Same as {@link #loadHtml(RestRequest,String)} but replaces request-time SVL variables.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getVarResolver()}
+	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
@@ -203,7 +203,7 @@ public abstract class Widget implements HtmlWidget {
 	 * Same as {@link #loadScript(RestRequest,String)} but replaces request-time SVL variables.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getVarResolver()}
+	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *
@@ -242,7 +242,7 @@ public abstract class Widget implements HtmlWidget {
 	 * Same as {@link #loadStyle(RestRequest,String)} but replaces request-time SVL variables.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getVarResolver()}
+	 * 	<li class='jm'>{@link RestContext#getVarResolver()}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL Variables</a>
 	 * </ul>
 	 *

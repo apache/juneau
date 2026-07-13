@@ -709,9 +709,9 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	public static class J2Bean {
-		@MarshalledProp(durationFormat=org.apache.juneau.marshall.DurationFormat.MILLIS)
+		@MarshalledProp(durationFormat=DurationFormat.MILLIS)
 		public java.time.Duration f1 = java.time.Duration.ofSeconds(5);
-		@MarshalledProp(durationFormat=org.apache.juneau.marshall.DurationFormat.SECONDS)
+		@MarshalledProp(durationFormat=DurationFormat.SECONDS)
 		public java.time.Duration f2 = java.time.Duration.ofSeconds(5);
 	}
 
@@ -720,10 +720,10 @@ class DefaultSwaps_Test extends TestBase {
 	}
 
 	public static class J3Bean {
-		@MarshalledProp(periodFormat=org.apache.juneau.marshall.PeriodFormat.DAYS)
-		public java.time.Period f1 = java.time.Period.ofDays(9);
-		@MarshalledProp(periodFormat=org.apache.juneau.marshall.PeriodFormat.DAYS)
-		public java.time.Period f2 = java.time.Period.ofDays(2);
+		@MarshalledProp(periodFormat=PeriodFormat.DAYS)
+		public Period f1 = Period.ofDays(9);
+		@MarshalledProp(periodFormat=PeriodFormat.DAYS)
+		public Period f2 = Period.ofDays(2);
 	}
 
 	@Test void j05_Period_propertyFormatOverride() {

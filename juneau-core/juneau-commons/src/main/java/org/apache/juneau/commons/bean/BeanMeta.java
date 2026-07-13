@@ -139,7 +139,7 @@ public class BeanMeta<T> {
 				return true;
 
 			// Get the bean property type from the getter/field.
-			Class<?> pt = null;  // Uses raw Class<?> here because assignment checks are performed against java.lang.Class.
+			Class<?> pt = null;  // Uses raw Class<?> here because assignment checks are performed against Class.
 			if (nn(b.getter))
 				pt = b.getter.getReturnType().inner();
 			else if (nn(b.field))
@@ -448,7 +448,7 @@ public class BeanMeta<T> {
 		var dynaPropertyValue = Holder.<BeanPropertyMeta>empty();
 		var propertyBeanRegistriesTemp = CollectionUtils.<BeanPropertyMeta,BeanRegistryLookup>map();  // Per-property BeanRegistry side-map.
 		var unsortedPropertiesTemp = false;
-		var btList = ap.find(org.apache.juneau.commons.bean.BeanType.class, classInfo);
+		var btList = ap.find(BeanType.class, classInfo);
 		var propertyNamer = o(bf).map(x -> x.getPropertyNamer()).orElse(config.getPropertyNamer());
 
 		// resolveTypePropertyName may return null on the commons-side NOOP path; fall back to the configured default.
@@ -644,7 +644,7 @@ public class BeanMeta<T> {
 		propertyBeanRegistries = u(propertyBeanRegistriesTemp);
 		dictionaryName = memoize(this::findDictionaryName);
 		beanProxyInvocationHandler = memoize(() -> config.isUseInterfaceProxies() && classInfo.isInterface() ? new BeanProxyInvocationHandler<>(this) : null);
-		var factoryClassTemp = btList.stream().map(x -> x.inner().factory()).filter(x -> x != org.apache.juneau.commons.function.BeanFactory.Void.class).findFirst().orElse(null);
+		var factoryClassTemp = btList.stream().map(x -> x.inner().factory()).filter(x -> x != BeanFactory.Void.class).findFirst().orElse(null);
 		factoryClass = factoryClassTemp;
 	}
 
@@ -1079,7 +1079,7 @@ public class BeanMeta<T> {
 			var h = beanProxyInvocationHandler.get();
 			if (nn(h)) {
 				var inner = classInfo.inner();
-				return (T)Proxy.newProxyInstance(inner.getClassLoader(), a(inner, java.io.Serializable.class), h);
+				return (T)Proxy.newProxyInstance(inner.getClassLoader(), a(inner, Serializable.class), h);
 			}
 		}
 		return null;
@@ -1089,7 +1089,7 @@ public class BeanMeta<T> {
 		"rawtypes", // Raw BeanFactory type at runtime
 		"unchecked" // Unchecked casts required for factory class and BeanStore result
 	})
-	private org.apache.juneau.commons.function.BeanFactory resolveFactory(Class<? extends org.apache.juneau.commons.function.BeanFactory> fc) {
+	private BeanFactory resolveFactory(Class<? extends BeanFactory> fc) {
 		var bs = config.getBeanStore();
 		if (bs != null) {
 			var opt = bs.getBean(fc);
@@ -1167,10 +1167,10 @@ public class BeanMeta<T> {
 
 		if (ci.isRecord()) {
 			var components = ci.getRecordComponents();
-			var paramTypes = components.stream().map(java.lang.reflect.RecordComponent::getType).toArray(Class[]::new);
+			var paramTypes = components.stream().map(RecordComponent::getType).toArray(Class[]::new);
 			var rcon = ci.getPublicConstructor(x -> x.hasParameterTypes(paramTypes)).orElse(null);
 			if (rcon != null)
-				return new BeanConstructor(o(rcon.accessible()), components.stream().map(java.lang.reflect.RecordComponent::getName).toList());
+				return new BeanConstructor(o(rcon.accessible()), components.stream().map(RecordComponent::getName).toList());
 		}
 
 		if (implClassConstructor != null)
@@ -1228,7 +1228,7 @@ public class BeanMeta<T> {
 		var ap = config.getAnnotationProvider();
 		var isRecord = classInfo.isRecord();
 		var recordComponentNames = isRecord
-			? classInfo.getRecordComponents().stream().map(java.lang.reflect.RecordComponent::getName).collect(java.util.stream.Collectors.toSet())
+			? classInfo.getRecordComponents().stream().map(RecordComponent::getName).collect(java.util.stream.Collectors.toSet())
 			: Set.<String>of();
 		// @formatter:off
 		return classHierarchy.get().stream()

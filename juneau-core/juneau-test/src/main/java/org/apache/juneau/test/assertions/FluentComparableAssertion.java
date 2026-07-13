@@ -256,7 +256,7 @@ public class FluentComparableAssertion<T extends Comparable,R> extends FluentObj
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentComparableAssertion<T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentComparableAssertion<T,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

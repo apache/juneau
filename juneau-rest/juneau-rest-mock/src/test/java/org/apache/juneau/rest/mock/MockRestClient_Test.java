@@ -65,7 +65,7 @@ class MockRestClient_Test {
 		}
 
 		@RestGet(path="/echo-header")
-		public String echoHeader(org.apache.juneau.rest.server.RestRequest req) {
+		public String echoHeader(RestRequest req) {
 			return req.getHeader("X-Custom");
 		}
 
@@ -96,7 +96,7 @@ class MockRestClient_Test {
 	@Rest
 	public static class NoContentResource {
 		@RestDelete
-		public void delete(org.apache.juneau.rest.server.RestResponse res) {
+		public void delete(RestResponse res) {
 			res.setStatus(204);
 		}
 	}

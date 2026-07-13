@@ -350,7 +350,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			// nested array shape via the recursive writeValue step).  At configured (non-NOT_SET)
 			// binary formats the per-property BinarySwap has already fired in writeKeyValue's
 			// swap step, so byte[] values reach this branch only at NOT_SET — a no-op for the
-			// configured-format paths.  java.lang.reflect.Array.get auto-boxes primitive
+			// configured-format paths.  Array.get auto-boxes primitive
 			// elements, so a single runtime-typed loop covers every primitive component type.
 			int len = Array.getLength(value);
 			w.arrayStart();

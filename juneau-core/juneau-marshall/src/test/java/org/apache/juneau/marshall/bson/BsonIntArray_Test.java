@@ -44,8 +44,8 @@ class BsonIntArray_Test {
 		var bytes = s.serialize(ints(1, 2, 3));
 		var result = p.parse(bytes, Object.class);
 		assertNotNull(result);
-		assertTrue(result instanceof java.util.Map);
-		var m = (java.util.Map<?,?>)result;
+		assertTrue(result instanceof Map);
+		var m = (Map<?,?>)result;
 		assertTrue(m.containsKey("value"));
 		assertNotNull(m.get("value"));
 	}

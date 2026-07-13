@@ -186,7 +186,7 @@ public class FluentBeanAssertion<T,R> extends FluentObjectAssertion<T,R> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentBeanAssertion<T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentBeanAssertion<T,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

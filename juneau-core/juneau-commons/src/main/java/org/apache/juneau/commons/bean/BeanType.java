@@ -107,7 +107,7 @@ public @interface BeanType {
 	@SuppressWarnings({
 		"rawtypes" // Raw BeanFactory type required for annotation attribute declaration
 	})
-	Class<? extends org.apache.juneau.commons.function.BeanFactory> factory() default org.apache.juneau.commons.function.BeanFactory.Void.class;
+	Class<? extends BeanFactory> factory() default BeanFactory.Void.class;
 
 	/**
 	 * Find fluent setters.

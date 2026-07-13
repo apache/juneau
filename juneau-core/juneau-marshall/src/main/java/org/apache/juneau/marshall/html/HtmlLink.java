@@ -35,7 +35,7 @@ import java.lang.annotation.*;
  * Annotation that can be used to specify that a class has a URL associated with it.
  *
  * <p>
- * When rendered using the {@link org.apache.juneau.marshall.html.HtmlSerializer HtmlSerializer} class, this class will get
+ * When rendered using the {@link HtmlSerializer HtmlSerializer} class, this class will get
  * rendered as a hyperlink like so...
  * <p class='code'>
  * 	<xt>&lt;a</xt> <xa>href</xa>=<xs>'hrefProperty'</xs><xt>&gt;</xt>nameProperty<xt>&lt;/a&gt;</xt>

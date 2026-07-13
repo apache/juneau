@@ -146,7 +146,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 			if (cm.isBean()) {
 				serializeBeanWithHeadings(w, toBeanMap(o), headingLevel);
 			} else if (cm.isCollectionOrArray()) {
-				var l = cm.isArray() ? java.util.Arrays.asList((Object[]) o) : (java.util.Collection<?>) o;
+				var l = cm.isArray() ? Arrays.asList((Object[]) o) : (Collection<?>) o;
 				serializeCollection(w, l, object(), cm);
 			} else {
 				serializeAnything(w, o, cm, null);
@@ -175,8 +175,8 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 	 */
 	protected void serializeBeanWithHeadings(MarkdownWriter w, BeanMap<?> bm, int level) throws IOException, SerializeException {
 		// Collect simple properties for the key/value table
-		var simpleProps = new java.util.LinkedHashMap<String, Object>();
-		var complexProps = new java.util.LinkedHashMap<String, Object>();
+		var simpleProps = new LinkedHashMap<String, Object>();
+		var complexProps = new LinkedHashMap<String, Object>();
 
 		for (var e : bm.entrySet()) {
 			var key = e.getKey();
@@ -243,7 +243,7 @@ public class MarkdownDocSerializerSession extends MarkdownSerializerSession {
 				serializeMap(w, (Map<?,?>) swapped, swappedCm);
 				w.blankLine();
 			} else if (swappedCm.isCollectionOrArray()) {
-				var l = swappedCm.isArray() ? java.util.Arrays.asList((Object[]) swapped) : (java.util.Collection<?>) swapped;
+				var l = swappedCm.isArray() ? Arrays.asList((Object[]) swapped) : (Collection<?>) swapped;
 				serializeCollection(w, l, object(), swappedCm);
 				w.blankLine();
 			} else {

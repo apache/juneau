@@ -73,7 +73,7 @@ class CollectionUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// accumulate(Object)
+	// accumulate(Object...)
 	//====================================================================================================
 	@Test
 	void a003_accumulate() {
@@ -1329,7 +1329,7 @@ class CollectionUtils_Test extends TestBase {
 		assertFalse(it.hasNext());
 
 		// Test line 2085: NoSuchElementException when calling next() after exhausted
-		assertThrows(java.util.NoSuchElementException.class, it::next);
+		assertThrows(NoSuchElementException.class, it::next);
 
 		// Test line 2093: UnsupportedOperationException when calling remove()
 		Iterator<String> it2 = result.iterator();
@@ -1632,7 +1632,7 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a096_isEmpty_collection() {
-		assertTrue(isEmpty((java.util.Collection<?>)null));
+		assertTrue(isEmpty((Collection<?>)null));
 		assertTrue(isEmpty(list()));
 		assertFalse(isEmpty(list("a")));
 		assertFalse(isEmpty(list("a", "b")));
@@ -1643,9 +1643,110 @@ class CollectionUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a097_isEmpty_map() {
-		assertTrue(isEmpty((java.util.Map<?,?>)null));
+		assertTrue(isEmpty((Map<?,?>)null));
 		assertTrue(isEmpty(map()));
 		assertFalse(isEmpty(map("k", "v")));
 		assertFalse(isEmpty(map("k1", "v1", "k2", "v2")));
+	}
+
+	//====================================================================================================
+	// accumulate(Object...) — null and zero-arg regression
+	//====================================================================================================
+	@Test
+	void a098_accumulate_nullAndZeroArg() {
+		// accumulate(null) — the whole varargs array is null; must return empty list, not throw
+		List<?> r1 = accumulate((Object) null);
+		assertNotNull(r1);
+		assertTrue(r1.isEmpty());
+
+		// accumulate() — zero args; must return empty list
+		List<?> r2 = accumulate();
+		assertNotNull(r2);
+		assertTrue(r2.isEmpty());
+
+		// null element mid-traversal contributes nothing to the result
+		List<Object> withNulls = new ArrayList<>();
+		withNulls.add("a");
+		withNulls.add(null);
+		withNulls.add("b");
+		List<?> r3 = accumulate(withNulls);
+		assertEquals(list("a", "b"), r3);
+	}
+
+	//====================================================================================================
+	// accumulate(Object...) — multi-root capability
+	//====================================================================================================
+	@Test
+	void a099_accumulate_multiRoot() {
+		List<String> list1 = list("a", "b");
+		int[] arr = {1, 2, 3};
+		List<?> result = accumulate(list1, arr, "leaf");
+		assertEquals(list("a", "b", 1, 2, 3, "leaf"), result);
+	}
+
+	//====================================================================================================
+	// deepStream(Object...) — parity with accumulate, laziness, null-handling
+	//====================================================================================================
+	@Test
+	void a100_deepStream() {
+		// Basic parity with accumulate
+		List<String> list1 = list("a", "b", "c");
+		List<Object> fromAccumulate = accumulate(list1);
+		List<Object> fromDeepStream = deepStream(list1).collect(java.util.stream.Collectors.toList());
+		assertEquals(fromAccumulate, fromDeepStream);
+
+		// Multi-root parity: list + primitive array + leaf
+		int[] arr = {1, 2};
+		List<?> accMulti = accumulate(list1, arr, "x");
+		List<?> dsMulti = deepStream(list1, arr, "x").collect(java.util.stream.Collectors.toList());
+		assertEquals(accMulti, dsMulti);
+
+		// null root returns empty stream
+		assertTrue(deepStream((Object[]) null).collect(java.util.stream.Collectors.toList()).isEmpty());
+
+		// null element mid-traversal contributes nothing
+		List<Object> withNull = new ArrayList<>();
+		withNull.add("p");
+		withNull.add(null);
+		withNull.add("q");
+		List<?> dsNull = deepStream(withNull).collect(java.util.stream.Collectors.toList());
+		assertEquals(list("p", "q"), dsNull);
+
+		// Laziness: the underlying Iterable's iterator() must not be called until the stream is consumed
+		int[] callCount = {0};
+		Iterable<String> lazyIterable = () -> {
+			callCount[0]++;
+			return list("lazy").iterator();
+		};
+		java.util.stream.Stream<Object> lazyStream = deepStream(lazyIterable);
+		assertEquals(0, callCount[0]); // not yet consumed
+		lazyStream.findFirst();
+		assertEquals(1, callCount[0]); // consumed exactly once
+	}
+
+	//====================================================================================================
+	// deepStream overload-resolution: stream(T[]) retains shallow semantics; deepStream goes deep
+	//====================================================================================================
+	@Test
+	void a101_deepStream_overloadResolution() {
+		String[] arr = {"a", "b", "c"};
+
+		// stream(T[] array) — shallow, yields the 3 String elements directly
+		List<String> shallow = stream(arr).collect(java.util.stream.Collectors.toList());
+		assertEquals(list("a", "b", "c"), shallow);
+
+		// deepStream(Object... o) — cast to Object[] makes intent explicit: arr is passed as the
+		// entire varargs array (String[] is-a Object[], array covariance), so each element "a","b","c"
+		// is traversed individually — same flattened result as the shallow stream above
+		List<Object> deep = deepStream((Object[]) arr).collect(java.util.stream.Collectors.toList());
+		assertEquals(list("a", "b", "c"), deep);
+
+		// The key distinction with nested arrays: stream is shallow, deepStream fully flattens
+		String[][] nested = {{"a", "b"}, {"c"}};
+		List<String[]> shallowNested = stream(nested).collect(java.util.stream.Collectors.toList());
+		assertEquals(2, shallowNested.size()); // 2 sub-arrays, not 3 strings
+
+		List<Object> deepNested = deepStream((Object[]) nested).collect(java.util.stream.Collectors.toList());
+		assertEquals(list("a", "b", "c"), deepNested); // fully flattened
 	}
 }

@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link ObjectIntrospector} - Additional information on introspection of POJO methods.
- * 	<li class='ja'>{@link org.apache.juneau.rest.server.RestOp#converters()} - Registering converters with REST resources.
+ * 	<li class='ja'>{@link RestOp#converters()} - Registering converters with REST resources.
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Converters">Converters</a>
  * </ul>
  */

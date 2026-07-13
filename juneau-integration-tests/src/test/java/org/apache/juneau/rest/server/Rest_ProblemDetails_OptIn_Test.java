@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
  * End-to-end tests for the {@code @Rest(problemDetails="true")} opt-in:
  *
  * <ul>
- * 	<li>Thrown {@link org.apache.juneau.http.response.BasicHttpException} on opted-in resource produces
+ * 	<li>Thrown {@link BasicHttpException} on opted-in resource produces
  * 		{@code application/problem+json} regardless of client {@code Accept} (Q5(A)).
  * 	<li>Returned {@link Problem} from a handler produces {@code application/problem+json}.
  * 	<li>Resource without opt-in still produces legacy {@code text/plain} (regression bar).

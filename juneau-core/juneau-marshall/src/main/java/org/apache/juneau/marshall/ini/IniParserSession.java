@@ -300,7 +300,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 *
 	 * <p>
 	 * Required so that format hints carried on the parent {@code IniParser} context (e.g.
-	 * {@link org.apache.juneau.marshall.LocaleFormat}, {@link org.apache.juneau.marshall.TimeZoneFormat}) are honored
+	 * {@link LocaleFormat}, {@link TimeZoneFormat}) are honored
 	 * when nested JSON5-encoded collection/map values are deserialized.  Using {@code Json5Parser.DEFAULT}
 	 * here would silently drop those hints and fall back to the format-default behavior.
 	 *
@@ -311,7 +311,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 	 * than repeated for every {@code […]} / {@code {…}} value.
 	 *
 	 * <p>
-	 * Bug #8: list-of-{@link Locale} values written under {@link org.apache.juneau.marshall.LocaleFormat#UNDERSCORE}
+	 * Bug #8: list-of-{@link Locale} values written under {@link LocaleFormat#UNDERSCORE}
 	 * (wire form {@code "en_US"}) were being parsed via {@code Locale.forLanguageTag("en_US")} (BCP_47 default)
 	 * which returns {@link Locale#ROOT}, dropping the locale content.
 	 */

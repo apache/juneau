@@ -90,7 +90,7 @@ import org.apache.juneau.commons.reflect.*;
  * 	<tr>
  * 		<td>{@link CharSequence}</td>
  * 		<td>{@code byte[]}</td>
- * 		<td>UTF-8 encoding via {@link String#getBytes(java.nio.charset.Charset)}</td>
+ * 		<td>UTF-8 encoding via {@link String#getBytes(Charset)}</td>
  * 	</tr>
  * 	<tr>
  * 		<td>{@link CharSequence}</td>

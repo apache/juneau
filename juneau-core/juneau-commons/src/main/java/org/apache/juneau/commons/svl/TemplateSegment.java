@@ -38,7 +38,7 @@ import java.io.*;
  * Segments are immutable and threadsafe. The compile-binding contract documented on
  * {@link VarTemplate} applies to the captured {@link Var} references in {@link VarRefSegment}.
  */
-abstract class TemplateSegment {
+abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, ScriptSegment {
 
 	/**
 	 * Resolves this segment and appends the result to {@code out}.

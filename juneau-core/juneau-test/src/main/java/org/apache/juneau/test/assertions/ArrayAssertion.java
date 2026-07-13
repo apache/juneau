@@ -159,7 +159,7 @@ public class ArrayAssertion<E> extends FluentArrayAssertion<E,ArrayAssertion<E>>
 	}
 
 	@Override /* Overridden from Assertion */
-	public ArrayAssertion<E> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public ArrayAssertion<E> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

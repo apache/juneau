@@ -162,7 +162,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 	 * is session-independent, so the precomputed {@link ProtobufFieldEntry#kind() kind}/{@link
 	 * ProtobufFieldEntry#scalarType() scalarType} cannot account for session-registered swaps.  This method therefore
 	 * re-derives the shape at dispatch time, mirroring {@code CborSerializerSession.serializeAnything}'s
-	 * {@link ClassMeta#getSwap(org.apache.juneau.marshall.MarshallingSession) getSwap(this)} step.
+	 * {@link ClassMeta#getSwap(MarshallingSession) getSwap(this)} step.
 	 *
 	 * <p>
 	 * Resolving the swap from the <b>runtime</b> type (not the declared type) is what keeps this correct in both

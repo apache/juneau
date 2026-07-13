@@ -65,7 +65,7 @@ import java.lang.reflect.*;
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsReflection">Reflection Package</a>
  * </ul>
  */
-public abstract class ElementInfo {
+public abstract sealed class ElementInfo permits ClassInfo, ParameterInfo, AccessibleInfo {
 
 	private final int modifiers;
 

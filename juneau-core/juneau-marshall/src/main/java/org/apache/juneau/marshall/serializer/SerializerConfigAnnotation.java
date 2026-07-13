@@ -35,7 +35,7 @@ public class SerializerConfigAnnotation {
 	private SerializerConfigAnnotation() {}
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.marshall.serializer.OutputStreamSerializer.Builder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link OutputStreamSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -60,7 +60,7 @@ public class SerializerConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.marshall.serializer.Serializer.Builder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link Serializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"unchecked", // Raw types required for reflective annotation application.
@@ -102,7 +102,7 @@ public class SerializerConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link SerializerConfig} annotations to a {@link org.apache.juneau.marshall.serializer.WriterSerializer.Builder}.
+	 * Applies {@link SerializerConfig} annotations to a {@link WriterSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

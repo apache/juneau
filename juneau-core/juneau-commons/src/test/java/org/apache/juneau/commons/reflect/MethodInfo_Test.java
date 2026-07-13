@@ -78,7 +78,7 @@ class MethodInfo_Test extends TestBase {
 				return t2.getDeclaringClass().getSimpleName() + '.' + MethodInfo.of((Method)t).getNameShort();
 			if (t instanceof List<?> t2)
 				return (t2.stream().map(this).collect(Collectors.joining(",")));
-			if (t instanceof java.util.Set<?> t2)
+			if (t instanceof Set<?> t2)
 				return "[" + t2.stream().map(this).collect(Collectors.joining(", ")) + "]";
 			if (t instanceof AnnotationInfo t2)
 				return apply(t2.inner());
@@ -689,7 +689,7 @@ class MethodInfo_Test extends TestBase {
 			assertFalse(bridgeMethod.get().is(ElementFlag.NOT_BRIDGE));  // Line 599: false branch
 		} else {
 			// Fallback: try ArrayList which should have bridge methods
-			ClassInfo listClass = ClassInfo.of(java.util.ArrayList.class);
+			ClassInfo listClass = ClassInfo.of(ArrayList.class);
 			var methods = listClass.getPublicMethods();
 			var arrayListBridge = methods.stream()
 				.filter(m -> m.isBridge())

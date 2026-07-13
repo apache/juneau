@@ -159,7 +159,7 @@ class StringFormat_Test extends TestBase {
 		assertMessageFormat("Unicode: {0} 中文", "Test");
 		assertMessageFormat("{0}{1}", "A", "B");
 		assertMessageFormat("{0} and {0} again", "Hello");
-		assertMessageFormat("Price: {0,number,currency}, Count: {1,number,integer}, Date: {2,date,short}", 19.99, 42, new java.util.Date(0L));
+		assertMessageFormat("Price: {0,number,currency}, Count: {1,number,integer}, Date: {2,date,short}", 19.99, 42, new Date(0L));
 		assertMessageFormat("Price: {0,number,currency}", Locale.US, 19.99);
 		assertMessageFormat("Price: {0,number,currency}", Locale.FRANCE, 19.99);
 		assertMessageFormat("a '{0}' b");
@@ -460,15 +460,15 @@ class StringFormat_Test extends TestBase {
 	@Test void a15_stringFormatTokenBranches() {
 		// Test args == null branch - covers line 217 (args == null)
 		var fmt1 = StringFormat.of("Hello %s");
-		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt1.format((Object[])null));
+		assertThrows(MissingFormatArgumentException.class, () -> fmt1.format((Object[])null));
 
 		// Test with complex format and null args
 		var fmt2 = StringFormat.of("Price: %.2f");
-		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt2.format((Object[])null));
+		assertThrows(MissingFormatArgumentException.class, () -> fmt2.format((Object[])null));
 
 		// Test with explicit index format and null args
 		var fmt3 = StringFormat.of("First: %1$s, Second: %2$s");
-		assertThrows(java.util.MissingFormatArgumentException.class, () -> fmt3.format((Object[])null));
+		assertThrows(MissingFormatArgumentException.class, () -> fmt3.format((Object[])null));
 
 		// Note on other branches:
 		// - index >= args.length: This branch exists but testing it is complex because the index

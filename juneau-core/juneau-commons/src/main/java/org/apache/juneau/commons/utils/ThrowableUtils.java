@@ -33,7 +33,7 @@ import org.apache.juneau.commons.settings.*;
  *
  * <p>
  * Exception <i>factory</i> methods (terse {@code rex}/{@code brex}/{@code iaex}/{@code isex}/{@code uoex}/
- * {@code uoroex}/{@code ioex}/{@code exex} constructors) live on {@link org.apache.juneau.commons.utils.Shorts}
+ * {@code uoroex}/{@code ioex}/{@code exex} constructors) live on {@link Shorts}
  * and construct their exceptions directly with no side-effects.  This class retains only throwable
  * <i>inspection</i>/<i>handling</i> helpers (stack-trace rendering, cause walking, safe-run wrappers, casting).
  *

@@ -2615,7 +2615,7 @@ public class HttpPartSchema {
 			return HttpPartSchema.toSet(s);
 		}
 
-		Builder apply(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+		Builder apply(Class<? extends Annotation> c, Type t) {
 			if (t instanceof Class<?> c2) {
 				rstream(AP.find(c, info(c2))).forEach(x -> apply(x.inner()));
 			} else if (Holder.isType(t)) {
@@ -2813,7 +2813,7 @@ public class HttpPartSchema {
 			return this;
 		}
 
-		public Builder applyAll(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+		public Builder applyAll(Class<? extends Annotation> c, Type t) {
 			return apply(Schema.class, t).apply(c, t);
 		}
 
@@ -3106,7 +3106,7 @@ public class HttpPartSchema {
 	 * 	The class containing the parameter.
 	 * @return The schema information about the parameter.
 	 */
-	public static HttpPartSchema create(Class<? extends Annotation> c, java.lang.reflect.Type t) {
+	public static HttpPartSchema create(Class<? extends Annotation> c, Type t) {
 		return create().applyAll(c, t).build();
 	}
 
@@ -4912,7 +4912,7 @@ public class HttpPartSchema {
 	private static boolean isValidRegex(String x) {
 		// ECMA-262 regex validation
 		try {
-			java.util.regex.Pattern.compile(x);
+			Pattern.compile(x);
 			return true;
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return false;

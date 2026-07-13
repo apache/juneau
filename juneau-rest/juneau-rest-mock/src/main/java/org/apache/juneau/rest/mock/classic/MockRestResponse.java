@@ -30,7 +30,7 @@ import org.apache.juneau.rest.client.classic.*;
 @SuppressWarnings({
 	"resource" // MockRestResponse manages Closeable resources
 })
-public class MockRestResponse extends org.apache.juneau.rest.client.classic.RestResponse {
+public class MockRestResponse extends RestResponse {
 
 	/**
 	 * Constructor.

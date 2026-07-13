@@ -42,7 +42,7 @@ import jakarta.servlet.http.*;
 })
 class SamlAuthFilter_Test extends TestBase {
 
-	private static SamlAssertionValidator validator(java.util.function.Function<String,java.security.Principal> impl) throws Exception {
+	private static SamlAssertionValidator validator(java.util.function.Function<String,Principal> impl) throws Exception {
 		var kp = KeyPairGenerator.getInstance("RSA");
 		kp.initialize(2048);
 		var pair = kp.generateKeyPair();
@@ -51,7 +51,7 @@ class SamlAuthFilter_Test extends TestBase {
 					.spEntityId("https://sp.example.com")
 					.expectedIssuer("https://idp.example.com")
 					.signingCredential(new BasicCredential(pair.getPublic(), pair.getPrivate()))) {
-			@Override public java.security.Principal validate(String xml) {
+			@Override public Principal validate(String xml) {
 				return impl.apply(xml);
 			}
 		};

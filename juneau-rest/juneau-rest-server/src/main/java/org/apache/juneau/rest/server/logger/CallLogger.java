@@ -89,7 +89,7 @@ import jakarta.servlet.http.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='ja'>{@link Rest#callLogger()}
- * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}
+ * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
  * 	<li class='ja'>{@link Rest#debug}
  * 	<li class='ja'>{@link RestOp#debug}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerLoggingAndDebugging">Logging / Debugging</a>
@@ -522,7 +522,7 @@ public class CallLogger {
 	public void log(HttpServletRequest req, HttpServletResponse res) {
 		var debugConfig = cast(DebugConfig.class, req.getAttribute("DebugConfig"));
 		if (debugConfig != null) {
-			var dr = debugConfig.resolve((org.apache.juneau.rest.server.RestContext)null, req);
+			var dr = debugConfig.resolve((RestContext)null, req);
 			if (dr.enabled() && dr.level() != Level.OFF) {
 				var e2 = cast(Throwable.class, req.getAttribute("Exception"));
 				var execTime2 = cast(Long.class, req.getAttribute("ExecTime"));
@@ -733,7 +733,7 @@ public class CallLogger {
 	 *
 	 * @param req The HTTP request being logged.
 	 * @return <jk>true</jk> if debug is enabled on this request.
-	 * @see org.apache.juneau.rest.server.RestContext#getDebugEnablement()
+	 * @see RestContext#getDebugEnablement()
 	 * @see Rest#debug()
 	 * @see RestOp#debug()
 	 */

@@ -538,7 +538,7 @@ public class CsvSerializerSession extends WriterSerializerSession implements Rec
 			return serializeCalendar(swapped, type);
 		if (swapped instanceof TemporalAccessor t)
 			return serializeTemporal(t, type);
-		if (swapped instanceof java.time.Duration)
+		if (swapped instanceof Duration)
 			return swapped.toString();
 		return swapped;
 	}

@@ -46,7 +46,7 @@ import jakarta.servlet.http.*;
  *   <li>BasicTextFormat resolution from the bean store at builder-construction time.
  * </ul>
  *
- * <p>{@link DebugConfig.Builder#rule(String, java.util.function.Consumer)} stores the
+ * <p>{@link DebugConfig.Builder#rule(String, Consumer)} stores the
  * configured rule on the builder; the produced {@code DebugConfig} exposes it via
  * {@link DebugConfig#getRuleFor(String)}.
  */

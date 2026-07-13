@@ -257,7 +257,7 @@ class MockServletRequest_Coverage_Test extends TestBase {
 			.create(A.class)
 			.build()
 			.get("/")
-			.httpSession(org.apache.juneau.rest.mock.MockHttpSession.create())
+			.httpSession(MockHttpSession.create())
 			.run()
 			.assertStatus(200);
 	}

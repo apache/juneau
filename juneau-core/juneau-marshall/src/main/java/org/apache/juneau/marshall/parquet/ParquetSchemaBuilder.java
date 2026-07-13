@@ -247,7 +247,7 @@ public final class ParquetSchemaBuilder {
 				// When property type is Object, infer from sample so Map/Collection get proper schema (2.2)
 				if ((propCm == null || propCm.isObject()) && childSample != null) // HTT: propCm is non-null (getBeanInfo always non-null for bean properties)
 					propCm = marshallingContext.getClassMeta(childSample.getClass());
-				// When property type is the abstract java.lang.Number, re-type from a concrete numeric sample so
+				// When property type is the abstract Number, re-type from a concrete numeric sample so
 				// the column uses the actual physical width (INT32/INT64/DOUBLE) and fractional values survive
 				// (GAP-12).  Only fires when the sample is itself a Number — a swapped property whose raw sample
 				// is non-numeric stays on the lossless INT64 default.
@@ -292,7 +292,7 @@ public final class ParquetSchemaBuilder {
 		Class<?> c = f != null ? f.getFieldType().inner() : p.getGetter().getReturnType().inner();
 		if (c == LocalDate.class || c == LocalTime.class || c == OffsetTime.class
 			|| c == java.math.BigDecimal.class || c == java.math.BigInteger.class
-			|| java.util.Date.class.isAssignableFrom(c) || java.util.Calendar.class.isAssignableFrom(c)
+			|| Date.class.isAssignableFrom(c) || Calendar.class.isAssignableFrom(c)
 			|| java.time.temporal.Temporal.class.isAssignableFrom(c))
 			return c;
 		return null;
@@ -367,10 +367,10 @@ public final class ParquetSchemaBuilder {
 				ct = CONVERTED_INT_32;
 			elements.add(new ParquetSchemaElement(name, TYPE_INT32, null, repetition, null, ct, null, null, null, path));
 		} else if (cm.is(Number.class)) {
-			// A statically-typed java.lang.Number leaf has no fixed physical width.  Mapping it to INT32 silently
+			// A statically-typed Number leaf has no fixed physical width.  Mapping it to INT32 silently
 			// truncates values above 2^31 (e.g. 5_000_000_000L -> 705032704) — GAP-12.  Default to INT64, which
 			// is lossless for every integral Number and keeps the wire value integral.  Integral matters for
-			// round-trip correctness: an ObjectSwap whose swap type is exactly java.lang.Number (e.g.
+			// round-trip correctness: an ObjectSwap whose swap type is exactly Number (e.g.
 			// enum-as-ordinal) round-trips through String.valueOf(...), and "0" parses where "0.0" would not.
 			// When a concrete runtime sample is available (addBeanSchema), the column is re-typed to the actual
 			// subtype (INT32/INT64/DOUBLE) so fractional values are preserved too.  BigInteger/BigDecimal have

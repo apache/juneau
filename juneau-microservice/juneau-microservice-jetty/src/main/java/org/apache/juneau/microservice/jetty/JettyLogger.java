@@ -27,7 +27,7 @@ import org.slf4j.*;
 import org.slf4j.spi.*;
 
 /**
- * Implementation of Jetty {@link Logger} based on {@link java.util.logging.Logger}.
+ * Implementation of Jetty {@link Logger} based on {@link Logger}.
  *
  * <p>
  * Allows Jetty to log to the Java Util logging framework (and thus to the main log file defined in the
@@ -62,7 +62,7 @@ public class JettyLogger implements LocationAwareLogger {
 	}
 
 	/**
-	 * Maps an SLF4J integer log level to the equivalent {@link java.util.logging.Level}.
+	 * Maps an SLF4J integer log level to the equivalent {@link Level}.
 	 *
 	 * @param level The SLF4J level constant (e.g. {@link LocationAwareLogger#DEBUG_INT}).
 	 * @return The equivalent Java Util Logging level.

@@ -730,7 +730,7 @@ class RestClientFeatures_Test {
 			.recordRequests()
 			.fallback(req -> TransportResponse.builder().statusCode(200).build())
 			.build();
-		var tempFile = java.io.File.createTempFile("ng-test-", ".txt");
+		var tempFile = File.createTempFile("ng-test-", ".txt");
 		tempFile.deleteOnExit();
 		java.nio.file.Files.writeString(tempFile.toPath(), "file-content");
 
@@ -939,7 +939,7 @@ class RestClientFeatures_Test {
 	@Test
 	void j04_defaultBodyConverters_canConvert_file() {
 		var converters = RestClient.DEFAULT_BODY_CONVERTERS;
-		assertTrue(converters.stream().anyMatch(c -> c.canConvert(new java.io.File("x"))));
+		assertTrue(converters.stream().anyMatch(c -> c.canConvert(new File("x"))));
 	}
 
 	@Test
@@ -1039,7 +1039,7 @@ class RestClientFeatures_Test {
 			var body = new HttpBody() {
 				@Override public String getContentType() { return null; }
 				@Override public long getContentLength() { return 0; }
-				@Override public void writeTo(java.io.OutputStream out) { /* intentionally empty */ }
+				@Override public void writeTo(OutputStream out) { /* intentionally empty */ }
 				@Override public boolean isRepeatable() { return true; }
 			};
 			return TransportBody.of(body);

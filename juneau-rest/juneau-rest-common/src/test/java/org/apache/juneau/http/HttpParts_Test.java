@@ -186,28 +186,28 @@ class HttpParts_Test extends TestBase {
 	// getName — annotation-based and NAME-static-field fallback paths
 	// ------------------------------------------------------------------------------------------------------------------
 
-	@org.apache.juneau.http.Header(value = "MyHeader")
+	@Header(value = "MyHeader")
 	public static class E_HeaderValueBean { }
 
-	@org.apache.juneau.http.Header(name = "MyHeaderName")
+	@Header(name = "MyHeaderName")
 	public static class E_HeaderNameBean { }
 
-	@org.apache.juneau.http.Query(value = "MyQuery")
+	@Query(value = "MyQuery")
 	public static class E_QueryValueBean { }
 
-	@org.apache.juneau.http.Query(name = "MyQueryName")
+	@Query(name = "MyQueryName")
 	public static class E_QueryNameBean { }
 
-	@org.apache.juneau.http.FormData(value = "MyFormData")
+	@FormData(value = "MyFormData")
 	public static class E_FormDataValueBean { }
 
-	@org.apache.juneau.http.FormData(name = "MyFormDataName")
+	@FormData(name = "MyFormDataName")
 	public static class E_FormDataNameBean { }
 
-	@org.apache.juneau.http.Path(value = "MyPath")
+	@Path(value = "MyPath")
 	public static class E_PathValueBean { }
 
-	@org.apache.juneau.http.Path(name = "MyPathName")
+	@Path(name = "MyPathName")
 	public static class E_PathNameBean { }
 
 	/** No annotation, but a public static String NAME field — exercises readPublicStaticStringField. */

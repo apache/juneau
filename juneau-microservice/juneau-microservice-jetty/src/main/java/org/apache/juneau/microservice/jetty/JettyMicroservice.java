@@ -43,12 +43,12 @@ import jakarta.servlet.*;
  * 		{@code startConsole=false} to suppress).
  * 	<li>Classpath defaults for <c>jetty.xml</c> and <c>juneau.cfg</c> &mdash; a consumer-supplied
  * 		copy on the working-directory or classpath wins via the existing
- * 		{@link org.apache.juneau.microservice.Microservice} resolution chain.
+ * 		{@link Microservice} resolution chain.
  * </ul>
  *
  * <p>
  * The supplied root servlet is registered as a {@code @Bean Servlet} in an external bean store and
- * auto-mounted by {@link org.apache.juneau.microservice.jetty.JettyServerComponent JettyServerComponent}
+ * auto-mounted by {@link JettyServerComponent JettyServerComponent}
  * at the path declared by its {@link org.apache.juneau.rest.server.Rest @Rest} annotation.  Consumers
  * who want full control over the bean store / configuration classes / listener wiring should call
  * {@link Microservice#create()} directly &mdash; this facade is a thin convenience over that builder.
@@ -87,7 +87,7 @@ public final class JettyMicroservice {
 	 *
 	 * <p>
 	 * Constructs the {@link Microservice}, registers the supplied servlet as a {@code @Bean Servlet} so
-	 * {@link org.apache.juneau.microservice.jetty.JettyServerComponent JettyServerComponent} auto-mounts
+	 * {@link JettyServerComponent JettyServerComponent} auto-mounts
 	 * it, applies {@link JettyConfiguration} so Jetty itself is wired, and starts the lifecycle.  The
 	 * returned microservice has not yet been {@link Microservice#join() joined}; callers wanting the
 	 * standard "start and block forever" loop should chain {@code .join()}.

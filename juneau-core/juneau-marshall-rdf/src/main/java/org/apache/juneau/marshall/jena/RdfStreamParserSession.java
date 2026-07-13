@@ -339,7 +339,7 @@ public class RdfStreamParserSession extends InputStreamParserSession {
 			if (v instanceof byte[] b) {
 				o = b;
 			} else if (v != null) {
-				o = java.util.Base64.getDecoder().decode(v.toString());
+				o = Base64.getDecoder().decode(v.toString());
 			}
 		} else if (sType.isCollectionOrArray() || sType.isArgs()) {
 			if (sType.isArray() || sType.isArgs())

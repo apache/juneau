@@ -2318,7 +2318,7 @@ class ThirdPartyProxy_Test extends TestBase {
 		void setNullString(@Content String x) throws AssertionFailedError;
 
 		@RemoteOp(method="POST", path="/setInt3dArray")
-		String setInt3dArray(@Content int[][][] x, @org.apache.juneau.http.Query("I") int i);
+		String setInt3dArray(@Content int[][][] x, @Query("I") int i);
 
 		@RemoteOp(method="POST", path="/setInteger3dArray")
 		void setInteger3dArray(@Content Integer[][][] x);

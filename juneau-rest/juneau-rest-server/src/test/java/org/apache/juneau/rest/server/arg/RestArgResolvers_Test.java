@@ -64,7 +64,7 @@ import jakarta.servlet.http.*;
  *
  * <p>
  * Note: {@code MockRestClient} is intentionally absent from this module's test scope to avoid Maven
- * reactor cycles (see {@link org.apache.juneau.TestUtils} javadoc). Runtime {@code resolve()} behaviour
+ * reactor cycles (see {@link TestUtils} javadoc). Runtime {@code resolve()} behaviour
  * is covered by integration tests in higher-level modules.
  *
  * @since 10.0.0
@@ -188,14 +188,14 @@ class RestArgResolvers_Test extends TestBase {
 		// additional isType-dispatch targets
 		public void withAsyncContext(AsyncContext r) { /* annotation carrier only */ }
 		public void withDispatcherType(DispatcherType r) { /* annotation carrier only */ }
-		public void withCookieList(org.apache.juneau.rest.server.arg.CookieList r) { /* annotation carrier only */ }
+		public void withCookieList(CookieList r) { /* annotation carrier only */ }
 		public void withBeanStore(org.apache.juneau.commons.inject.BeanStore r) { /* annotation carrier only */ }
 		public void withWritableBeanStore(org.apache.juneau.commons.inject.WritableBeanStore r) { /* annotation carrier only */ }
 		public void withServletOutputStream(jakarta.servlet.ServletOutputStream r) { /* annotation carrier only */ }
-		public void withWriter(java.io.Writer r) { /* annotation carrier only */ }
-		public void withOutputStream(java.io.OutputStream r) { /* annotation carrier only */ }
+		public void withWriter(Writer r) { /* annotation carrier only */ }
+		public void withOutputStream(OutputStream r) { /* annotation carrier only */ }
 		public void withJsonSchemaGenerator(org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator r) { /* annotation carrier only */ }
-		public void withParserSet(org.apache.juneau.marshall.parser.ParserSet r) { /* annotation carrier only */ }
+		public void withParserSet(ParserSet r) { /* annotation carrier only */ }
 		public void withSerializerSet(org.apache.juneau.marshall.serializer.SerializerSet r) { /* annotation carrier only */ }
 		public void withUrlPath(UrlPath r) { /* annotation carrier only */ }
 		public void withUrlPathMatch(UrlPathMatch r) { /* annotation carrier only */ }
@@ -358,7 +358,7 @@ class RestArgResolvers_Test extends TestBase {
 
 	@Test void f02_restOpArg_hasSingleResolveMethod() throws NoSuchMethodException {
 		// The interface contract: a single resolve(RestOpSession) method
-		var m = RestOpArg.class.getMethod("resolve", org.apache.juneau.rest.server.RestOpSession.class);
+		var m = RestOpArg.class.getMethod("resolve", RestOpSession.class);
 		assertNotNull(m);
 	}
 

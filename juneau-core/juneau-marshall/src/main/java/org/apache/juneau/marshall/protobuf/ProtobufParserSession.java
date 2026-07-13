@@ -179,7 +179,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 	 * <p>
 	 * Mirrors the serializer's {@code trySerializeSwapped} step:  the protobuf field table is built from declared/raw
 	 * types and is session-independent, so per-property swaps are resolved here at parse time via
-	 * {@link ClassMeta#getSwap(org.apache.juneau.marshall.MarshallingSession) getSwap(this)}.  When a swap is present
+	 * {@link ClassMeta#getSwap(MarshallingSession) getSwap(this)}.  When a swap is present
 	 * the wire value is decoded according to the <i>swapped</i> type's shape (message vs. scalar) and then run back
 	 * through {@link #unswap(ObjectSwap, Object, ClassMeta) unswap}.  When absent the original behavior is preserved:
 	 * an {@link ProtobufScalarType#AUTO} hint indicates a {@code MESSAGE} field (length-delimited sub-message), any

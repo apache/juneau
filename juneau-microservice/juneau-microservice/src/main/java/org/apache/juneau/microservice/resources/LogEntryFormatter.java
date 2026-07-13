@@ -48,7 +48,7 @@ import java.util.regex.*;
  * This class converts the format strings into a regular expression that can be used to parse the resulting log file.
  */
 @SuppressWarnings({
-	"java:S2143" // Public API built on java.text.SimpleDateFormat/java.util.Date for java.util.logging.Formatter compatibility; getDateFormat() returns java.text.DateFormat as a contract.
+	"java:S2143" // Public API built on SimpleDateFormat/Date for Formatter compatibility; getDateFormat() returns DateFormat as a contract.
 })
 public class LogEntryFormatter extends Formatter {
 

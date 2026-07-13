@@ -23,8 +23,8 @@ import java.util.*;
  *
  * <p>
  * A {@code ConverterSession} is passed through the {@link Conversion#to(Object, Object, ConverterSession, Class[])}
- * method and allows conversion lambdas to retrieve session-scoped objects such as a {@link java.util.TimeZone},
- * {@link java.util.Locale}, or media type without requiring those objects to be captured in the lambda closure.
+ * method and allows conversion lambdas to retrieve session-scoped objects such as a {@link TimeZone},
+ * {@link Locale}, or media type without requiring those objects to be captured in the lambda closure.
  *
  * <p>
  * Implementations look up contextual objects by type (and optionally by name). If no matching object is

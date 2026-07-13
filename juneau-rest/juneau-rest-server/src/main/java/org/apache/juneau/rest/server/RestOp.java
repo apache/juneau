@@ -127,7 +127,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestOpContext#getSupportedContentTypes()}
+	 * 	<li class='jm'>{@link RestOpContext#getSupportedContentTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -170,7 +170,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}
+	 * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -428,7 +428,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via
+	 * For programmatic equivalents, contribute a {@link EncoderSet} bean via
 	 * {@link Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -587,7 +587,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.parser.ParserSet} bean via
+	 * For programmatic equivalents, contribute a {@link ParserSet} bean via
 	 * {@link Bean @Bean(name="parsers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -726,13 +726,13 @@ public @interface RestOp {
 	 *
 	 * <p>
 	 * Overrides the resource-level {@link Rest#observability()} setting for this specific operation.
-	 * Controls whether the observability block ({@link org.apache.juneau.rest.server.metrics.MetricsRecorder} /
+	 * Controls whether the observability block ({@link MetricsRecorder} /
 	 * {@link org.apache.juneau.rest.server.tracing.TracerHook}) fires for this operation.
 	 *
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js> &mdash; strict opt-in: this operation <em>requires</em> a wired observability backend.
 	 * 		If neither a {@code @Bean MetricsRecorder} nor a {@code @Bean TracerHook} is registered when the
-	 * 		{@link org.apache.juneau.rest.server.RestContext} is built, construction fails with a precise error.
+	 * 		{@link RestContext} is built, construction fails with a precise error.
 	 * 	<li><js>"false"</js> &mdash; explicit opt-out: the observability block is short-circuited for this operation,
 	 * 		even when a wired backend is present. Also suppresses
 	 * 		{@link org.apache.juneau.rest.server.tracing.TraceContextResponseProcessor} header injection.
@@ -751,7 +751,7 @@ public @interface RestOp {
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='ja'>{@link Rest#observability()}
-	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.metrics.MetricsRecorder}
+	 * 	<li class='jc'>{@link MetricsRecorder}
 	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.tracing.TracerHook}
 	 * </ul>
 	 *
@@ -852,7 +852,7 @@ public @interface RestOp {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestOpContext#getSupportedAcceptTypes()}
+	 * 	<li class='jm'>{@link RestOpContext#getSupportedAcceptTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -1030,7 +1030,7 @@ public @interface RestOp {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via
+	 * For programmatic equivalents, contribute a {@link SerializerSet} bean via
 	 * {@link Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

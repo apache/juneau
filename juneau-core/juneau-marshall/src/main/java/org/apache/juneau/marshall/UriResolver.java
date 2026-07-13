@@ -299,8 +299,8 @@ public class UriResolver {
 	 * 	The URI to convert to absolute form.
 	 * 	Can be any of the following:
 	 * 	<ul>
-	 * 		<li>{@link java.net.URI}
-	 * 		<li>{@link java.net.URL}
+	 * 		<li>{@link URI}
+	 * 		<li>{@link URL}
 	 * 		<li>{@link CharSequence}
 	 * 	</ul>
 	 * 	URI can be any of the following forms:

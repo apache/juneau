@@ -136,7 +136,7 @@ class RemoteInterfaceTransport_Test extends TestBase {
 		String content(@Content String body);
 
 		@RemotePost("/content")
-		String contentHttpBody(@Content org.apache.juneau.http.HttpBody body);
+		String contentHttpBody(@Content HttpBody body);
 
 		@RemoteGet("/header")
 		String header(@Header("X-Test") String h);
@@ -171,7 +171,7 @@ class RemoteInterfaceTransport_Test extends TestBase {
 	/** Functional interface for a transport supplier that may throw. */
 	@FunctionalInterface
 	interface TransportSupplier {
-		org.apache.juneau.rest.client.HttpTransport get() throws Exception;
+		HttpTransport get() throws Exception;
 	}
 
 	static Stream<Arguments> transports() {

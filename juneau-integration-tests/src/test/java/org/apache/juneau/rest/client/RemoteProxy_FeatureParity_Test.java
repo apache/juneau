@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * verb-completeness rows (PUT/DELETE/{@code @RemoteOp}).
  *
  * <p>
- * This is the next-gen counterpart to the classic {@code org.apache.juneau.http.remote.Remote_*_Test} corpus and tracks
+ * This is the next-gen counterpart to the classic {@code Remote_*_Test} corpus and tracks
  * The single shared engine
  * ({@code RemoteClient}) is the system-under-test; it is driven through two columns:
  * <ul>

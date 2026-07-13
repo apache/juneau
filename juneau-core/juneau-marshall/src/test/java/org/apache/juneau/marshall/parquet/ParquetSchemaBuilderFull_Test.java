@@ -252,8 +252,8 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 	}
 
 	public static class DateTypeBean {
-		public java.util.Date when;
-		public java.util.Calendar cal;
+		public Date when;
+		public Calendar cal;
 		public OffsetDateTime odt;
 	}
 
@@ -262,8 +262,8 @@ class ParquetSchemaBuilderFull_Test extends TestBase {
 		// Drives the Date/Calendar/Temporal isAssignableFrom operands of declaredNativeType (line 304)
 		// with nativeLogicalTypes -> TIMESTAMP_MICROS leaves.
 		var sample = new DateTypeBean();
-		sample.when = new java.util.Date(0L);
-		sample.cal = java.util.Calendar.getInstance();
+		sample.when = new Date(0L);
+		sample.cal = Calendar.getInstance();
 		sample.odt = OffsetDateTime.parse("2026-06-17T00:00:00Z");
 		var b = new ParquetSchemaBuilder(MC, true, ParquetCycleHandling.NULL, 5, true);
 		var s = b.buildSchema(MC.getClassMeta(DateTypeBean.class), sample);

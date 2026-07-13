@@ -113,7 +113,7 @@ class BasicConvention_Builders_Test extends TestBase {
 			ZonedDateTime.parse("2026-05-24T18:00:00+02:00"),
 			"daily",
 			1.0);
-		var sw = new java.io.StringWriter();
+		var sw = new StringWriter();
 		assertDoesNotThrow(() -> e.write(sw));
 		var xml = sw.toString();
 		assertTrue(xml.contains("<lastmod>"), "lastmod present");
@@ -286,7 +286,7 @@ class BasicConvention_Builders_Test extends TestBase {
 		// without bubbling up the exception.
 		var brokenCl = new ClassLoader(null) {
 			@Override
-			public java.util.Enumeration<URL> getResources(String name) throws IOException {
+			public Enumeration<URL> getResources(String name) throws IOException {
 				throw new IOException("boom");
 			}
 		};

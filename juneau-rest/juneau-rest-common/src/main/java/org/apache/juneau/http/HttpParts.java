@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.*;
  * <p>
  * Import statically for clean DSL-style usage:
  * <p class='bjava'>
- * 	import static org.apache.juneau.http.HttpParts.*;
+ * 	import static HttpParts.*;
  *
  * 	PartList <jv>form</jv> = PartList.<jsm>of</jsm>(
  * 		part(<js>"username"</js>, <js>"alice"</js>),
@@ -138,8 +138,8 @@ public final class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> HEADER_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ine(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.Header.class, y -> ine(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(Header.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(Header.class, y -> ine(y.name()), y -> n.set(y.name()));
 		if (n.isEmpty())
 			n.set(readPublicStaticStringField(x.inner(), "NAME"));
 		return n.orElse(null);
@@ -147,8 +147,8 @@ public final class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> QUERY_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ine(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.Query.class, y -> ine(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(Query.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(Query.class, y -> ine(y.name()), y -> n.set(y.name()));
 		if (n.isEmpty())
 			n.set(readPublicStaticStringField(x.inner(), "NAME"));
 		return n.orElse(null);
@@ -156,8 +156,8 @@ public final class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> FORMDATA_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ine(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -> ine(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(FormData.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(FormData.class, y -> ine(y.name()), y -> n.set(y.name()));
 		if (n.isEmpty())
 			n.set(readPublicStaticStringField(x.inner(), "NAME"));
 		return n.orElse(null);
@@ -165,8 +165,8 @@ public final class HttpParts {
 
 	private static final Function<ClassMeta<?>,String> PATH_NAME_FUNCTION = x -> {
 		var n = Holder.<String>empty();
-		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ine(y.value()), y -> n.set(y.value()));
-		x.forEachAnnotation(org.apache.juneau.http.Path.class, y -> ine(y.name()), y -> n.set(y.name()));
+		x.forEachAnnotation(Path.class, y -> ine(y.value()), y -> n.set(y.value()));
+		x.forEachAnnotation(Path.class, y -> ine(y.name()), y -> n.set(y.name()));
 		if (n.isEmpty())
 			n.set(readPublicStaticStringField(x.inner(), "NAME"));
 		return n.orElse(null);

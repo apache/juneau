@@ -196,7 +196,7 @@ public class HtmlSchemaSerializer extends HtmlSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>The default is {@link org.apache.juneau.marshall.jsonschema.BasicBeanDefMapper}.
+		 * 	<br>The default is {@link BasicBeanDefMapper}.
 		 * @return This object.
 		 */
 		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {

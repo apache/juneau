@@ -35,7 +35,7 @@ public class HtmlConfigAnnotation {
 	private HtmlConfigAnnotation() {}
 
 	/**
-	 * Applies {@link HtmlConfig} annotations to a {@link org.apache.juneau.marshall.html.HtmlParser.Builder}.
+	 * Applies {@link HtmlConfig} annotations to a {@link HtmlParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<HtmlConfig,HtmlParser.Builder> {
 
@@ -55,7 +55,7 @@ public class HtmlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link HtmlConfig} annotations to a {@link org.apache.juneau.marshall.html.HtmlSerializer.Builder}.
+	 * Applies {@link HtmlConfig} annotations to a {@link HtmlSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

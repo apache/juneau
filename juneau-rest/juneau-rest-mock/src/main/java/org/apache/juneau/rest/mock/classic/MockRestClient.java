@@ -239,7 +239,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		String servletPath;
 		RestContext restContext;
 		Map<String,String> pathVars;
-		org.apache.juneau.commons.inject.BeanStore overridingBeanStore;
+		BeanStore overridingBeanStore;
 
 		/**
 		 * No-arg constructor.
@@ -298,7 +298,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires cast for builder chain
 		})
-		public Builder parsers(java.lang.Class<? extends org.apache.juneau.marshall.parser.Parser>...value) {
+		public Builder parsers(Class<? extends Parser>...value) {
 			super.parsers(value);
 			return this;
 		}
@@ -390,7 +390,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		}
 
 		/**
-		 * Installs a {@link org.apache.juneau.commons.inject.BeanStore BeanStore} as the
+		 * Installs a {@link BeanStore BeanStore} as the
 		 * {@code overridingParent} of the {@link RestContext}'s bean store, so test-time overrides
 		 * (e.g. {@code TestBeanStore}) resolve at tier 1 of the lookup chain &mdash; above the
 		 * resource's local {@code @Bean} factory entries.
@@ -405,7 +405,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		 * @since 10.0.0
 		 */
 		@Override
-		public Builder overridingBeanStore(org.apache.juneau.commons.inject.BeanStore value) {
+		public Builder overridingBeanStore(BeanStore value) {
 			overridingBeanStore = value;
 			return this;
 		}
@@ -414,7 +414,7 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 		@SuppressWarnings({
 			"unchecked" // Type erasure requires cast for builder chain
 		})
-		public Builder serializers(java.lang.Class<? extends org.apache.juneau.marshall.serializer.Serializer>...value) {
+		public Builder serializers(Class<? extends org.apache.juneau.marshall.serializer.Serializer>...value) {
 			super.serializers(value);
 			return this;
 		}

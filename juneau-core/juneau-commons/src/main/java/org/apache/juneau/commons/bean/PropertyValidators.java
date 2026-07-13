@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 /**
- * Discovery helper for {@link PropertyValidatorFactory} via {@link java.util.ServiceLoader ServiceLoader}.
+ * Discovery helper for {@link PropertyValidatorFactory} via {@link ServiceLoader ServiceLoader}.
  *
  * <p>
  * Used by the marshalling side (e.g. {@code MarshalledPropertyPostProcessor}) to obtain a validator factory at

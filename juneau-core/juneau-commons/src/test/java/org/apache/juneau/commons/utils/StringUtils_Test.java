@@ -4617,7 +4617,7 @@ class StringUtils_Test extends TestBase {
 		// Test Long type - triggers code path
 		assertEquals(123L, parseNumber("123", Long.class));
 		assertEquals(123L, parseNumber("123", Long.TYPE));
-		assertEquals(123L, parseNumber("123", java.util.concurrent.atomic.AtomicLong.class).longValue());
+		assertEquals(123L, parseNumber("123", AtomicLong.class).longValue());
 
 		// Test Integer type - triggers code path
 		assertEquals(123, parseNumber("123", Integer.class));
@@ -6194,28 +6194,28 @@ class StringUtils_Test extends TestBase {
 	@Test
 	void a206_toHexInputStream() {
 		// Null input
-		assertNull(toHex((java.io.InputStream)null));
+		assertNull(toHex((InputStream)null));
 
 		// Empty stream
-		var emptyStream = new java.io.ByteArrayInputStream(new byte[0]);
+		var emptyStream = new ByteArrayInputStream(new byte[0]);
 		assertEquals("", toHex(emptyStream));
 
 		// Single byte
-		var singleByte = new java.io.ByteArrayInputStream(new byte[]{0x41});
+		var singleByte = new ByteArrayInputStream(new byte[]{0x41});
 		assertEquals("41", toHex(singleByte));
 
 		// Multiple bytes
-		var multiByte = new java.io.ByteArrayInputStream(new byte[]{0x41, 0x42, 0x43});
+		var multiByte = new ByteArrayInputStream(new byte[]{0x41, 0x42, 0x43});
 		assertEquals("414243", toHex(multiByte));
 
 		// Bytes with various values (toHex returns uppercase)
-		var variousBytes = new java.io.ByteArrayInputStream(new byte[]{(byte)0xFF, (byte)0x00, (byte)0x0A});
+		var variousBytes = new ByteArrayInputStream(new byte[]{(byte)0xFF, (byte)0x00, (byte)0x0A});
 		assertEquals("FF000A", toHex(variousBytes));
 
 		// Large stream
 		var largeBytes = new byte[100];
-		java.util.Arrays.fill(largeBytes, (byte)0x42);
-		var largeStream = new java.io.ByteArrayInputStream(largeBytes);
+		Arrays.fill(largeBytes, (byte)0x42);
+		var largeStream = new ByteArrayInputStream(largeBytes);
 		var result = toHex(largeStream);
 		assertNotNull(result);
 		assertEquals(200, result.length()); // 100 bytes * 2 hex chars
@@ -6370,8 +6370,8 @@ class StringUtils_Test extends TestBase {
 		assertEquals("Test 123", toUtf8("Test 123".getBytes(UTF8)));
 
 		// toUtf8(InputStream)
-		assertNull(toUtf8((java.io.InputStream)null));
-		var is = new java.io.ByteArrayInputStream("Hello World".getBytes(UTF8));
+		assertNull(toUtf8((InputStream)null));
+		var is = new ByteArrayInputStream("Hello World".getBytes(UTF8));
 		assertEquals("Hello World", toUtf8(is));
 	}
 
@@ -6556,7 +6556,7 @@ class StringUtils_Test extends TestBase {
 		// Result: "a\\\\b" (both backslashes preserved)
 		System.out.println("=== Testing unescapeChars with a\\\\b, backslash NOT in escaped set ===");
 		var result2 = unescapeChars("a\\\\b", AsciiSet.of(","));
-		System.out.println("Result: " + java.util.Arrays.toString(result2.toCharArray()));
+		System.out.println("Result: " + Arrays.toString(result2.toCharArray()));
 		assertEquals("a\\\\b", result2); // '\' not in escaped set
 	}
 

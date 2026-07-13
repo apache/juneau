@@ -276,7 +276,7 @@ class AsyncResponseProcessor_Test extends TestBase {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_isAsyncDispatchOwned_nullSession_false() {
-		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned((org.apache.juneau.rest.server.RestOpSession) null));
+		assertFalse(AsyncResponseProcessor.isAsyncDispatchOwned((RestOpSession) null));
 	}
 
 	@Test void i02_isAsyncDispatchOwned_nullRequest_false() {

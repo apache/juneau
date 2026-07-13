@@ -74,6 +74,6 @@ class Allow_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(Allow.of((java.util.function.Supplier<String[]>)null));
+		assertNull(Allow.of((Supplier<String[]>)null));
 	}
 }

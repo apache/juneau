@@ -82,7 +82,7 @@ class HoconSerializerSession_Test extends TestBase {
 	}
 
 	public static class B_WithUri {
-		@org.apache.juneau.marshall.Uri
+		@Uri
 		public String link;
 	}
 
@@ -640,7 +640,7 @@ class HoconSerializerSession_Test extends TestBase {
 		// here for safety (fallthrough is exercised by the toml-style dispatch test below).
 		var m = new LinkedHashMap<String,Object>();
 		m.put("k","v");
-		var sw = new java.io.StringWriter();
+		var sw = new StringWriter();
 		HoconSerializer.DEFAULT.createSession().build().serialize(m, sw);
 		assertTrue(sw.toString().contains("k") && sw.toString().contains("v"));
 	}

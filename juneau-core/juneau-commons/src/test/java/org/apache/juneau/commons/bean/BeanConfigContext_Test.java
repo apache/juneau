@@ -442,7 +442,7 @@ class BeanConfigContext_Test extends TestBase {
 	@Test
 	void f12_isNotABean_classExclude_nonMatchingEntryIsSkipped() {
 		var ctx = BeanConfigContext.create()
-			.notBeanClasses(java.util.UUID.class)
+			.notBeanClasses(UUID.class)
 			.build();
 		assertFalse(ctx.isNotABean(info(BasicBeanStore.class)));
 	}

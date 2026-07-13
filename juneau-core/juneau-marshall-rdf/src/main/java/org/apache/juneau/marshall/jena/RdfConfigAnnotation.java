@@ -36,7 +36,7 @@ public class RdfConfigAnnotation {
 	private RdfConfigAnnotation() {}
 
 	/**
-	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.marshall.jena.RdfParser.Builder}.
+	 * Applies {@link RdfConfig} annotations to a {@link RdfParser.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -88,7 +88,7 @@ public class RdfConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link RdfConfig} annotations to a {@link org.apache.juneau.marshall.jena.RdfSerializer.Builder}.
+	 * Applies {@link RdfConfig} annotations to a {@link RdfSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

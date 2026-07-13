@@ -75,6 +75,6 @@ class ContentLocation_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(ContentLocation.of((java.net.URI)null));
+		assertNull(ContentLocation.of((URI)null));
 	}
 }

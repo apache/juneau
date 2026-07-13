@@ -121,11 +121,11 @@ class BsonInputStream_Test extends TestBase {
 	@Test
 	void a03_parseArray() throws Exception {
 		var s = BsonSerializer.create().keepNullProperties().build();
-		var bytes = s.serialize(java.util.List.of(1, 2, 3));
+		var bytes = s.serialize(List.of(1, 2, 3));
 		var p = BsonParser.create().build();
-		var result = p.parse(bytes, java.util.List.class);
+		var result = p.parse(bytes, List.class);
 		assertNotNull(result);
-		assertEquals(java.util.List.of(1, 2, 3), result);
+		assertEquals(List.of(1, 2, 3), result);
 	}
 
 	// ====================================================================

@@ -28,7 +28,7 @@ public class YamlConfigAnnotation {
 	private YamlConfigAnnotation() {}
 
 	/**
-	 * Applies {@link YamlConfig} annotations to a {@link org.apache.juneau.marshall.yaml.YamlParser.Builder}.
+	 * Applies {@link YamlConfig} annotations to a {@link YamlParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<YamlConfig,YamlParser.Builder> {
 
@@ -48,7 +48,7 @@ public class YamlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link YamlConfig} annotations to a {@link org.apache.juneau.marshall.yaml.YamlSerializer.Builder}.
+	 * Applies {@link YamlConfig} annotations to a {@link YamlSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<YamlConfig,YamlSerializer.Builder> {
 

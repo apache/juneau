@@ -323,7 +323,7 @@ class BuiltInDateTimeSerialization_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void p01_json_listOfLocalDates() throws Exception {
-		var dates = java.util.List.of(LocalDate.parse("2012-12-21"), LocalDate.parse("2013-01-15"));
+		var dates = List.of(LocalDate.parse("2012-12-21"), LocalDate.parse("2013-01-15"));
 		var json = JS.serialize(dates);
 		assertTrue(json.contains("'2012-12-21'"));
 		assertTrue(json.contains("'2013-01-15'"));

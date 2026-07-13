@@ -129,7 +129,7 @@ public abstract class FluentAssertion<R> extends Assertion {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

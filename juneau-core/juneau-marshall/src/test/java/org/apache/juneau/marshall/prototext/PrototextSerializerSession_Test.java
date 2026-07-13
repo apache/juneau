@@ -610,9 +610,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	// Scalar type dispatch: Date / Calendar / Temporal / Duration / Period / byte[]
 
 	@Test void j01_dateBeanProperty() throws Exception {
-		// java.util.Date bean property → serializeScalarValue Date branch
+		// Date bean property → serializeScalarValue Date branch
 		var bean = new BeanWithDateProp();
-		bean.ts = new java.util.Date(0);
+		bean.ts = new Date(0);
 		bean.name = "dateTest";
 		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
@@ -620,9 +620,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void j02_calendarBeanProperty() throws Exception {
-		// java.util.Calendar bean property → serializeScalarValue Calendar branch
+		// Calendar bean property → serializeScalarValue Calendar branch
 		var bean = new BeanWithCalendarProp();
-		bean.cal = java.util.Calendar.getInstance();
+		bean.cal = Calendar.getInstance();
 		bean.label = "calTest";
 		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
@@ -630,9 +630,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void j03_temporalBeanProperty() throws Exception {
-		// java.time.Instant property → serializeScalarValue Temporal branch
+		// Instant property → serializeScalarValue Temporal branch
 		var bean = new BeanWithInstantProp();
-		bean.instant = java.time.Instant.ofEpochMilli(0);
+		bean.instant = Instant.ofEpochMilli(0);
 		bean.label = "temporalTest";
 		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
@@ -640,9 +640,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void j04_durationBeanProperty() throws Exception {
-		// java.time.Duration property → serializeScalarValue Duration branch
+		// Duration property → serializeScalarValue Duration branch
 		var bean = new BeanWithDurationProp();
-		bean.dur = java.time.Duration.ofSeconds(30);
+		bean.dur = Duration.ofSeconds(30);
 		bean.label = "durationTest";
 		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
@@ -650,9 +650,9 @@ class PrototextSerializerSession_Test extends TestBase {
 	}
 
 	@Test void j05_periodBeanProperty() throws Exception {
-		// java.time.Period property → serializeScalarValue Period branch
+		// Period property → serializeScalarValue Period branch
 		var bean = new BeanWithPeriodProp();
-		bean.period = java.time.Period.ofDays(7);
+		bean.period = Period.ofDays(7);
 		bean.label = "periodTest";
 		var proto = PrototextSerializer.DEFAULT.serialize(bean);
 		assertNotNull(proto);
@@ -697,7 +697,7 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	public static class BeanWithCommentedProperty {
 		private String name;
-		@org.apache.juneau.marshall.prototext.Prototext(comment = "This is the name field")
+		@Prototext(comment = "This is the name field")
 		public String getName() { return name; }
 		public void setName(String v) { name = v; }
 	}
@@ -748,27 +748,27 @@ class PrototextSerializerSession_Test extends TestBase {
 
 	public static class BeanWithDateProp {
 		public String name;
-		public java.util.Date ts;
+		public Date ts;
 	}
 
 	public static class BeanWithCalendarProp {
 		public String label;
-		public java.util.Calendar cal;
+		public Calendar cal;
 	}
 
 	public static class BeanWithInstantProp {
 		public String label;
-		public java.time.Instant instant;
+		public Instant instant;
 	}
 
 	public static class BeanWithDurationProp {
 		public String label;
-		public java.time.Duration dur;
+		public Duration dur;
 	}
 
 	public static class BeanWithPeriodProp {
 		public String label;
-		public java.time.Period period;
+		public Period period;
 	}
 
 	public static class BeanWithBytesProp {

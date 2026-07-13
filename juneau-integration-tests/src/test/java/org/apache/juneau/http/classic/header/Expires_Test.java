@@ -77,6 +77,6 @@ class Expires_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(Expires.of((java.time.ZonedDateTime)null));
+		assertNull(Expires.of((ZonedDateTime)null));
 	}
 }

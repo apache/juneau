@@ -44,7 +44,7 @@ class Operation_Test extends TestBase {
 					.setRequestBody(requestBodyInfo().setDescription("d"))
 					.setResponses(map("200", response().setDescription("e")))
 					.setSecurity(securityRequirement().setRequirements(map("f1",l("f2"))))
-					.setServers(server().setUrl(java.net.URI.create("http://example.com")))
+					.setServers(server().setUrl(URI.create("http://example.com")))
 					.setSummary("g")
 					.setTags("h")
 			)
@@ -178,7 +178,7 @@ class Operation_Test extends TestBase {
 			var x = bean()
 				.setParameters(l(parameter().setIn("a1").setName("a2"), parameter().setIn("b1").setName("b2")))
 				.setSecurity(l(securityRequirement().setRequirements(map("c1", l("c2"))), securityRequirement().setRequirements(map("d1", l("d2")))))
-				.setServers(l(server().setUrl(java.net.URI.create("http://example1.com")), server().setUrl(java.net.URI.create("http://example2.com"))))
+				.setServers(l(server().setUrl(URI.create("http://example1.com")), server().setUrl(URI.create("http://example2.com"))))
 				.setTags(l("f1", "f2"));
 
 			assertBean(x,

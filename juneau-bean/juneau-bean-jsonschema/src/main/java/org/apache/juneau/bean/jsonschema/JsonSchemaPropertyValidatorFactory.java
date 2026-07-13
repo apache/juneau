@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.collections.*;
  * {@link PropertyValidatorFactory} implementation backed by the typed {@link JsonSchema} bean.
  *
  * <p>
- * This factory is registered as a {@link java.util.ServiceLoader ServiceLoader} provider for
+ * This factory is registered as a {@link ServiceLoader ServiceLoader} provider for
  * {@link PropertyValidatorFactory} via {@code META-INF/services/org.apache.juneau.commons.bean.PropertyValidatorFactory}.
  * Marshalling-side code discovers it through {@link PropertyValidators#factory()} at runtime.
  *
@@ -41,7 +41,7 @@ import org.apache.juneau.marshall.collections.*;
  */
 public final class JsonSchemaPropertyValidatorFactory implements PropertyValidatorFactory {
 
-	/** Public no-arg constructor required by {@link java.util.ServiceLoader ServiceLoader}. */
+	/** Public no-arg constructor required by {@link ServiceLoader ServiceLoader}. */
 	public JsonSchemaPropertyValidatorFactory() {
 		/* intentionally empty — required public no-arg constructor for ServiceLoader */
 	}

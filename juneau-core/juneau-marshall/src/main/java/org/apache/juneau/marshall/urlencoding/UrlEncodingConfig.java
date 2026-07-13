@@ -43,7 +43,7 @@ public @interface UrlEncodingConfig {
 	 * Parser bean property collections/arrays as separate key/value pairs.
 	 *
 	 * <p>
-	 * This is the parser-side equivalent of the {@link org.apache.juneau.marshall.urlencoding.UrlEncodingSerializer.Builder#expandedParams()} setting.
+	 * This is the parser-side equivalent of the {@link UrlEncodingSerializer.Builder#expandedParams()} setting.
 	 *
 	 * <p>
 	 * If <js>"false"</js>, serializing the array <c>[1,2,3]</c> results in <c>?key=$a(1,2,3)</c>.
@@ -66,7 +66,7 @@ public @interface UrlEncodingConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}
+	 * 	<li class='jm'>{@link UrlEncodingSerializer.Builder#expandedParams()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

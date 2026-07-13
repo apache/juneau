@@ -79,7 +79,7 @@ import jakarta.servlet.http.*;
  * <p>
  * When {@code @Rest(asyncCompletionExecutor="poolName")} or the per-op equivalent is set, this processor
  * switches from {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)},
- * routing the response-handler work through the named {@link java.util.concurrent.Executor} bean. The MDC
+ * routing the response-handler work through the named {@link Executor} bean. The MDC
  * snapshot (see below) is taken on the request thread <em>before</em> the executor routing so the MDC context
  * is always available regardless of which thread the executor picks.
  *

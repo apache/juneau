@@ -60,7 +60,7 @@ import org.apache.juneau.test.assertions.*;
  * 	<ul class='javatreec'>
  * 		<li class='jm'>{@link FluentObjectAssertion#asString() asString()}
  * 		<li class='jm'>{@link FluentObjectAssertion#asString(ThrowingFunction) asString(ThrowingFunction)}
- * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(java.util.function.UnaryOperator) asTransformed(UnaryOperator)}
+ * 		<li class='jm'>{@link FluentObjectAssertion#asTransformed(UnaryOperator) asTransformed(UnaryOperator)}
  * 		<li class='jm'>{@link FluentObjectAssertion#asAny() asAny()}
  *	</ul>
  * </ul>
@@ -175,7 +175,7 @@ public class FluentRequestLineAssertion<R> extends FluentObjectAssertion<HttpReq
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentRequestLineAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentRequestLineAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

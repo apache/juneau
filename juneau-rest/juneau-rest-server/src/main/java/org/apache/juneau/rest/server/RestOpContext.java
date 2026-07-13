@@ -153,7 +153,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				var hostClassAnnotations = context.getInheritedHostClassAnnotations(ap);
 				var declaringClassAnnotations = rstream(ap.find(resourceClass, SELF, PARENTS));
 				var methodAnnotations = rstream(ap.find(mi, SELF, MATCHING_METHODS, RETURN_TYPE, PACKAGE));
-				var allAnnotationsSet = new java.util.LinkedHashSet<AnnotationInfo<?>>();
+				var allAnnotationsSet = new LinkedHashSet<AnnotationInfo<?>>();
 				hostClassAnnotations.forEach(allAnnotationsSet::add);
 				declaringClassAnnotations.forEach(allAnnotationsSet::add);
 				methodAnnotations.forEach(allAnnotationsSet::add);
@@ -498,7 +498,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private final Memoizer<RestGuard[]> guards = memoizer(() -> {
 		var bs = beanStore();
 		var b = RestGuardList.create(bs);
-		var rolesDeclaredSet = new java.util.LinkedHashSet<String>();
+		var rolesDeclaredSet = new LinkedHashSet<String>();
 		var roleGuardStrs = new ArrayList<String>();
 
 		Consumer<AnnotationInfo<?>> walk = ai -> {
@@ -786,7 +786,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (pb.canApply(aa))
 			b.apply(aa);
 		getRestOpAnnotationsForProperty(PROPERTY_parsers).forEach(ai -> {
-			var c = ai.getClassArray("parsers", java.lang.Object.class).orElse(null);
+			var c = ai.getClassArray("parsers", Object.class).orElse(null);
 			if (nn(c) && c.length > 0)
 				b.set(c);
 		});
@@ -1049,7 +1049,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 * {@link Schema#default_()}/{@link Schema#df()} string (joined-non-blank-first) and dispatching
 	 * each annotation+default pair to the supplied callback.
 	 */
-	private void processParameterDefaults(java.util.function.BiConsumer<Annotation,String> callback) {
+	private void processParameterDefaults(BiConsumer<Annotation,String> callback) {
 		for (var aa : method.getParameterAnnotations()) {
 			String def = null;
 			for (var a : aa) {
@@ -1636,8 +1636,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public long getAsyncTimeoutMillis() { return asyncTimeoutMillis.get(); }
 
 	/**
-	 * Returns the effective {@link java.util.concurrent.Executor} for routing
-	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this operation, or
+	 * Returns the effective {@link Executor} for routing
+	 * {@link CompletableFuture} completion callbacks on this operation, or
 	 * {@code null} when neither the op nor the resource configures an executor (natural completion thread).
 	 *
 	 * @return The executor, or {@code null} if no async-completion executor is configured.

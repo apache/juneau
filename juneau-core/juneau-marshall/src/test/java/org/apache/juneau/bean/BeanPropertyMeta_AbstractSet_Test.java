@@ -127,7 +127,7 @@ class BeanPropertyMeta_AbstractSet_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a07: OQA-4 - a genuinely *non-instantiable* abstract set field (java.util.AbstractSet) falls back to
+	// a07: OQA-4 - a genuinely *non-instantiable* abstract set field (AbstractSet) falls back to
 	//      LinkedHashSet (the Set shape default; LinkedHashSet is-a AbstractSet, so the field assignment succeeds).
 	//------------------------------------------------------------------------------------------------------------------
 

@@ -72,18 +72,18 @@ class BasicEntityTagsHeader_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturns() {
-		assertNull(BasicEntityTagsHeader.of("Foo", (org.apache.juneau.http.header.EntityTags)null));
+		assertNull(BasicEntityTagsHeader.of("Foo", (EntityTags)null));
 		assertNull(BasicEntityTagsHeader.of("Foo", (String)null));
 	}
 
 	@Test void a03_orElseAndToEntityTags() {
 		var h = entityTagsHeader("Foo", "\"bar\"");
-		assertNotNull(h.orElse((org.apache.juneau.http.header.EntityTags)null));
+		assertNotNull(h.orElse((EntityTags)null));
 		assertNotNull(h.toEntityTags());
 
 		// supplier returns null
-		var h2 = new BasicEntityTagsHeader("Foo", (java.util.function.Supplier<org.apache.juneau.http.header.EntityTags>) () -> null);
-		assertNull(h2.orElse((org.apache.juneau.http.header.EntityTags)null));
+		var h2 = new BasicEntityTagsHeader("Foo", (Supplier<EntityTags>) () -> null);
+		assertNull(h2.orElse((EntityTags)null));
 		assertNull(h2.toEntityTags());
 	}
 

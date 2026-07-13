@@ -38,7 +38,7 @@ import com.nimbusds.jwt.proc.*;
  * {@link TokenValidator} that validates signed JWTs against a JWKS-backed key source.
  *
  * <p>
- * Designed to be paired with {@link org.apache.juneau.rest.server.auth.BearerTokenGuard} in
+ * Designed to be paired with {@link BearerTokenGuard} in
  * {@code juneau-rest-server}. It enforces a deliberately strict default policy so a misconfigured
  * call site can't accidentally accept dangerous tokens:
  *
@@ -61,7 +61,7 @@ import com.nimbusds.jwt.proc.*;
  * 		jwksEagerRefreshOnKidMiss(true)}) and bounded by a per-cache cooldown (default 10 seconds)
  * 		plus a single-in-flight guard. Opt out via
  * 		{@link Builder#jwksEagerRefreshOnKidMiss(boolean) jwksEagerRefreshOnKidMiss(false)}.
- * 		Applies only to {@link Builder#jwksUrl(java.net.URI) jwksUrl(...)}-backed caches; a
+ * 		Applies only to {@link Builder#jwksUrl(URI) jwksUrl(...)}-backed caches; a
  * 		caller-supplied {@link Builder#jwkSource(JWKSource) jwkSource(...)} is unaffected.
  * </ul>
  *
@@ -92,8 +92,8 @@ import com.nimbusds.jwt.proc.*;
  * <h5 class='section'>See Also:</h5>
  * <ul>
  * 	<li class='jc'>{@link TokenValidator}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.BearerTokenGuard}
- * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.ClaimsPrincipal}
+ * 	<li class='jc'>{@link BearerTokenGuard}
+ * 	<li class='jc'>{@link ClaimsPrincipal}
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7519">RFC 7519 — JSON Web Token</a>
  * 	<li class='link'><a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc7517">RFC 7517 — JSON Web Key</a>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerAuthGuards">AuthN Guards</a>
@@ -295,7 +295,7 @@ public class JwtTokenValidator implements TokenValidator {
 		 * single-in-flight guard (no thundering herd).
 		 *
 		 * <p>
-		 * Applies only to {@link #jwksUrl(java.net.URI) jwksUrl(...)}-backed caches. A
+		 * Applies only to {@link #jwksUrl(URI) jwksUrl(...)}-backed caches. A
 		 * caller-supplied {@link #jwkSource(JWKSource) jwkSource(...)} is unaffected.
 		 *
 		 * @param value {@code true} to enable (default); {@code false} to restore pre-10.0.0 behavior.

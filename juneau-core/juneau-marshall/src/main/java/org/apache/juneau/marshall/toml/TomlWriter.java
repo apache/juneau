@@ -143,7 +143,7 @@ public class TomlWriter extends SerializerWriter {
 	TomlWriter dateTimeValue(Object value) {
 		if (value instanceof TemporalAccessor ta) {
 			if (ta instanceof Instant i)
-				w(java.time.OffsetDateTime.ofInstant(i, ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+				w(OffsetDateTime.ofInstant(i, ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 			else if (ta instanceof OffsetDateTime odt)
 				w(odt.format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 			else if (ta instanceof ZonedDateTime zdt)

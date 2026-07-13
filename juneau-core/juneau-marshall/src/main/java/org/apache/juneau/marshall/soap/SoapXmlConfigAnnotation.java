@@ -32,7 +32,7 @@ public class SoapXmlConfigAnnotation {
 	private SoapXmlConfigAnnotation() {}
 
 	/**
-	 * Applies {@link SoapXmlConfig} annotations to a {@link org.apache.juneau.marshall.soap.SoapXmlSerializer.Builder}.
+	 * Applies {@link SoapXmlConfig} annotations to a {@link SoapXmlSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<SoapXmlConfig,SoapXmlSerializer.Builder> {
 

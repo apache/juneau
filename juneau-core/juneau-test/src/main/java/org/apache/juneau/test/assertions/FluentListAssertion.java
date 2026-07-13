@@ -342,7 +342,7 @@ public class FluentListAssertion<E,R> extends FluentCollectionAssertion<E,R> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentListAssertion<E,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentListAssertion<E,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -56,16 +56,16 @@ class BsonAnnotation_Test extends org.apache.juneau.TestBase {
 		assertSame(bc1, bc2);
 	}
 
-	@org.apache.juneau.marshall.bson.Bson(description = "a")
+	@Bson(description = "a")
 	public static class D1 {}
 
-	@org.apache.juneau.marshall.bson.Bson(description = "a")
+	@Bson(description = "a")
 	public static class D2 {}
 
 	@Test
 	void d01_comparisonWithDeclarativeAnnotations() {
-		var d1 = D1.class.getAnnotationsByType(org.apache.juneau.marshall.bson.Bson.class)[0];
-		var d2 = D2.class.getAnnotationsByType(org.apache.juneau.marshall.bson.Bson.class)[0];
+		var d1 = D1.class.getAnnotationsByType(Bson.class)[0];
+		var d2 = D2.class.getAnnotationsByType(Bson.class)[0];
 		assertEqualsAll(a1, d1, d2);
 		assertEqualsAll(a1.hashCode(), d1.hashCode(), d2.hashCode());
 	}

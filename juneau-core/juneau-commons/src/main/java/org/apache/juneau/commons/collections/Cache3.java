@@ -31,7 +31,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class uses {@link java.util.concurrent.ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
+ * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for three-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by three keys.
  *
@@ -67,7 +67,7 @@ import org.apache.juneau.commons.function.*;
  * <ul>
  * 	<li class='jc'>{@link Cache}
  * 	<li class='jc'>{@link Cache2}
- * 	<li class='jc'>{@link java.util.concurrent.ConcurrentHashMap}
+ * 	<li class='jc'>{@link ConcurrentHashMap}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
  *
@@ -268,7 +268,7 @@ public class Cache3<K1,K2,K3,V> {
 
 	// Internal map with Tuple3 keys for content-based equality (especially for arrays)
 	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final java.util.Map<Tuple3<K1,K2,K3>,V> map;
+	private final Map<Tuple3<K1,K2,K3>,V> map;
 
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanup()
@@ -428,7 +428,7 @@ public class Cache3<K1,K2,K3,V> {
 	 * @return The previous value associated with the key triplet, or <jk>null</jk> if there was no mapping.
 	 */
 	public V put(K1 key1, K2 key2, K3 key3, V value) {
-		java.util.Map<Tuple3<K1,K2,K3>,V> m = getMap();
+		Map<Tuple3<K1,K2,K3>,V> m = getMap();
 		if (value == null)
 			return m.remove(Tuple3.of(key1, key2, key3));
 		return m.put(Tuple3.of(key1, key2, key3), value);

@@ -211,7 +211,7 @@ class ResultSetList_Test extends TestBase {
 
 		var row = new int[]{0};
 		when(rs.next()).thenAnswer(inv -> ++row[0] <= 1);
-		when(rs.getCharacterStream(1)).thenReturn(new java.io.StringReader("hello"));
+		when(rs.getCharacterStream(1)).thenReturn(new StringReader("hello"));
 
 		var result = new ResultSetList(rs, 0, Integer.MAX_VALUE, false);
 		assertEquals(1, result.size());

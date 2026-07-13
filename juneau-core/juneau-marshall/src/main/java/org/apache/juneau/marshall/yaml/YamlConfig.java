@@ -58,7 +58,7 @@ public @interface YamlConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.yaml.YamlSerializer.Builder#addBeanTypesYaml()}
+	 * 	<li class='jm'>{@link YamlSerializer.Builder#addBeanTypesYaml()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

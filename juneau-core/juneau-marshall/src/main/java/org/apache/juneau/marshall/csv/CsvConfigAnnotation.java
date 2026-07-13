@@ -32,7 +32,7 @@ public class CsvConfigAnnotation {
 	private CsvConfigAnnotation() {}
 
 	/**
-	 * Applies {@link CsvConfig} annotations to a {@link org.apache.juneau.marshall.csv.CsvParser.Builder}.
+	 * Applies {@link CsvConfig} annotations to a {@link CsvParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<CsvConfig,CsvParser.Builder> {
 
@@ -52,7 +52,7 @@ public class CsvConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link CsvConfig} annotations to a {@link org.apache.juneau.marshall.csv.CsvSerializer.Builder}.
+	 * Applies {@link CsvConfig} annotations to a {@link CsvSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<CsvConfig,CsvSerializer.Builder> {
 

@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.*;
  * {@link HttpTransportProvider} implementation that supplies a {@link JettyHttpTransport}.
  *
  * <p>
- * Registered via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider} so that
+ * Registered via {@code META-INF/services/HttpTransportProvider} so that
  * {@code RestClient} can auto-discover Jetty 12 when this module is on the classpath.
  *
  * <p>

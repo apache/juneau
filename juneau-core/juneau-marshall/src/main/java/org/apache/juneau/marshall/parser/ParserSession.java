@@ -1339,7 +1339,7 @@ public class ParserSession extends MarshallingSession {
 	 * @param beanMap The bean that doesn't have the expected property.
 	 * @param value The parsed value.
 	 * @throws ParseException
-	 * 	Automatically thrown if {@link org.apache.juneau.marshall.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
+	 * 	Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is
 	 * 	<jk>false</jk>
 	 * @param <T> The class type of the bean map that doesn't have the expected property.
 	 */

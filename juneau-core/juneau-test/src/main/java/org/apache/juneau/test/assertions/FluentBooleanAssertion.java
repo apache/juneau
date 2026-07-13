@@ -183,7 +183,7 @@ public class FluentBooleanAssertion<R> extends FluentComparableAssertion<Boolean
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentBooleanAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentBooleanAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -229,7 +229,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 			final Collection<BeanPropertyMeta> pSet = getProperties();
 
 			@Override /* Overridden from Set */
-			public Iterator<java.util.Map.Entry<String,Object>> iterator() {
+			public Iterator<Map.Entry<String,Object>> iterator() {
 
 				// Construct our own anonymous iterator that uses iterators against the meta.getProperties()
 				// map to maintain position.  This prevents us from having to construct any of our own
@@ -619,7 +619,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * Returns <jk>null</jk> if the property does not exist on the bean <em>or</em> if the property exists but is
 	 * excluded by the current active view.  The latter allows the caller (e.g. {@link #put(String, Object)}) to
 	 * route out-of-view input through the existing unknown/ignored-property path governed by
-	 * {@link org.apache.juneau.commons.bean.BeanConfigContext#isIgnoreUnknownBeanProperties()}.
+	 * {@link BeanConfigContext#isIgnoreUnknownBeanProperties()}.
 	 *
 	 * @param propertyName The name of the bean property.
 	 * @return Metadata on the specified property, or <jk>null</jk> if that property does not exist or is out of view.

@@ -138,19 +138,73 @@ public class CollectionUtils {
 	private static final String ARG_o = "o";
 
 	/**
-	 * Traverses all elements in the specified object and accumulates them into a list.
+	 * Traverses all elements in the specified objects and accumulates them into a list.
+	 *
+	 * <p>
+	 * Input shapes are processed as follows:
+	 * <ul>
+	 * 	<li><b>Flattened (recursively):</b> {@link Iterable}, {@link Stream}, and any array type (including all 8 primitive
+	 * 		array types via {@link ClassUtils#isArray}), including arbitrary nesting and mixing of these
+	 * 		(e.g. a {@code List<int[]>}, an array of {@code Stream}s, etc.).
+	 * 	<li><b>Leaf (added as-is):</b> anything else — {@link String}, {@link Map}, custom beans, boxed primitives, etc.
+	 * 	<li><b>{@code null} handling:</b> a {@code null} root, or {@code null} encountered mid-traversal, contributes nothing
+	 * 		to the result — not even a {@code null} element.
+	 * </ul>
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;Object&gt; <jv>nested</jv> = List.of(<jk>new</jk> <jk>int</jk>[]{1, 2}, List.of(<js>"a"</js>, <js>"b"</js>));
+	 *
+	 * 	<jc>// Returns [1, 2, "a", "b"]</jc>
+	 * 	List&lt;Object&gt; <jv>result</jv> = <jsm>accumulate</jsm>(<jv>nested</jv>);
+	 *
+	 * 	<jc>// Multi-root: returns [1, 2, "a", "b"]</jc>
+	 * 	List&lt;Object&gt; <jv>result2</jv> = <jsm>accumulate</jsm>(<jk>new</jk> <jk>int</jk>[]{1, 2}, <js>"a"</js>, <js>"b"</js>);
+	 * </p>
 	 *
 	 * @param <T> The element type.
-	 * @param o The object to traverse.
-	 * @return A list containing all accumulated elements.
+	 * @param o The objects to traverse. Can be <jk>null</jk> or empty, in which case an empty list is returned.
+	 * @return A new modifiable list containing all accumulated leaf elements.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
 	})
-	public static <T> List<T> accumulate(Object o) {
+	public static <T> List<T> accumulate(Object... o) {
 		var l = list();
-		traverse(o, l::add);
+		if (o != null)
+			for (var x : o)
+				traverse(x, l::add);
 		return (List<T>)l;
+	}
+
+	/**
+	 * Traverses all elements in the specified objects and returns them as a lazily-evaluated stream,
+	 * without building an intermediate list.
+	 *
+	 * <p>
+	 * Accepts the same input shapes as {@link #accumulate(Object...)} — see that method's Javadoc for the full
+	 * list of flattened vs. leaf types and null-handling semantics.
+	 *
+	 * <p>
+	 * Named {@code deepStream} rather than {@code stream} to avoid an erasure conflict with the existing
+	 * shallow-array overload {@link #stream(Object[])}, which has the same erased parameter type ({@code Object[]}).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	List&lt;Object&gt; <jv>nested</jv> = List.of(<jk>new</jk> <jk>int</jk>[]{1, 2}, List.of(<js>"a"</js>, <js>"b"</js>));
+	 *
+	 * 	<jc>// Lazily yields 1, 2, "a", "b"</jc>
+	 * 	<jsm>deepStream</jsm>(<jv>nested</jv>).forEach(System.<jk>out</jk>::println);
+	 * </p>
+	 *
+	 * @param <T> The element type.
+	 * @param o The objects to traverse. Can be <jk>null</jk> or empty, in which case an empty stream is returned.
+	 * @return A lazily-evaluated stream of all leaf elements.
+	 */
+	public static <T> Stream<T> deepStream(Object... o) {
+		if (o == null)
+			return Stream.empty();
+		return Arrays.stream(o).flatMap(CollectionUtils::traverseToStream);
 	}
 
 	/**
@@ -2172,26 +2226,48 @@ public class CollectionUtils {
 	}
 
 	/**
-	 * Traverses all elements in the specified object and executes a consumer for it.
+	 * Traverses all elements in the specified object and executes a consumer for each leaf.
+	 *
+	 * <p>
+	 * Input shapes are processed as follows:
+	 * <ul>
+	 * 	<li><b>Flattened (recursively):</b> {@link Iterable}, {@link Stream}, and any array type (including all 8 primitive
+	 * 		array types via {@link ClassUtils#isArray}), including arbitrary nesting and mixing of these.
+	 * 	<li><b>Leaf (consumer called once):</b> anything else — {@link String}, {@link Map}, custom beans, boxed primitives, etc.
+	 * 	<li><b>{@code null} handling:</b> a {@code null} root, or {@code null} encountered mid-traversal, causes the
+	 * 		consumer to be called zero times — no {@code null} elements are ever delivered.
+	 * </ul>
 	 *
 	 * @param <T> The element type.
 	 * @param o The object to traverse.
-	 * @param c The consumer of the objects.
+	 * @param c The consumer of the leaf elements.
+	 */
+	public static <T> void traverse(Object o, Consumer<T> c) {
+		CollectionUtils.<T>traverseToStream(o).forEach(c);
+	}
+
+	/**
+	 * Shared recursive engine for {@link #traverse(Object, Consumer)}, {@link #accumulate(Object...)}, and
+	 * {@link #deepStream(Object...)}.
+	 *
+	 * <p>
+	 * Returns a lazily-evaluated {@link Stream} that recursively flattens {@link Iterable}, {@link Stream}, and
+	 * array inputs (including all primitive array types), treating everything else as a single leaf element.
+	 * {@code null} inputs return an empty stream.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires unchecked casts
 	})
-	public static <T> void traverse(Object o, Consumer<T> c) {
+	private static <T> Stream<T> traverseToStream(Object o) {
 		if (o == null)
-			return;
+			return Stream.empty();
 		if (o instanceof Iterable<?> o2)
-			o2.forEach(x -> traverse(x, c));
-		else if (o instanceof Stream<?> o2)
-			o2.forEach(x -> traverse(x, c));
-		else if (ClassUtils.isArray(o))
-			toStream(o).forEach(x -> traverse(x, c));
-		else
-			c.accept((T)o);
+			return StreamSupport.stream(o2.spliterator(), false).flatMap(CollectionUtils::traverseToStream);
+		if (o instanceof Stream<?> o2)
+			return o2.flatMap(CollectionUtils::traverseToStream);
+		if (ClassUtils.isArray(o))
+			return toStream(o).flatMap(CollectionUtils::traverseToStream);
+		return Stream.of((T)o);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

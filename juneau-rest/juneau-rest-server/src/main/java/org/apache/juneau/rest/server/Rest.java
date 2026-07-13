@@ -173,7 +173,7 @@ public @interface Rest {
 	 * <p>
 	 * Resolves the {@link java.security.Principal} and roles for requests to this resource and its descendant child
 	 * resources (inherited unless cut off via {@code noInherit={"authenticator"}}), so that {@code roleGuard} /
-	 * {@link org.apache.juneau.rest.server.guard.RoleBasedRestGuard} / {@link org.apache.juneau.rest.server.auth.Auth @Auth}
+	 * {@link RoleBasedRestGuard} / {@link Auth @Auth}
 	 * / {@code isUserInRole} resolve against the computed identity.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -459,7 +459,7 @@ public @interface Rest {
 	 *
 	 * <p>
 	 * Entries are merged in application order. A leading hyphen removes a previously added key: <js>"-escapeSolidus"</js>.
-	 * Method-level {@link org.apache.juneau.rest.server.RestGet#allowedSerializerOptions()} values are always merged on top.
+	 * Method-level {@link RestGet#allowedSerializerOptions()} values are always merged on top.
 	 * Use {@link #noInherit()} to prevent inheriting less-derived contributions.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -566,7 +566,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}
+	 * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -771,7 +771,7 @@ public @interface Rest {
 	 * 	<li>Honors the client's {@code Accept} header on the success path. When a {@code @RestOp} method returns a
 	 * 		{@link org.apache.juneau.bean.rfc7807.Problem} (or throws a
 	 * 		{@link org.apache.juneau.bean.rfc7807.ProblemException}), the
-	 * 		{@link org.apache.juneau.rest.server.processor.ProblemDetailsProcessor} only serializes it as
+	 * 		{@link ProblemDetailsProcessor} only serializes it as
 	 * 		{@code application/problem+json} when the {@code Accept} header matches that media type (or {@code *&#47;*}).
 	 * </ul>
 	 *
@@ -794,7 +794,7 @@ public @interface Rest {
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.Problem}
 	 * 	<li class='jc'>{@link org.apache.juneau.bean.rfc7807.ProblemException}
-	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.processor.ProblemDetailsProcessor}
+	 * 	<li class='jc'>{@link ProblemDetailsProcessor}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -807,7 +807,7 @@ public @interface Rest {
 	 * <p>
 	 * When enabled, every {@code @RestOp}-annotated handler invocation on this resource is submitted to a
 	 * {@code Executors.newVirtualThreadPerTaskExecutor()} virtual-thread-per-task executor
-	 * lazily built by the {@link org.apache.juneau.rest.server.RestContext}. The platform request thread blocks on
+	 * lazily built by the {@link RestContext}. The platform request thread blocks on
 	 * the virtual thread's completion (so the handler's return value, exceptions, and observability hooks are
 	 * preserved verbatim), but blocking I/O inside the handler now parks a virtual thread instead of the
 	 * carrier — i.e. the carrier thread is freed to service other concurrent requests while the handler is
@@ -860,7 +860,7 @@ public @interface Rest {
 	 * <ul class='values'>
 	 * 	<li><js>"true"</js> &mdash; strict opt-in: the resource <em>requires</em> a wired observability backend.
 	 * 		If neither a {@code @Bean MetricsRecorder} nor a {@code @Bean TracerHook} is registered when the
-	 * 		{@link org.apache.juneau.rest.server.RestContext} is built, construction fails with a precise error.
+	 * 		{@link RestContext} is built, construction fails with a precise error.
 	 * 		All operations on this resource have observability enabled.
 	 * 	<li><js>"false"</js> &mdash; explicit opt-out: the observability block is short-circuited for every
 	 * 		operation on this resource, even when a wired backend is present. Also suppresses
@@ -892,7 +892,7 @@ public @interface Rest {
 
 	/**
 	 * Configurable timeout (milliseconds) applied to {@link java.util.concurrent.CompletableFuture}-returning
-	 * handlers by {@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor}. Default is 30,000 ms.
+	 * handlers by {@link AsyncResponseProcessor}. Default is 30,000 ms.
 	 *
 	 * <p>
 	 * On timeout, the future is cancelled with {@code mayInterruptIfRunning=true} and the response is
@@ -909,7 +909,7 @@ public @interface Rest {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor}
+	 * 	<li class='jc'>{@link AsyncResponseProcessor}
 	 * 	<li class='ja'>{@link RestOp#asyncTimeoutMillis()}
 	 * </ul>
 	 *
@@ -923,7 +923,7 @@ public @interface Rest {
 	 * completion callbacks through a dedicated thread pool.
 	 *
 	 * <p>
-	 * When set, the {@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor} switches from
+	 * When set, the {@link AsyncResponseProcessor} switches from
 	 * {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)}, so the
 	 * response-handler work runs on the named pool instead of the future's natural completion thread (often an
 	 * I/O-driver or database-callback thread).
@@ -957,12 +957,12 @@ public @interface Rest {
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
 	 * 		MDC propagation still works when this executor is set — the
-	 * 		{@link org.apache.juneau.rest.server.processor.MdcAsyncListener} wraps the callback <em>before</em> it is
+	 * 		{@link MdcAsyncListener} wraps the callback <em>before</em> it is
 	 * 		routed through the executor, so the MDC snapshot is restored on whichever thread the executor picks.
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jc'>{@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor}
+	 * 	<li class='jc'>{@link AsyncResponseProcessor}
 	 * 	<li class='ja'>{@link RestOp#asyncCompletionExecutor()}
 	 * </ul>
 	 *
@@ -999,7 +999,7 @@ public @interface Rest {
 	 * The encoders can also be tailored at the method level using {@link RestOp#encoders()} (and related annotations).
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute an {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via
+	 * For programmatic equivalents, contribute an {@link EncoderSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
@@ -1168,7 +1168,7 @@ public @interface Rest {
 	 * The parsers can also be tailored at the method level using {@link RestOp#parsers()} (and related annotations).
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.parser.ParserSet} bean via
+	 * For programmatic equivalents, contribute a {@link ParserSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>
@@ -1257,7 +1257,7 @@ public @interface Rest {
 	 *
 	 * <h5 class='topic'>Path variables</h5>
 	 * <p>
-	 * The path can contain variables that get resolved to {@link org.apache.juneau.http.Path @Path} parameters
+	 * The path can contain variables that get resolved to {@link Path @Path} parameters
 	 * or access through the {@link RestRequest#getPathParams()} method.
 	 *
 	 * <h5 class='figure'>Example:</h5>
@@ -1597,7 +1597,7 @@ public @interface Rest {
 	 * The serializers can also be tailored at the method level using {@link RestOp#serializers()} (and related annotations).
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via
+	 * For programmatic equivalents, contribute a {@link SerializerSet} bean via
 	 * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")}.
 	 *
 	 * <h5 class='section'>Inheritance Rules</h5>

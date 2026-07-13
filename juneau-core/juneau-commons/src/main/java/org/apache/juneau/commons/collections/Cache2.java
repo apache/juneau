@@ -31,7 +31,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class uses {@link java.util.concurrent.ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
+ * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for two-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by two keys.
  *
@@ -96,7 +96,7 @@ import org.apache.juneau.commons.function.*;
  * <ul class='spaced-list'>
  * 	<li>Cache operations are O(1) average time complexity
  * 	<li>The {@link #get(Object, Object, java.util.function.Supplier)} method uses
- * 		{@link java.util.concurrent.ConcurrentHashMap#putIfAbsent(Object, Object)}
+ * 		{@link ConcurrentHashMap#putIfAbsent(Object, Object)}
  * 		to minimize redundant computation in concurrent scenarios
  * 	<li>When max size is exceeded, the entire cache is cleared in a single operation
  * 	<li>Statistics tracking uses {@link AtomicInteger} for thread-safe counting without locking
@@ -400,7 +400,7 @@ public class Cache2<K1,K2,V> {
 
 	// Internal map with Tuple2 keys for content-based equality (especially for arrays)
 	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final java.util.Map<Tuple2<K1,K2>,V> map;
+	private final Map<Tuple2<K1,K2>,V> map;
 
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanup()
@@ -528,7 +528,7 @@ public class Cache2<K1,K2,V> {
 	 * 	<li>If the key pair exists in the cache, return the cached value (cache hit)
 	 * 	<li>If the key pair doesn't exist, invoke the supplier to compute the value
 	 * 	<li>Store the computed value in the cache using
-	 * 		{@link java.util.concurrent.ConcurrentHashMap#putIfAbsent(Object, Object)}
+	 * 		{@link ConcurrentHashMap#putIfAbsent(Object, Object)}
 	 * 	<li>Return the value
 	 * </ol>
 	 *
@@ -538,7 +538,7 @@ public class Cache2<K1,K2,V> {
 	 * 	<li>If the cache exceeds {@link Builder#maxSize(int)}, clears all entries before storing the new value
 	 * 	<li>Thread-safe: Multiple threads can safely call this method concurrently
 	 * 	<li>The supplier may be called multiple times for the same key pair in concurrent scenarios
-	 * 		(due to {@link java.util.concurrent.ConcurrentHashMap#putIfAbsent(Object, Object)} semantics)
+	 * 		(due to {@link ConcurrentHashMap#putIfAbsent(Object, Object)} semantics)
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>

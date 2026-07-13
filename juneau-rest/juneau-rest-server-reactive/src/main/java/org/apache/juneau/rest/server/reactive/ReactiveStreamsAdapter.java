@@ -38,7 +38,7 @@ import java.util.concurrent.*;
  * <p>
  * Adapters are discovered via the JDK {@link java.util.ServiceLoader} mechanism. A bridge module (or a
  * consumer who wants a custom adapter) ships a
- * {@code META-INF/services/org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter} file listing the
+ * {@code META-INF/services/ReactiveStreamsAdapter} file listing the
  * implementation class names. The {@link ReactiveResponseProcessor} loads the providers once (lazily,
  * at first use) and skips any provider whose backing library is absent from the runtime classpath
  * (a {@link NoClassDefFoundError} / {@link java.util.ServiceConfigurationError} on instantiation is swallowed).

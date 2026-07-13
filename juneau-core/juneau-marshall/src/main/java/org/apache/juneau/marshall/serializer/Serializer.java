@@ -467,7 +467,7 @@ public class Serializer extends MarshallingTraverseContext {
 		 * <p>
 		 * <b>Precedence:</b> the serialize-side inclusion knobs short-circuit in a fixed order — first "omit" wins:
 		 * <ol>
-		 * 	<li><jk>null</jk> values (including {@link java.util.Optional#empty()}) are governed by
+		 * 	<li><jk>null</jk> values (including {@link Optional#empty()}) are governed by
 		 * 		{@link #keepNullProperties()}.
 		 * 	<li>Non-<jk>null</jk> string values are normalized by {@link #trimStrings()}.
 		 * 	<li>Empty collections / arrays / maps are omitted by {@link #trimEmptyCollections()} /

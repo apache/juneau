@@ -100,7 +100,7 @@ import org.apache.juneau.rest.server.util.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestPathParam}
- * 	<li class='ja'>{@link org.apache.juneau.http.Path}
+ * 	<li class='ja'>{@link Path}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
 */
@@ -311,7 +311,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * Returns the path parameter as the specified bean type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.Path} annotation
+	 * Type must have a name specified via the {@link Path} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.

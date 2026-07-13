@@ -974,7 +974,7 @@ public class BeanInstantiator<T> {
 	 * right default for most beans, but it doesn't fit every use case.
 	 *
 	 * <p>
-	 * The classic mismatch is parameterized container types like {@link java.util.TreeMap}, which expose:
+	 * The classic mismatch is parameterized container types like {@link TreeMap}, which expose:
 	 * <ul>
 	 * 	<li>{@code TreeMap()}
 	 * 	<li>{@code TreeMap(Comparator)}

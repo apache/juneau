@@ -118,7 +118,7 @@ public class BearerTokenAuthFilter extends AuthFilter {
 		 * Sets the {@link ClaimsPrincipal} claim name used to extract roles.
 		 *
 		 * <p>
-		 * Defaults to {@code "roles"}.  The claim value must be a {@link java.util.List} of {@link String} role names
+		 * Defaults to {@code "roles"}.  The claim value must be a {@link List} of {@link String} role names
 		 * for the roles to be populated in {@link AuthResult#getRoles()}.
 		 *
 		 * @param value The claim name. Must not be <jk>null</jk> or blank.

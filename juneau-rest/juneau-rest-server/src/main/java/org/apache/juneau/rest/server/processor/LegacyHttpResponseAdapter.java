@@ -114,7 +114,7 @@ final class LegacyHttpResponseAdapter {
 			var arr = (Object[]) invoke(hl, "getAll", new Class<?>[0]);
 			if (arr == null)
 				return;
-			iter = java.util.Arrays.asList(arr);
+			iter = Arrays.asList(arr);
 		}
 		for (var h : iter) {
 			if (h == null)

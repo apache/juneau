@@ -704,21 +704,21 @@ class Cache2_Test extends TestBase {
 		var x = Cache2.of(String.class, Integer.class, String.class)
 			.threadLocal()
 			.build();
-		var executor = java.util.concurrent.Executors.newFixedThreadPool(2);
+		var executor = Executors.newFixedThreadPool(2);
 		var threadValues = new ConcurrentHashMap<Thread, String>();
 
 		// Each thread caches ("user", 123) with its own value
-		var future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+		var future1 = CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "thread1-value");
 			threadValues.put(Thread.currentThread(), value);
 		}, executor);
 
-		var future2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+		var future2 = CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "thread2-value");
 			threadValues.put(Thread.currentThread(), value);
 		}, executor);
 
-		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
+		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 
 		// Verify both threads cached their own values
 		assertEquals(2, threadValues.size());
@@ -729,17 +729,17 @@ class Cache2_Test extends TestBase {
 		var threadValues2 = new ConcurrentHashMap<Thread, String>();
 		var threads = new ArrayList<>(threadValues.keySet());
 
-		future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+		future1 = CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "should-not-be-called");
 			threadValues2.put(Thread.currentThread(), value);
 		}, executor);
 
-		future2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+		future2 = CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "should-not-be-called");
 			threadValues2.put(Thread.currentThread(), value);
 		}, executor);
 
-		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
+		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 
 		// Each thread should get its own cached value (same as what it cached before)
 		for (var thread : threads) {
@@ -845,21 +845,21 @@ class Cache2_Test extends TestBase {
 			.threadLocal()
 			.cacheMode(WEAK)
 			.build();
-		var executor = java.util.concurrent.Executors.newFixedThreadPool(2);
+		var executor = Executors.newFixedThreadPool(2);
 		var threadValues = new ConcurrentHashMap<Thread, String>();
 
 		// Each thread caches ("user", 123) with its own value
-		var future1 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+		var future1 = CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "thread1-value");
 			threadValues.put(Thread.currentThread(), value);
 		}, executor);
 
-		var future2 = java.util.concurrent.CompletableFuture.runAsync(() -> {
+		var future2 = CompletableFuture.runAsync(() -> {
 			var value = x.get("user", 123, () -> "thread2-value");
 			threadValues.put(Thread.currentThread(), value);
 		}, executor);
 
-		java.util.concurrent.CompletableFuture.allOf(future1, future2).get(5, java.util.concurrent.TimeUnit.SECONDS);
+		CompletableFuture.allOf(future1, future2).get(5, TimeUnit.SECONDS);
 
 		// Verify both threads cached their own values
 		assertEquals(2, threadValues.size());

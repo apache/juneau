@@ -329,7 +329,7 @@ class SerializerProperties_ComboRoundTripTest extends ComboRoundTripTest_Base {
 			.urlEncR("_type=T11\n&f=@(\n\t(\n\t\tf=@(\n\t\t\t|+foo+|\n\t\t)\n\t)\n)")
 			.msgPack("82A55F74797065A3543131A1669181A16691A520666F6F20")
 			.msgPackT("82A174A3543131A1669181A16691A520666F6F20")
-			.apply(XmlSerializer.Builder.class, org.apache.juneau.marshall.xml.XmlSerializer.Builder::addNamespaceUrisToRoot)
+			.apply(XmlSerializer.Builder.class, XmlSerializer.Builder::addNamespaceUrisToRoot)
 			.apply(WriterSerializer.Builder.class, x -> x.quoteCharOverride('|'))
 			.apply(Serializer.Builder.class, x -> x.addBeanTypes().addRootType())
 			.skipTest(x -> x.contains("parse") || x.contains("verify"))

@@ -33,7 +33,7 @@ import org.apache.juneau.commons.lang.*;
  * <p>
  * Unlike using arrays directly as HashMap keys, this class properly handles arrays by using
  * content-based equality and hashing via {@link HashCode#of(Object...)} which internally uses
- * {@link java.util.Arrays#hashCode(Object[])} for arrays.
+ * {@link Arrays#hashCode(Object[])} for arrays.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link Tuple1}

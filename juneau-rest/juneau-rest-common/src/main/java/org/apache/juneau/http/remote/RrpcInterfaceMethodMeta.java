@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.httppart.*;
 
 /**
  * Holds resolved metadata for a single method on an interface annotated with
- * {@link org.apache.juneau.http.remote.Remote}.
+ * {@link Remote}.
  *
  * <p>
  * Extracted at interface-discovery time (see {@link RrpcInterfaceMeta}) and cached for
@@ -217,7 +217,7 @@ public final class RrpcInterfaceMethodMeta {
 	}
 
 	/**
-	 * Locates the single {@link org.apache.juneau.http.Url @Url} parameter on the method.
+	 * Locates the single {@link Url @Url} parameter on the method.
 	 *
 	 * <p>
 	 * Validated at proxy-build time: at most one {@code @Url} parameter is permitted per method.
@@ -246,10 +246,10 @@ public final class RrpcInterfaceMethodMeta {
 	 * <p>
 	 * Enforces body-mode exclusivity and detects misuse at proxy-build time:
 	 * <ul>
-	 * 	<li>A {@code @Multipart} method must declare at least one {@link org.apache.juneau.http.Part @Part} parameter.
-	 * 	<li>A {@code @Multipart} method must not also declare a single {@link org.apache.juneau.http.Content @Content}
+	 * 	<li>A {@code @Multipart} method must declare at least one {@link Part @Part} parameter.
+	 * 	<li>A {@code @Multipart} method must not also declare a single {@link Content @Content}
 	 * 		body (parameter-level or method-level) &mdash; a method is either multipart or single-body, not both.
-	 * 	<li>A {@link org.apache.juneau.http.Part @Part} parameter is only valid on a {@code @Multipart} method.
+	 * 	<li>A {@link Part @Part} parameter is only valid on a {@code @Multipart} method.
 	 * </ul>
 	 *
 	 * @param method The method to validate.
@@ -384,7 +384,7 @@ public final class RrpcInterfaceMethodMeta {
 	 * <p>
 	 * Sourced from {@code @RemoteOp(baseUrl=...)} / the verb annotations' {@code baseUrl} (resolved through
 	 * {@link org.apache.juneau.commons.svl.VarResolver#DEFAULT}).  Takes precedence over the interface-level
-	 * {@link RrpcInterfaceMeta#getBaseUrl()} but is itself overridden by an {@link org.apache.juneau.http.Url @Url}
+	 * {@link RrpcInterfaceMeta#getBaseUrl()} but is itself overridden by an {@link Url @Url}
 	 * parameter; preserves the interface base path + method path + templating.
 	 *
 	 * @return The base/host override. Never <jk>null</jk>, but may be empty.
@@ -422,7 +422,7 @@ public final class RrpcInterfaceMethodMeta {
 	}
 
 	/**
-	 * Returns the zero-based index of the method's single {@link org.apache.juneau.http.Url @Url} parameter,
+	 * Returns the zero-based index of the method's single {@link Url @Url} parameter,
 	 * or {@code -1} if the method declares none.
 	 *
 	 * <p>
@@ -438,12 +438,12 @@ public final class RrpcInterfaceMethodMeta {
 
 	/**
 	 * Returns whether this method assembles a {@code multipart/form-data} request body from its
-	 * {@link org.apache.juneau.http.Part @Part} parameters.
+	 * {@link Part @Part} parameters.
 	 *
 	 * <p>
 	 * Sourced from the presence of a method-level {@link Multipart @Multipart} annotation.  Validated at proxy-build
 	 * time: a multipart method must declare at least one {@code @Part} parameter and must not also declare a single
-	 * {@link org.apache.juneau.http.Content @Content} body.
+	 * {@link Content @Content} body.
 	 *
 	 * @return <jk>true</jk> if this is a multipart method.
 	 */

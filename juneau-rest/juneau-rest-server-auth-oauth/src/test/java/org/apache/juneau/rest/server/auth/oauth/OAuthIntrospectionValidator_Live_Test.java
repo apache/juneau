@@ -201,7 +201,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		// Expired token but active=true — exp in the past triggers the floor (lines 399/400).
 		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":1}";
 		var v = validatorBuilder()
-			.clock(Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), java.time.ZoneOffset.UTC))
+			.clock(Clock.fixed(Instant.parse("2030-01-01T00:00:00Z"), ZoneOffset.UTC))
 			.build();
 		assertNotNull(v.validate("tok-expiredexp"));
 	}
@@ -212,7 +212,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		long expEpoch = nowFixed.plusSeconds(30).getEpochSecond();
 		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}";
 		var v = validatorBuilder()
-			.clock(Clock.fixed(nowFixed, java.time.ZoneOffset.UTC))
+			.clock(Clock.fixed(nowFixed, ZoneOffset.UTC))
 			.build();
 		assertNotNull(v.validate("tok-expcap"));
 	}
@@ -223,7 +223,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		long expEpoch = nowFixed.plusSeconds(7200).getEpochSecond();
 		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}";
 		var v = validatorBuilder()
-			.clock(Clock.fixed(nowFixed, java.time.ZoneOffset.UTC))
+			.clock(Clock.fixed(nowFixed, ZoneOffset.UTC))
 			.build();
 		assertNotNull(v.validate("tok-expcap-far"));
 	}
@@ -234,7 +234,7 @@ class OAuthIntrospectionValidator_Live_Test extends TestBase {
 		long expEpoch = nowFixed.getEpochSecond();
 		nextResponse = "{\"active\":true,\"sub\":\"alice\",\"scope\":\"read\",\"exp\":" + expEpoch + "}";
 		var v = validatorBuilder()
-			.clock(Clock.fixed(nowFixed, java.time.ZoneOffset.UTC))
+			.clock(Clock.fixed(nowFixed, ZoneOffset.UTC))
 			.build();
 		assertNotNull(v.validate("tok-zero-exp"));
 	}

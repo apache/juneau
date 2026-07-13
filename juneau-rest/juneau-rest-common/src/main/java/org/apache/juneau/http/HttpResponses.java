@@ -24,7 +24,7 @@ import org.apache.juneau.http.response.*;
  * <p>
  * Import statically for clean DSL-style usage in REST server code:
  * <p class='bjava'>
- * 	import static org.apache.juneau.http.HttpResponses.*;
+ * 	import static HttpResponses.*;
  *
  * 	<ja>@RestGet</ja>(<js>"/users/{id}"</js>)
  * 	<jk>public</jk> User getUser(<ja>@Path</ja> String id) {

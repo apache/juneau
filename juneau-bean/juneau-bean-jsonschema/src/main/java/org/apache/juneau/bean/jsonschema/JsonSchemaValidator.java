@@ -35,7 +35,7 @@ import org.apache.juneau.marshall.json.*;
  * <p>
  * This is the {@code juneau-bean-jsonschema} implementation of the commons-side
  * {@link PropertyValidator} SPI.  It is registered as a {@link PropertyValidatorFactory} via
- * {@link java.util.ServiceLoader ServiceLoader} so that marshalling-side code (e.g.
+ * {@link ServiceLoader ServiceLoader} so that marshalling-side code (e.g.
  * {@code MarshalledPropertyPostProcessor}) can install schema validation closures on bean properties without taking a
  * compile-time dependency on this module.
  *

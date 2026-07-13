@@ -75,6 +75,6 @@ class Location_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(Location.of((java.net.URI)null));
+		assertNull(Location.of((URI)null));
 	}
 }

@@ -36,7 +36,7 @@ import org.apache.juneau.commons.reflect.*;
  * implementations live in {@link ObjectUtils}, {@link StringUtils}, {@link CollectionUtils},
  * {@link ClassUtils}, {@link ThrowableUtils}, {@link IoUtils}, {@link FileUtils},
  * {@link AssertionUtils}, {@link PredicateUtils}, {@link SystemUtils}, {@link DateUtils}, and
- * {@link org.apache.juneau.commons.reflect.ReflectionUtils}.
+ * {@link ReflectionUtils}.
  *
  * <p><b>Documented exception:</b> the terse exception factories ({@code rex}/{@code brex}/
  * {@code iaex}/{@code isex}/{@code uoex}/{@code uoroex}/{@code ioex}/{@code exex}) are
@@ -170,7 +170,7 @@ public class Shorts {
 	 * @return <jk>true</jk> if the objects are not equal per the predicate.
 	 * @see ObjectUtils#notEqual(Object,Object,BiPredicate)
 	 */
-	public static <T,U> boolean neq(T a, U b, java.util.function.BiPredicate<T,U> t) { return ObjectUtils.notEqual(a, b, t); }
+	public static <T,U> boolean neq(T a, U b, BiPredicate<T,U> t) { return ObjectUtils.notEqual(a, b, t); }
 
 	/**
 	 * Compares two objects for order (null-safe).
@@ -670,7 +670,7 @@ public class Shorts {
 	public static <T> T[] a(T...x) { return CollectionUtils.array(x); }
 
 	/**
-	 * Creates a modifiable {@link java.util.ArrayList} from the specified elements.
+	 * Creates a modifiable {@link ArrayList} from the specified elements.
 	 *
 	 * @param <T> The element type.
 	 * @param x The elements.
@@ -968,7 +968,7 @@ public class Shorts {
 	public static <T> Set<T> hs(T...v) { return CollectionUtils.hashSet(v); }
 
 	/**
-	 * Creates a modifiable, insertion-ordered {@link java.util.LinkedHashSet} from the specified elements.
+	 * Creates a modifiable, insertion-ordered {@link LinkedHashSet} from the specified elements.
 	 *
 	 * @param <T> The element type.
 	 * @param v The elements.
@@ -979,7 +979,7 @@ public class Shorts {
 	public static <T> Set<T> st(T...v) { return CollectionUtils.set(v); }
 
 	/**
-	 * Creates a sorted {@link java.util.TreeSet} from the specified elements (null values filtered out).
+	 * Creates a sorted {@link TreeSet} from the specified elements (null values filtered out).
 	 *
 	 * @param <E> The element type.
 	 * @param v The elements.

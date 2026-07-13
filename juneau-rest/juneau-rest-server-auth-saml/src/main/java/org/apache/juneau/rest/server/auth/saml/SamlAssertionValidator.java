@@ -381,7 +381,7 @@ public class SamlAssertionValidator {
 				throw new AuthenticationException("SAML envelope is not a <Response>: " + cns(obj))
 					.wwwAuthenticate("SAML error=\"invalid_response\"");
 			return r;
-		} catch (UnmarshallingException | ParserConfigurationException | java.io.IOException | org.xml.sax.SAXException e) {
+		} catch (UnmarshallingException | ParserConfigurationException | IOException | org.xml.sax.SAXException e) {
 			throw new AuthenticationException(e, "SAML response could not be parsed")
 				.wwwAuthenticate("SAML error=\"invalid_response\"");
 		}

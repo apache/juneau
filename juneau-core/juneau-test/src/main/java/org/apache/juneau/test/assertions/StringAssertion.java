@@ -171,7 +171,7 @@ public class StringAssertion extends FluentStringAssertion<StringAssertion> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public StringAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public StringAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -79,7 +79,7 @@ import org.apache.juneau.commons.utils.*;
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
 })
-public class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
+public final class ConstructorInfo extends ExecutableInfo implements Comparable<ConstructorInfo>, Annotatable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_declaringClass = "declaringClass";
@@ -197,8 +197,8 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * This delegates to the underlying {@link Constructor#equals(Object)} method.
 	 *
 	 * <p>
- * This method makes ConstructorInfo suitable for use as keys in hash-based collections such as {@link java.util.HashMap}
- * and {@link java.util.HashSet}.
+ * This method makes ConstructorInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+ * and {@link HashSet}.
 	 *
 	 * @param obj The object to compare with.
 	 * @return <jk>true</jk> if the objects are equal, <jk>false</jk> otherwise.
@@ -215,8 +215,8 @@ public class ConstructorInfo extends ExecutableInfo implements Comparable<Constr
 	 * This delegates to the underlying {@link Constructor#hashCode()} method.
 	 *
 	 * <p>
- * This method makes ConstructorInfo suitable for use as keys in hash-based collections such as {@link java.util.HashMap}
- * and {@link java.util.HashSet}.
+ * This method makes ConstructorInfo suitable for use as keys in hash-based collections such as {@link HashMap}
+ * and {@link HashSet}.
 	 *
 	 * @return A hash code value for this ConstructorInfo.
 	 */

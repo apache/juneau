@@ -77,6 +77,6 @@ class Date_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(Date.of((java.time.ZonedDateTime)null));
+		assertNull(Date.of((ZonedDateTime)null));
 	}
 }

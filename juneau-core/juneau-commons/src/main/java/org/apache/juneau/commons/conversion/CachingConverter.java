@@ -236,7 +236,7 @@ public abstract class CachingConverter implements Converter {
 	 *
 	 * <p>
 	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access
-	 * contextual objects such as {@link java.util.TimeZone} or {@link java.util.Locale}.
+	 * contextual objects such as {@link TimeZone} or {@link Locale}.
 	 *
 	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.
@@ -268,7 +268,7 @@ public abstract class CachingConverter implements Converter {
 	 *
 	 * <p>
 	 * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access
-	 * contextual objects such as {@link java.util.TimeZone} or {@link java.util.Locale}.
+	 * contextual objects such as {@link TimeZone} or {@link Locale}.
 	 *
 	 * @param o The object to convert. Can be <jk>null</jk>.
 	 * @param memberOf The outer instance for non-static inner class construction, or <jk>null</jk>.

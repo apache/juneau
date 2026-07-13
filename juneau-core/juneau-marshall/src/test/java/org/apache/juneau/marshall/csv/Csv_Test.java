@@ -89,7 +89,7 @@ class Csv_Test extends TestBase {
 			return df.format(date);
 		}
 		@Override
-		public Date unswap(MarshallingSession session, String str, ClassMeta<?> hint) throws java.text.ParseException {
+		public Date unswap(MarshallingSession session, String str, ClassMeta<?> hint) throws ParseException {
 			return df.parse(str);
 		}
 	}
@@ -385,12 +385,12 @@ class Csv_Test extends TestBase {
 		assertEquals(10, parsed.radius);
 	}
 
-	@org.apache.juneau.marshall.Marshalled(dictionary = {Circle.class, Rectangle.class})
+	@Marshalled(dictionary = {Circle.class, Rectangle.class})
 	public interface Shape {
 		String getName();
 	}
 
-	@org.apache.juneau.marshall.Marshalled(typeName = "Circle")
+	@Marshalled(typeName = "Circle")
 	public static class Circle implements Shape {
 		public String name;
 		public int radius;
@@ -404,7 +404,7 @@ class Csv_Test extends TestBase {
 		public String getName() { return name; }
 	}
 
-	@org.apache.juneau.marshall.Marshalled(typeName = "Rectangle")
+	@Marshalled(typeName = "Rectangle")
 	public static class Rectangle implements Shape {
 		public String name;
 		public int width;

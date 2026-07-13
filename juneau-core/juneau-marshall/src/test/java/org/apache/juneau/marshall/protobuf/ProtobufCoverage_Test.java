@@ -265,19 +265,19 @@ class ProtobufCoverage_Test extends TestBase {
 
 	public static class Temporals {
 		public java.util.Calendar cal;
-		public java.time.Duration dur;
-		public java.time.LocalDate ld;
-		public java.time.Period per;
+		public Duration dur;
+		public LocalDate ld;
+		public Period per;
 		public Temporals() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
 	@Test
 	void c01_temporalsRoundTrip() throws Exception {
 		var a = new Temporals();
-		a.cal = java.util.GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-02T03:04:05Z"));
-		a.dur = java.time.Duration.ofSeconds(90);
+		a.cal = java.util.GregorianCalendar.from(ZonedDateTime.parse("2024-01-02T03:04:05Z"));
+		a.dur = Duration.ofSeconds(90);
 		a.ld = LocalDate.of(2024, Month.JANUARY, 2);
-		a.per = java.time.Period.of(1, 2, 3);
+		a.per = Period.of(1, 2, 3);
 		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
 		var b = ProtobufParser.DEFAULT.parse(bytes, Temporals.class);
 		assertEquals(a.dur, b.dur);
@@ -310,9 +310,9 @@ class ProtobufCoverage_Test extends TestBase {
 	public static class C03_TemporalMaps {
 		public java.util.Map<String,java.util.Date> dates;
 		public java.util.Map<String,java.util.Calendar> cals;
-		public java.util.Map<String,java.time.LocalDate> lds;
-		public java.util.Map<String,java.time.Duration> durs;
-		public java.util.Map<String,java.time.Period> pers;
+		public java.util.Map<String,LocalDate> lds;
+		public java.util.Map<String,Duration> durs;
+		public java.util.Map<String,Period> pers;
 		public C03_TemporalMaps() { /* Public no-arg constructor required for Juneau bean recognition. */ }
 	}
 
@@ -320,19 +320,19 @@ class ProtobufCoverage_Test extends TestBase {
 	void c03_temporalMapValuesRoundTrip() throws Exception {
 		var a = new C03_TemporalMaps();
 		var d = new java.util.Date(1_700_000_000_000L);
-		var cal = java.util.GregorianCalendar.from(java.time.ZonedDateTime.parse("2024-01-02T03:04:05Z"));
+		var cal = java.util.GregorianCalendar.from(ZonedDateTime.parse("2024-01-02T03:04:05Z"));
 		a.dates = java.util.Map.of("k", d);
 		a.cals = java.util.Map.of("k", cal);
 		a.lds = java.util.Map.of("k", LocalDate.of(2024, Month.JANUARY, 2));
-		a.durs = java.util.Map.of("k", java.time.Duration.ofSeconds(90));
-		a.pers = java.util.Map.of("k", java.time.Period.of(1, 2, 3));
+		a.durs = java.util.Map.of("k", Duration.ofSeconds(90));
+		a.pers = java.util.Map.of("k", Period.of(1, 2, 3));
 		var bytes = ProtobufSerializer.DEFAULT.serialize(a);
 		var b = ProtobufParser.DEFAULT.parse(bytes, C03_TemporalMaps.class);
 		assertEquals(d, b.dates.get("k"));
 		assertEquals(cal.toInstant(), b.cals.get("k").toInstant());
 		assertEquals(LocalDate.of(2024, Month.JANUARY, 2), b.lds.get("k"));
-		assertEquals(java.time.Duration.ofSeconds(90), b.durs.get("k"));
-		assertEquals(java.time.Period.of(1, 2, 3), b.pers.get("k"));
+		assertEquals(Duration.ofSeconds(90), b.durs.get("k"));
+		assertEquals(Period.of(1, 2, 3), b.pers.get("k"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

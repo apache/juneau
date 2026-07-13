@@ -55,7 +55,7 @@ public @interface Markdown {
 	 * Custom heading text for document-mode rendering.
 	 *
 	 * <p>
-	 * Overrides the property name used as the heading in {@link org.apache.juneau.marshall.markdown.MarkdownDocSerializer} output.
+	 * Overrides the property name used as the heading in {@link MarkdownDocSerializer} output.
 	 *
 	 * @return The annotation value.
 	 */

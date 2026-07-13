@@ -21,7 +21,7 @@ package org.apache.juneau.rest.client;
  *
  * <p>
  * Transport adapter modules (e.g. {@code juneau-rest-client-apache-httpclient-45}) register their provider
- * via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider}.
+ * via {@code META-INF/services/HttpTransportProvider}.
  *
  * <p>
  * When no transport is explicitly set, {@code RestClient} uses {@link java.util.ServiceLoader} to load all

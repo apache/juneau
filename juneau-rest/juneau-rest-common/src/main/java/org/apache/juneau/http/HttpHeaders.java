@@ -32,7 +32,7 @@ import org.apache.juneau.http.header.*;
  *
  * <p class='bjava'>
  * 	<jc>// Import statically for clean DSL-style usage</jc>
- * 	import static org.apache.juneau.http.HttpHeaders.*;
+ * 	import static HttpHeaders.*;
  *
  * 	RestRequest <jv>req</jv> = client.get(<js>"/api/resource"</js>)
  * 		.header(accept(<js>"application/json"</js>))

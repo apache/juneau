@@ -106,8 +106,8 @@ import jakarta.servlet.http.Part;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestFormParam}
- * 	<li class='ja'>{@link org.apache.juneau.http.FormData}
- * 	<li class='ja'>{@link org.apache.juneau.http.HasFormData}
+ * 	<li class='ja'>{@link FormData}
+ * 	<li class='ja'>{@link HasFormData}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
@@ -383,7 +383,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * Returns the form data parameter as the specified bean type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.FormData} annotation
+	 * Type must have a name specified via the {@link FormData} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.

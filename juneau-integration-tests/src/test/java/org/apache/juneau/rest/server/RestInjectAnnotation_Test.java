@@ -28,9 +28,9 @@ import org.junit.jupiter.api.*;
  * is honoured during context initialization.
  *
  * <p>Three flavours of {@code @Inject} are exercised, all matched by FQN via
- * {@link org.apache.juneau.commons.inject.JsrSupport}:
+ * {@link JsrSupport}:
  * <ul>
- * 	<li>{@link org.apache.juneau.commons.inject.Inject} (Juneau-owned).
+ * 	<li>{@link Inject} (Juneau-owned).
  * 	<li>{@link jakarta.inject.Inject} (test classpath stub at the canonical JSR-330 FQN).
  * 	<li>{@link org.springframework.beans.factory.annotation.Autowired} (test classpath stub
  * 		at the canonical Spring FQN).

@@ -43,14 +43,14 @@ import org.apache.juneau.http.*;
  * <p>
  * This header supports comma-delimited values for multiple thrown values.
  * <p class='bcode'>
- * 	Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found,java.lang.RuntimeException;foo
+ * 	Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found,RuntimeException;foo
  * </p>
  *
  * <p>
  * Note that this is equivalent to specifying multiple header values.
  * <p class='bcode'>
  * 	Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found
- * 	Thrown: java.lang.RuntimeException;foo
+ * 	Thrown: RuntimeException;foo
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

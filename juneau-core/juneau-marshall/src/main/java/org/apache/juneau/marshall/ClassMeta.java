@@ -161,7 +161,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	private final Cache<String,Optional<?>> properties;
 	private final NullableSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
-	private final NullableSupplier<org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<T>> beanMeta;
+	private final NullableSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
 
 	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return o(keyType()); }
@@ -498,7 +498,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * 	The {@link BeanMeta} associated with this class, or <jk>null</jk> if there is no bean meta associated with
 	 * 	this class.
 	 */
-	public org.apache.juneau.commons.bean.BeanMeta<T> getBeanMeta() {
+	public BeanMeta<T> getBeanMeta() {
 		return beanMeta.get().beanMeta();
 	}
 
@@ -702,7 +702,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * ({@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}).
 	 *
 	 * <p>
-	 * Overrides {@link org.apache.juneau.commons.reflect.ClassInfo#isOptional()} so the marshalling layer
+	 * Overrides {@link ClassInfo#isOptional()} so the marshalling layer
 	 * treats the three primitive optional types as first-class optionals (synthetic boxed element type,
 	 * empty-as-null contract) without registering swaps for them.
 	 *
@@ -1358,7 +1358,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			return noArgConstructor.get().newInstance();
 		var h = getProxyInvocationHandler();
 		if (nn(h))
-			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(inner(), java.io.Serializable.class), h);
+			return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(inner(), Serializable.class), h);
 		return null;
 	}
 
@@ -1507,10 +1507,10 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			.orElse(null);
 	}
 
-	private org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<T> findBeanMeta() {
+	private BeanMeta.BeanMetaValue<T> findBeanMeta() {
 		if (! cat.isUnknown())
-			return new org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue<>((org.apache.juneau.commons.bean.BeanMeta<T>)null, "Known non-bean type");
-		return org.apache.juneau.commons.bean.BeanMeta.create(this, implClass.get());
+			return new BeanMeta.BeanMetaValue<>((BeanMeta<T>)null, "Known non-bean type");
+		return BeanMeta.create(this, implClass.get());
 	}
 
 	private KeyValueTypes findKeyValueTypes() {

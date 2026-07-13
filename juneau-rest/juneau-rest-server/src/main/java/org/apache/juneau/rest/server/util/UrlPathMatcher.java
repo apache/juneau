@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.*;
  * Handles aspects of matching and precedence ordering.
  *
  */
-public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
+public abstract sealed class UrlPathMatcher implements Comparable<UrlPathMatcher> permits UrlPathMatcher.FileNameMatcher, UrlPathMatcher.PathMatcher {
 
 	/**
 	 * A file name pattern such as "favicon.ico" or "*.jsp".
@@ -41,7 +41,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	@SuppressWarnings({
 		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
 	})
-	private static class FileNameMatcher extends UrlPathMatcher {
+	static final class FileNameMatcher extends UrlPathMatcher {
 
 		private final String basePattern;
 		private final String extPattern;
@@ -78,7 +78,7 @@ public abstract class UrlPathMatcher implements Comparable<UrlPathMatcher> {
 	@SuppressWarnings({
 		"java:S2160" // equals() is inherited from UrlPathMatcher which compares by pattern string; added fields are derived from the pattern
 	})
-	private static class PathMatcher extends UrlPathMatcher {
+	static final class PathMatcher extends UrlPathMatcher {
 		private static final Pattern VAR_PATTERN = Pattern.compile("\\{([^\\}]+)\\}");
 
 		private final String pattern;

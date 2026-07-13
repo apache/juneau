@@ -4636,7 +4636,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		</p>
 		 * 	<li>
 		 * 		<b>Refreshable cached value</b> &mdash; Use {@link Memoizer Memoizer}
-		 * 		(via {@link Suppliers#memoizer(java.util.function.Supplier) Suppliers.memoizer()})
+		 * 		(via {@link Suppliers#memoizer(Supplier) Suppliers.memoizer()})
 		 * 		when computing the URL is expensive (e.g. service discovery) and you want it cached until explicitly refreshed:
 		 * 		<p class='bjava'>
 		 * 			Memoizer&lt;String&gt; <jv>url</jv> = <jsm>memoizer</jsm>(() -&gt; serviceDiscovery.<jsm>findUrl</jsm>(<js>"my-service"</js>));

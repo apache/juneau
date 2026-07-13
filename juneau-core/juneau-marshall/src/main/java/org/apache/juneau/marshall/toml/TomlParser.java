@@ -42,7 +42,7 @@ import org.apache.juneau.marshall.stream.*;
  * 		The parser treats the configured <c>nullValue</c> string (e.g. <c>&lt;NULL&gt;</c>) as Java null
  * 		when it appears as a value.
  * 	<li><b>Non-string map keys</b> — TOML keys are always strings. Non-string key types
- * 		(e.g. <c>Map&lt;Integer,String&gt;</c>) are converted via {@link org.apache.juneau.marshall.parser.ParserSession#convertAttrToType(Object, String, org.apache.juneau.marshall.ClassMeta) convertAttrToType}.
+ * 		(e.g. <c>Map&lt;Integer,String&gt;</c>) are converted via {@link ParserSession#convertAttrToType(Object, String, org.apache.juneau.marshall.ClassMeta) convertAttrToType}.
  * 		Null keys are serialized as the string <c>null</c> and converted back to Java null during parsing.
  * 	<li><b>Polymorphic types</b> — Parsing to interfaces or abstract classes requires a
  * 		{@link org.apache.juneau.marshall.MarshallingContext.Builder#beanDictionary(Class[]) bean dictionary}

@@ -189,7 +189,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		 *
 		 * @param value
 		 * 	The new value for this property.
-		 * 	<br>The default is {@link org.apache.juneau.marshall.jsonschema.BasicBeanDefMapper}.
+		 * 	<br>The default is {@link BasicBeanDefMapper}.
 		 * @return This object.
 		 */
 		public Builder beanDefMapper(Class<? extends MarshallingDefMapper> value) {
@@ -231,7 +231,7 @@ public class HtmlSchemaDocSerializer extends HtmlDocSerializer {
 		@SuppressWarnings({
 			"unchecked" // Varargs method requires unchecked cast
 		})
-		public Builder widgets(java.lang.Class<? extends org.apache.juneau.marshall.html.HtmlWidget>...values) {
+		public Builder widgets(Class<? extends HtmlWidget>...values) {
 			super.widgets(values);
 			return this;
 		}

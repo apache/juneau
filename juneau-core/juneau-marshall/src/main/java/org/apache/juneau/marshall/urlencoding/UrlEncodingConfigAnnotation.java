@@ -35,7 +35,7 @@ public class UrlEncodingConfigAnnotation {
 	private UrlEncodingConfigAnnotation() {}
 
 	/**
-	 * Applies {@link UrlEncodingConfig} annotations to a {@link org.apache.juneau.marshall.urlencoding.UrlEncodingParser.Builder}.
+	 * Applies {@link UrlEncodingConfig} annotations to a {@link UrlEncodingParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingParser.Builder> {
 
@@ -57,7 +57,7 @@ public class UrlEncodingConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link UrlEncodingConfig} annotations to a {@link org.apache.juneau.marshall.urlencoding.UrlEncodingSerializer.Builder}.
+	 * Applies {@link UrlEncodingConfig} annotations to a {@link UrlEncodingSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<UrlEncodingConfig,UrlEncodingSerializer.Builder> {
 

@@ -19,7 +19,7 @@ package org.apache.juneau.marshall.bson;
 import org.apache.juneau.marshall.*;
 
 /**
- * Metadata on classes specific to the BSON serializers and parsers pulled from the {@link org.apache.juneau.marshall.bson.Bson @Bson} annotation on
+ * Metadata on classes specific to the BSON serializers and parsers pulled from the {@link Bson @Bson} annotation on
  * the class.
  *
  * <h5 class='section'>See Also:</h5><ul>

@@ -275,7 +275,7 @@ public class TypeVariables {
 				// If we couldn't find a type variable implementation, that means
 				// the type was defined at runtime (e.g. Bean b = new Bean<Foo>();)
 				// in which case the type is lost through erasure.
-				// Assume java.lang.Object as the type.
+				// Assume Object as the type.
 				return get(gc, varIndex);
 			}
 		}

@@ -245,7 +245,7 @@ class HashKey_Test extends TestBase {
 		// Empty keys should have the same hash code
 		assertEquals(key1.hashCode(), key2.hashCode());
 		// And should equal Arrays.hashCode(new Object[0])
-		assertEquals(java.util.Arrays.hashCode(new Object[0]), key1.hashCode());
+		assertEquals(Arrays.hashCode(new Object[0]), key1.hashCode());
 	}
 
 	@Test

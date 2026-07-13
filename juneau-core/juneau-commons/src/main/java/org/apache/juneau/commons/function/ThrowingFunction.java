@@ -24,7 +24,7 @@ import java.util.function.*;
  * A functional interface representing a function that accepts one argument, produces a result, and may throw a checked exception.
  *
  * <p>
- * This interface extends the standard Java {@link java.util.function.Function} to allow the functional method
+ * This interface extends the standard Java {@link Function} to allow the functional method
  * to throw checked exceptions. The default {@link #apply(Object)} method wraps any checked exceptions in a
  * {@link RuntimeException}, making it compatible with standard {@link Function} usage while still allowing
  * the implementation to throw checked exceptions via {@link #applyThrows(Object)}.

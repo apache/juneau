@@ -182,7 +182,7 @@ public class ListAssertion<E> extends FluentListAssertion<E,ListAssertion<E>> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public ListAssertion<E> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public ListAssertion<E> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -36,7 +36,7 @@ import org.junit.jupiter.api.extension.*;
  * <ul>
  * 	<li>The SUT (a {@code RestContext} via {@code MockRestClient}, a {@code Microservice}, a {@code SerializerSet},
  * 		etc.) is constructed <i>after</i> the overlay is built.  The overlay is threaded into the builder via
- * 		{@code overridingBeanStore(...)} (see {@link org.apache.juneau.commons.inject.BeanStoreOverridable}), which
+ * 		{@code overridingBeanStore(...)} (see {@link BeanStoreOverridable}), which
  * 		installs it in the {@code overridingParent} slot of the SUT's bean store at construction time.
  * 	<li>Because the overlay sits at tier&nbsp;1 of the resolution chain, every framework-managed bean lookup
  * 		consults it <i>before</i> any local {@code @Bean} factory or memoizer-backed default.  Mode INJECT is
@@ -49,8 +49,8 @@ import org.junit.jupiter.api.extension.*;
  * </ul>
  *
  * <p>
- * {@link org.apache.juneau.test.junit.TestBean @TestBean}, {@link TestBeanStore},
- * {@link org.apache.juneau.commons.inject.BeanStoreOverridable BeanStoreOverridable}, and the {@code overridingBeanStore(...)}
+ * {@link TestBean @TestBean}, {@link TestBeanStore},
+ * {@link BeanStoreOverridable BeanStoreOverridable}, and the {@code overridingBeanStore(...)}
  * setters on {@code MockRestClient.Builder}, {@code Microservice.Builder}, {@code SerializerSet.Builder},
  * {@code ParserSet.Builder}, and {@code EncoderSet.Builder} all implement this Mode INJECT contract.
  *
@@ -59,11 +59,11 @@ import org.junit.jupiter.api.extension.*;
  * <p>
  * <b>Mode OVERLAY</b> is the opt-in pattern for tests that hold a <i>long-lived</i> SUT (typically a
  * {@code Microservice} booted in {@code @BeforeAll}) and want to apply per-test overlays without rebuilding it.
- * The test calls {@link #attach(org.apache.juneau.commons.inject.WritableBeanStore)} to point the extension at the
+ * The test calls {@link #attach(WritableBeanStore)} to point the extension at the
  * SUT's bean store; the extension then uses
- * {@link org.apache.juneau.commons.inject.WritableBeanStore#pushOverlay(org.apache.juneau.commons.inject.BeanStore)}
+ * {@link WritableBeanStore#pushOverlay(BeanStore)}
  * at {@code beforeEach} / {@code beforeAll} and
- * {@link org.apache.juneau.commons.inject.WritableBeanStore#popOverlay(org.apache.juneau.commons.inject.Snapshot)}
+ * {@link WritableBeanStore#popOverlay(Snapshot)}
  * at {@code afterEach} / {@code afterAll} so the SUT's bean store is restored between tests.
  *
  * <p>

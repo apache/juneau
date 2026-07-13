@@ -245,7 +245,7 @@ public class FluentByteArrayAssertion<R> extends FluentPrimitiveArrayAssertion<B
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentByteArrayAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentByteArrayAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

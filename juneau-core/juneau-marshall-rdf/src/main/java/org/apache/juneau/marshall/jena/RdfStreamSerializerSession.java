@@ -99,7 +99,7 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		@Override
-		public Builder locale(java.util.Locale value) {
+		public Builder locale(Locale value) {
 			super.locale(value);
 			return this;
 		}
@@ -147,13 +147,13 @@ public class RdfStreamSerializerSession extends OutputStreamSerializerSession {
 		}
 
 		@Override
-		public Builder timeZone(java.util.TimeZone value) {
+		public Builder timeZone(TimeZone value) {
 			super.timeZone(value);
 			return this;
 		}
 
 		@Override
-		public Builder timeZoneDefault(java.util.TimeZone value) {
+		public Builder timeZoneDefault(TimeZone value) {
 			super.timeZoneDefault(value);
 			return this;
 		}

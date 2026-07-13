@@ -205,7 +205,7 @@ class SimpleMap_Test extends TestBase {
 		var keys = a("key1", "key2", "key3");
 		var values = a("value1", "value2");
 
-		assertThrowsWithMessage(IllegalArgumentException.class, java.util.List.of("array lengths differ", "3", "2"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, List.of("array lengths differ", "3", "2"), () -> {
 			new SimpleMap<>(keys, values);
 		});
 	}
@@ -215,7 +215,7 @@ class SimpleMap_Test extends TestBase {
 		var keys = a("key1", "key2");
 		var values = a("value1", "value2", "value3", "value4");
 
-		assertThrowsWithMessage(IllegalArgumentException.class, java.util.List.of("array lengths differ", "2", "4"), () -> {
+		assertThrowsWithMessage(IllegalArgumentException.class, List.of("array lengths differ", "2", "4"), () -> {
 			new SimpleMap<>(keys, values);
 		});
 	}

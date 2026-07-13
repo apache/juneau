@@ -75,6 +75,6 @@ class IfNoneMatch_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(IfNoneMatch.of((org.apache.juneau.http.header.EntityTags)null));
+		assertNull(IfNoneMatch.of((EntityTags)null));
 	}
 }

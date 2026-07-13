@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
  * 	<li>{@code String[]} &mdash; each element may itself be a comma-delimited list.
  * 	<li>{@link Collection}, {@link List}, {@link Set}, {@link Iterable}, {@link java.util.stream.Stream Stream}.
  * 	<li>Nested mixes of the above (recursively flattened via
- * 		{@link org.apache.juneau.commons.utils.CollectionUtils#accumulate(Object) CollectionUtils.accumulate}).
+ * 		{@link org.apache.juneau.commons.utils.CollectionUtils#accumulate(Object...) CollectionUtils.accumulate}).
  * 	<li>Primitive arrays (covered free by the flattening helper).
  * 	<li>Any other type &mdash; coerced via {@link String#valueOf(Object)} (loose, permissive contract).
  * </ul>

@@ -778,7 +778,7 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 
 	@Test void j02_rootCalendar_addJsonTags() throws Exception {
 		var s = HtmlSerializer.create().sq().addRootType().build();
-		var cal = new java.util.GregorianCalendar(2000, 0, 1);
+		var cal = new GregorianCalendar(2000, 0, 1);
 		var r = s.serialize(cal);
 		assertTrue(r.contains("<string>"), "Expected <string> tag for root Calendar, got: " + r);
 	}
@@ -841,7 +841,7 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 
 	@Test void j07b_rootCalendar_disableJsonTags() throws Exception {
 		var s = HtmlSerializer.create().sq().disableJsonTags().build();
-		var r = s.serialize(new java.util.GregorianCalendar(2000, 0, 1));
+		var r = s.serialize(new GregorianCalendar(2000, 0, 1));
 		assertFalse(r.contains("<string>"), "Expected no <string> wrapping when disableJsonTags, got: " + r);
 	}
 
@@ -1031,14 +1031,14 @@ class HtmlSerializerSessionCoverage_Test extends TestBase {
 
 	@Test void k01_rootDate_addJsonTags() throws Exception {
 		// isDate() branch at line 1000; isRoot=true && addJsonTags=true → <string> wrapper
-		var d = new java.util.Date(0);
+		var d = new Date(0);
 		var r = HtmlSerializer.DEFAULT.serialize(d);
 		assertNotNull(r);
 	}
 
 	@Test void k02_rootCalendar_addJsonTags() throws Exception {
 		// isCalendar() branch at line 1008; isRoot=true && addJsonTags=true → <string> wrapper
-		var c = java.util.Calendar.getInstance();
+		var c = Calendar.getInstance();
 		c.setTimeInMillis(0);
 		var r = HtmlSerializer.DEFAULT.serialize(c);
 		assertNotNull(r);

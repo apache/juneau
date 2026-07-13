@@ -104,7 +104,7 @@ class AuthResult_Test extends TestBase {
 	}
 
 	@Test void b05_ofRolesCollection() {
-		var x = AuthResult.ofRoles(java.util.List.of("r1", "r2"));
+		var x = AuthResult.ofRoles(List.of("r1", "r2"));
 		assertNull(x.getPrincipal());
 		assertEquals(AuthResult.MergeMode.ADD, x.getMode());
 		assertEquals(Set.of("r1", "r2"), x.getRoles());
@@ -112,7 +112,7 @@ class AuthResult_Test extends TestBase {
 
 	@Test void b06_ofRolesNullArgs() {
 		assertTrue(AuthResult.ofRoles((String[]) null).getRoles().isEmpty());
-		assertTrue(AuthResult.ofRoles((java.util.Collection<String>) null).getRoles().isEmpty());
+		assertTrue(AuthResult.ofRoles((Collection<String>) null).getRoles().isEmpty());
 	}
 
 	@Test void b07_replacingSetAndNullRoles() {

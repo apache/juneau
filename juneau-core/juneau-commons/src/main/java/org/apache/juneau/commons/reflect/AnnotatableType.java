@@ -34,7 +34,7 @@ public enum AnnotatableType {
 	/** Represents a {@link java.lang.reflect.Field} wrapped in {@link FieldInfo}. */
 	FIELD_TYPE,
 
-	/** Represents a {@link java.lang.Package} wrapped in {@link PackageInfo}. */
+	/** Represents a {@link Package} wrapped in {@link PackageInfo}. */
 	PACKAGE_TYPE,
 
 	/** Represents a {@link java.lang.reflect.Constructor} wrapped in {@link ConstructorInfo}. */

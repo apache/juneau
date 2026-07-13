@@ -145,7 +145,7 @@ public class ThrowableAssertion<T extends Throwable> extends FluentThrowableAsse
 	}
 
 	@Override /* Overridden from Assertion */
-	public ThrowableAssertion<T> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public ThrowableAssertion<T> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

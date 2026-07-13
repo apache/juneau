@@ -639,7 +639,7 @@ public class FluentStringAssertion<R> extends FluentObjectAssertion<String,R> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentStringAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentStringAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

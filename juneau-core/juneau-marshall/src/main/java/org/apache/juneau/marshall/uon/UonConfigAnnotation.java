@@ -35,7 +35,7 @@ public class UonConfigAnnotation {
 	private UonConfigAnnotation() {}
 
 	/**
-	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.marshall.uon.UonParser.Builder}.
+	 * Applies {@link UonConfig} annotations to a {@link UonParser.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -61,7 +61,7 @@ public class UonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link UonConfig} annotations to a {@link org.apache.juneau.marshall.uon.UonSerializer.Builder}.
+	 * Applies {@link UonConfig} annotations to a {@link UonSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

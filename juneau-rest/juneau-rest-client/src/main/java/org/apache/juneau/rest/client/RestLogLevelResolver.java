@@ -99,7 +99,7 @@ public interface RestLogLevelResolver {
 	 *
 	 * <p>
 	 * Rules are evaluated in registration order; the first matching rule wins. If no rule matches,
-	 * the {@link #defaultLevel(java.lang.System.Logger.Level)} is used (default: {@link java.lang.System.Logger.Level#INFO}).
+	 * the {@link #defaultLevel(System.Logger.Level)} is used (default: {@link java.lang.System.Logger.Level#INFO}).
 	 *
 	 * @since 9.2.1
 	 */

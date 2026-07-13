@@ -113,8 +113,8 @@ import org.apache.juneau.rest.server.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestQueryParam}
- * 	<li class='ja'>{@link org.apache.juneau.http.Query}
- * 	<li class='ja'>{@link org.apache.juneau.http.HasQuery}
+ * 	<li class='ja'>{@link Query}
+ * 	<li class='ja'>{@link HasQuery}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
@@ -343,7 +343,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * Returns the query parameter as the specified bean type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.Query} annotation
+	 * Type must have a name specified via the {@link Query} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.

@@ -127,7 +127,7 @@ class ParquetLogicalTypes_Test extends TestBase {
 		var in = List.of(new TemporalBean(LocalDate.parse("2026-06-17"), LocalTime.parse("12:34:56.123456"), ts));
 		var bytesDefault = ParquetSerializer.DEFAULT.serialize(in);
 		var bytesNative = ParquetSerializer.create().nativeLogicalTypes(true).build().serialize(in);
-		assertFalse(java.util.Arrays.equals(bytesDefault, bytesNative), "native temporal wire form must differ from default");
+		assertFalse(Arrays.equals(bytesDefault, bytesNative), "native temporal wire form must differ from default");
 	}
 
 	// =================================================================================
@@ -148,6 +148,6 @@ class ParquetLogicalTypes_Test extends TestBase {
 		var bytesDefault = ParquetSerializer.DEFAULT.serialize(in);
 		var bytesNative = ParquetSerializer.create().nativeLogicalTypes(true).build().serialize(in);
 		// Native DECIMAL (INT64) produces a different wire form than the default UTF-8-string normalization.
-		assertFalse(java.util.Arrays.equals(bytesDefault, bytesNative));
+		assertFalse(Arrays.equals(bytesDefault, bytesNative));
 	}
 }

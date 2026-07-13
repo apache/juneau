@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
 import jakarta.servlet.http.*;
 
 /**
- * Resource-level authentication SPI for {@link org.apache.juneau.rest.server.Rest @Rest} resources.
+ * Resource-level authentication SPI for {@link Rest @Rest} resources.
  *
  * <p>
  * Resolves a request's {@link java.security.Principal} and roles, reusing the same {@link Authenticator}
@@ -90,7 +90,7 @@ public abstract class RestAuthenticator {
 	}
 
 	/**
-	 * Sentinel "unset" type for {@link org.apache.juneau.rest.server.Rest#authenticator() @Rest(authenticator=...)};
+	 * Sentinel "unset" type for {@link Rest#authenticator() @Rest(authenticator=...)};
 	 * never authenticates.
 	 */
 	public static final class Null extends RestAuthenticator {

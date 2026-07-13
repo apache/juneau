@@ -71,7 +71,7 @@ import org.apache.juneau.marshall.stream.*;
  * 	<li>Decimal128 (0x13) NaN and ±Infinity have no {@link BigDecimal} form; they are normalized to <jk>null</jk>.
  * 	<li>Wire-declared lengths (strings, binary, document/array size prefixes) are bounds-checked against a
  * 		configurable maximum (default 16 MiB, see {@link Builder#maxLength(int)}); malformed/adversarial lengths
- * 		fail with a clean {@link org.apache.juneau.marshall.parser.ParseException} instead of an unchecked error.
+ * 		fail with a clean {@link ParseException} instead of an unchecked error.
  * 	<li>BSON is binary; <c>SpacedHex</c> and <c>Base64</c> subclasses accept text-encoded input.
  * </ul>
  *

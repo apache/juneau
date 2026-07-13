@@ -45,8 +45,8 @@ import jakarta.servlet.http.*;
  * This processor ships in the opt-in {@code juneau-rest-server-reactive} module and is <b>not</b> wired
  * into {@code DefaultConfig}. A bare {@code juneau-rest-server} has zero reactive behavior. When the
  * {@code juneau-rest-server-reactive} jar is on the classpath, its
- * {@code META-INF/services/org.apache.juneau.rest.server.processor.ResponseProcessor} provider file is discovered
- * by {@code RestContext} via {@link java.util.ServiceLoader} and this processor is front-loaded ahead of
+ * {@code META-INF/services/ResponseProcessor} provider file is discovered
+ * by {@code RestContext} via {@link ServiceLoader} and this processor is front-loaded ahead of
  * {@code AsyncResponseProcessor} in the chain &mdash; no {@code @Rest(responseProcessors=...)} entry required.
  *
  * <h5 class='topic'>What it handles</h5>
@@ -75,7 +75,7 @@ import jakarta.servlet.http.*;
  * 	<li><b>NDJSON</b> ({@code application/x-ndjson}, {@code application/jsonl}, {@code application/json5l}) &mdash; each element is
  * 		JSON-encoded on its own line.
  * 	<li><b>Buffer</b> (default, any other media type) &mdash; all elements are collected into a
- * 		{@link java.util.List List} and serialized through the normal serializer chain (e.g. a JSON
+ * 		{@link List List} and serialized through the normal serializer chain (e.g. a JSON
  * 		array). The collection is wrapped in a {@link CompletableFuture} and handed to the async path,
  * 		so a slow producer never blocks the request thread.
  * </ul>

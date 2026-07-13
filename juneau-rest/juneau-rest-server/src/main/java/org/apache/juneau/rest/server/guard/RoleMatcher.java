@@ -56,7 +56,7 @@ import org.apache.juneau.commons.utils.*;
  */
 public class RoleMatcher {
 
-	static class And extends Exp {
+	static final class And extends Exp {
 		Exp[] clauses;
 
 		And(List<Exp> clauses) {
@@ -83,7 +83,7 @@ public class RoleMatcher {
 		}
 	}
 
-	static class Eq extends Exp {
+	static final class Eq extends Exp {
 		final String operand;
 
 		Eq(String operand) {
@@ -109,7 +109,7 @@ public class RoleMatcher {
 		}
 	}
 
-	abstract static class Exp {
+	abstract static sealed class Exp permits And, Eq, Match, Never, Or {
 
 		@SuppressWarnings({
 			"unused" // set parameter unused in this default no-op implementation; subclasses use it
@@ -119,7 +119,7 @@ public class RoleMatcher {
 		abstract boolean matches(Set<String> roles);
 	}
 
-	static class Match extends Exp {
+	static final class Match extends Exp {
 		final Pattern p;
 		final String operand;
 
@@ -147,7 +147,7 @@ public class RoleMatcher {
 		}
 	}
 
-	static class Never extends Exp {
+	static final class Never extends Exp {
 		@Override /* Overridden from Object */
 		public String toString() {
 			return "(NEVER)";
@@ -159,7 +159,7 @@ public class RoleMatcher {
 		}
 	}
 
-	static class Or extends Exp {
+	static final class Or extends Exp {
 		Exp[] clauses;
 
 		Or(List<Exp> clauses) {

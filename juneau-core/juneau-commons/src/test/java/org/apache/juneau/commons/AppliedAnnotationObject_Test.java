@@ -1003,7 +1003,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 		@Test
 		void m03_nullMethod_throwsException() {
 			var builder = D_BuilderMTests.D.create();
-			assertThrows(IllegalArgumentException.class, () -> builder.on((java.lang.reflect.Method)null));
+			assertThrows(IllegalArgumentException.class, () -> builder.on((Method)null));
 		}
 
 		@Test
@@ -1015,7 +1015,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 		@Test
 		void m05_nullField_throwsException() {
 			var builder = F_BuilderMFTests.F.create();
-			assertThrows(IllegalArgumentException.class, () -> builder.on((java.lang.reflect.Field)null));
+			assertThrows(IllegalArgumentException.class, () -> builder.on((Field)null));
 		}
 
 		@Test
@@ -1027,7 +1027,7 @@ class AppliedAnnotationObject_Test extends TestBase {
 		@Test
 		void m07_nullConstructor_throwsException() {
 			var builder = E_BuilderCTests.E.create();
-			assertThrows(IllegalArgumentException.class, () -> builder.on((java.lang.reflect.Constructor<?>)null));
+			assertThrows(IllegalArgumentException.class, () -> builder.on((Constructor<?>)null));
 		}
 
 		@Test

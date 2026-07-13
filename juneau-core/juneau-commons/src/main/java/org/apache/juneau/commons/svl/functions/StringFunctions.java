@@ -249,7 +249,7 @@ public final class StringFunctions {
 
 	/**
 	 * {@code #{format(pattern, args...)}} — {@link String#format Java formatter-style
-	 * formatting}. Pattern uses Java {@link java.util.Formatter} syntax (e.g. {@code %s},
+	 * formatting}. Pattern uses Java {@link Formatter} syntax (e.g. {@code %s},
 	 * {@code %d}, {@code %.2f}). Variadic args; coerced per Java {@code Formatter} rules at
 	 * invocation.
 	 *

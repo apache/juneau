@@ -432,7 +432,7 @@ public class ClassUtils {
 			return null;
 
 		// JDK Dynamic Proxy: Created via Proxy.newProxyInstance()
-		// These implement interfaces and are instances of java.lang.reflect.Proxy
+		// These implement interfaces and are instances of Proxy
 		if (Proxy.isProxyClass(c)) {
 			var interfaces = c.getInterfaces();
 			return interfaces.length > 0 ? interfaces[0] : null;

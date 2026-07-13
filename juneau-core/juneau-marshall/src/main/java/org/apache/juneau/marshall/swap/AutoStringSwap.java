@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.*;
  *
  * <p>
  * Installed automatically when a class is annotated with
- * {@link org.apache.juneau.marshall.Marshalled @Marshalled}{@code (as=STRING)}.
+ * {@link Marshalled @Marshalled}{@code (as=STRING)}.
  *
  * @param <T> The normal class type.
  */

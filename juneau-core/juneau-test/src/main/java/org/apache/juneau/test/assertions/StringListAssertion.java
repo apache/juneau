@@ -165,7 +165,7 @@ public class StringListAssertion extends FluentStringListAssertion<StringListAss
 	}
 
 	@Override /* Overridden from Assertion */
-	public StringListAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public StringListAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

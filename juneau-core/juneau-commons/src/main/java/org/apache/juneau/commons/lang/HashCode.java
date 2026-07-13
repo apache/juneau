@@ -51,14 +51,14 @@ public class HashCode {
 	 * Calculates a hash code over the specified objects.
 	 *
 	 * <p>
-	 * Uses the same algorithm as {@link java.util.Objects#hash(Object...)} (31 * result + element hash).
+	 * Uses the same algorithm as {@link Objects#hash(Object...)} (31 * result + element hash).
 	 *
 	 * <p>
 	 * Special handling is provided for:
 	 * <ul>
 	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing
-	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
-	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
+	 * 		according to the {@link Annotation#hashCode()} contract.
+	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link Arrays#hashCode(Object[])}
 	 * 		instead of identity-based hashing.
 	 * 	<li><b>Null values:</b> Treated as 0 in the hash calculation.
 	 * </ul>
@@ -67,7 +67,7 @@ public class HashCode {
 	 * @return A numerical hashcode value.
 	 * @see #add(Object)
 	 * @see AnnotationUtils#hash(Annotation)
-	 * @see java.util.Objects#hash(Object...)
+	 * @see Objects#hash(Object...)
 	 */
 	public static final int of(Object...objects) {
 		HashCode x = create();
@@ -106,8 +106,8 @@ public class HashCode {
 	 * <ul>
 	 * 	<li><b>Null values:</b> Adds 0 to the hash code.
 	 * 	<li><b>Annotations:</b> Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing
-	 * 		according to the {@link java.lang.annotation.Annotation#hashCode()} contract.
-	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}
+	 * 		according to the {@link Annotation#hashCode()} contract.
+	 * 	<li><b>Arrays:</b> Uses content-based hashing via {@link Arrays#hashCode(Object[])}
 	 * 		instead of identity-based hashing. Supports all primitive array types and object arrays.
 	 * 	<li><b>Other objects:</b> Uses the object's {@link Object#hashCode()} method.
 	 * </ul>
@@ -115,7 +115,7 @@ public class HashCode {
 	 * @param o The object whose hashcode will be hashed with this object.
 	 * @return This object.
 	 * @see AnnotationUtils#hash(Annotation)
-	 * @see java.util.Arrays#hashCode(Object[])
+	 * @see Arrays#hashCode(Object[])
 	 */
 	public HashCode add(Object o) {
 		o = unswap(o);
@@ -140,9 +140,9 @@ public class HashCode {
 			else if (o instanceof boolean[] o2)
 				add(Arrays.hashCode(o2));
 			else if (o instanceof float[] o2)
-				add(java.util.Arrays.hashCode(o2));
+				add(Arrays.hashCode(o2));
 			else if (o instanceof double[] o2)
-				add(java.util.Arrays.hashCode(o2));
+				add(Arrays.hashCode(o2));
 		} else {
 			add(o.hashCode());
 		}

@@ -84,7 +84,7 @@ class RestServlet_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		final boolean viaBuilder;
 		public D() { this.viaBuilder = false; }
-		public D(org.apache.juneau.rest.server.RestBuilder<?> b) { super(b); this.viaBuilder = true; }
+		public D(RestBuilder<?> b) { super(b); this.viaBuilder = true; }
 	}
 
 	/** Subclass whose @RestPostInit hook throws — exercises the catch-Exception branch in init(). */

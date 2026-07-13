@@ -47,7 +47,7 @@ import org.junit.jupiter.api.*;
  *  - {@link ParserSession#doParseIntoMap}/{@code doParseIntoCollection} default impls throw
  *    {@code UnsupportedOperationException}; this is exercised below via a parser that does not
  *    override them (HTML-table-style parsers all do).  No JSON parser sets this path because
- *    {@link org.apache.juneau.marshall.json.JsonParserSession} overrides both, but the public
+ *    {@link JsonParserSession} overrides both, but the public
  *    {@link ParserSession#parseIntoMap}/{@link ParserSession#parseIntoCollection} wrappers
  *    re-wrap the {@code UnsupportedOperationException} as a {@link ParseException}.
  *  - The XML follow-up bug (issue 155 #12) was a {@code doParseIntoMap}/{@code doParseIntoCollection}
@@ -789,16 +789,16 @@ class ParserSession_Test extends TestBase {
 	}
 
 	@Test void p04_convertAttr_dateKey() throws Exception {
-		// java.util.Date as a map key — exercises sType.isDate() branch.
-		var m = (Map<java.util.Date, String>) P.parse(
-			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, java.util.Date.class, String.class);
+		// Date as a map key — exercises sType.isDate() branch.
+		var m = (Map<Date, String>) P.parse(
+			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Date.class, String.class);
 		assertEquals(1, m.size());
 	}
 
 	@Test void p05_convertAttr_calendarKey() throws Exception {
 		// Calendar as a map key — exercises sType.isCalendar() branch.
-		var m = (Map<java.util.Calendar, String>) P.parse(
-			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, java.util.Calendar.class, String.class);
+		var m = (Map<Calendar, String>) P.parse(
+			"{\"2020-01-02T00:00:00Z\":\"v\"}", HashMap.class, Calendar.class, String.class);
 		assertEquals(1, m.size());
 	}
 
@@ -829,13 +829,13 @@ class ParserSession_Test extends TestBase {
 		public void exposeReturnStringBuilder(StringBuilder sb) { returnStringBuilder(sb); }
 		public Object exposeTrim(Object o) { return trim(o); }
 		public String exposeTrimStr(String s) { return trim(s); }
-		public org.apache.juneau.marshall.LocaleFormat exposeGetLocaleFormat() { return getLocaleFormat(); }
-		public org.apache.juneau.marshall.TimeZoneFormat exposeGetTimeZoneFormat() { return getTimeZoneFormat(); }
-		public org.apache.juneau.marshall.DurationFormat exposeGetDurationFormat() { return getDurationFormat(); }
-		public org.apache.juneau.marshall.PeriodFormat exposeGetPeriodFormat() { return getPeriodFormat(); }
-		public org.apache.juneau.marshall.CalendarFormat exposeGetCalendarFormat() { return getCalendarFormat(); }
-		public org.apache.juneau.marshall.DateFormat exposeGetDateFormat() { return getDateFormat(); }
-		public org.apache.juneau.marshall.TemporalFormat exposeGetTemporalFormat() { return getTemporalFormat(); }
+		public LocaleFormat exposeGetLocaleFormat() { return getLocaleFormat(); }
+		public TimeZoneFormat exposeGetTimeZoneFormat() { return getTimeZoneFormat(); }
+		public DurationFormat exposeGetDurationFormat() { return getDurationFormat(); }
+		public PeriodFormat exposeGetPeriodFormat() { return getPeriodFormat(); }
+		public CalendarFormat exposeGetCalendarFormat() { return getCalendarFormat(); }
+		public DateFormat exposeGetDateFormat() { return getDateFormat(); }
+		public TemporalFormat exposeGetTemporalFormat() { return getTemporalFormat(); }
 		public java.time.Duration exposeParseDuration(String s) { return parseDuration(s); }
 		public java.time.Period exposeParsePeriod(String s) { return parsePeriod(s); }
 		public void exposeMark() { mark(); }

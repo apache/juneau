@@ -914,7 +914,7 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		public static class J22_BeanWithUriField {
-			@org.apache.juneau.marshall.Uri
+			@Uri
 			public String myUri = "http://example.org/resource";
 		}
 
@@ -926,7 +926,7 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		public static class J23_BeanWithRelativeUri {
-			@org.apache.juneau.marshall.Uri
+			@Uri
 			public String myUri = "relative/path";
 		}
 
@@ -1211,19 +1211,19 @@ class RdfSerializer_Test extends TestBase {
 
 		@Test void k28_stream_date_roundtrip() throws Exception {
 			// Serialize Date and parse back via Thrift — covers isDate() branch in stream parser parseAnything
-			var date = new java.util.Date(1000000000L);
+			var date = new Date(1000000000L);
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(date);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, java.util.Date.class);
+				.parse(bytes, Date.class);
 			assertNotNull(result);
 		}
 
 		@Test void k29_stream_calendar_roundtrip() throws Exception {
 			// Serialize Calendar and parse back via Thrift — covers isCalendar() branch in stream parser parseAnything
-			var cal = java.util.Calendar.getInstance();
+			var cal = Calendar.getInstance();
 			var bytes = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build().serialize(cal);
 			var result = RdfStreamParser.create().language(Constants.LANG_RDFTHRIFT).build()
-				.parse(bytes, java.util.Calendar.class);
+				.parse(bytes, Calendar.class);
 			assertNotNull(result);
 		}
 

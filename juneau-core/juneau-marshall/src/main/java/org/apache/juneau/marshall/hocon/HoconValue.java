@@ -32,7 +32,7 @@ import java.util.*;
  * 	<li class='link'><a class="doclink" href="https://github.com/lightbend/config/blob/main/HOCON.md">HOCON Specification</a>
  * </ul>
  */
-public abstract class HoconValue {
+public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconValue.HoconArray, HoconValue.HoconString, HoconValue.HoconNumber, HoconValue.HoconBoolean, HoconValue.HoconNull, HoconValue.HoconSubstitution, HoconValue.HoconConcat {
 
 	/** Value type. */
 	public enum Type {
@@ -66,7 +66,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON object (maps to Java bean or Map).
 	 */
-	public static class HoconObject extends HoconValue {
+	public static final class HoconObject extends HoconValue {
 		private final LinkedHashMap<String, HoconValue> members = new LinkedHashMap<>();
 
 		@Override
@@ -149,7 +149,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON array (maps to List or array).
 	 */
-	public static class HoconArray extends HoconValue {
+	public static final class HoconArray extends HoconValue {
 		private final List<HoconValue> elements = new ArrayList<>();
 
 		@Override
@@ -179,7 +179,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON string value.
 	 */
-	public static class HoconString extends HoconValue {
+	public static final class HoconString extends HoconValue {
 		private final String value;
 
 		/**
@@ -209,7 +209,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON number value.
 	 */
-	public static class HoconNumber extends HoconValue {
+	public static final class HoconNumber extends HoconValue {
 		private final Number value;
 
 		/**
@@ -239,7 +239,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON boolean value.
 	 */
-	public static class HoconBoolean extends HoconValue {
+	public static final class HoconBoolean extends HoconValue {
 		private final boolean value;
 
 		/**
@@ -269,7 +269,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON null value.
 	 */
-	public static class HoconNull extends HoconValue {
+	public static final class HoconNull extends HoconValue {
 		@Override
 		public Type getType() {
 			return Type.NULL;
@@ -279,7 +279,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON substitution reference (${var} or ${?var}).
 	 */
-	public static class HoconSubstitution extends HoconValue {
+	public static final class HoconSubstitution extends HoconValue {
 		private final String path;
 		private final boolean optional;
 
@@ -321,7 +321,7 @@ public abstract class HoconValue {
 	/**
 	 * HOCON value concatenation (adjacent values concatenated).
 	 */
-	public static class HoconConcat extends HoconValue {
+	public static final class HoconConcat extends HoconValue {
 		private final List<HoconValue> parts = new ArrayList<>();
 
 		@Override

@@ -30,7 +30,7 @@ import jakarta.servlet.*;
  *
  * <p>
  * Use this from an explicit {@code @Bean} method when you want the mount path to come from the
- * servlet's own {@link org.apache.juneau.rest.server.Rest#paths() @Rest(paths)} declaration
+ * servlet's own {@link Rest#paths() @Rest(paths)} declaration
  * (or its {@code getPaths()} override) rather than a hard-coded string in your configuration class:
  *
  * <p class='bjava'>
@@ -66,7 +66,7 @@ public class JuneauServletRegistrations {
 	 *
 	 * @param <T> The servlet type.
 	 * @param servlet The Juneau REST servlet to register. Must not be {@code null} and must carry a
-	 * 	{@link org.apache.juneau.rest.server.Rest @Rest} annotation that resolves to at least one
+	 * 	{@link Rest @Rest} annotation that resolves to at least one
 	 * 	top-level path (via {@code paths()} or a {@code getPaths()} override).
 	 * @param beanStore The bean store used for SVL resolution of {@code @Rest(paths)} elements
 	 * 	(e.g. {@code $C{key}} / {@code ${env}} templates). May be {@code null} (SVL is then skipped;

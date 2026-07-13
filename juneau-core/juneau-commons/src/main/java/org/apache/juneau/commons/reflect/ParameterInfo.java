@@ -97,7 +97,7 @@ import org.apache.juneau.commons.utils.*;
 	@SuppressWarnings({
 		"java:S115" // Constants use UPPER_snakeCase convention
 	})
-public class ParameterInfo extends ElementInfo implements Annotatable {
+public final class ParameterInfo extends ElementInfo implements Annotatable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_inner = "inner";
@@ -230,7 +230,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 *
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * Repeatable annotations (those marked with {@link Repeatable @Repeatable}) are automatically
 	 * expanded into their individual annotation instances. For example, if a parameter has multiple {@code @Marshalled} annotations,
 	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *
@@ -337,7 +337,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * Returns the Java language modifiers for the parameter represented by this object, as an integer.
 	 *
 	 * <p>
-	 * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.
+	 * The {@link Modifier} class should be used to decode the modifiers.
 	 *
 	 * <p>
 	 * Same as calling {@link Parameter#getModifiers()}.
@@ -352,7 +352,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 *
 	 * @return The Java language modifiers for this parameter.
 	 * @see Parameter#getModifiers()
-	 * @see java.lang.reflect.Modifier
+	 * @see Modifier
 	 */
 	@Override
 	public int getModifiers() { return inner.getModifiers(); }
@@ -441,7 +441,7 @@ public class ParameterInfo extends ElementInfo implements Annotatable {
 	 * annotation value to determine which named bean should be injected.
 	 *
 	 * <p>
-	 * This method is used by the {@link org.apache.juneau.commons.inject.BeanStore} for bean injection.
+	 * This method is used by the {@link BeanStore} for bean injection.
 	 *
 	 * <p>
 	 * <b>Note:</b> This is different from {@link #getResolvedName()} which looks for <ja>@Name</ja>

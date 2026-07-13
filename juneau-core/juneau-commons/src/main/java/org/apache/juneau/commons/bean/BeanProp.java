@@ -154,7 +154,7 @@ public @interface BeanProp {
 	@SuppressWarnings({
 		"rawtypes" // Raw BeanFactory type required for annotation attribute declaration
 	})
-	Class<? extends org.apache.juneau.commons.function.BeanFactory> factory() default org.apache.juneau.commons.function.BeanFactory.Void.class;
+	Class<? extends BeanFactory> factory() default BeanFactory.Void.class;
 
 	/**
 	 * Identifies the name of the property.

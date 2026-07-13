@@ -792,9 +792,9 @@ class MarkdownParserSession_Test extends TestBase {
 	void t01_keyValueTable_asTypedMap() {
 		// Key-value table with typed Map target → isMap() branch in parseKeyValueTable at line 306
 		// Also covers line 311 (keyType != null), 315 (cells.size() < 2)
-		var r = (java.util.TreeMap<String, String>) MarkdownParser.DEFAULT.parse(
+		var r = (TreeMap<String, String>) MarkdownParser.DEFAULT.parse(
 			"| Key | Value |\n|---|---|\n| k1 | v1 |\n| k2 | v2 |",
-			java.util.TreeMap.class, String.class, String.class
+			TreeMap.class, String.class, String.class
 		);
 		assertNotNull(r);
 		assertEquals("v1", r.get("k1"));

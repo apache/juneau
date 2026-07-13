@@ -28,7 +28,7 @@ public class MarkdownConfigAnnotation {
 	private MarkdownConfigAnnotation() {}
 
 	/**
-	 * Applies {@link MarkdownConfig} annotations to a {@link org.apache.juneau.marshall.markdown.MarkdownParser.Builder}.
+	 * Applies {@link MarkdownConfig} annotations to a {@link MarkdownParser.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -51,7 +51,7 @@ public class MarkdownConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link MarkdownConfig} annotations to a {@link org.apache.juneau.marshall.markdown.MarkdownSerializer.Builder}.
+	 * Applies {@link MarkdownConfig} annotations to a {@link MarkdownSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

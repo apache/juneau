@@ -91,7 +91,7 @@ import org.apache.juneau.commons.utils.*;
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 	"java:S3011"  // Reflection access needed for field introspection
 })
-public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
+public final class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, Annotatable {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_declaringClass = "declaringClass";
@@ -228,7 +228,7 @@ public class FieldInfo extends AccessibleInfo implements Comparable<FieldInfo>, 
 	 *
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * Repeatable annotations (those marked with {@link Repeatable @Repeatable}) are automatically
 	 * expanded into their individual annotation instances. For example, if a field has multiple {@code @Marshalled} annotations,
 	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *

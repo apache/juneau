@@ -160,7 +160,7 @@ public class ByteArrayAssertion extends FluentByteArrayAssertion<ByteArrayAssert
 	}
 
 	@Override /* Overridden from Assertion */
-	public ByteArrayAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public ByteArrayAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

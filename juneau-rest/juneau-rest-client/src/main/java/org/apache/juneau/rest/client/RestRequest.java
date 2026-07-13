@@ -240,7 +240,7 @@ public final class RestRequest {
 	 *
 	 * <p>
 	 * The object is first run through the client's body converter chain. The default converters handle:
-	 * {@link HttpBody} (passthrough), {@link InputStream}, {@code byte[]}, and {@link java.io.File}.
+	 * {@link HttpBody} (passthrough), {@link InputStream}, {@code byte[]}, and {@link File}.
 	 * Custom converters can be registered on the builder.
 	 *
 	 * <p>

@@ -151,7 +151,7 @@ class JsonList_Test extends TestBase {
 		assertString(l.toString(), l.toJson5());
 
 		// toString(WriterSerializer) — generalized
-		assertString("['b','a']", l.toString(org.apache.juneau.marshall.json5.Json5Serializer.DEFAULT));
+		assertString("['b','a']", l.toString(Json5Serializer.DEFAULT));
 	}
 
 	//====================================================================================================

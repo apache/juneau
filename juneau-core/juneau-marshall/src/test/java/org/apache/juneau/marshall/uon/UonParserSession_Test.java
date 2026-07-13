@@ -662,13 +662,13 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void p01_parseDate() throws Exception {
 		// Exercises the sType.isDate() branch in parseAnything.
-		var d = P.parse("2024-01-15T00:00:00Z", java.util.Date.class);
+		var d = P.parse("2024-01-15T00:00:00Z", Date.class);
 		assertNotNull(d);
 	}
 
 	@Test void p02_parseCalendar() throws Exception {
 		// Exercises the sType.isCalendar() branch in parseAnything.
-		var c = P.parse("2024-01-15T12:00:00Z", java.util.Calendar.class);
+		var c = P.parse("2024-01-15T12:00:00Z", Calendar.class);
 		assertNotNull(c);
 	}
 
@@ -694,12 +694,12 @@ class UonParserSession_Test extends TestBase {
 
 	@Test void p06_parseDate_null() throws Exception {
 		// Null value for Date type returns null.
-		assertNull(P.parse("null", java.util.Date.class));
+		assertNull(P.parse("null", Date.class));
 	}
 
 	@Test void p07_parseCalendar_null() throws Exception {
 		// Null value for Calendar type returns null.
-		assertNull(P.parse("null", java.util.Calendar.class));
+		assertNull(P.parse("null", Calendar.class));
 	}
 
 	@Test void p08_parseTemporal_null() throws Exception {

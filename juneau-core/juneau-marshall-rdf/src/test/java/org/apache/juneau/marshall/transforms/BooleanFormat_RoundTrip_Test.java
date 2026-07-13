@@ -55,7 +55,7 @@ import org.junit.jupiter.params.provider.*;
  * Per the {@link BooleanFormat} class-level "Binary serializers" note, the binary serializer family
  * (BSON / CBOR / MsgPack / Prototext / Parquet) emits a native boolean wire type regardless of the
  * configured constant.  The variant {@code booleanSwap} installed by
- * {@link org.apache.juneau.marshall.MarshalledPropertyPostProcessor} respects that by returning the raw
+ * {@link MarshalledPropertyPostProcessor} respects that by returning the raw
  * {@link Boolean} to {@link org.apache.juneau.marshall.serializer.OutputStreamSerializerSession} subtypes
  * instead of the formatted wire token, so bean-property round-trips through binary serializers stay
  * lossless via native handling.  Per the class-level "Parser leniency" note, parsers accept any of

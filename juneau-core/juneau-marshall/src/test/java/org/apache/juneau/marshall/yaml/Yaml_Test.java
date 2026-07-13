@@ -1049,13 +1049,13 @@ class Yaml_Test extends TestBase {
 	@Test void q02_convertToType_date() throws Exception {
 		// Date class via convertToType isDate branch.
 		String yaml = "'2023-01-15T00:00:00Z'";
-		java.util.Date d = YamlParser.DEFAULT.parse(yaml, java.util.Date.class);
+		Date d = YamlParser.DEFAULT.parse(yaml, Date.class);
 		assertNotNull(d);
 	}
 
 	@Test void q03_convertToType_calendar() throws Exception {
 		String yaml = "'2023-01-15T00:00:00Z'";
-		java.util.Calendar c = YamlParser.DEFAULT.parse(yaml, java.util.Calendar.class);
+		Calendar c = YamlParser.DEFAULT.parse(yaml, Calendar.class);
 		assertNotNull(c);
 	}
 
@@ -1076,7 +1076,7 @@ class Yaml_Test extends TestBase {
 
 	@Test void q07_convertToType_uuid() throws Exception {
 		// UUID has a fromString factory → canCreateNewInstanceFromString branch.
-		var u = YamlParser.DEFAULT.parse("'550e8400-e29b-41d4-a716-446655440000'", java.util.UUID.class);
+		var u = YamlParser.DEFAULT.parse("'550e8400-e29b-41d4-a716-446655440000'", UUID.class);
 		assertNotNull(u);
 	}
 

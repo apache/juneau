@@ -31,7 +31,7 @@ package org.apache.juneau.commons.reflect;
  * 	<li>{@link FieldInfo} - Wraps {@link java.lang.reflect.Field}
  * 	<li>{@link ConstructorInfo} - Wraps {@link java.lang.reflect.Constructor}
  * 	<li>{@link ParameterInfo} - Wraps {@link java.lang.reflect.Parameter}
- * 	<li>{@link PackageInfo} - Wraps {@link java.lang.Package}
+ * 	<li>{@link PackageInfo} - Wraps {@link Package}
  * </ul>
  */
 public interface Annotatable {

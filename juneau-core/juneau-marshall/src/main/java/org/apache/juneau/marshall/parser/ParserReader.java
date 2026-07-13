@@ -24,7 +24,7 @@ import java.io.*;
 import org.apache.juneau.commons.io.*;
 
 /**
- * Similar to a {@link java.io.PushbackReader} with a pushback buffer of 1 character.
+ * Similar to a {@link PushbackReader} with a pushback buffer of 1 character.
  *
  * <p>
  * Code is optimized to work with a 1 character buffer.

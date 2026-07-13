@@ -149,7 +149,7 @@ public class CollectionAssertion<E> extends FluentCollectionAssertion<E,Collecti
 	}
 
 	@Override /* Overridden from Assertion */
-	public CollectionAssertion<E> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public CollectionAssertion<E> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

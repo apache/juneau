@@ -31,11 +31,11 @@ import com.github.mustachejava.*;
  *
  * <p>
  * Auto-registered by {@link MustacheMixin} via
- * {@link org.apache.juneau.rest.server.Rest#responseProcessors() @Rest(responseProcessors=...)}
+ * {@link Rest#responseProcessors() @Rest(responseProcessors=...)}
  * &mdash; callers who add the mixin don't need to wire up this class explicitly. Callers who want
  * to handle {@code MustacheView} returns <i>without</i> adopting the mixin can add this class to
  * their own
- * {@link org.apache.juneau.rest.server.Rest#responseProcessors() responseProcessors} list.
+ * {@link Rest#responseProcessors() responseProcessors} list.
  *
  * <h5 class='section'>Behavior:</h5>
  *

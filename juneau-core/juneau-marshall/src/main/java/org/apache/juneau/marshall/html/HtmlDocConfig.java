@@ -79,7 +79,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#aside(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#aside(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -127,7 +127,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#asideFloat(AsideFloat)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#asideFloat(AsideFloat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -168,7 +168,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#footer(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#footer(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -207,7 +207,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#head(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#head(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -249,7 +249,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#header(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#header(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -293,7 +293,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#nav(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#nav(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -356,7 +356,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#navlinks(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#navlinks(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -386,7 +386,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#noResultsMessage(String)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#noResultsMessage(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -410,7 +410,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#nowrap()}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#nowrap()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -441,7 +441,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#resolveBodyVars()}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#resolveBodyVars()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -482,7 +482,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#script(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#script(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -524,7 +524,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#style(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#style(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -553,7 +553,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#stylesheet(String...)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#stylesheet(String...)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -586,7 +586,7 @@ public @interface HtmlDocConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder#template(Class)}
+	 * 	<li class='jm'>{@link HtmlDocSerializer.Builder#template(Class)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

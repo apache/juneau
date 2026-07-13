@@ -1210,9 +1210,9 @@ class SerializerSession_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void y01_createBeanTypeNameProperty() throws Exception {
-		var bm = org.apache.juneau.commons.bean.BeanMap.of(new U_A());
+		var bm = BeanMap.of(new U_A());
 		var method = SerializerSession.class.getDeclaredMethod("createBeanTypeNameProperty",
-			org.apache.juneau.commons.bean.BeanMap.class, String.class);
+			BeanMap.class, String.class);
 		method.setAccessible(true);
 		var result = method.invoke(null, bm, "U_A");
 		assertNotNull(result);

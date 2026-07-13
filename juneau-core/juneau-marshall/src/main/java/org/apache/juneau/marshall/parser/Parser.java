@@ -400,7 +400,7 @@ public class Parser extends MarshallingContextable {
 		 * Juneau's analog of Jackson's
 		 * <c>ObjectMapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(...))</c>.
 		 * Applied as the fallback when no per-property
-		 * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
+		 * {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -870,7 +870,7 @@ public class Parser extends MarshallingContextable {
 	 *
 	 * <p>
 	 * The outer object is used when instantiating top-level non-static inner classes and when setting
-	 * {@link org.apache.juneau.marshall.ParentProperty @ParentProperty} fields on parsed beans.
+	 * {@link ParentProperty @ParentProperty} fields on parsed beans.
 	 * This is important when a parser is used to parse inline content (e.g. JSON5 embedded in a Markdown
 	 * table cell) where the parent bean context must be preserved.
 	 *
@@ -879,7 +879,7 @@ public class Parser extends MarshallingContextable {
 	 * @param type The object type to create.
 	 * @param outer
 	 * 	The outer object to associate with this parse session.
-	 * 	Used for {@link org.apache.juneau.marshall.ParentProperty @ParentProperty} injection and
+	 * 	Used for {@link ParentProperty @ParentProperty} injection and
 	 * 	non-static inner class construction.
 	 * 	Can be <jk>null</jk>.
 	 * @return The parsed object.
@@ -1027,7 +1027,7 @@ public class Parser extends MarshallingContextable {
 
 	/**
 	 * Returns the context-level {@link Nulls} default consulted at parse-time when no per-property
-	 * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
+	 * {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.
 	 *
 	 * @return The current value (never <jk>null</jk>; {@link Nulls#NOT_SET} when unconfigured).
 	 * @see Parser.Builder#nulls(Nulls)

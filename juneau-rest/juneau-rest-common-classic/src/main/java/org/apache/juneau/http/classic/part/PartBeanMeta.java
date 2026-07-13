@@ -110,7 +110,7 @@ public class PartBeanMeta<T> {
 		else if (ci.hasAnnotation(Path.class))
 			this.schema = HttpPartSchema.create(Path.class, type);
 		else
-			this.schema = HttpPartSchema.create(org.apache.juneau.http.Header.class, type);
+			this.schema = HttpPartSchema.create(Header.class, type);
 	}
 
 	/**
@@ -132,8 +132,8 @@ public class PartBeanMeta<T> {
 	 *
 	 * @param name
 	 * 	The part name.
-	 * 	<br>If <jk>null</jk>, uses the value pulled from the {@link org.apache.juneau.http.Header#name() @Header(name)} or
-	 * 	{@link org.apache.juneau.http.Header#value() @Header(value)} annotations.
+	 * 	<br>If <jk>null</jk>, uses the value pulled from the {@link Header#name() @Header(name)} or
+	 * 	{@link Header#value() @Header(value)} annotations.
 	 * @param value
 	 * 	The part value.
 	 * @return A newly constructed bean.

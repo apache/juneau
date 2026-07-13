@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
  * This module's test classpath intentionally has no reactive module, so {@code RestContext}'s
  * {@link java.util.ServiceLoader}-based response-processor discovery finds no provider and
  * {@code ReactiveResponseProcessor} is never added to the chain. A {@code @RestOp} returning a
- * {@link java.util.concurrent.Flow.Publisher Flow.Publisher} is therefore treated as an ordinary POJO
+ * {@link Flow.Publisher Flow.Publisher} is therefore treated as an ordinary POJO
  * return value and serialized through the normal serializer chain &mdash; it is NOT collected into a
  * JSON array (the reactive buffer shape) and NOT streamed.
  *

@@ -298,7 +298,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 
 	private static byte[] readAllBytes(ParserPipe pipe) throws IOException {
 		try (var is = pipe.getInputStream()) {
-			var baos = new java.io.ByteArrayOutputStream();
+			var baos = new ByteArrayOutputStream();
 			var buf = new byte[8192];
 			int n;
 			while ((n = is.read(buf)) >= 0)
@@ -485,8 +485,8 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		var lh = dec.readListHeader();
 		var pathStack = new ArrayList<SchemaStackFrame>();
 		var result = new LinkedHashMap<String, Integer>();
-		var rawByteArrayPaths = new java.util.LinkedHashSet<String>();
-		var uuidPaths = new java.util.LinkedHashSet<String>();
+		var rawByteArrayPaths = new LinkedHashSet<String>();
+		var uuidPaths = new LinkedHashSet<String>();
 		var columnLogical = new LinkedHashMap<String, ColumnLogical>();
 		for (int i = 0; i < lh.size; i++) {
 			dec.readStructBegin();

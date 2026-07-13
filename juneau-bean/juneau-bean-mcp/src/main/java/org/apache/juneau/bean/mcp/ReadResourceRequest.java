@@ -19,7 +19,7 @@ package org.apache.juneau.bean.mcp;
 import org.apache.juneau.marshall.*;
 
 /**
- * Parameters for {@value org.apache.juneau.bean.mcp.McpMethods#RESOURCES_READ}.
+ * Parameters for {@value McpMethods#RESOURCES_READ}.
  */
 @Marshalled
 public class ReadResourceRequest {

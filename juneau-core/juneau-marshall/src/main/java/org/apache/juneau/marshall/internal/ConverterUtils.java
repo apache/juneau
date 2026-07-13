@@ -80,7 +80,7 @@ public class ConverterUtils {
 	 *
 	 * <p>
 	 * Uses the full {@link MarshallingContextConverter} to support bean-aware conversions such as
-	 * {@link java.util.Map} to bean, bean to bean, and {@link org.apache.juneau.marshall.swap.ObjectSwap} transforms.
+	 * {@link Map} to bean, bean to bean, and {@link org.apache.juneau.marshall.swap.ObjectSwap} transforms.
 	 *
 	 * @param <T> The class type to convert the value to.
 	 * @param value The value to convert.
@@ -118,7 +118,7 @@ public class ConverterUtils {
 	 * <p>
 	 * The input value can be any of the following:
 	 * <ul>
-	 * 	<li>A {@link java.util.Map Map} with entries convertible to the key/value types
+	 * 	<li>A {@link Map Map} with entries convertible to the key/value types
 	 * 	<li>A JSON object string that can be parsed into a map with the specified key/value types
 	 * 	<li>An object with bean properties that can be converted to map entries
 	 * </ul>
@@ -150,7 +150,7 @@ public class ConverterUtils {
 	 * </ul>
 	 *
 	 * <p>
-	 * Duplicate elements (after conversion) will be automatically removed as per {@link java.util.Set Set} semantics.
+	 * Duplicate elements (after conversion) will be automatically removed as per {@link Set Set} semantics.
 	 *
 	 * @param <T> The element type.
 	 * @param value The value to convert. Can be <jk>null</jk>.

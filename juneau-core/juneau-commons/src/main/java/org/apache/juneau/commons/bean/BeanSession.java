@@ -91,7 +91,7 @@ public interface BeanSession {
 	@SuppressWarnings({
 		"java:S1452" // Map<?,?> wildcard return intentional; the key/value types are determined by the JSON content at runtime
 	})
-	java.util.Map<?,?> parseToMap(CharSequence value);
+	Map<?,?> parseToMap(CharSequence value);
 
 	/**
 	 * Parses the specified JSON-formatted character sequence into a {@link Collection}.
@@ -110,7 +110,7 @@ public interface BeanSession {
 	@SuppressWarnings({
 		"java:S1452" // Collection<?> wildcard return intentional; the element type is determined by the JSON content at runtime
 	})
-	java.util.Collection<?> parseToList(CharSequence value);
+	Collection<?> parseToList(CharSequence value);
 
 	/**
 	 * Wraps the specified bean in a {@code BeanMap}.

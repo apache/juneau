@@ -86,7 +86,7 @@ import org.apache.juneau.commons.utils.*;
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 	"java:S3011"  // Reflection access needed for executable introspection
 })
-public abstract class ExecutableInfo extends AccessibleInfo {
+public abstract sealed class ExecutableInfo extends AccessibleInfo permits ConstructorInfo, MethodInfo {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_inner = "inner";
@@ -250,7 +250,7 @@ public abstract class ExecutableInfo extends AccessibleInfo {
 	 *
 	 * <p>
 	 * <b>Note on Repeatable Annotations:</b>
-	 * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically
+	 * Repeatable annotations (those marked with {@link Repeatable @Repeatable}) are automatically
 	 * expanded into their individual annotation instances. For example, if a method has multiple {@code @Marshalled} annotations,
 	 * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.
 	 *

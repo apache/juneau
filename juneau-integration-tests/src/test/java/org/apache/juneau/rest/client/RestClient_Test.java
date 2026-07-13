@@ -563,7 +563,7 @@ class RestClient_Test {
 		var noTypeBody = new HttpBody() {
 			@Override public String getContentType() { return null; }
 			@Override public long getContentLength() { return 4; }
-			@Override public void writeTo(java.io.OutputStream out) throws java.io.IOException { out.write("data".getBytes()); }
+			@Override public void writeTo(OutputStream out) throws IOException { out.write("data".getBytes()); }
 			@Override public boolean isRepeatable() { return true; }
 		};
 		try (var client = RestClient.builder().transport(transport).rootUrl("http://example.com").build()) {

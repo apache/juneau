@@ -222,9 +222,9 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 	// d - Type-specific serialization (Date, Temporal, Duration, Period, Char, Boolean, Number)
 	// ------------------------------------------------------------------------------------------------------------------
 
-	/** java.util.Date serializes without error. */
+	/** Date serializes without error. */
 	@Test void d01_date() {
-		var xml = SER.serialize(new java.util.Date(0));
+		var xml = SER.serialize(new Date(0));
 		assertNotNull(xml);
 	}
 
@@ -293,7 +293,7 @@ class XmlSerializerSession_BranchCoverage_Test extends TestBase {
 
 	@Test @SuppressWarnings({"unchecked","rawtypes"}) void f01_delegateList() {
 		var ctx = XmlSerializer.DEFAULT.getMarshallingContext();
-		var cm = (org.apache.juneau.marshall.ClassMeta) ctx.getClassMeta(java.util.List.class, String.class);
+		var cm = (org.apache.juneau.marshall.ClassMeta) ctx.getClassMeta(List.class, String.class);
 		var dl = new org.apache.juneau.marshall.internal.DelegateList<>(cm);
 		dl.add("alpha");
 		dl.add("beta");

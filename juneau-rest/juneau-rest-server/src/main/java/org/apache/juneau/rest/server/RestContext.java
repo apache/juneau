@@ -514,13 +514,13 @@ public class RestContext extends Context {
 
 		/**
 		 * Enables or disables SLF4J MDC propagation from the request thread to
-		 * {@link java.util.concurrent.CompletableFuture} completion threads.
+		 * {@link CompletableFuture} completion threads.
 		 *
 		 * <p>
 		 * Default is {@code true} (enabled) when SLF4J is on the runtime classpath.
-		 * When enabled, the {@link org.apache.juneau.rest.server.processor.MdcAsyncListener} snapshots the
+		 * When enabled, the {@link MdcAsyncListener} snapshots the
 		 * request thread's MDC map before the async dispatch and restores it inside the
-		 * {@link java.util.concurrent.CompletionStage#whenComplete(java.util.function.BiConsumer) whenComplete}
+		 * {@link CompletionStage#whenComplete(BiConsumer) whenComplete}
 		 * callback so that log statements emitted during async completion see the original request context.
 		 *
 		 * <p>
@@ -537,16 +537,16 @@ public class RestContext extends Context {
 		}
 
 		/**
-		 * Programmatically sets the {@link java.util.concurrent.Executor} bean name used to route
-		 * {@link java.util.concurrent.CompletableFuture} completion callbacks through a dedicated thread pool
+		 * Programmatically sets the {@link Executor} bean name used to route
+		 * {@link CompletableFuture} completion callbacks through a dedicated thread pool
 		 * Equivalent to {@link Rest#asyncCompletionExecutor()} on the resource class.
 		 *
 		 * <p>
 		 * The value is looked up by name in the resource's bean store at context-build time. If the name does
-		 * not resolve to an {@link java.util.concurrent.Executor} bean, the context constructor throws. Pass
+		 * not resolve to an {@link Executor} bean, the context constructor throws. Pass
 		 * {@code null} (or omit this call) to clear the override and fall back to the annotation chain.
 		 *
-		 * @param beanName The bean-store name of the {@link java.util.concurrent.Executor} to use, or {@code null} to clear.
+		 * @param beanName The bean-store name of the {@link Executor} to use, or {@code null} to clear.
 		 * @return This object.
 		 * @since 10.0.0
 		 */
@@ -785,8 +785,8 @@ public class RestContext extends Context {
 
 	/**
 	 * Reflectively invokes a no-arg {@code getPaths()} method on the resource (defined on
-	 * {@link org.apache.juneau.rest.server.servlet.RestServlet RestServlet} and
-	 * {@link org.apache.juneau.rest.server.servlet.RestResource RestResource}). Reflection is used to avoid coupling this
+	 * {@link RestServlet RestServlet} and
+	 * {@link RestResource RestResource}). Reflection is used to avoid coupling this
 	 * static utility to either base class &mdash; if a custom {@code @Rest}-annotated POJO declares
 	 * {@code public Object getPaths()} (or any covariant return type such as {@code String[]},
 	 * {@code List<String>}, etc.), it participates uniformly.
@@ -807,7 +807,7 @@ public class RestContext extends Context {
 			return null;
 		try {
 			return m.invoke(resource);
-		} catch (@SuppressWarnings("unused") IllegalAccessException | java.lang.reflect.InvocationTargetException e) {
+		} catch (@SuppressWarnings("unused") IllegalAccessException | InvocationTargetException e) {
 			return null;
 		}
 	}
@@ -1412,8 +1412,8 @@ public class RestContext extends Context {
 	private boolean defaultResponseTraceparent;
 
 	/**
-	 * Env-driven default controlling whether {@link org.apache.juneau.rest.server.processor.MdcAsyncListener} propagates
-	 * the request thread's SLF4J MDC map to {@link java.util.concurrent.CompletableFuture} completion threads
+	 * Env-driven default controlling whether {@link MdcAsyncListener} propagates
+	 * the request thread's SLF4J MDC map to {@link CompletableFuture} completion threads
 	 * Defaults to {@code true} (on when SLF4J is detected). Set
 	 * {@code RestContext.mdcAsyncPropagation=false} to disable globally, or call
 	 * {@link Builder#mdcAsyncPropagation(boolean)} per resource.
@@ -1602,7 +1602,7 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestDestroy @RestDestroy} and their invokers.
+	 * Methods annotated with {@link RestDestroy @RestDestroy} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> destroyInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1635,7 +1635,7 @@ public class RestContext extends Context {
 	private final Memoizer<EncoderSet> encoders = memoizer(() -> encodersBuilder.get().build());
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestEndCall @RestEndCall} and their invokers.
+	 * Methods annotated with {@link RestEndCall @RestEndCall} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> endCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1804,7 +1804,7 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestPostCall @RestPostCall}.
+	 * Methods annotated with {@link RestPostCall @RestPostCall}.
 	 */
 	private final Memoizer<MethodList> postCallMethods = memoizer(() -> {
 		var bs = beanStore();
@@ -1820,7 +1820,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Hook methods aren't op-specific, so the wrapping bean store stubs in the op-only {@link UrlPathMatcher}
-	 * binding with {@code null} so that {@link org.apache.juneau.rest.server.arg.PathArg#create PathArg.create()} (and
+	 * binding with {@code null} so that {@link PathArg#create PathArg.create()} (and
 	 * other op-aware resolvers) can be called by {@link #findRestOperationArgs(java.lang.reflect.Method, BeanStore)}
 	 * and abstain (return {@code null}) for parameters that aren't {@code @Path}-annotated. Using
 	 * {@code @Path} on a {@code @RestPostCall} method is not supported.
@@ -1836,7 +1836,7 @@ public class RestContext extends Context {
 	});
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestPostInit @RestPostInit}{@code (childFirst=true)} and their invokers.
+	 * Methods annotated with {@link RestPostInit @RestPostInit}{@code (childFirst=true)} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitChildFirstInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1848,7 +1848,7 @@ public class RestContext extends Context {
 	}));
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestPostInit @RestPostInit} and their invokers.
+	 * Methods annotated with {@link RestPostInit @RestPostInit} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> postInitInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -1860,7 +1860,7 @@ public class RestContext extends Context {
 	}));
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestPreCall @RestPreCall}.
+	 * Methods annotated with {@link RestPreCall @RestPreCall}.
 	 */
 	private final Memoizer<MethodList> preCallMethods = memoizer(() -> {
 		var bs = beanStore();
@@ -1876,7 +1876,7 @@ public class RestContext extends Context {
 	 *
 	 * <p>
 	 * Hook methods aren't op-specific, so the wrapping bean store stubs in the op-only {@link UrlPathMatcher}
-	 * binding with {@code null} so that {@link org.apache.juneau.rest.server.arg.PathArg#create PathArg.create()} (and
+	 * binding with {@code null} so that {@link PathArg#create PathArg.create()} (and
 	 * other op-aware resolvers) can be called by {@link #findRestOperationArgs(java.lang.reflect.Method, BeanStore)}
 	 * and abstain (return {@code null}) for parameters that aren't {@code @Path}-annotated. Using
 	 * {@code @Path} on a {@code @RestPreCall} method is not supported.
@@ -1919,7 +1919,7 @@ public class RestContext extends Context {
 	 * Populated lazily on first use and shared across all {@link RestContext} instances. Empty on a bare
 	 * {@code juneau-rest-server} classpath; non-empty only when an opt-in module (e.g.
 	 * {@code juneau-rest-server-reactive}) ships a
-	 * {@code META-INF/services/org.apache.juneau.rest.server.processor.ResponseProcessor} provider file.
+	 * {@code META-INF/services/ResponseProcessor} provider file.
 	 */
 	@SuppressWarnings({
 		"java:S3077" // volatile is required for correct double-checked-locking safe-publication of this JVM-wide cache; the reference is publish-once and never compound-mutated.
@@ -2045,7 +2045,7 @@ public class RestContext extends Context {
 	private final Memoizer<SerializerSet> serializers = memoizer(() -> serializersBuilder.get().build());
 
 	/**
-	 * Methods annotated with {@link org.apache.juneau.rest.server.RestStartCall @RestStartCall} and their invokers.
+	 * Methods annotated with {@link RestStartCall @RestStartCall} and their invokers.
 	 */
 	private final Memoizer<LifecycleInvokerPair> startCallInvokerPair = memoizer(() -> buildLifecycleInvokerPair(() -> {
 		var bs = beanStore();
@@ -2279,7 +2279,7 @@ public class RestContext extends Context {
 
 	/**
 	 * The {@link RestOperations} for this resource — all {@link RestOpContext} instances built from
-	 * methods annotated with {@link org.apache.juneau.rest.server.RestOp @RestOp} (and related).
+	 * methods annotated with {@link RestOp @RestOp} (and related).
 	 *
 	 * <p>
 	 * Eagerly initialized in the constructor (via an explicit {@code .get()} call inside the try-catch block)
@@ -3345,9 +3345,9 @@ public class RestContext extends Context {
 	/**
 	 * For a {@linkplain #isMixinContext() mixin sub-context}, returns the <b>host</b> resource class's
 	 * class-level annotation infos (host class chain, in parent-to-child order) so a mixin operation can
-	 * inherit the host's class-level {@link org.apache.juneau.marshall.ContextApply @ContextApply} config
-	 * (e.g. {@link org.apache.juneau.marshall.html.HtmlDocConfig @HtmlDocConfig},
-	 * {@link org.apache.juneau.marshall.serializer.SerializerConfig @SerializerConfig}).
+	 * inherit the host's class-level {@link ContextApply @ContextApply} config
+	 * (e.g. {@link HtmlDocConfig @HtmlDocConfig},
+	 * {@link SerializerConfig @SerializerConfig}).
 	 *
 	 * <p>
 	 * Used by {@link RestOpContext.Builder} to prepend the host's class-level config annotations <i>ahead of</i>
@@ -3978,7 +3978,7 @@ public class RestContext extends Context {
 	 * 	<li><b>Annotation default</b> &mdash; {@link Rest#paths()}, walked top-down across the resource-class
 	 * 		hierarchy with the most-derived non-empty value winning. Each element is
 	 * 		<a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerSvlVariables">SVL</a>-resolved
-	 * 		against the bootstrap {@link org.apache.juneau.commons.svl.VarResolver VarResolver}, then comma-split (trim
+	 * 		against the bootstrap {@link VarResolver VarResolver}, then comma-split (trim
 	 * 		each piece, drop empties).  A single element like {@code "$C{health.paths}"} can therefore expand
 	 * 		to multiple mount paths.
 	 * </ol>
@@ -4378,9 +4378,9 @@ public class RestContext extends Context {
 	 * <ul class='spaced-list'>
 	 * 	<li>Thrown {@code BasicHttpException}s are serialized as {@code application/problem+json} via
 	 * 		{@code RestContext.handleError} &mdash; regardless of the client's {@code Accept} header.
-	 * 	<li>{@code @RestOp} methods that return a {@link org.apache.juneau.bean.rfc7807.Problem} (or throw a
-	 * 		{@link org.apache.juneau.bean.rfc7807.ProblemException}) are serialized by
-	 * 		{@link org.apache.juneau.rest.server.processor.ProblemDetailsProcessor}, but only when the client's
+	 * 	<li>{@code @RestOp} methods that return a {@link Problem} (or throw a
+	 * 		{@link ProblemException}) are serialized by
+	 * 		{@link ProblemDetailsProcessor}, but only when the client's
 	 * 		{@code Accept} header matches {@code application/problem+json} (or {@code *&#47;*}).
 	 * </ul>
 	 *
@@ -4414,7 +4414,7 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * <p>
-	 * Per-operation overrides from {@link org.apache.juneau.rest.server.RestOp#observability()} (and verb
+	 * Per-operation overrides from {@link RestOp#observability()} (and verb
 	 * annotations) take precedence over this value; they are resolved in {@link RestOpContext}.
 	 *
 	 * @return The resolved {@code @Rest(observability)} string, or {@code null} when not set.
@@ -4447,15 +4447,15 @@ public class RestContext extends Context {
 	public boolean isResponseTraceparent() { return defaultResponseTraceparent; }
 
 	/**
-	 * Returns whether SLF4J MDC propagation is enabled for {@link java.util.concurrent.CompletableFuture}
+	 * Returns whether SLF4J MDC propagation is enabled for {@link CompletableFuture}
 	 * completion threads on this resource.
 	 *
 	 * <p>
 	 * Defaults to {@code true}; resolved first from the programmatic {@link Builder#mdcAsyncPropagation(boolean)}
 	 * override (if set), then from the {@code RestContext.mdcAsyncPropagation} env-driven default.
-	 * When {@code true}, {@link org.apache.juneau.rest.server.processor.MdcAsyncListener} wraps the
-	 * {@link java.util.concurrent.CompletionStage#whenComplete(java.util.function.BiConsumer) whenComplete} callback
-	 * registered by {@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor} so the completion thread sees
+	 * When {@code true}, {@link MdcAsyncListener} wraps the
+	 * {@link CompletionStage#whenComplete(BiConsumer) whenComplete} callback
+	 * registered by {@link AsyncResponseProcessor} so the completion thread sees
 	 * the request thread's MDC context. When {@code false}, no MDC work is done.
 	 *
 	 * @return <jk>true</jk> if MDC async propagation is enabled on this resource.
@@ -4483,8 +4483,8 @@ public class RestContext extends Context {
 	public long getAsyncTimeoutMillis() { return asyncTimeoutMillis.get(); }
 
 	/**
-	 * Returns the {@link java.util.concurrent.Executor} configured for routing
-	 * {@link java.util.concurrent.CompletableFuture} completion callbacks on this resource, or
+	 * Returns the {@link Executor} configured for routing
+	 * {@link CompletableFuture} completion callbacks on this resource, or
 	 * {@code null} when {@code @Rest(asyncCompletionExecutor)} is unset (natural completion thread).
 	 *
 	 * @return The executor, or {@code null} if no async-completion executor is configured.
@@ -4587,13 +4587,13 @@ public class RestContext extends Context {
 
 	/**
 	 * Validates that when {@code @Rest(observability="true")} is declared on this resource, at least one real
-	 * observability backend ({@link org.apache.juneau.rest.server.metrics.MetricsRecorder} or
-	 * {@link org.apache.juneau.rest.server.tracing.TracerHook}) is registered in the bean store.
+	 * observability backend ({@link MetricsRecorder} or
+	 * {@link TracerHook}) is registered in the bean store.
 	 *
 	 * <p>
 	 * Called once during {@link RestContext} construction, after all {@code @Bean} method injection has run.
 	 * If the attribute is {@code "true"} and both beans resolve to their {@code NoOp} singletons, construction
-	 * fails with a {@link org.apache.juneau.rest.server.BasicHttpException InternalServerError} whose message precisely
+	 * fails with a {@link BasicHttpException InternalServerError} whose message precisely
 	 * identifies the missing backends.
 	 *
 	 * <p>

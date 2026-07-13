@@ -758,11 +758,11 @@ class FieldInfo_Test extends TestBase {
 		public static final int finalField = 42;
 		public volatile boolean volatileField;
 		public transient Object transientField;
-		private java.util.List<String> genericField;
-		private java.util.Map<String, Integer> mapField;
+		private List<String> genericField;
+		private Map<String, Integer> mapField;
 		public int[] arrayField;
 		public String[][] matrixField;
-		public java.util.List<String>[] genericArrayField;
+		public List<String>[] genericArrayField;
 		public byte byteField;
 		public char charField;
 		public float floatField;

@@ -35,7 +35,7 @@ public class ProtobufConfigAnnotation {
 	private ProtobufConfigAnnotation() {}
 
 	/**
-	 * Applies {@link ProtobufConfig} annotations to a {@link org.apache.juneau.marshall.protobuf.ProtobufParser.Builder}.
+	 * Applies {@link ProtobufConfig} annotations to a {@link ProtobufParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<ProtobufConfig,ProtobufParser.Builder> {
 
@@ -57,7 +57,7 @@ public class ProtobufConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link ProtobufConfig} annotations to a {@link org.apache.juneau.marshall.protobuf.ProtobufSerializer.Builder}.
+	 * Applies {@link ProtobufConfig} annotations to a {@link ProtobufSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<ProtobufConfig,ProtobufSerializer.Builder> {
 

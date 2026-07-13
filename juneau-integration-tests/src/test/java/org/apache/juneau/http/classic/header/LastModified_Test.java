@@ -77,6 +77,6 @@ class LastModified_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(LastModified.of((java.time.ZonedDateTime)null));
+		assertNull(LastModified.of((ZonedDateTime)null));
 	}
 }

@@ -803,7 +803,7 @@ public class OidcRelyingParty {
 	}
 
 	/**
-	 * Returns a request-time {@link org.apache.juneau.rest.server.auth.AuthFilter} that resolves this RP's session cookie into a
+	 * Returns a request-time {@link AuthFilter} that resolves this RP's session cookie into a
 	 * {@link ClaimsPrincipal}.
 	 *
 	 * @return A new {@link OidcSessionAuthFilter} bound to this RP's session store + cookie name.

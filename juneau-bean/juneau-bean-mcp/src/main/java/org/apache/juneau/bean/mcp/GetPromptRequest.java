@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Parameters for {@value org.apache.juneau.bean.mcp.McpMethods#PROMPTS_GET}.
+ * Parameters for {@value McpMethods#PROMPTS_GET}.
  */
 @Marshalled
 public class GetPromptRequest {

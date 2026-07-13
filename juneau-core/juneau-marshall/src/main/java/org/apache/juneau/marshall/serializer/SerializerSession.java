@@ -575,8 +575,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * {@link Serializer.Builder#trimEmptyMaps() trimEmptyMaps},
 	 * recursion detection), then additionally:
 	 * <ul>
-	 * 	<li>Treats {@link java.util.Optional#empty()} (and its primitive cousins
-	 * 		{@link java.util.OptionalInt}/{@link java.util.OptionalLong}/{@link java.util.OptionalDouble}) as a
+	 * 	<li>Treats {@link Optional#empty()} (and its primitive cousins
+	 * 		{@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}) as a
 	 * 		<jk>null</jk> property value for inclusion purposes — the shared Optional/absent contract.
 	 * 	<li>Applies {@link Serializer.Builder#nonDefault() nonDefault} by comparing the surviving value against a
 	 * 		cached <i>reference instance</i> of the property's containing bean.  When no reference instance can be

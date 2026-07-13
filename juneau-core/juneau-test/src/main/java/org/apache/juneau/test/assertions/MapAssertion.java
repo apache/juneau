@@ -152,7 +152,7 @@ public class MapAssertion<K,V> extends FluentMapAssertion<K,V,MapAssertion<K,V>>
 	}
 
 	@Override /* Overridden from Assertion */
-	public MapAssertion<K,V> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public MapAssertion<K,V> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

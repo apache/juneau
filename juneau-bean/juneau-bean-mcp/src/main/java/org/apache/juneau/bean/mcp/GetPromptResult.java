@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Result payload for {@value org.apache.juneau.bean.mcp.McpMethods#PROMPTS_GET}.
+ * Result payload for {@value McpMethods#PROMPTS_GET}.
  */
 @Marshalled
 public class GetPromptResult {

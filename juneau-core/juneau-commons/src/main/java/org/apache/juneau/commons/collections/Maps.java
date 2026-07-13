@@ -303,9 +303,9 @@ public class Maps<K,V> {
 	 * <p>
 	 * Map type selection:
 	 * <ul>
-	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link java.util.concurrent.ConcurrentSkipListMap} if concurrent)
+	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link ConcurrentSkipListMap} if concurrent)
 	 * 	<li>If {@link #ordered()} is set: Uses {@link LinkedHashMap} (or synchronized LinkedHashMap if concurrent)
-	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link java.util.concurrent.ConcurrentHashMap} if concurrent)
+	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link ConcurrentHashMap} if concurrent)
 	 * </ul>
 	 *
 	 * <p>
@@ -383,9 +383,9 @@ public class Maps<K,V> {
 	 * <p>
 	 * Map type selection:
 	 * <ul>
-	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link java.util.concurrent.ConcurrentSkipListMap} if concurrent)
+	 * 	<li>If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link ConcurrentSkipListMap} if concurrent)
 	 * 	<li>If {@link #ordered()} is set: Uses {@link LinkedHashMap} (or synchronized LinkedHashMap if concurrent)
-	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link java.util.concurrent.ConcurrentHashMap} if concurrent)
+	 * 	<li>Otherwise: Uses {@link HashMap} (or {@link ConcurrentHashMap} if concurrent)
 	 * </ul>
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -616,9 +616,9 @@ public class Maps<K,V> {
 	 * <p>
 	 * The thread-safety implementation depends on other settings:
 	 * <ul>
-	 * 	<li>If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}
-	 * 	<li>If {@link #ordered()} is set: Uses {@link java.util.Collections#synchronizedMap(java.util.Map)}
-	 * 	<li>Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}
+	 * 	<li>If {@link #sorted()} is set: Uses {@link ConcurrentSkipListMap}
+	 * 	<li>If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(Map)}
+	 * 	<li>Otherwise: Uses {@link ConcurrentHashMap}
 	 * </ul>
 	 *
 	 * <p>
@@ -656,9 +656,9 @@ public class Maps<K,V> {
 	 * <p>
 	 * The thread-safety implementation depends on other settings:
 	 * <ul>
-	 * 	<li>If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}
-	 * 	<li>If {@link #ordered()} is set: Uses {@link java.util.Collections#synchronizedMap(java.util.Map)}
-	 * 	<li>Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}
+	 * 	<li>If {@link #sorted()} is set: Uses {@link ConcurrentSkipListMap}
+	 * 	<li>If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(Map)}
+	 * 	<li>Otherwise: Uses {@link ConcurrentHashMap}
 	 * </ul>
 	 *
 	 * <p>

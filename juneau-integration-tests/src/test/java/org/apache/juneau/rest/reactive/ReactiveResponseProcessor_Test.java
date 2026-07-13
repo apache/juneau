@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link ReactiveResponseProcessor} using only the JDK-native
- * {@link java.util.concurrent.Flow.Publisher Flow.Publisher} return type (no external reactive
+ * {@link Flow.Publisher Flow.Publisher} return type (no external reactive
  * library). This is the MAYBE-120 spine: {@code Flow.Publisher<SseEvent>} SSE streaming plus the
  * shared buffer / NDJSON shapes that all reactive types funnel through.
  *
@@ -51,7 +51,7 @@ class ReactiveResponseProcessor_Test extends TestBase {
 	}
 
 	/**
-	 * Trampolined synchronous {@link java.util.concurrent.Flow.Publisher Flow.Publisher} that replays a
+	 * Trampolined synchronous {@link Flow.Publisher Flow.Publisher} that replays a
 	 * fixed list on subscribe, honoring {@code request(n)} without recursing on re-request (so the
 	 * one-at-a-time streaming subscriber is exercised deterministically on a single thread).
 	 */

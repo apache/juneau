@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.httppart.*;
 import org.apache.juneau.rest.common.utils.*;
 
 /**
- * Holds resolved metadata for an interface annotated with {@link org.apache.juneau.http.remote.Remote @Remote}.
+ * Holds resolved metadata for an interface annotated with {@link Remote @Remote}.
  *
  * <p>
  * Built once per interface class and cached for efficient proxy invocation.
@@ -221,9 +221,9 @@ public final class RrpcInterfaceMeta {
 	/**
 	 * Returns the {@link RrpcInterfaceMeta} for the given interface, creating and caching it if necessary.
 	 *
-	 * @param iface The interface class. Must be annotated with {@link org.apache.juneau.http.remote.Remote}. Must not be <jk>null</jk>.
+	 * @param iface The interface class. Must be annotated with {@link Remote}. Must not be <jk>null</jk>.
 	 * @return The metadata. Never <jk>null</jk>.
-	 * @throws IllegalArgumentException If the class is not an interface or not annotated with {@link org.apache.juneau.http.remote.Remote}.
+	 * @throws IllegalArgumentException If the class is not an interface or not annotated with {@link Remote}.
 	 */
 	public static RrpcInterfaceMeta of(Class<?> iface) {
 		assertArgNotNull("iface", iface);
@@ -275,7 +275,7 @@ public final class RrpcInterfaceMeta {
 	}
 
 	/**
-	 * Returns the base path from the {@link org.apache.juneau.http.remote.Remote#path() Remote} annotation.
+	 * Returns the base path from the {@link Remote#path() Remote} annotation.
 	 *
 	 * @return The base path. Never <jk>null</jk>, but may be empty.
 	 */

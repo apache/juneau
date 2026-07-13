@@ -44,7 +44,7 @@ import org.apache.juneau.commons.utils.*;
  * <p>
  * Unlike using arrays directly as HashMap keys (which use identity-based equality), this class properly
  * handles arrays by using content-based equality and hashing via {@link HashCode#of(Object...)} which
- * internally uses {@link java.util.Arrays#hashCode(Object[])} for arrays. This means two Tuple2 instances
+ * internally uses {@link Arrays#hashCode(Object[])} for arrays. This means two Tuple2 instances
  * containing arrays with the same content will be considered equal.
  *
  * <h5 class='section'>Use Cases:</h5>

@@ -38,7 +38,7 @@ import jakarta.servlet.*;
  * Next-generation mock REST client that routes requests in-process to a Juneau {@link RestContext}.
  *
  * <p>
- * Use this class to write serverless unit tests for {@link org.apache.juneau.rest.server.Rest @Rest}-annotated
+ * Use this class to write serverless unit tests for {@link Rest @Rest}-annotated
  * resource classes.  Requests are dispatched directly to the {@link RestContext} without any network activity,
  * making tests fast and self-contained.
  *
@@ -91,7 +91,7 @@ public final class MockRestClient implements Closeable {
 	 * {@link RestContext} instances are cached per class for performance.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link org.apache.juneau.rest.server.Rest @Rest}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	If a {@link Class}, it must have a no-arg constructor.
 	 * @return A new client. Never <jk>null</jk>.
 	 */
@@ -103,7 +103,7 @@ public final class MockRestClient implements Closeable {
 	 * Returns a new {@link Builder} for the given REST bean or bean class.
 	 *
 	 * @param impl
-	 * 	The REST bean or bean class annotated with {@link org.apache.juneau.rest.server.Rest @Rest}.
+	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
 	 * 	If a {@link Class}, it must have a no-arg constructor.
 	 * @return A new builder. Never <jk>null</jk>.
 	 */

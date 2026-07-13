@@ -37,7 +37,7 @@ public class MarshalledPropApplyAnnotation {
 	private MarshalledPropApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link MarshalledPropApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link MarshalledPropApply} annotations to a {@link Context.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -66,7 +66,7 @@ public class MarshalledPropApplyAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {

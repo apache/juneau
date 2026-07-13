@@ -417,7 +417,7 @@ public class FluentArrayAssertion<E,R> extends FluentObjectAssertion<E[],R> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentArrayAssertion<E,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentArrayAssertion<E,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

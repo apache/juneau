@@ -144,7 +144,7 @@ class HtmlParserSession_Test extends TestBase {
 
 	@Test void d01_dateInCollection() throws Exception {
 		// sType.isDate() at line 256 when parsing text inside <li>
-		var d = new java.util.Date(0);
+		var d = new Date(0);
 		var html = SER.serialize(List.of(d));
 		assertNotNull(html);
 	}
@@ -176,7 +176,7 @@ class HtmlParserSession_Test extends TestBase {
 
 	@Test void e01_calendarAsStringTag() throws Exception {
 		// sType.isCalendar() at line 279 via <string> tag
-		var cal = java.util.Calendar.getInstance();
+		var cal = Calendar.getInstance();
 		cal.setTimeInMillis(0);
 		var html = SER.serialize(cal);
 		assertNotNull(html);

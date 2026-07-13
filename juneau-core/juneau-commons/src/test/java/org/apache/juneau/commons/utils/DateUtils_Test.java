@@ -62,7 +62,7 @@ class DateUtils_Test extends TestBase {
 		var fmt = DateUtils.getDateTimeFormatter("yyyy-MM-dd");
 		assertNotNull(fmt);
 		// Verify it actually formats a date without throwing
-		var formatted = fmt.format(java.time.LocalDate.of(2024, Month.JANUARY, 15).atStartOfDay(java.time.ZoneOffset.UTC));
+		var formatted = fmt.format(LocalDate.of(2024, Month.JANUARY, 15).atStartOfDay(ZoneOffset.UTC));
 		assertTrue(formatted.startsWith("2024-01-15"), "Expected formatted date to start with '2024-01-15' but was: " + formatted);
 	}
 

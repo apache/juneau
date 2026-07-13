@@ -59,7 +59,7 @@ public record OAuthToken(
 	 * @param skew Skew tolerance (subtracted from {@link #expiresAt}).  Must be non-negative.
 	 * @return <jk>true</jk> if {@code now &gt;= expiresAt - skew}.
 	 */
-	public boolean isExpired(Instant now, java.time.Duration skew) {
+	public boolean isExpired(Instant now, Duration skew) {
 		Objects.requireNonNull(now, "now");
 		Objects.requireNonNull(skew, "skew");
 		return !now.isBefore(expiresAt.minus(skew));

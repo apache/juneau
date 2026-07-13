@@ -268,7 +268,7 @@ public class FluentZonedDateTimeAssertion<R> extends FluentComparableAssertion<Z
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentZonedDateTimeAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentZonedDateTimeAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -50,7 +50,7 @@ public @interface SoapXmlConfig {
 	 * The <c>SOAPAction</c> HTTP header value to set on responses.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.soap.SoapXmlSerializer.Builder#soapAction(String)}
+	 * 	<li class='jm'>{@link SoapXmlSerializer.Builder#soapAction(String)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

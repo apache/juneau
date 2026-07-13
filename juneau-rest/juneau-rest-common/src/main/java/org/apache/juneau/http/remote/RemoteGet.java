@@ -136,7 +136,7 @@ public @interface RemoteGet {
 	 * <js>"http://other-host/api/users/{id}"</js>.
 	 *
 	 * <p>
-	 * Precedence (most-specific first): an {@link org.apache.juneau.http.Url @Url} parameter, then this method-level
+	 * Precedence (most-specific first): an {@link Url @Url} parameter, then this method-level
 	 * value, then the interface-level default ({@link Remote#baseUrl()}), then the client root URL.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
@@ -336,10 +336,10 @@ public @interface RemoteGet {
 	 * <ul>
 	 * 	<li>Auto-retry applies only to idempotent verbs (<c>GET</c>/<c>PUT</c>/<c>DELETE</c>/<c>HEAD</c>); non-idempotent
 	 * 		verbs (<c>POST</c>/<c>PATCH</c>) are retried only when {@link #retryNonIdempotent()} is <jk>true</jk>.
-	 * 	<li>A request whose body is not repeatable (e.g. a streaming {@link java.io.InputStream}/{@link java.io.Reader}
+	 * 	<li>A request whose body is not repeatable (e.g. a streaming {@link InputStream}/{@link Reader}
 	 * 		body) is never retried.
 	 * 	<li>Retries are disabled for streaming return modes ({@link RemoteReturn#RESPONSE}, raw
-	 * 		{@link java.io.InputStream}/{@link java.io.Reader} returns, and streaming cursors) and for
+	 * 		{@link InputStream}/{@link Reader} returns, and streaming cursors) and for
 	 * 		{@link java.util.concurrent.Future}/{@link java.util.concurrent.CompletableFuture} returns.
 	 * </ul>
 	 *

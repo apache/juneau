@@ -24,7 +24,7 @@ import java.util.function.*;
  * A functional interface representing an operation that accepts a single argument, returns no result, and may throw a checked exception.
  *
  * <p>
- * This interface extends the standard Java {@link java.util.function.Consumer} to allow the functional method
+ * This interface extends the standard Java {@link Consumer} to allow the functional method
  * to throw checked exceptions. The default {@link #accept(Object)} method wraps any checked exceptions in a
  * {@link RuntimeException}, making it compatible with standard {@link Consumer} usage while still allowing
  * the implementation to throw checked exceptions via {@link #acceptThrows(Object)}.

@@ -55,8 +55,8 @@ public @interface UrlEncoding {
 	 * When true, bean properties of type array or Collection will be expanded into multiple key/value pairings.
 	 *
 	 * <p>
-	 * This annotation is identical in behavior to using the {@link org.apache.juneau.marshall.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}
-	 * and {@link org.apache.juneau.marshall.urlencoding.UrlEncodingParser.Builder#expandedParams()} properties, but applies to only instances of this bean.
+	 * This annotation is identical in behavior to using the {@link UrlEncodingSerializer.Builder#expandedParams()}
+	 * and {@link UrlEncodingParser.Builder#expandedParams()} properties, but applies to only instances of this bean.
 	 *
 	 * @return The annotation value.
 	 */

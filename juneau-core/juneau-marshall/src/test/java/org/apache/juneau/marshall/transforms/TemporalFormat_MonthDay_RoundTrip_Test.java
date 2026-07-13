@@ -58,7 +58,7 @@ import org.junit.jupiter.params.provider.*;
  * the month+day-only subtype.
  *
  * <p>
- * {@link MonthDay} only implements {@link java.time.temporal.TemporalAccessor} (not {@link Temporal});
+ * {@link MonthDay} only implements {@link TemporalAccessor} (not {@link Temporal});
  * {@link MarshalledPropertyPostProcessor} routes {@link MonthDay} through its sibling
  * {@code temporalAccessorSwap} factory.  The swap delegates to {@link TemporalFormat#format} and
  * {@link TemporalFormat#parse}, which special-case {@link MonthDay} to its native {@code --MM-DD}

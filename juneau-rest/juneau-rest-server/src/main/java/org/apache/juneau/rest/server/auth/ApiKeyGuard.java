@@ -62,7 +62,7 @@ import org.apache.juneau.rest.server.guard.*;
  * 	<li>Query-string keys leak into proxy / access logs and browser history &mdash; prefer header or
  * 		cookie sources for production traffic. Query-string is offered for legacy / debugging use only.
  * 	<li>{@link ApiKeyStore} implementations should compare keys in constant time
- * 		({@link java.security.MessageDigest#isEqual(byte[], byte[])}).
+ * 		({@link MessageDigest#isEqual(byte[], byte[])}).
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

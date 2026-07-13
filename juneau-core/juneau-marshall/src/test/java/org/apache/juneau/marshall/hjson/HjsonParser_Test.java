@@ -153,6 +153,6 @@ class HjsonParser_Test extends TestBase {
 		var hjson = "{\"arr\":[1,2,3]}";
 		var m = (Map<String, Object>) HjsonParser.DEFAULT.parse(hjson, Map.class, String.class, Object.class);
 		var arr = m.get("arr");
-		assertTrue(arr instanceof java.util.List);
+		assertTrue(arr instanceof List);
 	}
 }

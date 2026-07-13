@@ -391,7 +391,7 @@ class Holder_Test extends TestBase {
 
 	@Test
 	void h01_isType_parameterizedType() {
-		java.lang.reflect.Type type = new java.lang.reflect.ParameterizedType() {
+		Type type = new ParameterizedType() {
 			@Override
 			public Type[] getActualTypeArguments() {
 				return new Type[]{String.class};
@@ -410,7 +410,7 @@ class Holder_Test extends TestBase {
 
 	@Test
 	void h02_isType_parameterizedType_differentRawType() {
-		java.lang.reflect.Type type = new java.lang.reflect.ParameterizedType() {
+		Type type = new ParameterizedType() {
 			@Override
 			public Type[] getActualTypeArguments() {
 				return new Type[]{String.class};
@@ -456,7 +456,7 @@ class Holder_Test extends TestBase {
 
 	@Test
 	void i01_unwrap_parameterizedValueType() {
-		java.lang.reflect.Type valueType = new java.lang.reflect.ParameterizedType() {
+		Type valueType = new ParameterizedType() {
 			@Override
 			public Type[] getActualTypeArguments() {
 				return new Type[]{String.class};

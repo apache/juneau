@@ -32,7 +32,7 @@ public class PlainTextConfigAnnotation {
 	private PlainTextConfigAnnotation() {}
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.marshall.plaintext.PlainTextParser.Builder}.
+	 * Applies {@link PlainTextConfig} annotations to a {@link PlainTextParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<PlainTextConfig,PlainTextParser.Builder> {
 
@@ -52,7 +52,7 @@ public class PlainTextConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link PlainTextConfig} annotations to a {@link org.apache.juneau.marshall.plaintext.PlainTextSerializer.Builder}.
+	 * Applies {@link PlainTextConfig} annotations to a {@link PlainTextSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<PlainTextConfig,PlainTextSerializer.Builder> {
 

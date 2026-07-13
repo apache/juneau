@@ -24,6 +24,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 
 import java.text.*;
 import java.util.*;
+import java.util.Formatter;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -55,7 +56,7 @@ import org.apache.juneau.commons.utils.*;
 	"java:S100",  // Method names match java.util.logging.LogRecord for API compatibility
 	"java:S1192", // String literals intentionally duplicated for clarity
 	"java:S2176", // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields
-	"java:S2143"  // java.util.Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.
+	"java:S2143"  // Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.
 })
 public class LogRecord extends java.util.logging.LogRecord {
 
@@ -156,7 +157,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 * Formats this log record as a string using the specified format pattern.
 	 *
 	 * <p>
-	 * Similar to how {@link java.util.logging.SimpleFormatter} formats log records, this method
+	 * Similar to how {@link SimpleFormatter} formats log records, this method
 	 * allows you to specify a custom format string with placeholders that are replaced with
 	 * actual values from the log record.
 	 *
@@ -176,7 +177,7 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 *
 	 * <h5 class='section'>Named Placeholders:</h5>
 	 * <ul>
-	 * 	<li><js>"{date}"</js> - The date/time formatted using {@link java.util.logging.SimpleFormatter SimpleFormatter}'s default date format
+	 * 	<li><js>"{date}"</js> - The date/time formatted using {@link SimpleFormatter SimpleFormatter}'s default date format
 	 * 	<li><js>"{timestamp}"</js> - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)
 	 * 	<li><js>"{class}"</js> - The source class name
 	 * 	<li><js>"{method}"</js> - The source method name
@@ -243,8 +244,8 @@ public class LogRecord extends java.util.logging.LogRecord {
 	 *
 	 * @param format The format string with placeholders and/or Formatter-style format specifiers.
 	 * @return The formatted string.
-	 * @see java.util.logging.SimpleFormatter
-	 * @see java.util.Formatter
+	 * @see SimpleFormatter
+	 * @see Formatter
 	 */
 	@SuppressWarnings({
 		"deprecation" // Date constructor is deprecated but needed for compatibility

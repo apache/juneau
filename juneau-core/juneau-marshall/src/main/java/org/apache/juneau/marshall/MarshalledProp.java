@@ -66,14 +66,14 @@ public @interface MarshalledProp {
 	 *
 	 * <p>
 	 * When an active view is selected (via
-	 * {@link org.apache.juneau.marshall.MarshallingContext.Builder#activeView(String)} or the per-call session
+	 * {@link MarshallingContext.Builder#activeView(String)} or the per-call session
 	 * override), this property is included only when its declared view set contains the active view name.
 	 *
 	 * <p>
 	 * If this member is empty (the default), the property follows the default-view-inclusion policy:
 	 * by default an untagged property is included under every active view (matching Jackson's
 	 * {@code DEFAULT_VIEW_INCLUSION} behavior). The policy can be flipped via
-	 * {@link org.apache.juneau.marshall.MarshallingContext.Builder#disableDefaultViewInclusion()}.
+	 * {@link MarshallingContext.Builder#disableDefaultViewInclusion()}.
 	 *
 	 * <p>
 	 * Multiple view names are supported — a property tagged {@code view={"summary","detail"}} is included
@@ -97,7 +97,7 @@ public @interface MarshalledProp {
 	 * </p>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#activeView(String)}
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#activeView(String)}
 	 * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ViewProjection">View-based Projection</a>
 	 * </ul>
 	 *
@@ -117,7 +117,7 @@ public @interface MarshalledProp {
 	 * 	<li class='ja'>{@link Marshalled#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary()}
 	 * 	<li class='ja'>{@link MarshalledConfig#dictionary_replace()}
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#beanDictionary(Class...)}
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#beanDictionary(Class...)}
 	 * </ul>
 	 *
 	 * <p>
@@ -285,8 +285,8 @@ public @interface MarshalledProp {
 	 * <ul>
 	 * 	<li>{@link Nulls#LEAVE LEAVE} (default) — set the property to {@code null} (or, for an {@link Optional}-typed
 	 * 		property, to {@link Optional#empty()}).
-	 * 	<li>{@link Nulls#EMPTY EMPTY} — substitute the type's "empty" value (empty {@link String}/{@link java.util.Collection}/
-	 * 		{@link java.util.Map}, primitive default for primitives, {@code Optional.empty()} for {@link Optional}).
+	 * 	<li>{@link Nulls#EMPTY EMPTY} — substitute the type's "empty" value (empty {@link String}/{@link Collection}/
+	 * 		{@link Map}, primitive default for primitives, {@code Optional.empty()} for {@link Optional}).
 	 * 	<li>{@link Nulls#DEFAULT DEFAULT} — substitute the bean-constructed default for the property (i.e. the value the
 	 * 		property holds on a fresh no-arg-constructed instance of the bean).  When no reference instance can be built,
 	 * 		falls back to {@link Nulls#LEAVE LEAVE}.
@@ -295,8 +295,8 @@ public @interface MarshalledProp {
 	 *
 	 * <p>
 	 * For an {@link Optional}-typed property, {@code EMPTY}/{@code DEFAULT} resolve to {@link Optional#empty()} —
-	 * never a bare {@code null} inside an {@link Optional}.  The same contract applies to {@link java.util.OptionalInt},
-	 * {@link java.util.OptionalLong}, and {@link java.util.OptionalDouble}.
+	 * never a bare {@code null} inside an {@link Optional}.  The same contract applies to {@link OptionalInt},
+	 * {@link OptionalLong}, and {@link OptionalDouble}.
 	 *
 	 * <p>
 	 * When this member is {@link Nulls#NOT_SET NOT_SET} (the default), the context-level default configured on

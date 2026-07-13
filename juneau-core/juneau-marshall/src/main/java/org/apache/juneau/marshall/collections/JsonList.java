@@ -45,7 +45,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * <b>v10.0 behavioral break:</b> {@code toString()} now produces strict (RFC 8259) JSON (was JSON5),
  * and the {@link CharSequence} / {@link Reader} constructors now default to {@link JsonParser#DEFAULT}
- * (was {@link Json5Parser#DEFAULT}). For the previous JSON5 behavior use {@link org.apache.juneau.marshall.json5.Json5List}.
+ * (was {@link Json5Parser#DEFAULT}). For the previous JSON5 behavior use {@link Json5List}.
  *
  * <p>
  * Note that the use of this class is optional for generating JSON.  The serializers will accept any objects that implement the
@@ -493,7 +493,7 @@ public class JsonList extends MarshalledList {
 	 *
 	 * @param json
 	 * 	The JSON text to parse.
-	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link org.apache.juneau.marshall.json5.Json5List} or pass
+	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link Json5List} or pass
 	 * 	{@link Json5Parser#DEFAULT} explicitly.
 	 * @throws ParseException Malformed input encountered.
 	 */
@@ -541,7 +541,7 @@ public class JsonList extends MarshalledList {
 	 *
 	 * @param json
 	 * 	The reader containing JSON text to parse.
-	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link org.apache.juneau.marshall.json5.Json5List} or pass
+	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link Json5List} or pass
 	 * 	{@link Json5Parser#DEFAULT} explicitly.
 	 * @throws ParseException Malformed input encountered.
 	 */

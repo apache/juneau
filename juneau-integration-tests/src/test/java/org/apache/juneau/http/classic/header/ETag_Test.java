@@ -84,6 +84,6 @@ class ETag_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(ETag.of((org.apache.juneau.http.header.EntityTag)null));
+		assertNull(ETag.of((EntityTag)null));
 	}
 }

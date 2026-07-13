@@ -2032,11 +2032,11 @@ public class ClassInfo_Test extends TestBase {
 
 		// Get the corresponding methods from Class.getMethods() for comparison
 		var classMethods = java.util.ArrayList.class.getMethods();
-		var classBridgeMethods = java.util.stream.Stream.of(classMethods)
-			.filter(java.lang.reflect.Method::isBridge)
+		var classBridgeMethods = Stream.of(classMethods)
+			.filter(Method::isBridge)
 			.toList();
-		var classSyntheticMethods = java.util.stream.Stream.of(classMethods)
-			.filter(java.lang.reflect.Method::isSynthetic)
+		var classSyntheticMethods = Stream.of(classMethods)
+			.filter(Method::isSynthetic)
 			.toList();
 
 		// Verify that getPublicMethods() includes bridge methods (matching Class.getMethods())
@@ -2636,8 +2636,8 @@ public class ClassInfo_Test extends TestBase {
 
 		// Test with Collection
 		assertTrue(ClassInfo.of(java.util.List.class).isCollectionOrArray());
-		assertTrue(ClassInfo.of(java.util.Set.class).isCollectionOrArray());
-		assertTrue(ClassInfo.of(java.util.Collection.class).isCollectionOrArray());
+		assertTrue(ClassInfo.of(Set.class).isCollectionOrArray());
+		assertTrue(ClassInfo.of(Collection.class).isCollectionOrArray());
 
 		// Test with non-collection, non-array
 		assertFalse(aClass.isCollectionOrArray());
@@ -3418,7 +3418,7 @@ public class ClassInfo_Test extends TestBase {
 	public static final class ToStringTestFinal {}
 	public abstract static class ToStringTestAbstract {}
 	public static class ToStringTestGeneric<T> {}
-	public static class ToStringTestGenericWithBounds<T extends Comparable<T> & java.io.Serializable> {}
+	public static class ToStringTestGenericWithBounds<T extends Comparable<T> & Serializable> {}
 	public enum ToStringTestEnum { VALUE1, VALUE2 }
 	public @interface ToStringTestAnnotation {}
 	public static record ToStringTestRecord(String name, int value) {}
@@ -3484,7 +3484,7 @@ public class ClassInfo_Test extends TestBase {
 
 		// Test unwrap with ParameterizedType (line 2382)
 		// Create a ParameterizedType directly
-		var pTypeOptional = new java.lang.reflect.ParameterizedType() {
+		var pTypeOptional = new ParameterizedType() {
 			@Override
 			public Type[] getActualTypeArguments() {
 				return new Type[]{A1.class};
@@ -3502,7 +3502,7 @@ public class ClassInfo_Test extends TestBase {
 		check("A1", ciOptional.unwrap(Optional.class));
 
 		// Test unwrap with ParameterizedType that has no type arguments (line 2383)
-		var pTypeEmpty = new java.lang.reflect.ParameterizedType() {
+		var pTypeEmpty = new ParameterizedType() {
 			@Override
 			public Type[] getActualTypeArguments() {
 				return new Type[0];

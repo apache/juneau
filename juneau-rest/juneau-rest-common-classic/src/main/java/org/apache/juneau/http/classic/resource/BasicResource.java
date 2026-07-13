@@ -28,7 +28,7 @@ import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.test.assertions.*;
 
 /**
- * A basic {@link org.apache.juneau.http.classic.resource.HttpResource} implementation with additional features.
+ * A basic {@link HttpResource} implementation with additional features.
  *
  * Provides the following features:
  * <ul class='spaced-list'>

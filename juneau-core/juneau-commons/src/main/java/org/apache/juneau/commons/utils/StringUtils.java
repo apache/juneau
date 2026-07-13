@@ -698,10 +698,10 @@ public class StringUtils {
 	 *
 	 * @param contents The UTF-8 string to compress.
 	 * @return The GZIP-compressed byte array.
-	 * @throws java.io.IOException If compression fails.
+	 * @throws IOException If compression fails.
 	 * @see #decompress(byte[])
 	 */
-	public static byte[] compress(String contents) throws java.io.IOException {
+	public static byte[] compress(String contents) throws IOException {
 		var baos = new ByteArrayOutputStream(contents.length() >> 1);
 		try (var gos = new GZIPOutputStream(baos)) {
 			gos.write(contents.getBytes());
@@ -1109,10 +1109,10 @@ public class StringUtils {
 	 *
 	 * @param is The GZIP-compressed byte array to decompress.
 	 * @return The decompressed UTF-8 string.
-	 * @throws java.io.IOException If decompression fails or the input is not valid GZIP data.
+	 * @throws IOException If decompression fails or the input is not valid GZIP data.
 	 * @see #compress(String)
 	 */
-	public static String decompress(byte[] is) throws java.io.IOException {
+	public static String decompress(byte[] is) throws IOException {
 		return read(new GZIPInputStream(new ByteArrayInputStream(is)));
 	}
 
@@ -1494,7 +1494,7 @@ public class StringUtils {
 	 * @param b Object 2.
 	 * @return <jk>true</jk> if both objects are equal ignoring case.
 	 * @see #equalsIgnoreCase(String, String)
-	 * @see org.apache.juneau.commons.utils.ObjectUtils#equalIgnoreCase(Object, Object)
+	 * @see ObjectUtils#equalIgnoreCase(Object, Object)
 	 */
 	public static boolean equalsIgnoreCase(Object a, Object b) {
 		if (a == null && b == null)
@@ -2184,7 +2184,7 @@ public class StringUtils {
 	 * @param pattern The format string supporting both MessageFormat and printf-style placeholders.
 	 * @param args The arguments to format.
 	 * @return The formatted string.
-	 * @throws java.util.IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.
+	 * @throws IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.
 	 * @see StringFormat for detailed format specification
 	 * @see String#format(String, Object...)
 	 * @see StringFormat for detailed format specification
@@ -2554,7 +2554,7 @@ public class StringUtils {
 	}
 
 	/**
-	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern}.
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern}.
 	 *
 	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
 	 * <ul>
@@ -2572,14 +2572,14 @@ public class StringUtils {
 	 * </p>
 	 *
 	 * @param s The glob-style wildcard pattern string.
-	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
+	 * @return A compiled {@link Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
 	 */
-	public static java.util.regex.Pattern getGlobMatchPattern(String s) {
+	public static Pattern getGlobMatchPattern(String s) {
 		return getGlobMatchPattern(s, 0);
 	}
 
 	/**
-	 * Converts a string containing glob-style wildcard characters to a regular expression {@link java.util.regex.Pattern} with flags.
+	 * Converts a string containing glob-style wildcard characters to a regular expression {@link Pattern} with flags.
 	 *
 	 * <p>This method converts glob-style patterns to regular expressions with the following mappings:
 	 * <ul>
@@ -2596,10 +2596,10 @@ public class StringUtils {
 	 * </p>
 	 *
 	 * @param s The glob-style wildcard pattern string.
-	 * @param flags Regular expression flags (see {@link java.util.regex.Pattern} constants).
-	 * @return A compiled {@link java.util.regex.Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
+	 * @param flags Regular expression flags (see {@link Pattern} constants).
+	 * @return A compiled {@link Pattern} object, or <jk>null</jk> if the input string is <jk>null</jk>.
 	 */
-	public static java.util.regex.Pattern getGlobMatchPattern(String s, int flags) {
+	public static Pattern getGlobMatchPattern(String s, int flags) {
 		if (s == null)
 			return null;
 		var sb = new StringBuilder();
@@ -2614,7 +2614,7 @@ public class StringUtils {
 				sb.append(c);
 		}
 		sb.append("\\E");
-		return java.util.regex.Pattern.compile(sb.toString(), flags);
+		return Pattern.compile(sb.toString(), flags);
 	}
 
 	/**

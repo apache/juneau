@@ -365,7 +365,7 @@ public class FluentPrimitiveArrayAssertion<E,T,R> extends FluentObjectAssertion<
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentPrimitiveArrayAssertion<E,T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentPrimitiveArrayAssertion<E,T,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -42,7 +42,7 @@ import jakarta.servlet.http.*;
  * 	<li>Otherwise (header absent, blank, or rejected by the validator), a fresh id is minted via the configured
  * 		{@linkplain Builder#idSupplier(Supplier) supplier} (default: {@link UUID#randomUUID()}).
  * 	<li>The chosen id is stashed on the underlying servlet request under the
- * 		{@link org.apache.juneau.rest.server.RestServerConstants#REQUEST_ID REQUEST_ID} attribute key.
+ * 		{@link RestServerConstants#REQUEST_ID REQUEST_ID} attribute key.
  * 	<li>The chosen id is echoed on the response as {@code X-Request-Id}.
  * </ul>
  *
@@ -143,7 +143,7 @@ public class RequestIdFilter {
 
 		Supplier<String> idSupplier;
 		Predicate<String> validator;
-		String attributeKey = org.apache.juneau.rest.server.RestServerConstants.REQUEST_ID;
+		String attributeKey = RestServerConstants.REQUEST_ID;
 
 		/**
 		 * Constructor.
@@ -187,7 +187,7 @@ public class RequestIdFilter {
 		 * Overrides the servlet-request attribute key under which the id is stashed.
 		 *
 		 * <p>
-		 * Defaults to {@link org.apache.juneau.rest.server.RestServerConstants#REQUEST_ID}.  Override only when
+		 * Defaults to {@link RestServerConstants#REQUEST_ID}.  Override only when
 		 * coexisting with a third-party filter that publishes the id under a different key.
 		 *
 		 * @param value The attribute key.  Must not be <jk>null</jk> or blank.

@@ -201,7 +201,7 @@ public class FluentVersionAssertion<R> extends FluentComparableAssertion<Version
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentVersionAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentVersionAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

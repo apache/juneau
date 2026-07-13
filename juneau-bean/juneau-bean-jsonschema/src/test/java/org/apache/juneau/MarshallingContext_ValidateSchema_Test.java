@@ -102,10 +102,10 @@ class MarshallingContext_ValidateSchema_Test extends TestBase {
 
 	/** Pass-through string swap (wraps with @ markers) — combined with @Schema to chain through both transforms. */
 	public static class AtAtSwap extends StringSwap<String> {
-		@Override public String swap(org.apache.juneau.marshall.MarshallingSession session, String o) {
+		@Override public String swap(MarshallingSession session, String o) {
 			return "@" + o + "@";
 		}
-		@Override public String unswap(org.apache.juneau.marshall.MarshallingSession session, String f, org.apache.juneau.marshall.ClassMeta<?> hint) throws SerializeException {
+		@Override public String unswap(MarshallingSession session, String f, ClassMeta<?> hint) throws SerializeException {
 			if (f.length() < 2 || ! f.startsWith("@") || ! f.endsWith("@"))
 				throw new SerializeException("invalid wrapper");
 			return f.substring(1, f.length() - 1);

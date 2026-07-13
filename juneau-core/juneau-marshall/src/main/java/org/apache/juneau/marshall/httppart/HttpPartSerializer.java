@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.cp.*;
  * <ul class='javatree'>
  * 	<li class='jc'>{@link org.apache.juneau.marshall.oapi.OpenApiSerializer} - Parts encoded based on OpenAPI schema.
  * 	<li class='jc'>{@link org.apache.juneau.marshall.uon.UonSerializer} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.marshall.httppart.SimplePartSerializer} - Parts encoded in plain text.
+ * 	<li class='jc'>{@link SimplePartSerializer} - Parts encoded in plain text.
  * </ul>
  *
  * <p>

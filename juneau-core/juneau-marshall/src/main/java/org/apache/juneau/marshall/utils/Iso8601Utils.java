@@ -139,7 +139,7 @@ public final class Iso8601Utils {
 	 *
 	 * <p>
 	 * {@code java.sql.Date}, {@code java.sql.Time}, and {@code java.sql.Timestamp} subclasses all dispatch
-	 * through {@link DateFormat#format(Date, ZoneId)} just like {@code java.util.Date}.
+	 * through {@link DateFormat#format(Date, ZoneId)} just like {@code Date}.
 	 *
 	 * @param value The value to format. <jk>null</jk> returns <jk>null</jk>.
 	 * @param sourceType The class metadata for the value (currently unused, kept for symmetry with the parse helper).
@@ -414,7 +414,7 @@ public final class Iso8601Utils {
 	 * @param formatHint The date wire format. May be <jk>null</jk> (treated as {@link DateFormat#NOT_SET}).
 	 * @param timeZone The session time zone (used as the default zone when the wire value lacks zone info).
 	 * @return The parsed {@link Date}, or <jk>null</jk> if {@code iso8601} is <jk>null</jk> or the target is
-	 * 	not exactly {@code java.util.Date}.
+	 * 	not exactly {@code Date}.
 	 */
 	@SuppressWarnings({
 		"unchecked" // Type erasure requires cast for Date dispatch

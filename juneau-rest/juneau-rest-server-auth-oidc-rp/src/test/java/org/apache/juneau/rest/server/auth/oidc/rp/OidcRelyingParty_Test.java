@@ -753,7 +753,7 @@ class OidcRelyingParty_Test extends TestBase {
 		var state = queryParam(res1.getHeader("Location"), "state");
 		var nonce = queryParam(res1.getHeader("Location"), "nonce");
 		// List with a number element: after JWT round-trip the number comes back as Long → not a String.
-		var scopeList = new java.util.ArrayList<>();
+		var scopeList = new ArrayList<>();
 		scopeList.add("read");
 		scopeList.add(99L);
 		idp.idToken = signIdToken(key, idp.issuer, CID, "alice", "sess-1", nonce, Instant.now(), Duration.ofMinutes(5),

@@ -36,7 +36,7 @@ public class OpenApiConfigAnnotation {
 	private OpenApiConfigAnnotation() {}
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder}.
+	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<OpenApiConfig,OpenApiParser.Builder> {
 
@@ -59,7 +59,7 @@ public class OpenApiConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder}.
+	 * Applies {@link OpenApiConfig} annotations to a {@link OpenApiSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<OpenApiConfig,OpenApiSerializer.Builder> {
 

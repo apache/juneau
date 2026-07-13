@@ -99,7 +99,7 @@ class ExecutableInfo_Test extends TestBase {
 	}
 
 	@Documented
-	@Target({PARAMETER,METHOD,java.lang.annotation.ElementType.CONSTRUCTOR})
+	@Target({PARAMETER,METHOD,ElementType.CONSTRUCTOR})
 	@Retention(RUNTIME)
 	@Inherited
 	public static @interface CA {}
@@ -899,7 +899,7 @@ class ExecutableInfo_Test extends TestBase {
 		protected void protectedMethod() {}
 		static void staticMethod() {}
 		final void finalMethod() {}
-		public void methodWithThrows() throws java.lang.Exception {}
+		public void methodWithThrows() throws Exception {}
 		public <T> void genericMethod(T t) {}
 		public <T extends Comparable<T>> void genericMethodWithBounds(T t) {}
 	}

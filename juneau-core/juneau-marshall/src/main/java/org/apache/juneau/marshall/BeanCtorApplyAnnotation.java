@@ -38,7 +38,7 @@ public class BeanCtorApplyAnnotation {
 	private BeanCtorApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link BeanCtorApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link BeanCtorApply} annotations to a {@link Context.Builder}.
 	 *
 	 * <p>
 	 * Passes the {@link BeanCtorApply @BeanCtorApply} annotation through to the builder's annotation list.
@@ -73,7 +73,7 @@ public class BeanCtorApplyAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {

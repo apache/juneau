@@ -102,7 +102,7 @@ import org.apache.juneau.rest.server.*;
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link RequestHeader}
- * 	<li class='ja'>{@link org.apache.juneau.http.Header}
+ * 	<li class='ja'>{@link Header}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts">HTTP Parts</a>
  * </ul>
  */
@@ -308,7 +308,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	 * Returns the header as the specified bean type.
 	 *
 	 * <p>
-	 * Type must have a name specified via the {@link org.apache.juneau.http.Header} annotation
+	 * Type must have a name specified via the {@link Header} annotation
 	 * and a public constructor that takes in either <c>value</c> or <c>name,value</c> as strings.
 	 *
 	 * @param <T> The bean type to create.

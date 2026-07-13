@@ -37,7 +37,7 @@ public class ExampleApplyAnnotation {
 	private ExampleApplyAnnotation() {}
 
 	/**
-	 * Applies targeted {@link ExampleApply} annotations to a {@link org.apache.juneau.marshall.Context.Builder}.
+	 * Applies targeted {@link ExampleApply} annotations to a {@link Context.Builder}.
 	 *
 	 * <p>
 	 * Passes the {@link ExampleApply @ExampleApply} annotation through to the builder's annotation list.
@@ -72,7 +72,7 @@ public class ExampleApplyAnnotation {
 	 * Builder class.
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}
+	 * 	<li class='jm'>{@link MarshallingContext.Builder#annotations(Annotation...)}
 	 * </ul>
 	 */
 	public static class Builder extends AppliedAnnotationObject.BuilderTMF {

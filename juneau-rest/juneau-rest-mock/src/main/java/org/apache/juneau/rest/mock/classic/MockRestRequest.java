@@ -53,7 +53,7 @@ import jakarta.servlet.http.*;
 @SuppressWarnings({
 	"resource" // MockRestRequest manages Closeable resources
 })
-public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestRequest {
+public class MockRestRequest extends RestRequest {
 	private Map<String,Object> attributeMap = map();
 	private Map<String,RequestDispatcher> requestDispatcherMap = map();
 	private String characterEncoding;
@@ -712,7 +712,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestR
 	}
 
 	@Override /* Overridden from RestRequest */
-	public MockRestRequest parser(Class<? extends org.apache.juneau.marshall.parser.Parser> parser) {
+	public MockRestRequest parser(Class<? extends Parser> parser) {
 		super.parser(parser);
 		return this;
 	}
@@ -1037,7 +1037,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestR
 	}
 
 	@Override /* Overridden from RestRequest */
-	public MockRestRequest rethrow(java.lang.Class<?>...values) {
+	public MockRestRequest rethrow(Class<?>...values) {
 		super.rethrow(values);
 		return this;
 	}
@@ -1079,7 +1079,7 @@ public class MockRestRequest extends org.apache.juneau.rest.client.classic.RestR
 	}
 
 	@Override /* Overridden from RestRequest */
-	public MockRestRequest serializer(Class<? extends org.apache.juneau.marshall.serializer.Serializer> serializer) {
+	public MockRestRequest serializer(Class<? extends Serializer> serializer) {
 		super.serializer(serializer);
 		return this;
 	}

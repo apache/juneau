@@ -206,7 +206,7 @@ public class FluentResponseStatusLineAssertion<R> extends FluentObjectAssertion<
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentResponseStatusLineAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentResponseStatusLineAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

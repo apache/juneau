@@ -819,7 +819,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 
 	/**
 	 * Opens a low-level pull-parser cursor over a JSON document, bound to this session's live
-	 * {@link org.apache.juneau.commons.bean.BeanSession}/{@link org.apache.juneau.marshall.MarshallingContext}.
+	 * {@link BeanSession}/{@link MarshallingContext}.
 	 *
 	 * <p>
 	 * The cursor is purely structural &mdash; object swaps and {@code @Schema} annotations are not

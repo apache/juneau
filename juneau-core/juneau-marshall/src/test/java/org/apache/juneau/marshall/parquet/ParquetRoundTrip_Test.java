@@ -137,12 +137,12 @@ class ParquetRoundTrip_Test extends TestBase {
 
 	@Test
 	void a08_mapWithNonStringKeysRoundTrip() throws Exception {
-		var in = new java.util.TreeMap<Integer, String>();
+		var in = new TreeMap<Integer, String>();
 		in.put(1, "a");
 		in.put(2, "b");
 		in.put(3, "c");
 		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (java.util.Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, java.util.Map.class, Integer.class, String.class);
+		var out = (Map<Integer, String>) ParquetParser.DEFAULT.parse(bytes, Map.class, Integer.class, String.class);
 		assertEquals(3, out.size());
 		assertEquals("a", out.get(1));
 		assertEquals("b", out.get(2));
@@ -174,12 +174,12 @@ class ParquetRoundTrip_Test extends TestBase {
 	@Test
 	void a11_mapWithEnumKeysRoundTrip() throws Exception {
 		// 2.7: Map<Enum,?> at root - enum keys serialized as name(), parser converts string back to enum
-		var in = new java.util.LinkedHashMap<TestEnum, String>();
+		var in = new LinkedHashMap<TestEnum, String>();
 		in.put(TestEnum.FOO, "x");
 		in.put(TestEnum.BAR, "y");
 		var bytes = ParquetSerializer.DEFAULT.serialize(in);
-		var out = (java.util.Map<TestEnum, String>) ParquetParser.DEFAULT.parse(bytes,
-			java.util.Map.class, TestEnum.class, String.class);
+		var out = (Map<TestEnum, String>) ParquetParser.DEFAULT.parse(bytes,
+			Map.class, TestEnum.class, String.class);
 		assertEquals(2, out.size());
 		assertEquals("x", out.get(TestEnum.FOO));
 		assertEquals("y", out.get(TestEnum.BAR));
@@ -224,13 +224,13 @@ class ParquetRoundTrip_Test extends TestBase {
 		// 2.1: Map<Date,String> with RoundTripMaps config (addBeanTypes, addRootType)
 		var s = ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var p = ParquetParser.create().build();
-		var xd1 = java.util.GregorianCalendar.from(java.time.ZonedDateTime.of(1901, 3, 3, 4, 5, 6, 0, java.time.ZoneId.systemDefault())).getTime();
-		var xd2 = java.util.GregorianCalendar.from(java.time.ZonedDateTime.of(1902, 4, 4, 5, 6, 7, 0, java.time.ZoneId.systemDefault())).getTime();
-		var x = new java.util.TreeMap<java.util.Date, String>();
+		var xd1 = GregorianCalendar.from(java.time.ZonedDateTime.of(1901, 3, 3, 4, 5, 6, 0, java.time.ZoneId.systemDefault())).getTime();
+		var xd2 = GregorianCalendar.from(java.time.ZonedDateTime.of(1902, 4, 4, 5, 6, 7, 0, java.time.ZoneId.systemDefault())).getTime();
+		var x = new TreeMap<Date, String>();
 		x.put(xd1, "a");
 		x.put(xd2, null);
 		var bytes = s.serialize(x);
-		var parsed = (java.util.TreeMap<java.util.Date, String>) p.parse(bytes, java.util.TreeMap.class, java.util.Date.class, String.class);
+		var parsed = (TreeMap<Date, String>) p.parse(bytes, TreeMap.class, Date.class, String.class);
 		assertEquals("a", parsed.get(xd1));
 		assertNull(parsed.get(xd2));
 		assertEquals(2, parsed.size());
@@ -241,13 +241,13 @@ class ParquetRoundTrip_Test extends TestBase {
 		// 2.1: Map<Calendar,String> with RoundTripMaps config
 		var s = ParquetSerializer.create().keepNullProperties().addBeanTypes().addRootType().build();
 		var p = ParquetParser.create().build();
-		var xc1 = java.util.GregorianCalendar.from(java.time.ZonedDateTime.parse("2012-12-21T12:34:56Z"));
-		var xc2 = java.util.GregorianCalendar.from(java.time.ZonedDateTime.parse("2012-12-21T12:34:57Z"));
-		var x = new java.util.TreeMap<java.util.Calendar, String>();
+		var xc1 = GregorianCalendar.from(java.time.ZonedDateTime.parse("2012-12-21T12:34:56Z"));
+		var xc2 = GregorianCalendar.from(java.time.ZonedDateTime.parse("2012-12-21T12:34:57Z"));
+		var x = new TreeMap<Calendar, String>();
 		x.put(xc1, "a");
 		x.put(xc2, null);
 		var bytes = s.serialize(x);
-		var parsed = (java.util.TreeMap<java.util.Calendar, String>) p.parse(bytes, java.util.TreeMap.class, java.util.GregorianCalendar.class, String.class);
+		var parsed = (TreeMap<Calendar, String>) p.parse(bytes, TreeMap.class, GregorianCalendar.class, String.class);
 		assertEquals("a", parsed.get(xc1));
 		assertNull(parsed.get(xc2));
 		assertEquals(2, parsed.size());
@@ -261,7 +261,7 @@ class ParquetRoundTrip_Test extends TestBase {
 		empty.statusMap = map();
 		var withEntries = new BeanWithNestedMap();
 		withEntries.name = "withEntries";
-		withEntries.statusMap = new java.util.LinkedHashMap<>();
+		withEntries.statusMap = new LinkedHashMap<>();
 		withEntries.statusMap.put(TestEnum.FOO, TestEnum.BAR);
 		withEntries.statusMap.put(TestEnum.BAR, TestEnum.FOO);
 

@@ -212,8 +212,8 @@ public class MimeTypeDetector {
 		 * Available modes:
 		 * <ul>
 		 * 	<li>{@link CacheMode#NONE NONE} - No caching (always recompute)
-		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link java.util.WeakHashMap})
-		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link java.util.concurrent.ConcurrentHashMap}, default)
+		 * 	<li>{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link WeakHashMap})
+		 * 	<li>{@link CacheMode#FULL FULL} - Full caching (uses {@link ConcurrentHashMap}, default)
 		 * </ul>
 		 *
 		 * @param value The caching mode.

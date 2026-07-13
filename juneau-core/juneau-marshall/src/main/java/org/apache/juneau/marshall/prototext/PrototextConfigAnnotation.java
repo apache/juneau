@@ -35,7 +35,7 @@ public class PrototextConfigAnnotation {
 	private PrototextConfigAnnotation() {}
 
 	/**
-	 * Applies {@link PrototextConfig} annotations to a {@link org.apache.juneau.marshall.prototext.PrototextParser.Builder}.
+	 * Applies {@link PrototextConfig} annotations to a {@link PrototextParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<PrototextConfig,PrototextParser.Builder> {
 
@@ -55,7 +55,7 @@ public class PrototextConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link PrototextConfig} annotations to a {@link org.apache.juneau.marshall.prototext.PrototextSerializer.Builder}.
+	 * Applies {@link PrototextConfig} annotations to a {@link PrototextSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<PrototextConfig,PrototextSerializer.Builder> {
 

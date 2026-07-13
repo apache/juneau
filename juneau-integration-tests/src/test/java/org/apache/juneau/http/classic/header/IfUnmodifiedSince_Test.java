@@ -77,6 +77,6 @@ class IfUnmodifiedSince_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(IfUnmodifiedSince.of((java.time.ZonedDateTime)null));
+		assertNull(IfUnmodifiedSince.of((ZonedDateTime)null));
 	}
 }

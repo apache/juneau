@@ -411,7 +411,7 @@ public class HttpParts {
 	}
 
 	/**
-	 * Instantiates a new {@link org.apache.juneau.http.classic.part.PartList}.
+	 * Instantiates a new {@link PartList}.
 	 *
 	 * @return A new part list.
 	 */

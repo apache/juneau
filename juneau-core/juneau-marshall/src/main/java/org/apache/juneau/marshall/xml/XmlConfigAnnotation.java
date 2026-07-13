@@ -35,7 +35,7 @@ public class XmlConfigAnnotation {
 	private XmlConfigAnnotation() {}
 
 	/**
-	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.marshall.xml.XmlParser.Builder}.
+	 * Applies {@link XmlConfig} annotations to a {@link XmlParser.Builder}.
 	 */
 	@SuppressWarnings({
 		"unchecked", // Raw types required for reflective annotation application.
@@ -65,7 +65,7 @@ public class XmlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link XmlConfig} annotations to a {@link org.apache.juneau.marshall.xml.XmlSerializer.Builder}.
+	 * Applies {@link XmlConfig} annotations to a {@link XmlSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

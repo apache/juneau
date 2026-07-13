@@ -22,7 +22,7 @@ import java.util.*;
  * Builds {@link PropertyValidator} instances from a JSON-Schema-shaped map of constraints.
  *
  * <p>
- * The factory is resolved at runtime via {@link java.util.ServiceLoader ServiceLoader} through
+ * The factory is resolved at runtime via {@link ServiceLoader ServiceLoader} through
  * {@link PropertyValidators#factory()}.  If no factory is on the classpath (i.e. {@code juneau-bean-jsonschema} is
  * not present), schema-validation mode silently becomes a no-op.
  *

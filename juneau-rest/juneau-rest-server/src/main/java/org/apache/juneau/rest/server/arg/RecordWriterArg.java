@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * Declaring this parameter flips the response into "user owns the body" mode &mdash; the
  * framework will not later serialize a POJO return value over the same stream.  Same contract
- * as declaring an {@link java.io.OutputStream OutputStream} or {@link java.io.Writer Writer}
+ * as declaring an {@link OutputStream OutputStream} or {@link Writer Writer}
  * parameter today.
  *
  * <p>

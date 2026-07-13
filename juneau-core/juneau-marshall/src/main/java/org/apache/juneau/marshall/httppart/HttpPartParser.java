@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.cp.*;
  * <ul class='doctree'>
  * 	<li class='jc'>{@link org.apache.juneau.marshall.oapi.OpenApiParser} - Parts encoded in based on OpenAPI schema.
  * 	<li class='jc'>{@link org.apache.juneau.marshall.uon.UonParser} - Parts encoded in UON notation.
- * 	<li class='jc'>{@link org.apache.juneau.marshall.httppart.SimplePartParser} - Parts encoded in plain text.
+ * 	<li class='jc'>{@link SimplePartParser} - Parts encoded in plain text.
  * </ul>
  *
  * <p>

@@ -355,7 +355,7 @@ class JsonSchemaValidator_Test extends TestBase {
 		var s = new JsonSchema().setType(JsonType.INTEGER);
 		v(s).validate((byte) 1);
 		v(s).validate((short) 1);
-		v(s).validate(new java.math.BigInteger("12345"));
+		v(s).validate(new BigInteger("12345"));
 	}
 
 	@Test void h11_integral_rejectsFloatWithFraction() {

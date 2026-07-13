@@ -31,7 +31,7 @@ import org.junit.jupiter.api.extension.ExtensionContext.*;
  * callbacks directly without spinning up a full JUnit Platform run.
  *
  * <p>
- * Implemented via {@link java.lang.reflect.Proxy} so we don't have to match every method of the upstream
+ * Implemented via {@link Proxy} so we don't have to match every method of the upstream
  * {@code ExtensionContext} / {@code Store} interface as JUnit evolves.  The proxy services the small
  * surface our extension actually touches ({@code getRequiredTestClass()}, {@code getRequiredTestInstance()},
  * {@code getStore(Namespace)}, {@code getParent()}) and throws {@link UnsupportedOperationException} for

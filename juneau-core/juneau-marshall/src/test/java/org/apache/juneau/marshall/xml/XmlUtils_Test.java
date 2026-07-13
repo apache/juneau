@@ -427,7 +427,7 @@ class XmlUtils_Test extends TestBase {
 		// Use a real XMLStreamReader to walk through events.
 		var xml = "<root><child>text</child></root>";
 		var f = javax.xml.stream.XMLInputFactory.newInstance();
-		try (var sr = new java.io.StringReader(xml)) {
+		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
 			r.next(); // START_ELEMENT (root)
 			assertEquals("<root>", XmlUtils.toReadableEvent(r));
@@ -447,7 +447,7 @@ class XmlUtils_Test extends TestBase {
 	@Test void h02_toReadableEvent_processingInstruction() throws Exception {
 		var xml = "<?pi target?><root/>";
 		var f = javax.xml.stream.XMLInputFactory.newInstance();
-		try (var sr = new java.io.StringReader(xml)) {
+		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
 			r.next(); // PROCESSING_INSTRUCTION
 			assertEquals("PROCESSING_INSTRUCTION", XmlUtils.toReadableEvent(r));
@@ -460,7 +460,7 @@ class XmlUtils_Test extends TestBase {
 		var xml = "<!-- my comment --><root/>";
 		var f = javax.xml.stream.XMLInputFactory.newInstance();
 		f.setProperty(javax.xml.stream.XMLInputFactory.IS_COALESCING, Boolean.FALSE);
-		try (var sr = new java.io.StringReader(xml)) {
+		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
 			r.next(); // COMMENT
 			if (r.getEventType() == 5) // only assert if parser emits COMMENT events
@@ -474,7 +474,7 @@ class XmlUtils_Test extends TestBase {
 		var xml = "<root><![CDATA[cdata text]]></root>";
 		var f = javax.xml.stream.XMLInputFactory.newInstance();
 		f.setProperty(javax.xml.stream.XMLInputFactory.IS_COALESCING, Boolean.FALSE);
-		try (var sr = new java.io.StringReader(xml)) {
+		try (var sr = new StringReader(xml)) {
 			var r = f.createXMLStreamReader(sr);
 			r.next(); // START_ELEMENT
 			r.next(); // CDATA or CHARACTERS depending on parser

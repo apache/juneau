@@ -350,9 +350,9 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 	}
 
 	private static long toEpochMillis(Object o) {
-		if (o instanceof java.util.Date d)
+		if (o instanceof Date d)
 			return d.getTime();
-		if (o instanceof java.util.Calendar c)
+		if (o instanceof Calendar c)
 			return c.getTimeInMillis();
 		if (o instanceof Instant i)
 			return i.toEpochMilli();

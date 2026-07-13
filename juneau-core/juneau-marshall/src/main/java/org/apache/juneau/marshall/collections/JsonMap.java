@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.serializer.*;
  * <p>
  * <b>v10.0 behavioral break:</b> {@code toString()} now produces strict (RFC 8259) JSON (was JSON5),
  * and the {@link CharSequence} / {@link Reader} constructors now default to {@link JsonParser#DEFAULT}
- * (was {@link Json5Parser#DEFAULT}). For the previous JSON5 behavior use {@link org.apache.juneau.marshall.json5.Json5Map}.
+ * (was {@link Json5Parser#DEFAULT}). For the previous JSON5 behavior use {@link Json5Map}.
  *
  * <p>
  * Note that the use of this class is optional for generating JSON. The serializers will accept any objects that implement the
@@ -371,7 +371,7 @@ public class JsonMap extends MarshalledMap {
 	 *
 	 * @param json
 	 * 	The JSON text to parse.
-	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link org.apache.juneau.marshall.json5.Json5Map} or pass
+	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link Json5Map} or pass
 	 * 	{@link Json5Parser#DEFAULT} explicitly.
 	 * @throws ParseException Malformed input encountered.
 	 */
@@ -425,7 +425,7 @@ public class JsonMap extends MarshalledMap {
 	 *
 	 * @param json
 	 * 	The reader containing JSON text to parse.
-	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link org.apache.juneau.marshall.json5.Json5Map} or pass
+	 * 	<br>Must be strict (RFC 8259) JSON; for JSON5 input use {@link Json5Map} or pass
 	 * 	{@link Json5Parser#DEFAULT} explicitly.
 	 * @throws ParseException Malformed input encountered.
 	 */
@@ -685,7 +685,7 @@ public class JsonMap extends MarshalledMap {
 	 * The JSON text can be an object (i.e. <js>"{...}"</js>) or an array (i.e. <js>"[...]"</js>).
 	 *
 	 * <p>
-	 * Input must be strict (RFC 8259) JSON; for JSON5 use {@link org.apache.juneau.marshall.json5.Json5Map#putJson5(String,String)}.
+	 * Input must be strict (RFC 8259) JSON; for JSON5 use {@link Json5Map#putJson5(String,String)}.
 	 *
 	 * @param key The key.
 	 * @param json The JSON text that will be parsed into an Object and then inserted into this map.

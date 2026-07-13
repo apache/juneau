@@ -100,7 +100,7 @@ public class MarkdownDocParserSession extends MarkdownParserSession {
 
 	@Override /* Overridden from MarkdownParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		try (var r = new java.io.BufferedReader(pipe.getReader())) {
+		try (var r = new BufferedReader(pipe.getReader())) {
 			var lines = readAllLines(r);
 			return parseDocAnything(lines, type, getOuter(), headingLevel);
 		}

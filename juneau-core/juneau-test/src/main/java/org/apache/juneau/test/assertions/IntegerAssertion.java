@@ -141,7 +141,7 @@ public class IntegerAssertion extends FluentIntegerAssertion<IntegerAssertion> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public IntegerAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public IntegerAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

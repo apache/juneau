@@ -33,7 +33,7 @@ import org.apache.juneau.commons.settings.*;
  *
  * <p>
  * Configuration is managed using thread-local storage, ensuring that parallel test execution doesn't
- * interfere with each other's settings. Settings are typically configured via the {@link org.apache.juneau.test.bct.BctConfig @BctConfig}
+ * interfere with each other's settings. Settings are typically configured via the {@link BctConfig @BctConfig}
  * annotation, but can also be set programmatically.
  *
  * <h5 class='section'>Configuration Properties:</h5>
@@ -77,8 +77,8 @@ import org.apache.juneau.commons.settings.*;
  * with other concurrently running tests.
  * </p>
  *
- * @see org.apache.juneau.test.bct.BctConfig
- * @see org.apache.juneau.test.bct.BctAssertions
+ * @see BctConfig
+ * @see BctAssertions
  */
 @SuppressWarnings({
 	"java:S115" // Constants use UPPER_snakeCase convention
@@ -246,7 +246,7 @@ public class BctConfiguration {
 	 *
 	 * <p>
 	 * This is typically called in test teardown methods (e.g., {@code @AfterEach}) to ensure
-	 * a clean state for subsequent tests. The {@link org.apache.juneau.test.bct.BctConfigExtension BctConfigExtension}
+	 * a clean state for subsequent tests. The {@link BctConfigExtension BctConfigExtension}
 	 * automatically calls this method after each test.
 	 *
 	 * <h5 class='section'>Example:</h5>
@@ -288,7 +288,7 @@ public class BctConfiguration {
 	 *
 	 * <p>
 	 * This is particularly useful when you need custom property access, stringification, or conversion logic
-	 * for specific tests. The converter can be configured via the {@link org.apache.juneau.test.bct.BctConfig @BctConfig}
+	 * for specific tests. The converter can be configured via the {@link BctConfig @BctConfig}
 	 * annotation or set programmatically.
 	 *
 	 * <h5 class='section'>Usage Example:</h5>
@@ -323,7 +323,7 @@ public class BctConfiguration {
 	 * @param converter The bean converter to use for the current thread. Must not be <jk>null</jk>.
 	 * @throws IllegalArgumentException If converter is <jk>null</jk>.
 	 * @see #clear()
-	 * @see org.apache.juneau.test.bct.BctConfig#beanConverter()
+	 * @see BctConfig#beanConverter()
 	 * @see BeanConverter
 	 * @see BasicBeanConverter
 	 */
@@ -348,7 +348,7 @@ public class BctConfiguration {
 	/**
 	 * Returns the {@link Value @Value}-resolved defaults for {@link #BCT_SORT_MAPS} and
 	 * {@link #BCT_SORT_COLLECTIONS}, sourced from the active
-	 * {@link org.apache.juneau.commons.settings.Settings Settings} chain (system properties
+	 * {@link Settings Settings} chain (system properties
 	 * &rarr; environment variables &rarr; registered property sources). Each invocation creates
 	 * a fresh, fully-injected instance.
 	 *

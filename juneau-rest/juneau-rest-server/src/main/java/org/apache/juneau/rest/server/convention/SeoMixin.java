@@ -202,7 +202,7 @@ public class SeoMixin extends RestMixin {
 			this.priority = priority;
 		}
 
-		void write(java.io.Writer w) throws IOException {
+		void write(Writer w) throws IOException {
 			w.write("\t<url>\n");
 			w.write("\t\t<loc>" + xmlEscape(loc) + "</loc>\n");
 			if (lastmod != null)

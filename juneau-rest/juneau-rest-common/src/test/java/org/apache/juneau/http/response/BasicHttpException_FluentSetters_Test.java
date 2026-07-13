@@ -77,7 +77,7 @@ class BasicHttpException_FluentSetters_Test extends TestBase {
 
 	@Test void a09_subclass_inheritsSetters() {
 		// Verifies that subclasses (Ok, InternalServerError, etc.) inherit the fluent setters.
-		var e = new org.apache.juneau.http.response.InternalServerError("ouch")
+		var e = new InternalServerError("ouch")
 			.setHeader("X-Trace", "abc");
 		assertEquals(500, e.getStatusCode());
 		assertEquals("abc", e.getHeaders().get(0).getValue());

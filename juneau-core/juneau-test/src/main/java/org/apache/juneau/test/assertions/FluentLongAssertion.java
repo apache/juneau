@@ -170,7 +170,7 @@ public class FluentLongAssertion<R> extends FluentComparableAssertion<Long,R> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentLongAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentLongAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

@@ -597,7 +597,7 @@ public class Microservice implements ConfigEventListener {
 		 * installed before the microservice is constructed and lives for the microservice's full lifetime.
 		 * For per-test push/pop overlays against an already-started microservice, see
 		 * {@link Microservice#getBeanStore()} and the push/pop primitives on
-		 * {@link org.apache.juneau.commons.inject.WritableBeanStore}.
+		 * {@link WritableBeanStore}.
 		 *
 		 * <p>
 		 * Composes with {@link #beanStore(WritableBeanStore)}: when both are supplied, the supplied
@@ -640,7 +640,7 @@ public class Microservice implements ConfigEventListener {
 	 * <p>
 	 * Routes builder construction through {@link BeanInstantiator} so that the
 	 * {@code juneau.workingDir} env default is resolved through the active
-	 * {@link org.apache.juneau.commons.settings.Settings Settings} chain.
+	 * {@link Settings Settings} chain.
 	 *
 	 * @return A new microservice builder.
 	 */

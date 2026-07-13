@@ -20,7 +20,7 @@ package org.apache.juneau.rest.client;
  * {@link HttpTransportProvider} implementation that supplies a {@link JavaHttpTransport}.
  *
  * <p>
- * Registered via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider} so that
+ * Registered via {@code META-INF/services/HttpTransportProvider} so that
  * {@code RestClient} auto-discovers the JDK HTTP client when no higher-priority transport is present.
  * Since the JDK transport ships in the {@code juneau-rest-client} artifact itself, it is always available
  * unless overridden by a sibling transport module with a lower priority value.

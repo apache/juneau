@@ -869,7 +869,7 @@ class Sets_Test extends TestBase {
 			.add(5, -1, 150, 0, 50, null)
 			.build();
 
-		assertList(new java.util.TreeSet<>(set), 5, 50);
+		assertList(new TreeSet<>(set), 5, 50);
 	}
 
 	@Test
@@ -916,7 +916,7 @@ class Sets_Test extends TestBase {
 			.add("banana", "apple", "cherry")
 			.build();
 		assertNotNull(set);
-		assertTrue(set instanceof java.util.TreeSet);
+		assertTrue(set instanceof TreeSet);
 	}
 
 	@Test
@@ -936,7 +936,7 @@ class Sets_Test extends TestBase {
 			.addAll(l("banana", "apple", "cherry"))
 			.build();
 		assertNotNull(set);
-		assertTrue(set instanceof java.util.TreeSet);
+		assertTrue(set instanceof TreeSet);
 	}
 
 	@Test

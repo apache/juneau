@@ -626,7 +626,7 @@ public final class StringFormat {
 		} else if (state == S2) {
 			// Dangling '%' without conversion - throw exception to match String.format() behavior
 			// UnknownFormatConversionException constructor takes just the conversion character
-			throw new java.util.UnknownFormatConversionException("%");
+			throw new UnknownFormatConversionException("%");
 		} else if (state == S3) {
 			// Unmatched '{' - throw exception to match MessageFormat behavior
 			throw new IllegalArgumentException("Unmatched braces in the pattern.");

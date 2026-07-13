@@ -122,7 +122,7 @@ public final class RemoteClient {
 	@SuppressWarnings({
 		"resource", // resp is closed within this method or returned to caller (RESPONSE mode)
 		"java:S112", // Reflective remote-proxy dispatch intentionally propagates arbitrary exceptions (target-method, parse, transport, and user-declared @Remote exception types) to the caller; narrowing the throws clauses would break that contract.
-		"java:S2143" // java.util.Date 'instanceof' check classifies simple-typed @Request args (a type test, not date arithmetic); no behavior-preserving java.time equivalent.
+		"java:S2143" // Date 'instanceof' check classifies simple-typed @Request args (a type test, not date arithmetic); no behavior-preserving java.time equivalent.
 	})
 	private static final class RemoteInvocationHandler implements InvocationHandler {
 
@@ -1043,7 +1043,7 @@ public final class RemoteClient {
 		 *
 		 * <p>
 		 * A declared exception type matches when it extends {@link BasicHttpException} and its static {@code STATUS_CODE}
-		 * field equals the response status code (e.g. {@code 404} &rarr; {@link org.apache.juneau.http.response.NotFound}).
+		 * field equals the response status code (e.g. {@code 404} &rarr; {@link NotFound}).
 		 * If no declared type matches, the response is left for normal body handling.
 		 */
 		private static void throwIfError(RestResponse resp, Method method, boolean throwOnError) throws Exception {
@@ -1158,7 +1158,7 @@ public final class RemoteClient {
 		 * <p>
 		 * {@link File}/{@link InputStream}/{@link Reader} and {@code byte[]} parts reuse the streaming bodies
 		 * (never pre-buffered); scalar values become a text {@link StringBody}; an {@link HttpBody} is used directly;
-		 * any other object (a bean) is streamed through the client's default {@link org.apache.juneau.marshall.serializer.Serializer}.
+		 * any other object (a bean) is streamed through the client's default {@link Serializer}.
 		 */
 		private HttpBody toPartBody(Object arg, String contentType) {
 			if (arg instanceof HttpBody b)
@@ -1219,7 +1219,7 @@ public final class RemoteClient {
 		 * Parses a response body for an {@code @Remote}-proxy method return value.
 		 *
 		 * <p>
-		 * Unlike {@link org.apache.juneau.rest.client.ResponseBody#as(org.apache.juneau.marshall.parser.Parser, Class)},
+		 * Unlike {@link ResponseBody#as(Parser, Class)},
 		 * which always surfaces a parse failure as an {@code IOException}, this method applies a deliberate proxy-only
 		 * leniency: when the declared return type is {@code Object}, a {@link ParseException} is swallowed and the raw
 		 * response body string is returned as-is. For any other declared return type the {@code ParseException}

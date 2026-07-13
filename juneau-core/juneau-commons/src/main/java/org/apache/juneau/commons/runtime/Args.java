@@ -76,7 +76,7 @@ public class Args {
 	 *
 	 * <p>
 	 * The string is split on whitespace honouring single- and double-quoted segments via
-	 * {@link org.apache.juneau.commons.utils.StringUtils#splitQuoted(String)}.
+	 * {@link StringUtils#splitQuoted(String)}.
 	 *
 	 * @param line The raw command line.  Can be <jk>null</jk> (treated as an empty argv).
 	 */

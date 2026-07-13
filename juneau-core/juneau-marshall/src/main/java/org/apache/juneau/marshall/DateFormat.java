@@ -27,9 +27,9 @@ import org.apache.juneau.marshall.swaps.*;
  *
  * <p>
  * Used by {@link MarshallingContext.Builder#dateFormat(DateFormat)},
- * {@link org.apache.juneau.marshall.Marshalled#dateFormat()},
- * {@link org.apache.juneau.marshall.MarshalledProp#dateFormat()}, and
- * {@link org.apache.juneau.marshall.MarshalledConfig#dateFormat()} to control how {@link Date}
+ * {@link Marshalled#dateFormat()},
+ * {@link MarshalledProp#dateFormat()}, and
+ * {@link MarshalledConfig#dateFormat()} to control how {@link Date}
  * values are written to and read from the wire.
  *
  * <p>
@@ -43,7 +43,7 @@ import org.apache.juneau.marshall.swaps.*;
  * every other constant.
  */
 @SuppressWarnings({
-	"java:S2143" // Public API formats/parses java.util.Date by design (it's the Date marshalling-format enum); internals already use java.time.
+	"java:S2143" // Public API formats/parses Date by design (it's the Date marshalling-format enum); internals already use java.time.
 })
 public enum DateFormat {
 

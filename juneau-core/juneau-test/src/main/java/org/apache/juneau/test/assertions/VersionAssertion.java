@@ -149,7 +149,7 @@ public class VersionAssertion extends FluentVersionAssertion<VersionAssertion> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public VersionAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public VersionAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

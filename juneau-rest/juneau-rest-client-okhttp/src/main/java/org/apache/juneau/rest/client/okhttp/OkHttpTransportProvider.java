@@ -22,7 +22,7 @@ import org.apache.juneau.rest.client.*;
  * {@link HttpTransportProvider} implementation that supplies an {@link OkHttpTransport}.
  *
  * <p>
- * Registered via {@code META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider} so that
+ * Registered via {@code META-INF/services/HttpTransportProvider} so that
  * {@code RestClient} can auto-discover OkHttp 5.x when this module is on the classpath.
  *
  * <p>

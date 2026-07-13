@@ -35,7 +35,7 @@ public class HtmlDocConfigAnnotation {
 	private HtmlDocConfigAnnotation() {}
 
 	/**
-	 * Applies {@link HtmlDocConfig} annotations to a {@link org.apache.juneau.marshall.html.HtmlDocSerializer.Builder}.
+	 * Applies {@link HtmlDocConfig} annotations to a {@link HtmlDocSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

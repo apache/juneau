@@ -379,7 +379,7 @@ class JsonMap_Test extends TestBase {
 		assertNotNull(m.toReadableJson5());
 
 		// toString(WriterSerializer) — generalized
-		assertString("{b:'2',a:'1'}", m.toString(org.apache.juneau.marshall.json5.Json5Serializer.DEFAULT));
+		assertString("{b:'2',a:'1'}", m.toString(Json5Serializer.DEFAULT));
 	}
 
 	//====================================================================================================

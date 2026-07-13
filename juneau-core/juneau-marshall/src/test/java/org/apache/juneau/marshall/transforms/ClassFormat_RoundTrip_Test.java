@@ -273,8 +273,8 @@ class ClassFormat_RoundTrip_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Bean with edge-case Class fields — java.util.HashMap (top-level), java.util.Map.Entry (nested) —
-	// exercises both FQCN-form ("java.util.Map.Entry") and BINARY_NAME-form ("java.util.Map$Entry")
+	// Bean with edge-case Class fields — HashMap (top-level), Map.Entry (nested) —
+	// exercises both FQCN-form ("Map.Entry") and BINARY_NAME-form ("java.util.Map$Entry")
 	// nested-type heuristics.
 	//
 	// <p>

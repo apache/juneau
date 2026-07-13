@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 class ParquetConformance_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// GAP-12: a statically-typed java.lang.Number leaf must not be silently narrowed to INT32.
+	// GAP-12: a statically-typed Number leaf must not be silently narrowed to INT32.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	public static class NumBean {

@@ -109,8 +109,8 @@ class JsonSchemaMap_Test extends TestBase {
 				// Return a reader that throws when read
 				return new Reader() {
 					@Override
-					public int read(char[] cbuf, int off, int len) throws java.io.IOException {
-						throw new java.io.IOException("Simulated IO error");
+					public int read(char[] cbuf, int off, int len) throws IOException {
+						throw new IOException("Simulated IO error");
 					}
 					@Override
 					public void close() { /* intentionally empty */ }

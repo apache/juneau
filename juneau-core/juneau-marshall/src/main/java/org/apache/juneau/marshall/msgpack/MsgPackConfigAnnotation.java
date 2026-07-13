@@ -35,7 +35,7 @@ public class MsgPackConfigAnnotation {
 	private MsgPackConfigAnnotation() {}
 
 	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.marshall.msgpack.MsgPackParser.Builder}.
+	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<MsgPackConfig,MsgPackParser.Builder> {
 
@@ -55,7 +55,7 @@ public class MsgPackConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link MsgPackConfig} annotations to a {@link org.apache.juneau.marshall.msgpack.MsgPackSerializer.Builder}.
+	 * Applies {@link MsgPackConfig} annotations to a {@link MsgPackSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<MsgPackConfig,MsgPackSerializer.Builder> {
 

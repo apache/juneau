@@ -93,7 +93,7 @@ class BsonEdgeCases_Test extends TestBase {
 		var s = BsonSerializer.create().keepNullProperties().build();
 		var p = BsonParser.create().build();
 		var bytes = s.serialize(o(42));
-		var result = p.parse(bytes, java.util.Optional.class);
+		var result = p.parse(bytes, Optional.class);
 		assertNotNull(result);
 		assertTrue(result.isPresent());
 		assertEquals(42, result.get());

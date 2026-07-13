@@ -125,7 +125,7 @@ public @interface RestPatch {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestOpContext#getSupportedContentTypes()}
+	 * 	<li class='jm'>{@link RestOpContext#getSupportedContentTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -169,7 +169,7 @@ public @interface RestPatch {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}
+	 * 	<li class='jm'>{@link RestContext#getDebugEnablement()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -427,7 +427,7 @@ public @interface RestPatch {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via
+	 * For programmatic equivalents, contribute a {@link EncoderSet} bean via
 	 * {@link Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -535,7 +535,7 @@ public @interface RestPatch {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.parser.ParserSet} bean via
+	 * For programmatic equivalents, contribute a {@link ParserSet} bean via
 	 * {@link Bean @Bean(name="parsers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
@@ -691,7 +691,7 @@ public @interface RestPatch {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.rest.server.RestOpContext#getSupportedAcceptTypes()}
+	 * 	<li class='jm'>{@link RestOpContext#getSupportedAcceptTypes()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -868,7 +868,7 @@ public @interface RestPatch {
 	 * </p>
 	 *
 	 * <p>
-	 * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via
+	 * For programmatic equivalents, contribute a {@link SerializerSet} bean via
 	 * {@link Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>

@@ -824,14 +824,14 @@ class MultiList_Test extends TestBase {
 	void h17_listIterator_emptyMultiList_next_throws() {
 		var ml = new MultiList<String>();
 		var it = ml.listIterator();
-		assertThrows(java.util.NoSuchElementException.class, it::next);
+		assertThrows(NoSuchElementException.class, it::next);
 	}
 
 	@Test
 	void h18_listIterator_emptyMultiList_previous_throws() {
 		var ml = new MultiList<String>();
 		var it = ml.listIterator();
-		assertThrows(java.util.NoSuchElementException.class, it::previous);
+		assertThrows(NoSuchElementException.class, it::previous);
 	}
 
 	@Test

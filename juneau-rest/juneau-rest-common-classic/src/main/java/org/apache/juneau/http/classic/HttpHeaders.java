@@ -1416,7 +1416,7 @@ public class HttpHeaders {
 	}
 
 	/**
-	 * Instantiates a new {@link org.apache.juneau.http.classic.header.HeaderList}.
+	 * Instantiates a new {@link HeaderList}.
 	 *
 	 * @return A new empty builder.
 	 */

@@ -58,7 +58,7 @@ import java.lang.annotation.*;
  * 	}
  * </p>
  * <p>
- * 	The parameter type must be either <jk>boolean</jk> or {@link java.lang.Boolean}.
+ * 	The parameter type must be either <jk>boolean</jk> or {@link Boolean}.
  * </p>
  * <p>
  * 	The following table shows the behavioral differences between <ja>@HasQuery</ja> and <ja>@Query</ja>:

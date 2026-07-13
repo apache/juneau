@@ -30,7 +30,7 @@ import org.junit.jupiter.api.extension.*;
 /**
  * JUnit 5 extension behind {@link MicroserviceTest @MicroserviceTest}: boots a whole
  * {@link Microservice} (config + lifecycle + embedded Jetty on an ephemeral port) for the test class, with
- * {@link org.apache.juneau.test.junit.TestBean @TestBean} mock-bean injection and convenience parameter resolution.
+ * {@link TestBean @TestBean} mock-bean injection and convenience parameter resolution.
  *
  * <h5 class='topic'>Lifecycle (per class)</h5>
  *
@@ -44,7 +44,7 @@ import org.junit.jupiter.api.extension.*;
  * <h5 class='topic'>Mock-bean injection</h5>
  *
  * <p>
- * {@link org.apache.juneau.test.junit.TestBean @TestBean} declarations are discovered via
+ * {@link TestBean @TestBean} declarations are discovered via
  * {@link JuneauBeanStoreExtension#discoverOverrides(Object)}. <b>Mode INJECT</b> (the default) installs the
  * overrides via {@code Microservice.Builder.overridingBeanStore(...)} <i>before</i> boot, so the service reads
  * them from startup. <b>Mode OVERLAY</b> pushes the overrides onto the booted instance's bean store for the

@@ -24,7 +24,7 @@ import java.text.*;
  * A utility for logging formatted messages to the console.
  *
  * <p>
- * Uses {@link java.text.MessageFormat} for formatting messages with arguments.
+ * Uses {@link MessageFormat} for formatting messages with arguments.
  */
 @SuppressWarnings({
 	"java:S106", // System.err/out usage is intentional for console output utility
@@ -43,7 +43,7 @@ public class Console {
 	 * Prints a message with arguments to {@link System#err}.
 	 *
 	 * <p>
-	 * Arguments are formatted using {@link java.text.MessageFormat}.
+	 * Arguments are formatted using {@link MessageFormat}.
 	 *
 	 * <p>
 	 * Useful for debug messages.
@@ -64,7 +64,7 @@ public class Console {
 	 * Prints a message with arguments to {@link System#out}.
 	 *
 	 * <p>
-	 * Arguments are formatted using {@link java.text.MessageFormat}.
+	 * Arguments are formatted using {@link MessageFormat}.
 	 *
 	 * <p>
 	 * Useful for debug messages.

@@ -61,8 +61,8 @@ public @interface OpenApiConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
+	 * 	<li class='jm'>{@link OpenApiSerializer.Builder#collectionFormat(HttpPartCollectionFormat)}
+	 * 	<li class='jm'>{@link OpenApiParser.Builder#collectionFormat(HttpPartCollectionFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -94,8 +94,8 @@ public @interface OpenApiConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder#format(HttpPartFormat)}
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder#format(HttpPartFormat)}
+	 * 	<li class='jm'>{@link OpenApiSerializer.Builder#format(HttpPartFormat)}
+	 * 	<li class='jm'>{@link OpenApiParser.Builder#format(HttpPartFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.

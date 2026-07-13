@@ -24,7 +24,7 @@ import java.lang.annotation.*;
 import org.apache.juneau.marshall.*;
 
 /**
- * Annotation for specifying config properties defined in {@link org.apache.juneau.marshall.toml.TomlSerializer} and {@link org.apache.juneau.marshall.toml.TomlParser}.
+ * Annotation for specifying config properties defined in {@link TomlSerializer} and {@link TomlParser}.
  *
  * <p>
  * Used primarily for specifying bean configuration properties on REST classes and methods.

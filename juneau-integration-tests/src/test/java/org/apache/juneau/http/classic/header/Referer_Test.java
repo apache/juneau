@@ -75,6 +75,6 @@ class Referer_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(Referer.of((java.net.URI)null));
+		assertNull(Referer.of((URI)null));
 	}
 }

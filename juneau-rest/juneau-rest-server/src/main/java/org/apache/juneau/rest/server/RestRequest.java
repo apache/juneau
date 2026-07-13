@@ -866,7 +866,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * 	The URL-encoded form data from the request.
 	 * 	<br>Never <jk>null</jk>.
 	 * @throws InternalServerError If query parameters could not be parsed.
-	 * @see org.apache.juneau.http.FormData
+	 * @see FormData
 	 */
 	public RequestFormParamList getFormParams() throws InternalServerError {
 		try {
@@ -1682,7 +1682,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Sets the resolved resource-level authentication result.
 	 *
 	 * <p>
-	 * Invoked by the framework after the {@link org.apache.juneau.rest.server.auth.RestAuthenticator} fold resolves
+	 * Invoked by the framework after the {@link RestAuthenticator} fold resolves
 	 * an identity for this request.  The stored result drives {@link #getUserPrincipal()}, {@link #isUserInRole(String)},
 	 * and {@link #getRemoteUser()}, and (when a principal is present) stashes the principal under
 	 * {@link RestServerConstants#PRINCIPAL_ATTR} so {@code @Auth} argument injection resolves it.

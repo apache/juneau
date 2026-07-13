@@ -75,6 +75,6 @@ class TE_Test extends TestBase {
 	}
 
 	@Test void a02_factoryNullReturn() {
-		assertNull(TE.of((org.apache.juneau.commons.http.StringRanges)null));
+		assertNull(TE.of((StringRanges)null));
 	}
 }

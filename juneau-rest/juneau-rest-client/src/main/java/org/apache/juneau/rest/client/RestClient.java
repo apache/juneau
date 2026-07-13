@@ -56,7 +56,7 @@ import org.apache.juneau.rest.client.remote.*;
  * {@link java.net.http.HttpClient}), which ships built into the {@code juneau-rest-client} artifact and
  * requires no extra dependencies on Java 11+.  Pulling in one of the optional transport modules
  * ({@code juneau-rest-client-apache-httpclient-45}, {@code -apache-httpclient-50}, {@code -okhttp},
- * {@code -jetty}) registers a higher-priority provider via {@link java.util.ServiceLoader} that takes
+ * {@code -jetty}) registers a higher-priority provider via {@link ServiceLoader} that takes
  * over automatically.  An explicit {@link Builder#transport(HttpTransport)} call always wins.
  *
  * <h5 class='section'>See Also:</h5><ul>
@@ -81,7 +81,7 @@ public final class RestClient implements Closeable {
 		BodyConverter.of(HttpBody.class, TransportBody::of),
 		BodyConverter.of(InputStream.class, is -> TransportBody.of(StreamBody.of(is))),
 		BodyConverter.of(byte[].class, bytes -> TransportBody.of(ByteArrayBody.of(bytes))),
-		BodyConverter.of(java.io.File.class, file -> TransportBody.of(FileBody.of(file)))
+		BodyConverter.of(File.class, file -> TransportBody.of(FileBody.of(file)))
 	);
 
 	final HttpTransport transport;
@@ -393,7 +393,7 @@ public final class RestClient implements Closeable {
 		 * Sets the HTTP transport to use.
 		 *
 		 * <p>
-		 * If not set, {@link RestClient} discovers a transport via {@link java.util.ServiceLoader}.  When no
+		 * If not set, {@link RestClient} discovers a transport via {@link ServiceLoader}.  When no
 		 * sibling transport module is on the classpath, the built-in {@link JavaHttpTransport} (backed by the JDK's
 		 * {@link java.net.http.HttpClient}) is used as the default.
 		 *

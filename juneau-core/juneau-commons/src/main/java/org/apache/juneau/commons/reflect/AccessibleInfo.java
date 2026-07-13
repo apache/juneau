@@ -77,7 +77,7 @@ import java.lang.reflect.*;
 	"java:S115",  // Constants use UPPER_snakeCase convention (e.g., CONST_value)
 	"java:S3011"  // Reflection access needed for accessibility introspection
 })
-public abstract class AccessibleInfo extends ElementInfo {
+public abstract sealed class AccessibleInfo extends ElementInfo permits FieldInfo, ExecutableInfo {
 
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_inner = "inner";

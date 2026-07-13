@@ -173,7 +173,7 @@ public class HashKey {
 	 * <p>
 	 * The hash code is computed from all values in the key using {@link Arrays#deepHashCode(Object[])}.
 	 * This ensures that equal keys have equal hash codes, making {@code HashKey} suitable for use
-	 * as keys in hash-based collections like {@link java.util.HashMap} and {@link java.util.HashSet}.
+	 * as keys in hash-based collections like {@link HashMap} and {@link HashSet}.
 	 * Arrays with the same contents (but different references) will produce the same hash code.
 	 *
 	 * @return The hash code value for this object.

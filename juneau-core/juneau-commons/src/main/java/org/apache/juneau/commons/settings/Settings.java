@@ -543,7 +543,7 @@ public class Settings {
 	 * This method searches for a value using the same lookup order as {@link #get(String)}.
 	 * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.
 	 * Supported types include any type that has a static method with signature <c>public static &lt;T&gt; T anyName(String arg)</c>
-	 * or a public constructor with signature <c>public T(String arg)</c>, such as {@link Boolean}, {@link Integer}, {@link java.nio.charset.Charset}, {@link java.io.File}, etc.
+	 * or a public constructor with signature <c>public T(String arg)</c>, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>

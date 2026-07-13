@@ -22,7 +22,7 @@ import java.net.http.HttpRequest.*;
 import java.net.http.HttpResponse.*;
 
 /**
- * {@link HttpTransport} implementation backed by the JDK's built-in {@link java.net.http.HttpClient}.
+ * {@link HttpTransport} implementation backed by the JDK's built-in {@link HttpClient}.
  *
  * <p>
  * This is the <b>default</b> transport used by {@link RestClient}.  It is built into the
@@ -52,10 +52,10 @@ import java.net.http.HttpResponse.*;
 })
 public final class JavaHttpTransport implements HttpTransport {
 
-	private final java.net.http.HttpClient httpClient;
+	private final HttpClient httpClient;
 
 	JavaHttpTransport(JavaHttpTransportBuilder builder) {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : java.net.http.HttpClient.newHttpClient();
+		this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClient.newHttpClient();
 	}
 
 	/**
@@ -68,7 +68,7 @@ public final class JavaHttpTransport implements HttpTransport {
 	}
 
 	/**
-	 * Returns a new instance backed by a default {@link java.net.http.HttpClient}.
+	 * Returns a new instance backed by a default {@link HttpClient}.
 	 *
 	 * @return A new instance. Never <jk>null</jk>.
 	 */

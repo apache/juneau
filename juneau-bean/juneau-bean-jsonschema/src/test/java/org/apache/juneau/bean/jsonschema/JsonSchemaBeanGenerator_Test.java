@@ -91,8 +91,8 @@ class JsonSchemaBeanGenerator_Test extends TestBase {
 	@Test void a07_staticOfFactories() {
 		assertEquals("object", JsonSchema.of(SimpleBean.class).getTypeAsJsonType().toString().toLowerCase(Locale.ROOT));
 		assertNotNull(JsonSchema.of(SimpleBean.class).getProperty("name"));
-		assertEquals("object", JsonSchema.of((java.lang.reflect.Type)SimpleBean.class).getTypeAsJsonType().toString().toLowerCase(Locale.ROOT));
-		assertNotNull(JsonSchema.of((java.lang.reflect.Type)SimpleBean.class).getProperty("name"));
+		assertEquals("object", JsonSchema.of((Type)SimpleBean.class).getTypeAsJsonType().toString().toLowerCase(Locale.ROOT));
+		assertNotNull(JsonSchema.of((Type)SimpleBean.class).getProperty("name"));
 	}
 
 	@Test void a08_toBeanConversion() {

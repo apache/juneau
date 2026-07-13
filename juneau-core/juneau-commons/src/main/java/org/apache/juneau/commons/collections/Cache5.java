@@ -31,7 +31,7 @@ import org.apache.juneau.commons.function.*;
  *
  * <h5 class='section'>Overview:</h5>
  * <p>
- * This class uses {@link java.util.concurrent.ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
+ * This class uses {@link ConcurrentHashMap} internally to provide a thread-safe caching layer with automatic
  * value computation, cache eviction, and statistics tracking for five-part composite keys. It's designed for
  * caching expensive-to-compute or frequently-accessed objects indexed by five keys.
  *
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.function.*;
  * 	<li class='jc'>{@link Cache2}
  * 	<li class='jc'>{@link Cache3}
  * 	<li class='jc'>{@link Cache4}
- * 	<li class='jc'>{@link java.util.concurrent.ConcurrentHashMap}
+ * 	<li class='jc'>{@link ConcurrentHashMap}
  * 	<li class='link'><a class="doclink" href="../../../../../index.html#juneau-commons">Overview &gt; juneau-commons</a>
  * </ul>
  *
@@ -264,12 +264,12 @@ public class Cache5<K1,K2,K3,K4,K5,V> {
 
 	// Internal map with Tuple5 keys for content-based equality (especially for arrays)
 	// If threadLocal is true, this is null and threadLocalMap is used instead
-	private final java.util.Map<Tuple5<K1,K2,K3,K4,K5>,V> map;
+	private final Map<Tuple5<K1,K2,K3,K4,K5>,V> map;
 
 	@SuppressWarnings({
 		"java:S5164" // Cleanup method provided: cleanup()
 	})
-	private final ThreadLocal<java.util.Map<Tuple5<K1,K2,K3,K4,K5>,V>> threadLocalMap;
+	private final ThreadLocal<Map<Tuple5<K1,K2,K3,K4,K5>,V>> threadLocalMap;
 
 	private final boolean isThreadLocal;
 

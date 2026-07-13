@@ -35,9 +35,9 @@ import java.nio.charset.*;
  * the {@link Reader} are buffered. There is therefore no well defined correlation
  * between the current position of the {@link Reader} and that of the {@link ReaderInputStream}.
  * This also implies that in general there is no need to wrap the underlying {@link Reader}
- * in a {@link java.io.BufferedReader}.
+ * in a {@link BufferedReader}.
  * <p>
- * {@link ReaderInputStream} implements the inverse transformation of {@link java.io.InputStreamReader};
+ * {@link ReaderInputStream} implements the inverse transformation of {@link InputStreamReader};
  * in the following example, reading from {@code in2} would return the same byte
  * sequence as reading from {@code in} (provided that the initial byte sequence is legal
  * with respect to the charset encoding):
@@ -46,9 +46,9 @@ import java.nio.charset.*;
  * Charset cs = ...
  * InputStreamReader reader = new InputStreamReader(in, cs);
  * ReaderInputStream in2 = new ReaderInputStream(reader, cs);</pre>
- * {@link ReaderInputStream} implements the same transformation as {@link java.io.OutputStreamWriter},
+ * {@link ReaderInputStream} implements the same transformation as {@link OutputStreamWriter},
  * except that the control flow is reversed: both classes transform a character stream
- * into a byte stream, but {@link java.io.OutputStreamWriter} pushes data to the underlying stream,
+ * into a byte stream, but {@link OutputStreamWriter} pushes data to the underlying stream,
  * while {@link ReaderInputStream} pulls it from the underlying stream.
  * <p>
  * Note that while there are use cases where there is no alternative to using

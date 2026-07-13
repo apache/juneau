@@ -303,7 +303,7 @@ class Logger_Test extends TestBase {
 	@Test void c09_addHandler() {
 		// Test line 276: delegate.addHandler(handler)
 		var logger = getLogger("c09");
-		var handler = new java.util.logging.ConsoleHandler();
+		var handler = new ConsoleHandler();
 
 		// Add handler - should delegate to underlying logger
 		logger.addHandler(handler);
@@ -325,7 +325,7 @@ class Logger_Test extends TestBase {
 	@Test void c10_removeHandler() {
 		// Test line 281: delegate.removeHandler(handler)
 		var logger = getLogger("c10");
-		var handler = new java.util.logging.ConsoleHandler();
+		var handler = new ConsoleHandler();
 
 		// Add handler first
 		logger.addHandler(handler);

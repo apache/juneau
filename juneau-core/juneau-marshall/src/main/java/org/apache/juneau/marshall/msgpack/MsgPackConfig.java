@@ -62,7 +62,7 @@ public @interface MsgPackConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.msgpack.MsgPackSerializer.Builder#addBeanTypesMsgPack()}
+	 * 	<li class='jm'>{@link MsgPackSerializer.Builder#addBeanTypesMsgPack()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

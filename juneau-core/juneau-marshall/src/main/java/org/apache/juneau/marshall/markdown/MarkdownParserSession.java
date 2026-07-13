@@ -135,7 +135,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 
 	@Override /* Overridden from ParserSession */
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
-		try (var r = new java.io.BufferedReader(pipe.getReader())) {
+		try (var r = new BufferedReader(pipe.getReader())) {
 			var lines = readAllLines(r);
 			return parseAnything(lines, type, getOuter(), null);
 		}
@@ -796,7 +796,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * @return All lines.
 	 * @throws IOException Thrown by underlying stream.
 	 */
-	protected List<String> readAllLines(java.io.BufferedReader r) throws IOException {
+	protected List<String> readAllLines(BufferedReader r) throws IOException {
 		var lines = new ArrayList<String>();
 		String line;
 		while ((line = r.readLine()) != null)

@@ -31,7 +31,7 @@ import org.apache.juneau.http.*;
  * 	<li>{@link HttpBody} — passed through directly (streaming preferred over buffering)
  * 	<li>{@link InputStream} — wrapped in a streaming body
  * 	<li>{@code byte[]} — wrapped in a byte-array body
- * 	<li>{@link java.io.File} — wrapped in a file body
+ * 	<li>{@link File} — wrapped in a file body
  * </ol>
  *
  * <p>

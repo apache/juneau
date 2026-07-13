@@ -355,7 +355,7 @@ public class FluentResponseBodyAssertion<R> extends FluentObjectAssertion<Respon
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentResponseBodyAssertion<R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentResponseBodyAssertion<R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

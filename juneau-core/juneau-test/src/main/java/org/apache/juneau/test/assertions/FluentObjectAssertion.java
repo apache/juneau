@@ -435,7 +435,7 @@ public class FluentObjectAssertion<T,R> extends FluentAssertion<R> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public FluentObjectAssertion<T,R> setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public FluentObjectAssertion<T,R> setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

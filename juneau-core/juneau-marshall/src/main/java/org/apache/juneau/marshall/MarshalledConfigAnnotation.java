@@ -34,7 +34,7 @@ public class MarshalledConfigAnnotation {
 	private MarshalledConfigAnnotation() {}
 
 	/**
-	 * Applies {@link MarshalledConfig} annotations to a {@link org.apache.juneau.marshall.MarshallingContext.Builder}.
+	 * Applies {@link MarshalledConfig} annotations to a {@link MarshallingContext.Builder}.
 	 */
 	public static class Applier extends AnnotationApplier<MarshalledConfig,MarshallingContext.Builder> {
 

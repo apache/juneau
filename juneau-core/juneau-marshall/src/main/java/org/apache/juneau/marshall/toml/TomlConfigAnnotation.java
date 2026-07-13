@@ -28,7 +28,7 @@ public class TomlConfigAnnotation {
 	private TomlConfigAnnotation() {}
 
 	/**
-	 * Applies {@link TomlConfig} annotations to a {@link org.apache.juneau.marshall.toml.TomlParser.Builder}.
+	 * Applies {@link TomlConfig} annotations to a {@link TomlParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<TomlConfig,TomlParser.Builder> {
 
@@ -48,7 +48,7 @@ public class TomlConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link TomlConfig} annotations to a {@link org.apache.juneau.marshall.toml.TomlSerializer.Builder}.
+	 * Applies {@link TomlConfig} annotations to a {@link TomlSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<TomlConfig,TomlSerializer.Builder> {
 

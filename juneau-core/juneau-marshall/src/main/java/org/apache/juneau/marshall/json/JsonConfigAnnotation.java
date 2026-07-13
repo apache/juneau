@@ -35,7 +35,7 @@ public class JsonConfigAnnotation {
 	private JsonConfigAnnotation() {}
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonParser.Builder}.
+	 * Applies {@link JsonConfig} annotations to a {@link JsonParser.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.
@@ -60,7 +60,7 @@ public class JsonConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link JsonConfig} annotations to a {@link org.apache.juneau.marshall.json.JsonSerializer.Builder}.
+	 * Applies {@link JsonConfig} annotations to a {@link JsonSerializer.Builder}.
 	 */
 	@SuppressWarnings({
 		"rawtypes" // Raw types required for reflective annotation application.

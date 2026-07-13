@@ -63,7 +63,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#addBeanTypesUon()}
+	 * 	<li class='jm'>{@link UonSerializer.Builder#addBeanTypesUon()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -88,7 +88,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonParser.Builder#decoding()}
+	 * 	<li class='jm'>{@link UonParser.Builder#decoding()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -117,7 +117,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#encoding()}
+	 * 	<li class='jm'>{@link UonSerializer.Builder#encoding()}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -141,7 +141,7 @@ public @interface UonConfig {
 	 * </ul>
 	 *
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonSerializer.Builder#paramFormat(ParamFormat)}
+	 * 	<li class='jm'>{@link UonSerializer.Builder#paramFormat(ParamFormat)}
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -176,7 +176,7 @@ public @interface UonConfig {
 	 * </ul>
 	 * 
 	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link org.apache.juneau.marshall.uon.UonParser.Builder#validateEnd()}
+	 * 	<li class='jm'>{@link UonParser.Builder#validateEnd()}
 	 * </ul>
 	 *
 	 * @return The annotation value.

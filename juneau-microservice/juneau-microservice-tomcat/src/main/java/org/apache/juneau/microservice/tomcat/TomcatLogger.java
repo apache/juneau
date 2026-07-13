@@ -24,7 +24,7 @@ import java.util.logging.*;
 import org.apache.juli.logging.*;
 
 /**
- * Implementation of the embedded-Tomcat {@link Log} façade based on {@link java.util.logging.Logger}.
+ * Implementation of the embedded-Tomcat {@link Log} façade based on {@link Logger}.
  *
  * <p>
  * Allows Tomcat to log to the Java Util logging framework (and thus to the main log file defined in the

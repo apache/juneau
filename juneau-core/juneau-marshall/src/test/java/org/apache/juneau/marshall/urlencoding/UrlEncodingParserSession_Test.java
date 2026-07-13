@@ -379,7 +379,7 @@ class UrlEncodingParserSession_Test extends TestBase {
 
 	@Test void i01_malformed_nonBeanClass() {
 		// Class without no-arg ctor and without _type/_value: triggers "Malformed" or "not-a-bean" throw path.
-		assertThrows(ParseException.class, () -> P.parse("?x=1", java.lang.Thread.class));
+		assertThrows(ParseException.class, () -> P.parse("?x=1", Thread.class));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

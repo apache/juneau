@@ -55,7 +55,7 @@ import java.util.*;
  * <p>
  * The coercion table is intentionally conservative &mdash; the validator that built the claims map is
  * the authoritative source of richer type-mapping. If a JWT validator decodes a claim as a
- * {@code java.util.List<String>}, callers can read it back as {@code List.class} or pull individual
+ * {@code List<String>}, callers can read it back as {@code List.class} or pull individual
  * elements via {@link #getClaims()} and operate on the {@link List} directly.
  *
  * <h5 class='section'>See Also:</h5><ul>

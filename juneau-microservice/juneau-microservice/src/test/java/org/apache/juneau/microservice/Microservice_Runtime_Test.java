@@ -500,13 +500,13 @@ class Microservice_Runtime_Test extends TestBase {
 	}
 
 	@Test void k03_builder_configurations_acceptsList() {
-		var b = Microservice.create().configurations(java.util.List.of(String.class));
+		var b = Microservice.create().configurations(List.of(String.class));
 		assertEquals(1, b.configurations.size());
 		assertSame(String.class, b.configurations.get(0));
 	}
 
 	@Test void k04_builder_configurations_listAcceptsNull() {
-		var b = Microservice.create().configurations((java.util.List<Class<?>>) null);
+		var b = Microservice.create().configurations((List<Class<?>>) null);
 		assertTrue(b.configurations.isEmpty());
 	}
 }

@@ -114,7 +114,7 @@ class HttpParts_Test extends TestBase {
 
 	@Test void a13_csvArrayPart_stringArray() {
 		// Test via BasicCsvArrayPart.of to verify behavior
-		var p = org.apache.juneau.http.classic.part.BasicCsvArrayPart.of("Foo", new String[]{"a", "b", "c"});
+		var p = BasicCsvArrayPart.of("Foo", new String[]{"a", "b", "c"});
 		assertNotNull(p);
 	}
 

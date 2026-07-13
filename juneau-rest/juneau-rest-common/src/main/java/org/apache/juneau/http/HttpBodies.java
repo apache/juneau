@@ -27,7 +27,7 @@ import org.apache.juneau.http.part.*;
  * <p>
  * Import statically for clean DSL-style usage:
  * <p class='bjava'>
- * 	import static org.apache.juneau.http.HttpBodies.*;
+ * 	import static HttpBodies.*;
  *
  * 	RestRequest <jv>req</jv> = client.post(<js>"/api/upload"</js>)
  * 		.body(stringBody(<js>"hello world"</js>, <js>"text/plain"</js>));

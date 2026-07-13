@@ -69,7 +69,7 @@ public class SpringBeanStore extends BasicBeanStore {
 	 * <p>
 	 * If {@code appContext} is non-null, this constructor also installs a
 	 * {@link SpringEnvironmentPropertySource} on the process-wide {@link Settings} singleton so that
-	 * {@link org.apache.juneau.commons.inject.Value @Value("&#123;...&#125;")} placeholders resolve against
+	 * {@link Value @Value("&#123;...&#125;")} placeholders resolve against
 	 * the Spring {@link org.springframework.core.env.Environment Environment} (i.e. against
 	 * {@code application.yaml}, env vars, system properties, etc.).  The source is removed by
 	 * {@link #clear()}.

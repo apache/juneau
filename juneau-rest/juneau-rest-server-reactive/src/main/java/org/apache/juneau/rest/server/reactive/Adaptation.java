@@ -39,9 +39,9 @@ import java.util.concurrent.*;
 public final class Adaptation {
 
 	private final CompletionStage<?> single;
-	private final java.util.concurrent.Flow.Publisher<?> stream;
+	private final Flow.Publisher<?> stream;
 
-	private Adaptation(CompletionStage<?> single, java.util.concurrent.Flow.Publisher<?> stream) {
+	private Adaptation(CompletionStage<?> single, Flow.Publisher<?> stream) {
 		this.single = single;
 		this.stream = stream;
 	}
@@ -62,7 +62,7 @@ public final class Adaptation {
 	 * @param value The publisher. Must not be {@code null}.
 	 * @return A new adaptation.
 	 */
-	public static Adaptation stream(java.util.concurrent.Flow.Publisher<?> value) {
+	public static Adaptation stream(Flow.Publisher<?> value) {
 		return new Adaptation(null, assertArgNotNull("value", value));
 	}
 
@@ -95,7 +95,7 @@ public final class Adaptation {
 	@SuppressWarnings({
 		"java:S1452" // Publisher<?> wildcard return intentional; callers only need the base publisher type for consumption
 	})
-	public java.util.concurrent.Flow.Publisher<?> stream() {
+	public Flow.Publisher<?> stream() {
 		return stream;
 	}
 }

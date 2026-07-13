@@ -140,7 +140,7 @@ public class BooleanAssertion extends FluentBooleanAssertion<BooleanAssertion> {
 	}
 
 	@Override /* Overridden from Assertion */
-	public BooleanAssertion setThrowable(Class<? extends java.lang.RuntimeException> value) {
+	public BooleanAssertion setThrowable(Class<? extends RuntimeException> value) {
 		super.setThrowable(value);
 		return this;
 	}

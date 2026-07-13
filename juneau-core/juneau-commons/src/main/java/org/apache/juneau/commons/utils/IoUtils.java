@@ -859,7 +859,7 @@ public class IoUtils {
 	public static long pipe(InputStream in, Writer out) throws IOException {
 		if (in == null || out == null)
 			return 0;
-		return pipe(new java.io.InputStreamReader(in, UTF8), out);
+		return pipe(new InputStreamReader(in, UTF8), out);
 	}
 
 	/** Pipes input stream to writer with exception handler. */
@@ -867,7 +867,7 @@ public class IoUtils {
 		try {
 			if (in == null || out == null)
 				return 0;
-			return pipe(new java.io.InputStreamReader(in, UTF8), out);
+			return pipe(new InputStreamReader(in, UTF8), out);
 		} catch (IOException e) {
 			onException.accept(e);
 			return -2;
@@ -889,7 +889,7 @@ public class IoUtils {
 			return 0;
 		var total = 0l;
 		try (var in2 = in) {
-			var osw = new java.io.OutputStreamWriter(out, UTF8);
+			var osw = new OutputStreamWriter(out, UTF8);
 			var i = 0;
 			var b = charBuffer(-1);
 			while ((i = in.read(b)) > 0) {

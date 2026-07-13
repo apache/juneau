@@ -35,7 +35,7 @@ public class JsonSchemaConfigAnnotation {
 	private JsonSchemaConfigAnnotation() {}
 
 	/**
-	 * Applies {@link JsonSchemaConfig} annotations to a {@link org.apache.juneau.marshall.jsonschema.JsonSchemaGenerator.Builder}.
+	 * Applies {@link JsonSchemaConfig} annotations to a {@link JsonSchemaGenerator.Builder}.
 	 */
 	public static class Apply extends AnnotationApplier<JsonSchemaConfig,JsonSchemaGenerator.Builder> {
 

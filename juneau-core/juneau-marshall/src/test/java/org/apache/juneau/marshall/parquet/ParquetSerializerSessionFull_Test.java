@@ -1267,7 +1267,7 @@ class ParquetSerializerSessionFull_Test extends TestBase {
 			new OptBeanOuter("b", new OptNestedBean(oe())),
 			new OptBeanOuter("c", null));
 		var bytes = ParquetSerializer.create().keepNullProperties().build().serialize(in);
-		var out = (java.util.List<OptBeanOuter>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBeanOuter.class);
+		var out = (List<OptBeanOuter>) ParquetParser.DEFAULT.parse(bytes, List.class, OptBeanOuter.class);
 		assertEquals(3, out.size());
 	}
 

@@ -35,7 +35,7 @@ public class CborConfigAnnotation {
 	private CborConfigAnnotation() {}
 
 	/**
-	 * Applies {@link CborConfig} annotations to a {@link org.apache.juneau.marshall.cbor.CborParser.Builder}.
+	 * Applies {@link CborConfig} annotations to a {@link CborParser.Builder}.
 	 */
 	public static class ParserApply extends AnnotationApplier<CborConfig,CborParser.Builder> {
 
@@ -55,7 +55,7 @@ public class CborConfigAnnotation {
 	}
 
 	/**
-	 * Applies {@link CborConfig} annotations to a {@link org.apache.juneau.marshall.cbor.CborSerializer.Builder}.
+	 * Applies {@link CborConfig} annotations to a {@link CborSerializer.Builder}.
 	 */
 	public static class SerializerApply extends AnnotationApplier<CborConfig,CborSerializer.Builder> {
 

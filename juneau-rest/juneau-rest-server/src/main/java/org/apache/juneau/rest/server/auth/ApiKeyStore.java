@@ -33,7 +33,7 @@ import java.util.*;
  * <ul>
  * 	<li>Treat the key as untrusted input (no logging of full keys, no exception messages echoing the key).
  * 	<li>Compare keys with a constant-time comparison if the store is in-memory &mdash; this matters for
- * 		short keys where a timing side-channel could leak bytes. {@code java.security.MessageDigest.isEqual(...)}
+ * 		short keys where a timing side-channel could leak bytes. {@code MessageDigest.isEqual(...)}
  * 		over the UTF-8 byte arrays is the standard idiom.
  * 	<li>Return {@link Optional#empty()} for any unknown / revoked / expired key; do not throw for ordinary
  * 		"not found" misses (that would couple lookup failures to exception-construction overhead under load).
