@@ -30,14 +30,20 @@ import org.apache.juneau.commons.reflect.*;
  *
  * <p>A single wildcard static import
  * ({@code import static org.apache.juneau.commons.utils.Shorts.*;}) exposes the entire
- * short-name vocabulary. Every method here is a one-line delegation to a canonical,
- * fully-descriptive method on a domain class — {@code Shorts} holds no logic of its own, so
- * behavior is identical to calling the canonical method directly. Each alias documents its
- * target via an {@code @see} tag. Canonical implementations live in {@link ObjectUtils},
- * {@link StringUtils}, {@link CollectionUtils}, {@link ClassUtils}, {@link ThrowableUtils},
- * {@link IoUtils}, {@link FileUtils}, {@link AssertionUtils}, {@link PredicateUtils},
- * {@link SystemUtils}, {@link DateUtils}, and
+ * short-name vocabulary. Almost every method here is a one-line delegation to a canonical,
+ * fully-descriptive method on a domain class — behavior is identical to calling the canonical
+ * method directly — and each such alias documents its target via an {@code @see} tag. Canonical
+ * implementations live in {@link ObjectUtils}, {@link StringUtils}, {@link CollectionUtils},
+ * {@link ClassUtils}, {@link ThrowableUtils}, {@link IoUtils}, {@link FileUtils},
+ * {@link AssertionUtils}, {@link PredicateUtils}, {@link SystemUtils}, {@link DateUtils}, and
  * {@link org.apache.juneau.commons.reflect.ReflectionUtils}.
+ *
+ * <p><b>Documented exception:</b> the terse exception factories ({@code rex}/{@code brex}/
+ * {@code iaex}/{@code isex}/{@code uoex}/{@code uoroex}/{@code ioex}/{@code exex}) are
+ * self-contained — they construct the exception directly rather than delegating to a domain
+ * class — so that the domain {@code *Utils} classes can stay {@code Shorts}-free (they use the
+ * package-private {@code Exceptions} helper instead). These are the only methods in this class
+ * with no {@code @see} tag.
  *
  * <p><b>Disjointness invariant:</b> no {@code Shorts} alias name is identical to the canonical
  * (full) method name of any method in any domain class. This lets a developer wildcard-import
