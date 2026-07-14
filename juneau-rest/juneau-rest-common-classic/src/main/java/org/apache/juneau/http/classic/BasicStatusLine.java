@@ -213,7 +213,7 @@ public class BasicStatusLine implements StatusLine {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(protocolVersion, statusCode, reasonPhrase, locale);
+		return h(protocolVersion, statusCode, reasonPhrase, locale);
 	}
 
 	/**

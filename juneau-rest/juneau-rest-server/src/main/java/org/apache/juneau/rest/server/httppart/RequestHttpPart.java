@@ -528,7 +528,7 @@ public class RequestHttpPart {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(getName(), getValue());
+		return h(getName(), getValue());
 	}
 
 	@Override /* Overridden from Object */

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.stream;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
@@ -167,8 +168,8 @@ class RecordStream_Test extends TestBase {
 		public int age;
 		public Flat() {}
 		public Flat(String name, int age) { this.name = name; this.age = age; }
-		@Override public boolean equals(Object o) { return o instanceof Flat f && Objects.equals(name, f.name) && age == f.age; }
-		@Override public int hashCode() { return Objects.hash(name, age); }
+		@Override public boolean equals(Object o) { return o instanceof Flat f && eq(name, f.name) && age == f.age; }
+		@Override public int hashCode() { return h(name, age); }
 	}
 
 	public static class Nested {
@@ -176,8 +177,8 @@ class RecordStream_Test extends TestBase {
 		public Flat inner;
 		public Nested() {}
 		public Nested(String label, Flat inner) { this.label = label; this.inner = inner; }
-		@Override public boolean equals(Object o) { return o instanceof Nested n && Objects.equals(label, n.label) && Objects.equals(inner, n.inner); }
-		@Override public int hashCode() { return Objects.hash(label, inner); }
+		@Override public boolean equals(Object o) { return o instanceof Nested n && eq(label, n.label) && eq(inner, n.inner); }
+		@Override public int hashCode() { return h(label, inner); }
 	}
 
 	public static class WithCollections {
@@ -208,8 +209,8 @@ class RecordStream_Test extends TestBase {
 		public Node child;
 		public Node() {}
 		public Node(String id, Node child) { this.id = id; this.child = child; }
-		@Override public boolean equals(Object o) { return o instanceof Node n && Objects.equals(id, n.id) && Objects.equals(child, n.child); }
-		@Override public int hashCode() { return Objects.hash(id, child); }
+		@Override public boolean equals(Object o) { return o instanceof Node n && eq(id, n.id) && eq(child, n.child); }
+		@Override public int hashCode() { return h(id, child); }
 	}
 
 	/** Builds a {@link Node} chain {@code depth} levels deep, null-terminated. */

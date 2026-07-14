@@ -119,7 +119,7 @@ class NestedTokenizer {
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(value, nested);
+			return h(value, nested);
 		}
 
 		/**

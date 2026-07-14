@@ -140,6 +140,6 @@ public class HttpHeaderBean implements HttpHeader {
 
 	@Override /* Object */
 	public int hashCode() {
-		return Objects.hash(name.toLowerCase(Locale.ROOT), getValue());
+		return h(name.toLowerCase(Locale.ROOT), getValue());
 	}
 }

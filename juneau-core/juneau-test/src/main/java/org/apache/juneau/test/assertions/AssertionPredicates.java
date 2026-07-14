@@ -145,7 +145,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> eq(String value) {
-		return test(x -> Objects.equals(s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);
+		return test(x -> Shorts.eq(s(x), value), MSG_valueDidNotMatchExpected, value, VALUE);  // NOAI
 	}
 
 	/**
@@ -232,7 +232,7 @@ public class AssertionPredicates {
 	 * @return A new predicate.
 	 */
 	public static final <T> AssertionPredicate<T> ne(String value) {
-		return test(x -> ! Objects.equals(s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
+		return test(x -> neq(s(x), value), MSG_valueUnexpectedlyMatched, VALUE);
 	}
 
 	/**

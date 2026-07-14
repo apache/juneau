@@ -19,8 +19,6 @@ package org.apache.juneau.http.request;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.*;
-
 import org.apache.juneau.http.*;
 
 /**
@@ -125,6 +123,6 @@ public final class HttpRequestLineBean implements HttpRequestLine {
 
 	@Override /* Object */
 	public int hashCode() {
-		return Objects.hash(method, uri, protocolVersion);
+		return h(method, uri, protocolVersion);
 	}
 }

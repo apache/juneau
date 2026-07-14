@@ -105,7 +105,7 @@ public final class RrpcInterfaceMethodMeta {
 
 		@Override
 		public int hashCode() {
-			return Objects.hash(Arrays.hashCode(interceptors), timeout, retries, retryNonIdempotent, throwOnError);
+			return h(Arrays.hashCode(interceptors), timeout, retries, retryNonIdempotent, throwOnError);
 		}
 
 		@Override

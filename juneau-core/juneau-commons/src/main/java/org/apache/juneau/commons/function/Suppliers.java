@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.function;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -41,7 +42,7 @@ public class Suppliers {
 		return () -> {
 			var h = cache.get();
 			if (h == null) {
-				h = Optional.ofNullable(supplier.get());
+				h = o(supplier.get());
 				if (! cache.compareAndSet(null, h)) h = cache.get();
 			}
 			return h.orElse(null);

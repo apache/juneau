@@ -189,7 +189,7 @@ public class BasicPart implements NameValuePair, Headerable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(name, getValue());
+		return h(name, getValue());
 	}
 
 	@Override /* Overridden from Object */

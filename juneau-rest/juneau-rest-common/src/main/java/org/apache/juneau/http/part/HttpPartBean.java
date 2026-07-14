@@ -19,7 +19,6 @@ package org.apache.juneau.http.part;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.http.*;
@@ -130,6 +129,6 @@ public class HttpPartBean implements HttpPart {
 
 	@Override /* Object */
 	public int hashCode() {
-		return Objects.hash(name, getValue());
+		return h(name, getValue());
 	}
 }

@@ -19,8 +19,6 @@ package org.apache.juneau.http.response;
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.*;
-
 import org.apache.juneau.http.*;
 
 /**
@@ -131,6 +129,6 @@ public final class HttpStatusLineBean implements HttpStatusLine {
 
 	@Override /* Object */
 	public int hashCode() {
-		return Objects.hash(protocolVersion, statusCode, reasonPhrase);
+		return h(protocolVersion, statusCode, reasonPhrase);
 	}
 }

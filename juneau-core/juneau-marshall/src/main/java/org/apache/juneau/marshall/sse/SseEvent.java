@@ -18,8 +18,6 @@ package org.apache.juneau.marshall.sse;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.util.*;
-
 import org.apache.juneau.commons.bean.*;
 
 /**
@@ -185,7 +183,7 @@ public class SseEvent {
 
 	@Override /* Overridden from Object */
 	public int hashCode() {
-		return Objects.hash(event, data, id, retry);
+		return h(event, data, id, retry);
 	}
 
 	@Override /* Overridden from Object */
