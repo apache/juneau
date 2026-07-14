@@ -48,7 +48,7 @@ jobs:
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@8aad20d150bbac5944a9f9d289da16a4b0d87c1e    # 3.29.5
+      uses: github/codeql-action/init@e5d2f324924c57b6cabef9bdd7a1c85d62a89be2    # 3.37.0
       with:
         languages: ${{ matrix.language }}
         # If you wish to specify custom queries, you can do so here or in a config file.
@@ -81,4 +81,6 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@8aad20d150bbac5944a9f9d289da16a4b0d87c1e    # 3.29.5
+      uses: github/codeql-action/analyze@e5d2f324924c57b6cabef9bdd7a1c85d62a89be2    # 3.37.0
+      env:
+        CODEQL_ACTION_EXTRA_OPTIONS: '{"database":{"run-queries":["--additional-packs=${{ github.workspace }}/.github/codeql","--extension-packs=apache/juneau-security-models"]}}'

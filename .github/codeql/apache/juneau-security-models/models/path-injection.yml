@@ -1,0 +1,49 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# `barrierModel` rows (CodeQL >= 2.25.2) that tell the java/path-injection query
+# family to stop taint tracking at the return value of juneau's path-boundary
+# funnel, org.apache.juneau.commons.utils.FileUtils.
+#
+# Background (TODO-240): FileUtils.resolveSafely(root, userPath) resolves a
+# user-supplied path against a root directory, rejecting (IllegalArgumentException)
+# any target that escapes the root -- via `../`, absolute-path injection, or a
+# symlink pointing outside the root -- and returns Optional.empty() only when the
+# (already-boundary-checked) target does not exist. It is a genuine cross-method
+# sanitizer, but CodeQL's stock java/path-injection query has no way to know that
+# without this model, so every reachable call site had to be manually dismissed as
+# a false positive (see .work/todo/finished/FINISHED-235-codeql-security-alert-remediation.md,
+# alerts #91, #93, #321-#328) -- and those dismissals don't survive a file move, as
+# proven by TODO-236 re-spawning #322-#328 under fresh ids.
+extensions:
+  - addsTo:
+      pack: codeql/java-all
+      extensible: barrierModel
+      checkPresence: false # tolerate CLI/bundle versions that predate barrierModel (< 2.25.2)
+    data:
+      # FileUtils.resolveSafely(File rootDir, String userPath) -> Optional<File>
+      # (juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/utils/FileUtils.java:286)
+      # The boundary-checked File lives inside the returned Optional's element, so both
+      # the plain ReturnValue and its unwrapped ".Element" are modeled as barriers -- the
+      # latter is what actually matters once a caller unwraps via Optional#get/orElse/etc.,
+      # since CodeQL's own java.util.model.yml summarizes those as
+      # `Argument[this].Element -> ReturnValue` (value-preserving).
+      - ["org.apache.juneau.commons.utils", "FileUtils", False, "resolveSafely", "(File,String)", "", "ReturnValue", "path-injection", "manual"]
+      - ["org.apache.juneau.commons.utils", "FileUtils", False, "resolveSafely", "(File,String)", "", "ReturnValue.Element", "path-injection", "manual"]
+      # FileUtils.resolveVirtualPathSafely(String basePath, String userPath) -> String
+      # (juneau-core/juneau-commons/src/main/java/org/apache/juneau/commons/utils/FileUtils.java:345)
+      # Virtual-path variant; returns a plain (already boundary-checked) String, no
+      # Optional wrapper, so only the bare ReturnValue access path applies.
+      - ["org.apache.juneau.commons.utils", "FileUtils", False, "resolveVirtualPathSafely", "(String,String)", "", "ReturnValue", "path-injection", "manual"]
