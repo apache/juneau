@@ -18,6 +18,7 @@ package org.apache.juneau.marshall.parquet;
 
 import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.commons.utils.SystemUtils.*;
 import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;
 
 import java.io.*;
@@ -47,8 +48,12 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private static final byte[] MAGIC = "PAR1".getBytes(StandardCharsets.UTF_8);
 	private static final String ARG_ctx = "ctx";
 
-	/** Enable via {@link #setDebugEnabled} or -Djuneau.parquet.debug=true. */
-	private static boolean parquetDebug = "true".equals(System.getProperty("juneau.parquet.debug"));
+	/**
+	 * Explicit override set via {@link #setDebugEnabled}.  When {@code null}, the debug state is read
+	 * from the {@code juneau.parquet.debug} setting through the settings lookup chain (via {@code env(...)}),
+	 * making it test-overridable via {@code Settings.setLocal}/{@code setGlobal}.
+	 */
+	private static Boolean parquetDebugOverride;
 
 	/**
 	 * Enable debug output for schema/column tracing.
@@ -56,16 +61,16 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	 * @param enabled <jk>true</jk> to enable debug logging to temp file.
 	 */
 	public static void setDebugEnabled(boolean enabled) {
-		parquetDebug = enabled;
+		parquetDebugOverride = enabled;
 	}
 
 	private static boolean parquetDebug() {
-		return parquetDebug;
+		return parquetDebugOverride != null ? parquetDebugOverride : env("juneau.parquet.debug", false);
 	}
 
 	private static void parquetDebugLog(String msg) {
 		try {
-			var f = java.nio.file.Paths.get(System.getProperty("java.io.tmpdir", "/tmp"), "juneau-parquet-debug.log");
+			var f = java.nio.file.Paths.get(env("java.io.tmpdir", "/tmp"), "juneau-parquet-debug.log");
 			java.nio.file.Files.writeString(f, "[Parquet DEBUG] " + msg + "\n",
 				java.nio.file.StandardOpenOption.CREATE, java.nio.file.StandardOpenOption.APPEND);
 		} catch (@SuppressWarnings("unused") IOException ignored) {

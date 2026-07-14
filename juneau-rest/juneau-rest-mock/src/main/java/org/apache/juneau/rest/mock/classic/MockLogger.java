@@ -225,6 +225,12 @@ public class MockLogger extends Logger {
 			synchronized (this) {
 				f = formatter.get();
 				if (f == null) { // HTT - double-checked locking; false branch requires concurrent thread
+					// Intentional, contained global-property mutation: the JDK's SimpleFormatter reads its layout
+					// exclusively from the raw java.util.logging.SimpleFormatter.format system property at
+					// construction time.  There is no constructor/API to inject the format, and the Settings
+					// abstraction cannot intercept a JDK-internal raw read, so we must set the property, construct
+					// the formatter, then restore the prior value.  The mutation is fully guarded by this lock and
+					// paired save/restore.
 					String oldFormat = System.getProperty(FORMAT_PROPERTY);
 					System.setProperty(FORMAT_PROPERTY, format.get());
 					f = new SimpleFormatter();

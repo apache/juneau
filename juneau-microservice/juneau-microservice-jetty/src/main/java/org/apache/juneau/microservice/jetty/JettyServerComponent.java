@@ -212,6 +212,11 @@ public class JettyServerComponent implements MicroserviceListener {
 			var availablePort = findOpenPort(ports);
 
 			if (availablePortEnv.isEmpty())
+				// Intentional real-JVM-property publish: the bundled jetty.xml binds its connector to
+				// $S{availablePort,10000}, and the $S{...} SVL var resolves via raw System.getProperty (bypassing
+				// the Settings override chain).  A Settings-based write would be invisible to jetty.xml, so the
+				// bound port MUST be published as a real system property here.  The @Value-injected availablePortEnv
+				// read side is already Settings-abstracted; only this publish must stay raw.
 				System.setProperty("availablePort", String.valueOf(availablePort));
 
 			// Prefer a @Bean-supplied Server, else build one from jetty.xml.
@@ -312,6 +317,10 @@ public class JettyServerComponent implements MicroserviceListener {
 			}
 
 			if (serverPortEnv.isEmpty())
+				// Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external
+				// publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A
+				// Settings-based write would not be visible to those raw readers, so this is kept.  The
+				// @Value-injected serverPortEnv read side is already Settings-abstracted.
 				System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 			server.get().start();

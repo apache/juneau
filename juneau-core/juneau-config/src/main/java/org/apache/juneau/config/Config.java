@@ -513,7 +513,7 @@ public class Config extends Context implements ConfigEventListener {
 			return l;
 		}
 
-		var cmd = System.getProperty("sun.java.command", "not_found").split("\\s+")[0];
+		var cmd = env("sun.java.command", "not_found").split("\\s+")[0];
 		if (cmd.endsWith(".jar") && ! co(cmd, "surefirebooter")) { // HTT - not a .jar during tests
 			cmd = cmd.replaceAll(".*?([^\\\\\\/]+)\\.jar$", "$1");
 			l.add(cmd + ".cfg");
@@ -1157,6 +1157,10 @@ public class Config extends Context implements ConfigEventListener {
 		for (var section : getSectionNames()) {
 			for (var key : getKeys(section)) {
 				var k = (section.isEmpty() ? key : section + '/' + key);
+				// Intentional real-JVM-property export: this method's documented contract is to publish config
+				// entries as process-global system properties so external/third-party code (which reads raw
+				// System.getProperty) can observe them.  Routing through Settings would break that contract, so
+				// the mutation is kept deliberately.
 				System.setProperty(k, getRaw(k));
 			}
 		}

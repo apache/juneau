@@ -1166,6 +1166,10 @@ public class Microservice implements ConfigEventListener {
 		var spKeys = config.getKeys("SystemProperties");
 		if (nn(spKeys))
 			for (var key : spKeys)
+				// Intentional real-JVM-property export: the [SystemProperties] config section is a documented
+				// feature whose whole purpose is to push config entries into process-global system properties so
+				// third-party libraries (e.g. SLF4J/logging adapters) that read raw System.getProperty pick them
+				// up.  A Settings-based write would be invisible to those external consumers, so this is kept.
 				System.setProperty(key, config.get("SystemProperties/" + key).orElse(null));
 
 		// --------------------------------------------------------------------------------
@@ -1183,6 +1187,10 @@ public class Microservice implements ConfigEventListener {
 				var logDirFile = resolveFile(logDir);
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
+				// Intentional real-JVM-property publish: the resolved log directory is exposed as a process-global
+				// system property so external config/templates can reference it via the raw-reading $S{juneau.logDir}
+				// SVL var (SystemPropertiesVar reads System.getProperty directly, bypassing the Settings override
+				// chain).  A Settings-based write would not be visible to $S{...}, so this is kept.
 				System.setProperty("juneau.logDir", logDir);
 
 				var append = coalesce(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));

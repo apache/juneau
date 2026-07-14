@@ -215,6 +215,11 @@ public class TomcatServerComponent implements MicroserviceListener {
 			var availablePort = findOpenPort(ports);
 
 			if (availablePortEnv.isEmpty())
+				// Intentional real-JVM-property publish: the bound port is exposed as a process-global system
+				// property so external config/templates (e.g. the bundled jetty.xml's $S{availablePort}) can read
+				// it.  The $S{...} SVL var resolves via raw System.getProperty (bypassing the Settings override
+				// chain), so a Settings-based write would be invisible to those consumers.  The @Value-injected
+				// availablePortEnv read side is already Settings-abstracted; only this publish must stay raw.
 				System.setProperty("availablePort", String.valueOf(availablePort));
 
 			// Prefer a @Bean-supplied Tomcat, else build one programmatically via the factory.
@@ -269,6 +274,10 @@ public class TomcatServerComponent implements MicroserviceListener {
 			}
 
 			if (serverPortEnv.isEmpty())
+				// Intentional real-JVM-property publish: juneau.serverPort is a documented cross-component/external
+				// publication of the bound port, consumed via raw System.getProperty (and $S{...} SVL).  A
+				// Settings-based write would not be visible to those raw readers, so this is kept.  The
+				// @Value-injected serverPortEnv read side is already Settings-abstracted.
 				System.setProperty("juneau.serverPort", String.valueOf(availablePort));
 
 			tomcat.get().start();
