@@ -21,45 +21,45 @@
 
 	<parent>
 		<groupId>org.apache.juneau</groupId>
-		<artifactId>juneau-petstore</artifactId>
+		<artifactId>juneau-microservice-parent</artifactId>
 		<version>10.0.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>juneau-petstore-jetty</artifactId>
-	<name>Apache Juneau Petstore Jetty</name>
-	<description>Apache Juneau Petstore - Jetty/Microservice deployment</description>
+	<artifactId>juneau-microservice-examples</artifactId>
+	<name>Apache Juneau Microservice Examples</name>
+	<description>Apache Juneau Microservice example/demo REST resources (not shipped as a framework artifact)</description>
 	<packaging>jar</packaging>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-bom</artifactId>
+				<version>${jetty.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-petstore-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+		<!-- Brings juneau-microservice + juneau-rest-server transitively, and the jetty-flavored surface for DebugResource. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-microservice-jetty</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Provides the ConfigResource/LogsResource/ShutdownResource admin trio mounted by RootResources. -->
+		<!-- DebugResource calls org.eclipse.jetty.server.Server.dump() directly. -->
 		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-examples</artifactId>
-			<version>${project.version}</version>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
 		</dependency>
 
 		<!-- Test dependencies -->
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-microservice-jetty</artifactId>
-			<version>${project.version}</version>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
@@ -80,7 +80,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-client-classic</artifactId>
+			<artifactId>juneau-rest-mock</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -88,44 +88,6 @@
 
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<escapeString>\</escapeString>
-				</configuration>
-				<executions>
-					<execution>
-						<id>juneau-assembly</id>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-						<configuration>
-							<finalName>juneau-petstore-jetty-${project.version}</finalName>
-							<descriptors>
-								<descriptor>src/assembly/bin.xml</descriptor>
-							</descriptors>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -147,4 +109,5 @@
 			</plugin>
 		</plugins>
 	</build>
+
 </project>

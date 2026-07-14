@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.examples;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,7 +24,7 @@ import org.apache.juneau.*;
 import org.apache.juneau.bean.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
-import org.apache.juneau.microservice.resources.LogsResource.*;
+import org.apache.juneau.microservice.examples.LogsResource.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;

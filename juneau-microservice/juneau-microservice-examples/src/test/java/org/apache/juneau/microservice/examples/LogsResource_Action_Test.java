@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.examples;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.microservice.resources.LogsResource.*;
+import org.apache.juneau.microservice.examples.LogsResource.*;
 import org.junit.jupiter.api.*;
 
 /**

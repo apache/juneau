@@ -34,9 +34,10 @@ import org.apache.juneau.rest.server.widget.*;
  *
  * <p>
  * Note: this Spring Boot deployment intentionally does NOT mount the Jetty/Microservice admin trio
- * ({@code ConfigResource}/{@code LogsResource}/{@code ShutdownResource}) — those are Jetty-only and have no
- * meaningful analogue here (Spring Boot has its own actuator surface).  This is the documented non-parity
- * deployment-specific difference between the two petstore deployments.
+ * ({@code ConfigResource}/{@code LogsResource}/{@code ShutdownResource}, now in the
+ * {@code juneau-microservice-examples} module) — those are Jetty-only and have no meaningful analogue here
+ * (Spring Boot has its own actuator surface).  This is the documented non-parity deployment-specific
+ * difference between the two petstore deployments.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>

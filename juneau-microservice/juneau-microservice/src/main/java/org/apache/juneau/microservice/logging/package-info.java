@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 /**
- * Predefined Jetty Microservice Resources
+ * Microservice Logging Infrastructure
  */
-package org.apache.juneau.microservice.jetty.resources;
+package org.apache.juneau.microservice.logging;

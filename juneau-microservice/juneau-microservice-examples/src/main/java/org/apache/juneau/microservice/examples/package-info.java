@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 /**
- * Predefined Microservice Resources
+ * Example / demo Microservice REST Resources
  */
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.examples;

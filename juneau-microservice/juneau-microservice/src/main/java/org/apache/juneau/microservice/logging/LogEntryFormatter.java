@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.logging;
 
 import static org.apache.juneau.commons.lang.StateEnum.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;

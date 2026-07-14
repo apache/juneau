@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.examples;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -35,6 +35,7 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.http.classic.response.*;
 import org.apache.juneau.marshall.html.*;
+import org.apache.juneau.microservice.logging.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.beans.*;
 import org.apache.juneau.rest.server.converter.*;

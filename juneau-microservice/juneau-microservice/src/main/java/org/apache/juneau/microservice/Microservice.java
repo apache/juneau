@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.parser.ParseException;
 import org.apache.juneau.microservice.console.*;
-import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.microservice.logging.*;
 
 /**
  * Parent class for all microservices.

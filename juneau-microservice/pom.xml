@@ -35,6 +35,7 @@
 		<module>juneau-microservice-jetty</module>
 		<module>juneau-microservice-tomcat</module>
 		<module>juneau-microservice-test</module>
+		<module>juneau-microservice-examples</module>
 	</modules>
 
 	<build>

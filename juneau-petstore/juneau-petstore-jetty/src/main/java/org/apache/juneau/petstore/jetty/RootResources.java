@@ -18,7 +18,7 @@ package org.apache.juneau.petstore.jetty;
 
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.serializer.*;
-import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.microservice.examples.*;
 import org.apache.juneau.petstore.rest.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;

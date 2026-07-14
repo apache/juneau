@@ -20,7 +20,7 @@ import java.util.*;
 import java.util.logging.*;
 import java.util.logging.Formatter;
 
-import org.apache.juneau.microservice.resources.*;
+import org.apache.juneau.microservice.logging.*;
 
 /**
  * Can be used for configuration of simple logging in the microservice.

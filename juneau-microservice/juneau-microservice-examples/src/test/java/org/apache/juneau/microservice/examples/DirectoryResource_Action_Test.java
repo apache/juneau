@@ -10,14 +10,14 @@
 // * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the        *
 // * specific language governing permissions and limitations under the License.                                              *
 // ***************************************************************************************************************************
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.examples;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.microservice.resources.DirectoryResource.*;
+import org.apache.juneau.microservice.examples.DirectoryResource.*;
 import org.junit.jupiter.api.*;
 
 /**

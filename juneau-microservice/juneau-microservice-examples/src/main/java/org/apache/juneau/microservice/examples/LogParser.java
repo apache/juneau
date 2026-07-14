@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.juneau.microservice.resources;
+package org.apache.juneau.microservice.examples;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -23,6 +23,8 @@ import java.nio.charset.*;
 import java.text.*;
 import java.util.*;
 import java.util.regex.*;
+
+import org.apache.juneau.microservice.logging.*;
 
 /**
  * Utility class for reading log files.
