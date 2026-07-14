@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.auth;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -60,6 +62,11 @@ public abstract class AuthFilter implements Filter, Authenticator {
 
 	/** WWW-Authenticate response header name (RFC 7235 §4.1). */
 	static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+
+	private static final Logger LOG = Logger.getLogger(AuthFilter.class.getName());
+
+	/** Generic {@code 401} response body — deliberately reveals no failure detail to the client. */
+	static final String GENERIC_UNAUTHORIZED_MESSAGE = "Unauthorized";
 
 	/**
 	 * Standalone-filter entry point.
@@ -124,8 +131,11 @@ public abstract class AuthFilter implements Filter, Authenticator {
 			.findFirst()
 			.ifPresent(v -> resp.setHeader(WWW_AUTHENTICATE, v));
 		resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-		var msg = e.getMessage();
-		if (msg != null)
-			resp.getWriter().write(msg);
+		// Return a generic body to the client.  The exception message can carry internal detail from a
+		// custom validator (e.g. a wrapped cause), so it must not be echoed over the wire — the
+		// WWW-Authenticate challenge set above is the only auth-specific data a client needs.  Detailed
+		// failure information is logged server-side for diagnostics.
+		LOG.log(Level.FINE, e, () -> "Authentication failed.");
+		resp.getWriter().write(GENERIC_UNAUTHORIZED_MESSAGE);
 	}
 }

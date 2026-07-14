@@ -180,10 +180,6 @@ class AuthFilter_Test extends TestBase {
 	}
 
 	@Test void d03_doFilter_authException_nullMessage_stillWrites401() throws Exception {
-		// Even when constructed with a null message, BasicHttpException#getMessage() falls back
-		// to the status reason phrase ("Unauthorized") — so the {@code msg != null} branch in
-		// AuthFilter#sendChallenge is effectively unreachable through public API (the else-branch
-		// is dead code given BasicHttpException#getMessage() never returns null). // NOSONAR
 		var f = new TestFilter(req -> { throw new AuthenticationException((String) null); });
 		var req = MockServletRequest.create("GET", "/x");
 		var resp = MockServletResponse.create();
@@ -193,6 +189,42 @@ class AuthFilter_Test extends TestBase {
 
 		assertEquals(0, chain.calls);
 		assertEquals(HttpServletResponse.SC_UNAUTHORIZED, resp.getStatus());
+	}
+
+	// ========================================================================
+	// sendChallenge — response body must be generic (no info leakage)
+	// ========================================================================
+
+	@Test void d04_sendChallenge_writesGenericBody_notExceptionMessage() throws Exception {
+		var resp = mock(HttpServletResponse.class);
+		var sw = new StringWriter();
+		when(resp.getWriter()).thenReturn(new PrintWriter(sw));
+		// Sensitive detail that must NOT be echoed back to the client.
+		var e = new AuthenticationException("token signature invalid: secret-key-id=abc123")
+			.wwwAuthenticate("Bearer realm=\"api\"");
+
+		AuthFilter.sendChallenge(resp, e);
+
+		verify(resp).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		verify(resp).setHeader("WWW-Authenticate", "Bearer realm=\"api\"");
+		var body = sw.toString();
+		assertEquals("Unauthorized", body);
+		assertFalse(body.contains("secret-key-id"), "Auth-failure body must not leak the exception message");
+	}
+
+	@Test void d05_sendChallenge_wrappedCauseNotLeaked() throws Exception {
+		var resp = mock(HttpServletResponse.class);
+		var sw = new StringWriter();
+		when(resp.getWriter()).thenReturn(new PrintWriter(sw));
+		// A custom validator can wrap an internal exception whose message must not reach the client.
+		var e = new AuthenticationException(new IllegalStateException("jdbc://internal-host:5432 unreachable"));
+
+		AuthFilter.sendChallenge(resp, e);
+
+		verify(resp).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		var body = sw.toString();
+		assertEquals("Unauthorized", body);
+		assertFalse(body.contains("internal-host"), "Wrapped cause message must not leak to the client");
 	}
 
 	// ========================================================================

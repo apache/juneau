@@ -66,6 +66,9 @@ public class XmlReader implements XMLStreamReader, Positionable {
 			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
 			factory.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
 			factory.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+			// Disable DTD processing entirely on the non-validating path to close the residual XXE surface (e.g. billion-laughs and SYSTEM-entity attacks via a DOCTYPE).  DTD support is left enabled only when validation is explicitly requested, since DTD validation requires it.
+			if (! validating)
+				factory.setProperty(XMLInputFactory.SUPPORT_DTD, false);
 			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && nn(reporter))
 				factory.setProperty(XMLInputFactory.REPORTER, reporter);
 			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && nn(resolver))

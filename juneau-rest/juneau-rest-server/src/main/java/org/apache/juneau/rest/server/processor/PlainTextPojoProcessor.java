@@ -58,6 +58,14 @@ public class PlainTextPojoProcessor implements ResponseProcessor {
 			w.append("null");
 		} else if (o instanceof Map || o instanceof Collection || o.getClass().isArray()) {
 			w.append(Json5.of(o));
+		} else if (o instanceof Throwable && ! opSession.getRestContext().isRenderResponseStackTraces()) {
+			// A thrown exception reached the plain-text renderer as the response content.  Emitting its
+			// toString() (class name + message) would leak internal detail to the client, so in production
+			// we write only the generic HTTP status text.  Structured detail remains in the 'Thrown'
+			// response header and server-side logs; enable renderResponseStackTraces for full in-response
+			// detail during development.
+			var statusText = RestUtils.getHttpResponseText(res.getStatus());
+			w.append(statusText == null ? "" : statusText);
 		} else {
 			w.append(req.getMarshallingSession().getClassMetaForObject(o).toString(o));
 		}

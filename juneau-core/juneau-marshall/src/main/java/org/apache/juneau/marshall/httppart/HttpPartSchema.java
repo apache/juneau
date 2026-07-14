@@ -4909,8 +4909,17 @@ public class HttpPartSchema {
 		return pattern == null || pattern.matcher(x).matches();
 	}
 
+	// Upper bound on the length of a value validated as a regular expression.  The value here is intentionally
+	// a caller-authored regex (JSON-Schema "format":"regex"), so it must be compiled rather than quoted; the
+	// compiled pattern is immediately discarded and never matched against anything.  This cap bounds the cost
+	// of that throwaway compilation so an over-long or deeply-nested pattern can't be used as a DoS vector.
+	private static final int MAX_REGEX_VALIDATION_LENGTH = 1000;
+
 	private static boolean isValidRegex(String x) {
-		// ECMA-262 regex validation
+		// ECMA-262 regex validation.  Reject over-long values before compiling (the compiled Pattern is
+		// discarded and never used for matching, so bounding length is sufficient to cap the work done here).
+		if (x.length() > MAX_REGEX_VALIDATION_LENGTH)
+			return false;
 		try {
 			Pattern.compile(x);
 			return true;

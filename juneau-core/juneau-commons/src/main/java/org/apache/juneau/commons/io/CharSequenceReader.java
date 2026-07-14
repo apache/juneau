@@ -174,7 +174,7 @@ public class CharSequenceReader extends BufferedReader {
 			return 0;
 		long n = Math.min((long) length - next, ns);
 		n = Math.max(-next, n);
-		next += n;
+		next += (int) n;  // Safe narrowing: n is bounded to [-next, length-next], so next+n stays within int range [0, length].
 		return n;
 	}
 

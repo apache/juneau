@@ -17,6 +17,7 @@
 package org.apache.juneau.server.config.rest;
 
 import org.apache.juneau.http.*;
+import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -47,7 +48,14 @@ public class LoadConfigResource extends RestServlet {
 		var jsonSerializer = JsonSerializer.DEFAULT_READABLE;
 
 		var config = new GetConfiguration(project, branch);
-		config.execute();
+		try {
+			config.execute();
+		} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
+			// A crafted project/branch that escapes the checkout root is rejected by
+			// FileUtils.resolveSafely(). Map that boundary violation to 403 with a generic
+			// message so the offending path is never echoed back to the client.
+			throw new Forbidden("Access denied.");
+		}
 
 		return jsonSerializer.serialize(config.get());
 	}

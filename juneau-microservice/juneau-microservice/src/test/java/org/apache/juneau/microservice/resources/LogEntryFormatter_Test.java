@@ -227,4 +227,31 @@ class LogEntryFormatter_Test extends TestBase {
 		assertEquals("", TraceContext.currentTraceId());
 		assertEquals("", TraceContext.currentSpanId());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Regex-injection safety - the caller-supplied format/dateFormat strings are escaped into the parsing regex.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_dateFormat_regexMetacharsEscapedAndMatch() {
+		// A date format containing regex metacharacters must be escaped (not injected) yet still match its own
+		// formatted output.  With the previous partial escaping, "(MM)" and "[dd]" produced a stray capture
+		// group and character class, so the resulting pattern no longer matched the formatted date.
+		var f = new LogEntryFormatter("[{date}] {msg}", "yyyy(MM)[dd]", false);
+		var r = new LogRecord(Level.INFO, "hello");
+		var line = f.format(r);
+		var m = f.getLogEntryPattern().matcher(line);
+		assertTrue(m.matches(), "Pattern should match its own formatted output with a metacharacter date format, got:\n" + line);
+	}
+
+	@Test void c02_dateFormat_unbalancedMetacharsDoNotThrow() {
+		// An unbalanced regex metacharacter in the date format previously produced an invalid pattern that
+		// threw a PatternSyntaxException during construction; it must now be escaped and compile cleanly.
+		assertDoesNotThrow(() -> new LogEntryFormatter("[{date}] {msg}", "yyyy(((MM", false));
+	}
+
+	@Test void c03_format_regexMetacharsEscaped() {
+		// Regex metacharacters in the literal portions of the format string must be escaped, so an adversarial
+		// format cannot inject regex syntax or break compilation of the log-parsing pattern.
+		assertDoesNotThrow(() -> new LogEntryFormatter("(([{date}]{level})+ {msg}%n", DATE_FORMAT, false));
+	}
 }

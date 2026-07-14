@@ -273,6 +273,15 @@ class HttpPartSchema_Validation_Test extends TestBase {
 		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("[unclosed"));
 	}
 
+	@Test void a30b_format_regex_overLengthRejected() {
+		var s = HttpPartSchema.create().tString().noValidate().format("regex").build();
+		// A value at the validation cap that is a valid regex still validates.
+		assertDoesNotThrow(()->s.validateInput("a".repeat(1000)));
+		// A value longer than the cap is rejected without attempting compilation, bounding the work done here
+		// so an over-long/deeply-nested pattern cannot be used as a compile-time DoS vector.
+		assertThrowsWithMessage(SchemaValidationException.class, "Value does not match expected format", ()->s.validateInput("(".repeat(5000)));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// DATE / DATE_TIME / DATE_TIME_ZONE format validation
 	//-----------------------------------------------------------------------------------------------------------------

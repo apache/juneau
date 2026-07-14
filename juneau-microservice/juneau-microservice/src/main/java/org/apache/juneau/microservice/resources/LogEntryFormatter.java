@@ -62,6 +62,36 @@ public class LogEntryFormatter extends Formatter {
 		return Integer.toHexString(i);
 	}
 
+	// Appends a single character to the log-parsing regex as a literal, escaping it when it is a regex
+	// metacharacter.  The format and date-format strings are caller-supplied configuration, so their
+	// literal characters must be escaped to keep them matched verbatim and prevent regex-injection.
+	private static void appendLiteral(StringBuilder re, char c) {
+		if (! (Character.isLetterOrDigit(c) || Character.isWhitespace(c)))
+			re.append('\\');
+		re.append(c);
+	}
+
+	// Appends each character of a string to the log-parsing regex as a literal (see {@link #appendLiteral(StringBuilder, char)}).
+	private static void appendLiteral(StringBuilder re, String s) {
+		for (var i = 0; i < s.length(); i++)
+			appendLiteral(re, s.charAt(i));
+	}
+
+	// Converts a SimpleDateFormat pattern into a regex fragment that matches formatted dates: date/time pattern
+	// letters become "\d" matchers and all other characters are treated as regex literals.  Escaping the
+	// non-letter characters (rather than only ".") prevents regex-injection from a caller-supplied date format.
+	private static String dateFormatToRegex(String dateFormat) {
+		var re = new StringBuilder();
+		for (var i = 0; i < dateFormat.length(); i++) {
+			var c = dateFormat.charAt(i);
+			if ("mHhsSdMy".indexOf(c) >= 0)
+				re.append("\\d");
+			else
+				appendLiteral(re, c);
+		}
+		return re.toString();
+	}
+
 	private ConcurrentHashMap<String,AtomicInteger> hashes;
 	private DateFormat df;
 	private String format;
@@ -135,17 +165,15 @@ public class LogEntryFormatter extends Formatter {
 			if (state == S1) {
 				if (c == '%')
 					state = S2;
-				else {
-					if (! (Character.isLetterOrDigit(c) || Character.isWhitespace(c)))
-						re.append('\\');
-					re.append(c);
-				}
+				else
+					appendLiteral(re, c);
 			} else if (state == S2) {
 				if (Character.isDigit(c)) {
 					i1 = i;
 					state = S3;
 				} else {
-					re.append("\\%").append(c);
+					re.append("\\%");
+					appendLiteral(re, c);
 					state = S1;
 				}
 			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
@@ -155,7 +183,8 @@ public class LogEntryFormatter extends Formatter {
 					// Stay in S3: group numbers may be multi-digit (e.g. %10$s for {spanId}).
 					state = S3;  // NOSONAR - explicit self-transition documents the multi-digit case
 				} else {
-					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit followed by non-$ which can't come from standard format placeholders
+					re.append("\\%");
+					appendLiteral(re, format.substring(i1, i)); // HTT - requires %digit followed by non-$ which can't come from standard format placeholders
 					state = S1;
 				}
 			} else if (state == S4) {
@@ -164,7 +193,7 @@ public class LogEntryFormatter extends Formatter {
 					switch (group) {
 						case 1:
 							fieldIndexes.put("date", index++);
-							re.append("(").append(dateFormat.replaceAll("[mHhsSdMy]", "\\\\d").replace(".", "\\.")).append(")");
+							re.append("(").append(dateFormatToRegex(dateFormat)).append(")");
 							break;
 						case 2:
 							fieldIndexes.put("class", index++);
@@ -205,7 +234,8 @@ public class LogEntryFormatter extends Formatter {
 						default: // HTT - group numbers > 10 would require a format placeholder beyond {spanId} // NOSONAR
 					}
 				} else {
-					re.append("\\%").append(format.substring(i1, i)); // HTT - requires %digit$ followed by non-s which can't come from standard format placeholders
+					re.append("\\%");
+					appendLiteral(re, format.substring(i1, i)); // HTT - requires %digit$ followed by non-s which can't come from standard format placeholders
 				}
 				state = S1;
 			}

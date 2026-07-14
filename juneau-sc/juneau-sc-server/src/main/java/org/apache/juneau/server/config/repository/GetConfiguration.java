@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.server.config.repository;
 
+import static org.apache.juneau.commons.utils.FileUtils.*;
+
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
@@ -34,7 +36,6 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 	private static final String APPLICATION = "APPLICATION";
 	private static final String PROJECT = "PROJECT";
 	private static final String EXT = ".cfg";
-	private static final String BAR = "/";
 
 	private Map<String,ConfigItem> configs = new HashMap<>();
 
@@ -67,9 +68,11 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 
 		var gitControl = new GitControl(pathStr, git);
 
-		var path = new File(pathStr);
+		// Trusted operator-configured local git checkout directory (GitServer/pathLocal).
+		// Serves as the confinement root for the project/application config file lookups below.
+		var root = new File(pathStr);
 
-		if (path.isDirectory()) {
+		if (root.isDirectory()) {
 			gitControl.pullFromRepo();
 		} else {
 			gitControl.cloneRepo();
@@ -81,14 +84,16 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		var fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
 		var fileProjectStr = this.project.concat(EXT);
 
-		var fileDefault = new File(pathStr.concat(BAR).concat(fileDefaultStr));
-		if (fileDefault.exists()) {
+		// Resolve the config file names under the checkout root through the shared boundary check
+		// so a crafted project name cannot escape the repo directory (empty = file absent).
+		var fileDefault = resolveSafely(root, fileDefaultStr).orElse(null);
+		if (fileDefault != null) {
 			var lines = new String(Files.readAllBytes(fileDefault.toPath()));
 			configs.put(APPLICATION, new ConfigItem(lines));
 		}
 
-		var fileProject = new File(pathStr.concat(BAR).concat(fileProjectStr));
-		if (fileProject.exists()) {
+		var fileProject = resolveSafely(root, fileProjectStr).orElse(null);
+		if (fileProject != null) {
 			var linesProject = new String(Files.readAllBytes(fileProject.toPath()));
 			configs.put(PROJECT, new ConfigItem(linesProject));
 		}

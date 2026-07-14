@@ -291,4 +291,20 @@ class LogsResource_PathTraversal_Test extends TestBase {
 				"Symlink-escape response must not leak the outside-root secret");
 		}
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// PARSE traversal — the remaining operation surface (view/download/delete covered above)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void t13_methodPARSE_traversal_returns403() throws Exception {
+		try (var c = buildClient()) {
+			@SuppressWarnings({
+				"resource"  // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
+			})
+			var resp = c.get("/../outside-secret.log?method=PARSE").run();
+			assertEquals(403, resp.getStatusCode(), "GET /../outside-secret.log?method=PARSE must be rejected");
+			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
+				"Response body must not leak the outside-root secret");
+		}
+	}
 }

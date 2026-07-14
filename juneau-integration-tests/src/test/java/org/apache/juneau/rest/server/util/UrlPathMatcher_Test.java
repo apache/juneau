@@ -20,6 +20,7 @@ import static org.apache.juneau.rest.server.util.UrlPathMatcher.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -356,5 +357,23 @@ class UrlPathMatcher_Test extends TestBase {
 		check(p, "/*.bar", "{}");
 		check(p, "/*.*", "{}");
 		shouldNotMatch(p, "/foo", "/foo", "/*", null);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// ReDoS safety
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_redos_pathologicalPatternCompilesQuickly() {
+		// Constructing a matcher computes a comparator string via a '\{[^{}]+\}' scan.  A pattern string
+		// consisting of many '{' characters previously drove that scan into O(n^2) backtracking; with the
+		// non-overlapping character class the construction stays effectively linear and must complete promptly.
+		var pattern = "/" + "{".repeat(200_000);
+		assertTimeoutPreemptively(Duration.ofSeconds(2), () -> of(pattern));
+	}
+
+	@Test void j02_redos_variablePatternComparatorUnchanged() {
+		// The comparator computation for well-formed variable patterns must be unaffected by the regex change.
+		assertEquals(of("/foo/{id}/bar").getComparator(), of("/foo/{name}/bar").getComparator());
+		assertEquals("/X/W/X/W/W", of("/foo/{id}/bar/{x}").getComparator());
 	}
 }
