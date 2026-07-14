@@ -288,7 +288,7 @@
 <span class="source-line-no">275</span><span id="line-275">            // If we couldn't find a type variable implementation, that means</span>
 <span class="source-line-no">276</span><span id="line-276">            // the type was defined at runtime (e.g. Bean b = new Bean&lt;Foo&gt;();)</span>
 <span class="source-line-no">277</span><span id="line-277">            // in which case the type is lost through erasure.</span>
-<span class="source-line-no">278</span><span id="line-278">            // Assume java.lang.Object as the type.</span>
+<span class="source-line-no">278</span><span id="line-278">            // Assume Object as the type.</span>
 <span class="source-line-no">279</span><span id="line-279">            return get(gc, varIndex);</span>
 <span class="source-line-no">280</span><span id="line-280">         }</span>
 <span class="source-line-no">281</span><span id="line-281">      }</span>

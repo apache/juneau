@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.thymeleaf;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -269,7 +269,7 @@
 <span class="source-line-no">256</span><span id="line-256">         bp = "/" + bp;</span>
 <span class="source-line-no">257</span><span id="line-257">      if (resolved.startsWith(bp))</span>
 <span class="source-line-no">258</span><span id="line-258">         return resolved.substring(bp.length());</span>
-<span class="source-line-no">259</span><span id="line-259">      throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
+<span class="source-line-no">259</span><span id="line-259">      throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
 <span class="source-line-no">260</span><span id="line-260">   }</span>
 <span class="source-line-no">261</span><span id="line-261"></span>
 <span class="source-line-no">262</span><span id="line-262">   /**</span>
@@ -352,7 +352,7 @@
 <span class="source-line-no">339</span><span id="line-339">       */</span>
 <span class="source-line-no">340</span><span id="line-340">      public ThymeleafDispatcher build() {</span>
 <span class="source-line-no">341</span><span id="line-341">         if (basePath == null)</span>
-<span class="source-line-no">342</span><span id="line-342">            throw illegalArg("basePath must not be null");</span>
+<span class="source-line-no">342</span><span id="line-342">            throw iaex("basePath must not be null");</span>
 <span class="source-line-no">343</span><span id="line-343">         return new ThymeleafDispatcher(this);</span>
 <span class="source-line-no">344</span><span id="line-344">      }</span>
 <span class="source-line-no">345</span><span id="line-345">   }</span>

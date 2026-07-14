@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.settings;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.concurrent.*;</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">         var newMap = new ConcurrentHashMap&lt;String,Optional&lt;String&gt;&gt;();</span>
 <span class="source-line-no">104</span><span id="line-104">         m = map.compareAndSet(null, newMap) ? newMap : map.get();  // Not easily testable.</span>
 <span class="source-line-no">105</span><span id="line-105">      }</span>
-<span class="source-line-no">106</span><span id="line-106">      m.put(key, opt(value));</span>
+<span class="source-line-no">106</span><span id="line-106">      m.put(key, o(value));</span>
 <span class="source-line-no">107</span><span id="line-107">   }</span>
 <span class="source-line-no">108</span><span id="line-108"></span>
 <span class="source-line-no">109</span><span id="line-109">   /**</span>

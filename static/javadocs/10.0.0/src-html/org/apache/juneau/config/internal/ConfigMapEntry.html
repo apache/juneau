@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.config.internal;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53">      var m1 = key2.indexOf('&lt;');</span>
 <span class="source-line-no">054</span><span id="line-54">      var m2 = key2.indexOf('&gt;');</span>
 <span class="source-line-no">055</span><span id="line-55"></span>
-<span class="source-line-no">056</span><span id="line-56">      modifiers = nullIfEmpty((m1 &gt; -1 &amp;&amp; m2 &gt; m1) ? key2.substring(m1 + 1, m2) : null);</span>
+<span class="source-line-no">056</span><span id="line-56">      modifiers = nie((m1 &gt; -1 &amp;&amp; m2 &gt; m1) ? key2.substring(m1 + 1, m2) : null);</span>
 <span class="source-line-no">057</span><span id="line-57"></span>
 <span class="source-line-no">058</span><span id="line-58">      this.key = m1 == -1 ? key2 : key2.substring(0, m1);</span>
 <span class="source-line-no">059</span><span id="line-59"></span>
@@ -170,7 +170,7 @@
 <span class="source-line-no">157</span><span id="line-157">            }</span>
 <span class="source-line-no">158</span><span id="line-158">         }</span>
 <span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">         if (ne(comment))</span>
+<span class="source-line-no">160</span><span id="line-160">         if (ine(comment))</span>
 <span class="source-line-no">161</span><span id="line-161">            w.append(" # ").append(comment);</span>
 <span class="source-line-no">162</span><span id="line-162"></span>
 <span class="source-line-no">163</span><span id="line-163">         w.append('\n');</span>

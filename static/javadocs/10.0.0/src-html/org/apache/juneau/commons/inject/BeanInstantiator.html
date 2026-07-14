@@ -31,12 +31,12 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.util.Comparator.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.reflect.ElementFlag.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.reflect.ElementFlag.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">027</span><span id="line-27"></span>
 <span class="source-line-no">028</span><span id="line-28">import java.util.*;</span>
 <span class="source-line-no">029</span><span id="line-29">import java.util.function.*;</span>
@@ -312,7 +312,7 @@
 <span class="source-line-no">299</span><span id="line-299">    * @return An {@link Optional} containing the created bean, or {@link Optional#empty()} if the type is &lt;jk&gt;null&lt;/jk&gt; or instantiation fails.</span>
 <span class="source-line-no">300</span><span id="line-300">    */</span>
 <span class="source-line-no">301</span><span id="line-301">   public static &lt;T&gt; Optional&lt;T&gt; optionalOf(Class&lt;T&gt; beanType) {</span>
-<span class="source-line-no">302</span><span id="line-302">      return beanType == null ? opte() : of(beanType).asOptional();</span>
+<span class="source-line-no">302</span><span id="line-302">      return beanType == null ? oe() : of(beanType).asOptional();</span>
 <span class="source-line-no">303</span><span id="line-303">   }</span>
 <span class="source-line-no">304</span><span id="line-304"></span>
 <span class="source-line-no">305</span><span id="line-305">   /**</span>
@@ -364,9 +364,9 @@
 <span class="source-line-no">351</span><span id="line-351">    */</span>
 <span class="source-line-no">352</span><span id="line-352">   public Optional&lt;T&gt; asOptional() {</span>
 <span class="source-line-no">353</span><span id="line-353">      try {</span>
-<span class="source-line-no">354</span><span id="line-354">         return opt(run());</span>
+<span class="source-line-no">354</span><span id="line-354">         return o(run());</span>
 <span class="source-line-no">355</span><span id="line-355">      } catch (@SuppressWarnings("unused") ExecutableException e) {</span>
-<span class="source-line-no">356</span><span id="line-356">         return opte();</span>
+<span class="source-line-no">356</span><span id="line-356">         return oe();</span>
 <span class="source-line-no">357</span><span id="line-357">      }</span>
 <span class="source-line-no">358</span><span id="line-358">   }</span>
 <span class="source-line-no">359</span><span id="line-359"></span>
@@ -987,7 +987,7 @@
 <span class="source-line-no">974</span><span id="line-974">    * right default for most beans, but it doesn't fit every use case.</span>
 <span class="source-line-no">975</span><span id="line-975">    *</span>
 <span class="source-line-no">976</span><span id="line-976">    * &lt;p&gt;</span>
-<span class="source-line-no">977</span><span id="line-977">    * The classic mismatch is parameterized container types like {@link java.util.TreeMap}, which expose:</span>
+<span class="source-line-no">977</span><span id="line-977">    * The classic mismatch is parameterized container types like {@link TreeMap}, which expose:</span>
 <span class="source-line-no">978</span><span id="line-978">    * &lt;ul&gt;</span>
 <span class="source-line-no">979</span><span id="line-979">    *    &lt;li&gt;{@code TreeMap()}</span>
 <span class="source-line-no">980</span><span id="line-980">    *    &lt;li&gt;{@code TreeMap(Comparator)}</span>
@@ -1723,7 +1723,7 @@
 <span class="source-line-no">1710</span><span id="line-1710">         var buildMethod = info(builder2.getClass()).getPublicMethods().stream()</span>
 <span class="source-line-no">1711</span><span id="line-1711">            .filter(x -&gt; x.isAll(NOT_STATIC, NOT_DEPRECATED, NOT_SYNTHETIC, NOT_BRIDGE))</span>
 <span class="source-line-no">1712</span><span id="line-1712">            .filter(x -&gt; buildMethodNames.contains(x.getNameSimple()))</span>
-<span class="source-line-no">1713</span><span id="line-1713">            .filter(x -&gt; opt(x).map(x2 -&gt; x2.getReturnType()).filter(x2 -&gt; x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType</span>
+<span class="source-line-no">1713</span><span id="line-1713">            .filter(x -&gt; o(x).map(x2 -&gt; x2.getReturnType()).filter(x2 -&gt; x2.is(beanSubType.inner()) || x2.isParentOf(beanSubType)).isPresent()) // Accept methods that return beanSubType or a parent type of beanSubType</span>
 <span class="source-line-no">1714</span><span id="line-1714">            .filter(x -&gt; x.getAnnotations().stream().anyMatch(JsrSupport::isInjectAnnotation) ? x.canResolveAllParameters(store2) : x.getParameterCount() == 0)</span>
 <span class="source-line-no">1715</span><span id="line-1715">            .sorted(methodComparator)</span>
 <span class="source-line-no">1716</span><span id="line-1716">            .findFirst();</span>
@@ -2023,7 +2023,7 @@
 <span class="source-line-no">2010</span><span id="line-2010"></span>
 <span class="source-line-no">2011</span><span id="line-2011">      // This should never happen if beanSubType validation is correct, but check anyway</span>
 <span class="source-line-no">2012</span><span id="line-2012">      if (result.isEmpty() || !result.get(result.size() - 1).is(beanType.inner())) {</span>
-<span class="source-line-no">2013</span><span id="line-2013">         throw illegalArg("beanType {0} was not found in the parent hierarchy of beanSubType {1}. This indicates a validation error.", beanType.getName(), beanSubType.getName());</span>
+<span class="source-line-no">2013</span><span id="line-2013">         throw iaex("beanType {0} was not found in the parent hierarchy of beanSubType {1}. This indicates a validation error.", beanType.getName(), beanSubType.getName());</span>
 <span class="source-line-no">2014</span><span id="line-2014">      }</span>
 <span class="source-line-no">2015</span><span id="line-2015"></span>
 <span class="source-line-no">2016</span><span id="line-2016">      return result;</span>

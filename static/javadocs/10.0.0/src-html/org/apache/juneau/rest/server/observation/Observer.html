@@ -30,163 +30,162 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.observation;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.time.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.rest.server.metrics.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.rest.server.tracing.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.rest.server.tracing.Scope;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * Factory for custom (non-request) {@link Observation}s, composing a {@link MetricsRecorder} and a</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link TracerHook}.</span>
-<span class="source-line-no">031</span><span id="line-31"> *</span>
-<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> * This is the explicit programmatic observation substrate for {@code juneau-rest-server}: it reuses the</span>
-<span class="source-line-no">034</span><span id="line-34"> * exact same two SPIs the request path uses ({@link MetricsRecorder}, {@link TracerHook}) and the same</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@code metricName} / {@code metricTags} comma-separated tag model, but is decoupled from</span>
-<span class="source-line-no">036</span><span id="line-36"> * {@code RestRequest} so application code can instrument an arbitrary block of work. Juneau deliberately</span>
-<span class="source-line-no">037</span><span id="line-37"> * has no method-interception / AOP substrate, so observation is explicit (a try-with-resources block)</span>
-<span class="source-line-no">038</span><span id="line-38"> * rather than annotation-driven &amp;mdash; consistent with the framework's explicit-over-magic philosophy.</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='topic'&gt;No-backend contract&lt;/h5&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> * An {@code Observer} built from the no-op SPIs ({@link #NOOP}) never takes a timestamp and hands back</span>
-<span class="source-line-no">044</span><span id="line-44"> * {@link Observation#NOOP}, so an observation in an unconfigured process costs nothing beyond the</span>
-<span class="source-line-no">045</span><span id="line-45"> * try-with-resources scaffolding. {@link #start(String, String)} short-circuits to the no-op handle</span>
-<span class="source-line-no">046</span><span id="line-46"> * whenever &lt;i&gt;both&lt;/i&gt; backends are the no-op singletons.</span>
-<span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='topic'&gt;Wiring&lt;/h5&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> * Typically obtained from a {@code RestContext}'s bean store &amp;mdash; register the same</span>
-<span class="source-line-no">052</span><span id="line-52"> * {@code @Bean MetricsRecorder} / {@code @Bean TracerHook} you already register for request-path</span>
-<span class="source-line-no">053</span><span id="line-53"> * observability, then build an {@code Observer} from them (or install one as the {@link Observations}</span>
-<span class="source-line-no">054</span><span id="line-54"> * default). Construct directly for tests:</span>
-<span class="source-line-no">055</span><span id="line-55"> *</span>
-<span class="source-line-no">056</span><span id="line-56"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    Observer &lt;jv&gt;o&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Observer(&lt;jk&gt;new&lt;/jk&gt; MicrometerMetricsRecorder(&lt;jv&gt;registry&lt;/jv&gt;), &lt;jk&gt;new&lt;/jk&gt; OtelTracerHook(&lt;jv&gt;otel&lt;/jv&gt;));</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;li class='jc'&gt;{@link Observations}</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='jc'&gt;{@link Observation}</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link MetricsRecorder}</span>
-<span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='jc'&gt;{@link TracerHook}</span>
-<span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *</span>
-<span class="source-line-no">067</span><span id="line-67"> * @since 10.0.0</span>
-<span class="source-line-no">068</span><span id="line-68"> */</span>
-<span class="source-line-no">069</span><span id="line-69">@SuppressWarnings({</span>
-<span class="source-line-no">070</span><span id="line-70">   "resource" // start(...) returns the Observation for the caller's try-with-resources; ActiveObservation holds the tracer Scope it closes in its own close().</span>
-<span class="source-line-no">071</span><span id="line-71">})</span>
-<span class="source-line-no">072</span><span id="line-72">public final class Observer {</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">   /**</span>
-<span class="source-line-no">075</span><span id="line-75">    * Observer backed by the no-op metrics recorder and tracer &amp;mdash; produces only</span>
-<span class="source-line-no">076</span><span id="line-76">    * {@link Observation#NOOP}.</span>
-<span class="source-line-no">077</span><span id="line-77">    */</span>
-<span class="source-line-no">078</span><span id="line-78">   public static final Observer NOOP = new Observer(NoOpMetricsRecorder.INSTANCE, NoOpTracerHook.INSTANCE);</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   // Constant name intentionally uses camelCase to match observation/metrics naming conventions.</span>
-<span class="source-line-no">081</span><span id="line-81">   @SuppressWarnings("java:S115")</span>
-<span class="source-line-no">082</span><span id="line-82">   private static final String ARG_recorder = "recorder";</span>
-<span class="source-line-no">083</span><span id="line-83">   // Constant name intentionally uses camelCase to match observation/metrics naming conventions.</span>
-<span class="source-line-no">084</span><span id="line-84">   @SuppressWarnings("java:S115")</span>
-<span class="source-line-no">085</span><span id="line-85">   private static final String ARG_tracer = "tracer";</span>
-<span class="source-line-no">086</span><span id="line-86">   // Constant name intentionally uses camelCase to match observation/metrics naming conventions.</span>
-<span class="source-line-no">087</span><span id="line-87">   @SuppressWarnings("java:S115")</span>
-<span class="source-line-no">088</span><span id="line-88">   private static final String ARG_name = "name";</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   private final MetricsRecorder recorder;</span>
-<span class="source-line-no">091</span><span id="line-91">   private final TracerHook tracer;</span>
-<span class="source-line-no">092</span><span id="line-92">   private final boolean active;</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /**</span>
-<span class="source-line-no">095</span><span id="line-95">    * Constructor.</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * @param recorder The metrics recorder to time observations against. Must not be &lt;jk&gt;null&lt;/jk&gt;;</span>
-<span class="source-line-no">098</span><span id="line-98">    *    use {@link NoOpMetricsRecorder#INSTANCE} to disable metrics.</span>
-<span class="source-line-no">099</span><span id="line-99">    * @param tracer The tracer to open spans against. Must not be &lt;jk&gt;null&lt;/jk&gt;; use</span>
-<span class="source-line-no">100</span><span id="line-100">    *    {@link NoOpTracerHook#INSTANCE} to disable tracing.</span>
-<span class="source-line-no">101</span><span id="line-101">    */</span>
-<span class="source-line-no">102</span><span id="line-102">   public Observer(MetricsRecorder recorder, TracerHook tracer) {</span>
-<span class="source-line-no">103</span><span id="line-103">      this.recorder = assertArgNotNull(ARG_recorder, recorder);</span>
-<span class="source-line-no">104</span><span id="line-104">      this.tracer = assertArgNotNull(ARG_tracer, tracer);</span>
-<span class="source-line-no">105</span><span id="line-105">      this.active = recorder != NoOpMetricsRecorder.INSTANCE || tracer != NoOpTracerHook.INSTANCE;</span>
-<span class="source-line-no">106</span><span id="line-106">   }</span>
-<span class="source-line-no">107</span><span id="line-107"></span>
-<span class="source-line-no">108</span><span id="line-108">   /**</span>
-<span class="source-line-no">109</span><span id="line-109">    * Starts a new observation.</span>
-<span class="source-line-no">110</span><span id="line-110">    *</span>
-<span class="source-line-no">111</span><span id="line-111">    * &lt;p&gt;</span>
-<span class="source-line-no">112</span><span id="line-112">    * When both backends are the no-op singletons this returns {@link Observation#NOOP} without taking a</span>
-<span class="source-line-no">113</span><span id="line-113">    * timestamp or opening a span. Otherwise it opens a span via {@link TracerHook#startSpan(String)} and</span>
-<span class="source-line-no">114</span><span id="line-114">    * captures a start timestamp; the paired timer sample is recorded on {@link Observation#close()}.</span>
-<span class="source-line-no">115</span><span id="line-115">    *</span>
-<span class="source-line-no">116</span><span id="line-116">    * @param name The observation name &amp;mdash; used as both the span name and the metric timer name.</span>
-<span class="source-line-no">117</span><span id="line-117">    *    Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
-<span class="source-line-no">118</span><span id="line-118">    * @param tags Additional metric tags as comma-separated {@code key=value} pairs (e.g.</span>
-<span class="source-line-no">119</span><span id="line-119">    *    {@code "team=payments,region=us-east"}), or &lt;jk&gt;null&lt;/jk&gt; / empty for none.</span>
-<span class="source-line-no">120</span><span id="line-120">    * @return The started {@link Observation}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">121</span><span id="line-121">    */</span>
-<span class="source-line-no">122</span><span id="line-122">   public Observation start(String name, String tags) {</span>
-<span class="source-line-no">123</span><span id="line-123">      assertArgNotNullOrBlank(ARG_name, name);</span>
-<span class="source-line-no">124</span><span id="line-124">      if (! active)</span>
-<span class="source-line-no">125</span><span id="line-125">         return Observation.NOOP;</span>
-<span class="source-line-no">126</span><span id="line-126">      var scope = tracer.startSpan(name);</span>
-<span class="source-line-no">127</span><span id="line-127">      return new ActiveObservation(recorder, scope, name, tags == null ? "" : tags);</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Returns whether this observer has at least one live backend (metrics or tracing).</span>
-<span class="source-line-no">132</span><span id="line-132">    *</span>
-<span class="source-line-no">133</span><span id="line-133">    * @return &lt;jk&gt;true&lt;/jk&gt; if either the metrics recorder or the tracer is non-no-op.</span>
-<span class="source-line-no">134</span><span id="line-134">    */</span>
-<span class="source-line-no">135</span><span id="line-135">   public boolean isActive() {</span>
-<span class="source-line-no">136</span><span id="line-136">      return active;</span>
-<span class="source-line-no">137</span><span id="line-137">   }</span>
-<span class="source-line-no">138</span><span id="line-138"></span>
-<span class="source-line-no">139</span><span id="line-139">   private static final class ActiveObservation implements Observation {</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">      private final MetricsRecorder recorder;</span>
-<span class="source-line-no">142</span><span id="line-142">      private final Scope scope;</span>
-<span class="source-line-no">143</span><span id="line-143">      private final String name;</span>
-<span class="source-line-no">144</span><span id="line-144">      private final String tags;</span>
-<span class="source-line-no">145</span><span id="line-145">      private final long startNanos;</span>
-<span class="source-line-no">146</span><span id="line-146">      private Throwable error;</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">      ActiveObservation(MetricsRecorder recorder, Scope scope, String name, String tags) {</span>
-<span class="source-line-no">149</span><span id="line-149">         this.recorder = recorder;</span>
-<span class="source-line-no">150</span><span id="line-150">         this.scope = scope;</span>
-<span class="source-line-no">151</span><span id="line-151">         this.name = name;</span>
-<span class="source-line-no">152</span><span id="line-152">         this.tags = tags;</span>
-<span class="source-line-no">153</span><span id="line-153">         this.startNanos = System.nanoTime();</span>
-<span class="source-line-no">154</span><span id="line-154">      }</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">      @Override /* Observation */</span>
-<span class="source-line-no">157</span><span id="line-157">      public void setError(Throwable error) {</span>
-<span class="source-line-no">158</span><span id="line-158">         this.error = error;</span>
-<span class="source-line-no">159</span><span id="line-159">      }</span>
-<span class="source-line-no">160</span><span id="line-160"></span>
-<span class="source-line-no">161</span><span id="line-161">      @Override /* Observation */</span>
-<span class="source-line-no">162</span><span id="line-162">      public void close() {</span>
-<span class="source-line-no">163</span><span id="line-163">         var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);</span>
-<span class="source-line-no">164</span><span id="line-164">         try {</span>
-<span class="source-line-no">165</span><span id="line-165">            if (nn(error))</span>
-<span class="source-line-no">166</span><span id="line-166">               scope.setError(error);</span>
-<span class="source-line-no">167</span><span id="line-167">         } finally {</span>
-<span class="source-line-no">168</span><span id="line-168">            try {</span>
-<span class="source-line-no">169</span><span id="line-169">               scope.close();</span>
-<span class="source-line-no">170</span><span id="line-170">            } finally {</span>
-<span class="source-line-no">171</span><span id="line-171">               recorder.record(name, tags, elapsed, error);</span>
-<span class="source-line-no">172</span><span id="line-172">            }</span>
-<span class="source-line-no">173</span><span id="line-173">         }</span>
-<span class="source-line-no">174</span><span id="line-174">      }</span>
-<span class="source-line-no">175</span><span id="line-175">   }</span>
-<span class="source-line-no">176</span><span id="line-176">}</span>
+<span class="source-line-no">026</span><span id="line-26"></span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Factory for custom (non-request) {@link Observation}s, composing a {@link MetricsRecorder} and a</span>
+<span class="source-line-no">029</span><span id="line-29"> * {@link TracerHook}.</span>
+<span class="source-line-no">030</span><span id="line-30"> *</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * This is the explicit programmatic observation substrate for {@code juneau-rest-server}: it reuses the</span>
+<span class="source-line-no">033</span><span id="line-33"> * exact same two SPIs the request path uses ({@link MetricsRecorder}, {@link TracerHook}) and the same</span>
+<span class="source-line-no">034</span><span id="line-34"> * {@code metricName} / {@code metricTags} comma-separated tag model, but is decoupled from</span>
+<span class="source-line-no">035</span><span id="line-35"> * {@code RestRequest} so application code can instrument an arbitrary block of work. Juneau deliberately</span>
+<span class="source-line-no">036</span><span id="line-36"> * has no method-interception / AOP substrate, so observation is explicit (a try-with-resources block)</span>
+<span class="source-line-no">037</span><span id="line-37"> * rather than annotation-driven &amp;mdash; consistent with the framework's explicit-over-magic philosophy.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;h5 class='topic'&gt;No-backend contract&lt;/h5&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * An {@code Observer} built from the no-op SPIs ({@link #NOOP}) never takes a timestamp and hands back</span>
+<span class="source-line-no">043</span><span id="line-43"> * {@link Observation#NOOP}, so an observation in an unconfigured process costs nothing beyond the</span>
+<span class="source-line-no">044</span><span id="line-44"> * try-with-resources scaffolding. {@link #start(String, String)} short-circuits to the no-op handle</span>
+<span class="source-line-no">045</span><span id="line-45"> * whenever &lt;i&gt;both&lt;/i&gt; backends are the no-op singletons.</span>
+<span class="source-line-no">046</span><span id="line-46"> *</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='topic'&gt;Wiring&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * Typically obtained from a {@code RestContext}'s bean store &amp;mdash; register the same</span>
+<span class="source-line-no">051</span><span id="line-51"> * {@code @Bean MetricsRecorder} / {@code @Bean TracerHook} you already register for request-path</span>
+<span class="source-line-no">052</span><span id="line-52"> * observability, then build an {@code Observer} from them (or install one as the {@link Observations}</span>
+<span class="source-line-no">053</span><span id="line-53"> * default). Construct directly for tests:</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    Observer &lt;jv&gt;o&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; Observer(&lt;jk&gt;new&lt;/jk&gt; MicrometerMetricsRecorder(&lt;jv&gt;registry&lt;/jv&gt;), &lt;jk&gt;new&lt;/jk&gt; OtelTracerHook(&lt;jv&gt;otel&lt;/jv&gt;));</span>
+<span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> *    &lt;li class='jc'&gt;{@link Observations}</span>
+<span class="source-line-no">061</span><span id="line-61"> *    &lt;li class='jc'&gt;{@link Observation}</span>
+<span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='jc'&gt;{@link MetricsRecorder}</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link TracerHook}</span>
+<span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *</span>
+<span class="source-line-no">066</span><span id="line-66"> * @since 10.0.0</span>
+<span class="source-line-no">067</span><span id="line-67"> */</span>
+<span class="source-line-no">068</span><span id="line-68">@SuppressWarnings({</span>
+<span class="source-line-no">069</span><span id="line-69">   "resource" // start(...) returns the Observation for the caller's try-with-resources; ActiveObservation holds the tracer Scope it closes in its own close().</span>
+<span class="source-line-no">070</span><span id="line-70">})</span>
+<span class="source-line-no">071</span><span id="line-71">public final class Observer {</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">   /**</span>
+<span class="source-line-no">074</span><span id="line-74">    * Observer backed by the no-op metrics recorder and tracer &amp;mdash; produces only</span>
+<span class="source-line-no">075</span><span id="line-75">    * {@link Observation#NOOP}.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public static final Observer NOOP = new Observer(NoOpMetricsRecorder.INSTANCE, NoOpTracerHook.INSTANCE);</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   // Constant name intentionally uses camelCase to match observation/metrics naming conventions.</span>
+<span class="source-line-no">080</span><span id="line-80">   @SuppressWarnings("java:S115")</span>
+<span class="source-line-no">081</span><span id="line-81">   private static final String ARG_recorder = "recorder";</span>
+<span class="source-line-no">082</span><span id="line-82">   // Constant name intentionally uses camelCase to match observation/metrics naming conventions.</span>
+<span class="source-line-no">083</span><span id="line-83">   @SuppressWarnings("java:S115")</span>
+<span class="source-line-no">084</span><span id="line-84">   private static final String ARG_tracer = "tracer";</span>
+<span class="source-line-no">085</span><span id="line-85">   // Constant name intentionally uses camelCase to match observation/metrics naming conventions.</span>
+<span class="source-line-no">086</span><span id="line-86">   @SuppressWarnings("java:S115")</span>
+<span class="source-line-no">087</span><span id="line-87">   private static final String ARG_name = "name";</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   private final MetricsRecorder recorder;</span>
+<span class="source-line-no">090</span><span id="line-90">   private final TracerHook tracer;</span>
+<span class="source-line-no">091</span><span id="line-91">   private final boolean active;</span>
+<span class="source-line-no">092</span><span id="line-92"></span>
+<span class="source-line-no">093</span><span id="line-93">   /**</span>
+<span class="source-line-no">094</span><span id="line-94">    * Constructor.</span>
+<span class="source-line-no">095</span><span id="line-95">    *</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param recorder The metrics recorder to time observations against. Must not be &lt;jk&gt;null&lt;/jk&gt;;</span>
+<span class="source-line-no">097</span><span id="line-97">    *    use {@link NoOpMetricsRecorder#INSTANCE} to disable metrics.</span>
+<span class="source-line-no">098</span><span id="line-98">    * @param tracer The tracer to open spans against. Must not be &lt;jk&gt;null&lt;/jk&gt;; use</span>
+<span class="source-line-no">099</span><span id="line-99">    *    {@link NoOpTracerHook#INSTANCE} to disable tracing.</span>
+<span class="source-line-no">100</span><span id="line-100">    */</span>
+<span class="source-line-no">101</span><span id="line-101">   public Observer(MetricsRecorder recorder, TracerHook tracer) {</span>
+<span class="source-line-no">102</span><span id="line-102">      this.recorder = assertArgNotNull(ARG_recorder, recorder);</span>
+<span class="source-line-no">103</span><span id="line-103">      this.tracer = assertArgNotNull(ARG_tracer, tracer);</span>
+<span class="source-line-no">104</span><span id="line-104">      this.active = recorder != NoOpMetricsRecorder.INSTANCE || tracer != NoOpTracerHook.INSTANCE;</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   /**</span>
+<span class="source-line-no">108</span><span id="line-108">    * Starts a new observation.</span>
+<span class="source-line-no">109</span><span id="line-109">    *</span>
+<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    * When both backends are the no-op singletons this returns {@link Observation#NOOP} without taking a</span>
+<span class="source-line-no">112</span><span id="line-112">    * timestamp or opening a span. Otherwise it opens a span via {@link TracerHook#startSpan(String)} and</span>
+<span class="source-line-no">113</span><span id="line-113">    * captures a start timestamp; the paired timer sample is recorded on {@link Observation#close()}.</span>
+<span class="source-line-no">114</span><span id="line-114">    *</span>
+<span class="source-line-no">115</span><span id="line-115">    * @param name The observation name &amp;mdash; used as both the span name and the metric timer name.</span>
+<span class="source-line-no">116</span><span id="line-116">    *    Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
+<span class="source-line-no">117</span><span id="line-117">    * @param tags Additional metric tags as comma-separated {@code key=value} pairs (e.g.</span>
+<span class="source-line-no">118</span><span id="line-118">    *    {@code "team=payments,region=us-east"}), or &lt;jk&gt;null&lt;/jk&gt; / empty for none.</span>
+<span class="source-line-no">119</span><span id="line-119">    * @return The started {@link Observation}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">120</span><span id="line-120">    */</span>
+<span class="source-line-no">121</span><span id="line-121">   public Observation start(String name, String tags) {</span>
+<span class="source-line-no">122</span><span id="line-122">      assertArgNotNullOrBlank(ARG_name, name);</span>
+<span class="source-line-no">123</span><span id="line-123">      if (! active)</span>
+<span class="source-line-no">124</span><span id="line-124">         return Observation.NOOP;</span>
+<span class="source-line-no">125</span><span id="line-125">      var scope = tracer.startSpan(name);</span>
+<span class="source-line-no">126</span><span id="line-126">      return new ActiveObservation(recorder, scope, name, tags == null ? "" : tags);</span>
+<span class="source-line-no">127</span><span id="line-127">   }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   /**</span>
+<span class="source-line-no">130</span><span id="line-130">    * Returns whether this observer has at least one live backend (metrics or tracing).</span>
+<span class="source-line-no">131</span><span id="line-131">    *</span>
+<span class="source-line-no">132</span><span id="line-132">    * @return &lt;jk&gt;true&lt;/jk&gt; if either the metrics recorder or the tracer is non-no-op.</span>
+<span class="source-line-no">133</span><span id="line-133">    */</span>
+<span class="source-line-no">134</span><span id="line-134">   public boolean isActive() {</span>
+<span class="source-line-no">135</span><span id="line-135">      return active;</span>
+<span class="source-line-no">136</span><span id="line-136">   }</span>
+<span class="source-line-no">137</span><span id="line-137"></span>
+<span class="source-line-no">138</span><span id="line-138">   private static final class ActiveObservation implements Observation {</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      private final MetricsRecorder recorder;</span>
+<span class="source-line-no">141</span><span id="line-141">      private final Scope scope;</span>
+<span class="source-line-no">142</span><span id="line-142">      private final String name;</span>
+<span class="source-line-no">143</span><span id="line-143">      private final String tags;</span>
+<span class="source-line-no">144</span><span id="line-144">      private final long startNanos;</span>
+<span class="source-line-no">145</span><span id="line-145">      private Throwable error;</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">      ActiveObservation(MetricsRecorder recorder, Scope scope, String name, String tags) {</span>
+<span class="source-line-no">148</span><span id="line-148">         this.recorder = recorder;</span>
+<span class="source-line-no">149</span><span id="line-149">         this.scope = scope;</span>
+<span class="source-line-no">150</span><span id="line-150">         this.name = name;</span>
+<span class="source-line-no">151</span><span id="line-151">         this.tags = tags;</span>
+<span class="source-line-no">152</span><span id="line-152">         this.startNanos = System.nanoTime();</span>
+<span class="source-line-no">153</span><span id="line-153">      }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">      @Override /* Observation */</span>
+<span class="source-line-no">156</span><span id="line-156">      public void setError(Throwable error) {</span>
+<span class="source-line-no">157</span><span id="line-157">         this.error = error;</span>
+<span class="source-line-no">158</span><span id="line-158">      }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">      @Override /* Observation */</span>
+<span class="source-line-no">161</span><span id="line-161">      public void close() {</span>
+<span class="source-line-no">162</span><span id="line-162">         var elapsed = Duration.ofNanos(System.nanoTime() - startNanos);</span>
+<span class="source-line-no">163</span><span id="line-163">         try {</span>
+<span class="source-line-no">164</span><span id="line-164">            if (nn(error))</span>
+<span class="source-line-no">165</span><span id="line-165">               scope.setError(error);</span>
+<span class="source-line-no">166</span><span id="line-166">         } finally {</span>
+<span class="source-line-no">167</span><span id="line-167">            try {</span>
+<span class="source-line-no">168</span><span id="line-168">               scope.close();</span>
+<span class="source-line-no">169</span><span id="line-169">            } finally {</span>
+<span class="source-line-no">170</span><span id="line-170">               recorder.record(name, tags, elapsed, error);</span>
+<span class="source-line-no">171</span><span id="line-171">            }</span>
+<span class="source-line-no">172</span><span id="line-172">         }</span>
+<span class="source-line-no">173</span><span id="line-173">      }</span>
+<span class="source-line-no">174</span><span id="line-174">   }</span>
+<span class="source-line-no">175</span><span id="line-175">}</span>
 
 
 

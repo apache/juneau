@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -157,7 +157,7 @@
 <span class="source-line-no">144</span><span id="line-144">   @Override /* Overridden from OpenApiElement */</span>
 <span class="source-line-no">145</span><span id="line-145">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">146</span><span id="line-146">      // @formatter:off</span>
-<span class="source-line-no">147</span><span id="line-147">      var s = setb(String.class)</span>
+<span class="source-line-no">147</span><span id="line-147">      var s = stb(String.class)</span>
 <span class="source-line-no">148</span><span id="line-148">         .addIf(nn(callbacks), PROP_callbacks)</span>
 <span class="source-line-no">149</span><span id="line-149">         .build();</span>
 <span class="source-line-no">150</span><span id="line-150">      // @formatter:on</span>

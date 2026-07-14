@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth.oauth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.security.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -172,12 +172,12 @@
 <span class="source-line-no">159</span><span id="line-159">   public Optional&lt;AuthResult&gt; authenticate(HttpServletRequest req) throws AuthenticationException {</span>
 <span class="source-line-no">160</span><span id="line-160">      var header = req.getHeader(AUTHORIZATION);</span>
 <span class="source-line-no">161</span><span id="line-161">      if (header == null || !header.regionMatches(true, 0, BEARER_PREFIX, 0, BEARER_PREFIX.length()))</span>
-<span class="source-line-no">162</span><span id="line-162">         return opte();</span>
+<span class="source-line-no">162</span><span id="line-162">         return oe();</span>
 <span class="source-line-no">163</span><span id="line-163">      var token = header.substring(BEARER_PREFIX.length()).trim();</span>
 <span class="source-line-no">164</span><span id="line-164">      if (token.isEmpty())</span>
-<span class="source-line-no">165</span><span id="line-165">         return opte();</span>
+<span class="source-line-no">165</span><span id="line-165">         return oe();</span>
 <span class="source-line-no">166</span><span id="line-166">      var principal = validate(token);</span>
-<span class="source-line-no">167</span><span id="line-167">      return opt(AuthResult.of(principal, extractRoles(principal)));</span>
+<span class="source-line-no">167</span><span id="line-167">      return o(AuthResult.of(principal, extractRoles(principal)));</span>
 <span class="source-line-no">168</span><span id="line-168">   }</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
 <span class="source-line-no">170</span><span id="line-170">   private Principal validate(String token) throws AuthenticationException {</span>

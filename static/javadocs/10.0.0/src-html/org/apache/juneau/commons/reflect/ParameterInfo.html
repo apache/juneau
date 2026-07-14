@@ -29,12 +29,12 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.reflect;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ClassNameFormat.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.reflect.ClassNameFormat.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">import java.lang.annotation.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.lang.reflect.*;</span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97">   @SuppressWarnings({</span>
 <span class="source-line-no">098</span><span id="line-98">      "java:S115" // Constants use UPPER_snakeCase convention</span>
 <span class="source-line-no">099</span><span id="line-99">   })</span>
-<span class="source-line-no">100</span><span id="line-100">public class ParameterInfo extends ElementInfo implements Annotatable {</span>
+<span class="source-line-no">100</span><span id="line-100">public final class ParameterInfo extends ElementInfo implements Annotatable {</span>
 <span class="source-line-no">101</span><span id="line-101"></span>
 <span class="source-line-no">102</span><span id="line-102">   // Argument name constants for assertArgNotNull</span>
 <span class="source-line-no">103</span><span id="line-103">   private static final String ARG_inner = "inner";</span>
@@ -243,7 +243,7 @@
 <span class="source-line-no">230</span><span id="line-230">    *</span>
 <span class="source-line-no">231</span><span id="line-231">    * &lt;p&gt;</span>
 <span class="source-line-no">232</span><span id="line-232">    * &lt;b&gt;Note on Repeatable Annotations:&lt;/b&gt;</span>
-<span class="source-line-no">233</span><span id="line-233">    * Repeatable annotations (those marked with {@link java.lang.annotation.Repeatable @Repeatable}) are automatically</span>
+<span class="source-line-no">233</span><span id="line-233">    * Repeatable annotations (those marked with {@link Repeatable @Repeatable}) are automatically</span>
 <span class="source-line-no">234</span><span id="line-234">    * expanded into their individual annotation instances. For example, if a parameter has multiple {@code @Marshalled} annotations,</span>
 <span class="source-line-no">235</span><span id="line-235">    * this method returns each {@code @Marshalled} annotation separately, rather than the container annotation.</span>
 <span class="source-line-no">236</span><span id="line-236">    *</span>
@@ -350,7 +350,7 @@
 <span class="source-line-no">337</span><span id="line-337">    * Returns the Java language modifiers for the parameter represented by this object, as an integer.</span>
 <span class="source-line-no">338</span><span id="line-338">    *</span>
 <span class="source-line-no">339</span><span id="line-339">    * &lt;p&gt;</span>
-<span class="source-line-no">340</span><span id="line-340">    * The {@link java.lang.reflect.Modifier} class should be used to decode the modifiers.</span>
+<span class="source-line-no">340</span><span id="line-340">    * The {@link Modifier} class should be used to decode the modifiers.</span>
 <span class="source-line-no">341</span><span id="line-341">    *</span>
 <span class="source-line-no">342</span><span id="line-342">    * &lt;p&gt;</span>
 <span class="source-line-no">343</span><span id="line-343">    * Same as calling {@link Parameter#getModifiers()}.</span>
@@ -365,7 +365,7 @@
 <span class="source-line-no">352</span><span id="line-352">    *</span>
 <span class="source-line-no">353</span><span id="line-353">    * @return The Java language modifiers for this parameter.</span>
 <span class="source-line-no">354</span><span id="line-354">    * @see Parameter#getModifiers()</span>
-<span class="source-line-no">355</span><span id="line-355">    * @see java.lang.reflect.Modifier</span>
+<span class="source-line-no">355</span><span id="line-355">    * @see Modifier</span>
 <span class="source-line-no">356</span><span id="line-356">    */</span>
 <span class="source-line-no">357</span><span id="line-357">   @Override</span>
 <span class="source-line-no">358</span><span id="line-358">   public int getModifiers() { return inner.getModifiers(); }</span>
@@ -454,7 +454,7 @@
 <span class="source-line-no">441</span><span id="line-441">    * annotation value to determine which named bean should be injected.</span>
 <span class="source-line-no">442</span><span id="line-442">    *</span>
 <span class="source-line-no">443</span><span id="line-443">    * &lt;p&gt;</span>
-<span class="source-line-no">444</span><span id="line-444">    * This method is used by the {@link org.apache.juneau.commons.inject.BeanStore} for bean injection.</span>
+<span class="source-line-no">444</span><span id="line-444">    * This method is used by the {@link BeanStore} for bean injection.</span>
 <span class="source-line-no">445</span><span id="line-445">    *</span>
 <span class="source-line-no">446</span><span id="line-446">    * &lt;p&gt;</span>
 <span class="source-line-no">447</span><span id="line-447">    * &lt;b&gt;Note:&lt;/b&gt; This is different from {@link #getResolvedName()} which looks for &lt;ja&gt;@Name&lt;/ja&gt;</span>
@@ -761,7 +761,7 @@
 <span class="source-line-no">748</span><span id="line-748">         }</span>
 <span class="source-line-no">749</span><span id="line-749">      }</span>
 <span class="source-line-no">750</span><span id="line-750"></span>
-<span class="source-line-no">751</span><span id="line-751">      return opt(inner).filter(x -&gt; x.isNamePresent()).filter(x -&gt; ! DISABLE_PARAM_NAME_DETECTION.get()).map(x -&gt; x.getName()).orElse(null);</span>
+<span class="source-line-no">751</span><span id="line-751">      return o(inner).filter(x -&gt; x.isNamePresent()).filter(x -&gt; ! DISABLE_PARAM_NAME_DETECTION.get()).map(x -&gt; x.getName()).orElse(null);</span>
 <span class="source-line-no">752</span><span id="line-752">   }</span>
 <span class="source-line-no">753</span><span id="line-753"></span>
 <span class="source-line-no">754</span><span id="line-754">   private String findQualifierInternal() {</span>
@@ -922,8 +922,8 @@
 <span class="source-line-no">909</span><span id="line-909">         // to Optional.empty() so @Value("${maybe}") Optional&lt;T&gt; behaves the same as Spring's.</span>
 <span class="source-line-no">910</span><span id="line-910">         if (pt.is(Optional.class))</span>
 <span class="source-line-no">911</span><span id="line-911">            return (resolved == null || (resolved instanceof String s &amp;&amp; s.isEmpty()))</span>
-<span class="source-line-no">912</span><span id="line-912">               ? opte()</span>
-<span class="source-line-no">913</span><span id="line-913">               : opt(resolved);</span>
+<span class="source-line-no">912</span><span id="line-912">               ? oe()</span>
+<span class="source-line-no">913</span><span id="line-913">               : o(resolved);</span>
 <span class="source-line-no">914</span><span id="line-914">         return resolved;</span>
 <span class="source-line-no">915</span><span id="line-915">      }</span>
 <span class="source-line-no">916</span><span id="line-916"></span>
@@ -985,7 +985,7 @@
 <span class="source-line-no">972</span><span id="line-972">            }</span>
 <span class="source-line-no">973</span><span id="line-973"></span>
 <span class="source-line-no">974</span><span id="line-974">            // Handle List&lt;T&gt; or Set&lt;T&gt;</span>
-<span class="source-line-no">975</span><span id="line-975">            var inner2 = opt(ptu.inner()).orElse(Object.class);</span>
+<span class="source-line-no">975</span><span id="line-975">            var inner2 = o(ptu.inner()).orElse(Object.class);</span>
 <span class="source-line-no">976</span><span id="line-976">            if (eq(inner2, List.class) || eq(inner2, Set.class)) {</span>
 <span class="source-line-no">977</span><span id="line-977">               if (parameterizedType instanceof ParameterizedType pt2) {</span>
 <span class="source-line-no">978</span><span id="line-978">                  var typeArgs = pt2.getActualTypeArguments();</span>
@@ -1006,7 +1006,7 @@
 <span class="source-line-no">993</span><span id="line-993">         collectionValue = ReflectionUtils.resolveCollectionValue(elementType, beanStore, ptu);</span>
 <span class="source-line-no">994</span><span id="line-994">      }</span>
 <span class="source-line-no">995</span><span id="line-995">      if (nn(collectionValue))</span>
-<span class="source-line-no">996</span><span id="line-996">         return pt.is(Optional.class) ? opt(collectionValue) : collectionValue;</span>
+<span class="source-line-no">996</span><span id="line-996">         return pt.is(Optional.class) ? o(collectionValue) : collectionValue;</span>
 <span class="source-line-no">997</span><span id="line-997"></span>
 <span class="source-line-no">998</span><span id="line-998">      // Handle single bean</span>
 <span class="source-line-no">999</span><span id="line-999">      var ptc = ptu.inner();</span>
@@ -1020,7 +1020,7 @@
 <span class="source-line-no">1007</span><span id="line-1007">         if (r.isEmpty()) {</span>
 <span class="source-line-no">1008</span><span id="line-1008">            for (var r2 : otherBeans)</span>
 <span class="source-line-no">1009</span><span id="line-1009">               if (canAccept(r2)) {</span>
-<span class="source-line-no">1010</span><span id="line-1010">                  r = opt(r2);</span>
+<span class="source-line-no">1010</span><span id="line-1010">                  r = o(r2);</span>
 <span class="source-line-no">1011</span><span id="line-1011">                  break;</span>
 <span class="source-line-no">1012</span><span id="line-1012">               }</span>
 <span class="source-line-no">1013</span><span id="line-1013">         }</span>

@@ -40,9 +40,9 @@
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * Used by {@link MarshallingContext.Builder#dateFormat(DateFormat)},</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.marshall.Marshalled#dateFormat()},</span>
-<span class="source-line-no">031</span><span id="line-31"> * {@link org.apache.juneau.marshall.MarshalledProp#dateFormat()}, and</span>
-<span class="source-line-no">032</span><span id="line-32"> * {@link org.apache.juneau.marshall.MarshalledConfig#dateFormat()} to control how {@link Date}</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link Marshalled#dateFormat()},</span>
+<span class="source-line-no">031</span><span id="line-31"> * {@link MarshalledProp#dateFormat()}, and</span>
+<span class="source-line-no">032</span><span id="line-32"> * {@link MarshalledConfig#dateFormat()} to control how {@link Date}</span>
 <span class="source-line-no">033</span><span id="line-33"> * values are written to and read from the wire.</span>
 <span class="source-line-no">034</span><span id="line-34"> *</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * every other constant.</span>
 <span class="source-line-no">044</span><span id="line-44"> */</span>
 <span class="source-line-no">045</span><span id="line-45">@SuppressWarnings({</span>
-<span class="source-line-no">046</span><span id="line-46">   "java:S2143" // Public API formats/parses java.util.Date by design (it's the Date marshalling-format enum); internals already use java.time.</span>
+<span class="source-line-no">046</span><span id="line-46">   "java:S2143" // Public API formats/parses Date by design (it's the Date marshalling-format enum); internals already use java.time.</span>
 <span class="source-line-no">047</span><span id="line-47">})</span>
 <span class="source-line-no">048</span><span id="line-48">public enum DateFormat {</span>
 <span class="source-line-no">049</span><span id="line-49"></span>

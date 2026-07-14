@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -511,7 +511,7 @@
 <span class="source-line-no">498</span><span id="line-498">    *</span>
 <span class="source-line-no">499</span><span id="line-499">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">500</span><span id="line-500">    */</span>
-<span class="source-line-no">501</span><span id="line-501">   public Set&lt;MediaType&gt; getConsumes() { return nullIfEmpty(consumes); }</span>
+<span class="source-line-no">501</span><span id="line-501">   public Set&lt;MediaType&gt; getConsumes() { return nie(consumes); }</span>
 <span class="source-line-no">502</span><span id="line-502"></span>
 <span class="source-line-no">503</span><span id="line-503">   /**</span>
 <span class="source-line-no">504</span><span id="line-504">    * Bean property getter:  &lt;property&gt;deprecated&lt;/property&gt;.</span>
@@ -592,7 +592,7 @@
 <span class="source-line-no">579</span><span id="line-579">    *</span>
 <span class="source-line-no">580</span><span id="line-580">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">581</span><span id="line-581">    */</span>
-<span class="source-line-no">582</span><span id="line-582">   public List&lt;ParameterInfo&gt; getParameters() { return nullIfEmpty(parameters); }</span>
+<span class="source-line-no">582</span><span id="line-582">   public List&lt;ParameterInfo&gt; getParameters() { return nie(parameters); }</span>
 <span class="source-line-no">583</span><span id="line-583"></span>
 <span class="source-line-no">584</span><span id="line-584">   /**</span>
 <span class="source-line-no">585</span><span id="line-585">    * Bean property getter:  &lt;property&gt;produces&lt;/property&gt;.</span>
@@ -602,7 +602,7 @@
 <span class="source-line-no">589</span><span id="line-589">    *</span>
 <span class="source-line-no">590</span><span id="line-590">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">591</span><span id="line-591">    */</span>
-<span class="source-line-no">592</span><span id="line-592">   public Set&lt;MediaType&gt; getProduces() { return nullIfEmpty(produces); }</span>
+<span class="source-line-no">592</span><span id="line-592">   public Set&lt;MediaType&gt; getProduces() { return nie(produces); }</span>
 <span class="source-line-no">593</span><span id="line-593"></span>
 <span class="source-line-no">594</span><span id="line-594">   /**</span>
 <span class="source-line-no">595</span><span id="line-595">    * Returns the response info with the given status code.</span>
@@ -633,7 +633,7 @@
 <span class="source-line-no">620</span><span id="line-620">    *</span>
 <span class="source-line-no">621</span><span id="line-621">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">622</span><span id="line-622">    */</span>
-<span class="source-line-no">623</span><span id="line-623">   public Map&lt;String,ResponseInfo&gt; getResponses() { return nullIfEmpty(responses); }</span>
+<span class="source-line-no">623</span><span id="line-623">   public Map&lt;String,ResponseInfo&gt; getResponses() { return nie(responses); }</span>
 <span class="source-line-no">624</span><span id="line-624"></span>
 <span class="source-line-no">625</span><span id="line-625">   /**</span>
 <span class="source-line-no">626</span><span id="line-626">    * Bean property getter:  &lt;property&gt;schemes&lt;/property&gt;.</span>
@@ -643,7 +643,7 @@
 <span class="source-line-no">630</span><span id="line-630">    *</span>
 <span class="source-line-no">631</span><span id="line-631">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">632</span><span id="line-632">    */</span>
-<span class="source-line-no">633</span><span id="line-633">   public Set&lt;String&gt; getSchemes() { return nullIfEmpty(schemes); }</span>
+<span class="source-line-no">633</span><span id="line-633">   public Set&lt;String&gt; getSchemes() { return nie(schemes); }</span>
 <span class="source-line-no">634</span><span id="line-634"></span>
 <span class="source-line-no">635</span><span id="line-635">   /**</span>
 <span class="source-line-no">636</span><span id="line-636">    * Bean property getter:  &lt;property&gt;security&lt;/property&gt;.</span>
@@ -653,7 +653,7 @@
 <span class="source-line-no">640</span><span id="line-640">    *</span>
 <span class="source-line-no">641</span><span id="line-641">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">642</span><span id="line-642">    */</span>
-<span class="source-line-no">643</span><span id="line-643">   public List&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; getSecurity() { return nullIfEmpty(security); }</span>
+<span class="source-line-no">643</span><span id="line-643">   public List&lt;Map&lt;String,List&lt;String&gt;&gt;&gt; getSecurity() { return nie(security); }</span>
 <span class="source-line-no">644</span><span id="line-644"></span>
 <span class="source-line-no">645</span><span id="line-645">   /**</span>
 <span class="source-line-no">646</span><span id="line-646">    * Bean property getter:  &lt;property&gt;summary&lt;/property&gt;.</span>
@@ -674,7 +674,7 @@
 <span class="source-line-no">661</span><span id="line-661">    *</span>
 <span class="source-line-no">662</span><span id="line-662">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">663</span><span id="line-663">    */</span>
-<span class="source-line-no">664</span><span id="line-664">   public Set&lt;String&gt; getTags() { return nullIfEmpty(tags); }</span>
+<span class="source-line-no">664</span><span id="line-664">   public Set&lt;String&gt; getTags() { return nie(tags); }</span>
 <span class="source-line-no">665</span><span id="line-665"></span>
 <span class="source-line-no">666</span><span id="line-666">   /**</span>
 <span class="source-line-no">667</span><span id="line-667">    * Bean property getter:  &lt;property&gt;deprecated&lt;/property&gt;.</span>
@@ -689,19 +689,19 @@
 <span class="source-line-no">676</span><span id="line-676">   @Override /* Overridden from SwaggerElement */</span>
 <span class="source-line-no">677</span><span id="line-677">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">678</span><span id="line-678">      // @formatter:off</span>
-<span class="source-line-no">679</span><span id="line-679">      var s = setb(String.class)</span>
-<span class="source-line-no">680</span><span id="line-680">         .addIf(ne(consumes), PROP_consumes)</span>
+<span class="source-line-no">679</span><span id="line-679">      var s = stb(String.class)</span>
+<span class="source-line-no">680</span><span id="line-680">         .addIf(ine(consumes), PROP_consumes)</span>
 <span class="source-line-no">681</span><span id="line-681">         .addIf(nn(deprecated), PROP_deprecated)</span>
 <span class="source-line-no">682</span><span id="line-682">         .addIf(nn(description), PROP_description)</span>
 <span class="source-line-no">683</span><span id="line-683">         .addIf(nn(externalDocs), PROP_externalDocs)</span>
 <span class="source-line-no">684</span><span id="line-684">         .addIf(nn(operationId), PROP_operationId)</span>
-<span class="source-line-no">685</span><span id="line-685">         .addIf(ne(parameters), PROP_parameters)</span>
-<span class="source-line-no">686</span><span id="line-686">         .addIf(ne(produces), PROP_produces)</span>
-<span class="source-line-no">687</span><span id="line-687">         .addIf(ne(responses), PROP_responses)</span>
-<span class="source-line-no">688</span><span id="line-688">         .addIf(ne(schemes), PROP_schemes)</span>
-<span class="source-line-no">689</span><span id="line-689">         .addIf(ne(security), PROP_security)</span>
+<span class="source-line-no">685</span><span id="line-685">         .addIf(ine(parameters), PROP_parameters)</span>
+<span class="source-line-no">686</span><span id="line-686">         .addIf(ine(produces), PROP_produces)</span>
+<span class="source-line-no">687</span><span id="line-687">         .addIf(ine(responses), PROP_responses)</span>
+<span class="source-line-no">688</span><span id="line-688">         .addIf(ine(schemes), PROP_schemes)</span>
+<span class="source-line-no">689</span><span id="line-689">         .addIf(ine(security), PROP_security)</span>
 <span class="source-line-no">690</span><span id="line-690">         .addIf(nn(summary), PROP_summary)</span>
-<span class="source-line-no">691</span><span id="line-691">         .addIf(ne(tags), PROP_tags)</span>
+<span class="source-line-no">691</span><span id="line-691">         .addIf(ine(tags), PROP_tags)</span>
 <span class="source-line-no">692</span><span id="line-692">         .build();</span>
 <span class="source-line-no">693</span><span id="line-693">      // @formatter:on</span>
 <span class="source-line-no">694</span><span id="line-694">      return new MultiSet&lt;&gt;(s, super.keySet());</span>
@@ -958,7 +958,7 @@
 <span class="source-line-no">945</span><span id="line-945">    * @return This object.</span>
 <span class="source-line-no">946</span><span id="line-946">    */</span>
 <span class="source-line-no">947</span><span id="line-947">   public Operation setSchemes(String...value) {</span>
-<span class="source-line-no">948</span><span id="line-948">      setSchemes(setb(String.class).sparse().add(value).build());</span>
+<span class="source-line-no">948</span><span id="line-948">      setSchemes(stb(String.class).sparse().add(value).build());</span>
 <span class="source-line-no">949</span><span id="line-949">      return this;</span>
 <span class="source-line-no">950</span><span id="line-950">   }</span>
 <span class="source-line-no">951</span><span id="line-951"></span>
@@ -1042,7 +1042,7 @@
 <span class="source-line-no">1029</span><span id="line-1029">    * @return This object.</span>
 <span class="source-line-no">1030</span><span id="line-1030">    */</span>
 <span class="source-line-no">1031</span><span id="line-1031">   public Operation setTags(String...value) {</span>
-<span class="source-line-no">1032</span><span id="line-1032">      setTags(setb(String.class).sparse().add(value).build());</span>
+<span class="source-line-no">1032</span><span id="line-1032">      setTags(stb(String.class).sparse().add(value).build());</span>
 <span class="source-line-no">1033</span><span id="line-1033">      return this;</span>
 <span class="source-line-no">1034</span><span id="line-1034">   }</span>
 <span class="source-line-no">1035</span><span id="line-1035"></span>

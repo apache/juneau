@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.logger;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">/**</span>
 <span class="source-line-no">022</span><span id="line-22"> * Represents the amount of detail to include in a log entry for HTTP requests and responses.</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49">    * @return The resolved value.</span>
 <span class="source-line-no">050</span><span id="line-50">    */</span>
 <span class="source-line-no">051</span><span id="line-51">   public static CallLoggingDetail fromString(String s) {</span>
-<span class="source-line-no">052</span><span id="line-52">      if (ne(s)) {</span>
+<span class="source-line-no">052</span><span id="line-52">      if (ine(s)) {</span>
 <span class="source-line-no">053</span><span id="line-53">         try {</span>
 <span class="source-line-no">054</span><span id="line-54">            return valueOf(s.toUpperCase());</span>
 <span class="source-line-no">055</span><span id="line-55">         } catch (@SuppressWarnings("unused") IllegalArgumentException e) {</span>

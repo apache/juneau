@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/BeanSession.html" title="interface in org.apache.juneau.commons.bean">BeanSession</a></code>, <code><a href="../../commons/conversion/ConverterSession.html" title="interface in org.apache.juneau.commons.conversion">ConverterSession</a></code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-40">IniSerializerSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-39">IniSerializerSession</a></span>
 <span class="extends-implements">extends <a href="../serializer/WriterSerializerSession.html" title="class in org.apache.juneau.marshall.serializer">WriterSerializerSession</a>
 implements <a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></span></div>
 <div class="block">Session for serializing objects to INI format.</div>
@@ -219,7 +219,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.ini.IniSerializerSession.Builder)">
 <h3>IniSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-82">IniSerializerSession</a></span><wbr><span class="parameters">(<a href="IniSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializerSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-81">IniSerializerSession</a></span><wbr><span class="parameters">(<a href="IniSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializerSession.Builder</a>&nbsp;builder)</span></div>
 </section>
 </li>
 </ul>
@@ -233,7 +233,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.ini.IniSerializer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IniSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-76">create</a></span><wbr><span class="parameters">(<a href="IniSerializer.html" title="class in org.apache.juneau.marshall.ini">IniSerializer</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="IniSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.ini">IniSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-75">create</a></span><wbr><span class="parameters">(<a href="IniSerializer.html" title="class in org.apache.juneau.marshall.ini">IniSerializer</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a session builder.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -246,7 +246,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="serializeRecords(java.lang.Object)">
 <h3>serializeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-87">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-86">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#serializeRecords(java.lang.Object)">RecordWritable</a></code></span></div>
 <div class="block">Opens a low-level <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output.
@@ -273,7 +273,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-92">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-91">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#isRecordStreaming()">RecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
@@ -289,7 +289,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">
 <h3>doSerialize</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-97">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-96">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
@@ -316,7 +316,7 @@ implements <a href="../stream/RecordWritable.html" title="interface in org.apach
 <li>
 <section class="detail" id="getIniWriter(org.apache.juneau.marshall.serializer.SerializerPipe)">
 <h3>getIniWriter</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="IniWriter.html" title="class in org.apache.juneau.marshall.ini">IniWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-119">getIniWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="IniWriter.html" title="class in org.apache.juneau.marshall.ini">IniWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/ini/IniSerializerSession.html#line-118">getIniWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
 </section>
 </li>
 </ul>

@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24"> * Utility classes and methods for the {@link BsonConfig @BsonConfig} annotation.</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics"&gt;BSON Basics&lt;/a&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Bson"&gt;BSON Basics&lt;/a&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;/ul&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> */</span>
 <span class="source-line-no">030</span><span id="line-30">public class BsonConfigAnnotation {</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35">   private BsonConfigAnnotation() {}</span>
 <span class="source-line-no">036</span><span id="line-36"></span>
 <span class="source-line-no">037</span><span id="line-37">   /**</span>
-<span class="source-line-no">038</span><span id="line-38">    * Applies {@link BsonConfig} annotations to a {@link org.apache.juneau.marshall.bson.BsonParser.Builder}.</span>
+<span class="source-line-no">038</span><span id="line-38">    * Applies {@link BsonConfig} annotations to a {@link BsonParser.Builder}.</span>
 <span class="source-line-no">039</span><span id="line-39">    */</span>
 <span class="source-line-no">040</span><span id="line-40">   public static class ParserApply extends AnnotationApplier&lt;BsonConfig,BsonParser.Builder&gt; {</span>
 <span class="source-line-no">041</span><span id="line-41"></span>
@@ -70,7 +70,7 @@
 <span class="source-line-no">057</span><span id="line-57">   }</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
 <span class="source-line-no">059</span><span id="line-59">   /**</span>
-<span class="source-line-no">060</span><span id="line-60">    * Applies {@link BsonConfig} annotations to a {@link org.apache.juneau.marshall.bson.BsonSerializer.Builder}.</span>
+<span class="source-line-no">060</span><span id="line-60">    * Applies {@link BsonConfig} annotations to a {@link BsonSerializer.Builder}.</span>
 <span class="source-line-no">061</span><span id="line-61">    */</span>
 <span class="source-line-no">062</span><span id="line-62">   public static class SerializerApply extends AnnotationApplier&lt;BsonConfig,BsonSerializer.Builder&gt; {</span>
 <span class="source-line-no">063</span><span id="line-63"></span>

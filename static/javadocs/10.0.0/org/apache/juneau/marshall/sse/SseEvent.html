@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
  <p>
  The payload field <a href="#getData()"><code>data</code></a> is a <b>pre-serialized</b> <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a> — the SSE
  serializer does not compose with a delegate marshaller. Callers that need a typed payload should
- serialize it themselves (e.g. via <a href="../marshaller/CharMarshaller.html#of(java.lang.Object)"><code>Json.DEFAULT.of(x)</code></a>)
+ serialize it themselves (e.g. via <a href="../marshaller/Json.html#of(java.lang.Object)"><code>Json.of(x)</code></a>)
  and assign the resulting string to <a href="#setData(java.lang.String)"><code>setData(...)</code></a>. The serializer will
  split that string on <code>\n</code> into multiple <c>data:</c> lines per spec.
 
@@ -118,7 +118,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SseBasics">SSE Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Sse">SSE Basics</a>
    <li class='link'><a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html">WHATWG HTML §9.2 — Server-sent events</a>
  </ul></div>
 </section>

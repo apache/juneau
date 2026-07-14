@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/BeanSession.html" title="interface in org.apache.juneau.commons.bean">BeanSession</a></code>, <code><a href="../../commons/conversion/ConverterSession.html" title="interface in org.apache.juneau.commons.conversion">ConverterSession</a></code>, <code><a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></code>, <code><a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-44">BsonParserSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-45">BsonParserSession</a></span>
 <span class="extends-implements">extends <a href="../parser/InputStreamParserSession.html" title="class in org.apache.juneau.marshall.parser">InputStreamParserSession</a>
 implements <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a>, <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson"><code>BsonParser</code></a>.
@@ -100,7 +100,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -229,7 +229,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.bson.BsonParserSession.Builder)">
 <h3>BsonParserSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-96">BsonParserSession</a></span><wbr><span class="parameters">(<a href="BsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-97">BsonParserSession</a></span><wbr><span class="parameters">(<a href="BsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession.Builder</a>&nbsp;builder)</span></div>
 </section>
 </li>
 </ul>
@@ -243,7 +243,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.bson.BsonParser)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-89">create</a></span><wbr><span class="parameters">(<a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-90">create</a></span><wbr><span class="parameters">(<a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for a <a href="BsonParserSession.html" title="class in org.apache.juneau.marshall.bson"><code>BsonParserSession</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -256,7 +256,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="doParse(org.apache.juneau.marshall.parser.ParserPipe,org.apache.juneau.marshall.ClassMeta)">
 <h3>doParse</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-294">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-295">doParse</a></span><wbr><span class="parameters">(<a href="../parser/ParserPipe.html" title="class in org.apache.juneau.marshall.parser">ParserPipe</a>&nbsp;pipe,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;T&gt;&nbsp;type)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a>,
@@ -292,7 +292,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="parseRecords(java.lang.Object)">
 <h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-311">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-312">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a whole-value pull-parser cursor over a BSON document, bound to this live session.
  <a href="../stream/RecordReader.html#read(java.lang.Class)"><code>read(...)</code></a> delegates to the polymorphic
@@ -312,7 +312,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="parseArrayRecords(java.lang.Object)">
 <h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-324">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-325">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> for BSON, bound to this live session.  Calls
  <code>parse(input, List.class, Object.class)</code> once and iterates the result.</div>
@@ -331,7 +331,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-334">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-335">isRecordStreaming</a></span>()</div>
 <div class="block">The BSON record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -344,7 +344,7 @@ implements <a href="../stream/RecordReadable.html" title="interface in org.apach
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-342">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParserSession.html#line-343">isArrayRecordStreaming</a></span>()</div>
 <div class="block">The BSON array-record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

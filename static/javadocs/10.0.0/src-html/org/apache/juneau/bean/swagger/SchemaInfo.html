@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -412,7 +412,7 @@
 <span class="source-line-no">399</span><span id="line-399">    *</span>
 <span class="source-line-no">400</span><span id="line-400">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">401</span><span id="line-401">    */</span>
-<span class="source-line-no">402</span><span id="line-402">   public Set&lt;SchemaInfo&gt; getAllOf() { return nullIfEmpty(allOf); }</span>
+<span class="source-line-no">402</span><span id="line-402">   public Set&lt;SchemaInfo&gt; getAllOf() { return nie(allOf); }</span>
 <span class="source-line-no">403</span><span id="line-403"></span>
 <span class="source-line-no">404</span><span id="line-404">   /**</span>
 <span class="source-line-no">405</span><span id="line-405">    * Bean property getter:  &lt;property&gt;default&lt;/property&gt;.</span>
@@ -443,7 +443,7 @@
 <span class="source-line-no">430</span><span id="line-430">    *</span>
 <span class="source-line-no">431</span><span id="line-431">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">432</span><span id="line-432">    */</span>
-<span class="source-line-no">433</span><span id="line-433">   public Set&lt;Object&gt; getEnum() { return nullIfEmpty(enum_); }</span>
+<span class="source-line-no">433</span><span id="line-433">   public Set&lt;Object&gt; getEnum() { return nie(enum_); }</span>
 <span class="source-line-no">434</span><span id="line-434"></span>
 <span class="source-line-no">435</span><span id="line-435">   /**</span>
 <span class="source-line-no">436</span><span id="line-436">    * Bean property getter:  &lt;property&gt;example&lt;/property&gt;.</span>
@@ -562,7 +562,7 @@
 <span class="source-line-no">549</span><span id="line-549">    *</span>
 <span class="source-line-no">550</span><span id="line-550">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">551</span><span id="line-551">    */</span>
-<span class="source-line-no">552</span><span id="line-552">   public Map&lt;String,SchemaInfo&gt; getProperties() { return nullIfEmpty(properties); }</span>
+<span class="source-line-no">552</span><span id="line-552">   public Map&lt;String,SchemaInfo&gt; getProperties() { return nie(properties); }</span>
 <span class="source-line-no">553</span><span id="line-553"></span>
 <span class="source-line-no">554</span><span id="line-554">   /**</span>
 <span class="source-line-no">555</span><span id="line-555">    * Bean property getter:  &lt;property&gt;readOnly&lt;/property&gt;.</span>
@@ -594,7 +594,7 @@
 <span class="source-line-no">581</span><span id="line-581">    *</span>
 <span class="source-line-no">582</span><span id="line-582">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">583</span><span id="line-583">    */</span>
-<span class="source-line-no">584</span><span id="line-584">   public Set&lt;String&gt; getRequiredProperties() { return nullIfEmpty(requiredProperties); }</span>
+<span class="source-line-no">584</span><span id="line-584">   public Set&lt;String&gt; getRequiredProperties() { return nie(requiredProperties); }</span>
 <span class="source-line-no">585</span><span id="line-585"></span>
 <span class="source-line-no">586</span><span id="line-586">   /**</span>
 <span class="source-line-no">587</span><span id="line-587">    * Bean property getter:  &lt;property&gt;title&lt;/property&gt;.</span>
@@ -627,14 +627,14 @@
 <span class="source-line-no">614</span><span id="line-614">   @Override /* Overridden from SwaggerElement */</span>
 <span class="source-line-no">615</span><span id="line-615">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">616</span><span id="line-616">      // @formatter:off</span>
-<span class="source-line-no">617</span><span id="line-617">      var s = setb(String.class)</span>
+<span class="source-line-no">617</span><span id="line-617">      var s = stb(String.class)</span>
 <span class="source-line-no">618</span><span id="line-618">         .addIf(nn(ref), PROP_ref)</span>
 <span class="source-line-no">619</span><span id="line-619">         .addIf(nn(additionalProperties), PROP_additionalProperties)</span>
-<span class="source-line-no">620</span><span id="line-620">         .addIf(ne(allOf), PROP_allOf)</span>
+<span class="source-line-no">620</span><span id="line-620">         .addIf(ine(allOf), PROP_allOf)</span>
 <span class="source-line-no">621</span><span id="line-621">         .addIf(nn(default_), PROP_default)</span>
 <span class="source-line-no">622</span><span id="line-622">         .addIf(nn(description), PROP_description)</span>
 <span class="source-line-no">623</span><span id="line-623">         .addIf(nn(discriminator), PROP_discriminator)</span>
-<span class="source-line-no">624</span><span id="line-624">         .addIf(ne(enum_), PROP_enum)</span>
+<span class="source-line-no">624</span><span id="line-624">         .addIf(ine(enum_), PROP_enum)</span>
 <span class="source-line-no">625</span><span id="line-625">         .addIf(nn(example), PROP_example)</span>
 <span class="source-line-no">626</span><span id="line-626">         .addIf(nn(exclusiveMaximum), PROP_exclusiveMaximum)</span>
 <span class="source-line-no">627</span><span id="line-627">         .addIf(nn(exclusiveMinimum), PROP_exclusiveMinimum)</span>
@@ -651,10 +651,10 @@
 <span class="source-line-no">638</span><span id="line-638">         .addIf(nn(minimum), PROP_minimum)</span>
 <span class="source-line-no">639</span><span id="line-639">         .addIf(nn(multipleOf), PROP_multipleOf)</span>
 <span class="source-line-no">640</span><span id="line-640">         .addIf(nn(pattern), PROP_pattern)</span>
-<span class="source-line-no">641</span><span id="line-641">         .addIf(ne(properties), PROP_properties)</span>
+<span class="source-line-no">641</span><span id="line-641">         .addIf(ine(properties), PROP_properties)</span>
 <span class="source-line-no">642</span><span id="line-642">         .addIf(nn(readOnly), PROP_readOnly)</span>
 <span class="source-line-no">643</span><span id="line-643">         .addIf(nn(required), PROP_required)</span>
-<span class="source-line-no">644</span><span id="line-644">         .addIf(ne(requiredProperties), PROP_requiredProperties)</span>
+<span class="source-line-no">644</span><span id="line-644">         .addIf(ine(requiredProperties), PROP_requiredProperties)</span>
 <span class="source-line-no">645</span><span id="line-645">         .addIf(nn(title), PROP_title)</span>
 <span class="source-line-no">646</span><span id="line-646">         .addIf(nn(type), PROP_type)</span>
 <span class="source-line-no">647</span><span id="line-647">         .addIf(nn(uniqueItems), PROP_uniqueItems)</span>
@@ -734,7 +734,7 @@
 <span class="source-line-no">721</span><span id="line-721">         case PROP_readOnly -&gt; setReadOnly(toBoolean(value));</span>
 <span class="source-line-no">722</span><span id="line-722">         case PROP_ref -&gt; setRef(s(value));</span>
 <span class="source-line-no">723</span><span id="line-723">         case PROP_required -&gt; setRequired(toBoolean(value));</span>
-<span class="source-line-no">724</span><span id="line-724">         case PROP_requiredProperties -&gt; setRequiredProperties(listb(String.class).addAny(value).sparse().build());</span>
+<span class="source-line-no">724</span><span id="line-724">         case PROP_requiredProperties -&gt; setRequiredProperties(lb(String.class).addAny(value).sparse().build());</span>
 <span class="source-line-no">725</span><span id="line-725">         case PROP_title -&gt; setTitle(s(value));</span>
 <span class="source-line-no">726</span><span id="line-726">         case PROP_type -&gt; setType(s(value));</span>
 <span class="source-line-no">727</span><span id="line-727">         case PROP_uniqueItems -&gt; setUniqueItems(toBoolean(value));</span>
@@ -784,7 +784,7 @@
 <span class="source-line-no">771</span><span id="line-771">    * @return This object.</span>
 <span class="source-line-no">772</span><span id="line-772">    */</span>
 <span class="source-line-no">773</span><span id="line-773">   public SchemaInfo setAllOf(SchemaInfo...value) {</span>
-<span class="source-line-no">774</span><span id="line-774">      setAllOf(setb(SchemaInfo.class).sparse().addAny((Object[])value).build());</span>
+<span class="source-line-no">774</span><span id="line-774">      setAllOf(stb(SchemaInfo.class).sparse().addAny((Object[])value).build());</span>
 <span class="source-line-no">775</span><span id="line-775">      return this;</span>
 <span class="source-line-no">776</span><span id="line-776">   }</span>
 <span class="source-line-no">777</span><span id="line-777"></span>
@@ -855,7 +855,7 @@
 <span class="source-line-no">842</span><span id="line-842">    * @return This object.</span>
 <span class="source-line-no">843</span><span id="line-843">    */</span>
 <span class="source-line-no">844</span><span id="line-844">   public SchemaInfo setEnum(Object...value) {</span>
-<span class="source-line-no">845</span><span id="line-845">      setEnum(setb(Object.class).sparse().addAny(value).build());</span>
+<span class="source-line-no">845</span><span id="line-845">      setEnum(stb(Object.class).sparse().addAny(value).build());</span>
 <span class="source-line-no">846</span><span id="line-846">      return this;</span>
 <span class="source-line-no">847</span><span id="line-847">   }</span>
 <span class="source-line-no">848</span><span id="line-848"></span>
@@ -1168,7 +1168,7 @@
 <span class="source-line-no">1155</span><span id="line-1155">    * @return This object.</span>
 <span class="source-line-no">1156</span><span id="line-1156">    */</span>
 <span class="source-line-no">1157</span><span id="line-1157">   public SchemaInfo setRequiredProperties(String...value) {</span>
-<span class="source-line-no">1158</span><span id="line-1158">      setRequiredProperties(setb(String.class).sparse().addAny((Object[])value).build());</span>
+<span class="source-line-no">1158</span><span id="line-1158">      setRequiredProperties(stb(String.class).sparse().addAny((Object[])value).build());</span>
 <span class="source-line-no">1159</span><span id="line-1159">      return this;</span>
 <span class="source-line-no">1160</span><span id="line-1160">   }</span>
 <span class="source-line-no">1161</span><span id="line-1161"></span>

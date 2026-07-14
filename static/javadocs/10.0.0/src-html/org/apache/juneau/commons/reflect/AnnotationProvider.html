@@ -29,12 +29,12 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.reflect;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.AnnotationTraversal.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">import java.lang.annotation.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.lang.reflect.*;</span>
@@ -364,14 +364,14 @@
 <span class="source-line-no">351</span><span id="line-351"></span>
 <span class="source-line-no">352</span><span id="line-352">               ci.getPublicMethod(x -&gt; x.hasName("onClass")).ifPresent(mi -&gt; {</span>
 <span class="source-line-no">353</span><span id="line-353">                  if (! mi.getReturnType().is(Class[].class))</span>
-<span class="source-line-no">354</span><span id="line-354">                     throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));</span>
+<span class="source-line-no">354</span><span id="line-354">                     throw brex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));</span>
 <span class="source-line-no">355</span><span id="line-355">                  for (var c : (Class&lt;?&gt;[])mi.accessible().invoke(a))</span>
 <span class="source-line-no">356</span><span id="line-356">                     runtimeAnnotations.append(c.getName(), annotationToStore);</span>
 <span class="source-line-no">357</span><span id="line-357">               });</span>
 <span class="source-line-no">358</span><span id="line-358"></span>
 <span class="source-line-no">359</span><span id="line-359">               ci.getPublicMethod(x -&gt; x.hasName("on")).ifPresent(mi -&gt; {</span>
 <span class="source-line-no">360</span><span id="line-360">                  if (! mi.getReturnType().is(String[].class))</span>
-<span class="source-line-no">361</span><span id="line-361">                     throw bex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));</span>
+<span class="source-line-no">361</span><span id="line-361">                     throw brex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));</span>
 <span class="source-line-no">362</span><span id="line-362">                  for (var s : (String[])mi.accessible().invoke(a))</span>
 <span class="source-line-no">363</span><span id="line-363">                     runtimeAnnotations.append(s, annotationToStore);</span>
 <span class="source-line-no">364</span><span id="line-364">               });</span>
@@ -379,7 +379,7 @@
 <span class="source-line-no">366</span><span id="line-366">            } catch (BeanRuntimeException e) {</span>
 <span class="source-line-no">367</span><span id="line-367">               throw e;</span>
 <span class="source-line-no">368</span><span id="line-368">            } catch (Exception e) {</span>
-<span class="source-line-no">369</span><span id="line-369">               throw bex(e, (Class&lt;?&gt;)null, "Invalid annotation @{0} used in runtime annotations.", cn(a));</span>
+<span class="source-line-no">369</span><span id="line-369">               throw brex(e, (Class&lt;?&gt;)null, "Invalid annotation @{0} used in runtime annotations.", cn(a));</span>
 <span class="source-line-no">370</span><span id="line-370">            }</span>
 <span class="source-line-no">371</span><span id="line-371">         }</span>
 <span class="source-line-no">372</span><span id="line-372">         return this;</span>
@@ -403,7 +403,7 @@
 <span class="source-line-no">390</span><span id="line-390">       * @return A new immutable {@link AnnotationProvider} instance.</span>
 <span class="source-line-no">391</span><span id="line-391">       */</span>
 <span class="source-line-no">392</span><span id="line-392">      public AnnotationProvider build() {</span>
-<span class="source-line-no">393</span><span id="line-393">         if (e(runtimeAnnotations))</span>
+<span class="source-line-no">393</span><span id="line-393">         if (ie(runtimeAnnotations))</span>
 <span class="source-line-no">394</span><span id="line-394">            return INSTANCE;</span>
 <span class="source-line-no">395</span><span id="line-395">         return new AnnotationProvider(this);</span>
 <span class="source-line-no">396</span><span id="line-396">      }</span>
@@ -525,7 +525,7 @@
 <span class="source-line-no">512</span><span id="line-512">         .logOnExit(builder.logOnExit, "AnnotationProvider.cache")</span>
 <span class="source-line-no">513</span><span id="line-513">         .build();</span>
 <span class="source-line-no">514</span><span id="line-514"></span>
-<span class="source-line-no">515</span><span id="line-515">      this.annotationMap = opt(builder.runtimeAnnotations).map(ReflectionMap.Builder::build).orElse(null);</span>
+<span class="source-line-no">515</span><span id="line-515">      this.annotationMap = o(builder.runtimeAnnotations).map(ReflectionMap.Builder::build).orElse(null);</span>
 <span class="source-line-no">516</span><span id="line-516">      // @formatter:on</span>
 <span class="source-line-no">517</span><span id="line-517">   }</span>
 <span class="source-line-no">518</span><span id="line-518"></span>
@@ -1044,7 +1044,7 @@
 <span class="source-line-no">1031</span><span id="line-1031">      else if (element instanceof FieldInfo || element instanceof ConstructorInfo)</span>
 <span class="source-line-no">1032</span><span id="line-1032">         t = l(a(SELF));</span>
 <span class="source-line-no">1033</span><span id="line-1033">      else {</span>
-<span class="source-line-no">1034</span><span id="line-1034">         assertType(ParameterInfo.class, element, () -&gt; unsupportedOp());</span>
+<span class="source-line-no">1034</span><span id="line-1034">         assertType(ParameterInfo.class, element, () -&gt; uoex());</span>
 <span class="source-line-no">1035</span><span id="line-1035">         t = l(a(SELF, MATCHING_PARAMETERS, PARAMETER_TYPE));</span>
 <span class="source-line-no">1036</span><span id="line-1036">      }</span>
 <span class="source-line-no">1037</span><span id="line-1037"></span>
@@ -1110,21 +1110,21 @@
 <span class="source-line-no">1097</span><span id="line-1097">   private List load(Object o) {</span>
 <span class="source-line-no">1098</span><span id="line-1098">      if (o instanceof Class o2) {</span>
 <span class="source-line-no">1099</span><span id="line-1099">         var ci = ClassInfo.of(o2);</span>
-<span class="source-line-no">1100</span><span id="line-1100">         return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -&gt; ai(ci, a)).toList();</span>
+<span class="source-line-no">1100</span><span id="line-1100">         return annotationMap == null ? emptyList() : annotationMap.find(ci.inner()).map(a -&gt; ai(ci, a)).toList();</span>
 <span class="source-line-no">1101</span><span id="line-1101">      }</span>
 <span class="source-line-no">1102</span><span id="line-1102">      if (o instanceof Method o2) {</span>
 <span class="source-line-no">1103</span><span id="line-1103">         var mi = info(o2);</span>
-<span class="source-line-no">1104</span><span id="line-1104">         return annotationMap == null ? liste() : annotationMap.find(mi.inner()).map(a -&gt; ai(mi, a)).toList();</span>
+<span class="source-line-no">1104</span><span id="line-1104">         return annotationMap == null ? emptyList() : annotationMap.find(mi.inner()).map(a -&gt; ai(mi, a)).toList();</span>
 <span class="source-line-no">1105</span><span id="line-1105">      }</span>
 <span class="source-line-no">1106</span><span id="line-1106">      if (o instanceof Field o2) {</span>
 <span class="source-line-no">1107</span><span id="line-1107">         var fi = info(o2);</span>
-<span class="source-line-no">1108</span><span id="line-1108">         return annotationMap == null ? liste() : annotationMap.find(fi.inner()).map(a -&gt; ai(fi, a)).toList();</span>
+<span class="source-line-no">1108</span><span id="line-1108">         return annotationMap == null ? emptyList() : annotationMap.find(fi.inner()).map(a -&gt; ai(fi, a)).toList();</span>
 <span class="source-line-no">1109</span><span id="line-1109">      }</span>
 <span class="source-line-no">1110</span><span id="line-1110">      if (o instanceof Constructor o2) {</span>
 <span class="source-line-no">1111</span><span id="line-1111">         var ci = info(o2);</span>
-<span class="source-line-no">1112</span><span id="line-1112">         return annotationMap == null ? liste() : annotationMap.find(ci.inner()).map(a -&gt; ai(ci, a)).toList();</span>
+<span class="source-line-no">1112</span><span id="line-1112">         return annotationMap == null ? emptyList() : annotationMap.find(ci.inner()).map(a -&gt; ai(ci, a)).toList();</span>
 <span class="source-line-no">1113</span><span id="line-1113">      }</span>
-<span class="source-line-no">1114</span><span id="line-1114">      throw unsupportedOp();</span>
+<span class="source-line-no">1114</span><span id="line-1114">      throw uoex();</span>
 <span class="source-line-no">1115</span><span id="line-1115">   }</span>
 <span class="source-line-no">1116</span><span id="line-1116">}</span>
 

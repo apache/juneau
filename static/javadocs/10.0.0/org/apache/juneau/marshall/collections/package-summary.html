@@ -75,13 +75,13 @@ loadScripts(document, 'script');</script>
    <li><a href="JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a> / <a href="JsonList.html" title="class in org.apache.juneau.marshall.collections"><code>JsonList</code></a>
       &mdash; strict-JSON-flavored subclasses. Their <code>toString()</code> renders as strict
       <a href="https://www.rfc-editor.org/rfc/rfc8259" target="_blank">RFC&nbsp;8259</a> JSON via
-      <a href="../marshaller/CharMarshaller.html#of(java.lang.Object)"><code>CharMarshaller.of(Object)</code></a>, and their <code>(CharSequence)</code> /
+      <a href="../marshaller/Json.html#of(java.lang.Object)"><code>Json.of(Object)</code></a>, and their <code>(CharSequence)</code> /
       <code>(Reader)</code> constructors and <code>ofString(...)</code> factories default to
       <a href="../json/JsonParser.html#DEFAULT"><code>JsonParser.DEFAULT</code></a>.
    <li><a href="../json5/Json5Map.html" title="class in org.apache.juneau.marshall.json5"><code>Json5Map</code></a> / <a href="../json5/Json5List.html" title="class in org.apache.juneau.marshall.json5"><code>Json5List</code></a>
       (in <a href="../json5/package-summary.html"><code>org.apache.juneau.marshall.json5</code></a>) &mdash; JSON5-flavored siblings of
       <code>JsonMap</code> / <code>JsonList</code>. Their <code>toString()</code> renders as JSON5 via
-      <a href="../marshaller/CharMarshaller.html#of(java.lang.Object)"><code>CharMarshaller.of(Object)</code></a>, and their <code>(CharSequence)</code> /
+      <a href="../marshaller/Json5.html#of(java.lang.Object)"><code>Json5.of(Object)</code></a>, and their <code>(CharSequence)</code> /
       <code>(Reader)</code> constructors and <code>ofString(...)</code> factories default to
       <a href="../json5/Json5Parser.html#DEFAULT"><code>Json5Parser.DEFAULT</code></a>. These are the drop-in replacement
       for callers that previously relied on <code>JsonMap.toString()</code> producing JSON5 or on

@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">   @Override /* Overridden from OpenApiElement */</span>
 <span class="source-line-no">108</span><span id="line-108">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">109</span><span id="line-109">      // @formatter:off</span>
-<span class="source-line-no">110</span><span id="line-110">      var s = setb(String.class)</span>
+<span class="source-line-no">110</span><span id="line-110">      var s = stb(String.class)</span>
 <span class="source-line-no">111</span><span id="line-111">         .addIf(nn(requirements), PROP_requirements)</span>
 <span class="source-line-no">112</span><span id="line-112">         .build();</span>
 <span class="source-line-no">113</span><span id="line-113">      // @formatter:on</span>

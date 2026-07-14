@@ -29,158 +29,157 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.svl;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">/**</span>
-<span class="source-line-no">026</span><span id="line-26"> * Reflection-based base class for {@link VarFunction} implementations that prefer typed</span>
-<span class="source-line-no">027</span><span id="line-27"> * argument signatures over manual {@code List&lt;Object&gt;} unpacking.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * Subclasses declare one or more public {@code invoke(...)} methods whose parameter lists mirror</span>
-<span class="source-line-no">031</span><span id="line-31"> * the function's expected arguments. Per-arg target types and arities are derived once at</span>
-<span class="source-line-no">032</span><span id="line-32"> * construction via reflection; per-call dispatch picks the matching overload by argument count</span>
-<span class="source-line-no">033</span><span id="line-33"> * and runs one reflective invoke + N {@link ArgCoercer} coercions.</span>
-<span class="source-line-no">034</span><span id="line-34"> *</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;h5 class='section'&gt;Method-resolution rules:&lt;/h5&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;ul&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;The subclass declares one or more public methods named {@code invoke}. Each must have a</span>
-<span class="source-line-no">038</span><span id="line-38"> *       distinct fixed-arity (or be the single variadic overload — see below).</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;The return type must be {@code String} (or a subtype convertible via</span>
-<span class="source-line-no">040</span><span id="line-40"> *       {@link Object#toString()}).</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Parameter types may be any of: {@code String}, {@code int}, {@code long}, {@code double},</span>
-<span class="source-line-no">042</span><span id="line-42"> *       {@code boolean} (or their wrappers), {@code String[]}, or {@code Object}. The final slot</span>
-<span class="source-line-no">043</span><span id="line-43"> *       may be {@code String[]} for variadic functions.</span>
-<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;If the subclass needs the {@link VarResolverSession session} (e.g. to look up beans),</span>
-<span class="source-line-no">045</span><span id="line-45"> *       declare {@code VarResolverSession} as the &lt;i&gt;first&lt;/i&gt; parameter.</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;At most one variadic overload (final {@code String[]} slot) per subclass; combined with</span>
-<span class="source-line-no">047</span><span id="line-47"> *       fixed-arity overloads as long as the arity counts don't overlap.</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;Example — multi-arity:&lt;/h5&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *    &lt;jk&gt;public class&lt;/jk&gt; Substring &lt;jk&gt;extends&lt;/jk&gt; TypedFunction {</span>
-<span class="source-line-no">053</span><span id="line-53"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String name() { &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;"substring"&lt;/js&gt;; }</span>
-<span class="source-line-no">054</span><span id="line-54"> *       &lt;jk&gt;public&lt;/jk&gt; String invoke(String &lt;jv&gt;s&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;start&lt;/jv&gt;) { &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt;.substring(&lt;jv&gt;start&lt;/jv&gt;); }</span>
-<span class="source-line-no">055</span><span id="line-55"> *       &lt;jk&gt;public&lt;/jk&gt; String invoke(String &lt;jv&gt;s&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;start&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;end&lt;/jv&gt;) { &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt;.substring(&lt;jv&gt;start&lt;/jv&gt;, &lt;jv&gt;end&lt;/jv&gt;); }</span>
-<span class="source-line-no">056</span><span id="line-56"> *    }</span>
-<span class="source-line-no">057</span><span id="line-57"> * &lt;/p&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> */</span>
-<span class="source-line-no">059</span><span id="line-59">@SuppressWarnings({</span>
-<span class="source-line-no">060</span><span id="line-60">   "java:S3776", // Cognitive complexity acceptable for the reflection-driven dispatch.</span>
-<span class="source-line-no">061</span><span id="line-61">})</span>
-<span class="source-line-no">062</span><span id="line-62">public abstract class TypedFunction implements VarFunction {</span>
-<span class="source-line-no">063</span><span id="line-63"></span>
-<span class="source-line-no">064</span><span id="line-64">   /** Per-overload reflection metadata. */</span>
-<span class="source-line-no">065</span><span id="line-65">   private static final class Overload {</span>
-<span class="source-line-no">066</span><span id="line-66">      final Method method;</span>
-<span class="source-line-no">067</span><span id="line-67">      final Class&lt;?&gt;[] argTypes;     // excluding leading session arg if present</span>
-<span class="source-line-no">068</span><span id="line-68">      final boolean takesSession;</span>
-<span class="source-line-no">069</span><span id="line-69">      final boolean variadic;</span>
-<span class="source-line-no">070</span><span id="line-70">      final int fixedCount;          // arg count excluding the variadic slot</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">      Overload(Method method, Class&lt;?&gt;[] argTypes, boolean takesSession, boolean variadic) {</span>
-<span class="source-line-no">073</span><span id="line-73">         this.method = method;</span>
-<span class="source-line-no">074</span><span id="line-74">         this.argTypes = argTypes;</span>
-<span class="source-line-no">075</span><span id="line-75">         this.takesSession = takesSession;</span>
-<span class="source-line-no">076</span><span id="line-76">         this.variadic = variadic;</span>
-<span class="source-line-no">077</span><span id="line-77">         this.fixedCount = variadic ? argTypes.length - 1 : argTypes.length;</span>
-<span class="source-line-no">078</span><span id="line-78">      }</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">      boolean acceptsArity(int n) {</span>
-<span class="source-line-no">081</span><span id="line-81">         if (variadic)</span>
-<span class="source-line-no">082</span><span id="line-82">            return n &gt;= fixedCount;</span>
-<span class="source-line-no">083</span><span id="line-83">         return n == fixedCount;</span>
-<span class="source-line-no">084</span><span id="line-84">      }</span>
-<span class="source-line-no">085</span><span id="line-85">   }</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   /** All declared {@code invoke} overloads, sorted by descending arity for predictable matching. */</span>
-<span class="source-line-no">088</span><span id="line-88">   private final Overload[] overloads;</span>
-<span class="source-line-no">089</span><span id="line-89">   private final int minArity;</span>
-<span class="source-line-no">090</span><span id="line-90">   private final int maxArity;</span>
-<span class="source-line-no">091</span><span id="line-91"></span>
-<span class="source-line-no">092</span><span id="line-92">   protected TypedFunction() {</span>
-<span class="source-line-no">093</span><span id="line-93">      this.overloads = findInvokeOverloads(getClass());</span>
-<span class="source-line-no">094</span><span id="line-94">      var lo = Integer.MAX_VALUE;</span>
-<span class="source-line-no">095</span><span id="line-95">      var hi = 0;</span>
-<span class="source-line-no">096</span><span id="line-96">      var anyVariadic = false;</span>
-<span class="source-line-no">097</span><span id="line-97">      for (var o : overloads) {</span>
-<span class="source-line-no">098</span><span id="line-98">         if (o.variadic) {</span>
-<span class="source-line-no">099</span><span id="line-99">            anyVariadic = true;</span>
-<span class="source-line-no">100</span><span id="line-100">            lo = Math.min(lo, o.fixedCount);</span>
-<span class="source-line-no">101</span><span id="line-101">         } else {</span>
-<span class="source-line-no">102</span><span id="line-102">            lo = Math.min(lo, o.fixedCount);</span>
-<span class="source-line-no">103</span><span id="line-103">            hi = Math.max(hi, o.fixedCount);</span>
-<span class="source-line-no">104</span><span id="line-104">         }</span>
-<span class="source-line-no">105</span><span id="line-105">      }</span>
-<span class="source-line-no">106</span><span id="line-106">      this.minArity = lo == Integer.MAX_VALUE ? 0 : lo;</span>
-<span class="source-line-no">107</span><span id="line-107">      this.maxArity = anyVariadic ? Integer.MAX_VALUE : hi;</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   @Override</span>
-<span class="source-line-no">111</span><span id="line-111">   public final int minArity() { return minArity; }</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   @Override</span>
-<span class="source-line-no">114</span><span id="line-114">   public final int maxArity() { return maxArity; }</span>
-<span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   @Override</span>
-<span class="source-line-no">117</span><span id="line-117">   public final String invoke(VarResolverSession session, List&lt;Object&gt; args) {</span>
-<span class="source-line-no">118</span><span id="line-118">      var n = args.size();</span>
-<span class="source-line-no">119</span><span id="line-119">      Overload o = null;</span>
-<span class="source-line-no">120</span><span id="line-120">      for (var c : overloads) {</span>
-<span class="source-line-no">121</span><span id="line-121">         if (c.acceptsArity(n)) { o = c; break; }</span>
-<span class="source-line-no">122</span><span id="line-122">      }</span>
-<span class="source-line-no">123</span><span id="line-123">      if (o == null)</span>
-<span class="source-line-no">124</span><span id="line-124">         throw illegalArg("Function ''{0}'' has no overload accepting {1} argument(s)", name(), n);</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">      var coerced = ArgCoercer.coerce(name(), o.argTypes, args);</span>
-<span class="source-line-no">127</span><span id="line-127">      try {</span>
-<span class="source-line-no">128</span><span id="line-128">         Object[] effective;</span>
-<span class="source-line-no">129</span><span id="line-129">         if (o.takesSession) {</span>
-<span class="source-line-no">130</span><span id="line-130">            effective = new Object[coerced.length + 1];</span>
-<span class="source-line-no">131</span><span id="line-131">            effective[0] = session;</span>
-<span class="source-line-no">132</span><span id="line-132">            System.arraycopy(coerced, 0, effective, 1, coerced.length);</span>
-<span class="source-line-no">133</span><span id="line-133">         } else {</span>
-<span class="source-line-no">134</span><span id="line-134">            effective = coerced;</span>
-<span class="source-line-no">135</span><span id="line-135">         }</span>
-<span class="source-line-no">136</span><span id="line-136">         var result = o.method.invoke(this, effective);</span>
-<span class="source-line-no">137</span><span id="line-137">         return result == null ? "" : result.toString();</span>
-<span class="source-line-no">138</span><span id="line-138">      } catch (InvocationTargetException e) {</span>
-<span class="source-line-no">139</span><span id="line-139">         var cause = e.getTargetException();</span>
-<span class="source-line-no">140</span><span id="line-140">         if (cause instanceof RuntimeException re)</span>
-<span class="source-line-no">141</span><span id="line-141">            throw re;</span>
-<span class="source-line-no">142</span><span id="line-142">         throw illegalArg("Function ''{0}'' threw {1}: {2}", name(), cns(cause), cause.getMessage());</span>
-<span class="source-line-no">143</span><span id="line-143">      } catch (IllegalAccessException e) {</span>
-<span class="source-line-no">144</span><span id="line-144">         throw illegalArg("Function ''{0}'' invoke method must be public: {1}", name(), e.getMessage());</span>
-<span class="source-line-no">145</span><span id="line-145">      }</span>
-<span class="source-line-no">146</span><span id="line-146">   }</span>
-<span class="source-line-no">147</span><span id="line-147"></span>
-<span class="source-line-no">148</span><span id="line-148">   private static Overload[] findInvokeOverloads(Class&lt;? extends TypedFunction&gt; cls) {</span>
-<span class="source-line-no">149</span><span id="line-149">      var found = new ArrayList&lt;Overload&gt;();</span>
-<span class="source-line-no">150</span><span id="line-150">      for (var m : cls.getMethods()) {</span>
-<span class="source-line-no">151</span><span id="line-151">         if (!"invoke".equals(m.getName())</span>
-<span class="source-line-no">152</span><span id="line-152">            || m.getDeclaringClass() == TypedFunction.class</span>
-<span class="source-line-no">153</span><span id="line-153">            || m.getDeclaringClass() == Object.class</span>
-<span class="source-line-no">154</span><span id="line-154">            || m.getDeclaringClass() == VarFunction.class)</span>
-<span class="source-line-no">155</span><span id="line-155">            continue;</span>
-<span class="source-line-no">156</span><span id="line-156">         var allParams = m.getParameterTypes();</span>
-<span class="source-line-no">157</span><span id="line-157">         var takesSession = allParams.length &gt; 0 &amp;&amp; allParams[0] == VarResolverSession.class;</span>
-<span class="source-line-no">158</span><span id="line-158">         var startIdx = takesSession ? 1 : 0;</span>
-<span class="source-line-no">159</span><span id="line-159">         var argTypes = Arrays.copyOfRange(allParams, startIdx, allParams.length);</span>
-<span class="source-line-no">160</span><span id="line-160">         var variadic = argTypes.length &gt; 0 &amp;&amp; argTypes[argTypes.length - 1] == String[].class;</span>
-<span class="source-line-no">161</span><span id="line-161">         found.add(new Overload(m, argTypes, takesSession, variadic));</span>
-<span class="source-line-no">162</span><span id="line-162">      }</span>
-<span class="source-line-no">163</span><span id="line-163">      if (found.isEmpty())</span>
-<span class="source-line-no">164</span><span id="line-164">         throw illegalArg("TypedFunction subclass {0} must declare a public invoke(...) method", cls.getName());</span>
-<span class="source-line-no">165</span><span id="line-165">      // Sort by descending fixedCount so larger arity overloads get matched before any</span>
-<span class="source-line-no">166</span><span id="line-166">      // variadic overload they might overlap with.</span>
-<span class="source-line-no">167</span><span id="line-167">      found.sort((a, b) -&gt; Integer.compare(b.fixedCount, a.fixedCount));</span>
-<span class="source-line-no">168</span><span id="line-168">      return found.toArray(new Overload[0]);</span>
-<span class="source-line-no">169</span><span id="line-169">   }</span>
-<span class="source-line-no">170</span><span id="line-170">}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">/**</span>
+<span class="source-line-no">025</span><span id="line-25"> * Reflection-based base class for {@link VarFunction} implementations that prefer typed</span>
+<span class="source-line-no">026</span><span id="line-26"> * argument signatures over manual {@code List&lt;Object&gt;} unpacking.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * Subclasses declare one or more public {@code invoke(...)} methods whose parameter lists mirror</span>
+<span class="source-line-no">030</span><span id="line-30"> * the function's expected arguments. Per-arg target types and arities are derived once at</span>
+<span class="source-line-no">031</span><span id="line-31"> * construction via reflection; per-call dispatch picks the matching overload by argument count</span>
+<span class="source-line-no">032</span><span id="line-32"> * and runs one reflective invoke + N {@link ArgCoercer} coercions.</span>
+<span class="source-line-no">033</span><span id="line-33"> *</span>
+<span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;Method-resolution rules:&lt;/h5&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;ul&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;The subclass declares one or more public methods named {@code invoke}. Each must have a</span>
+<span class="source-line-no">037</span><span id="line-37"> *       distinct fixed-arity (or be the single variadic overload — see below).</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;The return type must be {@code String} (or a subtype convertible via</span>
+<span class="source-line-no">039</span><span id="line-39"> *       {@link Object#toString()}).</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Parameter types may be any of: {@code String}, {@code int}, {@code long}, {@code double},</span>
+<span class="source-line-no">041</span><span id="line-41"> *       {@code boolean} (or their wrappers), {@code String[]}, or {@code Object}. The final slot</span>
+<span class="source-line-no">042</span><span id="line-42"> *       may be {@code String[]} for variadic functions.</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;If the subclass needs the {@link VarResolverSession session} (e.g. to look up beans),</span>
+<span class="source-line-no">044</span><span id="line-44"> *       declare {@code VarResolverSession} as the &lt;i&gt;first&lt;/i&gt; parameter.</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;At most one variadic overload (final {@code String[]} slot) per subclass; combined with</span>
+<span class="source-line-no">046</span><span id="line-46"> *       fixed-arity overloads as long as the arity counts don't overlap.</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;Example — multi-arity:&lt;/h5&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;jk&gt;public class&lt;/jk&gt; Substring &lt;jk&gt;extends&lt;/jk&gt; TypedFunction {</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;ja&gt;@Override&lt;/ja&gt; &lt;jk&gt;public&lt;/jk&gt; String name() { &lt;jk&gt;return&lt;/jk&gt; &lt;js&gt;"substring"&lt;/js&gt;; }</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;jk&gt;public&lt;/jk&gt; String invoke(String &lt;jv&gt;s&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;start&lt;/jv&gt;) { &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt;.substring(&lt;jv&gt;start&lt;/jv&gt;); }</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;jk&gt;public&lt;/jk&gt; String invoke(String &lt;jv&gt;s&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;start&lt;/jv&gt;, &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;end&lt;/jv&gt;) { &lt;jk&gt;return&lt;/jk&gt; &lt;jv&gt;s&lt;/jv&gt;.substring(&lt;jv&gt;start&lt;/jv&gt;, &lt;jv&gt;end&lt;/jv&gt;); }</span>
+<span class="source-line-no">055</span><span id="line-55"> *    }</span>
+<span class="source-line-no">056</span><span id="line-56"> * &lt;/p&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> */</span>
+<span class="source-line-no">058</span><span id="line-58">@SuppressWarnings({</span>
+<span class="source-line-no">059</span><span id="line-59">   "java:S3776", // Cognitive complexity acceptable for the reflection-driven dispatch.</span>
+<span class="source-line-no">060</span><span id="line-60">})</span>
+<span class="source-line-no">061</span><span id="line-61">public abstract class TypedFunction implements VarFunction {</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   /** Per-overload reflection metadata. */</span>
+<span class="source-line-no">064</span><span id="line-64">   private static final class Overload {</span>
+<span class="source-line-no">065</span><span id="line-65">      final Method method;</span>
+<span class="source-line-no">066</span><span id="line-66">      final Class&lt;?&gt;[] argTypes;     // excluding leading session arg if present</span>
+<span class="source-line-no">067</span><span id="line-67">      final boolean takesSession;</span>
+<span class="source-line-no">068</span><span id="line-68">      final boolean variadic;</span>
+<span class="source-line-no">069</span><span id="line-69">      final int fixedCount;          // arg count excluding the variadic slot</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">      Overload(Method method, Class&lt;?&gt;[] argTypes, boolean takesSession, boolean variadic) {</span>
+<span class="source-line-no">072</span><span id="line-72">         this.method = method;</span>
+<span class="source-line-no">073</span><span id="line-73">         this.argTypes = argTypes;</span>
+<span class="source-line-no">074</span><span id="line-74">         this.takesSession = takesSession;</span>
+<span class="source-line-no">075</span><span id="line-75">         this.variadic = variadic;</span>
+<span class="source-line-no">076</span><span id="line-76">         this.fixedCount = variadic ? argTypes.length - 1 : argTypes.length;</span>
+<span class="source-line-no">077</span><span id="line-77">      }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">      boolean acceptsArity(int n) {</span>
+<span class="source-line-no">080</span><span id="line-80">         if (variadic)</span>
+<span class="source-line-no">081</span><span id="line-81">            return n &gt;= fixedCount;</span>
+<span class="source-line-no">082</span><span id="line-82">         return n == fixedCount;</span>
+<span class="source-line-no">083</span><span id="line-83">      }</span>
+<span class="source-line-no">084</span><span id="line-84">   }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   /** All declared {@code invoke} overloads, sorted by descending arity for predictable matching. */</span>
+<span class="source-line-no">087</span><span id="line-87">   private final Overload[] overloads;</span>
+<span class="source-line-no">088</span><span id="line-88">   private final int minArity;</span>
+<span class="source-line-no">089</span><span id="line-89">   private final int maxArity;</span>
+<span class="source-line-no">090</span><span id="line-90"></span>
+<span class="source-line-no">091</span><span id="line-91">   protected TypedFunction() {</span>
+<span class="source-line-no">092</span><span id="line-92">      this.overloads = findInvokeOverloads(getClass());</span>
+<span class="source-line-no">093</span><span id="line-93">      var lo = Integer.MAX_VALUE;</span>
+<span class="source-line-no">094</span><span id="line-94">      var hi = 0;</span>
+<span class="source-line-no">095</span><span id="line-95">      var anyVariadic = false;</span>
+<span class="source-line-no">096</span><span id="line-96">      for (var o : overloads) {</span>
+<span class="source-line-no">097</span><span id="line-97">         if (o.variadic) {</span>
+<span class="source-line-no">098</span><span id="line-98">            anyVariadic = true;</span>
+<span class="source-line-no">099</span><span id="line-99">            lo = Math.min(lo, o.fixedCount);</span>
+<span class="source-line-no">100</span><span id="line-100">         } else {</span>
+<span class="source-line-no">101</span><span id="line-101">            lo = Math.min(lo, o.fixedCount);</span>
+<span class="source-line-no">102</span><span id="line-102">            hi = Math.max(hi, o.fixedCount);</span>
+<span class="source-line-no">103</span><span id="line-103">         }</span>
+<span class="source-line-no">104</span><span id="line-104">      }</span>
+<span class="source-line-no">105</span><span id="line-105">      this.minArity = lo == Integer.MAX_VALUE ? 0 : lo;</span>
+<span class="source-line-no">106</span><span id="line-106">      this.maxArity = anyVariadic ? Integer.MAX_VALUE : hi;</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   @Override</span>
+<span class="source-line-no">110</span><span id="line-110">   public final int minArity() { return minArity; }</span>
+<span class="source-line-no">111</span><span id="line-111"></span>
+<span class="source-line-no">112</span><span id="line-112">   @Override</span>
+<span class="source-line-no">113</span><span id="line-113">   public final int maxArity() { return maxArity; }</span>
+<span class="source-line-no">114</span><span id="line-114"></span>
+<span class="source-line-no">115</span><span id="line-115">   @Override</span>
+<span class="source-line-no">116</span><span id="line-116">   public final String invoke(VarResolverSession session, List&lt;Object&gt; args) {</span>
+<span class="source-line-no">117</span><span id="line-117">      var n = args.size();</span>
+<span class="source-line-no">118</span><span id="line-118">      Overload o = null;</span>
+<span class="source-line-no">119</span><span id="line-119">      for (var c : overloads) {</span>
+<span class="source-line-no">120</span><span id="line-120">         if (c.acceptsArity(n)) { o = c; break; }</span>
+<span class="source-line-no">121</span><span id="line-121">      }</span>
+<span class="source-line-no">122</span><span id="line-122">      if (o == null)</span>
+<span class="source-line-no">123</span><span id="line-123">         throw iaex("Function ''{0}'' has no overload accepting {1} argument(s)", name(), n);</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">      var coerced = ArgCoercer.coerce(name(), o.argTypes, args);</span>
+<span class="source-line-no">126</span><span id="line-126">      try {</span>
+<span class="source-line-no">127</span><span id="line-127">         Object[] effective;</span>
+<span class="source-line-no">128</span><span id="line-128">         if (o.takesSession) {</span>
+<span class="source-line-no">129</span><span id="line-129">            effective = new Object[coerced.length + 1];</span>
+<span class="source-line-no">130</span><span id="line-130">            effective[0] = session;</span>
+<span class="source-line-no">131</span><span id="line-131">            System.arraycopy(coerced, 0, effective, 1, coerced.length);</span>
+<span class="source-line-no">132</span><span id="line-132">         } else {</span>
+<span class="source-line-no">133</span><span id="line-133">            effective = coerced;</span>
+<span class="source-line-no">134</span><span id="line-134">         }</span>
+<span class="source-line-no">135</span><span id="line-135">         var result = o.method.invoke(this, effective);</span>
+<span class="source-line-no">136</span><span id="line-136">         return result == null ? "" : result.toString();</span>
+<span class="source-line-no">137</span><span id="line-137">      } catch (InvocationTargetException e) {</span>
+<span class="source-line-no">138</span><span id="line-138">         var cause = e.getTargetException();</span>
+<span class="source-line-no">139</span><span id="line-139">         if (cause instanceof RuntimeException re)</span>
+<span class="source-line-no">140</span><span id="line-140">            throw re;</span>
+<span class="source-line-no">141</span><span id="line-141">         throw iaex("Function ''{0}'' threw {1}: {2}", name(), cns(cause), cause.getMessage());</span>
+<span class="source-line-no">142</span><span id="line-142">      } catch (IllegalAccessException e) {</span>
+<span class="source-line-no">143</span><span id="line-143">         throw iaex("Function ''{0}'' invoke method must be public: {1}", name(), e.getMessage());</span>
+<span class="source-line-no">144</span><span id="line-144">      }</span>
+<span class="source-line-no">145</span><span id="line-145">   }</span>
+<span class="source-line-no">146</span><span id="line-146"></span>
+<span class="source-line-no">147</span><span id="line-147">   private static Overload[] findInvokeOverloads(Class&lt;? extends TypedFunction&gt; cls) {</span>
+<span class="source-line-no">148</span><span id="line-148">      var found = new ArrayList&lt;Overload&gt;();</span>
+<span class="source-line-no">149</span><span id="line-149">      for (var m : cls.getMethods()) {</span>
+<span class="source-line-no">150</span><span id="line-150">         if (!"invoke".equals(m.getName())</span>
+<span class="source-line-no">151</span><span id="line-151">            || m.getDeclaringClass() == TypedFunction.class</span>
+<span class="source-line-no">152</span><span id="line-152">            || m.getDeclaringClass() == Object.class</span>
+<span class="source-line-no">153</span><span id="line-153">            || m.getDeclaringClass() == VarFunction.class)</span>
+<span class="source-line-no">154</span><span id="line-154">            continue;</span>
+<span class="source-line-no">155</span><span id="line-155">         var allParams = m.getParameterTypes();</span>
+<span class="source-line-no">156</span><span id="line-156">         var takesSession = allParams.length &gt; 0 &amp;&amp; allParams[0] == VarResolverSession.class;</span>
+<span class="source-line-no">157</span><span id="line-157">         var startIdx = takesSession ? 1 : 0;</span>
+<span class="source-line-no">158</span><span id="line-158">         var argTypes = Arrays.copyOfRange(allParams, startIdx, allParams.length);</span>
+<span class="source-line-no">159</span><span id="line-159">         var variadic = argTypes.length &gt; 0 &amp;&amp; argTypes[argTypes.length - 1] == String[].class;</span>
+<span class="source-line-no">160</span><span id="line-160">         found.add(new Overload(m, argTypes, takesSession, variadic));</span>
+<span class="source-line-no">161</span><span id="line-161">      }</span>
+<span class="source-line-no">162</span><span id="line-162">      if (found.isEmpty())</span>
+<span class="source-line-no">163</span><span id="line-163">         throw iaex("TypedFunction subclass {0} must declare a public invoke(...) method", cls.getName());</span>
+<span class="source-line-no">164</span><span id="line-164">      // Sort by descending fixedCount so larger arity overloads get matched before any</span>
+<span class="source-line-no">165</span><span id="line-165">      // variadic overload they might overlap with.</span>
+<span class="source-line-no">166</span><span id="line-166">      found.sort((a, b) -&gt; Integer.compare(b.fixedCount, a.fixedCount));</span>
+<span class="source-line-no">167</span><span id="line-167">      return found.toArray(new Overload[0]);</span>
+<span class="source-line-no">168</span><span id="line-168">   }</span>
+<span class="source-line-no">169</span><span id="line-169">}</span>
 
 
 

@@ -32,8 +32,8 @@
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.IoUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.marshall.jena.Constants.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">import java.io.*;</span>
@@ -112,7 +112,7 @@
 <span class="source-line-no">099</span><span id="line-99">      }</span>
 <span class="source-line-no">100</span><span id="line-100"></span>
 <span class="source-line-no">101</span><span id="line-101">      @Override</span>
-<span class="source-line-no">102</span><span id="line-102">      public Builder locale(java.util.Locale value) {</span>
+<span class="source-line-no">102</span><span id="line-102">      public Builder locale(Locale value) {</span>
 <span class="source-line-no">103</span><span id="line-103">         super.locale(value);</span>
 <span class="source-line-no">104</span><span id="line-104">         return this;</span>
 <span class="source-line-no">105</span><span id="line-105">      }</span>
@@ -160,13 +160,13 @@
 <span class="source-line-no">147</span><span id="line-147">      }</span>
 <span class="source-line-no">148</span><span id="line-148"></span>
 <span class="source-line-no">149</span><span id="line-149">      @Override</span>
-<span class="source-line-no">150</span><span id="line-150">      public Builder timeZone(java.util.TimeZone value) {</span>
+<span class="source-line-no">150</span><span id="line-150">      public Builder timeZone(TimeZone value) {</span>
 <span class="source-line-no">151</span><span id="line-151">         super.timeZone(value);</span>
 <span class="source-line-no">152</span><span id="line-152">         return this;</span>
 <span class="source-line-no">153</span><span id="line-153">      }</span>
 <span class="source-line-no">154</span><span id="line-154"></span>
 <span class="source-line-no">155</span><span id="line-155">      @Override</span>
-<span class="source-line-no">156</span><span id="line-156">      public Builder timeZoneDefault(java.util.TimeZone value) {</span>
+<span class="source-line-no">156</span><span id="line-156">      public Builder timeZoneDefault(TimeZone value) {</span>
 <span class="source-line-no">157</span><span id="line-157">         super.timeZoneDefault(value);</span>
 <span class="source-line-no">158</span><span id="line-158">         return this;</span>
 <span class="source-line-no">159</span><span id="line-159">      }</span>
@@ -277,7 +277,7 @@
 <span class="source-line-no">264</span><span id="line-264">      String s = null;</span>
 <span class="source-line-no">265</span><span id="line-265">      if (nn(uri))</span>
 <span class="source-line-no">266</span><span id="line-266">         s = uri.toString();</span>
-<span class="source-line-no">267</span><span id="line-267">      if (e(s) &amp;&amp; nn(uri2))</span>
+<span class="source-line-no">267</span><span id="line-267">      if (ie(s) &amp;&amp; nn(uri2))</span>
 <span class="source-line-no">268</span><span id="line-268">         s = uri2.toString();</span>
 <span class="source-line-no">269</span><span id="line-269">      if (s == null)</span>
 <span class="source-line-no">270</span><span id="line-270">         return null;</span>

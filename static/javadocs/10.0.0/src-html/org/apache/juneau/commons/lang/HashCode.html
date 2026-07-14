@@ -64,14 +64,14 @@
 <span class="source-line-no">051</span><span id="line-51">    * Calculates a hash code over the specified objects.</span>
 <span class="source-line-no">052</span><span id="line-52">    *</span>
 <span class="source-line-no">053</span><span id="line-53">    * &lt;p&gt;</span>
-<span class="source-line-no">054</span><span id="line-54">    * Uses the same algorithm as {@link java.util.Objects#hash(Object...)} (31 * result + element hash).</span>
+<span class="source-line-no">054</span><span id="line-54">    * Uses the same algorithm as {@link Objects#hash(Object...)} (31 * result + element hash).</span>
 <span class="source-line-no">055</span><span id="line-55">    *</span>
 <span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57">    * Special handling is provided for:</span>
 <span class="source-line-no">058</span><span id="line-58">    * &lt;ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59">    *    &lt;li&gt;&lt;b&gt;Annotations:&lt;/b&gt; Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing</span>
-<span class="source-line-no">060</span><span id="line-60">    *       according to the {@link java.lang.annotation.Annotation#hashCode()} contract.</span>
-<span class="source-line-no">061</span><span id="line-61">    *    &lt;li&gt;&lt;b&gt;Arrays:&lt;/b&gt; Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}</span>
+<span class="source-line-no">060</span><span id="line-60">    *       according to the {@link Annotation#hashCode()} contract.</span>
+<span class="source-line-no">061</span><span id="line-61">    *    &lt;li&gt;&lt;b&gt;Arrays:&lt;/b&gt; Uses content-based hashing via {@link Arrays#hashCode(Object[])}</span>
 <span class="source-line-no">062</span><span id="line-62">    *       instead of identity-based hashing.</span>
 <span class="source-line-no">063</span><span id="line-63">    *    &lt;li&gt;&lt;b&gt;Null values:&lt;/b&gt; Treated as 0 in the hash calculation.</span>
 <span class="source-line-no">064</span><span id="line-64">    * &lt;/ul&gt;</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67">    * @return A numerical hashcode value.</span>
 <span class="source-line-no">068</span><span id="line-68">    * @see #add(Object)</span>
 <span class="source-line-no">069</span><span id="line-69">    * @see AnnotationUtils#hash(Annotation)</span>
-<span class="source-line-no">070</span><span id="line-70">    * @see java.util.Objects#hash(Object...)</span>
+<span class="source-line-no">070</span><span id="line-70">    * @see Objects#hash(Object...)</span>
 <span class="source-line-no">071</span><span id="line-71">    */</span>
 <span class="source-line-no">072</span><span id="line-72">   public static final int of(Object...objects) {</span>
 <span class="source-line-no">073</span><span id="line-73">      HashCode x = create();</span>
@@ -119,8 +119,8 @@
 <span class="source-line-no">106</span><span id="line-106">    * &lt;ul&gt;</span>
 <span class="source-line-no">107</span><span id="line-107">    *    &lt;li&gt;&lt;b&gt;Null values:&lt;/b&gt; Adds 0 to the hash code.</span>
 <span class="source-line-no">108</span><span id="line-108">    *    &lt;li&gt;&lt;b&gt;Annotations:&lt;/b&gt; Uses {@link AnnotationUtils#hash(Annotation)} to ensure consistent hashing</span>
-<span class="source-line-no">109</span><span id="line-109">    *       according to the {@link java.lang.annotation.Annotation#hashCode()} contract.</span>
-<span class="source-line-no">110</span><span id="line-110">    *    &lt;li&gt;&lt;b&gt;Arrays:&lt;/b&gt; Uses content-based hashing via {@link java.util.Arrays#hashCode(Object[])}</span>
+<span class="source-line-no">109</span><span id="line-109">    *       according to the {@link Annotation#hashCode()} contract.</span>
+<span class="source-line-no">110</span><span id="line-110">    *    &lt;li&gt;&lt;b&gt;Arrays:&lt;/b&gt; Uses content-based hashing via {@link Arrays#hashCode(Object[])}</span>
 <span class="source-line-no">111</span><span id="line-111">    *       instead of identity-based hashing. Supports all primitive array types and object arrays.</span>
 <span class="source-line-no">112</span><span id="line-112">    *    &lt;li&gt;&lt;b&gt;Other objects:&lt;/b&gt; Uses the object's {@link Object#hashCode()} method.</span>
 <span class="source-line-no">113</span><span id="line-113">    * &lt;/ul&gt;</span>
@@ -128,7 +128,7 @@
 <span class="source-line-no">115</span><span id="line-115">    * @param o The object whose hashcode will be hashed with this object.</span>
 <span class="source-line-no">116</span><span id="line-116">    * @return This object.</span>
 <span class="source-line-no">117</span><span id="line-117">    * @see AnnotationUtils#hash(Annotation)</span>
-<span class="source-line-no">118</span><span id="line-118">    * @see java.util.Arrays#hashCode(Object[])</span>
+<span class="source-line-no">118</span><span id="line-118">    * @see Arrays#hashCode(Object[])</span>
 <span class="source-line-no">119</span><span id="line-119">    */</span>
 <span class="source-line-no">120</span><span id="line-120">   public HashCode add(Object o) {</span>
 <span class="source-line-no">121</span><span id="line-121">      o = unswap(o);</span>
@@ -153,9 +153,9 @@
 <span class="source-line-no">140</span><span id="line-140">         else if (o instanceof boolean[] o2)</span>
 <span class="source-line-no">141</span><span id="line-141">            add(Arrays.hashCode(o2));</span>
 <span class="source-line-no">142</span><span id="line-142">         else if (o instanceof float[] o2)</span>
-<span class="source-line-no">143</span><span id="line-143">            add(java.util.Arrays.hashCode(o2));</span>
+<span class="source-line-no">143</span><span id="line-143">            add(Arrays.hashCode(o2));</span>
 <span class="source-line-no">144</span><span id="line-144">         else if (o instanceof double[] o2)</span>
-<span class="source-line-no">145</span><span id="line-145">            add(java.util.Arrays.hashCode(o2));</span>
+<span class="source-line-no">145</span><span id="line-145">            add(Arrays.hashCode(o2));</span>
 <span class="source-line-no">146</span><span id="line-146">      } else {</span>
 <span class="source-line-no">147</span><span id="line-147">         add(o.hashCode());</span>
 <span class="source-line-no">148</span><span id="line-148">      }</span>

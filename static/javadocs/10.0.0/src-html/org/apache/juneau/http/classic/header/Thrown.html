@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.classic.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -56,18 +56,18 @@
 <span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * This header supports comma-delimited values for multiple thrown values.</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bcode'&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found,java.lang.RuntimeException;foo</span>
+<span class="source-line-no">046</span><span id="line-46"> *    Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found,RuntimeException;foo</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * Note that this is equivalent to specifying multiple header values.</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;p class='bcode'&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    Thrown: org.apache.juneau.http.classic.response.NotFound;Resource was not found</span>
-<span class="source-line-no">053</span><span id="line-53"> *    Thrown: java.lang.RuntimeException;foo</span>
+<span class="source-line-no">053</span><span id="line-53"> *    Thrown: RuntimeException;foo</span>
 <span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> *</span>
 <span class="source-line-no">056</span><span id="line-56"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
 <span class="source-line-no">058</span><span id="line-58"> * &lt;/ul&gt;</span>
 <span class="source-line-no">059</span><span id="line-59"> *</span>
 <span class="source-line-no">060</span><span id="line-60"> * @serial exclude</span>
@@ -195,7 +195,7 @@
 <span class="source-line-no">182</span><span id="line-182">    * @return The class name portion of the header, or &lt;jk&gt;null&lt;/jk&gt; if not there.</span>
 <span class="source-line-no">183</span><span id="line-183">    */</span>
 <span class="source-line-no">184</span><span id="line-184">   public Optional&lt;List&lt;Part&gt;&gt; asParts() {</span>
-<span class="source-line-no">185</span><span id="line-185">      return opt(value);</span>
+<span class="source-line-no">185</span><span id="line-185">      return o(value);</span>
 <span class="source-line-no">186</span><span id="line-186">   }</span>
 <span class="source-line-no">187</span><span id="line-187">}</span>
 

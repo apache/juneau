@@ -78,7 +78,7 @@
 <span class="source-line-no">065</span><span id="line-65">    * Builder class.</span>
 <span class="source-line-no">066</span><span id="line-66">    *</span>
 <span class="source-line-no">067</span><span id="line-67">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#annotations(Annotation...)}</span>
+<span class="source-line-no">068</span><span id="line-68">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#annotations(Annotation...)}</span>
 <span class="source-line-no">069</span><span id="line-69">    * &lt;/ul&gt;</span>
 <span class="source-line-no">070</span><span id="line-70">    */</span>
 <span class="source-line-no">071</span><span id="line-71">   @SuppressWarnings({</span>
@@ -807,10 +807,10 @@
 <span class="source-line-no">794</span><span id="line-794">         return om;</span>
 <span class="source-line-no">795</span><span id="line-795">      if (om == null)</span>
 <span class="source-line-no">796</span><span id="line-796">         om = new JsonMap();</span>
-<span class="source-line-no">797</span><span id="line-797">      Predicate&lt;String&gt; ne = Utils::ne;</span>
-<span class="source-line-no">798</span><span id="line-798">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;</span>
-<span class="source-line-no">799</span><span id="line-799">      Predicate&lt;Boolean&gt; nf = Utils::isTrue;</span>
-<span class="source-line-no">800</span><span id="line-800">      Predicate&lt;Long&gt; nm1 = Utils::nm1;</span>
+<span class="source-line-no">797</span><span id="line-797">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">798</span><span id="line-798">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">799</span><span id="line-799">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">800</span><span id="line-800">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
 <span class="source-line-no">801</span><span id="line-801">      // @formatter:off</span>
 <span class="source-line-no">802</span><span id="line-802">      return om</span>
 <span class="source-line-no">803</span><span id="line-803">         .appendFirst(ne, PROP_collectionFormat, a.collectionFormat(), a.cf())</span>

@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -179,7 +179,7 @@
 <span class="source-line-no">166</span><span id="line-166">    *</span>
 <span class="source-line-no">167</span><span id="line-167">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">168</span><span id="line-168">    */</span>
-<span class="source-line-no">169</span><span id="line-169">   public Map&lt;String,Encoding&gt; getEncoding() { return nullIfEmpty(encoding); }</span>
+<span class="source-line-no">169</span><span id="line-169">   public Map&lt;String,Encoding&gt; getEncoding() { return nie(encoding); }</span>
 <span class="source-line-no">170</span><span id="line-170"></span>
 <span class="source-line-no">171</span><span id="line-171">   /**</span>
 <span class="source-line-no">172</span><span id="line-172">    * Bean property getter:  &lt;property&gt;x-example&lt;/property&gt;.</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">    *</span>
 <span class="source-line-no">185</span><span id="line-185">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">186</span><span id="line-186">    */</span>
-<span class="source-line-no">187</span><span id="line-187">   public Map&lt;String,Example&gt; getExamples() { return nullIfEmpty(examples); }</span>
+<span class="source-line-no">187</span><span id="line-187">   public Map&lt;String,Example&gt; getExamples() { return nie(examples); }</span>
 <span class="source-line-no">188</span><span id="line-188"></span>
 <span class="source-line-no">189</span><span id="line-189">   /**</span>
 <span class="source-line-no">190</span><span id="line-190">    * Bean property getter:  &lt;property&gt;schema&lt;/property&gt;.</span>
@@ -209,9 +209,9 @@
 <span class="source-line-no">196</span><span id="line-196">   @Override /* Overridden from OpenApiElement */</span>
 <span class="source-line-no">197</span><span id="line-197">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">198</span><span id="line-198">      // @formatter:off</span>
-<span class="source-line-no">199</span><span id="line-199">      var s = setb(String.class)</span>
-<span class="source-line-no">200</span><span id="line-200">         .addIf(ne(encoding), PROP_encoding)</span>
-<span class="source-line-no">201</span><span id="line-201">         .addIf(ne(examples), PROP_examples)</span>
+<span class="source-line-no">199</span><span id="line-199">      var s = stb(String.class)</span>
+<span class="source-line-no">200</span><span id="line-200">         .addIf(ine(encoding), PROP_encoding)</span>
+<span class="source-line-no">201</span><span id="line-201">         .addIf(ine(examples), PROP_examples)</span>
 <span class="source-line-no">202</span><span id="line-202">         .addIf(nn(schema), PROP_schema)</span>
 <span class="source-line-no">203</span><span id="line-203">         .addIf(nn(example), PROP_xExample)</span>
 <span class="source-line-no">204</span><span id="line-204">         .build();</span>

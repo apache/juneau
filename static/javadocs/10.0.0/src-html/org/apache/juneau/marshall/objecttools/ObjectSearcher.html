@@ -29,293 +29,294 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.objecttools;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.bean.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * POJO model searcher.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    This class is designed to provide searches across arrays and collections of maps or beans.</span>
-<span class="source-line-no">033</span><span id="line-33"> *    It allows you to quickly filter beans and maps using simple yet sophisticated search arguments.</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;/p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> *    MyBean[] &lt;jv&gt;arrayOfBeans&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    ObjectSearcher &lt;jv&gt;searcher&lt;/jv&gt; = ObjectSearcher.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;jc&gt;// Returns a list of beans whose 'foo' property is 'X' and 'bar' property is 'Y'.&lt;/jc&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;searcher&lt;/jv&gt;.run(&lt;jv&gt;arrayOfBeans&lt;/jv&gt;, &lt;js&gt;"foo=X,bar=Y"&lt;/js&gt;);</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;/p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *    The tool can be used against the following data types:</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;/p&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Arrays/collections of maps or beans.</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;/ul&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> * &lt;p&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    The default searcher is configured with the following matcher factories that provides the capabilities of matching</span>
-<span class="source-line-no">052</span><span id="line-52"> *    against various data types.  This list is extensible:</span>
-<span class="source-line-no">053</span><span id="line-53"> * &lt;/p&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;ul class='javatreec'&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;li class='jc'&gt;{@link StringMatcherFactory}</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;li class='jc'&gt;{@link NumberMatcherFactory}</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='jc'&gt;{@link TimeMatcherFactory}</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;/ul&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> * &lt;p&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *    The {@link StringMatcherFactory} class provides searching based on the following patterns:</span>
-<span class="source-line-no">061</span><span id="line-61"> * &lt;/p&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;ul&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li&gt;&lt;js&gt;"property=foo"&lt;/js&gt; - Simple full word match</span>
-<span class="source-line-no">064</span><span id="line-64"> *    &lt;li&gt;&lt;js&gt;"property=fo*"&lt;/js&gt;, &lt;js&gt;"property=?ar"&lt;/js&gt; - Meta-character matching</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;li&gt;&lt;js&gt;"property=foo bar"&lt;/js&gt;(implicit), &lt;js&gt;"property=^foo ^bar"&lt;/js&gt;(explicit) - Multiple OR'ed patterns</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;&lt;js&gt;"property=+fo* +*ar"&lt;/js&gt; - Multiple AND'ed patterns</span>
-<span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;&lt;js&gt;"property=fo* -bar"&lt;/js&gt; - Negative patterns</span>
-<span class="source-line-no">068</span><span id="line-68"> *    &lt;li&gt;&lt;js&gt;"property='foo bar'"&lt;/js&gt; - Patterns with whitespace</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;&lt;js&gt;"property=foo\\'bar"&lt;/js&gt; - Patterns with single-quotes</span>
-<span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;&lt;js&gt;"property=/foo\\s+bar"&lt;/js&gt; - Regular expression match</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> * &lt;p&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> *    The {@link NumberMatcherFactory} class provides searching based on the following patterns:</span>
-<span class="source-line-no">074</span><span id="line-74"> * &lt;/p&gt;</span>
-<span class="source-line-no">075</span><span id="line-75"> * &lt;ul&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> *    &lt;li&gt;&lt;js&gt;"property=1"&lt;/js&gt; - A single number</span>
-<span class="source-line-no">077</span><span id="line-77"> *    &lt;li&gt;&lt;js&gt;"property=1 2"&lt;/js&gt; - Multiple OR'ed numbers</span>
-<span class="source-line-no">078</span><span id="line-78"> *    &lt;li&gt;&lt;js&gt;"property=-1 -2"&lt;/js&gt; - Multiple OR'ed negative numbers</span>
-<span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;&lt;js&gt;"property=1-2"&lt;/js&gt;,&lt;js&gt;"property=-2--1"&lt;/js&gt;  - A range of numbers (whitespace ignored)</span>
-<span class="source-line-no">080</span><span id="line-80"> *    &lt;li&gt;&lt;js&gt;"property=1-2 4-5"&lt;/js&gt; - Multiple OR'ed ranges</span>
-<span class="source-line-no">081</span><span id="line-81"> *    &lt;li&gt;&lt;js&gt;"property=&amp;lt;1"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;=1"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;1"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;=1"&lt;/js&gt; - Open-ended ranges</span>
-<span class="source-line-no">082</span><span id="line-82"> *    &lt;li&gt;&lt;js&gt;"property=!1"&lt;/js&gt;,&lt;js&gt;"property=!1-2"&lt;/js&gt; - Negation</span>
-<span class="source-line-no">083</span><span id="line-83"> * &lt;/ul&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;p&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *    The {@link TimeMatcherFactory} class provides searching based on the following patterns:</span>
-<span class="source-line-no">086</span><span id="line-86"> * &lt;/p&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> * &lt;ul&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> *    &lt;li&gt;&lt;js&gt;"property=2011"&lt;/js&gt; - A single year</span>
-<span class="source-line-no">089</span><span id="line-89"> *    &lt;li&gt;&lt;js&gt;"property=2011 2013 2015"&lt;/js&gt; - Multiple years</span>
-<span class="source-line-no">090</span><span id="line-90"> *    &lt;li&gt;&lt;js&gt;"property=2011-01"&lt;/js&gt; - A single month</span>
-<span class="source-line-no">091</span><span id="line-91"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01"&lt;/js&gt; - A single day</span>
-<span class="source-line-no">092</span><span id="line-92"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01T12"&lt;/js&gt; - A single hour</span>
-<span class="source-line-no">093</span><span id="line-93"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01T12:30"&lt;/js&gt; - A single minute</span>
-<span class="source-line-no">094</span><span id="line-94"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01T12:30:45"&lt;/js&gt; - A single second</span>
-<span class="source-line-no">095</span><span id="line-95"> *    &lt;li&gt;&lt;js&gt;"property=&amp;gt;2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;=2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;=2011"&lt;/js&gt; - Open-ended ranges</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import java.lang.reflect.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.commons.bean.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * POJO model searcher.</span>
+<span class="source-line-no">031</span><span id="line-31"> *</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    This class is designed to provide searches across arrays and collections of maps or beans.</span>
+<span class="source-line-no">034</span><span id="line-34"> *    It allows you to quickly filter beans and maps using simple yet sophisticated search arguments.</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;/p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    MyBean[] &lt;jv&gt;arrayOfBeans&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    ObjectSearcher &lt;jv&gt;searcher&lt;/jv&gt; = ObjectSearcher.&lt;jsm&gt;create&lt;/jsm&gt;();</span>
+<span class="source-line-no">041</span><span id="line-41"> *</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;jc&gt;// Returns a list of beans whose 'foo' property is 'X' and 'bar' property is 'Y'.&lt;/jc&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    List&amp;lt;MyBean&amp;gt; &lt;jv&gt;result&lt;/jv&gt; = &lt;jv&gt;searcher&lt;/jv&gt;.run(&lt;jv&gt;arrayOfBeans&lt;/jv&gt;, &lt;js&gt;"foo=X,bar=Y"&lt;/js&gt;);</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;/p&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *    The tool can be used against the following data types:</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;/p&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Arrays/collections of maps or beans.</span>
+<span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> * &lt;p&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *    The default searcher is configured with the following matcher factories that provides the capabilities of matching</span>
+<span class="source-line-no">053</span><span id="line-53"> *    against various data types.  This list is extensible:</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;/p&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;ul class='javatreec'&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;li class='jc'&gt;{@link StringMatcherFactory}</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;li class='jc'&gt;{@link NumberMatcherFactory}</span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;li class='jc'&gt;{@link TimeMatcherFactory}</span>
+<span class="source-line-no">059</span><span id="line-59"> * &lt;/ul&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;p&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *    The {@link StringMatcherFactory} class provides searching based on the following patterns:</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;/p&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;ul&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;li&gt;&lt;js&gt;"property=foo"&lt;/js&gt; - Simple full word match</span>
+<span class="source-line-no">065</span><span id="line-65"> *    &lt;li&gt;&lt;js&gt;"property=fo*"&lt;/js&gt;, &lt;js&gt;"property=?ar"&lt;/js&gt; - Meta-character matching</span>
+<span class="source-line-no">066</span><span id="line-66"> *    &lt;li&gt;&lt;js&gt;"property=foo bar"&lt;/js&gt;(implicit), &lt;js&gt;"property=^foo ^bar"&lt;/js&gt;(explicit) - Multiple OR'ed patterns</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;li&gt;&lt;js&gt;"property=+fo* +*ar"&lt;/js&gt; - Multiple AND'ed patterns</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;li&gt;&lt;js&gt;"property=fo* -bar"&lt;/js&gt; - Negative patterns</span>
+<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;&lt;js&gt;"property='foo bar'"&lt;/js&gt; - Patterns with whitespace</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;&lt;js&gt;"property=foo\\'bar"&lt;/js&gt; - Patterns with single-quotes</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;&lt;js&gt;"property=/foo\\s+bar"&lt;/js&gt; - Regular expression match</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;/ul&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> * &lt;p&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *    The {@link NumberMatcherFactory} class provides searching based on the following patterns:</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;/p&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> * &lt;ul&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *    &lt;li&gt;&lt;js&gt;"property=1"&lt;/js&gt; - A single number</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;li&gt;&lt;js&gt;"property=1 2"&lt;/js&gt; - Multiple OR'ed numbers</span>
+<span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;&lt;js&gt;"property=-1 -2"&lt;/js&gt; - Multiple OR'ed negative numbers</span>
+<span class="source-line-no">080</span><span id="line-80"> *    &lt;li&gt;&lt;js&gt;"property=1-2"&lt;/js&gt;,&lt;js&gt;"property=-2--1"&lt;/js&gt;  - A range of numbers (whitespace ignored)</span>
+<span class="source-line-no">081</span><span id="line-81"> *    &lt;li&gt;&lt;js&gt;"property=1-2 4-5"&lt;/js&gt; - Multiple OR'ed ranges</span>
+<span class="source-line-no">082</span><span id="line-82"> *    &lt;li&gt;&lt;js&gt;"property=&amp;lt;1"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;=1"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;1"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;=1"&lt;/js&gt; - Open-ended ranges</span>
+<span class="source-line-no">083</span><span id="line-83"> *    &lt;li&gt;&lt;js&gt;"property=!1"&lt;/js&gt;,&lt;js&gt;"property=!1-2"&lt;/js&gt; - Negation</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;/ul&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> * &lt;p&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *    The {@link TimeMatcherFactory} class provides searching based on the following patterns:</span>
+<span class="source-line-no">087</span><span id="line-87"> * &lt;/p&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> * &lt;ul&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *    &lt;li&gt;&lt;js&gt;"property=2011"&lt;/js&gt; - A single year</span>
+<span class="source-line-no">090</span><span id="line-90"> *    &lt;li&gt;&lt;js&gt;"property=2011 2013 2015"&lt;/js&gt; - Multiple years</span>
+<span class="source-line-no">091</span><span id="line-91"> *    &lt;li&gt;&lt;js&gt;"property=2011-01"&lt;/js&gt; - A single month</span>
+<span class="source-line-no">092</span><span id="line-92"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01"&lt;/js&gt; - A single day</span>
+<span class="source-line-no">093</span><span id="line-93"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01T12"&lt;/js&gt; - A single hour</span>
+<span class="source-line-no">094</span><span id="line-94"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01T12:30"&lt;/js&gt; - A single minute</span>
+<span class="source-line-no">095</span><span id="line-95"> *    &lt;li&gt;&lt;js&gt;"property=2011-01-01T12:30:45"&lt;/js&gt; - A single second</span>
 <span class="source-line-no">096</span><span id="line-96"> *    &lt;li&gt;&lt;js&gt;"property=&amp;gt;2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;=2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;=2011"&lt;/js&gt; - Open-ended ranges</span>
-<span class="source-line-no">097</span><span id="line-97"> *    &lt;li&gt;&lt;js&gt;"property=2011 - 2013-06-30"&lt;/js&gt; - Closed ranges</span>
-<span class="source-line-no">098</span><span id="line-98"> * &lt;/ul&gt;</span>
-<span class="source-line-no">099</span><span id="line-99"> *</span>
-<span class="source-line-no">100</span><span id="line-100"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">101</span><span id="line-101"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools"&gt;Object Tools&lt;/a&gt;</span>
-<span class="source-line-no">102</span><span id="line-102"></span>
-<span class="source-line-no">103</span><span id="line-103"> * &lt;/ul&gt;</span>
-<span class="source-line-no">104</span><span id="line-104"> */</span>
-<span class="source-line-no">105</span><span id="line-105">@SuppressWarnings({</span>
-<span class="source-line-no">106</span><span id="line-106">   "rawtypes" // Raw types necessary for generic search result handling</span>
-<span class="source-line-no">107</span><span id="line-107">})</span>
-<span class="source-line-no">108</span><span id="line-108">public class ObjectSearcher implements ObjectTool&lt;SearchArgs&gt; {</span>
-<span class="source-line-no">109</span><span id="line-109">   /*</span>
-<span class="source-line-no">110</span><span id="line-110">    * Matcher that uses the correct matcher based on object type.</span>
-<span class="source-line-no">111</span><span id="line-111">    * Used for objects when we can't determine the object type beforehand.</span>
-<span class="source-line-no">112</span><span id="line-112">    */</span>
-<span class="source-line-no">113</span><span id="line-113">   private class ColumnMatcher {</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">      String searchPattern;</span>
-<span class="source-line-no">116</span><span id="line-116">      AbstractMatcher[] matchers;</span>
-<span class="source-line-no">117</span><span id="line-117">      MarshallingSession bs;</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">      ColumnMatcher(MarshallingSession bs, String searchPattern) {</span>
-<span class="source-line-no">120</span><span id="line-120">         this.bs = bs;</span>
-<span class="source-line-no">121</span><span id="line-121">         this.searchPattern = searchPattern;</span>
-<span class="source-line-no">122</span><span id="line-122">         this.matchers = new AbstractMatcher[factories.length];</span>
-<span class="source-line-no">123</span><span id="line-123">      }</span>
-<span class="source-line-no">124</span><span id="line-124"></span>
-<span class="source-line-no">125</span><span id="line-125">      @SuppressWarnings({</span>
-<span class="source-line-no">126</span><span id="line-126">         "java:S3776" // Cognitive complexity acceptable for search pattern matching logic</span>
-<span class="source-line-no">127</span><span id="line-127">      })</span>
-<span class="source-line-no">128</span><span id="line-128">      boolean matches(Object o) {</span>
-<span class="source-line-no">129</span><span id="line-129">         var cm = bs.getClassMetaForObject(o);</span>
-<span class="source-line-no">130</span><span id="line-130">         if (cm == null)</span>
-<span class="source-line-no">131</span><span id="line-131">            return false;</span>
-<span class="source-line-no">132</span><span id="line-132">         if (cm.isCollection()) {</span>
-<span class="source-line-no">133</span><span id="line-133">            for (var o2 : (Collection)o)</span>
-<span class="source-line-no">134</span><span id="line-134">               if (matches(o2))</span>
-<span class="source-line-no">135</span><span id="line-135">                  return true;</span>
-<span class="source-line-no">136</span><span id="line-136">            return false;</span>
-<span class="source-line-no">137</span><span id="line-137">         }</span>
-<span class="source-line-no">138</span><span id="line-138">         if (cm.isArray()) {</span>
-<span class="source-line-no">139</span><span id="line-139">            for (var i = 0; i &lt; Array.getLength(o); i++)</span>
-<span class="source-line-no">140</span><span id="line-140">               if (matches(Array.get(o, i)))</span>
-<span class="source-line-no">141</span><span id="line-141">                  return true;</span>
-<span class="source-line-no">142</span><span id="line-142">            return false;</span>
-<span class="source-line-no">143</span><span id="line-143">         }</span>
-<span class="source-line-no">144</span><span id="line-144">         for (var i = 0; i &lt; factories.length; i++) {</span>
-<span class="source-line-no">145</span><span id="line-145">            if (factories[i].canMatch(cm)) {</span>
-<span class="source-line-no">146</span><span id="line-146">               if (matchers[i] == null)</span>
-<span class="source-line-no">147</span><span id="line-147">                  matchers[i] = factories[i].create(searchPattern);</span>
-<span class="source-line-no">148</span><span id="line-148">               return matchers[i].matches(cm, o);</span>
-<span class="source-line-no">149</span><span id="line-149">            }</span>
-<span class="source-line-no">150</span><span id="line-150">         }</span>
-<span class="source-line-no">151</span><span id="line-151">         return false;</span>
-<span class="source-line-no">152</span><span id="line-152">      }</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   /*</span>
-<span class="source-line-no">156</span><span id="line-156">    * Matches on a Map only if all specified entry matchers match.</span>
-<span class="source-line-no">157</span><span id="line-157">    */</span>
-<span class="source-line-no">158</span><span id="line-158">   private class RowMatcher {</span>
-<span class="source-line-no">159</span><span id="line-159"></span>
-<span class="source-line-no">160</span><span id="line-160">      Map&lt;String,ColumnMatcher&gt; entryMatchers = new HashMap&lt;&gt;();</span>
-<span class="source-line-no">161</span><span id="line-161">      MarshallingSession bs;</span>
-<span class="source-line-no">162</span><span id="line-162"></span>
-<span class="source-line-no">163</span><span id="line-163">      @SuppressWarnings({</span>
-<span class="source-line-no">164</span><span id="line-164">         "unchecked" // Type erasure requires unchecked cast for Map query</span>
-<span class="source-line-no">165</span><span id="line-165">      })</span>
-<span class="source-line-no">166</span><span id="line-166">      RowMatcher(MarshallingSession bs, Map query) {</span>
-<span class="source-line-no">167</span><span id="line-167">         this.bs = bs;</span>
-<span class="source-line-no">168</span><span id="line-168">         query.forEach((k, v) -&gt; entryMatchers.put(s(k), new ColumnMatcher(bs, s(v))));</span>
-<span class="source-line-no">169</span><span id="line-169">      }</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">      @SuppressWarnings({</span>
-<span class="source-line-no">172</span><span id="line-172">         "java:S3776" // Cognitive complexity acceptable for row matching across multiple criteria</span>
-<span class="source-line-no">173</span><span id="line-173">      })</span>
-<span class="source-line-no">174</span><span id="line-174">      boolean matches(Object o) {</span>
-<span class="source-line-no">175</span><span id="line-175">         if (o == null)</span>
-<span class="source-line-no">176</span><span id="line-176">            return false;</span>
-<span class="source-line-no">177</span><span id="line-177">         var cm = bs.getClassMetaForObject(o);</span>
-<span class="source-line-no">178</span><span id="line-178">         if (cm.isMapOrBean()) {</span>
-<span class="source-line-no">179</span><span id="line-179">            Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);</span>
-<span class="source-line-no">180</span><span id="line-180">            for (var e : entryMatchers.entrySet()) {</span>
-<span class="source-line-no">181</span><span id="line-181">               String key = e.getKey();</span>
-<span class="source-line-no">182</span><span id="line-182">               Object val;</span>
-<span class="source-line-no">183</span><span id="line-183">               if (m instanceof BeanMap m2) {</span>
-<span class="source-line-no">184</span><span id="line-184">                  val = m2.getRaw(key);</span>
-<span class="source-line-no">185</span><span id="line-185">               } else {</span>
-<span class="source-line-no">186</span><span id="line-186">                  val = m.get(key);</span>
-<span class="source-line-no">187</span><span id="line-187">               }</span>
-<span class="source-line-no">188</span><span id="line-188">               if (! e.getValue().matches(val))</span>
-<span class="source-line-no">189</span><span id="line-189">                  return false;</span>
-<span class="source-line-no">190</span><span id="line-190">            }</span>
-<span class="source-line-no">191</span><span id="line-191">            return true;</span>
-<span class="source-line-no">192</span><span id="line-192">         }</span>
-<span class="source-line-no">193</span><span id="line-193">         if (cm.isCollection()) {</span>
-<span class="source-line-no">194</span><span id="line-194">            for (var o2 : (Collection)o)</span>
-<span class="source-line-no">195</span><span id="line-195">               if (! matches(o2))</span>
-<span class="source-line-no">196</span><span id="line-196">                  return false;</span>
-<span class="source-line-no">197</span><span id="line-197">            return true;</span>
-<span class="source-line-no">198</span><span id="line-198">         }</span>
-<span class="source-line-no">199</span><span id="line-199">         if (cm.isArray()) {</span>
-<span class="source-line-no">200</span><span id="line-200">            for (var i = 0; i &lt; Array.getLength(o); i++)</span>
-<span class="source-line-no">201</span><span id="line-201">               if (! matches(Array.get(o, i)))</span>
-<span class="source-line-no">202</span><span id="line-202">                  return false;</span>
-<span class="source-line-no">203</span><span id="line-203">            return true;</span>
-<span class="source-line-no">204</span><span id="line-204">         }</span>
-<span class="source-line-no">205</span><span id="line-205">         return false;</span>
-<span class="source-line-no">206</span><span id="line-206">      }</span>
-<span class="source-line-no">207</span><span id="line-207">   }</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">   /**</span>
-<span class="source-line-no">210</span><span id="line-210">    * Default reusable searcher.</span>
-<span class="source-line-no">211</span><span id="line-211">    */</span>
-<span class="source-line-no">212</span><span id="line-212">   public static final ObjectSearcher DEFAULT = new ObjectSearcher();</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">   /**</span>
-<span class="source-line-no">215</span><span id="line-215">    * Static creator.</span>
-<span class="source-line-no">216</span><span id="line-216">    *</span>
-<span class="source-line-no">217</span><span id="line-217">    * @param factories</span>
-<span class="source-line-no">218</span><span id="line-218">    *    The matcher factories to use.</span>
-<span class="source-line-no">219</span><span id="line-219">    *    &lt;br&gt;If not specified, uses the following:</span>
-<span class="source-line-no">220</span><span id="line-220">    *    &lt;ul&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">    *       &lt;li&gt;{@link StringMatcherFactory#DEFAULT}</span>
-<span class="source-line-no">222</span><span id="line-222">    *       &lt;li&gt;{@link NumberMatcherFactory#DEFAULT}</span>
-<span class="source-line-no">223</span><span id="line-223">    *       &lt;li&gt;{@link TimeMatcherFactory#DEFAULT}</span>
-<span class="source-line-no">224</span><span id="line-224">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">225</span><span id="line-225">    * @return A new {@link ObjectSearcher} object.</span>
-<span class="source-line-no">226</span><span id="line-226">    */</span>
-<span class="source-line-no">227</span><span id="line-227">   public static ObjectSearcher create(MatcherFactory...factories) {</span>
-<span class="source-line-no">228</span><span id="line-228">      return new ObjectSearcher(factories);</span>
-<span class="source-line-no">229</span><span id="line-229">   }</span>
-<span class="source-line-no">230</span><span id="line-230"></span>
-<span class="source-line-no">231</span><span id="line-231">   final MatcherFactory[] factories;</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">   /**</span>
-<span class="source-line-no">234</span><span id="line-234">    * Constructor.</span>
-<span class="source-line-no">235</span><span id="line-235">    *</span>
-<span class="source-line-no">236</span><span id="line-236">    * @param factories</span>
-<span class="source-line-no">237</span><span id="line-237">    *    The matcher factories to use.</span>
-<span class="source-line-no">238</span><span id="line-238">    *    &lt;br&gt;If not specified, uses the following:</span>
-<span class="source-line-no">239</span><span id="line-239">    *    &lt;ul&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    *       &lt;li&gt;{@link NumberMatcherFactory#DEFAULT}</span>
-<span class="source-line-no">241</span><span id="line-241">    *       &lt;li&gt;{@link TimeMatcherFactory#DEFAULT}</span>
-<span class="source-line-no">242</span><span id="line-242">    *       &lt;li&gt;{@link StringMatcherFactory#DEFAULT}</span>
-<span class="source-line-no">243</span><span id="line-243">    *    &lt;/ul&gt;</span>
-<span class="source-line-no">244</span><span id="line-244">    */</span>
-<span class="source-line-no">245</span><span id="line-245">   public ObjectSearcher(MatcherFactory...factories) {</span>
-<span class="source-line-no">246</span><span id="line-246">      this.factories = factories.length == 0 ? a(NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT) : factories;</span>
-<span class="source-line-no">247</span><span id="line-247">   }</span>
-<span class="source-line-no">248</span><span id="line-248"></span>
-<span class="source-line-no">249</span><span id="line-249">   @Override /* Overridden from ObjectTool */</span>
-<span class="source-line-no">250</span><span id="line-250">   public Object run(MarshallingSession session, Object input, SearchArgs args) {</span>
-<span class="source-line-no">251</span><span id="line-251"></span>
-<span class="source-line-no">252</span><span id="line-252">      var type = session.getClassMetaForObject(input);</span>
-<span class="source-line-no">253</span><span id="line-253">      Map&lt;String,String&gt; search = args.getSearch();</span>
-<span class="source-line-no">254</span><span id="line-254"></span>
-<span class="source-line-no">255</span><span id="line-255">      if (search.isEmpty() || type == null || ! type.isCollectionOrArray())</span>
-<span class="source-line-no">256</span><span id="line-256">         return input;</span>
-<span class="source-line-no">257</span><span id="line-257"></span>
-<span class="source-line-no">258</span><span id="line-258">      List&lt;Object&gt; l;</span>
-<span class="source-line-no">259</span><span id="line-259">      var rowMatcher = new RowMatcher(session, search);</span>
-<span class="source-line-no">260</span><span id="line-260"></span>
-<span class="source-line-no">261</span><span id="line-261">      if (type.isCollection()) {</span>
-<span class="source-line-no">262</span><span id="line-262">         Collection&lt;?&gt; c = (Collection)input;</span>
-<span class="source-line-no">263</span><span id="line-263">         l = listOfSize(c.size());</span>
-<span class="source-line-no">264</span><span id="line-264">         List&lt;Object&gt; l2 = l;</span>
-<span class="source-line-no">265</span><span id="line-265">         c.forEach(x -&gt; {</span>
-<span class="source-line-no">266</span><span id="line-266">            if (rowMatcher.matches(x))</span>
-<span class="source-line-no">267</span><span id="line-267">               l2.add(x);</span>
-<span class="source-line-no">268</span><span id="line-268">         });</span>
-<span class="source-line-no">269</span><span id="line-269"></span>
-<span class="source-line-no">270</span><span id="line-270">      } else /* isArray */ {</span>
-<span class="source-line-no">271</span><span id="line-271">         var size = Array.getLength(input);</span>
-<span class="source-line-no">272</span><span id="line-272">         l = listOfSize(size);</span>
-<span class="source-line-no">273</span><span id="line-273">         for (var i = 0; i &lt; size; i++) {</span>
-<span class="source-line-no">274</span><span id="line-274">            var o = Array.get(input, i);</span>
-<span class="source-line-no">275</span><span id="line-275">            if (rowMatcher.matches(o))</span>
-<span class="source-line-no">276</span><span id="line-276">               l.add(o);</span>
-<span class="source-line-no">277</span><span id="line-277">         }</span>
-<span class="source-line-no">278</span><span id="line-278">      }</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">      return l;</span>
-<span class="source-line-no">281</span><span id="line-281">   }</span>
-<span class="source-line-no">282</span><span id="line-282"></span>
-<span class="source-line-no">283</span><span id="line-283">   /**</span>
-<span class="source-line-no">284</span><span id="line-284">    * Convenience method for executing the searcher.</span>
-<span class="source-line-no">285</span><span id="line-285">    *</span>
-<span class="source-line-no">286</span><span id="line-286">    * @param &lt;R&gt; The return type.</span>
-<span class="source-line-no">287</span><span id="line-287">    * @param input The input.</span>
-<span class="source-line-no">288</span><span id="line-288">    * @param searchArgs The search arguments.  See {@link SearchArgs} for format.</span>
-<span class="source-line-no">289</span><span id="line-289">    * @return A list of maps/beans matching the</span>
-<span class="source-line-no">290</span><span id="line-290">    */</span>
-<span class="source-line-no">291</span><span id="line-291">   @SuppressWarnings({</span>
-<span class="source-line-no">292</span><span id="line-292">      "java:S1168",    // Intentional null when result is not a list/collection/array; callers branch on null (not an empty list).</span>
-<span class="source-line-no">293</span><span id="line-293">      "unchecked", // Type erasure requires unchecked casts</span>
-<span class="source-line-no">294</span><span id="line-294">   })</span>
-<span class="source-line-no">295</span><span id="line-295">   public &lt;R&gt; List&lt;R&gt; run(Object input, String searchArgs) {</span>
-<span class="source-line-no">296</span><span id="line-296">      Object r = run(MarshallingContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));</span>
-<span class="source-line-no">297</span><span id="line-297">      if (r instanceof List r2)</span>
-<span class="source-line-no">298</span><span id="line-298">         return r2;</span>
-<span class="source-line-no">299</span><span id="line-299">      if (r instanceof Collection r3)</span>
-<span class="source-line-no">300</span><span id="line-300">         return toList(r3);</span>
-<span class="source-line-no">301</span><span id="line-301">      if (isArray(r))</span>
-<span class="source-line-no">302</span><span id="line-302">         return l((R[])r);</span>
-<span class="source-line-no">303</span><span id="line-303">      return null;</span>
-<span class="source-line-no">304</span><span id="line-304">   }</span>
-<span class="source-line-no">305</span><span id="line-305">}</span>
+<span class="source-line-no">097</span><span id="line-97"> *    &lt;li&gt;&lt;js&gt;"property=&amp;gt;2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;gt;=2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;2011"&lt;/js&gt;,&lt;js&gt;"property=&amp;lt;=2011"&lt;/js&gt; - Open-ended ranges</span>
+<span class="source-line-no">098</span><span id="line-98"> *    &lt;li&gt;&lt;js&gt;"property=2011 - 2013-06-30"&lt;/js&gt; - Closed ranges</span>
+<span class="source-line-no">099</span><span id="line-99"> * &lt;/ul&gt;</span>
+<span class="source-line-no">100</span><span id="line-100"> *</span>
+<span class="source-line-no">101</span><span id="line-101"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/ObjectTools"&gt;Object Tools&lt;/a&gt;</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104"> * &lt;/ul&gt;</span>
+<span class="source-line-no">105</span><span id="line-105"> */</span>
+<span class="source-line-no">106</span><span id="line-106">@SuppressWarnings({</span>
+<span class="source-line-no">107</span><span id="line-107">   "rawtypes" // Raw types necessary for generic search result handling</span>
+<span class="source-line-no">108</span><span id="line-108">})</span>
+<span class="source-line-no">109</span><span id="line-109">public class ObjectSearcher implements ObjectTool&lt;SearchArgs&gt; {</span>
+<span class="source-line-no">110</span><span id="line-110">   /*</span>
+<span class="source-line-no">111</span><span id="line-111">    * Matcher that uses the correct matcher based on object type.</span>
+<span class="source-line-no">112</span><span id="line-112">    * Used for objects when we can't determine the object type beforehand.</span>
+<span class="source-line-no">113</span><span id="line-113">    */</span>
+<span class="source-line-no">114</span><span id="line-114">   private class ColumnMatcher {</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">      String searchPattern;</span>
+<span class="source-line-no">117</span><span id="line-117">      AbstractMatcher[] matchers;</span>
+<span class="source-line-no">118</span><span id="line-118">      MarshallingSession bs;</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">      ColumnMatcher(MarshallingSession bs, String searchPattern) {</span>
+<span class="source-line-no">121</span><span id="line-121">         this.bs = bs;</span>
+<span class="source-line-no">122</span><span id="line-122">         this.searchPattern = searchPattern;</span>
+<span class="source-line-no">123</span><span id="line-123">         this.matchers = new AbstractMatcher[factories.length];</span>
+<span class="source-line-no">124</span><span id="line-124">      }</span>
+<span class="source-line-no">125</span><span id="line-125"></span>
+<span class="source-line-no">126</span><span id="line-126">      @SuppressWarnings({</span>
+<span class="source-line-no">127</span><span id="line-127">         "java:S3776" // Cognitive complexity acceptable for search pattern matching logic</span>
+<span class="source-line-no">128</span><span id="line-128">      })</span>
+<span class="source-line-no">129</span><span id="line-129">      boolean matches(Object o) {</span>
+<span class="source-line-no">130</span><span id="line-130">         var cm = bs.getClassMetaForObject(o);</span>
+<span class="source-line-no">131</span><span id="line-131">         if (cm == null)</span>
+<span class="source-line-no">132</span><span id="line-132">            return false;</span>
+<span class="source-line-no">133</span><span id="line-133">         if (cm.isCollection()) {</span>
+<span class="source-line-no">134</span><span id="line-134">            for (var o2 : (Collection)o)</span>
+<span class="source-line-no">135</span><span id="line-135">               if (matches(o2))</span>
+<span class="source-line-no">136</span><span id="line-136">                  return true;</span>
+<span class="source-line-no">137</span><span id="line-137">            return false;</span>
+<span class="source-line-no">138</span><span id="line-138">         }</span>
+<span class="source-line-no">139</span><span id="line-139">         if (cm.isArray()) {</span>
+<span class="source-line-no">140</span><span id="line-140">            for (var i = 0; i &lt; Array.getLength(o); i++)</span>
+<span class="source-line-no">141</span><span id="line-141">               if (matches(Array.get(o, i)))</span>
+<span class="source-line-no">142</span><span id="line-142">                  return true;</span>
+<span class="source-line-no">143</span><span id="line-143">            return false;</span>
+<span class="source-line-no">144</span><span id="line-144">         }</span>
+<span class="source-line-no">145</span><span id="line-145">         for (var i = 0; i &lt; factories.length; i++) {</span>
+<span class="source-line-no">146</span><span id="line-146">            if (factories[i].canMatch(cm)) {</span>
+<span class="source-line-no">147</span><span id="line-147">               if (matchers[i] == null)</span>
+<span class="source-line-no">148</span><span id="line-148">                  matchers[i] = factories[i].create(searchPattern);</span>
+<span class="source-line-no">149</span><span id="line-149">               return matchers[i].matches(cm, o);</span>
+<span class="source-line-no">150</span><span id="line-150">            }</span>
+<span class="source-line-no">151</span><span id="line-151">         }</span>
+<span class="source-line-no">152</span><span id="line-152">         return false;</span>
+<span class="source-line-no">153</span><span id="line-153">      }</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   /*</span>
+<span class="source-line-no">157</span><span id="line-157">    * Matches on a Map only if all specified entry matchers match.</span>
+<span class="source-line-no">158</span><span id="line-158">    */</span>
+<span class="source-line-no">159</span><span id="line-159">   private class RowMatcher {</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">      Map&lt;String,ColumnMatcher&gt; entryMatchers = new HashMap&lt;&gt;();</span>
+<span class="source-line-no">162</span><span id="line-162">      MarshallingSession bs;</span>
+<span class="source-line-no">163</span><span id="line-163"></span>
+<span class="source-line-no">164</span><span id="line-164">      @SuppressWarnings({</span>
+<span class="source-line-no">165</span><span id="line-165">         "unchecked" // Type erasure requires unchecked cast for Map query</span>
+<span class="source-line-no">166</span><span id="line-166">      })</span>
+<span class="source-line-no">167</span><span id="line-167">      RowMatcher(MarshallingSession bs, Map query) {</span>
+<span class="source-line-no">168</span><span id="line-168">         this.bs = bs;</span>
+<span class="source-line-no">169</span><span id="line-169">         query.forEach((k, v) -&gt; entryMatchers.put(s(k), new ColumnMatcher(bs, s(v))));</span>
+<span class="source-line-no">170</span><span id="line-170">      }</span>
+<span class="source-line-no">171</span><span id="line-171"></span>
+<span class="source-line-no">172</span><span id="line-172">      @SuppressWarnings({</span>
+<span class="source-line-no">173</span><span id="line-173">         "java:S3776" // Cognitive complexity acceptable for row matching across multiple criteria</span>
+<span class="source-line-no">174</span><span id="line-174">      })</span>
+<span class="source-line-no">175</span><span id="line-175">      boolean matches(Object o) {</span>
+<span class="source-line-no">176</span><span id="line-176">         if (o == null)</span>
+<span class="source-line-no">177</span><span id="line-177">            return false;</span>
+<span class="source-line-no">178</span><span id="line-178">         var cm = bs.getClassMetaForObject(o);</span>
+<span class="source-line-no">179</span><span id="line-179">         if (cm.isMapOrBean()) {</span>
+<span class="source-line-no">180</span><span id="line-180">            Map m = cm.isMap() ? (Map)o : bs.toBeanMap(o);</span>
+<span class="source-line-no">181</span><span id="line-181">            for (var e : entryMatchers.entrySet()) {</span>
+<span class="source-line-no">182</span><span id="line-182">               String key = e.getKey();</span>
+<span class="source-line-no">183</span><span id="line-183">               Object val;</span>
+<span class="source-line-no">184</span><span id="line-184">               if (m instanceof BeanMap m2) {</span>
+<span class="source-line-no">185</span><span id="line-185">                  val = m2.getRaw(key);</span>
+<span class="source-line-no">186</span><span id="line-186">               } else {</span>
+<span class="source-line-no">187</span><span id="line-187">                  val = m.get(key);</span>
+<span class="source-line-no">188</span><span id="line-188">               }</span>
+<span class="source-line-no">189</span><span id="line-189">               if (! e.getValue().matches(val))</span>
+<span class="source-line-no">190</span><span id="line-190">                  return false;</span>
+<span class="source-line-no">191</span><span id="line-191">            }</span>
+<span class="source-line-no">192</span><span id="line-192">            return true;</span>
+<span class="source-line-no">193</span><span id="line-193">         }</span>
+<span class="source-line-no">194</span><span id="line-194">         if (cm.isCollection()) {</span>
+<span class="source-line-no">195</span><span id="line-195">            for (var o2 : (Collection)o)</span>
+<span class="source-line-no">196</span><span id="line-196">               if (! matches(o2))</span>
+<span class="source-line-no">197</span><span id="line-197">                  return false;</span>
+<span class="source-line-no">198</span><span id="line-198">            return true;</span>
+<span class="source-line-no">199</span><span id="line-199">         }</span>
+<span class="source-line-no">200</span><span id="line-200">         if (cm.isArray()) {</span>
+<span class="source-line-no">201</span><span id="line-201">            for (var i = 0; i &lt; Array.getLength(o); i++)</span>
+<span class="source-line-no">202</span><span id="line-202">               if (! matches(Array.get(o, i)))</span>
+<span class="source-line-no">203</span><span id="line-203">                  return false;</span>
+<span class="source-line-no">204</span><span id="line-204">            return true;</span>
+<span class="source-line-no">205</span><span id="line-205">         }</span>
+<span class="source-line-no">206</span><span id="line-206">         return false;</span>
+<span class="source-line-no">207</span><span id="line-207">      }</span>
+<span class="source-line-no">208</span><span id="line-208">   }</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">   /**</span>
+<span class="source-line-no">211</span><span id="line-211">    * Default reusable searcher.</span>
+<span class="source-line-no">212</span><span id="line-212">    */</span>
+<span class="source-line-no">213</span><span id="line-213">   public static final ObjectSearcher DEFAULT = new ObjectSearcher();</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">   /**</span>
+<span class="source-line-no">216</span><span id="line-216">    * Static creator.</span>
+<span class="source-line-no">217</span><span id="line-217">    *</span>
+<span class="source-line-no">218</span><span id="line-218">    * @param factories</span>
+<span class="source-line-no">219</span><span id="line-219">    *    The matcher factories to use.</span>
+<span class="source-line-no">220</span><span id="line-220">    *    &lt;br&gt;If not specified, uses the following:</span>
+<span class="source-line-no">221</span><span id="line-221">    *    &lt;ul&gt;</span>
+<span class="source-line-no">222</span><span id="line-222">    *       &lt;li&gt;{@link StringMatcherFactory#DEFAULT}</span>
+<span class="source-line-no">223</span><span id="line-223">    *       &lt;li&gt;{@link NumberMatcherFactory#DEFAULT}</span>
+<span class="source-line-no">224</span><span id="line-224">    *       &lt;li&gt;{@link TimeMatcherFactory#DEFAULT}</span>
+<span class="source-line-no">225</span><span id="line-225">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    * @return A new {@link ObjectSearcher} object.</span>
+<span class="source-line-no">227</span><span id="line-227">    */</span>
+<span class="source-line-no">228</span><span id="line-228">   public static ObjectSearcher create(MatcherFactory...factories) {</span>
+<span class="source-line-no">229</span><span id="line-229">      return new ObjectSearcher(factories);</span>
+<span class="source-line-no">230</span><span id="line-230">   }</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   final MatcherFactory[] factories;</span>
+<span class="source-line-no">233</span><span id="line-233"></span>
+<span class="source-line-no">234</span><span id="line-234">   /**</span>
+<span class="source-line-no">235</span><span id="line-235">    * Constructor.</span>
+<span class="source-line-no">236</span><span id="line-236">    *</span>
+<span class="source-line-no">237</span><span id="line-237">    * @param factories</span>
+<span class="source-line-no">238</span><span id="line-238">    *    The matcher factories to use.</span>
+<span class="source-line-no">239</span><span id="line-239">    *    &lt;br&gt;If not specified, uses the following:</span>
+<span class="source-line-no">240</span><span id="line-240">    *    &lt;ul&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    *       &lt;li&gt;{@link NumberMatcherFactory#DEFAULT}</span>
+<span class="source-line-no">242</span><span id="line-242">    *       &lt;li&gt;{@link TimeMatcherFactory#DEFAULT}</span>
+<span class="source-line-no">243</span><span id="line-243">    *       &lt;li&gt;{@link StringMatcherFactory#DEFAULT}</span>
+<span class="source-line-no">244</span><span id="line-244">    *    &lt;/ul&gt;</span>
+<span class="source-line-no">245</span><span id="line-245">    */</span>
+<span class="source-line-no">246</span><span id="line-246">   public ObjectSearcher(MatcherFactory...factories) {</span>
+<span class="source-line-no">247</span><span id="line-247">      this.factories = factories.length == 0 ? a(NumberMatcherFactory.DEFAULT, TimeMatcherFactory.DEFAULT, StringMatcherFactory.DEFAULT) : factories;</span>
+<span class="source-line-no">248</span><span id="line-248">   }</span>
+<span class="source-line-no">249</span><span id="line-249"></span>
+<span class="source-line-no">250</span><span id="line-250">   @Override /* Overridden from ObjectTool */</span>
+<span class="source-line-no">251</span><span id="line-251">   public Object run(MarshallingSession session, Object input, SearchArgs args) {</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">      var type = session.getClassMetaForObject(input);</span>
+<span class="source-line-no">254</span><span id="line-254">      Map&lt;String,String&gt; search = args.getSearch();</span>
+<span class="source-line-no">255</span><span id="line-255"></span>
+<span class="source-line-no">256</span><span id="line-256">      if (search.isEmpty() || type == null || ! type.isCollectionOrArray())</span>
+<span class="source-line-no">257</span><span id="line-257">         return input;</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">      List&lt;Object&gt; l;</span>
+<span class="source-line-no">260</span><span id="line-260">      var rowMatcher = new RowMatcher(session, search);</span>
+<span class="source-line-no">261</span><span id="line-261"></span>
+<span class="source-line-no">262</span><span id="line-262">      if (type.isCollection()) {</span>
+<span class="source-line-no">263</span><span id="line-263">         Collection&lt;?&gt; c = (Collection)input;</span>
+<span class="source-line-no">264</span><span id="line-264">         l = listOfSize(c.size());</span>
+<span class="source-line-no">265</span><span id="line-265">         List&lt;Object&gt; l2 = l;</span>
+<span class="source-line-no">266</span><span id="line-266">         c.forEach(x -&gt; {</span>
+<span class="source-line-no">267</span><span id="line-267">            if (rowMatcher.matches(x))</span>
+<span class="source-line-no">268</span><span id="line-268">               l2.add(x);</span>
+<span class="source-line-no">269</span><span id="line-269">         });</span>
+<span class="source-line-no">270</span><span id="line-270"></span>
+<span class="source-line-no">271</span><span id="line-271">      } else /* isArray */ {</span>
+<span class="source-line-no">272</span><span id="line-272">         var size = Array.getLength(input);</span>
+<span class="source-line-no">273</span><span id="line-273">         l = listOfSize(size);</span>
+<span class="source-line-no">274</span><span id="line-274">         for (var i = 0; i &lt; size; i++) {</span>
+<span class="source-line-no">275</span><span id="line-275">            var o = Array.get(input, i);</span>
+<span class="source-line-no">276</span><span id="line-276">            if (rowMatcher.matches(o))</span>
+<span class="source-line-no">277</span><span id="line-277">               l.add(o);</span>
+<span class="source-line-no">278</span><span id="line-278">         }</span>
+<span class="source-line-no">279</span><span id="line-279">      }</span>
+<span class="source-line-no">280</span><span id="line-280"></span>
+<span class="source-line-no">281</span><span id="line-281">      return l;</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   /**</span>
+<span class="source-line-no">285</span><span id="line-285">    * Convenience method for executing the searcher.</span>
+<span class="source-line-no">286</span><span id="line-286">    *</span>
+<span class="source-line-no">287</span><span id="line-287">    * @param &lt;R&gt; The return type.</span>
+<span class="source-line-no">288</span><span id="line-288">    * @param input The input.</span>
+<span class="source-line-no">289</span><span id="line-289">    * @param searchArgs The search arguments.  See {@link SearchArgs} for format.</span>
+<span class="source-line-no">290</span><span id="line-290">    * @return A list of maps/beans matching the</span>
+<span class="source-line-no">291</span><span id="line-291">    */</span>
+<span class="source-line-no">292</span><span id="line-292">   @SuppressWarnings({</span>
+<span class="source-line-no">293</span><span id="line-293">      "java:S1168",    // Intentional null when result is not a list/collection/array; callers branch on null (not an empty list).</span>
+<span class="source-line-no">294</span><span id="line-294">      "unchecked", // Type erasure requires unchecked casts</span>
+<span class="source-line-no">295</span><span id="line-295">   })</span>
+<span class="source-line-no">296</span><span id="line-296">   public &lt;R&gt; List&lt;R&gt; run(Object input, String searchArgs) {</span>
+<span class="source-line-no">297</span><span id="line-297">      Object r = run(MarshallingContext.DEFAULT_SESSION, input, SearchArgs.create(searchArgs));</span>
+<span class="source-line-no">298</span><span id="line-298">      if (r instanceof List r2)</span>
+<span class="source-line-no">299</span><span id="line-299">         return r2;</span>
+<span class="source-line-no">300</span><span id="line-300">      if (r instanceof Collection r3)</span>
+<span class="source-line-no">301</span><span id="line-301">         return toList(r3);</span>
+<span class="source-line-no">302</span><span id="line-302">      if (isArray(r))</span>
+<span class="source-line-no">303</span><span id="line-303">         return l((R[])r);</span>
+<span class="source-line-no">304</span><span id="line-304">      return null;</span>
+<span class="source-line-no">305</span><span id="line-305">   }</span>
+<span class="source-line-no">306</span><span id="line-306">}</span>
 
 
 

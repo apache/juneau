@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.mustache;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -284,7 +284,7 @@
 <span class="source-line-no">271</span><span id="line-271">         bp = "/" + bp;</span>
 <span class="source-line-no">272</span><span id="line-272">      if (resolved.startsWith(bp))</span>
 <span class="source-line-no">273</span><span id="line-273">         return resolved.substring(bp.length());</span>
-<span class="source-line-no">274</span><span id="line-274">      throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
+<span class="source-line-no">274</span><span id="line-274">      throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
 <span class="source-line-no">275</span><span id="line-275">   }</span>
 <span class="source-line-no">276</span><span id="line-276"></span>
 <span class="source-line-no">277</span><span id="line-277">   /**</span>
@@ -347,7 +347,7 @@
 <span class="source-line-no">334</span><span id="line-334">       */</span>
 <span class="source-line-no">335</span><span id="line-335">      public MustacheDispatcher build() {</span>
 <span class="source-line-no">336</span><span id="line-336">         if (basePath == null)</span>
-<span class="source-line-no">337</span><span id="line-337">            throw illegalArg("basePath must not be null");</span>
+<span class="source-line-no">337</span><span id="line-337">            throw iaex("basePath must not be null");</span>
 <span class="source-line-no">338</span><span id="line-338">         return new MustacheDispatcher(this);</span>
 <span class="source-line-no">339</span><span id="line-339">      }</span>
 <span class="source-line-no">340</span><span id="line-340">   }</span>

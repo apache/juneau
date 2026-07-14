@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * Import statically for clean DSL-style usage:</span>
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> *    import static org.apache.juneau.http.HttpParts.*;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    import static HttpParts.*;</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
 <span class="source-line-no">038</span><span id="line-38"> *    PartList &lt;jv&gt;form&lt;/jv&gt; = PartList.&lt;jsm&gt;of&lt;/jsm&gt;(</span>
 <span class="source-line-no">039</span><span id="line-39"> *       part(&lt;js&gt;"username"&lt;/js&gt;, &lt;js&gt;"alice"&lt;/js&gt;),</span>
@@ -151,8 +151,8 @@
 <span class="source-line-no">138</span><span id="line-138"></span>
 <span class="source-line-no">139</span><span id="line-139">   private static final Function&lt;ClassMeta&lt;?&gt;,String&gt; HEADER_NAME_FUNCTION = x -&gt; {</span>
 <span class="source-line-no">140</span><span id="line-140">      var n = Holder.&lt;String&gt;empty();</span>
-<span class="source-line-no">141</span><span id="line-141">      x.forEachAnnotation(org.apache.juneau.http.Header.class, y -&gt; ne(y.value()), y -&gt; n.set(y.value()));</span>
-<span class="source-line-no">142</span><span id="line-142">      x.forEachAnnotation(org.apache.juneau.http.Header.class, y -&gt; ne(y.name()), y -&gt; n.set(y.name()));</span>
+<span class="source-line-no">141</span><span id="line-141">      x.forEachAnnotation(Header.class, y -&gt; ine(y.value()), y -&gt; n.set(y.value()));</span>
+<span class="source-line-no">142</span><span id="line-142">      x.forEachAnnotation(Header.class, y -&gt; ine(y.name()), y -&gt; n.set(y.name()));</span>
 <span class="source-line-no">143</span><span id="line-143">      if (n.isEmpty())</span>
 <span class="source-line-no">144</span><span id="line-144">         n.set(readPublicStaticStringField(x.inner(), "NAME"));</span>
 <span class="source-line-no">145</span><span id="line-145">      return n.orElse(null);</span>
@@ -160,8 +160,8 @@
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148">   private static final Function&lt;ClassMeta&lt;?&gt;,String&gt; QUERY_NAME_FUNCTION = x -&gt; {</span>
 <span class="source-line-no">149</span><span id="line-149">      var n = Holder.&lt;String&gt;empty();</span>
-<span class="source-line-no">150</span><span id="line-150">      x.forEachAnnotation(org.apache.juneau.http.Query.class, y -&gt; ne(y.value()), y -&gt; n.set(y.value()));</span>
-<span class="source-line-no">151</span><span id="line-151">      x.forEachAnnotation(org.apache.juneau.http.Query.class, y -&gt; ne(y.name()), y -&gt; n.set(y.name()));</span>
+<span class="source-line-no">150</span><span id="line-150">      x.forEachAnnotation(Query.class, y -&gt; ine(y.value()), y -&gt; n.set(y.value()));</span>
+<span class="source-line-no">151</span><span id="line-151">      x.forEachAnnotation(Query.class, y -&gt; ine(y.name()), y -&gt; n.set(y.name()));</span>
 <span class="source-line-no">152</span><span id="line-152">      if (n.isEmpty())</span>
 <span class="source-line-no">153</span><span id="line-153">         n.set(readPublicStaticStringField(x.inner(), "NAME"));</span>
 <span class="source-line-no">154</span><span id="line-154">      return n.orElse(null);</span>
@@ -169,8 +169,8 @@
 <span class="source-line-no">156</span><span id="line-156"></span>
 <span class="source-line-no">157</span><span id="line-157">   private static final Function&lt;ClassMeta&lt;?&gt;,String&gt; FORMDATA_NAME_FUNCTION = x -&gt; {</span>
 <span class="source-line-no">158</span><span id="line-158">      var n = Holder.&lt;String&gt;empty();</span>
-<span class="source-line-no">159</span><span id="line-159">      x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -&gt; ne(y.value()), y -&gt; n.set(y.value()));</span>
-<span class="source-line-no">160</span><span id="line-160">      x.forEachAnnotation(org.apache.juneau.http.FormData.class, y -&gt; ne(y.name()), y -&gt; n.set(y.name()));</span>
+<span class="source-line-no">159</span><span id="line-159">      x.forEachAnnotation(FormData.class, y -&gt; ine(y.value()), y -&gt; n.set(y.value()));</span>
+<span class="source-line-no">160</span><span id="line-160">      x.forEachAnnotation(FormData.class, y -&gt; ine(y.name()), y -&gt; n.set(y.name()));</span>
 <span class="source-line-no">161</span><span id="line-161">      if (n.isEmpty())</span>
 <span class="source-line-no">162</span><span id="line-162">         n.set(readPublicStaticStringField(x.inner(), "NAME"));</span>
 <span class="source-line-no">163</span><span id="line-163">      return n.orElse(null);</span>
@@ -178,8 +178,8 @@
 <span class="source-line-no">165</span><span id="line-165"></span>
 <span class="source-line-no">166</span><span id="line-166">   private static final Function&lt;ClassMeta&lt;?&gt;,String&gt; PATH_NAME_FUNCTION = x -&gt; {</span>
 <span class="source-line-no">167</span><span id="line-167">      var n = Holder.&lt;String&gt;empty();</span>
-<span class="source-line-no">168</span><span id="line-168">      x.forEachAnnotation(org.apache.juneau.http.Path.class, y -&gt; ne(y.value()), y -&gt; n.set(y.value()));</span>
-<span class="source-line-no">169</span><span id="line-169">      x.forEachAnnotation(org.apache.juneau.http.Path.class, y -&gt; ne(y.name()), y -&gt; n.set(y.name()));</span>
+<span class="source-line-no">168</span><span id="line-168">      x.forEachAnnotation(Path.class, y -&gt; ine(y.value()), y -&gt; n.set(y.value()));</span>
+<span class="source-line-no">169</span><span id="line-169">      x.forEachAnnotation(Path.class, y -&gt; ine(y.name()), y -&gt; n.set(y.name()));</span>
 <span class="source-line-no">170</span><span id="line-170">      if (n.isEmpty())</span>
 <span class="source-line-no">171</span><span id="line-171">         n.set(readPublicStaticStringField(x.inner(), "NAME"));</span>
 <span class="source-line-no">172</span><span id="line-172">      return n.orElse(null);</span>
@@ -212,7 +212,7 @@
 <span class="source-line-no">199</span><span id="line-199">         case HEADER -&gt; type.getProperty("HttpPart.header.name", HEADER_NAME_FUNCTION);</span>
 <span class="source-line-no">200</span><span id="line-200">         case PATH -&gt; type.getProperty("HttpPart.path.name", PATH_NAME_FUNCTION);</span>
 <span class="source-line-no">201</span><span id="line-201">         case QUERY -&gt; type.getProperty("HttpPart.query.name", QUERY_NAME_FUNCTION);</span>
-<span class="source-line-no">202</span><span id="line-202">         default -&gt; opte();</span>
+<span class="source-line-no">202</span><span id="line-202">         default -&gt; oe();</span>
 <span class="source-line-no">203</span><span id="line-203">      };</span>
 <span class="source-line-no">204</span><span id="line-204">   }</span>
 <span class="source-line-no">205</span><span id="line-205">}</span>

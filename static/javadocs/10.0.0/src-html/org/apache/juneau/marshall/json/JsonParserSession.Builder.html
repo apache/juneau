@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.lang.StateEnum.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics"&gt;JSON Basics&lt;/a&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport"&gt;JSON Basics&lt;/a&gt;</span>
 <span class="source-line-no">047</span><span id="line-47"></span>
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> */</span>
@@ -184,7 +184,7 @@
 <span class="source-line-no">171</span><span id="line-171">         sType = eType;</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
 <span class="source-line-no">173</span><span id="line-173">      if (sType.isOptional())</span>
-<span class="source-line-no">174</span><span id="line-174">         return (T)opt(parseAnything(eType.getElementType(), r, outer, pMeta));</span>
+<span class="source-line-no">174</span><span id="line-174">         return (T)o(parseAnything(eType.getElementType(), r, outer, pMeta));</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
 <span class="source-line-no">176</span><span id="line-176">      setCurrentClass(sType);</span>
 <span class="source-line-no">177</span><span id="line-177">      var wrapperAttr = getJsonClassMeta(sType).getWrapperAttr();</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285">   private Boolean parseBoolean(ParserReader r) throws IOException, ParseException {</span>
 <span class="source-line-no">286</span><span id="line-286">      int c = r.peek();</span>
 <span class="source-line-no">287</span><span id="line-287">      if (c == '\'' || c == '"')</span>
-<span class="source-line-no">288</span><span id="line-288">         return bool(parseString(r));</span>
+<span class="source-line-no">288</span><span id="line-288">         return b(parseString(r));</span>
 <span class="source-line-no">289</span><span id="line-289">      if (c == 't') {</span>
 <span class="source-line-no">290</span><span id="line-290">         parseKeyword("true", r);</span>
 <span class="source-line-no">291</span><span id="line-291">         return Boolean.TRUE;</span>
@@ -832,7 +832,7 @@
 <span class="source-line-no">819</span><span id="line-819"></span>
 <span class="source-line-no">820</span><span id="line-820">   /**</span>
 <span class="source-line-no">821</span><span id="line-821">    * Opens a low-level pull-parser cursor over a JSON document, bound to this session's live</span>
-<span class="source-line-no">822</span><span id="line-822">    * {@link org.apache.juneau.commons.bean.BeanSession}/{@link org.apache.juneau.marshall.MarshallingContext}.</span>
+<span class="source-line-no">822</span><span id="line-822">    * {@link BeanSession}/{@link MarshallingContext}.</span>
 <span class="source-line-no">823</span><span id="line-823">    *</span>
 <span class="source-line-no">824</span><span id="line-824">    * &lt;p&gt;</span>
 <span class="source-line-no">825</span><span id="line-825">    * The cursor is purely structural &amp;mdash; object swaps and {@code @Schema} annotations are not</span>

@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/BeanSession.html" title="interface in org.apache.juneau.commons.bean">BeanSession</a></code>, <code><a href="../../commons/conversion/ConverterSession.html" title="interface in org.apache.juneau.commons.conversion">ConverterSession</a></code>, <code><a href="../stream/ArrayRecordWritable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordWritable</a></code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code>, <code><a href="../stream/TokenWritable.html" title="interface in org.apache.juneau.marshall.stream">TokenWritable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-42">JcsSerializerSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-41">JcsSerializerSession</a></span>
 <span class="extends-implements">extends <a href="../json/JsonSerializerSession.html" title="class in org.apache.juneau.marshall.json">JsonSerializerSession</a></span></div>
 <div class="block">Session object for <a href="JcsSerializer.html" title="class in org.apache.juneau.marshall.jcs"><code>JcsSerializer</code></a> that produces RFC 8785 canonical JSON.
 
@@ -258,7 +258,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.jcs.JcsSerializerSession.Builder)">
 <h3>JcsSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-90">JcsSerializerSession</a></span><wbr><span class="parameters">(<a href="JcsSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.jcs">JcsSerializerSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-89">JcsSerializerSession</a></span><wbr><span class="parameters">(<a href="JcsSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.jcs">JcsSerializerSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -277,7 +277,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.jcs.JcsSerializer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JcsSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.jcs">JcsSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-81">create</a></span><wbr><span class="parameters">(<a href="JcsSerializer.html" title="class in org.apache.juneau.marshall.jcs">JcsSerializer</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JcsSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.jcs">JcsSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-80">create</a></span><wbr><span class="parameters">(<a href="JcsSerializer.html" title="class in org.apache.juneau.marshall.jcs">JcsSerializer</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toEcmaNumber(java.lang.Number)">
 <h3>toEcmaNumber</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-101">toEcmaNumber</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;n)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-100">toEcmaNumber</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;n)</span></div>
 <div class="block">Converts a number to ECMAScript-compatible JSON string per RFC 8785.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -306,7 +306,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="jcsCompare(java.lang.String,java.lang.String)">
 <h3>jcsCompare</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-211">jcsCompare</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;a,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-210">jcsCompare</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;a,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;b)</span></div>
 <div class="block">JCS key comparison: UTF-16 code unit ordering per RFC 8785.
 
@@ -324,7 +324,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializeTokens(java.lang.Object)">
 <h3>serializeTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-235">serializeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-234">serializeTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                             throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Opens a low-level push generator that emits raw JSON (NOT canonical JCS) one structural
  event at a time, with the <a href="../stream/TokenWriter.html#object(java.lang.Object)"><code>TokenWriter.object(Object)</code></a> POJO bridge disabled (the
@@ -347,7 +347,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializeRecords(java.lang.Object)">
 <h3>serializeRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-266">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-265">serializeRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
                               throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Returns a record writer that emits canonical JCS for each value passed to
  <a href="../stream/RecordWriter.html#write(java.lang.Object)"><code>write(...)</code></a> (delegates to this session's
@@ -365,7 +365,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-271">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-270">isRecordStreaming</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/RecordWritable.html#isRecordStreaming()">RecordWritable</a></code></span></div>
 <div class="block">Streaming-quality signal queryable <em>before</em> opening a cursor.</div>
 <dl class="notes">
@@ -379,7 +379,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getJsonWriter(org.apache.juneau.marshall.serializer.SerializerPipe)">
 <h3>getJsonWriter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-274">getJsonWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-273">getJsonWriter</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../json/JsonSerializerSession.html#getJsonWriter(org.apache.juneau.marshall.serializer.SerializerPipe)">JsonSerializerSession</a></code></span></div>
 <div class="block">Converts the specified output target object to an <a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json"><code>JsonWriter</code></a>.</div>
 <dl class="notes">
@@ -395,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializeMap(org.apache.juneau.marshall.json.JsonWriter,java.util.Map,org.apache.juneau.marshall.ClassMeta)">
 <h3>serializeMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-284">serializeMap</a></span><wbr><span class="parameters">(<a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-283">serializeMap</a></span><wbr><span class="parameters">(<a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&nbsp;m,
  <a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;type)</span>
                                  throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
@@ -410,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serializeBeanMap(org.apache.juneau.marshall.json.JsonWriter,org.apache.juneau.commons.bean.BeanMap,java.lang.String)">
 <h3>serializeBeanMap</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-333">serializeBeanMap</a></span><wbr><span class="parameters">(<a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../serializer/SerializerWriter.html" title="class in org.apache.juneau.marshall.serializer">SerializerWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/jcs/JcsSerializerSession.html#line-332">serializeBeanMap</a></span><wbr><span class="parameters">(<a href="../json/JsonWriter.html" title="class in org.apache.juneau.marshall.json">JsonWriter</a>&nbsp;out,
  <a href="../../commons/bean/BeanMap.html" title="class in org.apache.juneau.commons.bean">BeanMap</a>&lt;?&gt;&nbsp;m,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;typeName)</span>
                                      throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>

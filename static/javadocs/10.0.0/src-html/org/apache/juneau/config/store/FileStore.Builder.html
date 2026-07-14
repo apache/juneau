@@ -32,11 +32,11 @@
 <span class="source-line-no">019</span><span id="line-19">import static java.nio.file.StandardOpenOption.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.nio.file.StandardWatchEventKinds.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.FileUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.FileUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">027</span><span id="line-27"></span>
 <span class="source-line-no">028</span><span id="line-28">import java.io.*;</span>
 <span class="source-line-no">029</span><span id="line-29">import java.nio.*;</span>
@@ -346,281 +346,283 @@
 <span class="source-line-no">333</span><span id="line-333">            }</span>
 <span class="source-line-no">334</span><span id="line-334">         } catch (@SuppressWarnings("unused") InterruptedException e) {</span>
 <span class="source-line-no">335</span><span id="line-335">            Thread.currentThread().interrupt();</span>
-<span class="source-line-no">336</span><span id="line-336">         } catch (Exception e) {</span>
-<span class="source-line-no">337</span><span id="line-337">            throw toRex(e); // HTT - unexpected exception from watchService.take()</span>
-<span class="source-line-no">338</span><span id="line-338">         }</span>
-<span class="source-line-no">339</span><span id="line-339">      }</span>
-<span class="source-line-no">340</span><span id="line-340"></span>
-<span class="source-line-no">341</span><span id="line-341">      @SuppressWarnings({</span>
-<span class="source-line-no">342</span><span id="line-342">         "java:S5738" // com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.</span>
-<span class="source-line-no">343</span><span id="line-343">      })</span>
-<span class="source-line-no">344</span><span id="line-344">      private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {</span>
-<span class="source-line-no">345</span><span id="line-345">         try {</span>
-<span class="source-line-no">346</span><span id="line-346">            return switch (s) {</span>
-<span class="source-line-no">347</span><span id="line-347">               case LOW -&gt; com.sun.nio.file.SensitivityWatchEventModifier.LOW;</span>
-<span class="source-line-no">348</span><span id="line-348">               case MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;</span>
-<span class="source-line-no">349</span><span id="line-349">               case HIGH -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;</span>
-<span class="source-line-no">350</span><span id="line-350">            };</span>
-<span class="source-line-no">351</span><span id="line-351">         } catch (@SuppressWarnings("unused") Exception e) {</span>
-<span class="source-line-no">352</span><span id="line-352">            /* Ignore */ // HTT - SensitivityWatchEventModifier exists on all supported JVMs</span>
-<span class="source-line-no">353</span><span id="line-353">         }</span>
-<span class="source-line-no">354</span><span id="line-354">         return null; // HTT - return null is only reached if SensitivityWatchEventModifier is unavailable</span>
-<span class="source-line-no">355</span><span id="line-355">      }</span>
-<span class="source-line-no">356</span><span id="line-356">   }</span>
-<span class="source-line-no">357</span><span id="line-357"></span>
-<span class="source-line-no">358</span><span id="line-358">   /** Default file store, all default values.*/</span>
-<span class="source-line-no">359</span><span id="line-359">   public static final FileStore DEFAULT = FileStore.create().build();</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   /**</span>
-<span class="source-line-no">362</span><span id="line-362">    * Creates a new builder for this object.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * @return A new builder.</span>
-<span class="source-line-no">365</span><span id="line-365">    */</span>
-<span class="source-line-no">366</span><span id="line-366">   public static Builder create() {</span>
-<span class="source-line-no">367</span><span id="line-367">      return new Builder();</span>
-<span class="source-line-no">368</span><span id="line-368">   }</span>
-<span class="source-line-no">369</span><span id="line-369"></span>
-<span class="source-line-no">370</span><span id="line-370">   protected final boolean enableWatcher;</span>
-<span class="source-line-no">371</span><span id="line-371">   protected final boolean updateOnWrite;</span>
-<span class="source-line-no">372</span><span id="line-372">   protected final Charset charset;</span>
-<span class="source-line-no">373</span><span id="line-373">   protected final String directory;</span>
-<span class="source-line-no">374</span><span id="line-374">   protected final String extensions;</span>
-<span class="source-line-no">375</span><span id="line-375">   protected final WatcherSensitivity watcherSensitivity;</span>
-<span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">   private final ConcurrentHashMap&lt;String,String&gt; cache = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">378</span><span id="line-378">   private final ConcurrentHashMap&lt;String,String&gt; nameCache = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">379</span><span id="line-379">   private final File dir;</span>
-<span class="source-line-no">380</span><span id="line-380">   private final String[] exts;</span>
-<span class="source-line-no">381</span><span id="line-381">   private final WatcherThread watcher;</span>
-<span class="source-line-no">382</span><span id="line-382"></span>
-<span class="source-line-no">383</span><span id="line-383">   /**</span>
-<span class="source-line-no">384</span><span id="line-384">    * Constructor.</span>
-<span class="source-line-no">385</span><span id="line-385">    *</span>
-<span class="source-line-no">386</span><span id="line-386">    * @param builder The builder for this object.</span>
-<span class="source-line-no">387</span><span id="line-387">    */</span>
-<span class="source-line-no">388</span><span id="line-388">   public FileStore(Builder builder) {</span>
-<span class="source-line-no">389</span><span id="line-389">      super(builder);</span>
-<span class="source-line-no">390</span><span id="line-390">      directory = builder.directory;</span>
-<span class="source-line-no">391</span><span id="line-391">      extensions = builder.extensions;</span>
-<span class="source-line-no">392</span><span id="line-392">      charset = builder.charset;</span>
-<span class="source-line-no">393</span><span id="line-393">      enableWatcher = builder.enableWatcher;</span>
-<span class="source-line-no">394</span><span id="line-394">      updateOnWrite = builder.updateOnWrite;</span>
-<span class="source-line-no">395</span><span id="line-395">      watcherSensitivity = builder.watcherSensitivity;</span>
-<span class="source-line-no">396</span><span id="line-396">      try {</span>
-<span class="source-line-no">397</span><span id="line-397">         dir = new File(directory).getCanonicalFile();</span>
-<span class="source-line-no">398</span><span id="line-398">         dir.mkdirs();</span>
-<span class="source-line-no">399</span><span id="line-399">         exts = split(extensions).toArray(String[]::new);</span>
-<span class="source-line-no">400</span><span id="line-400">         watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;</span>
-<span class="source-line-no">401</span><span id="line-401">         if (nn(watcher))</span>
-<span class="source-line-no">402</span><span id="line-402">            watcher.start();</span>
-<span class="source-line-no">403</span><span id="line-403">      } catch (Exception e) {</span>
-<span class="source-line-no">404</span><span id="line-404">         throw toRex(e); // HTT - getCanonicalFile() IOException is not normally triggered</span>
-<span class="source-line-no">405</span><span id="line-405">      }</span>
-<span class="source-line-no">406</span><span id="line-406">   }</span>
-<span class="source-line-no">407</span><span id="line-407"></span>
-<span class="source-line-no">408</span><span id="line-408">   @Override /* Overridden from Closeable */</span>
-<span class="source-line-no">409</span><span id="line-409">   public synchronized void close() {</span>
-<span class="source-line-no">410</span><span id="line-410">      if (nn(watcher))</span>
-<span class="source-line-no">411</span><span id="line-411">         watcher.interrupt();</span>
-<span class="source-line-no">412</span><span id="line-412">   }</span>
-<span class="source-line-no">413</span><span id="line-413"></span>
-<span class="source-line-no">414</span><span id="line-414">   @Override /* Overridden from Context */</span>
-<span class="source-line-no">415</span><span id="line-415">   public Builder copy() {</span>
-<span class="source-line-no">416</span><span id="line-416">      return new Builder(this);</span>
-<span class="source-line-no">417</span><span id="line-417">   }</span>
-<span class="source-line-no">418</span><span id="line-418"></span>
-<span class="source-line-no">419</span><span id="line-419">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">420</span><span id="line-420">   public synchronized boolean exists(String name) {</span>
-<span class="source-line-no">421</span><span id="line-421">      return Files.exists(resolveFile(name));</span>
-<span class="source-line-no">422</span><span id="line-422">   }</span>
-<span class="source-line-no">423</span><span id="line-423"></span>
-<span class="source-line-no">424</span><span id="line-424">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">425</span><span id="line-425">   public synchronized String read(String name) throws IOException {</span>
-<span class="source-line-no">426</span><span id="line-426">      name = resolveName(name);</span>
-<span class="source-line-no">427</span><span id="line-427"></span>
-<span class="source-line-no">428</span><span id="line-428">      var p = resolveFile(name);</span>
-<span class="source-line-no">429</span><span id="line-429">      name = p.getFileName().toString();</span>
-<span class="source-line-no">430</span><span id="line-430"></span>
-<span class="source-line-no">431</span><span id="line-431">      var s = cache.get(name);</span>
-<span class="source-line-no">432</span><span id="line-432">      if (nn(s))</span>
-<span class="source-line-no">433</span><span id="line-433">         return s;</span>
-<span class="source-line-no">434</span><span id="line-434"></span>
-<span class="source-line-no">435</span><span id="line-435">      dir.mkdirs();</span>
+<span class="source-line-no">336</span><span id="line-336">         } catch (@SuppressWarnings("unused") ClosedWatchServiceException e) {</span>
+<span class="source-line-no">337</span><span id="line-337">            // Expected on shutdown: interrupt() closes the WatchService while take() is blocked in this loop.</span>
+<span class="source-line-no">338</span><span id="line-338">         } catch (Exception e) {</span>
+<span class="source-line-no">339</span><span id="line-339">            throw toRex(e); // HTT - unexpected exception from watchService.take()</span>
+<span class="source-line-no">340</span><span id="line-340">         }</span>
+<span class="source-line-no">341</span><span id="line-341">      }</span>
+<span class="source-line-no">342</span><span id="line-342"></span>
+<span class="source-line-no">343</span><span id="line-343">      @SuppressWarnings({</span>
+<span class="source-line-no">344</span><span id="line-344">         "java:S5738" // com.sun.nio.file.SensitivityWatchEventModifier is deprecated-for-removal but has no public JDK replacement for WatchService poll sensitivity; required for the watcher-sensitivity feature on JVMs that still honor it.</span>
+<span class="source-line-no">345</span><span id="line-345">      })</span>
+<span class="source-line-no">346</span><span id="line-346">      private WatchEvent.Modifier lookupModifier(WatcherSensitivity s) {</span>
+<span class="source-line-no">347</span><span id="line-347">         try {</span>
+<span class="source-line-no">348</span><span id="line-348">            return switch (s) {</span>
+<span class="source-line-no">349</span><span id="line-349">               case LOW -&gt; com.sun.nio.file.SensitivityWatchEventModifier.LOW;</span>
+<span class="source-line-no">350</span><span id="line-350">               case MEDIUM -&gt; com.sun.nio.file.SensitivityWatchEventModifier.MEDIUM;</span>
+<span class="source-line-no">351</span><span id="line-351">               case HIGH -&gt; com.sun.nio.file.SensitivityWatchEventModifier.HIGH;</span>
+<span class="source-line-no">352</span><span id="line-352">            };</span>
+<span class="source-line-no">353</span><span id="line-353">         } catch (@SuppressWarnings("unused") Exception e) {</span>
+<span class="source-line-no">354</span><span id="line-354">            /* Ignore */ // HTT - SensitivityWatchEventModifier exists on all supported JVMs</span>
+<span class="source-line-no">355</span><span id="line-355">         }</span>
+<span class="source-line-no">356</span><span id="line-356">         return null; // HTT - return null is only reached if SensitivityWatchEventModifier is unavailable</span>
+<span class="source-line-no">357</span><span id="line-357">      }</span>
+<span class="source-line-no">358</span><span id="line-358">   }</span>
+<span class="source-line-no">359</span><span id="line-359"></span>
+<span class="source-line-no">360</span><span id="line-360">   /** Default file store, all default values.*/</span>
+<span class="source-line-no">361</span><span id="line-361">   public static final FileStore DEFAULT = FileStore.create().build();</span>
+<span class="source-line-no">362</span><span id="line-362"></span>
+<span class="source-line-no">363</span><span id="line-363">   /**</span>
+<span class="source-line-no">364</span><span id="line-364">    * Creates a new builder for this object.</span>
+<span class="source-line-no">365</span><span id="line-365">    *</span>
+<span class="source-line-no">366</span><span id="line-366">    * @return A new builder.</span>
+<span class="source-line-no">367</span><span id="line-367">    */</span>
+<span class="source-line-no">368</span><span id="line-368">   public static Builder create() {</span>
+<span class="source-line-no">369</span><span id="line-369">      return new Builder();</span>
+<span class="source-line-no">370</span><span id="line-370">   }</span>
+<span class="source-line-no">371</span><span id="line-371"></span>
+<span class="source-line-no">372</span><span id="line-372">   protected final boolean enableWatcher;</span>
+<span class="source-line-no">373</span><span id="line-373">   protected final boolean updateOnWrite;</span>
+<span class="source-line-no">374</span><span id="line-374">   protected final Charset charset;</span>
+<span class="source-line-no">375</span><span id="line-375">   protected final String directory;</span>
+<span class="source-line-no">376</span><span id="line-376">   protected final String extensions;</span>
+<span class="source-line-no">377</span><span id="line-377">   protected final WatcherSensitivity watcherSensitivity;</span>
+<span class="source-line-no">378</span><span id="line-378"></span>
+<span class="source-line-no">379</span><span id="line-379">   private final ConcurrentHashMap&lt;String,String&gt; cache = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">380</span><span id="line-380">   private final ConcurrentHashMap&lt;String,String&gt; nameCache = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">381</span><span id="line-381">   private final File dir;</span>
+<span class="source-line-no">382</span><span id="line-382">   private final String[] exts;</span>
+<span class="source-line-no">383</span><span id="line-383">   private final WatcherThread watcher;</span>
+<span class="source-line-no">384</span><span id="line-384"></span>
+<span class="source-line-no">385</span><span id="line-385">   /**</span>
+<span class="source-line-no">386</span><span id="line-386">    * Constructor.</span>
+<span class="source-line-no">387</span><span id="line-387">    *</span>
+<span class="source-line-no">388</span><span id="line-388">    * @param builder The builder for this object.</span>
+<span class="source-line-no">389</span><span id="line-389">    */</span>
+<span class="source-line-no">390</span><span id="line-390">   public FileStore(Builder builder) {</span>
+<span class="source-line-no">391</span><span id="line-391">      super(builder);</span>
+<span class="source-line-no">392</span><span id="line-392">      directory = builder.directory;</span>
+<span class="source-line-no">393</span><span id="line-393">      extensions = builder.extensions;</span>
+<span class="source-line-no">394</span><span id="line-394">      charset = builder.charset;</span>
+<span class="source-line-no">395</span><span id="line-395">      enableWatcher = builder.enableWatcher;</span>
+<span class="source-line-no">396</span><span id="line-396">      updateOnWrite = builder.updateOnWrite;</span>
+<span class="source-line-no">397</span><span id="line-397">      watcherSensitivity = builder.watcherSensitivity;</span>
+<span class="source-line-no">398</span><span id="line-398">      try {</span>
+<span class="source-line-no">399</span><span id="line-399">         dir = new File(directory).getCanonicalFile();</span>
+<span class="source-line-no">400</span><span id="line-400">         dir.mkdirs();</span>
+<span class="source-line-no">401</span><span id="line-401">         exts = split(extensions).toArray(String[]::new);</span>
+<span class="source-line-no">402</span><span id="line-402">         watcher = enableWatcher ? new WatcherThread(dir, watcherSensitivity) : null;</span>
+<span class="source-line-no">403</span><span id="line-403">         if (nn(watcher))</span>
+<span class="source-line-no">404</span><span id="line-404">            watcher.start();</span>
+<span class="source-line-no">405</span><span id="line-405">      } catch (Exception e) {</span>
+<span class="source-line-no">406</span><span id="line-406">         throw toRex(e); // HTT - getCanonicalFile() IOException is not normally triggered</span>
+<span class="source-line-no">407</span><span id="line-407">      }</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
+<span class="source-line-no">409</span><span id="line-409"></span>
+<span class="source-line-no">410</span><span id="line-410">   @Override /* Overridden from Closeable */</span>
+<span class="source-line-no">411</span><span id="line-411">   public synchronized void close() {</span>
+<span class="source-line-no">412</span><span id="line-412">      if (nn(watcher))</span>
+<span class="source-line-no">413</span><span id="line-413">         watcher.interrupt();</span>
+<span class="source-line-no">414</span><span id="line-414">   }</span>
+<span class="source-line-no">415</span><span id="line-415"></span>
+<span class="source-line-no">416</span><span id="line-416">   @Override /* Overridden from Context */</span>
+<span class="source-line-no">417</span><span id="line-417">   public Builder copy() {</span>
+<span class="source-line-no">418</span><span id="line-418">      return new Builder(this);</span>
+<span class="source-line-no">419</span><span id="line-419">   }</span>
+<span class="source-line-no">420</span><span id="line-420"></span>
+<span class="source-line-no">421</span><span id="line-421">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">422</span><span id="line-422">   public synchronized boolean exists(String name) {</span>
+<span class="source-line-no">423</span><span id="line-423">      return Files.exists(resolveFile(name));</span>
+<span class="source-line-no">424</span><span id="line-424">   }</span>
+<span class="source-line-no">425</span><span id="line-425"></span>
+<span class="source-line-no">426</span><span id="line-426">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">427</span><span id="line-427">   public synchronized String read(String name) throws IOException {</span>
+<span class="source-line-no">428</span><span id="line-428">      name = resolveName(name);</span>
+<span class="source-line-no">429</span><span id="line-429"></span>
+<span class="source-line-no">430</span><span id="line-430">      var p = resolveFile(name);</span>
+<span class="source-line-no">431</span><span id="line-431">      name = p.getFileName().toString();</span>
+<span class="source-line-no">432</span><span id="line-432"></span>
+<span class="source-line-no">433</span><span id="line-433">      var s = cache.get(name);</span>
+<span class="source-line-no">434</span><span id="line-434">      if (nn(s))</span>
+<span class="source-line-no">435</span><span id="line-435">         return s;</span>
 <span class="source-line-no">436</span><span id="line-436"></span>
-<span class="source-line-no">437</span><span id="line-437">      // If file doesn't exist, don't trigger creation.</span>
-<span class="source-line-no">438</span><span id="line-438">      if (! Files.exists(p))</span>
-<span class="source-line-no">439</span><span id="line-439">         return "";</span>
-<span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">      var isWritable = isWritable(p);</span>
-<span class="source-line-no">442</span><span id="line-442">      var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup</span>
-<span class="source-line-no">443</span><span id="line-443">      try (var fc = FileChannel.open(p, oo)) {</span>
-<span class="source-line-no">444</span><span id="line-444">         try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file</span>
-<span class="source-line-no">445</span><span id="line-445">            var buf = ByteBuffer.allocate(1024);</span>
-<span class="source-line-no">446</span><span id="line-446">            var sb = new StringBuilder();</span>
-<span class="source-line-no">447</span><span id="line-447">            while (fc.read(buf) != -1) {</span>
-<span class="source-line-no">448</span><span id="line-448">               sb.append(charset.decode((buf.flip()))); // Fixes Java 11 issue involving overridden flip method.</span>
-<span class="source-line-no">449</span><span id="line-449">               buf.clear();</span>
-<span class="source-line-no">450</span><span id="line-450">            }</span>
-<span class="source-line-no">451</span><span id="line-451">            s = sb.toString();</span>
-<span class="source-line-no">452</span><span id="line-452">            cache.put(name, s);</span>
-<span class="source-line-no">453</span><span id="line-453">         }</span>
-<span class="source-line-no">454</span><span id="line-454">      }</span>
-<span class="source-line-no">455</span><span id="line-455"></span>
-<span class="source-line-no">456</span><span id="line-456">      return cache.get(name);</span>
-<span class="source-line-no">457</span><span id="line-457">   }</span>
-<span class="source-line-no">458</span><span id="line-458"></span>
-<span class="source-line-no">459</span><span id="line-459">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">460</span><span id="line-460">   public synchronized FileStore update(String name, String newContents) {</span>
-<span class="source-line-no">461</span><span id="line-461">      cache.put(name, newContents);</span>
-<span class="source-line-no">462</span><span id="line-462">      super.update(name, newContents);</span>
-<span class="source-line-no">463</span><span id="line-463">      return this;</span>
-<span class="source-line-no">464</span><span id="line-464">   }</span>
-<span class="source-line-no">465</span><span id="line-465"></span>
-<span class="source-line-no">466</span><span id="line-466">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">467</span><span id="line-467">   @SuppressWarnings({</span>
-<span class="source-line-no">468</span><span id="line-468">      "java:S3776" // Cognitive complexity acceptable for file writing logic</span>
-<span class="source-line-no">469</span><span id="line-469">   })</span>
-<span class="source-line-no">470</span><span id="line-470">   public synchronized String write(String name, String expectedContents, String newContents) throws IOException {</span>
-<span class="source-line-no">471</span><span id="line-471">      name = resolveName(name);</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">      // This is a no-op.</span>
-<span class="source-line-no">474</span><span id="line-474">      if (eq(expectedContents, newContents))</span>
-<span class="source-line-no">475</span><span id="line-475">         return null;</span>
-<span class="source-line-no">476</span><span id="line-476"></span>
-<span class="source-line-no">477</span><span id="line-477">      dir.mkdirs();</span>
+<span class="source-line-no">437</span><span id="line-437">      dir.mkdirs();</span>
+<span class="source-line-no">438</span><span id="line-438"></span>
+<span class="source-line-no">439</span><span id="line-439">      // If file doesn't exist, don't trigger creation.</span>
+<span class="source-line-no">440</span><span id="line-440">      if (! Files.exists(p))</span>
+<span class="source-line-no">441</span><span id="line-441">         return "";</span>
+<span class="source-line-no">442</span><span id="line-442"></span>
+<span class="source-line-no">443</span><span id="line-443">      var isWritable = isWritable(p);</span>
+<span class="source-line-no">444</span><span id="line-444">      var oo = isWritable ? a(READ, WRITE, CREATE) : a(READ); // HTT - read-only files require special OS setup</span>
+<span class="source-line-no">445</span><span id="line-445">      try (var fc = FileChannel.open(p, oo)) {</span>
+<span class="source-line-no">446</span><span id="line-446">         try (var lock = isWritable ? fc.lock() : null) { // HTT - null lock path requires read-only file</span>
+<span class="source-line-no">447</span><span id="line-447">            var buf = ByteBuffer.allocate(1024);</span>
+<span class="source-line-no">448</span><span id="line-448">            var sb = new StringBuilder();</span>
+<span class="source-line-no">449</span><span id="line-449">            while (fc.read(buf) != -1) {</span>
+<span class="source-line-no">450</span><span id="line-450">               sb.append(charset.decode((buf.flip()))); // Fixes Java 11 issue involving overridden flip method.</span>
+<span class="source-line-no">451</span><span id="line-451">               buf.clear();</span>
+<span class="source-line-no">452</span><span id="line-452">            }</span>
+<span class="source-line-no">453</span><span id="line-453">            s = sb.toString();</span>
+<span class="source-line-no">454</span><span id="line-454">            cache.put(name, s);</span>
+<span class="source-line-no">455</span><span id="line-455">         }</span>
+<span class="source-line-no">456</span><span id="line-456">      }</span>
+<span class="source-line-no">457</span><span id="line-457"></span>
+<span class="source-line-no">458</span><span id="line-458">      return cache.get(name);</span>
+<span class="source-line-no">459</span><span id="line-459">   }</span>
+<span class="source-line-no">460</span><span id="line-460"></span>
+<span class="source-line-no">461</span><span id="line-461">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">462</span><span id="line-462">   public synchronized FileStore update(String name, String newContents) {</span>
+<span class="source-line-no">463</span><span id="line-463">      cache.put(name, newContents);</span>
+<span class="source-line-no">464</span><span id="line-464">      super.update(name, newContents);</span>
+<span class="source-line-no">465</span><span id="line-465">      return this;</span>
+<span class="source-line-no">466</span><span id="line-466">   }</span>
+<span class="source-line-no">467</span><span id="line-467"></span>
+<span class="source-line-no">468</span><span id="line-468">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">469</span><span id="line-469">   @SuppressWarnings({</span>
+<span class="source-line-no">470</span><span id="line-470">      "java:S3776" // Cognitive complexity acceptable for file writing logic</span>
+<span class="source-line-no">471</span><span id="line-471">   })</span>
+<span class="source-line-no">472</span><span id="line-472">   public synchronized String write(String name, String expectedContents, String newContents) throws IOException {</span>
+<span class="source-line-no">473</span><span id="line-473">      name = resolveName(name);</span>
+<span class="source-line-no">474</span><span id="line-474"></span>
+<span class="source-line-no">475</span><span id="line-475">      // This is a no-op.</span>
+<span class="source-line-no">476</span><span id="line-476">      if (eq(expectedContents, newContents))</span>
+<span class="source-line-no">477</span><span id="line-477">         return null;</span>
 <span class="source-line-no">478</span><span id="line-478"></span>
-<span class="source-line-no">479</span><span id="line-479">      var p = resolveFile(name);</span>
-<span class="source-line-no">480</span><span id="line-480">      name = p.getFileName().toString();</span>
-<span class="source-line-no">481</span><span id="line-481"></span>
-<span class="source-line-no">482</span><span id="line-482">      var exists = Files.exists(p);</span>
+<span class="source-line-no">479</span><span id="line-479">      dir.mkdirs();</span>
+<span class="source-line-no">480</span><span id="line-480"></span>
+<span class="source-line-no">481</span><span id="line-481">      var p = resolveFile(name);</span>
+<span class="source-line-no">482</span><span id="line-482">      name = p.getFileName().toString();</span>
 <span class="source-line-no">483</span><span id="line-483"></span>
-<span class="source-line-no">484</span><span id="line-484">      // Don't create the file if we're not going to match.</span>
-<span class="source-line-no">485</span><span id="line-485">      if ((! exists) &amp;&amp; ne(expectedContents))</span>
-<span class="source-line-no">486</span><span id="line-486">         return "";</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">      if (isWritable(p)) {</span>
-<span class="source-line-no">489</span><span id="line-489">         if (newContents == null)</span>
-<span class="source-line-no">490</span><span id="line-490">            Files.delete(p);</span>
-<span class="source-line-no">491</span><span id="line-491">         else {</span>
-<span class="source-line-no">492</span><span id="line-492">            try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {</span>
-<span class="source-line-no">493</span><span id="line-493">               try (var lock = fc.lock()) {</span>
-<span class="source-line-no">494</span><span id="line-494">                  var currentContents = "";</span>
-<span class="source-line-no">495</span><span id="line-495">                  if (exists) {</span>
-<span class="source-line-no">496</span><span id="line-496">                     var buf = ByteBuffer.allocate(1024);</span>
-<span class="source-line-no">497</span><span id="line-497">                     var sb = new StringBuilder();</span>
-<span class="source-line-no">498</span><span id="line-498">                     while (fc.read(buf) != -1) {</span>
-<span class="source-line-no">499</span><span id="line-499">                        sb.append(charset.decode(buf.flip()));</span>
-<span class="source-line-no">500</span><span id="line-500">                        buf.clear();</span>
-<span class="source-line-no">501</span><span id="line-501">                     }</span>
-<span class="source-line-no">502</span><span id="line-502">                     currentContents = sb.toString();</span>
-<span class="source-line-no">503</span><span id="line-503">                  }</span>
-<span class="source-line-no">504</span><span id="line-504">                  if (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {</span>
-<span class="source-line-no">505</span><span id="line-505">                     if (currentContents == null)</span>
-<span class="source-line-no">506</span><span id="line-506">                        cache.remove(name);</span>
-<span class="source-line-no">507</span><span id="line-507">                     else</span>
-<span class="source-line-no">508</span><span id="line-508">                        cache.put(name, currentContents);</span>
-<span class="source-line-no">509</span><span id="line-509">                     return currentContents;</span>
-<span class="source-line-no">510</span><span id="line-510">                  }</span>
-<span class="source-line-no">511</span><span id="line-511">                  fc.position(0);</span>
-<span class="source-line-no">512</span><span id="line-512">                  fc.write(charset.encode(newContents));</span>
-<span class="source-line-no">513</span><span id="line-513">               }</span>
-<span class="source-line-no">514</span><span id="line-514">            }</span>
-<span class="source-line-no">515</span><span id="line-515">         }</span>
-<span class="source-line-no">516</span><span id="line-516">      }</span>
-<span class="source-line-no">517</span><span id="line-517"></span>
-<span class="source-line-no">518</span><span id="line-518">      if (updateOnWrite)</span>
-<span class="source-line-no">519</span><span id="line-519">         update(name, newContents);</span>
-<span class="source-line-no">520</span><span id="line-520">      else</span>
-<span class="source-line-no">521</span><span id="line-521">         cache.remove(name);  // Invalidate the cache.</span>
-<span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">      return null;</span>
-<span class="source-line-no">524</span><span id="line-524">   }</span>
-<span class="source-line-no">525</span><span id="line-525"></span>
-<span class="source-line-no">526</span><span id="line-526">   private synchronized boolean isWritable(Path p) {</span>
-<span class="source-line-no">527</span><span id="line-527">      try {</span>
-<span class="source-line-no">528</span><span id="line-528">         if (! Files.exists(p)) {</span>
-<span class="source-line-no">529</span><span id="line-529">            Files.createDirectories(p.getParent());</span>
-<span class="source-line-no">530</span><span id="line-530">            if (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions</span>
-<span class="source-line-no">531</span><span id="line-531">               throw ioex("Could not create file: {0}", p);</span>
-<span class="source-line-no">532</span><span id="line-532">            }</span>
-<span class="source-line-no">533</span><span id="line-533">         }</span>
-<span class="source-line-no">534</span><span id="line-534">      } catch (@SuppressWarnings("unused") IOException e) {</span>
-<span class="source-line-no">535</span><span id="line-535">         return false; // HTT - IOException from createDirectories/createNewFile requires OS-level restrictions</span>
-<span class="source-line-no">536</span><span id="line-536">      }</span>
-<span class="source-line-no">537</span><span id="line-537">      return Files.isWritable(p);</span>
-<span class="source-line-no">538</span><span id="line-538">   }</span>
-<span class="source-line-no">539</span><span id="line-539"></span>
-<span class="source-line-no">540</span><span id="line-540">   private Path resolveFile(String name) {</span>
-<span class="source-line-no">541</span><span id="line-541">      return dir.toPath().resolve(resolveName(name));</span>
-<span class="source-line-no">542</span><span id="line-542">   }</span>
-<span class="source-line-no">543</span><span id="line-543"></span>
-<span class="source-line-no">544</span><span id="line-544">   /**</span>
-<span class="source-line-no">545</span><span id="line-545">    * Gets called when the watcher service on this store is triggered with a file system change.</span>
-<span class="source-line-no">546</span><span id="line-546">    *</span>
-<span class="source-line-no">547</span><span id="line-547">    * @param e The file system event.</span>
-<span class="source-line-no">548</span><span id="line-548">    * @throws IOException Thrown by underlying stream.</span>
-<span class="source-line-no">549</span><span id="line-549">    */</span>
-<span class="source-line-no">550</span><span id="line-550">   protected synchronized void onFileEvent(WatchEvent&lt;Path&gt; e) throws IOException {</span>
-<span class="source-line-no">551</span><span id="line-551">      var fn = e.context().getFileName().toString();</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">      var oldContents = cache.get(fn);</span>
-<span class="source-line-no">554</span><span id="line-554">      cache.remove(fn);</span>
-<span class="source-line-no">555</span><span id="line-555">      var newContents = read(fn);</span>
-<span class="source-line-no">556</span><span id="line-556"></span>
-<span class="source-line-no">557</span><span id="line-557">      if (neq(oldContents, newContents)) { // HTT - requires actual file system watcher event with content change</span>
-<span class="source-line-no">558</span><span id="line-558">         update(fn, newContents);</span>
-<span class="source-line-no">559</span><span id="line-559">      }</span>
-<span class="source-line-no">560</span><span id="line-560">   }</span>
-<span class="source-line-no">561</span><span id="line-561"></span>
-<span class="source-line-no">562</span><span id="line-562">   @Override /* Overridden from ConfigStore */</span>
-<span class="source-line-no">563</span><span id="line-563">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">564</span><span id="line-564">      return super.properties()</span>
-<span class="source-line-no">565</span><span id="line-565">         .a(PROP_charset, charset)</span>
-<span class="source-line-no">566</span><span id="line-566">         .a(PROP_extensions, extensions)</span>
-<span class="source-line-no">567</span><span id="line-567">         .a(PROP_updateOnWrite, updateOnWrite);</span>
-<span class="source-line-no">568</span><span id="line-568">   }</span>
-<span class="source-line-no">569</span><span id="line-569"></span>
-<span class="source-line-no">570</span><span id="line-570">   @Override</span>
-<span class="source-line-no">571</span><span id="line-571">   @SuppressWarnings({</span>
-<span class="source-line-no">572</span><span id="line-572">      "java:S3776" // Cognitive complexity acceptable for name resolution logic</span>
-<span class="source-line-no">573</span><span id="line-573">   })</span>
-<span class="source-line-no">574</span><span id="line-574">   protected String resolveName(String name) {</span>
-<span class="source-line-no">575</span><span id="line-575">      if (! nameCache.containsKey(name)) {</span>
-<span class="source-line-no">576</span><span id="line-576">         String n = null;</span>
-<span class="source-line-no">577</span><span id="line-577"></span>
-<span class="source-line-no">578</span><span id="line-578">         // Does file exist as-is?</span>
-<span class="source-line-no">579</span><span id="line-579">         if (fileExists(dir, name))</span>
-<span class="source-line-no">580</span><span id="line-580">            n = name;</span>
-<span class="source-line-no">581</span><span id="line-581"></span>
-<span class="source-line-no">582</span><span id="line-582">         // Does name already have an extension?</span>
-<span class="source-line-no">583</span><span id="line-583">         if (n == null) {</span>
-<span class="source-line-no">584</span><span id="line-584">            for (var ext : exts) {</span>
-<span class="source-line-no">585</span><span id="line-585">               if (hasExtension(name, ext)) {</span>
-<span class="source-line-no">586</span><span id="line-586">                  n = name;</span>
-<span class="source-line-no">587</span><span id="line-587">                  break;</span>
-<span class="source-line-no">588</span><span id="line-588">               }</span>
-<span class="source-line-no">589</span><span id="line-589">            }</span>
-<span class="source-line-no">590</span><span id="line-590">         }</span>
-<span class="source-line-no">591</span><span id="line-591"></span>
-<span class="source-line-no">592</span><span id="line-592">         // Find file with the correct extension.</span>
-<span class="source-line-no">593</span><span id="line-593">         if (n == null) {</span>
-<span class="source-line-no">594</span><span id="line-594">            for (var ext : exts) {</span>
-<span class="source-line-no">595</span><span id="line-595">               if (fileExists(dir, name + '.' + ext)) {</span>
-<span class="source-line-no">596</span><span id="line-596">                  n = name + '.' + ext;</span>
-<span class="source-line-no">597</span><span id="line-597">                  break;</span>
-<span class="source-line-no">598</span><span id="line-598">               }</span>
-<span class="source-line-no">599</span><span id="line-599">            }</span>
-<span class="source-line-no">600</span><span id="line-600">         }</span>
-<span class="source-line-no">601</span><span id="line-601"></span>
-<span class="source-line-no">602</span><span id="line-602">         // If file not found, use the default which is the name with the first extension.</span>
-<span class="source-line-no">603</span><span id="line-603">         if (n == null)</span>
-<span class="source-line-no">604</span><span id="line-604">            n = exts.length == 0 ? name : (name + "." + exts[0]);</span>
-<span class="source-line-no">605</span><span id="line-605"></span>
-<span class="source-line-no">606</span><span id="line-606">         nameCache.put(name, n);</span>
-<span class="source-line-no">607</span><span id="line-607">      }</span>
-<span class="source-line-no">608</span><span id="line-608">      return nameCache.get(name);</span>
-<span class="source-line-no">609</span><span id="line-609">   }</span>
-<span class="source-line-no">610</span><span id="line-610">}</span>
+<span class="source-line-no">484</span><span id="line-484">      var exists = Files.exists(p);</span>
+<span class="source-line-no">485</span><span id="line-485"></span>
+<span class="source-line-no">486</span><span id="line-486">      // Don't create the file if we're not going to match.</span>
+<span class="source-line-no">487</span><span id="line-487">      if ((! exists) &amp;&amp; ine(expectedContents))</span>
+<span class="source-line-no">488</span><span id="line-488">         return "";</span>
+<span class="source-line-no">489</span><span id="line-489"></span>
+<span class="source-line-no">490</span><span id="line-490">      if (isWritable(p)) {</span>
+<span class="source-line-no">491</span><span id="line-491">         if (newContents == null)</span>
+<span class="source-line-no">492</span><span id="line-492">            Files.delete(p);</span>
+<span class="source-line-no">493</span><span id="line-493">         else {</span>
+<span class="source-line-no">494</span><span id="line-494">            try (var fc = FileChannel.open(p, READ, WRITE, CREATE)) {</span>
+<span class="source-line-no">495</span><span id="line-495">               try (var lock = fc.lock()) {</span>
+<span class="source-line-no">496</span><span id="line-496">                  var currentContents = "";</span>
+<span class="source-line-no">497</span><span id="line-497">                  if (exists) {</span>
+<span class="source-line-no">498</span><span id="line-498">                     var buf = ByteBuffer.allocate(1024);</span>
+<span class="source-line-no">499</span><span id="line-499">                     var sb = new StringBuilder();</span>
+<span class="source-line-no">500</span><span id="line-500">                     while (fc.read(buf) != -1) {</span>
+<span class="source-line-no">501</span><span id="line-501">                        sb.append(charset.decode(buf.flip()));</span>
+<span class="source-line-no">502</span><span id="line-502">                        buf.clear();</span>
+<span class="source-line-no">503</span><span id="line-503">                     }</span>
+<span class="source-line-no">504</span><span id="line-504">                     currentContents = sb.toString();</span>
+<span class="source-line-no">505</span><span id="line-505">                  }</span>
+<span class="source-line-no">506</span><span id="line-506">                  if (nn(expectedContents) &amp;&amp; neq(currentContents, expectedContents)) {</span>
+<span class="source-line-no">507</span><span id="line-507">                     if (currentContents == null)</span>
+<span class="source-line-no">508</span><span id="line-508">                        cache.remove(name);</span>
+<span class="source-line-no">509</span><span id="line-509">                     else</span>
+<span class="source-line-no">510</span><span id="line-510">                        cache.put(name, currentContents);</span>
+<span class="source-line-no">511</span><span id="line-511">                     return currentContents;</span>
+<span class="source-line-no">512</span><span id="line-512">                  }</span>
+<span class="source-line-no">513</span><span id="line-513">                  fc.position(0);</span>
+<span class="source-line-no">514</span><span id="line-514">                  fc.write(charset.encode(newContents));</span>
+<span class="source-line-no">515</span><span id="line-515">               }</span>
+<span class="source-line-no">516</span><span id="line-516">            }</span>
+<span class="source-line-no">517</span><span id="line-517">         }</span>
+<span class="source-line-no">518</span><span id="line-518">      }</span>
+<span class="source-line-no">519</span><span id="line-519"></span>
+<span class="source-line-no">520</span><span id="line-520">      if (updateOnWrite)</span>
+<span class="source-line-no">521</span><span id="line-521">         update(name, newContents);</span>
+<span class="source-line-no">522</span><span id="line-522">      else</span>
+<span class="source-line-no">523</span><span id="line-523">         cache.remove(name);  // Invalidate the cache.</span>
+<span class="source-line-no">524</span><span id="line-524"></span>
+<span class="source-line-no">525</span><span id="line-525">      return null;</span>
+<span class="source-line-no">526</span><span id="line-526">   }</span>
+<span class="source-line-no">527</span><span id="line-527"></span>
+<span class="source-line-no">528</span><span id="line-528">   private synchronized boolean isWritable(Path p) {</span>
+<span class="source-line-no">529</span><span id="line-529">      try {</span>
+<span class="source-line-no">530</span><span id="line-530">         if (! Files.exists(p)) {</span>
+<span class="source-line-no">531</span><span id="line-531">            Files.createDirectories(p.getParent());</span>
+<span class="source-line-no">532</span><span id="line-532">            if (! Files.exists(p) &amp;&amp; ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions</span>
+<span class="source-line-no">533</span><span id="line-533">               throw ioex("Could not create file: {0}", p);</span>
+<span class="source-line-no">534</span><span id="line-534">            }</span>
+<span class="source-line-no">535</span><span id="line-535">         }</span>
+<span class="source-line-no">536</span><span id="line-536">      } catch (@SuppressWarnings("unused") IOException e) {</span>
+<span class="source-line-no">537</span><span id="line-537">         return false; // HTT - IOException from createDirectories/createNewFile requires OS-level restrictions</span>
+<span class="source-line-no">538</span><span id="line-538">      }</span>
+<span class="source-line-no">539</span><span id="line-539">      return Files.isWritable(p);</span>
+<span class="source-line-no">540</span><span id="line-540">   }</span>
+<span class="source-line-no">541</span><span id="line-541"></span>
+<span class="source-line-no">542</span><span id="line-542">   private Path resolveFile(String name) {</span>
+<span class="source-line-no">543</span><span id="line-543">      return dir.toPath().resolve(resolveName(name));</span>
+<span class="source-line-no">544</span><span id="line-544">   }</span>
+<span class="source-line-no">545</span><span id="line-545"></span>
+<span class="source-line-no">546</span><span id="line-546">   /**</span>
+<span class="source-line-no">547</span><span id="line-547">    * Gets called when the watcher service on this store is triggered with a file system change.</span>
+<span class="source-line-no">548</span><span id="line-548">    *</span>
+<span class="source-line-no">549</span><span id="line-549">    * @param e The file system event.</span>
+<span class="source-line-no">550</span><span id="line-550">    * @throws IOException Thrown by underlying stream.</span>
+<span class="source-line-no">551</span><span id="line-551">    */</span>
+<span class="source-line-no">552</span><span id="line-552">   protected synchronized void onFileEvent(WatchEvent&lt;Path&gt; e) throws IOException {</span>
+<span class="source-line-no">553</span><span id="line-553">      var fn = e.context().getFileName().toString();</span>
+<span class="source-line-no">554</span><span id="line-554"></span>
+<span class="source-line-no">555</span><span id="line-555">      var oldContents = cache.get(fn);</span>
+<span class="source-line-no">556</span><span id="line-556">      cache.remove(fn);</span>
+<span class="source-line-no">557</span><span id="line-557">      var newContents = read(fn);</span>
+<span class="source-line-no">558</span><span id="line-558"></span>
+<span class="source-line-no">559</span><span id="line-559">      if (neq(oldContents, newContents)) { // HTT - requires actual file system watcher event with content change</span>
+<span class="source-line-no">560</span><span id="line-560">         update(fn, newContents);</span>
+<span class="source-line-no">561</span><span id="line-561">      }</span>
+<span class="source-line-no">562</span><span id="line-562">   }</span>
+<span class="source-line-no">563</span><span id="line-563"></span>
+<span class="source-line-no">564</span><span id="line-564">   @Override /* Overridden from ConfigStore */</span>
+<span class="source-line-no">565</span><span id="line-565">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">566</span><span id="line-566">      return super.properties()</span>
+<span class="source-line-no">567</span><span id="line-567">         .a(PROP_charset, charset)</span>
+<span class="source-line-no">568</span><span id="line-568">         .a(PROP_extensions, extensions)</span>
+<span class="source-line-no">569</span><span id="line-569">         .a(PROP_updateOnWrite, updateOnWrite);</span>
+<span class="source-line-no">570</span><span id="line-570">   }</span>
+<span class="source-line-no">571</span><span id="line-571"></span>
+<span class="source-line-no">572</span><span id="line-572">   @Override</span>
+<span class="source-line-no">573</span><span id="line-573">   @SuppressWarnings({</span>
+<span class="source-line-no">574</span><span id="line-574">      "java:S3776" // Cognitive complexity acceptable for name resolution logic</span>
+<span class="source-line-no">575</span><span id="line-575">   })</span>
+<span class="source-line-no">576</span><span id="line-576">   protected String resolveName(String name) {</span>
+<span class="source-line-no">577</span><span id="line-577">      if (! nameCache.containsKey(name)) {</span>
+<span class="source-line-no">578</span><span id="line-578">         String n = null;</span>
+<span class="source-line-no">579</span><span id="line-579"></span>
+<span class="source-line-no">580</span><span id="line-580">         // Does file exist as-is?</span>
+<span class="source-line-no">581</span><span id="line-581">         if (fileExists(dir, name))</span>
+<span class="source-line-no">582</span><span id="line-582">            n = name;</span>
+<span class="source-line-no">583</span><span id="line-583"></span>
+<span class="source-line-no">584</span><span id="line-584">         // Does name already have an extension?</span>
+<span class="source-line-no">585</span><span id="line-585">         if (n == null) {</span>
+<span class="source-line-no">586</span><span id="line-586">            for (var ext : exts) {</span>
+<span class="source-line-no">587</span><span id="line-587">               if (hasExtension(name, ext)) {</span>
+<span class="source-line-no">588</span><span id="line-588">                  n = name;</span>
+<span class="source-line-no">589</span><span id="line-589">                  break;</span>
+<span class="source-line-no">590</span><span id="line-590">               }</span>
+<span class="source-line-no">591</span><span id="line-591">            }</span>
+<span class="source-line-no">592</span><span id="line-592">         }</span>
+<span class="source-line-no">593</span><span id="line-593"></span>
+<span class="source-line-no">594</span><span id="line-594">         // Find file with the correct extension.</span>
+<span class="source-line-no">595</span><span id="line-595">         if (n == null) {</span>
+<span class="source-line-no">596</span><span id="line-596">            for (var ext : exts) {</span>
+<span class="source-line-no">597</span><span id="line-597">               if (fileExists(dir, name + '.' + ext)) {</span>
+<span class="source-line-no">598</span><span id="line-598">                  n = name + '.' + ext;</span>
+<span class="source-line-no">599</span><span id="line-599">                  break;</span>
+<span class="source-line-no">600</span><span id="line-600">               }</span>
+<span class="source-line-no">601</span><span id="line-601">            }</span>
+<span class="source-line-no">602</span><span id="line-602">         }</span>
+<span class="source-line-no">603</span><span id="line-603"></span>
+<span class="source-line-no">604</span><span id="line-604">         // If file not found, use the default which is the name with the first extension.</span>
+<span class="source-line-no">605</span><span id="line-605">         if (n == null)</span>
+<span class="source-line-no">606</span><span id="line-606">            n = exts.length == 0 ? name : (name + "." + exts[0]);</span>
+<span class="source-line-no">607</span><span id="line-607"></span>
+<span class="source-line-no">608</span><span id="line-608">         nameCache.put(name, n);</span>
+<span class="source-line-no">609</span><span id="line-609">      }</span>
+<span class="source-line-no">610</span><span id="line-610">      return nameCache.get(name);</span>
+<span class="source-line-no">611</span><span id="line-611">   }</span>
+<span class="source-line-no">612</span><span id="line-612">}</span>
 
 
 

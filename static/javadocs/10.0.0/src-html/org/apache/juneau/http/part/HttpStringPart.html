@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.part;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">    * @return The value, wrapped in an {@link Optional}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">103</span><span id="line-103">    */</span>
 <span class="source-line-no">104</span><span id="line-104">   public Optional&lt;String&gt; asString() {</span>
-<span class="source-line-no">105</span><span id="line-105">      return opt(getValue());</span>
+<span class="source-line-no">105</span><span id="line-105">      return o(getValue());</span>
 <span class="source-line-no">106</span><span id="line-106">   }</span>
 <span class="source-line-no">107</span><span id="line-107"></span>
 <span class="source-line-no">108</span><span id="line-108">   /**</span>

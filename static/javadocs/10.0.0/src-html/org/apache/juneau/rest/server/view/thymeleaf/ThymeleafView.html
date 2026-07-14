@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.thymeleaf;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">    */</span>
 <span class="source-line-no">090</span><span id="line-90">   public static ThymeleafView of(String templateName) {</span>
 <span class="source-line-no">091</span><span id="line-91">      if (isBlank(templateName))</span>
-<span class="source-line-no">092</span><span id="line-92">         throw illegalArg("templateName must not be null or blank");</span>
+<span class="source-line-no">092</span><span id="line-92">         throw iaex("templateName must not be null or blank");</span>
 <span class="source-line-no">093</span><span id="line-93">      return new ThymeleafView(templateName, Map.of(), Map.of());</span>
 <span class="source-line-no">094</span><span id="line-94">   }</span>
 <span class="source-line-no">095</span><span id="line-95"></span>
@@ -132,9 +132,9 @@
 <span class="source-line-no">119</span><span id="line-119">    */</span>
 <span class="source-line-no">120</span><span id="line-120">   public ThymeleafView attr(String key, Object value) {</span>
 <span class="source-line-no">121</span><span id="line-121">      if (isBlank(key))</span>
-<span class="source-line-no">122</span><span id="line-122">         throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">122</span><span id="line-122">         throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">123</span><span id="line-123">      if (value == null)</span>
-<span class="source-line-no">124</span><span id="line-124">         throw illegalArg("attribute value must not be null (attribute ''{0}'')", key);</span>
+<span class="source-line-no">124</span><span id="line-124">         throw iaex("attribute value must not be null (attribute ''{0}'')", key);</span>
 <span class="source-line-no">125</span><span id="line-125">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">126</span><span id="line-126">      copy.put(key, value);</span>
 <span class="source-line-no">127</span><span id="line-127">      return new ThymeleafView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -156,9 +156,9 @@
 <span class="source-line-no">143</span><span id="line-143">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">144</span><span id="line-144">      values.forEach((k, v) -&gt; {</span>
 <span class="source-line-no">145</span><span id="line-145">         if (isBlank(k))</span>
-<span class="source-line-no">146</span><span id="line-146">            throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">146</span><span id="line-146">            throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">147</span><span id="line-147">         if (v == null)</span>
-<span class="source-line-no">148</span><span id="line-148">            throw illegalArg("attribute value must not be null (attribute ''{0}'')", k);</span>
+<span class="source-line-no">148</span><span id="line-148">            throw iaex("attribute value must not be null (attribute ''{0}'')", k);</span>
 <span class="source-line-no">149</span><span id="line-149">         copy.put(k, v);</span>
 <span class="source-line-no">150</span><span id="line-150">      });</span>
 <span class="source-line-no">151</span><span id="line-151">      return new ThymeleafView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -181,9 +181,9 @@
 <span class="source-line-no">168</span><span id="line-168">    */</span>
 <span class="source-line-no">169</span><span id="line-169">   public ThymeleafView header(String name, String value) {</span>
 <span class="source-line-no">170</span><span id="line-170">      if (isBlank(name))</span>
-<span class="source-line-no">171</span><span id="line-171">         throw illegalArg("header name must not be null or blank");</span>
+<span class="source-line-no">171</span><span id="line-171">         throw iaex("header name must not be null or blank");</span>
 <span class="source-line-no">172</span><span id="line-172">      if (value == null)</span>
-<span class="source-line-no">173</span><span id="line-173">         throw illegalArg("header value must not be null (header ''{0}'')", name);</span>
+<span class="source-line-no">173</span><span id="line-173">         throw iaex("header value must not be null (header ''{0}'')", name);</span>
 <span class="source-line-no">174</span><span id="line-174">      var copy = new LinkedHashMap&lt;&gt;(responseHeaders);</span>
 <span class="source-line-no">175</span><span id="line-175">      copy.put(name, value);</span>
 <span class="source-line-no">176</span><span id="line-176">      return new ThymeleafView(templateName, attributes, Map.copyOf(copy));</span>

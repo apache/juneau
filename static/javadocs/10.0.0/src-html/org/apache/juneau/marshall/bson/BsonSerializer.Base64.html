@@ -30,379 +30,378 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.bson;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.math.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.concurrent.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.commons.bean.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.io.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.commons.collections.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.marshall.serializer.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.marshall.stream.*;</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">/**</span>
-<span class="source-line-no">036</span><span id="line-36"> * Serializes POJO models to BSON (Binary JSON).</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Media types:&lt;/h5&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *</span>
-<span class="source-line-no">040</span><span id="line-40"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;application/bson&lt;/bc&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;p&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * Produces &lt;c&gt;Content-Type&lt;/c&gt; types: &lt;bc&gt;application/bson&lt;/bc&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;p&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> * Java-to-BSON type mapping:</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Maps and beans → BSON document (type 0x03)</span>
-<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;Collections and arrays → BSON array (type 0x04, document with numeric string keys)</span>
-<span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;{@link String} / {@link Enum} → BSON string (type 0x02)</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;{@link Boolean} → BSON boolean (type 0x08)</span>
-<span class="source-line-no">052</span><span id="line-52"> *    &lt;li&gt;{@code int} / {@code short} / {@code byte} → BSON int32 (type 0x10)</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;{@code long} → BSON int64 (type 0x12)</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;li&gt;{@code float} / {@code double} → BSON double (type 0x01)</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;{@link Date} / {@link Calendar} / {@link Instant} → BSON datetime (type 0x09) when</span>
-<span class="source-line-no">056</span><span id="line-56"> *       {@code writeDatesAsDatetime=true}; otherwise ISO 8601 string</span>
-<span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;{@link Duration} → ISO 8601 duration string</span>
-<span class="source-line-no">058</span><span id="line-58"> *    &lt;li&gt;{@code byte[]} → BSON binary (type 0x05, subtype 0x00)</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;li&gt;{@link BigDecimal} / {@link BigInteger} → BSON decimal128 (type 0x13)</span>
-<span class="source-line-no">060</span><span id="line-60"> *    &lt;li&gt;{@code null} → BSON null (type 0x0A)</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;li&gt;All other types → fallback to {@code toString()} as string</span>
-<span class="source-line-no">062</span><span id="line-62"> * &lt;/ul&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *</span>
-<span class="source-line-no">064</span><span id="line-64"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/ul&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;Limitations:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;BSON requires a top-level document. Standalone scalars, collections, and arrays are wrapped as &lt;c&gt;{value: x}&lt;/c&gt;.</span>
-<span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;Map keys must be strings. Non-string keys use &lt;c&gt;toString()&lt;/c&gt;. Null keys use a configurable placeholder.</span>
-<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;ObjectId (0x07) is not generated; parsing returns 24-character hex strings.</span>
-<span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;Deprecated types (Undefined, DBPointer, Symbol, JS with Scope) are skipped during parsing.</span>
-<span class="source-line-no">073</span><span id="line-73"> *    &lt;li&gt;MongoDB-internal types (JavaScript, Timestamp, MinKey, MaxKey) are not supported.</span>
-<span class="source-line-no">074</span><span id="line-74"> *    &lt;li&gt;{@link BigDecimal} / {@link BigInteger} values outside the Decimal128 range (max 34 significant digits,</span>
-<span class="source-line-no">075</span><span id="line-75"> *       exponent -6176..6111) cannot be represented and throw a {@link SerializeException} with a clear message.</span>
-<span class="source-line-no">076</span><span id="line-76"> *    &lt;li&gt;BSON datetime (0x09) is millisecond-resolution, so sub-millisecond (nanosecond) precision of</span>
-<span class="source-line-no">077</span><span id="line-77"> *       {@link Instant}/{@link OffsetDateTime}/{@link ZonedDateTime} is truncated when</span>
-<span class="source-line-no">078</span><span id="line-78"> *       {@code writeDatesAsDatetime=true}. Use {@code writeDatesAsDatetime=false} for lossless ISO-8601 string output.</span>
-<span class="source-line-no">079</span><span id="line-79"> *    &lt;li&gt;Local {@code java.time} types ({@link LocalDate}, {@link LocalDateTime}, {@link LocalTime}, {@link Year},</span>
-<span class="source-line-no">080</span><span id="line-80"> *       etc.) have no instant, so they are always written as ISO-8601 strings even when {@code writeDatesAsDatetime=true}.</span>
-<span class="source-line-no">081</span><span id="line-81"> *    &lt;li&gt;BSON is binary; &lt;c&gt;SpacedHex&lt;/c&gt; and &lt;c&gt;Base64&lt;/c&gt; subclasses provide text-encodable output.</span>
-<span class="source-line-no">082</span><span id="line-82"> * &lt;/ul&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> *</span>
-<span class="source-line-no">084</span><span id="line-84"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> *    &lt;jc&gt;// Serialize a POJO to BSON&lt;/jc&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *    byte[] &lt;jv&gt;bson&lt;/jv&gt; = BsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
-<span class="source-line-no">088</span><span id="line-88"> *</span>
-<span class="source-line-no">089</span><span id="line-89"> *    &lt;jc&gt;// Create a serializer that writes dates as ISO 8601 strings instead of BSON datetime&lt;/jc&gt;</span>
-<span class="source-line-no">090</span><span id="line-90"> *    BsonSerializer &lt;jv&gt;s&lt;/jv&gt; = BsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().writeDatesAsDatetime(&lt;jk&gt;false&lt;/jk&gt;).build();</span>
-<span class="source-line-no">091</span><span id="line-91"> *</span>
-<span class="source-line-no">092</span><span id="line-92"> *    &lt;jc&gt;// Or use the marshaller for convenience&lt;/jc&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> *    &lt;jv&gt;bson&lt;/jv&gt; = Bson.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
-<span class="source-line-no">094</span><span id="line-94"> * &lt;/p&gt;</span>
-<span class="source-line-no">095</span><span id="line-95"> *</span>
-<span class="source-line-no">096</span><span id="line-96"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">097</span><span id="line-97"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics"&gt;BSON Basics&lt;/a&gt;</span>
-<span class="source-line-no">098</span><span id="line-98"> * &lt;/ul&gt;</span>
-<span class="source-line-no">099</span><span id="line-99"> */</span>
-<span class="source-line-no">100</span><span id="line-100">@SuppressWarnings({</span>
-<span class="source-line-no">101</span><span id="line-101">   "java:S110", // Inheritance depth acceptable for this class hierarchy</span>
-<span class="source-line-no">102</span><span id="line-102">   "java:S115", // Constants use UPPER_snakeCase naming convention</span>
-<span class="source-line-no">103</span><span id="line-103">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
-<span class="source-line-no">104</span><span id="line-104">})</span>
-<span class="source-line-no">105</span><span id="line-105">public class BsonSerializer extends OutputStreamSerializer implements BsonMetaProvider, RecordWritable, ArrayRecordWritable {</span>
-<span class="source-line-no">106</span><span id="line-106"></span>
-<span class="source-line-no">107</span><span id="line-107">   // Argument name constants for assertArgNotNull</span>
-<span class="source-line-no">108</span><span id="line-108">   private static final String ARG_builder = "builder";</span>
-<span class="source-line-no">109</span><span id="line-109">   private static final String ARG_copyFrom = "copyFrom";</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   // Property name constants</span>
-<span class="source-line-no">112</span><span id="line-112">   private static final String PROP_addBeanTypesBson = "addBeanTypesBson";</span>
-<span class="source-line-no">113</span><span id="line-113">   private static final String PROP_nullKeyString = "nullKeyString";</span>
-<span class="source-line-no">114</span><span id="line-114">   private static final String PROP_writeDatesAsDatetime = "writeDatesAsDatetime";</span>
-<span class="source-line-no">115</span><span id="line-115">   private static final String DEFAULT_NULL_KEY = "&lt;NULL&gt;";</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   /** Default serializer, BASE64 string output. */</span>
-<span class="source-line-no">118</span><span id="line-118">   public static class Base64 extends BsonSerializer {</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">      /**</span>
-<span class="source-line-no">121</span><span id="line-121">       * Constructor.</span>
-<span class="source-line-no">122</span><span id="line-122">       *</span>
-<span class="source-line-no">123</span><span id="line-123">       * @param builder The builder for this object.</span>
-<span class="source-line-no">124</span><span id="line-124">       */</span>
-<span class="source-line-no">125</span><span id="line-125">      public Base64(Builder builder) {</span>
-<span class="source-line-no">126</span><span id="line-126">         super(assertArgNotNull(ARG_builder, builder).binaryFormat(BinaryFormat.BASE64));</span>
-<span class="source-line-no">127</span><span id="line-127">      }</span>
-<span class="source-line-no">128</span><span id="line-128">   }</span>
-<span class="source-line-no">129</span><span id="line-129"></span>
-<span class="source-line-no">130</span><span id="line-130">   /**</span>
-<span class="source-line-no">131</span><span id="line-131">    * Builder class.</span>
-<span class="source-line-no">132</span><span id="line-132">    */</span>
-<span class="source-line-no">133</span><span id="line-133">   public static class Builder extends OutputStreamSerializer.Builder&lt;Builder&gt; {</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">      private static final Cache&lt;HashKey,BsonSerializer&gt; CACHE = Cache.of(HashKey.class, BsonSerializer.class).build();</span>
-<span class="source-line-no">136</span><span id="line-136"></span>
-<span class="source-line-no">137</span><span id="line-137">      private boolean addBeanTypesBson;</span>
-<span class="source-line-no">138</span><span id="line-138">      private String nullKeyString = DEFAULT_NULL_KEY;</span>
-<span class="source-line-no">139</span><span id="line-139">      private boolean writeDatesAsDatetime = true;</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">      /**</span>
-<span class="source-line-no">142</span><span id="line-142">       * Constructor, default settings.</span>
-<span class="source-line-no">143</span><span id="line-143">       */</span>
-<span class="source-line-no">144</span><span id="line-144">      protected Builder() {</span>
-<span class="source-line-no">145</span><span id="line-145">         produces("application/bson");</span>
-<span class="source-line-no">146</span><span id="line-146">         accept("application/bson");</span>
-<span class="source-line-no">147</span><span id="line-147">         addBeanTypesBson = env("BsonSerializer.addBeanTypesBson", false);</span>
-<span class="source-line-no">148</span><span id="line-148">         nullKeyString = env("BsonSerializer.nullKeyString", DEFAULT_NULL_KEY);</span>
-<span class="source-line-no">149</span><span id="line-149">         writeDatesAsDatetime = env("BsonSerializer.writeDatesAsDatetime", true);</span>
-<span class="source-line-no">150</span><span id="line-150">      }</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">      /**</span>
-<span class="source-line-no">153</span><span id="line-153">       * Copy constructor.</span>
-<span class="source-line-no">154</span><span id="line-154">       *</span>
-<span class="source-line-no">155</span><span id="line-155">       * @param copyFrom The builder to copy from.</span>
-<span class="source-line-no">156</span><span id="line-156">       */</span>
-<span class="source-line-no">157</span><span id="line-157">      protected Builder(Builder copyFrom) {</span>
-<span class="source-line-no">158</span><span id="line-158">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">159</span><span id="line-159">         addBeanTypesBson = copyFrom.addBeanTypesBson;</span>
-<span class="source-line-no">160</span><span id="line-160">         nullKeyString = copyFrom.nullKeyString;</span>
-<span class="source-line-no">161</span><span id="line-161">         writeDatesAsDatetime = copyFrom.writeDatesAsDatetime;</span>
-<span class="source-line-no">162</span><span id="line-162">      }</span>
-<span class="source-line-no">163</span><span id="line-163"></span>
-<span class="source-line-no">164</span><span id="line-164">      /**</span>
-<span class="source-line-no">165</span><span id="line-165">       * Copy constructor.</span>
-<span class="source-line-no">166</span><span id="line-166">       *</span>
-<span class="source-line-no">167</span><span id="line-167">       * @param copyFrom The bean to copy from.</span>
-<span class="source-line-no">168</span><span id="line-168">       */</span>
-<span class="source-line-no">169</span><span id="line-169">      protected Builder(BsonSerializer copyFrom) {</span>
-<span class="source-line-no">170</span><span id="line-170">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
-<span class="source-line-no">171</span><span id="line-171">         addBeanTypesBson = copyFrom.addBeanTypesBson;</span>
-<span class="source-line-no">172</span><span id="line-172">         nullKeyString = copyFrom.nullKeyString;</span>
-<span class="source-line-no">173</span><span id="line-173">         writeDatesAsDatetime = copyFrom.writeDatesAsDatetime;</span>
-<span class="source-line-no">174</span><span id="line-174">      }</span>
-<span class="source-line-no">175</span><span id="line-175"></span>
-<span class="source-line-no">176</span><span id="line-176">      /**</span>
-<span class="source-line-no">177</span><span id="line-177">       * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
-<span class="source-line-no">178</span><span id="line-178">       *</span>
-<span class="source-line-no">179</span><span id="line-179">       * @param value The value for this setting.</span>
-<span class="source-line-no">180</span><span id="line-180">       * @return This object.</span>
-<span class="source-line-no">181</span><span id="line-181">       */</span>
-<span class="source-line-no">182</span><span id="line-182">      public Builder addBeanTypesBson(boolean value) {</span>
-<span class="source-line-no">183</span><span id="line-183">         addBeanTypesBson = value;</span>
-<span class="source-line-no">184</span><span id="line-184">         return this;</span>
-<span class="source-line-no">185</span><span id="line-185">      }</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">      /**</span>
-<span class="source-line-no">188</span><span id="line-188">       * The string used to represent &lt;jk&gt;null&lt;/jk&gt; map keys in BSON documents.</span>
-<span class="source-line-no">189</span><span id="line-189">       *</span>
-<span class="source-line-no">190</span><span id="line-190">       * &lt;p&gt;</span>
-<span class="source-line-no">191</span><span id="line-191">       * BSON document field names cannot be &lt;jk&gt;null&lt;/jk&gt;. When serializing a {@link Map} with a &lt;jk&gt;null&lt;/jk&gt; key,</span>
-<span class="source-line-no">192</span><span id="line-192">       * this string is used as the field name. When parsing, a field with this name is stored with &lt;jk&gt;null&lt;/jk&gt;</span>
-<span class="source-line-no">193</span><span id="line-193">       * as the key.</span>
-<span class="source-line-no">194</span><span id="line-194">       *</span>
-<span class="source-line-no">195</span><span id="line-195">       * @param value The placeholder string for null keys. Default is &lt;js&gt;"&amp;lt;NULL&amp;gt;"&lt;/js&gt;.</span>
-<span class="source-line-no">196</span><span id="line-196">       * @return This object.</span>
-<span class="source-line-no">197</span><span id="line-197">       */</span>
-<span class="source-line-no">198</span><span id="line-198">      public Builder nullKeyString(String value) {</span>
-<span class="source-line-no">199</span><span id="line-199">         nullKeyString = value == null ? DEFAULT_NULL_KEY : value;</span>
-<span class="source-line-no">200</span><span id="line-200">         return this;</span>
-<span class="source-line-no">201</span><span id="line-201">      }</span>
-<span class="source-line-no">202</span><span id="line-202"></span>
-<span class="source-line-no">203</span><span id="line-203">      /**</span>
-<span class="source-line-no">204</span><span id="line-204">       * Use BSON datetime type for dates. When &lt;jk&gt;false&lt;/jk&gt;, dates are serialized as ISO-8601 strings.</span>
-<span class="source-line-no">205</span><span id="line-205">       *</span>
-<span class="source-line-no">206</span><span id="line-206">       * @param value The value for this setting.</span>
-<span class="source-line-no">207</span><span id="line-207">       * @return This object.</span>
-<span class="source-line-no">208</span><span id="line-208">       */</span>
-<span class="source-line-no">209</span><span id="line-209">      public Builder writeDatesAsDatetime(boolean value) {</span>
-<span class="source-line-no">210</span><span id="line-210">         writeDatesAsDatetime = value;</span>
-<span class="source-line-no">211</span><span id="line-211">         return this;</span>
-<span class="source-line-no">212</span><span id="line-212">      }</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">      @Override /* OutputStreamSerializer.Builder&lt;?&gt; */</span>
-<span class="source-line-no">215</span><span id="line-215">      public Builder binaryFormat(BinaryFormat value) {</span>
-<span class="source-line-no">216</span><span id="line-216">         super.binaryFormat(value);</span>
-<span class="source-line-no">217</span><span id="line-217">         return this;</span>
-<span class="source-line-no">218</span><span id="line-218">      }</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">      @Override /* Serializer.Builder&lt;?&gt; */</span>
-<span class="source-line-no">221</span><span id="line-221">      public Builder keepNullProperties() {</span>
-<span class="source-line-no">222</span><span id="line-222">         super.keepNullProperties();</span>
-<span class="source-line-no">223</span><span id="line-223">         return this;</span>
-<span class="source-line-no">224</span><span id="line-224">      }</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">      @Override /* Serializer.Builder&lt;?&gt; */</span>
-<span class="source-line-no">227</span><span id="line-227">      public Builder keepNullProperties(boolean value) {</span>
-<span class="source-line-no">228</span><span id="line-228">         super.keepNullProperties(value);</span>
-<span class="source-line-no">229</span><span id="line-229">         return this;</span>
-<span class="source-line-no">230</span><span id="line-230">      }</span>
-<span class="source-line-no">231</span><span id="line-231"></span>
-<span class="source-line-no">232</span><span id="line-232">      @Override /* Serializer.Builder&lt;?&gt; */</span>
-<span class="source-line-no">233</span><span id="line-233">      public Builder addRootType() {</span>
-<span class="source-line-no">234</span><span id="line-234">         super.addRootType();</span>
-<span class="source-line-no">235</span><span id="line-235">         return this;</span>
-<span class="source-line-no">236</span><span id="line-236">      }</span>
-<span class="source-line-no">237</span><span id="line-237"></span>
-<span class="source-line-no">238</span><span id="line-238">      @Override /* Serializer.Builder&lt;?&gt; */</span>
-<span class="source-line-no">239</span><span id="line-239">      public Builder addRootType(boolean value) {</span>
-<span class="source-line-no">240</span><span id="line-240">         super.addRootType(value);</span>
-<span class="source-line-no">241</span><span id="line-241">         return this;</span>
-<span class="source-line-no">242</span><span id="line-242">      }</span>
-<span class="source-line-no">243</span><span id="line-243"></span>
-<span class="source-line-no">244</span><span id="line-244">      @Override /* Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">245</span><span id="line-245">      public BsonSerializer build() {</span>
-<span class="source-line-no">246</span><span id="line-246">         return cache(CACHE).build(BsonSerializer.class);</span>
-<span class="source-line-no">247</span><span id="line-247">      }</span>
-<span class="source-line-no">248</span><span id="line-248"></span>
-<span class="source-line-no">249</span><span id="line-249">      @Override /* Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">250</span><span id="line-250">      public HashKey hashKey() {</span>
-<span class="source-line-no">251</span><span id="line-251">         return HashKey.of(super.hashKey(), addBeanTypesBson, nullKeyString, writeDatesAsDatetime);</span>
-<span class="source-line-no">252</span><span id="line-252">      }</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">      @Override /* Context.Builder&lt;?&gt; */</span>
-<span class="source-line-no">255</span><span id="line-255">      public Builder copy() {</span>
-<span class="source-line-no">256</span><span id="line-256">         return new Builder(this);</span>
-<span class="source-line-no">257</span><span id="line-257">      }</span>
-<span class="source-line-no">258</span><span id="line-258">   }</span>
-<span class="source-line-no">259</span><span id="line-259"></span>
-<span class="source-line-no">260</span><span id="line-260">   /** Default serializer, spaced-hex string output. */</span>
-<span class="source-line-no">261</span><span id="line-261">   public static class SpacedHex extends BsonSerializer {</span>
-<span class="source-line-no">262</span><span id="line-262"></span>
-<span class="source-line-no">263</span><span id="line-263">      /**</span>
-<span class="source-line-no">264</span><span id="line-264">       * Constructor.</span>
-<span class="source-line-no">265</span><span id="line-265">       *</span>
-<span class="source-line-no">266</span><span id="line-266">       * @param builder The builder for this object.</span>
-<span class="source-line-no">267</span><span id="line-267">       */</span>
-<span class="source-line-no">268</span><span id="line-268">      public SpacedHex(Builder builder) {</span>
-<span class="source-line-no">269</span><span id="line-269">         super(builder.binaryFormat(BinaryFormat.SPACED_HEX));</span>
-<span class="source-line-no">270</span><span id="line-270">      }</span>
-<span class="source-line-no">271</span><span id="line-271">   }</span>
-<span class="source-line-no">272</span><span id="line-272"></span>
-<span class="source-line-no">273</span><span id="line-273">   /** Default serializer, all default settings. */</span>
-<span class="source-line-no">274</span><span id="line-274">   public static final BsonSerializer DEFAULT = new BsonSerializer(create());</span>
-<span class="source-line-no">275</span><span id="line-275">   /** Default serializer, spaced-hex string output. */</span>
-<span class="source-line-no">276</span><span id="line-276">   public static final BsonSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());</span>
-<span class="source-line-no">277</span><span id="line-277">   /** Default serializer, BASE64 string output. */</span>
-<span class="source-line-no">278</span><span id="line-278">   public static final BsonSerializer DEFAULT_BASE64 = new Base64(create());</span>
-<span class="source-line-no">279</span><span id="line-279"></span>
-<span class="source-line-no">280</span><span id="line-280">   /**</span>
-<span class="source-line-no">281</span><span id="line-281">    * Creates a new builder for this object.</span>
-<span class="source-line-no">282</span><span id="line-282">    *</span>
-<span class="source-line-no">283</span><span id="line-283">    * @return A new builder.</span>
-<span class="source-line-no">284</span><span id="line-284">    */</span>
-<span class="source-line-no">285</span><span id="line-285">   public static Builder create() {</span>
-<span class="source-line-no">286</span><span id="line-286">      return new Builder();</span>
-<span class="source-line-no">287</span><span id="line-287">   }</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">   protected final boolean addBeanTypesBson;</span>
-<span class="source-line-no">290</span><span id="line-290">   protected final String nullKeyString;</span>
-<span class="source-line-no">291</span><span id="line-291">   protected final boolean writeDatesAsDatetime;</span>
-<span class="source-line-no">292</span><span id="line-292"></span>
-<span class="source-line-no">293</span><span id="line-293">   private final Map&lt;BeanPropertyMeta,BsonBeanPropertyMeta&gt; bsonBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">294</span><span id="line-294">   private final Map&lt;ClassMeta&lt;?&gt;,BsonClassMeta&gt; bsonClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
-<span class="source-line-no">295</span><span id="line-295"></span>
-<span class="source-line-no">296</span><span id="line-296">   /**</span>
-<span class="source-line-no">297</span><span id="line-297">    * Constructor.</span>
-<span class="source-line-no">298</span><span id="line-298">    *</span>
-<span class="source-line-no">299</span><span id="line-299">    * @param builder The builder for this object.</span>
-<span class="source-line-no">300</span><span id="line-300">    */</span>
-<span class="source-line-no">301</span><span id="line-301">   public BsonSerializer(Builder builder) {</span>
-<span class="source-line-no">302</span><span id="line-302">      super(builder);</span>
-<span class="source-line-no">303</span><span id="line-303">      addBeanTypesBson = builder.addBeanTypesBson;</span>
-<span class="source-line-no">304</span><span id="line-304">      nullKeyString = builder.nullKeyString;</span>
-<span class="source-line-no">305</span><span id="line-305">      writeDatesAsDatetime = builder.writeDatesAsDatetime;</span>
-<span class="source-line-no">306</span><span id="line-306">   }</span>
-<span class="source-line-no">307</span><span id="line-307"></span>
-<span class="source-line-no">308</span><span id="line-308">   @Override /* Context */</span>
-<span class="source-line-no">309</span><span id="line-309">   public Builder copy() {</span>
-<span class="source-line-no">310</span><span id="line-310">      return new Builder(this);</span>
-<span class="source-line-no">311</span><span id="line-311">   }</span>
-<span class="source-line-no">312</span><span id="line-312"></span>
-<span class="source-line-no">313</span><span id="line-313">   @Override /* Context */</span>
-<span class="source-line-no">314</span><span id="line-314">   public BsonSerializerSession.Builder createSession() {</span>
-<span class="source-line-no">315</span><span id="line-315">      return BsonSerializerSession.create(this);</span>
-<span class="source-line-no">316</span><span id="line-316">   }</span>
-<span class="source-line-no">317</span><span id="line-317"></span>
-<span class="source-line-no">318</span><span id="line-318">   @Override /* BsonMetaProvider */</span>
-<span class="source-line-no">319</span><span id="line-319">   public BsonBeanPropertyMeta getBsonBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
-<span class="source-line-no">320</span><span id="line-320">      if (bpm == null)</span>
-<span class="source-line-no">321</span><span id="line-321">         return BsonBeanPropertyMeta.DEFAULT;</span>
-<span class="source-line-no">322</span><span id="line-322">      return bsonBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new BsonBeanPropertyMeta(k.getDelegateFor(), this));</span>
-<span class="source-line-no">323</span><span id="line-323">   }</span>
-<span class="source-line-no">324</span><span id="line-324"></span>
-<span class="source-line-no">325</span><span id="line-325">   @Override /* BsonMetaProvider */</span>
-<span class="source-line-no">326</span><span id="line-326">   public BsonClassMeta getBsonClassMeta(ClassMeta&lt;?&gt; cm) {</span>
-<span class="source-line-no">327</span><span id="line-327">      return bsonClassMetas.computeIfAbsent(cm, k -&gt; new BsonClassMeta(k, this));</span>
-<span class="source-line-no">328</span><span id="line-328">   }</span>
-<span class="source-line-no">329</span><span id="line-329"></span>
-<span class="source-line-no">330</span><span id="line-330">   @Override /* Context */</span>
-<span class="source-line-no">331</span><span id="line-331">   public BsonSerializerSession getSession() {</span>
-<span class="source-line-no">332</span><span id="line-332">      return createSession().build();</span>
-<span class="source-line-no">333</span><span id="line-333">   }</span>
-<span class="source-line-no">334</span><span id="line-334"></span>
-<span class="source-line-no">335</span><span id="line-335">   @Override</span>
-<span class="source-line-no">336</span><span id="line-336">   protected final boolean isAddBeanTypes() {</span>
-<span class="source-line-no">337</span><span id="line-337">      return addBeanTypesBson || super.isAddBeanTypes();</span>
-<span class="source-line-no">338</span><span id="line-338">   }</span>
-<span class="source-line-no">339</span><span id="line-339"></span>
-<span class="source-line-no">340</span><span id="line-340">   @Override /* OutputStreamSerializer */</span>
-<span class="source-line-no">341</span><span id="line-341">   protected FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">342</span><span id="line-342">      return super.properties()</span>
-<span class="source-line-no">343</span><span id="line-343">         .a(PROP_addBeanTypesBson, addBeanTypesBson)</span>
-<span class="source-line-no">344</span><span id="line-344">         .a(PROP_nullKeyString, nullKeyString)</span>
-<span class="source-line-no">345</span><span id="line-345">         .a(PROP_writeDatesAsDatetime, writeDatesAsDatetime);</span>
-<span class="source-line-no">346</span><span id="line-346">   }</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">   /**</span>
-<span class="source-line-no">349</span><span id="line-349">    * Convenience delegator for the whole-value {@link RecordWriter} using &lt;b&gt;default session</span>
-<span class="source-line-no">350</span><span id="line-350">    * arguments&lt;/b&gt;.  The real implementation lives on</span>
-<span class="source-line-no">351</span><span id="line-351">    * {@link BsonSerializerSession#serializeRecords(Object)}.</span>
-<span class="source-line-no">352</span><span id="line-352">    *</span>
-<span class="source-line-no">353</span><span id="line-353">    * @param output The output.</span>
-<span class="source-line-no">354</span><span id="line-354">    * @return A new {@link RecordWriter}.</span>
-<span class="source-line-no">355</span><span id="line-355">    * @throws IOException If a problem occurred opening the underlying output.</span>
-<span class="source-line-no">356</span><span id="line-356">    */</span>
-<span class="source-line-no">357</span><span id="line-357">   @Override /* RecordWritable */</span>
-<span class="source-line-no">358</span><span id="line-358">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
-<span class="source-line-no">359</span><span id="line-359">      return getSession().serializeRecords(output);</span>
-<span class="source-line-no">360</span><span id="line-360">   }</span>
-<span class="source-line-no">361</span><span id="line-361"></span>
-<span class="source-line-no">362</span><span id="line-362">   /**</span>
-<span class="source-line-no">363</span><span id="line-363">    * Convenience delegator for the buffered array-element {@link RecordWriter} using &lt;b&gt;default</span>
-<span class="source-line-no">364</span><span id="line-364">    * session arguments&lt;/b&gt;.  BSON's wire format requires the entire document byte-length up front</span>
-<span class="source-line-no">365</span><span id="line-365">    * (length prefix at every nesting level), so streaming without buffering is not possible.  The</span>
-<span class="source-line-no">366</span><span id="line-366">    * real implementation lives on {@link BsonSerializerSession#serializeArrayRecords(Object)}.</span>
-<span class="source-line-no">367</span><span id="line-367">    *</span>
-<span class="source-line-no">368</span><span id="line-368">    * @param output The output.</span>
-<span class="source-line-no">369</span><span id="line-369">    * @return A buffered {@link RecordWriter}.</span>
-<span class="source-line-no">370</span><span id="line-370">    * @throws IOException If a problem occurred opening the underlying output.</span>
-<span class="source-line-no">371</span><span id="line-371">    */</span>
-<span class="source-line-no">372</span><span id="line-372">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">373</span><span id="line-373">   public RecordWriter serializeArrayRecords(Object output) throws IOException {</span>
-<span class="source-line-no">374</span><span id="line-374">      return getSession().serializeArrayRecords(output);</span>
-<span class="source-line-no">375</span><span id="line-375">   }</span>
-<span class="source-line-no">376</span><span id="line-376"></span>
-<span class="source-line-no">377</span><span id="line-377">   /**</span>
-<span class="source-line-no">378</span><span id="line-378">    * The BSON record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
-<span class="source-line-no">379</span><span id="line-379">    *</span>
-<span class="source-line-no">380</span><span id="line-380">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">381</span><span id="line-381">    */</span>
-<span class="source-line-no">382</span><span id="line-382">   @Override /* RecordWritable */</span>
-<span class="source-line-no">383</span><span id="line-383">   public boolean isRecordStreaming() { return false; }</span>
-<span class="source-line-no">384</span><span id="line-384"></span>
-<span class="source-line-no">385</span><span id="line-385">   /**</span>
-<span class="source-line-no">386</span><span id="line-386">    * The BSON array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
-<span class="source-line-no">387</span><span id="line-387">    *</span>
-<span class="source-line-no">388</span><span id="line-388">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
-<span class="source-line-no">389</span><span id="line-389">    */</span>
-<span class="source-line-no">390</span><span id="line-390">   @Override /* ArrayRecordWritable */</span>
-<span class="source-line-no">391</span><span id="line-391">   public boolean isArrayRecordStreaming() { return false; }</span>
-<span class="source-line-no">392</span><span id="line-392">}</span>
+<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.math.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.time.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.concurrent.*;</span>
+<span class="source-line-no">027</span><span id="line-27"></span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.commons.bean.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.commons.collections.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.marshall.serializer.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.marshall.stream.*;</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">/**</span>
+<span class="source-line-no">035</span><span id="line-35"> * Serializes POJO models to BSON (Binary JSON).</span>
+<span class="source-line-no">036</span><span id="line-36"> *</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='section'&gt;Media types:&lt;/h5&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * Handles &lt;c&gt;Accept&lt;/c&gt; types:  &lt;bc&gt;application/bson&lt;/bc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * Produces &lt;c&gt;Content-Type&lt;/c&gt; types: &lt;bc&gt;application/bson&lt;/bc&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='topic'&gt;Description&lt;/h5&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * Java-to-BSON type mapping:</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;Maps and beans → BSON document (type 0x03)</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;Collections and arrays → BSON array (type 0x04, document with numeric string keys)</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;{@link String} / {@link Enum} → BSON string (type 0x02)</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;li&gt;{@link Boolean} → BSON boolean (type 0x08)</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;{@code int} / {@code short} / {@code byte} → BSON int32 (type 0x10)</span>
+<span class="source-line-no">052</span><span id="line-52"> *    &lt;li&gt;{@code long} → BSON int64 (type 0x12)</span>
+<span class="source-line-no">053</span><span id="line-53"> *    &lt;li&gt;{@code float} / {@code double} → BSON double (type 0x01)</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;li&gt;{@link Date} / {@link Calendar} / {@link Instant} → BSON datetime (type 0x09) when</span>
+<span class="source-line-no">055</span><span id="line-55"> *       {@code writeDatesAsDatetime=true}; otherwise ISO 8601 string</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@link Duration} → ISO 8601 duration string</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;li&gt;{@code byte[]} → BSON binary (type 0x05, subtype 0x00)</span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;li&gt;{@link BigDecimal} / {@link BigInteger} → BSON decimal128 (type 0x13)</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;li&gt;{@code null} → BSON null (type 0x0A)</span>
+<span class="source-line-no">060</span><span id="line-60"> *    &lt;li&gt;All other types → fallback to {@code toString()} as string</span>
+<span class="source-line-no">061</span><span id="line-61"> * &lt;/ul&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *</span>
+<span class="source-line-no">063</span><span id="line-63"> * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='note'&gt;This class is thread safe and reusable.</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='section'&gt;Limitations:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;li&gt;BSON requires a top-level document. Standalone scalars, collections, and arrays are wrapped as &lt;c&gt;{value: x}&lt;/c&gt;.</span>
+<span class="source-line-no">069</span><span id="line-69"> *    &lt;li&gt;Map keys must be strings. Non-string keys use &lt;c&gt;toString()&lt;/c&gt;. Null keys use a configurable placeholder.</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;li&gt;ObjectId (0x07) is not generated; parsing returns 24-character hex strings.</span>
+<span class="source-line-no">071</span><span id="line-71"> *    &lt;li&gt;Deprecated types (Undefined, DBPointer, Symbol, JS with Scope) are skipped during parsing.</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;li&gt;MongoDB-internal types (JavaScript, Timestamp, MinKey, MaxKey) are not supported.</span>
+<span class="source-line-no">073</span><span id="line-73"> *    &lt;li&gt;{@link BigDecimal} / {@link BigInteger} values outside the Decimal128 range (max 34 significant digits,</span>
+<span class="source-line-no">074</span><span id="line-74"> *       exponent -6176..6111) cannot be represented and throw a {@link SerializeException} with a clear message.</span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;li&gt;BSON datetime (0x09) is millisecond-resolution, so sub-millisecond (nanosecond) precision of</span>
+<span class="source-line-no">076</span><span id="line-76"> *       {@link Instant}/{@link OffsetDateTime}/{@link ZonedDateTime} is truncated when</span>
+<span class="source-line-no">077</span><span id="line-77"> *       {@code writeDatesAsDatetime=true}. Use {@code writeDatesAsDatetime=false} for lossless ISO-8601 string output.</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;li&gt;Local {@code java.time} types ({@link LocalDate}, {@link LocalDateTime}, {@link LocalTime}, {@link Year},</span>
+<span class="source-line-no">079</span><span id="line-79"> *       etc.) have no instant, so they are always written as ISO-8601 strings even when {@code writeDatesAsDatetime=true}.</span>
+<span class="source-line-no">080</span><span id="line-80"> *    &lt;li&gt;BSON is binary; &lt;c&gt;SpacedHex&lt;/c&gt; and &lt;c&gt;Base64&lt;/c&gt; subclasses provide text-encodable output.</span>
+<span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> *</span>
+<span class="source-line-no">083</span><span id="line-83"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *    &lt;jc&gt;// Serialize a POJO to BSON&lt;/jc&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *    byte[] &lt;jv&gt;bson&lt;/jv&gt; = BsonSerializer.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.serialize(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">087</span><span id="line-87"> *</span>
+<span class="source-line-no">088</span><span id="line-88"> *    &lt;jc&gt;// Create a serializer that writes dates as ISO 8601 strings instead of BSON datetime&lt;/jc&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *    BsonSerializer &lt;jv&gt;s&lt;/jv&gt; = BsonSerializer.&lt;jsm&gt;create&lt;/jsm&gt;().writeDatesAsDatetime(&lt;jk&gt;false&lt;/jk&gt;).build();</span>
+<span class="source-line-no">090</span><span id="line-90"> *</span>
+<span class="source-line-no">091</span><span id="line-91"> *    &lt;jc&gt;// Or use the marshaller for convenience&lt;/jc&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> *    &lt;jv&gt;bson&lt;/jv&gt; = Bson.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;someObject&lt;/jv&gt;);</span>
+<span class="source-line-no">093</span><span id="line-93"> * &lt;/p&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> *</span>
+<span class="source-line-no">095</span><span id="line-95"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Bson"&gt;BSON Basics&lt;/a&gt;</span>
+<span class="source-line-no">097</span><span id="line-97"> * &lt;/ul&gt;</span>
+<span class="source-line-no">098</span><span id="line-98"> */</span>
+<span class="source-line-no">099</span><span id="line-99">@SuppressWarnings({</span>
+<span class="source-line-no">100</span><span id="line-100">   "java:S110", // Inheritance depth acceptable for this class hierarchy</span>
+<span class="source-line-no">101</span><span id="line-101">   "java:S115", // Constants use UPPER_snakeCase naming convention</span>
+<span class="source-line-no">102</span><span id="line-102">   "resource" // Closeable resources are owned by the caller's serializer session; Eclipse JDT @Owning warning is by design.</span>
+<span class="source-line-no">103</span><span id="line-103">})</span>
+<span class="source-line-no">104</span><span id="line-104">public class BsonSerializer extends OutputStreamSerializer implements BsonMetaProvider, RecordWritable, ArrayRecordWritable {</span>
+<span class="source-line-no">105</span><span id="line-105"></span>
+<span class="source-line-no">106</span><span id="line-106">   // Argument name constants for assertArgNotNull</span>
+<span class="source-line-no">107</span><span id="line-107">   private static final String ARG_builder = "builder";</span>
+<span class="source-line-no">108</span><span id="line-108">   private static final String ARG_copyFrom = "copyFrom";</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   // Property name constants</span>
+<span class="source-line-no">111</span><span id="line-111">   private static final String PROP_addBeanTypesBson = "addBeanTypesBson";</span>
+<span class="source-line-no">112</span><span id="line-112">   private static final String PROP_nullKeyString = "nullKeyString";</span>
+<span class="source-line-no">113</span><span id="line-113">   private static final String PROP_writeDatesAsDatetime = "writeDatesAsDatetime";</span>
+<span class="source-line-no">114</span><span id="line-114">   private static final String DEFAULT_NULL_KEY = "&lt;NULL&gt;";</span>
+<span class="source-line-no">115</span><span id="line-115"></span>
+<span class="source-line-no">116</span><span id="line-116">   /** Default serializer, BASE64 string output. */</span>
+<span class="source-line-no">117</span><span id="line-117">   public static class Base64 extends BsonSerializer {</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">      /**</span>
+<span class="source-line-no">120</span><span id="line-120">       * Constructor.</span>
+<span class="source-line-no">121</span><span id="line-121">       *</span>
+<span class="source-line-no">122</span><span id="line-122">       * @param builder The builder for this object.</span>
+<span class="source-line-no">123</span><span id="line-123">       */</span>
+<span class="source-line-no">124</span><span id="line-124">      public Base64(Builder builder) {</span>
+<span class="source-line-no">125</span><span id="line-125">         super(assertArgNotNull(ARG_builder, builder).binaryFormat(BinaryFormat.BASE64));</span>
+<span class="source-line-no">126</span><span id="line-126">      }</span>
+<span class="source-line-no">127</span><span id="line-127">   }</span>
+<span class="source-line-no">128</span><span id="line-128"></span>
+<span class="source-line-no">129</span><span id="line-129">   /**</span>
+<span class="source-line-no">130</span><span id="line-130">    * Builder class.</span>
+<span class="source-line-no">131</span><span id="line-131">    */</span>
+<span class="source-line-no">132</span><span id="line-132">   public static class Builder extends OutputStreamSerializer.Builder&lt;Builder&gt; {</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">      private static final Cache&lt;HashKey,BsonSerializer&gt; CACHE = Cache.of(HashKey.class, BsonSerializer.class).build();</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">      private boolean addBeanTypesBson;</span>
+<span class="source-line-no">137</span><span id="line-137">      private String nullKeyString = DEFAULT_NULL_KEY;</span>
+<span class="source-line-no">138</span><span id="line-138">      private boolean writeDatesAsDatetime = true;</span>
+<span class="source-line-no">139</span><span id="line-139"></span>
+<span class="source-line-no">140</span><span id="line-140">      /**</span>
+<span class="source-line-no">141</span><span id="line-141">       * Constructor, default settings.</span>
+<span class="source-line-no">142</span><span id="line-142">       */</span>
+<span class="source-line-no">143</span><span id="line-143">      protected Builder() {</span>
+<span class="source-line-no">144</span><span id="line-144">         produces("application/bson");</span>
+<span class="source-line-no">145</span><span id="line-145">         accept("application/bson");</span>
+<span class="source-line-no">146</span><span id="line-146">         addBeanTypesBson = env("BsonSerializer.addBeanTypesBson", false);</span>
+<span class="source-line-no">147</span><span id="line-147">         nullKeyString = env("BsonSerializer.nullKeyString", DEFAULT_NULL_KEY);</span>
+<span class="source-line-no">148</span><span id="line-148">         writeDatesAsDatetime = env("BsonSerializer.writeDatesAsDatetime", true);</span>
+<span class="source-line-no">149</span><span id="line-149">      }</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">      /**</span>
+<span class="source-line-no">152</span><span id="line-152">       * Copy constructor.</span>
+<span class="source-line-no">153</span><span id="line-153">       *</span>
+<span class="source-line-no">154</span><span id="line-154">       * @param copyFrom The builder to copy from.</span>
+<span class="source-line-no">155</span><span id="line-155">       */</span>
+<span class="source-line-no">156</span><span id="line-156">      protected Builder(Builder copyFrom) {</span>
+<span class="source-line-no">157</span><span id="line-157">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">158</span><span id="line-158">         addBeanTypesBson = copyFrom.addBeanTypesBson;</span>
+<span class="source-line-no">159</span><span id="line-159">         nullKeyString = copyFrom.nullKeyString;</span>
+<span class="source-line-no">160</span><span id="line-160">         writeDatesAsDatetime = copyFrom.writeDatesAsDatetime;</span>
+<span class="source-line-no">161</span><span id="line-161">      }</span>
+<span class="source-line-no">162</span><span id="line-162"></span>
+<span class="source-line-no">163</span><span id="line-163">      /**</span>
+<span class="source-line-no">164</span><span id="line-164">       * Copy constructor.</span>
+<span class="source-line-no">165</span><span id="line-165">       *</span>
+<span class="source-line-no">166</span><span id="line-166">       * @param copyFrom The bean to copy from.</span>
+<span class="source-line-no">167</span><span id="line-167">       */</span>
+<span class="source-line-no">168</span><span id="line-168">      protected Builder(BsonSerializer copyFrom) {</span>
+<span class="source-line-no">169</span><span id="line-169">         super(assertArgNotNull(ARG_copyFrom, copyFrom));</span>
+<span class="source-line-no">170</span><span id="line-170">         addBeanTypesBson = copyFrom.addBeanTypesBson;</span>
+<span class="source-line-no">171</span><span id="line-171">         nullKeyString = copyFrom.nullKeyString;</span>
+<span class="source-line-no">172</span><span id="line-172">         writeDatesAsDatetime = copyFrom.writeDatesAsDatetime;</span>
+<span class="source-line-no">173</span><span id="line-173">      }</span>
+<span class="source-line-no">174</span><span id="line-174"></span>
+<span class="source-line-no">175</span><span id="line-175">      /**</span>
+<span class="source-line-no">176</span><span id="line-176">       * Add &lt;js&gt;"_type"&lt;/js&gt; properties when needed.</span>
+<span class="source-line-no">177</span><span id="line-177">       *</span>
+<span class="source-line-no">178</span><span id="line-178">       * @param value The value for this setting.</span>
+<span class="source-line-no">179</span><span id="line-179">       * @return This object.</span>
+<span class="source-line-no">180</span><span id="line-180">       */</span>
+<span class="source-line-no">181</span><span id="line-181">      public Builder addBeanTypesBson(boolean value) {</span>
+<span class="source-line-no">182</span><span id="line-182">         addBeanTypesBson = value;</span>
+<span class="source-line-no">183</span><span id="line-183">         return this;</span>
+<span class="source-line-no">184</span><span id="line-184">      }</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">      /**</span>
+<span class="source-line-no">187</span><span id="line-187">       * The string used to represent &lt;jk&gt;null&lt;/jk&gt; map keys in BSON documents.</span>
+<span class="source-line-no">188</span><span id="line-188">       *</span>
+<span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">       * BSON document field names cannot be &lt;jk&gt;null&lt;/jk&gt;. When serializing a {@link Map} with a &lt;jk&gt;null&lt;/jk&gt; key,</span>
+<span class="source-line-no">191</span><span id="line-191">       * this string is used as the field name. When parsing, a field with this name is stored with &lt;jk&gt;null&lt;/jk&gt;</span>
+<span class="source-line-no">192</span><span id="line-192">       * as the key.</span>
+<span class="source-line-no">193</span><span id="line-193">       *</span>
+<span class="source-line-no">194</span><span id="line-194">       * @param value The placeholder string for null keys. Default is &lt;js&gt;"&amp;lt;NULL&amp;gt;"&lt;/js&gt;.</span>
+<span class="source-line-no">195</span><span id="line-195">       * @return This object.</span>
+<span class="source-line-no">196</span><span id="line-196">       */</span>
+<span class="source-line-no">197</span><span id="line-197">      public Builder nullKeyString(String value) {</span>
+<span class="source-line-no">198</span><span id="line-198">         nullKeyString = value == null ? DEFAULT_NULL_KEY : value;</span>
+<span class="source-line-no">199</span><span id="line-199">         return this;</span>
+<span class="source-line-no">200</span><span id="line-200">      }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">      /**</span>
+<span class="source-line-no">203</span><span id="line-203">       * Use BSON datetime type for dates. When &lt;jk&gt;false&lt;/jk&gt;, dates are serialized as ISO-8601 strings.</span>
+<span class="source-line-no">204</span><span id="line-204">       *</span>
+<span class="source-line-no">205</span><span id="line-205">       * @param value The value for this setting.</span>
+<span class="source-line-no">206</span><span id="line-206">       * @return This object.</span>
+<span class="source-line-no">207</span><span id="line-207">       */</span>
+<span class="source-line-no">208</span><span id="line-208">      public Builder writeDatesAsDatetime(boolean value) {</span>
+<span class="source-line-no">209</span><span id="line-209">         writeDatesAsDatetime = value;</span>
+<span class="source-line-no">210</span><span id="line-210">         return this;</span>
+<span class="source-line-no">211</span><span id="line-211">      }</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">      @Override /* OutputStreamSerializer.Builder&lt;?&gt; */</span>
+<span class="source-line-no">214</span><span id="line-214">      public Builder binaryFormat(BinaryFormat value) {</span>
+<span class="source-line-no">215</span><span id="line-215">         super.binaryFormat(value);</span>
+<span class="source-line-no">216</span><span id="line-216">         return this;</span>
+<span class="source-line-no">217</span><span id="line-217">      }</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">      @Override /* Serializer.Builder&lt;?&gt; */</span>
+<span class="source-line-no">220</span><span id="line-220">      public Builder keepNullProperties() {</span>
+<span class="source-line-no">221</span><span id="line-221">         super.keepNullProperties();</span>
+<span class="source-line-no">222</span><span id="line-222">         return this;</span>
+<span class="source-line-no">223</span><span id="line-223">      }</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">      @Override /* Serializer.Builder&lt;?&gt; */</span>
+<span class="source-line-no">226</span><span id="line-226">      public Builder keepNullProperties(boolean value) {</span>
+<span class="source-line-no">227</span><span id="line-227">         super.keepNullProperties(value);</span>
+<span class="source-line-no">228</span><span id="line-228">         return this;</span>
+<span class="source-line-no">229</span><span id="line-229">      }</span>
+<span class="source-line-no">230</span><span id="line-230"></span>
+<span class="source-line-no">231</span><span id="line-231">      @Override /* Serializer.Builder&lt;?&gt; */</span>
+<span class="source-line-no">232</span><span id="line-232">      public Builder addRootType() {</span>
+<span class="source-line-no">233</span><span id="line-233">         super.addRootType();</span>
+<span class="source-line-no">234</span><span id="line-234">         return this;</span>
+<span class="source-line-no">235</span><span id="line-235">      }</span>
+<span class="source-line-no">236</span><span id="line-236"></span>
+<span class="source-line-no">237</span><span id="line-237">      @Override /* Serializer.Builder&lt;?&gt; */</span>
+<span class="source-line-no">238</span><span id="line-238">      public Builder addRootType(boolean value) {</span>
+<span class="source-line-no">239</span><span id="line-239">         super.addRootType(value);</span>
+<span class="source-line-no">240</span><span id="line-240">         return this;</span>
+<span class="source-line-no">241</span><span id="line-241">      }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">      @Override /* Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">244</span><span id="line-244">      public BsonSerializer build() {</span>
+<span class="source-line-no">245</span><span id="line-245">         return cache(CACHE).build(BsonSerializer.class);</span>
+<span class="source-line-no">246</span><span id="line-246">      }</span>
+<span class="source-line-no">247</span><span id="line-247"></span>
+<span class="source-line-no">248</span><span id="line-248">      @Override /* Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">249</span><span id="line-249">      public HashKey hashKey() {</span>
+<span class="source-line-no">250</span><span id="line-250">         return HashKey.of(super.hashKey(), addBeanTypesBson, nullKeyString, writeDatesAsDatetime);</span>
+<span class="source-line-no">251</span><span id="line-251">      }</span>
+<span class="source-line-no">252</span><span id="line-252"></span>
+<span class="source-line-no">253</span><span id="line-253">      @Override /* Context.Builder&lt;?&gt; */</span>
+<span class="source-line-no">254</span><span id="line-254">      public Builder copy() {</span>
+<span class="source-line-no">255</span><span id="line-255">         return new Builder(this);</span>
+<span class="source-line-no">256</span><span id="line-256">      }</span>
+<span class="source-line-no">257</span><span id="line-257">   }</span>
+<span class="source-line-no">258</span><span id="line-258"></span>
+<span class="source-line-no">259</span><span id="line-259">   /** Default serializer, spaced-hex string output. */</span>
+<span class="source-line-no">260</span><span id="line-260">   public static class SpacedHex extends BsonSerializer {</span>
+<span class="source-line-no">261</span><span id="line-261"></span>
+<span class="source-line-no">262</span><span id="line-262">      /**</span>
+<span class="source-line-no">263</span><span id="line-263">       * Constructor.</span>
+<span class="source-line-no">264</span><span id="line-264">       *</span>
+<span class="source-line-no">265</span><span id="line-265">       * @param builder The builder for this object.</span>
+<span class="source-line-no">266</span><span id="line-266">       */</span>
+<span class="source-line-no">267</span><span id="line-267">      public SpacedHex(Builder builder) {</span>
+<span class="source-line-no">268</span><span id="line-268">         super(builder.binaryFormat(BinaryFormat.SPACED_HEX));</span>
+<span class="source-line-no">269</span><span id="line-269">      }</span>
+<span class="source-line-no">270</span><span id="line-270">   }</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">   /** Default serializer, all default settings. */</span>
+<span class="source-line-no">273</span><span id="line-273">   public static final BsonSerializer DEFAULT = new BsonSerializer(create());</span>
+<span class="source-line-no">274</span><span id="line-274">   /** Default serializer, spaced-hex string output. */</span>
+<span class="source-line-no">275</span><span id="line-275">   public static final BsonSerializer DEFAULT_SPACED_HEX = new SpacedHex(create());</span>
+<span class="source-line-no">276</span><span id="line-276">   /** Default serializer, BASE64 string output. */</span>
+<span class="source-line-no">277</span><span id="line-277">   public static final BsonSerializer DEFAULT_BASE64 = new Base64(create());</span>
+<span class="source-line-no">278</span><span id="line-278"></span>
+<span class="source-line-no">279</span><span id="line-279">   /**</span>
+<span class="source-line-no">280</span><span id="line-280">    * Creates a new builder for this object.</span>
+<span class="source-line-no">281</span><span id="line-281">    *</span>
+<span class="source-line-no">282</span><span id="line-282">    * @return A new builder.</span>
+<span class="source-line-no">283</span><span id="line-283">    */</span>
+<span class="source-line-no">284</span><span id="line-284">   public static Builder create() {</span>
+<span class="source-line-no">285</span><span id="line-285">      return new Builder();</span>
+<span class="source-line-no">286</span><span id="line-286">   }</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   protected final boolean addBeanTypesBson;</span>
+<span class="source-line-no">289</span><span id="line-289">   protected final String nullKeyString;</span>
+<span class="source-line-no">290</span><span id="line-290">   protected final boolean writeDatesAsDatetime;</span>
+<span class="source-line-no">291</span><span id="line-291"></span>
+<span class="source-line-no">292</span><span id="line-292">   private final Map&lt;BeanPropertyMeta,BsonBeanPropertyMeta&gt; bsonBeanPropertyMetas = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">293</span><span id="line-293">   private final Map&lt;ClassMeta&lt;?&gt;,BsonClassMeta&gt; bsonClassMetas = new ConcurrentHashMap&lt;&gt;();</span>
+<span class="source-line-no">294</span><span id="line-294"></span>
+<span class="source-line-no">295</span><span id="line-295">   /**</span>
+<span class="source-line-no">296</span><span id="line-296">    * Constructor.</span>
+<span class="source-line-no">297</span><span id="line-297">    *</span>
+<span class="source-line-no">298</span><span id="line-298">    * @param builder The builder for this object.</span>
+<span class="source-line-no">299</span><span id="line-299">    */</span>
+<span class="source-line-no">300</span><span id="line-300">   public BsonSerializer(Builder builder) {</span>
+<span class="source-line-no">301</span><span id="line-301">      super(builder);</span>
+<span class="source-line-no">302</span><span id="line-302">      addBeanTypesBson = builder.addBeanTypesBson;</span>
+<span class="source-line-no">303</span><span id="line-303">      nullKeyString = builder.nullKeyString;</span>
+<span class="source-line-no">304</span><span id="line-304">      writeDatesAsDatetime = builder.writeDatesAsDatetime;</span>
+<span class="source-line-no">305</span><span id="line-305">   }</span>
+<span class="source-line-no">306</span><span id="line-306"></span>
+<span class="source-line-no">307</span><span id="line-307">   @Override /* Context */</span>
+<span class="source-line-no">308</span><span id="line-308">   public Builder copy() {</span>
+<span class="source-line-no">309</span><span id="line-309">      return new Builder(this);</span>
+<span class="source-line-no">310</span><span id="line-310">   }</span>
+<span class="source-line-no">311</span><span id="line-311"></span>
+<span class="source-line-no">312</span><span id="line-312">   @Override /* Context */</span>
+<span class="source-line-no">313</span><span id="line-313">   public BsonSerializerSession.Builder createSession() {</span>
+<span class="source-line-no">314</span><span id="line-314">      return BsonSerializerSession.create(this);</span>
+<span class="source-line-no">315</span><span id="line-315">   }</span>
+<span class="source-line-no">316</span><span id="line-316"></span>
+<span class="source-line-no">317</span><span id="line-317">   @Override /* BsonMetaProvider */</span>
+<span class="source-line-no">318</span><span id="line-318">   public BsonBeanPropertyMeta getBsonBeanPropertyMeta(BeanPropertyMeta bpm) {</span>
+<span class="source-line-no">319</span><span id="line-319">      if (bpm == null)</span>
+<span class="source-line-no">320</span><span id="line-320">         return BsonBeanPropertyMeta.DEFAULT;</span>
+<span class="source-line-no">321</span><span id="line-321">      return bsonBeanPropertyMetas.computeIfAbsent(bpm, k -&gt; new BsonBeanPropertyMeta(k.getDelegateFor(), this));</span>
+<span class="source-line-no">322</span><span id="line-322">   }</span>
+<span class="source-line-no">323</span><span id="line-323"></span>
+<span class="source-line-no">324</span><span id="line-324">   @Override /* BsonMetaProvider */</span>
+<span class="source-line-no">325</span><span id="line-325">   public BsonClassMeta getBsonClassMeta(ClassMeta&lt;?&gt; cm) {</span>
+<span class="source-line-no">326</span><span id="line-326">      return bsonClassMetas.computeIfAbsent(cm, k -&gt; new BsonClassMeta(k, this));</span>
+<span class="source-line-no">327</span><span id="line-327">   }</span>
+<span class="source-line-no">328</span><span id="line-328"></span>
+<span class="source-line-no">329</span><span id="line-329">   @Override /* Context */</span>
+<span class="source-line-no">330</span><span id="line-330">   public BsonSerializerSession getSession() {</span>
+<span class="source-line-no">331</span><span id="line-331">      return createSession().build();</span>
+<span class="source-line-no">332</span><span id="line-332">   }</span>
+<span class="source-line-no">333</span><span id="line-333"></span>
+<span class="source-line-no">334</span><span id="line-334">   @Override</span>
+<span class="source-line-no">335</span><span id="line-335">   protected final boolean isAddBeanTypes() {</span>
+<span class="source-line-no">336</span><span id="line-336">      return addBeanTypesBson || super.isAddBeanTypes();</span>
+<span class="source-line-no">337</span><span id="line-337">   }</span>
+<span class="source-line-no">338</span><span id="line-338"></span>
+<span class="source-line-no">339</span><span id="line-339">   @Override /* OutputStreamSerializer */</span>
+<span class="source-line-no">340</span><span id="line-340">   protected FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">341</span><span id="line-341">      return super.properties()</span>
+<span class="source-line-no">342</span><span id="line-342">         .a(PROP_addBeanTypesBson, addBeanTypesBson)</span>
+<span class="source-line-no">343</span><span id="line-343">         .a(PROP_nullKeyString, nullKeyString)</span>
+<span class="source-line-no">344</span><span id="line-344">         .a(PROP_writeDatesAsDatetime, writeDatesAsDatetime);</span>
+<span class="source-line-no">345</span><span id="line-345">   }</span>
+<span class="source-line-no">346</span><span id="line-346"></span>
+<span class="source-line-no">347</span><span id="line-347">   /**</span>
+<span class="source-line-no">348</span><span id="line-348">    * Convenience delegator for the whole-value {@link RecordWriter} using &lt;b&gt;default session</span>
+<span class="source-line-no">349</span><span id="line-349">    * arguments&lt;/b&gt;.  The real implementation lives on</span>
+<span class="source-line-no">350</span><span id="line-350">    * {@link BsonSerializerSession#serializeRecords(Object)}.</span>
+<span class="source-line-no">351</span><span id="line-351">    *</span>
+<span class="source-line-no">352</span><span id="line-352">    * @param output The output.</span>
+<span class="source-line-no">353</span><span id="line-353">    * @return A new {@link RecordWriter}.</span>
+<span class="source-line-no">354</span><span id="line-354">    * @throws IOException If a problem occurred opening the underlying output.</span>
+<span class="source-line-no">355</span><span id="line-355">    */</span>
+<span class="source-line-no">356</span><span id="line-356">   @Override /* RecordWritable */</span>
+<span class="source-line-no">357</span><span id="line-357">   public RecordWriter serializeRecords(Object output) throws IOException {</span>
+<span class="source-line-no">358</span><span id="line-358">      return getSession().serializeRecords(output);</span>
+<span class="source-line-no">359</span><span id="line-359">   }</span>
+<span class="source-line-no">360</span><span id="line-360"></span>
+<span class="source-line-no">361</span><span id="line-361">   /**</span>
+<span class="source-line-no">362</span><span id="line-362">    * Convenience delegator for the buffered array-element {@link RecordWriter} using &lt;b&gt;default</span>
+<span class="source-line-no">363</span><span id="line-363">    * session arguments&lt;/b&gt;.  BSON's wire format requires the entire document byte-length up front</span>
+<span class="source-line-no">364</span><span id="line-364">    * (length prefix at every nesting level), so streaming without buffering is not possible.  The</span>
+<span class="source-line-no">365</span><span id="line-365">    * real implementation lives on {@link BsonSerializerSession#serializeArrayRecords(Object)}.</span>
+<span class="source-line-no">366</span><span id="line-366">    *</span>
+<span class="source-line-no">367</span><span id="line-367">    * @param output The output.</span>
+<span class="source-line-no">368</span><span id="line-368">    * @return A buffered {@link RecordWriter}.</span>
+<span class="source-line-no">369</span><span id="line-369">    * @throws IOException If a problem occurred opening the underlying output.</span>
+<span class="source-line-no">370</span><span id="line-370">    */</span>
+<span class="source-line-no">371</span><span id="line-371">   @Override /* ArrayRecordWritable */</span>
+<span class="source-line-no">372</span><span id="line-372">   public RecordWriter serializeArrayRecords(Object output) throws IOException {</span>
+<span class="source-line-no">373</span><span id="line-373">      return getSession().serializeArrayRecords(output);</span>
+<span class="source-line-no">374</span><span id="line-374">   }</span>
+<span class="source-line-no">375</span><span id="line-375"></span>
+<span class="source-line-no">376</span><span id="line-376">   /**</span>
+<span class="source-line-no">377</span><span id="line-377">    * The BSON record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
+<span class="source-line-no">378</span><span id="line-378">    *</span>
+<span class="source-line-no">379</span><span id="line-379">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">380</span><span id="line-380">    */</span>
+<span class="source-line-no">381</span><span id="line-381">   @Override /* RecordWritable */</span>
+<span class="source-line-no">382</span><span id="line-382">   public boolean isRecordStreaming() { return false; }</span>
+<span class="source-line-no">383</span><span id="line-383"></span>
+<span class="source-line-no">384</span><span id="line-384">   /**</span>
+<span class="source-line-no">385</span><span id="line-385">    * The BSON array-record writer is buffered/{@link RecordAdapter}-backed, not O(1) streaming.</span>
+<span class="source-line-no">386</span><span id="line-386">    *</span>
+<span class="source-line-no">387</span><span id="line-387">    * @return Always &lt;jk&gt;false&lt;/jk&gt;.</span>
+<span class="source-line-no">388</span><span id="line-388">    */</span>
+<span class="source-line-no">389</span><span id="line-389">   @Override /* ArrayRecordWritable */</span>
+<span class="source-line-no">390</span><span id="line-390">   public boolean isArrayRecordStreaming() { return false; }</span>
+<span class="source-line-no">391</span><span id="line-391">}</span>
 
 
 

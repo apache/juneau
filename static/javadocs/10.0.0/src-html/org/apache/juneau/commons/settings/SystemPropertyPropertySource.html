@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.settings;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">/**</span>
 <span class="source-line-no">022</span><span id="line-22"> * Property source backed by {@link System#getProperty(String)}.</span>
@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26">   @Override</span>
 <span class="source-line-no">027</span><span id="line-27">   public PropertyLookupResult get(String name) {</span>
 <span class="source-line-no">028</span><span id="line-28">      var v = System.getProperty(name);</span>
-<span class="source-line-no">029</span><span id="line-29">      return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(v));</span>
+<span class="source-line-no">029</span><span id="line-29">      return v == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(v));</span>
 <span class="source-line-no">030</span><span id="line-30">   }</span>
 <span class="source-line-no">031</span><span id="line-31">}</span>
 

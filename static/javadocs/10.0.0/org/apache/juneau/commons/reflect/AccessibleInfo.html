@@ -84,8 +84,9 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a></code>, <code><a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/AccessibleInfo.html#line-76">AccessibleInfo</a></span>
-<span class="extends-implements">extends <a href="ElementInfo.html" title="class in org.apache.juneau.commons.reflect">ElementInfo</a></span></div>
+<div class="type-signature"><span class="modifiers">public abstract sealed class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/AccessibleInfo.html#line-76">AccessibleInfo</a></span>
+<span class="extends-implements">extends <a href="ElementInfo.html" title="class in org.apache.juneau.commons.reflect">ElementInfo</a></span>
+<span class="permits">permits <a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a>, <a href="ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a></span></div>
 <div class="block">Abstract base class for reflection info classes that wrap <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AccessibleObject.html" title="class or interface in java.lang.reflect" class="external-link"><code>AccessibleObject</code></a>.
 
  <p>

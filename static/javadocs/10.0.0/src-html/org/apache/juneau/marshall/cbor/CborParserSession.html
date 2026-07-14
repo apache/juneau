@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.cbor;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.marshall.cbor.DataType.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> * &lt;/ul&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/CborBasics"&gt;CBOR Basics&lt;/a&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor"&gt;CBOR Basics&lt;/a&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"> * &lt;/ul&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> */</span>
 <span class="source-line-no">045</span><span id="line-45">@SuppressWarnings({</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169">         sType = eType;</span>
 <span class="source-line-no">170</span><span id="line-170"></span>
 <span class="source-line-no">171</span><span id="line-171">      if (sType.isOptional())</span>
-<span class="source-line-no">172</span><span id="line-172">         return (T)opt(parseAnything(eType.getElementType(), is, outer, pMeta));</span>
+<span class="source-line-no">172</span><span id="line-172">         return (T)o(parseAnything(eType.getElementType(), is, outer, pMeta));</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
 <span class="source-line-no">174</span><span id="line-174">      setCurrentClass(sType);</span>
 <span class="source-line-no">175</span><span id="line-175"></span>

@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -270,7 +270,7 @@
 <span class="source-line-no">257</span><span id="line-257">   @Override /* Overridden from OpenApiElement */</span>
 <span class="source-line-no">258</span><span id="line-258">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">259</span><span id="line-259">      // @formatter:off</span>
-<span class="source-line-no">260</span><span id="line-260">      var s = setb(String.class)</span>
+<span class="source-line-no">260</span><span id="line-260">      var s = stb(String.class)</span>
 <span class="source-line-no">261</span><span id="line-261">         .addIf(nn(delete), PROP_delete)</span>
 <span class="source-line-no">262</span><span id="line-262">         .addIf(nn(description), PROP_description)</span>
 <span class="source-line-no">263</span><span id="line-263">         .addIf(nn(get), PROP_get)</span>
@@ -298,10 +298,10 @@
 <span class="source-line-no">285</span><span id="line-285">         case PROP_head -&gt; setHead(toType(value, Operation.class));</span>
 <span class="source-line-no">286</span><span id="line-286">         case PROP_options -&gt; setOptions(toType(value, Operation.class));</span>
 <span class="source-line-no">287</span><span id="line-287">         case PROP_patch -&gt; setPatch(toType(value, Operation.class));</span>
-<span class="source-line-no">288</span><span id="line-288">         case PROP_parameters -&gt; setParameters(listb(Parameter.class).addAny(value).sparse().build());</span>
+<span class="source-line-no">288</span><span id="line-288">         case PROP_parameters -&gt; setParameters(lb(Parameter.class).addAny(value).sparse().build());</span>
 <span class="source-line-no">289</span><span id="line-289">         case PROP_post -&gt; setPost(toType(value, Operation.class));</span>
 <span class="source-line-no">290</span><span id="line-290">         case PROP_put -&gt; setPut(toType(value, Operation.class));</span>
-<span class="source-line-no">291</span><span id="line-291">         case PROP_servers -&gt; setServers(listb(Server.class).addAny(value).sparse().build());</span>
+<span class="source-line-no">291</span><span id="line-291">         case PROP_servers -&gt; setServers(lb(Server.class).addAny(value).sparse().build());</span>
 <span class="source-line-no">292</span><span id="line-292">         case PROP_summary -&gt; setSummary(s(value));</span>
 <span class="source-line-no">293</span><span id="line-293">         case PROP_trace -&gt; setTrace(toType(value, Operation.class));</span>
 <span class="source-line-no">294</span><span id="line-294">         default -&gt; {</span>

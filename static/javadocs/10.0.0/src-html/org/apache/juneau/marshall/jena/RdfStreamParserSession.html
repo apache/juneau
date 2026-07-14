@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.marshall.jena.Constants.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import java.io.*;</span>
@@ -273,7 +273,7 @@
 <span class="source-line-no">260</span><span id="line-260">         sType = eType;</span>
 <span class="source-line-no">261</span><span id="line-261"></span>
 <span class="source-line-no">262</span><span id="line-262">      if (sType.isOptional())</span>
-<span class="source-line-no">263</span><span id="line-263">         return (T)opt(parseAnything(eType.getElementType(), n, outer, pMeta));</span>
+<span class="source-line-no">263</span><span id="line-263">         return (T)o(parseAnything(eType.getElementType(), n, outer, pMeta));</span>
 <span class="source-line-no">264</span><span id="line-264"></span>
 <span class="source-line-no">265</span><span id="line-265">      setCurrentClass(sType);</span>
 <span class="source-line-no">266</span><span id="line-266"></span>
@@ -352,7 +352,7 @@
 <span class="source-line-no">339</span><span id="line-339">         if (v instanceof byte[] b) {</span>
 <span class="source-line-no">340</span><span id="line-340">            o = b;</span>
 <span class="source-line-no">341</span><span id="line-341">         } else if (v != null) {</span>
-<span class="source-line-no">342</span><span id="line-342">            o = java.util.Base64.getDecoder().decode(v.toString());</span>
+<span class="source-line-no">342</span><span id="line-342">            o = Base64.getDecoder().decode(v.toString());</span>
 <span class="source-line-no">343</span><span id="line-343">         }</span>
 <span class="source-line-no">344</span><span id="line-344">      } else if (sType.isCollectionOrArray() || sType.isArgs()) {</span>
 <span class="source-line-no">345</span><span id="line-345">         if (sType.isArray() || sType.isArgs())</span>
@@ -540,7 +540,7 @@
 <span class="source-line-no">527</span><span id="line-527">      }</span>
 <span class="source-line-no">528</span><span id="line-528"></span>
 <span class="source-line-no">529</span><span id="line-529">      if (roots.isEmpty())</span>
-<span class="source-line-no">530</span><span id="line-530">         return type.isOptional() ? (T)opte() : null;</span>
+<span class="source-line-no">530</span><span id="line-530">         return type.isOptional() ? (T)oe() : null;</span>
 <span class="source-line-no">531</span><span id="line-531"></span>
 <span class="source-line-no">532</span><span id="line-532">      if (roots.size() &gt; 1)</span>
 <span class="source-line-no">533</span><span id="line-533">         throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());</span>

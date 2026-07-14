@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.isEmpty;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.isEmpty;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.security.*;</span>
@@ -253,7 +253,7 @@
 <span class="source-line-no">240</span><span id="line-240"></span>
 <span class="source-line-no">241</span><span id="line-241">      // No filters match this path — does not apply.</span>
 <span class="source-line-no">242</span><span id="line-242">      if (matchingEntries.isEmpty())</span>
-<span class="source-line-no">243</span><span id="line-243">         return opte();</span>
+<span class="source-line-no">243</span><span id="line-243">         return oe();</span>
 <span class="source-line-no">244</span><span id="line-244"></span>
 <span class="source-line-no">245</span><span id="line-245">      var acc = new AuthResultAccumulator();</span>
 <span class="source-line-no">246</span><span id="line-246">      List&lt;AuthenticationException&gt; failures = null;</span>
@@ -273,7 +273,7 @@
 <span class="source-line-no">260</span><span id="line-260">         return folded;</span>
 <span class="source-line-no">261</span><span id="line-261">      if (failures != null)</span>
 <span class="source-line-no">262</span><span id="line-262">         throw aggregate(failures);</span>
-<span class="source-line-no">263</span><span id="line-263">      return opte();</span>
+<span class="source-line-no">263</span><span id="line-263">      return oe();</span>
 <span class="source-line-no">264</span><span id="line-264">   }</span>
 <span class="source-line-no">265</span><span id="line-265"></span>
 <span class="source-line-no">266</span><span id="line-266">   /** Builds the effective request path relative to the context root. */</span>

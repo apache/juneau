@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.stats;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -97,7 +97,7 @@
 <span class="source-line-no">084</span><span id="line-84">   public Object invoke(BeanStore beanStore, Object o) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {</span>
 <span class="source-line-no">085</span><span id="line-85">      if (beanStore.hasAllParams(m, o))</span>
 <span class="source-line-no">086</span><span id="line-86">         return invoke(o, beanStore.getParams(m, o));</span>
-<span class="source-line-no">087</span><span id="line-87">      throw illegalArg("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), beanStore.getMissingParams(m, o));</span>
+<span class="source-line-no">087</span><span id="line-87">      throw iaex("Could not find prerequisites to invoke method ''{0}'': {1}", getFullName(), beanStore.getMissingParams(m, o));</span>
 <span class="source-line-no">088</span><span id="line-88">   }</span>
 <span class="source-line-no">089</span><span id="line-89"></span>
 <span class="source-line-no">090</span><span id="line-90">   /**</span>

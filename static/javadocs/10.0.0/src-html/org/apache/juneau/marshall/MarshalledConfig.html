@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59">    *       When bean getters throws exceptions, the exception includes the object stack information</span>
 <span class="source-line-no">060</span><span id="line-60">    *       in order to determine how that method was invoked.</span>
 <span class="source-line-no">061</span><span id="line-61">    *    &lt;li&gt;</span>
-<span class="source-line-no">062</span><span id="line-62">    *       Enables {@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions()}.</span>
+<span class="source-line-no">062</span><span id="line-62">    *       Enables {@link MarshallingTraverseContext.Builder#detectRecursions()}.</span>
 <span class="source-line-no">063</span><span id="line-63">    * &lt;/ul&gt;</span>
 <span class="source-line-no">064</span><span id="line-64">    *</span>
 <span class="source-line-no">065</span><span id="line-65">    * &lt;p&gt;</span>
@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81">    * &lt;/ul&gt;</span>
 <span class="source-line-no">082</span><span id="line-82">    *</span>
 <span class="source-line-no">083</span><span id="line-83">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">084</span><span id="line-84">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.Context.Builder#debug()}</span>
+<span class="source-line-no">084</span><span id="line-84">    *    &lt;li class='jm'&gt;{@link Context.Builder#debug()}</span>
 <span class="source-line-no">085</span><span id="line-85">    * &lt;/ul&gt;</span>
 <span class="source-line-no">086</span><span id="line-86">    *</span>
 <span class="source-line-no">087</span><span id="line-87">    * @return The annotation value.</span>
@@ -121,8 +121,8 @@
 <span class="source-line-no">108</span><span id="line-108">    *    &lt;li class='ja'&gt;{@link Marshalled#dictionary()}</span>
 <span class="source-line-no">109</span><span id="line-109">    *    &lt;li class='ja'&gt;{@link MarshalledProp#dictionary()}</span>
 <span class="source-line-no">110</span><span id="line-110">    *    &lt;li class='ja'&gt;{@link MarshalledConfig#dictionary_replace()}</span>
-<span class="source-line-no">111</span><span id="line-111">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#beanDictionary(Class...)}</span>
-<span class="source-line-no">112</span><span id="line-112">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaryBasics"&gt;Bean Dictionary Basics&lt;/a&gt;</span>
+<span class="source-line-no">111</span><span id="line-111">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
+<span class="source-line-no">112</span><span id="line-112">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/BeanDictionaries"&gt;Bean Dictionary Basics&lt;/a&gt;</span>
 <span class="source-line-no">113</span><span id="line-113">    * &lt;/ul&gt;</span>
 <span class="source-line-no">114</span><span id="line-114">    *</span>
 <span class="source-line-no">115</span><span id="line-115">    * @return The annotation value.</span>
@@ -139,7 +139,7 @@
 <span class="source-line-no">126</span><span id="line-126">    *    &lt;li class='ja'&gt;{@link Marshalled#dictionary()}</span>
 <span class="source-line-no">127</span><span id="line-127">    *    &lt;li class='ja'&gt;{@link MarshalledProp#dictionary()}</span>
 <span class="source-line-no">128</span><span id="line-128">    *    &lt;li class='ja'&gt;{@link MarshalledConfig#dictionary()}</span>
-<span class="source-line-no">129</span><span id="line-129">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#beanDictionary(Class...)}</span>
+<span class="source-line-no">129</span><span id="line-129">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#beanDictionary(Class...)}</span>
 <span class="source-line-no">130</span><span id="line-130">    * &lt;/ul&gt;</span>
 <span class="source-line-no">131</span><span id="line-131">    *</span>
 <span class="source-line-no">132</span><span id="line-132">    * @return The annotation value.</span>
@@ -158,8 +158,8 @@
 <span class="source-line-no">145</span><span id="line-145">    * &lt;/ul&gt;</span>
 <span class="source-line-no">146</span><span id="line-146">    *</span>
 <span class="source-line-no">147</span><span id="line-147">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">148</span><span id="line-148">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingSession.Builder#locale(Locale)}</span>
-<span class="source-line-no">149</span><span id="line-149">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#locale(Locale)}</span>
+<span class="source-line-no">148</span><span id="line-148">    *    &lt;li class='jm'&gt;{@link MarshallingSession.Builder#locale(Locale)}</span>
+<span class="source-line-no">149</span><span id="line-149">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#locale(Locale)}</span>
 <span class="source-line-no">150</span><span id="line-150">    * &lt;/ul&gt;</span>
 <span class="source-line-no">151</span><span id="line-151">    *</span>
 <span class="source-line-no">152</span><span id="line-152">    * @return The annotation value.</span>
@@ -178,8 +178,8 @@
 <span class="source-line-no">165</span><span id="line-165">    * &lt;/ul&gt;</span>
 <span class="source-line-no">166</span><span id="line-166">    *</span>
 <span class="source-line-no">167</span><span id="line-167">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">168</span><span id="line-168">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingSession.Builder#mediaType(MediaType)}</span>
-<span class="source-line-no">169</span><span id="line-169">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#mediaType(MediaType)}</span>
+<span class="source-line-no">168</span><span id="line-168">    *    &lt;li class='jm'&gt;{@link MarshallingSession.Builder#mediaType(MediaType)}</span>
+<span class="source-line-no">169</span><span id="line-169">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#mediaType(MediaType)}</span>
 <span class="source-line-no">170</span><span id="line-170">    * &lt;/ul&gt;</span>
 <span class="source-line-no">171</span><span id="line-171">    *</span>
 <span class="source-line-no">172</span><span id="line-172">    * @return The annotation value.</span>
@@ -212,8 +212,8 @@
 <span class="source-line-no">199</span><span id="line-199">    * {@link ObjectSwap#forMediaTypes()} or {@link Swap#mediaTypes() @Swap(mediaTypes)} are used to come up with the best match.</span>
 <span class="source-line-no">200</span><span id="line-200">    *</span>
 <span class="source-line-no">201</span><span id="line-201">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">202</span><span id="line-202">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)}</span>
-<span class="source-line-no">203</span><span id="line-203">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SwapBasics"&gt;Swap Basics&lt;/a&gt;</span>
+<span class="source-line-no">202</span><span id="line-202">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#swaps(Class...)}</span>
+<span class="source-line-no">203</span><span id="line-203">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Swaps"&gt;Swap Basics&lt;/a&gt;</span>
 <span class="source-line-no">204</span><span id="line-204">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/PerMediaTypeSwaps"&gt;Per-media-type Swaps&lt;/a&gt;</span>
 <span class="source-line-no">205</span><span id="line-205">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/OneWaySwaps"&gt;One-way Swaps&lt;/a&gt;</span>
 <span class="source-line-no">206</span><span id="line-206">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SwapAnnotation"&gt;@Swap Annotation&lt;/a&gt;</span>
@@ -232,7 +232,7 @@
 <span class="source-line-no">219</span><span id="line-219">    * Same as {@link #swaps()} but replaces any existing value.</span>
 <span class="source-line-no">220</span><span id="line-220">    *</span>
 <span class="source-line-no">221</span><span id="line-221">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">222</span><span id="line-222">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#swaps(Class...)}</span>
+<span class="source-line-no">222</span><span id="line-222">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#swaps(Class...)}</span>
 <span class="source-line-no">223</span><span id="line-223">    * &lt;/ul&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    *</span>
 <span class="source-line-no">225</span><span id="line-225">    * @return The annotation value.</span>
@@ -363,8 +363,8 @@
 <span class="source-line-no">350</span><span id="line-350">    * &lt;/ul&gt;</span>
 <span class="source-line-no">351</span><span id="line-351">    *</span>
 <span class="source-line-no">352</span><span id="line-352">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">353</span><span id="line-353">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingSession.Builder#timeZone(TimeZone)}</span>
-<span class="source-line-no">354</span><span id="line-354">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#timeZone(TimeZone)}</span>
+<span class="source-line-no">353</span><span id="line-353">    *    &lt;li class='jm'&gt;{@link MarshallingSession.Builder#timeZone(TimeZone)}</span>
+<span class="source-line-no">354</span><span id="line-354">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#timeZone(TimeZone)}</span>
 <span class="source-line-no">355</span><span id="line-355">    * &lt;/ul&gt;</span>
 <span class="source-line-no">356</span><span id="line-356">    *</span>
 <span class="source-line-no">357</span><span id="line-357">    * @return The annotation value.</span>
@@ -387,7 +387,7 @@
 <span class="source-line-no">374</span><span id="line-374">    *</span>
 <span class="source-line-no">375</span><span id="line-375">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">376</span><span id="line-376">    *    &lt;li class='ja'&gt;{@link Marshalled#typePropertyName()}</span>
-<span class="source-line-no">377</span><span id="line-377">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.MarshallingContext.Builder#typePropertyName(String)}</span>
+<span class="source-line-no">377</span><span id="line-377">    *    &lt;li class='jm'&gt;{@link MarshallingContext.Builder#typePropertyName(String)}</span>
 <span class="source-line-no">378</span><span id="line-378">    * &lt;/ul&gt;</span>
 <span class="source-line-no">379</span><span id="line-379">    *</span>
 <span class="source-line-no">380</span><span id="line-380">    * @return The annotation value.</span>

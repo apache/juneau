@@ -29,259 +29,262 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.logging;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import java.text.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.function.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import java.util.logging.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.commons.utils.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">/**</span>
-<span class="source-line-no">031</span><span id="line-31"> * LogRecord that supports lazy message formatting.</span>
-<span class="source-line-no">032</span><span id="line-32"> *</span>
-<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
-<span class="source-line-no">034</span><span id="line-34"> * This class extends {@link java.util.logging.LogRecord java.util.logging.LogRecord} and overrides {@link #getMessage()} to use</span>
-<span class="source-line-no">035</span><span id="line-35"> * {@link org.apache.juneau.commons.utils.Utils#f(String, Object...)} for lazy formatting.</span>
-<span class="source-line-no">036</span><span id="line-36"> * The message is only formatted when {@link #getMessage()} is actually called.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> * This class is used internally by {@link Logger} when logging formatted messages.</span>
-<span class="source-line-no">041</span><span id="line-41"> * The formatted message is only computed when the LogRecord's message is actually</span>
-<span class="source-line-no">042</span><span id="line-42"> * accessed (e.g., by a Handler or Formatter).</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;/p&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;li class='jc'&gt;{@link Logger}</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;li class='jc'&gt;{@link org.apache.juneau.commons.utils.Utils#f(String, Object...)}</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='jc'&gt;{@link java.util.logging.LogRecord}</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;/ul&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> */</span>
-<span class="source-line-no">051</span><span id="line-51">@SuppressWarnings({</span>
-<span class="source-line-no">052</span><span id="line-52">   "java:S115",  // Constants use UPPER_snakeCase convention</span>
-<span class="source-line-no">053</span><span id="line-53">   "java:S100",  // Method names match java.util.logging.LogRecord for API compatibility</span>
-<span class="source-line-no">054</span><span id="line-54">   "java:S1192", // String literals intentionally duplicated for clarity</span>
-<span class="source-line-no">055</span><span id="line-55">   "java:S2176", // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields</span>
-<span class="source-line-no">056</span><span id="line-56">   "java:S2143"  // java.util.Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.</span>
-<span class="source-line-no">057</span><span id="line-57">})</span>
-<span class="source-line-no">058</span><span id="line-58">public class LogRecord extends java.util.logging.LogRecord {</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   private static final long serialVersionUID = 1L;</span>
-<span class="source-line-no">061</span><span id="line-61"></span>
-<span class="source-line-no">062</span><span id="line-62">   // Key constants for format placeholders</span>
-<span class="source-line-no">063</span><span id="line-63">   private static final String KEY_date = "date";</span>
-<span class="source-line-no">064</span><span id="line-64">   private static final String KEY_source = "source";</span>
-<span class="source-line-no">065</span><span id="line-65">   private static final String KEY_logger = "logger";</span>
-<span class="source-line-no">066</span><span id="line-66">   private static final String KEY_level = "level";</span>
-<span class="source-line-no">067</span><span id="line-67">   private static final String KEY_msg = "msg";</span>
-<span class="source-line-no">068</span><span id="line-68">   private static final String KEY_thrown = "thrown";</span>
-<span class="source-line-no">069</span><span id="line-69">   private static final String KEY_timestamp = "timestamp";</span>
-<span class="source-line-no">070</span><span id="line-70">   private static final String KEY_class = "class";</span>
-<span class="source-line-no">071</span><span id="line-71">   private static final String KEY_method = "method";</span>
-<span class="source-line-no">072</span><span id="line-72">   private static final String KEY_thread = "thread";</span>
-<span class="source-line-no">073</span><span id="line-73">   private static final String KEY_threadid = "threadid";</span>
-<span class="source-line-no">074</span><span id="line-74">   private static final String KEY_exception = "exception";</span>
-<span class="source-line-no">075</span><span id="line-75"></span>
-<span class="source-line-no">076</span><span id="line-76">   private transient Supplier&lt;Optional&lt;StackTraceElement&gt;&gt; source = memoize(()-&gt;findSource());</span>
-<span class="source-line-no">077</span><span id="line-77"></span>
-<span class="source-line-no">078</span><span id="line-78">   /**</span>
-<span class="source-line-no">079</span><span id="line-79">    * Constructor.</span>
-<span class="source-line-no">080</span><span id="line-80">    *</span>
-<span class="source-line-no">081</span><span id="line-81">    * @param loggerName The logger name.</span>
-<span class="source-line-no">082</span><span id="line-82">    * @param level The log level.</span>
-<span class="source-line-no">083</span><span id="line-83">    * @param msg The message pattern (will be used as-is if args is null or empty).</span>
-<span class="source-line-no">084</span><span id="line-84">    * @param parameters The format arguments, or &lt;jk&gt;null&lt;/jk&gt; if none.</span>
-<span class="source-line-no">085</span><span id="line-85">    * @param throwable The throwable, or &lt;jk&gt;null&lt;/jk&gt; if none.</span>
-<span class="source-line-no">086</span><span id="line-86">    */</span>
-<span class="source-line-no">087</span><span id="line-87">   public LogRecord(String loggerName, Level level, String msg, Object[] parameters, Throwable throwable) {</span>
-<span class="source-line-no">088</span><span id="line-88">      super(level, msg);</span>
-<span class="source-line-no">089</span><span id="line-89">      setLoggerName(loggerName);</span>
-<span class="source-line-no">090</span><span id="line-90">      setParameters(isNotEmptyArray(parameters) ? parameters : null);</span>
-<span class="source-line-no">091</span><span id="line-91">      setThrown(throwable);</span>
-<span class="source-line-no">092</span><span id="line-92">   }</span>
-<span class="source-line-no">093</span><span id="line-93"></span>
-<span class="source-line-no">094</span><span id="line-94">   /**</span>
-<span class="source-line-no">095</span><span id="line-95">    * Returns the log message, formatting it lazily if needed.</span>
-<span class="source-line-no">096</span><span id="line-96">    *</span>
-<span class="source-line-no">097</span><span id="line-97">    * &lt;p&gt;</span>
-<span class="source-line-no">098</span><span id="line-98">    * If parameters were set via {@link #setParameters(Object[])}, the message is formatted</span>
-<span class="source-line-no">099</span><span id="line-99">    * using {@link org.apache.juneau.commons.utils.Utils#f(String, Object...)} on first access.</span>
-<span class="source-line-no">100</span><span id="line-100">    *</span>
-<span class="source-line-no">101</span><span id="line-101">    * @return The log message, formatted if parameters are present.</span>
-<span class="source-line-no">102</span><span id="line-102">    */</span>
-<span class="source-line-no">103</span><span id="line-103">   @Override</span>
-<span class="source-line-no">104</span><span id="line-104">   public String getMessage() {</span>
-<span class="source-line-no">105</span><span id="line-105">      var m = super.getMessage();</span>
-<span class="source-line-no">106</span><span id="line-106">      var p = getParameters();</span>
-<span class="source-line-no">107</span><span id="line-107">      return isEmptyArray(p) ? m : f(m, p);</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   /**</span>
-<span class="source-line-no">111</span><span id="line-111">    * Returns the source class name, calculating it lazily from the stack trace if not already set.</span>
-<span class="source-line-no">112</span><span id="line-112">    *</span>
-<span class="source-line-no">113</span><span id="line-113">    * @return The source class name, or &lt;jk&gt;null&lt;/jk&gt; if not available.</span>
-<span class="source-line-no">114</span><span id="line-114">    */</span>
-<span class="source-line-no">115</span><span id="line-115">   @Override</span>
-<span class="source-line-no">116</span><span id="line-116">   public String getSourceClassName() {</span>
-<span class="source-line-no">117</span><span id="line-117">      if (source == null)</span>
-<span class="source-line-no">118</span><span id="line-118">         source = memoize(()-&gt;findSource());</span>
-<span class="source-line-no">119</span><span id="line-119">      return source.get().map(x -&gt; x.getClassName()).orElse(null);</span>
-<span class="source-line-no">120</span><span id="line-120">   }</span>
-<span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   /**</span>
-<span class="source-line-no">123</span><span id="line-123">    * Returns the source method name, calculating it lazily from the stack trace if not already set.</span>
-<span class="source-line-no">124</span><span id="line-124">    *</span>
-<span class="source-line-no">125</span><span id="line-125">    * @return The source method name, or &lt;jk&gt;null&lt;/jk&gt; if not available.</span>
-<span class="source-line-no">126</span><span id="line-126">    */</span>
-<span class="source-line-no">127</span><span id="line-127">   @Override</span>
-<span class="source-line-no">128</span><span id="line-128">   public String getSourceMethodName() {</span>
-<span class="source-line-no">129</span><span id="line-129">      if (source == null)</span>
-<span class="source-line-no">130</span><span id="line-130">         source = memoize(()-&gt;findSource());</span>
-<span class="source-line-no">131</span><span id="line-131">      return source.get().map(x -&gt; x.getMethodName()).orElse(null);</span>
-<span class="source-line-no">132</span><span id="line-132">   }</span>
-<span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">   @SuppressWarnings({</span>
-<span class="source-line-no">135</span><span id="line-135">      "java:S3776" // Cognitive complexity acceptable for stack trace filtering</span>
-<span class="source-line-no">136</span><span id="line-136">   })</span>
-<span class="source-line-no">137</span><span id="line-137">   private static Optional&lt;StackTraceElement&gt; findSource() {</span>
-<span class="source-line-no">138</span><span id="line-138">      for (var e : new Throwable().getStackTrace()) {</span>
-<span class="source-line-no">139</span><span id="line-139">         var c = e.getClassName();</span>
-<span class="source-line-no">140</span><span id="line-140">         var m = e.getMethodName();</span>
-<span class="source-line-no">141</span><span id="line-141">         // Skip internal classes, logging classes, lambda methods/classes, and synthetic methods</span>
-<span class="source-line-no">142</span><span id="line-142">         if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class)) || eq(c, cn(Utils.class))</span>
-<span class="source-line-no">143</span><span id="line-143">            || c.startsWith("java.util.logging.")</span>
-<span class="source-line-no">144</span><span id="line-144">            || (m != null &amp;&amp; (m.contains("lambda$") || m.startsWith("access$")))</span>
-<span class="source-line-no">145</span><span id="line-145">            || c.contains("$$Lambda$") || (c.contains("/") &amp;&amp; c.contains("$Lambda"))) {</span>
-<span class="source-line-no">146</span><span id="line-146">            continue;</span>
-<span class="source-line-no">147</span><span id="line-147">         }</span>
-<span class="source-line-no">148</span><span id="line-148">         return opt(e);</span>
-<span class="source-line-no">149</span><span id="line-149">      }</span>
-<span class="source-line-no">150</span><span id="line-150">      return opte();</span>
-<span class="source-line-no">151</span><span id="line-151">   }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">   /**</span>
-<span class="source-line-no">154</span><span id="line-154">    * Formats this log record as a string using the specified format pattern.</span>
-<span class="source-line-no">155</span><span id="line-155">    *</span>
-<span class="source-line-no">156</span><span id="line-156">    * &lt;p&gt;</span>
-<span class="source-line-no">157</span><span id="line-157">    * Similar to how {@link java.util.logging.SimpleFormatter} formats log records, this method</span>
-<span class="source-line-no">158</span><span id="line-158">    * allows you to specify a custom format string with placeholders that are replaced with</span>
-<span class="source-line-no">159</span><span id="line-159">    * actual values from the log record.</span>
-<span class="source-line-no">160</span><span id="line-160">    *</span>
-<span class="source-line-no">161</span><span id="line-161">    * &lt;p&gt;</span>
-<span class="source-line-no">162</span><span id="line-162">    * The format string supports both named placeholders (e.g., &lt;js&gt;"{date}"&lt;/js&gt;) and</span>
-<span class="source-line-no">163</span><span id="line-163">    * {@link java.util.Formatter Formatter}-style format specifiers (e.g., &lt;js&gt;"%1$tc"&lt;/js&gt;).</span>
-<span class="source-line-no">164</span><span id="line-164">    * Named placeholders are replaced first, then the resulting string is formatted using</span>
-<span class="source-line-no">165</span><span id="line-165">    * {@link java.util.Formatter Formatter} with the following arguments:</span>
-<span class="source-line-no">166</span><span id="line-166">    * &lt;ol&gt;</span>
-<span class="source-line-no">167</span><span id="line-167">    *    &lt;li&gt;&lt;c&gt;date&lt;/c&gt; - The date/time as a {@link Date} object</span>
-<span class="source-line-no">168</span><span id="line-168">    *    &lt;li&gt;&lt;c&gt;source&lt;/c&gt; - The source class name and method name (e.g., "com.example.MyClass myMethod")</span>
-<span class="source-line-no">169</span><span id="line-169">    *    &lt;li&gt;&lt;c&gt;logger&lt;/c&gt; - The logger name</span>
-<span class="source-line-no">170</span><span id="line-170">    *    &lt;li&gt;&lt;c&gt;level&lt;/c&gt; - The log level</span>
-<span class="source-line-no">171</span><span id="line-171">    *    &lt;li&gt;&lt;c&gt;message&lt;/c&gt; - The formatted log message</span>
-<span class="source-line-no">172</span><span id="line-172">    *    &lt;li&gt;&lt;c&gt;thrown&lt;/c&gt; - The throwable object (if any)</span>
-<span class="source-line-no">173</span><span id="line-173">    * &lt;/ol&gt;</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * &lt;h5 class='section'&gt;Named Placeholders:&lt;/h5&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">    * &lt;ul&gt;</span>
-<span class="source-line-no">177</span><span id="line-177">    *    &lt;li&gt;&lt;js&gt;"{date}"&lt;/js&gt; - The date/time formatted using {@link java.util.logging.SimpleFormatter SimpleFormatter}'s default date format</span>
-<span class="source-line-no">178</span><span id="line-178">    *    &lt;li&gt;&lt;js&gt;"{timestamp}"&lt;/js&gt; - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)</span>
-<span class="source-line-no">179</span><span id="line-179">    *    &lt;li&gt;&lt;js&gt;"{class}"&lt;/js&gt; - The source class name</span>
-<span class="source-line-no">180</span><span id="line-180">    *    &lt;li&gt;&lt;js&gt;"{method}"&lt;/js&gt; - The source method name</span>
-<span class="source-line-no">181</span><span id="line-181">    *    &lt;li&gt;&lt;js&gt;"{source}"&lt;/js&gt; - The source class name and method name (e.g., "com.example.MyClass myMethod")</span>
-<span class="source-line-no">182</span><span id="line-182">    *    &lt;li&gt;&lt;js&gt;"{logger}"&lt;/js&gt; - The logger name</span>
-<span class="source-line-no">183</span><span id="line-183">    *    &lt;li&gt;&lt;js&gt;"{level}"&lt;/js&gt; - The log level name</span>
-<span class="source-line-no">184</span><span id="line-184">    *    &lt;li&gt;&lt;js&gt;"{msg}"&lt;/js&gt; - The log message (formatted if parameters are present)</span>
-<span class="source-line-no">185</span><span id="line-185">    *    &lt;li&gt;&lt;js&gt;"{thread}"&lt;/js&gt; - The thread ID</span>
-<span class="source-line-no">186</span><span id="line-186">    *    &lt;li&gt;&lt;js&gt;"{threadid}"&lt;/js&gt; - The thread ID (alias for {thread})</span>
-<span class="source-line-no">187</span><span id="line-187">    *    &lt;li&gt;&lt;js&gt;"{exception}"&lt;/js&gt; - The exception message (if thrown)</span>
-<span class="source-line-no">188</span><span id="line-188">    *    &lt;li&gt;&lt;js&gt;"{thrown}"&lt;/js&gt; - The throwable object (if thrown)</span>
-<span class="source-line-no">189</span><span id="line-189">    * &lt;/ul&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">    *</span>
-<span class="source-line-no">191</span><span id="line-191">    * &lt;h5 class='section'&gt;Formatter-Style Format Specifiers:&lt;/h5&gt;</span>
-<span class="source-line-no">192</span><span id="line-192">    * &lt;p&gt;</span>
-<span class="source-line-no">193</span><span id="line-193">    * You can use {@link java.util.Formatter Formatter}-style format specifiers directly in the format string.</span>
-<span class="source-line-no">194</span><span id="line-194">    * The arguments are passed in the same order as {@link java.util.logging.SimpleFormatter SimpleFormatter}:</span>
-<span class="source-line-no">195</span><span id="line-195">    * &lt;/p&gt;</span>
-<span class="source-line-no">196</span><span id="line-196">    * &lt;ul&gt;</span>
-<span class="source-line-no">197</span><span id="line-197">    *    &lt;li&gt;&lt;js&gt;"%1$s"&lt;/js&gt; or &lt;js&gt;"%1$tc"&lt;/js&gt; - The date/time (argument 1)</span>
-<span class="source-line-no">198</span><span id="line-198">    *    &lt;li&gt;&lt;js&gt;"%2$s"&lt;/js&gt; - The source (argument 2)</span>
-<span class="source-line-no">199</span><span id="line-199">    *    &lt;li&gt;&lt;js&gt;"%3$s"&lt;/js&gt; - The logger name (argument 3)</span>
-<span class="source-line-no">200</span><span id="line-200">    *    &lt;li&gt;&lt;js&gt;"%4$s"&lt;/js&gt; - The log level (argument 4)</span>
-<span class="source-line-no">201</span><span id="line-201">    *    &lt;li&gt;&lt;js&gt;"%5$s"&lt;/js&gt; - The log message (argument 5)</span>
-<span class="source-line-no">202</span><span id="line-202">    *    &lt;li&gt;&lt;js&gt;"%6$s"&lt;/js&gt; - The throwable and its backtrace (argument 6)</span>
-<span class="source-line-no">203</span><span id="line-203">    * &lt;/ul&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">    *</span>
-<span class="source-line-no">205</span><span id="line-205">    * &lt;p&gt;</span>
-<span class="source-line-no">206</span><span id="line-206">    * For date/time formatting, you can use date/time conversion characters with argument 1:</span>
-<span class="source-line-no">207</span><span id="line-207">    * &lt;/p&gt;</span>
-<span class="source-line-no">208</span><span id="line-208">    * &lt;ul&gt;</span>
-<span class="source-line-no">209</span><span id="line-209">    *    &lt;li&gt;&lt;js&gt;"%1$tc"&lt;/js&gt; - Complete date and time (e.g., "Tue Mar 22 13:11:31 PDT 2011")</span>
-<span class="source-line-no">210</span><span id="line-210">    *    &lt;li&gt;&lt;js&gt;"%1$tb"&lt;/js&gt; - Month abbreviation (e.g., "Mar")</span>
-<span class="source-line-no">211</span><span id="line-211">    *    &lt;li&gt;&lt;js&gt;"%1$td"&lt;/js&gt; - Day of month (01-31)</span>
-<span class="source-line-no">212</span><span id="line-212">    *    &lt;li&gt;&lt;js&gt;"%1$tY"&lt;/js&gt; - Year (4 digits)</span>
-<span class="source-line-no">213</span><span id="line-213">    *    &lt;li&gt;&lt;js&gt;"%1$tH"&lt;/js&gt; - Hour (00-23)</span>
-<span class="source-line-no">214</span><span id="line-214">    *    &lt;li&gt;&lt;js&gt;"%1$tM"&lt;/js&gt; - Minute (00-59)</span>
-<span class="source-line-no">215</span><span id="line-215">    *    &lt;li&gt;&lt;js&gt;"%1$tS"&lt;/js&gt; - Second (00-59)</span>
-<span class="source-line-no">216</span><span id="line-216">    *    &lt;li&gt;&lt;js&gt;"%1$tL"&lt;/js&gt; - Milliseconds (000-999)</span>
-<span class="source-line-no">217</span><span id="line-217">    *    &lt;li&gt;&lt;js&gt;"%1$tN"&lt;/js&gt; - Nanoseconds (000000000-999999999, since JDK 9)</span>
-<span class="source-line-no">218</span><span id="line-218">    *    &lt;li&gt;&lt;js&gt;"%1$Tp"&lt;/js&gt; - AM/PM marker (uppercase)</span>
-<span class="source-line-no">219</span><span id="line-219">    *    &lt;li&gt;&lt;js&gt;"%1$tp"&lt;/js&gt; - AM/PM marker (lowercase)</span>
-<span class="source-line-no">220</span><span id="line-220">    * &lt;/ul&gt;</span>
-<span class="source-line-no">221</span><span id="line-221">    *</span>
-<span class="source-line-no">222</span><span id="line-222">    * &lt;p&gt;</span>
-<span class="source-line-no">223</span><span id="line-223">    * The format string can also contain &lt;js&gt;"%n"&lt;/js&gt; for newlines.</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">import java.text.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.Formatter;</span>
+<span class="source-line-no">028</span><span id="line-28">import java.util.function.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import java.util.logging.*;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.commons.utils.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">/**</span>
+<span class="source-line-no">034</span><span id="line-34"> * LogRecord that supports lazy message formatting.</span>
+<span class="source-line-no">035</span><span id="line-35"> *</span>
+<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> * This class extends {@link java.util.logging.LogRecord java.util.logging.LogRecord} and overrides {@link #getMessage()} to use</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} for lazy formatting.</span>
+<span class="source-line-no">039</span><span id="line-39"> * The message is only formatted when {@link #getMessage()} is actually called.</span>
+<span class="source-line-no">040</span><span id="line-40"> *</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;Usage:&lt;/h5&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;p&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> * This class is used internally by {@link Logger} when logging formatted messages.</span>
+<span class="source-line-no">044</span><span id="line-44"> * The formatted message is only computed when the LogRecord's message is actually</span>
+<span class="source-line-no">045</span><span id="line-45"> * accessed (e.g., by a Handler or Formatter).</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/p&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li class='jc'&gt;{@link Logger}</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='jc'&gt;{@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='jc'&gt;{@link java.util.logging.LogRecord}</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> */</span>
+<span class="source-line-no">054</span><span id="line-54">@SuppressWarnings({</span>
+<span class="source-line-no">055</span><span id="line-55">   "java:S115",  // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">056</span><span id="line-56">   "java:S100",  // Method names match java.util.logging.LogRecord for API compatibility</span>
+<span class="source-line-no">057</span><span id="line-57">   "java:S1192", // String literals intentionally duplicated for clarity</span>
+<span class="source-line-no">058</span><span id="line-58">   "java:S2176", // Class name intentionally matches java.util.logging.LogRecord; extends it to enrich logging with Juneau-specific fields</span>
+<span class="source-line-no">059</span><span id="line-59">   "java:S2143"  // Date required for java.util.logging compatibility and Formatter %t conversions; not a behavior-preserving java.time swap.</span>
+<span class="source-line-no">060</span><span id="line-60">})</span>
+<span class="source-line-no">061</span><span id="line-61">public class LogRecord extends java.util.logging.LogRecord {</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   private static final long serialVersionUID = 1L;</span>
+<span class="source-line-no">064</span><span id="line-64"></span>
+<span class="source-line-no">065</span><span id="line-65">   // Key constants for format placeholders</span>
+<span class="source-line-no">066</span><span id="line-66">   private static final String KEY_date = "date";</span>
+<span class="source-line-no">067</span><span id="line-67">   private static final String KEY_source = "source";</span>
+<span class="source-line-no">068</span><span id="line-68">   private static final String KEY_logger = "logger";</span>
+<span class="source-line-no">069</span><span id="line-69">   private static final String KEY_level = "level";</span>
+<span class="source-line-no">070</span><span id="line-70">   private static final String KEY_msg = "msg";</span>
+<span class="source-line-no">071</span><span id="line-71">   private static final String KEY_thrown = "thrown";</span>
+<span class="source-line-no">072</span><span id="line-72">   private static final String KEY_timestamp = "timestamp";</span>
+<span class="source-line-no">073</span><span id="line-73">   private static final String KEY_class = "class";</span>
+<span class="source-line-no">074</span><span id="line-74">   private static final String KEY_method = "method";</span>
+<span class="source-line-no">075</span><span id="line-75">   private static final String KEY_thread = "thread";</span>
+<span class="source-line-no">076</span><span id="line-76">   private static final String KEY_threadid = "threadid";</span>
+<span class="source-line-no">077</span><span id="line-77">   private static final String KEY_exception = "exception";</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   private transient Supplier&lt;Optional&lt;StackTraceElement&gt;&gt; source = memoize(()-&gt;findSource());</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   /**</span>
+<span class="source-line-no">082</span><span id="line-82">    * Constructor.</span>
+<span class="source-line-no">083</span><span id="line-83">    *</span>
+<span class="source-line-no">084</span><span id="line-84">    * @param loggerName The logger name.</span>
+<span class="source-line-no">085</span><span id="line-85">    * @param level The log level.</span>
+<span class="source-line-no">086</span><span id="line-86">    * @param msg The message pattern (will be used as-is if args is null or empty).</span>
+<span class="source-line-no">087</span><span id="line-87">    * @param parameters The format arguments, or &lt;jk&gt;null&lt;/jk&gt; if none.</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param throwable The throwable, or &lt;jk&gt;null&lt;/jk&gt; if none.</span>
+<span class="source-line-no">089</span><span id="line-89">    */</span>
+<span class="source-line-no">090</span><span id="line-90">   public LogRecord(String loggerName, Level level, String msg, Object[] parameters, Throwable throwable) {</span>
+<span class="source-line-no">091</span><span id="line-91">      super(level, msg);</span>
+<span class="source-line-no">092</span><span id="line-92">      setLoggerName(loggerName);</span>
+<span class="source-line-no">093</span><span id="line-93">      setParameters(isNotEmptyArray(parameters) ? parameters : null);</span>
+<span class="source-line-no">094</span><span id="line-94">      setThrown(throwable);</span>
+<span class="source-line-no">095</span><span id="line-95">   }</span>
+<span class="source-line-no">096</span><span id="line-96"></span>
+<span class="source-line-no">097</span><span id="line-97">   /**</span>
+<span class="source-line-no">098</span><span id="line-98">    * Returns the log message, formatting it lazily if needed.</span>
+<span class="source-line-no">099</span><span id="line-99">    *</span>
+<span class="source-line-no">100</span><span id="line-100">    * &lt;p&gt;</span>
+<span class="source-line-no">101</span><span id="line-101">    * If parameters were set via {@link #setParameters(Object[])}, the message is formatted</span>
+<span class="source-line-no">102</span><span id="line-102">    * using {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} on first access.</span>
+<span class="source-line-no">103</span><span id="line-103">    *</span>
+<span class="source-line-no">104</span><span id="line-104">    * @return The log message, formatted if parameters are present.</span>
+<span class="source-line-no">105</span><span id="line-105">    */</span>
+<span class="source-line-no">106</span><span id="line-106">   @Override</span>
+<span class="source-line-no">107</span><span id="line-107">   public String getMessage() {</span>
+<span class="source-line-no">108</span><span id="line-108">      var m = super.getMessage();</span>
+<span class="source-line-no">109</span><span id="line-109">      var p = getParameters();</span>
+<span class="source-line-no">110</span><span id="line-110">      return isEmptyArray(p) ? m : f(m, p);</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   /**</span>
+<span class="source-line-no">114</span><span id="line-114">    * Returns the source class name, calculating it lazily from the stack trace if not already set.</span>
+<span class="source-line-no">115</span><span id="line-115">    *</span>
+<span class="source-line-no">116</span><span id="line-116">    * @return The source class name, or &lt;jk&gt;null&lt;/jk&gt; if not available.</span>
+<span class="source-line-no">117</span><span id="line-117">    */</span>
+<span class="source-line-no">118</span><span id="line-118">   @Override</span>
+<span class="source-line-no">119</span><span id="line-119">   public String getSourceClassName() {</span>
+<span class="source-line-no">120</span><span id="line-120">      if (source == null)</span>
+<span class="source-line-no">121</span><span id="line-121">         source = memoize(()-&gt;findSource());</span>
+<span class="source-line-no">122</span><span id="line-122">      return source.get().map(x -&gt; x.getClassName()).orElse(null);</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   /**</span>
+<span class="source-line-no">126</span><span id="line-126">    * Returns the source method name, calculating it lazily from the stack trace if not already set.</span>
+<span class="source-line-no">127</span><span id="line-127">    *</span>
+<span class="source-line-no">128</span><span id="line-128">    * @return The source method name, or &lt;jk&gt;null&lt;/jk&gt; if not available.</span>
+<span class="source-line-no">129</span><span id="line-129">    */</span>
+<span class="source-line-no">130</span><span id="line-130">   @Override</span>
+<span class="source-line-no">131</span><span id="line-131">   public String getSourceMethodName() {</span>
+<span class="source-line-no">132</span><span id="line-132">      if (source == null)</span>
+<span class="source-line-no">133</span><span id="line-133">         source = memoize(()-&gt;findSource());</span>
+<span class="source-line-no">134</span><span id="line-134">      return source.get().map(x -&gt; x.getMethodName()).orElse(null);</span>
+<span class="source-line-no">135</span><span id="line-135">   }</span>
+<span class="source-line-no">136</span><span id="line-136"></span>
+<span class="source-line-no">137</span><span id="line-137">   @SuppressWarnings({</span>
+<span class="source-line-no">138</span><span id="line-138">      "java:S3776" // Cognitive complexity acceptable for stack trace filtering</span>
+<span class="source-line-no">139</span><span id="line-139">   })</span>
+<span class="source-line-no">140</span><span id="line-140">   private static Optional&lt;StackTraceElement&gt; findSource() {</span>
+<span class="source-line-no">141</span><span id="line-141">      for (var e : new Throwable().getStackTrace()) {</span>
+<span class="source-line-no">142</span><span id="line-142">         var c = e.getClassName();</span>
+<span class="source-line-no">143</span><span id="line-143">         var m = e.getMethodName();</span>
+<span class="source-line-no">144</span><span id="line-144">         // Skip internal classes, logging classes, lambda methods/classes, and synthetic methods</span>
+<span class="source-line-no">145</span><span id="line-145">         if (eq(c, cn(LogRecord.class)) || eq(c, cn(Logger.class)) || eq(c, cn(StringUtils.class))</span>
+<span class="source-line-no">146</span><span id="line-146">            || c.startsWith("java.util.logging.")</span>
+<span class="source-line-no">147</span><span id="line-147">            || (m != null &amp;&amp; (m.contains("lambda$") || m.startsWith("access$")))</span>
+<span class="source-line-no">148</span><span id="line-148">            || c.contains("$$Lambda$") || (c.contains("/") &amp;&amp; c.contains("$Lambda"))) {</span>
+<span class="source-line-no">149</span><span id="line-149">            continue;</span>
+<span class="source-line-no">150</span><span id="line-150">         }</span>
+<span class="source-line-no">151</span><span id="line-151">         return o(e);</span>
+<span class="source-line-no">152</span><span id="line-152">      }</span>
+<span class="source-line-no">153</span><span id="line-153">      return oe();</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   /**</span>
+<span class="source-line-no">157</span><span id="line-157">    * Formats this log record as a string using the specified format pattern.</span>
+<span class="source-line-no">158</span><span id="line-158">    *</span>
+<span class="source-line-no">159</span><span id="line-159">    * &lt;p&gt;</span>
+<span class="source-line-no">160</span><span id="line-160">    * Similar to how {@link SimpleFormatter} formats log records, this method</span>
+<span class="source-line-no">161</span><span id="line-161">    * allows you to specify a custom format string with placeholders that are replaced with</span>
+<span class="source-line-no">162</span><span id="line-162">    * actual values from the log record.</span>
+<span class="source-line-no">163</span><span id="line-163">    *</span>
+<span class="source-line-no">164</span><span id="line-164">    * &lt;p&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    * The format string supports both named placeholders (e.g., &lt;js&gt;"{date}"&lt;/js&gt;) and</span>
+<span class="source-line-no">166</span><span id="line-166">    * {@link java.util.Formatter Formatter}-style format specifiers (e.g., &lt;js&gt;"%1$tc"&lt;/js&gt;).</span>
+<span class="source-line-no">167</span><span id="line-167">    * Named placeholders are replaced first, then the resulting string is formatted using</span>
+<span class="source-line-no">168</span><span id="line-168">    * {@link java.util.Formatter Formatter} with the following arguments:</span>
+<span class="source-line-no">169</span><span id="line-169">    * &lt;ol&gt;</span>
+<span class="source-line-no">170</span><span id="line-170">    *    &lt;li&gt;&lt;c&gt;date&lt;/c&gt; - The date/time as a {@link Date} object</span>
+<span class="source-line-no">171</span><span id="line-171">    *    &lt;li&gt;&lt;c&gt;source&lt;/c&gt; - The source class name and method name (e.g., "com.example.MyClass myMethod")</span>
+<span class="source-line-no">172</span><span id="line-172">    *    &lt;li&gt;&lt;c&gt;logger&lt;/c&gt; - The logger name</span>
+<span class="source-line-no">173</span><span id="line-173">    *    &lt;li&gt;&lt;c&gt;level&lt;/c&gt; - The log level</span>
+<span class="source-line-no">174</span><span id="line-174">    *    &lt;li&gt;&lt;c&gt;message&lt;/c&gt; - The formatted log message</span>
+<span class="source-line-no">175</span><span id="line-175">    *    &lt;li&gt;&lt;c&gt;thrown&lt;/c&gt; - The throwable object (if any)</span>
+<span class="source-line-no">176</span><span id="line-176">    * &lt;/ol&gt;</span>
+<span class="source-line-no">177</span><span id="line-177">    *</span>
+<span class="source-line-no">178</span><span id="line-178">    * &lt;h5 class='section'&gt;Named Placeholders:&lt;/h5&gt;</span>
+<span class="source-line-no">179</span><span id="line-179">    * &lt;ul&gt;</span>
+<span class="source-line-no">180</span><span id="line-180">    *    &lt;li&gt;&lt;js&gt;"{date}"&lt;/js&gt; - The date/time formatted using {@link SimpleFormatter SimpleFormatter}'s default date format</span>
+<span class="source-line-no">181</span><span id="line-181">    *    &lt;li&gt;&lt;js&gt;"{timestamp}"&lt;/js&gt; - The date/time formatted as ISO-8601 (yyyy-MM-dd'T'HH:mm:ss.SSSZ)</span>
+<span class="source-line-no">182</span><span id="line-182">    *    &lt;li&gt;&lt;js&gt;"{class}"&lt;/js&gt; - The source class name</span>
+<span class="source-line-no">183</span><span id="line-183">    *    &lt;li&gt;&lt;js&gt;"{method}"&lt;/js&gt; - The source method name</span>
+<span class="source-line-no">184</span><span id="line-184">    *    &lt;li&gt;&lt;js&gt;"{source}"&lt;/js&gt; - The source class name and method name (e.g., "com.example.MyClass myMethod")</span>
+<span class="source-line-no">185</span><span id="line-185">    *    &lt;li&gt;&lt;js&gt;"{logger}"&lt;/js&gt; - The logger name</span>
+<span class="source-line-no">186</span><span id="line-186">    *    &lt;li&gt;&lt;js&gt;"{level}"&lt;/js&gt; - The log level name</span>
+<span class="source-line-no">187</span><span id="line-187">    *    &lt;li&gt;&lt;js&gt;"{msg}"&lt;/js&gt; - The log message (formatted if parameters are present)</span>
+<span class="source-line-no">188</span><span id="line-188">    *    &lt;li&gt;&lt;js&gt;"{thread}"&lt;/js&gt; - The thread ID</span>
+<span class="source-line-no">189</span><span id="line-189">    *    &lt;li&gt;&lt;js&gt;"{threadid}"&lt;/js&gt; - The thread ID (alias for {thread})</span>
+<span class="source-line-no">190</span><span id="line-190">    *    &lt;li&gt;&lt;js&gt;"{exception}"&lt;/js&gt; - The exception message (if thrown)</span>
+<span class="source-line-no">191</span><span id="line-191">    *    &lt;li&gt;&lt;js&gt;"{thrown}"&lt;/js&gt; - The throwable object (if thrown)</span>
+<span class="source-line-no">192</span><span id="line-192">    * &lt;/ul&gt;</span>
+<span class="source-line-no">193</span><span id="line-193">    *</span>
+<span class="source-line-no">194</span><span id="line-194">    * &lt;h5 class='section'&gt;Formatter-Style Format Specifiers:&lt;/h5&gt;</span>
+<span class="source-line-no">195</span><span id="line-195">    * &lt;p&gt;</span>
+<span class="source-line-no">196</span><span id="line-196">    * You can use {@link java.util.Formatter Formatter}-style format specifiers directly in the format string.</span>
+<span class="source-line-no">197</span><span id="line-197">    * The arguments are passed in the same order as {@link java.util.logging.SimpleFormatter SimpleFormatter}:</span>
+<span class="source-line-no">198</span><span id="line-198">    * &lt;/p&gt;</span>
+<span class="source-line-no">199</span><span id="line-199">    * &lt;ul&gt;</span>
+<span class="source-line-no">200</span><span id="line-200">    *    &lt;li&gt;&lt;js&gt;"%1$s"&lt;/js&gt; or &lt;js&gt;"%1$tc"&lt;/js&gt; - The date/time (argument 1)</span>
+<span class="source-line-no">201</span><span id="line-201">    *    &lt;li&gt;&lt;js&gt;"%2$s"&lt;/js&gt; - The source (argument 2)</span>
+<span class="source-line-no">202</span><span id="line-202">    *    &lt;li&gt;&lt;js&gt;"%3$s"&lt;/js&gt; - The logger name (argument 3)</span>
+<span class="source-line-no">203</span><span id="line-203">    *    &lt;li&gt;&lt;js&gt;"%4$s"&lt;/js&gt; - The log level (argument 4)</span>
+<span class="source-line-no">204</span><span id="line-204">    *    &lt;li&gt;&lt;js&gt;"%5$s"&lt;/js&gt; - The log message (argument 5)</span>
+<span class="source-line-no">205</span><span id="line-205">    *    &lt;li&gt;&lt;js&gt;"%6$s"&lt;/js&gt; - The throwable and its backtrace (argument 6)</span>
+<span class="source-line-no">206</span><span id="line-206">    * &lt;/ul&gt;</span>
+<span class="source-line-no">207</span><span id="line-207">    *</span>
+<span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * For date/time formatting, you can use date/time conversion characters with argument 1:</span>
+<span class="source-line-no">210</span><span id="line-210">    * &lt;/p&gt;</span>
+<span class="source-line-no">211</span><span id="line-211">    * &lt;ul&gt;</span>
+<span class="source-line-no">212</span><span id="line-212">    *    &lt;li&gt;&lt;js&gt;"%1$tc"&lt;/js&gt; - Complete date and time (e.g., "Tue Mar 22 13:11:31 PDT 2011")</span>
+<span class="source-line-no">213</span><span id="line-213">    *    &lt;li&gt;&lt;js&gt;"%1$tb"&lt;/js&gt; - Month abbreviation (e.g., "Mar")</span>
+<span class="source-line-no">214</span><span id="line-214">    *    &lt;li&gt;&lt;js&gt;"%1$td"&lt;/js&gt; - Day of month (01-31)</span>
+<span class="source-line-no">215</span><span id="line-215">    *    &lt;li&gt;&lt;js&gt;"%1$tY"&lt;/js&gt; - Year (4 digits)</span>
+<span class="source-line-no">216</span><span id="line-216">    *    &lt;li&gt;&lt;js&gt;"%1$tH"&lt;/js&gt; - Hour (00-23)</span>
+<span class="source-line-no">217</span><span id="line-217">    *    &lt;li&gt;&lt;js&gt;"%1$tM"&lt;/js&gt; - Minute (00-59)</span>
+<span class="source-line-no">218</span><span id="line-218">    *    &lt;li&gt;&lt;js&gt;"%1$tS"&lt;/js&gt; - Second (00-59)</span>
+<span class="source-line-no">219</span><span id="line-219">    *    &lt;li&gt;&lt;js&gt;"%1$tL"&lt;/js&gt; - Milliseconds (000-999)</span>
+<span class="source-line-no">220</span><span id="line-220">    *    &lt;li&gt;&lt;js&gt;"%1$tN"&lt;/js&gt; - Nanoseconds (000000000-999999999, since JDK 9)</span>
+<span class="source-line-no">221</span><span id="line-221">    *    &lt;li&gt;&lt;js&gt;"%1$Tp"&lt;/js&gt; - AM/PM marker (uppercase)</span>
+<span class="source-line-no">222</span><span id="line-222">    *    &lt;li&gt;&lt;js&gt;"%1$tp"&lt;/js&gt; - AM/PM marker (lowercase)</span>
+<span class="source-line-no">223</span><span id="line-223">    * &lt;/ul&gt;</span>
 <span class="source-line-no">224</span><span id="line-224">    *</span>
-<span class="source-line-no">225</span><span id="line-225">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">226</span><span id="line-226">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">227</span><span id="line-227">    *    LogRecord &lt;jv&gt;record&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LogRecord(Level.INFO, &lt;js&gt;"User {0} logged in"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;);</span>
-<span class="source-line-no">228</span><span id="line-228">    *</span>
-<span class="source-line-no">229</span><span id="line-229">    *    &lt;jc&gt;// Using named placeholders&lt;/jc&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">    *    String &lt;jv&gt;formatted1&lt;/jv&gt; = &lt;jv&gt;record&lt;/jv&gt;.formatted(&lt;js&gt;"[{timestamp} {level}] {msg}"&lt;/js&gt;);</span>
-<span class="source-line-no">231</span><span id="line-231">    *    &lt;jc&gt;// Result: "[2025-01-22T07:42:45.123-0500 INFO] User John logged in"&lt;/jc&gt;</span>
-<span class="source-line-no">232</span><span id="line-232">    *</span>
-<span class="source-line-no">233</span><span id="line-233">    *    &lt;jc&gt;// Using Formatter-style specifiers&lt;/jc&gt;</span>
-<span class="source-line-no">234</span><span id="line-234">    *    String &lt;jv&gt;formatted2&lt;/jv&gt; = &lt;jv&gt;record&lt;/jv&gt;.formatted(&lt;js&gt;"%4$s: %5$s [%1$tc]%n"&lt;/js&gt;);</span>
-<span class="source-line-no">235</span><span id="line-235">    *    &lt;jc&gt;// Result: "INFO: User John logged in [Tue Jan 22 07:42:45 PST 2025]"&lt;/jc&gt;</span>
-<span class="source-line-no">236</span><span id="line-236">    *</span>
-<span class="source-line-no">237</span><span id="line-237">    *    &lt;jc&gt;// Mixed named placeholders and Formatter specifiers&lt;/jc&gt;</span>
-<span class="source-line-no">238</span><span id="line-238">    *    String &lt;jv&gt;formatted3&lt;/jv&gt; = &lt;jv&gt;record&lt;/jv&gt;.formatted(&lt;js&gt;"%1$tb %1$td, %1$tY {level}: {msg}%n"&lt;/js&gt;);</span>
-<span class="source-line-no">239</span><span id="line-239">    *    &lt;jc&gt;// Result: "Jan 22, 2025 INFO: User John logged in"&lt;/jc&gt;</span>
-<span class="source-line-no">240</span><span id="line-240">    * &lt;/p&gt;</span>
-<span class="source-line-no">241</span><span id="line-241">    *</span>
-<span class="source-line-no">242</span><span id="line-242">    * @param format The format string with placeholders and/or Formatter-style format specifiers.</span>
-<span class="source-line-no">243</span><span id="line-243">    * @return The formatted string.</span>
-<span class="source-line-no">244</span><span id="line-244">    * @see java.util.logging.SimpleFormatter</span>
-<span class="source-line-no">245</span><span id="line-245">    * @see java.util.Formatter</span>
-<span class="source-line-no">246</span><span id="line-246">    */</span>
-<span class="source-line-no">247</span><span id="line-247">   @SuppressWarnings({</span>
-<span class="source-line-no">248</span><span id="line-248">      "deprecation" // Date constructor is deprecated but needed for compatibility</span>
-<span class="source-line-no">249</span><span id="line-249">   })</span>
-<span class="source-line-no">250</span><span id="line-250">   public String formatted(String format) {</span>
-<span class="source-line-no">251</span><span id="line-251">      var date = new Date(getMillis());</span>
-<span class="source-line-no">252</span><span id="line-252">      Supplier&lt;String&gt; sourceName = () -&gt; getSourceClassName() + ' ' + getSourceMethodName();</span>
-<span class="source-line-no">253</span><span id="line-253"></span>
-<span class="source-line-no">254</span><span id="line-254">      Function&lt;String, Object&gt; resolver = key -&gt; switch (key) {</span>
-<span class="source-line-no">255</span><span id="line-255">         case KEY_date -&gt; "%1$s";</span>
-<span class="source-line-no">256</span><span id="line-256">         case KEY_source -&gt; sourceName.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.</span>
-<span class="source-line-no">257</span><span id="line-257">         case KEY_logger -&gt; "%3$s";</span>
-<span class="source-line-no">258</span><span id="line-258">         case KEY_level -&gt; "%4$s";</span>
-<span class="source-line-no">259</span><span id="line-259">         case KEY_msg -&gt; "%5$s";</span>
-<span class="source-line-no">260</span><span id="line-260">         case KEY_thrown -&gt; "%6$s";</span>
-<span class="source-line-no">261</span><span id="line-261">         case KEY_timestamp -&gt; new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);</span>
-<span class="source-line-no">262</span><span id="line-262">         case KEY_class -&gt; getSourceClassName();</span>
-<span class="source-line-no">263</span><span id="line-263">         case KEY_method -&gt; getSourceMethodName();</span>
-<span class="source-line-no">264</span><span id="line-264">         case KEY_thread, KEY_threadid -&gt; s(getThreadID());</span>
-<span class="source-line-no">265</span><span id="line-265">         case KEY_exception -&gt; opt(getThrown()).map(x -&gt; x.getMessage()).orElse("");</span>
-<span class="source-line-no">266</span><span id="line-266">         default -&gt; "";</span>
-<span class="source-line-no">267</span><span id="line-267">      };</span>
-<span class="source-line-no">268</span><span id="line-268"></span>
-<span class="source-line-no">269</span><span id="line-269">      return safeOptCatch(()-&gt;f(formatNamed(format, resolver), date, sourceName, getLoggerName(), getLevel(), getMessage(), getThrown()), x -&gt; x.getLocalizedMessage()).orElse(null);</span>
-<span class="source-line-no">270</span><span id="line-270">   }</span>
-<span class="source-line-no">271</span><span id="line-271">}</span>
+<span class="source-line-no">225</span><span id="line-225">    * &lt;p&gt;</span>
+<span class="source-line-no">226</span><span id="line-226">    * The format string can also contain &lt;js&gt;"%n"&lt;/js&gt; for newlines.</span>
+<span class="source-line-no">227</span><span id="line-227">    *</span>
+<span class="source-line-no">228</span><span id="line-228">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">229</span><span id="line-229">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    *    LogRecord &lt;jv&gt;record&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; LogRecord(Level.INFO, &lt;js&gt;"User {0} logged in"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;);</span>
+<span class="source-line-no">231</span><span id="line-231">    *</span>
+<span class="source-line-no">232</span><span id="line-232">    *    &lt;jc&gt;// Using named placeholders&lt;/jc&gt;</span>
+<span class="source-line-no">233</span><span id="line-233">    *    String &lt;jv&gt;formatted1&lt;/jv&gt; = &lt;jv&gt;record&lt;/jv&gt;.formatted(&lt;js&gt;"[{timestamp} {level}] {msg}"&lt;/js&gt;);</span>
+<span class="source-line-no">234</span><span id="line-234">    *    &lt;jc&gt;// Result: "[2025-01-22T07:42:45.123-0500 INFO] User John logged in"&lt;/jc&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    *</span>
+<span class="source-line-no">236</span><span id="line-236">    *    &lt;jc&gt;// Using Formatter-style specifiers&lt;/jc&gt;</span>
+<span class="source-line-no">237</span><span id="line-237">    *    String &lt;jv&gt;formatted2&lt;/jv&gt; = &lt;jv&gt;record&lt;/jv&gt;.formatted(&lt;js&gt;"%4$s: %5$s [%1$tc]%n"&lt;/js&gt;);</span>
+<span class="source-line-no">238</span><span id="line-238">    *    &lt;jc&gt;// Result: "INFO: User John logged in [Tue Jan 22 07:42:45 PST 2025]"&lt;/jc&gt;</span>
+<span class="source-line-no">239</span><span id="line-239">    *</span>
+<span class="source-line-no">240</span><span id="line-240">    *    &lt;jc&gt;// Mixed named placeholders and Formatter specifiers&lt;/jc&gt;</span>
+<span class="source-line-no">241</span><span id="line-241">    *    String &lt;jv&gt;formatted3&lt;/jv&gt; = &lt;jv&gt;record&lt;/jv&gt;.formatted(&lt;js&gt;"%1$tb %1$td, %1$tY {level}: {msg}%n"&lt;/js&gt;);</span>
+<span class="source-line-no">242</span><span id="line-242">    *    &lt;jc&gt;// Result: "Jan 22, 2025 INFO: User John logged in"&lt;/jc&gt;</span>
+<span class="source-line-no">243</span><span id="line-243">    * &lt;/p&gt;</span>
+<span class="source-line-no">244</span><span id="line-244">    *</span>
+<span class="source-line-no">245</span><span id="line-245">    * @param format The format string with placeholders and/or Formatter-style format specifiers.</span>
+<span class="source-line-no">246</span><span id="line-246">    * @return The formatted string.</span>
+<span class="source-line-no">247</span><span id="line-247">    * @see SimpleFormatter</span>
+<span class="source-line-no">248</span><span id="line-248">    * @see Formatter</span>
+<span class="source-line-no">249</span><span id="line-249">    */</span>
+<span class="source-line-no">250</span><span id="line-250">   @SuppressWarnings({</span>
+<span class="source-line-no">251</span><span id="line-251">      "deprecation" // Date constructor is deprecated but needed for compatibility</span>
+<span class="source-line-no">252</span><span id="line-252">   })</span>
+<span class="source-line-no">253</span><span id="line-253">   public String formatted(String format) {</span>
+<span class="source-line-no">254</span><span id="line-254">      var date = new Date(getMillis());</span>
+<span class="source-line-no">255</span><span id="line-255">      Supplier&lt;String&gt; sourceName = () -&gt; getSourceClassName() + ' ' + getSourceMethodName();</span>
+<span class="source-line-no">256</span><span id="line-256"></span>
+<span class="source-line-no">257</span><span id="line-257">      Function&lt;String, Object&gt; resolver = key -&gt; switch (key) {</span>
+<span class="source-line-no">258</span><span id="line-258">         case KEY_date -&gt; "%1$s";</span>
+<span class="source-line-no">259</span><span id="line-259">         case KEY_source -&gt; sourceName.get();  // Override default behavior since logging class doesn't handle classes outside of java.util.logging.</span>
+<span class="source-line-no">260</span><span id="line-260">         case KEY_logger -&gt; "%3$s";</span>
+<span class="source-line-no">261</span><span id="line-261">         case KEY_level -&gt; "%4$s";</span>
+<span class="source-line-no">262</span><span id="line-262">         case KEY_msg -&gt; "%5$s";</span>
+<span class="source-line-no">263</span><span id="line-263">         case KEY_thrown -&gt; "%6$s";</span>
+<span class="source-line-no">264</span><span id="line-264">         case KEY_timestamp -&gt; new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(date);</span>
+<span class="source-line-no">265</span><span id="line-265">         case KEY_class -&gt; getSourceClassName();</span>
+<span class="source-line-no">266</span><span id="line-266">         case KEY_method -&gt; getSourceMethodName();</span>
+<span class="source-line-no">267</span><span id="line-267">         case KEY_thread, KEY_threadid -&gt; s(getThreadID());</span>
+<span class="source-line-no">268</span><span id="line-268">         case KEY_exception -&gt; o(getThrown()).map(x -&gt; x.getMessage()).orElse("");</span>
+<span class="source-line-no">269</span><span id="line-269">         default -&gt; "";</span>
+<span class="source-line-no">270</span><span id="line-270">      };</span>
+<span class="source-line-no">271</span><span id="line-271"></span>
+<span class="source-line-no">272</span><span id="line-272">      return safeOptCatch(()-&gt;f(formatNamed(format, resolver), date, sourceName, getLoggerName(), getLevel(), getMessage(), getThrown()), x -&gt; x.getLocalizedMessage()).orElse(null);</span>
+<span class="source-line-no">273</span><span id="line-273">   }</span>
+<span class="source-line-no">274</span><span id="line-274">}</span>
 
 
 

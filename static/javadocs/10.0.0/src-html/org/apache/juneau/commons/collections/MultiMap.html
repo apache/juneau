@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.collections;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.stream.*;</span>
@@ -390,22 +390,22 @@
 <span class="source-line-no">377</span><span id="line-377">   // Unsupported operations</span>
 <span class="source-line-no">378</span><span id="line-378">   @Override</span>
 <span class="source-line-no">379</span><span id="line-379">   public V put(K key, V value) {</span>
-<span class="source-line-no">380</span><span id="line-380">      throw unsupportedOp("put() not supported on MultiMap. Use underlying maps directly.");</span>
+<span class="source-line-no">380</span><span id="line-380">      throw uoex("put() not supported on MultiMap. Use underlying maps directly.");</span>
 <span class="source-line-no">381</span><span id="line-381">   }</span>
 <span class="source-line-no">382</span><span id="line-382"></span>
 <span class="source-line-no">383</span><span id="line-383">   @Override</span>
 <span class="source-line-no">384</span><span id="line-384">   public V remove(Object key) {</span>
-<span class="source-line-no">385</span><span id="line-385">      throw unsupportedOp("remove() not supported on MultiMap. Use underlying maps directly.");</span>
+<span class="source-line-no">385</span><span id="line-385">      throw uoex("remove() not supported on MultiMap. Use underlying maps directly.");</span>
 <span class="source-line-no">386</span><span id="line-386">   }</span>
 <span class="source-line-no">387</span><span id="line-387"></span>
 <span class="source-line-no">388</span><span id="line-388">   @Override</span>
 <span class="source-line-no">389</span><span id="line-389">   public void putAll(Map&lt;? extends K, ? extends V&gt; m) {</span>
-<span class="source-line-no">390</span><span id="line-390">      throw unsupportedOp("putAll() not supported on MultiMap. Use underlying maps directly.");</span>
+<span class="source-line-no">390</span><span id="line-390">      throw uoex("putAll() not supported on MultiMap. Use underlying maps directly.");</span>
 <span class="source-line-no">391</span><span id="line-391">   }</span>
 <span class="source-line-no">392</span><span id="line-392"></span>
 <span class="source-line-no">393</span><span id="line-393">   @Override</span>
 <span class="source-line-no">394</span><span id="line-394">   public void clear() {</span>
-<span class="source-line-no">395</span><span id="line-395">      throw unsupportedOp("clear() not supported on MultiMap. Use underlying maps directly.");</span>
+<span class="source-line-no">395</span><span id="line-395">      throw uoex("clear() not supported on MultiMap. Use underlying maps directly.");</span>
 <span class="source-line-no">396</span><span id="line-396">   }</span>
 <span class="source-line-no">397</span><span id="line-397"></span>
 <span class="source-line-no">398</span><span id="line-398">   /**</span>
@@ -446,7 +446,7 @@
 <span class="source-line-no">433</span><span id="line-433">    */</span>
 <span class="source-line-no">434</span><span id="line-434">   @Override</span>
 <span class="source-line-no">435</span><span id="line-435">   public boolean equals(Object o) {</span>
-<span class="source-line-no">436</span><span id="line-436">      return (o instanceof Map o2) &amp;&amp; Utils.eq(this, o2, (x, y) -&gt; x.entrySet().equals(y.entrySet()));</span>
+<span class="source-line-no">436</span><span id="line-436">      return (o instanceof Map o2) &amp;&amp; Shorts.eq(this, o2, (x, y) -&gt; x.entrySet().equals(y.entrySet()));</span>
 <span class="source-line-no">437</span><span id="line-437">   }</span>
 <span class="source-line-no">438</span><span id="line-438"></span>
 <span class="source-line-no">439</span><span id="line-439">   /**</span>

@@ -161,19 +161,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="peek()">
 <h3>peek</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-60">peek</a></span>()</div>
-<div class="block">Returns a function that prints the input value to stderr and returns it unchanged.
-
- <p>
- Useful for debugging streams by inserting into a stream pipeline with <code>.map(peek())</code>.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   list.stream()
-      .map(peek())
-      .filter(x -&gt; x != <jk>null</jk>)
-      .collect(Collectors.toList());
- </p></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-49">peek</a></span>()</div>
+<div class="block">Returns a function that prints the input value to stderr and returns it unchanged.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type of value.</dd>
@@ -185,20 +174,9 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="peek(java.lang.String,java.util.function.Function)">
 <h3>peek</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-86">peek</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-64">peek</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;T,<wbr>?&gt;&nbsp;formatter)</span></div>
-<div class="block">Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.
-
- <p>
- Useful for debugging streams by inserting into a stream pipeline with <code>.map(peek(...))</code>.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   list.stream()
-      .map(peek(<js>"Processing: {0}"</js>, x -&gt; x.getName()))
-      .filter(x -&gt; x != <jk>null</jk>)
-      .collect(Collectors.toList());
- </p></div>
+<div class="block">Returns a function that prints the input value to stderr using a custom formatter and returns it unchanged.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The type of value.</dd>
@@ -213,7 +191,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="test(java.util.function.Predicate,T)">
 <h3 id="test(java.util.function.Predicate,java.lang.Object)">test</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-101">test</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;predicate,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-79">test</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;&nbsp;predicate,
  T&nbsp;value)</span></div>
 <div class="block">Returns <jk>true</jk> if the specified predicate is <jk>null</jk> or matches the specified value.</div>
 <dl class="notes">
@@ -230,7 +208,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="distinctByKey(java.util.function.Function)">
 <h3>distinctByKey</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-124">distinctByKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super T,<wbr>?&gt;&nbsp;keyExtractor)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/PredicateUtils.html#line-102">distinctByKey</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super T,<wbr>?&gt;&nbsp;keyExtractor)</span></div>
 <div class="block">Returns a predicate that filters out duplicate elements based on a key extractor function.
 
  <p>

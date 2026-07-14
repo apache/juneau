@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.bean;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.lang.Character.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">/**</span>
 <span class="source-line-no">023</span><span id="line-23"> * Converts property names to dashed-upper-case-start format.</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40">      "java:S3776" // Cognitive complexity acceptable for property name conversion logic</span>
 <span class="source-line-no">041</span><span id="line-41">   })</span>
 <span class="source-line-no">042</span><span id="line-42">   public String getPropertyName(String name) {</span>
-<span class="source-line-no">043</span><span id="line-43">      if (e(name))</span>
+<span class="source-line-no">043</span><span id="line-43">      if (ie(name))</span>
 <span class="source-line-no">044</span><span id="line-44">         return name;</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
 <span class="source-line-no">046</span><span id="line-46">      var numUCs = 0;</span>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.markdown;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100"></span>
 <span class="source-line-no">101</span><span id="line-101">   @Override /* Overridden from MarkdownParserSession */</span>
 <span class="source-line-no">102</span><span id="line-102">   protected &lt;T&gt; T doParse(ParserPipe pipe, ClassMeta&lt;T&gt; type) throws IOException, ParseException {</span>
-<span class="source-line-no">103</span><span id="line-103">      try (var r = new java.io.BufferedReader(pipe.getReader())) {</span>
+<span class="source-line-no">103</span><span id="line-103">      try (var r = new BufferedReader(pipe.getReader())) {</span>
 <span class="source-line-no">104</span><span id="line-104">         var lines = readAllLines(r);</span>
 <span class="source-line-no">105</span><span id="line-105">         return parseDocAnything(lines, type, getOuter(), headingLevel);</span>
 <span class="source-line-no">106</span><span id="line-106">      }</span>
@@ -191,7 +191,7 @@
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">      // The "root" section (before any sub-heading) holds the key/value table</span>
 <span class="source-line-no">180</span><span id="line-180">      var rootLines = sections.get("");</span>
-<span class="source-line-no">181</span><span id="line-181">      if (ne(rootLines)) {</span>
+<span class="source-line-no">181</span><span id="line-181">      if (ine(rootLines)) {</span>
 <span class="source-line-no">182</span><span id="line-182">         // Filter out the top-level heading (level)</span>
 <span class="source-line-no">183</span><span id="line-183">         var tableLines = rootLines.stream()</span>
 <span class="source-line-no">184</span><span id="line-184">            .filter(l -&gt; !isHeadingLine(l, level))</span>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.collections;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -102,11 +102,11 @@
 <span class="source-line-no">089</span><span id="line-89"></span>
 <span class="source-line-no">090</span><span id="line-90">   private static List&lt;String&gt; parse(String pointer) {</span>
 <span class="source-line-no">091</span><span id="line-91">      if (pointer == null)</span>
-<span class="source-line-no">092</span><span id="line-92">         throw illegalArg("JSON Pointer cannot be null.");</span>
+<span class="source-line-no">092</span><span id="line-92">         throw iaex("JSON Pointer cannot be null.");</span>
 <span class="source-line-no">093</span><span id="line-93">      if (pointer.isEmpty())</span>
 <span class="source-line-no">094</span><span id="line-94">         return List.of();</span>
 <span class="source-line-no">095</span><span id="line-95">      if (pointer.charAt(0) != '/')</span>
-<span class="source-line-no">096</span><span id="line-96">         throw illegalArg("Invalid JSON Pointer ''{0}'': a non-empty pointer must begin with ''/''.", pointer);</span>
+<span class="source-line-no">096</span><span id="line-96">         throw iaex("Invalid JSON Pointer ''{0}'': a non-empty pointer must begin with ''/''.", pointer);</span>
 <span class="source-line-no">097</span><span id="line-97">      var parts = pointer.split("/", -1);</span>
 <span class="source-line-no">098</span><span id="line-98">      var tokens = new ArrayList&lt;String&gt;(parts.length - 1);</span>
 <span class="source-line-no">099</span><span id="line-99">      for (var i = 1; i &lt; parts.length; i++)</span>
@@ -249,14 +249,14 @@
 <span class="source-line-no">236</span><span id="line-236">         }</span>
 <span class="source-line-no">237</span><span id="line-237">         var idx = toArrayIndex(token);</span>
 <span class="source-line-no">238</span><span id="line-238">         if (idx &lt; 0 || idx &gt; list.size())</span>
-<span class="source-line-no">239</span><span id="line-239">            throw illegalArg("Invalid JSON Pointer array index ''{0}'' for a list of size {1}.", token, list.size());</span>
+<span class="source-line-no">239</span><span id="line-239">            throw iaex("Invalid JSON Pointer array index ''{0}'' for a list of size {1}.", token, list.size());</span>
 <span class="source-line-no">240</span><span id="line-240">         if (idx == list.size())</span>
 <span class="source-line-no">241</span><span id="line-241">            list.add(value);</span>
 <span class="source-line-no">242</span><span id="line-242">         else</span>
 <span class="source-line-no">243</span><span id="line-243">            list.set(idx, value);</span>
 <span class="source-line-no">244</span><span id="line-244">         return;</span>
 <span class="source-line-no">245</span><span id="line-245">      }</span>
-<span class="source-line-no">246</span><span id="line-246">      throw illegalArg("Cannot set value at token ''{0}'' on a non-container value.", token);</span>
+<span class="source-line-no">246</span><span id="line-246">      throw iaex("Cannot set value at token ''{0}'' on a non-container value.", token);</span>
 <span class="source-line-no">247</span><span id="line-247">   }</span>
 <span class="source-line-no">248</span><span id="line-248"></span>
 <span class="source-line-no">249</span><span id="line-249">   private static Object rawRemove(Object container, String token) {</span>

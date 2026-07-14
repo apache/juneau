@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.lang.annotation.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.nio.charset.*;</span>
@@ -165,7 +165,7 @@
 <span class="source-line-no">152</span><span id="line-152">    * @return An array with resolved strings.</span>
 <span class="source-line-no">153</span><span id="line-153">    */</span>
 <span class="source-line-no">154</span><span id="line-154">   protected Stream&lt;String&gt; cdl(String in) {</span>
-<span class="source-line-no">155</span><span id="line-155">      return Arrays.stream(splita(vr.resolve(in))).filter(Utils::ne);</span>
+<span class="source-line-no">155</span><span id="line-155">      return Arrays.stream(splita(vr.resolve(in))).filter(Shorts::ine);</span>
 <span class="source-line-no">156</span><span id="line-156">   }</span>
 <span class="source-line-no">157</span><span id="line-157"></span>
 <span class="source-line-no">158</span><span id="line-158">   /**</span>
@@ -199,7 +199,7 @@
 <span class="source-line-no">186</span><span id="line-186">    * @return The array wrapped in an {@link Optional}.</span>
 <span class="source-line-no">187</span><span id="line-187">    */</span>
 <span class="source-line-no">188</span><span id="line-188">   protected Optional&lt;Class&lt;?&gt;[]&gt; classes(Class&lt;?&gt;[] in) {</span>
-<span class="source-line-no">189</span><span id="line-189">      return opt(in.length == 0 ? null : in);</span>
+<span class="source-line-no">189</span><span id="line-189">      return o(in.length == 0 ? null : in);</span>
 <span class="source-line-no">190</span><span id="line-190">   }</span>
 <span class="source-line-no">191</span><span id="line-191"></span>
 <span class="source-line-no">192</span><span id="line-192">   /**</span>
@@ -224,7 +224,7 @@
 <span class="source-line-no">211</span><span id="line-211">    * @return An array with resolved strings.</span>
 <span class="source-line-no">212</span><span id="line-212">    */</span>
 <span class="source-line-no">213</span><span id="line-213">   protected Stream&lt;String&gt; stream(String[] in) {</span>
-<span class="source-line-no">214</span><span id="line-214">      return Arrays.stream(in).map(vr::resolve).filter(Utils::ne);</span>
+<span class="source-line-no">214</span><span id="line-214">      return Arrays.stream(in).map(vr::resolve).filter(Shorts::ine);</span>
 <span class="source-line-no">215</span><span id="line-215">   }</span>
 <span class="source-line-no">216</span><span id="line-216"></span>
 <span class="source-line-no">217</span><span id="line-217">   /**</span>
@@ -235,7 +235,7 @@
 <span class="source-line-no">222</span><span id="line-222">    */</span>
 <span class="source-line-no">223</span><span id="line-223">   protected Optional&lt;String&gt; string(String in) {</span>
 <span class="source-line-no">224</span><span id="line-224">      in = vr.resolve(in);</span>
-<span class="source-line-no">225</span><span id="line-225">      return opt(isEmpty(in) ? null : in);</span>
+<span class="source-line-no">225</span><span id="line-225">      return o(isEmpty(in) ? null : in);</span>
 <span class="source-line-no">226</span><span id="line-226">   }</span>
 <span class="source-line-no">227</span><span id="line-227"></span>
 <span class="source-line-no">228</span><span id="line-228">   /**</span>
@@ -248,7 +248,7 @@
 <span class="source-line-no">235</span><span id="line-235">    * @return The array wrapped in an {@link Optional}.</span>
 <span class="source-line-no">236</span><span id="line-236">    */</span>
 <span class="source-line-no">237</span><span id="line-237">   protected Optional&lt;String[]&gt; strings(String[] in) {</span>
-<span class="source-line-no">238</span><span id="line-238">      return opt(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Utils::ne).toArray(String[]::new));</span>
+<span class="source-line-no">238</span><span id="line-238">      return o(in.length == 0 ? null : Arrays.stream(in).map(vr::resolve).filter(Shorts::ine).toArray(String[]::new));</span>
 <span class="source-line-no">239</span><span id="line-239">   }</span>
 <span class="source-line-no">240</span><span id="line-240"></span>
 <span class="source-line-no">241</span><span id="line-241">   /**</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">    * @return An optional containing the specified value.</span>
 <span class="source-line-no">247</span><span id="line-247">    */</span>
 <span class="source-line-no">248</span><span id="line-248">   protected &lt;T&gt; Optional&lt;Class&lt;T&gt;&gt; type(Class&lt;T&gt; in) {</span>
-<span class="source-line-no">249</span><span id="line-249">      return opt(in).filter(NOT_VOID);</span>
+<span class="source-line-no">249</span><span id="line-249">      return o(in).filter(NOT_VOID);</span>
 <span class="source-line-no">250</span><span id="line-250">   }</span>
 <span class="source-line-no">251</span><span id="line-251"></span>
 <span class="source-line-no">252</span><span id="line-252">   /**</span>

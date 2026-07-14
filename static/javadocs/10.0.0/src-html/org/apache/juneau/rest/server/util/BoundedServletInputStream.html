@@ -29,139 +29,138 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.util;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import jakarta.servlet.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * ServletInputStream wrapper around a normal input stream with support for limiting input.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> */</span>
-<span class="source-line-no">030</span><span id="line-30">@SuppressWarnings({</span>
-<span class="source-line-no">031</span><span id="line-31">   "resource" // is and sis are servlet-container-managed streams passed in by the caller; closed by the container</span>
-<span class="source-line-no">032</span><span id="line-32">})</span>
-<span class="source-line-no">033</span><span id="line-33">public class BoundedServletInputStream extends ServletInputStream {</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">   private final InputStream is;</span>
-<span class="source-line-no">036</span><span id="line-36">   private final ServletInputStream sis;</span>
-<span class="source-line-no">037</span><span id="line-37">   private long remain;</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">   /**</span>
-<span class="source-line-no">040</span><span id="line-40">    * Wraps the specified byte array.</span>
-<span class="source-line-no">041</span><span id="line-41">    *</span>
-<span class="source-line-no">042</span><span id="line-42">    * @param b The byte contents of the stream.</span>
-<span class="source-line-no">043</span><span id="line-43">    */</span>
-<span class="source-line-no">044</span><span id="line-44">   public BoundedServletInputStream(byte[] b) {</span>
-<span class="source-line-no">045</span><span id="line-45">      this(new ByteArrayInputStream(b), Long.MAX_VALUE);</span>
-<span class="source-line-no">046</span><span id="line-46">   }</span>
-<span class="source-line-no">047</span><span id="line-47"></span>
-<span class="source-line-no">048</span><span id="line-48">   /**</span>
-<span class="source-line-no">049</span><span id="line-49">    * Wraps the specified input stream.</span>
-<span class="source-line-no">050</span><span id="line-50">    *</span>
-<span class="source-line-no">051</span><span id="line-51">    * @param is The input stream to wrap.</span>
-<span class="source-line-no">052</span><span id="line-52">    * @param max The maximum number of bytes to read from the stream.</span>
-<span class="source-line-no">053</span><span id="line-53">    */</span>
-<span class="source-line-no">054</span><span id="line-54">   public BoundedServletInputStream(InputStream is, long max) {</span>
-<span class="source-line-no">055</span><span id="line-55">      this.is = is;</span>
-<span class="source-line-no">056</span><span id="line-56">      this.sis = null;</span>
-<span class="source-line-no">057</span><span id="line-57">      this.remain = max;</span>
-<span class="source-line-no">058</span><span id="line-58">   }</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   /**</span>
-<span class="source-line-no">061</span><span id="line-61">    * Wraps the specified input stream.</span>
-<span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param sis The input stream to wrap.</span>
-<span class="source-line-no">064</span><span id="line-64">    * @param max The maximum number of bytes to read from the stream.</span>
-<span class="source-line-no">065</span><span id="line-65">    */</span>
-<span class="source-line-no">066</span><span id="line-66">   public BoundedServletInputStream(ServletInputStream sis, long max) {</span>
-<span class="source-line-no">067</span><span id="line-67">      this.sis = sis;</span>
-<span class="source-line-no">068</span><span id="line-68">      this.is = sis;</span>
-<span class="source-line-no">069</span><span id="line-69">      this.remain = max;</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">073</span><span id="line-73">   public int available() throws IOException {</span>
-<span class="source-line-no">074</span><span id="line-74">      if (remain &lt;= 0)</span>
-<span class="source-line-no">075</span><span id="line-75">         return 0;</span>
-<span class="source-line-no">076</span><span id="line-76">      return is.available();</span>
-<span class="source-line-no">077</span><span id="line-77">   }</span>
-<span class="source-line-no">078</span><span id="line-78"></span>
-<span class="source-line-no">079</span><span id="line-79">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">080</span><span id="line-80">   public void close() throws IOException {</span>
-<span class="source-line-no">081</span><span id="line-81">      is.close();</span>
-<span class="source-line-no">082</span><span id="line-82">   }</span>
-<span class="source-line-no">083</span><span id="line-83"></span>
-<span class="source-line-no">084</span><span id="line-84">   @Override /* Overridden from ServletInputStream */</span>
-<span class="source-line-no">085</span><span id="line-85">   public boolean isFinished() { return sis != null &amp;&amp; sis.isFinished(); }</span>
-<span class="source-line-no">086</span><span id="line-86"></span>
-<span class="source-line-no">087</span><span id="line-87">   @Override /* Overridden from ServletInputStream */</span>
-<span class="source-line-no">088</span><span id="line-88">   public boolean isReady() { return sis == null || sis.isReady(); }</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">091</span><span id="line-91">   public synchronized void mark(int limit) {</span>
-<span class="source-line-no">092</span><span id="line-92">      is.mark(limit);</span>
-<span class="source-line-no">093</span><span id="line-93">   }</span>
-<span class="source-line-no">094</span><span id="line-94"></span>
-<span class="source-line-no">095</span><span id="line-95">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">096</span><span id="line-96">   public boolean markSupported() {</span>
-<span class="source-line-no">097</span><span id="line-97">      return is.markSupported();</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">101</span><span id="line-101">   public int read() throws IOException {</span>
-<span class="source-line-no">102</span><span id="line-102">      decrement();</span>
-<span class="source-line-no">103</span><span id="line-103">      return is.read();</span>
-<span class="source-line-no">104</span><span id="line-104">   }</span>
-<span class="source-line-no">105</span><span id="line-105"></span>
-<span class="source-line-no">106</span><span id="line-106">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">107</span><span id="line-107">   public int read(byte[] b) throws IOException {</span>
-<span class="source-line-no">108</span><span id="line-108">      return read(b, 0, b.length);</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">112</span><span id="line-112">   public int read(byte[] b, int off, int len) throws IOException {</span>
-<span class="source-line-no">113</span><span id="line-113">      long numBytes = Math.min(len, remain);</span>
-<span class="source-line-no">114</span><span id="line-114">      int r = is.read(b, off, (int)numBytes);</span>
-<span class="source-line-no">115</span><span id="line-115">      if (r == -1)</span>
-<span class="source-line-no">116</span><span id="line-116">         return -1;</span>
-<span class="source-line-no">117</span><span id="line-117">      decrement(numBytes);</span>
-<span class="source-line-no">118</span><span id="line-118">      return r;</span>
-<span class="source-line-no">119</span><span id="line-119">   }</span>
-<span class="source-line-no">120</span><span id="line-120"></span>
-<span class="source-line-no">121</span><span id="line-121">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">122</span><span id="line-122">   public synchronized void reset() throws IOException {</span>
-<span class="source-line-no">123</span><span id="line-123">      is.reset();</span>
-<span class="source-line-no">124</span><span id="line-124">   }</span>
-<span class="source-line-no">125</span><span id="line-125"></span>
-<span class="source-line-no">126</span><span id="line-126">   @Override /* Overridden from ServletInputStream */</span>
-<span class="source-line-no">127</span><span id="line-127">   public void setReadListener(ReadListener arg0) {</span>
-<span class="source-line-no">128</span><span id="line-128">      if (nn(sis))</span>
-<span class="source-line-no">129</span><span id="line-129">         sis.setReadListener(arg0);</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   @Override /* Overridden from InputStream */</span>
-<span class="source-line-no">133</span><span id="line-133">   public long skip(long n) throws IOException {</span>
-<span class="source-line-no">134</span><span id="line-134">      long toSkip = Math.min(n, remain);</span>
-<span class="source-line-no">135</span><span id="line-135">      long r = is.skip(toSkip);</span>
-<span class="source-line-no">136</span><span id="line-136">      decrement(r);</span>
-<span class="source-line-no">137</span><span id="line-137">      return r;</span>
-<span class="source-line-no">138</span><span id="line-138">   }</span>
-<span class="source-line-no">139</span><span id="line-139"></span>
-<span class="source-line-no">140</span><span id="line-140">   private void decrement() throws IOException {</span>
-<span class="source-line-no">141</span><span id="line-141">      remain--;</span>
-<span class="source-line-no">142</span><span id="line-142">      if (remain &lt; 0)</span>
-<span class="source-line-no">143</span><span id="line-143">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
-<span class="source-line-no">144</span><span id="line-144">   }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">   private void decrement(long count) throws IOException {</span>
-<span class="source-line-no">147</span><span id="line-147">      remain -= count;</span>
-<span class="source-line-no">148</span><span id="line-148">      if (remain &lt; 0)</span>
-<span class="source-line-no">149</span><span id="line-149">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
-<span class="source-line-no">150</span><span id="line-150">   }</span>
-<span class="source-line-no">151</span><span id="line-151">}</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import jakarta.servlet.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">/**</span>
+<span class="source-line-no">026</span><span id="line-26"> * ServletInputStream wrapper around a normal input stream with support for limiting input.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> */</span>
+<span class="source-line-no">029</span><span id="line-29">@SuppressWarnings({</span>
+<span class="source-line-no">030</span><span id="line-30">   "resource" // is and sis are servlet-container-managed streams passed in by the caller; closed by the container</span>
+<span class="source-line-no">031</span><span id="line-31">})</span>
+<span class="source-line-no">032</span><span id="line-32">public class BoundedServletInputStream extends ServletInputStream {</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">   private final InputStream is;</span>
+<span class="source-line-no">035</span><span id="line-35">   private final ServletInputStream sis;</span>
+<span class="source-line-no">036</span><span id="line-36">   private long remain;</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   /**</span>
+<span class="source-line-no">039</span><span id="line-39">    * Wraps the specified byte array.</span>
+<span class="source-line-no">040</span><span id="line-40">    *</span>
+<span class="source-line-no">041</span><span id="line-41">    * @param b The byte contents of the stream.</span>
+<span class="source-line-no">042</span><span id="line-42">    */</span>
+<span class="source-line-no">043</span><span id="line-43">   public BoundedServletInputStream(byte[] b) {</span>
+<span class="source-line-no">044</span><span id="line-44">      this(new ByteArrayInputStream(b), Long.MAX_VALUE);</span>
+<span class="source-line-no">045</span><span id="line-45">   }</span>
+<span class="source-line-no">046</span><span id="line-46"></span>
+<span class="source-line-no">047</span><span id="line-47">   /**</span>
+<span class="source-line-no">048</span><span id="line-48">    * Wraps the specified input stream.</span>
+<span class="source-line-no">049</span><span id="line-49">    *</span>
+<span class="source-line-no">050</span><span id="line-50">    * @param is The input stream to wrap.</span>
+<span class="source-line-no">051</span><span id="line-51">    * @param max The maximum number of bytes to read from the stream.</span>
+<span class="source-line-no">052</span><span id="line-52">    */</span>
+<span class="source-line-no">053</span><span id="line-53">   public BoundedServletInputStream(InputStream is, long max) {</span>
+<span class="source-line-no">054</span><span id="line-54">      this.is = is;</span>
+<span class="source-line-no">055</span><span id="line-55">      this.sis = null;</span>
+<span class="source-line-no">056</span><span id="line-56">      this.remain = max;</span>
+<span class="source-line-no">057</span><span id="line-57">   }</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * Wraps the specified input stream.</span>
+<span class="source-line-no">061</span><span id="line-61">    *</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param sis The input stream to wrap.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @param max The maximum number of bytes to read from the stream.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public BoundedServletInputStream(ServletInputStream sis, long max) {</span>
+<span class="source-line-no">066</span><span id="line-66">      this.sis = sis;</span>
+<span class="source-line-no">067</span><span id="line-67">      this.is = sis;</span>
+<span class="source-line-no">068</span><span id="line-68">      this.remain = max;</span>
+<span class="source-line-no">069</span><span id="line-69">   }</span>
+<span class="source-line-no">070</span><span id="line-70"></span>
+<span class="source-line-no">071</span><span id="line-71">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">072</span><span id="line-72">   public int available() throws IOException {</span>
+<span class="source-line-no">073</span><span id="line-73">      if (remain &lt;= 0)</span>
+<span class="source-line-no">074</span><span id="line-74">         return 0;</span>
+<span class="source-line-no">075</span><span id="line-75">      return is.available();</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">079</span><span id="line-79">   public void close() throws IOException {</span>
+<span class="source-line-no">080</span><span id="line-80">      is.close();</span>
+<span class="source-line-no">081</span><span id="line-81">   }</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   @Override /* Overridden from ServletInputStream */</span>
+<span class="source-line-no">084</span><span id="line-84">   public boolean isFinished() { return sis != null &amp;&amp; sis.isFinished(); }</span>
+<span class="source-line-no">085</span><span id="line-85"></span>
+<span class="source-line-no">086</span><span id="line-86">   @Override /* Overridden from ServletInputStream */</span>
+<span class="source-line-no">087</span><span id="line-87">   public boolean isReady() { return sis == null || sis.isReady(); }</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">090</span><span id="line-90">   public synchronized void mark(int limit) {</span>
+<span class="source-line-no">091</span><span id="line-91">      is.mark(limit);</span>
+<span class="source-line-no">092</span><span id="line-92">   }</span>
+<span class="source-line-no">093</span><span id="line-93"></span>
+<span class="source-line-no">094</span><span id="line-94">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">095</span><span id="line-95">   public boolean markSupported() {</span>
+<span class="source-line-no">096</span><span id="line-96">      return is.markSupported();</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">100</span><span id="line-100">   public int read() throws IOException {</span>
+<span class="source-line-no">101</span><span id="line-101">      decrement();</span>
+<span class="source-line-no">102</span><span id="line-102">      return is.read();</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">106</span><span id="line-106">   public int read(byte[] b) throws IOException {</span>
+<span class="source-line-no">107</span><span id="line-107">      return read(b, 0, b.length);</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">111</span><span id="line-111">   public int read(byte[] b, int off, int len) throws IOException {</span>
+<span class="source-line-no">112</span><span id="line-112">      long numBytes = Math.min(len, remain);</span>
+<span class="source-line-no">113</span><span id="line-113">      int r = is.read(b, off, (int)numBytes);</span>
+<span class="source-line-no">114</span><span id="line-114">      if (r == -1)</span>
+<span class="source-line-no">115</span><span id="line-115">         return -1;</span>
+<span class="source-line-no">116</span><span id="line-116">      decrement(numBytes);</span>
+<span class="source-line-no">117</span><span id="line-117">      return r;</span>
+<span class="source-line-no">118</span><span id="line-118">   }</span>
+<span class="source-line-no">119</span><span id="line-119"></span>
+<span class="source-line-no">120</span><span id="line-120">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">121</span><span id="line-121">   public synchronized void reset() throws IOException {</span>
+<span class="source-line-no">122</span><span id="line-122">      is.reset();</span>
+<span class="source-line-no">123</span><span id="line-123">   }</span>
+<span class="source-line-no">124</span><span id="line-124"></span>
+<span class="source-line-no">125</span><span id="line-125">   @Override /* Overridden from ServletInputStream */</span>
+<span class="source-line-no">126</span><span id="line-126">   public void setReadListener(ReadListener arg0) {</span>
+<span class="source-line-no">127</span><span id="line-127">      if (nn(sis))</span>
+<span class="source-line-no">128</span><span id="line-128">         sis.setReadListener(arg0);</span>
+<span class="source-line-no">129</span><span id="line-129">   }</span>
+<span class="source-line-no">130</span><span id="line-130"></span>
+<span class="source-line-no">131</span><span id="line-131">   @Override /* Overridden from InputStream */</span>
+<span class="source-line-no">132</span><span id="line-132">   public long skip(long n) throws IOException {</span>
+<span class="source-line-no">133</span><span id="line-133">      long toSkip = Math.min(n, remain);</span>
+<span class="source-line-no">134</span><span id="line-134">      long r = is.skip(toSkip);</span>
+<span class="source-line-no">135</span><span id="line-135">      decrement(r);</span>
+<span class="source-line-no">136</span><span id="line-136">      return r;</span>
+<span class="source-line-no">137</span><span id="line-137">   }</span>
+<span class="source-line-no">138</span><span id="line-138"></span>
+<span class="source-line-no">139</span><span id="line-139">   private void decrement() throws IOException {</span>
+<span class="source-line-no">140</span><span id="line-140">      remain--;</span>
+<span class="source-line-no">141</span><span id="line-141">      if (remain &lt; 0)</span>
+<span class="source-line-no">142</span><span id="line-142">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   private void decrement(long count) throws IOException {</span>
+<span class="source-line-no">146</span><span id="line-146">      remain -= count;</span>
+<span class="source-line-no">147</span><span id="line-147">      if (remain &lt; 0)</span>
+<span class="source-line-no">148</span><span id="line-148">         throw ioex("Input limit exceeded.  See @Rest(maxInput).");</span>
+<span class="source-line-no">149</span><span id="line-149">   }</span>
+<span class="source-line-no">150</span><span id="line-150">}</span>
 
 
 

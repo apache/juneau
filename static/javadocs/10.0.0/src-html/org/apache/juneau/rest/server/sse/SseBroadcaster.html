@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.sse;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.concurrent.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.logging.*;</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51">    */</span>
 <span class="source-line-no">052</span><span id="line-52">   public SseBroadcaster(int queueSize) {</span>
 <span class="source-line-no">053</span><span id="line-53">      if (queueSize &lt;= 0)</span>
-<span class="source-line-no">054</span><span id="line-54">         throw illegalArg("queueSize must be greater than 0.");</span>
+<span class="source-line-no">054</span><span id="line-54">         throw iaex("queueSize must be greater than 0.");</span>
 <span class="source-line-no">055</span><span id="line-55">      this.queueSize = queueSize;</span>
 <span class="source-line-no">056</span><span id="line-56">      subscriptions = new ConcurrentHashMap&lt;&gt;();</span>
 <span class="source-line-no">057</span><span id="line-57">   }</span>
@@ -80,7 +80,7 @@
 <span class="source-line-no">067</span><span id="line-67">   })</span>
 <span class="source-line-no">068</span><span id="line-68">   public SseSubscription subscribe(String id) {</span>
 <span class="source-line-no">069</span><span id="line-69">      if (isEmpty(id))</span>
-<span class="source-line-no">070</span><span id="line-70">         throw illegalArg("id cannot be null or empty.");</span>
+<span class="source-line-no">070</span><span id="line-70">         throw iaex("id cannot be null or empty.");</span>
 <span class="source-line-no">071</span><span id="line-71">      var subscription = new SseSubscription(id, queueSize, this::removeSubscriber);</span>
 <span class="source-line-no">072</span><span id="line-72">      var previous = subscriptions.put(id, subscription);</span>
 <span class="source-line-no">073</span><span id="line-73">      if (previous != null)</span>

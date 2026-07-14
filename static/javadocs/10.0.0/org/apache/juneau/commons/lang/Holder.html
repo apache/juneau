@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></code>, <code><a href="ByteHolder.html" title="class in org.apache.juneau.commons.lang">ByteHolder</a></code>, <code><a href="CharHolder.html" title="class in org.apache.juneau.commons.lang">CharHolder</a></code>, <code><a href="DoubleHolder.html" title="class in org.apache.juneau.commons.lang">DoubleHolder</a></code>, <code><a href="FloatHolder.html" title="class in org.apache.juneau.commons.lang">FloatHolder</a></code>, <code><a href="IntegerHolder.html" title="class in org.apache.juneau.commons.lang">IntegerHolder</a></code>, <code><a href="LongHolder.html" title="class in org.apache.juneau.commons.lang">LongHolder</a></code>, <code><a href="ShortHolder.html" title="class in org.apache.juneau.commons.lang">ShortHolder</a></code>, <code><a href="StringHolder.html" title="class in org.apache.juneau.commons.lang">StringHolder</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-111">Holder</a>&lt;T&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-112">Holder</a>&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">A generic mutable value wrapper.
 
@@ -251,7 +251,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#is(T)" class="member-name-link">is</a><wbr>(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;other)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Checks if the current value equals the specified value using <a href="../utils/Utils.html#eq(T,T)"><code>Utils.eq(Object, Object)</code></a>.</div>
+<div class="block">Checks if the current value equals the specified value using <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isEmpty()" class="member-name-link">isEmpty</a>()</code></div>
@@ -349,14 +349,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>Holder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-202">Holder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-203">Holder</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="&lt;init&gt;(T)">
 <h3 id="&lt;init&gt;(java.lang.Object)">Holder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-209">Holder</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-210">Holder</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -375,7 +375,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="empty()">
 <h3>empty</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-134">empty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-135">empty</a></span>()</div>
 <div class="block">Creates a new empty value (with <c>null</c> as the initial value).
 
  <h5 class='section'>Example:</h5>
@@ -395,7 +395,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isType(java.lang.reflect.Type)">
 <h3>isType</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-144">isType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-145">isType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t)</span></div>
 <div class="block">Convenience method for checking if the specified type is this class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -408,7 +408,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(T)">
 <h3 id="of(java.lang.Object)">of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-161">of</a></span><wbr><span class="parameters">(T&nbsp;object)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-162">of</a></span><wbr><span class="parameters">(T&nbsp;object)</span></div>
 <div class="block">Creates a new value with the specified initial value.
 
  <h5 class='section'>Example:</h5>
@@ -429,7 +429,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameterType(java.lang.reflect.Type)">
 <h3>getParameterType</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-171">getParameterType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-172">getParameterType</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t)</span></div>
 <div class="block">Returns the generic parameter type of the Holder type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -442,7 +442,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="unwrap(java.lang.reflect.Type)">
 <h3>unwrap</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-191">unwrap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-192">unwrap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;t)</span></div>
 <div class="block">Returns the unwrapped type.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -455,7 +455,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-213">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-214">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;obj)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -465,7 +465,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="filter(java.util.function.Predicate)">
 <h3>filter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-238">filter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;predicate)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-239">filter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;predicate)</span></div>
 <div class="block">If a value is present, and the value matches the given predicate, returns a <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a> describing the
  value, otherwise returns an empty <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>.
 
@@ -492,7 +492,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="flatMap(java.util.function.Function)">
 <h3>flatMap</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-269">flatMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>,<wbr>? extends <a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;? extends T2&gt;&gt;&nbsp;mapper)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-270">flatMap</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>,<wbr>? extends <a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;? extends T2&gt;&gt;&nbsp;mapper)</span></div>
 <div class="block">If a value is present, returns the result of applying the given <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>-bearing mapping function to
  the value, otherwise returns an empty <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a>.
 
@@ -524,7 +524,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get()">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-285">get</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-286">get</a></span>()</div>
 <div class="block">Returns the value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -535,7 +535,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAndSet(T)">
 <h3 id="getAndSet(java.lang.Object)">getAndSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-302">getAndSet</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-303">getAndSet</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Returns the current value and then sets it to the specified value.
 
  <h5 class='section'>Example:</h5>
@@ -555,7 +555,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAndUnset()">
 <h3>getAndUnset</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-323">getAndUnset</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-324">getAndUnset</a></span>()</div>
 <div class="block">Returns the current value and then unsets it (sets to <jk>null</jk>).
 
  <p>
@@ -576,7 +576,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-329">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-330">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -586,7 +586,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ifPresent(java.util.function.Consumer)">
 <h3>ifPresent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-348">ifPresent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;consumer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-349">ifPresent</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;consumer)</span></div>
 <div class="block">If a value is present (not <jk>null</jk>), invokes the specified consumer with the value, otherwise does nothing.
 
  <h5 class='section'>Example:</h5>
@@ -606,8 +606,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="is(T)">
 <h3 id="is(java.lang.Object)">is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-380">is</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;other)</span></div>
-<div class="block">Checks if the current value equals the specified value using <a href="../utils/Utils.html#eq(T,T)"><code>Utils.eq(Object, Object)</code></a>.
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-381">is</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;other)</span></div>
+<div class="block">Checks if the current value equals the specified value using <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a>.
 
  <p>
  This method uses <code>eq()</code> for equality comparison, which handles <jk>null</jk> values safely
@@ -633,14 +633,14 @@ loadScripts(document, 'script');</script>
 <dt>Parameters:</dt>
 <dd><code>other</code> - The value to compare with. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd><jk>true</jk> if the values are equal according to <a href="../utils/Utils.html#eq(T,T)"><code>Utils.eq(Object, Object)</code></a>.</dd>
+<dd><jk>true</jk> if the values are equal according to <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="isEmpty()">
 <h3>isEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-389">isEmpty</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-390">isEmpty</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the value is empty.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -651,7 +651,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isPresent()">
 <h3>isPresent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-396">isPresent</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-397">isPresent</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if the value is set.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -662,7 +662,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="listener(org.apache.juneau.commons.lang.ValueListener)">
 <h3>listener</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-416">listener</a></span><wbr><span class="parameters">(<a href="ValueListener.html" title="interface in org.apache.juneau.commons.lang">ValueListener</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;listener)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-417">listener</a></span><wbr><span class="parameters">(<a href="ValueListener.html" title="interface in org.apache.juneau.commons.lang">ValueListener</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;listener)</span></div>
 <div class="block">Registers a listener that will be called whenever the value is changed via <a href="#set(T)"><code>set(Object)</code></a>.
 
  <p>
@@ -692,7 +692,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="map(java.util.function.Function)">
 <h3>map</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-444">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>,<wbr>T2&gt;&nbsp;mapper)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T2&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;T2&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-445">map</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="Holder.html" title="type parameter in Holder">T</a>,<wbr>T2&gt;&nbsp;mapper)</span></div>
 <div class="block">Applies a mapping function to the value if present, returning a new <a href="Holder.html" title="class in org.apache.juneau.commons.lang"><code>Holder</code></a> with the result.
 
  <p>
@@ -723,7 +723,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElse(T)">
 <h3 id="orElse(java.lang.Object)">orElse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-457">orElse</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;def)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-458">orElse</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;def)</span></div>
 <div class="block">Returns the contents of this value or the default value if <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -736,7 +736,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElseGet(java.util.function.Supplier)">
 <h3>orElseGet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-471">orElseGet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;other)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-472">orElseGet</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends <a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;other)</span></div>
 <div class="block">Return the value if present, otherwise invoke <code>other</code> and return
  the result of that invocation.</div>
 <dl class="notes">
@@ -754,7 +754,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="orElseThrow(java.util.function.Supplier)">
 <h3>orElseThrow</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;X extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-487">orElseThrow</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends X&gt;&nbsp;exceptionSupplier)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;X extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type"><a href="Holder.html" title="type parameter in Holder">T</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-488">orElseThrow</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;? extends X&gt;&nbsp;exceptionSupplier)</span>
                                     throws <span class="exceptions">X</span></div>
 <div class="block">Return the contained value, if present, otherwise throw an exception
  to be created by the provided supplier.</div>
@@ -776,7 +776,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(T)">
 <h3 id="set(java.lang.Object)">set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-509">set</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-510">set</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Sets the value.
 
  <p>
@@ -799,7 +799,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setIf(boolean,T)">
 <h3 id="setIf(boolean,java.lang.Object)">setIf</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-531">setIf</a></span><wbr><span class="parameters">(boolean&nbsp;condition,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-532">setIf</a></span><wbr><span class="parameters">(boolean&nbsp;condition,
  <a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Sets the value only if the specified condition is <jk>true</jk>.
 
@@ -822,7 +822,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setIfEmpty(T)">
 <h3 id="setIfEmpty(java.lang.Object)">setIfEmpty</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-554">setIfEmpty</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-555">setIfEmpty</a></span><wbr><span class="parameters">(<a href="Holder.html" title="type parameter in Holder">T</a>&nbsp;t)</span></div>
 <div class="block">Sets the value only if it is currently empty (<jk>null</jk>).
 
  <p>
@@ -846,7 +846,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-560">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-561">toString</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -856,7 +856,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="update(java.util.function.UnaryOperator)">
 <h3>update</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-586">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;updater)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/Holder.html#line-587">update</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/UnaryOperator.html" title="class or interface in java.util.function" class="external-link">UnaryOperator</a>&lt;<a href="Holder.html" title="type parameter in Holder">T</a>&gt;&nbsp;updater)</span></div>
 <div class="block">Updates the value in-place using the specified function.
 
  <p>

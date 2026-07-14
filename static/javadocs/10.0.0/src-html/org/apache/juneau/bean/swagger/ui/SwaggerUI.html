@@ -35,8 +35,8 @@
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.bean.html5.HtmlBuilder.tr;</span>
 <span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.CollectionUtils.list;</span>
-<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">027</span><span id="line-27"></span>
 <span class="source-line-no">028</span><span id="line-28">import java.util.*;</span>
 <span class="source-line-no">029</span><span id="line-29"></span>
@@ -44,7 +44,7 @@
 <span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.bean.swagger.*;</span>
 <span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.commons.http.*;</span>
 <span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.commons.inject.*;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.commons.logging.Logger;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.commons.logging.*;</span>
 <span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.commons.utils.*;</span>
 <span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.marshall.*;</span>
 <span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.marshall.collections.*;</span>
@@ -422,7 +422,7 @@
 <span class="source-line-no">409</span><span id="line-409">    */</span>
 <span class="source-line-no">410</span><span id="line-410">   @Override</span>
 <span class="source-line-no">411</span><span id="line-411">   public MediaType[] forMediaTypes() {</span>
-<span class="source-line-no">412</span><span id="line-412">      return CollectionUtils.a(MediaType.HTML);</span>
+<span class="source-line-no">412</span><span id="line-412">      return Shorts.a(MediaType.HTML);</span>
 <span class="source-line-no">413</span><span id="line-413">   }</span>
 <span class="source-line-no">414</span><span id="line-414"></span>
 <span class="source-line-no">415</span><span id="line-415">   @Override</span>

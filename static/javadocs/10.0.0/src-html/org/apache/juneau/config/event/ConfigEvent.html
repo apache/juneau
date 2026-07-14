@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.config.event;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.config.event.ConfigEventType.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -229,7 +229,7 @@
 <span class="source-line-no">216</span><span id="line-216">            if (val.indexOf('#') != -1)</span>
 <span class="source-line-no">217</span><span id="line-217">               val = val.replace("#", "\\#");</span>
 <span class="source-line-no">218</span><span id="line-218">            out.append(val);</span>
-<span class="source-line-no">219</span><span id="line-219">            if (ne(comment))</span>
+<span class="source-line-no">219</span><span id="line-219">            if (ine(comment))</span>
 <span class="source-line-no">220</span><span id="line-220">               out.append(" # ").append(comment);</span>
 <span class="source-line-no">221</span><span id="line-221">            out.append(')');</span>
 <span class="source-line-no">222</span><span id="line-222">            yield out.toString();</span>

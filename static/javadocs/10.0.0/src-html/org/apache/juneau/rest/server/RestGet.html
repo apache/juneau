@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"> * This is a specialized subtype of &lt;c&gt;&lt;ja&gt;{@link RestOp @RestOp}(method=&lt;jsf&gt;GET&lt;/jsf&gt;)&lt;/c&gt;.</span>
 <span class="source-line-no">040</span><span id="line-40"> *</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethodBasics"&gt;@RestOp-Annotated Method Basics&lt;/a&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestOpAnnotatedMethods"&gt;@RestOp-Annotated Method Basics&lt;/a&gt;</span>
 <span class="source-line-no">043</span><span id="line-43"></span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> */</span>
@@ -162,7 +162,7 @@
 <span class="source-line-no">149</span><span id="line-149">    * &lt;/ul&gt;</span>
 <span class="source-line-no">150</span><span id="line-150">    *</span>
 <span class="source-line-no">151</span><span id="line-151">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">152</span><span id="line-152">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}</span>
+<span class="source-line-no">152</span><span id="line-152">    *    &lt;li class='jm'&gt;{@link RestContext#getDebugEnablement()}</span>
 <span class="source-line-no">153</span><span id="line-153">    * &lt;/ul&gt;</span>
 <span class="source-line-no">154</span><span id="line-154">    *</span>
 <span class="source-line-no">155</span><span id="line-155">    * @return The annotation value.</span>
@@ -378,7 +378,7 @@
 <span class="source-line-no">365</span><span id="line-365">    * &lt;/p&gt;</span>
 <span class="source-line-no">366</span><span id="line-366">    *</span>
 <span class="source-line-no">367</span><span id="line-367">    * &lt;p&gt;</span>
-<span class="source-line-no">368</span><span id="line-368">    * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via</span>
+<span class="source-line-no">368</span><span id="line-368">    * For programmatic equivalents, contribute a {@link EncoderSet} bean via</span>
 <span class="source-line-no">369</span><span id="line-369">    * {@link Bean @Bean(name="encoders")} (use methodScope to scope to specific operation methods).</span>
 <span class="source-line-no">370</span><span id="line-370">    *</span>
 <span class="source-line-no">371</span><span id="line-371">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -553,7 +553,7 @@
 <span class="source-line-no">540</span><span id="line-540">    * &lt;/ul&gt;</span>
 <span class="source-line-no">541</span><span id="line-541">    *</span>
 <span class="source-line-no">542</span><span id="line-542">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">543</span><span id="line-543">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.server.RestOpContext#getSupportedAcceptTypes()}</span>
+<span class="source-line-no">543</span><span id="line-543">    *    &lt;li class='jm'&gt;{@link RestOpContext#getSupportedAcceptTypes()}</span>
 <span class="source-line-no">544</span><span id="line-544">    * &lt;/ul&gt;</span>
 <span class="source-line-no">545</span><span id="line-545">    *</span>
 <span class="source-line-no">546</span><span id="line-546">    * @return The annotation value.</span>
@@ -730,7 +730,7 @@
 <span class="source-line-no">717</span><span id="line-717">    * &lt;/p&gt;</span>
 <span class="source-line-no">718</span><span id="line-718">    *</span>
 <span class="source-line-no">719</span><span id="line-719">    * &lt;p&gt;</span>
-<span class="source-line-no">720</span><span id="line-720">    * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via</span>
+<span class="source-line-no">720</span><span id="line-720">    * For programmatic equivalents, contribute a {@link SerializerSet} bean via</span>
 <span class="source-line-no">721</span><span id="line-721">    * {@link Bean @Bean(name="serializers")} (use methodScope to scope to specific operation methods).</span>
 <span class="source-line-no">722</span><span id="line-722">    *</span>
 <span class="source-line-no">723</span><span id="line-723">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>

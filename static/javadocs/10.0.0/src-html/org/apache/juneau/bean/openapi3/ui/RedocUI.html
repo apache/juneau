@@ -30,178 +30,179 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.openapi3.ui;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.bean.html5.HtmlBuilder.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.http.MediaType.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.bean.html5.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.bean.openapi3.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.http.MediaType;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.commons.inject.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.cp.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.swap.*;</span>
-<span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">/**</span>
-<span class="source-line-no">032</span><span id="line-32"> * Generates a Redoc-style documentation interface from an OpenAPI 3.1 document.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * Renders a two-column layout — a left sidebar containing the operation table-of-contents and a right</span>
-<span class="source-line-no">036</span><span id="line-36"> * content panel with full operation descriptions, parameters, request/response schemas, and components.</span>
-<span class="source-line-no">037</span><span id="line-37"> *</span>
-<span class="source-line-no">038</span><span id="line-38"> * &lt;p&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> * This is a sibling of {@link OpenApiUI} that provides a documentation-page-style rendering rather</span>
-<span class="source-line-no">040</span><span id="line-40"> * than the interactive collapsing-block layout. Both are server-rendered HTML — neither bundles</span>
-<span class="source-line-no">041</span><span id="line-41"> * external JavaScript packages.</span>
-<span class="source-line-no">042</span><span id="line-42"> *</span>
-<span class="source-line-no">043</span><span id="line-43"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi-v3&lt;/a&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> */</span>
-<span class="source-line-no">047</span><span id="line-47">@SuppressWarnings({</span>
-<span class="source-line-no">048</span><span id="line-48">   "java:S1192" // String literals repeated for clarity in UI generation</span>
-<span class="source-line-no">049</span><span id="line-49">})</span>
-<span class="source-line-no">050</span><span id="line-50">public class RedocUI extends ObjectSwap&lt;OpenApi,Div&gt; {</span>
-<span class="source-line-no">051</span><span id="line-51"></span>
-<span class="source-line-no">052</span><span id="line-52">   // @formatter:off</span>
-<span class="source-line-no">053</span><span id="line-53">   static final FileFinder RESOURCES = FileFinder</span>
-<span class="source-line-no">054</span><span id="line-54">      .create(BasicBeanStore.INSTANCE)</span>
-<span class="source-line-no">055</span><span id="line-55">      .cp(RedocUI.class, null, true)</span>
-<span class="source-line-no">056</span><span id="line-56">      .dir(",")</span>
-<span class="source-line-no">057</span><span id="line-57">      .caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)</span>
-<span class="source-line-no">058</span><span id="line-58">      .build();</span>
-<span class="source-line-no">059</span><span id="line-59">   // @formatter:on</span>
-<span class="source-line-no">060</span><span id="line-60"></span>
-<span class="source-line-no">061</span><span id="line-61">   @Override</span>
-<span class="source-line-no">062</span><span id="line-62">   public MediaType[] forMediaTypes() {</span>
-<span class="source-line-no">063</span><span id="line-63">      return new MediaType[] { HTML };</span>
-<span class="source-line-no">064</span><span id="line-64">   }</span>
-<span class="source-line-no">065</span><span id="line-65"></span>
-<span class="source-line-no">066</span><span id="line-66">   @Override</span>
-<span class="source-line-no">067</span><span id="line-67">   public Div swap(MarshallingSession session, OpenApi openApi) throws Exception {</span>
-<span class="source-line-no">068</span><span id="line-68">      var css = RESOURCES.getString("files/htdocs/styles/RedocUI.css", null)</span>
-<span class="source-line-no">069</span><span id="line-69">         .orElse(RESOURCES.getString("RedocUI.css", null).orElse(DEFAULT_CSS));</span>
-<span class="source-line-no">070</span><span id="line-70"></span>
-<span class="source-line-no">071</span><span id="line-71">      var sidebar = sidebar(openApi);</span>
-<span class="source-line-no">072</span><span id="line-72">      var content = content(openApi);</span>
-<span class="source-line-no">073</span><span id="line-73"></span>
-<span class="source-line-no">074</span><span id="line-74">      return div(style(css), div(sidebar, content).class_("redoc-container")).class_("redoc-ui");</span>
-<span class="source-line-no">075</span><span id="line-75">   }</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   private static Div sidebar(OpenApi openApi) {</span>
-<span class="source-line-no">078</span><span id="line-78">      var nav = div().class_("redoc-sidebar");</span>
-<span class="source-line-no">079</span><span id="line-79">      var info = openApi.getInfo();</span>
-<span class="source-line-no">080</span><span id="line-80">      if (nn(info) &amp;&amp; nn(info.getTitle()))</span>
-<span class="source-line-no">081</span><span id="line-81">         nav.child(div(info.getTitle()).class_("redoc-title"));</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">      var paths = openApi.getPaths();</span>
-<span class="source-line-no">084</span><span id="line-84">      if (nn(paths)) {</span>
-<span class="source-line-no">085</span><span id="line-85">         var ul = ul().class_("redoc-toc");</span>
-<span class="source-line-no">086</span><span id="line-86">         paths.forEach((path, pathItem) -&gt; appendOperations(ul, path, pathItem));</span>
-<span class="source-line-no">087</span><span id="line-87">         nav.child(ul);</span>
-<span class="source-line-no">088</span><span id="line-88">      }</span>
-<span class="source-line-no">089</span><span id="line-89">      if (nn(openApi.getComponents()) &amp;&amp; nn(openApi.getComponents().getSchemas())) {</span>
-<span class="source-line-no">090</span><span id="line-90">         var ul = ul().class_("redoc-toc redoc-models-toc");</span>
-<span class="source-line-no">091</span><span id="line-91">         ul.child(li(div("Models").class_("redoc-section-title")));</span>
-<span class="source-line-no">092</span><span id="line-92">         openApi.getComponents().getSchemas().forEach((name, schema) -&gt; ul.child(li(a("#model-" + name, name))));</span>
-<span class="source-line-no">093</span><span id="line-93">         nav.child(ul);</span>
-<span class="source-line-no">094</span><span id="line-94">      }</span>
-<span class="source-line-no">095</span><span id="line-95">      return nav;</span>
-<span class="source-line-no">096</span><span id="line-96">   }</span>
-<span class="source-line-no">097</span><span id="line-97"></span>
-<span class="source-line-no">098</span><span id="line-98">   private static void appendOperations(Ul ul, String path, PathItem item) {</span>
-<span class="source-line-no">099</span><span id="line-99">      appendOperation(ul, path, "GET", item.getGet());</span>
-<span class="source-line-no">100</span><span id="line-100">      appendOperation(ul, path, "PUT", item.getPut());</span>
-<span class="source-line-no">101</span><span id="line-101">      appendOperation(ul, path, "POST", item.getPost());</span>
-<span class="source-line-no">102</span><span id="line-102">      appendOperation(ul, path, "DELETE", item.getDelete());</span>
-<span class="source-line-no">103</span><span id="line-103">      appendOperation(ul, path, "PATCH", item.getPatch());</span>
-<span class="source-line-no">104</span><span id="line-104">      appendOperation(ul, path, "HEAD", item.getHead());</span>
-<span class="source-line-no">105</span><span id="line-105">      appendOperation(ul, path, "OPTIONS", item.getOptions());</span>
-<span class="source-line-no">106</span><span id="line-106">      appendOperation(ul, path, "TRACE", item.getTrace());</span>
-<span class="source-line-no">107</span><span id="line-107">   }</span>
-<span class="source-line-no">108</span><span id="line-108"></span>
-<span class="source-line-no">109</span><span id="line-109">   private static void appendOperation(Ul ul, String path, String verb, Operation op) {</span>
-<span class="source-line-no">110</span><span id="line-110">      if (op == null)</span>
-<span class="source-line-no">111</span><span id="line-111">         return;</span>
-<span class="source-line-no">112</span><span id="line-112">      var anchor = "op-" + verb.toLowerCase() + "-" + path.replaceAll("[^A-Za-z0-9]", "_");</span>
-<span class="source-line-no">113</span><span id="line-113">      var label = nn(op.getSummary()) ? op.getSummary() : verb + " " + path;</span>
-<span class="source-line-no">114</span><span id="line-114">      ul.child(li(span(verb).class_("redoc-method redoc-method-" + verb.toLowerCase()), a("#" + anchor, label)));</span>
-<span class="source-line-no">115</span><span id="line-115">   }</span>
-<span class="source-line-no">116</span><span id="line-116"></span>
-<span class="source-line-no">117</span><span id="line-117">   private static Div content(OpenApi openApi) {</span>
-<span class="source-line-no">118</span><span id="line-118">      var contentDiv = div().class_("redoc-content");</span>
-<span class="source-line-no">119</span><span id="line-119">      var info = openApi.getInfo();</span>
-<span class="source-line-no">120</span><span id="line-120">      if (nn(info)) {</span>
-<span class="source-line-no">121</span><span id="line-121">         if (nn(info.getTitle()))</span>
-<span class="source-line-no">122</span><span id="line-122">            contentDiv.child(h1(info.getTitle()));</span>
-<span class="source-line-no">123</span><span id="line-123">         if (nn(info.getVersion()))</span>
-<span class="source-line-no">124</span><span id="line-124">            contentDiv.child(div("Version: " + info.getVersion()).class_("redoc-version"));</span>
-<span class="source-line-no">125</span><span id="line-125">         if (nn(info.getDescription()))</span>
-<span class="source-line-no">126</span><span id="line-126">            contentDiv.child(div(info.getDescription()).class_("redoc-description"));</span>
-<span class="source-line-no">127</span><span id="line-127">      }</span>
-<span class="source-line-no">128</span><span id="line-128"></span>
-<span class="source-line-no">129</span><span id="line-129">      var paths = openApi.getPaths();</span>
-<span class="source-line-no">130</span><span id="line-130">      if (nn(paths))</span>
-<span class="source-line-no">131</span><span id="line-131">         paths.forEach((path, pathItem) -&gt; renderPathOperations(contentDiv, path, pathItem));</span>
-<span class="source-line-no">132</span><span id="line-132"></span>
-<span class="source-line-no">133</span><span id="line-133">      if (nn(openApi.getComponents()) &amp;&amp; nn(openApi.getComponents().getSchemas())) {</span>
-<span class="source-line-no">134</span><span id="line-134">         contentDiv.child(h2("Models"));</span>
-<span class="source-line-no">135</span><span id="line-135">         openApi.getComponents().getSchemas().forEach((name, schema) -&gt; {</span>
-<span class="source-line-no">136</span><span id="line-136">            contentDiv.child(h3(name).id("model-" + name));</span>
-<span class="source-line-no">137</span><span id="line-137">            if (nn(schema.getDescription()))</span>
-<span class="source-line-no">138</span><span id="line-138">               contentDiv.child(div(schema.getDescription()).class_("redoc-model-desc"));</span>
-<span class="source-line-no">139</span><span id="line-139">         });</span>
-<span class="source-line-no">140</span><span id="line-140">      }</span>
-<span class="source-line-no">141</span><span id="line-141">      return contentDiv;</span>
-<span class="source-line-no">142</span><span id="line-142">   }</span>
-<span class="source-line-no">143</span><span id="line-143"></span>
-<span class="source-line-no">144</span><span id="line-144">   private static void renderPathOperations(Div contentDiv, String path, PathItem item) {</span>
-<span class="source-line-no">145</span><span id="line-145">      renderOperation(contentDiv, path, "GET", item.getGet());</span>
-<span class="source-line-no">146</span><span id="line-146">      renderOperation(contentDiv, path, "PUT", item.getPut());</span>
-<span class="source-line-no">147</span><span id="line-147">      renderOperation(contentDiv, path, "POST", item.getPost());</span>
-<span class="source-line-no">148</span><span id="line-148">      renderOperation(contentDiv, path, "DELETE", item.getDelete());</span>
-<span class="source-line-no">149</span><span id="line-149">      renderOperation(contentDiv, path, "PATCH", item.getPatch());</span>
-<span class="source-line-no">150</span><span id="line-150">      renderOperation(contentDiv, path, "HEAD", item.getHead());</span>
-<span class="source-line-no">151</span><span id="line-151">      renderOperation(contentDiv, path, "OPTIONS", item.getOptions());</span>
-<span class="source-line-no">152</span><span id="line-152">      renderOperation(contentDiv, path, "TRACE", item.getTrace());</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   private static void renderOperation(Div contentDiv, String path, String verb, Operation op) {</span>
-<span class="source-line-no">156</span><span id="line-156">      if (op == null)</span>
-<span class="source-line-no">157</span><span id="line-157">         return;</span>
-<span class="source-line-no">158</span><span id="line-158">      var anchor = "op-" + verb.toLowerCase() + "-" + path.replaceAll("[^A-Za-z0-9]", "_");</span>
-<span class="source-line-no">159</span><span id="line-159">      contentDiv.child(div(</span>
-<span class="source-line-no">160</span><span id="line-160">         h2(verb + " " + path).id(anchor).class_("redoc-op-title redoc-op-title-" + verb.toLowerCase()),</span>
-<span class="source-line-no">161</span><span id="line-161">         nn(op.getSummary()) ? div(op.getSummary()).class_("redoc-op-summary") : null,</span>
-<span class="source-line-no">162</span><span id="line-162">         nn(op.getDescription()) ? div(op.getDescription()).class_("redoc-op-desc") : null</span>
-<span class="source-line-no">163</span><span id="line-163">      ).class_("redoc-op-block"));</span>
-<span class="source-line-no">164</span><span id="line-164">   }</span>
-<span class="source-line-no">165</span><span id="line-165"></span>
-<span class="source-line-no">166</span><span id="line-166">   private static final String DEFAULT_CSS =</span>
-<span class="source-line-no">167</span><span id="line-167">      ".redoc-ui{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#333;}" +</span>
-<span class="source-line-no">168</span><span id="line-168">      ".redoc-container{display:flex;min-height:100vh;}" +</span>
-<span class="source-line-no">169</span><span id="line-169">      ".redoc-sidebar{width:260px;background:#f4f5f7;padding:20px;border-right:1px solid #e1e4e8;overflow-y:auto;}" +</span>
-<span class="source-line-no">170</span><span id="line-170">      ".redoc-content{flex:1;padding:30px 40px;background:#fff;}" +</span>
-<span class="source-line-no">171</span><span id="line-171">      ".redoc-title{font-size:1.4em;font-weight:bold;margin-bottom:15px;color:#222;}" +</span>
-<span class="source-line-no">172</span><span id="line-172">      ".redoc-toc{list-style:none;padding:0;margin:0 0 20px 0;}" +</span>
-<span class="source-line-no">173</span><span id="line-173">      ".redoc-toc li{margin:6px 0;display:flex;align-items:center;}" +</span>
-<span class="source-line-no">174</span><span id="line-174">      ".redoc-toc a{color:#0366d6;text-decoration:none;font-size:0.9em;margin-left:8px;}" +</span>
-<span class="source-line-no">175</span><span id="line-175">      ".redoc-toc a:hover{text-decoration:underline;}" +</span>
-<span class="source-line-no">176</span><span id="line-176">      ".redoc-section-title{font-weight:bold;margin-top:15px;color:#666;text-transform:uppercase;font-size:0.8em;}" +</span>
-<span class="source-line-no">177</span><span id="line-177">      ".redoc-method{display:inline-block;font-size:0.7em;font-weight:bold;padding:2px 6px;border-radius:3px;color:#fff;text-transform:uppercase;}" +</span>
-<span class="source-line-no">178</span><span id="line-178">      ".redoc-method-get{background:#61affe;}" +</span>
-<span class="source-line-no">179</span><span id="line-179">      ".redoc-method-post{background:#49cc90;}" +</span>
-<span class="source-line-no">180</span><span id="line-180">      ".redoc-method-put{background:#fca130;}" +</span>
-<span class="source-line-no">181</span><span id="line-181">      ".redoc-method-delete{background:#f93e3e;}" +</span>
-<span class="source-line-no">182</span><span id="line-182">      ".redoc-method-patch{background:#50e3c2;}" +</span>
-<span class="source-line-no">183</span><span id="line-183">      ".redoc-method-head{background:#9012fe;}" +</span>
-<span class="source-line-no">184</span><span id="line-184">      ".redoc-method-options{background:#0d5aa7;}" +</span>
-<span class="source-line-no">185</span><span id="line-185">      ".redoc-method-trace{background:#ebebeb;color:#333;}" +</span>
-<span class="source-line-no">186</span><span id="line-186">      ".redoc-op-block{border-bottom:1px solid #e1e4e8;padding:20px 0;}" +</span>
-<span class="source-line-no">187</span><span id="line-187">      ".redoc-op-title{margin:0 0 10px 0;font-size:1.2em;}" +</span>
-<span class="source-line-no">188</span><span id="line-188">      ".redoc-op-summary{font-weight:bold;margin-bottom:8px;}" +</span>
-<span class="source-line-no">189</span><span id="line-189">      ".redoc-op-desc,.redoc-description,.redoc-model-desc{color:#555;line-height:1.5;}" +</span>
-<span class="source-line-no">190</span><span id="line-190">      ".redoc-version{color:#666;font-size:0.9em;margin-bottom:15px;}";</span>
-<span class="source-line-no">191</span><span id="line-191">}</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.bean.html5.HtmlBuilder.a;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.http.MediaType.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.bean.html5.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.bean.openapi3.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.commons.http.MediaType;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.commons.inject.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.marshall.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.marshall.cp.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.swap.*;</span>
+<span class="source-line-no">031</span><span id="line-31"></span>
+<span class="source-line-no">032</span><span id="line-32">/**</span>
+<span class="source-line-no">033</span><span id="line-33"> * Generates a Redoc-style documentation interface from an OpenAPI 3.1 document.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * Renders a two-column layout — a left sidebar containing the operation table-of-contents and a right</span>
+<span class="source-line-no">037</span><span id="line-37"> * content panel with full operation descriptions, parameters, request/response schemas, and components.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * This is a sibling of {@link OpenApiUI} that provides a documentation-page-style rendering rather</span>
+<span class="source-line-no">041</span><span id="line-41"> * than the interactive collapsing-block layout. Both are server-rendered HTML — neither bundles</span>
+<span class="source-line-no">042</span><span id="line-42"> * external JavaScript packages.</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauBeanOpenApi3"&gt;juneau-bean-openapi-v3&lt;/a&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> */</span>
+<span class="source-line-no">048</span><span id="line-48">@SuppressWarnings({</span>
+<span class="source-line-no">049</span><span id="line-49">   "java:S1192" // String literals repeated for clarity in UI generation</span>
+<span class="source-line-no">050</span><span id="line-50">})</span>
+<span class="source-line-no">051</span><span id="line-51">public class RedocUI extends ObjectSwap&lt;OpenApi,Div&gt; {</span>
+<span class="source-line-no">052</span><span id="line-52"></span>
+<span class="source-line-no">053</span><span id="line-53">   // @formatter:off</span>
+<span class="source-line-no">054</span><span id="line-54">   static final FileFinder RESOURCES = FileFinder</span>
+<span class="source-line-no">055</span><span id="line-55">      .create(BasicBeanStore.INSTANCE)</span>
+<span class="source-line-no">056</span><span id="line-56">      .cp(RedocUI.class, null, true)</span>
+<span class="source-line-no">057</span><span id="line-57">      .dir(",")</span>
+<span class="source-line-no">058</span><span id="line-58">      .caching(Boolean.getBoolean("RestContext.disableClasspathResourceCaching.b") ? -1 : 1_000_000)</span>
+<span class="source-line-no">059</span><span id="line-59">      .build();</span>
+<span class="source-line-no">060</span><span id="line-60">   // @formatter:on</span>
+<span class="source-line-no">061</span><span id="line-61"></span>
+<span class="source-line-no">062</span><span id="line-62">   @Override</span>
+<span class="source-line-no">063</span><span id="line-63">   public MediaType[] forMediaTypes() {</span>
+<span class="source-line-no">064</span><span id="line-64">      return new MediaType[] { HTML };</span>
+<span class="source-line-no">065</span><span id="line-65">   }</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   @Override</span>
+<span class="source-line-no">068</span><span id="line-68">   public Div swap(MarshallingSession session, OpenApi openApi) throws Exception {</span>
+<span class="source-line-no">069</span><span id="line-69">      var css = RESOURCES.getString("files/htdocs/styles/RedocUI.css", null)</span>
+<span class="source-line-no">070</span><span id="line-70">         .orElse(RESOURCES.getString("RedocUI.css", null).orElse(DEFAULT_CSS));</span>
+<span class="source-line-no">071</span><span id="line-71"></span>
+<span class="source-line-no">072</span><span id="line-72">      var sidebar = sidebar(openApi);</span>
+<span class="source-line-no">073</span><span id="line-73">      var content = content(openApi);</span>
+<span class="source-line-no">074</span><span id="line-74"></span>
+<span class="source-line-no">075</span><span id="line-75">      return div(style(css), div(sidebar, content).class_("redoc-container")).class_("redoc-ui");</span>
+<span class="source-line-no">076</span><span id="line-76">   }</span>
+<span class="source-line-no">077</span><span id="line-77"></span>
+<span class="source-line-no">078</span><span id="line-78">   private static Div sidebar(OpenApi openApi) {</span>
+<span class="source-line-no">079</span><span id="line-79">      var nav = div().class_("redoc-sidebar");</span>
+<span class="source-line-no">080</span><span id="line-80">      var info = openApi.getInfo();</span>
+<span class="source-line-no">081</span><span id="line-81">      if (nn(info) &amp;&amp; nn(info.getTitle()))</span>
+<span class="source-line-no">082</span><span id="line-82">         nav.child(div(info.getTitle()).class_("redoc-title"));</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">      var paths = openApi.getPaths();</span>
+<span class="source-line-no">085</span><span id="line-85">      if (nn(paths)) {</span>
+<span class="source-line-no">086</span><span id="line-86">         var ul = ul().class_("redoc-toc");</span>
+<span class="source-line-no">087</span><span id="line-87">         paths.forEach((path, pathItem) -&gt; appendOperations(ul, path, pathItem));</span>
+<span class="source-line-no">088</span><span id="line-88">         nav.child(ul);</span>
+<span class="source-line-no">089</span><span id="line-89">      }</span>
+<span class="source-line-no">090</span><span id="line-90">      if (nn(openApi.getComponents()) &amp;&amp; nn(openApi.getComponents().getSchemas())) {</span>
+<span class="source-line-no">091</span><span id="line-91">         var ul = ul().class_("redoc-toc redoc-models-toc");</span>
+<span class="source-line-no">092</span><span id="line-92">         ul.child(li(div("Models").class_("redoc-section-title")));</span>
+<span class="source-line-no">093</span><span id="line-93">         openApi.getComponents().getSchemas().forEach((name, schema) -&gt; ul.child(li(a("#model-" + name, name))));</span>
+<span class="source-line-no">094</span><span id="line-94">         nav.child(ul);</span>
+<span class="source-line-no">095</span><span id="line-95">      }</span>
+<span class="source-line-no">096</span><span id="line-96">      return nav;</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   private static void appendOperations(Ul ul, String path, PathItem item) {</span>
+<span class="source-line-no">100</span><span id="line-100">      appendOperation(ul, path, "GET", item.getGet());</span>
+<span class="source-line-no">101</span><span id="line-101">      appendOperation(ul, path, "PUT", item.getPut());</span>
+<span class="source-line-no">102</span><span id="line-102">      appendOperation(ul, path, "POST", item.getPost());</span>
+<span class="source-line-no">103</span><span id="line-103">      appendOperation(ul, path, "DELETE", item.getDelete());</span>
+<span class="source-line-no">104</span><span id="line-104">      appendOperation(ul, path, "PATCH", item.getPatch());</span>
+<span class="source-line-no">105</span><span id="line-105">      appendOperation(ul, path, "HEAD", item.getHead());</span>
+<span class="source-line-no">106</span><span id="line-106">      appendOperation(ul, path, "OPTIONS", item.getOptions());</span>
+<span class="source-line-no">107</span><span id="line-107">      appendOperation(ul, path, "TRACE", item.getTrace());</span>
+<span class="source-line-no">108</span><span id="line-108">   }</span>
+<span class="source-line-no">109</span><span id="line-109"></span>
+<span class="source-line-no">110</span><span id="line-110">   private static void appendOperation(Ul ul, String path, String verb, Operation op) {</span>
+<span class="source-line-no">111</span><span id="line-111">      if (op == null)</span>
+<span class="source-line-no">112</span><span id="line-112">         return;</span>
+<span class="source-line-no">113</span><span id="line-113">      var anchor = "op-" + verb.toLowerCase() + "-" + path.replaceAll("[^A-Za-z0-9]", "_");</span>
+<span class="source-line-no">114</span><span id="line-114">      var label = nn(op.getSummary()) ? op.getSummary() : verb + " " + path;</span>
+<span class="source-line-no">115</span><span id="line-115">      ul.child(li(span(verb).class_("redoc-method redoc-method-" + verb.toLowerCase()), a("#" + anchor, label)));</span>
+<span class="source-line-no">116</span><span id="line-116">   }</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   private static Div content(OpenApi openApi) {</span>
+<span class="source-line-no">119</span><span id="line-119">      var contentDiv = div().class_("redoc-content");</span>
+<span class="source-line-no">120</span><span id="line-120">      var info = openApi.getInfo();</span>
+<span class="source-line-no">121</span><span id="line-121">      if (nn(info)) {</span>
+<span class="source-line-no">122</span><span id="line-122">         if (nn(info.getTitle()))</span>
+<span class="source-line-no">123</span><span id="line-123">            contentDiv.child(h1(info.getTitle()));</span>
+<span class="source-line-no">124</span><span id="line-124">         if (nn(info.getVersion()))</span>
+<span class="source-line-no">125</span><span id="line-125">            contentDiv.child(div("Version: " + info.getVersion()).class_("redoc-version"));</span>
+<span class="source-line-no">126</span><span id="line-126">         if (nn(info.getDescription()))</span>
+<span class="source-line-no">127</span><span id="line-127">            contentDiv.child(div(info.getDescription()).class_("redoc-description"));</span>
+<span class="source-line-no">128</span><span id="line-128">      }</span>
+<span class="source-line-no">129</span><span id="line-129"></span>
+<span class="source-line-no">130</span><span id="line-130">      var paths = openApi.getPaths();</span>
+<span class="source-line-no">131</span><span id="line-131">      if (nn(paths))</span>
+<span class="source-line-no">132</span><span id="line-132">         paths.forEach((path, pathItem) -&gt; renderPathOperations(contentDiv, path, pathItem));</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">      if (nn(openApi.getComponents()) &amp;&amp; nn(openApi.getComponents().getSchemas())) {</span>
+<span class="source-line-no">135</span><span id="line-135">         contentDiv.child(h2("Models"));</span>
+<span class="source-line-no">136</span><span id="line-136">         openApi.getComponents().getSchemas().forEach((name, schema) -&gt; {</span>
+<span class="source-line-no">137</span><span id="line-137">            contentDiv.child(h3(name).id("model-" + name));</span>
+<span class="source-line-no">138</span><span id="line-138">            if (nn(schema.getDescription()))</span>
+<span class="source-line-no">139</span><span id="line-139">               contentDiv.child(div(schema.getDescription()).class_("redoc-model-desc"));</span>
+<span class="source-line-no">140</span><span id="line-140">         });</span>
+<span class="source-line-no">141</span><span id="line-141">      }</span>
+<span class="source-line-no">142</span><span id="line-142">      return contentDiv;</span>
+<span class="source-line-no">143</span><span id="line-143">   }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">   private static void renderPathOperations(Div contentDiv, String path, PathItem item) {</span>
+<span class="source-line-no">146</span><span id="line-146">      renderOperation(contentDiv, path, "GET", item.getGet());</span>
+<span class="source-line-no">147</span><span id="line-147">      renderOperation(contentDiv, path, "PUT", item.getPut());</span>
+<span class="source-line-no">148</span><span id="line-148">      renderOperation(contentDiv, path, "POST", item.getPost());</span>
+<span class="source-line-no">149</span><span id="line-149">      renderOperation(contentDiv, path, "DELETE", item.getDelete());</span>
+<span class="source-line-no">150</span><span id="line-150">      renderOperation(contentDiv, path, "PATCH", item.getPatch());</span>
+<span class="source-line-no">151</span><span id="line-151">      renderOperation(contentDiv, path, "HEAD", item.getHead());</span>
+<span class="source-line-no">152</span><span id="line-152">      renderOperation(contentDiv, path, "OPTIONS", item.getOptions());</span>
+<span class="source-line-no">153</span><span id="line-153">      renderOperation(contentDiv, path, "TRACE", item.getTrace());</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   private static void renderOperation(Div contentDiv, String path, String verb, Operation op) {</span>
+<span class="source-line-no">157</span><span id="line-157">      if (op == null)</span>
+<span class="source-line-no">158</span><span id="line-158">         return;</span>
+<span class="source-line-no">159</span><span id="line-159">      var anchor = "op-" + verb.toLowerCase() + "-" + path.replaceAll("[^A-Za-z0-9]", "_");</span>
+<span class="source-line-no">160</span><span id="line-160">      contentDiv.child(div(</span>
+<span class="source-line-no">161</span><span id="line-161">         h2(verb + " " + path).id(anchor).class_("redoc-op-title redoc-op-title-" + verb.toLowerCase()),</span>
+<span class="source-line-no">162</span><span id="line-162">         nn(op.getSummary()) ? div(op.getSummary()).class_("redoc-op-summary") : null,</span>
+<span class="source-line-no">163</span><span id="line-163">         nn(op.getDescription()) ? div(op.getDescription()).class_("redoc-op-desc") : null</span>
+<span class="source-line-no">164</span><span id="line-164">      ).class_("redoc-op-block"));</span>
+<span class="source-line-no">165</span><span id="line-165">   }</span>
+<span class="source-line-no">166</span><span id="line-166"></span>
+<span class="source-line-no">167</span><span id="line-167">   private static final String DEFAULT_CSS =</span>
+<span class="source-line-no">168</span><span id="line-168">      ".redoc-ui{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#333;}" +</span>
+<span class="source-line-no">169</span><span id="line-169">      ".redoc-container{display:flex;min-height:100vh;}" +</span>
+<span class="source-line-no">170</span><span id="line-170">      ".redoc-sidebar{width:260px;background:#f4f5f7;padding:20px;border-right:1px solid #e1e4e8;overflow-y:auto;}" +</span>
+<span class="source-line-no">171</span><span id="line-171">      ".redoc-content{flex:1;padding:30px 40px;background:#fff;}" +</span>
+<span class="source-line-no">172</span><span id="line-172">      ".redoc-title{font-size:1.4em;font-weight:bold;margin-bottom:15px;color:#222;}" +</span>
+<span class="source-line-no">173</span><span id="line-173">      ".redoc-toc{list-style:none;padding:0;margin:0 0 20px 0;}" +</span>
+<span class="source-line-no">174</span><span id="line-174">      ".redoc-toc li{margin:6px 0;display:flex;align-items:center;}" +</span>
+<span class="source-line-no">175</span><span id="line-175">      ".redoc-toc a{color:#0366d6;text-decoration:none;font-size:0.9em;margin-left:8px;}" +</span>
+<span class="source-line-no">176</span><span id="line-176">      ".redoc-toc a:hover{text-decoration:underline;}" +</span>
+<span class="source-line-no">177</span><span id="line-177">      ".redoc-section-title{font-weight:bold;margin-top:15px;color:#666;text-transform:uppercase;font-size:0.8em;}" +</span>
+<span class="source-line-no">178</span><span id="line-178">      ".redoc-method{display:inline-block;font-size:0.7em;font-weight:bold;padding:2px 6px;border-radius:3px;color:#fff;text-transform:uppercase;}" +</span>
+<span class="source-line-no">179</span><span id="line-179">      ".redoc-method-get{background:#61affe;}" +</span>
+<span class="source-line-no">180</span><span id="line-180">      ".redoc-method-post{background:#49cc90;}" +</span>
+<span class="source-line-no">181</span><span id="line-181">      ".redoc-method-put{background:#fca130;}" +</span>
+<span class="source-line-no">182</span><span id="line-182">      ".redoc-method-delete{background:#f93e3e;}" +</span>
+<span class="source-line-no">183</span><span id="line-183">      ".redoc-method-patch{background:#50e3c2;}" +</span>
+<span class="source-line-no">184</span><span id="line-184">      ".redoc-method-head{background:#9012fe;}" +</span>
+<span class="source-line-no">185</span><span id="line-185">      ".redoc-method-options{background:#0d5aa7;}" +</span>
+<span class="source-line-no">186</span><span id="line-186">      ".redoc-method-trace{background:#ebebeb;color:#333;}" +</span>
+<span class="source-line-no">187</span><span id="line-187">      ".redoc-op-block{border-bottom:1px solid #e1e4e8;padding:20px 0;}" +</span>
+<span class="source-line-no">188</span><span id="line-188">      ".redoc-op-title{margin:0 0 10px 0;font-size:1.2em;}" +</span>
+<span class="source-line-no">189</span><span id="line-189">      ".redoc-op-summary{font-weight:bold;margin-bottom:8px;}" +</span>
+<span class="source-line-no">190</span><span id="line-190">      ".redoc-op-desc,.redoc-description,.redoc-model-desc{color:#555;line-height:1.5;}" +</span>
+<span class="source-line-no">191</span><span id="line-191">      ".redoc-version{color:#666;font-size:0.9em;margin-bottom:15px;}";</span>
+<span class="source-line-no">192</span><span id="line-192">}</span>
 
 
 

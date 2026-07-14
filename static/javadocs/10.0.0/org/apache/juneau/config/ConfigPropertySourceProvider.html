@@ -99,7 +99,7 @@ implements <a href="../commons/settings/PropertySourceProvider.html" title="inte
  first <code>get(name)</code> invocation. This is deliberate — calling <code>getSystemDefault()</code> from
  inside <a href="#create()"><code>create()</code></a> would create a static-initialization cycle because
  <code>Settings.&lt;clinit&gt;</code> fires the ServiceLoader at class-load time, and <code>Config</code>'s
- static initializers transitively reference <a href="../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> (through <code>Cache</code> / <code>Utils.env(...)</code>)
+ static initializers transitively reference <a href="../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a> (through <code>Cache</code> / <code>SystemUtils.env(...)</code>)
  which would re-enter the <code>Settings.&lt;clinit&gt;</code> block.
 
  <p>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.marshaller;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">083</span><span id="line-83">    */</span>
 <span class="source-line-no">084</span><span id="line-84">   public static String json(Object object) throws SerializeException {</span>
-<span class="source-line-no">085</span><span id="line-85">      return Json.DEFAULT.of(object);</span>
+<span class="source-line-no">085</span><span id="line-85">      return Json.of(object);</span>
 <span class="source-line-no">086</span><span id="line-86">   }</span>
 <span class="source-line-no">087</span><span id="line-87"></span>
 <span class="source-line-no">088</span><span id="line-88">   /**</span>
@@ -108,7 +108,7 @@
 <span class="source-line-no">095</span><span id="line-95">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">096</span><span id="line-96">    */</span>
 <span class="source-line-no">097</span><span id="line-97">   public static Object json(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">098</span><span id="line-98">      Json.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">098</span><span id="line-98">      Json.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">099</span><span id="line-99">   }</span>
 <span class="source-line-no">100</span><span id="line-100"></span>
 <span class="source-line-no">101</span><span id="line-101">   /**</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">110</span><span id="line-110">    */</span>
 <span class="source-line-no">111</span><span id="line-111">   public static &lt;T&gt; T json(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">112</span><span id="line-112">      return Json.DEFAULT.to(input, type);</span>
+<span class="source-line-no">112</span><span id="line-112">      return Json.DEFAULT.read(input, type);</span>
 <span class="source-line-no">113</span><span id="line-113">   }</span>
 <span class="source-line-no">114</span><span id="line-114"></span>
 <span class="source-line-no">115</span><span id="line-115">   /**</span>
@@ -137,7 +137,7 @@
 <span class="source-line-no">124</span><span id="line-124">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">125</span><span id="line-125">    */</span>
 <span class="source-line-no">126</span><span id="line-126">   public static &lt;T&gt; T json(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">127</span><span id="line-127">      return Json.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">127</span><span id="line-127">      return Json.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">128</span><span id="line-128">   }</span>
 <span class="source-line-no">129</span><span id="line-129"></span>
 <span class="source-line-no">130</span><span id="line-130">   /**</span>
@@ -149,7 +149,7 @@
 <span class="source-line-no">136</span><span id="line-136">    * @return The parsed object.</span>
 <span class="source-line-no">137</span><span id="line-137">    */</span>
 <span class="source-line-no">138</span><span id="line-138">   public static &lt;T&gt; T json(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">139</span><span id="line-139">      return safe(() -&gt; Json.DEFAULT.to(o, c));</span>
+<span class="source-line-no">139</span><span id="line-139">      return safe(() -&gt; Json.to(o, c));</span>
 <span class="source-line-no">140</span><span id="line-140">   }</span>
 <span class="source-line-no">141</span><span id="line-141"></span>
 <span class="source-line-no">142</span><span id="line-142">   /**</span>
@@ -163,7 +163,7 @@
 <span class="source-line-no">150</span><span id="line-150">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">151</span><span id="line-151">    */</span>
 <span class="source-line-no">152</span><span id="line-152">   public static &lt;T&gt; T json(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">153</span><span id="line-153">      return Json.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">153</span><span id="line-153">      return Json.to(input, type, args);</span>
 <span class="source-line-no">154</span><span id="line-154">   }</span>
 <span class="source-line-no">155</span><span id="line-155"></span>
 <span class="source-line-no">156</span><span id="line-156">   /**</span>
@@ -177,7 +177,7 @@
 <span class="source-line-no">164</span><span id="line-164">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">165</span><span id="line-165">    */</span>
 <span class="source-line-no">166</span><span id="line-166">   public static String json5(Object object) throws SerializeException {</span>
-<span class="source-line-no">167</span><span id="line-167">      return Json5.DEFAULT.of(object);</span>
+<span class="source-line-no">167</span><span id="line-167">      return Json5.of(object);</span>
 <span class="source-line-no">168</span><span id="line-168">   }</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
 <span class="source-line-no">170</span><span id="line-170">   /**</span>
@@ -190,7 +190,7 @@
 <span class="source-line-no">177</span><span id="line-177">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">178</span><span id="line-178">    */</span>
 <span class="source-line-no">179</span><span id="line-179">   public static Object json5(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">180</span><span id="line-180">      Json5.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">180</span><span id="line-180">      Json5.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">181</span><span id="line-181">   }</span>
 <span class="source-line-no">182</span><span id="line-182"></span>
 <span class="source-line-no">183</span><span id="line-183">   /**</span>
@@ -204,7 +204,7 @@
 <span class="source-line-no">191</span><span id="line-191">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">192</span><span id="line-192">    */</span>
 <span class="source-line-no">193</span><span id="line-193">   public static &lt;T&gt; T json5(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">194</span><span id="line-194">      return Json5.DEFAULT.to(input, type);</span>
+<span class="source-line-no">194</span><span id="line-194">      return Json5.DEFAULT.read(input, type);</span>
 <span class="source-line-no">195</span><span id="line-195">   }</span>
 <span class="source-line-no">196</span><span id="line-196"></span>
 <span class="source-line-no">197</span><span id="line-197">   /**</span>
@@ -219,7 +219,7 @@
 <span class="source-line-no">206</span><span id="line-206">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">207</span><span id="line-207">    */</span>
 <span class="source-line-no">208</span><span id="line-208">   public static &lt;T&gt; T json5(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">209</span><span id="line-209">      return Json5.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">209</span><span id="line-209">      return Json5.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">210</span><span id="line-210">   }</span>
 <span class="source-line-no">211</span><span id="line-211"></span>
 <span class="source-line-no">212</span><span id="line-212">   /**</span>
@@ -231,7 +231,7 @@
 <span class="source-line-no">218</span><span id="line-218">    * @return The parsed object.</span>
 <span class="source-line-no">219</span><span id="line-219">    */</span>
 <span class="source-line-no">220</span><span id="line-220">   public static &lt;T&gt; T json5(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">221</span><span id="line-221">      return safe(() -&gt; Json5.DEFAULT.to(o, c));</span>
+<span class="source-line-no">221</span><span id="line-221">      return safe(() -&gt; Json5.to(o, c));</span>
 <span class="source-line-no">222</span><span id="line-222">   }</span>
 <span class="source-line-no">223</span><span id="line-223"></span>
 <span class="source-line-no">224</span><span id="line-224">   /**</span>
@@ -245,7 +245,7 @@
 <span class="source-line-no">232</span><span id="line-232">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">233</span><span id="line-233">    */</span>
 <span class="source-line-no">234</span><span id="line-234">   public static &lt;T&gt; T json5(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">235</span><span id="line-235">      return Json5.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">235</span><span id="line-235">      return Json5.to(input, type, args);</span>
 <span class="source-line-no">236</span><span id="line-236">   }</span>
 <span class="source-line-no">237</span><span id="line-237"></span>
 <span class="source-line-no">238</span><span id="line-238">   /**</span>
@@ -259,7 +259,7 @@
 <span class="source-line-no">246</span><span id="line-246">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">247</span><span id="line-247">    */</span>
 <span class="source-line-no">248</span><span id="line-248">   public static String jsonl(Object object) throws SerializeException {</span>
-<span class="source-line-no">249</span><span id="line-249">      return Jsonl.DEFAULT.of(object);</span>
+<span class="source-line-no">249</span><span id="line-249">      return Jsonl.of(object);</span>
 <span class="source-line-no">250</span><span id="line-250">   }</span>
 <span class="source-line-no">251</span><span id="line-251"></span>
 <span class="source-line-no">252</span><span id="line-252">   /**</span>
@@ -272,7 +272,7 @@
 <span class="source-line-no">259</span><span id="line-259">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">260</span><span id="line-260">    */</span>
 <span class="source-line-no">261</span><span id="line-261">   public static Object jsonl(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">262</span><span id="line-262">      Jsonl.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">262</span><span id="line-262">      Jsonl.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">263</span><span id="line-263">   }</span>
 <span class="source-line-no">264</span><span id="line-264"></span>
 <span class="source-line-no">265</span><span id="line-265">   /**</span>
@@ -286,7 +286,7 @@
 <span class="source-line-no">273</span><span id="line-273">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">274</span><span id="line-274">    */</span>
 <span class="source-line-no">275</span><span id="line-275">   public static &lt;T&gt; T jsonl(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">276</span><span id="line-276">      return Jsonl.DEFAULT.to(input, type);</span>
+<span class="source-line-no">276</span><span id="line-276">      return Jsonl.DEFAULT.read(input, type);</span>
 <span class="source-line-no">277</span><span id="line-277">   }</span>
 <span class="source-line-no">278</span><span id="line-278"></span>
 <span class="source-line-no">279</span><span id="line-279">   /**</span>
@@ -301,7 +301,7 @@
 <span class="source-line-no">288</span><span id="line-288">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">289</span><span id="line-289">    */</span>
 <span class="source-line-no">290</span><span id="line-290">   public static &lt;T&gt; T jsonl(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">291</span><span id="line-291">      return Jsonl.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">291</span><span id="line-291">      return Jsonl.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">292</span><span id="line-292">   }</span>
 <span class="source-line-no">293</span><span id="line-293"></span>
 <span class="source-line-no">294</span><span id="line-294">   /**</span>
@@ -313,7 +313,7 @@
 <span class="source-line-no">300</span><span id="line-300">    * @return The parsed object.</span>
 <span class="source-line-no">301</span><span id="line-301">    */</span>
 <span class="source-line-no">302</span><span id="line-302">   public static &lt;T&gt; T jsonl(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">303</span><span id="line-303">      return safe(() -&gt; Jsonl.DEFAULT.to(o, c));</span>
+<span class="source-line-no">303</span><span id="line-303">      return safe(() -&gt; Jsonl.to(o, c));</span>
 <span class="source-line-no">304</span><span id="line-304">   }</span>
 <span class="source-line-no">305</span><span id="line-305"></span>
 <span class="source-line-no">306</span><span id="line-306">   /**</span>
@@ -327,7 +327,7 @@
 <span class="source-line-no">314</span><span id="line-314">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">315</span><span id="line-315">    */</span>
 <span class="source-line-no">316</span><span id="line-316">   public static &lt;T&gt; T jsonl(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">317</span><span id="line-317">      return Jsonl.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">317</span><span id="line-317">      return Jsonl.to(input, type, args);</span>
 <span class="source-line-no">318</span><span id="line-318">   }</span>
 <span class="source-line-no">319</span><span id="line-319"></span>
 <span class="source-line-no">320</span><span id="line-320">   /**</span>
@@ -341,7 +341,7 @@
 <span class="source-line-no">328</span><span id="line-328">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">329</span><span id="line-329">    */</span>
 <span class="source-line-no">330</span><span id="line-330">   public static String jcs(Object object) throws SerializeException {</span>
-<span class="source-line-no">331</span><span id="line-331">      return Jcs.DEFAULT.of(object);</span>
+<span class="source-line-no">331</span><span id="line-331">      return Jcs.of(object);</span>
 <span class="source-line-no">332</span><span id="line-332">   }</span>
 <span class="source-line-no">333</span><span id="line-333"></span>
 <span class="source-line-no">334</span><span id="line-334">   /**</span>
@@ -354,7 +354,7 @@
 <span class="source-line-no">341</span><span id="line-341">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">342</span><span id="line-342">    */</span>
 <span class="source-line-no">343</span><span id="line-343">   public static Object jcs(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">344</span><span id="line-344">      Jcs.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">344</span><span id="line-344">      Jcs.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">345</span><span id="line-345">   }</span>
 <span class="source-line-no">346</span><span id="line-346"></span>
 <span class="source-line-no">347</span><span id="line-347">   /**</span>
@@ -368,7 +368,7 @@
 <span class="source-line-no">355</span><span id="line-355">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">356</span><span id="line-356">    */</span>
 <span class="source-line-no">357</span><span id="line-357">   public static &lt;T&gt; T jcs(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">358</span><span id="line-358">      return Jcs.DEFAULT.to(input, type);</span>
+<span class="source-line-no">358</span><span id="line-358">      return Jcs.DEFAULT.read(input, type);</span>
 <span class="source-line-no">359</span><span id="line-359">   }</span>
 <span class="source-line-no">360</span><span id="line-360"></span>
 <span class="source-line-no">361</span><span id="line-361">   /**</span>
@@ -383,7 +383,7 @@
 <span class="source-line-no">370</span><span id="line-370">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">371</span><span id="line-371">    */</span>
 <span class="source-line-no">372</span><span id="line-372">   public static &lt;T&gt; T jcs(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">373</span><span id="line-373">      return Jcs.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">373</span><span id="line-373">      return Jcs.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">374</span><span id="line-374">   }</span>
 <span class="source-line-no">375</span><span id="line-375"></span>
 <span class="source-line-no">376</span><span id="line-376">   /**</span>
@@ -395,7 +395,7 @@
 <span class="source-line-no">382</span><span id="line-382">    * @return The parsed object.</span>
 <span class="source-line-no">383</span><span id="line-383">    */</span>
 <span class="source-line-no">384</span><span id="line-384">   public static &lt;T&gt; T jcs(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">385</span><span id="line-385">      return safe(() -&gt; Jcs.DEFAULT.to(o, c));</span>
+<span class="source-line-no">385</span><span id="line-385">      return safe(() -&gt; Jcs.to(o, c));</span>
 <span class="source-line-no">386</span><span id="line-386">   }</span>
 <span class="source-line-no">387</span><span id="line-387"></span>
 <span class="source-line-no">388</span><span id="line-388">   /**</span>
@@ -409,7 +409,7 @@
 <span class="source-line-no">396</span><span id="line-396">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">397</span><span id="line-397">    */</span>
 <span class="source-line-no">398</span><span id="line-398">   public static &lt;T&gt; T jcs(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">399</span><span id="line-399">      return Jcs.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">399</span><span id="line-399">      return Jcs.to(input, type, args);</span>
 <span class="source-line-no">400</span><span id="line-400">   }</span>
 <span class="source-line-no">401</span><span id="line-401"></span>
 <span class="source-line-no">402</span><span id="line-402">   /**</span>
@@ -423,7 +423,7 @@
 <span class="source-line-no">410</span><span id="line-410">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">411</span><span id="line-411">    */</span>
 <span class="source-line-no">412</span><span id="line-412">   public static String hjson(Object object) throws SerializeException {</span>
-<span class="source-line-no">413</span><span id="line-413">      return Hjson.DEFAULT.of(object);</span>
+<span class="source-line-no">413</span><span id="line-413">      return Hjson.of(object);</span>
 <span class="source-line-no">414</span><span id="line-414">   }</span>
 <span class="source-line-no">415</span><span id="line-415"></span>
 <span class="source-line-no">416</span><span id="line-416">   /**</span>
@@ -436,7 +436,7 @@
 <span class="source-line-no">423</span><span id="line-423">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">424</span><span id="line-424">    */</span>
 <span class="source-line-no">425</span><span id="line-425">   public static Object hjson(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">426</span><span id="line-426">      Hjson.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">426</span><span id="line-426">      Hjson.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">427</span><span id="line-427">   }</span>
 <span class="source-line-no">428</span><span id="line-428"></span>
 <span class="source-line-no">429</span><span id="line-429">   /**</span>
@@ -450,7 +450,7 @@
 <span class="source-line-no">437</span><span id="line-437">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">438</span><span id="line-438">    */</span>
 <span class="source-line-no">439</span><span id="line-439">   public static &lt;T&gt; T hjson(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">440</span><span id="line-440">      return Hjson.DEFAULT.to(input, type);</span>
+<span class="source-line-no">440</span><span id="line-440">      return Hjson.DEFAULT.read(input, type);</span>
 <span class="source-line-no">441</span><span id="line-441">   }</span>
 <span class="source-line-no">442</span><span id="line-442"></span>
 <span class="source-line-no">443</span><span id="line-443">   /**</span>
@@ -465,7 +465,7 @@
 <span class="source-line-no">452</span><span id="line-452">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">453</span><span id="line-453">    */</span>
 <span class="source-line-no">454</span><span id="line-454">   public static &lt;T&gt; T hjson(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">455</span><span id="line-455">      return Hjson.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">455</span><span id="line-455">      return Hjson.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">456</span><span id="line-456">   }</span>
 <span class="source-line-no">457</span><span id="line-457"></span>
 <span class="source-line-no">458</span><span id="line-458">   /**</span>
@@ -477,7 +477,7 @@
 <span class="source-line-no">464</span><span id="line-464">    * @return The parsed object.</span>
 <span class="source-line-no">465</span><span id="line-465">    */</span>
 <span class="source-line-no">466</span><span id="line-466">   public static &lt;T&gt; T hjson(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">467</span><span id="line-467">      return safe(() -&gt; Hjson.DEFAULT.to(o, c));</span>
+<span class="source-line-no">467</span><span id="line-467">      return safe(() -&gt; Hjson.to(o, c));</span>
 <span class="source-line-no">468</span><span id="line-468">   }</span>
 <span class="source-line-no">469</span><span id="line-469"></span>
 <span class="source-line-no">470</span><span id="line-470">   /**</span>
@@ -491,7 +491,7 @@
 <span class="source-line-no">478</span><span id="line-478">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">479</span><span id="line-479">    */</span>
 <span class="source-line-no">480</span><span id="line-480">   public static &lt;T&gt; T hjson(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">481</span><span id="line-481">      return Hjson.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">481</span><span id="line-481">      return Hjson.to(input, type, args);</span>
 <span class="source-line-no">482</span><span id="line-482">   }</span>
 <span class="source-line-no">483</span><span id="line-483"></span>
 <span class="source-line-no">484</span><span id="line-484">   /**</span>
@@ -505,7 +505,7 @@
 <span class="source-line-no">492</span><span id="line-492">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">493</span><span id="line-493">    */</span>
 <span class="source-line-no">494</span><span id="line-494">   public static String xml(Object object) throws SerializeException {</span>
-<span class="source-line-no">495</span><span id="line-495">      return Xml.DEFAULT.of(object);</span>
+<span class="source-line-no">495</span><span id="line-495">      return Xml.of(object);</span>
 <span class="source-line-no">496</span><span id="line-496">   }</span>
 <span class="source-line-no">497</span><span id="line-497"></span>
 <span class="source-line-no">498</span><span id="line-498">   /**</span>
@@ -518,7 +518,7 @@
 <span class="source-line-no">505</span><span id="line-505">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">506</span><span id="line-506">    */</span>
 <span class="source-line-no">507</span><span id="line-507">   public static Object xml(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">508</span><span id="line-508">      Xml.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">508</span><span id="line-508">      Xml.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">509</span><span id="line-509">   }</span>
 <span class="source-line-no">510</span><span id="line-510"></span>
 <span class="source-line-no">511</span><span id="line-511">   /**</span>
@@ -532,7 +532,7 @@
 <span class="source-line-no">519</span><span id="line-519">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">520</span><span id="line-520">    */</span>
 <span class="source-line-no">521</span><span id="line-521">   public static &lt;T&gt; T xml(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">522</span><span id="line-522">      return Xml.DEFAULT.to(input, type);</span>
+<span class="source-line-no">522</span><span id="line-522">      return Xml.DEFAULT.read(input, type);</span>
 <span class="source-line-no">523</span><span id="line-523">   }</span>
 <span class="source-line-no">524</span><span id="line-524"></span>
 <span class="source-line-no">525</span><span id="line-525">   /**</span>
@@ -547,7 +547,7 @@
 <span class="source-line-no">534</span><span id="line-534">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">535</span><span id="line-535">    */</span>
 <span class="source-line-no">536</span><span id="line-536">   public static &lt;T&gt; T xml(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">537</span><span id="line-537">      return Xml.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">537</span><span id="line-537">      return Xml.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">538</span><span id="line-538">   }</span>
 <span class="source-line-no">539</span><span id="line-539"></span>
 <span class="source-line-no">540</span><span id="line-540">   /**</span>
@@ -559,7 +559,7 @@
 <span class="source-line-no">546</span><span id="line-546">    * @return The parsed object.</span>
 <span class="source-line-no">547</span><span id="line-547">    */</span>
 <span class="source-line-no">548</span><span id="line-548">   public static &lt;T&gt; T xml(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">549</span><span id="line-549">      return safe(() -&gt; Xml.DEFAULT.to(o, c));</span>
+<span class="source-line-no">549</span><span id="line-549">      return safe(() -&gt; Xml.to(o, c));</span>
 <span class="source-line-no">550</span><span id="line-550">   }</span>
 <span class="source-line-no">551</span><span id="line-551"></span>
 <span class="source-line-no">552</span><span id="line-552">   /**</span>
@@ -573,7 +573,7 @@
 <span class="source-line-no">560</span><span id="line-560">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">561</span><span id="line-561">    */</span>
 <span class="source-line-no">562</span><span id="line-562">   public static &lt;T&gt; T xml(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">563</span><span id="line-563">      return Xml.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">563</span><span id="line-563">      return Xml.to(input, type, args);</span>
 <span class="source-line-no">564</span><span id="line-564">   }</span>
 <span class="source-line-no">565</span><span id="line-565"></span>
 <span class="source-line-no">566</span><span id="line-566">   /**</span>
@@ -587,7 +587,7 @@
 <span class="source-line-no">574</span><span id="line-574">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">575</span><span id="line-575">    */</span>
 <span class="source-line-no">576</span><span id="line-576">   public static String html(Object object) throws SerializeException {</span>
-<span class="source-line-no">577</span><span id="line-577">      return Html.DEFAULT.of(object);</span>
+<span class="source-line-no">577</span><span id="line-577">      return Html.of(object);</span>
 <span class="source-line-no">578</span><span id="line-578">   }</span>
 <span class="source-line-no">579</span><span id="line-579"></span>
 <span class="source-line-no">580</span><span id="line-580">   /**</span>
@@ -600,7 +600,7 @@
 <span class="source-line-no">587</span><span id="line-587">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">588</span><span id="line-588">    */</span>
 <span class="source-line-no">589</span><span id="line-589">   public static Object html(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">590</span><span id="line-590">      Html.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">590</span><span id="line-590">      Html.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">591</span><span id="line-591">   }</span>
 <span class="source-line-no">592</span><span id="line-592"></span>
 <span class="source-line-no">593</span><span id="line-593">   /**</span>
@@ -614,7 +614,7 @@
 <span class="source-line-no">601</span><span id="line-601">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">602</span><span id="line-602">    */</span>
 <span class="source-line-no">603</span><span id="line-603">   public static &lt;T&gt; T html(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">604</span><span id="line-604">      return Html.DEFAULT.to(input, type);</span>
+<span class="source-line-no">604</span><span id="line-604">      return Html.DEFAULT.read(input, type);</span>
 <span class="source-line-no">605</span><span id="line-605">   }</span>
 <span class="source-line-no">606</span><span id="line-606"></span>
 <span class="source-line-no">607</span><span id="line-607">   /**</span>
@@ -629,7 +629,7 @@
 <span class="source-line-no">616</span><span id="line-616">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">617</span><span id="line-617">    */</span>
 <span class="source-line-no">618</span><span id="line-618">   public static &lt;T&gt; T html(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">619</span><span id="line-619">      return Html.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">619</span><span id="line-619">      return Html.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">620</span><span id="line-620">   }</span>
 <span class="source-line-no">621</span><span id="line-621"></span>
 <span class="source-line-no">622</span><span id="line-622">   /**</span>
@@ -641,7 +641,7 @@
 <span class="source-line-no">628</span><span id="line-628">    * @return The parsed object.</span>
 <span class="source-line-no">629</span><span id="line-629">    */</span>
 <span class="source-line-no">630</span><span id="line-630">   public static &lt;T&gt; T html(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">631</span><span id="line-631">      return safe(() -&gt; Html.DEFAULT.to(o, c));</span>
+<span class="source-line-no">631</span><span id="line-631">      return safe(() -&gt; Html.to(o, c));</span>
 <span class="source-line-no">632</span><span id="line-632">   }</span>
 <span class="source-line-no">633</span><span id="line-633"></span>
 <span class="source-line-no">634</span><span id="line-634">   /**</span>
@@ -655,7 +655,7 @@
 <span class="source-line-no">642</span><span id="line-642">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">643</span><span id="line-643">    */</span>
 <span class="source-line-no">644</span><span id="line-644">   public static &lt;T&gt; T html(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">645</span><span id="line-645">      return Html.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">645</span><span id="line-645">      return Html.to(input, type, args);</span>
 <span class="source-line-no">646</span><span id="line-646">   }</span>
 <span class="source-line-no">647</span><span id="line-647"></span>
 <span class="source-line-no">648</span><span id="line-648">   /**</span>
@@ -669,7 +669,7 @@
 <span class="source-line-no">656</span><span id="line-656">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">657</span><span id="line-657">    */</span>
 <span class="source-line-no">658</span><span id="line-658">   public static String uon(Object object) throws SerializeException {</span>
-<span class="source-line-no">659</span><span id="line-659">      return Uon.DEFAULT.of(object);</span>
+<span class="source-line-no">659</span><span id="line-659">      return Uon.of(object);</span>
 <span class="source-line-no">660</span><span id="line-660">   }</span>
 <span class="source-line-no">661</span><span id="line-661"></span>
 <span class="source-line-no">662</span><span id="line-662">   /**</span>
@@ -682,7 +682,7 @@
 <span class="source-line-no">669</span><span id="line-669">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">670</span><span id="line-670">    */</span>
 <span class="source-line-no">671</span><span id="line-671">   public static Object uon(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">672</span><span id="line-672">      Uon.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">672</span><span id="line-672">      Uon.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">673</span><span id="line-673">   }</span>
 <span class="source-line-no">674</span><span id="line-674"></span>
 <span class="source-line-no">675</span><span id="line-675">   /**</span>
@@ -696,7 +696,7 @@
 <span class="source-line-no">683</span><span id="line-683">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">684</span><span id="line-684">    */</span>
 <span class="source-line-no">685</span><span id="line-685">   public static &lt;T&gt; T uon(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">686</span><span id="line-686">      return Uon.DEFAULT.to(input, type);</span>
+<span class="source-line-no">686</span><span id="line-686">      return Uon.DEFAULT.read(input, type);</span>
 <span class="source-line-no">687</span><span id="line-687">   }</span>
 <span class="source-line-no">688</span><span id="line-688"></span>
 <span class="source-line-no">689</span><span id="line-689">   /**</span>
@@ -711,7 +711,7 @@
 <span class="source-line-no">698</span><span id="line-698">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">699</span><span id="line-699">    */</span>
 <span class="source-line-no">700</span><span id="line-700">   public static &lt;T&gt; T uon(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">701</span><span id="line-701">      return Uon.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">701</span><span id="line-701">      return Uon.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">702</span><span id="line-702">   }</span>
 <span class="source-line-no">703</span><span id="line-703"></span>
 <span class="source-line-no">704</span><span id="line-704">   /**</span>
@@ -723,7 +723,7 @@
 <span class="source-line-no">710</span><span id="line-710">    * @return The parsed object.</span>
 <span class="source-line-no">711</span><span id="line-711">    */</span>
 <span class="source-line-no">712</span><span id="line-712">   public static &lt;T&gt; T uon(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">713</span><span id="line-713">      return safe(() -&gt; Uon.DEFAULT.to(o, c));</span>
+<span class="source-line-no">713</span><span id="line-713">      return safe(() -&gt; Uon.to(o, c));</span>
 <span class="source-line-no">714</span><span id="line-714">   }</span>
 <span class="source-line-no">715</span><span id="line-715"></span>
 <span class="source-line-no">716</span><span id="line-716">   /**</span>
@@ -737,7 +737,7 @@
 <span class="source-line-no">724</span><span id="line-724">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">725</span><span id="line-725">    */</span>
 <span class="source-line-no">726</span><span id="line-726">   public static &lt;T&gt; T uon(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">727</span><span id="line-727">      return Uon.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">727</span><span id="line-727">      return Uon.to(input, type, args);</span>
 <span class="source-line-no">728</span><span id="line-728">   }</span>
 <span class="source-line-no">729</span><span id="line-729"></span>
 <span class="source-line-no">730</span><span id="line-730">   /**</span>
@@ -751,7 +751,7 @@
 <span class="source-line-no">738</span><span id="line-738">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">739</span><span id="line-739">    */</span>
 <span class="source-line-no">740</span><span id="line-740">   public static String urlEncoding(Object object) throws SerializeException {</span>
-<span class="source-line-no">741</span><span id="line-741">      return UrlEncoding.DEFAULT.of(object);</span>
+<span class="source-line-no">741</span><span id="line-741">      return UrlEncoding.of(object);</span>
 <span class="source-line-no">742</span><span id="line-742">   }</span>
 <span class="source-line-no">743</span><span id="line-743"></span>
 <span class="source-line-no">744</span><span id="line-744">   /**</span>
@@ -764,7 +764,7 @@
 <span class="source-line-no">751</span><span id="line-751">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">752</span><span id="line-752">    */</span>
 <span class="source-line-no">753</span><span id="line-753">   public static Object urlEncoding(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">754</span><span id="line-754">      UrlEncoding.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">754</span><span id="line-754">      UrlEncoding.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">755</span><span id="line-755">   }</span>
 <span class="source-line-no">756</span><span id="line-756"></span>
 <span class="source-line-no">757</span><span id="line-757">   /**</span>
@@ -778,7 +778,7 @@
 <span class="source-line-no">765</span><span id="line-765">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">766</span><span id="line-766">    */</span>
 <span class="source-line-no">767</span><span id="line-767">   public static &lt;T&gt; T urlEncoding(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">768</span><span id="line-768">      return UrlEncoding.DEFAULT.to(input, type);</span>
+<span class="source-line-no">768</span><span id="line-768">      return UrlEncoding.DEFAULT.read(input, type);</span>
 <span class="source-line-no">769</span><span id="line-769">   }</span>
 <span class="source-line-no">770</span><span id="line-770"></span>
 <span class="source-line-no">771</span><span id="line-771">   /**</span>
@@ -793,7 +793,7 @@
 <span class="source-line-no">780</span><span id="line-780">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">781</span><span id="line-781">    */</span>
 <span class="source-line-no">782</span><span id="line-782">   public static &lt;T&gt; T urlEncoding(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">783</span><span id="line-783">      return UrlEncoding.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">783</span><span id="line-783">      return UrlEncoding.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">784</span><span id="line-784">   }</span>
 <span class="source-line-no">785</span><span id="line-785"></span>
 <span class="source-line-no">786</span><span id="line-786">   /**</span>
@@ -805,7 +805,7 @@
 <span class="source-line-no">792</span><span id="line-792">    * @return The parsed object.</span>
 <span class="source-line-no">793</span><span id="line-793">    */</span>
 <span class="source-line-no">794</span><span id="line-794">   public static &lt;T&gt; T urlEncoding(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">795</span><span id="line-795">      return safe(() -&gt; UrlEncoding.DEFAULT.to(o, c));</span>
+<span class="source-line-no">795</span><span id="line-795">      return safe(() -&gt; UrlEncoding.to(o, c));</span>
 <span class="source-line-no">796</span><span id="line-796">   }</span>
 <span class="source-line-no">797</span><span id="line-797"></span>
 <span class="source-line-no">798</span><span id="line-798">   /**</span>
@@ -819,7 +819,7 @@
 <span class="source-line-no">806</span><span id="line-806">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">807</span><span id="line-807">    */</span>
 <span class="source-line-no">808</span><span id="line-808">   public static &lt;T&gt; T urlEncoding(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">809</span><span id="line-809">      return UrlEncoding.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">809</span><span id="line-809">      return UrlEncoding.to(input, type, args);</span>
 <span class="source-line-no">810</span><span id="line-810">   }</span>
 <span class="source-line-no">811</span><span id="line-811"></span>
 <span class="source-line-no">812</span><span id="line-812">   /**</span>
@@ -833,7 +833,7 @@
 <span class="source-line-no">820</span><span id="line-820">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">821</span><span id="line-821">    */</span>
 <span class="source-line-no">822</span><span id="line-822">   public static String yaml(Object object) throws SerializeException {</span>
-<span class="source-line-no">823</span><span id="line-823">      return Yaml.DEFAULT.of(object);</span>
+<span class="source-line-no">823</span><span id="line-823">      return Yaml.of(object);</span>
 <span class="source-line-no">824</span><span id="line-824">   }</span>
 <span class="source-line-no">825</span><span id="line-825"></span>
 <span class="source-line-no">826</span><span id="line-826">   /**</span>
@@ -846,7 +846,7 @@
 <span class="source-line-no">833</span><span id="line-833">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">834</span><span id="line-834">    */</span>
 <span class="source-line-no">835</span><span id="line-835">   public static Object yaml(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">836</span><span id="line-836">      Yaml.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">836</span><span id="line-836">      Yaml.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">837</span><span id="line-837">   }</span>
 <span class="source-line-no">838</span><span id="line-838"></span>
 <span class="source-line-no">839</span><span id="line-839">   /**</span>
@@ -860,7 +860,7 @@
 <span class="source-line-no">847</span><span id="line-847">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">848</span><span id="line-848">    */</span>
 <span class="source-line-no">849</span><span id="line-849">   public static &lt;T&gt; T yaml(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">850</span><span id="line-850">      return Yaml.DEFAULT.to(input, type);</span>
+<span class="source-line-no">850</span><span id="line-850">      return Yaml.DEFAULT.read(input, type);</span>
 <span class="source-line-no">851</span><span id="line-851">   }</span>
 <span class="source-line-no">852</span><span id="line-852"></span>
 <span class="source-line-no">853</span><span id="line-853">   /**</span>
@@ -875,7 +875,7 @@
 <span class="source-line-no">862</span><span id="line-862">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">863</span><span id="line-863">    */</span>
 <span class="source-line-no">864</span><span id="line-864">   public static &lt;T&gt; T yaml(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">865</span><span id="line-865">      return Yaml.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">865</span><span id="line-865">      return Yaml.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">866</span><span id="line-866">   }</span>
 <span class="source-line-no">867</span><span id="line-867"></span>
 <span class="source-line-no">868</span><span id="line-868">   /**</span>
@@ -887,7 +887,7 @@
 <span class="source-line-no">874</span><span id="line-874">    * @return The parsed object.</span>
 <span class="source-line-no">875</span><span id="line-875">    */</span>
 <span class="source-line-no">876</span><span id="line-876">   public static &lt;T&gt; T yaml(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">877</span><span id="line-877">      return safe(() -&gt; Yaml.DEFAULT.to(o, c));</span>
+<span class="source-line-no">877</span><span id="line-877">      return safe(() -&gt; Yaml.to(o, c));</span>
 <span class="source-line-no">878</span><span id="line-878">   }</span>
 <span class="source-line-no">879</span><span id="line-879"></span>
 <span class="source-line-no">880</span><span id="line-880">   /**</span>
@@ -901,7 +901,7 @@
 <span class="source-line-no">888</span><span id="line-888">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">889</span><span id="line-889">    */</span>
 <span class="source-line-no">890</span><span id="line-890">   public static &lt;T&gt; T yaml(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">891</span><span id="line-891">      return Yaml.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">891</span><span id="line-891">      return Yaml.to(input, type, args);</span>
 <span class="source-line-no">892</span><span id="line-892">   }</span>
 <span class="source-line-no">893</span><span id="line-893"></span>
 <span class="source-line-no">894</span><span id="line-894">   /**</span>
@@ -915,7 +915,7 @@
 <span class="source-line-no">902</span><span id="line-902">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">903</span><span id="line-903">    */</span>
 <span class="source-line-no">904</span><span id="line-904">   public static String csv(Object object) throws SerializeException {</span>
-<span class="source-line-no">905</span><span id="line-905">      return Csv.DEFAULT.of(object);</span>
+<span class="source-line-no">905</span><span id="line-905">      return Csv.of(object);</span>
 <span class="source-line-no">906</span><span id="line-906">   }</span>
 <span class="source-line-no">907</span><span id="line-907"></span>
 <span class="source-line-no">908</span><span id="line-908">   /**</span>
@@ -928,7 +928,7 @@
 <span class="source-line-no">915</span><span id="line-915">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">916</span><span id="line-916">    */</span>
 <span class="source-line-no">917</span><span id="line-917">   public static Object csv(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">918</span><span id="line-918">      Csv.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">918</span><span id="line-918">      Csv.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">919</span><span id="line-919">   }</span>
 <span class="source-line-no">920</span><span id="line-920"></span>
 <span class="source-line-no">921</span><span id="line-921">   /**</span>
@@ -942,7 +942,7 @@
 <span class="source-line-no">929</span><span id="line-929">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">930</span><span id="line-930">    */</span>
 <span class="source-line-no">931</span><span id="line-931">   public static &lt;T&gt; T csv(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">932</span><span id="line-932">      return Csv.DEFAULT.to(input, type);</span>
+<span class="source-line-no">932</span><span id="line-932">      return Csv.DEFAULT.read(input, type);</span>
 <span class="source-line-no">933</span><span id="line-933">   }</span>
 <span class="source-line-no">934</span><span id="line-934"></span>
 <span class="source-line-no">935</span><span id="line-935">   /**</span>
@@ -957,7 +957,7 @@
 <span class="source-line-no">944</span><span id="line-944">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">945</span><span id="line-945">    */</span>
 <span class="source-line-no">946</span><span id="line-946">   public static &lt;T&gt; T csv(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">947</span><span id="line-947">      return Csv.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">947</span><span id="line-947">      return Csv.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">948</span><span id="line-948">   }</span>
 <span class="source-line-no">949</span><span id="line-949"></span>
 <span class="source-line-no">950</span><span id="line-950">   /**</span>
@@ -969,7 +969,7 @@
 <span class="source-line-no">956</span><span id="line-956">    * @return The parsed object.</span>
 <span class="source-line-no">957</span><span id="line-957">    */</span>
 <span class="source-line-no">958</span><span id="line-958">   public static &lt;T&gt; T csv(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">959</span><span id="line-959">      return safe(() -&gt; Csv.DEFAULT.to(o, c));</span>
+<span class="source-line-no">959</span><span id="line-959">      return safe(() -&gt; Csv.to(o, c));</span>
 <span class="source-line-no">960</span><span id="line-960">   }</span>
 <span class="source-line-no">961</span><span id="line-961"></span>
 <span class="source-line-no">962</span><span id="line-962">   /**</span>
@@ -983,7 +983,7 @@
 <span class="source-line-no">970</span><span id="line-970">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">971</span><span id="line-971">    */</span>
 <span class="source-line-no">972</span><span id="line-972">   public static &lt;T&gt; T csv(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">973</span><span id="line-973">      return Csv.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">973</span><span id="line-973">      return Csv.to(input, type, args);</span>
 <span class="source-line-no">974</span><span id="line-974">   }</span>
 <span class="source-line-no">975</span><span id="line-975"></span>
 <span class="source-line-no">976</span><span id="line-976">   /**</span>
@@ -997,7 +997,7 @@
 <span class="source-line-no">984</span><span id="line-984">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">985</span><span id="line-985">    */</span>
 <span class="source-line-no">986</span><span id="line-986">   public static String openApi(Object object) throws SerializeException {</span>
-<span class="source-line-no">987</span><span id="line-987">      return OpenApi.DEFAULT.of(object);</span>
+<span class="source-line-no">987</span><span id="line-987">      return OpenApi.of(object);</span>
 <span class="source-line-no">988</span><span id="line-988">   }</span>
 <span class="source-line-no">989</span><span id="line-989"></span>
 <span class="source-line-no">990</span><span id="line-990">   /**</span>
@@ -1010,7 +1010,7 @@
 <span class="source-line-no">997</span><span id="line-997">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">998</span><span id="line-998">    */</span>
 <span class="source-line-no">999</span><span id="line-999">   public static Object openApi(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1000</span><span id="line-1000">      OpenApi.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1000</span><span id="line-1000">      OpenApi.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1001</span><span id="line-1001">   }</span>
 <span class="source-line-no">1002</span><span id="line-1002"></span>
 <span class="source-line-no">1003</span><span id="line-1003">   /**</span>
@@ -1024,7 +1024,7 @@
 <span class="source-line-no">1011</span><span id="line-1011">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1012</span><span id="line-1012">    */</span>
 <span class="source-line-no">1013</span><span id="line-1013">   public static &lt;T&gt; T openApi(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1014</span><span id="line-1014">      return OpenApi.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1014</span><span id="line-1014">      return OpenApi.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1015</span><span id="line-1015">   }</span>
 <span class="source-line-no">1016</span><span id="line-1016"></span>
 <span class="source-line-no">1017</span><span id="line-1017">   /**</span>
@@ -1039,7 +1039,7 @@
 <span class="source-line-no">1026</span><span id="line-1026">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1027</span><span id="line-1027">    */</span>
 <span class="source-line-no">1028</span><span id="line-1028">   public static &lt;T&gt; T openApi(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1029</span><span id="line-1029">      return OpenApi.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1029</span><span id="line-1029">      return OpenApi.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1030</span><span id="line-1030">   }</span>
 <span class="source-line-no">1031</span><span id="line-1031"></span>
 <span class="source-line-no">1032</span><span id="line-1032">   /**</span>
@@ -1051,7 +1051,7 @@
 <span class="source-line-no">1038</span><span id="line-1038">    * @return The parsed object.</span>
 <span class="source-line-no">1039</span><span id="line-1039">    */</span>
 <span class="source-line-no">1040</span><span id="line-1040">   public static &lt;T&gt; T openApi(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1041</span><span id="line-1041">      return safe(() -&gt; OpenApi.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1041</span><span id="line-1041">      return safe(() -&gt; OpenApi.to(o, c));</span>
 <span class="source-line-no">1042</span><span id="line-1042">   }</span>
 <span class="source-line-no">1043</span><span id="line-1043"></span>
 <span class="source-line-no">1044</span><span id="line-1044">   /**</span>
@@ -1065,7 +1065,7 @@
 <span class="source-line-no">1052</span><span id="line-1052">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1053</span><span id="line-1053">    */</span>
 <span class="source-line-no">1054</span><span id="line-1054">   public static &lt;T&gt; T openApi(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1055</span><span id="line-1055">      return OpenApi.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1055</span><span id="line-1055">      return OpenApi.to(input, type, args);</span>
 <span class="source-line-no">1056</span><span id="line-1056">   }</span>
 <span class="source-line-no">1057</span><span id="line-1057"></span>
 <span class="source-line-no">1058</span><span id="line-1058">   /**</span>
@@ -1079,7 +1079,7 @@
 <span class="source-line-no">1066</span><span id="line-1066">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1067</span><span id="line-1067">    */</span>
 <span class="source-line-no">1068</span><span id="line-1068">   public static String plainText(Object object) throws SerializeException {</span>
-<span class="source-line-no">1069</span><span id="line-1069">      return PlainText.DEFAULT.of(object);</span>
+<span class="source-line-no">1069</span><span id="line-1069">      return PlainText.of(object);</span>
 <span class="source-line-no">1070</span><span id="line-1070">   }</span>
 <span class="source-line-no">1071</span><span id="line-1071"></span>
 <span class="source-line-no">1072</span><span id="line-1072">   /**</span>
@@ -1092,7 +1092,7 @@
 <span class="source-line-no">1079</span><span id="line-1079">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1080</span><span id="line-1080">    */</span>
 <span class="source-line-no">1081</span><span id="line-1081">   public static Object plainText(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1082</span><span id="line-1082">      PlainText.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1082</span><span id="line-1082">      PlainText.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1083</span><span id="line-1083">   }</span>
 <span class="source-line-no">1084</span><span id="line-1084"></span>
 <span class="source-line-no">1085</span><span id="line-1085">   /**</span>
@@ -1106,7 +1106,7 @@
 <span class="source-line-no">1093</span><span id="line-1093">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1094</span><span id="line-1094">    */</span>
 <span class="source-line-no">1095</span><span id="line-1095">   public static &lt;T&gt; T plainText(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1096</span><span id="line-1096">      return PlainText.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1096</span><span id="line-1096">      return PlainText.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1097</span><span id="line-1097">   }</span>
 <span class="source-line-no">1098</span><span id="line-1098"></span>
 <span class="source-line-no">1099</span><span id="line-1099">   /**</span>
@@ -1121,7 +1121,7 @@
 <span class="source-line-no">1108</span><span id="line-1108">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1109</span><span id="line-1109">    */</span>
 <span class="source-line-no">1110</span><span id="line-1110">   public static &lt;T&gt; T plainText(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1111</span><span id="line-1111">      return PlainText.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1111</span><span id="line-1111">      return PlainText.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1112</span><span id="line-1112">   }</span>
 <span class="source-line-no">1113</span><span id="line-1113"></span>
 <span class="source-line-no">1114</span><span id="line-1114">   /**</span>
@@ -1133,7 +1133,7 @@
 <span class="source-line-no">1120</span><span id="line-1120">    * @return The parsed object.</span>
 <span class="source-line-no">1121</span><span id="line-1121">    */</span>
 <span class="source-line-no">1122</span><span id="line-1122">   public static &lt;T&gt; T plainText(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1123</span><span id="line-1123">      return safe(() -&gt; PlainText.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1123</span><span id="line-1123">      return safe(() -&gt; PlainText.to(o, c));</span>
 <span class="source-line-no">1124</span><span id="line-1124">   }</span>
 <span class="source-line-no">1125</span><span id="line-1125"></span>
 <span class="source-line-no">1126</span><span id="line-1126">   /**</span>
@@ -1147,7 +1147,7 @@
 <span class="source-line-no">1134</span><span id="line-1134">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1135</span><span id="line-1135">    */</span>
 <span class="source-line-no">1136</span><span id="line-1136">   public static &lt;T&gt; T plainText(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1137</span><span id="line-1137">      return PlainText.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1137</span><span id="line-1137">      return PlainText.to(input, type, args);</span>
 <span class="source-line-no">1138</span><span id="line-1138">   }</span>
 <span class="source-line-no">1139</span><span id="line-1139"></span>
 <span class="source-line-no">1140</span><span id="line-1140">   /**</span>
@@ -1161,7 +1161,7 @@
 <span class="source-line-no">1148</span><span id="line-1148">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1149</span><span id="line-1149">    */</span>
 <span class="source-line-no">1150</span><span id="line-1150">   public static String markdown(Object object) throws SerializeException {</span>
-<span class="source-line-no">1151</span><span id="line-1151">      return Markdown.DEFAULT.of(object);</span>
+<span class="source-line-no">1151</span><span id="line-1151">      return Markdown.of(object);</span>
 <span class="source-line-no">1152</span><span id="line-1152">   }</span>
 <span class="source-line-no">1153</span><span id="line-1153"></span>
 <span class="source-line-no">1154</span><span id="line-1154">   /**</span>
@@ -1174,7 +1174,7 @@
 <span class="source-line-no">1161</span><span id="line-1161">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1162</span><span id="line-1162">    */</span>
 <span class="source-line-no">1163</span><span id="line-1163">   public static Object markdown(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1164</span><span id="line-1164">      Markdown.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1164</span><span id="line-1164">      Markdown.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1165</span><span id="line-1165">   }</span>
 <span class="source-line-no">1166</span><span id="line-1166"></span>
 <span class="source-line-no">1167</span><span id="line-1167">   /**</span>
@@ -1188,7 +1188,7 @@
 <span class="source-line-no">1175</span><span id="line-1175">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1176</span><span id="line-1176">    */</span>
 <span class="source-line-no">1177</span><span id="line-1177">   public static &lt;T&gt; T markdown(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1178</span><span id="line-1178">      return Markdown.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1178</span><span id="line-1178">      return Markdown.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1179</span><span id="line-1179">   }</span>
 <span class="source-line-no">1180</span><span id="line-1180"></span>
 <span class="source-line-no">1181</span><span id="line-1181">   /**</span>
@@ -1203,7 +1203,7 @@
 <span class="source-line-no">1190</span><span id="line-1190">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1191</span><span id="line-1191">    */</span>
 <span class="source-line-no">1192</span><span id="line-1192">   public static &lt;T&gt; T markdown(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1193</span><span id="line-1193">      return Markdown.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1193</span><span id="line-1193">      return Markdown.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1194</span><span id="line-1194">   }</span>
 <span class="source-line-no">1195</span><span id="line-1195"></span>
 <span class="source-line-no">1196</span><span id="line-1196">   /**</span>
@@ -1215,7 +1215,7 @@
 <span class="source-line-no">1202</span><span id="line-1202">    * @return The parsed object.</span>
 <span class="source-line-no">1203</span><span id="line-1203">    */</span>
 <span class="source-line-no">1204</span><span id="line-1204">   public static &lt;T&gt; T markdown(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1205</span><span id="line-1205">      return safe(() -&gt; Markdown.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1205</span><span id="line-1205">      return safe(() -&gt; Markdown.to(o, c));</span>
 <span class="source-line-no">1206</span><span id="line-1206">   }</span>
 <span class="source-line-no">1207</span><span id="line-1207"></span>
 <span class="source-line-no">1208</span><span id="line-1208">   /**</span>
@@ -1229,7 +1229,7 @@
 <span class="source-line-no">1216</span><span id="line-1216">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1217</span><span id="line-1217">    */</span>
 <span class="source-line-no">1218</span><span id="line-1218">   public static &lt;T&gt; T markdown(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1219</span><span id="line-1219">      return Markdown.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1219</span><span id="line-1219">      return Markdown.to(input, type, args);</span>
 <span class="source-line-no">1220</span><span id="line-1220">   }</span>
 <span class="source-line-no">1221</span><span id="line-1221"></span>
 <span class="source-line-no">1222</span><span id="line-1222">   /**</span>
@@ -1243,7 +1243,7 @@
 <span class="source-line-no">1230</span><span id="line-1230">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1231</span><span id="line-1231">    */</span>
 <span class="source-line-no">1232</span><span id="line-1232">   public static String markdownDoc(Object object) throws SerializeException {</span>
-<span class="source-line-no">1233</span><span id="line-1233">      return MarkdownDoc.DEFAULT.of(object);</span>
+<span class="source-line-no">1233</span><span id="line-1233">      return MarkdownDoc.of(object);</span>
 <span class="source-line-no">1234</span><span id="line-1234">   }</span>
 <span class="source-line-no">1235</span><span id="line-1235"></span>
 <span class="source-line-no">1236</span><span id="line-1236">   /**</span>
@@ -1256,7 +1256,7 @@
 <span class="source-line-no">1243</span><span id="line-1243">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1244</span><span id="line-1244">    */</span>
 <span class="source-line-no">1245</span><span id="line-1245">   public static Object markdownDoc(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1246</span><span id="line-1246">      MarkdownDoc.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1246</span><span id="line-1246">      MarkdownDoc.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1247</span><span id="line-1247">   }</span>
 <span class="source-line-no">1248</span><span id="line-1248"></span>
 <span class="source-line-no">1249</span><span id="line-1249">   /**</span>
@@ -1270,7 +1270,7 @@
 <span class="source-line-no">1257</span><span id="line-1257">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1258</span><span id="line-1258">    */</span>
 <span class="source-line-no">1259</span><span id="line-1259">   public static &lt;T&gt; T markdownDoc(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1260</span><span id="line-1260">      return MarkdownDoc.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1260</span><span id="line-1260">      return MarkdownDoc.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1261</span><span id="line-1261">   }</span>
 <span class="source-line-no">1262</span><span id="line-1262"></span>
 <span class="source-line-no">1263</span><span id="line-1263">   /**</span>
@@ -1285,7 +1285,7 @@
 <span class="source-line-no">1272</span><span id="line-1272">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1273</span><span id="line-1273">    */</span>
 <span class="source-line-no">1274</span><span id="line-1274">   public static &lt;T&gt; T markdownDoc(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1275</span><span id="line-1275">      return MarkdownDoc.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1275</span><span id="line-1275">      return MarkdownDoc.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1276</span><span id="line-1276">   }</span>
 <span class="source-line-no">1277</span><span id="line-1277"></span>
 <span class="source-line-no">1278</span><span id="line-1278">   /**</span>
@@ -1297,7 +1297,7 @@
 <span class="source-line-no">1284</span><span id="line-1284">    * @return The parsed object.</span>
 <span class="source-line-no">1285</span><span id="line-1285">    */</span>
 <span class="source-line-no">1286</span><span id="line-1286">   public static &lt;T&gt; T markdownDoc(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1287</span><span id="line-1287">      return safe(() -&gt; MarkdownDoc.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1287</span><span id="line-1287">      return safe(() -&gt; MarkdownDoc.to(o, c));</span>
 <span class="source-line-no">1288</span><span id="line-1288">   }</span>
 <span class="source-line-no">1289</span><span id="line-1289"></span>
 <span class="source-line-no">1290</span><span id="line-1290">   /**</span>
@@ -1311,7 +1311,7 @@
 <span class="source-line-no">1298</span><span id="line-1298">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1299</span><span id="line-1299">    */</span>
 <span class="source-line-no">1300</span><span id="line-1300">   public static &lt;T&gt; T markdownDoc(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1301</span><span id="line-1301">      return MarkdownDoc.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1301</span><span id="line-1301">      return MarkdownDoc.to(input, type, args);</span>
 <span class="source-line-no">1302</span><span id="line-1302">   }</span>
 <span class="source-line-no">1303</span><span id="line-1303"></span>
 <span class="source-line-no">1304</span><span id="line-1304">   /**</span>
@@ -1325,7 +1325,7 @@
 <span class="source-line-no">1312</span><span id="line-1312">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1313</span><span id="line-1313">    */</span>
 <span class="source-line-no">1314</span><span id="line-1314">   public static String ini(Object object) throws SerializeException {</span>
-<span class="source-line-no">1315</span><span id="line-1315">      return Ini.DEFAULT.of(object);</span>
+<span class="source-line-no">1315</span><span id="line-1315">      return Ini.of(object);</span>
 <span class="source-line-no">1316</span><span id="line-1316">   }</span>
 <span class="source-line-no">1317</span><span id="line-1317"></span>
 <span class="source-line-no">1318</span><span id="line-1318">   /**</span>
@@ -1338,7 +1338,7 @@
 <span class="source-line-no">1325</span><span id="line-1325">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1326</span><span id="line-1326">    */</span>
 <span class="source-line-no">1327</span><span id="line-1327">   public static Object ini(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1328</span><span id="line-1328">      Ini.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1328</span><span id="line-1328">      Ini.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1329</span><span id="line-1329">   }</span>
 <span class="source-line-no">1330</span><span id="line-1330"></span>
 <span class="source-line-no">1331</span><span id="line-1331">   /**</span>
@@ -1352,7 +1352,7 @@
 <span class="source-line-no">1339</span><span id="line-1339">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1340</span><span id="line-1340">    */</span>
 <span class="source-line-no">1341</span><span id="line-1341">   public static &lt;T&gt; T ini(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1342</span><span id="line-1342">      return Ini.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1342</span><span id="line-1342">      return Ini.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1343</span><span id="line-1343">   }</span>
 <span class="source-line-no">1344</span><span id="line-1344"></span>
 <span class="source-line-no">1345</span><span id="line-1345">   /**</span>
@@ -1367,7 +1367,7 @@
 <span class="source-line-no">1354</span><span id="line-1354">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1355</span><span id="line-1355">    */</span>
 <span class="source-line-no">1356</span><span id="line-1356">   public static &lt;T&gt; T ini(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1357</span><span id="line-1357">      return Ini.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1357</span><span id="line-1357">      return Ini.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1358</span><span id="line-1358">   }</span>
 <span class="source-line-no">1359</span><span id="line-1359"></span>
 <span class="source-line-no">1360</span><span id="line-1360">   /**</span>
@@ -1379,7 +1379,7 @@
 <span class="source-line-no">1366</span><span id="line-1366">    * @return The parsed object.</span>
 <span class="source-line-no">1367</span><span id="line-1367">    */</span>
 <span class="source-line-no">1368</span><span id="line-1368">   public static &lt;T&gt; T ini(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1369</span><span id="line-1369">      return safe(() -&gt; Ini.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1369</span><span id="line-1369">      return safe(() -&gt; Ini.to(o, c));</span>
 <span class="source-line-no">1370</span><span id="line-1370">   }</span>
 <span class="source-line-no">1371</span><span id="line-1371"></span>
 <span class="source-line-no">1372</span><span id="line-1372">   /**</span>
@@ -1393,7 +1393,7 @@
 <span class="source-line-no">1380</span><span id="line-1380">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1381</span><span id="line-1381">    */</span>
 <span class="source-line-no">1382</span><span id="line-1382">   public static &lt;T&gt; T ini(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1383</span><span id="line-1383">      return Ini.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1383</span><span id="line-1383">      return Ini.to(input, type, args);</span>
 <span class="source-line-no">1384</span><span id="line-1384">   }</span>
 <span class="source-line-no">1385</span><span id="line-1385"></span>
 <span class="source-line-no">1386</span><span id="line-1386">   /**</span>
@@ -1407,7 +1407,7 @@
 <span class="source-line-no">1394</span><span id="line-1394">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1395</span><span id="line-1395">    */</span>
 <span class="source-line-no">1396</span><span id="line-1396">   public static String toml(Object object) throws SerializeException {</span>
-<span class="source-line-no">1397</span><span id="line-1397">      return Toml.DEFAULT.of(object);</span>
+<span class="source-line-no">1397</span><span id="line-1397">      return Toml.of(object);</span>
 <span class="source-line-no">1398</span><span id="line-1398">   }</span>
 <span class="source-line-no">1399</span><span id="line-1399"></span>
 <span class="source-line-no">1400</span><span id="line-1400">   /**</span>
@@ -1420,7 +1420,7 @@
 <span class="source-line-no">1407</span><span id="line-1407">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1408</span><span id="line-1408">    */</span>
 <span class="source-line-no">1409</span><span id="line-1409">   public static Object toml(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1410</span><span id="line-1410">      Toml.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1410</span><span id="line-1410">      Toml.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1411</span><span id="line-1411">   }</span>
 <span class="source-line-no">1412</span><span id="line-1412"></span>
 <span class="source-line-no">1413</span><span id="line-1413">   /**</span>
@@ -1434,7 +1434,7 @@
 <span class="source-line-no">1421</span><span id="line-1421">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1422</span><span id="line-1422">    */</span>
 <span class="source-line-no">1423</span><span id="line-1423">   public static &lt;T&gt; T toml(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1424</span><span id="line-1424">      return Toml.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1424</span><span id="line-1424">      return Toml.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1425</span><span id="line-1425">   }</span>
 <span class="source-line-no">1426</span><span id="line-1426"></span>
 <span class="source-line-no">1427</span><span id="line-1427">   /**</span>
@@ -1449,7 +1449,7 @@
 <span class="source-line-no">1436</span><span id="line-1436">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1437</span><span id="line-1437">    */</span>
 <span class="source-line-no">1438</span><span id="line-1438">   public static &lt;T&gt; T toml(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1439</span><span id="line-1439">      return Toml.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1439</span><span id="line-1439">      return Toml.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1440</span><span id="line-1440">   }</span>
 <span class="source-line-no">1441</span><span id="line-1441"></span>
 <span class="source-line-no">1442</span><span id="line-1442">   /**</span>
@@ -1461,7 +1461,7 @@
 <span class="source-line-no">1448</span><span id="line-1448">    * @return The parsed object.</span>
 <span class="source-line-no">1449</span><span id="line-1449">    */</span>
 <span class="source-line-no">1450</span><span id="line-1450">   public static &lt;T&gt; T toml(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1451</span><span id="line-1451">      return safe(() -&gt; Toml.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1451</span><span id="line-1451">      return safe(() -&gt; Toml.to(o, c));</span>
 <span class="source-line-no">1452</span><span id="line-1452">   }</span>
 <span class="source-line-no">1453</span><span id="line-1453"></span>
 <span class="source-line-no">1454</span><span id="line-1454">   /**</span>
@@ -1475,7 +1475,7 @@
 <span class="source-line-no">1462</span><span id="line-1462">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1463</span><span id="line-1463">    */</span>
 <span class="source-line-no">1464</span><span id="line-1464">   public static &lt;T&gt; T toml(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1465</span><span id="line-1465">      return Toml.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1465</span><span id="line-1465">      return Toml.to(input, type, args);</span>
 <span class="source-line-no">1466</span><span id="line-1466">   }</span>
 <span class="source-line-no">1467</span><span id="line-1467"></span>
 <span class="source-line-no">1468</span><span id="line-1468">   /**</span>
@@ -1489,7 +1489,7 @@
 <span class="source-line-no">1476</span><span id="line-1476">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1477</span><span id="line-1477">    */</span>
 <span class="source-line-no">1478</span><span id="line-1478">   public static String hocon(Object object) throws SerializeException {</span>
-<span class="source-line-no">1479</span><span id="line-1479">      return Hocon.DEFAULT.of(object);</span>
+<span class="source-line-no">1479</span><span id="line-1479">      return Hocon.of(object);</span>
 <span class="source-line-no">1480</span><span id="line-1480">   }</span>
 <span class="source-line-no">1481</span><span id="line-1481"></span>
 <span class="source-line-no">1482</span><span id="line-1482">   /**</span>
@@ -1502,7 +1502,7 @@
 <span class="source-line-no">1489</span><span id="line-1489">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1490</span><span id="line-1490">    */</span>
 <span class="source-line-no">1491</span><span id="line-1491">   public static Object hocon(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1492</span><span id="line-1492">      Hocon.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1492</span><span id="line-1492">      Hocon.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1493</span><span id="line-1493">   }</span>
 <span class="source-line-no">1494</span><span id="line-1494"></span>
 <span class="source-line-no">1495</span><span id="line-1495">   /**</span>
@@ -1516,7 +1516,7 @@
 <span class="source-line-no">1503</span><span id="line-1503">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1504</span><span id="line-1504">    */</span>
 <span class="source-line-no">1505</span><span id="line-1505">   public static &lt;T&gt; T hocon(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1506</span><span id="line-1506">      return Hocon.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1506</span><span id="line-1506">      return Hocon.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1507</span><span id="line-1507">   }</span>
 <span class="source-line-no">1508</span><span id="line-1508"></span>
 <span class="source-line-no">1509</span><span id="line-1509">   /**</span>
@@ -1531,7 +1531,7 @@
 <span class="source-line-no">1518</span><span id="line-1518">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1519</span><span id="line-1519">    */</span>
 <span class="source-line-no">1520</span><span id="line-1520">   public static &lt;T&gt; T hocon(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1521</span><span id="line-1521">      return Hocon.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1521</span><span id="line-1521">      return Hocon.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1522</span><span id="line-1522">   }</span>
 <span class="source-line-no">1523</span><span id="line-1523"></span>
 <span class="source-line-no">1524</span><span id="line-1524">   /**</span>
@@ -1543,7 +1543,7 @@
 <span class="source-line-no">1530</span><span id="line-1530">    * @return The parsed object.</span>
 <span class="source-line-no">1531</span><span id="line-1531">    */</span>
 <span class="source-line-no">1532</span><span id="line-1532">   public static &lt;T&gt; T hocon(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1533</span><span id="line-1533">      return safe(() -&gt; Hocon.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1533</span><span id="line-1533">      return safe(() -&gt; Hocon.to(o, c));</span>
 <span class="source-line-no">1534</span><span id="line-1534">   }</span>
 <span class="source-line-no">1535</span><span id="line-1535"></span>
 <span class="source-line-no">1536</span><span id="line-1536">   /**</span>
@@ -1557,7 +1557,7 @@
 <span class="source-line-no">1544</span><span id="line-1544">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1545</span><span id="line-1545">    */</span>
 <span class="source-line-no">1546</span><span id="line-1546">   public static &lt;T&gt; T hocon(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1547</span><span id="line-1547">      return Hocon.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1547</span><span id="line-1547">      return Hocon.to(input, type, args);</span>
 <span class="source-line-no">1548</span><span id="line-1548">   }</span>
 <span class="source-line-no">1549</span><span id="line-1549"></span>
 <span class="source-line-no">1550</span><span id="line-1550">   /**</span>
@@ -1571,7 +1571,7 @@
 <span class="source-line-no">1558</span><span id="line-1558">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1559</span><span id="line-1559">    */</span>
 <span class="source-line-no">1560</span><span id="line-1560">   public static String proto(Object object) throws SerializeException {</span>
-<span class="source-line-no">1561</span><span id="line-1561">      return Prototext.DEFAULT.of(object);</span>
+<span class="source-line-no">1561</span><span id="line-1561">      return Prototext.of(object);</span>
 <span class="source-line-no">1562</span><span id="line-1562">   }</span>
 <span class="source-line-no">1563</span><span id="line-1563"></span>
 <span class="source-line-no">1564</span><span id="line-1564">   /**</span>
@@ -1584,7 +1584,7 @@
 <span class="source-line-no">1571</span><span id="line-1571">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1572</span><span id="line-1572">    */</span>
 <span class="source-line-no">1573</span><span id="line-1573">   public static Object proto(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1574</span><span id="line-1574">      Prototext.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1574</span><span id="line-1574">      Prototext.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1575</span><span id="line-1575">   }</span>
 <span class="source-line-no">1576</span><span id="line-1576"></span>
 <span class="source-line-no">1577</span><span id="line-1577">   /**</span>
@@ -1598,7 +1598,7 @@
 <span class="source-line-no">1585</span><span id="line-1585">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1586</span><span id="line-1586">    */</span>
 <span class="source-line-no">1587</span><span id="line-1587">   public static &lt;T&gt; T proto(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1588</span><span id="line-1588">      return Prototext.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1588</span><span id="line-1588">      return Prototext.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1589</span><span id="line-1589">   }</span>
 <span class="source-line-no">1590</span><span id="line-1590"></span>
 <span class="source-line-no">1591</span><span id="line-1591">   /**</span>
@@ -1613,7 +1613,7 @@
 <span class="source-line-no">1600</span><span id="line-1600">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1601</span><span id="line-1601">    */</span>
 <span class="source-line-no">1602</span><span id="line-1602">   public static &lt;T&gt; T proto(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1603</span><span id="line-1603">      return Prototext.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1603</span><span id="line-1603">      return Prototext.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1604</span><span id="line-1604">   }</span>
 <span class="source-line-no">1605</span><span id="line-1605"></span>
 <span class="source-line-no">1606</span><span id="line-1606">   /**</span>
@@ -1625,7 +1625,7 @@
 <span class="source-line-no">1612</span><span id="line-1612">    * @return The parsed object.</span>
 <span class="source-line-no">1613</span><span id="line-1613">    */</span>
 <span class="source-line-no">1614</span><span id="line-1614">   public static &lt;T&gt; T proto(String o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1615</span><span id="line-1615">      return safe(() -&gt; Prototext.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1615</span><span id="line-1615">      return safe(() -&gt; Prototext.to(o, c));</span>
 <span class="source-line-no">1616</span><span id="line-1616">   }</span>
 <span class="source-line-no">1617</span><span id="line-1617"></span>
 <span class="source-line-no">1618</span><span id="line-1618">   /**</span>
@@ -1639,7 +1639,7 @@
 <span class="source-line-no">1626</span><span id="line-1626">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1627</span><span id="line-1627">    */</span>
 <span class="source-line-no">1628</span><span id="line-1628">   public static &lt;T&gt; T proto(String input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1629</span><span id="line-1629">      return Prototext.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1629</span><span id="line-1629">      return Prototext.to(input, type, args);</span>
 <span class="source-line-no">1630</span><span id="line-1630">   }</span>
 <span class="source-line-no">1631</span><span id="line-1631"></span>
 <span class="source-line-no">1632</span><span id="line-1632">   //-----------------------------------------------------------------------------------------------------------------</span>
@@ -1657,7 +1657,7 @@
 <span class="source-line-no">1644</span><span id="line-1644">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1645</span><span id="line-1645">    */</span>
 <span class="source-line-no">1646</span><span id="line-1646">   public static byte[] msgPack(Object object) throws SerializeException {</span>
-<span class="source-line-no">1647</span><span id="line-1647">      return MsgPack.DEFAULT.of(object);</span>
+<span class="source-line-no">1647</span><span id="line-1647">      return MsgPack.of(object);</span>
 <span class="source-line-no">1648</span><span id="line-1648">   }</span>
 <span class="source-line-no">1649</span><span id="line-1649"></span>
 <span class="source-line-no">1650</span><span id="line-1650">   /**</span>
@@ -1670,7 +1670,7 @@
 <span class="source-line-no">1657</span><span id="line-1657">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1658</span><span id="line-1658">    */</span>
 <span class="source-line-no">1659</span><span id="line-1659">   public static Object msgPack(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1660</span><span id="line-1660">      MsgPack.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1660</span><span id="line-1660">      MsgPack.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1661</span><span id="line-1661">   }</span>
 <span class="source-line-no">1662</span><span id="line-1662"></span>
 <span class="source-line-no">1663</span><span id="line-1663">   /**</span>
@@ -1684,7 +1684,7 @@
 <span class="source-line-no">1671</span><span id="line-1671">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1672</span><span id="line-1672">    */</span>
 <span class="source-line-no">1673</span><span id="line-1673">   public static &lt;T&gt; T msgPack(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1674</span><span id="line-1674">      return MsgPack.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1674</span><span id="line-1674">      return MsgPack.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1675</span><span id="line-1675">   }</span>
 <span class="source-line-no">1676</span><span id="line-1676"></span>
 <span class="source-line-no">1677</span><span id="line-1677">   /**</span>
@@ -1699,7 +1699,7 @@
 <span class="source-line-no">1686</span><span id="line-1686">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1687</span><span id="line-1687">    */</span>
 <span class="source-line-no">1688</span><span id="line-1688">   public static &lt;T&gt; T msgPack(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1689</span><span id="line-1689">      return MsgPack.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1689</span><span id="line-1689">      return MsgPack.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1690</span><span id="line-1690">   }</span>
 <span class="source-line-no">1691</span><span id="line-1691"></span>
 <span class="source-line-no">1692</span><span id="line-1692">   /**</span>
@@ -1711,7 +1711,7 @@
 <span class="source-line-no">1698</span><span id="line-1698">    * @return The parsed object.</span>
 <span class="source-line-no">1699</span><span id="line-1699">    */</span>
 <span class="source-line-no">1700</span><span id="line-1700">   public static &lt;T&gt; T msgPack(byte[] o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1701</span><span id="line-1701">      return safe(() -&gt; MsgPack.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1701</span><span id="line-1701">      return safe(() -&gt; MsgPack.to(o, c));</span>
 <span class="source-line-no">1702</span><span id="line-1702">   }</span>
 <span class="source-line-no">1703</span><span id="line-1703"></span>
 <span class="source-line-no">1704</span><span id="line-1704">   /**</span>
@@ -1725,7 +1725,7 @@
 <span class="source-line-no">1712</span><span id="line-1712">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1713</span><span id="line-1713">    */</span>
 <span class="source-line-no">1714</span><span id="line-1714">   public static &lt;T&gt; T msgPack(byte[] input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1715</span><span id="line-1715">      return MsgPack.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1715</span><span id="line-1715">      return MsgPack.to(input, type, args);</span>
 <span class="source-line-no">1716</span><span id="line-1716">   }</span>
 <span class="source-line-no">1717</span><span id="line-1717"></span>
 <span class="source-line-no">1718</span><span id="line-1718">   /**</span>
@@ -1739,7 +1739,7 @@
 <span class="source-line-no">1726</span><span id="line-1726">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1727</span><span id="line-1727">    */</span>
 <span class="source-line-no">1728</span><span id="line-1728">   public static byte[] cbor(Object object) throws SerializeException {</span>
-<span class="source-line-no">1729</span><span id="line-1729">      return Cbor.DEFAULT.of(object);</span>
+<span class="source-line-no">1729</span><span id="line-1729">      return Cbor.of(object);</span>
 <span class="source-line-no">1730</span><span id="line-1730">   }</span>
 <span class="source-line-no">1731</span><span id="line-1731"></span>
 <span class="source-line-no">1732</span><span id="line-1732">   /**</span>
@@ -1752,7 +1752,7 @@
 <span class="source-line-no">1739</span><span id="line-1739">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1740</span><span id="line-1740">    */</span>
 <span class="source-line-no">1741</span><span id="line-1741">   public static Object cbor(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1742</span><span id="line-1742">      Cbor.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1742</span><span id="line-1742">      Cbor.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1743</span><span id="line-1743">   }</span>
 <span class="source-line-no">1744</span><span id="line-1744"></span>
 <span class="source-line-no">1745</span><span id="line-1745">   /**</span>
@@ -1766,7 +1766,7 @@
 <span class="source-line-no">1753</span><span id="line-1753">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1754</span><span id="line-1754">    */</span>
 <span class="source-line-no">1755</span><span id="line-1755">   public static &lt;T&gt; T cbor(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1756</span><span id="line-1756">      return Cbor.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1756</span><span id="line-1756">      return Cbor.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1757</span><span id="line-1757">   }</span>
 <span class="source-line-no">1758</span><span id="line-1758"></span>
 <span class="source-line-no">1759</span><span id="line-1759">   /**</span>
@@ -1781,7 +1781,7 @@
 <span class="source-line-no">1768</span><span id="line-1768">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1769</span><span id="line-1769">    */</span>
 <span class="source-line-no">1770</span><span id="line-1770">   public static &lt;T&gt; T cbor(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1771</span><span id="line-1771">      return Cbor.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1771</span><span id="line-1771">      return Cbor.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1772</span><span id="line-1772">   }</span>
 <span class="source-line-no">1773</span><span id="line-1773"></span>
 <span class="source-line-no">1774</span><span id="line-1774">   /**</span>
@@ -1793,7 +1793,7 @@
 <span class="source-line-no">1780</span><span id="line-1780">    * @return The parsed object.</span>
 <span class="source-line-no">1781</span><span id="line-1781">    */</span>
 <span class="source-line-no">1782</span><span id="line-1782">   public static &lt;T&gt; T cbor(byte[] o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1783</span><span id="line-1783">      return safe(() -&gt; Cbor.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1783</span><span id="line-1783">      return safe(() -&gt; Cbor.to(o, c));</span>
 <span class="source-line-no">1784</span><span id="line-1784">   }</span>
 <span class="source-line-no">1785</span><span id="line-1785"></span>
 <span class="source-line-no">1786</span><span id="line-1786">   /**</span>
@@ -1807,7 +1807,7 @@
 <span class="source-line-no">1794</span><span id="line-1794">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1795</span><span id="line-1795">    */</span>
 <span class="source-line-no">1796</span><span id="line-1796">   public static &lt;T&gt; T cbor(byte[] input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1797</span><span id="line-1797">      return Cbor.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1797</span><span id="line-1797">      return Cbor.to(input, type, args);</span>
 <span class="source-line-no">1798</span><span id="line-1798">   }</span>
 <span class="source-line-no">1799</span><span id="line-1799"></span>
 <span class="source-line-no">1800</span><span id="line-1800">   /**</span>
@@ -1821,7 +1821,7 @@
 <span class="source-line-no">1808</span><span id="line-1808">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1809</span><span id="line-1809">    */</span>
 <span class="source-line-no">1810</span><span id="line-1810">   public static byte[] bson(Object object) throws SerializeException {</span>
-<span class="source-line-no">1811</span><span id="line-1811">      return Bson.DEFAULT.of(object);</span>
+<span class="source-line-no">1811</span><span id="line-1811">      return Bson.of(object);</span>
 <span class="source-line-no">1812</span><span id="line-1812">   }</span>
 <span class="source-line-no">1813</span><span id="line-1813"></span>
 <span class="source-line-no">1814</span><span id="line-1814">   /**</span>
@@ -1834,7 +1834,7 @@
 <span class="source-line-no">1821</span><span id="line-1821">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1822</span><span id="line-1822">    */</span>
 <span class="source-line-no">1823</span><span id="line-1823">   public static Object bson(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1824</span><span id="line-1824">      Bson.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1824</span><span id="line-1824">      Bson.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1825</span><span id="line-1825">   }</span>
 <span class="source-line-no">1826</span><span id="line-1826"></span>
 <span class="source-line-no">1827</span><span id="line-1827">   /**</span>
@@ -1848,7 +1848,7 @@
 <span class="source-line-no">1835</span><span id="line-1835">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1836</span><span id="line-1836">    */</span>
 <span class="source-line-no">1837</span><span id="line-1837">   public static &lt;T&gt; T bson(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1838</span><span id="line-1838">      return Bson.DEFAULT.to(input, type);</span>
+<span class="source-line-no">1838</span><span id="line-1838">      return Bson.DEFAULT.read(input, type);</span>
 <span class="source-line-no">1839</span><span id="line-1839">   }</span>
 <span class="source-line-no">1840</span><span id="line-1840"></span>
 <span class="source-line-no">1841</span><span id="line-1841">   /**</span>
@@ -1863,7 +1863,7 @@
 <span class="source-line-no">1850</span><span id="line-1850">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1851</span><span id="line-1851">    */</span>
 <span class="source-line-no">1852</span><span id="line-1852">   public static &lt;T&gt; T bson(Object input, Type type, Type... args) throws ParseException, IOException {</span>
-<span class="source-line-no">1853</span><span id="line-1853">      return Bson.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1853</span><span id="line-1853">      return Bson.DEFAULT.read(input, type, args);</span>
 <span class="source-line-no">1854</span><span id="line-1854">   }</span>
 <span class="source-line-no">1855</span><span id="line-1855"></span>
 <span class="source-line-no">1856</span><span id="line-1856">   /**</span>
@@ -1875,7 +1875,7 @@
 <span class="source-line-no">1862</span><span id="line-1862">    * @return The parsed object.</span>
 <span class="source-line-no">1863</span><span id="line-1863">    */</span>
 <span class="source-line-no">1864</span><span id="line-1864">   public static &lt;T&gt; T bson(byte[] o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1865</span><span id="line-1865">      return safe(() -&gt; Bson.DEFAULT.to(o, c));</span>
+<span class="source-line-no">1865</span><span id="line-1865">      return safe(() -&gt; Bson.to(o, c));</span>
 <span class="source-line-no">1866</span><span id="line-1866">   }</span>
 <span class="source-line-no">1867</span><span id="line-1867"></span>
 <span class="source-line-no">1868</span><span id="line-1868">   /**</span>
@@ -1889,7 +1889,7 @@
 <span class="source-line-no">1876</span><span id="line-1876">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1877</span><span id="line-1877">    */</span>
 <span class="source-line-no">1878</span><span id="line-1878">   public static &lt;T&gt; T bson(byte[] input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1879</span><span id="line-1879">      return Bson.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1879</span><span id="line-1879">      return Bson.to(input, type, args);</span>
 <span class="source-line-no">1880</span><span id="line-1880">   }</span>
 <span class="source-line-no">1881</span><span id="line-1881"></span>
 <span class="source-line-no">1882</span><span id="line-1882">   /**</span>
@@ -1907,7 +1907,7 @@
 <span class="source-line-no">1894</span><span id="line-1894">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">1895</span><span id="line-1895">    */</span>
 <span class="source-line-no">1896</span><span id="line-1896">   public static byte[] parquet(Object object) throws SerializeException {</span>
-<span class="source-line-no">1897</span><span id="line-1897">      return Parquet.DEFAULT.of(object);</span>
+<span class="source-line-no">1897</span><span id="line-1897">      return Parquet.of(object);</span>
 <span class="source-line-no">1898</span><span id="line-1898">   }</span>
 <span class="source-line-no">1899</span><span id="line-1899"></span>
 <span class="source-line-no">1900</span><span id="line-1900">   /**</span>
@@ -1920,7 +1920,7 @@
 <span class="source-line-no">1907</span><span id="line-1907">    * @throws IOException Thrown by underlying stream.</span>
 <span class="source-line-no">1908</span><span id="line-1908">    */</span>
 <span class="source-line-no">1909</span><span id="line-1909">   public static Object parquet(Object object, Object output) throws SerializeException, IOException {</span>
-<span class="source-line-no">1910</span><span id="line-1910">      Parquet.DEFAULT.of(object, output); return output;</span>
+<span class="source-line-no">1910</span><span id="line-1910">      Parquet.DEFAULT.write(object, output); return output;</span>
 <span class="source-line-no">1911</span><span id="line-1911">   }</span>
 <span class="source-line-no">1912</span><span id="line-1912"></span>
 <span class="source-line-no">1913</span><span id="line-1913">   /**</span>
@@ -1941,7 +1941,7 @@
 <span class="source-line-no">1928</span><span id="line-1928">      "unchecked" // Parquet always returns List&lt;T&gt;; generic cast is safe by contract.</span>
 <span class="source-line-no">1929</span><span id="line-1929">   })</span>
 <span class="source-line-no">1930</span><span id="line-1930">   public static &lt;T&gt; List&lt;T&gt; parquet(Object input, Class&lt;T&gt; type) throws ParseException, IOException {</span>
-<span class="source-line-no">1931</span><span id="line-1931">      return (List&lt;T&gt;) Parquet.DEFAULT.to(input, List.class, type);</span>
+<span class="source-line-no">1931</span><span id="line-1931">      return (List&lt;T&gt;) Parquet.DEFAULT.read(input, List.class, type);</span>
 <span class="source-line-no">1932</span><span id="line-1932">   }</span>
 <span class="source-line-no">1933</span><span id="line-1933"></span>
 <span class="source-line-no">1934</span><span id="line-1934">   /**</span>
@@ -1960,7 +1960,7 @@
 <span class="source-line-no">1947</span><span id="line-1947">      "unchecked" // Parquet always returns List&lt;T&gt;; generic cast is safe by contract.</span>
 <span class="source-line-no">1948</span><span id="line-1948">   })</span>
 <span class="source-line-no">1949</span><span id="line-1949">   public static &lt;T&gt; List&lt;T&gt; parquet(byte[] o, Class&lt;T&gt; c) {</span>
-<span class="source-line-no">1950</span><span id="line-1950">      return (List&lt;T&gt;) safe(() -&gt; Parquet.DEFAULT.to(o, List.class, c));</span>
+<span class="source-line-no">1950</span><span id="line-1950">      return (List&lt;T&gt;) safe(() -&gt; Parquet.to(o, List.class, c));</span>
 <span class="source-line-no">1951</span><span id="line-1951">   }</span>
 <span class="source-line-no">1952</span><span id="line-1952"></span>
 <span class="source-line-no">1953</span><span id="line-1953">   /**</span>
@@ -1976,7 +1976,7 @@
 <span class="source-line-no">1963</span><span id="line-1963">      "unchecked" // Parquet always returns List&lt;T&gt;; generic cast is safe by contract.</span>
 <span class="source-line-no">1964</span><span id="line-1964">   })</span>
 <span class="source-line-no">1965</span><span id="line-1965">   public static &lt;T&gt; List&lt;T&gt; parquet(byte[] input, Type type) throws ParseException {</span>
-<span class="source-line-no">1966</span><span id="line-1966">      return (List&lt;T&gt;) Parquet.DEFAULT.to(input, List.class, type);</span>
+<span class="source-line-no">1966</span><span id="line-1966">      return (List&lt;T&gt;) Parquet.to(input, List.class, type);</span>
 <span class="source-line-no">1967</span><span id="line-1967">   }</span>
 <span class="source-line-no">1968</span><span id="line-1968"></span>
 <span class="source-line-no">1969</span><span id="line-1969">   /**</span>
@@ -1990,7 +1990,7 @@
 <span class="source-line-no">1977</span><span id="line-1977">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">1978</span><span id="line-1978">    */</span>
 <span class="source-line-no">1979</span><span id="line-1979">   public static &lt;T&gt; T parquet(byte[] input, Type type, Type... args) throws ParseException {</span>
-<span class="source-line-no">1980</span><span id="line-1980">      return Parquet.DEFAULT.to(input, type, args);</span>
+<span class="source-line-no">1980</span><span id="line-1980">      return Parquet.to(input, type, args);</span>
 <span class="source-line-no">1981</span><span id="line-1981">   }</span>
 <span class="source-line-no">1982</span><span id="line-1982">}</span>
 

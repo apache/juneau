@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.jsonschema;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.math.*;</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * This is the {@code juneau-bean-jsonschema} implementation of the commons-side</span>
 <span class="source-line-no">037</span><span id="line-37"> * {@link PropertyValidator} SPI.  It is registered as a {@link PropertyValidatorFactory} via</span>
-<span class="source-line-no">038</span><span id="line-38"> * {@link java.util.ServiceLoader ServiceLoader} so that marshalling-side code (e.g.</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@link ServiceLoader ServiceLoader} so that marshalling-side code (e.g.</span>
 <span class="source-line-no">039</span><span id="line-39"> * {@code MarshalledPropertyPostProcessor}) can install schema validation closures on bean properties without taking a</span>
 <span class="source-line-no">040</span><span id="line-40"> * compile-time dependency on this module.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
@@ -205,7 +205,7 @@
 <span class="source-line-no">192</span><span id="line-192"></span>
 <span class="source-line-no">193</span><span id="line-193">   private static void validateEnum(JsonSchema s, Object value) {</span>
 <span class="source-line-no">194</span><span id="line-194">      var enums = s.getEnum();</span>
-<span class="source-line-no">195</span><span id="line-195">      if (e(enums))</span>
+<span class="source-line-no">195</span><span id="line-195">      if (ie(enums))</span>
 <span class="source-line-no">196</span><span id="line-196">         return;</span>
 <span class="source-line-no">197</span><span id="line-197">      for (var e : enums) {</span>
 <span class="source-line-no">198</span><span id="line-198">         if (jsonEquals(e, value))</span>
@@ -230,7 +230,7 @@
 <span class="source-line-no">217</span><span id="line-217">         return;</span>
 <span class="source-line-no">218</span><span id="line-218">      }</span>
 <span class="source-line-no">219</span><span id="line-219">      var arr = s.getTypeAsJsonTypeArray();</span>
-<span class="source-line-no">220</span><span id="line-220">      if (e(arr))</span>
+<span class="source-line-no">220</span><span id="line-220">      if (ie(arr))</span>
 <span class="source-line-no">221</span><span id="line-221">         return;</span>
 <span class="source-line-no">222</span><span id="line-222">      for (var t : arr) {</span>
 <span class="source-line-no">223</span><span id="line-223">         if (matchesType(t, value))</span>

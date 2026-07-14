@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -243,7 +243,7 @@
 <span class="source-line-no">230</span><span id="line-230">    *</span>
 <span class="source-line-no">231</span><span id="line-231">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">232</span><span id="line-232">    */</span>
-<span class="source-line-no">233</span><span id="line-233">   public Map&lt;String,Example&gt; getExamples() { return nullIfEmpty(examples); }</span>
+<span class="source-line-no">233</span><span id="line-233">   public Map&lt;String,Example&gt; getExamples() { return nie(examples); }</span>
 <span class="source-line-no">234</span><span id="line-234"></span>
 <span class="source-line-no">235</span><span id="line-235">   /**</span>
 <span class="source-line-no">236</span><span id="line-236">    * Bean property getter:  &lt;property&gt;required&lt;/property&gt;.</span>
@@ -283,13 +283,13 @@
 <span class="source-line-no">270</span><span id="line-270">   @Override /* Overridden from SwaggerElement */</span>
 <span class="source-line-no">271</span><span id="line-271">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">272</span><span id="line-272">      // @formatter:off</span>
-<span class="source-line-no">273</span><span id="line-273">      var s = setb(String.class)</span>
+<span class="source-line-no">273</span><span id="line-273">      var s = stb(String.class)</span>
 <span class="source-line-no">274</span><span id="line-274">         .addIf(nn(ref), PROP_ref)</span>
 <span class="source-line-no">275</span><span id="line-275">         .addIf(nn(allowEmptyValue), PROP_allowEmptyValue)</span>
 <span class="source-line-no">276</span><span id="line-276">         .addIf(nn(allowReserved), PROP_allowReserved)</span>
 <span class="source-line-no">277</span><span id="line-277">         .addIf(nn(deprecated), PROP_deprecated)</span>
 <span class="source-line-no">278</span><span id="line-278">         .addIf(nn(description), PROP_description)</span>
-<span class="source-line-no">279</span><span id="line-279">         .addIf(ne(examples), PROP_examples)</span>
+<span class="source-line-no">279</span><span id="line-279">         .addIf(ine(examples), PROP_examples)</span>
 <span class="source-line-no">280</span><span id="line-280">         .addIf(nn(explode), PROP_explode)</span>
 <span class="source-line-no">281</span><span id="line-281">         .addIf(nn(required), PROP_required)</span>
 <span class="source-line-no">282</span><span id="line-282">         .addIf(nn(schema), PROP_schema)</span>

@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.function.*;</span>
@@ -177,19 +177,19 @@
 <span class="source-line-no">164</span><span id="line-164">         assertArgNotNull("value", value);</span>
 <span class="source-line-no">165</span><span id="line-165">         var v = value.trim();</span>
 <span class="source-line-no">166</span><span id="line-166">         if (v.isEmpty())</span>
-<span class="source-line-no">167</span><span id="line-167">            throw illegalArg("warning value must not be blank");</span>
+<span class="source-line-no">167</span><span id="line-167">            throw iaex("warning value must not be blank");</span>
 <span class="source-line-no">168</span><span id="line-168">         warnings.add(v);</span>
 <span class="source-line-no">169</span><span id="line-169">         return this;</span>
 <span class="source-line-no">170</span><span id="line-170">      }</span>
 <span class="source-line-no">171</span><span id="line-171"></span>
 <span class="source-line-no">172</span><span id="line-172">      private static String render(int code, String agent, String text, String date) {</span>
 <span class="source-line-no">173</span><span id="line-173">         if (code &lt; 0 || code &gt; 999)</span>
-<span class="source-line-no">174</span><span id="line-174">            throw illegalArg("warn-code must be in the range 0-999: {0}", code);</span>
+<span class="source-line-no">174</span><span id="line-174">            throw iaex("warn-code must be in the range 0-999: {0}", code);</span>
 <span class="source-line-no">175</span><span id="line-175">         assertArgNotNull("agent", agent);</span>
 <span class="source-line-no">176</span><span id="line-176">         assertArgNotNull("text", text);</span>
 <span class="source-line-no">177</span><span id="line-177">         var a = agent.trim();</span>
 <span class="source-line-no">178</span><span id="line-178">         if (a.isEmpty())</span>
-<span class="source-line-no">179</span><span id="line-179">            throw illegalArg("warn-agent must not be blank");</span>
+<span class="source-line-no">179</span><span id="line-179">            throw iaex("warn-agent must not be blank");</span>
 <span class="source-line-no">180</span><span id="line-180">         var sb = new StringBuilder();</span>
 <span class="source-line-no">181</span><span id="line-181">         sb.append(String.format("%03d", code)).append(' ').append(a).append(' ').append(q(text));</span>
 <span class="source-line-no">182</span><span id="line-182">         if (date != null)</span>

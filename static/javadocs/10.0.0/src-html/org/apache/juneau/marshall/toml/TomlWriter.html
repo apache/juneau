@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">   TomlWriter dateTimeValue(Object value) {</span>
 <span class="source-line-no">144</span><span id="line-144">      if (value instanceof TemporalAccessor ta) {</span>
 <span class="source-line-no">145</span><span id="line-145">         if (ta instanceof Instant i)</span>
-<span class="source-line-no">146</span><span id="line-146">            w(java.time.OffsetDateTime.ofInstant(i, ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));</span>
+<span class="source-line-no">146</span><span id="line-146">            w(OffsetDateTime.ofInstant(i, ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));</span>
 <span class="source-line-no">147</span><span id="line-147">         else if (ta instanceof OffsetDateTime odt)</span>
 <span class="source-line-no">148</span><span id="line-148">            w(odt.format(java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME));</span>
 <span class="source-line-no">149</span><span id="line-149">         else if (ta instanceof ZonedDateTime zdt)</span>

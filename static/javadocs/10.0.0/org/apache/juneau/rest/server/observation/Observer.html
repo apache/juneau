@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-69">Observer</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-68">Observer</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Factory for custom (non-request) <a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation"><code>Observation</code></a>s, composing a <a href="../metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics"><code>MetricsRecorder</code></a> and a
  <a href="../tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing"><code>TracerHook</code></a>.
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="NOOP">
 <h3>NOOP</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Observer.html" title="class in org.apache.juneau.rest.server.observation">Observer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-78">NOOP</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Observer.html" title="class in org.apache.juneau.rest.server.observation">Observer</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-77">NOOP</a></span></div>
 <div class="block">Observer backed by the no-op metrics recorder and tracer &mdash; produces only
  <a href="Observation.html#NOOP"><code>Observation.NOOP</code></a>.</div>
 </section>
@@ -216,7 +216,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.rest.server.metrics.MetricsRecorder,org.apache.juneau.rest.server.tracing.TracerHook)">
 <h3>Observer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-102">Observer</a></span><wbr><span class="parameters">(<a href="../metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics">MetricsRecorder</a>&nbsp;recorder,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-101">Observer</a></span><wbr><span class="parameters">(<a href="../metrics/MetricsRecorder.html" title="interface in org.apache.juneau.rest.server.metrics">MetricsRecorder</a>&nbsp;recorder,
  <a href="../tracing/TracerHook.html" title="interface in org.apache.juneau.rest.server.tracing">TracerHook</a>&nbsp;tracer)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -239,7 +239,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="start(java.lang.String,java.lang.String)">
 <h3>start</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation">Observation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-122">start</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Observation.html" title="interface in org.apache.juneau.rest.server.observation">Observation</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-121">start</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;tags)</span></div>
 <div class="block">Starts a new observation.
 
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isActive()">
 <h3>isActive</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-135">isActive</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/observation/Observer.html#line-134">isActive</a></span>()</div>
 <div class="block">Returns whether this observer has at least one live backend (metrics or tracing).</div>
 <dl class="notes">
 <dt>Returns:</dt>

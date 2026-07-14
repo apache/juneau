@@ -274,7 +274,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer)">
 <h3>JsonTokenWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-127">JsonTokenWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-128">JsonTokenWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out)</span></div>
 <div class="block">Constructor for a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> target with default <a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter.Settings</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -285,7 +285,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="&lt;init&gt;(java.io.Writer,org.apache.juneau.marshall.json.JsonTokenWriter.Settings)">
 <h3>JsonTokenWriter</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-137">JsonTokenWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-138">JsonTokenWriter</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link">Writer</a>&nbsp;out,
  <a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenWriter.Settings</a>&nbsp;settings)</span></div>
 <div class="block">Constructor for a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Writer.html" title="class or interface in java.io" class="external-link"><code>Writer</code></a> target with explicit <a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter.Settings</code></a>.</div>
 <dl class="notes">
@@ -306,7 +306,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="startObject()">
 <h3>startObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-161">startObject</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-162">startObject</a></span>()
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#startObject()">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#START_OBJECT"><code>TokenType.START_OBJECT</code></a> event.</div>
@@ -323,7 +323,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="endObject()">
 <h3>endObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-170">endObject</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-171">endObject</a></span>()
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#endObject()">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#END_OBJECT"><code>TokenType.END_OBJECT</code></a> event.</div>
@@ -340,7 +340,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="startArray()">
 <h3>startArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-182">startArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-183">startArray</a></span>()
                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#startArray()">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#START_ARRAY"><code>TokenType.START_ARRAY</code></a> event.</div>
@@ -357,7 +357,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="endArray()">
 <h3>endArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-191">endArray</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-192">endArray</a></span>()
                      throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#endArray()">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#END_ARRAY"><code>TokenType.END_ARRAY</code></a> event.</div>
@@ -374,7 +374,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="fieldName(java.lang.String)">
 <h3>fieldName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-203">fieldName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-204">fieldName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span>
                       throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#fieldName(java.lang.String)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#FIELD_NAME"><code>TokenType.FIELD_NAME</code></a> event for the next field of the enclosing object.</div>
@@ -393,7 +393,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="string(java.lang.String)">
 <h3>string</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-255">string</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-256">string</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#string(java.lang.String)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_STRING"><code>TokenType.VALUE_STRING</code></a> event.</div>
@@ -413,7 +413,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="number(java.lang.Number)">
 <h3>number</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-266">number</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-267">number</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#number(java.lang.Number)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_NUMBER"><code>TokenType.VALUE_NUMBER</code></a> event for an arbitrary <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link"><code>Number</code></a>.</div>
@@ -433,7 +433,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="number(long)">
 <h3>number</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-277">number</a></span><wbr><span class="parameters">(long&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-278">number</a></span><wbr><span class="parameters">(long&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#number(long)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_NUMBER"><code>TokenType.VALUE_NUMBER</code></a> event for a <code>long</code>.</div>
@@ -452,7 +452,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="number(double)">
 <h3>number</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-286">number</a></span><wbr><span class="parameters">(double&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-287">number</a></span><wbr><span class="parameters">(double&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#number(double)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_NUMBER"><code>TokenType.VALUE_NUMBER</code></a> event for a <code>double</code>.</div>
@@ -471,7 +471,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="number(java.math.BigDecimal)">
 <h3>number</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-297">number</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-298">number</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link">BigDecimal</a>&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#number(java.math.BigDecimal)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_NUMBER"><code>TokenType.VALUE_NUMBER</code></a> event for a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigDecimal.html" title="class or interface in java.math" class="external-link"><code>BigDecimal</code></a>.</div>
@@ -491,7 +491,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="number(java.math.BigInteger)">
 <h3>number</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-308">number</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link">BigInteger</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-309">number</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link">BigInteger</a>&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#number(java.math.BigInteger)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_NUMBER"><code>TokenType.VALUE_NUMBER</code></a> event for a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/math/BigInteger.html" title="class or interface in java.math" class="external-link"><code>BigInteger</code></a>.</div>
@@ -511,7 +511,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="bool(boolean)">
 <h3>bool</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-319">bool</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-320">bool</a></span><wbr><span class="parameters">(boolean&nbsp;value)</span>
                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#bool(boolean)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_BOOLEAN"><code>TokenType.VALUE_BOOLEAN</code></a> event.</div>
@@ -530,7 +530,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="nil()">
 <h3>nil</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-328">nil</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-329">nil</a></span>()
                 throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#nil()">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_NULL"><code>TokenType.VALUE_NULL</code></a> event.</div>
@@ -547,7 +547,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="object(java.lang.Object)">
 <h3>object</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-337">object</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-338">object</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#object(java.lang.Object)">TokenWriter</a></code></span></div>
 <div class="block">Emits an arbitrary POJO through the format's structural events.
@@ -590,7 +590,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="settingsAccess()">
 <h3>settingsAccess</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenWriter.Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-359">settingsAccess</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenWriter.Settings</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-360">settingsAccess</a></span>()</div>
 <div class="block">Returns the <a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenWriter.Settings</code></a> this writer was configured with.
 
  <p>
@@ -605,7 +605,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="binary(byte[])">
 <h3>binary</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-363">binary</a></span><wbr><span class="parameters">(byte[]&nbsp;value)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenWriter.html" title="interface in org.apache.juneau.marshall.stream">TokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-364">binary</a></span><wbr><span class="parameters">(byte[]&nbsp;value)</span>
                    throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#binary(byte%5B%5D)">TokenWriter</a></code></span></div>
 <div class="block">Emits a <a href="../stream/TokenType.html#VALUE_BINARY"><code>TokenType.VALUE_BINARY</code></a> event.
@@ -629,7 +629,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="flush()">
 <h3>flush</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-375">flush</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-376">flush</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#flush()">TokenWriter</a></code></span></div>
 <div class="block">Flushes any buffered output to the underlying stream.</div>
@@ -648,7 +648,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="close()">
 <h3>close</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-380">close</a></span>()
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-381">close</a></span>()
            throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../stream/TokenWriter.html#close()">TokenWriter</a></code></span></div>
 <div class="block">Closes the writer, flushing any buffered output first.
@@ -672,7 +672,7 @@ implements <a href="../stream/TokenWriter.html" title="interface in org.apache.j
 <li>
 <section class="detail" id="forOutput(java.lang.Object,org.apache.juneau.marshall.json.JsonTokenWriter.Settings)">
 <h3>forOutput</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json">JsonTokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-553">forOutput</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonTokenWriter.html" title="class in org.apache.juneau.marshall.json">JsonTokenWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonTokenWriter.html#line-554">forOutput</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output,
  <a href="JsonTokenWriter.Settings.html" title="class in org.apache.juneau.marshall.json">JsonTokenWriter.Settings</a>&nbsp;settings)</span>
                                  throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Internal factory used by <a href="JsonSerializer.html#serializeTokens(java.lang.Object)"><code>JsonSerializer.serializeTokens(Object)</code></a>.  Coerces the supported

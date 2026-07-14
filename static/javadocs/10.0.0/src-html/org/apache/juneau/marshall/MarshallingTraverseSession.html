@@ -29,9 +29,9 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.text.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -143,7 +143,7 @@
 <span class="source-line-no">130</span><span id="line-130"></span>
 <span class="source-line-no">131</span><span id="line-131">      String toString(boolean simple) {</span>
 <span class="source-line-no">132</span><span id="line-132">         var sb = new StringBuilder().append('[').append(depth).append(']').append(' ');</span>
-<span class="source-line-no">133</span><span id="line-133">         sb.append(e(name) ? "&lt;noname&gt;" : name).append(':');</span>
+<span class="source-line-no">133</span><span id="line-133">         sb.append(ie(name) ? "&lt;noname&gt;" : name).append(':');</span>
 <span class="source-line-no">134</span><span id="line-134">         sb.append(aType.toString(simple));</span>
 <span class="source-line-no">135</span><span id="line-135">         if (aType != aType.getSerializedClassMeta(MarshallingTraverseSession.this))</span>
 <span class="source-line-no">136</span><span id="line-136">            sb.append('/').append(aType.getSerializedClassMeta(MarshallingTraverseSession.this).toString(simple));</span>
@@ -176,7 +176,7 @@
 <span class="source-line-no">163</span><span id="line-163">      if (isDetectRecursions() || isDebug()) {</span>
 <span class="source-line-no">164</span><span id="line-164">         set = new IdentityHashMap&lt;&gt;();</span>
 <span class="source-line-no">165</span><span id="line-165">      } else {</span>
-<span class="source-line-no">166</span><span id="line-166">         set = mape();</span>
+<span class="source-line-no">166</span><span id="line-166">         set = emptyMap();</span>
 <span class="source-line-no">167</span><span id="line-167">      }</span>
 <span class="source-line-no">168</span><span id="line-168">   }</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
@@ -195,8 +195,8 @@
 <span class="source-line-no">182</span><span id="line-182">    * @return A map, typically containing something like &lt;c&gt;{line:123,column:456,currentProperty:"foobar"}&lt;/c&gt;</span>
 <span class="source-line-no">183</span><span id="line-183">    */</span>
 <span class="source-line-no">184</span><span id="line-184">   public final JsonMap getLastLocation() {</span>
-<span class="source-line-no">185</span><span id="line-185">      Predicate&lt;Object&gt; nn = Utils::nn;</span>
-<span class="source-line-no">186</span><span id="line-186">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;</span>
+<span class="source-line-no">185</span><span id="line-185">      Predicate&lt;Object&gt; nn = Shorts::nn;</span>
+<span class="source-line-no">186</span><span id="line-186">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
 <span class="source-line-no">187</span><span id="line-187">      // @formatter:off</span>
 <span class="source-line-no">188</span><span id="line-188">      return JsonMap</span>
 <span class="source-line-no">189</span><span id="line-189">         .create()</span>

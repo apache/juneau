@@ -32,8 +32,8 @@
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.PredicateUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import java.util.function.*;</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> * &lt;/p&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> */</span>
 <span class="source-line-no">066</span><span id="line-66">@SuppressWarnings({</span>
@@ -382,10 +382,10 @@
 <span class="source-line-no">369</span><span id="line-369">      }</span>
 <span class="source-line-no">370</span><span id="line-370"></span>
 <span class="source-line-no">371</span><span id="line-371">      if (first == null)</span>
-<span class="source-line-no">372</span><span id="line-372">         return opte();</span>
+<span class="source-line-no">372</span><span id="line-372">         return oe();</span>
 <span class="source-line-no">373</span><span id="line-373"></span>
 <span class="source-line-no">374</span><span id="line-374">      if (rest == null)</span>
-<span class="source-line-no">375</span><span id="line-375">         return opt(first);</span>
+<span class="source-line-no">375</span><span id="line-375">         return o(first);</span>
 <span class="source-line-no">376</span><span id="line-376"></span>
 <span class="source-line-no">377</span><span id="line-377">      var sb = new CharArrayBuffer(128);</span>
 <span class="source-line-no">378</span><span id="line-378">      sb.append(first.getValue());</span>
@@ -394,7 +394,7 @@
 <span class="source-line-no">381</span><span id="line-381">         sb.append(element.getValue());</span>
 <span class="source-line-no">382</span><span id="line-382">      }</span>
 <span class="source-line-no">383</span><span id="line-383"></span>
-<span class="source-line-no">384</span><span id="line-384">      return opt(new BasicHeader(name, sb.toString()));</span>
+<span class="source-line-no">384</span><span id="line-384">      return o(new BasicHeader(name, sb.toString()));</span>
 <span class="source-line-no">385</span><span id="line-385">   }</span>
 <span class="source-line-no">386</span><span id="line-386"></span>
 <span class="source-line-no">387</span><span id="line-387">   /**</span>
@@ -440,10 +440,10 @@
 <span class="source-line-no">427</span><span id="line-427">      }</span>
 <span class="source-line-no">428</span><span id="line-428"></span>
 <span class="source-line-no">429</span><span id="line-429">      if (first == null)</span>
-<span class="source-line-no">430</span><span id="line-430">         return opte();</span>
+<span class="source-line-no">430</span><span id="line-430">         return oe();</span>
 <span class="source-line-no">431</span><span id="line-431"></span>
 <span class="source-line-no">432</span><span id="line-432">      if (rest == null)</span>
-<span class="source-line-no">433</span><span id="line-433">         return opt(HeaderBeanMeta.of(type).construct(name, first.getValue()));</span>
+<span class="source-line-no">433</span><span id="line-433">         return o(HeaderBeanMeta.of(type).construct(name, first.getValue()));</span>
 <span class="source-line-no">434</span><span id="line-434"></span>
 <span class="source-line-no">435</span><span id="line-435">      var sb = new CharArrayBuffer(128);</span>
 <span class="source-line-no">436</span><span id="line-436">      sb.append(first.getValue());</span>
@@ -452,7 +452,7 @@
 <span class="source-line-no">439</span><span id="line-439">         sb.append(element.getValue());</span>
 <span class="source-line-no">440</span><span id="line-440">      }</span>
 <span class="source-line-no">441</span><span id="line-441"></span>
-<span class="source-line-no">442</span><span id="line-442">      return opt(HeaderBeanMeta.of(type).construct(name, sb.toString()));</span>
+<span class="source-line-no">442</span><span id="line-442">      return o(HeaderBeanMeta.of(type).construct(name, sb.toString()));</span>
 <span class="source-line-no">443</span><span id="line-443">   }</span>
 <span class="source-line-no">444</span><span id="line-444"></span>
 <span class="source-line-no">445</span><span id="line-445">   /**</span>
@@ -504,9 +504,9 @@
 <span class="source-line-no">491</span><span id="line-491">      for (var i = 0; i &lt; size(); i++) {</span>
 <span class="source-line-no">492</span><span id="line-492">         var x = get(i);</span>
 <span class="source-line-no">493</span><span id="line-493">         if (eq(x.getName(), name))</span>
-<span class="source-line-no">494</span><span id="line-494">            return opt(x);</span>
+<span class="source-line-no">494</span><span id="line-494">            return o(x);</span>
 <span class="source-line-no">495</span><span id="line-495">      }</span>
-<span class="source-line-no">496</span><span id="line-496">      return opte();</span>
+<span class="source-line-no">496</span><span id="line-496">      return oe();</span>
 <span class="source-line-no">497</span><span id="line-497">   }</span>
 <span class="source-line-no">498</span><span id="line-498"></span>
 <span class="source-line-no">499</span><span id="line-499">   /**</span>
@@ -522,9 +522,9 @@
 <span class="source-line-no">509</span><span id="line-509">      for (var i = size() - 1; i &gt;= 0; i--) {</span>
 <span class="source-line-no">510</span><span id="line-510">         var x = get(i);</span>
 <span class="source-line-no">511</span><span id="line-511">         if (eq(x.getName(), name))</span>
-<span class="source-line-no">512</span><span id="line-512">            return opt(x);</span>
+<span class="source-line-no">512</span><span id="line-512">            return o(x);</span>
 <span class="source-line-no">513</span><span id="line-513">      }</span>
-<span class="source-line-no">514</span><span id="line-514">      return opte();</span>
+<span class="source-line-no">514</span><span id="line-514">      return oe();</span>
 <span class="source-line-no">515</span><span id="line-515">   }</span>
 <span class="source-line-no">516</span><span id="line-516"></span>
 <span class="source-line-no">517</span><span id="line-517">   /**</span>
@@ -944,7 +944,7 @@
 <span class="source-line-no">931</span><span id="line-931">   }</span>
 <span class="source-line-no">932</span><span id="line-932"></span>
 <span class="source-line-no">933</span><span id="line-933">   private boolean eq(String s1, String s2) {</span>
-<span class="source-line-no">934</span><span id="line-934">      return Utils.eq(! caseSensitive, s1, s2);  // NOAI</span>
+<span class="source-line-no">934</span><span id="line-934">      return Shorts.eq(! caseSensitive, s1, s2);  // NOAI</span>
 <span class="source-line-no">935</span><span id="line-935">   }</span>
 <span class="source-line-no">936</span><span id="line-936"></span>
 <span class="source-line-no">937</span><span id="line-937">   private Supplier&lt;Object&gt; resolver(Object input) {</span>

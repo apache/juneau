@@ -31,9 +31,9 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.list;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.list;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
@@ -308,7 +308,7 @@
 <span class="source-line-no">295</span><span id="line-295">      "java:S1168"  // Intentional null when sparse+empty — null is the absent/not-set sentinel used by callers (e.g. OpenAPI bean setters)</span>
 <span class="source-line-no">296</span><span id="line-296">   })</span>
 <span class="source-line-no">297</span><span id="line-297">   public List&lt;E&gt; build() {</span>
-<span class="source-line-no">298</span><span id="line-298">      if (sparse &amp;&amp; e(list))</span>
+<span class="source-line-no">298</span><span id="line-298">      if (sparse &amp;&amp; ie(list))</span>
 <span class="source-line-no">299</span><span id="line-299">         return null;</span>
 <span class="source-line-no">300</span><span id="line-300"></span>
 <span class="source-line-no">301</span><span id="line-301">      List&lt;E&gt; list2 = null;</span>

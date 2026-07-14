@@ -78,7 +78,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-69">MarshalledNode</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-67">MarshalledNode</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Typed tree façade over the generic-collections model (<a href="MarshalledMap.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledMap</code></a> / <a href="MarshalledList.html" title="class in org.apache.juneau.marshall.collections"><code>MarshalledList</code></a> and their
  <a href="JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a> / <a href="JsonList.html" title="class in org.apache.juneau.marshall.collections"><code>JsonList</code></a> subclasses).
@@ -281,7 +281,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Object)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-83">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-81">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Wraps any value as a node.
 
  <p>
@@ -300,7 +300,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="objectNode()">
 <h3>objectNode</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-92">objectNode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-90">objectNode</a></span>()</div>
 <div class="block">Creates a new object node backed by a new empty <a href="JsonMap.html" title="class in org.apache.juneau.marshall.collections"><code>JsonMap</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -311,7 +311,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="arrayNode()">
 <h3>arrayNode</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-101">arrayNode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-99">arrayNode</a></span>()</div>
 <div class="block">Creates a new array node backed by a new empty <a href="JsonList.html" title="class in org.apache.juneau.marshall.collections"><code>JsonList</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -322,7 +322,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isObject()">
 <h3>isObject</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-116">isObject</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-114">isObject</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this node wraps a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> (an object node).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -333,7 +333,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isArray()">
 <h3>isArray</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-125">isArray</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-123">isArray</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this node wraps a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> (an array node).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -344,7 +344,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isValue()">
 <h3>isValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-134">isValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-132">isValue</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this node wraps a non-<jk>null</jk> scalar (not a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> or <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a>).</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -355,7 +355,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNull()">
 <h3>isNull</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-143">isNull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-141">isNull</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this node wraps <jk>null</jk>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -366,7 +366,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asString()">
 <h3>asString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-152">asString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-150">asString</a></span>()</div>
 <div class="block">Returns the backing value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link"><code>String</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -377,7 +377,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asInt()">
 <h3>asInt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-161">asInt</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-159">asInt</a></span>()</div>
 <div class="block">Returns the backing value converted to an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link"><code>Integer</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -388,7 +388,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asLong()">
 <h3>asLong</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-170">asLong</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-168">asLong</a></span>()</div>
 <div class="block">Returns the backing value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link"><code>Long</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -399,7 +399,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asDouble()">
 <h3>asDouble</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-179">asDouble</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-177">asDouble</a></span>()</div>
 <div class="block">Returns the backing value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link"><code>Double</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -410,7 +410,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asBoolean()">
 <h3>asBoolean</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-188">asBoolean</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-186">asBoolean</a></span>()</div>
 <div class="block">Returns the backing value converted to a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link"><code>Boolean</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -421,7 +421,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="as(java.lang.Class)">
 <h3>as</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-203">as</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-201">as</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span></div>
 <div class="block">Converts the raw backing value to the specified type.
 
  <p>
@@ -440,7 +440,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="value()">
 <h3>value</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-218">value</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-216">value</a></span>()</div>
 <div class="block">Returns the raw backing value wrapped by this node.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -451,7 +451,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-228">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-226">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the child node for the specified key on an object node.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -464,7 +464,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="get(int)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-240">get</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-238">get</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Returns the element node at the specified index on an array node.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -477,7 +477,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="size()">
 <h3>size</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-251">size</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-249">size</a></span>()</div>
 <div class="block">Returns the number of entries (object) or elements (array) in this node.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -488,7 +488,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="put(java.lang.String,java.lang.Object)">
 <h3>put</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-267">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-265">put</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Adds or replaces an entry on an object node, mutating the backing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link"><code>Map</code></a> in place.</div>
 <dl class="notes">
@@ -505,7 +505,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(java.lang.Object)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-284">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-282">add</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Appends a value on an array node, mutating the backing <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link"><code>List</code></a> in place.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -520,7 +520,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-304">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-302">copy</a></span>()</div>
 <div class="block">Returns a new node backed by a deep copy of this node's backing value.
 
  <p>
@@ -536,7 +536,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="at(java.lang.String)">
 <h3>at</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-320">at</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-318">at</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
 <div class="block">Returns the node addressed by the specified <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a>
  JSON Pointer relative to this node's backing value.
 
@@ -555,7 +555,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="find(java.lang.String)">
 <h3>find</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-330">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-328">find</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
 <div class="block">Optional read variant of <a href="#at(java.lang.String)"><code>at(String)</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -568,7 +568,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="set(java.lang.String,java.lang.Object)">
 <h3>set</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-350">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="MarshalledNode.html" title="class in org.apache.juneau.marshall.collections">MarshalledNode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-348">set</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span></div>
 <div class="block">Writes the specified value at the location addressed by the specified
  <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a> JSON Pointer, mutating the
@@ -592,7 +592,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="remove(java.lang.String)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-365">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/collections/MarshalledNode.html#line-363">remove</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;pointer)</span></div>
 <div class="block">Removes the member or element addressed by the specified
  <a class="doclink" href="https://datatracker.ietf.org/doc/html/rfc6901">RFC 6901</a> JSON Pointer.</div>
 <dl class="notes">

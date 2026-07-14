@@ -30,667 +30,666 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.conversion;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">023</span><span id="line-23"></span>
-<span class="source-line-no">024</span><span id="line-24">import java.lang.reflect.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.math.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import java.nio.charset.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.concurrent.atomic.*;</span>
-<span class="source-line-no">029</span><span id="line-29"></span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.commons.reflect.*;</span>
-<span class="source-line-no">031</span><span id="line-31"></span>
-<span class="source-line-no">032</span><span id="line-32">/**</span>
-<span class="source-line-no">033</span><span id="line-33"> * A concrete {@link CachingConverter} that supports common type conversions without</span>
-<span class="source-line-no">034</span><span id="line-34"> * requiring a {@code MarshallingContext} or {@code MarshallingSession}.</span>
-<span class="source-line-no">035</span><span id="line-35"> *</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> * The following conversions are supported:</span>
-<span class="source-line-no">038</span><span id="line-38"> *</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;table class='styled'&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;tr&gt;&lt;th&gt;Input type&lt;/th&gt;&lt;th&gt;Output type&lt;/th&gt;&lt;th&gt;Notes&lt;/th&gt;&lt;/tr&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;tr&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> *       &lt;td&gt;Any type&lt;/td&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *       &lt;td&gt;Same or supertype&lt;/td&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *       &lt;td&gt;Identity / widening (no-op cast)&lt;/td&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *    &lt;tr&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *       &lt;td&gt;{@link Number}&lt;/td&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *       &lt;td&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *          {@link Integer}, {@link Long}, {@link Short}, {@link Float}, {@link Double}, {@link Byte},</span>
-<span class="source-line-no">050</span><span id="line-50"> *          {@link AtomicInteger}, {@link AtomicLong}, {@link BigDecimal}, {@link BigInteger},</span>
-<span class="source-line-no">051</span><span id="line-51"> *          and primitive equivalents</span>
-<span class="source-line-no">052</span><span id="line-52"> *       &lt;/td&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *       &lt;td&gt;Narrowing/widening numeric conversion&lt;/td&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;tr&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> *       &lt;td&gt;{@link Boolean}&lt;/td&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *       &lt;td&gt;{@link Number} types (including {@link BigDecimal}, {@link BigInteger})&lt;/td&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> *       &lt;td&gt;&lt;c&gt;true=1, false=0&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *    &lt;tr&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *       &lt;td&gt;{@link Number} types&lt;/td&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *       &lt;td&gt;Parsed via {@link org.apache.juneau.commons.utils.StringUtils#parseNumber(String, Class)};</span>
-<span class="source-line-no">064</span><span id="line-64"> *          empty string or {@code "null"} returns &lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;tr&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *       &lt;td&gt;{@link Number}&lt;/td&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *       &lt;td&gt;{@link Boolean}&lt;/td&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *       &lt;td&gt;&lt;c&gt;intValue() != 0&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">071</span><span id="line-71"> *    &lt;tr&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
-<span class="source-line-no">073</span><span id="line-73"> *       &lt;td&gt;{@link Boolean}&lt;/td&gt;</span>
-<span class="source-line-no">074</span><span id="line-74"> *       &lt;td&gt;{@link Boolean#valueOf(String)}&lt;/td&gt;</span>
-<span class="source-line-no">075</span><span id="line-75"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">076</span><span id="line-76"> *    &lt;tr&gt;</span>
-<span class="source-line-no">077</span><span id="line-77"> *       &lt;td&gt;{@link CharSequence} (length 1)&lt;/td&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *       &lt;td&gt;{@link Character}&lt;/td&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> *       &lt;td&gt;&lt;c&gt;charAt(0)&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">080</span><span id="line-80"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">081</span><span id="line-81"> *    &lt;tr&gt;</span>
-<span class="source-line-no">082</span><span id="line-82"> *       &lt;td&gt;{@link Number}&lt;/td&gt;</span>
-<span class="source-line-no">083</span><span id="line-83"> *       &lt;td&gt;{@link Character}&lt;/td&gt;</span>
-<span class="source-line-no">084</span><span id="line-84"> *       &lt;td&gt;First character of {@code toString()} (e.g. {@code 65} → {@code '6'})&lt;/td&gt;</span>
-<span class="source-line-no">085</span><span id="line-85"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">086</span><span id="line-86"> *    &lt;tr&gt;</span>
-<span class="source-line-no">087</span><span id="line-87"> *       &lt;td&gt;Any&lt;/td&gt;</span>
-<span class="source-line-no">088</span><span id="line-88"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
-<span class="source-line-no">089</span><span id="line-89"> *       &lt;td&gt;{@link Object#toString()}, with array support via {@link Arrays#toString(Object[])}&lt;/td&gt;</span>
-<span class="source-line-no">090</span><span id="line-90"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">091</span><span id="line-91"> *    &lt;tr&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
-<span class="source-line-no">093</span><span id="line-93"> *       &lt;td&gt;{@code byte[]}&lt;/td&gt;</span>
-<span class="source-line-no">094</span><span id="line-94"> *       &lt;td&gt;UTF-8 encoding via {@link String#getBytes(java.nio.charset.Charset)}&lt;/td&gt;</span>
-<span class="source-line-no">095</span><span id="line-95"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">096</span><span id="line-96"> *    &lt;tr&gt;</span>
-<span class="source-line-no">097</span><span id="line-97"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
-<span class="source-line-no">098</span><span id="line-98"> *       &lt;td&gt;Any {@link Enum}&lt;/td&gt;</span>
-<span class="source-line-no">099</span><span id="line-99"> *       &lt;td&gt;{@link Enum#valueOf(Class, String)}&lt;/td&gt;</span>
-<span class="source-line-no">100</span><span id="line-100"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">101</span><span id="line-101"> *    &lt;tr&gt;</span>
-<span class="source-line-no">102</span><span id="line-102"> *       &lt;td&gt;{@link Collection} or array&lt;/td&gt;</span>
-<span class="source-line-no">103</span><span id="line-103"> *       &lt;td&gt;{@link Collection} subtype&lt;/td&gt;</span>
-<span class="source-line-no">104</span><span id="line-104"> *       &lt;td&gt;Copies elements; element type from &lt;c&gt;args[0]&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">105</span><span id="line-105"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">106</span><span id="line-106"> *    &lt;tr&gt;</span>
-<span class="source-line-no">107</span><span id="line-107"> *       &lt;td&gt;{@link Map}&lt;/td&gt;</span>
-<span class="source-line-no">108</span><span id="line-108"> *       &lt;td&gt;{@link Map} subtype&lt;/td&gt;</span>
-<span class="source-line-no">109</span><span id="line-109"> *       &lt;td&gt;Copies entries; key type from &lt;c&gt;args[0]&lt;/c&gt;, value type from &lt;c&gt;args[1]&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">110</span><span id="line-110"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">111</span><span id="line-111"> *    &lt;tr&gt;</span>
-<span class="source-line-no">112</span><span id="line-112"> *       &lt;td&gt;{@link Collection} or array&lt;/td&gt;</span>
-<span class="source-line-no">113</span><span id="line-113"> *       &lt;td&gt;Array type&lt;/td&gt;</span>
-<span class="source-line-no">114</span><span id="line-114"> *       &lt;td&gt;Element type from &lt;c&gt;outType.getComponentType()&lt;/c&gt;&lt;/td&gt;</span>
-<span class="source-line-no">115</span><span id="line-115"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">116</span><span id="line-116"> *    &lt;tr&gt;</span>
-<span class="source-line-no">117</span><span id="line-117"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
-<span class="source-line-no">118</span><span id="line-118"> *       &lt;td&gt;{@link TimeZone}&lt;/td&gt;</span>
-<span class="source-line-no">119</span><span id="line-119"> *       &lt;td&gt;{@link TimeZone#getTimeZone(String)}&lt;/td&gt;</span>
-<span class="source-line-no">120</span><span id="line-120"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">121</span><span id="line-121"> *    &lt;tr&gt;</span>
-<span class="source-line-no">122</span><span id="line-122"> *       &lt;td&gt;{@link TimeZone}&lt;/td&gt;</span>
-<span class="source-line-no">123</span><span id="line-123"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
-<span class="source-line-no">124</span><span id="line-124"> *       &lt;td&gt;{@link TimeZone#getID()}&lt;/td&gt;</span>
-<span class="source-line-no">125</span><span id="line-125"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">126</span><span id="line-126"> *    &lt;tr&gt;</span>
-<span class="source-line-no">127</span><span id="line-127"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
-<span class="source-line-no">128</span><span id="line-128"> *       &lt;td&gt;{@link Locale}&lt;/td&gt;</span>
-<span class="source-line-no">129</span><span id="line-129"> *       &lt;td&gt;{@link Locale#forLanguageTag(String)} (underscores converted to hyphens)&lt;/td&gt;</span>
-<span class="source-line-no">130</span><span id="line-130"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">131</span><span id="line-131"> *    &lt;tr&gt;</span>
-<span class="source-line-no">132</span><span id="line-132"> *       &lt;td&gt;Any&lt;/td&gt;</span>
-<span class="source-line-no">133</span><span id="line-133"> *       &lt;td&gt;Any with &lt;c&gt;static T fromString/valueOf/of/from/parse/create/forName/fromValue/builder(X)&lt;/c&gt;</span>
-<span class="source-line-no">134</span><span id="line-134"> *          or dynamic &lt;c&gt;fromX/forX/parseX&lt;/c&gt; where X is the input class name&lt;/td&gt;</span>
-<span class="source-line-no">135</span><span id="line-135"> *       &lt;td&gt;Reflection-based static factory lookup&lt;/td&gt;</span>
-<span class="source-line-no">136</span><span id="line-136"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">137</span><span id="line-137"> *    &lt;tr&gt;</span>
-<span class="source-line-no">138</span><span id="line-138"> *       &lt;td&gt;Any&lt;/td&gt;</span>
-<span class="source-line-no">139</span><span id="line-139"> *       &lt;td&gt;Any with &lt;c&gt;public T(X)&lt;/c&gt; constructor&lt;/td&gt;</span>
-<span class="source-line-no">140</span><span id="line-140"> *       &lt;td&gt;Reflection-based constructor lookup&lt;/td&gt;</span>
-<span class="source-line-no">141</span><span id="line-141"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">142</span><span id="line-142"> *    &lt;tr&gt;</span>
-<span class="source-line-no">143</span><span id="line-143"> *       &lt;td&gt;Any with &lt;c&gt;toX()&lt;/c&gt; instance method&lt;/td&gt;</span>
-<span class="source-line-no">144</span><span id="line-144"> *       &lt;td&gt;Any type X&lt;/td&gt;</span>
-<span class="source-line-no">145</span><span id="line-145"> *       &lt;td&gt;Instance method where name matches &lt;c&gt;to&lt;/c&gt; + output class name (e.g. &lt;c&gt;toInteger()&lt;/c&gt;)&lt;/td&gt;</span>
-<span class="source-line-no">146</span><span id="line-146"> *    &lt;/tr&gt;</span>
-<span class="source-line-no">147</span><span id="line-147"> * &lt;/table&gt;</span>
-<span class="source-line-no">148</span><span id="line-148"> *</span>
-<span class="source-line-no">149</span><span id="line-149"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
-<span class="source-line-no">150</span><span id="line-150"> * &lt;p&gt;</span>
-<span class="source-line-no">151</span><span id="line-151"> * This class is thread-safe. The singleton instance can be safely shared across multiple threads.</span>
-<span class="source-line-no">152</span><span id="line-152"> */</span>
-<span class="source-line-no">153</span><span id="line-153">@SuppressWarnings({</span>
-<span class="source-line-no">154</span><span id="line-154">   "rawtypes", // Raw types necessary for generic conversion dispatch</span>
-<span class="source-line-no">155</span><span id="line-155">   "unchecked", // Type erasure requires unchecked casts throughout conversion logic</span>
-<span class="source-line-no">156</span><span id="line-156">   "java:S3776", // Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs</span>
-<span class="source-line-no">157</span><span id="line-157">   "java:S1067", // Complex boolean expressions in conversion checks reflect the natural type hierarchy</span>
-<span class="source-line-no">158</span><span id="line-158">   "java:S1192" // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity</span>
-<span class="source-line-no">159</span><span id="line-159">})</span>
-<span class="source-line-no">160</span><span id="line-160">public class BasicConverter extends CachingConverter {</span>
-<span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">   /**</span>
-<span class="source-line-no">163</span><span id="line-163">    * Singleton instance.</span>
-<span class="source-line-no">164</span><span id="line-164">    */</span>
-<span class="source-line-no">165</span><span id="line-165">   public static final BasicConverter INSTANCE = new BasicConverter();</span>
-<span class="source-line-no">166</span><span id="line-166"></span>
-<span class="source-line-no">167</span><span id="line-167">   private static final Set&lt;String&gt; FACTORY_METHOD_NAMES = Set.of(</span>
-<span class="source-line-no">168</span><span id="line-168">      "fromString", "valueOf", "of", "from", "parse", "create", "forName", "fromValue", "builder"</span>
-<span class="source-line-no">169</span><span id="line-169">   );</span>
-<span class="source-line-no">170</span><span id="line-170"></span>
-<span class="source-line-no">171</span><span id="line-171">   private static final Map&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt; PRIMITIVE_TO_WRAPPER = Map.of(</span>
-<span class="source-line-no">172</span><span id="line-172">      boolean.class, Boolean.class,</span>
-<span class="source-line-no">173</span><span id="line-173">      byte.class, Byte.class,</span>
-<span class="source-line-no">174</span><span id="line-174">      char.class, Character.class,</span>
-<span class="source-line-no">175</span><span id="line-175">      double.class, Double.class,</span>
-<span class="source-line-no">176</span><span id="line-176">      float.class, Float.class,</span>
-<span class="source-line-no">177</span><span id="line-177">      int.class, Integer.class,</span>
-<span class="source-line-no">178</span><span id="line-178">      long.class, Long.class,</span>
-<span class="source-line-no">179</span><span id="line-179">      short.class, Short.class</span>
-<span class="source-line-no">180</span><span id="line-180">   );</span>
-<span class="source-line-no">181</span><span id="line-181"></span>
-<span class="source-line-no">182</span><span id="line-182">   /**</span>
-<span class="source-line-no">183</span><span id="line-183">    * Constructor.</span>
-<span class="source-line-no">184</span><span id="line-184">    */</span>
-<span class="source-line-no">185</span><span id="line-185">   protected BasicConverter() {}</span>
-<span class="source-line-no">186</span><span id="line-186"></span>
-<span class="source-line-no">187</span><span id="line-187">   @Override</span>
-<span class="source-line-no">188</span><span id="line-188">   protected &lt;I, O&gt; Conversion&lt;I, O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">189</span><span id="line-189">      var out = outType.isPrimitive() ? (Class&lt;O&gt;) PRIMITIVE_TO_WRAPPER.get(outType) : outType;</span>
-<span class="source-line-no">190</span><span id="line-190"></span>
-<span class="source-line-no">191</span><span id="line-191">      Conversion&lt;I, O&gt; c;</span>
-<span class="source-line-no">192</span><span id="line-192"></span>
-<span class="source-line-no">193</span><span id="line-193">      if ((c = findSpecialConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">194</span><span id="line-194"></span>
-<span class="source-line-no">195</span><span id="line-195">      if (out.isAssignableFrom(inType) &amp;&amp; !Collection.class.isAssignableFrom(out) &amp;&amp; !Map.class.isAssignableFrom(out))</span>
-<span class="source-line-no">196</span><span id="line-196">         return (in, memberOf, session, args) -&gt; (O) in;</span>
-<span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">      if (Number.class.isAssignableFrom(out) &amp;&amp; (c = findNumberConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">      if (out == Boolean.class &amp;&amp; (c = findBooleanConversion(inType)) != null) return c;</span>
-<span class="source-line-no">201</span><span id="line-201"></span>
-<span class="source-line-no">202</span><span id="line-202">      if (out == Character.class &amp;&amp; (c = findCharacterConversion(inType)) != null) return c;</span>
-<span class="source-line-no">203</span><span id="line-203"></span>
-<span class="source-line-no">204</span><span id="line-204">      if (out == String.class)</span>
-<span class="source-line-no">205</span><span id="line-205">         return (Conversion&lt;I, O&gt;) findToStringConversion(inType);</span>
-<span class="source-line-no">206</span><span id="line-206"></span>
-<span class="source-line-no">207</span><span id="line-207">      if (out.isEnum() &amp;&amp; (c = findEnumConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">208</span><span id="line-208"></span>
-<span class="source-line-no">209</span><span id="line-209">      if (out == Optional.class &amp;&amp; (c = findOptionalConversion()) != null) return c;</span>
-<span class="source-line-no">210</span><span id="line-210"></span>
-<span class="source-line-no">211</span><span id="line-211">      if ((out == OptionalInt.class || out == OptionalLong.class || out == OptionalDouble.class)</span>
-<span class="source-line-no">212</span><span id="line-212">            &amp;&amp; (c = findPrimitiveOptionalConversion(out)) != null) return c;</span>
-<span class="source-line-no">213</span><span id="line-213"></span>
-<span class="source-line-no">214</span><span id="line-214">      if (Collection.class.isAssignableFrom(out) &amp;&amp; (c = findCollectionConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">215</span><span id="line-215"></span>
-<span class="source-line-no">216</span><span id="line-216">      if (Map.class.isAssignableFrom(out) &amp;&amp; (c = findMapConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">217</span><span id="line-217"></span>
-<span class="source-line-no">218</span><span id="line-218">      if (out.isArray() &amp;&amp; (c = findArrayConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">219</span><span id="line-219"></span>
-<span class="source-line-no">220</span><span id="line-220">      if ((c = findToXMethod(inType, out)) != null) return c;</span>
-<span class="source-line-no">221</span><span id="line-221"></span>
-<span class="source-line-no">222</span><span id="line-222">      if ((c = findStaticFactory(inType, out)) != null) return c;</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">      if ((c = findConstructorConversion(inType, out)) != null) return c;</span>
-<span class="source-line-no">225</span><span id="line-225"></span>
-<span class="source-line-no">226</span><span id="line-226">      return null;</span>
-<span class="source-line-no">227</span><span id="line-227">   }</span>
-<span class="source-line-no">228</span><span id="line-228"></span>
-<span class="source-line-no">229</span><span id="line-229">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">230</span><span id="line-230">   // Number conversions</span>
-<span class="source-line-no">231</span><span id="line-231">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">232</span><span id="line-232"></span>
-<span class="source-line-no">233</span><span id="line-233">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findNumberConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">234</span><span id="line-234">      if (Number.class.isAssignableFrom(inType))</span>
-<span class="source-line-no">235</span><span id="line-235">         return findNumberFromNumber(outType);</span>
-<span class="source-line-no">236</span><span id="line-236">      if (inType == Boolean.class)</span>
-<span class="source-line-no">237</span><span id="line-237">         return (Conversion&lt;I, O&gt;) findNumberFromBoolean(outType);</span>
-<span class="source-line-no">238</span><span id="line-238">      if (CharSequence.class.isAssignableFrom(inType))</span>
-<span class="source-line-no">239</span><span id="line-239">         return (Conversion&lt;I, O&gt;) findNumberFromString(outType);</span>
-<span class="source-line-no">240</span><span id="line-240">      return null;</span>
-<span class="source-line-no">241</span><span id="line-241">   }</span>
-<span class="source-line-no">242</span><span id="line-242"></span>
-<span class="source-line-no">243</span><span id="line-243">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findNumberFromNumber(Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">244</span><span id="line-244">      if (outType == Integer.class) return (in, memberOf, session, args) -&gt; (O) Integer.valueOf(((Number) in).intValue());</span>
-<span class="source-line-no">245</span><span id="line-245">      if (outType == Long.class) return (in, memberOf, session, args) -&gt; (O) Long.valueOf(((Number) in).longValue());</span>
-<span class="source-line-no">246</span><span id="line-246">      if (outType == Short.class) return (in, memberOf, session, args) -&gt; (O) Short.valueOf(((Number) in).shortValue());</span>
-<span class="source-line-no">247</span><span id="line-247">      if (outType == Float.class) return (in, memberOf, session, args) -&gt; (O) Float.valueOf(((Number) in).floatValue());</span>
-<span class="source-line-no">248</span><span id="line-248">      if (outType == Double.class) return (in, memberOf, session, args) -&gt; (O) Double.valueOf(((Number) in).doubleValue());</span>
-<span class="source-line-no">249</span><span id="line-249">      if (outType == Byte.class) return (in, memberOf, session, args) -&gt; (O) Byte.valueOf(((Number) in).byteValue());</span>
-<span class="source-line-no">250</span><span id="line-250">      if (outType == AtomicInteger.class) return (in, memberOf, session, args) -&gt; (O) new AtomicInteger(((Number) in).intValue());</span>
-<span class="source-line-no">251</span><span id="line-251">      if (outType == AtomicLong.class) return (in, memberOf, session, args) -&gt; (O) new AtomicLong(((Number) in).longValue());</span>
-<span class="source-line-no">252</span><span id="line-252">      if (outType == BigDecimal.class) return (in, memberOf, session, args) -&gt; (O) new BigDecimal(in.toString());</span>
-<span class="source-line-no">253</span><span id="line-253">      if (outType == BigInteger.class) return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">254</span><span id="line-254">         var n = (Number) in;</span>
-<span class="source-line-no">255</span><span id="line-255">         if (n instanceof BigDecimal bd) return (O) bd.toBigInteger();</span>
-<span class="source-line-no">256</span><span id="line-256">         if (n instanceof BigInteger bi) return (O) bi;</span>
-<span class="source-line-no">257</span><span id="line-257">         return (O) BigInteger.valueOf(n.longValue());</span>
-<span class="source-line-no">258</span><span id="line-258">      };</span>
-<span class="source-line-no">259</span><span id="line-259">      return null;</span>
-<span class="source-line-no">260</span><span id="line-260">   }</span>
-<span class="source-line-no">261</span><span id="line-261"></span>
-<span class="source-line-no">262</span><span id="line-262">   private &lt;O&gt; Conversion&lt;Boolean, O&gt; findNumberFromBoolean(Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">263</span><span id="line-263">      if (outType == Integer.class) return (in, memberOf, session, args) -&gt; (O) Integer.valueOf(in.booleanValue() ? 1 : 0);</span>
-<span class="source-line-no">264</span><span id="line-264">      if (outType == Long.class) return (in, memberOf, session, args) -&gt; (O) Long.valueOf(in.booleanValue() ? 1L : 0L);</span>
-<span class="source-line-no">265</span><span id="line-265">      if (outType == Short.class) return (in, memberOf, session, args) -&gt; (O) Short.valueOf(in.booleanValue() ? (short) 1 : (short) 0);</span>
-<span class="source-line-no">266</span><span id="line-266">      if (outType == Float.class) return (in, memberOf, session, args) -&gt; (O) Float.valueOf(in.booleanValue() ? 1f : 0f);</span>
-<span class="source-line-no">267</span><span id="line-267">      if (outType == Double.class) return (in, memberOf, session, args) -&gt; (O) Double.valueOf(in.booleanValue() ? 1d : 0d);</span>
-<span class="source-line-no">268</span><span id="line-268">      if (outType == Byte.class) return (in, memberOf, session, args) -&gt; (O) Byte.valueOf(in.booleanValue() ? (byte) 1 : (byte) 0);</span>
-<span class="source-line-no">269</span><span id="line-269">      if (outType == AtomicInteger.class) return (in, memberOf, session, args) -&gt; (O) new AtomicInteger(in.booleanValue() ? 1 : 0);</span>
-<span class="source-line-no">270</span><span id="line-270">      if (outType == AtomicLong.class) return (in, memberOf, session, args) -&gt; (O) new AtomicLong(in.booleanValue() ? 1L : 0L);</span>
-<span class="source-line-no">271</span><span id="line-271">      if (outType == BigDecimal.class) return (in, memberOf, session, args) -&gt; (O) BigDecimal.valueOf(in.booleanValue() ? 1L : 0L);</span>
-<span class="source-line-no">272</span><span id="line-272">      if (outType == BigInteger.class) return (in, memberOf, session, args) -&gt; (O) BigInteger.valueOf(in.booleanValue() ? 1L : 0L);</span>
-<span class="source-line-no">273</span><span id="line-273">      return null;</span>
-<span class="source-line-no">274</span><span id="line-274">   }</span>
-<span class="source-line-no">275</span><span id="line-275"></span>
-<span class="source-line-no">276</span><span id="line-276">   private &lt;O&gt; Conversion&lt;CharSequence, O&gt; findNumberFromString(Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">277</span><span id="line-277">      return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">278</span><span id="line-278">         var s = in.toString();</span>
-<span class="source-line-no">279</span><span id="line-279">         if (s.isEmpty() || "null".equals(s))</span>
-<span class="source-line-no">280</span><span id="line-280">            return null;</span>
-<span class="source-line-no">281</span><span id="line-281">         return (O) parseNumber(s, (Class&lt;? extends Number&gt;) outType);</span>
-<span class="source-line-no">282</span><span id="line-282">      };</span>
-<span class="source-line-no">283</span><span id="line-283">   }</span>
-<span class="source-line-no">284</span><span id="line-284"></span>
-<span class="source-line-no">285</span><span id="line-285">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">286</span><span id="line-286">   // Boolean conversions</span>
-<span class="source-line-no">287</span><span id="line-287">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">288</span><span id="line-288"></span>
-<span class="source-line-no">289</span><span id="line-289">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findBooleanConversion(Class&lt;I&gt; inType) {</span>
-<span class="source-line-no">290</span><span id="line-290">      if (Number.class.isAssignableFrom(inType))</span>
-<span class="source-line-no">291</span><span id="line-291">         return (in, memberOf, session, args) -&gt; (O) Boolean.valueOf(((Number) in).intValue() != 0);</span>
-<span class="source-line-no">292</span><span id="line-292">      return null;</span>
-<span class="source-line-no">293</span><span id="line-293">   }</span>
-<span class="source-line-no">294</span><span id="line-294"></span>
-<span class="source-line-no">295</span><span id="line-295">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">296</span><span id="line-296">   // Character conversions</span>
-<span class="source-line-no">297</span><span id="line-297">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">298</span><span id="line-298"></span>
-<span class="source-line-no">299</span><span id="line-299">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findCharacterConversion(Class&lt;I&gt; inType) {</span>
-<span class="source-line-no">300</span><span id="line-300">      if (CharSequence.class.isAssignableFrom(inType))</span>
-<span class="source-line-no">301</span><span id="line-301">         return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">302</span><span id="line-302">            var s = in.toString();</span>
-<span class="source-line-no">303</span><span id="line-303">            if (s.length() != 1)</span>
-<span class="source-line-no">304</span><span id="line-304">               throw illegalArg("Cannot convert string of length {0} to char: ''{1}''", s.length(), s);</span>
-<span class="source-line-no">305</span><span id="line-305">            return (O) Character.valueOf(s.charAt(0));</span>
-<span class="source-line-no">306</span><span id="line-306">         };</span>
-<span class="source-line-no">307</span><span id="line-307">      if (Number.class.isAssignableFrom(inType))</span>
-<span class="source-line-no">308</span><span id="line-308">         return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">309</span><span id="line-309">            var s = in.toString();</span>
-<span class="source-line-no">310</span><span id="line-310">            return s.isEmpty() ? null : (O) Character.valueOf(s.charAt(0));</span>
-<span class="source-line-no">311</span><span id="line-311">         };</span>
-<span class="source-line-no">312</span><span id="line-312">      return null;</span>
-<span class="source-line-no">313</span><span id="line-313">   }</span>
-<span class="source-line-no">314</span><span id="line-314"></span>
-<span class="source-line-no">315</span><span id="line-315">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">316</span><span id="line-316">   // String conversions</span>
-<span class="source-line-no">317</span><span id="line-317">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">318</span><span id="line-318"></span>
-<span class="source-line-no">319</span><span id="line-319">   private &lt;I&gt; Conversion&lt;I, String&gt; findToStringConversion(Class&lt;I&gt; inType) {</span>
-<span class="source-line-no">320</span><span id="line-320">      if (inType.isArray()) {</span>
-<span class="source-line-no">321</span><span id="line-321">         if (inType == int[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((int[]) in);</span>
-<span class="source-line-no">322</span><span id="line-322">         if (inType == long[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((long[]) in);</span>
-<span class="source-line-no">323</span><span id="line-323">         if (inType == double[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((double[]) in);</span>
-<span class="source-line-no">324</span><span id="line-324">         if (inType == float[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((float[]) in);</span>
-<span class="source-line-no">325</span><span id="line-325">         if (inType == boolean[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((boolean[]) in);</span>
-<span class="source-line-no">326</span><span id="line-326">         if (inType == byte[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((byte[]) in);</span>
-<span class="source-line-no">327</span><span id="line-327">         if (inType == short[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((short[]) in);</span>
-<span class="source-line-no">328</span><span id="line-328">         if (inType == char[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((char[]) in);</span>
-<span class="source-line-no">329</span><span id="line-329">         return (in, memberOf, session, args) -&gt; Arrays.deepToString((Object[]) in);</span>
-<span class="source-line-no">330</span><span id="line-330">      }</span>
-<span class="source-line-no">331</span><span id="line-331">      return (in, memberOf, session, args) -&gt; in.toString();</span>
-<span class="source-line-no">332</span><span id="line-332">   }</span>
-<span class="source-line-no">333</span><span id="line-333"></span>
-<span class="source-line-no">334</span><span id="line-334">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">335</span><span id="line-335">   // Enum conversions</span>
-<span class="source-line-no">336</span><span id="line-336">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">337</span><span id="line-337"></span>
-<span class="source-line-no">338</span><span id="line-338">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findEnumConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">339</span><span id="line-339">      if (CharSequence.class.isAssignableFrom(inType))</span>
-<span class="source-line-no">340</span><span id="line-340">         return (in, memberOf, session, args) -&gt; (O) Enum.valueOf((Class&lt;Enum&gt;) outType, in.toString());</span>
-<span class="source-line-no">341</span><span id="line-341">      return null;</span>
-<span class="source-line-no">342</span><span id="line-342">   }</span>
-<span class="source-line-no">343</span><span id="line-343"></span>
-<span class="source-line-no">344</span><span id="line-344">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">345</span><span id="line-345">   // Optional conversions</span>
-<span class="source-line-no">346</span><span id="line-346">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">347</span><span id="line-347"></span>
-<span class="source-line-no">348</span><span id="line-348">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findOptionalConversion() {</span>
-<span class="source-line-no">349</span><span id="line-349">      return (Conversion&lt;I, O&gt;) (Conversion&lt;Object, Optional&lt;?&gt;&gt;) (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">350</span><span id="line-350">         if (in instanceof Optional&lt;?&gt; opt) {</span>
-<span class="source-line-no">351</span><span id="line-351">            if (args.length == 0)</span>
-<span class="source-line-no">352</span><span id="line-352">               return opt;</span>
-<span class="source-line-no">353</span><span id="line-353">            return opt.map(x -&gt; to(x, memberOf, session, args[0]));</span>
-<span class="source-line-no">354</span><span id="line-354">         }</span>
-<span class="source-line-no">355</span><span id="line-355">         if (args.length == 0)</span>
-<span class="source-line-no">356</span><span id="line-356">            return opt(in);</span>
-<span class="source-line-no">357</span><span id="line-357">         return opt(to(in, memberOf, session, args[0]));</span>
-<span class="source-line-no">358</span><span id="line-358">      };</span>
-<span class="source-line-no">359</span><span id="line-359">   }</span>
-<span class="source-line-no">360</span><span id="line-360"></span>
-<span class="source-line-no">361</span><span id="line-361">   /**</span>
-<span class="source-line-no">362</span><span id="line-362">    * Conversion to a primitive {@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}.</span>
-<span class="source-line-no">363</span><span id="line-363">    *</span>
-<span class="source-line-no">364</span><span id="line-364">    * &lt;p&gt;</span>
-<span class="source-line-no">365</span><span id="line-365">    * Mirrors the {@link Optional} contract: a {@code null} input (or an empty optional of any flavor)</span>
-<span class="source-line-no">366</span><span id="line-366">    * yields the matching empty primitive optional; any other value is unwrapped (if it is itself an</span>
-<span class="source-line-no">367</span><span id="line-367">    * optional) and coerced to the matching boxed number before wrapping.</span>
-<span class="source-line-no">368</span><span id="line-368">    *</span>
-<span class="source-line-no">369</span><span id="line-369">    * @param out The target primitive-optional class.</span>
-<span class="source-line-no">370</span><span id="line-370">    * @return The conversion, never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">371</span><span id="line-371">    */</span>
-<span class="source-line-no">372</span><span id="line-372">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findPrimitiveOptionalConversion(Class&lt;O&gt; out) {</span>
-<span class="source-line-no">373</span><span id="line-373">      final Class&lt;? extends Number&gt; elementType;</span>
-<span class="source-line-no">374</span><span id="line-374">      if (out == OptionalInt.class)</span>
-<span class="source-line-no">375</span><span id="line-375">         elementType = Integer.class;</span>
-<span class="source-line-no">376</span><span id="line-376">      else if (out == OptionalLong.class)</span>
-<span class="source-line-no">377</span><span id="line-377">         elementType = Long.class;</span>
-<span class="source-line-no">378</span><span id="line-378">      else</span>
-<span class="source-line-no">379</span><span id="line-379">         elementType = Double.class;</span>
-<span class="source-line-no">380</span><span id="line-380">      return (Conversion&lt;I, O&gt;) (Conversion&lt;Object, Object&gt;) (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">381</span><span id="line-381">         Object v = in;</span>
-<span class="source-line-no">382</span><span id="line-382">         if (v instanceof Optional&lt;?&gt; opt)</span>
-<span class="source-line-no">383</span><span id="line-383">            v = opt.orElse(null);</span>
-<span class="source-line-no">384</span><span id="line-384">         else if (v instanceof OptionalInt oi)</span>
-<span class="source-line-no">385</span><span id="line-385">            v = oi.isPresent() ? Integer.valueOf(oi.getAsInt()) : null;</span>
-<span class="source-line-no">386</span><span id="line-386">         else if (v instanceof OptionalLong ol)</span>
-<span class="source-line-no">387</span><span id="line-387">            v = ol.isPresent() ? Long.valueOf(ol.getAsLong()) : null;</span>
-<span class="source-line-no">388</span><span id="line-388">         else if (v instanceof OptionalDouble od)</span>
-<span class="source-line-no">389</span><span id="line-389">            v = od.isPresent() ? Double.valueOf(od.getAsDouble()) : null;</span>
-<span class="source-line-no">390</span><span id="line-390">         if (v == null)</span>
-<span class="source-line-no">391</span><span id="line-391">            return emptyPrimitiveOptional(out);</span>
-<span class="source-line-no">392</span><span id="line-392">         var n = (Number) to(v, memberOf, session, elementType);</span>
-<span class="source-line-no">393</span><span id="line-393">         if (n == null)</span>
-<span class="source-line-no">394</span><span id="line-394">            return emptyPrimitiveOptional(out);</span>
-<span class="source-line-no">395</span><span id="line-395">         if (out == OptionalInt.class)</span>
-<span class="source-line-no">396</span><span id="line-396">            return OptionalInt.of(n.intValue());</span>
-<span class="source-line-no">397</span><span id="line-397">         if (out == OptionalLong.class)</span>
-<span class="source-line-no">398</span><span id="line-398">            return OptionalLong.of(n.longValue());</span>
-<span class="source-line-no">399</span><span id="line-399">         return OptionalDouble.of(n.doubleValue());</span>
-<span class="source-line-no">400</span><span id="line-400">      };</span>
-<span class="source-line-no">401</span><span id="line-401">   }</span>
-<span class="source-line-no">402</span><span id="line-402"></span>
-<span class="source-line-no">403</span><span id="line-403">   private static Object emptyPrimitiveOptional(Class&lt;?&gt; out) {</span>
-<span class="source-line-no">404</span><span id="line-404">      if (out == OptionalInt.class)</span>
-<span class="source-line-no">405</span><span id="line-405">         return OptionalInt.empty();</span>
-<span class="source-line-no">406</span><span id="line-406">      if (out == OptionalLong.class)</span>
-<span class="source-line-no">407</span><span id="line-407">         return OptionalLong.empty();</span>
-<span class="source-line-no">408</span><span id="line-408">      return OptionalDouble.empty();</span>
-<span class="source-line-no">409</span><span id="line-409">   }</span>
-<span class="source-line-no">410</span><span id="line-410"></span>
-<span class="source-line-no">411</span><span id="line-411">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">412</span><span id="line-412">   // Collection conversions</span>
-<span class="source-line-no">413</span><span id="line-413">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">414</span><span id="line-414"></span>
-<span class="source-line-no">415</span><span id="line-415">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findCollectionConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">416</span><span id="line-416">      if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {</span>
-<span class="source-line-no">417</span><span id="line-417">         return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">418</span><span id="line-418">            // Treat Object.class as "no element type" since it means untyped/raw and needs no element conversion.</span>
-<span class="source-line-no">419</span><span id="line-419">            var elemType = args.length &gt; 0 &amp;&amp; args[0] != Object.class ? args[0] : null;</span>
-<span class="source-line-no">420</span><span id="line-420">            if (elemType == null &amp;&amp; !inType.isArray() &amp;&amp; outType.isAssignableFrom(inType))</span>
-<span class="source-line-no">421</span><span id="line-421">               return (O) in;</span>
-<span class="source-line-no">422</span><span id="line-422">            var result = newCollection(outType);</span>
-<span class="source-line-no">423</span><span id="line-423">            if (Collection.class.isAssignableFrom(inType)) {</span>
-<span class="source-line-no">424</span><span id="line-424">               for (var elem : (Collection&lt;?&gt;) in)</span>
-<span class="source-line-no">425</span><span id="line-425">                  result.add(elemType != null ? to(elem, elemType) : elem);</span>
-<span class="source-line-no">426</span><span id="line-426">            } else {</span>
-<span class="source-line-no">427</span><span id="line-427">               var len = Array.getLength(in);</span>
-<span class="source-line-no">428</span><span id="line-428">               for (var i = 0; i &lt; len; i++) {</span>
-<span class="source-line-no">429</span><span id="line-429">                  var elem = Array.get(in, i);</span>
-<span class="source-line-no">430</span><span id="line-430">                  result.add(elemType != null ? to(elem, elemType) : elem);</span>
-<span class="source-line-no">431</span><span id="line-431">               }</span>
-<span class="source-line-no">432</span><span id="line-432">            }</span>
-<span class="source-line-no">433</span><span id="line-433">            return (O) result;</span>
-<span class="source-line-no">434</span><span id="line-434">         };</span>
-<span class="source-line-no">435</span><span id="line-435">      }</span>
-<span class="source-line-no">436</span><span id="line-436">      return null;</span>
-<span class="source-line-no">437</span><span id="line-437">   }</span>
-<span class="source-line-no">438</span><span id="line-438"></span>
-<span class="source-line-no">439</span><span id="line-439">   private Collection&lt;Object&gt; newCollection(Class&lt;?&gt; outType) {</span>
-<span class="source-line-no">440</span><span id="line-440">      if (outType == List.class || outType == Collection.class || outType == Iterable.class /* HTT: Iterable is a supertype of Collection so findCollectionConversion never passes Iterable as outType */ || outType == AbstractList.class)</span>
-<span class="source-line-no">441</span><span id="line-441">         return new ArrayList&lt;&gt;();</span>
-<span class="source-line-no">442</span><span id="line-442">      if (outType == Set.class || outType == LinkedHashSet.class || outType == AbstractSet.class)</span>
-<span class="source-line-no">443</span><span id="line-443">         return new LinkedHashSet&lt;&gt;();</span>
-<span class="source-line-no">444</span><span id="line-444">      if (outType == SortedSet.class || outType == NavigableSet.class || outType == TreeSet.class)</span>
-<span class="source-line-no">445</span><span id="line-445">         return new TreeSet&lt;&gt;();</span>
-<span class="source-line-no">446</span><span id="line-446">      if (outType == Queue.class || outType == Deque.class || outType == LinkedList.class)</span>
-<span class="source-line-no">447</span><span id="line-447">         return new LinkedList&lt;&gt;();</span>
-<span class="source-line-no">448</span><span id="line-448">      return newInstanceOrDefault(outType, ArrayList::new);</span>
-<span class="source-line-no">449</span><span id="line-449">   }</span>
-<span class="source-line-no">450</span><span id="line-450"></span>
-<span class="source-line-no">451</span><span id="line-451">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">452</span><span id="line-452">   // Map conversions</span>
-<span class="source-line-no">453</span><span id="line-453">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">454</span><span id="line-454"></span>
-<span class="source-line-no">455</span><span id="line-455">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findMapConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">456</span><span id="line-456">      if (Map.class.isAssignableFrom(inType)) {</span>
-<span class="source-line-no">457</span><span id="line-457">         return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">458</span><span id="line-458">            // Treat Object.class as "no key/value type" since it means untyped/raw and needs no element conversion.</span>
-<span class="source-line-no">459</span><span id="line-459">            var keyType = args.length &gt; 0 &amp;&amp; args[0] != Object.class ? args[0] : null;</span>
-<span class="source-line-no">460</span><span id="line-460">            var valType = args.length &gt; 1 &amp;&amp; args[1] != Object.class ? args[1] : null;</span>
-<span class="source-line-no">461</span><span id="line-461">            if (keyType == null &amp;&amp; outType.isAssignableFrom(inType))</span>
-<span class="source-line-no">462</span><span id="line-462">               return (O) in;</span>
-<span class="source-line-no">463</span><span id="line-463">            var result = newMap(outType);</span>
-<span class="source-line-no">464</span><span id="line-464">            ((Map&lt;?, ?&gt;) in).forEach((k, v) -&gt; result.put(</span>
-<span class="source-line-no">465</span><span id="line-465">               keyType != null ? to(k, keyType) : k,</span>
-<span class="source-line-no">466</span><span id="line-466">               valType != null ? to(v, valType) : v</span>
-<span class="source-line-no">467</span><span id="line-467">            ));</span>
-<span class="source-line-no">468</span><span id="line-468">            return (O) result;</span>
-<span class="source-line-no">469</span><span id="line-469">         };</span>
-<span class="source-line-no">470</span><span id="line-470">      }</span>
-<span class="source-line-no">471</span><span id="line-471">      return null;</span>
-<span class="source-line-no">472</span><span id="line-472">   }</span>
-<span class="source-line-no">473</span><span id="line-473"></span>
-<span class="source-line-no">474</span><span id="line-474">   private Map&lt;Object, Object&gt; newMap(Class&lt;?&gt; outType) {</span>
-<span class="source-line-no">475</span><span id="line-475">      if (outType == Map.class || outType == LinkedHashMap.class || outType == AbstractMap.class)</span>
-<span class="source-line-no">476</span><span id="line-476">         return new LinkedHashMap&lt;&gt;();</span>
-<span class="source-line-no">477</span><span id="line-477">      if (outType == SortedMap.class || outType == NavigableMap.class || outType == TreeMap.class)</span>
-<span class="source-line-no">478</span><span id="line-478">         return new TreeMap&lt;&gt;();</span>
-<span class="source-line-no">479</span><span id="line-479">      if (outType == HashMap.class)</span>
-<span class="source-line-no">480</span><span id="line-480">         return new HashMap&lt;&gt;();</span>
-<span class="source-line-no">481</span><span id="line-481">      return newInstanceOrDefault(outType, LinkedHashMap::new);</span>
-<span class="source-line-no">482</span><span id="line-482">   }</span>
-<span class="source-line-no">483</span><span id="line-483"></span>
-<span class="source-line-no">484</span><span id="line-484">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">485</span><span id="line-485">   // Array conversions</span>
-<span class="source-line-no">486</span><span id="line-486">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">487</span><span id="line-487"></span>
-<span class="source-line-no">488</span><span id="line-488">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findArrayConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">489</span><span id="line-489">      if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {</span>
-<span class="source-line-no">490</span><span id="line-490">         var componentType = outType.getComponentType();</span>
-<span class="source-line-no">491</span><span id="line-491">         // For array→array, validate that element-level conversion is possible.</span>
-<span class="source-line-no">492</span><span id="line-492">         // Skip the pre-check for Object[] — runtime elements may be of a more specific type.</span>
-<span class="source-line-no">493</span><span id="line-493">         // Collections use runtime element types so we skip the pre-check there too.</span>
-<span class="source-line-no">494</span><span id="line-494">         if (inType.isArray()) {</span>
-<span class="source-line-no">495</span><span id="line-495">            var inComponentType = inType.getComponentType();</span>
-<span class="source-line-no">496</span><span id="line-496">            // Primitive component types are auto-boxed by Array.get(), so skip the canConvert check.</span>
-<span class="source-line-no">497</span><span id="line-497">            // Otherwise verify that element-level conversion is possible before returning a lambda.</span>
-<span class="source-line-no">498</span><span id="line-498">            if (!inComponentType.isPrimitive()</span>
-<span class="source-line-no">499</span><span id="line-499">                  &amp;&amp; inComponentType != componentType</span>
-<span class="source-line-no">500</span><span id="line-500">                  &amp;&amp; inComponentType != Object.class</span>
-<span class="source-line-no">501</span><span id="line-501">                  &amp;&amp; !canConvert(inComponentType, componentType))</span>
-<span class="source-line-no">502</span><span id="line-502">               return null;</span>
-<span class="source-line-no">503</span><span id="line-503">         }</span>
-<span class="source-line-no">504</span><span id="line-504">         return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">505</span><span id="line-505">            if (Collection.class.isAssignableFrom(inType)) {</span>
-<span class="source-line-no">506</span><span id="line-506">               var list = (Collection&lt;?&gt;) in;</span>
-<span class="source-line-no">507</span><span id="line-507">               var arr = Array.newInstance(componentType, list.size());</span>
-<span class="source-line-no">508</span><span id="line-508">               var i = 0;</span>
-<span class="source-line-no">509</span><span id="line-509">               for (var elem : list)</span>
-<span class="source-line-no">510</span><span id="line-510">                  Array.set(arr, i++, to(elem, memberOf, session, componentType));</span>
-<span class="source-line-no">511</span><span id="line-511">               return (O) arr;</span>
-<span class="source-line-no">512</span><span id="line-512">            }</span>
-<span class="source-line-no">513</span><span id="line-513">            var len = Array.getLength(in);</span>
-<span class="source-line-no">514</span><span id="line-514">            var arr = Array.newInstance(componentType, len);</span>
-<span class="source-line-no">515</span><span id="line-515">            for (var i = 0; i &lt; len; i++)</span>
-<span class="source-line-no">516</span><span id="line-516">               Array.set(arr, i, to(Array.get(in, i), memberOf, session, componentType));</span>
-<span class="source-line-no">517</span><span id="line-517">            return (O) arr;</span>
-<span class="source-line-no">518</span><span id="line-518">         };</span>
-<span class="source-line-no">519</span><span id="line-519">      }</span>
-<span class="source-line-no">520</span><span id="line-520">      return null;</span>
-<span class="source-line-no">521</span><span id="line-521">   }</span>
-<span class="source-line-no">522</span><span id="line-522"></span>
-<span class="source-line-no">523</span><span id="line-523">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">524</span><span id="line-524">   // Special-case conversions</span>
-<span class="source-line-no">525</span><span id="line-525">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">526</span><span id="line-526"></span>
-<span class="source-line-no">527</span><span id="line-527">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findSpecialConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">528</span><span id="line-528">      if (inType == String.class &amp;&amp; outType == TimeZone.class)</span>
-<span class="source-line-no">529</span><span id="line-529">         return (Conversion&lt;I, O&gt;) (Conversion&lt;String, TimeZone&gt;) (in, memberOf, session, args) -&gt; TimeZone.getTimeZone(in);</span>
-<span class="source-line-no">530</span><span id="line-530">      if (TimeZone.class.isAssignableFrom(inType) &amp;&amp; outType == String.class)</span>
-<span class="source-line-no">531</span><span id="line-531">         return (Conversion&lt;I, O&gt;) (Conversion&lt;TimeZone, String&gt;) (in, memberOf, session, args) -&gt; in.getID();</span>
-<span class="source-line-no">532</span><span id="line-532">      if (inType == String.class &amp;&amp; outType == Locale.class)</span>
-<span class="source-line-no">533</span><span id="line-533">         return (Conversion&lt;I, O&gt;) (Conversion&lt;String, Locale&gt;) (in, memberOf, session, args) -&gt; Locale.forLanguageTag(in.replace('_', '-'));</span>
-<span class="source-line-no">534</span><span id="line-534">      if (CharSequence.class.isAssignableFrom(inType) &amp;&amp; outType == Boolean.class)</span>
-<span class="source-line-no">535</span><span id="line-535">         return (in, memberOf, session, args) -&gt; {</span>
-<span class="source-line-no">536</span><span id="line-536">            var s = in.toString();</span>
-<span class="source-line-no">537</span><span id="line-537">            if (s.isEmpty() || "null".equals(s))</span>
-<span class="source-line-no">538</span><span id="line-538">               return null;</span>
-<span class="source-line-no">539</span><span id="line-539">            return (O) Boolean.valueOf(s);</span>
-<span class="source-line-no">540</span><span id="line-540">         };</span>
-<span class="source-line-no">541</span><span id="line-541">      if (CharSequence.class.isAssignableFrom(inType) &amp;&amp; outType == byte[].class)</span>
-<span class="source-line-no">542</span><span id="line-542">         return (in, memberOf, session, args) -&gt; (O) in.toString().getBytes(StandardCharsets.UTF_8);</span>
-<span class="source-line-no">543</span><span id="line-543">      return null;</span>
-<span class="source-line-no">544</span><span id="line-544">   }</span>
-<span class="source-line-no">545</span><span id="line-545"></span>
-<span class="source-line-no">546</span><span id="line-546">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">547</span><span id="line-547">   // Reflection: static factory methods</span>
-<span class="source-line-no">548</span><span id="line-548">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">549</span><span id="line-549"></span>
-<span class="source-line-no">550</span><span id="line-550">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findStaticFactory(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">551</span><span id="line-551">      var ci = info(outType);</span>
-<span class="source-line-no">552</span><span id="line-552"></span>
-<span class="source-line-no">553</span><span id="line-553">      for (var name : FACTORY_METHOD_NAMES) {</span>
-<span class="source-line-no">554</span><span id="line-554">         var opt = findStaticMethod(ci, name, inType, outType);</span>
-<span class="source-line-no">555</span><span id="line-555">         if (opt.isPresent())</span>
-<span class="source-line-no">556</span><span id="line-556">            return (in, memberOf, session, args) -&gt; opt.get().invoke(null, in);</span>
-<span class="source-line-no">557</span><span id="line-557">      }</span>
-<span class="source-line-no">558</span><span id="line-558"></span>
-<span class="source-line-no">559</span><span id="line-559">      // Walk the type hierarchy (superclasses then interfaces) so that e.g. InputStreamReader</span>
-<span class="source-line-no">560</span><span id="line-560">      // can be passed to a method declared as fromReader(Reader r).</span>
-<span class="source-line-no">561</span><span id="line-561">      for (Class&lt;?&gt; c = inType; c != null &amp;&amp; c != Object.class; c = c.getSuperclass()) {</span>
-<span class="source-line-no">562</span><span id="line-562">         var inName = c.getSimpleName();</span>
-<span class="source-line-no">563</span><span id="line-563">         for (var prefix : new String[]{"from", "for", "parse"}) {</span>
-<span class="source-line-no">564</span><span id="line-564">            var opt = findStaticMethod(ci, prefix + inName, inType, outType);</span>
-<span class="source-line-no">565</span><span id="line-565">            if (opt.isPresent())</span>
-<span class="source-line-no">566</span><span id="line-566">               return (in, memberOf, session, args) -&gt; opt.get().invoke(null, in);</span>
-<span class="source-line-no">567</span><span id="line-567">         }</span>
-<span class="source-line-no">568</span><span id="line-568">      }</span>
-<span class="source-line-no">569</span><span id="line-569">      for (var iface : allInterfaces(inType)) {</span>
-<span class="source-line-no">570</span><span id="line-570">         var inName = iface.getSimpleName();</span>
-<span class="source-line-no">571</span><span id="line-571">         for (var prefix : new String[]{"from", "for", "parse"}) {</span>
-<span class="source-line-no">572</span><span id="line-572">            var opt = findStaticMethod(ci, prefix + inName, inType, outType);</span>
-<span class="source-line-no">573</span><span id="line-573">            if (opt.isPresent())</span>
-<span class="source-line-no">574</span><span id="line-574">               return (in, memberOf, session, args) -&gt; opt.get().invoke(null, in);</span>
-<span class="source-line-no">575</span><span id="line-575">         }</span>
-<span class="source-line-no">576</span><span id="line-576">      }</span>
-<span class="source-line-no">577</span><span id="line-577"></span>
-<span class="source-line-no">578</span><span id="line-578">      return null;</span>
-<span class="source-line-no">579</span><span id="line-579">   }</span>
-<span class="source-line-no">580</span><span id="line-580"></span>
-<span class="source-line-no">581</span><span id="line-581">   private static List&lt;Class&lt;?&gt;&gt; allInterfaces(Class&lt;?&gt; c) {</span>
-<span class="source-line-no">582</span><span id="line-582">      var result = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
-<span class="source-line-no">583</span><span id="line-583">      for (var x = c; x != null; x = x.getSuperclass())</span>
-<span class="source-line-no">584</span><span id="line-584">         for (var iface : x.getInterfaces())</span>
-<span class="source-line-no">585</span><span id="line-585">            collectInterfaces(iface, result);</span>
-<span class="source-line-no">586</span><span id="line-586">      return result;</span>
-<span class="source-line-no">587</span><span id="line-587">   }</span>
-<span class="source-line-no">588</span><span id="line-588"></span>
-<span class="source-line-no">589</span><span id="line-589">   private static void collectInterfaces(Class&lt;?&gt; iface, List&lt;Class&lt;?&gt;&gt; result) {</span>
-<span class="source-line-no">590</span><span id="line-590">      if (!result.contains(iface)) {</span>
-<span class="source-line-no">591</span><span id="line-591">         result.add(iface);</span>
-<span class="source-line-no">592</span><span id="line-592">         for (var parent : iface.getInterfaces())</span>
-<span class="source-line-no">593</span><span id="line-593">            collectInterfaces(parent, result);</span>
-<span class="source-line-no">594</span><span id="line-594">      }</span>
-<span class="source-line-no">595</span><span id="line-595">   }</span>
-<span class="source-line-no">596</span><span id="line-596"></span>
-<span class="source-line-no">597</span><span id="line-597">   private Optional&lt;MethodInfo&gt; findStaticMethod(ClassInfo ci, String name, Class&lt;?&gt; inType, Class&lt;?&gt; outType) {</span>
-<span class="source-line-no">598</span><span id="line-598">      return ci.getPublicMethod(m -&gt;</span>
-<span class="source-line-no">599</span><span id="line-599">         m.isStatic()</span>
-<span class="source-line-no">600</span><span id="line-600">         &amp;&amp; m.isNotDeprecated()</span>
-<span class="source-line-no">601</span><span id="line-601">         &amp;&amp; m.hasName(name)</span>
-<span class="source-line-no">602</span><span id="line-602">         &amp;&amp; m.getParameterCount() == 1</span>
-<span class="source-line-no">603</span><span id="line-603">         &amp;&amp; m.getParameterTypes().get(0).isAssignableFrom(inType)</span>
-<span class="source-line-no">604</span><span id="line-604">         &amp;&amp; m.hasReturnTypeParent(outType)</span>
-<span class="source-line-no">605</span><span id="line-605">         // Exclude generic Object-param factory methods (e.g. List.of(E)) when input is not Object,</span>
-<span class="source-line-no">606</span><span id="line-606">         // since type erasure makes E appear as Object at runtime, causing false matches.</span>
-<span class="source-line-no">607</span><span id="line-607">         &amp;&amp; (inType == Object.class || m.getParameterTypes().get(0).inner() != Object.class)</span>
-<span class="source-line-no">608</span><span id="line-608">      );</span>
-<span class="source-line-no">609</span><span id="line-609">   }</span>
-<span class="source-line-no">610</span><span id="line-610"></span>
-<span class="source-line-no">611</span><span id="line-611">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">612</span><span id="line-612">   // Reflection: public constructors</span>
-<span class="source-line-no">613</span><span id="line-613">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">614</span><span id="line-614"></span>
-<span class="source-line-no">615</span><span id="line-615">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findConstructorConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">616</span><span id="line-616">      if (outType.getEnclosingClass() != null &amp;&amp; !Modifier.isStatic(outType.getModifiers())) {</span>
-<span class="source-line-no">617</span><span id="line-617">         var enclosing = outType.getEnclosingClass();</span>
-<span class="source-line-no">618</span><span id="line-618">         var opt = info(outType).getPublicConstructor(c -&gt;</span>
-<span class="source-line-no">619</span><span id="line-619">            c.getParameterCount() == 2</span>
-<span class="source-line-no">620</span><span id="line-620">            &amp;&amp; c.isNotDeprecated()</span>
-<span class="source-line-no">621</span><span id="line-621">            &amp;&amp; c.getParameterTypes().get(0).inner() == enclosing</span>
-<span class="source-line-no">622</span><span id="line-622">            &amp;&amp; c.getParameterTypes().get(1).isAssignableFrom(inType)</span>
-<span class="source-line-no">623</span><span id="line-623">         );</span>
-<span class="source-line-no">624</span><span id="line-624">         if (opt.isPresent()) {</span>
-<span class="source-line-no">625</span><span id="line-625">            var ctor = opt.get();</span>
-<span class="source-line-no">626</span><span id="line-626">            return (in, memberOf, session, args) -&gt; ctor.newInstance(memberOf, in);</span>
-<span class="source-line-no">627</span><span id="line-627">         }</span>
-<span class="source-line-no">628</span><span id="line-628">      }</span>
-<span class="source-line-no">629</span><span id="line-629"></span>
-<span class="source-line-no">630</span><span id="line-630">      var opt = info(outType).getPublicConstructor(c -&gt;</span>
-<span class="source-line-no">631</span><span id="line-631">         c.getParameterCount() == 1</span>
-<span class="source-line-no">632</span><span id="line-632">         &amp;&amp; c.isNotDeprecated()</span>
-<span class="source-line-no">633</span><span id="line-633">         &amp;&amp; c.getParameterTypes().get(0).isAssignableFrom(inType)</span>
-<span class="source-line-no">634</span><span id="line-634">      );</span>
-<span class="source-line-no">635</span><span id="line-635">      if (opt.isPresent()) {</span>
-<span class="source-line-no">636</span><span id="line-636">         var ctor = opt.get();</span>
-<span class="source-line-no">637</span><span id="line-637">         return (in, memberOf, session, args) -&gt; ctor.newInstance(in);</span>
-<span class="source-line-no">638</span><span id="line-638">      }</span>
-<span class="source-line-no">639</span><span id="line-639">      return null;</span>
-<span class="source-line-no">640</span><span id="line-640">   }</span>
-<span class="source-line-no">641</span><span id="line-641"></span>
-<span class="source-line-no">642</span><span id="line-642">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">643</span><span id="line-643">   // Reflection: toX() instance methods</span>
-<span class="source-line-no">644</span><span id="line-644">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">645</span><span id="line-645"></span>
-<span class="source-line-no">646</span><span id="line-646">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findToXMethod(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
-<span class="source-line-no">647</span><span id="line-647">      // Use getNameReadable() so that array types use "Array" suffix (e.g. "toStringArray" for String[]).</span>
-<span class="source-line-no">648</span><span id="line-648">      // Use equalsIgnoreCase to match Mutaters' behavior (e.g. "toByteArray" matches "tobyteArray" from byte[]).</span>
-<span class="source-line-no">649</span><span id="line-649">      var methodName = "to" + info(outType).getNameReadable();</span>
-<span class="source-line-no">650</span><span id="line-650">      var opt = info(inType).getPublicMethod(m -&gt;</span>
-<span class="source-line-no">651</span><span id="line-651">         m.isNotStatic()</span>
-<span class="source-line-no">652</span><span id="line-652">         &amp;&amp; m.isNotDeprecated()</span>
-<span class="source-line-no">653</span><span id="line-653">         &amp;&amp; m.getParameterCount() == 0</span>
-<span class="source-line-no">654</span><span id="line-654">         &amp;&amp; m.getNameSimple().equalsIgnoreCase(methodName)</span>
-<span class="source-line-no">655</span><span id="line-655">         &amp;&amp; m.hasReturnTypeParent(outType)</span>
-<span class="source-line-no">656</span><span id="line-656">      );</span>
-<span class="source-line-no">657</span><span id="line-657">      if (opt.isPresent()) {</span>
-<span class="source-line-no">658</span><span id="line-658">         var method = opt.get();</span>
-<span class="source-line-no">659</span><span id="line-659">         return (in, memberOf, session, args) -&gt; method.invoke(in);</span>
-<span class="source-line-no">660</span><span id="line-660">      }</span>
-<span class="source-line-no">661</span><span id="line-661">      return null;</span>
-<span class="source-line-no">662</span><span id="line-662">   }</span>
-<span class="source-line-no">663</span><span id="line-663"></span>
-<span class="source-line-no">664</span><span id="line-664">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">665</span><span id="line-665">   // Helpers</span>
-<span class="source-line-no">666</span><span id="line-666">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">667</span><span id="line-667"></span>
-<span class="source-line-no">668</span><span id="line-668">   private &lt;T&gt; T newInstanceOrDefault(Class&lt;?&gt; type, java.util.function.Supplier&lt;T&gt; defaultSupplier) {</span>
-<span class="source-line-no">669</span><span id="line-669">      var opt = info(type).getPublicConstructor(c -&gt; c.getParameterCount() == 0);</span>
-<span class="source-line-no">670</span><span id="line-670">      if (opt.isPresent()) {</span>
-<span class="source-line-no">671</span><span id="line-671">         var ctor = opt.get();</span>
-<span class="source-line-no">672</span><span id="line-672">         try {</span>
-<span class="source-line-no">673</span><span id="line-673">            return ctor.newInstance();</span>
-<span class="source-line-no">674</span><span id="line-674">         } catch (@SuppressWarnings("unused") Exception e) { // HTT: constructor would have to throw to reach here</span>
-<span class="source-line-no">675</span><span id="line-675">            return defaultSupplier.get(); // HTT</span>
-<span class="source-line-no">676</span><span id="line-676">         }</span>
-<span class="source-line-no">677</span><span id="line-677">      }</span>
-<span class="source-line-no">678</span><span id="line-678">      return defaultSupplier.get();</span>
-<span class="source-line-no">679</span><span id="line-679">   }</span>
-<span class="source-line-no">680</span><span id="line-680">}</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22"></span>
+<span class="source-line-no">023</span><span id="line-23">import java.lang.reflect.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import java.math.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.nio.charset.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.concurrent.atomic.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.commons.reflect.*;</span>
+<span class="source-line-no">030</span><span id="line-30"></span>
+<span class="source-line-no">031</span><span id="line-31">/**</span>
+<span class="source-line-no">032</span><span id="line-32"> * A concrete {@link CachingConverter} that supports common type conversions without</span>
+<span class="source-line-no">033</span><span id="line-33"> * requiring a {@code MarshallingContext} or {@code MarshallingSession}.</span>
+<span class="source-line-no">034</span><span id="line-34"> *</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;p&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> * The following conversions are supported:</span>
+<span class="source-line-no">037</span><span id="line-37"> *</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;table class='styled'&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;tr&gt;&lt;th&gt;Input type&lt;/th&gt;&lt;th&gt;Output type&lt;/th&gt;&lt;th&gt;Notes&lt;/th&gt;&lt;/tr&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;tr&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> *       &lt;td&gt;Any type&lt;/td&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *       &lt;td&gt;Same or supertype&lt;/td&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *       &lt;td&gt;Identity / widening (no-op cast)&lt;/td&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;tr&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *       &lt;td&gt;{@link Number}&lt;/td&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *       &lt;td&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *          {@link Integer}, {@link Long}, {@link Short}, {@link Float}, {@link Double}, {@link Byte},</span>
+<span class="source-line-no">049</span><span id="line-49"> *          {@link AtomicInteger}, {@link AtomicLong}, {@link BigDecimal}, {@link BigInteger},</span>
+<span class="source-line-no">050</span><span id="line-50"> *          and primitive equivalents</span>
+<span class="source-line-no">051</span><span id="line-51"> *       &lt;/td&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;td&gt;Narrowing/widening numeric conversion&lt;/td&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;tr&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> *       &lt;td&gt;{@link Boolean}&lt;/td&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *       &lt;td&gt;{@link Number} types (including {@link BigDecimal}, {@link BigInteger})&lt;/td&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *       &lt;td&gt;&lt;c&gt;true=1, false=0&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;tr&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *       &lt;td&gt;{@link Number} types&lt;/td&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *       &lt;td&gt;Parsed via {@link org.apache.juneau.commons.utils.StringUtils#parseNumber(String, Class)};</span>
+<span class="source-line-no">063</span><span id="line-63"> *          empty string or {@code "null"} returns &lt;jk&gt;null&lt;/jk&gt;&lt;/td&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *    &lt;tr&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *       &lt;td&gt;{@link Number}&lt;/td&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *       &lt;td&gt;{@link Boolean}&lt;/td&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *       &lt;td&gt;&lt;c&gt;intValue() != 0&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *    &lt;tr&gt;</span>
+<span class="source-line-no">071</span><span id="line-71"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> *       &lt;td&gt;{@link Boolean}&lt;/td&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *       &lt;td&gt;{@link Boolean#valueOf(String)}&lt;/td&gt;</span>
+<span class="source-line-no">074</span><span id="line-74"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">075</span><span id="line-75"> *    &lt;tr&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> *       &lt;td&gt;{@link CharSequence} (length 1)&lt;/td&gt;</span>
+<span class="source-line-no">077</span><span id="line-77"> *       &lt;td&gt;{@link Character}&lt;/td&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *       &lt;td&gt;&lt;c&gt;charAt(0)&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">080</span><span id="line-80"> *    &lt;tr&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> *       &lt;td&gt;{@link Number}&lt;/td&gt;</span>
+<span class="source-line-no">082</span><span id="line-82"> *       &lt;td&gt;{@link Character}&lt;/td&gt;</span>
+<span class="source-line-no">083</span><span id="line-83"> *       &lt;td&gt;First character of {@code toString()} (e.g. {@code 65} → {@code '6'})&lt;/td&gt;</span>
+<span class="source-line-no">084</span><span id="line-84"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">085</span><span id="line-85"> *    &lt;tr&gt;</span>
+<span class="source-line-no">086</span><span id="line-86"> *       &lt;td&gt;Any&lt;/td&gt;</span>
+<span class="source-line-no">087</span><span id="line-87"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
+<span class="source-line-no">088</span><span id="line-88"> *       &lt;td&gt;{@link Object#toString()}, with array support via {@link Arrays#toString(Object[])}&lt;/td&gt;</span>
+<span class="source-line-no">089</span><span id="line-89"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">090</span><span id="line-90"> *    &lt;tr&gt;</span>
+<span class="source-line-no">091</span><span id="line-91"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
+<span class="source-line-no">092</span><span id="line-92"> *       &lt;td&gt;{@code byte[]}&lt;/td&gt;</span>
+<span class="source-line-no">093</span><span id="line-93"> *       &lt;td&gt;UTF-8 encoding via {@link String#getBytes(Charset)}&lt;/td&gt;</span>
+<span class="source-line-no">094</span><span id="line-94"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">095</span><span id="line-95"> *    &lt;tr&gt;</span>
+<span class="source-line-no">096</span><span id="line-96"> *       &lt;td&gt;{@link CharSequence}&lt;/td&gt;</span>
+<span class="source-line-no">097</span><span id="line-97"> *       &lt;td&gt;Any {@link Enum}&lt;/td&gt;</span>
+<span class="source-line-no">098</span><span id="line-98"> *       &lt;td&gt;{@link Enum#valueOf(Class, String)}&lt;/td&gt;</span>
+<span class="source-line-no">099</span><span id="line-99"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">100</span><span id="line-100"> *    &lt;tr&gt;</span>
+<span class="source-line-no">101</span><span id="line-101"> *       &lt;td&gt;{@link Collection} or array&lt;/td&gt;</span>
+<span class="source-line-no">102</span><span id="line-102"> *       &lt;td&gt;{@link Collection} subtype&lt;/td&gt;</span>
+<span class="source-line-no">103</span><span id="line-103"> *       &lt;td&gt;Copies elements; element type from &lt;c&gt;args[0]&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">104</span><span id="line-104"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">105</span><span id="line-105"> *    &lt;tr&gt;</span>
+<span class="source-line-no">106</span><span id="line-106"> *       &lt;td&gt;{@link Map}&lt;/td&gt;</span>
+<span class="source-line-no">107</span><span id="line-107"> *       &lt;td&gt;{@link Map} subtype&lt;/td&gt;</span>
+<span class="source-line-no">108</span><span id="line-108"> *       &lt;td&gt;Copies entries; key type from &lt;c&gt;args[0]&lt;/c&gt;, value type from &lt;c&gt;args[1]&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">109</span><span id="line-109"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">110</span><span id="line-110"> *    &lt;tr&gt;</span>
+<span class="source-line-no">111</span><span id="line-111"> *       &lt;td&gt;{@link Collection} or array&lt;/td&gt;</span>
+<span class="source-line-no">112</span><span id="line-112"> *       &lt;td&gt;Array type&lt;/td&gt;</span>
+<span class="source-line-no">113</span><span id="line-113"> *       &lt;td&gt;Element type from &lt;c&gt;outType.getComponentType()&lt;/c&gt;&lt;/td&gt;</span>
+<span class="source-line-no">114</span><span id="line-114"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">115</span><span id="line-115"> *    &lt;tr&gt;</span>
+<span class="source-line-no">116</span><span id="line-116"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
+<span class="source-line-no">117</span><span id="line-117"> *       &lt;td&gt;{@link TimeZone}&lt;/td&gt;</span>
+<span class="source-line-no">118</span><span id="line-118"> *       &lt;td&gt;{@link TimeZone#getTimeZone(String)}&lt;/td&gt;</span>
+<span class="source-line-no">119</span><span id="line-119"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">120</span><span id="line-120"> *    &lt;tr&gt;</span>
+<span class="source-line-no">121</span><span id="line-121"> *       &lt;td&gt;{@link TimeZone}&lt;/td&gt;</span>
+<span class="source-line-no">122</span><span id="line-122"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
+<span class="source-line-no">123</span><span id="line-123"> *       &lt;td&gt;{@link TimeZone#getID()}&lt;/td&gt;</span>
+<span class="source-line-no">124</span><span id="line-124"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">125</span><span id="line-125"> *    &lt;tr&gt;</span>
+<span class="source-line-no">126</span><span id="line-126"> *       &lt;td&gt;{@link String}&lt;/td&gt;</span>
+<span class="source-line-no">127</span><span id="line-127"> *       &lt;td&gt;{@link Locale}&lt;/td&gt;</span>
+<span class="source-line-no">128</span><span id="line-128"> *       &lt;td&gt;{@link Locale#forLanguageTag(String)} (underscores converted to hyphens)&lt;/td&gt;</span>
+<span class="source-line-no">129</span><span id="line-129"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">130</span><span id="line-130"> *    &lt;tr&gt;</span>
+<span class="source-line-no">131</span><span id="line-131"> *       &lt;td&gt;Any&lt;/td&gt;</span>
+<span class="source-line-no">132</span><span id="line-132"> *       &lt;td&gt;Any with &lt;c&gt;static T fromString/valueOf/of/from/parse/create/forName/fromValue/builder(X)&lt;/c&gt;</span>
+<span class="source-line-no">133</span><span id="line-133"> *          or dynamic &lt;c&gt;fromX/forX/parseX&lt;/c&gt; where X is the input class name&lt;/td&gt;</span>
+<span class="source-line-no">134</span><span id="line-134"> *       &lt;td&gt;Reflection-based static factory lookup&lt;/td&gt;</span>
+<span class="source-line-no">135</span><span id="line-135"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">136</span><span id="line-136"> *    &lt;tr&gt;</span>
+<span class="source-line-no">137</span><span id="line-137"> *       &lt;td&gt;Any&lt;/td&gt;</span>
+<span class="source-line-no">138</span><span id="line-138"> *       &lt;td&gt;Any with &lt;c&gt;public T(X)&lt;/c&gt; constructor&lt;/td&gt;</span>
+<span class="source-line-no">139</span><span id="line-139"> *       &lt;td&gt;Reflection-based constructor lookup&lt;/td&gt;</span>
+<span class="source-line-no">140</span><span id="line-140"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">141</span><span id="line-141"> *    &lt;tr&gt;</span>
+<span class="source-line-no">142</span><span id="line-142"> *       &lt;td&gt;Any with &lt;c&gt;toX()&lt;/c&gt; instance method&lt;/td&gt;</span>
+<span class="source-line-no">143</span><span id="line-143"> *       &lt;td&gt;Any type X&lt;/td&gt;</span>
+<span class="source-line-no">144</span><span id="line-144"> *       &lt;td&gt;Instance method where name matches &lt;c&gt;to&lt;/c&gt; + output class name (e.g. &lt;c&gt;toInteger()&lt;/c&gt;)&lt;/td&gt;</span>
+<span class="source-line-no">145</span><span id="line-145"> *    &lt;/tr&gt;</span>
+<span class="source-line-no">146</span><span id="line-146"> * &lt;/table&gt;</span>
+<span class="source-line-no">147</span><span id="line-147"> *</span>
+<span class="source-line-no">148</span><span id="line-148"> * &lt;h5 class='section'&gt;Thread Safety:&lt;/h5&gt;</span>
+<span class="source-line-no">149</span><span id="line-149"> * &lt;p&gt;</span>
+<span class="source-line-no">150</span><span id="line-150"> * This class is thread-safe. The singleton instance can be safely shared across multiple threads.</span>
+<span class="source-line-no">151</span><span id="line-151"> */</span>
+<span class="source-line-no">152</span><span id="line-152">@SuppressWarnings({</span>
+<span class="source-line-no">153</span><span id="line-153">   "rawtypes", // Raw types necessary for generic conversion dispatch</span>
+<span class="source-line-no">154</span><span id="line-154">   "unchecked", // Type erasure requires unchecked casts throughout conversion logic</span>
+<span class="source-line-no">155</span><span id="line-155">   "java:S3776", // Cognitive complexity of conversion dispatch methods is inherent to the number of supported type pairs</span>
+<span class="source-line-no">156</span><span id="line-156">   "java:S1067", // Complex boolean expressions in conversion checks reflect the natural type hierarchy</span>
+<span class="source-line-no">157</span><span id="line-157">   "java:S1192" // "parse" literal is used in multiple independent Sets/arrays; extracting it would reduce clarity</span>
+<span class="source-line-no">158</span><span id="line-158">})</span>
+<span class="source-line-no">159</span><span id="line-159">public class BasicConverter extends CachingConverter {</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">   /**</span>
+<span class="source-line-no">162</span><span id="line-162">    * Singleton instance.</span>
+<span class="source-line-no">163</span><span id="line-163">    */</span>
+<span class="source-line-no">164</span><span id="line-164">   public static final BasicConverter INSTANCE = new BasicConverter();</span>
+<span class="source-line-no">165</span><span id="line-165"></span>
+<span class="source-line-no">166</span><span id="line-166">   private static final Set&lt;String&gt; FACTORY_METHOD_NAMES = Set.of(</span>
+<span class="source-line-no">167</span><span id="line-167">      "fromString", "valueOf", "of", "from", "parse", "create", "forName", "fromValue", "builder"</span>
+<span class="source-line-no">168</span><span id="line-168">   );</span>
+<span class="source-line-no">169</span><span id="line-169"></span>
+<span class="source-line-no">170</span><span id="line-170">   private static final Map&lt;Class&lt;?&gt;, Class&lt;?&gt;&gt; PRIMITIVE_TO_WRAPPER = Map.of(</span>
+<span class="source-line-no">171</span><span id="line-171">      boolean.class, Boolean.class,</span>
+<span class="source-line-no">172</span><span id="line-172">      byte.class, Byte.class,</span>
+<span class="source-line-no">173</span><span id="line-173">      char.class, Character.class,</span>
+<span class="source-line-no">174</span><span id="line-174">      double.class, Double.class,</span>
+<span class="source-line-no">175</span><span id="line-175">      float.class, Float.class,</span>
+<span class="source-line-no">176</span><span id="line-176">      int.class, Integer.class,</span>
+<span class="source-line-no">177</span><span id="line-177">      long.class, Long.class,</span>
+<span class="source-line-no">178</span><span id="line-178">      short.class, Short.class</span>
+<span class="source-line-no">179</span><span id="line-179">   );</span>
+<span class="source-line-no">180</span><span id="line-180"></span>
+<span class="source-line-no">181</span><span id="line-181">   /**</span>
+<span class="source-line-no">182</span><span id="line-182">    * Constructor.</span>
+<span class="source-line-no">183</span><span id="line-183">    */</span>
+<span class="source-line-no">184</span><span id="line-184">   protected BasicConverter() {}</span>
+<span class="source-line-no">185</span><span id="line-185"></span>
+<span class="source-line-no">186</span><span id="line-186">   @Override</span>
+<span class="source-line-no">187</span><span id="line-187">   protected &lt;I, O&gt; Conversion&lt;I, O&gt; findConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">188</span><span id="line-188">      var out = outType.isPrimitive() ? (Class&lt;O&gt;) PRIMITIVE_TO_WRAPPER.get(outType) : outType;</span>
+<span class="source-line-no">189</span><span id="line-189"></span>
+<span class="source-line-no">190</span><span id="line-190">      Conversion&lt;I, O&gt; c;</span>
+<span class="source-line-no">191</span><span id="line-191"></span>
+<span class="source-line-no">192</span><span id="line-192">      if ((c = findSpecialConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">193</span><span id="line-193"></span>
+<span class="source-line-no">194</span><span id="line-194">      if (out.isAssignableFrom(inType) &amp;&amp; !Collection.class.isAssignableFrom(out) &amp;&amp; !Map.class.isAssignableFrom(out))</span>
+<span class="source-line-no">195</span><span id="line-195">         return (in, memberOf, session, args) -&gt; (O) in;</span>
+<span class="source-line-no">196</span><span id="line-196"></span>
+<span class="source-line-no">197</span><span id="line-197">      if (Number.class.isAssignableFrom(out) &amp;&amp; (c = findNumberConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">198</span><span id="line-198"></span>
+<span class="source-line-no">199</span><span id="line-199">      if (out == Boolean.class &amp;&amp; (c = findBooleanConversion(inType)) != null) return c;</span>
+<span class="source-line-no">200</span><span id="line-200"></span>
+<span class="source-line-no">201</span><span id="line-201">      if (out == Character.class &amp;&amp; (c = findCharacterConversion(inType)) != null) return c;</span>
+<span class="source-line-no">202</span><span id="line-202"></span>
+<span class="source-line-no">203</span><span id="line-203">      if (out == String.class)</span>
+<span class="source-line-no">204</span><span id="line-204">         return (Conversion&lt;I, O&gt;) findToStringConversion(inType);</span>
+<span class="source-line-no">205</span><span id="line-205"></span>
+<span class="source-line-no">206</span><span id="line-206">      if (out.isEnum() &amp;&amp; (c = findEnumConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">207</span><span id="line-207"></span>
+<span class="source-line-no">208</span><span id="line-208">      if (out == Optional.class &amp;&amp; (c = findOptionalConversion()) != null) return c;</span>
+<span class="source-line-no">209</span><span id="line-209"></span>
+<span class="source-line-no">210</span><span id="line-210">      if ((out == OptionalInt.class || out == OptionalLong.class || out == OptionalDouble.class)</span>
+<span class="source-line-no">211</span><span id="line-211">            &amp;&amp; (c = findPrimitiveOptionalConversion(out)) != null) return c;</span>
+<span class="source-line-no">212</span><span id="line-212"></span>
+<span class="source-line-no">213</span><span id="line-213">      if (Collection.class.isAssignableFrom(out) &amp;&amp; (c = findCollectionConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">214</span><span id="line-214"></span>
+<span class="source-line-no">215</span><span id="line-215">      if (Map.class.isAssignableFrom(out) &amp;&amp; (c = findMapConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">216</span><span id="line-216"></span>
+<span class="source-line-no">217</span><span id="line-217">      if (out.isArray() &amp;&amp; (c = findArrayConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">218</span><span id="line-218"></span>
+<span class="source-line-no">219</span><span id="line-219">      if ((c = findToXMethod(inType, out)) != null) return c;</span>
+<span class="source-line-no">220</span><span id="line-220"></span>
+<span class="source-line-no">221</span><span id="line-221">      if ((c = findStaticFactory(inType, out)) != null) return c;</span>
+<span class="source-line-no">222</span><span id="line-222"></span>
+<span class="source-line-no">223</span><span id="line-223">      if ((c = findConstructorConversion(inType, out)) != null) return c;</span>
+<span class="source-line-no">224</span><span id="line-224"></span>
+<span class="source-line-no">225</span><span id="line-225">      return null;</span>
+<span class="source-line-no">226</span><span id="line-226">   }</span>
+<span class="source-line-no">227</span><span id="line-227"></span>
+<span class="source-line-no">228</span><span id="line-228">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">229</span><span id="line-229">   // Number conversions</span>
+<span class="source-line-no">230</span><span id="line-230">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">231</span><span id="line-231"></span>
+<span class="source-line-no">232</span><span id="line-232">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findNumberConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">233</span><span id="line-233">      if (Number.class.isAssignableFrom(inType))</span>
+<span class="source-line-no">234</span><span id="line-234">         return findNumberFromNumber(outType);</span>
+<span class="source-line-no">235</span><span id="line-235">      if (inType == Boolean.class)</span>
+<span class="source-line-no">236</span><span id="line-236">         return (Conversion&lt;I, O&gt;) findNumberFromBoolean(outType);</span>
+<span class="source-line-no">237</span><span id="line-237">      if (CharSequence.class.isAssignableFrom(inType))</span>
+<span class="source-line-no">238</span><span id="line-238">         return (Conversion&lt;I, O&gt;) findNumberFromString(outType);</span>
+<span class="source-line-no">239</span><span id="line-239">      return null;</span>
+<span class="source-line-no">240</span><span id="line-240">   }</span>
+<span class="source-line-no">241</span><span id="line-241"></span>
+<span class="source-line-no">242</span><span id="line-242">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findNumberFromNumber(Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">243</span><span id="line-243">      if (outType == Integer.class) return (in, memberOf, session, args) -&gt; (O) Integer.valueOf(((Number) in).intValue());</span>
+<span class="source-line-no">244</span><span id="line-244">      if (outType == Long.class) return (in, memberOf, session, args) -&gt; (O) Long.valueOf(((Number) in).longValue());</span>
+<span class="source-line-no">245</span><span id="line-245">      if (outType == Short.class) return (in, memberOf, session, args) -&gt; (O) Short.valueOf(((Number) in).shortValue());</span>
+<span class="source-line-no">246</span><span id="line-246">      if (outType == Float.class) return (in, memberOf, session, args) -&gt; (O) Float.valueOf(((Number) in).floatValue());</span>
+<span class="source-line-no">247</span><span id="line-247">      if (outType == Double.class) return (in, memberOf, session, args) -&gt; (O) Double.valueOf(((Number) in).doubleValue());</span>
+<span class="source-line-no">248</span><span id="line-248">      if (outType == Byte.class) return (in, memberOf, session, args) -&gt; (O) Byte.valueOf(((Number) in).byteValue());</span>
+<span class="source-line-no">249</span><span id="line-249">      if (outType == AtomicInteger.class) return (in, memberOf, session, args) -&gt; (O) new AtomicInteger(((Number) in).intValue());</span>
+<span class="source-line-no">250</span><span id="line-250">      if (outType == AtomicLong.class) return (in, memberOf, session, args) -&gt; (O) new AtomicLong(((Number) in).longValue());</span>
+<span class="source-line-no">251</span><span id="line-251">      if (outType == BigDecimal.class) return (in, memberOf, session, args) -&gt; (O) new BigDecimal(in.toString());</span>
+<span class="source-line-no">252</span><span id="line-252">      if (outType == BigInteger.class) return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">253</span><span id="line-253">         var n = (Number) in;</span>
+<span class="source-line-no">254</span><span id="line-254">         if (n instanceof BigDecimal bd) return (O) bd.toBigInteger();</span>
+<span class="source-line-no">255</span><span id="line-255">         if (n instanceof BigInteger bi) return (O) bi;</span>
+<span class="source-line-no">256</span><span id="line-256">         return (O) BigInteger.valueOf(n.longValue());</span>
+<span class="source-line-no">257</span><span id="line-257">      };</span>
+<span class="source-line-no">258</span><span id="line-258">      return null;</span>
+<span class="source-line-no">259</span><span id="line-259">   }</span>
+<span class="source-line-no">260</span><span id="line-260"></span>
+<span class="source-line-no">261</span><span id="line-261">   private &lt;O&gt; Conversion&lt;Boolean, O&gt; findNumberFromBoolean(Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">262</span><span id="line-262">      if (outType == Integer.class) return (in, memberOf, session, args) -&gt; (O) Integer.valueOf(in.booleanValue() ? 1 : 0);</span>
+<span class="source-line-no">263</span><span id="line-263">      if (outType == Long.class) return (in, memberOf, session, args) -&gt; (O) Long.valueOf(in.booleanValue() ? 1L : 0L);</span>
+<span class="source-line-no">264</span><span id="line-264">      if (outType == Short.class) return (in, memberOf, session, args) -&gt; (O) Short.valueOf(in.booleanValue() ? (short) 1 : (short) 0);</span>
+<span class="source-line-no">265</span><span id="line-265">      if (outType == Float.class) return (in, memberOf, session, args) -&gt; (O) Float.valueOf(in.booleanValue() ? 1f : 0f);</span>
+<span class="source-line-no">266</span><span id="line-266">      if (outType == Double.class) return (in, memberOf, session, args) -&gt; (O) Double.valueOf(in.booleanValue() ? 1d : 0d);</span>
+<span class="source-line-no">267</span><span id="line-267">      if (outType == Byte.class) return (in, memberOf, session, args) -&gt; (O) Byte.valueOf(in.booleanValue() ? (byte) 1 : (byte) 0);</span>
+<span class="source-line-no">268</span><span id="line-268">      if (outType == AtomicInteger.class) return (in, memberOf, session, args) -&gt; (O) new AtomicInteger(in.booleanValue() ? 1 : 0);</span>
+<span class="source-line-no">269</span><span id="line-269">      if (outType == AtomicLong.class) return (in, memberOf, session, args) -&gt; (O) new AtomicLong(in.booleanValue() ? 1L : 0L);</span>
+<span class="source-line-no">270</span><span id="line-270">      if (outType == BigDecimal.class) return (in, memberOf, session, args) -&gt; (O) BigDecimal.valueOf(in.booleanValue() ? 1L : 0L);</span>
+<span class="source-line-no">271</span><span id="line-271">      if (outType == BigInteger.class) return (in, memberOf, session, args) -&gt; (O) BigInteger.valueOf(in.booleanValue() ? 1L : 0L);</span>
+<span class="source-line-no">272</span><span id="line-272">      return null;</span>
+<span class="source-line-no">273</span><span id="line-273">   }</span>
+<span class="source-line-no">274</span><span id="line-274"></span>
+<span class="source-line-no">275</span><span id="line-275">   private &lt;O&gt; Conversion&lt;CharSequence, O&gt; findNumberFromString(Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">276</span><span id="line-276">      return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">277</span><span id="line-277">         var s = in.toString();</span>
+<span class="source-line-no">278</span><span id="line-278">         if (s.isEmpty() || "null".equals(s))</span>
+<span class="source-line-no">279</span><span id="line-279">            return null;</span>
+<span class="source-line-no">280</span><span id="line-280">         return (O) parseNumber(s, (Class&lt;? extends Number&gt;) outType);</span>
+<span class="source-line-no">281</span><span id="line-281">      };</span>
+<span class="source-line-no">282</span><span id="line-282">   }</span>
+<span class="source-line-no">283</span><span id="line-283"></span>
+<span class="source-line-no">284</span><span id="line-284">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">285</span><span id="line-285">   // Boolean conversions</span>
+<span class="source-line-no">286</span><span id="line-286">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">287</span><span id="line-287"></span>
+<span class="source-line-no">288</span><span id="line-288">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findBooleanConversion(Class&lt;I&gt; inType) {</span>
+<span class="source-line-no">289</span><span id="line-289">      if (Number.class.isAssignableFrom(inType))</span>
+<span class="source-line-no">290</span><span id="line-290">         return (in, memberOf, session, args) -&gt; (O) Boolean.valueOf(((Number) in).intValue() != 0);</span>
+<span class="source-line-no">291</span><span id="line-291">      return null;</span>
+<span class="source-line-no">292</span><span id="line-292">   }</span>
+<span class="source-line-no">293</span><span id="line-293"></span>
+<span class="source-line-no">294</span><span id="line-294">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">295</span><span id="line-295">   // Character conversions</span>
+<span class="source-line-no">296</span><span id="line-296">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">297</span><span id="line-297"></span>
+<span class="source-line-no">298</span><span id="line-298">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findCharacterConversion(Class&lt;I&gt; inType) {</span>
+<span class="source-line-no">299</span><span id="line-299">      if (CharSequence.class.isAssignableFrom(inType))</span>
+<span class="source-line-no">300</span><span id="line-300">         return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">301</span><span id="line-301">            var s = in.toString();</span>
+<span class="source-line-no">302</span><span id="line-302">            if (s.length() != 1)</span>
+<span class="source-line-no">303</span><span id="line-303">               throw iaex("Cannot convert string of length {0} to char: ''{1}''", s.length(), s);</span>
+<span class="source-line-no">304</span><span id="line-304">            return (O) Character.valueOf(s.charAt(0));</span>
+<span class="source-line-no">305</span><span id="line-305">         };</span>
+<span class="source-line-no">306</span><span id="line-306">      if (Number.class.isAssignableFrom(inType))</span>
+<span class="source-line-no">307</span><span id="line-307">         return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">308</span><span id="line-308">            var s = in.toString();</span>
+<span class="source-line-no">309</span><span id="line-309">            return s.isEmpty() ? null : (O) Character.valueOf(s.charAt(0));</span>
+<span class="source-line-no">310</span><span id="line-310">         };</span>
+<span class="source-line-no">311</span><span id="line-311">      return null;</span>
+<span class="source-line-no">312</span><span id="line-312">   }</span>
+<span class="source-line-no">313</span><span id="line-313"></span>
+<span class="source-line-no">314</span><span id="line-314">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">315</span><span id="line-315">   // String conversions</span>
+<span class="source-line-no">316</span><span id="line-316">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">317</span><span id="line-317"></span>
+<span class="source-line-no">318</span><span id="line-318">   private &lt;I&gt; Conversion&lt;I, String&gt; findToStringConversion(Class&lt;I&gt; inType) {</span>
+<span class="source-line-no">319</span><span id="line-319">      if (inType.isArray()) {</span>
+<span class="source-line-no">320</span><span id="line-320">         if (inType == int[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((int[]) in);</span>
+<span class="source-line-no">321</span><span id="line-321">         if (inType == long[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((long[]) in);</span>
+<span class="source-line-no">322</span><span id="line-322">         if (inType == double[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((double[]) in);</span>
+<span class="source-line-no">323</span><span id="line-323">         if (inType == float[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((float[]) in);</span>
+<span class="source-line-no">324</span><span id="line-324">         if (inType == boolean[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((boolean[]) in);</span>
+<span class="source-line-no">325</span><span id="line-325">         if (inType == byte[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((byte[]) in);</span>
+<span class="source-line-no">326</span><span id="line-326">         if (inType == short[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((short[]) in);</span>
+<span class="source-line-no">327</span><span id="line-327">         if (inType == char[].class) return (in, memberOf, session, args) -&gt; Arrays.toString((char[]) in);</span>
+<span class="source-line-no">328</span><span id="line-328">         return (in, memberOf, session, args) -&gt; Arrays.deepToString((Object[]) in);</span>
+<span class="source-line-no">329</span><span id="line-329">      }</span>
+<span class="source-line-no">330</span><span id="line-330">      return (in, memberOf, session, args) -&gt; in.toString();</span>
+<span class="source-line-no">331</span><span id="line-331">   }</span>
+<span class="source-line-no">332</span><span id="line-332"></span>
+<span class="source-line-no">333</span><span id="line-333">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">334</span><span id="line-334">   // Enum conversions</span>
+<span class="source-line-no">335</span><span id="line-335">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">336</span><span id="line-336"></span>
+<span class="source-line-no">337</span><span id="line-337">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findEnumConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">338</span><span id="line-338">      if (CharSequence.class.isAssignableFrom(inType))</span>
+<span class="source-line-no">339</span><span id="line-339">         return (in, memberOf, session, args) -&gt; (O) Enum.valueOf((Class&lt;Enum&gt;) outType, in.toString());</span>
+<span class="source-line-no">340</span><span id="line-340">      return null;</span>
+<span class="source-line-no">341</span><span id="line-341">   }</span>
+<span class="source-line-no">342</span><span id="line-342"></span>
+<span class="source-line-no">343</span><span id="line-343">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">344</span><span id="line-344">   // Optional conversions</span>
+<span class="source-line-no">345</span><span id="line-345">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">346</span><span id="line-346"></span>
+<span class="source-line-no">347</span><span id="line-347">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findOptionalConversion() {</span>
+<span class="source-line-no">348</span><span id="line-348">      return (Conversion&lt;I, O&gt;) (Conversion&lt;Object, Optional&lt;?&gt;&gt;) (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">349</span><span id="line-349">         if (in instanceof Optional&lt;?&gt; opt) {</span>
+<span class="source-line-no">350</span><span id="line-350">            if (args.length == 0)</span>
+<span class="source-line-no">351</span><span id="line-351">               return opt;</span>
+<span class="source-line-no">352</span><span id="line-352">            return opt.map(x -&gt; to(x, memberOf, session, args[0]));</span>
+<span class="source-line-no">353</span><span id="line-353">         }</span>
+<span class="source-line-no">354</span><span id="line-354">         if (args.length == 0)</span>
+<span class="source-line-no">355</span><span id="line-355">            return o(in);</span>
+<span class="source-line-no">356</span><span id="line-356">         return o(to(in, memberOf, session, args[0]));</span>
+<span class="source-line-no">357</span><span id="line-357">      };</span>
+<span class="source-line-no">358</span><span id="line-358">   }</span>
+<span class="source-line-no">359</span><span id="line-359"></span>
+<span class="source-line-no">360</span><span id="line-360">   /**</span>
+<span class="source-line-no">361</span><span id="line-361">    * Conversion to a primitive {@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}.</span>
+<span class="source-line-no">362</span><span id="line-362">    *</span>
+<span class="source-line-no">363</span><span id="line-363">    * &lt;p&gt;</span>
+<span class="source-line-no">364</span><span id="line-364">    * Mirrors the {@link Optional} contract: a {@code null} input (or an empty optional of any flavor)</span>
+<span class="source-line-no">365</span><span id="line-365">    * yields the matching empty primitive optional; any other value is unwrapped (if it is itself an</span>
+<span class="source-line-no">366</span><span id="line-366">    * optional) and coerced to the matching boxed number before wrapping.</span>
+<span class="source-line-no">367</span><span id="line-367">    *</span>
+<span class="source-line-no">368</span><span id="line-368">    * @param out The target primitive-optional class.</span>
+<span class="source-line-no">369</span><span id="line-369">    * @return The conversion, never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">370</span><span id="line-370">    */</span>
+<span class="source-line-no">371</span><span id="line-371">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findPrimitiveOptionalConversion(Class&lt;O&gt; out) {</span>
+<span class="source-line-no">372</span><span id="line-372">      final Class&lt;? extends Number&gt; elementType;</span>
+<span class="source-line-no">373</span><span id="line-373">      if (out == OptionalInt.class)</span>
+<span class="source-line-no">374</span><span id="line-374">         elementType = Integer.class;</span>
+<span class="source-line-no">375</span><span id="line-375">      else if (out == OptionalLong.class)</span>
+<span class="source-line-no">376</span><span id="line-376">         elementType = Long.class;</span>
+<span class="source-line-no">377</span><span id="line-377">      else</span>
+<span class="source-line-no">378</span><span id="line-378">         elementType = Double.class;</span>
+<span class="source-line-no">379</span><span id="line-379">      return (Conversion&lt;I, O&gt;) (Conversion&lt;Object, Object&gt;) (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">380</span><span id="line-380">         Object v = in;</span>
+<span class="source-line-no">381</span><span id="line-381">         if (v instanceof Optional&lt;?&gt; opt)</span>
+<span class="source-line-no">382</span><span id="line-382">            v = opt.orElse(null);</span>
+<span class="source-line-no">383</span><span id="line-383">         else if (v instanceof OptionalInt oi)</span>
+<span class="source-line-no">384</span><span id="line-384">            v = oi.isPresent() ? Integer.valueOf(oi.getAsInt()) : null;</span>
+<span class="source-line-no">385</span><span id="line-385">         else if (v instanceof OptionalLong ol)</span>
+<span class="source-line-no">386</span><span id="line-386">            v = ol.isPresent() ? Long.valueOf(ol.getAsLong()) : null;</span>
+<span class="source-line-no">387</span><span id="line-387">         else if (v instanceof OptionalDouble od)</span>
+<span class="source-line-no">388</span><span id="line-388">            v = od.isPresent() ? Double.valueOf(od.getAsDouble()) : null;</span>
+<span class="source-line-no">389</span><span id="line-389">         if (v == null)</span>
+<span class="source-line-no">390</span><span id="line-390">            return emptyPrimitiveOptional(out);</span>
+<span class="source-line-no">391</span><span id="line-391">         var n = (Number) to(v, memberOf, session, elementType);</span>
+<span class="source-line-no">392</span><span id="line-392">         if (n == null)</span>
+<span class="source-line-no">393</span><span id="line-393">            return emptyPrimitiveOptional(out);</span>
+<span class="source-line-no">394</span><span id="line-394">         if (out == OptionalInt.class)</span>
+<span class="source-line-no">395</span><span id="line-395">            return OptionalInt.of(n.intValue());</span>
+<span class="source-line-no">396</span><span id="line-396">         if (out == OptionalLong.class)</span>
+<span class="source-line-no">397</span><span id="line-397">            return OptionalLong.of(n.longValue());</span>
+<span class="source-line-no">398</span><span id="line-398">         return OptionalDouble.of(n.doubleValue());</span>
+<span class="source-line-no">399</span><span id="line-399">      };</span>
+<span class="source-line-no">400</span><span id="line-400">   }</span>
+<span class="source-line-no">401</span><span id="line-401"></span>
+<span class="source-line-no">402</span><span id="line-402">   private static Object emptyPrimitiveOptional(Class&lt;?&gt; out) {</span>
+<span class="source-line-no">403</span><span id="line-403">      if (out == OptionalInt.class)</span>
+<span class="source-line-no">404</span><span id="line-404">         return OptionalInt.empty();</span>
+<span class="source-line-no">405</span><span id="line-405">      if (out == OptionalLong.class)</span>
+<span class="source-line-no">406</span><span id="line-406">         return OptionalLong.empty();</span>
+<span class="source-line-no">407</span><span id="line-407">      return OptionalDouble.empty();</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
+<span class="source-line-no">409</span><span id="line-409"></span>
+<span class="source-line-no">410</span><span id="line-410">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">411</span><span id="line-411">   // Collection conversions</span>
+<span class="source-line-no">412</span><span id="line-412">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">413</span><span id="line-413"></span>
+<span class="source-line-no">414</span><span id="line-414">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findCollectionConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">415</span><span id="line-415">      if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {</span>
+<span class="source-line-no">416</span><span id="line-416">         return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">417</span><span id="line-417">            // Treat Object.class as "no element type" since it means untyped/raw and needs no element conversion.</span>
+<span class="source-line-no">418</span><span id="line-418">            var elemType = args.length &gt; 0 &amp;&amp; args[0] != Object.class ? args[0] : null;</span>
+<span class="source-line-no">419</span><span id="line-419">            if (elemType == null &amp;&amp; !inType.isArray() &amp;&amp; outType.isAssignableFrom(inType))</span>
+<span class="source-line-no">420</span><span id="line-420">               return (O) in;</span>
+<span class="source-line-no">421</span><span id="line-421">            var result = newCollection(outType);</span>
+<span class="source-line-no">422</span><span id="line-422">            if (Collection.class.isAssignableFrom(inType)) {</span>
+<span class="source-line-no">423</span><span id="line-423">               for (var elem : (Collection&lt;?&gt;) in)</span>
+<span class="source-line-no">424</span><span id="line-424">                  result.add(elemType != null ? to(elem, elemType) : elem);</span>
+<span class="source-line-no">425</span><span id="line-425">            } else {</span>
+<span class="source-line-no">426</span><span id="line-426">               var len = Array.getLength(in);</span>
+<span class="source-line-no">427</span><span id="line-427">               for (var i = 0; i &lt; len; i++) {</span>
+<span class="source-line-no">428</span><span id="line-428">                  var elem = Array.get(in, i);</span>
+<span class="source-line-no">429</span><span id="line-429">                  result.add(elemType != null ? to(elem, elemType) : elem);</span>
+<span class="source-line-no">430</span><span id="line-430">               }</span>
+<span class="source-line-no">431</span><span id="line-431">            }</span>
+<span class="source-line-no">432</span><span id="line-432">            return (O) result;</span>
+<span class="source-line-no">433</span><span id="line-433">         };</span>
+<span class="source-line-no">434</span><span id="line-434">      }</span>
+<span class="source-line-no">435</span><span id="line-435">      return null;</span>
+<span class="source-line-no">436</span><span id="line-436">   }</span>
+<span class="source-line-no">437</span><span id="line-437"></span>
+<span class="source-line-no">438</span><span id="line-438">   private Collection&lt;Object&gt; newCollection(Class&lt;?&gt; outType) {</span>
+<span class="source-line-no">439</span><span id="line-439">      if (outType == List.class || outType == Collection.class || outType == Iterable.class /* HTT: Iterable is a supertype of Collection so findCollectionConversion never passes Iterable as outType */ || outType == AbstractList.class)</span>
+<span class="source-line-no">440</span><span id="line-440">         return new ArrayList&lt;&gt;();</span>
+<span class="source-line-no">441</span><span id="line-441">      if (outType == Set.class || outType == LinkedHashSet.class || outType == AbstractSet.class)</span>
+<span class="source-line-no">442</span><span id="line-442">         return new LinkedHashSet&lt;&gt;();</span>
+<span class="source-line-no">443</span><span id="line-443">      if (outType == SortedSet.class || outType == NavigableSet.class || outType == TreeSet.class)</span>
+<span class="source-line-no">444</span><span id="line-444">         return new TreeSet&lt;&gt;();</span>
+<span class="source-line-no">445</span><span id="line-445">      if (outType == Queue.class || outType == Deque.class || outType == LinkedList.class)</span>
+<span class="source-line-no">446</span><span id="line-446">         return new LinkedList&lt;&gt;();</span>
+<span class="source-line-no">447</span><span id="line-447">      return newInstanceOrDefault(outType, ArrayList::new);</span>
+<span class="source-line-no">448</span><span id="line-448">   }</span>
+<span class="source-line-no">449</span><span id="line-449"></span>
+<span class="source-line-no">450</span><span id="line-450">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">451</span><span id="line-451">   // Map conversions</span>
+<span class="source-line-no">452</span><span id="line-452">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">453</span><span id="line-453"></span>
+<span class="source-line-no">454</span><span id="line-454">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findMapConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">455</span><span id="line-455">      if (Map.class.isAssignableFrom(inType)) {</span>
+<span class="source-line-no">456</span><span id="line-456">         return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">457</span><span id="line-457">            // Treat Object.class as "no key/value type" since it means untyped/raw and needs no element conversion.</span>
+<span class="source-line-no">458</span><span id="line-458">            var keyType = args.length &gt; 0 &amp;&amp; args[0] != Object.class ? args[0] : null;</span>
+<span class="source-line-no">459</span><span id="line-459">            var valType = args.length &gt; 1 &amp;&amp; args[1] != Object.class ? args[1] : null;</span>
+<span class="source-line-no">460</span><span id="line-460">            if (keyType == null &amp;&amp; outType.isAssignableFrom(inType))</span>
+<span class="source-line-no">461</span><span id="line-461">               return (O) in;</span>
+<span class="source-line-no">462</span><span id="line-462">            var result = newMap(outType);</span>
+<span class="source-line-no">463</span><span id="line-463">            ((Map&lt;?, ?&gt;) in).forEach((k, v) -&gt; result.put(</span>
+<span class="source-line-no">464</span><span id="line-464">               keyType != null ? to(k, keyType) : k,</span>
+<span class="source-line-no">465</span><span id="line-465">               valType != null ? to(v, valType) : v</span>
+<span class="source-line-no">466</span><span id="line-466">            ));</span>
+<span class="source-line-no">467</span><span id="line-467">            return (O) result;</span>
+<span class="source-line-no">468</span><span id="line-468">         };</span>
+<span class="source-line-no">469</span><span id="line-469">      }</span>
+<span class="source-line-no">470</span><span id="line-470">      return null;</span>
+<span class="source-line-no">471</span><span id="line-471">   }</span>
+<span class="source-line-no">472</span><span id="line-472"></span>
+<span class="source-line-no">473</span><span id="line-473">   private Map&lt;Object, Object&gt; newMap(Class&lt;?&gt; outType) {</span>
+<span class="source-line-no">474</span><span id="line-474">      if (outType == Map.class || outType == LinkedHashMap.class || outType == AbstractMap.class)</span>
+<span class="source-line-no">475</span><span id="line-475">         return new LinkedHashMap&lt;&gt;();</span>
+<span class="source-line-no">476</span><span id="line-476">      if (outType == SortedMap.class || outType == NavigableMap.class || outType == TreeMap.class)</span>
+<span class="source-line-no">477</span><span id="line-477">         return new TreeMap&lt;&gt;();</span>
+<span class="source-line-no">478</span><span id="line-478">      if (outType == HashMap.class)</span>
+<span class="source-line-no">479</span><span id="line-479">         return new HashMap&lt;&gt;();</span>
+<span class="source-line-no">480</span><span id="line-480">      return newInstanceOrDefault(outType, LinkedHashMap::new);</span>
+<span class="source-line-no">481</span><span id="line-481">   }</span>
+<span class="source-line-no">482</span><span id="line-482"></span>
+<span class="source-line-no">483</span><span id="line-483">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">484</span><span id="line-484">   // Array conversions</span>
+<span class="source-line-no">485</span><span id="line-485">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">486</span><span id="line-486"></span>
+<span class="source-line-no">487</span><span id="line-487">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findArrayConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">488</span><span id="line-488">      if (Collection.class.isAssignableFrom(inType) || inType.isArray()) {</span>
+<span class="source-line-no">489</span><span id="line-489">         var componentType = outType.getComponentType();</span>
+<span class="source-line-no">490</span><span id="line-490">         // For array→array, validate that element-level conversion is possible.</span>
+<span class="source-line-no">491</span><span id="line-491">         // Skip the pre-check for Object[] — runtime elements may be of a more specific type.</span>
+<span class="source-line-no">492</span><span id="line-492">         // Collections use runtime element types so we skip the pre-check there too.</span>
+<span class="source-line-no">493</span><span id="line-493">         if (inType.isArray()) {</span>
+<span class="source-line-no">494</span><span id="line-494">            var inComponentType = inType.getComponentType();</span>
+<span class="source-line-no">495</span><span id="line-495">            // Primitive component types are auto-boxed by Array.get(), so skip the canConvert check.</span>
+<span class="source-line-no">496</span><span id="line-496">            // Otherwise verify that element-level conversion is possible before returning a lambda.</span>
+<span class="source-line-no">497</span><span id="line-497">            if (!inComponentType.isPrimitive()</span>
+<span class="source-line-no">498</span><span id="line-498">                  &amp;&amp; inComponentType != componentType</span>
+<span class="source-line-no">499</span><span id="line-499">                  &amp;&amp; inComponentType != Object.class</span>
+<span class="source-line-no">500</span><span id="line-500">                  &amp;&amp; !canConvert(inComponentType, componentType))</span>
+<span class="source-line-no">501</span><span id="line-501">               return null;</span>
+<span class="source-line-no">502</span><span id="line-502">         }</span>
+<span class="source-line-no">503</span><span id="line-503">         return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">504</span><span id="line-504">            if (Collection.class.isAssignableFrom(inType)) {</span>
+<span class="source-line-no">505</span><span id="line-505">               var list = (Collection&lt;?&gt;) in;</span>
+<span class="source-line-no">506</span><span id="line-506">               var arr = Array.newInstance(componentType, list.size());</span>
+<span class="source-line-no">507</span><span id="line-507">               var i = 0;</span>
+<span class="source-line-no">508</span><span id="line-508">               for (var elem : list)</span>
+<span class="source-line-no">509</span><span id="line-509">                  Array.set(arr, i++, to(elem, memberOf, session, componentType));</span>
+<span class="source-line-no">510</span><span id="line-510">               return (O) arr;</span>
+<span class="source-line-no">511</span><span id="line-511">            }</span>
+<span class="source-line-no">512</span><span id="line-512">            var len = Array.getLength(in);</span>
+<span class="source-line-no">513</span><span id="line-513">            var arr = Array.newInstance(componentType, len);</span>
+<span class="source-line-no">514</span><span id="line-514">            for (var i = 0; i &lt; len; i++)</span>
+<span class="source-line-no">515</span><span id="line-515">               Array.set(arr, i, to(Array.get(in, i), memberOf, session, componentType));</span>
+<span class="source-line-no">516</span><span id="line-516">            return (O) arr;</span>
+<span class="source-line-no">517</span><span id="line-517">         };</span>
+<span class="source-line-no">518</span><span id="line-518">      }</span>
+<span class="source-line-no">519</span><span id="line-519">      return null;</span>
+<span class="source-line-no">520</span><span id="line-520">   }</span>
+<span class="source-line-no">521</span><span id="line-521"></span>
+<span class="source-line-no">522</span><span id="line-522">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">523</span><span id="line-523">   // Special-case conversions</span>
+<span class="source-line-no">524</span><span id="line-524">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">525</span><span id="line-525"></span>
+<span class="source-line-no">526</span><span id="line-526">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findSpecialConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">527</span><span id="line-527">      if (inType == String.class &amp;&amp; outType == TimeZone.class)</span>
+<span class="source-line-no">528</span><span id="line-528">         return (Conversion&lt;I, O&gt;) (Conversion&lt;String, TimeZone&gt;) (in, memberOf, session, args) -&gt; TimeZone.getTimeZone(in);</span>
+<span class="source-line-no">529</span><span id="line-529">      if (TimeZone.class.isAssignableFrom(inType) &amp;&amp; outType == String.class)</span>
+<span class="source-line-no">530</span><span id="line-530">         return (Conversion&lt;I, O&gt;) (Conversion&lt;TimeZone, String&gt;) (in, memberOf, session, args) -&gt; in.getID();</span>
+<span class="source-line-no">531</span><span id="line-531">      if (inType == String.class &amp;&amp; outType == Locale.class)</span>
+<span class="source-line-no">532</span><span id="line-532">         return (Conversion&lt;I, O&gt;) (Conversion&lt;String, Locale&gt;) (in, memberOf, session, args) -&gt; Locale.forLanguageTag(in.replace('_', '-'));</span>
+<span class="source-line-no">533</span><span id="line-533">      if (CharSequence.class.isAssignableFrom(inType) &amp;&amp; outType == Boolean.class)</span>
+<span class="source-line-no">534</span><span id="line-534">         return (in, memberOf, session, args) -&gt; {</span>
+<span class="source-line-no">535</span><span id="line-535">            var s = in.toString();</span>
+<span class="source-line-no">536</span><span id="line-536">            if (s.isEmpty() || "null".equals(s))</span>
+<span class="source-line-no">537</span><span id="line-537">               return null;</span>
+<span class="source-line-no">538</span><span id="line-538">            return (O) Boolean.valueOf(s);</span>
+<span class="source-line-no">539</span><span id="line-539">         };</span>
+<span class="source-line-no">540</span><span id="line-540">      if (CharSequence.class.isAssignableFrom(inType) &amp;&amp; outType == byte[].class)</span>
+<span class="source-line-no">541</span><span id="line-541">         return (in, memberOf, session, args) -&gt; (O) in.toString().getBytes(StandardCharsets.UTF_8);</span>
+<span class="source-line-no">542</span><span id="line-542">      return null;</span>
+<span class="source-line-no">543</span><span id="line-543">   }</span>
+<span class="source-line-no">544</span><span id="line-544"></span>
+<span class="source-line-no">545</span><span id="line-545">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">546</span><span id="line-546">   // Reflection: static factory methods</span>
+<span class="source-line-no">547</span><span id="line-547">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">548</span><span id="line-548"></span>
+<span class="source-line-no">549</span><span id="line-549">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findStaticFactory(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">550</span><span id="line-550">      var ci = info(outType);</span>
+<span class="source-line-no">551</span><span id="line-551"></span>
+<span class="source-line-no">552</span><span id="line-552">      for (var name : FACTORY_METHOD_NAMES) {</span>
+<span class="source-line-no">553</span><span id="line-553">         var opt = findStaticMethod(ci, name, inType, outType);</span>
+<span class="source-line-no">554</span><span id="line-554">         if (opt.isPresent())</span>
+<span class="source-line-no">555</span><span id="line-555">            return (in, memberOf, session, args) -&gt; opt.get().invoke(null, in);</span>
+<span class="source-line-no">556</span><span id="line-556">      }</span>
+<span class="source-line-no">557</span><span id="line-557"></span>
+<span class="source-line-no">558</span><span id="line-558">      // Walk the type hierarchy (superclasses then interfaces) so that e.g. InputStreamReader</span>
+<span class="source-line-no">559</span><span id="line-559">      // can be passed to a method declared as fromReader(Reader r).</span>
+<span class="source-line-no">560</span><span id="line-560">      for (Class&lt;?&gt; c = inType; c != null &amp;&amp; c != Object.class; c = c.getSuperclass()) {</span>
+<span class="source-line-no">561</span><span id="line-561">         var inName = c.getSimpleName();</span>
+<span class="source-line-no">562</span><span id="line-562">         for (var prefix : new String[]{"from", "for", "parse"}) {</span>
+<span class="source-line-no">563</span><span id="line-563">            var opt = findStaticMethod(ci, prefix + inName, inType, outType);</span>
+<span class="source-line-no">564</span><span id="line-564">            if (opt.isPresent())</span>
+<span class="source-line-no">565</span><span id="line-565">               return (in, memberOf, session, args) -&gt; opt.get().invoke(null, in);</span>
+<span class="source-line-no">566</span><span id="line-566">         }</span>
+<span class="source-line-no">567</span><span id="line-567">      }</span>
+<span class="source-line-no">568</span><span id="line-568">      for (var iface : allInterfaces(inType)) {</span>
+<span class="source-line-no">569</span><span id="line-569">         var inName = iface.getSimpleName();</span>
+<span class="source-line-no">570</span><span id="line-570">         for (var prefix : new String[]{"from", "for", "parse"}) {</span>
+<span class="source-line-no">571</span><span id="line-571">            var opt = findStaticMethod(ci, prefix + inName, inType, outType);</span>
+<span class="source-line-no">572</span><span id="line-572">            if (opt.isPresent())</span>
+<span class="source-line-no">573</span><span id="line-573">               return (in, memberOf, session, args) -&gt; opt.get().invoke(null, in);</span>
+<span class="source-line-no">574</span><span id="line-574">         }</span>
+<span class="source-line-no">575</span><span id="line-575">      }</span>
+<span class="source-line-no">576</span><span id="line-576"></span>
+<span class="source-line-no">577</span><span id="line-577">      return null;</span>
+<span class="source-line-no">578</span><span id="line-578">   }</span>
+<span class="source-line-no">579</span><span id="line-579"></span>
+<span class="source-line-no">580</span><span id="line-580">   private static List&lt;Class&lt;?&gt;&gt; allInterfaces(Class&lt;?&gt; c) {</span>
+<span class="source-line-no">581</span><span id="line-581">      var result = new ArrayList&lt;Class&lt;?&gt;&gt;();</span>
+<span class="source-line-no">582</span><span id="line-582">      for (var x = c; x != null; x = x.getSuperclass())</span>
+<span class="source-line-no">583</span><span id="line-583">         for (var iface : x.getInterfaces())</span>
+<span class="source-line-no">584</span><span id="line-584">            collectInterfaces(iface, result);</span>
+<span class="source-line-no">585</span><span id="line-585">      return result;</span>
+<span class="source-line-no">586</span><span id="line-586">   }</span>
+<span class="source-line-no">587</span><span id="line-587"></span>
+<span class="source-line-no">588</span><span id="line-588">   private static void collectInterfaces(Class&lt;?&gt; iface, List&lt;Class&lt;?&gt;&gt; result) {</span>
+<span class="source-line-no">589</span><span id="line-589">      if (!result.contains(iface)) {</span>
+<span class="source-line-no">590</span><span id="line-590">         result.add(iface);</span>
+<span class="source-line-no">591</span><span id="line-591">         for (var parent : iface.getInterfaces())</span>
+<span class="source-line-no">592</span><span id="line-592">            collectInterfaces(parent, result);</span>
+<span class="source-line-no">593</span><span id="line-593">      }</span>
+<span class="source-line-no">594</span><span id="line-594">   }</span>
+<span class="source-line-no">595</span><span id="line-595"></span>
+<span class="source-line-no">596</span><span id="line-596">   private Optional&lt;MethodInfo&gt; findStaticMethod(ClassInfo ci, String name, Class&lt;?&gt; inType, Class&lt;?&gt; outType) {</span>
+<span class="source-line-no">597</span><span id="line-597">      return ci.getPublicMethod(m -&gt;</span>
+<span class="source-line-no">598</span><span id="line-598">         m.isStatic()</span>
+<span class="source-line-no">599</span><span id="line-599">         &amp;&amp; m.isNotDeprecated()</span>
+<span class="source-line-no">600</span><span id="line-600">         &amp;&amp; m.hasName(name)</span>
+<span class="source-line-no">601</span><span id="line-601">         &amp;&amp; m.getParameterCount() == 1</span>
+<span class="source-line-no">602</span><span id="line-602">         &amp;&amp; m.getParameterTypes().get(0).isAssignableFrom(inType)</span>
+<span class="source-line-no">603</span><span id="line-603">         &amp;&amp; m.hasReturnTypeParent(outType)</span>
+<span class="source-line-no">604</span><span id="line-604">         // Exclude generic Object-param factory methods (e.g. List.of(E)) when input is not Object,</span>
+<span class="source-line-no">605</span><span id="line-605">         // since type erasure makes E appear as Object at runtime, causing false matches.</span>
+<span class="source-line-no">606</span><span id="line-606">         &amp;&amp; (inType == Object.class || m.getParameterTypes().get(0).inner() != Object.class)</span>
+<span class="source-line-no">607</span><span id="line-607">      );</span>
+<span class="source-line-no">608</span><span id="line-608">   }</span>
+<span class="source-line-no">609</span><span id="line-609"></span>
+<span class="source-line-no">610</span><span id="line-610">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">611</span><span id="line-611">   // Reflection: public constructors</span>
+<span class="source-line-no">612</span><span id="line-612">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">613</span><span id="line-613"></span>
+<span class="source-line-no">614</span><span id="line-614">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findConstructorConversion(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">615</span><span id="line-615">      if (outType.getEnclosingClass() != null &amp;&amp; !Modifier.isStatic(outType.getModifiers())) {</span>
+<span class="source-line-no">616</span><span id="line-616">         var enclosing = outType.getEnclosingClass();</span>
+<span class="source-line-no">617</span><span id="line-617">         var opt = info(outType).getPublicConstructor(c -&gt;</span>
+<span class="source-line-no">618</span><span id="line-618">            c.getParameterCount() == 2</span>
+<span class="source-line-no">619</span><span id="line-619">            &amp;&amp; c.isNotDeprecated()</span>
+<span class="source-line-no">620</span><span id="line-620">            &amp;&amp; c.getParameterTypes().get(0).inner() == enclosing</span>
+<span class="source-line-no">621</span><span id="line-621">            &amp;&amp; c.getParameterTypes().get(1).isAssignableFrom(inType)</span>
+<span class="source-line-no">622</span><span id="line-622">         );</span>
+<span class="source-line-no">623</span><span id="line-623">         if (opt.isPresent()) {</span>
+<span class="source-line-no">624</span><span id="line-624">            var ctor = opt.get();</span>
+<span class="source-line-no">625</span><span id="line-625">            return (in, memberOf, session, args) -&gt; ctor.newInstance(memberOf, in);</span>
+<span class="source-line-no">626</span><span id="line-626">         }</span>
+<span class="source-line-no">627</span><span id="line-627">      }</span>
+<span class="source-line-no">628</span><span id="line-628"></span>
+<span class="source-line-no">629</span><span id="line-629">      var opt = info(outType).getPublicConstructor(c -&gt;</span>
+<span class="source-line-no">630</span><span id="line-630">         c.getParameterCount() == 1</span>
+<span class="source-line-no">631</span><span id="line-631">         &amp;&amp; c.isNotDeprecated()</span>
+<span class="source-line-no">632</span><span id="line-632">         &amp;&amp; c.getParameterTypes().get(0).isAssignableFrom(inType)</span>
+<span class="source-line-no">633</span><span id="line-633">      );</span>
+<span class="source-line-no">634</span><span id="line-634">      if (opt.isPresent()) {</span>
+<span class="source-line-no">635</span><span id="line-635">         var ctor = opt.get();</span>
+<span class="source-line-no">636</span><span id="line-636">         return (in, memberOf, session, args) -&gt; ctor.newInstance(in);</span>
+<span class="source-line-no">637</span><span id="line-637">      }</span>
+<span class="source-line-no">638</span><span id="line-638">      return null;</span>
+<span class="source-line-no">639</span><span id="line-639">   }</span>
+<span class="source-line-no">640</span><span id="line-640"></span>
+<span class="source-line-no">641</span><span id="line-641">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">642</span><span id="line-642">   // Reflection: toX() instance methods</span>
+<span class="source-line-no">643</span><span id="line-643">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">644</span><span id="line-644"></span>
+<span class="source-line-no">645</span><span id="line-645">   private &lt;I, O&gt; Conversion&lt;I, O&gt; findToXMethod(Class&lt;I&gt; inType, Class&lt;O&gt; outType) {</span>
+<span class="source-line-no">646</span><span id="line-646">      // Use getNameReadable() so that array types use "Array" suffix (e.g. "toStringArray" for String[]).</span>
+<span class="source-line-no">647</span><span id="line-647">      // Use equalsIgnoreCase to match Mutaters' behavior (e.g. "toByteArray" matches "tobyteArray" from byte[]).</span>
+<span class="source-line-no">648</span><span id="line-648">      var methodName = "to" + info(outType).getNameReadable();</span>
+<span class="source-line-no">649</span><span id="line-649">      var opt = info(inType).getPublicMethod(m -&gt;</span>
+<span class="source-line-no">650</span><span id="line-650">         m.isNotStatic()</span>
+<span class="source-line-no">651</span><span id="line-651">         &amp;&amp; m.isNotDeprecated()</span>
+<span class="source-line-no">652</span><span id="line-652">         &amp;&amp; m.getParameterCount() == 0</span>
+<span class="source-line-no">653</span><span id="line-653">         &amp;&amp; m.getNameSimple().equalsIgnoreCase(methodName)</span>
+<span class="source-line-no">654</span><span id="line-654">         &amp;&amp; m.hasReturnTypeParent(outType)</span>
+<span class="source-line-no">655</span><span id="line-655">      );</span>
+<span class="source-line-no">656</span><span id="line-656">      if (opt.isPresent()) {</span>
+<span class="source-line-no">657</span><span id="line-657">         var method = opt.get();</span>
+<span class="source-line-no">658</span><span id="line-658">         return (in, memberOf, session, args) -&gt; method.invoke(in);</span>
+<span class="source-line-no">659</span><span id="line-659">      }</span>
+<span class="source-line-no">660</span><span id="line-660">      return null;</span>
+<span class="source-line-no">661</span><span id="line-661">   }</span>
+<span class="source-line-no">662</span><span id="line-662"></span>
+<span class="source-line-no">663</span><span id="line-663">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">664</span><span id="line-664">   // Helpers</span>
+<span class="source-line-no">665</span><span id="line-665">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">666</span><span id="line-666"></span>
+<span class="source-line-no">667</span><span id="line-667">   private &lt;T&gt; T newInstanceOrDefault(Class&lt;?&gt; type, java.util.function.Supplier&lt;T&gt; defaultSupplier) {</span>
+<span class="source-line-no">668</span><span id="line-668">      var opt = info(type).getPublicConstructor(c -&gt; c.getParameterCount() == 0);</span>
+<span class="source-line-no">669</span><span id="line-669">      if (opt.isPresent()) {</span>
+<span class="source-line-no">670</span><span id="line-670">         var ctor = opt.get();</span>
+<span class="source-line-no">671</span><span id="line-671">         try {</span>
+<span class="source-line-no">672</span><span id="line-672">            return ctor.newInstance();</span>
+<span class="source-line-no">673</span><span id="line-673">         } catch (@SuppressWarnings("unused") Exception e) { // HTT: constructor would have to throw to reach here</span>
+<span class="source-line-no">674</span><span id="line-674">            return defaultSupplier.get(); // HTT</span>
+<span class="source-line-no">675</span><span id="line-675">         }</span>
+<span class="source-line-no">676</span><span id="line-676">      }</span>
+<span class="source-line-no">677</span><span id="line-677">      return defaultSupplier.get();</span>
+<span class="source-line-no">678</span><span id="line-678">   }</span>
+<span class="source-line-no">679</span><span id="line-679">}</span>
 
 
 

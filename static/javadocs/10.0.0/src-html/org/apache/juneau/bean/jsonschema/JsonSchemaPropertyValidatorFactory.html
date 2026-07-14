@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.jsonschema;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> * {@link PropertyValidatorFactory} implementation backed by the typed {@link JsonSchema} bean.</span>
 <span class="source-line-no">028</span><span id="line-28"> *</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * This factory is registered as a {@link java.util.ServiceLoader ServiceLoader} provider for</span>
+<span class="source-line-no">030</span><span id="line-30"> * This factory is registered as a {@link ServiceLoader ServiceLoader} provider for</span>
 <span class="source-line-no">031</span><span id="line-31"> * {@link PropertyValidatorFactory} via {@code META-INF/services/org.apache.juneau.commons.bean.PropertyValidatorFactory}.</span>
 <span class="source-line-no">032</span><span id="line-32"> * Marshalling-side code discovers it through {@link PropertyValidators#factory()} at runtime.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
@@ -54,14 +54,14 @@
 <span class="source-line-no">041</span><span id="line-41"> */</span>
 <span class="source-line-no">042</span><span id="line-42">public final class JsonSchemaPropertyValidatorFactory implements PropertyValidatorFactory {</span>
 <span class="source-line-no">043</span><span id="line-43"></span>
-<span class="source-line-no">044</span><span id="line-44">   /** Public no-arg constructor required by {@link java.util.ServiceLoader ServiceLoader}. */</span>
+<span class="source-line-no">044</span><span id="line-44">   /** Public no-arg constructor required by {@link ServiceLoader ServiceLoader}. */</span>
 <span class="source-line-no">045</span><span id="line-45">   public JsonSchemaPropertyValidatorFactory() {</span>
 <span class="source-line-no">046</span><span id="line-46">      /* intentionally empty — required public no-arg constructor for ServiceLoader */</span>
 <span class="source-line-no">047</span><span id="line-47">   }</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
 <span class="source-line-no">049</span><span id="line-49">   @Override</span>
 <span class="source-line-no">050</span><span id="line-50">   public PropertyValidator create(Map&lt;String,Object&gt; schemaMap, Class&lt;?&gt; propertyType) {</span>
-<span class="source-line-no">051</span><span id="line-51">      if (e(schemaMap))</span>
+<span class="source-line-no">051</span><span id="line-51">      if (ie(schemaMap))</span>
 <span class="source-line-no">052</span><span id="line-52">         return null;</span>
 <span class="source-line-no">053</span><span id="line-53">      var jm = (schemaMap instanceof JsonMap m) ? m : new JsonMap(schemaMap);</span>
 <span class="source-line-no">054</span><span id="line-54">      var schema = JsonSchemaBeanGenerator.toBean(jm);</span>

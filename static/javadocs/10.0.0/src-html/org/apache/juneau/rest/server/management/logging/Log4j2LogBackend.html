@@ -68,72 +68,75 @@
 <span class="source-line-no">055</span><span id="line-55"> */</span>
 <span class="source-line-no">056</span><span id="line-56">public class Log4j2LogBackend implements LogBackend {</span>
 <span class="source-line-no">057</span><span id="line-57"></span>
-<span class="source-line-no">058</span><span id="line-58">   private final LoggerContext context;</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   /**</span>
-<span class="source-line-no">061</span><span id="line-61">    * Constructor using the current Log4j2 {@link LoggerContext}.</span>
-<span class="source-line-no">062</span><span id="line-62">    */</span>
-<span class="source-line-no">063</span><span id="line-63">   public Log4j2LogBackend() {</span>
-<span class="source-line-no">064</span><span id="line-64">      this((LoggerContext) LogManager.getContext(false));</span>
-<span class="source-line-no">065</span><span id="line-65">   }</span>
-<span class="source-line-no">066</span><span id="line-66"></span>
-<span class="source-line-no">067</span><span id="line-67">   /**</span>
-<span class="source-line-no">068</span><span id="line-68">    * Constructor with an explicit {@link LoggerContext} (for tests / multi-context setups).</span>
-<span class="source-line-no">069</span><span id="line-69">    *</span>
-<span class="source-line-no">070</span><span id="line-70">    * @param context The Log4j2 logger context. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">071</span><span id="line-71">    */</span>
-<span class="source-line-no">072</span><span id="line-72">   public Log4j2LogBackend(LoggerContext context) {</span>
-<span class="source-line-no">073</span><span id="line-73">      this.context = Objects.requireNonNull(context, "context");</span>
-<span class="source-line-no">074</span><span id="line-74">   }</span>
-<span class="source-line-no">075</span><span id="line-75"></span>
-<span class="source-line-no">076</span><span id="line-76">   @Override /* LogBackend */</span>
-<span class="source-line-no">077</span><span id="line-77">   public Map&lt;String,String&gt; getLevels() {</span>
-<span class="source-line-no">078</span><span id="line-78">      var out = new TreeMap&lt;String,String&gt;();</span>
-<span class="source-line-no">079</span><span id="line-79">      var cfg = context.getConfiguration();</span>
-<span class="source-line-no">080</span><span id="line-80">      // The root LoggerConfig is NOT in getLoggers() (that map holds only the named, explicitly-configured</span>
-<span class="source-line-no">081</span><span id="line-81">      // loggers) - it's reachable via getRootLogger().  Surface it under the "ROOT" key.</span>
-<span class="source-line-no">082</span><span id="line-82">      var root = cfg.getRootLogger();</span>
-<span class="source-line-no">083</span><span id="line-83">      if (root != null)</span>
-<span class="source-line-no">084</span><span id="line-84">         out.put("ROOT", root.getLevel() == null ? "" : root.getLevel().name());</span>
-<span class="source-line-no">085</span><span id="line-85">      for (var lc : cfg.getLoggers().values()) {</span>
-<span class="source-line-no">086</span><span id="line-86">         if (lc.getName().isEmpty())</span>
-<span class="source-line-no">087</span><span id="line-87">            continue;  // defensive: root already handled above</span>
-<span class="source-line-no">088</span><span id="line-88">         out.put(lc.getName(), lc.getLevel() == null ? "" : lc.getLevel().name());</span>
-<span class="source-line-no">089</span><span id="line-89">      }</span>
-<span class="source-line-no">090</span><span id="line-90">      return out;</span>
-<span class="source-line-no">091</span><span id="line-91">   }</span>
-<span class="source-line-no">092</span><span id="line-92"></span>
-<span class="source-line-no">093</span><span id="line-93">   @Override /* LogBackend */</span>
-<span class="source-line-no">094</span><span id="line-94">   public String getLevel(String name) {</span>
-<span class="source-line-no">095</span><span id="line-95">      var cfg = context.getConfiguration();</span>
-<span class="source-line-no">096</span><span id="line-96">      var resolved = resolveName(name);</span>
-<span class="source-line-no">097</span><span id="line-97">      var lc = resolved.isEmpty() ? cfg.getRootLogger() : cfg.getLoggers().get(resolved);</span>
-<span class="source-line-no">098</span><span id="line-98">      if (lc == null)</span>
-<span class="source-line-no">099</span><span id="line-99">         return null;</span>
-<span class="source-line-no">100</span><span id="line-100">      var level = lc.getLevel();</span>
-<span class="source-line-no">101</span><span id="line-101">      return level == null ? "" : level.name();</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   @Override /* LogBackend */</span>
-<span class="source-line-no">105</span><span id="line-105">   public void setLevel(String name, String level) {</span>
-<span class="source-line-no">106</span><span id="line-106">      var target = (name == null || name.equals("ROOT")) ? LogManager.ROOT_LOGGER_NAME : name;</span>
-<span class="source-line-no">107</span><span id="line-107">      // Null/blank clears the override back to the parent's level (Configurator treats null as "remove override").</span>
-<span class="source-line-no">108</span><span id="line-108">      Configurator.setLevel(target, level == null || level.isBlank() ? null : parse(level.trim()));</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   private static Level parse(String level) {</span>
-<span class="source-line-no">112</span><span id="line-112">      // Level.getLevel(name) returns null for an unknown name (Level.toLevel would silently default) - hard-fail</span>
-<span class="source-line-no">113</span><span id="line-113">      // to match the JUL backend's IllegalArgumentException contract.</span>
-<span class="source-line-no">114</span><span id="line-114">      var l = Level.getLevel(level.toUpperCase(Locale.ROOT));</span>
-<span class="source-line-no">115</span><span id="line-115">      if (l == null)</span>
-<span class="source-line-no">116</span><span id="line-116">         throw new IllegalArgumentException("Not a valid Log4j2 level: '" + level + "'.");</span>
-<span class="source-line-no">117</span><span id="line-117">      return l;</span>
-<span class="source-line-no">118</span><span id="line-118">   }</span>
-<span class="source-line-no">119</span><span id="line-119"></span>
-<span class="source-line-no">120</span><span id="line-120">   private static String resolveName(String name) {</span>
-<span class="source-line-no">121</span><span id="line-121">      return (name == null || name.equals("ROOT")) ? "" : name;</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
-<span class="source-line-no">123</span><span id="line-123">}</span>
+<span class="source-line-no">058</span><span id="line-58">   @SuppressWarnings({</span>
+<span class="source-line-no">059</span><span id="line-59">      "resource" // Shared Log4j2 LoggerContext owned by LogManager/caller - not closed here.</span>
+<span class="source-line-no">060</span><span id="line-60">   })</span>
+<span class="source-line-no">061</span><span id="line-61">   private final LoggerContext context;</span>
+<span class="source-line-no">062</span><span id="line-62"></span>
+<span class="source-line-no">063</span><span id="line-63">   /**</span>
+<span class="source-line-no">064</span><span id="line-64">    * Constructor using the current Log4j2 {@link LoggerContext}.</span>
+<span class="source-line-no">065</span><span id="line-65">    */</span>
+<span class="source-line-no">066</span><span id="line-66">   public Log4j2LogBackend() {</span>
+<span class="source-line-no">067</span><span id="line-67">      this((LoggerContext) LogManager.getContext(false));</span>
+<span class="source-line-no">068</span><span id="line-68">   }</span>
+<span class="source-line-no">069</span><span id="line-69"></span>
+<span class="source-line-no">070</span><span id="line-70">   /**</span>
+<span class="source-line-no">071</span><span id="line-71">    * Constructor with an explicit {@link LoggerContext} (for tests / multi-context setups).</span>
+<span class="source-line-no">072</span><span id="line-72">    *</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param context The Log4j2 logger context. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">074</span><span id="line-74">    */</span>
+<span class="source-line-no">075</span><span id="line-75">   public Log4j2LogBackend(LoggerContext context) {</span>
+<span class="source-line-no">076</span><span id="line-76">      this.context = Objects.requireNonNull(context, "context");</span>
+<span class="source-line-no">077</span><span id="line-77">   }</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   @Override /* LogBackend */</span>
+<span class="source-line-no">080</span><span id="line-80">   public Map&lt;String,String&gt; getLevels() {</span>
+<span class="source-line-no">081</span><span id="line-81">      var out = new TreeMap&lt;String,String&gt;();</span>
+<span class="source-line-no">082</span><span id="line-82">      var cfg = context.getConfiguration();</span>
+<span class="source-line-no">083</span><span id="line-83">      // The root LoggerConfig is NOT in getLoggers() (that map holds only the named, explicitly-configured</span>
+<span class="source-line-no">084</span><span id="line-84">      // loggers) - it's reachable via getRootLogger().  Surface it under the "ROOT" key.</span>
+<span class="source-line-no">085</span><span id="line-85">      var root = cfg.getRootLogger();</span>
+<span class="source-line-no">086</span><span id="line-86">      if (root != null)</span>
+<span class="source-line-no">087</span><span id="line-87">         out.put("ROOT", root.getLevel() == null ? "" : root.getLevel().name());</span>
+<span class="source-line-no">088</span><span id="line-88">      for (var lc : cfg.getLoggers().values()) {</span>
+<span class="source-line-no">089</span><span id="line-89">         if (lc.getName().isEmpty())</span>
+<span class="source-line-no">090</span><span id="line-90">            continue;  // defensive: root already handled above</span>
+<span class="source-line-no">091</span><span id="line-91">         out.put(lc.getName(), lc.getLevel() == null ? "" : lc.getLevel().name());</span>
+<span class="source-line-no">092</span><span id="line-92">      }</span>
+<span class="source-line-no">093</span><span id="line-93">      return out;</span>
+<span class="source-line-no">094</span><span id="line-94">   }</span>
+<span class="source-line-no">095</span><span id="line-95"></span>
+<span class="source-line-no">096</span><span id="line-96">   @Override /* LogBackend */</span>
+<span class="source-line-no">097</span><span id="line-97">   public String getLevel(String name) {</span>
+<span class="source-line-no">098</span><span id="line-98">      var cfg = context.getConfiguration();</span>
+<span class="source-line-no">099</span><span id="line-99">      var resolved = resolveName(name);</span>
+<span class="source-line-no">100</span><span id="line-100">      var lc = resolved.isEmpty() ? cfg.getRootLogger() : cfg.getLoggers().get(resolved);</span>
+<span class="source-line-no">101</span><span id="line-101">      if (lc == null)</span>
+<span class="source-line-no">102</span><span id="line-102">         return null;</span>
+<span class="source-line-no">103</span><span id="line-103">      var level = lc.getLevel();</span>
+<span class="source-line-no">104</span><span id="line-104">      return level == null ? "" : level.name();</span>
+<span class="source-line-no">105</span><span id="line-105">   }</span>
+<span class="source-line-no">106</span><span id="line-106"></span>
+<span class="source-line-no">107</span><span id="line-107">   @Override /* LogBackend */</span>
+<span class="source-line-no">108</span><span id="line-108">   public void setLevel(String name, String level) {</span>
+<span class="source-line-no">109</span><span id="line-109">      var target = (name == null || name.equals("ROOT")) ? LogManager.ROOT_LOGGER_NAME : name;</span>
+<span class="source-line-no">110</span><span id="line-110">      // Null/blank clears the override back to the parent's level (Configurator treats null as "remove override").</span>
+<span class="source-line-no">111</span><span id="line-111">      Configurator.setLevel(target, level == null || level.isBlank() ? null : parse(level.trim()));</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   private static Level parse(String level) {</span>
+<span class="source-line-no">115</span><span id="line-115">      // Level.getLevel(name) returns null for an unknown name (Level.toLevel would silently default) - hard-fail</span>
+<span class="source-line-no">116</span><span id="line-116">      // to match the JUL backend's IllegalArgumentException contract.</span>
+<span class="source-line-no">117</span><span id="line-117">      var l = Level.getLevel(level.toUpperCase(Locale.ROOT));</span>
+<span class="source-line-no">118</span><span id="line-118">      if (l == null)</span>
+<span class="source-line-no">119</span><span id="line-119">         throw new IllegalArgumentException("Not a valid Log4j2 level: '" + level + "'.");</span>
+<span class="source-line-no">120</span><span id="line-120">      return l;</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122"></span>
+<span class="source-line-no">123</span><span id="line-123">   private static String resolveName(String name) {</span>
+<span class="source-line-no">124</span><span id="line-124">      return (name == null || name.equals("ROOT")) ? "" : name;</span>
+<span class="source-line-no">125</span><span id="line-125">   }</span>
+<span class="source-line-no">126</span><span id="line-126">}</span>
 
 
 

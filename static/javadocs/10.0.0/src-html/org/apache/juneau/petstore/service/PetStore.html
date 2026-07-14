@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.petstore.service;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.io.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.nio.charset.*;</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * state back to the seeded baseline.</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstoreOverview"&gt;juneau-petstore&lt;/a&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore"&gt;juneau-petstore&lt;/a&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> */</span>
 <span class="source-line-no">046</span><span id="line-46">public class PetStore {</span>
@@ -112,7 +112,7 @@
 <span class="source-line-no">099</span><span id="line-99">            return Json5Parser.DEFAULT.parse(reader, List.class, elementType);</span>
 <span class="source-line-no">100</span><span id="line-100">         }</span>
 <span class="source-line-no">101</span><span id="line-101">      } catch (Exception e) {</span>
-<span class="source-line-no">102</span><span id="line-102">         throw bex(e, "Failed to load petstore seed resource ''{0}''", resourcePath);</span>
+<span class="source-line-no">102</span><span id="line-102">         throw brex(e, "Failed to load petstore seed resource ''{0}''", resourcePath);</span>
 <span class="source-line-no">103</span><span id="line-103">      }</span>
 <span class="source-line-no">104</span><span id="line-104">   }</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
@@ -150,7 +150,7 @@
 <span class="source-line-no">137</span><span id="line-137">    */</span>
 <span class="source-line-no">138</span><span id="line-138">   public Pet createPet(Pet pet) {</span>
 <span class="source-line-no">139</span><span id="line-139">      if (pet == null)</span>
-<span class="source-line-no">140</span><span id="line-140">         throw illegalArg("Pet must not be null");</span>
+<span class="source-line-no">140</span><span id="line-140">         throw iaex("Pet must not be null");</span>
 <span class="source-line-no">141</span><span id="line-141">      var id = nextPetId.incrementAndGet();</span>
 <span class="source-line-no">142</span><span id="line-142">      pet.setId(id);</span>
 <span class="source-line-no">143</span><span id="line-143">      pets.put(id, pet);</span>
@@ -166,7 +166,7 @@
 <span class="source-line-no">153</span><span id="line-153">    */</span>
 <span class="source-line-no">154</span><span id="line-154">   public Pet updatePet(Pet pet) {</span>
 <span class="source-line-no">155</span><span id="line-155">      if (pet == null)</span>
-<span class="source-line-no">156</span><span id="line-156">         throw illegalArg("Pet must not be null");</span>
+<span class="source-line-no">156</span><span id="line-156">         throw iaex("Pet must not be null");</span>
 <span class="source-line-no">157</span><span id="line-157">      if (! pets.containsKey(pet.getId()))</span>
 <span class="source-line-no">158</span><span id="line-158">         throw new PetstoreNotFoundException("Pet not found: id=" + pet.getId());</span>
 <span class="source-line-no">159</span><span id="line-159">      pets.put(pet.getId(), pet);</span>
@@ -218,7 +218,7 @@
 <span class="source-line-no">205</span><span id="line-205">    */</span>
 <span class="source-line-no">206</span><span id="line-206">   public Order createOrder(Order order) {</span>
 <span class="source-line-no">207</span><span id="line-207">      if (order == null)</span>
-<span class="source-line-no">208</span><span id="line-208">         throw illegalArg("Order must not be null");</span>
+<span class="source-line-no">208</span><span id="line-208">         throw iaex("Order must not be null");</span>
 <span class="source-line-no">209</span><span id="line-209">      var id = nextOrderId.incrementAndGet();</span>
 <span class="source-line-no">210</span><span id="line-210">      order.setId(id);</span>
 <span class="source-line-no">211</span><span id="line-211">      orders.put(id, order);</span>
@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">    */</span>
 <span class="source-line-no">222</span><span id="line-222">   public Order updateOrder(Order order) {</span>
 <span class="source-line-no">223</span><span id="line-223">      if (order == null)</span>
-<span class="source-line-no">224</span><span id="line-224">         throw illegalArg("Order must not be null");</span>
+<span class="source-line-no">224</span><span id="line-224">         throw iaex("Order must not be null");</span>
 <span class="source-line-no">225</span><span id="line-225">      if (! orders.containsKey(order.getId()))</span>
 <span class="source-line-no">226</span><span id="line-226">         throw new PetstoreNotFoundException("Order not found: id=" + order.getId());</span>
 <span class="source-line-no">227</span><span id="line-227">      orders.put(order.getId(), order);</span>
@@ -284,11 +284,11 @@
 <span class="source-line-no">271</span><span id="line-271">    */</span>
 <span class="source-line-no">272</span><span id="line-272">   public User createUser(User user) {</span>
 <span class="source-line-no">273</span><span id="line-273">      if (user == null)</span>
-<span class="source-line-no">274</span><span id="line-274">         throw illegalArg("User must not be null");</span>
+<span class="source-line-no">274</span><span id="line-274">         throw iaex("User must not be null");</span>
 <span class="source-line-no">275</span><span id="line-275">      if (user.getUsername() == null)</span>
-<span class="source-line-no">276</span><span id="line-276">         throw illegalArg("User username must not be null");</span>
+<span class="source-line-no">276</span><span id="line-276">         throw iaex("User username must not be null");</span>
 <span class="source-line-no">277</span><span id="line-277">      if (users.putIfAbsent(user.getUsername(), user) != null)</span>
-<span class="source-line-no">278</span><span id="line-278">         throw illegalArg("User already exists: username=''{0}''", user.getUsername());</span>
+<span class="source-line-no">278</span><span id="line-278">         throw iaex("User already exists: username=''{0}''", user.getUsername());</span>
 <span class="source-line-no">279</span><span id="line-279">      return user;</span>
 <span class="source-line-no">280</span><span id="line-280">   }</span>
 <span class="source-line-no">281</span><span id="line-281"></span>
@@ -301,7 +301,7 @@
 <span class="source-line-no">288</span><span id="line-288">    */</span>
 <span class="source-line-no">289</span><span id="line-289">   public User updateUser(User user) {</span>
 <span class="source-line-no">290</span><span id="line-290">      if (user == null)</span>
-<span class="source-line-no">291</span><span id="line-291">         throw illegalArg("User must not be null");</span>
+<span class="source-line-no">291</span><span id="line-291">         throw iaex("User must not be null");</span>
 <span class="source-line-no">292</span><span id="line-292">      if (! users.containsKey(user.getUsername()))</span>
 <span class="source-line-no">293</span><span id="line-293">         throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());</span>
 <span class="source-line-no">294</span><span id="line-294">      users.put(user.getUsername(), user);</span>

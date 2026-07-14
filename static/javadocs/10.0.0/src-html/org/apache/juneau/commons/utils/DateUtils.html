@@ -66,7 +66,7 @@
 <span class="source-line-no">053</span><span id="line-53">            }</span>
 <span class="source-line-no">054</span><span id="line-54">            return DateTimeFormatter.ofPattern(pattern);</span>
 <span class="source-line-no">055</span><span id="line-55">         } catch (IllegalArgumentException | IllegalAccessException e) {</span>
-<span class="source-line-no">056</span><span id="line-56">            throw toRex(e);</span>
+<span class="source-line-no">056</span><span id="line-56">            throw toRuntimeException(e);</span>
 <span class="source-line-no">057</span><span id="line-57">         }</span>
 <span class="source-line-no">058</span><span id="line-58">      })</span>
 <span class="source-line-no">059</span><span id="line-59">      .build();</span>

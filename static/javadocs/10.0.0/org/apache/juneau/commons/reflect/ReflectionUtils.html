@@ -153,7 +153,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final &lt;T&gt;&nbsp;<a href="ClassInfoTyped.html" title="class in org.apache.juneau.commons.reflect">ClassInfoTyped</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#info(java.lang.Class)" class="member-name-link">info</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;o)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns the <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> wrapper for the specified class.</div>
+<div class="block">Returns the <a href="ClassInfoTyped.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfoTyped</code></a> wrapper for the specified class.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static final <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#info(java.lang.Object)" class="member-name-link">info</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -195,32 +195,23 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.Class)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassInfoTyped.html" title="class in org.apache.juneau.commons.reflect">ClassInfoTyped</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-97">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;o)</span></div>
-<div class="block">Returns the <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> wrapper for the specified class.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(MyClass.<jk>class</jk>);
- </p></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="ClassInfoTyped.html" title="class in org.apache.juneau.commons.reflect">ClassInfoTyped</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-93">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;o)</span></div>
+<div class="block">Returns the <a href="ClassInfoTyped.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfoTyped</code></a> wrapper for the specified class.</div>
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The class type.</dd>
 <dt>Parameters:</dt>
 <dd><code>o</code> - The class to wrap. Can be <jk>null</jk>.</dd>
 <dt>Returns:</dt>
-<dd>The <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> wrapper, or <jk>null</jk> if the input is <jk>null</jk>.</dd>
+<dd>The <a href="ClassInfoTyped.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfoTyped</code></a> wrapper, or <jk>null</jk> if the input is <jk>null</jk>.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="info(java.lang.reflect.Constructor)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-113">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;?&gt;&nbsp;o)</span></div>
-<div class="block">Returns the <a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> wrapper for the specified constructor.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   Constructor&lt;?&gt; <jv>c</jv> = MyClass.<jk>class</jk>.getConstructor();
-   ConstructorInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>c</jv>);
- </p></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-103">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link">Constructor</a>&lt;?&gt;&nbsp;o)</span></div>
+<div class="block">Returns the <a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> wrapper for the specified constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The constructor to wrap. Can be <jk>null</jk>.</dd>
@@ -232,14 +223,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.reflect.Field)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-129">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html" title="class or interface in java.lang.reflect" class="external-link">Field</a>&nbsp;o)</span></div>
-<div class="block">Returns the <a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect"><code>FieldInfo</code></a> wrapper for the specified field.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   Field <jv>f</jv> = MyClass.<jk>class</jk>.getField(<js>"myField"</js>);
-   FieldInfo <jv>fi</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>f</jv>);
- </p></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect">FieldInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-113">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Field.html" title="class or interface in java.lang.reflect" class="external-link">Field</a>&nbsp;o)</span></div>
+<div class="block">Returns the <a href="FieldInfo.html" title="class in org.apache.juneau.commons.reflect"><code>FieldInfo</code></a> wrapper for the specified field.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The field to wrap. Can be <jk>null</jk>.</dd>
@@ -251,14 +236,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.reflect.Method)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-145">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;o)</span></div>
-<div class="block">Returns the <a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> wrapper for the specified method.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   Method <jv>m</jv> = MyClass.<jk>class</jk>.getMethod(<js>"myMethod"</js>);
-   MethodInfo <jv>mi</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>m</jv>);
- </p></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-123">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Method.html" title="class or interface in java.lang.reflect" class="external-link">Method</a>&nbsp;o)</span></div>
+<div class="block">Returns the <a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a> wrapper for the specified method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The method to wrap. Can be <jk>null</jk>.</dd>
@@ -270,14 +249,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="info(java.lang.Object)">
 <h3>info</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-161">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Returns the <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> wrapper for the class of the specified object.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   MyClass <jv>obj</jv> = <jk>new</jk> MyClass();
-   ClassInfo <jv>ci</jv> = ReflectionUtils.<jsm>info</jsm>(<jv>obj</jv>);
- </p></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-133">info</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="block">Returns the <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> wrapper for the class of the specified object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>o</code> - The object whose class to wrap. Can be <jk>null</jk>.</dd>
@@ -289,7 +262,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="asEnumClass(java.lang.Class)">
 <h3>asEnumClass</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-187">asEnumClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;? extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ReflectionUtils.html#line-159">asEnumClass</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;clazz)</span></div>
 <div class="block">Converts a class to an enum class, suppressing rawtypes warnings.
 
  <p>

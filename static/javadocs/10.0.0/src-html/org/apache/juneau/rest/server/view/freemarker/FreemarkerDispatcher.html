@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.freemarker;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -316,7 +316,7 @@
 <span class="source-line-no">303</span><span id="line-303">         bp = "/" + bp;</span>
 <span class="source-line-no">304</span><span id="line-304">      if (resolved.startsWith(bp))</span>
 <span class="source-line-no">305</span><span id="line-305">         return resolved.substring(bp.length());</span>
-<span class="source-line-no">306</span><span id="line-306">      throw illegalArg("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
+<span class="source-line-no">306</span><span id="line-306">      throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);</span>
 <span class="source-line-no">307</span><span id="line-307">   }</span>
 <span class="source-line-no">308</span><span id="line-308"></span>
 <span class="source-line-no">309</span><span id="line-309">   /**</span>
@@ -401,7 +401,7 @@
 <span class="source-line-no">388</span><span id="line-388">       */</span>
 <span class="source-line-no">389</span><span id="line-389">      public FreemarkerDispatcher build() {</span>
 <span class="source-line-no">390</span><span id="line-390">         if (basePath == null)</span>
-<span class="source-line-no">391</span><span id="line-391">            throw illegalArg("basePath must not be null");</span>
+<span class="source-line-no">391</span><span id="line-391">            throw iaex("basePath must not be null");</span>
 <span class="source-line-no">392</span><span id="line-392">         return new FreemarkerDispatcher(this);</span>
 <span class="source-line-no">393</span><span id="line-393">      }</span>
 <span class="source-line-no">394</span><span id="line-394">   }</span>

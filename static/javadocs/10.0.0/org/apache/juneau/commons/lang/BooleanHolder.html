@@ -80,7 +80,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-62">BooleanHolder</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-64">BooleanHolder</a></span>
 <span class="extends-implements">extends <a href="Holder.html" title="class in org.apache.juneau.commons.lang">Holder</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span></div>
 <div class="block">A simple mutable boolean value.
 
@@ -200,7 +200,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.Boolean)">
 <h3>BooleanHolder</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-106">BooleanHolder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-108">BooleanHolder</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -219,7 +219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-81">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-83">create</a></span>()</div>
 <div class="block">Creates a new boolean value initialized to <c>false</c>.
 
  <h5 class='section'>Example:</h5>
@@ -236,7 +236,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="of(java.lang.Boolean)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-97">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BooleanHolder.html" title="class in org.apache.juneau.commons.lang">BooleanHolder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-99">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Creates a new boolean value with the specified initial value.
 
  <h5 class='section'>Example:</h5>
@@ -255,11 +255,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="is(java.lang.Boolean)">
 <h3>is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-130">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-132">is</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&nbsp;value)</span></div>
 <div class="block">Checks if the current value is equal to the specified value.
 
  <p>
- Uses <a href="../utils/Utils.html#eq(T,T)"><code>Utils.eq(Object, Object)</code></a> for deep equality comparison, which handles nulls safely.
+ Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison, which handles nulls safely.
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -284,11 +284,11 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isAny(java.lang.Boolean...)">
 <h3>isAny</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-151">isAny</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>...&nbsp;values)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-153">isAny</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>...&nbsp;values)</span></div>
 <div class="block">Checks if the current value matches any of the specified values.
 
  <p>
- Uses <a href="../utils/Utils.html#eq(T,T)"><code>Utils.eq(Object, Object)</code></a> for deep equality comparison of each value.
+ Uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for deep equality comparison of each value.
 
  <h5 class='section'>Example:</h5>
  <p class='bjava'>
@@ -307,7 +307,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNotTrue()">
 <h3>isNotTrue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-173">isNotTrue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-175">isNotTrue</a></span>()</div>
 <div class="block">Returns <c>true</c> if the value is not set to <c>true</c> (i.e., it's <c>false</c> or <c>null</c>).
 
  <h5 class='section'>Example:</h5>
@@ -326,7 +326,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isTrue()">
 <h3>isTrue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-188">isTrue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/lang/BooleanHolder.html#line-190">isTrue</a></span>()</div>
 <div class="block">Returns <c>true</c> if the value is set to <c>true</c>.
 
  <h5 class='section'>Example:</h5>

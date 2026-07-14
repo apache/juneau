@@ -291,7 +291,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  <code>java.sql.Date</code>, <code>java.sql.Time</code>, and <code>java.sql.Timestamp</code> subclasses all dispatch
- through <a href="../DateFormat.html#format(java.util.Date,java.time.ZoneId)"><code>DateFormat.format(Date, ZoneId)</code></a> just like <code>java.util.Date</code>.</div>
+ through <a href="../DateFormat.html#format(java.util.Date,java.time.ZoneId)"><code>DateFormat.format(Date, ZoneId)</code></a> just like <code>Date</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>value</code> - The value to format. <jk>null</jk> returns <jk>null</jk>.</dd>
@@ -511,7 +511,7 @@ loadScripts(document, 'script');</script>
 <dd><code>timeZone</code> - The session time zone (used as the default zone when the wire value lacks zone info).</dd>
 <dt>Returns:</dt>
 <dd>The parsed <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Date.html" title="class or interface in java.util" class="external-link"><code>Date</code></a>, or <jk>null</jk> if <code>iso8601</code> is <jk>null</jk> or the target is
-   not exactly <code>java.util.Date</code>.</dd>
+   not exactly <code>Date</code>.</dd>
 </dl>
 </section>
 </li>

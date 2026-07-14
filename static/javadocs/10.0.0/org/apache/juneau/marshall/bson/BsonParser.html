@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BsonParser.Base64.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Base64</a></code>, <code><a href="BsonParser.SpacedHex.html" title="class in org.apache.juneau.marshall.bson">BsonParser.SpacedHex</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-83">BsonParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-82">BsonParser</a></span>
 <span class="extends-implements">extends <a href="../parser/InputStreamParser.html" title="class in org.apache.juneau.marshall.parser">InputStreamParser</a>
 implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau.marshall.bson">BsonMetaProvider</a>, <a href="../stream/RecordReadable.html" title="interface in org.apache.juneau.marshall.stream">RecordReadable</a>, <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></span></div>
 <div class="block">Parses BSON (Binary JSON) into POJO models.
@@ -141,7 +141,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics">BSON Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Bson">BSON Basics</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -339,21 +339,21 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-230">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-229">DEFAULT</a></span></div>
 <div class="block">Default parser, all default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_SPACED_HEX">
 <h3>DEFAULT_SPACED_HEX</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-232">DEFAULT_SPACED_HEX</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-231">DEFAULT_SPACED_HEX</a></span></div>
 <div class="block">Default parser, spaced-hex string input.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="DEFAULT_BASE64">
 <h3>DEFAULT_BASE64</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-234">DEFAULT_BASE64</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BsonParser.html" title="class in org.apache.juneau.marshall.bson">BsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-233">DEFAULT_BASE64</a></span></div>
 <div class="block">Default parser, BASE64 string input.</div>
 </section>
 </li>
@@ -368,7 +368,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.bson.BsonParser.Builder)">
 <h3>BsonParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-255">BsonParser</a></span><wbr><span class="parameters">(<a href="BsonParser.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-254">BsonParser</a></span><wbr><span class="parameters">(<a href="BsonParser.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -387,7 +387,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BsonParser.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-241">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BsonParser.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-240">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -398,7 +398,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonParser.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-261">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonParser.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParser.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-260">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -415,7 +415,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-266">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-265">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -433,7 +433,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getBsonBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getBsonBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.bson">BsonBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-271">getBsonBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.bson">BsonBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-270">getBsonBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BsonMetaProvider.html#getBsonBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">BsonMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -449,7 +449,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getBsonClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getBsonClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonClassMeta.html" title="class in org.apache.juneau.marshall.bson">BsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-278">getBsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonClassMeta.html" title="class in org.apache.juneau.marshall.bson">BsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-277">getBsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="BsonMetaProvider.html#getBsonClassMeta(org.apache.juneau.marshall.ClassMeta)">BsonMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -465,7 +465,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonParserSession.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-283">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BsonParserSession.html" title="class in org.apache.juneau.marshall.bson">BsonParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-282">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -482,7 +482,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getNullKeyString()">
 <h3>getNullKeyString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-293">getNullKeyString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-292">getNullKeyString</a></span>()</div>
 <div class="block">Returns the string used to represent <jk>null</jk> map keys in BSON documents.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -493,7 +493,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getMaxLength()">
 <h3>getMaxLength</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-303">getMaxLength</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-302">getMaxLength</a></span>()</div>
 <div class="block">Returns the maximum allowed wire-declared length (in bytes) for strings, binary payloads, and document/array
  size prefixes.</div>
 <dl class="notes">
@@ -505,7 +505,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="parseRecords(java.lang.Object)">
 <h3>parseRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-315">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-314">parseRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                           throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the whole-value <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default session
  arguments</b>.  The real implementation lives on <a href="BsonParserSession.html#parseRecords(java.lang.Object)"><code>BsonParserSession.parseRecords(Object)</code></a>.</div>
@@ -524,7 +524,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="parseArrayRecords(java.lang.Object)">
 <h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-329">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-328">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the buffered array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> using <b>default
  session arguments</b>.  The real implementation lives on
@@ -544,7 +544,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isRecordStreaming()">
 <h3>isRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-339">isRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-338">isRecordStreaming</a></span>()</div>
 <div class="block">The BSON record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -557,7 +557,7 @@ implements <a href="BsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isArrayRecordStreaming()">
 <h3>isArrayRecordStreaming</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-347">isArrayRecordStreaming</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/bson/BsonParser.html#line-346">isArrayRecordStreaming</a></span>()</div>
 <div class="block">The BSON array-record cursor is buffered/<a href="../stream/RecordAdapter.html" title="class in org.apache.juneau.marshall.stream"><code>RecordAdapter</code></a>-backed, not O(1) streaming.</div>
 <dl class="notes">
 <dt>Specified by:</dt>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.part;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79">    */</span>
 <span class="source-line-no">080</span><span id="line-80">   public HttpBooleanPart(String name, String value) {</span>
 <span class="source-line-no">081</span><span id="line-81">      super(name, value);</span>
-<span class="source-line-no">082</span><span id="line-82">      this.typedValue = e(value) ? null : Boolean.valueOf(bool(value));</span>
+<span class="source-line-no">082</span><span id="line-82">      this.typedValue = ie(value) ? null : Boolean.valueOf(b(value));</span>
 <span class="source-line-no">083</span><span id="line-83">      this.typedSupplier = null;</span>
 <span class="source-line-no">084</span><span id="line-84">   }</span>
 <span class="source-line-no">085</span><span id="line-85"></span>
@@ -129,7 +129,7 @@
 <span class="source-line-no">116</span><span id="line-116">    * @return The boolean value, wrapped in an {@link Optional}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">117</span><span id="line-117">    */</span>
 <span class="source-line-no">118</span><span id="line-118">   public Optional&lt;Boolean&gt; asBoolean() {</span>
-<span class="source-line-no">119</span><span id="line-119">      return opt(toBoolean());</span>
+<span class="source-line-no">119</span><span id="line-119">      return o(toBoolean());</span>
 <span class="source-line-no">120</span><span id="line-120">   }</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
 <span class="source-line-no">122</span><span id="line-122">   /**</span>

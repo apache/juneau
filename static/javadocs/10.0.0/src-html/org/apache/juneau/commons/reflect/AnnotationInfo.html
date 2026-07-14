@@ -29,891 +29,893 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.reflect;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ClassNameFormat.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import java.lang.annotation.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import java.util.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import java.util.function.*;</span>
-<span class="source-line-no">030</span><span id="line-30"></span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.commons.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.commons.collections.*;</span>
-<span class="source-line-no">033</span><span id="line-33"></span>
-<span class="source-line-no">034</span><span id="line-34">/**</span>
-<span class="source-line-no">035</span><span id="line-35"> * Encapsulates information about an annotation instance and the element it's declared on.</span>
-<span class="source-line-no">036</span><span id="line-36"> *</span>
-<span class="source-line-no">037</span><span id="line-37"> * &lt;p&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> * This class provides a convenient wrapper around Java annotations that allows you to:</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;ul&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;Access annotation values in a type-safe manner</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;Query annotation properties without reflection boilerplate</span>
-<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Track where the annotation was found (class, method, field, etc.)</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Sort annotations by precedence using ranks</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *</span>
-<span class="source-line-no">046</span><span id="line-46"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;jc&gt;// Get annotation info from a class&lt;/jc&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">050</span><span id="line-50"> *    Optional&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; =</span>
-<span class="source-line-no">051</span><span id="line-51"> *       &lt;jv&gt;ci&lt;/jv&gt;.getAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;).findFirst();</span>
-<span class="source-line-no">052</span><span id="line-52"> *</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;jc&gt;// Access annotation values&lt;/jc&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;jv&gt;ai&lt;/jv&gt;.ifPresent(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; {</span>
-<span class="source-line-no">055</span><span id="line-55"> *       String &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.getValue(String.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"value"&lt;/js&gt;).orElse(&lt;js&gt;"default"&lt;/js&gt;);</span>
-<span class="source-line-no">056</span><span id="line-56"> *       &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;priority&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.getInt(&lt;js&gt;"priority"&lt;/js&gt;).orElse(0);</span>
-<span class="source-line-no">057</span><span id="line-57"> *    });</span>
-<span class="source-line-no">058</span><span id="line-58"> * &lt;/p&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *</span>
-<span class="source-line-no">060</span><span id="line-60"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *    &lt;li class='jc'&gt;{@link ClassInfo}</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;li class='jc'&gt;{@link MethodInfo}</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link FieldInfo}</span>
-<span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='jc'&gt;{@link ConstructorInfo}</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='jc'&gt;{@link ParameterInfo}</span>
-<span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='jc'&gt;{@link PackageInfo}</span>
-<span class="source-line-no">067</span><span id="line-67"> * &lt;/ul&gt;</span>
-<span class="source-line-no">068</span><span id="line-68"> *</span>
-<span class="source-line-no">069</span><span id="line-69"> * @param &lt;T&gt; The annotation type.</span>
-<span class="source-line-no">070</span><span id="line-70"> */</span>
-<span class="source-line-no">071</span><span id="line-71">@SuppressWarnings({</span>
-<span class="source-line-no">072</span><span id="line-72">   "java:S115",  // Constants use UPPER_snakeCase convention</span>
-<span class="source-line-no">073</span><span id="line-73">   "java:S3740"  // Raw Annotation type used intentionally for unparameterized annotation introspection</span>
-<span class="source-line-no">074</span><span id="line-74">})</span>
-<span class="source-line-no">075</span><span id="line-75">public class AnnotationInfo&lt;T extends Annotation&gt; {</span>
-<span class="source-line-no">076</span><span id="line-76"></span>
-<span class="source-line-no">077</span><span id="line-77">   // Argument name constants for assertArgNotNull</span>
-<span class="source-line-no">078</span><span id="line-78">   private static final String ARG_on = "on";</span>
-<span class="source-line-no">079</span><span id="line-79">   private static final String ARG_a = "a";</span>
-<span class="source-line-no">080</span><span id="line-80"></span>
-<span class="source-line-no">081</span><span id="line-81">   /**</span>
-<span class="source-line-no">082</span><span id="line-82">    * Creates a new annotation info object.</span>
-<span class="source-line-no">083</span><span id="line-83">    *</span>
-<span class="source-line-no">084</span><span id="line-84">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">085</span><span id="line-85">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">086</span><span id="line-86">    *    &lt;jc&gt;// Create annotation info for a class annotation&lt;/jc&gt;</span>
-<span class="source-line-no">087</span><span id="line-87">    *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">088</span><span id="line-88">    *    MyAnnotation &lt;jv&gt;annotation&lt;/jv&gt; = &lt;jv&gt;ci&lt;/jv&gt;.inner().getAnnotation(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">089</span><span id="line-89">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = AnnotationInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;ci&lt;/jv&gt;, &lt;jv&gt;annotation&lt;/jv&gt;);</span>
-<span class="source-line-no">090</span><span id="line-90">    * &lt;/p&gt;</span>
-<span class="source-line-no">091</span><span id="line-91">    *</span>
-<span class="source-line-no">092</span><span id="line-92">    * @param &lt;A&gt; The annotation type.</span>
-<span class="source-line-no">093</span><span id="line-93">    * @param on The annotatable object where the annotation was found (class, method, field, constructor, parameter, or package).</span>
-<span class="source-line-no">094</span><span id="line-94">    * @param value The annotation instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">095</span><span id="line-95">    * @return A new {@link AnnotationInfo} object wrapping the annotation.</span>
-<span class="source-line-no">096</span><span id="line-96">    */</span>
-<span class="source-line-no">097</span><span id="line-97">   public static &lt;A extends Annotation&gt; AnnotationInfo&lt;A&gt; of(Annotatable on, A value) {</span>
-<span class="source-line-no">098</span><span id="line-98">      return new AnnotationInfo&lt;&gt;(on, value);</span>
-<span class="source-line-no">099</span><span id="line-99">   }</span>
-<span class="source-line-no">100</span><span id="line-100"></span>
-<span class="source-line-no">101</span><span id="line-101">   private static int findRank(Object a) {</span>
-<span class="source-line-no">102</span><span id="line-102">      // @formatter:off</span>
-<span class="source-line-no">103</span><span id="line-103">      return ClassInfo.of(a).getAllMethods().stream()</span>
-<span class="source-line-no">104</span><span id="line-104">         .filter(m -&gt; m.hasName("rank") &amp;&amp; m.hasReturnType(int.class))</span>
-<span class="source-line-no">105</span><span id="line-105">         .findFirst()</span>
-<span class="source-line-no">106</span><span id="line-106">         .map(m -&gt; safe(() -&gt; (int)m.invoke(a)))</span>
-<span class="source-line-no">107</span><span id="line-107">         .orElse(0);</span>
-<span class="source-line-no">108</span><span id="line-108">      // @formatter:on</span>
-<span class="source-line-no">109</span><span id="line-109">   }</span>
-<span class="source-line-no">110</span><span id="line-110"></span>
-<span class="source-line-no">111</span><span id="line-111">   private final Annotatable annotatable;</span>
-<span class="source-line-no">112</span><span id="line-112">   final int rank;</span>
-<span class="source-line-no">113</span><span id="line-113"></span>
-<span class="source-line-no">114</span><span id="line-114">   private T a;  // Effectively final</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ClassArrayFormat.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.reflect.ClassNameFormat.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">import java.lang.annotation.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import java.util.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import java.util.function.*;</span>
+<span class="source-line-no">032</span><span id="line-32"></span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.commons.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.commons.collections.*;</span>
+<span class="source-line-no">035</span><span id="line-35"></span>
+<span class="source-line-no">036</span><span id="line-36">/**</span>
+<span class="source-line-no">037</span><span id="line-37"> * Encapsulates information about an annotation instance and the element it's declared on.</span>
+<span class="source-line-no">038</span><span id="line-38"> *</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> * This class provides a convenient wrapper around Java annotations that allows you to:</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;ul&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Access annotation values in a type-safe manner</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Query annotation properties without reflection boilerplate</span>
+<span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Track where the annotation was found (class, method, field, etc.)</span>
+<span class="source-line-no">045</span><span id="line-45"> *    &lt;li&gt;Sort annotations by precedence using ranks</span>
+<span class="source-line-no">046</span><span id="line-46"> * &lt;/ul&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Get annotation info from a class&lt;/jc&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">052</span><span id="line-52"> *    Optional&amp;lt;AnnotationInfo&amp;lt;MyAnnotation&amp;gt;&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; =</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;jv&gt;ci&lt;/jv&gt;.getAnnotations(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;).findFirst();</span>
+<span class="source-line-no">054</span><span id="line-54"> *</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;jc&gt;// Access annotation values&lt;/jc&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;jv&gt;ai&lt;/jv&gt;.ifPresent(&lt;jv&gt;x&lt;/jv&gt; -&amp;gt; {</span>
+<span class="source-line-no">057</span><span id="line-57"> *       String &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.getValue(String.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"value"&lt;/js&gt;).orElse(&lt;js&gt;"default"&lt;/js&gt;);</span>
+<span class="source-line-no">058</span><span id="line-58"> *       &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;priority&lt;/jv&gt; = &lt;jv&gt;x&lt;/jv&gt;.getInt(&lt;js&gt;"priority"&lt;/js&gt;).orElse(0);</span>
+<span class="source-line-no">059</span><span id="line-59"> *    });</span>
+<span class="source-line-no">060</span><span id="line-60"> * &lt;/p&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *</span>
+<span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='jc'&gt;{@link ClassInfo}</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='jc'&gt;{@link MethodInfo}</span>
+<span class="source-line-no">065</span><span id="line-65"> *    &lt;li class='jc'&gt;{@link FieldInfo}</span>
+<span class="source-line-no">066</span><span id="line-66"> *    &lt;li class='jc'&gt;{@link ConstructorInfo}</span>
+<span class="source-line-no">067</span><span id="line-67"> *    &lt;li class='jc'&gt;{@link ParameterInfo}</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;li class='jc'&gt;{@link PackageInfo}</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;/ul&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *</span>
+<span class="source-line-no">071</span><span id="line-71"> * @param &lt;T&gt; The annotation type.</span>
+<span class="source-line-no">072</span><span id="line-72"> */</span>
+<span class="source-line-no">073</span><span id="line-73">@SuppressWarnings({</span>
+<span class="source-line-no">074</span><span id="line-74">   "java:S115",  // Constants use UPPER_snakeCase convention</span>
+<span class="source-line-no">075</span><span id="line-75">   "java:S3740"  // Raw Annotation type used intentionally for unparameterized annotation introspection</span>
+<span class="source-line-no">076</span><span id="line-76">})</span>
+<span class="source-line-no">077</span><span id="line-77">public class AnnotationInfo&lt;T extends Annotation&gt; {</span>
+<span class="source-line-no">078</span><span id="line-78"></span>
+<span class="source-line-no">079</span><span id="line-79">   // Argument name constants for assertArgNotNull</span>
+<span class="source-line-no">080</span><span id="line-80">   private static final String ARG_on = "on";</span>
+<span class="source-line-no">081</span><span id="line-81">   private static final String ARG_a = "a";</span>
+<span class="source-line-no">082</span><span id="line-82"></span>
+<span class="source-line-no">083</span><span id="line-83">   /**</span>
+<span class="source-line-no">084</span><span id="line-84">    * Creates a new annotation info object.</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">088</span><span id="line-88">    *    &lt;jc&gt;// Create annotation info for a class annotation&lt;/jc&gt;</span>
+<span class="source-line-no">089</span><span id="line-89">    *    ClassInfo &lt;jv&gt;ci&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">090</span><span id="line-90">    *    MyAnnotation &lt;jv&gt;annotation&lt;/jv&gt; = &lt;jv&gt;ci&lt;/jv&gt;.inner().getAnnotation(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">091</span><span id="line-91">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = AnnotationInfo.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;ci&lt;/jv&gt;, &lt;jv&gt;annotation&lt;/jv&gt;);</span>
+<span class="source-line-no">092</span><span id="line-92">    * &lt;/p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93">    *</span>
+<span class="source-line-no">094</span><span id="line-94">    * @param &lt;A&gt; The annotation type.</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param on The annotatable object where the annotation was found (class, method, field, constructor, parameter, or package).</span>
+<span class="source-line-no">096</span><span id="line-96">    * @param value The annotation instance. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @return A new {@link AnnotationInfo} object wrapping the annotation.</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   public static &lt;A extends Annotation&gt; AnnotationInfo&lt;A&gt; of(Annotatable on, A value) {</span>
+<span class="source-line-no">100</span><span id="line-100">      return new AnnotationInfo&lt;&gt;(on, value);</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   private static int findRank(Object a) {</span>
+<span class="source-line-no">104</span><span id="line-104">      // @formatter:off</span>
+<span class="source-line-no">105</span><span id="line-105">      return ClassInfo.of(a).getAllMethods().stream()</span>
+<span class="source-line-no">106</span><span id="line-106">         .filter(m -&gt; m.hasName("rank") &amp;&amp; m.hasReturnType(int.class))</span>
+<span class="source-line-no">107</span><span id="line-107">         .findFirst()</span>
+<span class="source-line-no">108</span><span id="line-108">         .map(m -&gt; safe(() -&gt; (int)m.invoke(a)))</span>
+<span class="source-line-no">109</span><span id="line-109">         .orElse(0);</span>
+<span class="source-line-no">110</span><span id="line-110">      // @formatter:on</span>
+<span class="source-line-no">111</span><span id="line-111">   }</span>
+<span class="source-line-no">112</span><span id="line-112"></span>
+<span class="source-line-no">113</span><span id="line-113">   private final Annotatable annotatable;</span>
+<span class="source-line-no">114</span><span id="line-114">   final int rank;</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
-<span class="source-line-no">116</span><span id="line-116">   private final Supplier&lt;List&lt;MethodInfo&gt;&gt; methods = memoize(() -&gt; stream(a.annotationType().getMethods()).map(m -&gt; MethodInfo.of(info(a.annotationType()), m)).toList());</span>
-<span class="source-line-no">117</span><span id="line-117">   private final Supplier&lt;String&gt; toString;  // String representation with annotation type, location, and values.</span>
-<span class="source-line-no">118</span><span id="line-118"></span>
-<span class="source-line-no">119</span><span id="line-119">   /**</span>
-<span class="source-line-no">120</span><span id="line-120">    * Constructor.</span>
-<span class="source-line-no">121</span><span id="line-121">    *</span>
-<span class="source-line-no">122</span><span id="line-122">    * @param on The annotatable object where the annotation was found.</span>
-<span class="source-line-no">123</span><span id="line-123">    * @param a The annotation instance.</span>
-<span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   AnnotationInfo(Annotatable on, T a) {</span>
-<span class="source-line-no">126</span><span id="line-126">      this.annotatable = assertArgNotNull(ARG_on, on);</span>
-<span class="source-line-no">127</span><span id="line-127">      this.a = assertArgNotNull(ARG_a, a);</span>
-<span class="source-line-no">128</span><span id="line-128">      this.rank = findRank(a);</span>
-<span class="source-line-no">129</span><span id="line-129">      this.toString = memoize(this::findToString);</span>
-<span class="source-line-no">130</span><span id="line-130">   }</span>
-<span class="source-line-no">131</span><span id="line-131"></span>
-<span class="source-line-no">132</span><span id="line-132">   /**</span>
-<span class="source-line-no">133</span><span id="line-133">    * Returns the annotatable object (class, method, field, etc.) where this annotation was found.</span>
-<span class="source-line-no">134</span><span id="line-134">    *</span>
-<span class="source-line-no">135</span><span id="line-135">    * @return The annotatable object where this annotation was found.</span>
-<span class="source-line-no">136</span><span id="line-136">    */</span>
-<span class="source-line-no">137</span><span id="line-137">   public Annotatable getAnnotatable() {</span>
-<span class="source-line-no">138</span><span id="line-138">      return annotatable;</span>
-<span class="source-line-no">139</span><span id="line-139">   }</span>
-<span class="source-line-no">140</span><span id="line-140"></span>
-<span class="source-line-no">141</span><span id="line-141">   /**</span>
-<span class="source-line-no">142</span><span id="line-142">    * Returns the annotatable object cast to the specified type.</span>
-<span class="source-line-no">143</span><span id="line-143">    *</span>
-<span class="source-line-no">144</span><span id="line-144">    * @param &lt;A&gt; The annotatable type.</span>
-<span class="source-line-no">145</span><span id="line-145">    * @param type The class to cast to.</span>
-<span class="source-line-no">146</span><span id="line-146">    * @return The annotatable element cast to the specified type.</span>
-<span class="source-line-no">147</span><span id="line-147">    * @throws ClassCastException If the annotatable element is not of the specified type.</span>
-<span class="source-line-no">148</span><span id="line-148">    */</span>
-<span class="source-line-no">149</span><span id="line-149">   public &lt;A extends Annotatable&gt; A getAnnotatable(Class&lt;A&gt; type) {</span>
-<span class="source-line-no">150</span><span id="line-150">      return type.cast(annotatable);</span>
-<span class="source-line-no">151</span><span id="line-151">   }</span>
-<span class="source-line-no">152</span><span id="line-152"></span>
-<span class="source-line-no">153</span><span id="line-153">   /**</span>
-<span class="source-line-no">154</span><span id="line-154">    * Returns the annotation type of this annotation.</span>
-<span class="source-line-no">155</span><span id="line-155">    *</span>
-<span class="source-line-no">156</span><span id="line-156">    * &lt;p&gt;</span>
-<span class="source-line-no">157</span><span id="line-157">    * Same as calling {@link Annotation#annotationType()}.</span>
-<span class="source-line-no">158</span><span id="line-158">    *</span>
-<span class="source-line-no">159</span><span id="line-159">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">160</span><span id="line-160">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">161</span><span id="line-161">    *    AnnotationInfo&amp;lt;Deprecated&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getAnnotation(Deprecated.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">162</span><span id="line-162">    *    Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Annotation&amp;gt; &lt;jv&gt;type&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.annotationType();  &lt;jc&gt;// Returns Deprecated.class&lt;/jc&gt;</span>
-<span class="source-line-no">163</span><span id="line-163">    * &lt;/p&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">    *</span>
-<span class="source-line-no">165</span><span id="line-165">    * @return The annotation type of this annotation.</span>
-<span class="source-line-no">166</span><span id="line-166">    * @see Annotation#annotationType()</span>
-<span class="source-line-no">167</span><span id="line-167">    */</span>
-<span class="source-line-no">168</span><span id="line-168">   public Class&lt;? extends Annotation&gt; annotationType() {</span>
-<span class="source-line-no">169</span><span id="line-169">      return a.annotationType();</span>
-<span class="source-line-no">170</span><span id="line-170">   }</span>
-<span class="source-line-no">171</span><span id="line-171"></span>
-<span class="source-line-no">172</span><span id="line-172">   /**</span>
-<span class="source-line-no">173</span><span id="line-173">    * Casts this annotation info to a specific annotation type.</span>
-<span class="source-line-no">174</span><span id="line-174">    *</span>
-<span class="source-line-no">175</span><span id="line-175">    * &lt;p&gt;</span>
-<span class="source-line-no">176</span><span id="line-176">    * This is useful when you have an {@code AnnotationInfo&lt;?&gt;} and need to narrow it to a specific type.</span>
-<span class="source-line-no">177</span><span id="line-177">    *</span>
-<span class="source-line-no">178</span><span id="line-178">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">179</span><span id="line-179">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">180</span><span id="line-180">    *    AnnotationInfo&amp;lt;?&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">181</span><span id="line-181">    *</span>
-<span class="source-line-no">182</span><span id="line-182">    *    &lt;jc&gt;// Safe cast&lt;/jc&gt;</span>
-<span class="source-line-no">183</span><span id="line-183">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;myAi&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.cast(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">184</span><span id="line-184">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;myAi&lt;/jv&gt; != &lt;jk&gt;null&lt;/jk&gt;) {</span>
-<span class="source-line-no">185</span><span id="line-185">    *       &lt;jc&gt;// Use strongly-typed annotation info&lt;/jc&gt;</span>
-<span class="source-line-no">186</span><span id="line-186">    *    }</span>
-<span class="source-line-no">187</span><span id="line-187">    * &lt;/p&gt;</span>
-<span class="source-line-no">188</span><span id="line-188">    *</span>
-<span class="source-line-no">189</span><span id="line-189">    * @param &lt;A&gt; The annotation type to cast to.</span>
-<span class="source-line-no">190</span><span id="line-190">    * @param type The annotation type to cast to.</span>
-<span class="source-line-no">191</span><span id="line-191">    * @return This annotation info cast to the specified type, or &lt;jk&gt;null&lt;/jk&gt; if the annotation is not of the specified type.</span>
-<span class="source-line-no">192</span><span id="line-192">    */</span>
-<span class="source-line-no">193</span><span id="line-193">   @SuppressWarnings({</span>
-<span class="source-line-no">194</span><span id="line-194">      "unchecked" // Type erasure requires cast to AnnotationInfo&lt;A&gt;</span>
-<span class="source-line-no">195</span><span id="line-195">   })</span>
-<span class="source-line-no">196</span><span id="line-196">   public &lt;A extends Annotation&gt; AnnotationInfo&lt;A&gt; cast(Class&lt;A&gt; type) {</span>
-<span class="source-line-no">197</span><span id="line-197">      return type.isInstance(a) ? (AnnotationInfo&lt;A&gt;)this : null;</span>
-<span class="source-line-no">198</span><span id="line-198">   }</span>
-<span class="source-line-no">199</span><span id="line-199"></span>
-<span class="source-line-no">200</span><span id="line-200">   /**</span>
-<span class="source-line-no">201</span><span id="line-201">    * Returns true if the specified object represents an annotation that is logically equivalent to this one.</span>
-<span class="source-line-no">202</span><span id="line-202">    *</span>
-<span class="source-line-no">203</span><span id="line-203">    * &lt;p&gt;</span>
-<span class="source-line-no">204</span><span id="line-204">    * Same as calling {@link Annotation#equals(Object)} on the wrapped annotation.</span>
-<span class="source-line-no">205</span><span id="line-205">    *</span>
-<span class="source-line-no">206</span><span id="line-206">    * &lt;p&gt;</span>
-<span class="source-line-no">207</span><span id="line-207">    * Two annotations are considered equal if:</span>
-<span class="source-line-no">208</span><span id="line-208">    * &lt;ul&gt;</span>
-<span class="source-line-no">209</span><span id="line-209">    *    &lt;li&gt;They are of the same annotation type</span>
-<span class="source-line-no">210</span><span id="line-210">    *    &lt;li&gt;All their corresponding member values are equal</span>
-<span class="source-line-no">211</span><span id="line-211">    * &lt;/ul&gt;</span>
-<span class="source-line-no">212</span><span id="line-212">    *</span>
-<span class="source-line-no">213</span><span id="line-213">    * @param o The reference object with which to compare.</span>
-<span class="source-line-no">214</span><span id="line-214">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified object is equal to this annotation.</span>
-<span class="source-line-no">215</span><span id="line-215">    * @see Annotation#equals(Object)</span>
-<span class="source-line-no">216</span><span id="line-216">    */</span>
-<span class="source-line-no">217</span><span id="line-217">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">218</span><span id="line-218">   public boolean equals(Object o) {</span>
-<span class="source-line-no">219</span><span id="line-219">      if (o instanceof AnnotationInfo o2)</span>
-<span class="source-line-no">220</span><span id="line-220">         return a.equals(o2.a);</span>
-<span class="source-line-no">221</span><span id="line-221">      return a.equals(o);</span>
-<span class="source-line-no">222</span><span id="line-222">   }</span>
-<span class="source-line-no">223</span><span id="line-223"></span>
-<span class="source-line-no">224</span><span id="line-224">   /**</span>
-<span class="source-line-no">225</span><span id="line-225">    * Returns the value of the specified method on this annotation as a boolean.</span>
-<span class="source-line-no">226</span><span id="line-226">    *</span>
-<span class="source-line-no">227</span><span id="line-227">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">228</span><span id="line-228">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">229</span><span id="line-229">    *    &lt;jc&gt;// For annotation: @MyAnnotation(enabled=true)&lt;/jc&gt;</span>
-<span class="source-line-no">230</span><span id="line-230">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">231</span><span id="line-231">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;enabled&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getBoolean(&lt;js&gt;"enabled"&lt;/js&gt;).orElse(&lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// Returns true&lt;/jc&gt;</span>
-<span class="source-line-no">232</span><span id="line-232">    * &lt;/p&gt;</span>
-<span class="source-line-no">233</span><span id="line-233">    *</span>
-<span class="source-line-no">234</span><span id="line-234">    * @param methodName The method name.</span>
-<span class="source-line-no">235</span><span id="line-235">    * @return An {@link Optional} containing the value as a boolean, or empty if not found or not a {@code boolean} type.</span>
-<span class="source-line-no">236</span><span id="line-236">    */</span>
-<span class="source-line-no">237</span><span id="line-237">   public Optional&lt;Boolean&gt; getBoolean(String methodName) {</span>
-<span class="source-line-no">238</span><span id="line-238">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(boolean.class)).map(x -&gt; (Boolean)x.invoke(a));</span>
-<span class="source-line-no">239</span><span id="line-239">   }</span>
-<span class="source-line-no">240</span><span id="line-240"></span>
-<span class="source-line-no">241</span><span id="line-241">   /**</span>
-<span class="source-line-no">242</span><span id="line-242">    * Returns the value of the specified method on this annotation as a class array.</span>
-<span class="source-line-no">243</span><span id="line-243">    *</span>
-<span class="source-line-no">244</span><span id="line-244">    * &lt;p&gt;</span>
-<span class="source-line-no">245</span><span id="line-245">    * For type-safe access to an array of classes of a specific supertype, use {@link #getClassArray(String, Class)}.</span>
-<span class="source-line-no">246</span><span id="line-246">    *</span>
-<span class="source-line-no">247</span><span id="line-247">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">248</span><span id="line-248">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">249</span><span id="line-249">    *    &lt;jc&gt;// For annotation: @MyAnnotation(types={String.class, Integer.class})&lt;/jc&gt;</span>
-<span class="source-line-no">250</span><span id="line-250">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">251</span><span id="line-251">    *    Class&amp;lt;?&amp;gt;[] &lt;jv&gt;types&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getClassArray(&lt;js&gt;"types"&lt;/js&gt;).orElse(&lt;jk&gt;new&lt;/jk&gt; Class[0]);  &lt;jc&gt;// Returns [String.class, Integer.class]&lt;/jc&gt;</span>
-<span class="source-line-no">252</span><span id="line-252">    * &lt;/p&gt;</span>
-<span class="source-line-no">253</span><span id="line-253">    *</span>
-<span class="source-line-no">254</span><span id="line-254">    * @param methodName The method name.</span>
-<span class="source-line-no">255</span><span id="line-255">    * @return An {@link Optional} containing the class array value, or empty if not found or not a {@code Class[]} type.</span>
-<span class="source-line-no">256</span><span id="line-256">    */</span>
-<span class="source-line-no">257</span><span id="line-257">   @SuppressWarnings({</span>
-<span class="source-line-no">258</span><span id="line-258">      "unchecked" // Type erasure requires cast to Class&lt;?&gt;[] for annotation value</span>
-<span class="source-line-no">259</span><span id="line-259">   })</span>
-<span class="source-line-no">260</span><span id="line-260">   public Optional&lt;Class&lt;?&gt;[]&gt; getClassArray(String methodName) {</span>
-<span class="source-line-no">261</span><span id="line-261">      return (Optional&lt;Class&lt;?&gt;[]&gt;)(Optional&lt;?&gt;)getMethod(methodName).filter(x -&gt; x.hasReturnType(Class[].class)).map(x -&gt; x.invoke(a));</span>
-<span class="source-line-no">262</span><span id="line-262">   }</span>
-<span class="source-line-no">263</span><span id="line-263"></span>
-<span class="source-line-no">264</span><span id="line-264">   /**</span>
-<span class="source-line-no">265</span><span id="line-265">    * Returns the value of the specified method on this annotation as a class array of a specific type.</span>
-<span class="source-line-no">266</span><span id="line-266">    *</span>
-<span class="source-line-no">267</span><span id="line-267">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">268</span><span id="line-268">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">269</span><span id="line-269">    *    &lt;jc&gt;// Get an array of serializer classes from an annotation&lt;/jc&gt;</span>
-<span class="source-line-no">270</span><span id="line-270">    *    Optional&amp;lt;Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Serializer&amp;gt;[]&amp;gt; &lt;jv&gt;serializerClasses&lt;/jv&gt; =</span>
-<span class="source-line-no">271</span><span id="line-271">    *       &lt;jv&gt;annotationInfo&lt;/jv&gt;.getClassArray(&lt;js&gt;"serializers"&lt;/js&gt;, Serializer.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">272</span><span id="line-272">    * &lt;/p&gt;</span>
-<span class="source-line-no">273</span><span id="line-273">    *</span>
-<span class="source-line-no">274</span><span id="line-274">    * @param &lt;T&gt; The expected supertype of the classes.</span>
-<span class="source-line-no">275</span><span id="line-275">    * @param methodName The method name.</span>
-<span class="source-line-no">276</span><span id="line-276">    * @param type The expected supertype of the class values.</span>
-<span class="source-line-no">277</span><span id="line-277">    * @return An optional containing the value of the specified method cast to the expected type,</span>
-<span class="source-line-no">278</span><span id="line-278">    *         or empty if not found, not a class array, or any element is not assignable to the expected type.</span>
-<span class="source-line-no">279</span><span id="line-279">    */</span>
-<span class="source-line-no">280</span><span id="line-280">   @SuppressWarnings({</span>
-<span class="source-line-no">281</span><span id="line-281">      "unchecked", // Type erasure requires unchecked casts</span>
-<span class="source-line-no">282</span><span id="line-282">      "hiding", // Field/variable hiding intentional for specific scoping</span>
-<span class="source-line-no">283</span><span id="line-283">   })</span>
-<span class="source-line-no">284</span><span id="line-284">   public &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;[]&gt; getClassArray(String methodName, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">285</span><span id="line-285">      // @formatter:off</span>
-<span class="source-line-no">286</span><span id="line-286">      return getMethod(methodName)</span>
-<span class="source-line-no">287</span><span id="line-287">         .filter(x -&gt; x.hasReturnType(Class[].class))</span>
-<span class="source-line-no">288</span><span id="line-288">         .map(x -&gt; (Class&lt;?&gt;[])x.invoke(a))</span>
-<span class="source-line-no">289</span><span id="line-289">         .filter(arr -&gt; {</span>
-<span class="source-line-no">290</span><span id="line-290">            for (var c : arr) {</span>
-<span class="source-line-no">291</span><span id="line-291">               if (!type.isAssignableFrom(c))</span>
-<span class="source-line-no">292</span><span id="line-292">                  return false;</span>
-<span class="source-line-no">293</span><span id="line-293">            }</span>
-<span class="source-line-no">294</span><span id="line-294">            return true;</span>
-<span class="source-line-no">295</span><span id="line-295">         })</span>
-<span class="source-line-no">296</span><span id="line-296">         .map(x -&gt; (Class&lt;? extends T&gt;[])x);</span>
-<span class="source-line-no">297</span><span id="line-297">      // @formatter:on</span>
-<span class="source-line-no">298</span><span id="line-298">   }</span>
-<span class="source-line-no">299</span><span id="line-299"></span>
-<span class="source-line-no">300</span><span id="line-300">   /**</span>
-<span class="source-line-no">301</span><span id="line-301">    * Returns the value of the specified method on this annotation as a class.</span>
-<span class="source-line-no">302</span><span id="line-302">    *</span>
-<span class="source-line-no">303</span><span id="line-303">    * &lt;p&gt;</span>
-<span class="source-line-no">304</span><span id="line-304">    * For type-safe access to a class of a specific supertype, use {@link #getClassValue(String, Class)}.</span>
-<span class="source-line-no">305</span><span id="line-305">    *</span>
-<span class="source-line-no">306</span><span id="line-306">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">307</span><span id="line-307">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">308</span><span id="line-308">    *    &lt;jc&gt;// For annotation: @MyAnnotation(type=String.class)&lt;/jc&gt;</span>
-<span class="source-line-no">309</span><span id="line-309">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">310</span><span id="line-310">    *    Class&amp;lt;?&amp;gt; &lt;jv&gt;type&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getClassValue(&lt;js&gt;"type"&lt;/js&gt;).orElse(&lt;jk&gt;null&lt;/jk&gt;);  &lt;jc&gt;// Returns String.class&lt;/jc&gt;</span>
-<span class="source-line-no">311</span><span id="line-311">    * &lt;/p&gt;</span>
-<span class="source-line-no">312</span><span id="line-312">    *</span>
-<span class="source-line-no">313</span><span id="line-313">    * @param methodName The method name.</span>
-<span class="source-line-no">314</span><span id="line-314">    * @return An {@link Optional} containing the class value, or empty if not found or not a {@link Class} type.</span>
-<span class="source-line-no">315</span><span id="line-315">    */</span>
-<span class="source-line-no">316</span><span id="line-316">   @SuppressWarnings({</span>
-<span class="source-line-no">317</span><span id="line-317">      "unchecked" // Type erasure requires cast to Class&lt;?&gt; for annotation value</span>
-<span class="source-line-no">318</span><span id="line-318">   })</span>
-<span class="source-line-no">319</span><span id="line-319">   public Optional&lt;Class&lt;?&gt;&gt; getClassValue(String methodName) {</span>
-<span class="source-line-no">320</span><span id="line-320">      return (Optional&lt;Class&lt;?&gt;&gt;)(Optional&lt;?&gt;)getMethod(methodName).filter(x -&gt; x.hasReturnType(Class.class)).map(x -&gt; x.invoke(a));</span>
-<span class="source-line-no">321</span><span id="line-321">   }</span>
-<span class="source-line-no">322</span><span id="line-322"></span>
-<span class="source-line-no">323</span><span id="line-323">   /**</span>
-<span class="source-line-no">324</span><span id="line-324">    * Returns the value of the specified method on this annotation as a class of a specific type.</span>
-<span class="source-line-no">325</span><span id="line-325">    *</span>
-<span class="source-line-no">326</span><span id="line-326">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">327</span><span id="line-327">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">328</span><span id="line-328">    *    &lt;jc&gt;// Get a serializer class from an annotation&lt;/jc&gt;</span>
-<span class="source-line-no">329</span><span id="line-329">    *    Optional&amp;lt;Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Serializer&amp;gt;&amp;gt; &lt;jv&gt;serializerClass&lt;/jv&gt; =</span>
-<span class="source-line-no">330</span><span id="line-330">    *       &lt;jv&gt;annotationInfo&lt;/jv&gt;.getClassValue(&lt;js&gt;"serializer"&lt;/js&gt;, Serializer.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">331</span><span id="line-331">    * &lt;/p&gt;</span>
-<span class="source-line-no">332</span><span id="line-332">    *</span>
-<span class="source-line-no">333</span><span id="line-333">    * @param &lt;T&gt; The expected supertype of the class.</span>
-<span class="source-line-no">334</span><span id="line-334">    * @param methodName The method name.</span>
-<span class="source-line-no">335</span><span id="line-335">    * @param type The expected supertype of the class value.</span>
-<span class="source-line-no">336</span><span id="line-336">    * @return An optional containing the value of the specified method cast to the expected type,</span>
-<span class="source-line-no">337</span><span id="line-337">    *         or empty if not found, not a class, or not assignable to the expected type.</span>
-<span class="source-line-no">338</span><span id="line-338">    */</span>
-<span class="source-line-no">339</span><span id="line-339">   @SuppressWarnings({</span>
-<span class="source-line-no">340</span><span id="line-340">      "unchecked", // Type erasure requires unchecked casts</span>
-<span class="source-line-no">341</span><span id="line-341">      "hiding", // Field/variable hiding intentional for specific scoping</span>
-<span class="source-line-no">342</span><span id="line-342">   })</span>
-<span class="source-line-no">343</span><span id="line-343">   public &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;&gt; getClassValue(String methodName, Class&lt;T&gt; type) {</span>
-<span class="source-line-no">344</span><span id="line-344">      // @formatter:off</span>
-<span class="source-line-no">345</span><span id="line-345">      return getMethod(methodName)</span>
-<span class="source-line-no">346</span><span id="line-346">         .filter(x -&gt; x.hasReturnType(Class.class))</span>
-<span class="source-line-no">347</span><span id="line-347">         .map(x -&gt; (Class&lt;?&gt;)x.invoke(a))</span>
-<span class="source-line-no">348</span><span id="line-348">         .filter(type::isAssignableFrom)</span>
-<span class="source-line-no">349</span><span id="line-349">         .map(x -&gt; (Class&lt;? extends T&gt;)x);</span>
-<span class="source-line-no">350</span><span id="line-350">      // @formatter:on</span>
-<span class="source-line-no">351</span><span id="line-351">   }</span>
-<span class="source-line-no">352</span><span id="line-352"></span>
-<span class="source-line-no">353</span><span id="line-353">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">354</span><span id="line-354">   // Annotation interface methods</span>
+<span class="source-line-no">116</span><span id="line-116">   private T a;  // Effectively final</span>
+<span class="source-line-no">117</span><span id="line-117"></span>
+<span class="source-line-no">118</span><span id="line-118">   private final Supplier&lt;List&lt;MethodInfo&gt;&gt; methods = memoize(() -&gt; stream(a.annotationType().getMethods()).map(m -&gt; MethodInfo.of(info(a.annotationType()), m)).toList());</span>
+<span class="source-line-no">119</span><span id="line-119">   private final Supplier&lt;String&gt; toString;  // String representation with annotation type, location, and values.</span>
+<span class="source-line-no">120</span><span id="line-120"></span>
+<span class="source-line-no">121</span><span id="line-121">   /**</span>
+<span class="source-line-no">122</span><span id="line-122">    * Constructor.</span>
+<span class="source-line-no">123</span><span id="line-123">    *</span>
+<span class="source-line-no">124</span><span id="line-124">    * @param on The annotatable object where the annotation was found.</span>
+<span class="source-line-no">125</span><span id="line-125">    * @param a The annotation instance.</span>
+<span class="source-line-no">126</span><span id="line-126">    */</span>
+<span class="source-line-no">127</span><span id="line-127">   AnnotationInfo(Annotatable on, T a) {</span>
+<span class="source-line-no">128</span><span id="line-128">      this.annotatable = assertArgNotNull(ARG_on, on);</span>
+<span class="source-line-no">129</span><span id="line-129">      this.a = assertArgNotNull(ARG_a, a);</span>
+<span class="source-line-no">130</span><span id="line-130">      this.rank = findRank(a);</span>
+<span class="source-line-no">131</span><span id="line-131">      this.toString = memoize(this::findToString);</span>
+<span class="source-line-no">132</span><span id="line-132">   }</span>
+<span class="source-line-no">133</span><span id="line-133"></span>
+<span class="source-line-no">134</span><span id="line-134">   /**</span>
+<span class="source-line-no">135</span><span id="line-135">    * Returns the annotatable object (class, method, field, etc.) where this annotation was found.</span>
+<span class="source-line-no">136</span><span id="line-136">    *</span>
+<span class="source-line-no">137</span><span id="line-137">    * @return The annotatable object where this annotation was found.</span>
+<span class="source-line-no">138</span><span id="line-138">    */</span>
+<span class="source-line-no">139</span><span id="line-139">   public Annotatable getAnnotatable() {</span>
+<span class="source-line-no">140</span><span id="line-140">      return annotatable;</span>
+<span class="source-line-no">141</span><span id="line-141">   }</span>
+<span class="source-line-no">142</span><span id="line-142"></span>
+<span class="source-line-no">143</span><span id="line-143">   /**</span>
+<span class="source-line-no">144</span><span id="line-144">    * Returns the annotatable object cast to the specified type.</span>
+<span class="source-line-no">145</span><span id="line-145">    *</span>
+<span class="source-line-no">146</span><span id="line-146">    * @param &lt;A&gt; The annotatable type.</span>
+<span class="source-line-no">147</span><span id="line-147">    * @param type The class to cast to.</span>
+<span class="source-line-no">148</span><span id="line-148">    * @return The annotatable element cast to the specified type.</span>
+<span class="source-line-no">149</span><span id="line-149">    * @throws ClassCastException If the annotatable element is not of the specified type.</span>
+<span class="source-line-no">150</span><span id="line-150">    */</span>
+<span class="source-line-no">151</span><span id="line-151">   public &lt;A extends Annotatable&gt; A getAnnotatable(Class&lt;A&gt; type) {</span>
+<span class="source-line-no">152</span><span id="line-152">      return type.cast(annotatable);</span>
+<span class="source-line-no">153</span><span id="line-153">   }</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">   /**</span>
+<span class="source-line-no">156</span><span id="line-156">    * Returns the annotation type of this annotation.</span>
+<span class="source-line-no">157</span><span id="line-157">    *</span>
+<span class="source-line-no">158</span><span id="line-158">    * &lt;p&gt;</span>
+<span class="source-line-no">159</span><span id="line-159">    * Same as calling {@link Annotation#annotationType()}.</span>
+<span class="source-line-no">160</span><span id="line-160">    *</span>
+<span class="source-line-no">161</span><span id="line-161">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">162</span><span id="line-162">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">163</span><span id="line-163">    *    AnnotationInfo&amp;lt;Deprecated&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ClassInfo.&lt;jsm&gt;of&lt;/jsm&gt;(MyClass.&lt;jk&gt;class&lt;/jk&gt;).getAnnotation(Deprecated.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">164</span><span id="line-164">    *    Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Annotation&amp;gt; &lt;jv&gt;type&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.annotationType();  &lt;jc&gt;// Returns Deprecated.class&lt;/jc&gt;</span>
+<span class="source-line-no">165</span><span id="line-165">    * &lt;/p&gt;</span>
+<span class="source-line-no">166</span><span id="line-166">    *</span>
+<span class="source-line-no">167</span><span id="line-167">    * @return The annotation type of this annotation.</span>
+<span class="source-line-no">168</span><span id="line-168">    * @see Annotation#annotationType()</span>
+<span class="source-line-no">169</span><span id="line-169">    */</span>
+<span class="source-line-no">170</span><span id="line-170">   public Class&lt;? extends Annotation&gt; annotationType() {</span>
+<span class="source-line-no">171</span><span id="line-171">      return a.annotationType();</span>
+<span class="source-line-no">172</span><span id="line-172">   }</span>
+<span class="source-line-no">173</span><span id="line-173"></span>
+<span class="source-line-no">174</span><span id="line-174">   /**</span>
+<span class="source-line-no">175</span><span id="line-175">    * Casts this annotation info to a specific annotation type.</span>
+<span class="source-line-no">176</span><span id="line-176">    *</span>
+<span class="source-line-no">177</span><span id="line-177">    * &lt;p&gt;</span>
+<span class="source-line-no">178</span><span id="line-178">    * This is useful when you have an {@code AnnotationInfo&lt;?&gt;} and need to narrow it to a specific type.</span>
+<span class="source-line-no">179</span><span id="line-179">    *</span>
+<span class="source-line-no">180</span><span id="line-180">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">181</span><span id="line-181">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">182</span><span id="line-182">    *    AnnotationInfo&amp;lt;?&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">183</span><span id="line-183">    *</span>
+<span class="source-line-no">184</span><span id="line-184">    *    &lt;jc&gt;// Safe cast&lt;/jc&gt;</span>
+<span class="source-line-no">185</span><span id="line-185">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;myAi&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.cast(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">186</span><span id="line-186">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;myAi&lt;/jv&gt; != &lt;jk&gt;null&lt;/jk&gt;) {</span>
+<span class="source-line-no">187</span><span id="line-187">    *       &lt;jc&gt;// Use strongly-typed annotation info&lt;/jc&gt;</span>
+<span class="source-line-no">188</span><span id="line-188">    *    }</span>
+<span class="source-line-no">189</span><span id="line-189">    * &lt;/p&gt;</span>
+<span class="source-line-no">190</span><span id="line-190">    *</span>
+<span class="source-line-no">191</span><span id="line-191">    * @param &lt;A&gt; The annotation type to cast to.</span>
+<span class="source-line-no">192</span><span id="line-192">    * @param type The annotation type to cast to.</span>
+<span class="source-line-no">193</span><span id="line-193">    * @return This annotation info cast to the specified type, or &lt;jk&gt;null&lt;/jk&gt; if the annotation is not of the specified type.</span>
+<span class="source-line-no">194</span><span id="line-194">    */</span>
+<span class="source-line-no">195</span><span id="line-195">   @SuppressWarnings({</span>
+<span class="source-line-no">196</span><span id="line-196">      "unchecked" // Type erasure requires cast to AnnotationInfo&lt;A&gt;</span>
+<span class="source-line-no">197</span><span id="line-197">   })</span>
+<span class="source-line-no">198</span><span id="line-198">   public &lt;A extends Annotation&gt; AnnotationInfo&lt;A&gt; cast(Class&lt;A&gt; type) {</span>
+<span class="source-line-no">199</span><span id="line-199">      return type.isInstance(a) ? (AnnotationInfo&lt;A&gt;)this : null;</span>
+<span class="source-line-no">200</span><span id="line-200">   }</span>
+<span class="source-line-no">201</span><span id="line-201"></span>
+<span class="source-line-no">202</span><span id="line-202">   /**</span>
+<span class="source-line-no">203</span><span id="line-203">    * Returns true if the specified object represents an annotation that is logically equivalent to this one.</span>
+<span class="source-line-no">204</span><span id="line-204">    *</span>
+<span class="source-line-no">205</span><span id="line-205">    * &lt;p&gt;</span>
+<span class="source-line-no">206</span><span id="line-206">    * Same as calling {@link Annotation#equals(Object)} on the wrapped annotation.</span>
+<span class="source-line-no">207</span><span id="line-207">    *</span>
+<span class="source-line-no">208</span><span id="line-208">    * &lt;p&gt;</span>
+<span class="source-line-no">209</span><span id="line-209">    * Two annotations are considered equal if:</span>
+<span class="source-line-no">210</span><span id="line-210">    * &lt;ul&gt;</span>
+<span class="source-line-no">211</span><span id="line-211">    *    &lt;li&gt;They are of the same annotation type</span>
+<span class="source-line-no">212</span><span id="line-212">    *    &lt;li&gt;All their corresponding member values are equal</span>
+<span class="source-line-no">213</span><span id="line-213">    * &lt;/ul&gt;</span>
+<span class="source-line-no">214</span><span id="line-214">    *</span>
+<span class="source-line-no">215</span><span id="line-215">    * @param o The reference object with which to compare.</span>
+<span class="source-line-no">216</span><span id="line-216">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified object is equal to this annotation.</span>
+<span class="source-line-no">217</span><span id="line-217">    * @see Annotation#equals(Object)</span>
+<span class="source-line-no">218</span><span id="line-218">    */</span>
+<span class="source-line-no">219</span><span id="line-219">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">220</span><span id="line-220">   public boolean equals(Object o) {</span>
+<span class="source-line-no">221</span><span id="line-221">      if (o instanceof AnnotationInfo o2)</span>
+<span class="source-line-no">222</span><span id="line-222">         return a.equals(o2.a);</span>
+<span class="source-line-no">223</span><span id="line-223">      return a.equals(o);</span>
+<span class="source-line-no">224</span><span id="line-224">   }</span>
+<span class="source-line-no">225</span><span id="line-225"></span>
+<span class="source-line-no">226</span><span id="line-226">   /**</span>
+<span class="source-line-no">227</span><span id="line-227">    * Returns the value of the specified method on this annotation as a boolean.</span>
+<span class="source-line-no">228</span><span id="line-228">    *</span>
+<span class="source-line-no">229</span><span id="line-229">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">230</span><span id="line-230">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">231</span><span id="line-231">    *    &lt;jc&gt;// For annotation: @MyAnnotation(enabled=true)&lt;/jc&gt;</span>
+<span class="source-line-no">232</span><span id="line-232">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">233</span><span id="line-233">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;enabled&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getBoolean(&lt;js&gt;"enabled"&lt;/js&gt;).orElse(&lt;jk&gt;false&lt;/jk&gt;);  &lt;jc&gt;// Returns true&lt;/jc&gt;</span>
+<span class="source-line-no">234</span><span id="line-234">    * &lt;/p&gt;</span>
+<span class="source-line-no">235</span><span id="line-235">    *</span>
+<span class="source-line-no">236</span><span id="line-236">    * @param methodName The method name.</span>
+<span class="source-line-no">237</span><span id="line-237">    * @return An {@link Optional} containing the value as a boolean, or empty if not found or not a {@code boolean} type.</span>
+<span class="source-line-no">238</span><span id="line-238">    */</span>
+<span class="source-line-no">239</span><span id="line-239">   public Optional&lt;Boolean&gt; getBoolean(String methodName) {</span>
+<span class="source-line-no">240</span><span id="line-240">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(boolean.class)).map(x -&gt; (Boolean)x.invoke(a));</span>
+<span class="source-line-no">241</span><span id="line-241">   }</span>
+<span class="source-line-no">242</span><span id="line-242"></span>
+<span class="source-line-no">243</span><span id="line-243">   /**</span>
+<span class="source-line-no">244</span><span id="line-244">    * Returns the value of the specified method on this annotation as a class array.</span>
+<span class="source-line-no">245</span><span id="line-245">    *</span>
+<span class="source-line-no">246</span><span id="line-246">    * &lt;p&gt;</span>
+<span class="source-line-no">247</span><span id="line-247">    * For type-safe access to an array of classes of a specific supertype, use {@link #getClassArray(String, Class)}.</span>
+<span class="source-line-no">248</span><span id="line-248">    *</span>
+<span class="source-line-no">249</span><span id="line-249">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">250</span><span id="line-250">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">251</span><span id="line-251">    *    &lt;jc&gt;// For annotation: @MyAnnotation(types={String.class, Integer.class})&lt;/jc&gt;</span>
+<span class="source-line-no">252</span><span id="line-252">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">253</span><span id="line-253">    *    Class&amp;lt;?&amp;gt;[] &lt;jv&gt;types&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getClassArray(&lt;js&gt;"types"&lt;/js&gt;).orElse(&lt;jk&gt;new&lt;/jk&gt; Class[0]);  &lt;jc&gt;// Returns [String.class, Integer.class]&lt;/jc&gt;</span>
+<span class="source-line-no">254</span><span id="line-254">    * &lt;/p&gt;</span>
+<span class="source-line-no">255</span><span id="line-255">    *</span>
+<span class="source-line-no">256</span><span id="line-256">    * @param methodName The method name.</span>
+<span class="source-line-no">257</span><span id="line-257">    * @return An {@link Optional} containing the class array value, or empty if not found or not a {@code Class[]} type.</span>
+<span class="source-line-no">258</span><span id="line-258">    */</span>
+<span class="source-line-no">259</span><span id="line-259">   @SuppressWarnings({</span>
+<span class="source-line-no">260</span><span id="line-260">      "unchecked" // Type erasure requires cast to Class&lt;?&gt;[] for annotation value</span>
+<span class="source-line-no">261</span><span id="line-261">   })</span>
+<span class="source-line-no">262</span><span id="line-262">   public Optional&lt;Class&lt;?&gt;[]&gt; getClassArray(String methodName) {</span>
+<span class="source-line-no">263</span><span id="line-263">      return (Optional&lt;Class&lt;?&gt;[]&gt;)(Optional&lt;?&gt;)getMethod(methodName).filter(x -&gt; x.hasReturnType(Class[].class)).map(x -&gt; x.invoke(a));</span>
+<span class="source-line-no">264</span><span id="line-264">   }</span>
+<span class="source-line-no">265</span><span id="line-265"></span>
+<span class="source-line-no">266</span><span id="line-266">   /**</span>
+<span class="source-line-no">267</span><span id="line-267">    * Returns the value of the specified method on this annotation as a class array of a specific type.</span>
+<span class="source-line-no">268</span><span id="line-268">    *</span>
+<span class="source-line-no">269</span><span id="line-269">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">270</span><span id="line-270">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">271</span><span id="line-271">    *    &lt;jc&gt;// Get an array of serializer classes from an annotation&lt;/jc&gt;</span>
+<span class="source-line-no">272</span><span id="line-272">    *    Optional&amp;lt;Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Serializer&amp;gt;[]&amp;gt; &lt;jv&gt;serializerClasses&lt;/jv&gt; =</span>
+<span class="source-line-no">273</span><span id="line-273">    *       &lt;jv&gt;annotationInfo&lt;/jv&gt;.getClassArray(&lt;js&gt;"serializers"&lt;/js&gt;, Serializer.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">274</span><span id="line-274">    * &lt;/p&gt;</span>
+<span class="source-line-no">275</span><span id="line-275">    *</span>
+<span class="source-line-no">276</span><span id="line-276">    * @param &lt;T&gt; The expected supertype of the classes.</span>
+<span class="source-line-no">277</span><span id="line-277">    * @param methodName The method name.</span>
+<span class="source-line-no">278</span><span id="line-278">    * @param type The expected supertype of the class values.</span>
+<span class="source-line-no">279</span><span id="line-279">    * @return An optional containing the value of the specified method cast to the expected type,</span>
+<span class="source-line-no">280</span><span id="line-280">    *         or empty if not found, not a class array, or any element is not assignable to the expected type.</span>
+<span class="source-line-no">281</span><span id="line-281">    */</span>
+<span class="source-line-no">282</span><span id="line-282">   @SuppressWarnings({</span>
+<span class="source-line-no">283</span><span id="line-283">      "unchecked", // Type erasure requires unchecked casts</span>
+<span class="source-line-no">284</span><span id="line-284">      "hiding", // Field/variable hiding intentional for specific scoping</span>
+<span class="source-line-no">285</span><span id="line-285">   })</span>
+<span class="source-line-no">286</span><span id="line-286">   public &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;[]&gt; getClassArray(String methodName, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">287</span><span id="line-287">      // @formatter:off</span>
+<span class="source-line-no">288</span><span id="line-288">      return getMethod(methodName)</span>
+<span class="source-line-no">289</span><span id="line-289">         .filter(x -&gt; x.hasReturnType(Class[].class))</span>
+<span class="source-line-no">290</span><span id="line-290">         .map(x -&gt; (Class&lt;?&gt;[])x.invoke(a))</span>
+<span class="source-line-no">291</span><span id="line-291">         .filter(arr -&gt; {</span>
+<span class="source-line-no">292</span><span id="line-292">            for (var c : arr) {</span>
+<span class="source-line-no">293</span><span id="line-293">               if (!type.isAssignableFrom(c))</span>
+<span class="source-line-no">294</span><span id="line-294">                  return false;</span>
+<span class="source-line-no">295</span><span id="line-295">            }</span>
+<span class="source-line-no">296</span><span id="line-296">            return true;</span>
+<span class="source-line-no">297</span><span id="line-297">         })</span>
+<span class="source-line-no">298</span><span id="line-298">         .map(x -&gt; (Class&lt;? extends T&gt;[])x);</span>
+<span class="source-line-no">299</span><span id="line-299">      // @formatter:on</span>
+<span class="source-line-no">300</span><span id="line-300">   }</span>
+<span class="source-line-no">301</span><span id="line-301"></span>
+<span class="source-line-no">302</span><span id="line-302">   /**</span>
+<span class="source-line-no">303</span><span id="line-303">    * Returns the value of the specified method on this annotation as a class.</span>
+<span class="source-line-no">304</span><span id="line-304">    *</span>
+<span class="source-line-no">305</span><span id="line-305">    * &lt;p&gt;</span>
+<span class="source-line-no">306</span><span id="line-306">    * For type-safe access to a class of a specific supertype, use {@link #getClassValue(String, Class)}.</span>
+<span class="source-line-no">307</span><span id="line-307">    *</span>
+<span class="source-line-no">308</span><span id="line-308">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">309</span><span id="line-309">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">310</span><span id="line-310">    *    &lt;jc&gt;// For annotation: @MyAnnotation(type=String.class)&lt;/jc&gt;</span>
+<span class="source-line-no">311</span><span id="line-311">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">312</span><span id="line-312">    *    Class&amp;lt;?&amp;gt; &lt;jv&gt;type&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getClassValue(&lt;js&gt;"type"&lt;/js&gt;).orElse(&lt;jk&gt;null&lt;/jk&gt;);  &lt;jc&gt;// Returns String.class&lt;/jc&gt;</span>
+<span class="source-line-no">313</span><span id="line-313">    * &lt;/p&gt;</span>
+<span class="source-line-no">314</span><span id="line-314">    *</span>
+<span class="source-line-no">315</span><span id="line-315">    * @param methodName The method name.</span>
+<span class="source-line-no">316</span><span id="line-316">    * @return An {@link Optional} containing the class value, or empty if not found or not a {@link Class} type.</span>
+<span class="source-line-no">317</span><span id="line-317">    */</span>
+<span class="source-line-no">318</span><span id="line-318">   @SuppressWarnings({</span>
+<span class="source-line-no">319</span><span id="line-319">      "unchecked" // Type erasure requires cast to Class&lt;?&gt; for annotation value</span>
+<span class="source-line-no">320</span><span id="line-320">   })</span>
+<span class="source-line-no">321</span><span id="line-321">   public Optional&lt;Class&lt;?&gt;&gt; getClassValue(String methodName) {</span>
+<span class="source-line-no">322</span><span id="line-322">      return (Optional&lt;Class&lt;?&gt;&gt;)(Optional&lt;?&gt;)getMethod(methodName).filter(x -&gt; x.hasReturnType(Class.class)).map(x -&gt; x.invoke(a));</span>
+<span class="source-line-no">323</span><span id="line-323">   }</span>
+<span class="source-line-no">324</span><span id="line-324"></span>
+<span class="source-line-no">325</span><span id="line-325">   /**</span>
+<span class="source-line-no">326</span><span id="line-326">    * Returns the value of the specified method on this annotation as a class of a specific type.</span>
+<span class="source-line-no">327</span><span id="line-327">    *</span>
+<span class="source-line-no">328</span><span id="line-328">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">329</span><span id="line-329">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">330</span><span id="line-330">    *    &lt;jc&gt;// Get a serializer class from an annotation&lt;/jc&gt;</span>
+<span class="source-line-no">331</span><span id="line-331">    *    Optional&amp;lt;Class&amp;lt;? &lt;jk&gt;extends&lt;/jk&gt; Serializer&amp;gt;&amp;gt; &lt;jv&gt;serializerClass&lt;/jv&gt; =</span>
+<span class="source-line-no">332</span><span id="line-332">    *       &lt;jv&gt;annotationInfo&lt;/jv&gt;.getClassValue(&lt;js&gt;"serializer"&lt;/js&gt;, Serializer.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">333</span><span id="line-333">    * &lt;/p&gt;</span>
+<span class="source-line-no">334</span><span id="line-334">    *</span>
+<span class="source-line-no">335</span><span id="line-335">    * @param &lt;T&gt; The expected supertype of the class.</span>
+<span class="source-line-no">336</span><span id="line-336">    * @param methodName The method name.</span>
+<span class="source-line-no">337</span><span id="line-337">    * @param type The expected supertype of the class value.</span>
+<span class="source-line-no">338</span><span id="line-338">    * @return An optional containing the value of the specified method cast to the expected type,</span>
+<span class="source-line-no">339</span><span id="line-339">    *         or empty if not found, not a class, or not assignable to the expected type.</span>
+<span class="source-line-no">340</span><span id="line-340">    */</span>
+<span class="source-line-no">341</span><span id="line-341">   @SuppressWarnings({</span>
+<span class="source-line-no">342</span><span id="line-342">      "unchecked", // Type erasure requires unchecked casts</span>
+<span class="source-line-no">343</span><span id="line-343">      "hiding", // Field/variable hiding intentional for specific scoping</span>
+<span class="source-line-no">344</span><span id="line-344">   })</span>
+<span class="source-line-no">345</span><span id="line-345">   public &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;&gt; getClassValue(String methodName, Class&lt;T&gt; type) {</span>
+<span class="source-line-no">346</span><span id="line-346">      // @formatter:off</span>
+<span class="source-line-no">347</span><span id="line-347">      return getMethod(methodName)</span>
+<span class="source-line-no">348</span><span id="line-348">         .filter(x -&gt; x.hasReturnType(Class.class))</span>
+<span class="source-line-no">349</span><span id="line-349">         .map(x -&gt; (Class&lt;?&gt;)x.invoke(a))</span>
+<span class="source-line-no">350</span><span id="line-350">         .filter(type::isAssignableFrom)</span>
+<span class="source-line-no">351</span><span id="line-351">         .map(x -&gt; (Class&lt;? extends T&gt;)x);</span>
+<span class="source-line-no">352</span><span id="line-352">      // @formatter:on</span>
+<span class="source-line-no">353</span><span id="line-353">   }</span>
+<span class="source-line-no">354</span><span id="line-354"></span>
 <span class="source-line-no">355</span><span id="line-355">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">356</span><span id="line-356"></span>
-<span class="source-line-no">357</span><span id="line-357">   /**</span>
-<span class="source-line-no">358</span><span id="line-358">    * Returns the value of the specified method on this annotation as a double.</span>
-<span class="source-line-no">359</span><span id="line-359">    *</span>
-<span class="source-line-no">360</span><span id="line-360">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">361</span><span id="line-361">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">362</span><span id="line-362">    *    &lt;jc&gt;// For annotation: @MyAnnotation(threshold=0.95)&lt;/jc&gt;</span>
-<span class="source-line-no">363</span><span id="line-363">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">364</span><span id="line-364">    *    &lt;jk&gt;double&lt;/jk&gt; &lt;jv&gt;threshold&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getDouble(&lt;js&gt;"threshold"&lt;/js&gt;).orElse(0.0);  &lt;jc&gt;// Returns 0.95&lt;/jc&gt;</span>
-<span class="source-line-no">365</span><span id="line-365">    * &lt;/p&gt;</span>
-<span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    * @param methodName The method name.</span>
-<span class="source-line-no">368</span><span id="line-368">    * @return An {@link Optional} containing the value as a double, or empty if not found or not a {@code double} type.</span>
-<span class="source-line-no">369</span><span id="line-369">    */</span>
-<span class="source-line-no">370</span><span id="line-370">   public Optional&lt;Double&gt; getDouble(String methodName) {</span>
-<span class="source-line-no">371</span><span id="line-371">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(double.class)).map(x -&gt; (Double)x.invoke(a));</span>
-<span class="source-line-no">372</span><span id="line-372">   }</span>
-<span class="source-line-no">373</span><span id="line-373"></span>
-<span class="source-line-no">374</span><span id="line-374">   /**</span>
-<span class="source-line-no">375</span><span id="line-375">    * Returns the value of the specified method on this annotation as a float.</span>
-<span class="source-line-no">376</span><span id="line-376">    *</span>
-<span class="source-line-no">377</span><span id="line-377">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">378</span><span id="line-378">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">379</span><span id="line-379">    *    &lt;jc&gt;// For annotation: @MyAnnotation(weight=0.5f)&lt;/jc&gt;</span>
-<span class="source-line-no">380</span><span id="line-380">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">381</span><span id="line-381">    *    &lt;jk&gt;float&lt;/jk&gt; &lt;jv&gt;weight&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getFloat(&lt;js&gt;"weight"&lt;/js&gt;).orElse(0.0f);  &lt;jc&gt;// Returns 0.5f&lt;/jc&gt;</span>
-<span class="source-line-no">382</span><span id="line-382">    * &lt;/p&gt;</span>
-<span class="source-line-no">383</span><span id="line-383">    *</span>
-<span class="source-line-no">384</span><span id="line-384">    * @param methodName The method name.</span>
-<span class="source-line-no">385</span><span id="line-385">    * @return An {@link Optional} containing the value as a float, or empty if not found or not a {@code float} type.</span>
-<span class="source-line-no">386</span><span id="line-386">    */</span>
-<span class="source-line-no">387</span><span id="line-387">   public Optional&lt;Float&gt; getFloat(String methodName) {</span>
-<span class="source-line-no">388</span><span id="line-388">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(float.class)).map(x -&gt; (Float)x.invoke(a));</span>
-<span class="source-line-no">389</span><span id="line-389">   }</span>
-<span class="source-line-no">390</span><span id="line-390"></span>
-<span class="source-line-no">391</span><span id="line-391">   /**</span>
-<span class="source-line-no">392</span><span id="line-392">    * Returns the value of the specified method on this annotation as an integer.</span>
-<span class="source-line-no">393</span><span id="line-393">    *</span>
-<span class="source-line-no">394</span><span id="line-394">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">395</span><span id="line-395">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">396</span><span id="line-396">    *    &lt;jc&gt;// For annotation: @MyAnnotation(priority=5)&lt;/jc&gt;</span>
-<span class="source-line-no">397</span><span id="line-397">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">398</span><span id="line-398">    *    &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;priority&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getInt(&lt;js&gt;"priority"&lt;/js&gt;).orElse(0);  &lt;jc&gt;// Returns 5&lt;/jc&gt;</span>
-<span class="source-line-no">399</span><span id="line-399">    * &lt;/p&gt;</span>
-<span class="source-line-no">400</span><span id="line-400">    *</span>
-<span class="source-line-no">401</span><span id="line-401">    * @param methodName The method name.</span>
-<span class="source-line-no">402</span><span id="line-402">    * @return An {@link Optional} containing the value as an integer, or empty if not found or not an {@code int} type.</span>
-<span class="source-line-no">403</span><span id="line-403">    */</span>
-<span class="source-line-no">404</span><span id="line-404">   public Optional&lt;Integer&gt; getInt(String methodName) {</span>
-<span class="source-line-no">405</span><span id="line-405">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(int.class)).map(x -&gt; (Integer)x.invoke(a));</span>
-<span class="source-line-no">406</span><span id="line-406">   }</span>
-<span class="source-line-no">407</span><span id="line-407"></span>
-<span class="source-line-no">408</span><span id="line-408">   /**</span>
-<span class="source-line-no">409</span><span id="line-409">    * Returns the value of the specified method on this annotation as a long.</span>
-<span class="source-line-no">410</span><span id="line-410">    *</span>
-<span class="source-line-no">411</span><span id="line-411">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">412</span><span id="line-412">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">413</span><span id="line-413">    *    &lt;jc&gt;// For annotation: @MyAnnotation(timestamp=1234567890L)&lt;/jc&gt;</span>
-<span class="source-line-no">414</span><span id="line-414">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">415</span><span id="line-415">    *    &lt;jk&gt;long&lt;/jk&gt; &lt;jv&gt;timestamp&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getLong(&lt;js&gt;"timestamp"&lt;/js&gt;).orElse(0L);  &lt;jc&gt;// Returns 1234567890L&lt;/jc&gt;</span>
-<span class="source-line-no">416</span><span id="line-416">    * &lt;/p&gt;</span>
-<span class="source-line-no">417</span><span id="line-417">    *</span>
-<span class="source-line-no">418</span><span id="line-418">    * @param methodName The method name.</span>
-<span class="source-line-no">419</span><span id="line-419">    * @return An {@link Optional} containing the value as a long, or empty if not found or not a {@code long} type.</span>
-<span class="source-line-no">420</span><span id="line-420">    */</span>
-<span class="source-line-no">421</span><span id="line-421">   public Optional&lt;Long&gt; getLong(String methodName) {</span>
-<span class="source-line-no">422</span><span id="line-422">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(long.class)).map(x -&gt; (Long)x.invoke(a));</span>
-<span class="source-line-no">423</span><span id="line-423">   }</span>
-<span class="source-line-no">424</span><span id="line-424"></span>
-<span class="source-line-no">425</span><span id="line-425">   /**</span>
-<span class="source-line-no">426</span><span id="line-426">    * Returns the method with the specified name on this annotation.</span>
-<span class="source-line-no">427</span><span id="line-427">    *</span>
-<span class="source-line-no">428</span><span id="line-428">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">429</span><span id="line-429">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">430</span><span id="line-430">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">431</span><span id="line-431">    *    Optional&amp;lt;MethodInfo&amp;gt; &lt;jv&gt;method&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getMethod(&lt;js&gt;"value"&lt;/js&gt;);</span>
-<span class="source-line-no">432</span><span id="line-432">    *    &lt;jv&gt;method&lt;/jv&gt;.ifPresent(&lt;jv&gt;m&lt;/jv&gt; -&amp;gt; System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;m&lt;/jv&gt;.getReturnType()));</span>
-<span class="source-line-no">433</span><span id="line-433">    * &lt;/p&gt;</span>
-<span class="source-line-no">434</span><span id="line-434">    *</span>
-<span class="source-line-no">435</span><span id="line-435">    * @param methodName The method name to look for.</span>
-<span class="source-line-no">436</span><span id="line-436">    * @return An {@link Optional} containing the method info, or empty if method not found.</span>
-<span class="source-line-no">437</span><span id="line-437">    */</span>
-<span class="source-line-no">438</span><span id="line-438">   public Optional&lt;MethodInfo&gt; getMethod(String methodName) {</span>
-<span class="source-line-no">439</span><span id="line-439">      return methods.get().stream().filter(x -&gt; eq(methodName, x.getNameSimple())).findFirst();</span>
-<span class="source-line-no">440</span><span id="line-440">   }</span>
-<span class="source-line-no">441</span><span id="line-441"></span>
-<span class="source-line-no">442</span><span id="line-442">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">443</span><span id="line-443">   // Private helper methods</span>
+<span class="source-line-no">356</span><span id="line-356">   // Annotation interface methods</span>
+<span class="source-line-no">357</span><span id="line-357">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">358</span><span id="line-358"></span>
+<span class="source-line-no">359</span><span id="line-359">   /**</span>
+<span class="source-line-no">360</span><span id="line-360">    * Returns the value of the specified method on this annotation as a double.</span>
+<span class="source-line-no">361</span><span id="line-361">    *</span>
+<span class="source-line-no">362</span><span id="line-362">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">363</span><span id="line-363">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">364</span><span id="line-364">    *    &lt;jc&gt;// For annotation: @MyAnnotation(threshold=0.95)&lt;/jc&gt;</span>
+<span class="source-line-no">365</span><span id="line-365">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">366</span><span id="line-366">    *    &lt;jk&gt;double&lt;/jk&gt; &lt;jv&gt;threshold&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getDouble(&lt;js&gt;"threshold"&lt;/js&gt;).orElse(0.0);  &lt;jc&gt;// Returns 0.95&lt;/jc&gt;</span>
+<span class="source-line-no">367</span><span id="line-367">    * &lt;/p&gt;</span>
+<span class="source-line-no">368</span><span id="line-368">    *</span>
+<span class="source-line-no">369</span><span id="line-369">    * @param methodName The method name.</span>
+<span class="source-line-no">370</span><span id="line-370">    * @return An {@link Optional} containing the value as a double, or empty if not found or not a {@code double} type.</span>
+<span class="source-line-no">371</span><span id="line-371">    */</span>
+<span class="source-line-no">372</span><span id="line-372">   public Optional&lt;Double&gt; getDouble(String methodName) {</span>
+<span class="source-line-no">373</span><span id="line-373">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(double.class)).map(x -&gt; (Double)x.invoke(a));</span>
+<span class="source-line-no">374</span><span id="line-374">   }</span>
+<span class="source-line-no">375</span><span id="line-375"></span>
+<span class="source-line-no">376</span><span id="line-376">   /**</span>
+<span class="source-line-no">377</span><span id="line-377">    * Returns the value of the specified method on this annotation as a float.</span>
+<span class="source-line-no">378</span><span id="line-378">    *</span>
+<span class="source-line-no">379</span><span id="line-379">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">380</span><span id="line-380">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">381</span><span id="line-381">    *    &lt;jc&gt;// For annotation: @MyAnnotation(weight=0.5f)&lt;/jc&gt;</span>
+<span class="source-line-no">382</span><span id="line-382">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">383</span><span id="line-383">    *    &lt;jk&gt;float&lt;/jk&gt; &lt;jv&gt;weight&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getFloat(&lt;js&gt;"weight"&lt;/js&gt;).orElse(0.0f);  &lt;jc&gt;// Returns 0.5f&lt;/jc&gt;</span>
+<span class="source-line-no">384</span><span id="line-384">    * &lt;/p&gt;</span>
+<span class="source-line-no">385</span><span id="line-385">    *</span>
+<span class="source-line-no">386</span><span id="line-386">    * @param methodName The method name.</span>
+<span class="source-line-no">387</span><span id="line-387">    * @return An {@link Optional} containing the value as a float, or empty if not found or not a {@code float} type.</span>
+<span class="source-line-no">388</span><span id="line-388">    */</span>
+<span class="source-line-no">389</span><span id="line-389">   public Optional&lt;Float&gt; getFloat(String methodName) {</span>
+<span class="source-line-no">390</span><span id="line-390">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(float.class)).map(x -&gt; (Float)x.invoke(a));</span>
+<span class="source-line-no">391</span><span id="line-391">   }</span>
+<span class="source-line-no">392</span><span id="line-392"></span>
+<span class="source-line-no">393</span><span id="line-393">   /**</span>
+<span class="source-line-no">394</span><span id="line-394">    * Returns the value of the specified method on this annotation as an integer.</span>
+<span class="source-line-no">395</span><span id="line-395">    *</span>
+<span class="source-line-no">396</span><span id="line-396">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">397</span><span id="line-397">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">398</span><span id="line-398">    *    &lt;jc&gt;// For annotation: @MyAnnotation(priority=5)&lt;/jc&gt;</span>
+<span class="source-line-no">399</span><span id="line-399">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">400</span><span id="line-400">    *    &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;priority&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getInt(&lt;js&gt;"priority"&lt;/js&gt;).orElse(0);  &lt;jc&gt;// Returns 5&lt;/jc&gt;</span>
+<span class="source-line-no">401</span><span id="line-401">    * &lt;/p&gt;</span>
+<span class="source-line-no">402</span><span id="line-402">    *</span>
+<span class="source-line-no">403</span><span id="line-403">    * @param methodName The method name.</span>
+<span class="source-line-no">404</span><span id="line-404">    * @return An {@link Optional} containing the value as an integer, or empty if not found or not an {@code int} type.</span>
+<span class="source-line-no">405</span><span id="line-405">    */</span>
+<span class="source-line-no">406</span><span id="line-406">   public Optional&lt;Integer&gt; getInt(String methodName) {</span>
+<span class="source-line-no">407</span><span id="line-407">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(int.class)).map(x -&gt; (Integer)x.invoke(a));</span>
+<span class="source-line-no">408</span><span id="line-408">   }</span>
+<span class="source-line-no">409</span><span id="line-409"></span>
+<span class="source-line-no">410</span><span id="line-410">   /**</span>
+<span class="source-line-no">411</span><span id="line-411">    * Returns the value of the specified method on this annotation as a long.</span>
+<span class="source-line-no">412</span><span id="line-412">    *</span>
+<span class="source-line-no">413</span><span id="line-413">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">414</span><span id="line-414">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">415</span><span id="line-415">    *    &lt;jc&gt;// For annotation: @MyAnnotation(timestamp=1234567890L)&lt;/jc&gt;</span>
+<span class="source-line-no">416</span><span id="line-416">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">417</span><span id="line-417">    *    &lt;jk&gt;long&lt;/jk&gt; &lt;jv&gt;timestamp&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getLong(&lt;js&gt;"timestamp"&lt;/js&gt;).orElse(0L);  &lt;jc&gt;// Returns 1234567890L&lt;/jc&gt;</span>
+<span class="source-line-no">418</span><span id="line-418">    * &lt;/p&gt;</span>
+<span class="source-line-no">419</span><span id="line-419">    *</span>
+<span class="source-line-no">420</span><span id="line-420">    * @param methodName The method name.</span>
+<span class="source-line-no">421</span><span id="line-421">    * @return An {@link Optional} containing the value as a long, or empty if not found or not a {@code long} type.</span>
+<span class="source-line-no">422</span><span id="line-422">    */</span>
+<span class="source-line-no">423</span><span id="line-423">   public Optional&lt;Long&gt; getLong(String methodName) {</span>
+<span class="source-line-no">424</span><span id="line-424">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(long.class)).map(x -&gt; (Long)x.invoke(a));</span>
+<span class="source-line-no">425</span><span id="line-425">   }</span>
+<span class="source-line-no">426</span><span id="line-426"></span>
+<span class="source-line-no">427</span><span id="line-427">   /**</span>
+<span class="source-line-no">428</span><span id="line-428">    * Returns the method with the specified name on this annotation.</span>
+<span class="source-line-no">429</span><span id="line-429">    *</span>
+<span class="source-line-no">430</span><span id="line-430">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">431</span><span id="line-431">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">432</span><span id="line-432">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">433</span><span id="line-433">    *    Optional&amp;lt;MethodInfo&amp;gt; &lt;jv&gt;method&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getMethod(&lt;js&gt;"value"&lt;/js&gt;);</span>
+<span class="source-line-no">434</span><span id="line-434">    *    &lt;jv&gt;method&lt;/jv&gt;.ifPresent(&lt;jv&gt;m&lt;/jv&gt; -&amp;gt; System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;m&lt;/jv&gt;.getReturnType()));</span>
+<span class="source-line-no">435</span><span id="line-435">    * &lt;/p&gt;</span>
+<span class="source-line-no">436</span><span id="line-436">    *</span>
+<span class="source-line-no">437</span><span id="line-437">    * @param methodName The method name to look for.</span>
+<span class="source-line-no">438</span><span id="line-438">    * @return An {@link Optional} containing the method info, or empty if method not found.</span>
+<span class="source-line-no">439</span><span id="line-439">    */</span>
+<span class="source-line-no">440</span><span id="line-440">   public Optional&lt;MethodInfo&gt; getMethod(String methodName) {</span>
+<span class="source-line-no">441</span><span id="line-441">      return methods.get().stream().filter(x -&gt; eq(methodName, x.getNameSimple())).findFirst();</span>
+<span class="source-line-no">442</span><span id="line-442">   }</span>
+<span class="source-line-no">443</span><span id="line-443"></span>
 <span class="source-line-no">444</span><span id="line-444">   //-----------------------------------------------------------------------------------------------------------------</span>
-<span class="source-line-no">445</span><span id="line-445"></span>
-<span class="source-line-no">446</span><span id="line-446">   /**</span>
-<span class="source-line-no">447</span><span id="line-447">    * Returns the class name of this annotation.</span>
-<span class="source-line-no">448</span><span id="line-448">    *</span>
-<span class="source-line-no">449</span><span id="line-449">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">450</span><span id="line-450">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">451</span><span id="line-451">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">452</span><span id="line-452">    *    String &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getName();  &lt;jc&gt;// Returns "mypackage.MyAnnotation"&lt;/jc&gt;</span>
-<span class="source-line-no">453</span><span id="line-453">    * &lt;/p&gt;</span>
-<span class="source-line-no">454</span><span id="line-454">    *</span>
-<span class="source-line-no">455</span><span id="line-455">    * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).</span>
-<span class="source-line-no">456</span><span id="line-456">    */</span>
-<span class="source-line-no">457</span><span id="line-457">   public String getName() { return cn(a.annotationType()); }</span>
-<span class="source-line-no">458</span><span id="line-458"></span>
-<span class="source-line-no">459</span><span id="line-459">   /**</span>
-<span class="source-line-no">460</span><span id="line-460">    * Returns the simple class name of this annotation.</span>
-<span class="source-line-no">461</span><span id="line-461">    *</span>
-<span class="source-line-no">462</span><span id="line-462">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">463</span><span id="line-463">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">464</span><span id="line-464">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">465</span><span id="line-465">    *    String &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getNameSimple();  &lt;jc&gt;// Returns "MyAnnotation"&lt;/jc&gt;</span>
-<span class="source-line-no">466</span><span id="line-466">    * &lt;/p&gt;</span>
-<span class="source-line-no">467</span><span id="line-467">    *</span>
-<span class="source-line-no">468</span><span id="line-468">    * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).</span>
-<span class="source-line-no">469</span><span id="line-469">    * @see #getName()</span>
-<span class="source-line-no">470</span><span id="line-470">    */</span>
-<span class="source-line-no">471</span><span id="line-471">   public String getNameSimple() { return cns(a.annotationType()); }</span>
-<span class="source-line-no">472</span><span id="line-472"></span>
-<span class="source-line-no">473</span><span id="line-473">   /**</span>
-<span class="source-line-no">474</span><span id="line-474">    * Returns the rank of this annotation for sorting by precedence.</span>
-<span class="source-line-no">475</span><span id="line-475">    *</span>
-<span class="source-line-no">476</span><span id="line-476">    * &lt;p&gt;</span>
-<span class="source-line-no">477</span><span id="line-477">    * The rank is determined by checking if the annotation has a {@code rank()} method that returns an {@code int}.</span>
-<span class="source-line-no">478</span><span id="line-478">    * If found, that value is used; otherwise the rank defaults to {@code 0}.</span>
-<span class="source-line-no">479</span><span id="line-479">    *</span>
-<span class="source-line-no">480</span><span id="line-480">    * &lt;p&gt;</span>
-<span class="source-line-no">481</span><span id="line-481">    * Higher rank values indicate higher precedence when multiple annotations of the same type are present.</span>
-<span class="source-line-no">482</span><span id="line-482">    *</span>
-<span class="source-line-no">483</span><span id="line-483">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">484</span><span id="line-484">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">485</span><span id="line-485">    *    &lt;jc&gt;// Annotation with rank method&lt;/jc&gt;</span>
-<span class="source-line-no">486</span><span id="line-486">    *    &lt;ja&gt;@interface&lt;/ja&gt; MyAnnotation {</span>
-<span class="source-line-no">487</span><span id="line-487">    *       &lt;jk&gt;int&lt;/jk&gt; rank() &lt;jk&gt;default&lt;/jk&gt; 0;</span>
-<span class="source-line-no">488</span><span id="line-488">    *    }</span>
-<span class="source-line-no">489</span><span id="line-489">    *</span>
-<span class="source-line-no">490</span><span id="line-490">    *    &lt;jc&gt;// Get rank from annotation info&lt;/jc&gt;</span>
-<span class="source-line-no">491</span><span id="line-491">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">492</span><span id="line-492">    *    &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;rank&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getRank();  &lt;jc&gt;// Returns value from rank() method&lt;/jc&gt;</span>
-<span class="source-line-no">493</span><span id="line-493">    * &lt;/p&gt;</span>
-<span class="source-line-no">494</span><span id="line-494">    *</span>
-<span class="source-line-no">495</span><span id="line-495">    * @return The rank of this annotation, or {@code 0} if no rank method exists.</span>
-<span class="source-line-no">496</span><span id="line-496">    */</span>
-<span class="source-line-no">497</span><span id="line-497">   public int getRank() { return rank; }</span>
-<span class="source-line-no">498</span><span id="line-498"></span>
-<span class="source-line-no">499</span><span id="line-499">   /**</span>
-<span class="source-line-no">500</span><span id="line-500">    * Returns the return type of the specified method on this annotation.</span>
-<span class="source-line-no">501</span><span id="line-501">    *</span>
-<span class="source-line-no">502</span><span id="line-502">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">503</span><span id="line-503">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">504</span><span id="line-504">    *    Optional&amp;lt;ClassInfo&amp;gt; &lt;jv&gt;returnType&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.getReturnType(&lt;js&gt;"value"&lt;/js&gt;);</span>
-<span class="source-line-no">505</span><span id="line-505">    * &lt;/p&gt;</span>
-<span class="source-line-no">506</span><span id="line-506">    *</span>
-<span class="source-line-no">507</span><span id="line-507">    * @param methodName The method name.</span>
-<span class="source-line-no">508</span><span id="line-508">    * @return An optional containing the return type of the specified method, or empty if method not found.</span>
-<span class="source-line-no">509</span><span id="line-509">    */</span>
-<span class="source-line-no">510</span><span id="line-510">   public Optional&lt;ClassInfo&gt; getReturnType(String methodName) {</span>
-<span class="source-line-no">511</span><span id="line-511">      return getMethod(methodName).map(x -&gt; x.getReturnType());</span>
-<span class="source-line-no">512</span><span id="line-512">   }</span>
-<span class="source-line-no">513</span><span id="line-513"></span>
-<span class="source-line-no">514</span><span id="line-514">   /**</span>
-<span class="source-line-no">515</span><span id="line-515">    * Returns the value of the specified method on this annotation as a string.</span>
-<span class="source-line-no">516</span><span id="line-516">    *</span>
-<span class="source-line-no">517</span><span id="line-517">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">518</span><span id="line-518">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">519</span><span id="line-519">    *    &lt;jc&gt;// For annotation: @MyAnnotation(name="John", age=30)&lt;/jc&gt;</span>
-<span class="source-line-no">520</span><span id="line-520">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">521</span><span id="line-521">    *    String &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getString(&lt;js&gt;"name"&lt;/js&gt;).orElse(&lt;js&gt;"unknown"&lt;/js&gt;);  &lt;jc&gt;// Returns "John"&lt;/jc&gt;</span>
-<span class="source-line-no">522</span><span id="line-522">    * &lt;/p&gt;</span>
-<span class="source-line-no">523</span><span id="line-523">    *</span>
-<span class="source-line-no">524</span><span id="line-524">    * @param methodName The method name.</span>
-<span class="source-line-no">525</span><span id="line-525">    * @return An {@link Optional} containing the value as a string, or empty if not found or not a string type.</span>
-<span class="source-line-no">526</span><span id="line-526">    */</span>
-<span class="source-line-no">527</span><span id="line-527">   public Optional&lt;String&gt; getString(String methodName) {</span>
-<span class="source-line-no">528</span><span id="line-528">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(String.class)).map(x -&gt; s(x.invoke(a)));</span>
-<span class="source-line-no">529</span><span id="line-529">   }</span>
-<span class="source-line-no">530</span><span id="line-530"></span>
-<span class="source-line-no">531</span><span id="line-531">   /**</span>
-<span class="source-line-no">532</span><span id="line-532">    * Returns the value of the specified method on this annotation as a string array.</span>
-<span class="source-line-no">533</span><span id="line-533">    *</span>
-<span class="source-line-no">534</span><span id="line-534">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">535</span><span id="line-535">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">536</span><span id="line-536">    *    &lt;jc&gt;// For annotation: @MyAnnotation(tags={"foo", "bar"})&lt;/jc&gt;</span>
-<span class="source-line-no">537</span><span id="line-537">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">538</span><span id="line-538">    *    String[] &lt;jv&gt;tags&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getStringArray(&lt;js&gt;"tags"&lt;/js&gt;).orElse(&lt;jk&gt;new&lt;/jk&gt; String[0]);  &lt;jc&gt;// Returns ["foo", "bar"]&lt;/jc&gt;</span>
-<span class="source-line-no">539</span><span id="line-539">    * &lt;/p&gt;</span>
-<span class="source-line-no">540</span><span id="line-540">    *</span>
-<span class="source-line-no">541</span><span id="line-541">    * @param methodName The method name.</span>
-<span class="source-line-no">542</span><span id="line-542">    * @return An {@link Optional} containing the string array value, or empty if not found or not a {@code String[]} type.</span>
-<span class="source-line-no">543</span><span id="line-543">    */</span>
-<span class="source-line-no">544</span><span id="line-544">   public Optional&lt;String[]&gt; getStringArray(String methodName) {</span>
-<span class="source-line-no">545</span><span id="line-545">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(String[].class)).map(x -&gt; (String[])x.invoke(a));</span>
-<span class="source-line-no">546</span><span id="line-546">   }</span>
-<span class="source-line-no">547</span><span id="line-547"></span>
-<span class="source-line-no">548</span><span id="line-548">   /**</span>
-<span class="source-line-no">549</span><span id="line-549">    * Returns the value of the {@code value()} method on this annotation as a string.</span>
-<span class="source-line-no">550</span><span id="line-550">    *</span>
-<span class="source-line-no">551</span><span id="line-551">    * &lt;p&gt;</span>
-<span class="source-line-no">552</span><span id="line-552">    * This is a convenience method equivalent to calling {@link #getString(String) getString("value")}.</span>
-<span class="source-line-no">553</span><span id="line-553">    *</span>
-<span class="source-line-no">554</span><span id="line-554">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">555</span><span id="line-555">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">556</span><span id="line-556">    *    &lt;jc&gt;// For annotation: @MyAnnotation("foo")&lt;/jc&gt;</span>
-<span class="source-line-no">557</span><span id="line-557">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">558</span><span id="line-558">    *    String &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getValue().orElse(&lt;js&gt;"default"&lt;/js&gt;);  &lt;jc&gt;// Returns "foo"&lt;/jc&gt;</span>
-<span class="source-line-no">559</span><span id="line-559">    * &lt;/p&gt;</span>
-<span class="source-line-no">560</span><span id="line-560">    *</span>
-<span class="source-line-no">561</span><span id="line-561">    * @return An {@link Optional} containing the value of the {@code value()} method, or empty if not found or not a string.</span>
-<span class="source-line-no">562</span><span id="line-562">    */</span>
-<span class="source-line-no">563</span><span id="line-563">   public Optional&lt;String&gt; getValue() { return getString("value"); }</span>
-<span class="source-line-no">564</span><span id="line-564"></span>
-<span class="source-line-no">565</span><span id="line-565">   /**</span>
-<span class="source-line-no">566</span><span id="line-566">    * Returns the value of a specific annotation method.</span>
-<span class="source-line-no">567</span><span id="line-567">    *</span>
-<span class="source-line-no">568</span><span id="line-568">    * &lt;p&gt;</span>
-<span class="source-line-no">569</span><span id="line-569">    * This method provides type-safe access to annotation field values without requiring</span>
-<span class="source-line-no">570</span><span id="line-570">    * explicit reflection calls or casting.</span>
-<span class="source-line-no">571</span><span id="line-571">    *</span>
-<span class="source-line-no">572</span><span id="line-572">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">573</span><span id="line-573">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">574</span><span id="line-574">    *    &lt;jc&gt;// For annotation: @interface MyAnnotation { String value(); int priority(); }&lt;/jc&gt;</span>
-<span class="source-line-no">575</span><span id="line-575">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">576</span><span id="line-576">    *</span>
-<span class="source-line-no">577</span><span id="line-577">    *    &lt;jc&gt;// Get string value&lt;/jc&gt;</span>
-<span class="source-line-no">578</span><span id="line-578">    *    Optional&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getValue(String.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"value"&lt;/js&gt;);</span>
-<span class="source-line-no">579</span><span id="line-579">    *</span>
-<span class="source-line-no">580</span><span id="line-580">    *    &lt;jc&gt;// Get int value&lt;/jc&gt;</span>
-<span class="source-line-no">581</span><span id="line-581">    *    Optional&amp;lt;Integer&amp;gt; &lt;jv&gt;priority&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getValue(Integer.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"priority"&lt;/js&gt;);</span>
-<span class="source-line-no">582</span><span id="line-582">    * &lt;/p&gt;</span>
-<span class="source-line-no">583</span><span id="line-583">    *</span>
-<span class="source-line-no">584</span><span id="line-584">    * @param &lt;V&gt; The expected type of the annotation field value.</span>
-<span class="source-line-no">585</span><span id="line-585">    * @param type The expected class of the annotation field value.</span>
-<span class="source-line-no">586</span><span id="line-586">    * @param name The name of the annotation method (field).</span>
-<span class="source-line-no">587</span><span id="line-587">    * @return An {@link Optional} containing the value if found and type matches, empty otherwise.</span>
-<span class="source-line-no">588</span><span id="line-588">    */</span>
-<span class="source-line-no">589</span><span id="line-589">   @SuppressWarnings({</span>
-<span class="source-line-no">590</span><span id="line-590">      "unchecked" // Type erasure requires cast to V for annotation value</span>
-<span class="source-line-no">591</span><span id="line-591">   })</span>
-<span class="source-line-no">592</span><span id="line-592">   public &lt;V&gt; Optional&lt;V&gt; getValue(Class&lt;V&gt; type, String name) {</span>
-<span class="source-line-no">593</span><span id="line-593">      // @formatter:off</span>
-<span class="source-line-no">594</span><span id="line-594">      return methods.get().stream()</span>
-<span class="source-line-no">595</span><span id="line-595">         .filter(m -&gt; eq(m.getName(), name) &amp;&amp; eq(m.getReturnType().inner(), type))</span>
-<span class="source-line-no">596</span><span id="line-596">         .map(m -&gt; safe(() -&gt; (V)m.invoke(a)))</span>
-<span class="source-line-no">597</span><span id="line-597">         .findFirst();</span>
-<span class="source-line-no">598</span><span id="line-598">      // @formatter:on</span>
-<span class="source-line-no">599</span><span id="line-599">   }</span>
-<span class="source-line-no">600</span><span id="line-600"></span>
-<span class="source-line-no">601</span><span id="line-601">   /**</span>
-<span class="source-line-no">602</span><span id="line-602">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is itself annotated with the specified annotation.</span>
-<span class="source-line-no">603</span><span id="line-603">    *</span>
-<span class="source-line-no">604</span><span id="line-604">    * &lt;p&gt;</span>
-<span class="source-line-no">605</span><span id="line-605">    * This checks for meta-annotations on the annotation type.</span>
-<span class="source-line-no">606</span><span id="line-606">    *</span>
-<span class="source-line-no">607</span><span id="line-607">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">608</span><span id="line-608">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">609</span><span id="line-609">    *    &lt;jc&gt;// Check if @MyAnnotation is annotated with @Documented&lt;/jc&gt;</span>
-<span class="source-line-no">610</span><span id="line-610">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">611</span><span id="line-611">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isDocumented&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.hasAnnotation(Documented.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">612</span><span id="line-612">    * &lt;/p&gt;</span>
-<span class="source-line-no">613</span><span id="line-613">    *</span>
-<span class="source-line-no">614</span><span id="line-614">    * @param &lt;A&gt; The meta-annotation type.</span>
-<span class="source-line-no">615</span><span id="line-615">    * @param type The meta-annotation to test for.</span>
-<span class="source-line-no">616</span><span id="line-616">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation is annotated with the specified annotation.</span>
-<span class="source-line-no">617</span><span id="line-617">    */</span>
-<span class="source-line-no">618</span><span id="line-618">   public &lt;A extends Annotation&gt; boolean hasAnnotation(Class&lt;A&gt; type) {</span>
-<span class="source-line-no">619</span><span id="line-619">      return nn(this.a.annotationType().getAnnotation(type));</span>
-<span class="source-line-no">620</span><span id="line-620">   }</span>
-<span class="source-line-no">621</span><span id="line-621"></span>
-<span class="source-line-no">622</span><span id="line-622">   /**</span>
-<span class="source-line-no">623</span><span id="line-623">    * Returns the hash code of this annotation.</span>
-<span class="source-line-no">624</span><span id="line-624">    *</span>
-<span class="source-line-no">625</span><span id="line-625">    * &lt;p&gt;</span>
-<span class="source-line-no">626</span><span id="line-626">    * Same as calling {@link Annotation#hashCode()} on the wrapped annotation.</span>
-<span class="source-line-no">627</span><span id="line-627">    *</span>
-<span class="source-line-no">628</span><span id="line-628">    * &lt;p&gt;</span>
-<span class="source-line-no">629</span><span id="line-629">    * The hash code of an annotation is the sum of the hash codes of its members (including those with default values).</span>
-<span class="source-line-no">630</span><span id="line-630">    *</span>
-<span class="source-line-no">631</span><span id="line-631">    * @return The hash code of this annotation.</span>
-<span class="source-line-no">632</span><span id="line-632">    * @see Annotation#hashCode()</span>
-<span class="source-line-no">633</span><span id="line-633">    */</span>
-<span class="source-line-no">634</span><span id="line-634">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">635</span><span id="line-635">   public int hashCode() {</span>
-<span class="source-line-no">636</span><span id="line-636">      return a.hashCode();</span>
-<span class="source-line-no">637</span><span id="line-637">   }</span>
-<span class="source-line-no">638</span><span id="line-638"></span>
-<span class="source-line-no">639</span><span id="line-639">   /**</span>
-<span class="source-line-no">640</span><span id="line-640">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified fully-qualified name.</span>
-<span class="source-line-no">641</span><span id="line-641">    *</span>
-<span class="source-line-no">642</span><span id="line-642">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">643</span><span id="line-643">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">644</span><span id="line-644">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isName&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.hasName(&lt;js&gt;"org.apache.juneau.commons.bean.Name"&lt;/js&gt;);</span>
-<span class="source-line-no">645</span><span id="line-645">    * &lt;/p&gt;</span>
-<span class="source-line-no">646</span><span id="line-646">    *</span>
-<span class="source-line-no">647</span><span id="line-647">    * @param value The fully-qualified name to check.</span>
-<span class="source-line-no">648</span><span id="line-648">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified fully-qualified name.</span>
-<span class="source-line-no">649</span><span id="line-649">    */</span>
-<span class="source-line-no">650</span><span id="line-650">   public boolean hasName(String value) {</span>
-<span class="source-line-no">651</span><span id="line-651">      return eq(value, getName());</span>
-<span class="source-line-no">652</span><span id="line-652">   }</span>
-<span class="source-line-no">653</span><span id="line-653"></span>
-<span class="source-line-no">654</span><span id="line-654">   /**</span>
-<span class="source-line-no">655</span><span id="line-655">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified simple name.</span>
-<span class="source-line-no">656</span><span id="line-656">    *</span>
-<span class="source-line-no">657</span><span id="line-657">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">658</span><span id="line-658">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">659</span><span id="line-659">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isName&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.hasSimpleName(&lt;js&gt;"Name"&lt;/js&gt;);</span>
-<span class="source-line-no">660</span><span id="line-660">    * &lt;/p&gt;</span>
-<span class="source-line-no">661</span><span id="line-661">    *</span>
-<span class="source-line-no">662</span><span id="line-662">    * @param value The simple name to check.</span>
-<span class="source-line-no">663</span><span id="line-663">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified simple name.</span>
-<span class="source-line-no">664</span><span id="line-664">    */</span>
-<span class="source-line-no">665</span><span id="line-665">   public boolean hasNameSimple(String value) {</span>
-<span class="source-line-no">666</span><span id="line-666">      return eq(value, getNameSimple());</span>
-<span class="source-line-no">667</span><span id="line-667">   }</span>
-<span class="source-line-no">668</span><span id="line-668"></span>
-<span class="source-line-no">669</span><span id="line-669">   /**</span>
-<span class="source-line-no">670</span><span id="line-670">    * Returns the wrapped annotation instance.</span>
-<span class="source-line-no">671</span><span id="line-671">    *</span>
-<span class="source-line-no">672</span><span id="line-672">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">673</span><span id="line-673">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">674</span><span id="line-674">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">675</span><span id="line-675">    *    MyAnnotation &lt;jv&gt;annotation&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.inner();</span>
-<span class="source-line-no">676</span><span id="line-676">    *</span>
-<span class="source-line-no">677</span><span id="line-677">    *    &lt;jc&gt;// Access annotation methods directly&lt;/jc&gt;</span>
-<span class="source-line-no">678</span><span id="line-678">    *    String &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;annotation&lt;/jv&gt;.value();</span>
-<span class="source-line-no">679</span><span id="line-679">    * &lt;/p&gt;</span>
-<span class="source-line-no">680</span><span id="line-680">    *</span>
-<span class="source-line-no">681</span><span id="line-681">    * @return The wrapped annotation instance.</span>
-<span class="source-line-no">682</span><span id="line-682">    */</span>
-<span class="source-line-no">683</span><span id="line-683">   public T inner() {</span>
-<span class="source-line-no">684</span><span id="line-684">      return a;</span>
-<span class="source-line-no">685</span><span id="line-685">   }</span>
-<span class="source-line-no">686</span><span id="line-686"></span>
-<span class="source-line-no">687</span><span id="line-687">   /**</span>
-<span class="source-line-no">688</span><span id="line-688">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is in the specified {@link AnnotationGroup}.</span>
-<span class="source-line-no">689</span><span id="line-689">    *</span>
-<span class="source-line-no">690</span><span id="line-690">    * &lt;p&gt;</span>
-<span class="source-line-no">691</span><span id="line-691">    * Annotation groups are used to logically group related annotations together.</span>
-<span class="source-line-no">692</span><span id="line-692">    * This checks if the annotation is annotated with {@link AnnotationGroup} and if</span>
-<span class="source-line-no">693</span><span id="line-693">    * the group value matches the specified type.</span>
-<span class="source-line-no">694</span><span id="line-694">    *</span>
-<span class="source-line-no">695</span><span id="line-695">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">696</span><span id="line-696">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">697</span><span id="line-697">    *    &lt;jc&gt;// Define an annotation group&lt;/jc&gt;</span>
-<span class="source-line-no">698</span><span id="line-698">    *    &lt;ja&gt;@interface&lt;/ja&gt; MyGroup {}</span>
-<span class="source-line-no">699</span><span id="line-699">    *</span>
-<span class="source-line-no">700</span><span id="line-700">    *    &lt;jc&gt;// Annotation in the group&lt;/jc&gt;</span>
-<span class="source-line-no">701</span><span id="line-701">    *    &lt;ja&gt;@AnnotationGroup&lt;/ja&gt;(MyGroup.&lt;jk&gt;class&lt;/jk&gt;)</span>
-<span class="source-line-no">702</span><span id="line-702">    *    &lt;ja&gt;@interface&lt;/ja&gt; MyAnnotation {}</span>
-<span class="source-line-no">703</span><span id="line-703">    *</span>
-<span class="source-line-no">704</span><span id="line-704">    *    &lt;jc&gt;// Check if annotation is in group&lt;/jc&gt;</span>
-<span class="source-line-no">705</span><span id="line-705">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">706</span><span id="line-706">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;inGroup&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.isInGroup(MyGroup.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// Returns true&lt;/jc&gt;</span>
-<span class="source-line-no">707</span><span id="line-707">    * &lt;/p&gt;</span>
-<span class="source-line-no">708</span><span id="line-708">    *</span>
-<span class="source-line-no">709</span><span id="line-709">    * @param &lt;A&gt; The group annotation type.</span>
-<span class="source-line-no">710</span><span id="line-710">    * @param group The group annotation class to test for.</span>
-<span class="source-line-no">711</span><span id="line-711">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation is in the specified group.</span>
-<span class="source-line-no">712</span><span id="line-712">    * @see AnnotationGroup</span>
-<span class="source-line-no">713</span><span id="line-713">    */</span>
-<span class="source-line-no">714</span><span id="line-714">   public &lt;A extends Annotation&gt; boolean isInGroup(Class&lt;A&gt; group) {</span>
-<span class="source-line-no">715</span><span id="line-715">      var x = a.annotationType().getAnnotation(AnnotationGroup.class);</span>
-<span class="source-line-no">716</span><span id="line-716">      return (nn(x) &amp;&amp; x.value().equals(group));</span>
-<span class="source-line-no">717</span><span id="line-717">   }</span>
-<span class="source-line-no">718</span><span id="line-718"></span>
-<span class="source-line-no">719</span><span id="line-719">   /**</span>
-<span class="source-line-no">720</span><span id="line-720">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is of the specified type.</span>
-<span class="source-line-no">721</span><span id="line-721">    *</span>
-<span class="source-line-no">722</span><span id="line-722">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">723</span><span id="line-723">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">724</span><span id="line-724">    *    AnnotationInfo&amp;lt;?&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">725</span><span id="line-725">    *</span>
-<span class="source-line-no">726</span><span id="line-726">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;ai&lt;/jv&gt;.isType(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;)) {</span>
-<span class="source-line-no">727</span><span id="line-727">    *       &lt;jc&gt;// Handle MyAnnotation specifically&lt;/jc&gt;</span>
-<span class="source-line-no">728</span><span id="line-728">    *    }</span>
-<span class="source-line-no">729</span><span id="line-729">    * &lt;/p&gt;</span>
-<span class="source-line-no">730</span><span id="line-730">    *</span>
-<span class="source-line-no">731</span><span id="line-731">    * @param &lt;A&gt; The annotation type to test for.</span>
-<span class="source-line-no">732</span><span id="line-732">    * @param type The annotation type to test against.</span>
-<span class="source-line-no">733</span><span id="line-733">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation's type is exactly the specified type.</span>
-<span class="source-line-no">734</span><span id="line-734">    */</span>
-<span class="source-line-no">735</span><span id="line-735">   public &lt;A extends Annotation&gt; boolean isType(Class&lt;A&gt; type) {</span>
-<span class="source-line-no">736</span><span id="line-736">      return this.a.annotationType() == type;</span>
-<span class="source-line-no">737</span><span id="line-737">   }</span>
-<span class="source-line-no">738</span><span id="line-738"></span>
-<span class="source-line-no">739</span><span id="line-739">   /**</span>
-<span class="source-line-no">740</span><span id="line-740">    * Converts this annotation info to a map representation for debugging purposes.</span>
-<span class="source-line-no">741</span><span id="line-741">    *</span>
-<span class="source-line-no">742</span><span id="line-742">    * &lt;p&gt;</span>
-<span class="source-line-no">743</span><span id="line-743">    * The returned map contains:</span>
-<span class="source-line-no">744</span><span id="line-744">    * &lt;ul&gt;</span>
-<span class="source-line-no">745</span><span id="line-745">    *    &lt;li&gt;The annotatable element's type and label (e.g., {@code "CLASS_TYPE" -&gt; "com.example.MyClass"})</span>
-<span class="source-line-no">746</span><span id="line-746">    *    &lt;li&gt;A nested map with the annotation's simple name as key and its non-default values</span>
-<span class="source-line-no">747</span><span id="line-747">    * &lt;/ul&gt;</span>
-<span class="source-line-no">748</span><span id="line-748">    *</span>
-<span class="source-line-no">749</span><span id="line-749">    * &lt;p&gt;</span>
-<span class="source-line-no">750</span><span id="line-750">    * Only annotation values that differ from their default values are included.</span>
-<span class="source-line-no">751</span><span id="line-751">    *</span>
-<span class="source-line-no">752</span><span id="line-752">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">753</span><span id="line-753">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">754</span><span id="line-754">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">755</span><span id="line-755">    *    LinkedHashMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.toMap();</span>
-<span class="source-line-no">756</span><span id="line-756">    *    &lt;jc&gt;// Returns: {"CLASS_TYPE": "MyClass", "@MyAnnotation": {"value": "foo", "priority": 5}}&lt;/jc&gt;</span>
-<span class="source-line-no">757</span><span id="line-757">    * &lt;/p&gt;</span>
-<span class="source-line-no">758</span><span id="line-758">    *</span>
-<span class="source-line-no">759</span><span id="line-759">    * @return A new map showing the attributes of this annotation info.</span>
-<span class="source-line-no">760</span><span id="line-760">    */</span>
-<span class="source-line-no">761</span><span id="line-761">   public FluentMap&lt;String,Object&gt; properties() {</span>
-<span class="source-line-no">762</span><span id="line-762">      // @formatter:off</span>
-<span class="source-line-no">763</span><span id="line-763">      var ca = info(a.annotationType());</span>
-<span class="source-line-no">764</span><span id="line-764">      var ja = mapb().sorted().buildFluent();  // NOAI</span>
-<span class="source-line-no">765</span><span id="line-765">      ca.getDeclaredMethods().forEach(x -&gt; safeOptCatch(() -&gt; {</span>
-<span class="source-line-no">766</span><span id="line-766">         var val = x.invoke(a);</span>
-<span class="source-line-no">767</span><span id="line-767">         var d = x.inner().getDefaultValue();</span>
-<span class="source-line-no">768</span><span id="line-768">         // Add values only if they're different from the default.</span>
-<span class="source-line-no">769</span><span id="line-769">         if (neq(val, d) &amp;&amp; ! (isArray(val) &amp;&amp; length(val) == 0 &amp;&amp; isArray(d) &amp;&amp; length(d) == 0))</span>
-<span class="source-line-no">770</span><span id="line-770">            return val;</span>
-<span class="source-line-no">771</span><span id="line-771">         return null;</span>
-<span class="source-line-no">772</span><span id="line-772">      }, e -&gt; lm(e)).ifPresent(v -&gt; ja.a(x.getName(), v)));</span>
-<span class="source-line-no">773</span><span id="line-773">      return filteredBeanPropertyMap()</span>
-<span class="source-line-no">774</span><span id="line-774">         .a(s(annotatable.getAnnotatableType()), annotatable.getLabel())</span>
-<span class="source-line-no">775</span><span id="line-775">         .a("@" + ca.getNameSimple(), ja);</span>
-<span class="source-line-no">776</span><span id="line-776">      // @formatter:on</span>
-<span class="source-line-no">777</span><span id="line-777">   }</span>
-<span class="source-line-no">778</span><span id="line-778"></span>
-<span class="source-line-no">779</span><span id="line-779">   /**</span>
-<span class="source-line-no">780</span><span id="line-780">    * Returns a simple string representation of this annotation showing the annotation type and location.</span>
-<span class="source-line-no">781</span><span id="line-781">    *</span>
-<span class="source-line-no">782</span><span id="line-782">    * &lt;p&gt;</span>
-<span class="source-line-no">783</span><span id="line-783">    * Format: {@code @AnnotationName(on=location)}</span>
-<span class="source-line-no">784</span><span id="line-784">    *</span>
-<span class="source-line-no">785</span><span id="line-785">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">786</span><span id="line-786">    * &lt;ul&gt;</span>
-<span class="source-line-no">787</span><span id="line-787">    *    &lt;li&gt;{@code @Marshalled(on=MyClass)} - Annotation on a class</span>
-<span class="source-line-no">788</span><span id="line-788">    *    &lt;li&gt;{@code @Inject(on=MyClass.myField)} - Annotation on a field</span>
-<span class="source-line-no">789</span><span id="line-789">    *    &lt;li&gt;{@code @PackageAnnotation(on=my.package)} - Annotation on a package</span>
-<span class="source-line-no">790</span><span id="line-790">    * &lt;/ul&gt;</span>
-<span class="source-line-no">791</span><span id="line-791">    *</span>
-<span class="source-line-no">792</span><span id="line-792">    * @return A simple string representation of this annotation.</span>
-<span class="source-line-no">793</span><span id="line-793">    */</span>
-<span class="source-line-no">794</span><span id="line-794">   public String toSimpleString() {</span>
-<span class="source-line-no">795</span><span id="line-795">      return "@" + cns(a.annotationType()) + "(on=" + annotatable.getLabel() + ")";</span>
-<span class="source-line-no">796</span><span id="line-796">   }</span>
-<span class="source-line-no">797</span><span id="line-797"></span>
-<span class="source-line-no">798</span><span id="line-798">   /**</span>
-<span class="source-line-no">799</span><span id="line-799">    * Returns a detailed string representation of this annotation.</span>
-<span class="source-line-no">800</span><span id="line-800">    *</span>
-<span class="source-line-no">801</span><span id="line-801">    * &lt;p&gt;</span>
-<span class="source-line-no">802</span><span id="line-802">    * The returned string includes:</span>
-<span class="source-line-no">803</span><span id="line-803">    * &lt;ul&gt;</span>
-<span class="source-line-no">804</span><span id="line-804">    *    &lt;li&gt;Annotation type (fully qualified name with @ prefix)</span>
-<span class="source-line-no">805</span><span id="line-805">    *    &lt;li&gt;Location where the annotation is declared (on=...)</span>
-<span class="source-line-no">806</span><span id="line-806">    *    &lt;li&gt;Annotation values (non-default values only, in key=value format)</span>
-<span class="source-line-no">807</span><span id="line-807">    * &lt;/ul&gt;</span>
-<span class="source-line-no">808</span><span id="line-808">    *</span>
-<span class="source-line-no">809</span><span id="line-809">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">810</span><span id="line-810">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">811</span><span id="line-811">    *    &lt;jc&gt;// Simple annotation on a class&lt;/jc&gt;</span>
-<span class="source-line-no">812</span><span id="line-812">    *    AnnotationInfo &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">813</span><span id="line-813">    *    &lt;jv&gt;ai&lt;/jv&gt;.toString();</span>
-<span class="source-line-no">814</span><span id="line-814">    *    &lt;jc&gt;// Returns: "@java.lang.Deprecated(on=org.example.MyClass)"&lt;/jc&gt;</span>
-<span class="source-line-no">815</span><span id="line-815">    *</span>
-<span class="source-line-no">816</span><span id="line-816">    *    &lt;jc&gt;// Annotation with value&lt;/jc&gt;</span>
-<span class="source-line-no">817</span><span id="line-817">    *    &lt;jc&gt;// Returns: "@org.example.MyAnnotation(value=foo, on=org.example.MyClass)"&lt;/jc&gt;</span>
-<span class="source-line-no">818</span><span id="line-818">    *</span>
-<span class="source-line-no">819</span><span id="line-819">    *    &lt;jc&gt;// Annotation on a method&lt;/jc&gt;</span>
-<span class="source-line-no">820</span><span id="line-820">    *    &lt;jc&gt;// Returns: "@org.example.RestGet(path=/api, on=org.example.MyClass.myMethod)"&lt;/jc&gt;</span>
-<span class="source-line-no">821</span><span id="line-821">    *</span>
-<span class="source-line-no">822</span><span id="line-822">    *    &lt;jc&gt;// Annotation on a field&lt;/jc&gt;</span>
-<span class="source-line-no">823</span><span id="line-823">    *    &lt;jc&gt;// Returns: "@org.example.Inject(name=myBean, on=org.example.MyClass.myField)"&lt;/jc&gt;</span>
-<span class="source-line-no">824</span><span id="line-824">    * &lt;/p&gt;</span>
-<span class="source-line-no">825</span><span id="line-825">    *</span>
-<span class="source-line-no">826</span><span id="line-826">    * &lt;h5 class='section'&gt;Comparison with Other Methods:&lt;/h5&gt;</span>
-<span class="source-line-no">827</span><span id="line-827">    * &lt;ul class='spaced-list'&gt;</span>
-<span class="source-line-no">828</span><span id="line-828">    *    &lt;li&gt;{@link #toSimpleString()} - Returns simple format: "@AnnotationName(on=location)"</span>
-<span class="source-line-no">829</span><span id="line-829">    *    &lt;li&gt;{@link #properties()} - Returns map representation for debugging</span>
-<span class="source-line-no">830</span><span id="line-830">    * &lt;/ul&gt;</span>
-<span class="source-line-no">831</span><span id="line-831">    *</span>
-<span class="source-line-no">832</span><span id="line-832">    * @return A detailed string representation including annotation type, location, and values.</span>
-<span class="source-line-no">833</span><span id="line-833">    */</span>
-<span class="source-line-no">834</span><span id="line-834">   @Override /* Overridden from Object */</span>
-<span class="source-line-no">835</span><span id="line-835">   public String toString() {</span>
-<span class="source-line-no">836</span><span id="line-836">      return toString.get();</span>
-<span class="source-line-no">837</span><span id="line-837">   }</span>
-<span class="source-line-no">838</span><span id="line-838"></span>
-<span class="source-line-no">839</span><span id="line-839">   private String findToString() {</span>
-<span class="source-line-no">840</span><span id="line-840">      var sb = new StringBuilder(256);</span>
-<span class="source-line-no">841</span><span id="line-841"></span>
-<span class="source-line-no">842</span><span id="line-842">      // Annotation type (with @ prefix and full package name)</span>
-<span class="source-line-no">843</span><span id="line-843">      sb.append("@");</span>
-<span class="source-line-no">844</span><span id="line-844">      var annotationType = a.annotationType();</span>
-<span class="source-line-no">845</span><span id="line-845">      ClassInfo.of(annotationType).appendNameFormatted(sb, FULL, true, '$', BRACKETS);</span>
-<span class="source-line-no">846</span><span id="line-846"></span>
-<span class="source-line-no">847</span><span id="line-847">      // Get annotation values (non-default only)</span>
-<span class="source-line-no">848</span><span id="line-848">      var ca = info(annotationType);</span>
-<span class="source-line-no">849</span><span id="line-849">      var values = new ArrayList&lt;String&gt;();</span>
-<span class="source-line-no">850</span><span id="line-850">      ca.getDeclaredMethods().forEach(m -&gt; safeOptCatch(() -&gt; {</span>
-<span class="source-line-no">851</span><span id="line-851">         var val = m.invoke(a);</span>
-<span class="source-line-no">852</span><span id="line-852">         var d = m.inner().getDefaultValue();</span>
-<span class="source-line-no">853</span><span id="line-853">         // Add values only if they're different from the default</span>
-<span class="source-line-no">854</span><span id="line-854">         if (neq(val, d) &amp;&amp; ! (isArray(val) &amp;&amp; length(val) == 0 &amp;&amp; isArray(d) &amp;&amp; length(d) == 0)) {</span>
-<span class="source-line-no">855</span><span id="line-855">            var valueStr = formatAnnotationValue(val);</span>
-<span class="source-line-no">856</span><span id="line-856">            values.add(m.getName() + "=" + valueStr);</span>
-<span class="source-line-no">857</span><span id="line-857">         }</span>
-<span class="source-line-no">858</span><span id="line-858">         return null;</span>
-<span class="source-line-no">859</span><span id="line-859">      }, e -&gt; null));</span>
-<span class="source-line-no">860</span><span id="line-860"></span>
-<span class="source-line-no">861</span><span id="line-861">      // Build the string: @AnnotationType(key1=value1, key2=value2, on=location)</span>
-<span class="source-line-no">862</span><span id="line-862">      if (! values.isEmpty()) {</span>
-<span class="source-line-no">863</span><span id="line-863">         sb.append("(");</span>
-<span class="source-line-no">864</span><span id="line-864">         sb.append(String.join(", ", values));</span>
-<span class="source-line-no">865</span><span id="line-865">         sb.append(", on=");</span>
-<span class="source-line-no">866</span><span id="line-866">      } else {</span>
-<span class="source-line-no">867</span><span id="line-867">         sb.append("(on=");</span>
-<span class="source-line-no">868</span><span id="line-868">      }</span>
-<span class="source-line-no">869</span><span id="line-869">      sb.append(annotatable.getLabel());</span>
-<span class="source-line-no">870</span><span id="line-870">      sb.append(")");</span>
-<span class="source-line-no">871</span><span id="line-871"></span>
-<span class="source-line-no">872</span><span id="line-872">      return sb.toString();</span>
-<span class="source-line-no">873</span><span id="line-873">   }</span>
-<span class="source-line-no">874</span><span id="line-874"></span>
-<span class="source-line-no">875</span><span id="line-875">   private String formatAnnotationValue(Object value) {</span>
-<span class="source-line-no">876</span><span id="line-876">      if (value == null)</span>
-<span class="source-line-no">877</span><span id="line-877">         return "null";</span>
-<span class="source-line-no">878</span><span id="line-878">      if (value instanceof String)</span>
-<span class="source-line-no">879</span><span id="line-879">         return "\"" + value + "\"";</span>
-<span class="source-line-no">880</span><span id="line-880">      if (isArray(value)) {</span>
-<span class="source-line-no">881</span><span id="line-881">         var array = toList(value, Object.class);</span>
-<span class="source-line-no">882</span><span id="line-882">         if (array.isEmpty())</span>
-<span class="source-line-no">883</span><span id="line-883">            return "{}";</span>
-<span class="source-line-no">884</span><span id="line-884">         var elements = array.stream()</span>
-<span class="source-line-no">885</span><span id="line-885">            .map(this::formatAnnotationValue)</span>
-<span class="source-line-no">886</span><span id="line-886">            .collect(java.util.stream.Collectors.joining(", "));</span>
-<span class="source-line-no">887</span><span id="line-887">         return "{" + elements + "}";</span>
-<span class="source-line-no">888</span><span id="line-888">      }</span>
-<span class="source-line-no">889</span><span id="line-889">      if (value instanceof Class&lt;?&gt; c) {</span>
-<span class="source-line-no">890</span><span id="line-890">         var sb = new StringBuilder();</span>
-<span class="source-line-no">891</span><span id="line-891">         ClassInfo.of(c).appendNameFormatted(sb, FULL, true, '$', BRACKETS);</span>
-<span class="source-line-no">892</span><span id="line-892">         return sb.toString() + ".class";</span>
-<span class="source-line-no">893</span><span id="line-893">      }</span>
-<span class="source-line-no">894</span><span id="line-894">      if (value instanceof Enum&lt;?&gt; e) {</span>
-<span class="source-line-no">895</span><span id="line-895">         return e.getDeclaringClass().getSimpleName() + "." + e.name();</span>
-<span class="source-line-no">896</span><span id="line-896">      }</span>
-<span class="source-line-no">897</span><span id="line-897">      if (value instanceof Annotation value2) {</span>
-<span class="source-line-no">898</span><span id="line-898">         // For nested annotations, use simple format</span>
-<span class="source-line-no">899</span><span id="line-899">         return "@" + ClassInfo.of(value2.annotationType()).getNameSimple() + "(...)";</span>
-<span class="source-line-no">900</span><span id="line-900">      }</span>
-<span class="source-line-no">901</span><span id="line-901">      return String.valueOf(value);</span>
-<span class="source-line-no">902</span><span id="line-902">   }</span>
-<span class="source-line-no">903</span><span id="line-903">}</span>
+<span class="source-line-no">445</span><span id="line-445">   // Private helper methods</span>
+<span class="source-line-no">446</span><span id="line-446">   //-----------------------------------------------------------------------------------------------------------------</span>
+<span class="source-line-no">447</span><span id="line-447"></span>
+<span class="source-line-no">448</span><span id="line-448">   /**</span>
+<span class="source-line-no">449</span><span id="line-449">    * Returns the class name of this annotation.</span>
+<span class="source-line-no">450</span><span id="line-450">    *</span>
+<span class="source-line-no">451</span><span id="line-451">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">452</span><span id="line-452">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">453</span><span id="line-453">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">454</span><span id="line-454">    *    String &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getName();  &lt;jc&gt;// Returns "mypackage.MyAnnotation"&lt;/jc&gt;</span>
+<span class="source-line-no">455</span><span id="line-455">    * &lt;/p&gt;</span>
+<span class="source-line-no">456</span><span id="line-456">    *</span>
+<span class="source-line-no">457</span><span id="line-457">    * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).</span>
+<span class="source-line-no">458</span><span id="line-458">    */</span>
+<span class="source-line-no">459</span><span id="line-459">   public String getName() { return cn(a.annotationType()); }</span>
+<span class="source-line-no">460</span><span id="line-460"></span>
+<span class="source-line-no">461</span><span id="line-461">   /**</span>
+<span class="source-line-no">462</span><span id="line-462">    * Returns the simple class name of this annotation.</span>
+<span class="source-line-no">463</span><span id="line-463">    *</span>
+<span class="source-line-no">464</span><span id="line-464">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">465</span><span id="line-465">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">466</span><span id="line-466">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">467</span><span id="line-467">    *    String &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getNameSimple();  &lt;jc&gt;// Returns "MyAnnotation"&lt;/jc&gt;</span>
+<span class="source-line-no">468</span><span id="line-468">    * &lt;/p&gt;</span>
+<span class="source-line-no">469</span><span id="line-469">    *</span>
+<span class="source-line-no">470</span><span id="line-470">    * @return The simple class name of the annotation (e.g., {@code "Override"} for {@code @Override}).</span>
+<span class="source-line-no">471</span><span id="line-471">    * @see #getName()</span>
+<span class="source-line-no">472</span><span id="line-472">    */</span>
+<span class="source-line-no">473</span><span id="line-473">   public String getNameSimple() { return cns(a.annotationType()); }</span>
+<span class="source-line-no">474</span><span id="line-474"></span>
+<span class="source-line-no">475</span><span id="line-475">   /**</span>
+<span class="source-line-no">476</span><span id="line-476">    * Returns the rank of this annotation for sorting by precedence.</span>
+<span class="source-line-no">477</span><span id="line-477">    *</span>
+<span class="source-line-no">478</span><span id="line-478">    * &lt;p&gt;</span>
+<span class="source-line-no">479</span><span id="line-479">    * The rank is determined by checking if the annotation has a {@code rank()} method that returns an {@code int}.</span>
+<span class="source-line-no">480</span><span id="line-480">    * If found, that value is used; otherwise the rank defaults to {@code 0}.</span>
+<span class="source-line-no">481</span><span id="line-481">    *</span>
+<span class="source-line-no">482</span><span id="line-482">    * &lt;p&gt;</span>
+<span class="source-line-no">483</span><span id="line-483">    * Higher rank values indicate higher precedence when multiple annotations of the same type are present.</span>
+<span class="source-line-no">484</span><span id="line-484">    *</span>
+<span class="source-line-no">485</span><span id="line-485">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">486</span><span id="line-486">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">487</span><span id="line-487">    *    &lt;jc&gt;// Annotation with rank method&lt;/jc&gt;</span>
+<span class="source-line-no">488</span><span id="line-488">    *    &lt;ja&gt;@interface&lt;/ja&gt; MyAnnotation {</span>
+<span class="source-line-no">489</span><span id="line-489">    *       &lt;jk&gt;int&lt;/jk&gt; rank() &lt;jk&gt;default&lt;/jk&gt; 0;</span>
+<span class="source-line-no">490</span><span id="line-490">    *    }</span>
+<span class="source-line-no">491</span><span id="line-491">    *</span>
+<span class="source-line-no">492</span><span id="line-492">    *    &lt;jc&gt;// Get rank from annotation info&lt;/jc&gt;</span>
+<span class="source-line-no">493</span><span id="line-493">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">494</span><span id="line-494">    *    &lt;jk&gt;int&lt;/jk&gt; &lt;jv&gt;rank&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getRank();  &lt;jc&gt;// Returns value from rank() method&lt;/jc&gt;</span>
+<span class="source-line-no">495</span><span id="line-495">    * &lt;/p&gt;</span>
+<span class="source-line-no">496</span><span id="line-496">    *</span>
+<span class="source-line-no">497</span><span id="line-497">    * @return The rank of this annotation, or {@code 0} if no rank method exists.</span>
+<span class="source-line-no">498</span><span id="line-498">    */</span>
+<span class="source-line-no">499</span><span id="line-499">   public int getRank() { return rank; }</span>
+<span class="source-line-no">500</span><span id="line-500"></span>
+<span class="source-line-no">501</span><span id="line-501">   /**</span>
+<span class="source-line-no">502</span><span id="line-502">    * Returns the return type of the specified method on this annotation.</span>
+<span class="source-line-no">503</span><span id="line-503">    *</span>
+<span class="source-line-no">504</span><span id="line-504">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">505</span><span id="line-505">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">506</span><span id="line-506">    *    Optional&amp;lt;ClassInfo&amp;gt; &lt;jv&gt;returnType&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.getReturnType(&lt;js&gt;"value"&lt;/js&gt;);</span>
+<span class="source-line-no">507</span><span id="line-507">    * &lt;/p&gt;</span>
+<span class="source-line-no">508</span><span id="line-508">    *</span>
+<span class="source-line-no">509</span><span id="line-509">    * @param methodName The method name.</span>
+<span class="source-line-no">510</span><span id="line-510">    * @return An optional containing the return type of the specified method, or empty if method not found.</span>
+<span class="source-line-no">511</span><span id="line-511">    */</span>
+<span class="source-line-no">512</span><span id="line-512">   public Optional&lt;ClassInfo&gt; getReturnType(String methodName) {</span>
+<span class="source-line-no">513</span><span id="line-513">      return getMethod(methodName).map(x -&gt; x.getReturnType());</span>
+<span class="source-line-no">514</span><span id="line-514">   }</span>
+<span class="source-line-no">515</span><span id="line-515"></span>
+<span class="source-line-no">516</span><span id="line-516">   /**</span>
+<span class="source-line-no">517</span><span id="line-517">    * Returns the value of the specified method on this annotation as a string.</span>
+<span class="source-line-no">518</span><span id="line-518">    *</span>
+<span class="source-line-no">519</span><span id="line-519">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">520</span><span id="line-520">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">521</span><span id="line-521">    *    &lt;jc&gt;// For annotation: @MyAnnotation(name="John", age=30)&lt;/jc&gt;</span>
+<span class="source-line-no">522</span><span id="line-522">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">523</span><span id="line-523">    *    String &lt;jv&gt;name&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getString(&lt;js&gt;"name"&lt;/js&gt;).orElse(&lt;js&gt;"unknown"&lt;/js&gt;);  &lt;jc&gt;// Returns "John"&lt;/jc&gt;</span>
+<span class="source-line-no">524</span><span id="line-524">    * &lt;/p&gt;</span>
+<span class="source-line-no">525</span><span id="line-525">    *</span>
+<span class="source-line-no">526</span><span id="line-526">    * @param methodName The method name.</span>
+<span class="source-line-no">527</span><span id="line-527">    * @return An {@link Optional} containing the value as a string, or empty if not found or not a string type.</span>
+<span class="source-line-no">528</span><span id="line-528">    */</span>
+<span class="source-line-no">529</span><span id="line-529">   public Optional&lt;String&gt; getString(String methodName) {</span>
+<span class="source-line-no">530</span><span id="line-530">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(String.class)).map(x -&gt; s(x.invoke(a)));</span>
+<span class="source-line-no">531</span><span id="line-531">   }</span>
+<span class="source-line-no">532</span><span id="line-532"></span>
+<span class="source-line-no">533</span><span id="line-533">   /**</span>
+<span class="source-line-no">534</span><span id="line-534">    * Returns the value of the specified method on this annotation as a string array.</span>
+<span class="source-line-no">535</span><span id="line-535">    *</span>
+<span class="source-line-no">536</span><span id="line-536">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">537</span><span id="line-537">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">538</span><span id="line-538">    *    &lt;jc&gt;// For annotation: @MyAnnotation(tags={"foo", "bar"})&lt;/jc&gt;</span>
+<span class="source-line-no">539</span><span id="line-539">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">540</span><span id="line-540">    *    String[] &lt;jv&gt;tags&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getStringArray(&lt;js&gt;"tags"&lt;/js&gt;).orElse(&lt;jk&gt;new&lt;/jk&gt; String[0]);  &lt;jc&gt;// Returns ["foo", "bar"]&lt;/jc&gt;</span>
+<span class="source-line-no">541</span><span id="line-541">    * &lt;/p&gt;</span>
+<span class="source-line-no">542</span><span id="line-542">    *</span>
+<span class="source-line-no">543</span><span id="line-543">    * @param methodName The method name.</span>
+<span class="source-line-no">544</span><span id="line-544">    * @return An {@link Optional} containing the string array value, or empty if not found or not a {@code String[]} type.</span>
+<span class="source-line-no">545</span><span id="line-545">    */</span>
+<span class="source-line-no">546</span><span id="line-546">   public Optional&lt;String[]&gt; getStringArray(String methodName) {</span>
+<span class="source-line-no">547</span><span id="line-547">      return getMethod(methodName).filter(x -&gt; x.hasReturnType(String[].class)).map(x -&gt; (String[])x.invoke(a));</span>
+<span class="source-line-no">548</span><span id="line-548">   }</span>
+<span class="source-line-no">549</span><span id="line-549"></span>
+<span class="source-line-no">550</span><span id="line-550">   /**</span>
+<span class="source-line-no">551</span><span id="line-551">    * Returns the value of the {@code value()} method on this annotation as a string.</span>
+<span class="source-line-no">552</span><span id="line-552">    *</span>
+<span class="source-line-no">553</span><span id="line-553">    * &lt;p&gt;</span>
+<span class="source-line-no">554</span><span id="line-554">    * This is a convenience method equivalent to calling {@link #getString(String) getString("value")}.</span>
+<span class="source-line-no">555</span><span id="line-555">    *</span>
+<span class="source-line-no">556</span><span id="line-556">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">557</span><span id="line-557">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">558</span><span id="line-558">    *    &lt;jc&gt;// For annotation: @MyAnnotation("foo")&lt;/jc&gt;</span>
+<span class="source-line-no">559</span><span id="line-559">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">560</span><span id="line-560">    *    String &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getValue().orElse(&lt;js&gt;"default"&lt;/js&gt;);  &lt;jc&gt;// Returns "foo"&lt;/jc&gt;</span>
+<span class="source-line-no">561</span><span id="line-561">    * &lt;/p&gt;</span>
+<span class="source-line-no">562</span><span id="line-562">    *</span>
+<span class="source-line-no">563</span><span id="line-563">    * @return An {@link Optional} containing the value of the {@code value()} method, or empty if not found or not a string.</span>
+<span class="source-line-no">564</span><span id="line-564">    */</span>
+<span class="source-line-no">565</span><span id="line-565">   public Optional&lt;String&gt; getValue() { return getString("value"); }</span>
+<span class="source-line-no">566</span><span id="line-566"></span>
+<span class="source-line-no">567</span><span id="line-567">   /**</span>
+<span class="source-line-no">568</span><span id="line-568">    * Returns the value of a specific annotation method.</span>
+<span class="source-line-no">569</span><span id="line-569">    *</span>
+<span class="source-line-no">570</span><span id="line-570">    * &lt;p&gt;</span>
+<span class="source-line-no">571</span><span id="line-571">    * This method provides type-safe access to annotation field values without requiring</span>
+<span class="source-line-no">572</span><span id="line-572">    * explicit reflection calls or casting.</span>
+<span class="source-line-no">573</span><span id="line-573">    *</span>
+<span class="source-line-no">574</span><span id="line-574">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">575</span><span id="line-575">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">576</span><span id="line-576">    *    &lt;jc&gt;// For annotation: @interface MyAnnotation { String value(); int priority(); }&lt;/jc&gt;</span>
+<span class="source-line-no">577</span><span id="line-577">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">578</span><span id="line-578">    *</span>
+<span class="source-line-no">579</span><span id="line-579">    *    &lt;jc&gt;// Get string value&lt;/jc&gt;</span>
+<span class="source-line-no">580</span><span id="line-580">    *    Optional&amp;lt;String&amp;gt; &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getValue(String.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"value"&lt;/js&gt;);</span>
+<span class="source-line-no">581</span><span id="line-581">    *</span>
+<span class="source-line-no">582</span><span id="line-582">    *    &lt;jc&gt;// Get int value&lt;/jc&gt;</span>
+<span class="source-line-no">583</span><span id="line-583">    *    Optional&amp;lt;Integer&amp;gt; &lt;jv&gt;priority&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.getValue(Integer.&lt;jk&gt;class&lt;/jk&gt;, &lt;js&gt;"priority"&lt;/js&gt;);</span>
+<span class="source-line-no">584</span><span id="line-584">    * &lt;/p&gt;</span>
+<span class="source-line-no">585</span><span id="line-585">    *</span>
+<span class="source-line-no">586</span><span id="line-586">    * @param &lt;V&gt; The expected type of the annotation field value.</span>
+<span class="source-line-no">587</span><span id="line-587">    * @param type The expected class of the annotation field value.</span>
+<span class="source-line-no">588</span><span id="line-588">    * @param name The name of the annotation method (field).</span>
+<span class="source-line-no">589</span><span id="line-589">    * @return An {@link Optional} containing the value if found and type matches, empty otherwise.</span>
+<span class="source-line-no">590</span><span id="line-590">    */</span>
+<span class="source-line-no">591</span><span id="line-591">   @SuppressWarnings({</span>
+<span class="source-line-no">592</span><span id="line-592">      "unchecked" // Type erasure requires cast to V for annotation value</span>
+<span class="source-line-no">593</span><span id="line-593">   })</span>
+<span class="source-line-no">594</span><span id="line-594">   public &lt;V&gt; Optional&lt;V&gt; getValue(Class&lt;V&gt; type, String name) {</span>
+<span class="source-line-no">595</span><span id="line-595">      // @formatter:off</span>
+<span class="source-line-no">596</span><span id="line-596">      return methods.get().stream()</span>
+<span class="source-line-no">597</span><span id="line-597">         .filter(m -&gt; eq(m.getName(), name) &amp;&amp; eq(m.getReturnType().inner(), type))</span>
+<span class="source-line-no">598</span><span id="line-598">         .map(m -&gt; safe(() -&gt; (V)m.invoke(a)))</span>
+<span class="source-line-no">599</span><span id="line-599">         .findFirst();</span>
+<span class="source-line-no">600</span><span id="line-600">      // @formatter:on</span>
+<span class="source-line-no">601</span><span id="line-601">   }</span>
+<span class="source-line-no">602</span><span id="line-602"></span>
+<span class="source-line-no">603</span><span id="line-603">   /**</span>
+<span class="source-line-no">604</span><span id="line-604">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is itself annotated with the specified annotation.</span>
+<span class="source-line-no">605</span><span id="line-605">    *</span>
+<span class="source-line-no">606</span><span id="line-606">    * &lt;p&gt;</span>
+<span class="source-line-no">607</span><span id="line-607">    * This checks for meta-annotations on the annotation type.</span>
+<span class="source-line-no">608</span><span id="line-608">    *</span>
+<span class="source-line-no">609</span><span id="line-609">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">610</span><span id="line-610">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">611</span><span id="line-611">    *    &lt;jc&gt;// Check if @MyAnnotation is annotated with @Documented&lt;/jc&gt;</span>
+<span class="source-line-no">612</span><span id="line-612">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">613</span><span id="line-613">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isDocumented&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.hasAnnotation(Documented.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">614</span><span id="line-614">    * &lt;/p&gt;</span>
+<span class="source-line-no">615</span><span id="line-615">    *</span>
+<span class="source-line-no">616</span><span id="line-616">    * @param &lt;A&gt; The meta-annotation type.</span>
+<span class="source-line-no">617</span><span id="line-617">    * @param type The meta-annotation to test for.</span>
+<span class="source-line-no">618</span><span id="line-618">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation is annotated with the specified annotation.</span>
+<span class="source-line-no">619</span><span id="line-619">    */</span>
+<span class="source-line-no">620</span><span id="line-620">   public &lt;A extends Annotation&gt; boolean hasAnnotation(Class&lt;A&gt; type) {</span>
+<span class="source-line-no">621</span><span id="line-621">      return nn(this.a.annotationType().getAnnotation(type));</span>
+<span class="source-line-no">622</span><span id="line-622">   }</span>
+<span class="source-line-no">623</span><span id="line-623"></span>
+<span class="source-line-no">624</span><span id="line-624">   /**</span>
+<span class="source-line-no">625</span><span id="line-625">    * Returns the hash code of this annotation.</span>
+<span class="source-line-no">626</span><span id="line-626">    *</span>
+<span class="source-line-no">627</span><span id="line-627">    * &lt;p&gt;</span>
+<span class="source-line-no">628</span><span id="line-628">    * Same as calling {@link Annotation#hashCode()} on the wrapped annotation.</span>
+<span class="source-line-no">629</span><span id="line-629">    *</span>
+<span class="source-line-no">630</span><span id="line-630">    * &lt;p&gt;</span>
+<span class="source-line-no">631</span><span id="line-631">    * The hash code of an annotation is the sum of the hash codes of its members (including those with default values).</span>
+<span class="source-line-no">632</span><span id="line-632">    *</span>
+<span class="source-line-no">633</span><span id="line-633">    * @return The hash code of this annotation.</span>
+<span class="source-line-no">634</span><span id="line-634">    * @see Annotation#hashCode()</span>
+<span class="source-line-no">635</span><span id="line-635">    */</span>
+<span class="source-line-no">636</span><span id="line-636">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">637</span><span id="line-637">   public int hashCode() {</span>
+<span class="source-line-no">638</span><span id="line-638">      return a.hashCode();</span>
+<span class="source-line-no">639</span><span id="line-639">   }</span>
+<span class="source-line-no">640</span><span id="line-640"></span>
+<span class="source-line-no">641</span><span id="line-641">   /**</span>
+<span class="source-line-no">642</span><span id="line-642">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified fully-qualified name.</span>
+<span class="source-line-no">643</span><span id="line-643">    *</span>
+<span class="source-line-no">644</span><span id="line-644">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">645</span><span id="line-645">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">646</span><span id="line-646">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isName&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.hasName(&lt;js&gt;"org.apache.juneau.commons.bean.Name"&lt;/js&gt;);</span>
+<span class="source-line-no">647</span><span id="line-647">    * &lt;/p&gt;</span>
+<span class="source-line-no">648</span><span id="line-648">    *</span>
+<span class="source-line-no">649</span><span id="line-649">    * @param value The fully-qualified name to check.</span>
+<span class="source-line-no">650</span><span id="line-650">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified fully-qualified name.</span>
+<span class="source-line-no">651</span><span id="line-651">    */</span>
+<span class="source-line-no">652</span><span id="line-652">   public boolean hasName(String value) {</span>
+<span class="source-line-no">653</span><span id="line-653">      return eq(value, getName());</span>
+<span class="source-line-no">654</span><span id="line-654">   }</span>
+<span class="source-line-no">655</span><span id="line-655"></span>
+<span class="source-line-no">656</span><span id="line-656">   /**</span>
+<span class="source-line-no">657</span><span id="line-657">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified simple name.</span>
+<span class="source-line-no">658</span><span id="line-658">    *</span>
+<span class="source-line-no">659</span><span id="line-659">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">660</span><span id="line-660">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">661</span><span id="line-661">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;isName&lt;/jv&gt; = &lt;jv&gt;annotationInfo&lt;/jv&gt;.hasSimpleName(&lt;js&gt;"Name"&lt;/js&gt;);</span>
+<span class="source-line-no">662</span><span id="line-662">    * &lt;/p&gt;</span>
+<span class="source-line-no">663</span><span id="line-663">    *</span>
+<span class="source-line-no">664</span><span id="line-664">    * @param value The simple name to check.</span>
+<span class="source-line-no">665</span><span id="line-665">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation has the specified simple name.</span>
+<span class="source-line-no">666</span><span id="line-666">    */</span>
+<span class="source-line-no">667</span><span id="line-667">   public boolean hasNameSimple(String value) {</span>
+<span class="source-line-no">668</span><span id="line-668">      return eq(value, getNameSimple());</span>
+<span class="source-line-no">669</span><span id="line-669">   }</span>
+<span class="source-line-no">670</span><span id="line-670"></span>
+<span class="source-line-no">671</span><span id="line-671">   /**</span>
+<span class="source-line-no">672</span><span id="line-672">    * Returns the wrapped annotation instance.</span>
+<span class="source-line-no">673</span><span id="line-673">    *</span>
+<span class="source-line-no">674</span><span id="line-674">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">675</span><span id="line-675">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">676</span><span id="line-676">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">677</span><span id="line-677">    *    MyAnnotation &lt;jv&gt;annotation&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.inner();</span>
+<span class="source-line-no">678</span><span id="line-678">    *</span>
+<span class="source-line-no">679</span><span id="line-679">    *    &lt;jc&gt;// Access annotation methods directly&lt;/jc&gt;</span>
+<span class="source-line-no">680</span><span id="line-680">    *    String &lt;jv&gt;value&lt;/jv&gt; = &lt;jv&gt;annotation&lt;/jv&gt;.value();</span>
+<span class="source-line-no">681</span><span id="line-681">    * &lt;/p&gt;</span>
+<span class="source-line-no">682</span><span id="line-682">    *</span>
+<span class="source-line-no">683</span><span id="line-683">    * @return The wrapped annotation instance.</span>
+<span class="source-line-no">684</span><span id="line-684">    */</span>
+<span class="source-line-no">685</span><span id="line-685">   public T inner() {</span>
+<span class="source-line-no">686</span><span id="line-686">      return a;</span>
+<span class="source-line-no">687</span><span id="line-687">   }</span>
+<span class="source-line-no">688</span><span id="line-688"></span>
+<span class="source-line-no">689</span><span id="line-689">   /**</span>
+<span class="source-line-no">690</span><span id="line-690">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is in the specified {@link AnnotationGroup}.</span>
+<span class="source-line-no">691</span><span id="line-691">    *</span>
+<span class="source-line-no">692</span><span id="line-692">    * &lt;p&gt;</span>
+<span class="source-line-no">693</span><span id="line-693">    * Annotation groups are used to logically group related annotations together.</span>
+<span class="source-line-no">694</span><span id="line-694">    * This checks if the annotation is annotated with {@link AnnotationGroup} and if</span>
+<span class="source-line-no">695</span><span id="line-695">    * the group value matches the specified type.</span>
+<span class="source-line-no">696</span><span id="line-696">    *</span>
+<span class="source-line-no">697</span><span id="line-697">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">698</span><span id="line-698">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">699</span><span id="line-699">    *    &lt;jc&gt;// Define an annotation group&lt;/jc&gt;</span>
+<span class="source-line-no">700</span><span id="line-700">    *    &lt;ja&gt;@interface&lt;/ja&gt; MyGroup {}</span>
+<span class="source-line-no">701</span><span id="line-701">    *</span>
+<span class="source-line-no">702</span><span id="line-702">    *    &lt;jc&gt;// Annotation in the group&lt;/jc&gt;</span>
+<span class="source-line-no">703</span><span id="line-703">    *    &lt;ja&gt;@AnnotationGroup&lt;/ja&gt;(MyGroup.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">704</span><span id="line-704">    *    &lt;ja&gt;@interface&lt;/ja&gt; MyAnnotation {}</span>
+<span class="source-line-no">705</span><span id="line-705">    *</span>
+<span class="source-line-no">706</span><span id="line-706">    *    &lt;jc&gt;// Check if annotation is in group&lt;/jc&gt;</span>
+<span class="source-line-no">707</span><span id="line-707">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">708</span><span id="line-708">    *    &lt;jk&gt;boolean&lt;/jk&gt; &lt;jv&gt;inGroup&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.isInGroup(MyGroup.&lt;jk&gt;class&lt;/jk&gt;);  &lt;jc&gt;// Returns true&lt;/jc&gt;</span>
+<span class="source-line-no">709</span><span id="line-709">    * &lt;/p&gt;</span>
+<span class="source-line-no">710</span><span id="line-710">    *</span>
+<span class="source-line-no">711</span><span id="line-711">    * @param &lt;A&gt; The group annotation type.</span>
+<span class="source-line-no">712</span><span id="line-712">    * @param group The group annotation class to test for.</span>
+<span class="source-line-no">713</span><span id="line-713">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation is in the specified group.</span>
+<span class="source-line-no">714</span><span id="line-714">    * @see AnnotationGroup</span>
+<span class="source-line-no">715</span><span id="line-715">    */</span>
+<span class="source-line-no">716</span><span id="line-716">   public &lt;A extends Annotation&gt; boolean isInGroup(Class&lt;A&gt; group) {</span>
+<span class="source-line-no">717</span><span id="line-717">      var x = a.annotationType().getAnnotation(AnnotationGroup.class);</span>
+<span class="source-line-no">718</span><span id="line-718">      return (nn(x) &amp;&amp; x.value().equals(group));</span>
+<span class="source-line-no">719</span><span id="line-719">   }</span>
+<span class="source-line-no">720</span><span id="line-720"></span>
+<span class="source-line-no">721</span><span id="line-721">   /**</span>
+<span class="source-line-no">722</span><span id="line-722">    * Returns &lt;jk&gt;true&lt;/jk&gt; if this annotation is of the specified type.</span>
+<span class="source-line-no">723</span><span id="line-723">    *</span>
+<span class="source-line-no">724</span><span id="line-724">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">725</span><span id="line-725">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">726</span><span id="line-726">    *    AnnotationInfo&amp;lt;?&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">727</span><span id="line-727">    *</span>
+<span class="source-line-no">728</span><span id="line-728">    *    &lt;jk&gt;if&lt;/jk&gt; (&lt;jv&gt;ai&lt;/jv&gt;.isType(MyAnnotation.&lt;jk&gt;class&lt;/jk&gt;)) {</span>
+<span class="source-line-no">729</span><span id="line-729">    *       &lt;jc&gt;// Handle MyAnnotation specifically&lt;/jc&gt;</span>
+<span class="source-line-no">730</span><span id="line-730">    *    }</span>
+<span class="source-line-no">731</span><span id="line-731">    * &lt;/p&gt;</span>
+<span class="source-line-no">732</span><span id="line-732">    *</span>
+<span class="source-line-no">733</span><span id="line-733">    * @param &lt;A&gt; The annotation type to test for.</span>
+<span class="source-line-no">734</span><span id="line-734">    * @param type The annotation type to test against.</span>
+<span class="source-line-no">735</span><span id="line-735">    * @return &lt;jk&gt;true&lt;/jk&gt; if this annotation's type is exactly the specified type.</span>
+<span class="source-line-no">736</span><span id="line-736">    */</span>
+<span class="source-line-no">737</span><span id="line-737">   public &lt;A extends Annotation&gt; boolean isType(Class&lt;A&gt; type) {</span>
+<span class="source-line-no">738</span><span id="line-738">      return this.a.annotationType() == type;</span>
+<span class="source-line-no">739</span><span id="line-739">   }</span>
+<span class="source-line-no">740</span><span id="line-740"></span>
+<span class="source-line-no">741</span><span id="line-741">   /**</span>
+<span class="source-line-no">742</span><span id="line-742">    * Converts this annotation info to a map representation for debugging purposes.</span>
+<span class="source-line-no">743</span><span id="line-743">    *</span>
+<span class="source-line-no">744</span><span id="line-744">    * &lt;p&gt;</span>
+<span class="source-line-no">745</span><span id="line-745">    * The returned map contains:</span>
+<span class="source-line-no">746</span><span id="line-746">    * &lt;ul&gt;</span>
+<span class="source-line-no">747</span><span id="line-747">    *    &lt;li&gt;The annotatable element's type and label (e.g., {@code "CLASS_TYPE" -&gt; "com.example.MyClass"})</span>
+<span class="source-line-no">748</span><span id="line-748">    *    &lt;li&gt;A nested map with the annotation's simple name as key and its non-default values</span>
+<span class="source-line-no">749</span><span id="line-749">    * &lt;/ul&gt;</span>
+<span class="source-line-no">750</span><span id="line-750">    *</span>
+<span class="source-line-no">751</span><span id="line-751">    * &lt;p&gt;</span>
+<span class="source-line-no">752</span><span id="line-752">    * Only annotation values that differ from their default values are included.</span>
+<span class="source-line-no">753</span><span id="line-753">    *</span>
+<span class="source-line-no">754</span><span id="line-754">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">755</span><span id="line-755">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">756</span><span id="line-756">    *    AnnotationInfo&amp;lt;MyAnnotation&amp;gt; &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">757</span><span id="line-757">    *    LinkedHashMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;ai&lt;/jv&gt;.toMap();</span>
+<span class="source-line-no">758</span><span id="line-758">    *    &lt;jc&gt;// Returns: {"CLASS_TYPE": "MyClass", "@MyAnnotation": {"value": "foo", "priority": 5}}&lt;/jc&gt;</span>
+<span class="source-line-no">759</span><span id="line-759">    * &lt;/p&gt;</span>
+<span class="source-line-no">760</span><span id="line-760">    *</span>
+<span class="source-line-no">761</span><span id="line-761">    * @return A new map showing the attributes of this annotation info.</span>
+<span class="source-line-no">762</span><span id="line-762">    */</span>
+<span class="source-line-no">763</span><span id="line-763">   public FluentMap&lt;String,Object&gt; properties() {</span>
+<span class="source-line-no">764</span><span id="line-764">      // @formatter:off</span>
+<span class="source-line-no">765</span><span id="line-765">      var ca = info(a.annotationType());</span>
+<span class="source-line-no">766</span><span id="line-766">      var ja = mapBuilder().sorted().buildFluent();  // NOAI</span>
+<span class="source-line-no">767</span><span id="line-767">      ca.getDeclaredMethods().forEach(x -&gt; safeOptCatch(() -&gt; {</span>
+<span class="source-line-no">768</span><span id="line-768">         var val = x.invoke(a);</span>
+<span class="source-line-no">769</span><span id="line-769">         var d = x.inner().getDefaultValue();</span>
+<span class="source-line-no">770</span><span id="line-770">         // Add values only if they're different from the default.</span>
+<span class="source-line-no">771</span><span id="line-771">         if (neq(val, d) &amp;&amp; ! (isArray(val) &amp;&amp; length(val) == 0 &amp;&amp; isArray(d) &amp;&amp; length(d) == 0))</span>
+<span class="source-line-no">772</span><span id="line-772">            return val;</span>
+<span class="source-line-no">773</span><span id="line-773">         return null;</span>
+<span class="source-line-no">774</span><span id="line-774">      }, e -&gt; localizedMessage(e)).ifPresent(v -&gt; ja.a(x.getName(), v)));</span>
+<span class="source-line-no">775</span><span id="line-775">      return filteredBeanPropertyMap()</span>
+<span class="source-line-no">776</span><span id="line-776">         .a(s(annotatable.getAnnotatableType()), annotatable.getLabel())</span>
+<span class="source-line-no">777</span><span id="line-777">         .a("@" + ca.getNameSimple(), ja);</span>
+<span class="source-line-no">778</span><span id="line-778">      // @formatter:on</span>
+<span class="source-line-no">779</span><span id="line-779">   }</span>
+<span class="source-line-no">780</span><span id="line-780"></span>
+<span class="source-line-no">781</span><span id="line-781">   /**</span>
+<span class="source-line-no">782</span><span id="line-782">    * Returns a simple string representation of this annotation showing the annotation type and location.</span>
+<span class="source-line-no">783</span><span id="line-783">    *</span>
+<span class="source-line-no">784</span><span id="line-784">    * &lt;p&gt;</span>
+<span class="source-line-no">785</span><span id="line-785">    * Format: {@code @AnnotationName(on=location)}</span>
+<span class="source-line-no">786</span><span id="line-786">    *</span>
+<span class="source-line-no">787</span><span id="line-787">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">788</span><span id="line-788">    * &lt;ul&gt;</span>
+<span class="source-line-no">789</span><span id="line-789">    *    &lt;li&gt;{@code @Marshalled(on=MyClass)} - Annotation on a class</span>
+<span class="source-line-no">790</span><span id="line-790">    *    &lt;li&gt;{@code @Inject(on=MyClass.myField)} - Annotation on a field</span>
+<span class="source-line-no">791</span><span id="line-791">    *    &lt;li&gt;{@code @PackageAnnotation(on=my.package)} - Annotation on a package</span>
+<span class="source-line-no">792</span><span id="line-792">    * &lt;/ul&gt;</span>
+<span class="source-line-no">793</span><span id="line-793">    *</span>
+<span class="source-line-no">794</span><span id="line-794">    * @return A simple string representation of this annotation.</span>
+<span class="source-line-no">795</span><span id="line-795">    */</span>
+<span class="source-line-no">796</span><span id="line-796">   public String toSimpleString() {</span>
+<span class="source-line-no">797</span><span id="line-797">      return "@" + cns(a.annotationType()) + "(on=" + annotatable.getLabel() + ")";</span>
+<span class="source-line-no">798</span><span id="line-798">   }</span>
+<span class="source-line-no">799</span><span id="line-799"></span>
+<span class="source-line-no">800</span><span id="line-800">   /**</span>
+<span class="source-line-no">801</span><span id="line-801">    * Returns a detailed string representation of this annotation.</span>
+<span class="source-line-no">802</span><span id="line-802">    *</span>
+<span class="source-line-no">803</span><span id="line-803">    * &lt;p&gt;</span>
+<span class="source-line-no">804</span><span id="line-804">    * The returned string includes:</span>
+<span class="source-line-no">805</span><span id="line-805">    * &lt;ul&gt;</span>
+<span class="source-line-no">806</span><span id="line-806">    *    &lt;li&gt;Annotation type (fully qualified name with @ prefix)</span>
+<span class="source-line-no">807</span><span id="line-807">    *    &lt;li&gt;Location where the annotation is declared (on=...)</span>
+<span class="source-line-no">808</span><span id="line-808">    *    &lt;li&gt;Annotation values (non-default values only, in key=value format)</span>
+<span class="source-line-no">809</span><span id="line-809">    * &lt;/ul&gt;</span>
+<span class="source-line-no">810</span><span id="line-810">    *</span>
+<span class="source-line-no">811</span><span id="line-811">    * &lt;h5 class='section'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">812</span><span id="line-812">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">813</span><span id="line-813">    *    &lt;jc&gt;// Simple annotation on a class&lt;/jc&gt;</span>
+<span class="source-line-no">814</span><span id="line-814">    *    AnnotationInfo &lt;jv&gt;ai&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">815</span><span id="line-815">    *    &lt;jv&gt;ai&lt;/jv&gt;.toString();</span>
+<span class="source-line-no">816</span><span id="line-816">    *    &lt;jc&gt;// Returns: "@java.lang.Deprecated(on=org.example.MyClass)"&lt;/jc&gt;</span>
+<span class="source-line-no">817</span><span id="line-817">    *</span>
+<span class="source-line-no">818</span><span id="line-818">    *    &lt;jc&gt;// Annotation with value&lt;/jc&gt;</span>
+<span class="source-line-no">819</span><span id="line-819">    *    &lt;jc&gt;// Returns: "@org.example.MyAnnotation(value=foo, on=org.example.MyClass)"&lt;/jc&gt;</span>
+<span class="source-line-no">820</span><span id="line-820">    *</span>
+<span class="source-line-no">821</span><span id="line-821">    *    &lt;jc&gt;// Annotation on a method&lt;/jc&gt;</span>
+<span class="source-line-no">822</span><span id="line-822">    *    &lt;jc&gt;// Returns: "@org.example.RestGet(path=/api, on=org.example.MyClass.myMethod)"&lt;/jc&gt;</span>
+<span class="source-line-no">823</span><span id="line-823">    *</span>
+<span class="source-line-no">824</span><span id="line-824">    *    &lt;jc&gt;// Annotation on a field&lt;/jc&gt;</span>
+<span class="source-line-no">825</span><span id="line-825">    *    &lt;jc&gt;// Returns: "@org.example.Inject(name=myBean, on=org.example.MyClass.myField)"&lt;/jc&gt;</span>
+<span class="source-line-no">826</span><span id="line-826">    * &lt;/p&gt;</span>
+<span class="source-line-no">827</span><span id="line-827">    *</span>
+<span class="source-line-no">828</span><span id="line-828">    * &lt;h5 class='section'&gt;Comparison with Other Methods:&lt;/h5&gt;</span>
+<span class="source-line-no">829</span><span id="line-829">    * &lt;ul class='spaced-list'&gt;</span>
+<span class="source-line-no">830</span><span id="line-830">    *    &lt;li&gt;{@link #toSimpleString()} - Returns simple format: "@AnnotationName(on=location)"</span>
+<span class="source-line-no">831</span><span id="line-831">    *    &lt;li&gt;{@link #properties()} - Returns map representation for debugging</span>
+<span class="source-line-no">832</span><span id="line-832">    * &lt;/ul&gt;</span>
+<span class="source-line-no">833</span><span id="line-833">    *</span>
+<span class="source-line-no">834</span><span id="line-834">    * @return A detailed string representation including annotation type, location, and values.</span>
+<span class="source-line-no">835</span><span id="line-835">    */</span>
+<span class="source-line-no">836</span><span id="line-836">   @Override /* Overridden from Object */</span>
+<span class="source-line-no">837</span><span id="line-837">   public String toString() {</span>
+<span class="source-line-no">838</span><span id="line-838">      return toString.get();</span>
+<span class="source-line-no">839</span><span id="line-839">   }</span>
+<span class="source-line-no">840</span><span id="line-840"></span>
+<span class="source-line-no">841</span><span id="line-841">   private String findToString() {</span>
+<span class="source-line-no">842</span><span id="line-842">      var sb = new StringBuilder(256);</span>
+<span class="source-line-no">843</span><span id="line-843"></span>
+<span class="source-line-no">844</span><span id="line-844">      // Annotation type (with @ prefix and full package name)</span>
+<span class="source-line-no">845</span><span id="line-845">      sb.append("@");</span>
+<span class="source-line-no">846</span><span id="line-846">      var annotationType = a.annotationType();</span>
+<span class="source-line-no">847</span><span id="line-847">      ClassInfo.of(annotationType).appendNameFormatted(sb, FULL, true, '$', BRACKETS);</span>
+<span class="source-line-no">848</span><span id="line-848"></span>
+<span class="source-line-no">849</span><span id="line-849">      // Get annotation values (non-default only)</span>
+<span class="source-line-no">850</span><span id="line-850">      var ca = info(annotationType);</span>
+<span class="source-line-no">851</span><span id="line-851">      var values = new ArrayList&lt;String&gt;();</span>
+<span class="source-line-no">852</span><span id="line-852">      ca.getDeclaredMethods().forEach(m -&gt; safeOptCatch(() -&gt; {</span>
+<span class="source-line-no">853</span><span id="line-853">         var val = m.invoke(a);</span>
+<span class="source-line-no">854</span><span id="line-854">         var d = m.inner().getDefaultValue();</span>
+<span class="source-line-no">855</span><span id="line-855">         // Add values only if they're different from the default</span>
+<span class="source-line-no">856</span><span id="line-856">         if (neq(val, d) &amp;&amp; ! (isArray(val) &amp;&amp; length(val) == 0 &amp;&amp; isArray(d) &amp;&amp; length(d) == 0)) {</span>
+<span class="source-line-no">857</span><span id="line-857">            var valueStr = formatAnnotationValue(val);</span>
+<span class="source-line-no">858</span><span id="line-858">            values.add(m.getName() + "=" + valueStr);</span>
+<span class="source-line-no">859</span><span id="line-859">         }</span>
+<span class="source-line-no">860</span><span id="line-860">         return null;</span>
+<span class="source-line-no">861</span><span id="line-861">      }, e -&gt; null));</span>
+<span class="source-line-no">862</span><span id="line-862"></span>
+<span class="source-line-no">863</span><span id="line-863">      // Build the string: @AnnotationType(key1=value1, key2=value2, on=location)</span>
+<span class="source-line-no">864</span><span id="line-864">      if (! values.isEmpty()) {</span>
+<span class="source-line-no">865</span><span id="line-865">         sb.append("(");</span>
+<span class="source-line-no">866</span><span id="line-866">         sb.append(String.join(", ", values));</span>
+<span class="source-line-no">867</span><span id="line-867">         sb.append(", on=");</span>
+<span class="source-line-no">868</span><span id="line-868">      } else {</span>
+<span class="source-line-no">869</span><span id="line-869">         sb.append("(on=");</span>
+<span class="source-line-no">870</span><span id="line-870">      }</span>
+<span class="source-line-no">871</span><span id="line-871">      sb.append(annotatable.getLabel());</span>
+<span class="source-line-no">872</span><span id="line-872">      sb.append(")");</span>
+<span class="source-line-no">873</span><span id="line-873"></span>
+<span class="source-line-no">874</span><span id="line-874">      return sb.toString();</span>
+<span class="source-line-no">875</span><span id="line-875">   }</span>
+<span class="source-line-no">876</span><span id="line-876"></span>
+<span class="source-line-no">877</span><span id="line-877">   private String formatAnnotationValue(Object value) {</span>
+<span class="source-line-no">878</span><span id="line-878">      if (value == null)</span>
+<span class="source-line-no">879</span><span id="line-879">         return "null";</span>
+<span class="source-line-no">880</span><span id="line-880">      if (value instanceof String)</span>
+<span class="source-line-no">881</span><span id="line-881">         return "\"" + value + "\"";</span>
+<span class="source-line-no">882</span><span id="line-882">      if (isArray(value)) {</span>
+<span class="source-line-no">883</span><span id="line-883">         var array = toList(value, Object.class);</span>
+<span class="source-line-no">884</span><span id="line-884">         if (array.isEmpty())</span>
+<span class="source-line-no">885</span><span id="line-885">            return "{}";</span>
+<span class="source-line-no">886</span><span id="line-886">         var elements = array.stream()</span>
+<span class="source-line-no">887</span><span id="line-887">            .map(this::formatAnnotationValue)</span>
+<span class="source-line-no">888</span><span id="line-888">            .collect(java.util.stream.Collectors.joining(", "));</span>
+<span class="source-line-no">889</span><span id="line-889">         return "{" + elements + "}";</span>
+<span class="source-line-no">890</span><span id="line-890">      }</span>
+<span class="source-line-no">891</span><span id="line-891">      if (value instanceof Class&lt;?&gt; c) {</span>
+<span class="source-line-no">892</span><span id="line-892">         var sb = new StringBuilder();</span>
+<span class="source-line-no">893</span><span id="line-893">         ClassInfo.of(c).appendNameFormatted(sb, FULL, true, '$', BRACKETS);</span>
+<span class="source-line-no">894</span><span id="line-894">         return sb.toString() + ".class";</span>
+<span class="source-line-no">895</span><span id="line-895">      }</span>
+<span class="source-line-no">896</span><span id="line-896">      if (value instanceof Enum&lt;?&gt; e) {</span>
+<span class="source-line-no">897</span><span id="line-897">         return e.getDeclaringClass().getSimpleName() + "." + e.name();</span>
+<span class="source-line-no">898</span><span id="line-898">      }</span>
+<span class="source-line-no">899</span><span id="line-899">      if (value instanceof Annotation value2) {</span>
+<span class="source-line-no">900</span><span id="line-900">         // For nested annotations, use simple format</span>
+<span class="source-line-no">901</span><span id="line-901">         return "@" + ClassInfo.of(value2.annotationType()).getNameSimple() + "(...)";</span>
+<span class="source-line-no">902</span><span id="line-902">      }</span>
+<span class="source-line-no">903</span><span id="line-903">      return String.valueOf(value);</span>
+<span class="source-line-no">904</span><span id="line-904">   }</span>
+<span class="source-line-no">905</span><span id="line-905">}</span>
 
 
 

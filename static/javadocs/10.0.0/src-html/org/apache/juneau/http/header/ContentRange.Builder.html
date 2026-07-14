@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -154,7 +154,7 @@
 <span class="source-line-no">141</span><span id="line-141">         assertArgNotNull("value", value);</span>
 <span class="source-line-no">142</span><span id="line-142">         var v = value.trim();</span>
 <span class="source-line-no">143</span><span id="line-143">         if (v.isEmpty())</span>
-<span class="source-line-no">144</span><span id="line-144">            throw illegalArg("range unit must not be blank");</span>
+<span class="source-line-no">144</span><span id="line-144">            throw iaex("range unit must not be blank");</span>
 <span class="source-line-no">145</span><span id="line-145">         unit = v;</span>
 <span class="source-line-no">146</span><span id="line-146">         return this;</span>
 <span class="source-line-no">147</span><span id="line-147">      }</span>
@@ -172,9 +172,9 @@
 <span class="source-line-no">159</span><span id="line-159">       */</span>
 <span class="source-line-no">160</span><span id="line-160">      public Builder range(long startValue, long endValue) {</span>
 <span class="source-line-no">161</span><span id="line-161">         if (startValue &lt; 0)</span>
-<span class="source-line-no">162</span><span id="line-162">            throw illegalArg("range start must be non-negative: {0}", startValue);</span>
+<span class="source-line-no">162</span><span id="line-162">            throw iaex("range start must be non-negative: {0}", startValue);</span>
 <span class="source-line-no">163</span><span id="line-163">         if (endValue &lt; startValue)</span>
-<span class="source-line-no">164</span><span id="line-164">            throw illegalArg("range end {0} must be &gt;= start {1}", endValue, startValue);</span>
+<span class="source-line-no">164</span><span id="line-164">            throw iaex("range end {0} must be &gt;= start {1}", endValue, startValue);</span>
 <span class="source-line-no">165</span><span id="line-165">         start = startValue;</span>
 <span class="source-line-no">166</span><span id="line-166">         end = endValue;</span>
 <span class="source-line-no">167</span><span id="line-167">         rangeUnsatisfied = false;</span>
@@ -205,7 +205,7 @@
 <span class="source-line-no">192</span><span id="line-192">       */</span>
 <span class="source-line-no">193</span><span id="line-193">      public Builder length(long value) {</span>
 <span class="source-line-no">194</span><span id="line-194">         if (value &lt; 0)</span>
-<span class="source-line-no">195</span><span id="line-195">            throw illegalArg("complete-length must be non-negative: {0}", value);</span>
+<span class="source-line-no">195</span><span id="line-195">            throw iaex("complete-length must be non-negative: {0}", value);</span>
 <span class="source-line-no">196</span><span id="line-196">         completeLength = value;</span>
 <span class="source-line-no">197</span><span id="line-197">         lengthUnknown = false;</span>
 <span class="source-line-no">198</span><span id="line-198">         return this;</span>

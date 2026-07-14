@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.svl;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48"> * &lt;/ul&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SimpleVariableLanguageBasics"&gt;Simple Variable Language Basics&lt;/a&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/MarshallSimpleVariableLanguage"&gt;Simple Variable Language Basics&lt;/a&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> */</span>
 <span class="source-line-no">054</span><span id="line-54">@SuppressWarnings({</span>
@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81">         // Need to make sure only ASCII characters are used.</span>
 <span class="source-line-no">082</span><span id="line-82">         var c = name.charAt(i);</span>
 <span class="source-line-no">083</span><span id="line-83">         if (c &lt; 'A' || c &gt; 'z' || (c &gt; 'Z' &amp;&amp; c &lt; 'a'))</span>
-<span class="source-line-no">084</span><span id="line-84">            throw illegalArg("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");</span>
+<span class="source-line-no">084</span><span id="line-84">            throw iaex("Invalid var name.  Must consist of only uppercase and lowercase ASCII letters.");</span>
 <span class="source-line-no">085</span><span id="line-85">      }</span>
 <span class="source-line-no">086</span><span id="line-86">   }</span>
 <span class="source-line-no">087</span><span id="line-87"></span>

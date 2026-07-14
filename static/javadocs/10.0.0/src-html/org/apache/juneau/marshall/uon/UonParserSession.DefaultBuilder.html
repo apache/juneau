@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.lang.StateEnum.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UonBasics"&gt;UON Basics&lt;/a&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UonSupport"&gt;UON Basics&lt;/a&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"></span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> */</span>
@@ -240,7 +240,7 @@
 <span class="source-line-no">227</span><span id="line-227">   public &lt;T&gt; T parse(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta&lt;T&gt; toType) throws ParseException, SchemaValidationException {</span>
 <span class="source-line-no">228</span><span id="line-228">      if (in == null)</span>
 <span class="source-line-no">229</span><span id="line-229">         return null;</span>
-<span class="source-line-no">230</span><span id="line-230">      if (toType.isString() &amp;&amp; ne(in)) {</span>
+<span class="source-line-no">230</span><span id="line-230">      if (toType.isString() &amp;&amp; ine(in)) {</span>
 <span class="source-line-no">231</span><span id="line-231">         // Shortcut - If we're returning a string and the value doesn't start with "'" or is "null", then</span>
 <span class="source-line-no">232</span><span id="line-232">         // just return the string since it's a plain value.</span>
 <span class="source-line-no">233</span><span id="line-233">         // This allows us to bypass the creation of a UonParserSession object.</span>
@@ -296,7 +296,7 @@
 <span class="source-line-no">283</span><span id="line-283">         sType = eType;</span>
 <span class="source-line-no">284</span><span id="line-284"></span>
 <span class="source-line-no">285</span><span id="line-285">      if (sType.isOptional())</span>
-<span class="source-line-no">286</span><span id="line-286">         return (T)opt(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));</span>
+<span class="source-line-no">286</span><span id="line-286">         return (T)o(parseAnything(eType.getElementType(), r, outer, isUrlParamValue, pMeta));</span>
 <span class="source-line-no">287</span><span id="line-287"></span>
 <span class="source-line-no">288</span><span id="line-288">      setCurrentClass(sType);</span>
 <span class="source-line-no">289</span><span id="line-289"></span>
@@ -329,7 +329,7 @@
 <span class="source-line-no">316</span><span id="line-316">            var s = parseString(r, isUrlParamValue);</span>
 <span class="source-line-no">317</span><span id="line-317">            if (c != '\'') {</span>
 <span class="source-line-no">318</span><span id="line-318">               if ("true".equals(s) || "false".equals(s))</span>
-<span class="source-line-no">319</span><span id="line-319">                  o = bool(s);</span>
+<span class="source-line-no">319</span><span id="line-319">                  o = b(s);</span>
 <span class="source-line-no">320</span><span id="line-320">               else {</span>
 <span class="source-line-no">321</span><span id="line-321">                  if (isNumeric(s))</span>
 <span class="source-line-no">322</span><span id="line-322">                     o = StringUtils.parseNumber(s, Number.class);</span>

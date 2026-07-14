@@ -82,8 +82,9 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="HoconValue.HoconArray.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a></code>, <code><a href="HoconValue.HoconBoolean.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconBoolean</a></code>, <code><a href="HoconValue.HoconConcat.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconConcat</a></code>, <code><a href="HoconValue.HoconNull.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconNull</a></code>, <code><a href="HoconValue.HoconNumber.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconNumber</a></code>, <code><a href="HoconValue.HoconObject.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a></code>, <code><a href="HoconValue.HoconString.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconString</a></code>, <code><a href="HoconValue.HoconSubstitution.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconSubstitution</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.html#line-35">HoconValue</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public abstract sealed class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/hocon/HoconValue.html#line-35">HoconValue</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>
+<span class="permits">permits <a href="HoconValue.HoconObject.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a>, <a href="HoconValue.HoconArray.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a>, <a href="HoconValue.HoconString.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconString</a>, <a href="HoconValue.HoconNumber.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconNumber</a>, <a href="HoconValue.HoconBoolean.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconBoolean</a>, <a href="HoconValue.HoconNull.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconNull</a>, <a href="HoconValue.HoconSubstitution.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconSubstitution</a>, <a href="HoconValue.HoconConcat.html" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconConcat</a></span></div>
 <div class="block">Intermediate representation for parsed HOCON data before conversion to Java beans.
 
  <p>
@@ -106,42 +107,42 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="HoconValue.HoconArray.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconArray</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">HOCON array (maps to List or array).</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="HoconValue.HoconBoolean.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconBoolean</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">HOCON boolean value.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="HoconValue.HoconConcat.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconConcat</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">HOCON value concatenation (adjacent values concatenated).</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="HoconValue.HoconNull.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconNull</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">HOCON null value.</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="HoconValue.HoconNumber.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconNumber</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">HOCON number value.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="HoconValue.HoconObject.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconObject</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">HOCON object (maps to Java bean or Map).</div>
 </div>
-<div class="col-first even-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="HoconValue.HoconString.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconString</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">HOCON string value.</div>
 </div>
-<div class="col-first odd-row-color"><code>static class&nbsp;</code></div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="HoconValue.HoconSubstitution.html" class="type-name-link" title="class in org.apache.juneau.marshall.hocon">HoconValue.HoconSubstitution</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">HOCON substitution reference (${var} or ${?</div>

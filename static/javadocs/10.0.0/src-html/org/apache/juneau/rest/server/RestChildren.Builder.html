@@ -30,9 +30,9 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.isNotEmpty;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.lang.reflect.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
@@ -62,7 +62,7 @@
 <span class="source-line-no">049</span><span id="line-49"> * (path prefix matcher) is always populated at startup; only the full context build is deferred.</span>
 <span class="source-line-no">050</span><span id="line-50"> *</span>
 <span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/ul&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> */</span>
 <span class="source-line-no">055</span><span id="line-55">public class RestChildren {</span>
@@ -354,18 +354,18 @@
 <span class="source-line-no">341</span><span id="line-341">            var pm = rc.getPathMatcher();  // Treated as nullable per RestContext's own usage (see RestContext.getPathMatcher() null-guards).</span>
 <span class="source-line-no">342</span><span id="line-342">            UrlPathMatch uppm = pm == null ? null : pm.match(builder.getUrlPath());</span>
 <span class="source-line-no">343</span><span id="line-343">            if (nn(uppm))</span>
-<span class="source-line-no">344</span><span id="line-344">               return opt(RestChildMatch.create(uppm, rc));</span>
+<span class="source-line-no">344</span><span id="line-344">               return o(RestChildMatch.create(uppm, rc));</span>
 <span class="source-line-no">345</span><span id="line-345">         }</span>
 <span class="source-line-no">346</span><span id="line-346">         // Check lazy entries.</span>
 <span class="source-line-no">347</span><span id="line-347">         for (var e : lazyEntries.values()) {</span>
 <span class="source-line-no">348</span><span id="line-348">            UrlPathMatch uppm = e.pathMatcher.match(builder.getUrlPath());</span>
 <span class="source-line-no">349</span><span id="line-349">            if (nn(uppm)) {</span>
 <span class="source-line-no">350</span><span id="line-350">               var rc = e.materialize();</span>
-<span class="source-line-no">351</span><span id="line-351">               return opt(RestChildMatch.create(uppm, rc));</span>
+<span class="source-line-no">351</span><span id="line-351">               return o(RestChildMatch.create(uppm, rc));</span>
 <span class="source-line-no">352</span><span id="line-352">            }</span>
 <span class="source-line-no">353</span><span id="line-353">         }</span>
 <span class="source-line-no">354</span><span id="line-354">      }</span>
-<span class="source-line-no">355</span><span id="line-355">      return opte();</span>
+<span class="source-line-no">355</span><span id="line-355">      return oe();</span>
 <span class="source-line-no">356</span><span id="line-356">   }</span>
 <span class="source-line-no">357</span><span id="line-357"></span>
 <span class="source-line-no">358</span><span id="line-358">   /**</span>
@@ -602,7 +602,7 @@
 <span class="source-line-no">589</span><span id="line-589"></span>
 <span class="source-line-no">590</span><span id="line-590">   private RestContext addChildInternal(Class&lt;?&gt; resourceClass, Object resourceInstance, String pathOverride, boolean replace) throws ServletException {</span>
 <span class="source-line-no">591</span><span id="line-591">      if (parent == null || beanStore == null)</span>
-<span class="source-line-no">592</span><span id="line-592">         throw illegalState("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");</span>
+<span class="source-line-no">592</span><span id="line-592">         throw isex("Cannot add a child to a RestChildren that was not initialized with a parent RestContext.");</span>
 <span class="source-line-no">593</span><span id="line-593">      RestContext cc;</span>
 <span class="source-line-no">594</span><span id="line-594">      try {</span>
 <span class="source-line-no">595</span><span id="line-595">         cc = buildChildContext(parent, beanStore, servletConfig, resourceClass, resourceInstance, pathOverride);</span>
@@ -615,7 +615,7 @@
 <span class="source-line-no">602</span><span id="line-602">         if (children.containsKey(key)) {</span>
 <span class="source-line-no">603</span><span id="line-603">            if (! replace) {</span>
 <span class="source-line-no">604</span><span id="line-604">               destroyQuietly(cc);</span>
-<span class="source-line-no">605</span><span id="line-605">               throw illegalState("Child resource already registered at path ''{0}''.", key);</span>
+<span class="source-line-no">605</span><span id="line-605">               throw isex("Child resource already registered at path ''{0}''.", key);</span>
 <span class="source-line-no">606</span><span id="line-606">            }</span>
 <span class="source-line-no">607</span><span id="line-607">            replaced = children.get(key);</span>
 <span class="source-line-no">608</span><span id="line-608">            var withoutExisting = new LinkedHashMap&lt;&gt;(children);</span>

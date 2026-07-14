@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.openapi;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143">      var swagger = swaggerSession.getSwagger();</span>
 <span class="source-line-no">144</span><span id="line-144">      // Round-trip via Json5 so we work with a plain Json5Map and can apply the spec mapping</span>
 <span class="source-line-no">145</span><span id="line-145">      // without touching the typed Swagger / OpenApi beans.</span>
-<span class="source-line-no">146</span><span id="line-146">      var swaggerMap = Json5.DEFAULT.to(Json5.DEFAULT.of(swagger), Json5Map.class);</span>
+<span class="source-line-no">146</span><span id="line-146">      var swaggerMap = Json5.to(Json5.of(swagger), Json5Map.class);</span>
 <span class="source-line-no">147</span><span id="line-147">      if (swaggerMap == null)</span>
 <span class="source-line-no">148</span><span id="line-148">         swaggerMap = new Json5Map();</span>
 <span class="source-line-no">149</span><span id="line-149">      var openApiMap = transform(swaggerMap);</span>

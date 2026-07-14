@@ -24,6 +24,7 @@
   "juneau-marshall": "juneau-core/juneau-marshall",
   "juneau-marshall-rdf": "juneau-core/juneau-marshall-rdf",
   "juneau-microservice": "juneau-microservice/juneau-microservice",
+  "juneau-microservice-examples": "juneau-microservice/juneau-microservice-examples",
   "juneau-microservice-jetty": "juneau-microservice/juneau-microservice-jetty",
   "juneau-microservice-jetty-bundle": "juneau-bundles/juneau-microservice-jetty-bundle",
   "juneau-microservice-parent": "juneau-microservice",

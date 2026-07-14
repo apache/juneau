@@ -30,9 +30,9 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.parser;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
@@ -672,9 +672,9 @@
 <span class="source-line-no">659</span><span id="line-659">      } catch (@SuppressWarnings("unused") StackOverflowError e) {</span>
 <span class="source-line-no">660</span><span id="line-660">         throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");</span>
 <span class="source-line-no">661</span><span id="line-661">      } catch (IOException e) {</span>
-<span class="source-line-no">662</span><span id="line-662">         throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), lm(e));</span>
+<span class="source-line-no">662</span><span id="line-662">         throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));</span>
 <span class="source-line-no">663</span><span id="line-663">      } catch (Exception e) {</span>
-<span class="source-line-no">664</span><span id="line-664">         throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));</span>
+<span class="source-line-no">664</span><span id="line-664">         throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));</span>
 <span class="source-line-no">665</span><span id="line-665">      } finally {</span>
 <span class="source-line-no">666</span><span id="line-666">         checkForWarnings();</span>
 <span class="source-line-no">667</span><span id="line-667">      }</span>
@@ -707,9 +707,9 @@
 <span class="source-line-no">694</span><span id="line-694">      } catch (@SuppressWarnings("unused") StackOverflowError e) {</span>
 <span class="source-line-no">695</span><span id="line-695">         throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");</span>
 <span class="source-line-no">696</span><span id="line-696">      } catch (IOException e) {</span>
-<span class="source-line-no">697</span><span id="line-697">         throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), lm(e));</span>
+<span class="source-line-no">697</span><span id="line-697">         throw new ParseException(this, e, "I/O exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));</span>
 <span class="source-line-no">698</span><span id="line-698">      } catch (Exception e) {</span>
-<span class="source-line-no">699</span><span id="line-699">         throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));</span>
+<span class="source-line-no">699</span><span id="line-699">         throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));</span>
 <span class="source-line-no">700</span><span id="line-700">      } finally {</span>
 <span class="source-line-no">701</span><span id="line-701">         checkForWarnings();</span>
 <span class="source-line-no">702</span><span id="line-702">      }</span>
@@ -783,7 +783,7 @@
 <span class="source-line-no">770</span><span id="line-770">      } catch (@SuppressWarnings("unused") StackOverflowError e) {</span>
 <span class="source-line-no">771</span><span id="line-771">         throw new ParseException(this, "Depth too deep.  Stack overflow occurred.");</span>
 <span class="source-line-no">772</span><span id="line-772">      } catch (Exception e) {</span>
-<span class="source-line-no">773</span><span id="line-773">         throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), lm(e));</span>
+<span class="source-line-no">773</span><span id="line-773">         throw new ParseException(this, e, "Exception occurred.  exception={0}, message={1}.", cns(e), localizedMessage(e));</span>
 <span class="source-line-no">774</span><span id="line-774">      } finally {</span>
 <span class="source-line-no">775</span><span id="line-775">         checkForWarnings();</span>
 <span class="source-line-no">776</span><span id="line-776">      }</span>
@@ -852,10 +852,10 @@
 <span class="source-line-no">839</span><span id="line-839">            throw e;</span>
 <span class="source-line-no">840</span><span id="line-840">         if (bodyThrown instanceof IOException e)</span>
 <span class="source-line-no">841</span><span id="line-841">            throw e;</span>
-<span class="source-line-no">842</span><span id="line-842">         throw new ParseException(this, bodyThrown, "Exception occurred.  exception={0}, message={1}.", cns(bodyThrown), lm(bodyThrown));</span>
+<span class="source-line-no">842</span><span id="line-842">         throw new ParseException(this, bodyThrown, "Exception occurred.  exception={0}, message={1}.", cns(bodyThrown), localizedMessage(bodyThrown));</span>
 <span class="source-line-no">843</span><span id="line-843">      }</span>
 <span class="source-line-no">844</span><span id="line-844">      if (completeThrown != null)</span>
-<span class="source-line-no">845</span><span id="line-845">         throw new ParseException(this, completeThrown, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(completeThrown), lm(completeThrown));</span>
+<span class="source-line-no">845</span><span id="line-845">         throw new ParseException(this, completeThrown, "Exception occurred in BeanConsumer.complete().  exception={0}, message={1}.", cns(completeThrown), localizedMessage(completeThrown));</span>
 <span class="source-line-no">846</span><span id="line-846">   }</span>
 <span class="source-line-no">847</span><span id="line-847"></span>
 <span class="source-line-no">848</span><span id="line-848">   private static &lt;T&gt; Exception drainToConsumer(BeanConsumer&lt;T&gt; consumer, List&lt;T&gt; list) {</span>
@@ -1054,7 +1054,7 @@
 <span class="source-line-no">1041</span><span id="line-1041">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
 <span class="source-line-no">1042</span><span id="line-1042">   })</span>
 <span class="source-line-no">1043</span><span id="line-1043">   protected &lt;E&gt; Collection&lt;E&gt; doParseIntoCollection(ParserPipe pipe, Collection&lt;E&gt; c, Type elementType) throws Exception {</span>
-<span class="source-line-no">1044</span><span id="line-1044">      throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));</span>
+<span class="source-line-no">1044</span><span id="line-1044">      throw uoex("Parser ''{0}'' does not support this method.", cn(getClass()));</span>
 <span class="source-line-no">1045</span><span id="line-1045">   }</span>
 <span class="source-line-no">1046</span><span id="line-1046"></span>
 <span class="source-line-no">1047</span><span id="line-1047">   /**</span>
@@ -1076,7 +1076,7 @@
 <span class="source-line-no">1063</span><span id="line-1063">      "java:S112" // throws Exception intentional - callback/lifecycle method</span>
 <span class="source-line-no">1064</span><span id="line-1064">   })</span>
 <span class="source-line-no">1065</span><span id="line-1065">   protected &lt;K,V&gt; Map&lt;K,V&gt; doParseIntoMap(ParserPipe pipe, Map&lt;K,V&gt; m, Type keyType, Type valueType) throws Exception {</span>
-<span class="source-line-no">1066</span><span id="line-1066">      throw unsupportedOp("Parser ''{0}'' does not support this method.", cn(getClass()));</span>
+<span class="source-line-no">1066</span><span id="line-1066">      throw uoex("Parser ''{0}'' does not support this method.", cn(getClass()));</span>
 <span class="source-line-no">1067</span><span id="line-1067">   }</span>
 <span class="source-line-no">1068</span><span id="line-1068"></span>
 <span class="source-line-no">1069</span><span id="line-1069">   /**</span>
@@ -1342,7 +1342,7 @@
 <span class="source-line-no">1329</span><span id="line-1329">      if (nn(listener))</span>
 <span class="source-line-no">1330</span><span id="line-1330">         listener.onBeanSetterException(this, t, p);</span>
 <span class="source-line-no">1331</span><span id="line-1331">      var prefix = "";</span>
-<span class="source-line-no">1332</span><span id="line-1332">      addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), lm(t));</span>
+<span class="source-line-no">1332</span><span id="line-1332">      addWarning("{0}Could not call setValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t));</span>
 <span class="source-line-no">1333</span><span id="line-1333">   }</span>
 <span class="source-line-no">1334</span><span id="line-1334"></span>
 <span class="source-line-no">1335</span><span id="line-1335">   /**</span>
@@ -1352,7 +1352,7 @@
 <span class="source-line-no">1339</span><span id="line-1339">    * @param beanMap The bean that doesn't have the expected property.</span>
 <span class="source-line-no">1340</span><span id="line-1340">    * @param value The parsed value.</span>
 <span class="source-line-no">1341</span><span id="line-1341">    * @throws ParseException</span>
-<span class="source-line-no">1342</span><span id="line-1342">    *    Automatically thrown if {@link org.apache.juneau.marshall.MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is</span>
+<span class="source-line-no">1342</span><span id="line-1342">    *    Automatically thrown if {@link MarshallingContext.Builder#ignoreUnknownBeanProperties()} setting on this parser is</span>
 <span class="source-line-no">1343</span><span id="line-1343">    *    &lt;jk&gt;false&lt;/jk&gt;</span>
 <span class="source-line-no">1344</span><span id="line-1344">    * @param &lt;T&gt; The class type of the bean map that doesn't have the expected property.</span>
 <span class="source-line-no">1345</span><span id="line-1345">    */</span>

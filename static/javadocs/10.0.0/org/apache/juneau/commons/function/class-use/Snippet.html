@@ -132,20 +132,25 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#quiet(org.apache.juneau.commons.function.Snippet)" class="member-name-link">quiet</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Shorts.</span><code><a href="../../utils/Shorts.html#quiet(org.apache.juneau.commons.function.Snippet)" class="member-name-link">quiet</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;s)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Runs a snippet of code and silently ignores any exceptions.</div>
+<div class="block">Runs the specified snippet, silently swallowing any thrown exception.</div>
 </div>
 <div class="col-first odd-row-color"><code>static void</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safe(org.apache.juneau.commons.function.Snippet)" class="member-name-link">safe</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#runQuietly(org.apache.juneau.commons.function.Snippet)" class="member-name-link">runQuietly</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Runs a snippet of code and encapsulates any throwable inside a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+<div class="block">Runs a snippet, silently ignoring any exception.</div>
 </div>
 <div class="col-first even-row-color"><code>static void</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safe(org.apache.juneau.commons.function.Snippet,java.util.function.Function)" class="member-name-link">safe</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safe(org.apache.juneau.commons.function.Snippet)" class="member-name-link">safe</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Runs a snippet of code with a custom exception mapper.</div>
+<div class="block">Runs a snippet; wraps any checked throwable in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+</div>
+<div class="col-first odd-row-color"><code>static void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safe(org.apache.juneau.commons.function.Snippet,java.util.function.Function)" class="member-name-link">safe</a><wbr>(<a href="../Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Runs a snippet; maps any checked throwable via the provided function.</div>
 </div>
 </div>
 </section>

@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">    *</span>
 <span class="source-line-no">148</span><span id="line-148">    * @return The property value, or &lt;jk&gt;null&lt;/jk&gt; if it is not set.</span>
 <span class="source-line-no">149</span><span id="line-149">    */</span>
-<span class="source-line-no">150</span><span id="line-150">   public Map&lt;String,String&gt; getMapping() { return nullIfEmpty(mapping); }</span>
+<span class="source-line-no">150</span><span id="line-150">   public Map&lt;String,String&gt; getMapping() { return nie(mapping); }</span>
 <span class="source-line-no">151</span><span id="line-151"></span>
 <span class="source-line-no">152</span><span id="line-152">   /**</span>
 <span class="source-line-no">153</span><span id="line-153">    * Bean property getter:  &lt;property&gt;propertyName&lt;/property&gt;.</span>
@@ -175,8 +175,8 @@
 <span class="source-line-no">162</span><span id="line-162">   @Override /* Overridden from OpenApiElement */</span>
 <span class="source-line-no">163</span><span id="line-163">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">164</span><span id="line-164">      // @formatter:off</span>
-<span class="source-line-no">165</span><span id="line-165">      var s = setb(String.class)</span>
-<span class="source-line-no">166</span><span id="line-166">         .addIf(ne(mapping), PROP_mapping)</span>
+<span class="source-line-no">165</span><span id="line-165">      var s = stb(String.class)</span>
+<span class="source-line-no">166</span><span id="line-166">         .addIf(ine(mapping), PROP_mapping)</span>
 <span class="source-line-no">167</span><span id="line-167">         .addIf(nn(propertyName), PROP_propertyName)</span>
 <span class="source-line-no">168</span><span id="line-168">         .build();</span>
 <span class="source-line-no">169</span><span id="line-169">      // @formatter:on</span>

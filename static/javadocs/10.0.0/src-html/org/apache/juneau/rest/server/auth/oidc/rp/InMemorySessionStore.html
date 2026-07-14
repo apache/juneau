@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth.oidc.rp;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.time.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -124,12 +124,12 @@
 <span class="source-line-no">111</span><span id="line-111">      synchronized (lock) {</span>
 <span class="source-line-no">112</span><span id="line-112">         var s = byId.get(cookieValue);</span>
 <span class="source-line-no">113</span><span id="line-113">         if (s == null)</span>
-<span class="source-line-no">114</span><span id="line-114">            return opte();</span>
+<span class="source-line-no">114</span><span id="line-114">            return oe();</span>
 <span class="source-line-no">115</span><span id="line-115">         if (s.isExpired(clock.instant())) {</span>
 <span class="source-line-no">116</span><span id="line-116">            removeById(cookieValue);</span>
-<span class="source-line-no">117</span><span id="line-117">            return opte();</span>
+<span class="source-line-no">117</span><span id="line-117">            return oe();</span>
 <span class="source-line-no">118</span><span id="line-118">         }</span>
-<span class="source-line-no">119</span><span id="line-119">         return opt(s);</span>
+<span class="source-line-no">119</span><span id="line-119">         return o(s);</span>
 <span class="source-line-no">120</span><span id="line-120">      }</span>
 <span class="source-line-no">121</span><span id="line-121">   }</span>
 <span class="source-line-no">122</span><span id="line-122"></span>

@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.security.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -267,7 +267,7 @@
 <span class="source-line-no">254</span><span id="line-254">      public static String nonce(String token) {</span>
 <span class="source-line-no">255</span><span id="line-255">         assertArgNotNull("token", token);</span>
 <span class="source-line-no">256</span><span id="line-256">         if (token.trim().isEmpty())</span>
-<span class="source-line-no">257</span><span id="line-257">            throw illegalArg("nonce token must not be blank");</span>
+<span class="source-line-no">257</span><span id="line-257">            throw iaex("nonce token must not be blank");</span>
 <span class="source-line-no">258</span><span id="line-258">         return "'nonce-" + token + "'";</span>
 <span class="source-line-no">259</span><span id="line-259">      }</span>
 <span class="source-line-no">260</span><span id="line-260"></span>
@@ -282,7 +282,7 @@
 <span class="source-line-no">269</span><span id="line-269">         assertArgNotNull("scheme", scheme);</span>
 <span class="source-line-no">270</span><span id="line-270">         var s = scheme.trim();</span>
 <span class="source-line-no">271</span><span id="line-271">         if (s.isEmpty())</span>
-<span class="source-line-no">272</span><span id="line-272">            throw illegalArg("scheme must not be blank");</span>
+<span class="source-line-no">272</span><span id="line-272">            throw iaex("scheme must not be blank");</span>
 <span class="source-line-no">273</span><span id="line-273">         return s.endsWith(":") ? s : s + ":";</span>
 <span class="source-line-no">274</span><span id="line-274">      }</span>
 <span class="source-line-no">275</span><span id="line-275"></span>
@@ -298,9 +298,9 @@
 <span class="source-line-no">285</span><span id="line-285">         assertArgNotNull("algorithm", algorithm);</span>
 <span class="source-line-no">286</span><span id="line-286">         assertArgNotNull("base64Hash", base64Hash);</span>
 <span class="source-line-no">287</span><span id="line-287">         if (algorithm.trim().isEmpty())</span>
-<span class="source-line-no">288</span><span id="line-288">            throw illegalArg("hash algorithm must not be blank");</span>
+<span class="source-line-no">288</span><span id="line-288">            throw iaex("hash algorithm must not be blank");</span>
 <span class="source-line-no">289</span><span id="line-289">         if (base64Hash.trim().isEmpty())</span>
-<span class="source-line-no">290</span><span id="line-290">            throw illegalArg("hash value must not be blank");</span>
+<span class="source-line-no">290</span><span id="line-290">            throw iaex("hash value must not be blank");</span>
 <span class="source-line-no">291</span><span id="line-291">         return "'" + algorithm.trim() + "-" + base64Hash.trim() + "'";</span>
 <span class="source-line-no">292</span><span id="line-292">      }</span>
 <span class="source-line-no">293</span><span id="line-293"></span>
@@ -512,7 +512,7 @@
 <span class="source-line-no">499</span><span id="line-499">         assertArgNotNull("name", name);</span>
 <span class="source-line-no">500</span><span id="line-500">         var n = name.trim();</span>
 <span class="source-line-no">501</span><span id="line-501">         if (n.isEmpty())</span>
-<span class="source-line-no">502</span><span id="line-502">            throw illegalArg("directive name must not be blank");</span>
+<span class="source-line-no">502</span><span id="line-502">            throw iaex("directive name must not be blank");</span>
 <span class="source-line-no">503</span><span id="line-503">         directives.put(n, new ArrayList&lt;&gt;(Arrays.asList(sources)));</span>
 <span class="source-line-no">504</span><span id="line-504">         return this;</span>
 <span class="source-line-no">505</span><span id="line-505">      }</span>

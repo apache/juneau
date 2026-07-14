@@ -29,12 +29,12 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.httppart;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.httppart.HttpPartType.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.httppart.HttpPartType.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.util.stream.*;</span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100"> *</span>
 <span class="source-line-no">101</span><span id="line-101"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='jc'&gt;{@link RequestPathParam}</span>
-<span class="source-line-no">103</span><span id="line-103"> *    &lt;li class='ja'&gt;{@link org.apache.juneau.http.Path}</span>
+<span class="source-line-no">103</span><span id="line-103"> *    &lt;li class='ja'&gt;{@link Path}</span>
 <span class="source-line-no">104</span><span id="line-104"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/HttpParts"&gt;HTTP Parts&lt;/a&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> * &lt;/ul&gt;</span>
 <span class="source-line-no">106</span><span id="line-106">*/</span>
@@ -151,7 +151,7 @@
 <span class="source-line-no">138</span><span id="line-138">      @SuppressWarnings({</span>
 <span class="source-line-no">139</span><span id="line-139">         "unchecked" // Type erasure requires unchecked cast</span>
 <span class="source-line-no">140</span><span id="line-140">      })</span>
-<span class="source-line-no">141</span><span id="line-141">      var parentVars = (Map&lt;String,String&gt;)req.getAttribute("juneau.pathVars").orElse(mape());</span>
+<span class="source-line-no">141</span><span id="line-141">      var parentVars = (Map&lt;String,String&gt;)req.getAttribute("juneau.pathVars").orElse(emptyMap());</span>
 <span class="source-line-no">142</span><span id="line-142">      for (var e : parentVars.entrySet())</span>
 <span class="source-line-no">143</span><span id="line-143">         add(e.getKey(), e.getValue());</span>
 <span class="source-line-no">144</span><span id="line-144"></span>
@@ -240,7 +240,7 @@
 <span class="source-line-no">227</span><span id="line-227">      for (var p : pairs) {</span>
 <span class="source-line-no">228</span><span id="line-228">         var name = p.getName();</span>
 <span class="source-line-no">229</span><span id="line-229">         var l = stream(name);</span>
-<span class="source-line-no">230</span><span id="line-230">         var hasAllBlanks = l.allMatch(x -&gt; Utils.e(x.getValue()));</span>
+<span class="source-line-no">230</span><span id="line-230">         var hasAllBlanks = l.allMatch(x -&gt; Shorts.ie(x.getValue()));</span>
 <span class="source-line-no">231</span><span id="line-231">         if (hasAllBlanks) {</span>
 <span class="source-line-no">232</span><span id="line-232">            removeAll(getAll(name));</span>
 <span class="source-line-no">233</span><span id="line-233">            add(new RequestPathParam(req, name, vs.resolve(p.getValue())));</span>
@@ -324,7 +324,7 @@
 <span class="source-line-no">311</span><span id="line-311">    * Returns the path parameter as the specified bean type.</span>
 <span class="source-line-no">312</span><span id="line-312">    *</span>
 <span class="source-line-no">313</span><span id="line-313">    * &lt;p&gt;</span>
-<span class="source-line-no">314</span><span id="line-314">    * Type must have a name specified via the {@link org.apache.juneau.http.Path} annotation</span>
+<span class="source-line-no">314</span><span id="line-314">    * Type must have a name specified via the {@link Path} annotation</span>
 <span class="source-line-no">315</span><span id="line-315">    * and a public constructor that takes in either &lt;c&gt;value&lt;/c&gt; or &lt;c&gt;name,value&lt;/c&gt; as strings.</span>
 <span class="source-line-no">316</span><span id="line-316">    *</span>
 <span class="source-line-no">317</span><span id="line-317">    * @param &lt;T&gt; The bean type to create.</span>
@@ -601,7 +601,7 @@
 <span class="source-line-no">588</span><span id="line-588">   }</span>
 <span class="source-line-no">589</span><span id="line-589"></span>
 <span class="source-line-no">590</span><span id="line-590">   private boolean eq(String s1, String s2) {</span>
-<span class="source-line-no">591</span><span id="line-591">      return Utils.eq(! caseSensitive, s1, s2);  // NOAI</span>
+<span class="source-line-no">591</span><span id="line-591">      return Shorts.eq(! caseSensitive, s1, s2);  // NOAI</span>
 <span class="source-line-no">592</span><span id="line-592">   }</span>
 <span class="source-line-no">593</span><span id="line-593">}</span>
 

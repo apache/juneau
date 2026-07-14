@@ -104,7 +104,7 @@
 <span class="source-line-no">091</span><span id="line-91">   @SuppressWarnings({</span>
 <span class="source-line-no">092</span><span id="line-92">      "java:S1452" // Map&lt;?,?&gt; wildcard return intentional; the key/value types are determined by the JSON content at runtime</span>
 <span class="source-line-no">093</span><span id="line-93">   })</span>
-<span class="source-line-no">094</span><span id="line-94">   java.util.Map&lt;?,?&gt; parseToMap(CharSequence value);</span>
+<span class="source-line-no">094</span><span id="line-94">   Map&lt;?,?&gt; parseToMap(CharSequence value);</span>
 <span class="source-line-no">095</span><span id="line-95"></span>
 <span class="source-line-no">096</span><span id="line-96">   /**</span>
 <span class="source-line-no">097</span><span id="line-97">    * Parses the specified JSON-formatted character sequence into a {@link Collection}.</span>
@@ -123,7 +123,7 @@
 <span class="source-line-no">110</span><span id="line-110">   @SuppressWarnings({</span>
 <span class="source-line-no">111</span><span id="line-111">      "java:S1452" // Collection&lt;?&gt; wildcard return intentional; the element type is determined by the JSON content at runtime</span>
 <span class="source-line-no">112</span><span id="line-112">   })</span>
-<span class="source-line-no">113</span><span id="line-113">   java.util.Collection&lt;?&gt; parseToList(CharSequence value);</span>
+<span class="source-line-no">113</span><span id="line-113">   Collection&lt;?&gt; parseToList(CharSequence value);</span>
 <span class="source-line-no">114</span><span id="line-114"></span>
 <span class="source-line-no">115</span><span id="line-115">   /**</span>
 <span class="source-line-no">116</span><span id="line-116">    * Wraps the specified bean in a {@code BeanMap}.</span>

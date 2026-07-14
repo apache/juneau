@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56"> * {@link java.net.http.HttpClient}), which ships built into the {@code juneau-rest-client} artifact and</span>
 <span class="source-line-no">057</span><span id="line-57"> * requires no extra dependencies on Java 11+.  Pulling in one of the optional transport modules</span>
 <span class="source-line-no">058</span><span id="line-58"> * ({@code juneau-rest-client-apache-httpclient-45}, {@code -apache-httpclient-50}, {@code -okhttp},</span>
-<span class="source-line-no">059</span><span id="line-59"> * {@code -jetty}) registers a higher-priority provider via {@link java.util.ServiceLoader} that takes</span>
+<span class="source-line-no">059</span><span id="line-59"> * {@code -jetty}) registers a higher-priority provider via {@link ServiceLoader} that takes</span>
 <span class="source-line-no">060</span><span id="line-60"> * over automatically.  An explicit {@link Builder#transport(HttpTransport)} call always wins.</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -94,7 +94,7 @@
 <span class="source-line-no">081</span><span id="line-81">      BodyConverter.of(HttpBody.class, TransportBody::of),</span>
 <span class="source-line-no">082</span><span id="line-82">      BodyConverter.of(InputStream.class, is -&gt; TransportBody.of(StreamBody.of(is))),</span>
 <span class="source-line-no">083</span><span id="line-83">      BodyConverter.of(byte[].class, bytes -&gt; TransportBody.of(ByteArrayBody.of(bytes))),</span>
-<span class="source-line-no">084</span><span id="line-84">      BodyConverter.of(java.io.File.class, file -&gt; TransportBody.of(FileBody.of(file)))</span>
+<span class="source-line-no">084</span><span id="line-84">      BodyConverter.of(File.class, file -&gt; TransportBody.of(FileBody.of(file)))</span>
 <span class="source-line-no">085</span><span id="line-85">   );</span>
 <span class="source-line-no">086</span><span id="line-86"></span>
 <span class="source-line-no">087</span><span id="line-87">   final HttpTransport transport;</span>
@@ -247,7 +247,7 @@
 <span class="source-line-no">234</span><span id="line-234">    * @return The configured default serializer, or {@link Optional#empty()} if none was set.</span>
 <span class="source-line-no">235</span><span id="line-235">    */</span>
 <span class="source-line-no">236</span><span id="line-236">   public Optional&lt;Serializer&gt; getDefaultSerializer() {</span>
-<span class="source-line-no">237</span><span id="line-237">      return opt(defaultSerializer);</span>
+<span class="source-line-no">237</span><span id="line-237">      return o(defaultSerializer);</span>
 <span class="source-line-no">238</span><span id="line-238">   }</span>
 <span class="source-line-no">239</span><span id="line-239"></span>
 <span class="source-line-no">240</span><span id="line-240">   /**</span>
@@ -274,7 +274,7 @@
 <span class="source-line-no">261</span><span id="line-261">         if (p.isPresent())</span>
 <span class="source-line-no">262</span><span id="line-262">            return p;</span>
 <span class="source-line-no">263</span><span id="line-263">      }</span>
-<span class="source-line-no">264</span><span id="line-264">      return opt(defaultParser);</span>
+<span class="source-line-no">264</span><span id="line-264">      return o(defaultParser);</span>
 <span class="source-line-no">265</span><span id="line-265">   }</span>
 <span class="source-line-no">266</span><span id="line-266"></span>
 <span class="source-line-no">267</span><span id="line-267">   /**</span>
@@ -296,7 +296,7 @@
 <span class="source-line-no">283</span><span id="line-283">    */</span>
 <span class="source-line-no">284</span><span id="line-284">   public Optional&lt;Serializer&gt; getSerializerForMediaType(String mediaType) {</span>
 <span class="source-line-no">285</span><span id="line-285">      if (mediaType == null || mediaType.isEmpty() || serializers == null)</span>
-<span class="source-line-no">286</span><span id="line-286">         return opte();</span>
+<span class="source-line-no">286</span><span id="line-286">         return oe();</span>
 <span class="source-line-no">287</span><span id="line-287">      return serializers.getSerializer(mediaType);</span>
 <span class="source-line-no">288</span><span id="line-288">   }</span>
 <span class="source-line-no">289</span><span id="line-289"></span>
@@ -317,7 +317,7 @@
 <span class="source-line-no">304</span><span id="line-304">    */</span>
 <span class="source-line-no">305</span><span id="line-305">   public Optional&lt;Parser&gt; getParserForMediaType(String mediaType) {</span>
 <span class="source-line-no">306</span><span id="line-306">      if (mediaType == null || mediaType.isEmpty() || parsers == null)</span>
-<span class="source-line-no">307</span><span id="line-307">         return opte();</span>
+<span class="source-line-no">307</span><span id="line-307">         return oe();</span>
 <span class="source-line-no">308</span><span id="line-308">      return parsers.getParser(mediaType);</span>
 <span class="source-line-no">309</span><span id="line-309">   }</span>
 <span class="source-line-no">310</span><span id="line-310"></span>
@@ -406,7 +406,7 @@
 <span class="source-line-no">393</span><span id="line-393">       * Sets the HTTP transport to use.</span>
 <span class="source-line-no">394</span><span id="line-394">       *</span>
 <span class="source-line-no">395</span><span id="line-395">       * &lt;p&gt;</span>
-<span class="source-line-no">396</span><span id="line-396">       * If not set, {@link RestClient} discovers a transport via {@link java.util.ServiceLoader}.  When no</span>
+<span class="source-line-no">396</span><span id="line-396">       * If not set, {@link RestClient} discovers a transport via {@link ServiceLoader}.  When no</span>
 <span class="source-line-no">397</span><span id="line-397">       * sibling transport module is on the classpath, the built-in {@link JavaHttpTransport} (backed by the JDK's</span>
 <span class="source-line-no">398</span><span id="line-398">       * {@link java.net.http.HttpClient}) is used as the default.</span>
 <span class="source-line-no">399</span><span id="line-399">       *</span>

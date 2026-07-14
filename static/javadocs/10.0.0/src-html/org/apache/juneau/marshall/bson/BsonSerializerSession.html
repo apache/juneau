@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.bson;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.marshall.bson.DataType.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * &lt;/ul&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> *</span>
 <span class="source-line-no">042</span><span id="line-42"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/BsonBasics"&gt;BSON Basics&lt;/a&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Bson"&gt;BSON Basics&lt;/a&gt;</span>
 <span class="source-line-no">044</span><span id="line-44"> * &lt;/ul&gt;</span>
 <span class="source-line-no">045</span><span id="line-45"> */</span>
 <span class="source-line-no">046</span><span id="line-46">@SuppressWarnings({</span>
@@ -363,9 +363,9 @@
 <span class="source-line-no">350</span><span id="line-350">   }</span>
 <span class="source-line-no">351</span><span id="line-351"></span>
 <span class="source-line-no">352</span><span id="line-352">   private static long toEpochMillis(Object o) {</span>
-<span class="source-line-no">353</span><span id="line-353">      if (o instanceof java.util.Date d)</span>
+<span class="source-line-no">353</span><span id="line-353">      if (o instanceof Date d)</span>
 <span class="source-line-no">354</span><span id="line-354">         return d.getTime();</span>
-<span class="source-line-no">355</span><span id="line-355">      if (o instanceof java.util.Calendar c)</span>
+<span class="source-line-no">355</span><span id="line-355">      if (o instanceof Calendar c)</span>
 <span class="source-line-no">356</span><span id="line-356">         return c.getTimeInMillis();</span>
 <span class="source-line-no">357</span><span id="line-357">      if (o instanceof Instant i)</span>
 <span class="source-line-no">358</span><span id="line-358">         return i.toEpochMilli();</span>

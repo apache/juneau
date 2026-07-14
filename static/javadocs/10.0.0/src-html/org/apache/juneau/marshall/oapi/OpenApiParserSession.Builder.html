@@ -32,9 +32,9 @@
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.httppart.HttpPartCollectionFormat.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.httppart.HttpPartDataType.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.httppart.HttpPartFormat.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ObjectUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">import java.io.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.lang.reflect.*;</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics"&gt;OpenApi Basics&lt;/a&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport"&gt;OpenApi Basics&lt;/a&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"></span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;/ul&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> */</span>
@@ -144,7 +144,7 @@
 <span class="source-line-no">131</span><span id="line-131">      if (type == null)</span>
 <span class="source-line-no">132</span><span id="line-132">         type = (ClassMeta&lt;T&gt;)object();</span>
 <span class="source-line-no">133</span><span id="line-133"></span>
-<span class="source-line-no">134</span><span id="line-134">      schema = firstNonNull(schema, getSchema(), DEFAULT_SCHEMA);</span>
+<span class="source-line-no">134</span><span id="line-134">      schema = coalesce(schema, getSchema(), DEFAULT_SCHEMA);</span>
 <span class="source-line-no">135</span><span id="line-135"></span>
 <span class="source-line-no">136</span><span id="line-136">      T t = parseInner(partType, schema, in, type);</span>
 <span class="source-line-no">137</span><span id="line-137">      if (t == null &amp;&amp; type.isPrimitive())</span>
@@ -152,7 +152,7 @@
 <span class="source-line-no">139</span><span id="line-139">      schema.validateOutput(t);</span>
 <span class="source-line-no">140</span><span id="line-140"></span>
 <span class="source-line-no">141</span><span id="line-141">      if (isOptional)</span>
-<span class="source-line-no">142</span><span id="line-142">         t = (T)opt(t);</span>
+<span class="source-line-no">142</span><span id="line-142">         t = (T)o(t);</span>
 <span class="source-line-no">143</span><span id="line-143"></span>
 <span class="source-line-no">144</span><span id="line-144">      return t;</span>
 <span class="source-line-no">145</span><span id="line-145">   }</span>
@@ -181,7 +181,7 @@
 <span class="source-line-no">168</span><span id="line-168">            sType = type;</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
 <span class="source-line-no">170</span><span id="line-170">         if (sType.isOptional())</span>
-<span class="source-line-no">171</span><span id="line-171">            return (T)opt(parseInner(partType, schema, in, sType.getElementType()));</span>
+<span class="source-line-no">171</span><span id="line-171">            return (T)o(parseInner(partType, schema, in, sType.getElementType()));</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
 <span class="source-line-no">173</span><span id="line-173">         var t = schema.getType(sType);</span>
 <span class="source-line-no">174</span><span id="line-174">         if (partType == null)</span>
@@ -197,7 +197,7 @@
 <span class="source-line-no">184</span><span id="line-184">                  return toType(base64Decode(in), type);</span>
 <span class="source-line-no">185</span><span id="line-185">               if (f == DATE || f == DATE_TIME) {</span>
 <span class="source-line-no">186</span><span id="line-186">                  var in2 = in;</span>
-<span class="source-line-no">187</span><span id="line-187">                  return toType(opt(in).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.of(in2).getZonedDateTime()).map(GregorianCalendar::from).orElse(null), type);</span>
+<span class="source-line-no">187</span><span id="line-187">                  return toType(o(in).filter(x1 -&gt; ! isBlank(x1)).map(x -&gt; GranularZonedDateTime.of(in2).getZonedDateTime()).map(GregorianCalendar::from).orElse(null), type);</span>
 <span class="source-line-no">188</span><span id="line-188">               }</span>
 <span class="source-line-no">189</span><span id="line-189">               if (f == BINARY)</span>
 <span class="source-line-no">190</span><span id="line-190">                  return toType(fromHex(in), type);</span>

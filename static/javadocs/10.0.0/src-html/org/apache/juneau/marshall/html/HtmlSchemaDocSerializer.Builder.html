@@ -58,7 +58,7 @@
 <span class="source-line-no">045</span><span id="line-45"> * &lt;/ul&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlBasics"&gt;HTML Basics&lt;/a&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/HtmlSupport"&gt;HTML Basics&lt;/a&gt;</span>
 <span class="source-line-no">049</span><span id="line-49"></span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;/ul&gt;</span>
 <span class="source-line-no">051</span><span id="line-51"> */</span>
@@ -202,7 +202,7 @@
 <span class="source-line-no">189</span><span id="line-189">       *</span>
 <span class="source-line-no">190</span><span id="line-190">       * @param value</span>
 <span class="source-line-no">191</span><span id="line-191">       *    The new value for this property.</span>
-<span class="source-line-no">192</span><span id="line-192">       *    &lt;br&gt;The default is {@link org.apache.juneau.marshall.jsonschema.BasicBeanDefMapper}.</span>
+<span class="source-line-no">192</span><span id="line-192">       *    &lt;br&gt;The default is {@link BasicBeanDefMapper}.</span>
 <span class="source-line-no">193</span><span id="line-193">       * @return This object.</span>
 <span class="source-line-no">194</span><span id="line-194">       */</span>
 <span class="source-line-no">195</span><span id="line-195">      public Builder beanDefMapper(Class&lt;? extends MarshallingDefMapper&gt; value) {</span>
@@ -244,7 +244,7 @@
 <span class="source-line-no">231</span><span id="line-231">      @SuppressWarnings({</span>
 <span class="source-line-no">232</span><span id="line-232">         "unchecked" // Varargs method requires unchecked cast</span>
 <span class="source-line-no">233</span><span id="line-233">      })</span>
-<span class="source-line-no">234</span><span id="line-234">      public Builder widgets(java.lang.Class&lt;? extends org.apache.juneau.marshall.html.HtmlWidget&gt;...values) {</span>
+<span class="source-line-no">234</span><span id="line-234">      public Builder widgets(Class&lt;? extends HtmlWidget&gt;...values) {</span>
 <span class="source-line-no">235</span><span id="line-235">         super.widgets(values);</span>
 <span class="source-line-no">236</span><span id="line-236">         return this;</span>
 <span class="source-line-no">237</span><span id="line-237">      }</span>

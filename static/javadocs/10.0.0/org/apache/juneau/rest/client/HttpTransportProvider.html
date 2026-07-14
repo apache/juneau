@@ -84,7 +84,7 @@ loadScripts(document, 'script');</script>
 
  <p>
  Transport adapter modules (e.g. <code>juneau-rest-client-apache-httpclient-45</code>) register their provider
- via <code>META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider</code>.
+ via <code>META-INF/services/HttpTransportProvider</code>.
 
  <p>
  When no transport is explicitly set, <code>RestClient</code> uses <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> to load all

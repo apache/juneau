@@ -58,8 +58,8 @@
 <span class="source-line-no">045</span><span id="line-45"> * This processor ships in the opt-in {@code juneau-rest-server-reactive} module and is &lt;b&gt;not&lt;/b&gt; wired</span>
 <span class="source-line-no">046</span><span id="line-46"> * into {@code DefaultConfig}. A bare {@code juneau-rest-server} has zero reactive behavior. When the</span>
 <span class="source-line-no">047</span><span id="line-47"> * {@code juneau-rest-server-reactive} jar is on the classpath, its</span>
-<span class="source-line-no">048</span><span id="line-48"> * {@code META-INF/services/org.apache.juneau.rest.server.processor.ResponseProcessor} provider file is discovered</span>
-<span class="source-line-no">049</span><span id="line-49"> * by {@code RestContext} via {@link java.util.ServiceLoader} and this processor is front-loaded ahead of</span>
+<span class="source-line-no">048</span><span id="line-48"> * {@code META-INF/services/ResponseProcessor} provider file is discovered</span>
+<span class="source-line-no">049</span><span id="line-49"> * by {@code RestContext} via {@link ServiceLoader} and this processor is front-loaded ahead of</span>
 <span class="source-line-no">050</span><span id="line-50"> * {@code AsyncResponseProcessor} in the chain &amp;mdash; no {@code @Rest(responseProcessors=...)} entry required.</span>
 <span class="source-line-no">051</span><span id="line-51"> *</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='topic'&gt;What it handles&lt;/h5&gt;</span>
@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75"> *    &lt;li&gt;&lt;b&gt;NDJSON&lt;/b&gt; ({@code application/x-ndjson}, {@code application/jsonl}, {@code application/json5l}) &amp;mdash; each element is</span>
 <span class="source-line-no">076</span><span id="line-76"> *       JSON-encoded on its own line.</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;li&gt;&lt;b&gt;Buffer&lt;/b&gt; (default, any other media type) &amp;mdash; all elements are collected into a</span>
-<span class="source-line-no">078</span><span id="line-78"> *       {@link java.util.List List} and serialized through the normal serializer chain (e.g. a JSON</span>
+<span class="source-line-no">078</span><span id="line-78"> *       {@link List List} and serialized through the normal serializer chain (e.g. a JSON</span>
 <span class="source-line-no">079</span><span id="line-79"> *       array). The collection is wrapped in a {@link CompletableFuture} and handed to the async path,</span>
 <span class="source-line-no">080</span><span id="line-80"> *       so a slow producer never blocks the request thread.</span>
 <span class="source-line-no">081</span><span id="line-81"> * &lt;/ul&gt;</span>
@@ -298,7 +298,7 @@
 <span class="source-line-no">285</span><span id="line-285">         SseSerializer.DEFAULT.serialize(ev, w);</span>
 <span class="source-line-no">286</span><span id="line-286">         return;</span>
 <span class="source-line-no">287</span><span id="line-287">      }</span>
-<span class="source-line-no">288</span><span id="line-288">      var data = element instanceof CharSequence c ? c.toString() : Json.DEFAULT.of(element);</span>
+<span class="source-line-no">288</span><span id="line-288">      var data = element instanceof CharSequence c ? c.toString() : Json.of(element);</span>
 <span class="source-line-no">289</span><span id="line-289">      SseSerializer.DEFAULT.serialize(new SseEvent(null, data), w);</span>
 <span class="source-line-no">290</span><span id="line-290">   }</span>
 <span class="source-line-no">291</span><span id="line-291"></span>
@@ -308,7 +308,7 @@
 <span class="source-line-no">295</span><span id="line-295">   private static void writeNdjsonFrame(FinishablePrintWriter w, Object element) throws SerializeException {</span>
 <span class="source-line-no">296</span><span id="line-296">      if (element == null)</span>
 <span class="source-line-no">297</span><span id="line-297">         return;</span>
-<span class="source-line-no">298</span><span id="line-298">      var json = element instanceof CharSequence c ? c.toString() : Json.DEFAULT.of(element);</span>
+<span class="source-line-no">298</span><span id="line-298">      var json = element instanceof CharSequence c ? c.toString() : Json.of(element);</span>
 <span class="source-line-no">299</span><span id="line-299">      w.write(json);</span>
 <span class="source-line-no">300</span><span id="line-300">      w.write("\n");</span>
 <span class="source-line-no">301</span><span id="line-301">      w.flush();</span>

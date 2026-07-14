@@ -56,12 +56,12 @@
 <span class="source-line-no">043</span><span id="line-43"> *       {@code startConsole=false} to suppress).</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Classpath defaults for &lt;c&gt;jetty.xml&lt;/c&gt; and &lt;c&gt;juneau.cfg&lt;/c&gt; &amp;mdash; a consumer-supplied</span>
 <span class="source-line-no">045</span><span id="line-45"> *       copy on the working-directory or classpath wins via the existing</span>
-<span class="source-line-no">046</span><span id="line-46"> *       {@link org.apache.juneau.microservice.Microservice} resolution chain.</span>
+<span class="source-line-no">046</span><span id="line-46"> *       {@link Microservice} resolution chain.</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
 <span class="source-line-no">049</span><span id="line-49"> * &lt;p&gt;</span>
 <span class="source-line-no">050</span><span id="line-50"> * The supplied root servlet is registered as a {@code @Bean Servlet} in an external bean store and</span>
-<span class="source-line-no">051</span><span id="line-51"> * auto-mounted by {@link org.apache.juneau.microservice.jetty.JettyServerComponent JettyServerComponent}</span>
+<span class="source-line-no">051</span><span id="line-51"> * auto-mounted by {@link JettyServerComponent JettyServerComponent}</span>
 <span class="source-line-no">052</span><span id="line-52"> * at the path declared by its {@link org.apache.juneau.rest.server.Rest @Rest} annotation.  Consumers</span>
 <span class="source-line-no">053</span><span id="line-53"> * who want full control over the bean store / configuration classes / listener wiring should call</span>
 <span class="source-line-no">054</span><span id="line-54"> * {@link Microservice#create()} directly &amp;mdash; this facade is a thin convenience over that builder.</span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">    *</span>
 <span class="source-line-no">088</span><span id="line-88">    * &lt;p&gt;</span>
 <span class="source-line-no">089</span><span id="line-89">    * Constructs the {@link Microservice}, registers the supplied servlet as a {@code @Bean Servlet} so</span>
-<span class="source-line-no">090</span><span id="line-90">    * {@link org.apache.juneau.microservice.jetty.JettyServerComponent JettyServerComponent} auto-mounts</span>
+<span class="source-line-no">090</span><span id="line-90">    * {@link JettyServerComponent JettyServerComponent} auto-mounts</span>
 <span class="source-line-no">091</span><span id="line-91">    * it, applies {@link JettyConfiguration} so Jetty itself is wired, and starts the lifecycle.  The</span>
 <span class="source-line-no">092</span><span id="line-92">    * returned microservice has not yet been {@link Microservice#join() joined}; callers wanting the</span>
 <span class="source-line-no">093</span><span id="line-93">    * standard "start and block forever" loop should chain {@code .join()}.</span>

@@ -99,7 +99,7 @@ loadScripts(document, 'script');</script>
  <p>
  Adapters are discovered via the JDK <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> mechanism. A bridge module (or a
  consumer who wants a custom adapter) ships a
- <code>META-INF/services/org.apache.juneau.rest.server.reactive.ReactiveStreamsAdapter</code> file listing the
+ <code>META-INF/services/ReactiveStreamsAdapter</code> file listing the
  implementation class names. The <a href="ReactiveResponseProcessor.html" title="class in org.apache.juneau.rest.server.reactive"><code>ReactiveResponseProcessor</code></a> loads the providers once (lazily,
  at first use) and skips any provider whose backing library is absent from the runtime classpath
  (a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/NoClassDefFoundError.html" title="class or interface in java.lang" class="external-link"><code>NoClassDefFoundError</code></a> / <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceConfigurationError.html" title="class or interface in java.util" class="external-link"><code>ServiceConfigurationError</code></a> on instantiation is swallowed).

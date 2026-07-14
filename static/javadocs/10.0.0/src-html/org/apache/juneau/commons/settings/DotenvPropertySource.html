@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.settings;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.nio.file.*;</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68">   public PropertyLookupResult get(String name) {</span>
 <span class="source-line-no">069</span><span id="line-69">      var values = map.updateAndGet(existing -&gt; existing != null ? existing : load(path));</span>
 <span class="source-line-no">070</span><span id="line-70">      var value = values.get(name);</span>
-<span class="source-line-no">071</span><span id="line-71">      return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(opt(value));</span>
+<span class="source-line-no">071</span><span id="line-71">      return value == null ? PropertyLookupResult.missing() : PropertyLookupResult.present(o(value));</span>
 <span class="source-line-no">072</span><span id="line-72">   }</span>
 <span class="source-line-no">073</span><span id="line-73"></span>
 <span class="source-line-no">074</span><span id="line-74">   @SuppressWarnings({</span>

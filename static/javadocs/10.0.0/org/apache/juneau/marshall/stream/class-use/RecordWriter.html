@@ -421,15 +421,190 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code><a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Marshaller.</span><code><a href="../../marshaller/Marshaller.html#toArrayRecords(java.lang.Object)" class="member-name-link">toArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Bson.</span><code><a href="../../marshaller/Bson.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
 <div class="col-last even-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Bson.html#DEFAULT"><code>Bson.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Cbor.</span><code><a href="../../marshaller/Cbor.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Cbor.html#DEFAULT"><code>Cbor.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Jcs.</span><code><a href="../../marshaller/Jcs.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Jcs.html#DEFAULT"><code>Jcs.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json.</span><code><a href="../../marshaller/Json.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5.</span><code><a href="../../marshaller/Json5.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json5l.</span><code><a href="../../marshaller/Json5l.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Json5l.html#DEFAULT"><code>Json5l.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/MsgPack.html#DEFAULT"><code>MsgPack.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Parquet.</span><code><a href="../../marshaller/Parquet.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Parquet.html#DEFAULT"><code>Parquet.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Yaml.</span><code><a href="../../marshaller/Yaml.html#ofArrayRecords(java.lang.Object)" class="member-name-link">ofArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level wire array using the <a href="../../marshaller/Yaml.html#DEFAULT"><code>Yaml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Bson.</span><code><a href="../../marshaller/Bson.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Bson.html#DEFAULT"><code>Bson.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Cbor.</span><code><a href="../../marshaller/Cbor.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Cbor.html#DEFAULT"><code>Cbor.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Csv.</span><code><a href="../../marshaller/Csv.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Csv.html#DEFAULT"><code>Csv.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Hjson.</span><code><a href="../../marshaller/Hjson.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Hjson.html#DEFAULT"><code>Hjson.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Hocon.</span><code><a href="../../marshaller/Hocon.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Hocon.html#DEFAULT"><code>Hocon.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Html.</span><code><a href="../../marshaller/Html.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Html.html#DEFAULT"><code>Html.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Ini.</span><code><a href="../../marshaller/Ini.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Ini.html#DEFAULT"><code>Ini.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Jcs.</span><code><a href="../../marshaller/Jcs.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Jcs.html#DEFAULT"><code>Jcs.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json.</span><code><a href="../../marshaller/Json.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Json.html#DEFAULT"><code>Json.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Json5.</span><code><a href="../../marshaller/Json5.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Json5.html#DEFAULT"><code>Json5.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Json5l.</span><code><a href="../../marshaller/Json5l.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Json5l.html#DEFAULT"><code>Json5l.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Jsonl.</span><code><a href="../../marshaller/Jsonl.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Jsonl.html#DEFAULT"><code>Jsonl.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Markdown.</span><code><a href="../../marshaller/Markdown.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Markdown.html#DEFAULT"><code>Markdown.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">MarkdownDoc.</span><code><a href="../../marshaller/MarkdownDoc.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/MarkdownDoc.html#DEFAULT"><code>MarkdownDoc.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">MsgPack.</span><code><a href="../../marshaller/MsgPack.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/MsgPack.html#DEFAULT"><code>MsgPack.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">OpenApi.</span><code><a href="../../marshaller/OpenApi.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/OpenApi.html#DEFAULT"><code>OpenApi.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Parquet.</span><code><a href="../../marshaller/Parquet.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Parquet.html#DEFAULT"><code>Parquet.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">PlainText.</span><code><a href="../../marshaller/PlainText.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/PlainText.html#DEFAULT"><code>PlainText.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Prototext.</span><code><a href="../../marshaller/Prototext.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Prototext.html#DEFAULT"><code>Prototext.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Sse.</span><code><a href="../../marshaller/Sse.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Sse.html#DEFAULT"><code>Sse.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Toml.</span><code><a href="../../marshaller/Toml.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Toml.html#DEFAULT"><code>Toml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Uon.</span><code><a href="../../marshaller/Uon.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Uon.html#DEFAULT"><code>Uon.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">UrlEncoding.</span><code><a href="../../marshaller/UrlEncoding.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/UrlEncoding.html#DEFAULT"><code>UrlEncoding.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Xml.</span><code><a href="../../marshaller/Xml.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Xml.html#DEFAULT"><code>Xml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Yaml.</span><code><a href="../../marshaller/Yaml.html#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="../../marshaller/Yaml.html#DEFAULT"><code>Yaml.DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Marshaller.</span><code><a href="../../marshaller/Marshaller.html#writeArrayRecords(java.lang.Object)" class="member-name-link">writeArrayRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color">
 <div class="block">Opens a <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> that wraps each written value as one element of a top-level
  wire array.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Marshaller.</span><code><a href="../../marshaller/Marshaller.html#toRecords(java.lang.Object)" class="member-name-link">toRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Marshaller.</span><code><a href="../../marshaller/Marshaller.html#writeRecords(java.lang.Object)" class="member-name-link">writeRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Opens a low-level <a href="../RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor that emits each whole value as a record.</div>
 </div>
 </div>

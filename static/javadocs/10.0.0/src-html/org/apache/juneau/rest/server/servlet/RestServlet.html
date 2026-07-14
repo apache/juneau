@@ -32,8 +32,8 @@
 <span class="source-line-no">019</span><span id="line-19">import static jakarta.servlet.http.HttpServletResponse.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.util.logging.Level.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import java.io.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import java.text.*;</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> * &lt;/ul&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> * &lt;/ul&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> *</span>
 <span class="source-line-no">066</span><span id="line-66"> * @serial exclude</span>
@@ -207,7 +207,7 @@
 <span class="source-line-no">194</span><span id="line-194">      // @formatter:off</span>
 <span class="source-line-no">195</span><span id="line-195">      return rstream(AP.find(Rest.class, ci))</span>
 <span class="source-line-no">196</span><span id="line-196">         .map(x -&gt; x.inner().path())</span>
-<span class="source-line-no">197</span><span id="line-197">         .filter(Utils::ne)</span>
+<span class="source-line-no">197</span><span id="line-197">         .filter(Shorts::ine)</span>
 <span class="source-line-no">198</span><span id="line-198">         .map(StringUtils::trimSlashes)</span>
 <span class="source-line-no">199</span><span id="line-199">         .findFirst()</span>
 <span class="source-line-no">200</span><span id="line-200">         .orElse("");</span>
@@ -347,7 +347,7 @@
 <span class="source-line-no">334</span><span id="line-334">         getContext().execute(this, r1, r2);</span>
 <span class="source-line-no">335</span><span id="line-335"></span>
 <span class="source-line-no">336</span><span id="line-336">      } catch (Exception e) {</span>
-<span class="source-line-no">337</span><span id="line-337">         r2.sendError(SC_INTERNAL_SERVER_ERROR, lm(e));</span>
+<span class="source-line-no">337</span><span id="line-337">         r2.sendError(SC_INTERNAL_SERVER_ERROR, localizedMessage(e));</span>
 <span class="source-line-no">338</span><span id="line-338">      }</span>
 <span class="source-line-no">339</span><span id="line-339">   }</span>
 <span class="source-line-no">340</span><span id="line-340"></span>

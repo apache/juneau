@@ -32,10 +32,10 @@
 <span class="source-line-no">019</span><span id="line-19">import java.io.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import java.util.function.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.test.assertions.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.commons.function.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.http.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.commons.function.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.http.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.test.assertions.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
 <span class="source-line-no">027</span><span id="line-27">/**</span>
 <span class="source-line-no">028</span><span id="line-28"> * Used for fluent assertion calls against {@link HttpProtocolVersion} objects.</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> *    &lt;ul class='javatreec'&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asString() asString()}</span>
 <span class="source-line-no">062</span><span id="line-62"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asString(ThrowingFunction) asString(ThrowingFunction)}</span>
-<span class="source-line-no">063</span><span id="line-63"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asTransformed(java.util.function.UnaryOperator) asTransformed(UnaryOperator)}</span>
+<span class="source-line-no">063</span><span id="line-63"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asTransformed(UnaryOperator) asTransformed(UnaryOperator)}</span>
 <span class="source-line-no">064</span><span id="line-64"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asAny() asAny()}</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;/ul&gt;</span>
@@ -187,7 +187,7 @@
 <span class="source-line-no">174</span><span id="line-174">   }</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
 <span class="source-line-no">176</span><span id="line-176">   @Override /* Overridden from Assertion */</span>
-<span class="source-line-no">177</span><span id="line-177">   public FluentProtocolVersionAssertion&lt;R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">177</span><span id="line-177">   public FluentProtocolVersionAssertion&lt;R&gt; setThrowable(Class&lt;? extends RuntimeException&gt; value) {</span>
 <span class="source-line-no">178</span><span id="line-178">      super.setThrowable(value);</span>
 <span class="source-line-no">179</span><span id="line-179">      return this;</span>
 <span class="source-line-no">180</span><span id="line-180">   }</span>

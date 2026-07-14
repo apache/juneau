@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.internal.ConverterUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -389,7 +389,7 @@
 <span class="source-line-no">376</span><span id="line-376">    *</span>
 <span class="source-line-no">377</span><span id="line-377">    * @return The callbacks map.</span>
 <span class="source-line-no">378</span><span id="line-378">    */</span>
-<span class="source-line-no">379</span><span id="line-379">   public Map&lt;String,Callback&gt; getCallbacks() { return nullIfEmpty(callbacks); }</span>
+<span class="source-line-no">379</span><span id="line-379">   public Map&lt;String,Callback&gt; getCallbacks() { return nie(callbacks); }</span>
 <span class="source-line-no">380</span><span id="line-380"></span>
 <span class="source-line-no">381</span><span id="line-381">   /**</span>
 <span class="source-line-no">382</span><span id="line-382">    * Returns the deprecated flag.</span>
@@ -440,7 +440,7 @@
 <span class="source-line-no">427</span><span id="line-427">    *</span>
 <span class="source-line-no">428</span><span id="line-428">    * @return The parameters list.</span>
 <span class="source-line-no">429</span><span id="line-429">    */</span>
-<span class="source-line-no">430</span><span id="line-430">   public List&lt;Parameter&gt; getParameters() { return nullIfEmpty(parameters); }</span>
+<span class="source-line-no">430</span><span id="line-430">   public List&lt;Parameter&gt; getParameters() { return nie(parameters); }</span>
 <span class="source-line-no">431</span><span id="line-431"></span>
 <span class="source-line-no">432</span><span id="line-432">   /**</span>
 <span class="source-line-no">433</span><span id="line-433">    * Returns the request body.</span>
@@ -475,21 +475,21 @@
 <span class="source-line-no">462</span><span id="line-462">    *</span>
 <span class="source-line-no">463</span><span id="line-463">    * @return The responses map.</span>
 <span class="source-line-no">464</span><span id="line-464">    */</span>
-<span class="source-line-no">465</span><span id="line-465">   public Map&lt;String,Response&gt; getResponses() { return nullIfEmpty(responses); }</span>
+<span class="source-line-no">465</span><span id="line-465">   public Map&lt;String,Response&gt; getResponses() { return nie(responses); }</span>
 <span class="source-line-no">466</span><span id="line-466"></span>
 <span class="source-line-no">467</span><span id="line-467">   /**</span>
 <span class="source-line-no">468</span><span id="line-468">    * Returns the security requirements list.</span>
 <span class="source-line-no">469</span><span id="line-469">    *</span>
 <span class="source-line-no">470</span><span id="line-470">    * @return The security requirements list.</span>
 <span class="source-line-no">471</span><span id="line-471">    */</span>
-<span class="source-line-no">472</span><span id="line-472">   public List&lt;SecurityRequirement&gt; getSecurity() { return nullIfEmpty(security); }</span>
+<span class="source-line-no">472</span><span id="line-472">   public List&lt;SecurityRequirement&gt; getSecurity() { return nie(security); }</span>
 <span class="source-line-no">473</span><span id="line-473"></span>
 <span class="source-line-no">474</span><span id="line-474">   /**</span>
 <span class="source-line-no">475</span><span id="line-475">    * Returns the servers list.</span>
 <span class="source-line-no">476</span><span id="line-476">    *</span>
 <span class="source-line-no">477</span><span id="line-477">    * @return The servers list.</span>
 <span class="source-line-no">478</span><span id="line-478">    */</span>
-<span class="source-line-no">479</span><span id="line-479">   public List&lt;Server&gt; getServers() { return nullIfEmpty(servers); }</span>
+<span class="source-line-no">479</span><span id="line-479">   public List&lt;Server&gt; getServers() { return nie(servers); }</span>
 <span class="source-line-no">480</span><span id="line-480"></span>
 <span class="source-line-no">481</span><span id="line-481">   /**</span>
 <span class="source-line-no">482</span><span id="line-482">    * Returns the summary.</span>
@@ -503,24 +503,24 @@
 <span class="source-line-no">490</span><span id="line-490">    *</span>
 <span class="source-line-no">491</span><span id="line-491">    * @return The tags list.</span>
 <span class="source-line-no">492</span><span id="line-492">    */</span>
-<span class="source-line-no">493</span><span id="line-493">   public List&lt;String&gt; getTags() { return nullIfEmpty(tags); }</span>
+<span class="source-line-no">493</span><span id="line-493">   public List&lt;String&gt; getTags() { return nie(tags); }</span>
 <span class="source-line-no">494</span><span id="line-494"></span>
 <span class="source-line-no">495</span><span id="line-495">   @Override /* Overridden from OpenApiElement */</span>
 <span class="source-line-no">496</span><span id="line-496">   public Set&lt;String&gt; keySet() {</span>
 <span class="source-line-no">497</span><span id="line-497">      // @formatter:off</span>
-<span class="source-line-no">498</span><span id="line-498">      var s = setb(String.class)</span>
-<span class="source-line-no">499</span><span id="line-499">         .addIf(ne(callbacks), PROP_callbacks)</span>
+<span class="source-line-no">498</span><span id="line-498">      var s = stb(String.class)</span>
+<span class="source-line-no">499</span><span id="line-499">         .addIf(ine(callbacks), PROP_callbacks)</span>
 <span class="source-line-no">500</span><span id="line-500">         .addIf(nn(deprecated), PROP_deprecated)</span>
 <span class="source-line-no">501</span><span id="line-501">         .addIf(nn(description), PROP_description)</span>
 <span class="source-line-no">502</span><span id="line-502">         .addIf(nn(externalDocs), PROP_externalDocs)</span>
 <span class="source-line-no">503</span><span id="line-503">         .addIf(nn(operationId), PROP_operationId)</span>
-<span class="source-line-no">504</span><span id="line-504">         .addIf(ne(parameters), PROP_parameters)</span>
+<span class="source-line-no">504</span><span id="line-504">         .addIf(ine(parameters), PROP_parameters)</span>
 <span class="source-line-no">505</span><span id="line-505">         .addIf(nn(requestBody), PROP_requestBody)</span>
-<span class="source-line-no">506</span><span id="line-506">         .addIf(ne(responses), PROP_responses)</span>
-<span class="source-line-no">507</span><span id="line-507">         .addIf(ne(security), PROP_security)</span>
-<span class="source-line-no">508</span><span id="line-508">         .addIf(ne(servers), PROP_servers)</span>
+<span class="source-line-no">506</span><span id="line-506">         .addIf(ine(responses), PROP_responses)</span>
+<span class="source-line-no">507</span><span id="line-507">         .addIf(ine(security), PROP_security)</span>
+<span class="source-line-no">508</span><span id="line-508">         .addIf(ine(servers), PROP_servers)</span>
 <span class="source-line-no">509</span><span id="line-509">         .addIf(nn(summary), PROP_summary)</span>
-<span class="source-line-no">510</span><span id="line-510">         .addIf(ne(tags), PROP_tags)</span>
+<span class="source-line-no">510</span><span id="line-510">         .addIf(ine(tags), PROP_tags)</span>
 <span class="source-line-no">511</span><span id="line-511">         .build();</span>
 <span class="source-line-no">512</span><span id="line-512">      // @formatter:on</span>
 <span class="source-line-no">513</span><span id="line-513">      return new MultiSet&lt;&gt;(s, super.keySet());</span>

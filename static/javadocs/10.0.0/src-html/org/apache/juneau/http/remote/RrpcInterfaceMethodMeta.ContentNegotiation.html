@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.remote;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.marshall.Constants.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"></span>
 <span class="source-line-no">030</span><span id="line-30">/**</span>
 <span class="source-line-no">031</span><span id="line-31"> * Holds resolved metadata for a single method on an interface annotated with</span>
-<span class="source-line-no">032</span><span id="line-32"> * {@link org.apache.juneau.http.remote.Remote}.</span>
+<span class="source-line-no">032</span><span id="line-32"> * {@link Remote}.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> * Extracted at interface-discovery time (see {@link RrpcInterfaceMeta}) and cached for</span>
@@ -230,7 +230,7 @@
 <span class="source-line-no">217</span><span id="line-217">   }</span>
 <span class="source-line-no">218</span><span id="line-218"></span>
 <span class="source-line-no">219</span><span id="line-219">   /**</span>
-<span class="source-line-no">220</span><span id="line-220">    * Locates the single {@link org.apache.juneau.http.Url @Url} parameter on the method.</span>
+<span class="source-line-no">220</span><span id="line-220">    * Locates the single {@link Url @Url} parameter on the method.</span>
 <span class="source-line-no">221</span><span id="line-221">    *</span>
 <span class="source-line-no">222</span><span id="line-222">    * &lt;p&gt;</span>
 <span class="source-line-no">223</span><span id="line-223">    * Validated at proxy-build time: at most one {@code @Url} parameter is permitted per method.</span>
@@ -245,7 +245,7 @@
 <span class="source-line-no">232</span><span id="line-232">      for (var i = 0; i &lt; params.length; i++) {</span>
 <span class="source-line-no">233</span><span id="line-233">         if (params[i].getAnnotation(Url.class) != null) {</span>
 <span class="source-line-no">234</span><span id="line-234">            if (index != -1)</span>
-<span class="source-line-no">235</span><span id="line-235">               throw illegalArg("Method {0}.{1} declares more than one @Url parameter; at most one is allowed",</span>
+<span class="source-line-no">235</span><span id="line-235">               throw iaex("Method {0}.{1} declares more than one @Url parameter; at most one is allowed",</span>
 <span class="source-line-no">236</span><span id="line-236">                  method.getDeclaringClass().getName(), method.getName());</span>
 <span class="source-line-no">237</span><span id="line-237">            index = i;</span>
 <span class="source-line-no">238</span><span id="line-238">         }</span>
@@ -259,10 +259,10 @@
 <span class="source-line-no">246</span><span id="line-246">    * &lt;p&gt;</span>
 <span class="source-line-no">247</span><span id="line-247">    * Enforces body-mode exclusivity and detects misuse at proxy-build time:</span>
 <span class="source-line-no">248</span><span id="line-248">    * &lt;ul&gt;</span>
-<span class="source-line-no">249</span><span id="line-249">    *    &lt;li&gt;A {@code @Multipart} method must declare at least one {@link org.apache.juneau.http.Part @Part} parameter.</span>
-<span class="source-line-no">250</span><span id="line-250">    *    &lt;li&gt;A {@code @Multipart} method must not also declare a single {@link org.apache.juneau.http.Content @Content}</span>
+<span class="source-line-no">249</span><span id="line-249">    *    &lt;li&gt;A {@code @Multipart} method must declare at least one {@link Part @Part} parameter.</span>
+<span class="source-line-no">250</span><span id="line-250">    *    &lt;li&gt;A {@code @Multipart} method must not also declare a single {@link Content @Content}</span>
 <span class="source-line-no">251</span><span id="line-251">    *       body (parameter-level or method-level) &amp;mdash; a method is either multipart or single-body, not both.</span>
-<span class="source-line-no">252</span><span id="line-252">    *    &lt;li&gt;A {@link org.apache.juneau.http.Part @Part} parameter is only valid on a {@code @Multipart} method.</span>
+<span class="source-line-no">252</span><span id="line-252">    *    &lt;li&gt;A {@link Part @Part} parameter is only valid on a {@code @Multipart} method.</span>
 <span class="source-line-no">253</span><span id="line-253">    * &lt;/ul&gt;</span>
 <span class="source-line-no">254</span><span id="line-254">    *</span>
 <span class="source-line-no">255</span><span id="line-255">    * @param method The method to validate.</span>
@@ -282,11 +282,11 @@
 <span class="source-line-no">269</span><span id="line-269">      var mn = method.getName();</span>
 <span class="source-line-no">270</span><span id="line-270">      if (multipart) {</span>
 <span class="source-line-no">271</span><span id="line-271">         if (hasContentParam)</span>
-<span class="source-line-no">272</span><span id="line-272">            throw illegalArg("Method {0}.{1} declares both @Multipart and @Content; a method is either multipart or single-@Content, not both", cn, mn);</span>
+<span class="source-line-no">272</span><span id="line-272">            throw iaex("Method {0}.{1} declares both @Multipart and @Content; a method is either multipart or single-@Content, not both", cn, mn);</span>
 <span class="source-line-no">273</span><span id="line-273">         if (partCount == 0)</span>
-<span class="source-line-no">274</span><span id="line-274">            throw illegalArg("Method {0}.{1} is annotated @Multipart but declares no @Part parameters", cn, mn);</span>
+<span class="source-line-no">274</span><span id="line-274">            throw iaex("Method {0}.{1} is annotated @Multipart but declares no @Part parameters", cn, mn);</span>
 <span class="source-line-no">275</span><span id="line-275">      } else if (partCount &gt; 0) {</span>
-<span class="source-line-no">276</span><span id="line-276">         throw illegalArg("Method {0}.{1} declares @Part parameter(s) but is not annotated @Multipart", cn, mn);</span>
+<span class="source-line-no">276</span><span id="line-276">         throw iaex("Method {0}.{1} declares @Part parameter(s) but is not annotated @Multipart", cn, mn);</span>
 <span class="source-line-no">277</span><span id="line-277">      }</span>
 <span class="source-line-no">278</span><span id="line-278">   }</span>
 <span class="source-line-no">279</span><span id="line-279"></span>
@@ -397,7 +397,7 @@
 <span class="source-line-no">384</span><span id="line-384">    * &lt;p&gt;</span>
 <span class="source-line-no">385</span><span id="line-385">    * Sourced from {@code @RemoteOp(baseUrl=...)} / the verb annotations' {@code baseUrl} (resolved through</span>
 <span class="source-line-no">386</span><span id="line-386">    * {@link org.apache.juneau.commons.svl.VarResolver#DEFAULT}).  Takes precedence over the interface-level</span>
-<span class="source-line-no">387</span><span id="line-387">    * {@link RrpcInterfaceMeta#getBaseUrl()} but is itself overridden by an {@link org.apache.juneau.http.Url @Url}</span>
+<span class="source-line-no">387</span><span id="line-387">    * {@link RrpcInterfaceMeta#getBaseUrl()} but is itself overridden by an {@link Url @Url}</span>
 <span class="source-line-no">388</span><span id="line-388">    * parameter; preserves the interface base path + method path + templating.</span>
 <span class="source-line-no">389</span><span id="line-389">    *</span>
 <span class="source-line-no">390</span><span id="line-390">    * @return The base/host override. Never &lt;jk&gt;null&lt;/jk&gt;, but may be empty.</span>
@@ -435,7 +435,7 @@
 <span class="source-line-no">422</span><span id="line-422">   }</span>
 <span class="source-line-no">423</span><span id="line-423"></span>
 <span class="source-line-no">424</span><span id="line-424">   /**</span>
-<span class="source-line-no">425</span><span id="line-425">    * Returns the zero-based index of the method's single {@link org.apache.juneau.http.Url @Url} parameter,</span>
+<span class="source-line-no">425</span><span id="line-425">    * Returns the zero-based index of the method's single {@link Url @Url} parameter,</span>
 <span class="source-line-no">426</span><span id="line-426">    * or {@code -1} if the method declares none.</span>
 <span class="source-line-no">427</span><span id="line-427">    *</span>
 <span class="source-line-no">428</span><span id="line-428">    * &lt;p&gt;</span>
@@ -451,12 +451,12 @@
 <span class="source-line-no">438</span><span id="line-438"></span>
 <span class="source-line-no">439</span><span id="line-439">   /**</span>
 <span class="source-line-no">440</span><span id="line-440">    * Returns whether this method assembles a {@code multipart/form-data} request body from its</span>
-<span class="source-line-no">441</span><span id="line-441">    * {@link org.apache.juneau.http.Part @Part} parameters.</span>
+<span class="source-line-no">441</span><span id="line-441">    * {@link Part @Part} parameters.</span>
 <span class="source-line-no">442</span><span id="line-442">    *</span>
 <span class="source-line-no">443</span><span id="line-443">    * &lt;p&gt;</span>
 <span class="source-line-no">444</span><span id="line-444">    * Sourced from the presence of a method-level {@link Multipart @Multipart} annotation.  Validated at proxy-build</span>
 <span class="source-line-no">445</span><span id="line-445">    * time: a multipart method must declare at least one {@code @Part} parameter and must not also declare a single</span>
-<span class="source-line-no">446</span><span id="line-446">    * {@link org.apache.juneau.http.Content @Content} body.</span>
+<span class="source-line-no">446</span><span id="line-446">    * {@link Content @Content} body.</span>
 <span class="source-line-no">447</span><span id="line-447">    *</span>
 <span class="source-line-no">448</span><span id="line-448">    * @return &lt;jk&gt;true&lt;/jk&gt; if this is a multipart method.</span>
 <span class="source-line-no">449</span><span id="line-449">    */</span>

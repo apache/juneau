@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-48">OpenApi</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-57">OpenApi</a></span>
 <span class="extends-implements">extends <a href="CharMarshaller.html" title="class in org.apache.juneau.marshall.marshaller">CharMarshaller</a></span></div>
 <div class="block">A pairing of a <a href="../oapi/OpenApiSerializer.html" title="class in org.apache.juneau.marshall.oapi"><code>OpenApiSerializer</code></a> and <a href="../oapi/OpenApiParser.html" title="class in org.apache.juneau.marshall.oapi"><code>OpenApiParser</code></a> into a single class with convenience to/of methods.
 
@@ -93,13 +93,19 @@ loadScripts(document, 'script');</script>
  <p class='bjava'>
    <jc>// Using instance.</jc>
    OpenApi <jv>oapi</jv> = <jk>new</jk> OpenApi();
-   MyPojo <jv>myPojo</jv> = <jv>oapi</jv>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
-   String <jv>string</jv> = <jv>oapi</jv>.of(<jv>myPojo</jv>);
+   MyPojo <jv>myPojo</jv> = <jv>oapi</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+   String <jv>string</jv> = <jv>oapi</jv>.write(<jv>myPojo</jv>);
  </p>
  <p class='bjava'>
    <jc>// Using DEFAULT instance.</jc>
-   MyPojo <jv>myPojo</jv> = OpenApi.<jsf>DEFAULT</jsf>.to(<jv>string</jv>, MyPojo.<jk>class</jk>);
-   String <jv>string</jv> = OpenApi.<jsf>DEFAULT</jsf>.of(<jv>myPojo</jv>);
+   MyPojo <jv>myPojo</jv> = OpenApi.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
+   String <jv>string</jv> = OpenApi.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
+ </p>
+
+ <p class='bjava'>
+   <jc>// Using static shortcuts.</jc>
+   MyPojo <jv>myPojo</jv> = OpenApi.<jsm>to</jsm>(<jv>string</jv>, MyPojo.<jk>class</jk>);
+   String <jv>string</jv> = OpenApi.<jsm>of</jsm>(<jv>myPojo</jv>);
  </p>
 
  <h5 class='section'>See Also:</h5><ul>
@@ -157,10 +163,33 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Serializes a POJO to a <c>String</c> using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)" class="member-name-link">of</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Serializes a Java object to an OpenApi output.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ofRecords(java.lang.Object)" class="member-name-link">ofRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Opens a low-level <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#to(java.lang.String,java.lang.Class)" class="member-name-link">to</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Parses an input into the specified object type using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#to(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)" class="member-name-link">to</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Parses an input into the specified parameterized object type using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#to(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)" class="member-name-link">to</a><wbr>(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
@@ -169,15 +198,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Parses an OpenApi input object to the specified Java type.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#toRecords(java.lang.Object)" class="member-name-link">toRecords</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Opens a low-level <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor over the specified input using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.marshaller.CharMarshaller">Methods inherited from class&nbsp;org.apache.juneau.marshall.marshaller.<a href="CharMarshaller.html" title="class in org.apache.juneau.marshall.marshaller">CharMarshaller</a></h3>
-<code><a href="CharMarshaller.html#of(java.lang.Object)">of</a>, <a href="CharMarshaller.html#to(java.lang.String,java.lang.Class)">to</a>, <a href="CharMarshaller.html#to(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">to</a></code></div>
+<code><a href="CharMarshaller.html#read(java.lang.String,java.lang.Class)">read</a>, <a href="CharMarshaller.html#read(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="CharMarshaller.html#write(java.lang.Object)">write</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-org.apache.juneau.marshall.marshaller.Marshaller">Methods inherited from class&nbsp;org.apache.juneau.marshall.marshaller.<a href="Marshaller.html" title="class in org.apache.juneau.marshall.marshaller">Marshaller</a></h3>
-<code><a href="Marshaller.html#fromArrayRecords(java.lang.Object)">fromArrayRecords</a>, <a href="Marshaller.html#fromRecords(java.lang.Object)">fromRecords</a>, <a href="Marshaller.html#fromTokens(java.lang.Object)">fromTokens</a>, <a href="Marshaller.html#getParser()">getParser</a>, <a href="Marshaller.html#getSerializer()">getSerializer</a>, <a href="Marshaller.html#of(java.lang.Object,java.lang.Object)">of</a>, <a href="Marshaller.html#to(java.lang.Object,java.lang.Class)">to</a>, <a href="Marshaller.html#to(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">to</a>, <a href="Marshaller.html#toArrayRecords(java.lang.Object)">toArrayRecords</a>, <a href="Marshaller.html#toRecords(java.lang.Object)">toRecords</a>, <a href="Marshaller.html#toTokens(java.lang.Object)">toTokens</a></code></div>
+<code><a href="Marshaller.html#getParser()">getParser</a>, <a href="Marshaller.html#getSerializer()">getSerializer</a>, <a href="Marshaller.html#read(java.lang.Object,java.lang.Class)">read</a>, <a href="Marshaller.html#read(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)">read</a>, <a href="Marshaller.html#readArrayRecords(java.lang.Object)">readArrayRecords</a>, <a href="Marshaller.html#readRecords(java.lang.Object)">readRecords</a>, <a href="Marshaller.html#readTokens(java.lang.Object)">readTokens</a>, <a href="Marshaller.html#write(java.lang.Object,java.lang.Object)">write</a>, <a href="Marshaller.html#writeArrayRecords(java.lang.Object)">writeArrayRecords</a>, <a href="Marshaller.html#writeRecords(java.lang.Object)">writeRecords</a>, <a href="Marshaller.html#writeTokens(java.lang.Object)">writeTokens</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -195,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.marshall.marshaller">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-53">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OpenApi.html" title="class in org.apache.juneau.marshall.marshaller">OpenApi</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-65">DEFAULT</a></span></div>
 <div class="block">Default reusable instance.</div>
 </section>
 </li>
@@ -210,7 +244,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>OpenApi</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-97">OpenApi</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-184">OpenApi</a></span>()</div>
 <div class="block">Constructor.
 
  <p>
@@ -220,7 +254,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.oapi.OpenApiSerializer,org.apache.juneau.marshall.oapi.OpenApiParser)">
 <h3>OpenApi</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-111">OpenApi</a></span><wbr><span class="parameters">(<a href="../oapi/OpenApiSerializer.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializer</a>&nbsp;s,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-198">OpenApi</a></span><wbr><span class="parameters">(<a href="../oapi/OpenApiSerializer.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializer</a>&nbsp;s,
  <a href="../oapi/OpenApiParser.html" title="class in org.apache.juneau.marshall.oapi">OpenApiParser</a>&nbsp;p)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -241,15 +275,120 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="of(java.lang.Object)">
+<h3>of</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-77">of</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span>
+                 throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
+<div class="block">Serializes a POJO to a <c>String</c> using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.
+
+ <p>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>object</code> - The object to serialize.</dd>
+<dt>Returns:</dt>
+<dd>The serialized object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></code> - If a problem occurred trying to convert the output.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="to(java.lang.String,java.lang.Class)">
+<h3>to</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-93">to</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
+                throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
+<div class="block">Parses an input into the specified object type using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.
+
+ <p>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The class type of the object being created.</dd>
+<dt>Parameters:</dt>
+<dd><code>input</code> - The input.</dd>
+<dd><code>type</code> - The object type to create.</dd>
+<dt>Returns:</dt>
+<dd>The parsed object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed input encountered.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="to(java.lang.String,java.lang.reflect.Type,java.lang.reflect.Type...)">
+<h3>to</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-110">to</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>&nbsp;type,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Type.html" title="class or interface in java.lang.reflect" class="external-link">Type</a>...&nbsp;args)</span>
+                throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
+<div class="block">Parses an input into the specified parameterized object type using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.
+
+ <p>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The class type of the object to create.</dd>
+<dt>Parameters:</dt>
+<dd><code>input</code> - The input.</dd>
+<dd><code>type</code> - The object type to create.</dd>
+<dd><code>args</code> - The type arguments of the class if it's a collection or map.</dd>
+<dt>Returns:</dt>
+<dd>The parsed object.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></code> - Malformed input encountered.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="toRecords(java.lang.Object)">
+<h3>toRecords</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-124">toRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Opens a low-level <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> cursor over the specified input using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.
+
+ <p>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.readRecords(<jv>input</jv>)</c>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>input</code> - The input.</dd>
+<dt>Returns:</dt>
+<dd>A new <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If a problem occurred opening the underlying input.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="ofRecords(java.lang.Object)">
+<h3>ofRecords</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream">RecordWriter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-138">ofRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;output)</span>
+                              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Opens a low-level <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a> cursor over the specified output using the <a href="#DEFAULT"><code>DEFAULT</code></a> marshaller.
+
+ <p>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.writeRecords(<jv>output</jv>)</c>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>output</code> - The output.</dd>
+<dt>Returns:</dt>
+<dd>A new <a href="../stream/RecordWriter.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordWriter</code></a>.</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - If a problem occurred opening the underlying output.</dd>
+</dl>
+</section>
+</li>
+<li>
 <section class="detail" id="of(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)">
 <h3>of</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-65">of</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-152">of</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span>
                  throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>
 <div class="block">Serializes a Java object to an OpenApi output.
 
  <p>
- A shortcut for calling <c><jsf>DEFAULT</jsf>.of(<jv>output</jv>)</c>.</div>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>output</jv>)</c>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>schema</code> - The part schema.  Can be <jk>null</jk>.</dd>
@@ -264,14 +403,14 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="to(org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.String,java.lang.Class)">
 <h3>to</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-83">to</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/marshaller/OpenApi.html#line-170">to</a></span><wbr><span class="parameters">(<a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type)</span>
                 throws <span class="exceptions"><a href="../parser/ParseException.html" title="class in org.apache.juneau.marshall.parser">ParseException</a></span></div>
 <div class="block">Parses an OpenApi input object to the specified Java type.
 
  <p>
- A shortcut for calling <c><jsf>DEFAULT</jsf>.to(<jv>input</jv>, <jv>type</jv>)</c>.</div>
+ A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - The class type of the object being created.</dd>

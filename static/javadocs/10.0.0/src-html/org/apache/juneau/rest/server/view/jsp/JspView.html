@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.jsp;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -90,7 +90,7 @@
 <span class="source-line-no">077</span><span id="line-77">    */</span>
 <span class="source-line-no">078</span><span id="line-78">   public static JspView of(String templateName) {</span>
 <span class="source-line-no">079</span><span id="line-79">      if (isBlank(templateName))</span>
-<span class="source-line-no">080</span><span id="line-80">         throw illegalArg("templateName must not be null or blank");</span>
+<span class="source-line-no">080</span><span id="line-80">         throw iaex("templateName must not be null or blank");</span>
 <span class="source-line-no">081</span><span id="line-81">      return new JspView(templateName, Map.of(), Map.of());</span>
 <span class="source-line-no">082</span><span id="line-82">   }</span>
 <span class="source-line-no">083</span><span id="line-83"></span>
@@ -119,9 +119,9 @@
 <span class="source-line-no">106</span><span id="line-106">    */</span>
 <span class="source-line-no">107</span><span id="line-107">   public JspView attr(String key, Object value) {</span>
 <span class="source-line-no">108</span><span id="line-108">      if (isBlank(key))</span>
-<span class="source-line-no">109</span><span id="line-109">         throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">109</span><span id="line-109">         throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">110</span><span id="line-110">      if (value == null)</span>
-<span class="source-line-no">111</span><span id="line-111">         throw illegalArg("attribute value must not be null (attribute ''{0}'')", key);</span>
+<span class="source-line-no">111</span><span id="line-111">         throw iaex("attribute value must not be null (attribute ''{0}'')", key);</span>
 <span class="source-line-no">112</span><span id="line-112">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">113</span><span id="line-113">      copy.put(key, value);</span>
 <span class="source-line-no">114</span><span id="line-114">      return new JspView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -141,9 +141,9 @@
 <span class="source-line-no">128</span><span id="line-128">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">129</span><span id="line-129">      values.forEach((k, v) -&gt; {</span>
 <span class="source-line-no">130</span><span id="line-130">         if (isBlank(k))</span>
-<span class="source-line-no">131</span><span id="line-131">            throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">131</span><span id="line-131">            throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">132</span><span id="line-132">         if (v == null)</span>
-<span class="source-line-no">133</span><span id="line-133">            throw illegalArg("attribute value must not be null (attribute ''{0}'')", k);</span>
+<span class="source-line-no">133</span><span id="line-133">            throw iaex("attribute value must not be null (attribute ''{0}'')", k);</span>
 <span class="source-line-no">134</span><span id="line-134">         copy.put(k, v);</span>
 <span class="source-line-no">135</span><span id="line-135">      });</span>
 <span class="source-line-no">136</span><span id="line-136">      return new JspView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -166,9 +166,9 @@
 <span class="source-line-no">153</span><span id="line-153">    */</span>
 <span class="source-line-no">154</span><span id="line-154">   public JspView header(String name, String value) {</span>
 <span class="source-line-no">155</span><span id="line-155">      if (isBlank(name))</span>
-<span class="source-line-no">156</span><span id="line-156">         throw illegalArg("header name must not be null or blank");</span>
+<span class="source-line-no">156</span><span id="line-156">         throw iaex("header name must not be null or blank");</span>
 <span class="source-line-no">157</span><span id="line-157">      if (value == null)</span>
-<span class="source-line-no">158</span><span id="line-158">         throw illegalArg("header value must not be null (header ''{0}'')", name);</span>
+<span class="source-line-no">158</span><span id="line-158">         throw iaex("header value must not be null (header ''{0}'')", name);</span>
 <span class="source-line-no">159</span><span id="line-159">      var copy = new LinkedHashMap&lt;&gt;(responseHeaders);</span>
 <span class="source-line-no">160</span><span id="line-160">      copy.put(name, value);</span>
 <span class="source-line-no">161</span><span id="line-161">      return new JspView(templateName, attributes, Map.copyOf(copy));</span>

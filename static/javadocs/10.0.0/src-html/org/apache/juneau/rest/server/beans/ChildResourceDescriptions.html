@@ -91,7 +91,7 @@
 <span class="source-line-no">078</span><span id="line-78">         try {</span>
 <span class="source-line-no">079</span><span id="line-79">            title = e.getValue().getSwagger(req.getLocale()).map(x -&gt; x == null ? null : x.getInfo()).map(x -&gt; x == null ? null : x.getTitle()).orElse(null);</span>
 <span class="source-line-no">080</span><span id="line-80">         } catch (Exception e1) {</span>
-<span class="source-line-no">081</span><span id="line-81">            title = lm(e1);</span>
+<span class="source-line-no">081</span><span id="line-81">            title = localizedMessage(e1);</span>
 <span class="source-line-no">082</span><span id="line-82">         }</span>
 <span class="source-line-no">083</span><span id="line-83">         add(new ResourceDescription(e.getKey(), title));</span>
 <span class="source-line-no">084</span><span id="line-84">      }</span>

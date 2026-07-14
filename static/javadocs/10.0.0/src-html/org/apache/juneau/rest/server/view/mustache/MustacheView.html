@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.mustache;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    */</span>
 <span class="source-line-no">104</span><span id="line-104">   public static MustacheView of(String templateName) {</span>
 <span class="source-line-no">105</span><span id="line-105">      if (isBlank(templateName))</span>
-<span class="source-line-no">106</span><span id="line-106">         throw illegalArg("templateName must not be null or blank");</span>
+<span class="source-line-no">106</span><span id="line-106">         throw iaex("templateName must not be null or blank");</span>
 <span class="source-line-no">107</span><span id="line-107">      return new MustacheView(templateName, Map.of(), Map.of());</span>
 <span class="source-line-no">108</span><span id="line-108">   }</span>
 <span class="source-line-no">109</span><span id="line-109"></span>
@@ -146,9 +146,9 @@
 <span class="source-line-no">133</span><span id="line-133">    */</span>
 <span class="source-line-no">134</span><span id="line-134">   public MustacheView attr(String key, Object value) {</span>
 <span class="source-line-no">135</span><span id="line-135">      if (isBlank(key))</span>
-<span class="source-line-no">136</span><span id="line-136">         throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">136</span><span id="line-136">         throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">137</span><span id="line-137">      if (value == null)</span>
-<span class="source-line-no">138</span><span id="line-138">         throw illegalArg("attribute value must not be null (attribute ''{0}'')", key);</span>
+<span class="source-line-no">138</span><span id="line-138">         throw iaex("attribute value must not be null (attribute ''{0}'')", key);</span>
 <span class="source-line-no">139</span><span id="line-139">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">140</span><span id="line-140">      copy.put(key, value);</span>
 <span class="source-line-no">141</span><span id="line-141">      return new MustacheView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -170,9 +170,9 @@
 <span class="source-line-no">157</span><span id="line-157">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">158</span><span id="line-158">      values.forEach((k, v) -&gt; {</span>
 <span class="source-line-no">159</span><span id="line-159">         if (isBlank(k))</span>
-<span class="source-line-no">160</span><span id="line-160">            throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">160</span><span id="line-160">            throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">161</span><span id="line-161">         if (v == null)</span>
-<span class="source-line-no">162</span><span id="line-162">            throw illegalArg("attribute value must not be null (attribute ''{0}'')", k);</span>
+<span class="source-line-no">162</span><span id="line-162">            throw iaex("attribute value must not be null (attribute ''{0}'')", k);</span>
 <span class="source-line-no">163</span><span id="line-163">         copy.put(k, v);</span>
 <span class="source-line-no">164</span><span id="line-164">      });</span>
 <span class="source-line-no">165</span><span id="line-165">      return new MustacheView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -195,9 +195,9 @@
 <span class="source-line-no">182</span><span id="line-182">    */</span>
 <span class="source-line-no">183</span><span id="line-183">   public MustacheView header(String name, String value) {</span>
 <span class="source-line-no">184</span><span id="line-184">      if (isBlank(name))</span>
-<span class="source-line-no">185</span><span id="line-185">         throw illegalArg("header name must not be null or blank");</span>
+<span class="source-line-no">185</span><span id="line-185">         throw iaex("header name must not be null or blank");</span>
 <span class="source-line-no">186</span><span id="line-186">      if (value == null)</span>
-<span class="source-line-no">187</span><span id="line-187">         throw illegalArg("header value must not be null (header ''{0}'')", name);</span>
+<span class="source-line-no">187</span><span id="line-187">         throw iaex("header value must not be null (header ''{0}'')", name);</span>
 <span class="source-line-no">188</span><span id="line-188">      var copy = new LinkedHashMap&lt;&gt;(responseHeaders);</span>
 <span class="source-line-no">189</span><span id="line-189">      copy.put(name, value);</span>
 <span class="source-line-no">190</span><span id="line-190">      return new MustacheView(templateName, attributes, Map.copyOf(copy));</span>

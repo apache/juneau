@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.part;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.function.*;</span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120">    * @return The array value, wrapped in an {@link Optional}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">121</span><span id="line-121">    */</span>
 <span class="source-line-no">122</span><span id="line-122">   public Optional&lt;String[]&gt; asArray() {</span>
-<span class="source-line-no">123</span><span id="line-123">      return opt(toArray());</span>
+<span class="source-line-no">123</span><span id="line-123">      return o(toArray());</span>
 <span class="source-line-no">124</span><span id="line-124">   }</span>
 <span class="source-line-no">125</span><span id="line-125"></span>
 <span class="source-line-no">126</span><span id="line-126">   /**</span>
@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line-129">    * @return The list value, wrapped in an {@link Optional}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">130</span><span id="line-130">    */</span>
 <span class="source-line-no">131</span><span id="line-131">   public Optional&lt;List&lt;String&gt;&gt; asList() {</span>
-<span class="source-line-no">132</span><span id="line-132">      return opt(toList());</span>
+<span class="source-line-no">132</span><span id="line-132">      return o(toList());</span>
 <span class="source-line-no">133</span><span id="line-133">   }</span>
 <span class="source-line-no">134</span><span id="line-134"></span>
 <span class="source-line-no">135</span><span id="line-135">   /**</span>

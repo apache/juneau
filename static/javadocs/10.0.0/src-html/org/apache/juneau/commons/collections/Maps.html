@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.collections;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.lang.reflect.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> * Instances of this builder can be created using {@link #create(Class, Class)} or the convenience method</span>
-<span class="source-line-no">038</span><span id="line-38"> * {@link org.apache.juneau.commons.utils.CollectionUtils#mapb(Class, Class)}.</span>
+<span class="source-line-no">038</span><span id="line-38"> * {@link org.apache.juneau.commons.utils.CollectionUtils#mapBuilder(Class, Class)}.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;h5 class='section'&gt;Features:&lt;/h5&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;ul class='spaced-list'&gt;</span>
@@ -68,19 +68,19 @@
 <span class="source-line-no">055</span><span id="line-55"> *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> *    &lt;jc&gt;// Basic usage - returns Map&lt;/jc&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">058</span><span id="line-58"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">059</span><span id="line-59"> *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">060</span><span id="line-60"> *       .add(&lt;js&gt;"two"&lt;/js&gt;, 2)</span>
 <span class="source-line-no">061</span><span id="line-61"> *       .add(&lt;js&gt;"three"&lt;/js&gt;, 3)</span>
 <span class="source-line-no">062</span><span id="line-62"> *       .build();</span>
 <span class="source-line-no">063</span><span id="line-63"> *</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;jc&gt;// Using pairs - returns Map&lt;/jc&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;props&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">065</span><span id="line-65"> *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;props&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">066</span><span id="line-66"> *       .addPairs(&lt;js&gt;"host"&lt;/js&gt;, &lt;js&gt;"localhost"&lt;/js&gt;, &lt;js&gt;"port"&lt;/js&gt;, &lt;js&gt;"8080"&lt;/js&gt;)</span>
 <span class="source-line-no">067</span><span id="line-67"> *       .build();</span>
 <span class="source-line-no">068</span><span id="line-68"> *</span>
 <span class="source-line-no">069</span><span id="line-69"> *    &lt;jc&gt;// With sorting by key - returns Map&lt;/jc&gt;</span>
-<span class="source-line-no">070</span><span id="line-70"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;sorted&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">070</span><span id="line-70"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;sorted&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">071</span><span id="line-71"> *       .add(&lt;js&gt;"zebra"&lt;/js&gt;, 3)</span>
 <span class="source-line-no">072</span><span id="line-72"> *       .add(&lt;js&gt;"apple"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">073</span><span id="line-73"> *       .add(&lt;js&gt;"banana"&lt;/js&gt;, 2)</span>
@@ -88,7 +88,7 @@
 <span class="source-line-no">075</span><span id="line-75"> *       .build();  &lt;jc&gt;// Returns TreeMap with natural key order&lt;/jc&gt;</span>
 <span class="source-line-no">076</span><span id="line-76"> *</span>
 <span class="source-line-no">077</span><span id="line-77"> *    &lt;jc&gt;// Immutable map - returns Map&lt;/jc&gt;</span>
-<span class="source-line-no">078</span><span id="line-78"> *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">078</span><span id="line-78"> *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;config&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">079</span><span id="line-79"> *       .add(&lt;js&gt;"env"&lt;/js&gt;, &lt;js&gt;"prod"&lt;/js&gt;)</span>
 <span class="source-line-no">080</span><span id="line-80"> *       .add(&lt;js&gt;"region"&lt;/js&gt;, &lt;js&gt;"us-west"&lt;/js&gt;)</span>
 <span class="source-line-no">081</span><span id="line-81"> *       .unmodifiable()</span>
@@ -96,23 +96,23 @@
 <span class="source-line-no">083</span><span id="line-83"> *</span>
 <span class="source-line-no">084</span><span id="line-84"> *    &lt;jc&gt;// From multiple sources - returns Map&lt;/jc&gt;</span>
 <span class="source-line-no">085</span><span id="line-85"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;existing&lt;/jv&gt; = Map.of(&lt;js&gt;"a"&lt;/js&gt;, 1, &lt;js&gt;"b"&lt;/js&gt;, 2);</span>
-<span class="source-line-no">086</span><span id="line-86"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;combined&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">086</span><span id="line-86"> *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;combined&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">087</span><span id="line-87"> *       .addAll(&lt;jv&gt;existing&lt;/jv&gt;)</span>
 <span class="source-line-no">088</span><span id="line-88"> *       .add(&lt;js&gt;"c"&lt;/js&gt;, 3)</span>
 <span class="source-line-no">089</span><span id="line-89"> *       .build();</span>
 <span class="source-line-no">090</span><span id="line-90"> *</span>
 <span class="source-line-no">091</span><span id="line-91"> *    &lt;jc&gt;// Sparse mode - returns null when empty&lt;/jc&gt;</span>
-<span class="source-line-no">092</span><span id="line-92"> *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;maybeNull&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">092</span><span id="line-92"> *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;maybeNull&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">093</span><span id="line-93"> *       .sparse()</span>
 <span class="source-line-no">094</span><span id="line-94"> *       .build();  &lt;jc&gt;// Returns null, not empty map&lt;/jc&gt;</span>
 <span class="source-line-no">095</span><span id="line-95"> *</span>
 <span class="source-line-no">096</span><span id="line-96"> *    &lt;jc&gt;// FluentMap wrapper - use buildFluent()&lt;/jc&gt;</span>
-<span class="source-line-no">097</span><span id="line-97"> *    FluentMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;fluent&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">097</span><span id="line-97"> *    FluentMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;fluent&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">098</span><span id="line-98"> *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">099</span><span id="line-99"> *       .buildFluent();</span>
 <span class="source-line-no">100</span><span id="line-100"> *</span>
 <span class="source-line-no">101</span><span id="line-101"> *    &lt;jc&gt;// FilteredMap - use buildFiltered()&lt;/jc&gt;</span>
-<span class="source-line-no">102</span><span id="line-102"> *    FilteredMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;filtered&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">102</span><span id="line-102"> *    FilteredMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;filtered&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">103</span><span id="line-103"> *       .filtered((k, v) -&amp;gt; v &amp;gt; 0)</span>
 <span class="source-line-no">104</span><span id="line-104"> *       .add(&lt;js&gt;"a"&lt;/js&gt;, 5)</span>
 <span class="source-line-no">105</span><span id="line-105"> *       .add(&lt;js&gt;"b"&lt;/js&gt;, -1)  &lt;jc&gt;// Filtered out&lt;/jc&gt;</span>
@@ -301,7 +301,7 @@
 <span class="source-line-no">288</span><span id="line-288">   public Maps&lt;K,V&gt; addPairs(Object...pairs) {</span>
 <span class="source-line-no">289</span><span id="line-289">      assertArgNotNull(ARG_pairs, pairs);</span>
 <span class="source-line-no">290</span><span id="line-290">      if (pairs.length % 2 != 0)</span>
-<span class="source-line-no">291</span><span id="line-291">         throw illegalArg("Odd number of parameters passed into Maps.addPairs(...)");</span>
+<span class="source-line-no">291</span><span id="line-291">         throw iaex("Odd number of parameters passed into Maps.addPairs(...)");</span>
 <span class="source-line-no">292</span><span id="line-292">      for (var i = 0; i &lt; pairs.length; i += 2)</span>
 <span class="source-line-no">293</span><span id="line-293">         add((K)pairs[i], (V)pairs[i + 1]);</span>
 <span class="source-line-no">294</span><span id="line-294">      return this;</span>
@@ -316,9 +316,9 @@
 <span class="source-line-no">303</span><span id="line-303">    * &lt;p&gt;</span>
 <span class="source-line-no">304</span><span id="line-304">    * Map type selection:</span>
 <span class="source-line-no">305</span><span id="line-305">    * &lt;ul&gt;</span>
-<span class="source-line-no">306</span><span id="line-306">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link java.util.concurrent.ConcurrentSkipListMap} if concurrent)</span>
+<span class="source-line-no">306</span><span id="line-306">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link ConcurrentSkipListMap} if concurrent)</span>
 <span class="source-line-no">307</span><span id="line-307">    *    &lt;li&gt;If {@link #ordered()} is set: Uses {@link LinkedHashMap} (or synchronized LinkedHashMap if concurrent)</span>
-<span class="source-line-no">308</span><span id="line-308">    *    &lt;li&gt;Otherwise: Uses {@link HashMap} (or {@link java.util.concurrent.ConcurrentHashMap} if concurrent)</span>
+<span class="source-line-no">308</span><span id="line-308">    *    &lt;li&gt;Otherwise: Uses {@link HashMap} (or {@link ConcurrentHashMap} if concurrent)</span>
 <span class="source-line-no">309</span><span id="line-309">    * &lt;/ul&gt;</span>
 <span class="source-line-no">310</span><span id="line-310">    *</span>
 <span class="source-line-no">311</span><span id="line-311">    * &lt;p&gt;</span>
@@ -332,7 +332,7 @@
 <span class="source-line-no">319</span><span id="line-319">   })</span>
 <span class="source-line-no">320</span><span id="line-320">   public Map&lt;K,V&gt; build() {</span>
 <span class="source-line-no">321</span><span id="line-321"></span>
-<span class="source-line-no">322</span><span id="line-322">      if (sparse &amp;&amp; e(map))</span>
+<span class="source-line-no">322</span><span id="line-322">      if (sparse &amp;&amp; ie(map))</span>
 <span class="source-line-no">323</span><span id="line-323">         return null;</span>
 <span class="source-line-no">324</span><span id="line-324"></span>
 <span class="source-line-no">325</span><span id="line-325">      Map&lt;K,V&gt; map2;</span>
@@ -377,7 +377,7 @@
 <span class="source-line-no">364</span><span id="line-364">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">365</span><span id="line-365">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">366</span><span id="line-366">    *</span>
-<span class="source-line-no">367</span><span id="line-367">    *    FluentMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">367</span><span id="line-367">    *    FluentMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">368</span><span id="line-368">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">369</span><span id="line-369">    *       .add(&lt;js&gt;"two"&lt;/js&gt;, 2)</span>
 <span class="source-line-no">370</span><span id="line-370">    *       .buildFluent();</span>
@@ -396,16 +396,16 @@
 <span class="source-line-no">383</span><span id="line-383">    * &lt;p&gt;</span>
 <span class="source-line-no">384</span><span id="line-384">    * Map type selection:</span>
 <span class="source-line-no">385</span><span id="line-385">    * &lt;ul&gt;</span>
-<span class="source-line-no">386</span><span id="line-386">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link java.util.concurrent.ConcurrentSkipListMap} if concurrent)</span>
+<span class="source-line-no">386</span><span id="line-386">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link TreeMap} (or {@link ConcurrentSkipListMap} if concurrent)</span>
 <span class="source-line-no">387</span><span id="line-387">    *    &lt;li&gt;If {@link #ordered()} is set: Uses {@link LinkedHashMap} (or synchronized LinkedHashMap if concurrent)</span>
-<span class="source-line-no">388</span><span id="line-388">    *    &lt;li&gt;Otherwise: Uses {@link HashMap} (or {@link java.util.concurrent.ConcurrentHashMap} if concurrent)</span>
+<span class="source-line-no">388</span><span id="line-388">    *    &lt;li&gt;Otherwise: Uses {@link HashMap} (or {@link ConcurrentHashMap} if concurrent)</span>
 <span class="source-line-no">389</span><span id="line-389">    * &lt;/ul&gt;</span>
 <span class="source-line-no">390</span><span id="line-390">    *</span>
 <span class="source-line-no">391</span><span id="line-391">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">392</span><span id="line-392">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">393</span><span id="line-393">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">394</span><span id="line-394">    *</span>
-<span class="source-line-no">395</span><span id="line-395">    *    FilteredMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">395</span><span id="line-395">    *    FilteredMap&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">396</span><span id="line-396">    *       .filtered((k, v) -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; v &amp;gt; 0)</span>
 <span class="source-line-no">397</span><span id="line-397">    *       .add(&lt;js&gt;"a"&lt;/js&gt;, 5)</span>
 <span class="source-line-no">398</span><span id="line-398">    *       .add(&lt;js&gt;"b"&lt;/js&gt;, -1)  &lt;jc&gt;// Will be filtered out&lt;/jc&gt;</span>
@@ -495,7 +495,7 @@
 <span class="source-line-no">482</span><span id="line-482">    * &lt;p class='bjava'&gt;</span>
 <span class="source-line-no">483</span><span id="line-483">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">484</span><span id="line-484">    *</span>
-<span class="source-line-no">485</span><span id="line-485">    *    FluentMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Object.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">485</span><span id="line-485">    *    FluentMap&amp;lt;String,Object&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Object.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">486</span><span id="line-486">    *       .filtered()</span>
 <span class="source-line-no">487</span><span id="line-487">    *       .add(&lt;js&gt;"name"&lt;/js&gt;, &lt;js&gt;"John"&lt;/js&gt;)</span>
 <span class="source-line-no">488</span><span id="line-488">    *       .add(&lt;js&gt;"age"&lt;/js&gt;, -1)              &lt;jc&gt;// Filtered out at build time&lt;/jc&gt;</span>
@@ -538,7 +538,7 @@
 <span class="source-line-no">525</span><span id="line-525">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">526</span><span id="line-526">    *</span>
 <span class="source-line-no">527</span><span id="line-527">    *    &lt;jc&gt;// Keep only non-null, non-empty string values&lt;/jc&gt;</span>
-<span class="source-line-no">528</span><span id="line-528">    *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">528</span><span id="line-528">    *    Map&amp;lt;String,String&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, String.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">529</span><span id="line-529">    *       .filtered((k, v) -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt; &amp;amp;&amp;amp; !v.equals(&lt;js&gt;""&lt;/js&gt;))</span>
 <span class="source-line-no">530</span><span id="line-530">    *       .add(&lt;js&gt;"a"&lt;/js&gt;, &lt;js&gt;"foo"&lt;/js&gt;)</span>
 <span class="source-line-no">531</span><span id="line-531">    *       .add(&lt;js&gt;"b"&lt;/js&gt;, &lt;jk&gt;null&lt;/jk&gt;)     &lt;jc&gt;// Filtered out at build time&lt;/jc&gt;</span>
@@ -546,7 +546,7 @@
 <span class="source-line-no">533</span><span id="line-533">    *       .build();</span>
 <span class="source-line-no">534</span><span id="line-534">    *</span>
 <span class="source-line-no">535</span><span id="line-535">    *    &lt;jc&gt;// Multiple filters combined with AND&lt;/jc&gt;</span>
-<span class="source-line-no">536</span><span id="line-536">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">536</span><span id="line-536">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">537</span><span id="line-537">    *       .filtered((k, v) -&amp;gt; v != &lt;jk&gt;null&lt;/jk&gt;)           &lt;jc&gt;// First filter&lt;/jc&gt;</span>
 <span class="source-line-no">538</span><span id="line-538">    *       .filtered((k, v) -&amp;gt; v &amp;gt; 0)                    &lt;jc&gt;// Second filter (ANDed with first)&lt;/jc&gt;</span>
 <span class="source-line-no">539</span><span id="line-539">    *       .filtered((k, v) -&amp;gt; ! k.startsWith(&lt;js&gt;"_"&lt;/js&gt;)) &lt;jc&gt;// Third filter (ANDed with previous)&lt;/jc&gt;</span>
@@ -629,9 +629,9 @@
 <span class="source-line-no">616</span><span id="line-616">    * &lt;p&gt;</span>
 <span class="source-line-no">617</span><span id="line-617">    * The thread-safety implementation depends on other settings:</span>
 <span class="source-line-no">618</span><span id="line-618">    * &lt;ul&gt;</span>
-<span class="source-line-no">619</span><span id="line-619">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}</span>
-<span class="source-line-no">620</span><span id="line-620">    *    &lt;li&gt;If {@link #ordered()} is set: Uses {@link java.util.Collections#synchronizedMap(java.util.Map)}</span>
-<span class="source-line-no">621</span><span id="line-621">    *    &lt;li&gt;Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}</span>
+<span class="source-line-no">619</span><span id="line-619">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link ConcurrentSkipListMap}</span>
+<span class="source-line-no">620</span><span id="line-620">    *    &lt;li&gt;If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(Map)}</span>
+<span class="source-line-no">621</span><span id="line-621">    *    &lt;li&gt;Otherwise: Uses {@link ConcurrentHashMap}</span>
 <span class="source-line-no">622</span><span id="line-622">    * &lt;/ul&gt;</span>
 <span class="source-line-no">623</span><span id="line-623">    *</span>
 <span class="source-line-no">624</span><span id="line-624">    * &lt;p&gt;</span>
@@ -642,14 +642,14 @@
 <span class="source-line-no">629</span><span id="line-629">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">630</span><span id="line-630">    *</span>
 <span class="source-line-no">631</span><span id="line-631">    *    &lt;jc&gt;// Create a thread-safe map using ConcurrentHashMap&lt;/jc&gt;</span>
-<span class="source-line-no">632</span><span id="line-632">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">632</span><span id="line-632">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">633</span><span id="line-633">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">634</span><span id="line-634">    *       .add(&lt;js&gt;"two"&lt;/js&gt;, 2)</span>
 <span class="source-line-no">635</span><span id="line-635">    *       .concurrent()</span>
 <span class="source-line-no">636</span><span id="line-636">    *       .build();</span>
 <span class="source-line-no">637</span><span id="line-637">    *</span>
 <span class="source-line-no">638</span><span id="line-638">    *    &lt;jc&gt;// Create a thread-safe ordered map&lt;/jc&gt;</span>
-<span class="source-line-no">639</span><span id="line-639">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">639</span><span id="line-639">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map2&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">640</span><span id="line-640">    *       .ordered()</span>
 <span class="source-line-no">641</span><span id="line-641">    *       .concurrent()</span>
 <span class="source-line-no">642</span><span id="line-642">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
@@ -669,9 +669,9 @@
 <span class="source-line-no">656</span><span id="line-656">    * &lt;p&gt;</span>
 <span class="source-line-no">657</span><span id="line-657">    * The thread-safety implementation depends on other settings:</span>
 <span class="source-line-no">658</span><span id="line-658">    * &lt;ul&gt;</span>
-<span class="source-line-no">659</span><span id="line-659">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link java.util.concurrent.ConcurrentSkipListMap}</span>
-<span class="source-line-no">660</span><span id="line-660">    *    &lt;li&gt;If {@link #ordered()} is set: Uses {@link java.util.Collections#synchronizedMap(java.util.Map)}</span>
-<span class="source-line-no">661</span><span id="line-661">    *    &lt;li&gt;Otherwise: Uses {@link java.util.concurrent.ConcurrentHashMap}</span>
+<span class="source-line-no">659</span><span id="line-659">    *    &lt;li&gt;If {@link #sorted()} is set: Uses {@link ConcurrentSkipListMap}</span>
+<span class="source-line-no">660</span><span id="line-660">    *    &lt;li&gt;If {@link #ordered()} is set: Uses {@link Collections#synchronizedMap(Map)}</span>
+<span class="source-line-no">661</span><span id="line-661">    *    &lt;li&gt;Otherwise: Uses {@link ConcurrentHashMap}</span>
 <span class="source-line-no">662</span><span id="line-662">    * &lt;/ul&gt;</span>
 <span class="source-line-no">663</span><span id="line-663">    *</span>
 <span class="source-line-no">664</span><span id="line-664">    * &lt;p&gt;</span>
@@ -682,7 +682,7 @@
 <span class="source-line-no">669</span><span id="line-669">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">670</span><span id="line-670">    *</span>
 <span class="source-line-no">671</span><span id="line-671">    *    &lt;jc&gt;// Conditionally create a thread-safe map&lt;/jc&gt;</span>
-<span class="source-line-no">672</span><span id="line-672">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">672</span><span id="line-672">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">673</span><span id="line-673">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">674</span><span id="line-674">    *       .concurrent(&lt;jv&gt;needsThreadSafety&lt;/jv&gt;)</span>
 <span class="source-line-no">675</span><span id="line-675">    *       .build();</span>
@@ -711,7 +711,7 @@
 <span class="source-line-no">698</span><span id="line-698">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">699</span><span id="line-699">    *</span>
 <span class="source-line-no">700</span><span id="line-700">    *    &lt;jc&gt;// Create an ordered map (preserves insertion order)&lt;/jc&gt;</span>
-<span class="source-line-no">701</span><span id="line-701">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">701</span><span id="line-701">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">702</span><span id="line-702">    *       .ordered()</span>
 <span class="source-line-no">703</span><span id="line-703">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">704</span><span id="line-704">    *       .add(&lt;js&gt;"two"&lt;/js&gt;, 2)</span>
@@ -740,7 +740,7 @@
 <span class="source-line-no">727</span><span id="line-727">    *    &lt;jk&gt;import static&lt;/jk&gt; org.apache.juneau.commons.utils.CollectionUtils.*;</span>
 <span class="source-line-no">728</span><span id="line-728">    *</span>
 <span class="source-line-no">729</span><span id="line-729">    *    &lt;jc&gt;// Conditionally create an ordered map&lt;/jc&gt;</span>
-<span class="source-line-no">730</span><span id="line-730">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapb&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
+<span class="source-line-no">730</span><span id="line-730">    *    Map&amp;lt;String,Integer&amp;gt; &lt;jv&gt;map&lt;/jv&gt; = &lt;jsm&gt;mapBuilder&lt;/jsm&gt;(String.&lt;jk&gt;class&lt;/jk&gt;, Integer.&lt;jk&gt;class&lt;/jk&gt;)</span>
 <span class="source-line-no">731</span><span id="line-731">    *       .ordered(&lt;jv&gt;preserveOrder&lt;/jv&gt;)</span>
 <span class="source-line-no">732</span><span id="line-732">    *       .add(&lt;js&gt;"one"&lt;/js&gt;, 1)</span>
 <span class="source-line-no">733</span><span id="line-733">    *       .build();</span>

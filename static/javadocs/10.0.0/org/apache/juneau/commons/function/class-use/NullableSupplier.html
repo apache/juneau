@@ -66,10 +66,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Thread-safe system property access with support for global and per-thread overrides,
  making it useful for unit tests and configuration management.</div>
 </div>
-<div class="col-first even-row-color"><a href="#org.apache.juneau.commons.utils">org.apache.juneau.commons.utils</a></div>
-<div class="col-last even-row-color">
-<div class="block">Common internal utilities.</div>
-</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -113,13 +109,18 @@ loadScripts(document, 'script');</script>
 <div class="block">If a value is present, applies the provided mapping function to it and returns a NullableSupplier describing the result.</div>
 </div>
 <div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">NullableSupplier.</span><code><a href="../NullableSupplier.html#of(java.util.function.Supplier)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Suppliers.</span><code><a href="../Suppliers.html#memoize(java.util.function.Supplier)" class="member-name-link">memoize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Creates a NullableSupplier from a Supplier.</div>
+<div class="block">Thread-safe memoizing supplier (computes once, caches).</div>
 </div>
 <div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;<a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">NullableSupplier.</span><code><a href="../NullableSupplier.html#ofNullable(T)" class="member-name-link">ofNullable</a><wbr>(T&nbsp;value)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">NullableSupplier.</span><code><a href="../NullableSupplier.html#of(java.util.function.Supplier)" class="member-name-link">of</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></div>
 <div class="col-last odd-row-color">
+<div class="block">Creates a NullableSupplier from a Supplier.</div>
+</div>
+<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">NullableSupplier.</span><code><a href="../NullableSupplier.html#ofNullable(T)" class="member-name-link">ofNullable</a><wbr>(T&nbsp;value)</code></div>
+<div class="col-last even-row-color">
 <div class="block">Creates a NullableSupplier that always returns the specified value.</div>
 </div>
 </div>
@@ -169,22 +170,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">Settings.Builder.</span><code><a href="../../settings/Settings.Builder.html#localStore(org.apache.juneau.commons.function.NullableSupplier)" class="member-name-link">localStore</a><wbr>(<a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;<a href="../../settings/PropertyStore.html" title="interface in org.apache.juneau.commons.settings">PropertyStore</a>&gt;&nbsp;supplier)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Sets the supplier for the local (per-thread) store.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.commons.utils">
-<h2>Uses of <a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a> in <a href="../../utils/package-summary.html">org.apache.juneau.commons.utils</a></h2>
-<div class="caption"><span>Methods in <a href="../../utils/package-summary.html">org.apache.juneau.commons.utils</a> that return <a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../NullableSupplier.html" title="interface in org.apache.juneau.commons.function">NullableSupplier</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#memoize(java.util.function.Supplier)" class="member-name-link">memoize</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Creates a thread-safe memoizing supplier that computes a value once and caches it.</div>
 </div>
 </div>
 </section>

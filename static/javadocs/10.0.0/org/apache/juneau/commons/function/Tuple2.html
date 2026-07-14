@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <dd><code>B</code> - The type of the second value in this tuple.</dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-86">Tuple2</a>&lt;A,<wbr>B&gt;</span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-87">Tuple2</a>&lt;A,<wbr>B&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Represents an immutable tuple containing two values.
 
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
  <h5 class='section'>Features:</h5>
  <ul class='spaced-list'>
    <li>Immutable - values cannot be changed after construction
-   <li>Content-based equality - uses <a href="../utils/Utils.html#eq(T,T)"><code>Utils.eq(Object, Object)</code></a> for comparison
+   <li>Content-based equality - uses <a href="../utils/Shorts.html#eq(T,T)"><code>Shorts.eq(Object, Object)</code></a> for comparison
    <li>Content-based hashing - uses <a href="../lang/HashCode.html#of(java.lang.Object...)"><code>HashCode.of(Object...)</code></a> for hash code computation
    <li>Array support - properly handles arrays with content-based equality and hashing
  </ul>
@@ -139,7 +139,7 @@ loadScripts(document, 'script');</script>
    <li class='jc'><a href="Tuple3.html" title="class in org.apache.juneau.commons.function"><code>Tuple3</code></a> - Three-value tuple
    <li class='jc'><a href="Tuple4.html" title="class in org.apache.juneau.commons.function"><code>Tuple4</code></a> - Four-value tuple
    <li class='jc'><a href="Tuple5.html" title="class in org.apache.juneau.commons.function"><code>Tuple5</code></a> - Five-value tuple
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommonsBasics">juneau-commons Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauCommons">juneau-commons Basics</a>
  </ul></div>
 </section>
 <section class="summary">
@@ -224,7 +224,7 @@ B&gt;&nbsp;<a href="Tuple2.html" title="class in org.apache.juneau.commons.funct
 <li>
 <section class="detail" id="&lt;init&gt;(A,B)">
 <h3 id="&lt;init&gt;(java.lang.Object,java.lang.Object)">Tuple2</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-120">Tuple2</a></span><wbr><span class="parameters">(<a href="Tuple2.html" title="type parameter in Tuple2">A</a>&nbsp;a,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-121">Tuple2</a></span><wbr><span class="parameters">(<a href="Tuple2.html" title="type parameter in Tuple2">A</a>&nbsp;a,
  <a href="Tuple2.html" title="type parameter in Tuple2">B</a>&nbsp;b)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
@@ -246,7 +246,7 @@ B&gt;&nbsp;<a href="Tuple2.html" title="class in org.apache.juneau.commons.funct
 <section class="detail" id="of(A,B)">
 <h3 id="of(java.lang.Object,java.lang.Object)">of</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;A,<wbr>
-B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class in org.apache.juneau.commons.function">Tuple2</a>&lt;A,<wbr>B&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-106">of</a></span><wbr><span class="parameters">(A&nbsp;a,
+B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class in org.apache.juneau.commons.function">Tuple2</a>&lt;A,<wbr>B&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-107">of</a></span><wbr><span class="parameters">(A&nbsp;a,
  B&nbsp;b)</span></div>
 <div class="block">Creates a new tuple containing the specified two values.
 
@@ -273,7 +273,7 @@ B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class i
 <li>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-126">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-127">equals</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
@@ -283,7 +283,7 @@ B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class i
 <li>
 <section class="detail" id="getA()">
 <h3>getA</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="type parameter in Tuple2">A</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-142">getA</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="type parameter in Tuple2">A</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-143">getA</a></span>()</div>
 <div class="block">Returns the first value in this tuple.
 
  <h5 class='section'>Example:</h5>
@@ -300,7 +300,7 @@ B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class i
 <li>
 <section class="detail" id="getB()">
 <h3>getB</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="type parameter in Tuple2">B</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-155">getB</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="type parameter in Tuple2">B</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-156">getB</a></span>()</div>
 <div class="block">Returns the second value in this tuple.
 
  <h5 class='section'>Example:</h5>
@@ -317,7 +317,7 @@ B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class i
 <li>
 <section class="detail" id="optA()">
 <h3>optA</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Tuple2.html" title="type parameter in Tuple2">A</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-171">optA</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Tuple2.html" title="type parameter in Tuple2">A</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-172">optA</a></span>()</div>
 <div class="block">Returns the first value in this tuple wrapped in an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.
 
  <h5 class='section'>Example:</h5>
@@ -337,7 +337,7 @@ B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class i
 <li>
 <section class="detail" id="optB()">
 <h3>optB</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Tuple2.html" title="type parameter in Tuple2">B</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-189">optB</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="Tuple2.html" title="type parameter in Tuple2">B</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-190">optB</a></span>()</div>
 <div class="block">Returns the second value in this tuple wrapped in an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a>.
 
  <h5 class='section'>Example:</h5>
@@ -357,7 +357,7 @@ B&gt;</span>&nbsp;<span class="return-type"><a href="Tuple2.html" title="class i
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-193">hashCode</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/function/Tuple2.html#line-194">hashCode</a></span>()</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>

@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51">   }</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
 <span class="source-line-no">053</span><span id="line-53">   /**</span>
-<span class="source-line-no">054</span><span id="line-54">    * Same as {@link #to(Object,Class)} but reads from a byte array and thus doesn't throw an &lt;c&gt;IOException&lt;/c&gt;.</span>
+<span class="source-line-no">054</span><span id="line-54">    * Same as {@link #read(Object,Class)} but reads from a byte array and thus doesn't throw an &lt;c&gt;IOException&lt;/c&gt;.</span>
 <span class="source-line-no">055</span><span id="line-55">    *</span>
 <span class="source-line-no">056</span><span id="line-56">    * &lt;p&gt;</span>
 <span class="source-line-no">057</span><span id="line-57">    * This is the preferred parse method for simple types since you don't need to cast the results.</span>
@@ -74,19 +74,19 @@
 <span class="source-line-no">061</span><span id="line-61">    *    Marshaller &lt;jv&gt;marshaller&lt;/jv&gt;  = Json.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;;</span>
 <span class="source-line-no">062</span><span id="line-62">    *</span>
 <span class="source-line-no">063</span><span id="line-63">    *    &lt;jc&gt;// Parse into a string.&lt;/jc&gt;</span>
-<span class="source-line-no">064</span><span id="line-64">    *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .to(&lt;jv&gt;json&lt;/jv&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">064</span><span id="line-64">    *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, String.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">065</span><span id="line-65">    *</span>
 <span class="source-line-no">066</span><span id="line-66">    *    &lt;jc&gt;// Parse into a bean.&lt;/jc&gt;</span>
-<span class="source-line-no">067</span><span id="line-67">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .to(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">067</span><span id="line-67">    *    MyBean &lt;jv&gt;bean&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, MyBean.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">068</span><span id="line-68">    *</span>
 <span class="source-line-no">069</span><span id="line-69">    *    &lt;jc&gt;// Parse into a bean array.&lt;/jc&gt;</span>
-<span class="source-line-no">070</span><span id="line-70">    *    MyBean[] &lt;jv&gt;beanArray&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .to(&lt;jv&gt;json&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">070</span><span id="line-70">    *    MyBean[] &lt;jv&gt;beanArray&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, MyBean[].&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">071</span><span id="line-71">    *</span>
 <span class="source-line-no">072</span><span id="line-72">    *    &lt;jc&gt;// Parse into a linked-list of objects.&lt;/jc&gt;</span>
-<span class="source-line-no">073</span><span id="line-73">    *    List &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .to(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">073</span><span id="line-73">    *    List &lt;jv&gt;list&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, LinkedList.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">074</span><span id="line-74">    *</span>
 <span class="source-line-no">075</span><span id="line-75">    *    &lt;jc&gt;// Parse into a map of object keys/values.&lt;/jc&gt;</span>
-<span class="source-line-no">076</span><span id="line-76">    *    Map &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .to(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">076</span><span id="line-76">    *    Map &lt;jv&gt;map&lt;/jv&gt; = &lt;jv&gt;marshaller&lt;/jv&gt; .read(&lt;jv&gt;json&lt;/jv&gt;, TreeMap.&lt;jk&gt;class&lt;/jk&gt;);</span>
 <span class="source-line-no">077</span><span id="line-77">    * &lt;/p&gt;</span>
 <span class="source-line-no">078</span><span id="line-78">    *</span>
 <span class="source-line-no">079</span><span id="line-79">    * @param &lt;T&gt; The class type of the object being created.</span>
@@ -95,7 +95,7 @@
 <span class="source-line-no">082</span><span id="line-82">    * @return The parsed object.</span>
 <span class="source-line-no">083</span><span id="line-83">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">084</span><span id="line-84">    */</span>
-<span class="source-line-no">085</span><span id="line-85">   public final &lt;T&gt; T to(byte[] input, Class&lt;T&gt; type) throws ParseException {</span>
+<span class="source-line-no">085</span><span id="line-85">   public final &lt;T&gt; T read(byte[] input, Class&lt;T&gt; type) throws ParseException {</span>
 <span class="source-line-no">086</span><span id="line-86">      try {</span>
 <span class="source-line-no">087</span><span id="line-87">         return p.parse(input, type);</span>
 <span class="source-line-no">088</span><span id="line-88">      } catch (IOException e) {</span>
@@ -104,7 +104,7 @@
 <span class="source-line-no">091</span><span id="line-91">   }</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
 <span class="source-line-no">093</span><span id="line-93">   /**</span>
-<span class="source-line-no">094</span><span id="line-94">    * Same as {@link #to(Object,Type,Type...)} but reads from a byte array and thus doesn't throw an &lt;c&gt;IOException&lt;/c&gt;.</span>
+<span class="source-line-no">094</span><span id="line-94">    * Same as {@link #read(Object,Type,Type...)} but reads from a byte array and thus doesn't throw an &lt;c&gt;IOException&lt;/c&gt;.</span>
 <span class="source-line-no">095</span><span id="line-95">    *</span>
 <span class="source-line-no">096</span><span id="line-96">    * @param &lt;T&gt; The class type of the object to create.</span>
 <span class="source-line-no">097</span><span id="line-97">    * @param input The input.</span>
@@ -119,7 +119,7 @@
 <span class="source-line-no">106</span><span id="line-106">    * @throws ParseException Malformed input encountered.</span>
 <span class="source-line-no">107</span><span id="line-107">    * @see MarshallingSession#getClassMeta(Type,Type...) for argument syntax for maps and collections.</span>
 <span class="source-line-no">108</span><span id="line-108">    */</span>
-<span class="source-line-no">109</span><span id="line-109">   public final &lt;T&gt; T to(byte[] input, Type type, Type...args) throws ParseException {</span>
+<span class="source-line-no">109</span><span id="line-109">   public final &lt;T&gt; T read(byte[] input, Type type, Type...args) throws ParseException {</span>
 <span class="source-line-no">110</span><span id="line-110">      try {</span>
 <span class="source-line-no">111</span><span id="line-111">         return p.parse(input, type, args);</span>
 <span class="source-line-no">112</span><span id="line-112">      } catch (IOException e) {</span>
@@ -135,7 +135,7 @@
 <span class="source-line-no">122</span><span id="line-122">    *    The serialized object.</span>
 <span class="source-line-no">123</span><span id="line-123">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
 <span class="source-line-no">124</span><span id="line-124">    */</span>
-<span class="source-line-no">125</span><span id="line-125">   public final byte[] of(Object o) throws SerializeException {</span>
+<span class="source-line-no">125</span><span id="line-125">   public final byte[] write(Object o) throws SerializeException {</span>
 <span class="source-line-no">126</span><span id="line-126">      return s.serialize(o);</span>
 <span class="source-line-no">127</span><span id="line-127">   }</span>
 <span class="source-line-no">128</span><span id="line-128">}</span>

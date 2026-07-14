@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.microservice.resources;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.nio.charset.*;</span>
@@ -367,8 +367,8 @@
 <span class="source-line-no">354</span><span id="line-354"></span>
 <span class="source-line-no">355</span><span id="line-355">      var f = getFile(path);</span>
 <span class="source-line-no">356</span><span id="line-356"></span>
-<span class="source-line-no">357</span><span id="line-357">      var startDate = opt(start).filter(x1 -&gt; ! isBlank(x1)).map(x2 -&gt; GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
-<span class="source-line-no">358</span><span id="line-358">      var endDate = opt(end).filter(x11 -&gt; ! isBlank(x11)).map(x4 -&gt; GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
+<span class="source-line-no">357</span><span id="line-357">      var startDate = o(start).filter(x1 -&gt; ! isBlank(x1)).map(x2 -&gt; GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
+<span class="source-line-no">358</span><span id="line-358">      var endDate = o(end).filter(x11 -&gt; ! isBlank(x11)).map(x4 -&gt; GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
 <span class="source-line-no">359</span><span id="line-359"></span>
 <span class="source-line-no">360</span><span id="line-360">      if (! highlight) {</span>
 <span class="source-line-no">361</span><span id="line-361">         var o = getReader(f, startDate, endDate, thread, loggers, severity);</span>
@@ -451,8 +451,8 @@
 <span class="source-line-no">438</span><span id="line-438">      var f = getFile(path);</span>
 <span class="source-line-no">439</span><span id="line-439">      req.setAttribute("fullPath", f.getAbsolutePath());</span>
 <span class="source-line-no">440</span><span id="line-440"></span>
-<span class="source-line-no">441</span><span id="line-441">      var startDate = opt(start).filter(x1 -&gt; ! isBlank(x1)).map(x2 -&gt; GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
-<span class="source-line-no">442</span><span id="line-442">      var endDate = opt(end).filter(x11 -&gt; ! isBlank(x11)).map(x4 -&gt; GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
+<span class="source-line-no">441</span><span id="line-441">      var startDate = o(start).filter(x1 -&gt; ! isBlank(x1)).map(x2 -&gt; GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
+<span class="source-line-no">442</span><span id="line-442">      var endDate = o(end).filter(x11 -&gt; ! isBlank(x11)).map(x4 -&gt; GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);</span>
 <span class="source-line-no">443</span><span id="line-443"></span>
 <span class="source-line-no">444</span><span id="line-444">      return getLogParser(f, startDate, endDate, thread, loggers, severity);</span>
 <span class="source-line-no">445</span><span id="line-445">   }</span>

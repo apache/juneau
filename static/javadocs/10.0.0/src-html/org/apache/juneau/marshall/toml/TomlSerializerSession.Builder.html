@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.toml;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.lang.reflect.*;</span>
@@ -363,7 +363,7 @@
 <span class="source-line-no">350</span><span id="line-350">         // nested array shape via the recursive writeValue step).  At configured (non-NOT_SET)</span>
 <span class="source-line-no">351</span><span id="line-351">         // binary formats the per-property BinarySwap has already fired in writeKeyValue's</span>
 <span class="source-line-no">352</span><span id="line-352">         // swap step, so byte[] values reach this branch only at NOT_SET — a no-op for the</span>
-<span class="source-line-no">353</span><span id="line-353">         // configured-format paths.  java.lang.reflect.Array.get auto-boxes primitive</span>
+<span class="source-line-no">353</span><span id="line-353">         // configured-format paths.  Array.get auto-boxes primitive</span>
 <span class="source-line-no">354</span><span id="line-354">         // elements, so a single runtime-typed loop covers every primitive component type.</span>
 <span class="source-line-no">355</span><span id="line-355">         int len = Array.getLength(value);</span>
 <span class="source-line-no">356</span><span id="line-356">         w.arrayStart();</span>

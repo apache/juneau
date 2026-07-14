@@ -82,8 +82,9 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="AccessibleInfo.html" title="class in org.apache.juneau.commons.reflect">AccessibleInfo</a></code>, <code><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></code>, <code><a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ElementInfo.html#line-68">ElementInfo</a></span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public abstract sealed class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ElementInfo.html#line-68">ElementInfo</a></span>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span>
+<span class="permits">permits <a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>, <a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>, <a href="AccessibleInfo.html" title="class in org.apache.juneau.commons.reflect">AccessibleInfo</a></span></div>
 <div class="block">Abstract base class for all reflection wrapper objects providing common modifier checking functionality.
 
  <p>

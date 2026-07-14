@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.json;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.lang.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.marshall.*;</span>
@@ -39,7 +39,7 @@
 <span class="source-line-no">026</span><span id="line-26"> * the class.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics"&gt;JSON Basics&lt;/a&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport"&gt;JSON Basics&lt;/a&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"></span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;/ul&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> */</span>
@@ -57,7 +57,7 @@
 <span class="source-line-no">044</span><span id="line-44">      super(cm);</span>
 <span class="source-line-no">045</span><span id="line-45"></span>
 <span class="source-line-no">046</span><span id="line-46">      var wrapperAttr2 = Holder.&lt;String&gt;empty();</span>
-<span class="source-line-no">047</span><span id="line-47">      cm.forEachAnnotation(Json.class, x -&gt; ne(x.wrapperAttr()), x -&gt; wrapperAttr2.set(x.wrapperAttr()));</span>
+<span class="source-line-no">047</span><span id="line-47">      cm.forEachAnnotation(Json.class, x -&gt; ine(x.wrapperAttr()), x -&gt; wrapperAttr2.set(x.wrapperAttr()));</span>
 <span class="source-line-no">048</span><span id="line-48">      this.wrapperAttr = wrapperAttr2.orElse(null);</span>
 <span class="source-line-no">049</span><span id="line-49">   }</span>
 <span class="source-line-no">050</span><span id="line-50"></span>

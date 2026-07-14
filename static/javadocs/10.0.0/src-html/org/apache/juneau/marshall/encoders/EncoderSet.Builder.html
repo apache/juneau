@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.util.stream.Collectors.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.concurrent.*;</span>
@@ -180,7 +180,7 @@
 <span class="source-line-no">167</span><span id="line-167">            if (Encoder.class.isAssignableFrom(v)) {</span>
 <span class="source-line-no">168</span><span id="line-168">               l.add(v);</span>
 <span class="source-line-no">169</span><span id="line-169">            } else if (! cns(v).equals("NoInherit")) {</span>
-<span class="source-line-no">170</span><span id="line-170">               throw illegalArg("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));</span>
+<span class="source-line-no">170</span><span id="line-170">               throw iaex("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));</span>
 <span class="source-line-no">171</span><span id="line-171">            }</span>
 <span class="source-line-no">172</span><span id="line-172">         }</span>
 <span class="source-line-no">173</span><span id="line-173">         entries.addAll(0, l);</span>
@@ -276,7 +276,7 @@
 <span class="source-line-no">263</span><span id="line-263">            } else if (Encoder.class.isAssignableFrom(v)) {</span>
 <span class="source-line-no">264</span><span id="line-264">               l.add(v);</span>
 <span class="source-line-no">265</span><span id="line-265">            } else {</span>
-<span class="source-line-no">266</span><span id="line-266">               throw illegalArg("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));</span>
+<span class="source-line-no">266</span><span id="line-266">               throw iaex("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));</span>
 <span class="source-line-no">267</span><span id="line-267">            }</span>
 <span class="source-line-no">268</span><span id="line-268">         }</span>
 <span class="source-line-no">269</span><span id="line-269">         entries = l;</span>

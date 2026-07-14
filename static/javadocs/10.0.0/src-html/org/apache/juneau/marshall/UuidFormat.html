@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -38,9 +38,9 @@
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * Used by {@link MarshallingContext.Builder#uuidFormat(UuidFormat)},</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@link org.apache.juneau.marshall.Marshalled#uuidFormat()},</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@link org.apache.juneau.marshall.MarshalledProp#uuidFormat()}, and</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.marshall.MarshalledConfig#uuidFormat()} to control how {@link UUID} values</span>
+<span class="source-line-no">028</span><span id="line-28"> * {@link Marshalled#uuidFormat()},</span>
+<span class="source-line-no">029</span><span id="line-29"> * {@link MarshalledProp#uuidFormat()}, and</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link MarshalledConfig#uuidFormat()} to control how {@link UUID} values</span>
 <span class="source-line-no">031</span><span id="line-31"> * are written to text-based wire formats.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
@@ -49,9 +49,9 @@
 <span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;ol&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledProp#uuidFormat() @MarshalledProp(uuidFormat=…)} on the bean property.</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Marshalled#uuidFormat() @Marshalled(uuidFormat=…)} on the bean class.</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledConfig#uuidFormat() @MarshalledConfig(uuidFormat=…)} on</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;{@link MarshalledProp#uuidFormat() @MarshalledProp(uuidFormat=…)} on the bean property.</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@link Marshalled#uuidFormat() @Marshalled(uuidFormat=…)} on the bean class.</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link MarshalledConfig#uuidFormat() @MarshalledConfig(uuidFormat=…)} on</span>
 <span class="source-line-no">042</span><span id="line-42"> *       &lt;code&gt;&lt;ja&gt;@Rest&lt;/ja&gt;&lt;/code&gt;-annotated classes / methods.</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Programmatic {@link MarshallingContext.Builder#uuidFormat(UuidFormat)}.</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Environment variable &lt;c&gt;MarshallingContext.uuidFormat&lt;/c&gt;.</span>
@@ -167,7 +167,7 @@
 <span class="source-line-no">154</span><span id="line-154">      try {</span>
 <span class="source-line-no">155</span><span id="line-155">         return UUID.fromString(s);</span>
 <span class="source-line-no">156</span><span id="line-156">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">157</span><span id="line-157">         throw illegalArg("Invalid UUID value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
+<span class="source-line-no">157</span><span id="line-157">         throw iaex("Invalid UUID value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
 <span class="source-line-no">158</span><span id="line-158">      }</span>
 <span class="source-line-no">159</span><span id="line-159">   }</span>
 <span class="source-line-no">160</span><span id="line-160"></span>

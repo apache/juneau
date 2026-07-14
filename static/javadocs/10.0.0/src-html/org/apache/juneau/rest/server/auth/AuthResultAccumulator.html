@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.security.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
@@ -86,8 +86,8 @@
 <span class="source-line-no">073</span><span id="line-73">    */</span>
 <span class="source-line-no">074</span><span id="line-74">   public Optional&lt;AuthResult&gt; result() {</span>
 <span class="source-line-no">075</span><span id="line-75">      if (! any || principal == null)</span>
-<span class="source-line-no">076</span><span id="line-76">         return opte();</span>
-<span class="source-line-no">077</span><span id="line-77">      return opt(AuthResult.of(principal, roles));</span>
+<span class="source-line-no">076</span><span id="line-76">         return oe();</span>
+<span class="source-line-no">077</span><span id="line-77">      return o(AuthResult.of(principal, roles));</span>
 <span class="source-line-no">078</span><span id="line-78">   }</span>
 <span class="source-line-no">079</span><span id="line-79">}</span>
 

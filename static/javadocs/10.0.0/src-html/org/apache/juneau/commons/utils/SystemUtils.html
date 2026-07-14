@@ -68,7 +68,30 @@
 <span class="source-line-no">055</span><span id="line-55">   public static void shutdownMessage(Supplier&lt;String&gt; message) {</span>
 <span class="source-line-no">056</span><span id="line-56">      SHUTDOWN_MESSAGES.add(message);</span>
 <span class="source-line-no">057</span><span id="line-57">   }</span>
-<span class="source-line-no">058</span><span id="line-58">}</span>
+<span class="source-line-no">058</span><span id="line-58"></span>
+<span class="source-line-no">059</span><span id="line-59">   /**</span>
+<span class="source-line-no">060</span><span id="line-60">    * Looks up a system property or environment variable.</span>
+<span class="source-line-no">061</span><span id="line-61">    *</span>
+<span class="source-line-no">062</span><span id="line-62">    * @param name The property name.</span>
+<span class="source-line-no">063</span><span id="line-63">    * @return A StringSetting wrapping the value.</span>
+<span class="source-line-no">064</span><span id="line-64">    */</span>
+<span class="source-line-no">065</span><span id="line-65">   public static StringSetting env(String name) {</span>
+<span class="source-line-no">066</span><span id="line-66">      return Settings.get().get(name);</span>
+<span class="source-line-no">067</span><span id="line-67">   }</span>
+<span class="source-line-no">068</span><span id="line-68"></span>
+<span class="source-line-no">069</span><span id="line-69">   /**</span>
+<span class="source-line-no">070</span><span id="line-70">    * Looks up a system property or environment variable, returning a default if not found.</span>
+<span class="source-line-no">071</span><span id="line-71">    *</span>
+<span class="source-line-no">072</span><span id="line-72">    * @param &lt;T&gt; The type to convert the value to.</span>
+<span class="source-line-no">073</span><span id="line-73">    * @param name The property name.</span>
+<span class="source-line-no">074</span><span id="line-74">    * @param def The default value.</span>
+<span class="source-line-no">075</span><span id="line-75">    * @return The found value, or the default.</span>
+<span class="source-line-no">076</span><span id="line-76">    */</span>
+<span class="source-line-no">077</span><span id="line-77">   public static &lt;T&gt; T env(String name, T def) {</span>
+<span class="source-line-no">078</span><span id="line-78">      var s = Settings.get();</span>
+<span class="source-line-no">079</span><span id="line-79">      return s != null ? s.get(name, def) : def;</span>
+<span class="source-line-no">080</span><span id="line-80">   }</span>
+<span class="source-line-no">081</span><span id="line-81">}</span>
 
 
 

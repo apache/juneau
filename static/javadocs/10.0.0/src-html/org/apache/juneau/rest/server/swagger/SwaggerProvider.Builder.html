@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.swagger;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -104,7 +104,7 @@
 <span class="source-line-no">091</span><span id="line-91">       * @return The file finder.</span>
 <span class="source-line-no">092</span><span id="line-92">       */</span>
 <span class="source-line-no">093</span><span id="line-93">      public Optional&lt;FileFinder&gt; fileFinder() {</span>
-<span class="source-line-no">094</span><span id="line-94">         return opt(fileFinder).map(Supplier::get);</span>
+<span class="source-line-no">094</span><span id="line-94">         return o(fileFinder).map(Supplier::get);</span>
 <span class="source-line-no">095</span><span id="line-95">      }</span>
 <span class="source-line-no">096</span><span id="line-96"></span>
 <span class="source-line-no">097</span><span id="line-97">      /**</span>
@@ -135,7 +135,7 @@
 <span class="source-line-no">122</span><span id="line-122">       * @return The JSON schema generator.</span>
 <span class="source-line-no">123</span><span id="line-123">       */</span>
 <span class="source-line-no">124</span><span id="line-124">      public Optional&lt;JsonSchemaGenerator&gt; jsonSchemaGenerator() {</span>
-<span class="source-line-no">125</span><span id="line-125">         return opt(jsonSchemaGenerator).map(Supplier::get);</span>
+<span class="source-line-no">125</span><span id="line-125">         return o(jsonSchemaGenerator).map(Supplier::get);</span>
 <span class="source-line-no">126</span><span id="line-126">      }</span>
 <span class="source-line-no">127</span><span id="line-127"></span>
 <span class="source-line-no">128</span><span id="line-128">      /**</span>
@@ -155,7 +155,7 @@
 <span class="source-line-no">142</span><span id="line-142">       * @return The messages.</span>
 <span class="source-line-no">143</span><span id="line-143">       */</span>
 <span class="source-line-no">144</span><span id="line-144">      public Optional&lt;Messages&gt; messages() {</span>
-<span class="source-line-no">145</span><span id="line-145">         return opt(messages).map(Supplier::get);</span>
+<span class="source-line-no">145</span><span id="line-145">         return o(messages).map(Supplier::get);</span>
 <span class="source-line-no">146</span><span id="line-146">      }</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148">      /**</span>
@@ -176,7 +176,7 @@
 <span class="source-line-no">163</span><span id="line-163">       * @return  This object.</span>
 <span class="source-line-no">164</span><span id="line-164">       */</span>
 <span class="source-line-no">165</span><span id="line-165">      public Builder type(Class&lt;? extends SwaggerProvider&gt; value) {</span>
-<span class="source-line-no">166</span><span id="line-166">         implType = opt(value).isPresent() ? value : BasicSwaggerProvider.class;</span>
+<span class="source-line-no">166</span><span id="line-166">         implType = o(value).isPresent() ? value : BasicSwaggerProvider.class;</span>
 <span class="source-line-no">167</span><span id="line-167">         return this;</span>
 <span class="source-line-no">168</span><span id="line-168">      }</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">       * @return The var resolver.</span>
 <span class="source-line-no">174</span><span id="line-174">       */</span>
 <span class="source-line-no">175</span><span id="line-175">      public Optional&lt;VarResolver&gt; varResolver() {</span>
-<span class="source-line-no">176</span><span id="line-176">         return opt(varResolver).map(Supplier::get);</span>
+<span class="source-line-no">176</span><span id="line-176">         return o(varResolver).map(Supplier::get);</span>
 <span class="source-line-no">177</span><span id="line-177">      }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
 <span class="source-line-no">179</span><span id="line-179">      /**</span>

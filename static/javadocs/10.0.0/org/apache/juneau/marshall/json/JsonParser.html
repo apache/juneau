@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../json5/Json5Parser.html" title="class in org.apache.juneau.marshall.json5">Json5Parser</a></code>, <code><a href="../jsonl/JsonlParser.html" title="class in org.apache.juneau.marshall.jsonl">JsonlParser</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-125">JsonParser</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-124">JsonParser</a></span>
 <span class="extends-implements">extends <a href="../parser/ReaderParser.html" title="class in org.apache.juneau.marshall.parser">ReaderParser</a>
 implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau.marshall.json">JsonMetaProvider</a>, <a href="../stream/TokenReadable.html" title="interface in org.apache.juneau.marshall.stream">TokenReadable</a>, <a href="../stream/ArrayRecordReadable.html" title="interface in org.apache.juneau.marshall.stream">ArrayRecordReadable</a></span></div>
 <div class="block">Parses any valid RFC 8259 JSON text into a POJO model.
@@ -181,7 +181,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonBasics">JSON Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JsonSupport">JSON Basics</a>
    <li class='link'><a href="../json5/Json5Parser.html" title="class in org.apache.juneau.marshall.json5"><code>Json5Parser</code></a> - For JSON5 syntax (single quotes, comments, etc.)
  </ul></div>
 </section>
@@ -353,14 +353,14 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="DEFAULT">
 <h3>DEFAULT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonParser.html" title="class in org.apache.juneau.marshall.json">JsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-244">DEFAULT</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="JsonParser.html" title="class in org.apache.juneau.marshall.json">JsonParser</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-243">DEFAULT</a></span></div>
 <div class="block">Default parser, all default settings.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="validateEnd">
 <h3>validateEnd</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-258">validateEnd</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-257">validateEnd</a></span></div>
 </section>
 </li>
 </ul>
@@ -374,7 +374,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.json.JsonParser.Builder)">
 <h3>JsonParser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-269">JsonParser</a></span><wbr><span class="parameters">(<a href="JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-268">JsonParser</a></span><wbr><span class="parameters">(<a href="JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -393,7 +393,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-251">create</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-250">create</a></span>()</div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -404,7 +404,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="copy()">
 <h3>copy</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-274">copy</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonParser.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParser.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-273">copy</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#copy()">Context</a></code></span></div>
 <div class="block">Creates a builder from this context object.
 
@@ -421,7 +421,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="createSession()">
 <h3>createSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParserSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-279">createSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonParserSession.Builder.html" title="class in org.apache.juneau.marshall.json">JsonParserSession.Builder</a>&lt;?&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-278">createSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#createSession()">Context</a></code></span></div>
 <div class="block">Create a session builder based on the properties defined on this context.
 
@@ -439,7 +439,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getJsonBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">
 <h3>getJsonBeanPropertyMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.json">JsonBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-284">getJsonBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonBeanPropertyMeta.html" title="class in org.apache.juneau.marshall.json">JsonBeanPropertyMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-283">getJsonBeanPropertyMeta</a></span><wbr><span class="parameters">(<a href="../../commons/bean/BeanPropertyMeta.html" title="class in org.apache.juneau.commons.bean">BeanPropertyMeta</a>&nbsp;bpm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="JsonMetaProvider.html#getJsonBeanPropertyMeta(org.apache.juneau.commons.bean.BeanPropertyMeta)">JsonMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified bean property.</div>
 <dl class="notes">
@@ -455,7 +455,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getJsonClassMeta(org.apache.juneau.marshall.ClassMeta)">
 <h3>getJsonClassMeta</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonClassMeta.html" title="class in org.apache.juneau.marshall.json">JsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-291">getJsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonClassMeta.html" title="class in org.apache.juneau.marshall.json">JsonClassMeta</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-290">getJsonClassMeta</a></span><wbr><span class="parameters">(<a href="../ClassMeta.html" title="class in org.apache.juneau.marshall">ClassMeta</a>&lt;?&gt;&nbsp;cm)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="JsonMetaProvider.html#getJsonClassMeta(org.apache.juneau.marshall.ClassMeta)">JsonMetaProvider</a></code></span></div>
 <div class="block">Returns the language-specific metadata on the specified class.</div>
 <dl class="notes">
@@ -471,7 +471,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="getSession()">
 <h3>getSession</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonParserSession.html" title="class in org.apache.juneau.marshall.json">JsonParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-296">getSession</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="JsonParserSession.html" title="class in org.apache.juneau.marshall.json">JsonParserSession</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-295">getSession</a></span>()</div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="../Context.html#getSession()">Context</a></code></span></div>
 <div class="block">Returns a session to use for this context.
 
@@ -488,7 +488,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="parseTokens(java.lang.Object)">
 <h3>parseTokens</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-314">parseTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/TokenReader.html" title="interface in org.apache.juneau.marshall.stream">TokenReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-313">parseTokens</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator that opens a <a href="JsonTokenReader.html" title="class in org.apache.juneau.marshall.json"><code>JsonTokenReader</code></a> over the input using
  <b>default session arguments</b> (mirrors <a href="../parser/Parser.html#parse(java.lang.Object,java.lang.Class)"><code>Parser.parse(Object, Class)</code></a>).
@@ -514,7 +514,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="isValidateEnd()">
 <h3>isValidateEnd</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-327">isValidateEnd</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-326">isValidateEnd</a></span>()</div>
 <div class="block">Validate end.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -532,7 +532,7 @@ implements <a href="JsonMetaProvider.html" title="interface in org.apache.juneau
 <li>
 <section class="detail" id="parseArrayRecords(java.lang.Object)">
 <h3>parseArrayRecords</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-338">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream">RecordReader</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/json/JsonParser.html#line-337">parseArrayRecords</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;input)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
 <div class="block">Convenience delegator for the streaming array-element <a href="../stream/RecordReader.html" title="interface in org.apache.juneau.marshall.stream"><code>RecordReader</code></a> (uses default
  session args; see <a href="#parseTokens(java.lang.Object)"><code>parseTokens(Object)</code></a>).  Real impl on

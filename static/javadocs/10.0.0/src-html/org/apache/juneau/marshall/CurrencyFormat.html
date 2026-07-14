@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -38,9 +38,9 @@
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * Used by {@link MarshallingContext.Builder#currencyFormat(CurrencyFormat)},</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@link org.apache.juneau.marshall.Marshalled#currencyFormat()},</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@link org.apache.juneau.marshall.MarshalledProp#currencyFormat()}, and</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.marshall.MarshalledConfig#currencyFormat()} to control how {@link Currency}</span>
+<span class="source-line-no">028</span><span id="line-28"> * {@link Marshalled#currencyFormat()},</span>
+<span class="source-line-no">029</span><span id="line-29"> * {@link MarshalledProp#currencyFormat()}, and</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link MarshalledConfig#currencyFormat()} to control how {@link Currency}</span>
 <span class="source-line-no">031</span><span id="line-31"> * values are written to text-based wire formats.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
@@ -64,9 +64,9 @@
 <span class="source-line-no">051</span><span id="line-51"> *</span>
 <span class="source-line-no">052</span><span id="line-52"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;ol&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledProp#currencyFormat() @MarshalledProp(currencyFormat=…)} on the bean property.</span>
-<span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.</span>
-<span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledConfig#currencyFormat() @MarshalledConfig(currencyFormat=…)} on</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;li&gt;{@link MarshalledProp#currencyFormat() @MarshalledProp(currencyFormat=…)} on the bean property.</span>
+<span class="source-line-no">055</span><span id="line-55"> *    &lt;li&gt;{@link Marshalled#currencyFormat() @Marshalled(currencyFormat=…)} on the bean class.</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;li&gt;{@link MarshalledConfig#currencyFormat() @MarshalledConfig(currencyFormat=…)} on</span>
 <span class="source-line-no">057</span><span id="line-57"> *       &lt;code&gt;&lt;ja&gt;@Rest&lt;/ja&gt;&lt;/code&gt;-annotated classes / methods.</span>
 <span class="source-line-no">058</span><span id="line-58"> *    &lt;li&gt;Programmatic {@link MarshallingContext.Builder#currencyFormat(CurrencyFormat)}.</span>
 <span class="source-line-no">059</span><span id="line-59"> *    &lt;li&gt;Environment variable &lt;c&gt;MarshallingContext.currencyFormat&lt;/c&gt;.</span>
@@ -198,7 +198,7 @@
 <span class="source-line-no">185</span><span id="line-185">         // Fall through to symbol / display-name scan.</span>
 <span class="source-line-no">186</span><span id="line-186">      }</span>
 <span class="source-line-no">187</span><span id="line-187">      return switch (fmt) {</span>
-<span class="source-line-no">188</span><span id="line-188">         case NOT_SET, ISO_CODE -&gt; throw illegalArg("Invalid currency code ''{0}''", value);</span>
+<span class="source-line-no">188</span><span id="line-188">         case NOT_SET, ISO_CODE -&gt; throw iaex("Invalid currency code ''{0}''", value);</span>
 <span class="source-line-no">189</span><span id="line-189">         case SYMBOL -&gt; findBySymbol(s, loc, value);</span>
 <span class="source-line-no">190</span><span id="line-190">         case DISPLAY_NAME -&gt; findByDisplayName(s, loc, value);</span>
 <span class="source-line-no">191</span><span id="line-191">      };</span>
@@ -222,7 +222,7 @@
 <span class="source-line-no">209</span><span id="line-209"></span>
 <span class="source-line-no">210</span><span id="line-210">   private static Currency resolveAmbiguousMatches(List&lt;Currency&gt; matches, Locale loc, String original, String kind) {</span>
 <span class="source-line-no">211</span><span id="line-211">      if (matches.isEmpty())</span>
-<span class="source-line-no">212</span><span id="line-212">         throw illegalArg("Could not resolve currency {0} ''{1}'' in locale {2}", kind, original, loc);</span>
+<span class="source-line-no">212</span><span id="line-212">         throw iaex("Could not resolve currency {0} ''{1}'' in locale {2}", kind, original, loc);</span>
 <span class="source-line-no">213</span><span id="line-213">      if (matches.size() == 1)</span>
 <span class="source-line-no">214</span><span id="line-214">         return matches.get(0);</span>
 <span class="source-line-no">215</span><span id="line-215">      // Prefer the locale's default currency when the locale has one.</span>
@@ -233,7 +233,7 @@
 <span class="source-line-no">220</span><span id="line-220">      } catch (@SuppressWarnings("unused") IllegalArgumentException ignored) {</span>
 <span class="source-line-no">221</span><span id="line-221">         // Locale has no associated currency (e.g. Locale.ROOT, Locale.ENGLISH, Locale.JAPAN may or may not).</span>
 <span class="source-line-no">222</span><span id="line-222">      }</span>
-<span class="source-line-no">223</span><span id="line-223">      throw illegalArg("Ambiguous currency {0} ''{1}'' in locale {2}: matches {3}", kind, original, loc, matches);</span>
+<span class="source-line-no">223</span><span id="line-223">      throw iaex("Ambiguous currency {0} ''{1}'' in locale {2}: matches {3}", kind, original, loc, matches);</span>
 <span class="source-line-no">224</span><span id="line-224">   }</span>
 <span class="source-line-no">225</span><span id="line-225"></span>
 <span class="source-line-no">226</span><span id="line-226">   /**</span>

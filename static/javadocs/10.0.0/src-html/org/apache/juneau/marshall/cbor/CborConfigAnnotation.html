@@ -37,7 +37,7 @@
 <span class="source-line-no">024</span><span id="line-24"> * Utility classes and methods for the {@link CborConfig @CborConfig} annotation.</span>
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/CborBasics"&gt;CBOR Basics&lt;/a&gt;</span>
+<span class="source-line-no">027</span><span id="line-27"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Cbor"&gt;CBOR Basics&lt;/a&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;/ul&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> */</span>
 <span class="source-line-no">030</span><span id="line-30">public class CborConfigAnnotation {</span>
@@ -48,7 +48,7 @@
 <span class="source-line-no">035</span><span id="line-35">   private CborConfigAnnotation() {}</span>
 <span class="source-line-no">036</span><span id="line-36"></span>
 <span class="source-line-no">037</span><span id="line-37">   /**</span>
-<span class="source-line-no">038</span><span id="line-38">    * Applies {@link CborConfig} annotations to a {@link org.apache.juneau.marshall.cbor.CborParser.Builder}.</span>
+<span class="source-line-no">038</span><span id="line-38">    * Applies {@link CborConfig} annotations to a {@link CborParser.Builder}.</span>
 <span class="source-line-no">039</span><span id="line-39">    */</span>
 <span class="source-line-no">040</span><span id="line-40">   public static class ParserApply extends AnnotationApplier&lt;CborConfig,CborParser.Builder&gt; {</span>
 <span class="source-line-no">041</span><span id="line-41"></span>
@@ -68,7 +68,7 @@
 <span class="source-line-no">055</span><span id="line-55">   }</span>
 <span class="source-line-no">056</span><span id="line-56"></span>
 <span class="source-line-no">057</span><span id="line-57">   /**</span>
-<span class="source-line-no">058</span><span id="line-58">    * Applies {@link CborConfig} annotations to a {@link org.apache.juneau.marshall.cbor.CborSerializer.Builder}.</span>
+<span class="source-line-no">058</span><span id="line-58">    * Applies {@link CborConfig} annotations to a {@link CborSerializer.Builder}.</span>
 <span class="source-line-no">059</span><span id="line-59">    */</span>
 <span class="source-line-no">060</span><span id="line-60">   public static class SerializerApply extends AnnotationApplier&lt;CborConfig,CborSerializer.Builder&gt; {</span>
 <span class="source-line-no">061</span><span id="line-61"></span>

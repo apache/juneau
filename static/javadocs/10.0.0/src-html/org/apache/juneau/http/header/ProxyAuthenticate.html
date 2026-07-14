@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.function.*;</span>
@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">         assertArgNotNull("value", value);</span>
 <span class="source-line-no">174</span><span id="line-174">         var v = value.trim();</span>
 <span class="source-line-no">175</span><span id="line-175">         if (v.isEmpty())</span>
-<span class="source-line-no">176</span><span id="line-176">            throw illegalArg("scheme must not be blank");</span>
+<span class="source-line-no">176</span><span id="line-176">            throw iaex("scheme must not be blank");</span>
 <span class="source-line-no">177</span><span id="line-177">         scheme = v;</span>
 <span class="source-line-no">178</span><span id="line-178">         return this;</span>
 <span class="source-line-no">179</span><span id="line-179">      }</span>
@@ -352,7 +352,7 @@
 <span class="source-line-no">339</span><span id="line-339">         assertArgNotNull("name", name);</span>
 <span class="source-line-no">340</span><span id="line-340">         var n = name.trim();</span>
 <span class="source-line-no">341</span><span id="line-341">         if (n.isEmpty())</span>
-<span class="source-line-no">342</span><span id="line-342">            throw illegalArg("auth-param name must not be blank");</span>
+<span class="source-line-no">342</span><span id="line-342">            throw iaex("auth-param name must not be blank");</span>
 <span class="source-line-no">343</span><span id="line-343">         return n;</span>
 <span class="source-line-no">344</span><span id="line-344">      }</span>
 <span class="source-line-no">345</span><span id="line-345"></span>

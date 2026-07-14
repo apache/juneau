@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.arg;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -139,7 +139,7 @@
 <span class="source-line-no">126</span><span id="line-126">      // @formatter:on</span>
 <span class="source-line-no">127</span><span id="line-127">      if (fromAnnotation.isPresent())</span>
 <span class="source-line-no">128</span><span id="line-128">         return fromAnnotation;</span>
-<span class="source-line-no">129</span><span id="line-129">      return opt(nameFromTypeNameField(pi));</span>
+<span class="source-line-no">129</span><span id="line-129">      return o(nameFromTypeNameField(pi));</span>
 <span class="source-line-no">130</span><span id="line-130">   }</span>
 <span class="source-line-no">131</span><span id="line-131"></span>
 <span class="source-line-no">132</span><span id="line-132">   private static String nameFromTypeNameField(ParameterInfo pi) {</span>
@@ -163,7 +163,7 @@
 <span class="source-line-no">150</span><span id="line-150">      return AP.find(Header.class, pi)</span>
 <span class="source-line-no">151</span><span id="line-151">         .stream()</span>
 <span class="source-line-no">152</span><span id="line-152">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">153</span><span id="line-153">         .filter(x -&gt; ne(x.def()))</span>
+<span class="source-line-no">153</span><span id="line-153">         .filter(x -&gt; ine(x.def()))</span>
 <span class="source-line-no">154</span><span id="line-154">         .findFirst()</span>
 <span class="source-line-no">155</span><span id="line-155">         .map(Header::def);</span>
 <span class="source-line-no">156</span><span id="line-156">      // @formatter:on</span>
@@ -208,7 +208,7 @@
 <span class="source-line-no">195</span><span id="line-195">      schemaBuilder.applyAll(Header.class, pi);</span>
 <span class="source-line-no">196</span><span id="line-196">      this.schema = schemaBuilder.build();</span>
 <span class="source-line-no">197</span><span id="line-197"></span>
-<span class="source-line-no">198</span><span id="line-198">      this.def = findDef(pi).or(() -&gt; opt(classLevelHeader).filter(h -&gt; ne(h.def())).map(Header::def)).orElse(null);</span>
+<span class="source-line-no">198</span><span id="line-198">      this.def = findDef(pi).or(() -&gt; o(classLevelHeader).filter(h -&gt; ine(h.def())).map(Header::def)).orElse(null);</span>
 <span class="source-line-no">199</span><span id="line-199">      this.type = pi.getParameterType();</span>
 <span class="source-line-no">200</span><span id="line-200">      @SuppressWarnings({</span>
 <span class="source-line-no">201</span><span id="line-201">         "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>

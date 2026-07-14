@@ -35,10 +35,10 @@
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.regex.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.test.assertions.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.commons.function.*;</span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.rest.server.httppart.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.function.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.rest.server.httppart.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.test.assertions.*;</span>
 <span class="source-line-no">029</span><span id="line-29"></span>
 <span class="source-line-no">030</span><span id="line-30">/**</span>
 <span class="source-line-no">031</span><span id="line-31"> * Used for fluent assertion calls against {@link RequestQueryParam} objects.</span>
@@ -110,7 +110,7 @@
 <span class="source-line-no">097</span><span id="line-97"> *    &lt;ul class='javatreec'&gt;</span>
 <span class="source-line-no">098</span><span id="line-98"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asString() asString()}</span>
 <span class="source-line-no">099</span><span id="line-99"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asString(ThrowingFunction) asString(ThrowingFunction)}</span>
-<span class="source-line-no">100</span><span id="line-100"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asTransformed(java.util.function.UnaryOperator) asTransformed(UnaryOperator)}</span>
+<span class="source-line-no">100</span><span id="line-100"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asTransformed(UnaryOperator) asTransformed(UnaryOperator)}</span>
 <span class="source-line-no">101</span><span id="line-101"> *       &lt;li class='jm'&gt;{@link FluentObjectAssertion#asAny() asAny()}</span>
 <span class="source-line-no">102</span><span id="line-102"> * &lt;/ul&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> * &lt;/ul&gt;</span>
@@ -273,7 +273,7 @@
 <span class="source-line-no">260</span><span id="line-260">   }</span>
 <span class="source-line-no">261</span><span id="line-261"></span>
 <span class="source-line-no">262</span><span id="line-262">   @Override /* Overridden from Assertion */</span>
-<span class="source-line-no">263</span><span id="line-263">   public FluentRequestQueryParamAssertion&lt;R&gt; setThrowable(Class&lt;? extends java.lang.RuntimeException&gt; value) {</span>
+<span class="source-line-no">263</span><span id="line-263">   public FluentRequestQueryParamAssertion&lt;R&gt; setThrowable(Class&lt;? extends RuntimeException&gt; value) {</span>
 <span class="source-line-no">264</span><span id="line-264">      super.setThrowable(value);</span>
 <span class="source-line-no">265</span><span id="line-265">      return this;</span>
 <span class="source-line-no">266</span><span id="line-266">   }</span>

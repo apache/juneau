@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ConfigurableConverter.html" title="class in org.apache.juneau.commons.conversion">ConfigurableConverter</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-153">BasicConverter</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-152">BasicConverter</a></span>
 <span class="extends-implements">extends <a href="CachingConverter.html" title="class in org.apache.juneau.commons.conversion">CachingConverter</a></span></div>
 <div class="block">A concrete <a href="CachingConverter.html" title="class in org.apache.juneau.commons.conversion"><code>CachingConverter</code></a> that supports common type conversions without
  requiring a <code>MarshallingContext</code> or <code>MarshallingSession</code>.
@@ -151,7 +151,7 @@ loadScripts(document, 'script');</script>
    <tr>
       <td><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a></td>
       <td><code>byte[]</code></td>
-      <td>UTF-8 encoding via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#getBytes(java.nio.charset.Charset)" title="class or interface in java.lang" class="external-link"><code>String.getBytes(java.nio.charset.Charset)</code></a></td>
+      <td>UTF-8 encoding via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#getBytes(java.nio.charset.Charset)" title="class or interface in java.lang" class="external-link"><code>String.getBytes(Charset)</code></a></td>
    </tr>
    <tr>
       <td><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/CharSequence.html" title="class or interface in java.lang" class="external-link"><code>CharSequence</code></a></td>
@@ -287,7 +287,7 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
 <li>
 <section class="detail" id="INSTANCE">
 <h3>INSTANCE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-165">INSTANCE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="BasicConverter.html" title="class in org.apache.juneau.commons.conversion">BasicConverter</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-164">INSTANCE</a></span></div>
 <div class="block">Singleton instance.</div>
 </section>
 </li>
@@ -302,7 +302,7 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>BasicConverter</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-185">BasicConverter</a></span>()</div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-184">BasicConverter</a></span>()</div>
 <div class="block">Constructor.</div>
 </section>
 </li>
@@ -318,7 +318,7 @@ O&gt;&nbsp;<a href="Conversion.html" title="interface in org.apache.juneau.commo
 <section class="detail" id="findConversion(java.lang.Class,java.lang.Class)">
 <h3>findConversion</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="type-parameters">&lt;I,<wbr>
-O&gt;</span>&nbsp;<span class="return-type"><a href="Conversion.html" title="interface in org.apache.juneau.commons.conversion">Conversion</a>&lt;I,<wbr>O&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-187">findConversion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;I&gt;&nbsp;inType,
+O&gt;</span>&nbsp;<span class="return-type"><a href="Conversion.html" title="interface in org.apache.juneau.commons.conversion">Conversion</a>&lt;I,<wbr>O&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/conversion/BasicConverter.html#line-186">findConversion</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;I&gt;&nbsp;inType,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;O&gt;&nbsp;outType)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from class:&nbsp;<code><a href="CachingConverter.html#findConversion(java.lang.Class,java.lang.Class)">CachingConverter</a></code></span></div>
 <div class="block">Finds a conversion function from the specified input type to the specified output type.

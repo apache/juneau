@@ -29,111 +29,110 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19"></span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import java.util.function.*;</span>
-<span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.http.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20"></span>
+<span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import org.apache.juneau.commons.http.*;</span>
+<span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * Base for comma-separated tokens with optional q-values.</span>
-<span class="source-line-no">030</span><span id="line-30"> *</span>
-<span class="source-line-no">031</span><span id="line-31"> * @since 9.2.1</span>
-<span class="source-line-no">032</span><span id="line-32"> */</span>
-<span class="source-line-no">033</span><span id="line-33">@SuppressWarnings({</span>
-<span class="source-line-no">034</span><span id="line-34">   "java:S2160",</span>
-<span class="source-line-no">035</span><span id="line-35">   "unchecked"</span>
-<span class="source-line-no">036</span><span id="line-36">})</span>
-<span class="source-line-no">037</span><span id="line-37">public class HttpStringRangesHeader extends HttpHeaderBean {</span>
-<span class="source-line-no">038</span><span id="line-38"></span>
-<span class="source-line-no">039</span><span id="line-39">   public static final int LAZY_WIRE_STRING = 0;</span>
-<span class="source-line-no">040</span><span id="line-40">   public static final int LAZY_STRING_RANGES = 1;</span>
-<span class="source-line-no">041</span><span id="line-41"></span>
-<span class="source-line-no">042</span><span id="line-42">   private final StringRanges cachedForStringOrDirect;</span>
-<span class="source-line-no">043</span><span id="line-43">   private final Supplier&lt;?&gt; lazySupplier;</span>
-<span class="source-line-no">044</span><span id="line-44">   private final int lazyMode;</span>
-<span class="source-line-no">045</span><span id="line-45"></span>
-<span class="source-line-no">046</span><span id="line-46">   /**</span>
-<span class="source-line-no">047</span><span id="line-47">    * Creates an {@link HttpStringRangesHeader} by parsing the given wire-format value.</span>
-<span class="source-line-no">048</span><span id="line-48">    *</span>
-<span class="source-line-no">049</span><span id="line-49">    * @param name Header name. Must not be {@code null}.</span>
-<span class="source-line-no">050</span><span id="line-50">    * @param wireValue Wire value (e.g. {@code "gzip;q=0.5, identity"}). May be {@code null}.</span>
-<span class="source-line-no">051</span><span id="line-51">    * @return A new instance. Never {@code null}.</span>
-<span class="source-line-no">052</span><span id="line-52">    */</span>
-<span class="source-line-no">053</span><span id="line-53">   public static HttpStringRangesHeader of(String name, String wireValue) {</span>
-<span class="source-line-no">054</span><span id="line-54">      return new HttpStringRangesHeader(name, wireValue);</span>
-<span class="source-line-no">055</span><span id="line-55">   }</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">   /**</span>
-<span class="source-line-no">058</span><span id="line-58">    * Creates an {@link HttpStringRangesHeader} with the given typed value.</span>
-<span class="source-line-no">059</span><span id="line-59">    *</span>
-<span class="source-line-no">060</span><span id="line-60">    * @param name Header name. Must not be {@code null}.</span>
-<span class="source-line-no">061</span><span id="line-61">    * @param typedValue The string-ranges value. May be {@code null}.</span>
-<span class="source-line-no">062</span><span id="line-62">    * @return A new instance. Never {@code null}.</span>
-<span class="source-line-no">063</span><span id="line-63">    */</span>
-<span class="source-line-no">064</span><span id="line-64">   public static HttpStringRangesHeader of(String name, StringRanges typedValue) {</span>
-<span class="source-line-no">065</span><span id="line-65">      return new HttpStringRangesHeader(name, typedValue);</span>
-<span class="source-line-no">066</span><span id="line-66">   }</span>
-<span class="source-line-no">067</span><span id="line-67"></span>
-<span class="source-line-no">068</span><span id="line-68">   protected HttpStringRangesHeader(String name, String value) {</span>
-<span class="source-line-no">069</span><span id="line-69">      super(name, value);</span>
-<span class="source-line-no">070</span><span id="line-70">      this.cachedForStringOrDirect = value == null ? null : StringRanges.of(value);</span>
-<span class="source-line-no">071</span><span id="line-71">      this.lazySupplier = null;</span>
-<span class="source-line-no">072</span><span id="line-72">      this.lazyMode = -1;</span>
-<span class="source-line-no">073</span><span id="line-73">   }</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   protected HttpStringRangesHeader(String name, StringRanges value) {</span>
-<span class="source-line-no">076</span><span id="line-76">      super(name, value == null ? null : value.toString());</span>
-<span class="source-line-no">077</span><span id="line-77">      this.cachedForStringOrDirect = value;</span>
-<span class="source-line-no">078</span><span id="line-78">      this.lazySupplier = null;</span>
-<span class="source-line-no">079</span><span id="line-79">      this.lazyMode = -1;</span>
-<span class="source-line-no">080</span><span id="line-80">   }</span>
-<span class="source-line-no">081</span><span id="line-81"></span>
-<span class="source-line-no">082</span><span id="line-82">   protected HttpStringRangesHeader(String name, Supplier&lt;?&gt; supplier, int lazyMode) {</span>
-<span class="source-line-no">083</span><span id="line-83">      super(name, lazyMode == LAZY_WIRE_STRING</span>
-<span class="source-line-no">084</span><span id="line-84">         ? ((Supplier&lt;String&gt;) supplier)::get</span>
-<span class="source-line-no">085</span><span id="line-85">         : () -&gt; {</span>
-<span class="source-line-no">086</span><span id="line-86">            var m = ((Supplier&lt;StringRanges&gt;) supplier).get();</span>
-<span class="source-line-no">087</span><span id="line-87">            if (m == null)</span>
-<span class="source-line-no">088</span><span id="line-88">               return null;</span>
-<span class="source-line-no">089</span><span id="line-89">            return m.toString();</span>
-<span class="source-line-no">090</span><span id="line-90">         });</span>
-<span class="source-line-no">091</span><span id="line-91">      this.cachedForStringOrDirect = null;</span>
-<span class="source-line-no">092</span><span id="line-92">      this.lazySupplier = supplier;</span>
-<span class="source-line-no">093</span><span id="line-93">      this.lazyMode = lazyMode;</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   public Optional&lt;StringRanges&gt; asStringRanges() {</span>
-<span class="source-line-no">097</span><span id="line-97">      return opt(toStringRanges());</span>
-<span class="source-line-no">098</span><span id="line-98">   }</span>
-<span class="source-line-no">099</span><span id="line-99"></span>
-<span class="source-line-no">100</span><span id="line-100">   public StringRange getRange(int index) {</span>
-<span class="source-line-no">101</span><span id="line-101">      var x = toStringRanges();</span>
-<span class="source-line-no">102</span><span id="line-102">      return x == null ? null : x.getRange(index);</span>
-<span class="source-line-no">103</span><span id="line-103">   }</span>
-<span class="source-line-no">104</span><span id="line-104"></span>
-<span class="source-line-no">105</span><span id="line-105">   public int match(List&lt;String&gt; names) {</span>
-<span class="source-line-no">106</span><span id="line-106">      var x = toStringRanges();</span>
-<span class="source-line-no">107</span><span id="line-107">      return x == null ? -1 : x.match(names);</span>
-<span class="source-line-no">108</span><span id="line-108">   }</span>
-<span class="source-line-no">109</span><span id="line-109"></span>
-<span class="source-line-no">110</span><span id="line-110">   public StringRanges orElse(StringRanges other) {</span>
-<span class="source-line-no">111</span><span id="line-111">      var x = toStringRanges();</span>
-<span class="source-line-no">112</span><span id="line-112">      return nn(x) ? x : other;</span>
-<span class="source-line-no">113</span><span id="line-113">   }</span>
-<span class="source-line-no">114</span><span id="line-114"></span>
-<span class="source-line-no">115</span><span id="line-115">   public StringRanges toStringRanges() {</span>
-<span class="source-line-no">116</span><span id="line-116">      if (lazyMode == LAZY_STRING_RANGES)</span>
-<span class="source-line-no">117</span><span id="line-117">         return ((Supplier&lt;StringRanges&gt;) lazySupplier).get();</span>
-<span class="source-line-no">118</span><span id="line-118">      if (cachedForStringOrDirect != null)</span>
-<span class="source-line-no">119</span><span id="line-119">         return cachedForStringOrDirect;</span>
-<span class="source-line-no">120</span><span id="line-120">      var v = super.getValue();</span>
-<span class="source-line-no">121</span><span id="line-121">      return v == null ? null : StringRanges.of(v);</span>
-<span class="source-line-no">122</span><span id="line-122">   }</span>
-<span class="source-line-no">123</span><span id="line-123">}</span>
+<span class="source-line-no">027</span><span id="line-27">/**</span>
+<span class="source-line-no">028</span><span id="line-28"> * Base for comma-separated tokens with optional q-values.</span>
+<span class="source-line-no">029</span><span id="line-29"> *</span>
+<span class="source-line-no">030</span><span id="line-30"> * @since 9.2.1</span>
+<span class="source-line-no">031</span><span id="line-31"> */</span>
+<span class="source-line-no">032</span><span id="line-32">@SuppressWarnings({</span>
+<span class="source-line-no">033</span><span id="line-33">   "java:S2160",</span>
+<span class="source-line-no">034</span><span id="line-34">   "unchecked"</span>
+<span class="source-line-no">035</span><span id="line-35">})</span>
+<span class="source-line-no">036</span><span id="line-36">public class HttpStringRangesHeader extends HttpHeaderBean {</span>
+<span class="source-line-no">037</span><span id="line-37"></span>
+<span class="source-line-no">038</span><span id="line-38">   public static final int LAZY_WIRE_STRING = 0;</span>
+<span class="source-line-no">039</span><span id="line-39">   public static final int LAZY_STRING_RANGES = 1;</span>
+<span class="source-line-no">040</span><span id="line-40"></span>
+<span class="source-line-no">041</span><span id="line-41">   private final StringRanges cachedForStringOrDirect;</span>
+<span class="source-line-no">042</span><span id="line-42">   private final Supplier&lt;?&gt; lazySupplier;</span>
+<span class="source-line-no">043</span><span id="line-43">   private final int lazyMode;</span>
+<span class="source-line-no">044</span><span id="line-44"></span>
+<span class="source-line-no">045</span><span id="line-45">   /**</span>
+<span class="source-line-no">046</span><span id="line-46">    * Creates an {@link HttpStringRangesHeader} by parsing the given wire-format value.</span>
+<span class="source-line-no">047</span><span id="line-47">    *</span>
+<span class="source-line-no">048</span><span id="line-48">    * @param name Header name. Must not be {@code null}.</span>
+<span class="source-line-no">049</span><span id="line-49">    * @param wireValue Wire value (e.g. {@code "gzip;q=0.5, identity"}). May be {@code null}.</span>
+<span class="source-line-no">050</span><span id="line-50">    * @return A new instance. Never {@code null}.</span>
+<span class="source-line-no">051</span><span id="line-51">    */</span>
+<span class="source-line-no">052</span><span id="line-52">   public static HttpStringRangesHeader of(String name, String wireValue) {</span>
+<span class="source-line-no">053</span><span id="line-53">      return new HttpStringRangesHeader(name, wireValue);</span>
+<span class="source-line-no">054</span><span id="line-54">   }</span>
+<span class="source-line-no">055</span><span id="line-55"></span>
+<span class="source-line-no">056</span><span id="line-56">   /**</span>
+<span class="source-line-no">057</span><span id="line-57">    * Creates an {@link HttpStringRangesHeader} with the given typed value.</span>
+<span class="source-line-no">058</span><span id="line-58">    *</span>
+<span class="source-line-no">059</span><span id="line-59">    * @param name Header name. Must not be {@code null}.</span>
+<span class="source-line-no">060</span><span id="line-60">    * @param typedValue The string-ranges value. May be {@code null}.</span>
+<span class="source-line-no">061</span><span id="line-61">    * @return A new instance. Never {@code null}.</span>
+<span class="source-line-no">062</span><span id="line-62">    */</span>
+<span class="source-line-no">063</span><span id="line-63">   public static HttpStringRangesHeader of(String name, StringRanges typedValue) {</span>
+<span class="source-line-no">064</span><span id="line-64">      return new HttpStringRangesHeader(name, typedValue);</span>
+<span class="source-line-no">065</span><span id="line-65">   }</span>
+<span class="source-line-no">066</span><span id="line-66"></span>
+<span class="source-line-no">067</span><span id="line-67">   protected HttpStringRangesHeader(String name, String value) {</span>
+<span class="source-line-no">068</span><span id="line-68">      super(name, value);</span>
+<span class="source-line-no">069</span><span id="line-69">      this.cachedForStringOrDirect = value == null ? null : StringRanges.of(value);</span>
+<span class="source-line-no">070</span><span id="line-70">      this.lazySupplier = null;</span>
+<span class="source-line-no">071</span><span id="line-71">      this.lazyMode = -1;</span>
+<span class="source-line-no">072</span><span id="line-72">   }</span>
+<span class="source-line-no">073</span><span id="line-73"></span>
+<span class="source-line-no">074</span><span id="line-74">   protected HttpStringRangesHeader(String name, StringRanges value) {</span>
+<span class="source-line-no">075</span><span id="line-75">      super(name, value == null ? null : value.toString());</span>
+<span class="source-line-no">076</span><span id="line-76">      this.cachedForStringOrDirect = value;</span>
+<span class="source-line-no">077</span><span id="line-77">      this.lazySupplier = null;</span>
+<span class="source-line-no">078</span><span id="line-78">      this.lazyMode = -1;</span>
+<span class="source-line-no">079</span><span id="line-79">   }</span>
+<span class="source-line-no">080</span><span id="line-80"></span>
+<span class="source-line-no">081</span><span id="line-81">   protected HttpStringRangesHeader(String name, Supplier&lt;?&gt; supplier, int lazyMode) {</span>
+<span class="source-line-no">082</span><span id="line-82">      super(name, lazyMode == LAZY_WIRE_STRING</span>
+<span class="source-line-no">083</span><span id="line-83">         ? ((Supplier&lt;String&gt;) supplier)::get</span>
+<span class="source-line-no">084</span><span id="line-84">         : () -&gt; {</span>
+<span class="source-line-no">085</span><span id="line-85">            var m = ((Supplier&lt;StringRanges&gt;) supplier).get();</span>
+<span class="source-line-no">086</span><span id="line-86">            if (m == null)</span>
+<span class="source-line-no">087</span><span id="line-87">               return null;</span>
+<span class="source-line-no">088</span><span id="line-88">            return m.toString();</span>
+<span class="source-line-no">089</span><span id="line-89">         });</span>
+<span class="source-line-no">090</span><span id="line-90">      this.cachedForStringOrDirect = null;</span>
+<span class="source-line-no">091</span><span id="line-91">      this.lazySupplier = supplier;</span>
+<span class="source-line-no">092</span><span id="line-92">      this.lazyMode = lazyMode;</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   public Optional&lt;StringRanges&gt; asStringRanges() {</span>
+<span class="source-line-no">096</span><span id="line-96">      return o(toStringRanges());</span>
+<span class="source-line-no">097</span><span id="line-97">   }</span>
+<span class="source-line-no">098</span><span id="line-98"></span>
+<span class="source-line-no">099</span><span id="line-99">   public StringRange getRange(int index) {</span>
+<span class="source-line-no">100</span><span id="line-100">      var x = toStringRanges();</span>
+<span class="source-line-no">101</span><span id="line-101">      return x == null ? null : x.getRange(index);</span>
+<span class="source-line-no">102</span><span id="line-102">   }</span>
+<span class="source-line-no">103</span><span id="line-103"></span>
+<span class="source-line-no">104</span><span id="line-104">   public int match(List&lt;String&gt; names) {</span>
+<span class="source-line-no">105</span><span id="line-105">      var x = toStringRanges();</span>
+<span class="source-line-no">106</span><span id="line-106">      return x == null ? -1 : x.match(names);</span>
+<span class="source-line-no">107</span><span id="line-107">   }</span>
+<span class="source-line-no">108</span><span id="line-108"></span>
+<span class="source-line-no">109</span><span id="line-109">   public StringRanges orElse(StringRanges other) {</span>
+<span class="source-line-no">110</span><span id="line-110">      var x = toStringRanges();</span>
+<span class="source-line-no">111</span><span id="line-111">      return nn(x) ? x : other;</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   public StringRanges toStringRanges() {</span>
+<span class="source-line-no">115</span><span id="line-115">      if (lazyMode == LAZY_STRING_RANGES)</span>
+<span class="source-line-no">116</span><span id="line-116">         return ((Supplier&lt;StringRanges&gt;) lazySupplier).get();</span>
+<span class="source-line-no">117</span><span id="line-117">      if (cachedForStringOrDirect != null)</span>
+<span class="source-line-no">118</span><span id="line-118">         return cachedForStringOrDirect;</span>
+<span class="source-line-no">119</span><span id="line-119">      var v = super.getValue();</span>
+<span class="source-line-no">120</span><span id="line-120">      return v == null ? null : StringRanges.of(v);</span>
+<span class="source-line-no">121</span><span id="line-121">   }</span>
+<span class="source-line-no">122</span><span id="line-122">}</span>
 
 
 

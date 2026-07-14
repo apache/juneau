@@ -135,7 +135,7 @@ R&gt;</span>&nbsp;<span class="return-type"><a href="McpToolHandler.html" title=
  Conversion behavior:
  <ul>
    <li>The incoming <code>Map&lt;String,Object&gt;</code> arguments are serialized to JSON and re-parsed as
-       <a href="McpTypedToolHandler.html#argumentType()"><code>McpTypedToolHandler.argumentType()</code></a> via <a href="../../../marshall/marshaller/CharMarshaller.html#of(java.lang.Object)"><code>CharMarshaller.of(Object)</code></a> / <a href="../../../marshall/marshaller/Marshaller.html#to(java.lang.Object,java.lang.reflect.Type,java.lang.reflect.Type...)"><code>Marshaller.to(Object, Class, java.lang.reflect.Type...)</code></a>.
+       <a href="McpTypedToolHandler.html#argumentType()"><code>McpTypedToolHandler.argumentType()</code></a> via <a href="../../../marshall/marshaller/Json.html#of(java.lang.Object)"><code>Json.of(Object)</code></a> / <a href="../../../marshall/marshaller/Json.html#to(java.lang.String,java.lang.Class)"><code>Json.to(String, Class)</code></a>.
    <li>If the typed handler returns a <a href="../../../bean/mcp/CallToolResult.html" title="class in org.apache.juneau.bean.mcp"><code>CallToolResult</code></a>, it is passed through unchanged.
    <li>Otherwise, the return value is JSON-serialized and wrapped in a single <a href="../../../bean/mcp/TextContent.html" title="class in org.apache.juneau.bean.mcp"><code>TextContent</code></a>
        inside a <a href="../../../bean/mcp/CallToolResult.html" title="class in org.apache.juneau.bean.mcp"><code>CallToolResult</code></a>.

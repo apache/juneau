@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.time.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
@@ -263,7 +263,7 @@
 <span class="source-line-no">250</span><span id="line-250">       */</span>
 <span class="source-line-no">251</span><span id="line-251">      public Builder maxAge(long seconds) {</span>
 <span class="source-line-no">252</span><span id="line-252">         if (seconds &lt; 0)</span>
-<span class="source-line-no">253</span><span id="line-253">            throw illegalArg("max-age must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">253</span><span id="line-253">            throw iaex("max-age must be non-negative: {0}", seconds);</span>
 <span class="source-line-no">254</span><span id="line-254">         maxAge = seconds;</span>
 <span class="source-line-no">255</span><span id="line-255">         return this;</span>
 <span class="source-line-no">256</span><span id="line-256">      }</span>
@@ -289,7 +289,7 @@
 <span class="source-line-no">276</span><span id="line-276">       */</span>
 <span class="source-line-no">277</span><span id="line-277">      public Builder sMaxAge(long seconds) {</span>
 <span class="source-line-no">278</span><span id="line-278">         if (seconds &lt; 0)</span>
-<span class="source-line-no">279</span><span id="line-279">            throw illegalArg("s-maxage must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">279</span><span id="line-279">            throw iaex("s-maxage must be non-negative: {0}", seconds);</span>
 <span class="source-line-no">280</span><span id="line-280">         sMaxAge = seconds;</span>
 <span class="source-line-no">281</span><span id="line-281">         return this;</span>
 <span class="source-line-no">282</span><span id="line-282">      }</span>
@@ -315,7 +315,7 @@
 <span class="source-line-no">302</span><span id="line-302">       */</span>
 <span class="source-line-no">303</span><span id="line-303">      public Builder staleWhileRevalidate(long seconds) {</span>
 <span class="source-line-no">304</span><span id="line-304">         if (seconds &lt; 0)</span>
-<span class="source-line-no">305</span><span id="line-305">            throw illegalArg("stale-while-revalidate must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">305</span><span id="line-305">            throw iaex("stale-while-revalidate must be non-negative: {0}", seconds);</span>
 <span class="source-line-no">306</span><span id="line-306">         staleWhileRevalidate = seconds;</span>
 <span class="source-line-no">307</span><span id="line-307">         return this;</span>
 <span class="source-line-no">308</span><span id="line-308">      }</span>
@@ -329,7 +329,7 @@
 <span class="source-line-no">316</span><span id="line-316">       */</span>
 <span class="source-line-no">317</span><span id="line-317">      public Builder staleIfError(long seconds) {</span>
 <span class="source-line-no">318</span><span id="line-318">         if (seconds &lt; 0)</span>
-<span class="source-line-no">319</span><span id="line-319">            throw illegalArg("stale-if-error must be non-negative: {0}", seconds);</span>
+<span class="source-line-no">319</span><span id="line-319">            throw iaex("stale-if-error must be non-negative: {0}", seconds);</span>
 <span class="source-line-no">320</span><span id="line-320">         staleIfError = seconds;</span>
 <span class="source-line-no">321</span><span id="line-321">         return this;</span>
 <span class="source-line-no">322</span><span id="line-322">      }</span>
@@ -349,7 +349,7 @@
 <span class="source-line-no">336</span><span id="line-336">         assertArgNotNull(ARG_value, value);</span>
 <span class="source-line-no">337</span><span id="line-337">         var v = value.trim();</span>
 <span class="source-line-no">338</span><span id="line-338">         if (v.isEmpty())</span>
-<span class="source-line-no">339</span><span id="line-339">            throw illegalArg("cache-control extension must not be blank");</span>
+<span class="source-line-no">339</span><span id="line-339">            throw iaex("cache-control extension must not be blank");</span>
 <span class="source-line-no">340</span><span id="line-340">         extensions.add(v);</span>
 <span class="source-line-no">341</span><span id="line-341">         return this;</span>
 <span class="source-line-no">342</span><span id="line-342">      }</span>

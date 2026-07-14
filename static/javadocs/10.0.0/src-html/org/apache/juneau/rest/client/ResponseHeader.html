@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.client;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -114,7 +114,7 @@
 <span class="source-line-no">101</span><span id="line-101">    * @return An optional containing the first header value, or empty if absent.</span>
 <span class="source-line-no">102</span><span id="line-102">    */</span>
 <span class="source-line-no">103</span><span id="line-103">   public Optional&lt;String&gt; asOptional() {</span>
-<span class="source-line-no">104</span><span id="line-104">      return opt(getValue());</span>
+<span class="source-line-no">104</span><span id="line-104">      return o(getValue());</span>
 <span class="source-line-no">105</span><span id="line-105">   }</span>
 <span class="source-line-no">106</span><span id="line-106"></span>
 <span class="source-line-no">107</span><span id="line-107">   /**</span>

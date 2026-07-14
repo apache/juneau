@@ -30,11 +30,11 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.util.Collections.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">025</span><span id="line-25"></span>
 <span class="source-line-no">026</span><span id="line-26">import java.text.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import java.util.*;</span>
@@ -156,8 +156,8 @@
 <span class="source-line-no">143</span><span id="line-143">       * If not specified, defaults to {@link Context.Builder#debug()}.</span>
 <span class="source-line-no">144</span><span id="line-144">       *</span>
 <span class="source-line-no">145</span><span id="line-145">       * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">146</span><span id="line-146">       *    &lt;li class='ja'&gt;{@link org.apache.juneau.marshall.MarshalledConfig#debug()}</span>
-<span class="source-line-no">147</span><span id="line-147">       *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.Context.Builder#debug()}</span>
+<span class="source-line-no">146</span><span id="line-146">       *    &lt;li class='ja'&gt;{@link MarshalledConfig#debug()}</span>
+<span class="source-line-no">147</span><span id="line-147">       *    &lt;li class='jm'&gt;{@link Context.Builder#debug()}</span>
 <span class="source-line-no">148</span><span id="line-148">       *</span>
 <span class="source-line-no">149</span><span id="line-149">       * @param value</span>
 <span class="source-line-no">150</span><span id="line-150">       *    The new value for this property.</span>
@@ -247,7 +247,7 @@
 <span class="source-line-no">234</span><span id="line-234">   protected ContextSession(Builder&lt;?&gt; builder) {</span>
 <span class="source-line-no">235</span><span id="line-235">      assertArgNotNull(ARG_builder, builder);</span>
 <span class="source-line-no">236</span><span id="line-236">      ctx = builder.ctx;</span>
-<span class="source-line-no">237</span><span id="line-237">      debug = opt(builder.debug).orElse(ctx.isDebug());</span>
+<span class="source-line-no">237</span><span id="line-237">      debug = o(builder.debug).orElse(ctx.isDebug());</span>
 <span class="source-line-no">238</span><span id="line-238">      unmodifiable = builder.unmodifiable;</span>
 <span class="source-line-no">239</span><span id="line-239">      var sp = builder.properties.get();</span>
 <span class="source-line-no">240</span><span id="line-240">      if (unmodifiable) {</span>
@@ -279,7 +279,7 @@
 <span class="source-line-no">266</span><span id="line-266">    */</span>
 <span class="source-line-no">267</span><span id="line-267">   public void checkForWarnings() {</span>
 <span class="source-line-no">268</span><span id="line-268">      if (debug &amp;&amp; ! getWarnings().isEmpty())</span>
-<span class="source-line-no">269</span><span id="line-269">         throw bex("Warnings occurred in session: \n" + join(getWarnings(), "\n"));</span>
+<span class="source-line-no">269</span><span id="line-269">         throw brex("Warnings occurred in session: \n" + join(getWarnings(), "\n"));</span>
 <span class="source-line-no">270</span><span id="line-270">   }</span>
 <span class="source-line-no">271</span><span id="line-271"></span>
 <span class="source-line-no">272</span><span id="line-272">   /**</span>

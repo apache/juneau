@@ -30,23 +30,23 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.httppart;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.httppart.HttpPartType.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.regex.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
-<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.test.assertions.*;</span>
-<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.commons.httppart.*;</span>
-<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.http.*;</span>
-<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.http.part.*;</span>
-<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.http.response.*;</span>
-<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.marshall.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.marshall.httppart.*;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.marshall.oapi.*;</span>
-<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.marshall.parser.*;</span>
-<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import org.apache.juneau.commons.httppart.*;</span>
+<span class="source-line-no">028</span><span id="line-28">import org.apache.juneau.http.*;</span>
+<span class="source-line-no">029</span><span id="line-29">import org.apache.juneau.http.part.*;</span>
+<span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.http.response.*;</span>
+<span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.marshall.*;</span>
+<span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.marshall.httppart.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.marshall.oapi.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.marshall.parser.*;</span>
+<span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.rest.server.*;</span>
+<span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.test.assertions.*;</span>
 <span class="source-line-no">037</span><span id="line-37"></span>
 <span class="source-line-no">038</span><span id="line-38">/**</span>
 <span class="source-line-no">039</span><span id="line-39"> * Represents a single HTTP part on an HTTP request.</span>
@@ -136,14 +136,14 @@
 <span class="source-line-no">123</span><span id="line-123">            var cc = HttpParts.getConstructor(type).orElse(null);</span>
 <span class="source-line-no">124</span><span id="line-124">            if (nn(cc)) {</span>
 <span class="source-line-no">125</span><span id="line-125">               if (! isPresent())</span>
-<span class="source-line-no">126</span><span id="line-126">                  return opte();</span>
+<span class="source-line-no">126</span><span id="line-126">                  return oe();</span>
 <span class="source-line-no">127</span><span id="line-127">               if (cc.hasParameterTypes(String.class))</span>
-<span class="source-line-no">128</span><span id="line-128">                  return opt(cc.newInstance(get()));</span>
+<span class="source-line-no">128</span><span id="line-128">                  return o(cc.newInstance(get()));</span>
 <span class="source-line-no">129</span><span id="line-129">               if (cc.hasParameterTypes(String.class, String.class))</span>
-<span class="source-line-no">130</span><span id="line-130">                  return opt(cc.newInstance(getName(), get()));</span>
+<span class="source-line-no">130</span><span id="line-130">                  return o(cc.newInstance(getName(), get()));</span>
 <span class="source-line-no">131</span><span id="line-131">            }</span>
 <span class="source-line-no">132</span><span id="line-132">         }</span>
-<span class="source-line-no">133</span><span id="line-133">         return opt(parser.parse(HEADER, schema, orElse(null), type));</span>
+<span class="source-line-no">133</span><span id="line-133">         return o(parser.parse(HEADER, schema, orElse(null), type));</span>
 <span class="source-line-no">134</span><span id="line-134">      } catch (ParseException e) {</span>
 <span class="source-line-no">135</span><span id="line-135">         throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());</span>
 <span class="source-line-no">136</span><span id="line-136">      }</span>
@@ -417,7 +417,7 @@
 <span class="source-line-no">404</span><span id="line-404">    * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.</span>
 <span class="source-line-no">405</span><span id="line-405">    */</span>
 <span class="source-line-no">406</span><span id="line-406">   public Optional&lt;String&gt; asString() {</span>
-<span class="source-line-no">407</span><span id="line-407">      return opt(getValue());</span>
+<span class="source-line-no">407</span><span id="line-407">      return o(getValue());</span>
 <span class="source-line-no">408</span><span id="line-408">   }</span>
 <span class="source-line-no">409</span><span id="line-409"></span>
 <span class="source-line-no">410</span><span id="line-410">   /**</span>
@@ -503,7 +503,7 @@
 <span class="source-line-no">490</span><span id="line-490">    * Specifies the part parser to use for this part.</span>
 <span class="source-line-no">491</span><span id="line-491">    *</span>
 <span class="source-line-no">492</span><span id="line-492">    * &lt;p&gt;</span>
-<span class="source-line-no">493</span><span id="line-493">    * If not specified, uses the part parser defined on the resource via {@link org.apache.juneau.rest.server.Rest#partParser() @Rest(partParser=...)}.</span>
+<span class="source-line-no">493</span><span id="line-493">    * If not specified, uses the part parser defined on the resource via {@link Rest#partParser() @Rest(partParser=...)}.</span>
 <span class="source-line-no">494</span><span id="line-494">    *</span>
 <span class="source-line-no">495</span><span id="line-495">    * @param value</span>
 <span class="source-line-no">496</span><span id="line-496">    *    The new part parser to use for this part.</span>

@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.freemarker;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -121,7 +121,7 @@
 <span class="source-line-no">108</span><span id="line-108">    */</span>
 <span class="source-line-no">109</span><span id="line-109">   public static FreemarkerView of(String templateName) {</span>
 <span class="source-line-no">110</span><span id="line-110">      if (isBlank(templateName))</span>
-<span class="source-line-no">111</span><span id="line-111">         throw illegalArg("templateName must not be null or blank");</span>
+<span class="source-line-no">111</span><span id="line-111">         throw iaex("templateName must not be null or blank");</span>
 <span class="source-line-no">112</span><span id="line-112">      return new FreemarkerView(templateName, Map.of(), Map.of());</span>
 <span class="source-line-no">113</span><span id="line-113">   }</span>
 <span class="source-line-no">114</span><span id="line-114"></span>
@@ -152,9 +152,9 @@
 <span class="source-line-no">139</span><span id="line-139">    */</span>
 <span class="source-line-no">140</span><span id="line-140">   public FreemarkerView attr(String key, Object value) {</span>
 <span class="source-line-no">141</span><span id="line-141">      if (isBlank(key))</span>
-<span class="source-line-no">142</span><span id="line-142">         throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">142</span><span id="line-142">         throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">143</span><span id="line-143">      if (value == null)</span>
-<span class="source-line-no">144</span><span id="line-144">         throw illegalArg("attribute value must not be null (attribute ''{0}'')", key);</span>
+<span class="source-line-no">144</span><span id="line-144">         throw iaex("attribute value must not be null (attribute ''{0}'')", key);</span>
 <span class="source-line-no">145</span><span id="line-145">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">146</span><span id="line-146">      copy.put(key, value);</span>
 <span class="source-line-no">147</span><span id="line-147">      return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -176,9 +176,9 @@
 <span class="source-line-no">163</span><span id="line-163">      var copy = new LinkedHashMap&lt;&gt;(attributes);</span>
 <span class="source-line-no">164</span><span id="line-164">      values.forEach((k, v) -&gt; {</span>
 <span class="source-line-no">165</span><span id="line-165">         if (isBlank(k))</span>
-<span class="source-line-no">166</span><span id="line-166">            throw illegalArg("attribute key must not be null or blank");</span>
+<span class="source-line-no">166</span><span id="line-166">            throw iaex("attribute key must not be null or blank");</span>
 <span class="source-line-no">167</span><span id="line-167">         if (v == null)</span>
-<span class="source-line-no">168</span><span id="line-168">            throw illegalArg("attribute value must not be null (attribute ''{0}'')", k);</span>
+<span class="source-line-no">168</span><span id="line-168">            throw iaex("attribute value must not be null (attribute ''{0}'')", k);</span>
 <span class="source-line-no">169</span><span id="line-169">         copy.put(k, v);</span>
 <span class="source-line-no">170</span><span id="line-170">      });</span>
 <span class="source-line-no">171</span><span id="line-171">      return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);</span>
@@ -201,9 +201,9 @@
 <span class="source-line-no">188</span><span id="line-188">    */</span>
 <span class="source-line-no">189</span><span id="line-189">   public FreemarkerView header(String name, String value) {</span>
 <span class="source-line-no">190</span><span id="line-190">      if (isBlank(name))</span>
-<span class="source-line-no">191</span><span id="line-191">         throw illegalArg("header name must not be null or blank");</span>
+<span class="source-line-no">191</span><span id="line-191">         throw iaex("header name must not be null or blank");</span>
 <span class="source-line-no">192</span><span id="line-192">      if (value == null)</span>
-<span class="source-line-no">193</span><span id="line-193">         throw illegalArg("header value must not be null (header ''{0}'')", name);</span>
+<span class="source-line-no">193</span><span id="line-193">         throw iaex("header value must not be null (header ''{0}'')", name);</span>
 <span class="source-line-no">194</span><span id="line-194">      var copy = new LinkedHashMap&lt;&gt;(responseHeaders);</span>
 <span class="source-line-no">195</span><span id="line-195">      copy.put(name, value);</span>
 <span class="source-line-no">196</span><span id="line-196">      return new FreemarkerView(templateName, attributes, Map.copyOf(copy));</span>

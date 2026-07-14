@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.stream.*;</span>
@@ -39,9 +39,9 @@
 <span class="source-line-no">026</span><span id="line-26"> *</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * Used by {@link MarshallingContext.Builder#bitSetFormat(BitSetFormat)},</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@link org.apache.juneau.marshall.Marshalled#bitSetFormat()},</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.marshall.MarshalledProp#bitSetFormat()}, and</span>
-<span class="source-line-no">031</span><span id="line-31"> * {@link org.apache.juneau.marshall.MarshalledConfig#bitSetFormat()} to control how {@link BitSet} values</span>
+<span class="source-line-no">029</span><span id="line-29"> * {@link Marshalled#bitSetFormat()},</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link MarshalledProp#bitSetFormat()}, and</span>
+<span class="source-line-no">031</span><span id="line-31"> * {@link MarshalledConfig#bitSetFormat()} to control how {@link BitSet} values</span>
 <span class="source-line-no">032</span><span id="line-32"> * are written to text-based wire formats.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
@@ -49,9 +49,9 @@
 <span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;ol&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledProp#bitSetFormat() @MarshalledProp(bitSetFormat=…)} on the bean property.</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Marshalled#bitSetFormat() @Marshalled(bitSetFormat=…)} on the bean class.</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledConfig#bitSetFormat() @MarshalledConfig(bitSetFormat=…)} on</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;{@link MarshalledProp#bitSetFormat() @MarshalledProp(bitSetFormat=…)} on the bean property.</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@link Marshalled#bitSetFormat() @Marshalled(bitSetFormat=…)} on the bean class.</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link MarshalledConfig#bitSetFormat() @MarshalledConfig(bitSetFormat=…)} on</span>
 <span class="source-line-no">042</span><span id="line-42"> *       &lt;code&gt;&lt;ja&gt;@Rest&lt;/ja&gt;&lt;/code&gt;-annotated classes / methods.</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Programmatic {@link MarshallingContext.Builder#bitSetFormat(BitSetFormat)}.</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Environment variable &lt;c&gt;MarshallingContext.bitSetFormat&lt;/c&gt;.</span>
@@ -186,20 +186,20 @@
 <span class="source-line-no">173</span><span id="line-173">            }</span>
 <span class="source-line-no">174</span><span id="line-174">         }</span>
 <span class="source-line-no">175</span><span id="line-175">      } catch (IllegalArgumentException e) {</span>
-<span class="source-line-no">176</span><span id="line-176">         throw illegalArg("Invalid BitSet value ''{0}'' for format {1}: {2}", value, fmt, e.getMessage());</span>
+<span class="source-line-no">176</span><span id="line-176">         throw iaex("Invalid BitSet value ''{0}'' for format {1}: {2}", value, fmt, e.getMessage());</span>
 <span class="source-line-no">177</span><span id="line-177">      }</span>
 <span class="source-line-no">178</span><span id="line-178">      return bs;</span>
 <span class="source-line-no">179</span><span id="line-179">   }</span>
 <span class="source-line-no">180</span><span id="line-180"></span>
 <span class="source-line-no">181</span><span id="line-181">   private static byte[] parseHex(String s) {</span>
 <span class="source-line-no">182</span><span id="line-182">      if ((s.length() &amp; 1) != 0)</span>
-<span class="source-line-no">183</span><span id="line-183">         throw illegalArg("Hex string must have an even number of characters");</span>
+<span class="source-line-no">183</span><span id="line-183">         throw iaex("Hex string must have an even number of characters");</span>
 <span class="source-line-no">184</span><span id="line-184">      var out = new byte[s.length() / 2];</span>
 <span class="source-line-no">185</span><span id="line-185">      for (var i = 0; i &lt; out.length; i++) {</span>
 <span class="source-line-no">186</span><span id="line-186">         var hi = Character.digit(s.charAt(i * 2), 16);</span>
 <span class="source-line-no">187</span><span id="line-187">         var lo = Character.digit(s.charAt(i * 2 + 1), 16);</span>
 <span class="source-line-no">188</span><span id="line-188">         if (hi &lt; 0 || lo &lt; 0)</span>
-<span class="source-line-no">189</span><span id="line-189">            throw illegalArg("Invalid hex character");</span>
+<span class="source-line-no">189</span><span id="line-189">            throw iaex("Invalid hex character");</span>
 <span class="source-line-no">190</span><span id="line-190">         out[i] = (byte) ((hi &lt;&lt; 4) | lo);</span>
 <span class="source-line-no">191</span><span id="line-191">      }</span>
 <span class="source-line-no">192</span><span id="line-192">      return out;</span>

@@ -88,7 +88,7 @@ implements <a href="HttpTransportProvider.html" title="interface in org.apache.j
 <div class="block"><a href="HttpTransportProvider.html" title="interface in org.apache.juneau.rest.client"><code>HttpTransportProvider</code></a> implementation that supplies a <a href="JavaHttpTransport.html" title="class in org.apache.juneau.rest.client"><code>JavaHttpTransport</code></a>.
 
  <p>
- Registered via <code>META-INF/services/org.apache.juneau.rest.client.HttpTransportProvider</code> so that
+ Registered via <code>META-INF/services/HttpTransportProvider</code> so that
  <code>RestClient</code> auto-discovers the JDK HTTP client when no higher-priority transport is present.
  Since the JDK transport ships in the <code>juneau-rest-client</code> artifact itself, it is always available
  unless overridden by a sibling transport module with a lower priority value.

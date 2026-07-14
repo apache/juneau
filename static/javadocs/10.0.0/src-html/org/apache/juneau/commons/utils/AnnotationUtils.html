@@ -31,167 +31,168 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import java.lang.annotation.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.lang.reflect.*;</span>
-<span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
-<span class="source-line-no">026</span><span id="line-26">import java.util.stream.*;</span>
-<span class="source-line-no">027</span><span id="line-27"></span>
-<span class="source-line-no">028</span><span id="line-28">/**</span>
-<span class="source-line-no">029</span><span id="line-29"> * Annotation utilities.</span>
-<span class="source-line-no">030</span><span id="line-30"> */</span>
-<span class="source-line-no">031</span><span id="line-31">public class AnnotationUtils {</span>
-<span class="source-line-no">032</span><span id="line-32"></span>
-<span class="source-line-no">033</span><span id="line-33">   /**</span>
-<span class="source-line-no">034</span><span id="line-34">    * Prevents instantiation.</span>
-<span class="source-line-no">035</span><span id="line-35">    */</span>
-<span class="source-line-no">036</span><span id="line-36">   private AnnotationUtils() {}</span>
-<span class="source-line-no">037</span><span id="line-37"></span>
-<span class="source-line-no">038</span><span id="line-38">   /**</span>
-<span class="source-line-no">039</span><span id="line-39">    * Checks if two annotations are equal using the criteria for equality presented in the {@link Annotation#equals(Object)} API docs.</span>
-<span class="source-line-no">040</span><span id="line-40">    *</span>
-<span class="source-line-no">041</span><span id="line-41">    * @param a1 the first Annotation to compare, {@code null} returns {@code false} unless both are {@code null}</span>
-<span class="source-line-no">042</span><span id="line-42">    * @param a2 the second Annotation to compare, {@code null} returns {@code false} unless both are {@code null}</span>
-<span class="source-line-no">043</span><span id="line-43">    * @return {@code true} if the two annotations are {@code equal} or both {@code null}</span>
-<span class="source-line-no">044</span><span id="line-44">    */</span>
-<span class="source-line-no">045</span><span id="line-45">   public static boolean equals(Annotation a1, Annotation a2) {</span>
-<span class="source-line-no">046</span><span id="line-46">      if (a1 == a2)</span>
-<span class="source-line-no">047</span><span id="line-47">         return true;</span>
-<span class="source-line-no">048</span><span id="line-48">      if (a1 == null || a2 == null)</span>
-<span class="source-line-no">049</span><span id="line-49">         return false;</span>
-<span class="source-line-no">050</span><span id="line-50"></span>
-<span class="source-line-no">051</span><span id="line-51">      var t1 = a1.annotationType();</span>
-<span class="source-line-no">052</span><span id="line-52">      var t2 = a2.annotationType();</span>
-<span class="source-line-no">053</span><span id="line-53"></span>
-<span class="source-line-no">054</span><span id="line-54">      if (! t1.equals(t2))</span>
-<span class="source-line-no">055</span><span id="line-55">         return false;</span>
-<span class="source-line-no">056</span><span id="line-56"></span>
-<span class="source-line-no">057</span><span id="line-57">      return getAnnotationMethods(t1).allMatch(x -&gt; memberEquals(x.getReturnType(), safeSupplier(() -&gt; x.invoke(a1)), safeSupplier(() -&gt; x.invoke(a2))));</span>
-<span class="source-line-no">058</span><span id="line-58">   }</span>
-<span class="source-line-no">059</span><span id="line-59"></span>
-<span class="source-line-no">060</span><span id="line-60">   /**</span>
-<span class="source-line-no">061</span><span id="line-61">    * Generate a hash code for the given annotation using the algorithm presented in the {@link Annotation#hashCode()} API docs.</span>
-<span class="source-line-no">062</span><span id="line-62">    *</span>
-<span class="source-line-no">063</span><span id="line-63">    * @param a the Annotation for a hash code calculation is desired, not {@code null}</span>
-<span class="source-line-no">064</span><span id="line-64">    * @return the calculated hash code</span>
-<span class="source-line-no">065</span><span id="line-65">    * @throws RuntimeException if an {@code Exception} is encountered during annotation member access</span>
-<span class="source-line-no">066</span><span id="line-66">    * @throws IllegalStateException if an annotation method invocation returns {@code null}</span>
-<span class="source-line-no">067</span><span id="line-67">    */</span>
-<span class="source-line-no">068</span><span id="line-68">   public static int hash(Annotation a) {</span>
-<span class="source-line-no">069</span><span id="line-69">      return getAnnotationMethods(a.annotationType()).mapToInt(x -&gt; hashMember(x.getName(), safeSupplier(() -&gt; x.invoke(a)))).sum();</span>
-<span class="source-line-no">070</span><span id="line-70">   }</span>
-<span class="source-line-no">071</span><span id="line-71"></span>
-<span class="source-line-no">072</span><span id="line-72">   /**</span>
-<span class="source-line-no">073</span><span id="line-73">    * Returns a stream of nested annotations in a repeated annotation if the specified annotation is a repeated annotation,</span>
-<span class="source-line-no">074</span><span id="line-74">    * or a singleton stream with the same annotation if not.</span>
-<span class="source-line-no">075</span><span id="line-75">    *</span>
-<span class="source-line-no">076</span><span id="line-76">    * &lt;p&gt;</span>
-<span class="source-line-no">077</span><span id="line-77">    * This method is a stream-based alternative to splitting repeated annotations that avoids creating intermediate arrays.</span>
-<span class="source-line-no">078</span><span id="line-78">    *</span>
-<span class="source-line-no">079</span><span id="line-79">    * &lt;p&gt;</span>
-<span class="source-line-no">080</span><span id="line-80">    * &lt;b&gt;Example:&lt;/b&gt;</span>
-<span class="source-line-no">081</span><span id="line-81">    * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">082</span><span id="line-82">    *    &lt;jc&gt;// Given an annotation that may be repeatable&lt;/jc&gt;</span>
-<span class="source-line-no">083</span><span id="line-83">    *    Annotation &lt;jv&gt;annotation&lt;/jv&gt; = ...;</span>
-<span class="source-line-no">084</span><span id="line-84">    *</span>
-<span class="source-line-no">085</span><span id="line-85">    *    &lt;jc&gt;// Stream individual annotations (expanded if repeatable)&lt;/jc&gt;</span>
-<span class="source-line-no">086</span><span id="line-86">    *    streamRepeated(&lt;jv&gt;annotation&lt;/jv&gt;)</span>
-<span class="source-line-no">087</span><span id="line-87">    *       .forEach(&lt;jv&gt;a&lt;/jv&gt; -&amp;gt; System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;a&lt;/jv&gt;));</span>
-<span class="source-line-no">088</span><span id="line-88">    * &lt;/p&gt;</span>
-<span class="source-line-no">089</span><span id="line-89">    *</span>
-<span class="source-line-no">090</span><span id="line-90">    * @param a The annotation to split.</span>
-<span class="source-line-no">091</span><span id="line-91">    * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.</span>
-<span class="source-line-no">092</span><span id="line-92">    *    Never &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">093</span><span id="line-93">    */</span>
-<span class="source-line-no">094</span><span id="line-94">   public static Stream&lt;Annotation&gt; streamRepeated(Annotation a) {</span>
-<span class="source-line-no">095</span><span id="line-95">      var ci = info(a.annotationType());</span>
-<span class="source-line-no">096</span><span id="line-96">      var mi = ci.getRepeatedAnnotationMethod();</span>
-<span class="source-line-no">097</span><span id="line-97">      if (nn(mi)) {</span>
-<span class="source-line-no">098</span><span id="line-98">         Annotation[] annotations = mi.invoke(a);</span>
-<span class="source-line-no">099</span><span id="line-99">         return Arrays.stream(annotations);</span>
-<span class="source-line-no">100</span><span id="line-100">      }</span>
-<span class="source-line-no">101</span><span id="line-101">      return Stream.of(a);</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103"></span>
-<span class="source-line-no">104</span><span id="line-104">   private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {</span>
-<span class="source-line-no">105</span><span id="line-105">      if (a1.length != a2.length)</span>
-<span class="source-line-no">106</span><span id="line-106">         return false;</span>
-<span class="source-line-no">107</span><span id="line-107">      for (var i = 0; i &lt; a1.length; i++)</span>
-<span class="source-line-no">108</span><span id="line-108">         if (neq(a1[i], a2[i]))</span>
-<span class="source-line-no">109</span><span id="line-109">            return false;</span>
-<span class="source-line-no">110</span><span id="line-110">      return true;</span>
-<span class="source-line-no">111</span><span id="line-111">   }</span>
-<span class="source-line-no">112</span><span id="line-112"></span>
-<span class="source-line-no">113</span><span id="line-113">   private static boolean arrayMemberEquals(Class&lt;?&gt; componentType, Object o1, Object o2) {</span>
-<span class="source-line-no">114</span><span id="line-114">      if (componentType.isAnnotation())</span>
-<span class="source-line-no">115</span><span id="line-115">         return annotationArrayMemberEquals((Annotation[])o1, (Annotation[])o2);</span>
-<span class="source-line-no">116</span><span id="line-116">      if (componentType.equals(Byte.TYPE))</span>
-<span class="source-line-no">117</span><span id="line-117">         return Arrays.equals((byte[])o1, (byte[])o2);</span>
-<span class="source-line-no">118</span><span id="line-118">      if (componentType.equals(Short.TYPE))</span>
-<span class="source-line-no">119</span><span id="line-119">         return Arrays.equals((short[])o1, (short[])o2);</span>
-<span class="source-line-no">120</span><span id="line-120">      if (componentType.equals(Integer.TYPE))</span>
-<span class="source-line-no">121</span><span id="line-121">         return Arrays.equals((int[])o1, (int[])o2);</span>
-<span class="source-line-no">122</span><span id="line-122">      if (componentType.equals(Character.TYPE))</span>
-<span class="source-line-no">123</span><span id="line-123">         return Arrays.equals((char[])o1, (char[])o2);</span>
-<span class="source-line-no">124</span><span id="line-124">      if (componentType.equals(Long.TYPE))</span>
-<span class="source-line-no">125</span><span id="line-125">         return Arrays.equals((long[])o1, (long[])o2);</span>
-<span class="source-line-no">126</span><span id="line-126">      if (componentType.equals(Float.TYPE))</span>
-<span class="source-line-no">127</span><span id="line-127">         return Arrays.equals((float[])o1, (float[])o2);</span>
-<span class="source-line-no">128</span><span id="line-128">      if (componentType.equals(Double.TYPE))</span>
-<span class="source-line-no">129</span><span id="line-129">         return Arrays.equals((double[])o1, (double[])o2);</span>
-<span class="source-line-no">130</span><span id="line-130">      if (componentType.equals(Boolean.TYPE))</span>
-<span class="source-line-no">131</span><span id="line-131">         return Arrays.equals((boolean[])o1, (boolean[])o2);</span>
-<span class="source-line-no">132</span><span id="line-132">      return Arrays.equals((Object[])o1, (Object[])o2);</span>
-<span class="source-line-no">133</span><span id="line-133">   }</span>
-<span class="source-line-no">134</span><span id="line-134"></span>
-<span class="source-line-no">135</span><span id="line-135">   private static int arrayMemberHash(Class&lt;?&gt; componentType, Object o) {</span>
-<span class="source-line-no">136</span><span id="line-136">      if (componentType.equals(Byte.TYPE))</span>
-<span class="source-line-no">137</span><span id="line-137">         return Arrays.hashCode((byte[])o);</span>
-<span class="source-line-no">138</span><span id="line-138">      if (componentType.equals(Short.TYPE))</span>
-<span class="source-line-no">139</span><span id="line-139">         return Arrays.hashCode((short[])o);</span>
-<span class="source-line-no">140</span><span id="line-140">      if (componentType.equals(Integer.TYPE))</span>
-<span class="source-line-no">141</span><span id="line-141">         return Arrays.hashCode((int[])o);</span>
-<span class="source-line-no">142</span><span id="line-142">      if (componentType.equals(Character.TYPE))</span>
-<span class="source-line-no">143</span><span id="line-143">         return Arrays.hashCode((char[])o);</span>
-<span class="source-line-no">144</span><span id="line-144">      if (componentType.equals(Long.TYPE))</span>
-<span class="source-line-no">145</span><span id="line-145">         return Arrays.hashCode((long[])o);</span>
-<span class="source-line-no">146</span><span id="line-146">      if (componentType.equals(Float.TYPE))</span>
-<span class="source-line-no">147</span><span id="line-147">         return Arrays.hashCode((float[])o);</span>
-<span class="source-line-no">148</span><span id="line-148">      if (componentType.equals(Double.TYPE))</span>
-<span class="source-line-no">149</span><span id="line-149">         return Arrays.hashCode((double[])o);</span>
-<span class="source-line-no">150</span><span id="line-150">      if (componentType.equals(Boolean.TYPE))</span>
-<span class="source-line-no">151</span><span id="line-151">         return Arrays.hashCode((boolean[])o);</span>
-<span class="source-line-no">152</span><span id="line-152">      return Arrays.hashCode((Object[])o);</span>
-<span class="source-line-no">153</span><span id="line-153">   }</span>
-<span class="source-line-no">154</span><span id="line-154"></span>
-<span class="source-line-no">155</span><span id="line-155">   private static Stream&lt;Method&gt; getAnnotationMethods(Class&lt;? extends Annotation&gt; type) {</span>
-<span class="source-line-no">156</span><span id="line-156">      return l(type.getDeclaredMethods()).stream();</span>
-<span class="source-line-no">157</span><span id="line-157">   }</span>
-<span class="source-line-no">158</span><span id="line-158"></span>
-<span class="source-line-no">159</span><span id="line-159">   private static int hashMember(String name, Object value) {</span>
-<span class="source-line-no">160</span><span id="line-160">      int part1 = name.hashCode() * 127;</span>
-<span class="source-line-no">161</span><span id="line-161">      if (value == null)</span>
-<span class="source-line-no">162</span><span id="line-162">         return part1;</span>
-<span class="source-line-no">163</span><span id="line-163">      if (isArray(value))</span>
-<span class="source-line-no">164</span><span id="line-164">         return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);</span>
-<span class="source-line-no">165</span><span id="line-165">      if (value instanceof Annotation value2)</span>
-<span class="source-line-no">166</span><span id="line-166">         return part1 ^ hash(value2);</span>
-<span class="source-line-no">167</span><span id="line-167">      return part1 ^ value.hashCode();</span>
-<span class="source-line-no">168</span><span id="line-168">   }</span>
-<span class="source-line-no">169</span><span id="line-169"></span>
-<span class="source-line-no">170</span><span id="line-170">   private static boolean memberEquals(Class&lt;?&gt; type, Object o1, Object o2) {</span>
-<span class="source-line-no">171</span><span id="line-171">      if (o1 == o2)</span>
-<span class="source-line-no">172</span><span id="line-172">         return true;</span>
-<span class="source-line-no">173</span><span id="line-173">      if (o1 == null || o2 == null)</span>
-<span class="source-line-no">174</span><span id="line-174">         return false;</span>
-<span class="source-line-no">175</span><span id="line-175">      if (type.isArray())</span>
-<span class="source-line-no">176</span><span id="line-176">         return arrayMemberEquals(type.getComponentType(), o1, o2);</span>
-<span class="source-line-no">177</span><span id="line-177">      if (type.isAnnotation())</span>
-<span class="source-line-no">178</span><span id="line-178">         return eq((Annotation)o1, (Annotation)o2);</span>
-<span class="source-line-no">179</span><span id="line-179">      return o1.equals(o2);</span>
-<span class="source-line-no">180</span><span id="line-180">   }</span>
-<span class="source-line-no">181</span><span id="line-181">}</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ObjectUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23"></span>
+<span class="source-line-no">024</span><span id="line-24">import java.lang.annotation.*;</span>
+<span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
+<span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
+<span class="source-line-no">027</span><span id="line-27">import java.util.stream.*;</span>
+<span class="source-line-no">028</span><span id="line-28"></span>
+<span class="source-line-no">029</span><span id="line-29">/**</span>
+<span class="source-line-no">030</span><span id="line-30"> * Annotation utilities.</span>
+<span class="source-line-no">031</span><span id="line-31"> */</span>
+<span class="source-line-no">032</span><span id="line-32">public class AnnotationUtils {</span>
+<span class="source-line-no">033</span><span id="line-33"></span>
+<span class="source-line-no">034</span><span id="line-34">   /**</span>
+<span class="source-line-no">035</span><span id="line-35">    * Prevents instantiation.</span>
+<span class="source-line-no">036</span><span id="line-36">    */</span>
+<span class="source-line-no">037</span><span id="line-37">   private AnnotationUtils() {}</span>
+<span class="source-line-no">038</span><span id="line-38"></span>
+<span class="source-line-no">039</span><span id="line-39">   /**</span>
+<span class="source-line-no">040</span><span id="line-40">    * Checks if two annotations are equal using the criteria for equality presented in the {@link Annotation#equals(Object)} API docs.</span>
+<span class="source-line-no">041</span><span id="line-41">    *</span>
+<span class="source-line-no">042</span><span id="line-42">    * @param a1 the first Annotation to compare, {@code null} returns {@code false} unless both are {@code null}</span>
+<span class="source-line-no">043</span><span id="line-43">    * @param a2 the second Annotation to compare, {@code null} returns {@code false} unless both are {@code null}</span>
+<span class="source-line-no">044</span><span id="line-44">    * @return {@code true} if the two annotations are {@code equal} or both {@code null}</span>
+<span class="source-line-no">045</span><span id="line-45">    */</span>
+<span class="source-line-no">046</span><span id="line-46">   public static boolean equals(Annotation a1, Annotation a2) {</span>
+<span class="source-line-no">047</span><span id="line-47">      if (a1 == a2)</span>
+<span class="source-line-no">048</span><span id="line-48">         return true;</span>
+<span class="source-line-no">049</span><span id="line-49">      if (a1 == null || a2 == null)</span>
+<span class="source-line-no">050</span><span id="line-50">         return false;</span>
+<span class="source-line-no">051</span><span id="line-51"></span>
+<span class="source-line-no">052</span><span id="line-52">      var t1 = a1.annotationType();</span>
+<span class="source-line-no">053</span><span id="line-53">      var t2 = a2.annotationType();</span>
+<span class="source-line-no">054</span><span id="line-54"></span>
+<span class="source-line-no">055</span><span id="line-55">      if (! t1.equals(t2))</span>
+<span class="source-line-no">056</span><span id="line-56">         return false;</span>
+<span class="source-line-no">057</span><span id="line-57"></span>
+<span class="source-line-no">058</span><span id="line-58">      return getAnnotationMethods(t1).allMatch(x -&gt; memberEquals(x.getReturnType(), safeSupplier(() -&gt; x.invoke(a1)), safeSupplier(() -&gt; x.invoke(a2))));</span>
+<span class="source-line-no">059</span><span id="line-59">   }</span>
+<span class="source-line-no">060</span><span id="line-60"></span>
+<span class="source-line-no">061</span><span id="line-61">   /**</span>
+<span class="source-line-no">062</span><span id="line-62">    * Generate a hash code for the given annotation using the algorithm presented in the {@link Annotation#hashCode()} API docs.</span>
+<span class="source-line-no">063</span><span id="line-63">    *</span>
+<span class="source-line-no">064</span><span id="line-64">    * @param a the Annotation for a hash code calculation is desired, not {@code null}</span>
+<span class="source-line-no">065</span><span id="line-65">    * @return the calculated hash code</span>
+<span class="source-line-no">066</span><span id="line-66">    * @throws RuntimeException if an {@code Exception} is encountered during annotation member access</span>
+<span class="source-line-no">067</span><span id="line-67">    * @throws IllegalStateException if an annotation method invocation returns {@code null}</span>
+<span class="source-line-no">068</span><span id="line-68">    */</span>
+<span class="source-line-no">069</span><span id="line-69">   public static int hash(Annotation a) {</span>
+<span class="source-line-no">070</span><span id="line-70">      return getAnnotationMethods(a.annotationType()).mapToInt(x -&gt; hashMember(x.getName(), safeSupplier(() -&gt; x.invoke(a)))).sum();</span>
+<span class="source-line-no">071</span><span id="line-71">   }</span>
+<span class="source-line-no">072</span><span id="line-72"></span>
+<span class="source-line-no">073</span><span id="line-73">   /**</span>
+<span class="source-line-no">074</span><span id="line-74">    * Returns a stream of nested annotations in a repeated annotation if the specified annotation is a repeated annotation,</span>
+<span class="source-line-no">075</span><span id="line-75">    * or a singleton stream with the same annotation if not.</span>
+<span class="source-line-no">076</span><span id="line-76">    *</span>
+<span class="source-line-no">077</span><span id="line-77">    * &lt;p&gt;</span>
+<span class="source-line-no">078</span><span id="line-78">    * This method is a stream-based alternative to splitting repeated annotations that avoids creating intermediate arrays.</span>
+<span class="source-line-no">079</span><span id="line-79">    *</span>
+<span class="source-line-no">080</span><span id="line-80">    * &lt;p&gt;</span>
+<span class="source-line-no">081</span><span id="line-81">    * &lt;b&gt;Example:&lt;/b&gt;</span>
+<span class="source-line-no">082</span><span id="line-82">    * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">083</span><span id="line-83">    *    &lt;jc&gt;// Given an annotation that may be repeatable&lt;/jc&gt;</span>
+<span class="source-line-no">084</span><span id="line-84">    *    Annotation &lt;jv&gt;annotation&lt;/jv&gt; = ...;</span>
+<span class="source-line-no">085</span><span id="line-85">    *</span>
+<span class="source-line-no">086</span><span id="line-86">    *    &lt;jc&gt;// Stream individual annotations (expanded if repeatable)&lt;/jc&gt;</span>
+<span class="source-line-no">087</span><span id="line-87">    *    streamRepeated(&lt;jv&gt;annotation&lt;/jv&gt;)</span>
+<span class="source-line-no">088</span><span id="line-88">    *       .forEach(&lt;jv&gt;a&lt;/jv&gt; -&amp;gt; System.&lt;jsf&gt;out&lt;/jsf&gt;.println(&lt;jv&gt;a&lt;/jv&gt;));</span>
+<span class="source-line-no">089</span><span id="line-89">    * &lt;/p&gt;</span>
+<span class="source-line-no">090</span><span id="line-90">    *</span>
+<span class="source-line-no">091</span><span id="line-91">    * @param a The annotation to split.</span>
+<span class="source-line-no">092</span><span id="line-92">    * @return A stream of nested annotations, or a singleton stream with the same annotation if it's not repeated.</span>
+<span class="source-line-no">093</span><span id="line-93">    *    Never &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">094</span><span id="line-94">    */</span>
+<span class="source-line-no">095</span><span id="line-95">   public static Stream&lt;Annotation&gt; streamRepeated(Annotation a) {</span>
+<span class="source-line-no">096</span><span id="line-96">      var ci = info(a.annotationType());</span>
+<span class="source-line-no">097</span><span id="line-97">      var mi = ci.getRepeatedAnnotationMethod();</span>
+<span class="source-line-no">098</span><span id="line-98">      if (isNotNull(mi)) {</span>
+<span class="source-line-no">099</span><span id="line-99">         Annotation[] annotations = mi.invoke(a);</span>
+<span class="source-line-no">100</span><span id="line-100">         return Arrays.stream(annotations);</span>
+<span class="source-line-no">101</span><span id="line-101">      }</span>
+<span class="source-line-no">102</span><span id="line-102">      return Stream.of(a);</span>
+<span class="source-line-no">103</span><span id="line-103">   }</span>
+<span class="source-line-no">104</span><span id="line-104"></span>
+<span class="source-line-no">105</span><span id="line-105">   private static boolean annotationArrayMemberEquals(Annotation[] a1, Annotation[] a2) {</span>
+<span class="source-line-no">106</span><span id="line-106">      if (a1.length != a2.length)</span>
+<span class="source-line-no">107</span><span id="line-107">         return false;</span>
+<span class="source-line-no">108</span><span id="line-108">      for (var i = 0; i &lt; a1.length; i++)</span>
+<span class="source-line-no">109</span><span id="line-109">         if (notEqual(a1[i], a2[i]))</span>
+<span class="source-line-no">110</span><span id="line-110">            return false;</span>
+<span class="source-line-no">111</span><span id="line-111">      return true;</span>
+<span class="source-line-no">112</span><span id="line-112">   }</span>
+<span class="source-line-no">113</span><span id="line-113"></span>
+<span class="source-line-no">114</span><span id="line-114">   private static boolean arrayMemberEquals(Class&lt;?&gt; componentType, Object o1, Object o2) {</span>
+<span class="source-line-no">115</span><span id="line-115">      if (componentType.isAnnotation())</span>
+<span class="source-line-no">116</span><span id="line-116">         return annotationArrayMemberEquals((Annotation[])o1, (Annotation[])o2);</span>
+<span class="source-line-no">117</span><span id="line-117">      if (componentType.equals(Byte.TYPE))</span>
+<span class="source-line-no">118</span><span id="line-118">         return Arrays.equals((byte[])o1, (byte[])o2);</span>
+<span class="source-line-no">119</span><span id="line-119">      if (componentType.equals(Short.TYPE))</span>
+<span class="source-line-no">120</span><span id="line-120">         return Arrays.equals((short[])o1, (short[])o2);</span>
+<span class="source-line-no">121</span><span id="line-121">      if (componentType.equals(Integer.TYPE))</span>
+<span class="source-line-no">122</span><span id="line-122">         return Arrays.equals((int[])o1, (int[])o2);</span>
+<span class="source-line-no">123</span><span id="line-123">      if (componentType.equals(Character.TYPE))</span>
+<span class="source-line-no">124</span><span id="line-124">         return Arrays.equals((char[])o1, (char[])o2);</span>
+<span class="source-line-no">125</span><span id="line-125">      if (componentType.equals(Long.TYPE))</span>
+<span class="source-line-no">126</span><span id="line-126">         return Arrays.equals((long[])o1, (long[])o2);</span>
+<span class="source-line-no">127</span><span id="line-127">      if (componentType.equals(Float.TYPE))</span>
+<span class="source-line-no">128</span><span id="line-128">         return Arrays.equals((float[])o1, (float[])o2);</span>
+<span class="source-line-no">129</span><span id="line-129">      if (componentType.equals(Double.TYPE))</span>
+<span class="source-line-no">130</span><span id="line-130">         return Arrays.equals((double[])o1, (double[])o2);</span>
+<span class="source-line-no">131</span><span id="line-131">      if (componentType.equals(Boolean.TYPE))</span>
+<span class="source-line-no">132</span><span id="line-132">         return Arrays.equals((boolean[])o1, (boolean[])o2);</span>
+<span class="source-line-no">133</span><span id="line-133">      return Arrays.equals((Object[])o1, (Object[])o2);</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   private static int arrayMemberHash(Class&lt;?&gt; componentType, Object o) {</span>
+<span class="source-line-no">137</span><span id="line-137">      if (componentType.equals(Byte.TYPE))</span>
+<span class="source-line-no">138</span><span id="line-138">         return Arrays.hashCode((byte[])o);</span>
+<span class="source-line-no">139</span><span id="line-139">      if (componentType.equals(Short.TYPE))</span>
+<span class="source-line-no">140</span><span id="line-140">         return Arrays.hashCode((short[])o);</span>
+<span class="source-line-no">141</span><span id="line-141">      if (componentType.equals(Integer.TYPE))</span>
+<span class="source-line-no">142</span><span id="line-142">         return Arrays.hashCode((int[])o);</span>
+<span class="source-line-no">143</span><span id="line-143">      if (componentType.equals(Character.TYPE))</span>
+<span class="source-line-no">144</span><span id="line-144">         return Arrays.hashCode((char[])o);</span>
+<span class="source-line-no">145</span><span id="line-145">      if (componentType.equals(Long.TYPE))</span>
+<span class="source-line-no">146</span><span id="line-146">         return Arrays.hashCode((long[])o);</span>
+<span class="source-line-no">147</span><span id="line-147">      if (componentType.equals(Float.TYPE))</span>
+<span class="source-line-no">148</span><span id="line-148">         return Arrays.hashCode((float[])o);</span>
+<span class="source-line-no">149</span><span id="line-149">      if (componentType.equals(Double.TYPE))</span>
+<span class="source-line-no">150</span><span id="line-150">         return Arrays.hashCode((double[])o);</span>
+<span class="source-line-no">151</span><span id="line-151">      if (componentType.equals(Boolean.TYPE))</span>
+<span class="source-line-no">152</span><span id="line-152">         return Arrays.hashCode((boolean[])o);</span>
+<span class="source-line-no">153</span><span id="line-153">      return Arrays.hashCode((Object[])o);</span>
+<span class="source-line-no">154</span><span id="line-154">   }</span>
+<span class="source-line-no">155</span><span id="line-155"></span>
+<span class="source-line-no">156</span><span id="line-156">   private static Stream&lt;Method&gt; getAnnotationMethods(Class&lt;? extends Annotation&gt; type) {</span>
+<span class="source-line-no">157</span><span id="line-157">      return fixedSizeList(type.getDeclaredMethods()).stream();</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159"></span>
+<span class="source-line-no">160</span><span id="line-160">   private static int hashMember(String name, Object value) {</span>
+<span class="source-line-no">161</span><span id="line-161">      int part1 = name.hashCode() * 127;</span>
+<span class="source-line-no">162</span><span id="line-162">      if (value == null)</span>
+<span class="source-line-no">163</span><span id="line-163">         return part1;</span>
+<span class="source-line-no">164</span><span id="line-164">      if (ClassUtils.isArray(value))</span>
+<span class="source-line-no">165</span><span id="line-165">         return part1 ^ arrayMemberHash(value.getClass().getComponentType(), value);</span>
+<span class="source-line-no">166</span><span id="line-166">      if (value instanceof Annotation value2)</span>
+<span class="source-line-no">167</span><span id="line-167">         return part1 ^ hash(value2);</span>
+<span class="source-line-no">168</span><span id="line-168">      return part1 ^ value.hashCode();</span>
+<span class="source-line-no">169</span><span id="line-169">   }</span>
+<span class="source-line-no">170</span><span id="line-170"></span>
+<span class="source-line-no">171</span><span id="line-171">   private static boolean memberEquals(Class&lt;?&gt; type, Object o1, Object o2) {</span>
+<span class="source-line-no">172</span><span id="line-172">      if (o1 == o2)</span>
+<span class="source-line-no">173</span><span id="line-173">         return true;</span>
+<span class="source-line-no">174</span><span id="line-174">      if (o1 == null || o2 == null)</span>
+<span class="source-line-no">175</span><span id="line-175">         return false;</span>
+<span class="source-line-no">176</span><span id="line-176">      if (type.isArray())</span>
+<span class="source-line-no">177</span><span id="line-177">         return arrayMemberEquals(type.getComponentType(), o1, o2);</span>
+<span class="source-line-no">178</span><span id="line-178">      if (type.isAnnotation())</span>
+<span class="source-line-no">179</span><span id="line-179">         return equal((Annotation)o1, (Annotation)o2);</span>
+<span class="source-line-no">180</span><span id="line-180">      return o1.equals(o2);</span>
+<span class="source-line-no">181</span><span id="line-181">   }</span>
+<span class="source-line-no">182</span><span id="line-182">}</span>
 
 
 

@@ -30,12 +30,12 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.runtime;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
-<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.utils.Utils;</span>
+<span class="source-line-no">025</span><span id="line-25">import org.apache.juneau.commons.utils.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
 <span class="source-line-no">027</span><span id="line-27">/**</span>
 <span class="source-line-no">028</span><span id="line-28"> * Lean parser for command-line arguments passed in through a {@code main(String[] args)} method.</span>
@@ -89,7 +89,7 @@
 <span class="source-line-no">076</span><span id="line-76">    *</span>
 <span class="source-line-no">077</span><span id="line-77">    * &lt;p&gt;</span>
 <span class="source-line-no">078</span><span id="line-78">    * The string is split on whitespace honouring single- and double-quoted segments via</span>
-<span class="source-line-no">079</span><span id="line-79">    * {@link org.apache.juneau.commons.utils.StringUtils#splitQuoted(String)}.</span>
+<span class="source-line-no">079</span><span id="line-79">    * {@link StringUtils#splitQuoted(String)}.</span>
 <span class="source-line-no">080</span><span id="line-80">    *</span>
 <span class="source-line-no">081</span><span id="line-81">    * @param line The raw command line.  Can be &lt;jk&gt;null&lt;/jk&gt; (treated as an empty argv).</span>
 <span class="source-line-no">082</span><span id="line-82">    */</span>
@@ -137,8 +137,8 @@
 <span class="source-line-no">124</span><span id="line-124">    */</span>
 <span class="source-line-no">125</span><span id="line-125">   public Optional&lt;String&gt; get(int index) {</span>
 <span class="source-line-no">126</span><span id="line-126">      if (index &lt; 0 || index &gt;= positional.size())</span>
-<span class="source-line-no">127</span><span id="line-127">         return opte();</span>
-<span class="source-line-no">128</span><span id="line-128">      return opt(positional.get(index));</span>
+<span class="source-line-no">127</span><span id="line-127">         return oe();</span>
+<span class="source-line-no">128</span><span id="line-128">      return o(positional.get(index));</span>
 <span class="source-line-no">129</span><span id="line-129">   }</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
 <span class="source-line-no">131</span><span id="line-131">   /**</span>
@@ -153,9 +153,9 @@
 <span class="source-line-no">140</span><span id="line-140">    */</span>
 <span class="source-line-no">141</span><span id="line-141">   public Optional&lt;String&gt; get(String key) {</span>
 <span class="source-line-no">142</span><span id="line-142">      var v = options.get(normalize(key));</span>
-<span class="source-line-no">143</span><span id="line-143">      if (e(v))</span>
-<span class="source-line-no">144</span><span id="line-144">         return opte();</span>
-<span class="source-line-no">145</span><span id="line-145">      return opt(v.get(0));</span>
+<span class="source-line-no">143</span><span id="line-143">      if (ie(v))</span>
+<span class="source-line-no">144</span><span id="line-144">         return oe();</span>
+<span class="source-line-no">145</span><span id="line-145">      return o(v.get(0));</span>
 <span class="source-line-no">146</span><span id="line-146">   }</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148">   /**</span>
@@ -394,7 +394,7 @@
 <span class="source-line-no">381</span><span id="line-381">            if (allowShortFlags)</span>
 <span class="source-line-no">382</span><span id="line-382">               p.add("-");</span>
 <span class="source-line-no">383</span><span id="line-383">         }</span>
-<span class="source-line-no">384</span><span id="line-384">         p.removeIf(Utils::e);</span>
+<span class="source-line-no">384</span><span id="line-384">         p.removeIf(Shorts::ie);</span>
 <span class="source-line-no">385</span><span id="line-385">         p.sort((a,b) -&gt; Integer.compare(b.length(), a.length()));</span>
 <span class="source-line-no">386</span><span id="line-386">         return p;</span>
 <span class="source-line-no">387</span><span id="line-387">      }</span>
@@ -408,7 +408,7 @@
 <span class="source-line-no">395</span><span id="line-395">      }</span>
 <span class="source-line-no">396</span><span id="line-396"></span>
 <span class="source-line-no">397</span><span id="line-397">      private String normalizeKey(String key) {</span>
-<span class="source-line-no">398</span><span id="line-398">         if (ne(key) &amp;&amp; ! caseSensitive)</span>
+<span class="source-line-no">398</span><span id="line-398">         if (ine(key) &amp;&amp; ! caseSensitive)</span>
 <span class="source-line-no">399</span><span id="line-399">            return key.toLowerCase(Locale.ROOT);</span>
 <span class="source-line-no">400</span><span id="line-400">         return key;</span>
 <span class="source-line-no">401</span><span id="line-401">      }</span>

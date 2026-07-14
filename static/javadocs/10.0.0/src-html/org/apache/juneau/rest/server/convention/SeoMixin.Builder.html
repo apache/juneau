@@ -112,7 +112,7 @@
 <span class="source-line-no">099</span><span id="line-99"> *    &lt;li class='jc'&gt;{@link WellKnownMixin}</span>
 <span class="source-line-no">100</span><span id="line-100"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://www.rfc-editor.org/rfc/rfc9309"&gt;RFC 9309 &amp;mdash; Robots Exclusion Protocol&lt;/a&gt;</span>
 <span class="source-line-no">101</span><span id="line-101"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://www.sitemaps.org/protocol.html"&gt;sitemaps.org &amp;mdash; Sitemap protocol&lt;/a&gt;</span>
-<span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths"&gt;REST Server &amp;mdash; Composition (mixins, paths)&lt;/a&gt;</span>
+<span class="source-line-no">102</span><span id="line-102"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server &amp;mdash; Composition (mixins, paths)&lt;/a&gt;</span>
 <span class="source-line-no">103</span><span id="line-103"> * &lt;/ul&gt;</span>
 <span class="source-line-no">104</span><span id="line-104"> *</span>
 <span class="source-line-no">105</span><span id="line-105"> * @since 10.0.0</span>
@@ -215,7 +215,7 @@
 <span class="source-line-no">202</span><span id="line-202">         this.priority = priority;</span>
 <span class="source-line-no">203</span><span id="line-203">      }</span>
 <span class="source-line-no">204</span><span id="line-204"></span>
-<span class="source-line-no">205</span><span id="line-205">      void write(java.io.Writer w) throws IOException {</span>
+<span class="source-line-no">205</span><span id="line-205">      void write(Writer w) throws IOException {</span>
 <span class="source-line-no">206</span><span id="line-206">         w.write("\t&lt;url&gt;\n");</span>
 <span class="source-line-no">207</span><span id="line-207">         w.write("\t\t&lt;loc&gt;" + xmlEscape(loc) + "&lt;/loc&gt;\n");</span>
 <span class="source-line-no">208</span><span id="line-208">         if (lastmod != null)</span>

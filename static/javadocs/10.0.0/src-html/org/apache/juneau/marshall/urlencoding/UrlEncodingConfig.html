@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> * Used primarily for specifying bean configuration properties on REST classes and methods.</span>
 <span class="source-line-no">031</span><span id="line-31"> *</span>
 <span class="source-line-no">032</span><span id="line-32"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">033</span><span id="line-33"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingBasics"&gt;URL-Encoding Basics&lt;/a&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/UrlEncodingSupport"&gt;URL-Encoding Basics&lt;/a&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;/ul&gt;</span>
 <span class="source-line-no">035</span><span id="line-35"> */</span>
 <span class="source-line-no">036</span><span id="line-36">@Target({ TYPE, METHOD })</span>
@@ -56,7 +56,7 @@
 <span class="source-line-no">043</span><span id="line-43">    * Parser bean property collections/arrays as separate key/value pairs.</span>
 <span class="source-line-no">044</span><span id="line-44">    *</span>
 <span class="source-line-no">045</span><span id="line-45">    * &lt;p&gt;</span>
-<span class="source-line-no">046</span><span id="line-46">    * This is the parser-side equivalent of the {@link org.apache.juneau.marshall.urlencoding.UrlEncodingSerializer.Builder#expandedParams()} setting.</span>
+<span class="source-line-no">046</span><span id="line-46">    * This is the parser-side equivalent of the {@link UrlEncodingSerializer.Builder#expandedParams()} setting.</span>
 <span class="source-line-no">047</span><span id="line-47">    *</span>
 <span class="source-line-no">048</span><span id="line-48">    * &lt;p&gt;</span>
 <span class="source-line-no">049</span><span id="line-49">    * If &lt;js&gt;"false"&lt;/js&gt;, serializing the array &lt;c&gt;[1,2,3]&lt;/c&gt; results in &lt;c&gt;?key=$a(1,2,3)&lt;/c&gt;.</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66">    * &lt;/ul&gt;</span>
 <span class="source-line-no">067</span><span id="line-67">    *</span>
 <span class="source-line-no">068</span><span id="line-68">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">069</span><span id="line-69">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.marshall.urlencoding.UrlEncodingSerializer.Builder#expandedParams()}</span>
+<span class="source-line-no">069</span><span id="line-69">    *    &lt;li class='jm'&gt;{@link UrlEncodingSerializer.Builder#expandedParams()}</span>
 <span class="source-line-no">070</span><span id="line-70">    * &lt;/ul&gt;</span>
 <span class="source-line-no">071</span><span id="line-71">    *</span>
 <span class="source-line-no">072</span><span id="line-72">    * @return The annotation value.</span>

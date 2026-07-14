@@ -78,21 +78,20 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-57">ThrowableUtils</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-59">ThrowableUtils</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Various utility methods for creating and working with throwables.
+<div class="block">Various utility methods for working with throwables.
 
  <p>
- All factory methods in this class (e.g. <a href="#illegalArg(java.lang.String,java.lang.Object...)"><code>illegalArg(String, Object...)</code></a>, <a href="#rex(java.lang.String,java.lang.Object...)"><code>rex(String, Object...)</code></a>,
- <a href="#bex(java.lang.String,java.lang.Object...)"><code>bex(String, Object...)</code></a>, etc.) route through an internal <code>log()</code> method that checks the
- <code>juneau.enableVerboseExceptions</code> system property.  When that property is set to <code>true</code>, the
- created exception's stack trace is printed to stderr immediately at the point of creation, even if the
- exception is later caught and swallowed.
+ Exception <i>factory</i> methods (terse <code>rex</code>/<code>brex</code>/<code>iaex</code>/<code>isex</code>/<code>uoex</code>/
+ <code>uoroex</code>/<code>ioex</code>/<code>exex</code> constructors) live on <a href="Shorts.html" title="class in org.apache.juneau.commons.utils"><code>Shorts</code></a>
+ and construct their exceptions directly with no side-effects.  This class retains only throwable
+ <i>inspection</i>/<i>handling</i> helpers (stack-trace rendering, cause walking, safe-run wrappers, casting).
 
- <h5 class='section'>Example — enabling at startup:</h5>
- <p class='bjava'>
-   System.<jsf>setProperty</jsf>(<js>"juneau.enableVerboseExceptions"</js>, <js>"true"</js>);
- </p>
+ <p>
+ The opt-in <a href="#log(T)"><code>log(Throwable)</code></a> helper checks the <code>juneau.enableVerboseExceptions</code> setting and, when
+ enabled, prints the throwable's stack trace to the logger.  It is <b>not</b> invoked automatically by any
+ factory — callers that want verbose logging at a specific site must call it explicitly.
 
  <h5 class='section'>Example — enabling for a single test thread:</h5>
  <p class='bjava'>
@@ -122,7 +121,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="ThrowableUtils.SupplierWithThrowable.html" class="type-name-link" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;<a href="ThrowableUtils.SupplierWithThrowable.html" title="type parameter in ThrowableUtils.SupplierWithThrowable">T</a>&gt;</code></div>
 <div class="col-last even-row-color">
-<div class="block">Interface used with <a href="Utils.html#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable)"><code>Utils.safeSupplier(SupplierWithThrowable)</code></a>.</div>
+<div class="block">Interface used with <a href="#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable)"><code>safeSupplier(SupplierWithThrowable)</code></a>.</div>
 </div>
 </div>
 </section>
@@ -151,77 +150,11 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(java.lang.Class,java.lang.String,java.lang.Object...)" class="member-name-link">bex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a message and associated class.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(java.lang.String,java.lang.Object...)" class="member-name-link">bex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(java.lang.Throwable)" class="member-name-link">bex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> wrapping the given throwable.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(java.lang.Throwable,java.lang.Class,java.lang.String,java.lang.Object...)" class="member-name-link">bex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a cause, message, and associated class.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(java.lang.Throwable,java.lang.String,java.lang.Object...)" class="member-name-link">bex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> with a cause.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(java.lang.Throwable,org.apache.juneau.commons.reflect.ClassInfo,java.lang.String,java.lang.Object...)" class="member-name-link">bex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
- <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a cause, message, and associated class.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#bex(org.apache.juneau.commons.reflect.ClassInfo,java.lang.String,java.lang.Object...)" class="member-name-link">bex</a><wbr>(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a message and associated class.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#castException(java.lang.Class,java.lang.Throwable)" class="member-name-link">castException</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#castException(java.lang.Class,java.lang.Throwable)" class="member-name-link">castException</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Casts or wraps the specified throwable to the specified type.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#exex(java.lang.String,java.lang.Object...)" class="member-name-link">exex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Shortcut for creating an <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> with a message.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#exex(java.lang.Throwable)" class="member-name-link">exex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> wrapping the given throwable.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#exex(java.lang.Throwable,java.lang.String,java.lang.Object...)" class="member-name-link">exex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> with a cause.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;<br><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#findCause(java.lang.Throwable,java.lang.Class)" class="member-name-link">findCause</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
@@ -246,52 +179,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Calculates a 16-bit hash for the specified throwable based on it's stack trace.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#illegalArg(java.lang.String,java.lang.Object...)" class="member-name-link">illegalArg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#localizedMessage(java.lang.Throwable)" class="member-name-link">localizedMessage</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#illegalArg(java.lang.Throwable)" class="member-name-link">illegalArg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> wrapping the given throwable.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#illegalArg(java.lang.Throwable,java.lang.String,java.lang.Object...)" class="member-name-link">illegalArg</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> with a cause.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#illegalState(java.lang.String,java.lang.Object...)" class="member-name-link">illegalState</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> with a formatted message.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ioex(java.lang.String,java.lang.Object...)" class="member-name-link">ioex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ioex(java.lang.Throwable)" class="member-name-link">ioex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> wrapping the given throwable.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#ioex(java.lang.Throwable,java.lang.String,java.lang.Object...)" class="member-name-link">ioex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> with a cause.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#lm(java.lang.Throwable)" class="member-name-link">lm</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Convenience method for calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getLocalizedMessage()" title="class or interface in java.lang" class="external-link"><code>Throwable.getLocalizedMessage()</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;<br>T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#log(T)" class="member-name-link">log</a><wbr>(T&nbsp;exception)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Opt-in verbose logger for a throwable.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#printStackTrace(java.lang.Throwable,java.io.PrintWriter,java.lang.Integer)" class="member-name-link">printStackTrace</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
@@ -306,56 +202,75 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Prints a stack trace with a maximum depth limit to standard error.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#rex(java.lang.String,java.lang.Object...)" class="member-name-link">rex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#runQuietly(org.apache.juneau.commons.function.Snippet)" class="member-name-link">runQuietly</a><wbr>(<a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+<div class="block">Runs a snippet, silently ignoring any exception.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#rex(java.lang.Throwable)" class="member-name-link">rex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safe(org.apache.juneau.commons.function.Snippet)" class="member-name-link">safe</a><wbr>(<a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> wrapping the given throwable.</div>
+<div class="block">Runs a snippet; wraps any checked throwable in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#rex(java.lang.Throwable,java.lang.String,java.lang.Object...)" class="member-name-link">rex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safe(org.apache.juneau.commons.function.Snippet,java.util.function.Function)" class="member-name-link">safe</a><wbr>(<a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> with a cause.</div>
+<div class="block">Runs a snippet; maps any checked throwable via the provided function.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safe(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safe</a><wbr>(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a supplier; wraps any checked exception in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safe(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safe</a><wbr>(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a supplier; maps any checked exception via the provided function.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safeCatch</a><wbr>(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr>T&gt;&nbsp;exceptionFunction)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a supplier; returns the result or a fallback value produced by the exception function.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeOpt(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safeOpt</a><wbr>(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a supplier; returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> of the result, or empty if an exception is thrown.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeOptCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safeOptCatch</a><wbr>(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr>T&gt;&nbsp;exceptionFunction)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a supplier; returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> of the result or the exception function's value.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeOrNull(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safeOrNull</a><wbr>(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a supplier; returns the result or <code>null</code> if an exception is thrown.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable)" class="member-name-link">safeSupplier</a><wbr>(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a <a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils"><code>ThrowableUtils.SupplierWithThrowable</code></a>; wraps any checked throwable in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable,java.util.function.Function)" class="member-name-link">safeSupplier</a><wbr>(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Executes a <a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils"><code>ThrowableUtils.SupplierWithThrowable</code></a>; maps any checked throwable via the provided function.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#toRex(java.lang.Throwable)" class="member-name-link">toRex</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+<div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> from the specified cause (or returns it if already one).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#unsupportedOp()" class="member-name-link">unsupportedOp</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#toRuntimeException(java.lang.Throwable)" class="member-name-link">toRuntimeException</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> with a default message.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#unsupportedOp(java.lang.String,java.lang.Object...)" class="member-name-link">unsupportedOp</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#unsupportedOp(java.lang.Throwable)" class="member-name-link">unsupportedOp</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> wrapping the given throwable.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#unsupportedOp(java.lang.Throwable,java.lang.String,java.lang.Object...)" class="member-name-link">unsupportedOp</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> with a cause.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#unsupportedOpReadOnly()" class="member-name-link">unsupportedOpReadOnly</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> for read-only objects.</div>
+<div class="block">Wraps or casts to RuntimeException.</div>
 </div>
 </div>
 </div>
@@ -377,7 +292,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;()">
 <h3>ThrowableUtils</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-57">ThrowableUtils</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-59">ThrowableUtils</a></span>()</div>
 </section>
 </li>
 </ul>
@@ -389,177 +304,9 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="bex(java.lang.Class,java.lang.String,java.lang.Object...)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-91">bex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a message and associated class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>c</code> - The class associated with the exception.</dd>
-<dd><code>msg</code> - The message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format(String, Object...)</code></a> arguments.</dd>
-<dt>Returns:</dt>
-<dd>A new <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="bex(org.apache.juneau.commons.reflect.ClassInfo,java.lang.String,java.lang.Object...)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-106">bex</a></span><wbr><span class="parameters">(<a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a message and associated class.
-
- <p>
- Same as the <code>bex(Class, String, Object...)</code> method but accepts a <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> instead of a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>c</code> - The class info associated with the exception.</dd>
-<dd><code>msg</code> - The message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format(String, Object...)</code></a> arguments.</dd>
-<dt>Returns:</dt>
-<dd>A new <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="bex(java.lang.String,java.lang.Object...)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-117">bex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new RuntimeException with the formatted message.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="bex(java.lang.Throwable)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-127">bex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> wrapping the given throwable.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dt>Returns:</dt>
-<dd>A new RuntimeException wrapping the given cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="bex(java.lang.Throwable,java.lang.Class,java.lang.String,java.lang.Object...)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-140">bex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a cause, message, and associated class.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>e</code> - The cause of the exception.</dd>
-<dd><code>c</code> - The class associated with the exception.</dd>
-<dd><code>msg</code> - The message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format(String, Object...)</code></a> arguments.</dd>
-<dt>Returns:</dt>
-<dd>A new <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="bex(java.lang.Throwable,org.apache.juneau.commons.reflect.ClassInfo,java.lang.String,java.lang.Object...)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-156">bex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
- <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;c,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Shortcut for creating a <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a> with a cause, message, and associated class.
-
- <p>
- Same as the <code>bex(Throwable, Class, String, Object...)</code> method but accepts a <a href="../reflect/ClassInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ClassInfo</code></a> instead of a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link"><code>Class</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>e</code> - The cause of the exception.</dd>
-<dd><code>c</code> - The class info associated with the exception.</dd>
-<dd><code>msg</code> - The message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format(String, Object...)</code></a> arguments.</dd>
-<dt>Returns:</dt>
-<dd>A new <a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect"><code>BeanRuntimeException</code></a>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="bex(java.lang.Throwable,java.lang.String,java.lang.Object...)">
-<h3>bex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/BeanRuntimeException.html" title="class in org.apache.juneau.commons.reflect">BeanRuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-168">bex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> with a cause.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new RuntimeException with the formatted message and cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="exex(java.lang.String,java.lang.Object...)">
-<h3>exex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-179">exex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Shortcut for creating an <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> with a message.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>msg</code> - The message.</dd>
-<dd><code>args</code> - Optional <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html#format(java.lang.String,java.lang.Object...)" title="class or interface in java.lang" class="external-link"><code>String.format(String, Object...)</code></a> arguments.</dd>
-<dt>Returns:</dt>
-<dd>A new <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a>.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="exex(java.lang.Throwable)">
-<h3>exex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-189">exex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates an <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> wrapping the given throwable.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dt>Returns:</dt>
-<dd>A new ExecutableException wrapping the given cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="exex(java.lang.Throwable,java.lang.String,java.lang.Object...)">
-<h3>exex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect">ExecutableException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-201">exex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="../reflect/ExecutableException.html" title="class in org.apache.juneau.commons.reflect"><code>ExecutableException</code></a> with a cause.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new ExecutableException with the formatted message and cause.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="castException(java.lang.Class,java.lang.Throwable)">
 <h3>castException</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-213">castException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-93">castException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
 <div class="block">Casts or wraps the specified throwable to the specified type.</div>
 <dl class="notes">
@@ -576,7 +323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="findCause(java.lang.Throwable,java.lang.Class)">
 <h3>findCause</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-225">findCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-105">findCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;e,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;cause)</span></div>
 <div class="block">Searches through the cause chain of an exception to find an exception of the specified type.</div>
 <dl class="notes">
@@ -593,7 +340,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStackTrace(java.lang.Throwable)">
 <h3>getStackTrace</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-240">getStackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-120">getStackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
 <div class="block">Convenience method for getting a stack trace as a string.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -606,7 +353,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="printStackTrace(java.lang.Throwable,java.io.PrintWriter,java.lang.Integer)">
 <h3>printStackTrace</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-270">printStackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-150">printStackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/PrintWriter.html" title="class or interface in java.io" class="external-link">PrintWriter</a>&nbsp;pw,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;maxDepth)</span></div>
 <div class="block">Prints a stack trace with a maximum depth limit.
@@ -636,7 +383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="printStackTrace(java.lang.Throwable,java.lang.Integer)">
 <h3>printStackTrace</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-315">printStackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-195">printStackTrace</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;maxDepth)</span></div>
 <div class="block">Prints a stack trace with a maximum depth limit to standard error.
 
@@ -667,7 +414,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getThrowableCause(java.lang.Class,java.lang.Throwable)">
 <h3>getThrowableCause</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-331">getThrowableCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-211">getThrowableCause</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;T&gt;&nbsp;c,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
 <div class="block">Same as <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getCause()" title="class or interface in java.lang" class="external-link"><code>Throwable.getCause()</code></a> but searches the throwable chain for an exception of the specified type.</div>
 <dl class="notes">
@@ -684,7 +431,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hash(java.lang.Throwable,java.lang.String)">
 <h3>hash</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-347">hash</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-227">hash</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;stopClass)</span></div>
 <div class="block">Calculates a 16-bit hash for the specified throwable based on it's stack trace.</div>
 <dl class="notes">
@@ -697,130 +444,30 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="illegalArg(java.lang.String,java.lang.Object...)">
-<h3>illegalArg</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-368">illegalArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new IllegalArgumentException with the formatted message.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="illegalState(java.lang.String,java.lang.Object...)">
-<h3>illegalState</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-395">illegalState</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalStateException</code></a> with a formatted message.
+<section class="detail" id="log(T)">
+<h3 id="log(java.lang.Throwable)">log</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-254">log</a></span><wbr><span class="parameters">(T&nbsp;exception)</span></div>
+<div class="block">Opt-in verbose logger for a throwable.
 
  <p>
- This is a convenience method for creating state exceptions with formatted messages.
- The message is formatted using <a href="Utils.html#f(java.lang.String,java.lang.Object...)"><code>Utils.f(String, Object...)</code></a>.
-
- <h5 class='section'>Example:</h5>
- <p class='bjava'>
-   <jk>throw</jk> <jsm>illegalState</jsm>(<js>"Invalid state: {0}"</js>, <jv>state</jv>);
- </p></div>
+ When the <code>juneau.enableVerboseExceptions</code> setting is <code>true</code>, logs the throwable's stack trace
+ as a warning; otherwise does nothing.  Returns the same throwable to allow inline use (e.g.
+ <code>throw log(iaex("..."))</code>).  This is never invoked automatically — call it explicitly at sites where
+ verbose logging is desired.</div>
 <dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><code>T</code> - The throwable type.</dd>
 <dt>Parameters:</dt>
-<dd><code>msg</code> - The message format string.</dd>
-<dd><code>args</code> - The arguments for the message format string.</dd>
+<dd><code>exception</code> - The throwable to (optionally) log.</dd>
 <dt>Returns:</dt>
-<dd>A new IllegalStateException with the formatted message.</dd>
-<dt>See Also:</dt>
-<dd>
-<ul class="see-list-long">
-<li><a href="Utils.html#f(java.lang.String,java.lang.Object...)"><code>Utils.f(String, Object...)</code></a></li>
-<li><a href="#illegalArg(java.lang.String,java.lang.Object...)"><code>illegalArg(String, Object...)</code></a></li>
-</ul>
-</dd>
+<dd>The same throwable.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="illegalArg(java.lang.Throwable)">
-<h3>illegalArg</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-406">illegalArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> wrapping the given throwable.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dt>Returns:</dt>
-<dd>A new IllegalArgumentException wrapping the given cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="illegalArg(java.lang.Throwable,java.lang.String,java.lang.Object...)">
-<h3>illegalArg</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-418">illegalArg</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link"><code>IllegalArgumentException</code></a> with a cause.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new IllegalArgumentException with the formatted message and cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="ioex(java.lang.String,java.lang.Object...)">
-<h3>ioex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-429">ioex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new IOException with the formatted message.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="ioex(java.lang.Throwable)">
-<h3>ioex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-439">ioex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> wrapping the given throwable.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dt>Returns:</dt>
-<dd>A new IOException wrapping the given cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="ioex(java.lang.Throwable,java.lang.String,java.lang.Object...)">
-<h3>ioex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-451">ioex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link"><code>IOException</code></a> with a cause.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new IOException with the formatted message and cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="lm(java.lang.Throwable)">
-<h3>lm</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-466">lm</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
+<section class="detail" id="localizedMessage(java.lang.Throwable)">
+<h3>localizedMessage</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-270">localizedMessage</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;t)</span></div>
 <div class="block">Convenience method for calling <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html#getLocalizedMessage()" title="class or interface in java.lang" class="external-link"><code>Throwable.getLocalizedMessage()</code></a>.
 
  <p>
@@ -836,55 +483,17 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="rex(java.lang.String,java.lang.Object...)">
-<h3>rex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-483">rex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new RuntimeException with the formatted message.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="rex(java.lang.Throwable)">
-<h3>rex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-493">rex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> wrapping the given throwable.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dt>Returns:</dt>
-<dd>A new RuntimeException wrapping the given cause.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="rex(java.lang.Throwable,java.lang.String,java.lang.Object...)">
-<h3>rex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-505">rex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> with a cause.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new RuntimeException with the formatted message and cause.</dd>
-</dl>
+<section class="detail" id="toRuntimeException(java.lang.Throwable)">
+<h3>toRuntimeException</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-281">toRuntimeException</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
+<div class="block">Wraps or casts to RuntimeException.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="toRex(java.lang.Throwable)">
 <h3>toRex</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-515">toRex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-291">toRex</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
+<div class="block">Creates a new <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a> from the specified cause (or returns it if already one).</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>cause</code> - The caused-by exception.</dd>
@@ -894,70 +503,85 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="unsupportedOp()">
-<h3>unsupportedOp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-524">unsupportedOp</a></span>()</div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> with a default message.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>A new UnsupportedOperationException with the message "Not supported."</dd>
-</dl>
+<section class="detail" id="safe(org.apache.juneau.commons.function.Snippet)">
+<h3>safe</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-296">safe</a></span><wbr><span class="parameters">(<a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</span></div>
+<div class="block">Runs a snippet; wraps any checked throwable in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="unsupportedOp(java.lang.String,java.lang.Object...)">
-<h3>unsupportedOp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-535">unsupportedOp</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new UnsupportedOperationException with the formatted message.</dd>
-</dl>
+<section class="detail" id="safe(org.apache.juneau.commons.function.Snippet,java.util.function.Function)">
+<h3>safe</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-310">safe</a></span><wbr><span class="parameters">(<a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</span></div>
+<div class="block">Runs a snippet; maps any checked throwable via the provided function.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="unsupportedOp(java.lang.Throwable)">
-<h3>unsupportedOp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-545">unsupportedOp</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> wrapping the given throwable.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dt>Returns:</dt>
-<dd>A new UnsupportedOperationException wrapping the given cause.</dd>
-</dl>
+<section class="detail" id="safe(org.apache.juneau.commons.function.ThrowingSupplier)">
+<h3>safe</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-324">safe</a></span><wbr><span class="parameters">(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</span></div>
+<div class="block">Executes a supplier; wraps any checked exception in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="unsupportedOp(java.lang.Throwable,java.lang.String,java.lang.Object...)">
-<h3>unsupportedOp</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-557">unsupportedOp</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&nbsp;cause,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> with a cause.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>cause</code> - The cause of the exception.</dd>
-<dd><code>msg</code> - The exception message.</dd>
-<dd><code>args</code> - The arguments to substitute into the message.</dd>
-<dt>Returns:</dt>
-<dd>A new UnsupportedOperationException with the formatted message and cause.</dd>
-</dl>
+<section class="detail" id="safe(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)">
+<h3>safe</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-338">safe</a></span><wbr><span class="parameters">(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</span></div>
+<div class="block">Executes a supplier; maps any checked exception via the provided function.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="unsupportedOpReadOnly()">
-<h3>unsupportedOpReadOnly</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link">UnsupportedOperationException</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-566">unsupportedOpReadOnly</a></span>()</div>
-<div class="block">Creates an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/UnsupportedOperationException.html" title="class or interface in java.lang" class="external-link"><code>UnsupportedOperationException</code></a> for read-only objects.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>A new UnsupportedOperationException with the message "Object is read only."</dd>
-</dl>
+<section class="detail" id="runQuietly(org.apache.juneau.commons.function.Snippet)">
+<h3>runQuietly</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-352">runQuietly</a></span><wbr><span class="parameters">(<a href="../function/Snippet.html" title="interface in org.apache.juneau.commons.function">Snippet</a>&nbsp;snippet)</span></div>
+<div class="block">Runs a snippet, silently ignoring any exception.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="safeCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)">
+<h3>safeCatch</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-362">safeCatch</a></span><wbr><span class="parameters">(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr>T&gt;&nbsp;exceptionFunction)</span></div>
+<div class="block">Executes a supplier; returns the result or a fallback value produced by the exception function.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="safeOpt(org.apache.juneau.commons.function.ThrowingSupplier)">
+<h3>safeOpt</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-371">safeOpt</a></span><wbr><span class="parameters">(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</span></div>
+<div class="block">Executes a supplier; returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> of the result, or empty if an exception is thrown.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="safeOptCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)">
+<h3>safeOptCatch</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-380">safeOptCatch</a></span><wbr><span class="parameters">(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr>T&gt;&nbsp;exceptionFunction)</span></div>
+<div class="block">Executes a supplier; returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> of the result or the exception function's value.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="safeOrNull(org.apache.juneau.commons.function.ThrowingSupplier)">
+<h3>safeOrNull</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-389">safeOrNull</a></span><wbr><span class="parameters">(<a href="../function/ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</span></div>
+<div class="block">Executes a supplier; returns the result or <code>null</code> if an exception is thrown.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable)">
+<h3>safeSupplier</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-394">safeSupplier</a></span><wbr><span class="parameters">(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</span></div>
+<div class="block">Executes a <a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils"><code>ThrowableUtils.SupplierWithThrowable</code></a>; wraps any checked throwable in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable,java.util.function.Function)">
+<h3>safeSupplier</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/utils/ThrowableUtils.html#line-408">safeSupplier</a></span><wbr><span class="parameters">(<a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</span></div>
+<div class="block">Executes a <a href="ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils"><code>ThrowableUtils.SupplierWithThrowable</code></a>; maps any checked throwable via the provided function.</div>
 </section>
 </li>
 </ul>

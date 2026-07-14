@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25"> * Utility classes and methods for the {@link OpenApiConfig @OpenApiConfig} annotation.</span>
 <span class="source-line-no">026</span><span id="line-26"> *</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">028</span><span id="line-28"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics"&gt;OpenApi Basics&lt;/a&gt;</span>
+<span class="source-line-no">028</span><span id="line-28"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport"&gt;OpenApi Basics&lt;/a&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * &lt;/ul&gt;</span>
 <span class="source-line-no">030</span><span id="line-30"> */</span>
 <span class="source-line-no">031</span><span id="line-31">public class OpenApiConfigAnnotation {</span>
@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36">   private OpenApiConfigAnnotation() {}</span>
 <span class="source-line-no">037</span><span id="line-37"></span>
 <span class="source-line-no">038</span><span id="line-38">   /**</span>
-<span class="source-line-no">039</span><span id="line-39">    * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.marshall.oapi.OpenApiParser.Builder}.</span>
+<span class="source-line-no">039</span><span id="line-39">    * Applies {@link OpenApiConfig} annotations to a {@link OpenApiParser.Builder}.</span>
 <span class="source-line-no">040</span><span id="line-40">    */</span>
 <span class="source-line-no">041</span><span id="line-41">   public static class ParserApply extends AnnotationApplier&lt;OpenApiConfig,OpenApiParser.Builder&gt; {</span>
 <span class="source-line-no">042</span><span id="line-42"></span>
@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59">   }</span>
 <span class="source-line-no">060</span><span id="line-60"></span>
 <span class="source-line-no">061</span><span id="line-61">   /**</span>
-<span class="source-line-no">062</span><span id="line-62">    * Applies {@link OpenApiConfig} annotations to a {@link org.apache.juneau.marshall.oapi.OpenApiSerializer.Builder}.</span>
+<span class="source-line-no">062</span><span id="line-62">    * Applies {@link OpenApiConfig} annotations to a {@link OpenApiSerializer.Builder}.</span>
 <span class="source-line-no">063</span><span id="line-63">    */</span>
 <span class="source-line-no">064</span><span id="line-64">   public static class SerializerApply extends AnnotationApplier&lt;OpenApiConfig,OpenApiSerializer.Builder&gt; {</span>
 <span class="source-line-no">065</span><span id="line-65"></span>

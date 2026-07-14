@@ -75,7 +75,7 @@
 <span class="source-line-no">062</span><span id="line-62"> *    &lt;li&gt;Query-string keys leak into proxy / access logs and browser history &amp;mdash; prefer header or</span>
 <span class="source-line-no">063</span><span id="line-63"> *       cookie sources for production traffic. Query-string is offered for legacy / debugging use only.</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;li&gt;{@link ApiKeyStore} implementations should compare keys in constant time</span>
-<span class="source-line-no">065</span><span id="line-65"> *       ({@link java.security.MessageDigest#isEqual(byte[], byte[])}).</span>
+<span class="source-line-no">065</span><span id="line-65"> *       ({@link MessageDigest#isEqual(byte[], byte[])}).</span>
 <span class="source-line-no">066</span><span id="line-66"> * &lt;/ul&gt;</span>
 <span class="source-line-no">067</span><span id="line-67"> *</span>
 <span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>

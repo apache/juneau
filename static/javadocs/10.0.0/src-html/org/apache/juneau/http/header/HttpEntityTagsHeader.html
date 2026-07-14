@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -99,7 +99,7 @@
 <span class="source-line-no">086</span><span id="line-86">   }</span>
 <span class="source-line-no">087</span><span id="line-87"></span>
 <span class="source-line-no">088</span><span id="line-88">   public Optional&lt;EntityTags&gt; asEntityTags() {</span>
-<span class="source-line-no">089</span><span id="line-89">      return opt(toEntityTags());</span>
+<span class="source-line-no">089</span><span id="line-89">      return o(toEntityTags());</span>
 <span class="source-line-no">090</span><span id="line-90">   }</span>
 <span class="source-line-no">091</span><span id="line-91"></span>
 <span class="source-line-no">092</span><span id="line-92">   @Override</span>

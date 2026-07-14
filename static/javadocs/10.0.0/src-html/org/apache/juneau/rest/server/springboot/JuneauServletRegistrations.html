@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.springboot;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.inject.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.rest.server.*;</span>
@@ -43,7 +43,7 @@
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;p&gt;</span>
 <span class="source-line-no">032</span><span id="line-32"> * Use this from an explicit {@code @Bean} method when you want the mount path to come from the</span>
-<span class="source-line-no">033</span><span id="line-33"> * servlet's own {@link org.apache.juneau.rest.server.Rest#paths() @Rest(paths)} declaration</span>
+<span class="source-line-no">033</span><span id="line-33"> * servlet's own {@link Rest#paths() @Rest(paths)} declaration</span>
 <span class="source-line-no">034</span><span id="line-34"> * (or its {@code getPaths()} override) rather than a hard-coded string in your configuration class:</span>
 <span class="source-line-no">035</span><span id="line-35"> *</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;p class='bjava'&gt;</span>
@@ -64,7 +64,7 @@
 <span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;li class='jc'&gt;{@link JuneauRestAutoConfiguration}</span>
 <span class="source-line-no">053</span><span id="line-53"> *    &lt;li class='jm'&gt;{@link RestContext#resolveTopLevelPaths(Class, Object, BeanStore)}</span>
-<span class="source-line-no">054</span><span id="line-54"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringbootBasics"&gt;juneau-rest-server-springboot Basics&lt;/a&gt;</span>
+<span class="source-line-no">054</span><span id="line-54"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestServerSpringboot"&gt;juneau-rest-server-springboot Basics&lt;/a&gt;</span>
 <span class="source-line-no">055</span><span id="line-55"> * &lt;/ul&gt;</span>
 <span class="source-line-no">056</span><span id="line-56"> *</span>
 <span class="source-line-no">057</span><span id="line-57"> * @since 10.0.0</span>
@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66">    *</span>
 <span class="source-line-no">067</span><span id="line-67">    * @param &lt;T&gt; The servlet type.</span>
 <span class="source-line-no">068</span><span id="line-68">    * @param servlet The Juneau REST servlet to register. Must not be {@code null} and must carry a</span>
-<span class="source-line-no">069</span><span id="line-69">    *    {@link org.apache.juneau.rest.server.Rest @Rest} annotation that resolves to at least one</span>
+<span class="source-line-no">069</span><span id="line-69">    *    {@link Rest @Rest} annotation that resolves to at least one</span>
 <span class="source-line-no">070</span><span id="line-70">    *    top-level path (via {@code paths()} or a {@code getPaths()} override).</span>
 <span class="source-line-no">071</span><span id="line-71">    * @param beanStore The bean store used for SVL resolution of {@code @Rest(paths)} elements</span>
 <span class="source-line-no">072</span><span id="line-72">    *    (e.g. {@code $C{key}} / {@code ${env}} templates). May be {@code null} (SVL is then skipped;</span>

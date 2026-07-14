@@ -29,10 +29,10 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.marshall.ClassMeta.Category.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import java.io.*;</span>
@@ -174,11 +174,11 @@
 <span class="source-line-no">161</span><span id="line-161">   private final Cache&lt;String,Optional&lt;?&gt;&gt; properties;</span>
 <span class="source-line-no">162</span><span id="line-162">   private final NullableSupplier&lt;ConstructorInfo&gt; stringConstructor;         // The X(String) constructor (if it has one).</span>
 <span class="source-line-no">163</span><span id="line-163">   private final Supplier&lt;List&lt;ObjectSwap&lt;T,?&gt;&gt;&gt; swaps;                       // The object POJO swaps associated with this bean (if it has any).</span>
-<span class="source-line-no">164</span><span id="line-164">   private final NullableSupplier&lt;org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue&lt;T&gt;&gt; beanMeta;</span>
+<span class="source-line-no">164</span><span id="line-164">   private final NullableSupplier&lt;BeanMeta.BeanMetaValue&lt;T&gt;&gt; beanMeta;</span>
 <span class="source-line-no">165</span><span id="line-165"></span>
 <span class="source-line-no">166</span><span id="line-166">   private record KeyValueTypes(ClassMeta&lt;?&gt; keyType, ClassMeta&lt;?&gt; valueType) {</span>
-<span class="source-line-no">167</span><span id="line-167">      Optional&lt;ClassMeta&lt;?&gt;&gt; optKeyType() { return opt(keyType()); }</span>
-<span class="source-line-no">168</span><span id="line-168">      Optional&lt;ClassMeta&lt;?&gt;&gt; optValueType() { return opt(valueType()); }</span>
+<span class="source-line-no">167</span><span id="line-167">      Optional&lt;ClassMeta&lt;?&gt;&gt; optKeyType() { return o(keyType()); }</span>
+<span class="source-line-no">168</span><span id="line-168">      Optional&lt;ClassMeta&lt;?&gt;&gt; optValueType() { return o(valueType()); }</span>
 <span class="source-line-no">169</span><span id="line-169">   }</span>
 <span class="source-line-no">170</span><span id="line-170"></span>
 <span class="source-line-no">171</span><span id="line-171">   /**</span>
@@ -470,7 +470,7 @@
 <span class="source-line-no">457</span><span id="line-457">   public ClassMeta&lt;?&gt; getArg(int index) {</span>
 <span class="source-line-no">458</span><span id="line-458">      if (nn(args) &amp;&amp; index &gt;= 0 &amp;&amp; index &lt; args.size())</span>
 <span class="source-line-no">459</span><span id="line-459">         return args.get(index);</span>
-<span class="source-line-no">460</span><span id="line-460">      throw bex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.size());</span>
+<span class="source-line-no">460</span><span id="line-460">      throw brex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.size());</span>
 <span class="source-line-no">461</span><span id="line-461">   }</span>
 <span class="source-line-no">462</span><span id="line-462"></span>
 <span class="source-line-no">463</span><span id="line-463">   /**</span>
@@ -511,7 +511,7 @@
 <span class="source-line-no">498</span><span id="line-498">    *    The {@link BeanMeta} associated with this class, or &lt;jk&gt;null&lt;/jk&gt; if there is no bean meta associated with</span>
 <span class="source-line-no">499</span><span id="line-499">    *    this class.</span>
 <span class="source-line-no">500</span><span id="line-500">    */</span>
-<span class="source-line-no">501</span><span id="line-501">   public org.apache.juneau.commons.bean.BeanMeta&lt;T&gt; getBeanMeta() {</span>
+<span class="source-line-no">501</span><span id="line-501">   public BeanMeta&lt;T&gt; getBeanMeta() {</span>
 <span class="source-line-no">502</span><span id="line-502">      return beanMeta.get().beanMeta();</span>
 <span class="source-line-no">503</span><span id="line-503">   }</span>
 <span class="source-line-no">504</span><span id="line-504"></span>
@@ -689,9 +689,9 @@
 <span class="source-line-no">676</span><span id="line-676">   @Override</span>
 <span class="source-line-no">677</span><span id="line-677">   public Optional&lt;?&gt; getOptionalDefault() {</span>
 <span class="source-line-no">678</span><span id="line-678">      if (isPrimitiveOptional())</span>
-<span class="source-line-no">679</span><span id="line-679">         return opte();</span>
+<span class="source-line-no">679</span><span id="line-679">         return oe();</span>
 <span class="source-line-no">680</span><span id="line-680">      if (isOptional())</span>
-<span class="source-line-no">681</span><span id="line-681">         return opt(getElementType().getOptionalDefault());</span>
+<span class="source-line-no">681</span><span id="line-681">         return o(getElementType().getOptionalDefault());</span>
 <span class="source-line-no">682</span><span id="line-682">      return null;</span>
 <span class="source-line-no">683</span><span id="line-683">   }</span>
 <span class="source-line-no">684</span><span id="line-684"></span>
@@ -715,7 +715,7 @@
 <span class="source-line-no">702</span><span id="line-702">    * ({@link OptionalInt}/{@link OptionalLong}/{@link OptionalDouble}).</span>
 <span class="source-line-no">703</span><span id="line-703">    *</span>
 <span class="source-line-no">704</span><span id="line-704">    * &lt;p&gt;</span>
-<span class="source-line-no">705</span><span id="line-705">    * Overrides {@link org.apache.juneau.commons.reflect.ClassInfo#isOptional()} so the marshalling layer</span>
+<span class="source-line-no">705</span><span id="line-705">    * Overrides {@link ClassInfo#isOptional()} so the marshalling layer</span>
 <span class="source-line-no">706</span><span id="line-706">    * treats the three primitive optional types as first-class optionals (synthetic boxed element type,</span>
 <span class="source-line-no">707</span><span id="line-707">    * empty-as-null contract) without registering swaps for them.</span>
 <span class="source-line-no">708</span><span id="line-708">    *</span>
@@ -777,7 +777,7 @@
 <span class="source-line-no">764</span><span id="line-764">      "unchecked" // Type erasure requires cast to Optional&lt;T2&gt;</span>
 <span class="source-line-no">765</span><span id="line-765">   })</span>
 <span class="source-line-no">766</span><span id="line-766">   public &lt;T2&gt; Optional&lt;T2&gt; getProperty(String name, Function&lt;ClassMeta&lt;?&gt;,T2&gt; function) {</span>
-<span class="source-line-no">767</span><span id="line-767">      return (Optional&lt;T2&gt;)properties.get(name, () -&gt; opt(function.apply(this)));</span>
+<span class="source-line-no">767</span><span id="line-767">      return (Optional&lt;T2&gt;)properties.get(name, () -&gt; o(function.apply(this)));</span>
 <span class="source-line-no">768</span><span id="line-768">   }</span>
 <span class="source-line-no">769</span><span id="line-769"></span>
 <span class="source-line-no">770</span><span id="line-770">   /**</span>
@@ -1371,7 +1371,7 @@
 <span class="source-line-no">1358</span><span id="line-1358">         return noArgConstructor.get().newInstance();</span>
 <span class="source-line-no">1359</span><span id="line-1359">      var h = getProxyInvocationHandler();</span>
 <span class="source-line-no">1360</span><span id="line-1360">      if (nn(h))</span>
-<span class="source-line-no">1361</span><span id="line-1361">         return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(inner(), java.io.Serializable.class), h);</span>
+<span class="source-line-no">1361</span><span id="line-1361">         return (T)Proxy.newProxyInstance(this.getClass().getClassLoader(), a(inner(), Serializable.class), h);</span>
 <span class="source-line-no">1362</span><span id="line-1362">      return null;</span>
 <span class="source-line-no">1363</span><span id="line-1363">   }</span>
 <span class="source-line-no">1364</span><span id="line-1364"></span>
@@ -1520,10 +1520,10 @@
 <span class="source-line-no">1507</span><span id="line-1507">         .orElse(null);</span>
 <span class="source-line-no">1508</span><span id="line-1508">   }</span>
 <span class="source-line-no">1509</span><span id="line-1509"></span>
-<span class="source-line-no">1510</span><span id="line-1510">   private org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {</span>
+<span class="source-line-no">1510</span><span id="line-1510">   private BeanMeta.BeanMetaValue&lt;T&gt; findBeanMeta() {</span>
 <span class="source-line-no">1511</span><span id="line-1511">      if (! cat.isUnknown())</span>
-<span class="source-line-no">1512</span><span id="line-1512">         return new org.apache.juneau.commons.bean.BeanMeta.BeanMetaValue&lt;&gt;((org.apache.juneau.commons.bean.BeanMeta&lt;T&gt;)null, "Known non-bean type");</span>
-<span class="source-line-no">1513</span><span id="line-1513">      return org.apache.juneau.commons.bean.BeanMeta.create(this, implClass.get());</span>
+<span class="source-line-no">1512</span><span id="line-1512">         return new BeanMeta.BeanMetaValue&lt;&gt;((BeanMeta&lt;T&gt;)null, "Known non-bean type");</span>
+<span class="source-line-no">1513</span><span id="line-1513">      return BeanMeta.create(this, implClass.get());</span>
 <span class="source-line-no">1514</span><span id="line-1514">   }</span>
 <span class="source-line-no">1515</span><span id="line-1515"></span>
 <span class="source-line-no">1516</span><span id="line-1516">   private KeyValueTypes findKeyValueTypes() {</span>
@@ -1658,7 +1658,7 @@
 <span class="source-line-no">1645</span><span id="line-1645">         ex = marshalledFilter.map(x -&gt; x.getExample()).orElse(null);</span>
 <span class="source-line-no">1646</span><span id="line-1646"></span>
 <span class="source-line-no">1647</span><span id="line-1647">      if (ex == null &amp;&amp; nn(marshallingContext))</span>
-<span class="source-line-no">1648</span><span id="line-1648">         ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -&gt; x.inner().value()).filter(Utils::ne).findFirst().orElse(null);</span>
+<span class="source-line-no">1648</span><span id="line-1648">         ex = marshallingContext.getAnnotationProvider().find(Example.class, this).stream().map(x -&gt; x.inner().value()).filter(Shorts::ine).findFirst().orElse(null);</span>
 <span class="source-line-no">1649</span><span id="line-1649"></span>
 <span class="source-line-no">1650</span><span id="line-1650">      if (ex == null) {</span>
 <span class="source-line-no">1651</span><span id="line-1651">         if (isAny(boolean.class, Boolean.class)) {</span>

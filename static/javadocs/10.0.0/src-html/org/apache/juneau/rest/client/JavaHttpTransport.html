@@ -35,7 +35,7 @@
 <span class="source-line-no">022</span><span id="line-22">import java.net.http.HttpResponse.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">/**</span>
-<span class="source-line-no">025</span><span id="line-25"> * {@link HttpTransport} implementation backed by the JDK's built-in {@link java.net.http.HttpClient}.</span>
+<span class="source-line-no">025</span><span id="line-25"> * {@link HttpTransport} implementation backed by the JDK's built-in {@link HttpClient}.</span>
 <span class="source-line-no">026</span><span id="line-26"> *</span>
 <span class="source-line-no">027</span><span id="line-27"> * &lt;p&gt;</span>
 <span class="source-line-no">028</span><span id="line-28"> * This is the &lt;b&gt;default&lt;/b&gt; transport used by {@link RestClient}.  It is built into the</span>
@@ -65,10 +65,10 @@
 <span class="source-line-no">052</span><span id="line-52">})</span>
 <span class="source-line-no">053</span><span id="line-53">public final class JavaHttpTransport implements HttpTransport {</span>
 <span class="source-line-no">054</span><span id="line-54"></span>
-<span class="source-line-no">055</span><span id="line-55">   private final java.net.http.HttpClient httpClient;</span>
+<span class="source-line-no">055</span><span id="line-55">   private final HttpClient httpClient;</span>
 <span class="source-line-no">056</span><span id="line-56"></span>
 <span class="source-line-no">057</span><span id="line-57">   JavaHttpTransport(JavaHttpTransportBuilder builder) {</span>
-<span class="source-line-no">058</span><span id="line-58">      this.httpClient = builder.httpClient != null ? builder.httpClient : java.net.http.HttpClient.newHttpClient();</span>
+<span class="source-line-no">058</span><span id="line-58">      this.httpClient = builder.httpClient != null ? builder.httpClient : HttpClient.newHttpClient();</span>
 <span class="source-line-no">059</span><span id="line-59">   }</span>
 <span class="source-line-no">060</span><span id="line-60"></span>
 <span class="source-line-no">061</span><span id="line-61">   /**</span>
@@ -81,7 +81,7 @@
 <span class="source-line-no">068</span><span id="line-68">   }</span>
 <span class="source-line-no">069</span><span id="line-69"></span>
 <span class="source-line-no">070</span><span id="line-70">   /**</span>
-<span class="source-line-no">071</span><span id="line-71">    * Returns a new instance backed by a default {@link java.net.http.HttpClient}.</span>
+<span class="source-line-no">071</span><span id="line-71">    * Returns a new instance backed by a default {@link HttpClient}.</span>
 <span class="source-line-no">072</span><span id="line-72">    *</span>
 <span class="source-line-no">073</span><span id="line-73">    * @return A new instance. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">074</span><span id="line-74">    */</span>

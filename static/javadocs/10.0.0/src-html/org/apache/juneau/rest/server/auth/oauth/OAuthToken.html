@@ -72,7 +72,7 @@
 <span class="source-line-no">059</span><span id="line-59">    * @param skew Skew tolerance (subtracted from {@link #expiresAt}).  Must be non-negative.</span>
 <span class="source-line-no">060</span><span id="line-60">    * @return &lt;jk&gt;true&lt;/jk&gt; if {@code now &amp;gt;= expiresAt - skew}.</span>
 <span class="source-line-no">061</span><span id="line-61">    */</span>
-<span class="source-line-no">062</span><span id="line-62">   public boolean isExpired(Instant now, java.time.Duration skew) {</span>
+<span class="source-line-no">062</span><span id="line-62">   public boolean isExpired(Instant now, Duration skew) {</span>
 <span class="source-line-no">063</span><span id="line-63">      Objects.requireNonNull(now, "now");</span>
 <span class="source-line-no">064</span><span id="line-64">      Objects.requireNonNull(skew, "skew");</span>
 <span class="source-line-no">065</span><span id="line-65">      return !now.isBefore(expiresAt.minus(skew));</span>

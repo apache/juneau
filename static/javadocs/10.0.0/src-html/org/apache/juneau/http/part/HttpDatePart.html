@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.time.format.DateTimeFormatter.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.time.temporal.ChronoUnit.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">    */</span>
 <span class="source-line-no">084</span><span id="line-84">   public HttpDatePart(String name, String value) {</span>
 <span class="source-line-no">085</span><span id="line-85">      super(name, value);</span>
-<span class="source-line-no">086</span><span id="line-86">      this.typedValue = e(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);</span>
+<span class="source-line-no">086</span><span id="line-86">      this.typedValue = ie(value) ? null : ZonedDateTime.from(ISO_DATE_TIME.parse(value)).truncatedTo(SECONDS);</span>
 <span class="source-line-no">087</span><span id="line-87">      this.typedSupplier = null;</span>
 <span class="source-line-no">088</span><span id="line-88">   }</span>
 <span class="source-line-no">089</span><span id="line-89"></span>
@@ -133,7 +133,7 @@
 <span class="source-line-no">120</span><span id="line-120">    * @return The date value, wrapped in an {@link Optional}. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">121</span><span id="line-121">    */</span>
 <span class="source-line-no">122</span><span id="line-122">   public Optional&lt;ZonedDateTime&gt; asZonedDateTime() {</span>
-<span class="source-line-no">123</span><span id="line-123">      return opt(toZonedDateTime());</span>
+<span class="source-line-no">123</span><span id="line-123">      return o(toZonedDateTime());</span>
 <span class="source-line-no">124</span><span id="line-124">   }</span>
 <span class="source-line-no">125</span><span id="line-125"></span>
 <span class="source-line-no">126</span><span id="line-126">   /**</span>

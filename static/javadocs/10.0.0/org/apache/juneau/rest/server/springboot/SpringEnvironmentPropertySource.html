@@ -82,7 +82,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../../commons/settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-65">SpringEnvironmentPropertySource</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-66">SpringEnvironmentPropertySource</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../../commons/settings/PropertySource.html" title="interface in org.apache.juneau.commons.settings">PropertySource</a></span></div>
 <div class="block">Bridges a Spring <code>Environment</code> into the Juneau <a href="../../../commons/settings/Settings.html" title="class in org.apache.juneau.commons.settings"><code>Settings</code></a>
@@ -117,7 +117,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
  Spring context is built (e.g. from a user-provided microservice <code>Config</code>) still win.
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotationBasics"><code>@Value</code> basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ValueAnnotation"><code>@Value</code> basics</a>
    <li class='jc'><a href="SpringBeanStore.html" title="class in org.apache.juneau.rest.server.springboot"><code>SpringBeanStore</code></a>
  </ul></div>
 </section>
@@ -178,7 +178,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <li>
 <section class="detail" id="&lt;init&gt;(org.springframework.core.env.Environment)">
 <h3>SpringEnvironmentPropertySource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-81">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(org.springframework.core.env.Environment&nbsp;env)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-82">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(org.springframework.core.env.Environment&nbsp;env)</span></div>
 <div class="block">Constructor that bridges a pre-built <code>Environment</code>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -189,7 +189,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <li>
 <section class="detail" id="&lt;init&gt;(java.util.function.Supplier)">
 <h3>SpringEnvironmentPropertySource</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-99">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;org.springframework.core.env.Environment&gt;&nbsp;envSupplier)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-100">SpringEnvironmentPropertySource</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;org.springframework.core.env.Environment&gt;&nbsp;envSupplier)</span></div>
 <div class="block">Constructor that lazily resolves the <code>Environment</code> on first lookup.
 
  <p>
@@ -215,7 +215,7 @@ implements <a href="../../../commons/settings/PropertySource.html" title="interf
 <li>
 <section class="detail" id="get(java.lang.String)">
 <h3>get</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/settings/PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-103">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../commons/settings/PropertyLookupResult.html" title="class in org.apache.juneau.commons.settings">PropertyLookupResult</a></span>&nbsp;<span class="element-name"><a href="../../../../../../src-html/org/apache/juneau/rest/server/springboot/SpringEnvironmentPropertySource.html#line-104">get</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="../../../commons/settings/PropertySource.html#get(java.lang.String)">PropertySource</a></code></span></div>
 <div class="block">Returns a property in this property source.</div>
 <dl class="notes">

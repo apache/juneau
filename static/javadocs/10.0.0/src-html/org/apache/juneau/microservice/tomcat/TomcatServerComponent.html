@@ -30,11 +30,11 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.microservice.tomcat;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.FileUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.FileUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ObjectUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.marshall.collections.JsonMap.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
 <span class="source-line-no">027</span><span id="line-27">import java.io.*;</span>
@@ -89,7 +89,7 @@
 <span class="source-line-no">076</span><span id="line-76"> * {@code Microservice.getInstance().getBeanStore().getBean(TomcatServerComponent.class).orElseThrow()}.</span>
 <span class="source-line-no">077</span><span id="line-77"> *</span>
 <span class="source-line-no">078</span><span id="line-78"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcatBasics"&gt;juneau-microservice-tomcat Basics&lt;/a&gt;</span>
+<span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceTomcat"&gt;juneau-microservice-tomcat Basics&lt;/a&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
 <span class="source-line-no">081</span><span id="line-81"> *</span>
 <span class="source-line-no">082</span><span id="line-82"> * @since 10.0.0</span>
@@ -121,17 +121,17 @@
 <span class="source-line-no">108</span><span id="line-108">    * {@link #onStart(Microservice)} publishes the bound port back as the {@code availablePort} system property).</span>
 <span class="source-line-no">109</span><span id="line-109">    */</span>
 <span class="source-line-no">110</span><span id="line-110">   @Value("${availablePort}")</span>
-<span class="source-line-no">111</span><span id="line-111">   Optional&lt;String&gt; availablePortEnv = opte();</span>
+<span class="source-line-no">111</span><span id="line-111">   Optional&lt;String&gt; availablePortEnv = oe();</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
 <span class="source-line-no">113</span><span id="line-113">   /**</span>
 <span class="source-line-no">114</span><span id="line-114">    * Env-driven sentinel for {@code juneau.serverPort}; {@link Optional#empty()} when unset (in which case</span>
 <span class="source-line-no">115</span><span id="line-115">    * {@link #onStart(Microservice)} publishes the bound port back as the {@code juneau.serverPort} system property).</span>
 <span class="source-line-no">116</span><span id="line-116">    */</span>
 <span class="source-line-no">117</span><span id="line-117">   @Value("${juneau.serverPort}")</span>
-<span class="source-line-no">118</span><span id="line-118">   Optional&lt;String&gt; serverPortEnv = opte();</span>
+<span class="source-line-no">118</span><span id="line-118">   Optional&lt;String&gt; serverPortEnv = oe();</span>
 <span class="source-line-no">119</span><span id="line-119"></span>
 <span class="source-line-no">120</span><span id="line-120">   private static int[] parseIntArray(String csv) {</span>
-<span class="source-line-no">121</span><span id="line-121">      if (e(csv))</span>
+<span class="source-line-no">121</span><span id="line-121">      if (ie(csv))</span>
 <span class="source-line-no">122</span><span id="line-122">         return new int[0];</span>
 <span class="source-line-no">123</span><span id="line-123">      var parts = csv.split(",");</span>
 <span class="source-line-no">124</span><span id="line-124">      var out = new int[parts.length];</span>
@@ -249,8 +249,8 @@
 <span class="source-line-no">236</span><span id="line-236">         //    onStop() can wait for in-flight requests to complete before the server stops.</span>
 <span class="source-line-no">237</span><span id="line-237">         //  - Remember the settle delay so onStop() can let the LB observe the /readyz 503 before draining.</span>
 <span class="source-line-no">238</span><span id="line-238">         //  - Mark readiness ready so a freshly-(re)started service serves traffic.</span>
-<span class="source-line-no">239</span><span id="line-239">         stopTimeout.set(firstNonNull(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));</span>
-<span class="source-line-no">240</span><span id="line-240">         shutdownSettleDelay.set(firstNonNull(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));</span>
+<span class="source-line-no">239</span><span id="line-239">         stopTimeout.set(coalesce(settings.getStopTimeout(), cf.get("Tomcat/stopTimeout").asLong().map(Duration::ofMillis).orElse(DEFAULT_STOP_TIMEOUT)));</span>
+<span class="source-line-no">240</span><span id="line-240">         shutdownSettleDelay.set(coalesce(settings.getShutdownSettleDelay(), cf.get("Tomcat/shutdownSettleDelay").asLong().map(Duration::ofMillis).orElse(Duration.ZERO)));</span>
 <span class="source-line-no">241</span><span id="line-241">         ReadinessState.resolve(store).markReady();</span>
 <span class="source-line-no">242</span><span id="line-242"></span>
 <span class="source-line-no">243</span><span id="line-243">         // Track each servlet pathSpec with its declaring source so we can fail loudly on collisions.</span>
@@ -275,7 +275,7 @@
 <span class="source-line-no">262</span><span id="line-262">            if (cls.getAnnotation(Rest.class) == null)</span>
 <span class="source-line-no">263</span><span id="line-263">               continue;</span>
 <span class="source-line-no">264</span><span id="line-264">            var pathSpecs = restPathsFor(servlet, store);</span>
-<span class="source-line-no">265</span><span id="line-265">            var source = "@Bean " + cls.getName() + (ne(e.getKey()) ? "[" + e.getKey() + "]" : "");</span>
+<span class="source-line-no">265</span><span id="line-265">            var source = "@Bean " + cls.getName() + (ine(e.getKey()) ? "[" + e.getKey() + "]" : "");</span>
 <span class="source-line-no">266</span><span id="line-266">            for (var pathSpec : pathSpecs)</span>
 <span class="source-line-no">267</span><span id="line-267">               checkPathCollision(pathSpec, source, mountedPaths);</span>
 <span class="source-line-no">268</span><span id="line-268">            addServlet(servlet, pathSpecs);</span>
@@ -313,7 +313,7 @@
 <span class="source-line-no">300</span><span id="line-300">               t2.destroy();</span>
 <span class="source-line-no">301</span><span id="line-301">               ms.out(messages, "ServerStopped");</span>
 <span class="source-line-no">302</span><span id="line-302">            } catch (Exception e) {</span>
-<span class="source-line-no">303</span><span id="line-303">               logger.log(Level.WARNING, lm(e), e);</span>
+<span class="source-line-no">303</span><span id="line-303">               logger.log(Level.WARNING, localizedMessage(e), e);</span>
 <span class="source-line-no">304</span><span id="line-304">            } finally {</span>
 <span class="source-line-no">305</span><span id="line-305">               cleanupBaseDir();</span>
 <span class="source-line-no">306</span><span id="line-306">            }</span>
@@ -346,7 +346,7 @@
 <span class="source-line-no">333</span><span id="line-333">            }</span>
 <span class="source-line-no">334</span><span id="line-334">         }</span>
 <span class="source-line-no">335</span><span id="line-335">      } catch (Exception e) {</span>
-<span class="source-line-no">336</span><span id="line-336">         logger.log(Level.WARNING, lm(e), e);</span>
+<span class="source-line-no">336</span><span id="line-336">         logger.log(Level.WARNING, localizedMessage(e), e);</span>
 <span class="source-line-no">337</span><span id="line-337">      }</span>
 <span class="source-line-no">338</span><span id="line-338">   }</span>
 <span class="source-line-no">339</span><span id="line-339"></span>
@@ -523,7 +523,7 @@
 <span class="source-line-no">510</span><span id="line-510">   public URI getURI() {</span>
 <span class="source-line-no">511</span><span id="line-511">      var cp = getContextPath();</span>
 <span class="source-line-no">512</span><span id="line-512">      try {</span>
-<span class="source-line-no">513</span><span id="line-513">         return new URI(getProtocol(), null, getHostName(), getPort(), e(cp) ? null : cp, null, null);</span>
+<span class="source-line-no">513</span><span id="line-513">         return new URI(getProtocol(), null, getHostName(), getPort(), ie(cp) ? null : cp, null, null);</span>
 <span class="source-line-no">514</span><span id="line-514">      } catch (URISyntaxException e) {</span>
 <span class="source-line-no">515</span><span id="line-515">         throw toRex(e);</span>
 <span class="source-line-no">516</span><span id="line-516">      }</span>
@@ -539,7 +539,7 @@
 <span class="source-line-no">526</span><span id="line-526"></span>
 <span class="source-line-no">527</span><span id="line-527">   private File resolveBaseDir(TomcatSettings settings) {</span>
 <span class="source-line-no">528</span><span id="line-528">      var configured = settings.getBaseDir();</span>
-<span class="source-line-no">529</span><span id="line-529">      if (ne(configured)) {</span>
+<span class="source-line-no">529</span><span id="line-529">      if (ine(configured)) {</span>
 <span class="source-line-no">530</span><span id="line-530">         ownsBaseDir.set(false);</span>
 <span class="source-line-no">531</span><span id="line-531">         var f = new File(configured);</span>
 <span class="source-line-no">532</span><span id="line-532">         baseDir.set(f);</span>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">/**</span>
 <span class="source-line-no">022</span><span id="line-22"> * Supported wire formats for non-finite {@link Float} / {@link Double} values</span>
@@ -37,9 +37,9 @@
 <span class="source-line-no">024</span><span id="line-24"> *</span>
 <span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
 <span class="source-line-no">026</span><span id="line-26"> * Used by {@link MarshallingContext.Builder#floatFormat(FloatFormat)},</span>
-<span class="source-line-no">027</span><span id="line-27"> * {@link org.apache.juneau.marshall.Marshalled#floatFormat()},</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@link org.apache.juneau.marshall.MarshalledProp#floatFormat()}, and</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@link org.apache.juneau.marshall.MarshalledConfig#floatFormat()} to control how non-finite</span>
+<span class="source-line-no">027</span><span id="line-27"> * {@link Marshalled#floatFormat()},</span>
+<span class="source-line-no">028</span><span id="line-28"> * {@link MarshalledProp#floatFormat()}, and</span>
+<span class="source-line-no">029</span><span id="line-29"> * {@link MarshalledConfig#floatFormat()} to control how non-finite</span>
 <span class="source-line-no">030</span><span id="line-30"> * floating-point values are written to text-based wire formats.  Finite values are unaffected and ride</span>
 <span class="source-line-no">031</span><span id="line-31"> * the natural bare-numeric-token wire form for the underlying serializer.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
@@ -49,9 +49,9 @@
 <span class="source-line-no">036</span><span id="line-36"> *</span>
 <span class="source-line-no">037</span><span id="line-37"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;ol&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledProp#floatFormat() @MarshalledProp(floatFormat=…)} on the bean property.</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledConfig#floatFormat() @MarshalledConfig(floatFormat=…)} on</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;{@link MarshalledProp#floatFormat() @MarshalledProp(floatFormat=…)} on the bean property.</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;{@link Marshalled#floatFormat() @Marshalled(floatFormat=…)} on the bean class.</span>
+<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;{@link MarshalledConfig#floatFormat() @MarshalledConfig(floatFormat=…)} on</span>
 <span class="source-line-no">042</span><span id="line-42"> *       &lt;code&gt;&lt;ja&gt;@Rest&lt;/ja&gt;&lt;/code&gt;-annotated classes / methods.</span>
 <span class="source-line-no">043</span><span id="line-43"> *    &lt;li&gt;Programmatic {@link MarshallingContext.Builder#floatFormat(FloatFormat)}.</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;Environment variable &lt;c&gt;MarshallingContext.floatFormat&lt;/c&gt;.</span>
@@ -182,7 +182,7 @@
 <span class="source-line-no">169</span><span id="line-169">         case NOT_SET, NaN_AS_NULL -&gt; null;</span>
 <span class="source-line-no">170</span><span id="line-170">         case NaN_AS_STRING -&gt; nonFiniteTokenFloat(value);</span>
 <span class="source-line-no">171</span><span id="line-171">         case NaN_AS_NUMBER -&gt; Float.valueOf(value);</span>
-<span class="source-line-no">172</span><span id="line-172">         case NaN_AS_ERROR -&gt; throw illegalArg("Non-finite float value {0} rejected by FloatFormat.NaN_AS_ERROR", value);</span>
+<span class="source-line-no">172</span><span id="line-172">         case NaN_AS_ERROR -&gt; throw iaex("Non-finite float value {0} rejected by FloatFormat.NaN_AS_ERROR", value);</span>
 <span class="source-line-no">173</span><span id="line-173">      };</span>
 <span class="source-line-no">174</span><span id="line-174">   }</span>
 <span class="source-line-no">175</span><span id="line-175"></span>
@@ -192,7 +192,7 @@
 <span class="source-line-no">179</span><span id="line-179">         case NOT_SET, NaN_AS_NULL -&gt; null;</span>
 <span class="source-line-no">180</span><span id="line-180">         case NaN_AS_STRING -&gt; nonFiniteToken(value);</span>
 <span class="source-line-no">181</span><span id="line-181">         case NaN_AS_NUMBER -&gt; Double.valueOf(value);</span>
-<span class="source-line-no">182</span><span id="line-182">         case NaN_AS_ERROR -&gt; throw illegalArg("Non-finite double value {0} rejected by FloatFormat.NaN_AS_ERROR", value);</span>
+<span class="source-line-no">182</span><span id="line-182">         case NaN_AS_ERROR -&gt; throw iaex("Non-finite double value {0} rejected by FloatFormat.NaN_AS_ERROR", value);</span>
 <span class="source-line-no">183</span><span id="line-183">      };</span>
 <span class="source-line-no">184</span><span id="line-184">   }</span>
 <span class="source-line-no">185</span><span id="line-185"></span>
@@ -240,9 +240,9 @@
 <span class="source-line-no">227</span><span id="line-227">            return (T) Double.valueOf(parseDouble(s));</span>
 <span class="source-line-no">228</span><span id="line-228">         if (Float.class.equals(targetType) || float.class.equals(targetType))</span>
 <span class="source-line-no">229</span><span id="line-229">            return (T) Float.valueOf(parseFloat(s));</span>
-<span class="source-line-no">230</span><span id="line-230">         throw illegalArg("Unsupported FloatFormat target type: {0}", targetType.getName());</span>
+<span class="source-line-no">230</span><span id="line-230">         throw iaex("Unsupported FloatFormat target type: {0}", targetType.getName());</span>
 <span class="source-line-no">231</span><span id="line-231">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">232</span><span id="line-232">         throw illegalArg("Invalid float value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
+<span class="source-line-no">232</span><span id="line-232">         throw iaex("Invalid float value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
 <span class="source-line-no">233</span><span id="line-233">      }</span>
 <span class="source-line-no">234</span><span id="line-234">   }</span>
 <span class="source-line-no">235</span><span id="line-235"></span>

@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.math.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -38,9 +38,9 @@
 <span class="source-line-no">025</span><span id="line-25"> *</span>
 <span class="source-line-no">026</span><span id="line-26"> * &lt;p&gt;</span>
 <span class="source-line-no">027</span><span id="line-27"> * Used by {@link MarshallingContext.Builder#bigNumberFormat(BigNumberFormat)},</span>
-<span class="source-line-no">028</span><span id="line-28"> * {@link org.apache.juneau.marshall.Marshalled#bigNumberFormat()},</span>
-<span class="source-line-no">029</span><span id="line-29"> * {@link org.apache.juneau.marshall.MarshalledProp#bigNumberFormat()}, and</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.marshall.MarshalledConfig#bigNumberFormat()} to control how</span>
+<span class="source-line-no">028</span><span id="line-28"> * {@link Marshalled#bigNumberFormat()},</span>
+<span class="source-line-no">029</span><span id="line-29"> * {@link MarshalledProp#bigNumberFormat()}, and</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link MarshalledConfig#bigNumberFormat()} to control how</span>
 <span class="source-line-no">031</span><span id="line-31"> * {@link BigInteger} / {@link BigDecimal} values are written to text-based wire formats.</span>
 <span class="source-line-no">032</span><span id="line-32"> *</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
@@ -57,9 +57,9 @@
 <span class="source-line-no">044</span><span id="line-44"> *</span>
 <span class="source-line-no">045</span><span id="line-45"> * &lt;h5 class='topic'&gt;Precedence (highest to lowest)&lt;/h5&gt;</span>
 <span class="source-line-no">046</span><span id="line-46"> * &lt;ol&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledProp#bigNumberFormat() @MarshalledProp(bigNumberFormat=…)} on the bean property.</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;{@link org.apache.juneau.marshall.Marshalled#bigNumberFormat() @Marshalled(bigNumberFormat=…)} on the bean class.</span>
-<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;{@link org.apache.juneau.marshall.MarshalledConfig#bigNumberFormat() @MarshalledConfig(bigNumberFormat=…)} on</span>
+<span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;{@link MarshalledProp#bigNumberFormat() @MarshalledProp(bigNumberFormat=…)} on the bean property.</span>
+<span class="source-line-no">048</span><span id="line-48"> *    &lt;li&gt;{@link Marshalled#bigNumberFormat() @Marshalled(bigNumberFormat=…)} on the bean class.</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;li&gt;{@link MarshalledConfig#bigNumberFormat() @MarshalledConfig(bigNumberFormat=…)} on</span>
 <span class="source-line-no">050</span><span id="line-50"> *       &lt;code&gt;&lt;ja&gt;@Rest&lt;/ja&gt;&lt;/code&gt;-annotated classes / methods.</span>
 <span class="source-line-no">051</span><span id="line-51"> *    &lt;li&gt;Programmatic {@link MarshallingContext.Builder#bigNumberFormat(BigNumberFormat)}.</span>
 <span class="source-line-no">052</span><span id="line-52"> *    &lt;li&gt;Environment variable &lt;c&gt;MarshallingContext.bigNumberFormat&lt;/c&gt;.</span>
@@ -221,9 +221,9 @@
 <span class="source-line-no">208</span><span id="line-208">            return (T) new BigInteger(s);</span>
 <span class="source-line-no">209</span><span id="line-209">         if (BigDecimal.class.equals(targetType))</span>
 <span class="source-line-no">210</span><span id="line-210">            return (T) new BigDecimal(s);</span>
-<span class="source-line-no">211</span><span id="line-211">         throw illegalArg("Unsupported BigNumberFormat target type: {0}", targetType.getName());</span>
+<span class="source-line-no">211</span><span id="line-211">         throw iaex("Unsupported BigNumberFormat target type: {0}", targetType.getName());</span>
 <span class="source-line-no">212</span><span id="line-212">      } catch (NumberFormatException e) {</span>
-<span class="source-line-no">213</span><span id="line-213">         throw illegalArg("Invalid big-number value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
+<span class="source-line-no">213</span><span id="line-213">         throw iaex("Invalid big-number value ''{0}'' for format {1}: {2}", value, format, e.getMessage());</span>
 <span class="source-line-no">214</span><span id="line-214">      }</span>
 <span class="source-line-no">215</span><span id="line-215">   }</span>
 <span class="source-line-no">216</span><span id="line-216"></span>

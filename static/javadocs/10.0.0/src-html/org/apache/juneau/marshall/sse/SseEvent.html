@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.sse;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -53,7 +53,7 @@
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * The payload field {@link #getData() data} is a &lt;b&gt;pre-serialized&lt;/b&gt; {@link String} — the SSE</span>
 <span class="source-line-no">042</span><span id="line-42"> * serializer does not compose with a delegate marshaller. Callers that need a typed payload should</span>
-<span class="source-line-no">043</span><span id="line-43"> * serialize it themselves (e.g. via {@link org.apache.juneau.marshall.marshaller.Json#of(Object) Json.DEFAULT.of(x)})</span>
+<span class="source-line-no">043</span><span id="line-43"> * serialize it themselves (e.g. via {@link org.apache.juneau.marshall.marshaller.Json#of(Object) Json.of(x)})</span>
 <span class="source-line-no">044</span><span id="line-44"> * and assign the resulting string to {@link #setData(String) setData(...)}. The serializer will</span>
 <span class="source-line-no">045</span><span id="line-45"> * split that string on {@code \n} into multiple &lt;c&gt;data:&lt;/c&gt; lines per spec.</span>
 <span class="source-line-no">046</span><span id="line-46"> *</span>
@@ -73,7 +73,7 @@
 <span class="source-line-no">060</span><span id="line-60"> * &lt;/ul&gt;</span>
 <span class="source-line-no">061</span><span id="line-61"> *</span>
 <span class="source-line-no">062</span><span id="line-62"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/SseBasics"&gt;SSE Basics&lt;/a&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/Sse"&gt;SSE Basics&lt;/a&gt;</span>
 <span class="source-line-no">064</span><span id="line-64"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://html.spec.whatwg.org/multipage/server-sent-events.html"&gt;WHATWG HTML §9.2 — Server-sent events&lt;/a&gt;</span>
 <span class="source-line-no">065</span><span id="line-65"> * &lt;/ul&gt;</span>
 <span class="source-line-no">066</span><span id="line-66"> */</span>

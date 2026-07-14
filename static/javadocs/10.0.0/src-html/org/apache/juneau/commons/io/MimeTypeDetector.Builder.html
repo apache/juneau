@@ -32,7 +32,7 @@
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.collections.CacheMode.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.FileUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.nio.file.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
@@ -179,11 +179,11 @@
 <span class="source-line-no">166</span><span id="line-166">      })</span>
 <span class="source-line-no">167</span><span id="line-167">      public Builder addTypes(String...mimeTypesLines) {</span>
 <span class="source-line-no">168</span><span id="line-168">         for (var input : mimeTypesLines) {</span>
-<span class="source-line-no">169</span><span id="line-169">            if (ne(input)) {</span>
+<span class="source-line-no">169</span><span id="line-169">            if (ine(input)) {</span>
 <span class="source-line-no">170</span><span id="line-170">               // Split on newlines to handle both individual lines and file contents</span>
 <span class="source-line-no">171</span><span id="line-171">               var lines = input.split("\\r?\\n");</span>
 <span class="source-line-no">172</span><span id="line-172">               for (var line : lines) {</span>
-<span class="source-line-no">173</span><span id="line-173">                  if (ne(line) &amp;&amp; ! line.trim().startsWith("#")) {</span>
+<span class="source-line-no">173</span><span id="line-173">                  if (ine(line) &amp;&amp; ! line.trim().startsWith("#")) {</span>
 <span class="source-line-no">174</span><span id="line-174">                     var parts = line.trim().split("\\s+");</span>
 <span class="source-line-no">175</span><span id="line-175">                     if (parts.length &gt;= 2) {</span>
 <span class="source-line-no">176</span><span id="line-176">                        var mimeType = parts[0];</span>
@@ -225,8 +225,8 @@
 <span class="source-line-no">212</span><span id="line-212">       * Available modes:</span>
 <span class="source-line-no">213</span><span id="line-213">       * &lt;ul&gt;</span>
 <span class="source-line-no">214</span><span id="line-214">       *    &lt;li&gt;{@link CacheMode#NONE NONE} - No caching (always recompute)</span>
-<span class="source-line-no">215</span><span id="line-215">       *    &lt;li&gt;{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link java.util.WeakHashMap})</span>
-<span class="source-line-no">216</span><span id="line-216">       *    &lt;li&gt;{@link CacheMode#FULL FULL} - Full caching (uses {@link java.util.concurrent.ConcurrentHashMap}, default)</span>
+<span class="source-line-no">215</span><span id="line-215">       *    &lt;li&gt;{@link CacheMode#WEAK WEAK} - Weak caching (uses {@link WeakHashMap})</span>
+<span class="source-line-no">216</span><span id="line-216">       *    &lt;li&gt;{@link CacheMode#FULL FULL} - Full caching (uses {@link ConcurrentHashMap}, default)</span>
 <span class="source-line-no">217</span><span id="line-217">       * &lt;/ul&gt;</span>
 <span class="source-line-no">218</span><span id="line-218">       *</span>
 <span class="source-line-no">219</span><span id="line-219">       * @param value The caching mode.</span>
@@ -345,7 +345,7 @@
 <span class="source-line-no">332</span><span id="line-332">    * @return The MIME type of the file, or the default type if unknown.</span>
 <span class="source-line-no">333</span><span id="line-333">    */</span>
 <span class="source-line-no">334</span><span id="line-334">   public String getContentType(String fileName) {</span>
-<span class="source-line-no">335</span><span id="line-335">      if (e(fileName)) {</span>
+<span class="source-line-no">335</span><span id="line-335">      if (ie(fileName)) {</span>
 <span class="source-line-no">336</span><span id="line-336">         return defaultType;</span>
 <span class="source-line-no">337</span><span id="line-337">      }</span>
 <span class="source-line-no">338</span><span id="line-338"></span>
@@ -372,7 +372,7 @@
 <span class="source-line-no">359</span><span id="line-359">            var path = Paths.get(fileName);</span>
 <span class="source-line-no">360</span><span id="line-360">            if (Files.exists(path)) {</span>
 <span class="source-line-no">361</span><span id="line-361">               var contentType = Files.probeContentType(path);</span>
-<span class="source-line-no">362</span><span id="line-362">               if (ne(contentType)) {</span>
+<span class="source-line-no">362</span><span id="line-362">               if (ine(contentType)) {</span>
 <span class="source-line-no">363</span><span id="line-363">                  return contentType;</span>
 <span class="source-line-no">364</span><span id="line-364">               }</span>
 <span class="source-line-no">365</span><span id="line-365">         }</span>
@@ -383,7 +383,7 @@
 <span class="source-line-no">370</span><span id="line-370"></span>
 <span class="source-line-no">371</span><span id="line-371">      // Fall back to extension-based detection</span>
 <span class="source-line-no">372</span><span id="line-372">      var extension = getFileExtension(fileName);</span>
-<span class="source-line-no">373</span><span id="line-373">      if (ne(extension)) {</span>
+<span class="source-line-no">373</span><span id="line-373">      if (ine(extension)) {</span>
 <span class="source-line-no">374</span><span id="line-374">         var mimeType = extMap.get(extension.toLowerCase());</span>
 <span class="source-line-no">375</span><span id="line-375">         if (nn(mimeType)) {</span>
 <span class="source-line-no">376</span><span id="line-376">            return mimeType;</span>

@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.classic;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ObjectUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -42,7 +42,7 @@
 <span class="source-line-no">029</span><span id="line-29"> * A basic implementation of the {@link StatusLine} interface.</span>
 <span class="source-line-no">030</span><span id="line-30"> *</span>
 <span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">032</span><span id="line-32"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
 <span class="source-line-no">033</span><span id="line-33"> * &lt;/ul&gt;</span>
 <span class="source-line-no">034</span><span id="line-34"> */</span>
 <span class="source-line-no">035</span><span id="line-35">public class BasicStatusLine implements StatusLine {</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   @Override /* Overridden from StatusLine */</span>
 <span class="source-line-no">103</span><span id="line-103">   public String getReasonPhrase() {</span>
 <span class="source-line-no">104</span><span id="line-104">      if (reasonPhrase == null) {</span>
-<span class="source-line-no">105</span><span id="line-105">         ReasonPhraseCatalog rfc = firstNonNull(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);</span>
+<span class="source-line-no">105</span><span id="line-105">         ReasonPhraseCatalog rfc = coalesce(reasonPhraseCatalog, EnglishReasonPhraseCatalog.INSTANCE);</span>
 <span class="source-line-no">106</span><span id="line-106">         return rfc.getReason(statusCode, locale);</span>
 <span class="source-line-no">107</span><span id="line-107">      }</span>
 <span class="source-line-no">108</span><span id="line-108">      return reasonPhrase;</span>
@@ -234,7 +234,7 @@
 <span class="source-line-no">221</span><span id="line-221">    */</span>
 <span class="source-line-no">222</span><span id="line-222">   protected final void assertModifiable() {</span>
 <span class="source-line-no">223</span><span id="line-223">      if (unmodifiable)</span>
-<span class="source-line-no">224</span><span id="line-224">         throw unsupportedOp("Bean is read-only");</span>
+<span class="source-line-no">224</span><span id="line-224">         throw uoex("Bean is read-only");</span>
 <span class="source-line-no">225</span><span id="line-225">   }</span>
 <span class="source-line-no">226</span><span id="line-226">}</span>
 

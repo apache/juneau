@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.svl.functions;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.concurrent.*;</span>
@@ -85,11 +85,11 @@
 <span class="source-line-no">072</span><span id="line-72">   public static class RandInt extends TypedFunction {</span>
 <span class="source-line-no">073</span><span id="line-73">      @Override public String name() { return "randInt"; }</span>
 <span class="source-line-no">074</span><span id="line-74">      public String invoke(int max) {</span>
-<span class="source-line-no">075</span><span id="line-75">         if (max &lt;= 0) throw illegalArg("randInt: max must be &gt; 0");</span>
+<span class="source-line-no">075</span><span id="line-75">         if (max &lt;= 0) throw iaex("randInt: max must be &gt; 0");</span>
 <span class="source-line-no">076</span><span id="line-76">         return String.valueOf(ThreadLocalRandom.current().nextInt(max));</span>
 <span class="source-line-no">077</span><span id="line-77">      }</span>
 <span class="source-line-no">078</span><span id="line-78">      public String invoke(int min, int max) {</span>
-<span class="source-line-no">079</span><span id="line-79">         if (min &gt; max) throw illegalArg("randInt: min ({0}) must be &lt;= max ({1})", min, max);</span>
+<span class="source-line-no">079</span><span id="line-79">         if (min &gt; max) throw iaex("randInt: min ({0}) must be &lt;= max ({1})", min, max);</span>
 <span class="source-line-no">080</span><span id="line-80">         return String.valueOf(ThreadLocalRandom.current().nextLong(min, (long) max + 1));</span>
 <span class="source-line-no">081</span><span id="line-81">      }</span>
 <span class="source-line-no">082</span><span id="line-82">   }</span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">   public static class RandLong extends TypedFunction {</span>
 <span class="source-line-no">086</span><span id="line-86">      @Override public String name() { return "randLong"; }</span>
 <span class="source-line-no">087</span><span id="line-87">      public String invoke(long min, long max) {</span>
-<span class="source-line-no">088</span><span id="line-88">         if (min &gt; max) throw illegalArg("randLong: min ({0}) must be &lt;= max ({1})", min, max);</span>
+<span class="source-line-no">088</span><span id="line-88">         if (min &gt; max) throw iaex("randLong: min ({0}) must be &lt;= max ({1})", min, max);</span>
 <span class="source-line-no">089</span><span id="line-89">         if (max == Long.MAX_VALUE)</span>
 <span class="source-line-no">090</span><span id="line-90">            return String.valueOf(ThreadLocalRandom.current().nextLong(min, max));</span>
 <span class="source-line-no">091</span><span id="line-91">         return String.valueOf(ThreadLocalRandom.current().nextLong(min, max + 1));</span>
@@ -117,7 +117,7 @@
 <span class="source-line-no">104</span><span id="line-104">      @Override public String name() { return "randString"; }</span>
 <span class="source-line-no">105</span><span id="line-105">      public String invoke(int length) { return invoke(length, ALPHA_NUM); }</span>
 <span class="source-line-no">106</span><span id="line-106">      public String invoke(int length, String charset) {</span>
-<span class="source-line-no">107</span><span id="line-107">         if (length &lt; 0) throw illegalArg("randString: length must be &gt;= 0");</span>
+<span class="source-line-no">107</span><span id="line-107">         if (length &lt; 0) throw iaex("randString: length must be &gt;= 0");</span>
 <span class="source-line-no">108</span><span id="line-108">         if (charset == null || charset.isEmpty()) charset = ALPHA_NUM;</span>
 <span class="source-line-no">109</span><span id="line-109">         var rnd = ThreadLocalRandom.current();</span>
 <span class="source-line-no">110</span><span id="line-110">         var sb = new StringBuilder(length);</span>
@@ -131,7 +131,7 @@
 <span class="source-line-no">118</span><span id="line-118">   public static class RandChoice extends TypedFunction {</span>
 <span class="source-line-no">119</span><span id="line-119">      @Override public String name() { return "randChoice"; }</span>
 <span class="source-line-no">120</span><span id="line-120">      public String invoke(String[] options) {</span>
-<span class="source-line-no">121</span><span id="line-121">         if (options.length == 0) throw illegalArg("randChoice: at least one option required");</span>
+<span class="source-line-no">121</span><span id="line-121">         if (options.length == 0) throw iaex("randChoice: at least one option required");</span>
 <span class="source-line-no">122</span><span id="line-122">         return options[ThreadLocalRandom.current().nextInt(options.length)];</span>
 <span class="source-line-no">123</span><span id="line-123">      }</span>
 <span class="source-line-no">124</span><span id="line-124">   }</span>

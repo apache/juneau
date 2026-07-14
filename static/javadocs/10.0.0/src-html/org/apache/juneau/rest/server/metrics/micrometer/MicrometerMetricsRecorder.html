@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.metrics.micrometer;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">   })</span>
 <span class="source-line-no">160</span><span id="line-160">   @Override /* MetricsRecorder */</span>
 <span class="source-line-no">161</span><span id="line-161">   public void record(String opName, String httpMethod, String uriTemplate, int statusCode, Duration elapsed, Throwable error, String metricName, String metricTags) {</span>
-<span class="source-line-no">162</span><span id="line-162">      var effectiveName = ne(metricName) ? metricName : timerName;</span>
+<span class="source-line-no">162</span><span id="line-162">      var effectiveName = ine(metricName) ? metricName : timerName;</span>
 <span class="source-line-no">163</span><span id="line-163">      var builder = Timer.builder(effectiveName)</span>
 <span class="source-line-no">164</span><span id="line-164">         .tag(TAG_METHOD, defaultIfBlank(httpMethod, ""))</span>
 <span class="source-line-no">165</span><span id="line-165">         .tag(TAG_URI, defaultIfBlank(uriTemplate, ""))</span>
@@ -196,7 +196,7 @@
 <span class="source-line-no">183</span><span id="line-183">   }</span>
 <span class="source-line-no">184</span><span id="line-184"></span>
 <span class="source-line-no">185</span><span id="line-185">   private static Timer.Builder applyMetricTags(Timer.Builder builder, String metricTags) {</span>
-<span class="source-line-no">186</span><span id="line-186">      if (ne(metricTags))</span>
+<span class="source-line-no">186</span><span id="line-186">      if (ine(metricTags))</span>
 <span class="source-line-no">187</span><span id="line-187">         for (var pair : metricTags.split(",")) {</span>
 <span class="source-line-no">188</span><span id="line-188">            var kv = pair.split("=", 2);</span>
 <span class="source-line-no">189</span><span id="line-189">            if (kv.length == 2)</span>

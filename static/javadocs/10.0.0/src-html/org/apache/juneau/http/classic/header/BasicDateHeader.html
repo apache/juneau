@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.time.format.DateTimeFormatter.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static java.time.temporal.ChronoUnit.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.time.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
@@ -49,7 +49,7 @@
 <span class="source-line-no">036</span><span id="line-36"> * &lt;/p&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> *</span>
 <span class="source-line-no">038</span><span id="line-38"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommonBasics"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestCommon"&gt;juneau-rest-common Basics&lt;/a&gt;</span>
 <span class="source-line-no">040</span><span id="line-40"> *    &lt;li class='extlink'&gt;&lt;a class="doclink" href="https://www.w3.org/Protocols/rfc2616/rfc2616.html"&gt;Hypertext Transfer Protocol -- HTTP/1.1&lt;/a&gt;</span>
 <span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
 <span class="source-line-no">042</span><span id="line-42"> *</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">    */</span>
 <span class="source-line-no">110</span><span id="line-110">   public BasicDateHeader(String name, String value) {</span>
 <span class="source-line-no">111</span><span id="line-111">      super(name, value);</span>
-<span class="source-line-no">112</span><span id="line-112">      this.value = e(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value)).truncatedTo(SECONDS);</span>
+<span class="source-line-no">112</span><span id="line-112">      this.value = ie(value) ? null : ZonedDateTime.from(RFC_1123_DATE_TIME.parse(value)).truncatedTo(SECONDS);</span>
 <span class="source-line-no">113</span><span id="line-113">      this.supplier = null;</span>
 <span class="source-line-no">114</span><span id="line-114">   }</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
@@ -184,7 +184,7 @@
 <span class="source-line-no">171</span><span id="line-171">    * @return The header value as a {@link ZonedDateTime} wrapped in an {@link Optional}.  Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">172</span><span id="line-172">    */</span>
 <span class="source-line-no">173</span><span id="line-173">   public Optional&lt;ZonedDateTime&gt; asZonedDateTime() {</span>
-<span class="source-line-no">174</span><span id="line-174">      return opt(value());</span>
+<span class="source-line-no">174</span><span id="line-174">      return o(value());</span>
 <span class="source-line-no">175</span><span id="line-175">   }</span>
 <span class="source-line-no">176</span><span id="line-176"></span>
 <span class="source-line-no">177</span><span id="line-177">   @Override /* Overridden from Header */</span>

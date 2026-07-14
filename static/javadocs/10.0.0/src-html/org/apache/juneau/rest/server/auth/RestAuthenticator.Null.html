@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -38,7 +38,7 @@
 <span class="source-line-no">025</span><span id="line-25">import jakarta.servlet.http.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
 <span class="source-line-no">027</span><span id="line-27">/**</span>
-<span class="source-line-no">028</span><span id="line-28"> * Resource-level authentication SPI for {@link org.apache.juneau.rest.server.Rest @Rest} resources.</span>
+<span class="source-line-no">028</span><span id="line-28"> * Resource-level authentication SPI for {@link Rest @Rest} resources.</span>
 <span class="source-line-no">029</span><span id="line-29"> *</span>
 <span class="source-line-no">030</span><span id="line-30"> * &lt;p&gt;</span>
 <span class="source-line-no">031</span><span id="line-31"> * Resolves a request's {@link java.security.Principal} and roles, reusing the same {@link Authenticator}</span>
@@ -103,15 +103,15 @@
 <span class="source-line-no">090</span><span id="line-90">   }</span>
 <span class="source-line-no">091</span><span id="line-91"></span>
 <span class="source-line-no">092</span><span id="line-92">   /**</span>
-<span class="source-line-no">093</span><span id="line-93">    * Sentinel "unset" type for {@link org.apache.juneau.rest.server.Rest#authenticator() @Rest(authenticator=...)};</span>
+<span class="source-line-no">093</span><span id="line-93">    * Sentinel "unset" type for {@link Rest#authenticator() @Rest(authenticator=...)};</span>
 <span class="source-line-no">094</span><span id="line-94">    * never authenticates.</span>
 <span class="source-line-no">095</span><span id="line-95">    */</span>
 <span class="source-line-no">096</span><span id="line-96">   public static final class Null extends RestAuthenticator {</span>
 <span class="source-line-no">097</span><span id="line-97">      @Override public Optional&lt;AuthResult&gt; authenticate(RestRequest req) {</span>
-<span class="source-line-no">098</span><span id="line-98">         return opte();</span>
+<span class="source-line-no">098</span><span id="line-98">         return oe();</span>
 <span class="source-line-no">099</span><span id="line-99">      }</span>
 <span class="source-line-no">100</span><span id="line-100">      @Override Optional&lt;AuthResult&gt; authenticateRaw(HttpServletRequest req) {</span>
-<span class="source-line-no">101</span><span id="line-101">         return opte();</span>
+<span class="source-line-no">101</span><span id="line-101">         return oe();</span>
 <span class="source-line-no">102</span><span id="line-102">      }</span>
 <span class="source-line-no">103</span><span id="line-103">   }</span>
 <span class="source-line-no">104</span><span id="line-104">}</span>

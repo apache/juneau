@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.httppart;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -100,7 +100,7 @@
 <span class="source-line-no">087</span><span id="line-87">    * @throws BasicHttpException If value could not be parsed.</span>
 <span class="source-line-no">088</span><span id="line-88">    */</span>
 <span class="source-line-no">089</span><span id="line-89">   public &lt;T&gt; Optional&lt;T&gt; as(Class&lt;T&gt; type) {</span>
-<span class="source-line-no">090</span><span id="line-90">      return opt(req.getMarshallingSession().convertToType(getValue(), type));</span>
+<span class="source-line-no">090</span><span id="line-90">      return o(req.getMarshallingSession().convertToType(getValue(), type));</span>
 <span class="source-line-no">091</span><span id="line-91">   }</span>
 <span class="source-line-no">092</span><span id="line-92"></span>
 <span class="source-line-no">093</span><span id="line-93">   /**</span>
@@ -109,7 +109,7 @@
 <span class="source-line-no">096</span><span id="line-96">    * @return The value of this part as a string, or {@link Optional#empty()} if the part was not present.</span>
 <span class="source-line-no">097</span><span id="line-97">    */</span>
 <span class="source-line-no">098</span><span id="line-98">   public Optional&lt;String&gt; asString() {</span>
-<span class="source-line-no">099</span><span id="line-99">      return opt(s(getValue()));</span>
+<span class="source-line-no">099</span><span id="line-99">      return o(s(getValue()));</span>
 <span class="source-line-no">100</span><span id="line-100">   }</span>
 <span class="source-line-no">101</span><span id="line-101">}</span>
 

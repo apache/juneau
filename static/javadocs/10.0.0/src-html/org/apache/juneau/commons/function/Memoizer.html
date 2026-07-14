@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.function;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.concurrent.atomic.*;</span>
@@ -82,7 +82,7 @@
 <span class="source-line-no">069</span><span id="line-69"> *</span>
 <span class="source-line-no">070</span><span id="line-70"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;</span>
 <span class="source-line-no">071</span><span id="line-71"> * &lt;ul&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jm'&gt;{@link org.apache.juneau.commons.utils.Utils#memoizer(Supplier)}</span>
+<span class="source-line-no">072</span><span id="line-72"> *    &lt;li class='jm'&gt;{@link Suppliers#memoizer(Supplier)}</span>
 <span class="source-line-no">073</span><span id="line-73"> *    &lt;li class='jc'&gt;{@link NullableSupplier} - Base interface providing Optional-like methods</span>
 <span class="source-line-no">074</span><span id="line-74"> * &lt;/ul&gt;</span>
 <span class="source-line-no">075</span><span id="line-75"> *</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">   public T get() {</span>
 <span class="source-line-no">110</span><span id="line-110">      Optional&lt;T&gt; h = cache.get();</span>
 <span class="source-line-no">111</span><span id="line-111">      if (h == null) {</span>
-<span class="source-line-no">112</span><span id="line-112">         h = opt(supplier.get());</span>
+<span class="source-line-no">112</span><span id="line-112">         h = o(supplier.get());</span>
 <span class="source-line-no">113</span><span id="line-113">         if (! cache.compareAndSet(null, h)) {</span>
 <span class="source-line-no">114</span><span id="line-114">            // Another thread beat us, use their value</span>
 <span class="source-line-no">115</span><span id="line-115">            h = cache.get();</span>
@@ -173,7 +173,7 @@
 <span class="source-line-no">160</span><span id="line-160">    * @param value The value to cache. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">161</span><span id="line-161">    */</span>
 <span class="source-line-no">162</span><span id="line-162">   public void set(T value) {</span>
-<span class="source-line-no">163</span><span id="line-163">      cache.set(opt(value));</span>
+<span class="source-line-no">163</span><span id="line-163">      cache.set(o(value));</span>
 <span class="source-line-no">164</span><span id="line-164">   }</span>
 <span class="source-line-no">165</span><span id="line-165"></span>
 <span class="source-line-no">166</span><span id="line-166">   /**</span>

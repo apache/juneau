@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.lang.StateEnum.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.text.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
@@ -69,7 +69,7 @@
 <span class="source-line-no">056</span><span id="line-56"> */</span>
 <span class="source-line-no">057</span><span id="line-57">public class RoleMatcher {</span>
 <span class="source-line-no">058</span><span id="line-58"></span>
-<span class="source-line-no">059</span><span id="line-59">   static class And extends Exp {</span>
+<span class="source-line-no">059</span><span id="line-59">   static final class And extends Exp {</span>
 <span class="source-line-no">060</span><span id="line-60">      Exp[] clauses;</span>
 <span class="source-line-no">061</span><span id="line-61"></span>
 <span class="source-line-no">062</span><span id="line-62">      And(List&lt;Exp&gt; clauses) {</span>
@@ -96,7 +96,7 @@
 <span class="source-line-no">083</span><span id="line-83">      }</span>
 <span class="source-line-no">084</span><span id="line-84">   }</span>
 <span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   static class Eq extends Exp {</span>
+<span class="source-line-no">086</span><span id="line-86">   static final class Eq extends Exp {</span>
 <span class="source-line-no">087</span><span id="line-87">      final String operand;</span>
 <span class="source-line-no">088</span><span id="line-88"></span>
 <span class="source-line-no">089</span><span id="line-89">      Eq(String operand) {</span>
@@ -122,7 +122,7 @@
 <span class="source-line-no">109</span><span id="line-109">      }</span>
 <span class="source-line-no">110</span><span id="line-110">   }</span>
 <span class="source-line-no">111</span><span id="line-111"></span>
-<span class="source-line-no">112</span><span id="line-112">   abstract static class Exp {</span>
+<span class="source-line-no">112</span><span id="line-112">   abstract static sealed class Exp permits And, Eq, Match, Never, Or {</span>
 <span class="source-line-no">113</span><span id="line-113"></span>
 <span class="source-line-no">114</span><span id="line-114">      @SuppressWarnings({</span>
 <span class="source-line-no">115</span><span id="line-115">         "unused" // set parameter unused in this default no-op implementation; subclasses use it</span>
@@ -132,7 +132,7 @@
 <span class="source-line-no">119</span><span id="line-119">      abstract boolean matches(Set&lt;String&gt; roles);</span>
 <span class="source-line-no">120</span><span id="line-120">   }</span>
 <span class="source-line-no">121</span><span id="line-121"></span>
-<span class="source-line-no">122</span><span id="line-122">   static class Match extends Exp {</span>
+<span class="source-line-no">122</span><span id="line-122">   static final class Match extends Exp {</span>
 <span class="source-line-no">123</span><span id="line-123">      final Pattern p;</span>
 <span class="source-line-no">124</span><span id="line-124">      final String operand;</span>
 <span class="source-line-no">125</span><span id="line-125"></span>
@@ -160,7 +160,7 @@
 <span class="source-line-no">147</span><span id="line-147">      }</span>
 <span class="source-line-no">148</span><span id="line-148">   }</span>
 <span class="source-line-no">149</span><span id="line-149"></span>
-<span class="source-line-no">150</span><span id="line-150">   static class Never extends Exp {</span>
+<span class="source-line-no">150</span><span id="line-150">   static final class Never extends Exp {</span>
 <span class="source-line-no">151</span><span id="line-151">      @Override /* Overridden from Object */</span>
 <span class="source-line-no">152</span><span id="line-152">      public String toString() {</span>
 <span class="source-line-no">153</span><span id="line-153">         return "(NEVER)";</span>
@@ -172,7 +172,7 @@
 <span class="source-line-no">159</span><span id="line-159">      }</span>
 <span class="source-line-no">160</span><span id="line-160">   }</span>
 <span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">   static class Or extends Exp {</span>
+<span class="source-line-no">162</span><span id="line-162">   static final class Or extends Exp {</span>
 <span class="source-line-no">163</span><span id="line-163">      Exp[] clauses;</span>
 <span class="source-line-no">164</span><span id="line-164"></span>
 <span class="source-line-no">165</span><span id="line-165">      Or(List&lt;Exp&gt; clauses) {</span>

@@ -46,7 +46,7 @@
 <span class="source-line-no">033</span><span id="line-33"> * first {@code get(name)} invocation. This is deliberate — calling {@code getSystemDefault()} from</span>
 <span class="source-line-no">034</span><span id="line-34"> * inside {@link #create()} would create a static-initialization cycle because</span>
 <span class="source-line-no">035</span><span id="line-35"> * {@code Settings.&lt;clinit&gt;} fires the ServiceLoader at class-load time, and {@code Config}'s</span>
-<span class="source-line-no">036</span><span id="line-36"> * static initializers transitively reference {@link Settings} (through {@code Cache} / {@code Utils.env(...)})</span>
+<span class="source-line-no">036</span><span id="line-36"> * static initializers transitively reference {@link Settings} (through {@code Cache} / {@code SystemUtils.env(...)})</span>
 <span class="source-line-no">037</span><span id="line-37"> * which would re-enter the {@code Settings.&lt;clinit&gt;} block.</span>
 <span class="source-line-no">038</span><span id="line-38"> *</span>
 <span class="source-line-no">039</span><span id="line-39"> * &lt;p&gt;</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61">   public PropertySource create() {</span>
 <span class="source-line-no">062</span><span id="line-62">      // Return a lazy wrapper.  Resolving Config.getSystemDefault() eagerly here would trigger</span>
 <span class="source-line-no">063</span><span id="line-63">      // Config.&lt;clinit&gt;, which can transitively re-enter Settings.&lt;clinit&gt; through Cache /</span>
-<span class="source-line-no">064</span><span id="line-64">      // Utils.env(...) — the SPI registration is invoked from inside the Settings static init</span>
+<span class="source-line-no">064</span><span id="line-64">      // SystemUtils.env(...) — the SPI registration is invoked from inside the Settings static init</span>
 <span class="source-line-no">065</span><span id="line-65">      // block, so any cycle here surfaces as ExceptionInInitializerError.</span>
 <span class="source-line-no">066</span><span id="line-66">      return new LazyConfigPropertySource();</span>
 <span class="source-line-no">067</span><span id="line-67">   }</span>

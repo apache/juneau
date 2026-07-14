@@ -31,8 +31,8 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.lang.StateEnum.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
@@ -228,7 +228,7 @@
 <span class="source-line-no">215</span><span id="line-215">         sType = eType;</span>
 <span class="source-line-no">216</span><span id="line-216"></span>
 <span class="source-line-no">217</span><span id="line-217">      if (sType.isOptional())</span>
-<span class="source-line-no">218</span><span id="line-218">         return (T)opt(parseAnything(eType.getElementType(), r, outer, pMeta));</span>
+<span class="source-line-no">218</span><span id="line-218">         return (T)o(parseAnything(eType.getElementType(), r, outer, pMeta));</span>
 <span class="source-line-no">219</span><span id="line-219"></span>
 <span class="source-line-no">220</span><span id="line-220">      setCurrentClass(sType);</span>
 <span class="source-line-no">221</span><span id="line-221"></span>
@@ -465,7 +465,7 @@
 <span class="source-line-no">452</span><span id="line-452">      } else if (sType.isNumber()) {</span>
 <span class="source-line-no">453</span><span id="line-453">         return StringUtils.parseNumber(s, (Class&lt;? extends Number&gt;)sType.inner());</span>
 <span class="source-line-no">454</span><span id="line-454">      } else if (sType.isBoolean()) {</span>
-<span class="source-line-no">455</span><span id="line-455">         return bool(s);</span>
+<span class="source-line-no">455</span><span id="line-455">         return b(s);</span>
 <span class="source-line-no">456</span><span id="line-456">      } else if (sType.isDate()) {</span>
 <span class="source-line-no">457</span><span id="line-457">         return parseDate(s, sType);</span>
 <span class="source-line-no">458</span><span id="line-458">      } else if (sType.isCalendar()) {</span>

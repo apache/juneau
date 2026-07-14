@@ -29,9 +29,9 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.jsonschema;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.net.*;</span>
@@ -74,7 +74,7 @@
 <span class="source-line-no">061</span><span id="line-61">   public JsonSchemaMap add(JsonSchema...schemas) {</span>
 <span class="source-line-no">062</span><span id="line-62">      for (var schema : schemas) {</span>
 <span class="source-line-no">063</span><span id="line-63">         if (schema.getId() == null)</span>
-<span class="source-line-no">064</span><span id="line-64">            throw illegalArg("Schema with no ID passed to JsonSchemaMap.add(Schema...)");</span>
+<span class="source-line-no">064</span><span id="line-64">            throw iaex("Schema with no ID passed to JsonSchemaMap.add(Schema...)");</span>
 <span class="source-line-no">065</span><span id="line-65">         put(schema.getId(), schema);</span>
 <span class="source-line-no">066</span><span id="line-66">         schema.setSchemaMap(this);</span>
 <span class="source-line-no">067</span><span id="line-67">      }</span>

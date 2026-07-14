@@ -94,7 +94,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../../commons/bean/BeanSession.html" title="interface in org.apache.juneau.commons.bean">BeanSession</a></code>, <code><a href="../../commons/conversion/ConverterSession.html" title="interface in org.apache.juneau.commons.conversion">ConverterSession</a></code>, <code><a href="../httppart/HttpPartSerializerSession.html" title="interface in org.apache.juneau.marshall.httppart">HttpPartSerializerSession</a></code>, <code><a href="../stream/RecordWritable.html" title="interface in org.apache.juneau.marshall.stream">RecordWritable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-52">OpenApiSerializerSession</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-53">OpenApiSerializerSession</a></span>
 <span class="extends-implements">extends <a href="../uon/UonSerializerSession.html" title="class in org.apache.juneau.marshall.uon">UonSerializerSession</a></span></div>
 <div class="block">Session object that lives for the duration of a single use of <a href="OpenApiSerializer.html" title="class in org.apache.juneau.marshall.oapi"><code>OpenApiSerializer</code></a>.
 
@@ -103,7 +103,7 @@ loadScripts(document, 'script');</script>
  </ul>
 
  <h5 class='section'>See Also:</h5><ul>
-   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiBasics">OpenApi Basics</a>
+   <li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/OpenApiSupport">OpenApi Basics</a>
 
  </ul></div>
 </section>
@@ -229,7 +229,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.marshall.oapi.OpenApiSerializerSession.Builder)">
 <h3>OpenApiSerializerSession</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-171">OpenApiSerializerSession</a></span><wbr><span class="parameters">(<a href="OpenApiSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializerSession.Builder</a>&nbsp;builder)</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-172">OpenApiSerializerSession</a></span><wbr><span class="parameters">(<a href="OpenApiSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializerSession.Builder</a>&nbsp;builder)</span></div>
 <div class="block">Constructor.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -248,7 +248,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create(org.apache.juneau.marshall.oapi.OpenApiSerializer)">
 <h3>create</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-160">create</a></span><wbr><span class="parameters">(<a href="OpenApiSerializer.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializer</a>&nbsp;ctx)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OpenApiSerializerSession.Builder.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializerSession.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-161">create</a></span><wbr><span class="parameters">(<a href="OpenApiSerializer.html" title="class in org.apache.juneau.marshall.oapi">OpenApiSerializer</a>&nbsp;ctx)</span></div>
 <div class="block">Creates a new builder for this object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -261,7 +261,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="serialize(org.apache.juneau.commons.httppart.HttpPartType,org.apache.juneau.marshall.httppart.HttpPartSchema,java.lang.Object)">
 <h3>serialize</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-176">serialize</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-177">serialize</a></span><wbr><span class="parameters">(<a href="../../commons/httppart/HttpPartType.html" title="enum class in org.apache.juneau.commons.httppart">HttpPartType</a>&nbsp;partType,
  <a href="../httppart/HttpPartSchema.html" title="class in org.apache.juneau.marshall.httppart">HttpPartSchema</a>&nbsp;schema,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;value)</span>
                  throws <span class="exceptions"><a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a>,
@@ -294,7 +294,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="doSerialize(org.apache.juneau.marshall.serializer.SerializerPipe,java.lang.Object)">
 <h3>doSerialize</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-432">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/marshall/oapi/OpenApiSerializerSession.html#line-433">doSerialize</a></span><wbr><span class="parameters">(<a href="../serializer/SerializerPipe.html" title="class in org.apache.juneau.marshall.serializer">SerializerPipe</a>&nbsp;out,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span>
                     throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a>,
 <a href="../serializer/SerializeException.html" title="class in org.apache.juneau.marshall.serializer">SerializeException</a></span></div>

@@ -51,7 +51,7 @@
 <span class="source-line-no">038</span><span id="line-38"> * Next-generation mock REST client that routes requests in-process to a Juneau {@link RestContext}.</span>
 <span class="source-line-no">039</span><span id="line-39"> *</span>
 <span class="source-line-no">040</span><span id="line-40"> * &lt;p&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> * Use this class to write serverless unit tests for {@link org.apache.juneau.rest.server.Rest @Rest}-annotated</span>
+<span class="source-line-no">041</span><span id="line-41"> * Use this class to write serverless unit tests for {@link Rest @Rest}-annotated</span>
 <span class="source-line-no">042</span><span id="line-42"> * resource classes.  Requests are dispatched directly to the {@link RestContext} without any network activity,</span>
 <span class="source-line-no">043</span><span id="line-43"> * making tests fast and self-contained.</span>
 <span class="source-line-no">044</span><span id="line-44"> *</span>
@@ -104,7 +104,7 @@
 <span class="source-line-no">091</span><span id="line-91">    * {@link RestContext} instances are cached per class for performance.</span>
 <span class="source-line-no">092</span><span id="line-92">    *</span>
 <span class="source-line-no">093</span><span id="line-93">    * @param impl</span>
-<span class="source-line-no">094</span><span id="line-94">    *    The REST bean or bean class annotated with {@link org.apache.juneau.rest.server.Rest @Rest}.</span>
+<span class="source-line-no">094</span><span id="line-94">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">095</span><span id="line-95">    *    If a {@link Class}, it must have a no-arg constructor.</span>
 <span class="source-line-no">096</span><span id="line-96">    * @return A new client. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">097</span><span id="line-97">    */</span>
@@ -116,7 +116,7 @@
 <span class="source-line-no">103</span><span id="line-103">    * Returns a new {@link Builder} for the given REST bean or bean class.</span>
 <span class="source-line-no">104</span><span id="line-104">    *</span>
 <span class="source-line-no">105</span><span id="line-105">    * @param impl</span>
-<span class="source-line-no">106</span><span id="line-106">    *    The REST bean or bean class annotated with {@link org.apache.juneau.rest.server.Rest @Rest}.</span>
+<span class="source-line-no">106</span><span id="line-106">    *    The REST bean or bean class annotated with {@link Rest @Rest}.</span>
 <span class="source-line-no">107</span><span id="line-107">    *    If a {@link Class}, it must have a no-arg constructor.</span>
 <span class="source-line-no">108</span><span id="line-108">    * @return A new builder. Never &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">109</span><span id="line-109">    */</span>

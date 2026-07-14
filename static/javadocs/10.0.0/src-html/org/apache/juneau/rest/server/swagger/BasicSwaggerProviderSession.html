@@ -30,10 +30,10 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.swagger;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.isEmpty;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.isEmpty;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.rest.server.RestOpAnnotation.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.rest.server.httppart.RestPartType.*;</span>
 <span class="source-line-no">026</span><span id="line-26"></span>
@@ -176,11 +176,11 @@
 <span class="source-line-no">163</span><span id="line-163">   }</span>
 <span class="source-line-no">164</span><span id="line-164"></span>
 <span class="source-line-no">165</span><span id="line-165">   private static MarshalledList nullIfEmpty(MarshalledList l) {</span>
-<span class="source-line-no">166</span><span id="line-166">      return e(l) ? null : l;</span>
+<span class="source-line-no">166</span><span id="line-166">      return ie(l) ? null : l;</span>
 <span class="source-line-no">167</span><span id="line-167">   }</span>
 <span class="source-line-no">168</span><span id="line-168"></span>
 <span class="source-line-no">169</span><span id="line-169">   private static MarshalledMap nullIfEmpty(MarshalledMap m) {</span>
-<span class="source-line-no">170</span><span id="line-170">      return e(m) ? null : m;</span>
+<span class="source-line-no">170</span><span id="line-170">      return ie(m) ? null : m;</span>
 <span class="source-line-no">171</span><span id="line-171">   }</span>
 <span class="source-line-no">172</span><span id="line-172"></span>
 <span class="source-line-no">173</span><span id="line-173">   static String joinnl(String[]...s) {</span>
@@ -244,12 +244,12 @@
 <span class="source-line-no">231</span><span id="line-231"></span>
 <span class="source-line-no">232</span><span id="line-232">      var ap = this.context.getMarshallingContext().getAnnotationProvider();</span>
 <span class="source-line-no">233</span><span id="line-233"></span>
-<span class="source-line-no">234</span><span id="line-234">      Predicate&lt;String&gt; ne = Utils::ne;</span>
-<span class="source-line-no">235</span><span id="line-235">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;</span>
-<span class="source-line-no">236</span><span id="line-236">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;</span>
+<span class="source-line-no">234</span><span id="line-234">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">235</span><span id="line-235">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">236</span><span id="line-236">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
 <span class="source-line-no">237</span><span id="line-237"></span>
 <span class="source-line-no">238</span><span id="line-238">      // Load swagger JSON from classpath.</span>
-<span class="source-line-no">239</span><span id="line-239">      var omSwagger = Json5.DEFAULT.to(is, Json5Map.class);</span>
+<span class="source-line-no">239</span><span id="line-239">      var omSwagger = Json5.DEFAULT.read(is, Json5Map.class);</span>
 <span class="source-line-no">240</span><span id="line-240">      if (omSwagger == null)</span>
 <span class="source-line-no">241</span><span id="line-241">         omSwagger = new Json5Map();</span>
 <span class="source-line-no">242</span><span id="line-242"></span>
@@ -760,7 +760,7 @@
 <span class="source-line-no">747</span><span id="line-747">                  // @formatter:on</span>
 <span class="source-line-no">748</span><span id="line-748">                  examples.put(s2.getPrimaryMediaType().toString(), eVal);</span>
 <span class="source-line-no">749</span><span id="line-749">               } catch (Exception e) {</span>
-<span class="source-line-no">750</span><span id="line-750">                  LOG.warning("Could not serialize to media type [{}]: {}", mt, lm(e));  // NOT DEBUG</span>
+<span class="source-line-no">750</span><span id="line-750">                  LOG.warning("Could not serialize to media type [{}]: {}", mt, localizedMessage(e));  // NOT DEBUG</span>
 <span class="source-line-no">751</span><span id="line-751">               }</span>
 <span class="source-line-no">752</span><span id="line-752">            }</span>
 <span class="source-line-no">753</span><span id="line-753">         }</span>
@@ -805,7 +805,7 @@
 <span class="source-line-no">792</span><span id="line-792">   @SafeVarargs</span>
 <span class="source-line-no">793</span><span id="line-793">   private static final &lt;T&gt; T firstNonEmpty(T...t) {</span>
 <span class="source-line-no">794</span><span id="line-794">      for (var oo : t)</span>
-<span class="source-line-no">795</span><span id="line-795">         if (ne(oo))</span>
+<span class="source-line-no">795</span><span id="line-795">         if (ine(oo))</span>
 <span class="source-line-no">796</span><span id="line-796">            return oo;</span>
 <span class="source-line-no">797</span><span id="line-797">      return null;</span>
 <span class="source-line-no">798</span><span id="line-798">   }</span>
@@ -814,7 +814,7 @@
 <span class="source-line-no">801</span><span id="line-801">    * Replaces non-standard JSON-Schema attributes with standard Swagger attributes.</span>
 <span class="source-line-no">802</span><span id="line-802">    */</span>
 <span class="source-line-no">803</span><span id="line-803">   private static MarshalledMap fixSwaggerExtensions(MarshalledMap om) {</span>
-<span class="source-line-no">804</span><span id="line-804">      Predicate&lt;Object&gt; nn = Utils::nn;</span>
+<span class="source-line-no">804</span><span id="line-804">      Predicate&lt;Object&gt; nn = Shorts::nn;</span>
 <span class="source-line-no">805</span><span id="line-805">      // @formatter:off</span>
 <span class="source-line-no">806</span><span id="line-806">      om</span>
 <span class="source-line-no">807</span><span id="line-807">         .appendIf(nn, SWAGGER_discriminator, om.remove(JSONSCHEMA_x_discriminator))</span>
@@ -886,7 +886,7 @@
 <span class="source-line-no">873</span><span id="line-873">      if (ExternalDocsAnnotation.empty(a))</span>
 <span class="source-line-no">874</span><span id="line-874">         return om;</span>
 <span class="source-line-no">875</span><span id="line-875">      om = newMap(om);</span>
-<span class="source-line-no">876</span><span id="line-876">      Predicate&lt;String&gt; ne = Utils::ne;</span>
+<span class="source-line-no">876</span><span id="line-876">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
 <span class="source-line-no">877</span><span id="line-877">      // @formatter:off</span>
 <span class="source-line-no">878</span><span id="line-878">      return om</span>
 <span class="source-line-no">879</span><span id="line-879">         .appendIf(ne, SWAGGER_description, resolve(a.description()))</span>
@@ -902,7 +902,7 @@
 <span class="source-line-no">889</span><span id="line-889">      for (var aa : a) {</span>
 <span class="source-line-no">890</span><span id="line-890">         var name = StringUtils.firstNonEmpty(aa.name(), aa.value());</span>
 <span class="source-line-no">891</span><span id="line-891">         if (isEmpty(name))</span>
-<span class="source-line-no">892</span><span id="line-892">            throw illegalArg("@Header used without name or value.");</span>
+<span class="source-line-no">892</span><span id="line-892">            throw iaex("@Header used without name or value.");</span>
 <span class="source-line-no">893</span><span id="line-893">         merge(om.getMap(name, true), aa.schema());</span>
 <span class="source-line-no">894</span><span id="line-894">      }</span>
 <span class="source-line-no">895</span><span id="line-895">      return om;</span>
@@ -912,11 +912,11 @@
 <span class="source-line-no">899</span><span id="line-899">      if (ItemsAnnotation.empty(a))</span>
 <span class="source-line-no">900</span><span id="line-900">         return om;</span>
 <span class="source-line-no">901</span><span id="line-901">      om = newMap(om);</span>
-<span class="source-line-no">902</span><span id="line-902">      Predicate&lt;String&gt; ne = Utils::ne;</span>
-<span class="source-line-no">903</span><span id="line-903">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;</span>
-<span class="source-line-no">904</span><span id="line-904">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;</span>
-<span class="source-line-no">905</span><span id="line-905">      Predicate&lt;Boolean&gt; nf = Utils::isTrue;</span>
-<span class="source-line-no">906</span><span id="line-906">      Predicate&lt;Long&gt; nm1 = Utils::nm1;</span>
+<span class="source-line-no">902</span><span id="line-902">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">903</span><span id="line-903">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">904</span><span id="line-904">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
+<span class="source-line-no">905</span><span id="line-905">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">906</span><span id="line-906">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
 <span class="source-line-no">907</span><span id="line-907">      // @formatter:off</span>
 <span class="source-line-no">908</span><span id="line-908">      return om</span>
 <span class="source-line-no">909</span><span id="line-909">         .appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())</span>
@@ -945,7 +945,7 @@
 <span class="source-line-no">932</span><span id="line-932">      if (ResponseAnnotation.empty(a))</span>
 <span class="source-line-no">933</span><span id="line-933">         return om;</span>
 <span class="source-line-no">934</span><span id="line-934">      om = newMap(om);</span>
-<span class="source-line-no">935</span><span id="line-935">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;</span>
+<span class="source-line-no">935</span><span id="line-935">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
 <span class="source-line-no">936</span><span id="line-936">      if (! SchemaAnnotation.empty(a.schema()))</span>
 <span class="source-line-no">937</span><span id="line-937">         merge(om, a.schema());</span>
 <span class="source-line-no">938</span><span id="line-938">      // @formatter:off</span>
@@ -965,11 +965,11 @@
 <span class="source-line-no">952</span><span id="line-952">         if (SchemaAnnotation.empty(a))</span>
 <span class="source-line-no">953</span><span id="line-953">            return om;</span>
 <span class="source-line-no">954</span><span id="line-954">         om = newMap(om);</span>
-<span class="source-line-no">955</span><span id="line-955">         Predicate&lt;String&gt; ne = Utils::ne;</span>
-<span class="source-line-no">956</span><span id="line-956">         Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;</span>
-<span class="source-line-no">957</span><span id="line-957">         Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;</span>
-<span class="source-line-no">958</span><span id="line-958">         Predicate&lt;Boolean&gt; nf = Utils::isTrue;</span>
-<span class="source-line-no">959</span><span id="line-959">         Predicate&lt;Long&gt; nm1 = Utils::nm1;</span>
+<span class="source-line-no">955</span><span id="line-955">         Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">956</span><span id="line-956">         Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">957</span><span id="line-957">         Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
+<span class="source-line-no">958</span><span id="line-958">         Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">959</span><span id="line-959">         Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
 <span class="source-line-no">960</span><span id="line-960">         // @formatter:off</span>
 <span class="source-line-no">961</span><span id="line-961">         return om</span>
 <span class="source-line-no">962</span><span id="line-962">            .appendIf(ne, SWAGGER_allOf, joinnl(a.allOf()))</span>
@@ -1005,7 +1005,7 @@
 <span class="source-line-no">992</span><span id="line-992">         ;</span>
 <span class="source-line-no">993</span><span id="line-993">         // @formatter:on</span>
 <span class="source-line-no">994</span><span id="line-994">      } catch (ParseException e) {</span>
-<span class="source-line-no">995</span><span id="line-995">         throw illegalArg(e);</span>
+<span class="source-line-no">995</span><span id="line-995">         throw iaex(e);</span>
 <span class="source-line-no">996</span><span id="line-996">      }</span>
 <span class="source-line-no">997</span><span id="line-997">   }</span>
 <span class="source-line-no">998</span><span id="line-998"></span>
@@ -1013,10 +1013,10 @@
 <span class="source-line-no">1000</span><span id="line-1000">      if (SubItemsAnnotation.empty(a))</span>
 <span class="source-line-no">1001</span><span id="line-1001">         return om;</span>
 <span class="source-line-no">1002</span><span id="line-1002">      om = newMap(om);</span>
-<span class="source-line-no">1003</span><span id="line-1003">      Predicate&lt;String&gt; ne = Utils::ne;</span>
-<span class="source-line-no">1004</span><span id="line-1004">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Utils::ne;</span>
-<span class="source-line-no">1005</span><span id="line-1005">      Predicate&lt;Boolean&gt; nf = Utils::isTrue;</span>
-<span class="source-line-no">1006</span><span id="line-1006">      Predicate&lt;Long&gt; nm1 = Utils::nm1;</span>
+<span class="source-line-no">1003</span><span id="line-1003">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1004</span><span id="line-1004">      Predicate&lt;Collection&lt;?&gt;&gt; nec = Shorts::ine;</span>
+<span class="source-line-no">1005</span><span id="line-1005">      Predicate&lt;Boolean&gt; nf = ObjectUtils::isTrue;</span>
+<span class="source-line-no">1006</span><span id="line-1006">      Predicate&lt;Long&gt; nm1 = Shorts::nm1;</span>
 <span class="source-line-no">1007</span><span id="line-1007">      // @formatter:off</span>
 <span class="source-line-no">1008</span><span id="line-1008">      return om</span>
 <span class="source-line-no">1009</span><span id="line-1009">         .appendFirst(ne, SWAGGER_collectionFormat, a.collectionFormat(), a.cf())</span>
@@ -1112,7 +1112,7 @@
 <span class="source-line-no">1099</span><span id="line-1099"></span>
 <span class="source-line-no">1100</span><span id="line-1100">   private static MarshalledMap pushupSchemaFields(RestPartType type, MarshalledMap param, MarshalledMap schema) {</span>
 <span class="source-line-no">1101</span><span id="line-1101">      // @formatter:off</span>
-<span class="source-line-no">1102</span><span id="line-1102">      Predicate&lt;Object&gt; ne = Utils::ne;</span>
+<span class="source-line-no">1102</span><span id="line-1102">      Predicate&lt;Object&gt; ne = Shorts::ine;</span>
 <span class="source-line-no">1103</span><span id="line-1103">      if (nn(schema) &amp;&amp; ! schema.isEmpty()) {</span>
 <span class="source-line-no">1104</span><span id="line-1104">         if (type == BODY || type == RESPONSE) {</span>
 <span class="source-line-no">1105</span><span id="line-1105">            param</span>
@@ -1223,7 +1223,7 @@
 <span class="source-line-no">1210</span><span id="line-1210">   private MarshalledMap toMap(Contact a) {</span>
 <span class="source-line-no">1211</span><span id="line-1211">      if (ContactAnnotation.empty(a))</span>
 <span class="source-line-no">1212</span><span id="line-1212">         return null;</span>
-<span class="source-line-no">1213</span><span id="line-1213">      Predicate&lt;String&gt; ne = Utils::ne;</span>
+<span class="source-line-no">1213</span><span id="line-1213">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
 <span class="source-line-no">1214</span><span id="line-1214">      // @formatter:off</span>
 <span class="source-line-no">1215</span><span id="line-1215">      var om = Json5Map.create()</span>
 <span class="source-line-no">1216</span><span id="line-1216">         .appendIf(ne, SWAGGER_name, resolve(a.name()))</span>
@@ -1236,7 +1236,7 @@
 <span class="source-line-no">1223</span><span id="line-1223">   private MarshalledMap toMap(ExternalDocs a) {</span>
 <span class="source-line-no">1224</span><span id="line-1224">      if (ExternalDocsAnnotation.empty(a))</span>
 <span class="source-line-no">1225</span><span id="line-1225">         return null;</span>
-<span class="source-line-no">1226</span><span id="line-1226">      Predicate&lt;String&gt; ne = Utils::ne;</span>
+<span class="source-line-no">1226</span><span id="line-1226">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
 <span class="source-line-no">1227</span><span id="line-1227">      // @formatter:off</span>
 <span class="source-line-no">1228</span><span id="line-1228">      var om = Json5Map.create()</span>
 <span class="source-line-no">1229</span><span id="line-1229">         .appendIf(ne, SWAGGER_description, resolve(joinnl(a.description())))</span>
@@ -1248,7 +1248,7 @@
 <span class="source-line-no">1235</span><span id="line-1235">   private MarshalledMap toMap(License a) {</span>
 <span class="source-line-no">1236</span><span id="line-1236">      if (LicenseAnnotation.empty(a))</span>
 <span class="source-line-no">1237</span><span id="line-1237">         return null;</span>
-<span class="source-line-no">1238</span><span id="line-1238">      Predicate&lt;String&gt; ne = Utils::ne;</span>
+<span class="source-line-no">1238</span><span id="line-1238">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
 <span class="source-line-no">1239</span><span id="line-1239">      // @formatter:off</span>
 <span class="source-line-no">1240</span><span id="line-1240">      var om = Json5Map.create()</span>
 <span class="source-line-no">1241</span><span id="line-1241">         .appendIf(ne, SWAGGER_name, resolve(a.name()))</span>
@@ -1259,8 +1259,8 @@
 <span class="source-line-no">1246</span><span id="line-1246"></span>
 <span class="source-line-no">1247</span><span id="line-1247">   private MarshalledMap toMap(Tag a) {</span>
 <span class="source-line-no">1248</span><span id="line-1248">      var om = Json5Map.create();</span>
-<span class="source-line-no">1249</span><span id="line-1249">      Predicate&lt;String&gt; ne = Utils::ne;</span>
-<span class="source-line-no">1250</span><span id="line-1250">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Utils::ne;</span>
+<span class="source-line-no">1249</span><span id="line-1249">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
+<span class="source-line-no">1250</span><span id="line-1250">      Predicate&lt;Map&lt;?,?&gt;&gt; nem = Shorts::ine;</span>
 <span class="source-line-no">1251</span><span id="line-1251">      // @formatter:off</span>
 <span class="source-line-no">1252</span><span id="line-1252">      om</span>
 <span class="source-line-no">1253</span><span id="line-1253">         .appendIf(ne, SWAGGER_name, resolve(a.name()))</span>

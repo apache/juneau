@@ -31,89 +31,145 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import org.apache.juneau.marshall.jena.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import org.apache.juneau.marshall.marshaller.*;</span>
-<span class="source-line-no">021</span><span id="line-21"></span>
-<span class="source-line-no">022</span><span id="line-22">/**</span>
-<span class="source-line-no">023</span><span id="line-23"> * A pairing of a {@link RdfXmlSerializer} and {@link RdfXmlParser} into a single class with convenience to/of methods.</span>
-<span class="source-line-no">024</span><span id="line-24"> *</span>
-<span class="source-line-no">025</span><span id="line-25"> * &lt;p&gt;</span>
-<span class="source-line-no">026</span><span id="line-26"> *    The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.</span>
+<span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.marshall.parser.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import org.apache.juneau.marshall.serializer.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">/**</span>
+<span class="source-line-no">026</span><span id="line-26"> * A pairing of a {@link RdfXmlSerializer} and {@link RdfXmlParser} into a single class with convenience to/of methods.</span>
 <span class="source-line-no">027</span><span id="line-27"> *</span>
-<span class="source-line-no">028</span><span id="line-28"> * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> *    &lt;jc&gt;// Using instance.&lt;/jc&gt;</span>
-<span class="source-line-no">031</span><span id="line-31"> *    RdfXml &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; RdfXml();</span>
-<span class="source-line-no">032</span><span id="line-32"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = &lt;jv&gt;rdfXml&lt;/jv&gt;.to(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">033</span><span id="line-33"> *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;rdfXml&lt;/jv&gt;.of(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;/p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;jc&gt;// Using DEFAULT instance.&lt;/jc&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = RdfXml.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.to(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
-<span class="source-line-no">038</span><span id="line-38"> *    String &lt;jv&gt;string&lt;/jv&gt; = RdfXml.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.of(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
-<span class="source-line-no">039</span><span id="line-39"> * &lt;/p&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *</span>
-<span class="source-line-no">041</span><span id="line-41"> * &lt;h5 class='figure'&gt;Example output (bean with name/age):&lt;/h5&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;p class='bxml'&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *    &lt;xt&gt;&amp;lt;rdf:RDF&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">044</span><span id="line-44"> *       &lt;xt&gt;&amp;lt;rdf:Description rdf:about=&lt;/xt&gt;&lt;xs&gt;"..."&lt;/xs&gt;&lt;xt&gt;&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> *          &lt;xt&gt;&amp;lt;j:name&amp;gt;&lt;/xt&gt;Alice&lt;xt&gt;&amp;lt;/j:name&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">046</span><span id="line-46"> *          &lt;xt&gt;&amp;lt;j:age&amp;gt;&lt;/xt&gt;30&lt;xt&gt;&amp;lt;/j:age&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">047</span><span id="line-47"> *       &lt;xt&gt;&amp;lt;/rdf:Description&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">048</span><span id="line-48"> *    &lt;xt&gt;&amp;lt;/rdf:RDF&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;/p&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *</span>
-<span class="source-line-no">051</span><span id="line-51"> * &lt;h5 class='figure'&gt;Complex (nested address + array of tags):&lt;/h5&gt;</span>
-<span class="source-line-no">052</span><span id="line-52"> * &lt;p class='bxml'&gt;</span>
-<span class="source-line-no">053</span><span id="line-53"> *    &lt;xt&gt;&amp;lt;rdf:RDF&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">054</span><span id="line-54"> *       &lt;xt&gt;&amp;lt;rdf:Description rdf:about=&lt;/xt&gt;&lt;xs&gt;"..."&lt;/xs&gt;&lt;xt&gt;&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">055</span><span id="line-55"> *          &lt;xt&gt;&amp;lt;j:name&amp;gt;&lt;/xt&gt;Alice&lt;xt&gt;&amp;lt;/j:name&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">056</span><span id="line-56"> *          &lt;xt&gt;&amp;lt;j:age&amp;gt;&lt;/xt&gt;30&lt;xt&gt;&amp;lt;/j:age&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">057</span><span id="line-57"> *          &lt;xt&gt;&amp;lt;j:address rdf:resource=&lt;/xt&gt;&lt;xs&gt;".../address"&lt;/xs&gt;&lt;xt&gt;/&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">058</span><span id="line-58"> *          &lt;xt&gt;&amp;lt;j:tags rdf:resource=&lt;/xt&gt;&lt;xs&gt;".../tags"&lt;/xs&gt;&lt;xt&gt;/&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *       &lt;xt&gt;&amp;lt;/rdf:Description&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">060</span><span id="line-60"> *       &lt;xt&gt;&amp;lt;rdf:Description rdf:about=&lt;/xt&gt;&lt;xs&gt;".../address"&lt;/xs&gt;&lt;xt&gt;&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">061</span><span id="line-61"> *          &lt;xt&gt;&amp;lt;j:street&amp;gt;&lt;/xt&gt;123 Main St&lt;xt&gt;&amp;lt;/j:street&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">062</span><span id="line-62"> *          &lt;xt&gt;&amp;lt;j:city&amp;gt;&lt;/xt&gt;Boston&lt;xt&gt;&amp;lt;/j:city&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *          &lt;xt&gt;&amp;lt;j:state&amp;gt;&lt;/xt&gt;MA&lt;xt&gt;&amp;lt;/j:state&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">064</span><span id="line-64"> *       &lt;xt&gt;&amp;lt;/rdf:Description&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;xt&gt;&amp;lt;/rdf:RDF&amp;gt;&lt;/xt&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *    &lt;li class='link'&gt;{doc jmr.RdfDetails}</span>
-<span class="source-line-no">070</span><span id="line-70"> *    &lt;li class='link'&gt;{doc jm.Marshallers}</span>
-<span class="source-line-no">071</span><span id="line-71"> * &lt;/ul&gt;</span>
-<span class="source-line-no">072</span><span id="line-72"> */</span>
-<span class="source-line-no">073</span><span id="line-73">public class RdfXml extends CharMarshaller {</span>
-<span class="source-line-no">074</span><span id="line-74"></span>
-<span class="source-line-no">075</span><span id="line-75">   /**</span>
-<span class="source-line-no">076</span><span id="line-76">    * Default reusable instance.</span>
-<span class="source-line-no">077</span><span id="line-77">    */</span>
-<span class="source-line-no">078</span><span id="line-78">   public static final RdfXml DEFAULT = new RdfXml();</span>
-<span class="source-line-no">079</span><span id="line-79"></span>
-<span class="source-line-no">080</span><span id="line-80">   /**</span>
-<span class="source-line-no">081</span><span id="line-81">    * Constructor.</span>
-<span class="source-line-no">082</span><span id="line-82">    *</span>
-<span class="source-line-no">083</span><span id="line-83">    * &lt;p&gt;</span>
-<span class="source-line-no">084</span><span id="line-84">    * Uses {@link RdfXmlSerializer#DEFAULT} and {@link RdfXmlParser#DEFAULT}.</span>
-<span class="source-line-no">085</span><span id="line-85">    */</span>
-<span class="source-line-no">086</span><span id="line-86">   public RdfXml() {</span>
-<span class="source-line-no">087</span><span id="line-87">      this(RdfXmlSerializer.DEFAULT, RdfXmlParser.DEFAULT);</span>
-<span class="source-line-no">088</span><span id="line-88">   }</span>
-<span class="source-line-no">089</span><span id="line-89"></span>
-<span class="source-line-no">090</span><span id="line-90">   /**</span>
-<span class="source-line-no">091</span><span id="line-91">    * Constructor.</span>
-<span class="source-line-no">092</span><span id="line-92">    *</span>
-<span class="source-line-no">093</span><span id="line-93">    * @param s</span>
-<span class="source-line-no">094</span><span id="line-94">    *    The serializer to use for serializing output.</span>
-<span class="source-line-no">095</span><span id="line-95">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">096</span><span id="line-96">    * @param p</span>
-<span class="source-line-no">097</span><span id="line-97">    *    The parser to use for parsing input.</span>
-<span class="source-line-no">098</span><span id="line-98">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">099</span><span id="line-99">    */</span>
-<span class="source-line-no">100</span><span id="line-100">   public RdfXml(RdfXmlSerializer s, RdfXmlParser p) {</span>
-<span class="source-line-no">101</span><span id="line-101">      super(s, p);</span>
-<span class="source-line-no">102</span><span id="line-102">   }</span>
-<span class="source-line-no">103</span><span id="line-103">}</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> *    The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.</span>
+<span class="source-line-no">030</span><span id="line-30"> *</span>
+<span class="source-line-no">031</span><span id="line-31"> * &lt;h5 class='figure'&gt;Examples:&lt;/h5&gt;</span>
+<span class="source-line-no">032</span><span id="line-32"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">033</span><span id="line-33"> *    &lt;jc&gt;// Using instance.&lt;/jc&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> *    RdfXml &lt;jv&gt;rdfXml&lt;/jv&gt; = &lt;jk&gt;new&lt;/jk&gt; RdfXml();</span>
+<span class="source-line-no">035</span><span id="line-35"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = &lt;jv&gt;rdfXml&lt;/jv&gt;.read(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">036</span><span id="line-36"> *    String &lt;jv&gt;string&lt;/jv&gt; = &lt;jv&gt;rdfXml&lt;/jv&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
+<span class="source-line-no">037</span><span id="line-37"> * &lt;/p&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> * &lt;jc&gt;// Using DEFAULT instance.&lt;/jc&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = RdfXml.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">041</span><span id="line-41"> *    String &lt;jv&gt;string&lt;/jv&gt; = RdfXml.&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
+<span class="source-line-no">042</span><span id="line-42"> * &lt;/p&gt;</span>
+<span class="source-line-no">043</span><span id="line-43"> *</span>
+<span class="source-line-no">044</span><span id="line-44"> * &lt;h5 class='figure'&gt;Example output (bean with name/age):&lt;/h5&gt;</span>
+<span class="source-line-no">045</span><span id="line-45"> * &lt;p class='bxml'&gt;</span>
+<span class="source-line-no">046</span><span id="line-46"> *    &lt;xt&gt;&amp;lt;rdf:RDF&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">047</span><span id="line-47"> *       &lt;xt&gt;&amp;lt;rdf:Description rdf:about=&lt;/xt&gt;&lt;xs&gt;"..."&lt;/xs&gt;&lt;xt&gt;&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> *          &lt;xt&gt;&amp;lt;j:name&amp;gt;&lt;/xt&gt;Alice&lt;xt&gt;&amp;lt;/j:name&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *          &lt;xt&gt;&amp;lt;j:age&amp;gt;&lt;/xt&gt;30&lt;xt&gt;&amp;lt;/j:age&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *       &lt;xt&gt;&amp;lt;/rdf:Description&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;xt&gt;&amp;lt;/rdf:RDF&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">052</span><span id="line-52"> * &lt;/p&gt;</span>
+<span class="source-line-no">053</span><span id="line-53"> *</span>
+<span class="source-line-no">054</span><span id="line-54"> * &lt;h5 class='figure'&gt;Complex (nested address + array of tags):&lt;/h5&gt;</span>
+<span class="source-line-no">055</span><span id="line-55"> * &lt;p class='bxml'&gt;</span>
+<span class="source-line-no">056</span><span id="line-56"> *    &lt;xt&gt;&amp;lt;rdf:RDF&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">057</span><span id="line-57"> *       &lt;xt&gt;&amp;lt;rdf:Description rdf:about=&lt;/xt&gt;&lt;xs&gt;"..."&lt;/xs&gt;&lt;xt&gt;&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *          &lt;xt&gt;&amp;lt;j:name&amp;gt;&lt;/xt&gt;Alice&lt;xt&gt;&amp;lt;/j:name&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">059</span><span id="line-59"> *          &lt;xt&gt;&amp;lt;j:age&amp;gt;&lt;/xt&gt;30&lt;xt&gt;&amp;lt;/j:age&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">060</span><span id="line-60"> *          &lt;xt&gt;&amp;lt;j:address rdf:resource=&lt;/xt&gt;&lt;xs&gt;".../address"&lt;/xs&gt;&lt;xt&gt;/&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">061</span><span id="line-61"> *          &lt;xt&gt;&amp;lt;j:tags rdf:resource=&lt;/xt&gt;&lt;xs&gt;".../tags"&lt;/xs&gt;&lt;xt&gt;/&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *       &lt;xt&gt;&amp;lt;/rdf:Description&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">063</span><span id="line-63"> *       &lt;xt&gt;&amp;lt;rdf:Description rdf:about=&lt;/xt&gt;&lt;xs&gt;".../address"&lt;/xs&gt;&lt;xt&gt;&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">064</span><span id="line-64"> *          &lt;xt&gt;&amp;lt;j:street&amp;gt;&lt;/xt&gt;123 Main St&lt;xt&gt;&amp;lt;/j:street&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> *          &lt;xt&gt;&amp;lt;j:city&amp;gt;&lt;/xt&gt;Boston&lt;xt&gt;&amp;lt;/j:city&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *          &lt;xt&gt;&amp;lt;j:state&amp;gt;&lt;/xt&gt;MA&lt;xt&gt;&amp;lt;/j:state&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">067</span><span id="line-67"> *       &lt;xt&gt;&amp;lt;/rdf:Description&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *    &lt;xt&gt;&amp;lt;/rdf:RDF&amp;gt;&lt;/xt&gt;</span>
+<span class="source-line-no">069</span><span id="line-69"> * &lt;/p&gt;</span>
+<span class="source-line-no">070</span><span id="line-70"> *</span>
+<span class="source-line-no">071</span><span id="line-71"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">072</span><span id="line-72"> * &lt;jc&gt;// Using static shortcuts.&lt;/jc&gt;</span>
+<span class="source-line-no">073</span><span id="line-73"> *    MyPojo &lt;jv&gt;myPojo&lt;/jv&gt; = RdfXml.&lt;jsm&gt;to&lt;/jsm&gt;(&lt;jv&gt;string&lt;/jv&gt;, MyPojo.&lt;jk&gt;class&lt;/jk&gt;);</span>
+<span class="source-line-no">074</span><span id="line-74"> *    String &lt;jv&gt;string&lt;/jv&gt; = RdfXml.&lt;jsm&gt;of&lt;/jsm&gt;(&lt;jv&gt;myPojo&lt;/jv&gt;);</span>
+<span class="source-line-no">075</span><span id="line-75"> * &lt;/p&gt;</span>
+<span class="source-line-no">076</span><span id="line-76"> *</span>
+<span class="source-line-no">077</span><span id="line-77"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
+<span class="source-line-no">078</span><span id="line-78"> *    &lt;li class='link'&gt;{doc jmr.RdfDetails}</span>
+<span class="source-line-no">079</span><span id="line-79"> *    &lt;li class='link'&gt;{doc jm.Marshallers}</span>
+<span class="source-line-no">080</span><span id="line-80"> * &lt;/ul&gt;</span>
+<span class="source-line-no">081</span><span id="line-81"> */</span>
+<span class="source-line-no">082</span><span id="line-82">public class RdfXml extends CharMarshaller {</span>
+<span class="source-line-no">083</span><span id="line-83"></span>
+<span class="source-line-no">084</span><span id="line-84">   /**</span>
+<span class="source-line-no">085</span><span id="line-85">    * Default reusable instance.</span>
+<span class="source-line-no">086</span><span id="line-86">    */</span>
+<span class="source-line-no">087</span><span id="line-87">   public static final RdfXml DEFAULT = new RdfXml();</span>
+<span class="source-line-no">088</span><span id="line-88"></span>
+<span class="source-line-no">089</span><span id="line-89">   /**</span>
+<span class="source-line-no">090</span><span id="line-90">    * Serializes a POJO to a &lt;c&gt;String&lt;/c&gt; using the {@link #DEFAULT} marshaller.</span>
+<span class="source-line-no">091</span><span id="line-91">    *</span>
+<span class="source-line-no">092</span><span id="line-92">    * &lt;p&gt;</span>
+<span class="source-line-no">093</span><span id="line-93">    * A shortcut for calling &lt;c&gt;&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.write(&lt;jv&gt;object&lt;/jv&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">094</span><span id="line-94">    *</span>
+<span class="source-line-no">095</span><span id="line-95">    * @param object The object to serialize.</span>
+<span class="source-line-no">096</span><span id="line-96">    * @return The serialized object.</span>
+<span class="source-line-no">097</span><span id="line-97">    * @throws SerializeException If a problem occurred trying to convert the output.</span>
+<span class="source-line-no">098</span><span id="line-98">    */</span>
+<span class="source-line-no">099</span><span id="line-99">   public static String of(Object object) throws SerializeException {</span>
+<span class="source-line-no">100</span><span id="line-100">      return DEFAULT.write(object);</span>
+<span class="source-line-no">101</span><span id="line-101">   }</span>
+<span class="source-line-no">102</span><span id="line-102"></span>
+<span class="source-line-no">103</span><span id="line-103">   /**</span>
+<span class="source-line-no">104</span><span id="line-104">    * Parses an input into the specified object type using the {@link #DEFAULT} marshaller.</span>
+<span class="source-line-no">105</span><span id="line-105">    *</span>
+<span class="source-line-no">106</span><span id="line-106">    * &lt;p&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">    * A shortcut for calling &lt;c&gt;&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;input&lt;/jv&gt;, &lt;jv&gt;type&lt;/jv&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * @param &lt;T&gt; The class type of the object being created.</span>
+<span class="source-line-no">110</span><span id="line-110">    * @param input The input.</span>
+<span class="source-line-no">111</span><span id="line-111">    * @param type The object type to create.</span>
+<span class="source-line-no">112</span><span id="line-112">    * @return The parsed object.</span>
+<span class="source-line-no">113</span><span id="line-113">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">114</span><span id="line-114">    */</span>
+<span class="source-line-no">115</span><span id="line-115">   public static &lt;T&gt; T to(String input, Class&lt;T&gt; type) throws ParseException {</span>
+<span class="source-line-no">116</span><span id="line-116">      return DEFAULT.read(input, type);</span>
+<span class="source-line-no">117</span><span id="line-117">   }</span>
+<span class="source-line-no">118</span><span id="line-118"></span>
+<span class="source-line-no">119</span><span id="line-119">   /**</span>
+<span class="source-line-no">120</span><span id="line-120">    * Parses an input into the specified parameterized object type using the {@link #DEFAULT} marshaller.</span>
+<span class="source-line-no">121</span><span id="line-121">    *</span>
+<span class="source-line-no">122</span><span id="line-122">    * &lt;p&gt;</span>
+<span class="source-line-no">123</span><span id="line-123">    * A shortcut for calling &lt;c&gt;&lt;jsf&gt;DEFAULT&lt;/jsf&gt;.read(&lt;jv&gt;input&lt;/jv&gt;, &lt;jv&gt;type&lt;/jv&gt;, &lt;jv&gt;args&lt;/jv&gt;)&lt;/c&gt;.</span>
+<span class="source-line-no">124</span><span id="line-124">    *</span>
+<span class="source-line-no">125</span><span id="line-125">    * @param &lt;T&gt; The class type of the object to create.</span>
+<span class="source-line-no">126</span><span id="line-126">    * @param input The input.</span>
+<span class="source-line-no">127</span><span id="line-127">    * @param type The object type to create.</span>
+<span class="source-line-no">128</span><span id="line-128">    * @param args The type arguments of the class if it's a collection or map.</span>
+<span class="source-line-no">129</span><span id="line-129">    * @return The parsed object.</span>
+<span class="source-line-no">130</span><span id="line-130">    * @throws ParseException Malformed input encountered.</span>
+<span class="source-line-no">131</span><span id="line-131">    */</span>
+<span class="source-line-no">132</span><span id="line-132">   public static &lt;T&gt; T to(String input, Type type, Type... args) throws ParseException {</span>
+<span class="source-line-no">133</span><span id="line-133">      return DEFAULT.read(input, type, args);</span>
+<span class="source-line-no">134</span><span id="line-134">   }</span>
+<span class="source-line-no">135</span><span id="line-135"></span>
+<span class="source-line-no">136</span><span id="line-136">   /**</span>
+<span class="source-line-no">137</span><span id="line-137">    * Constructor.</span>
+<span class="source-line-no">138</span><span id="line-138">    *</span>
+<span class="source-line-no">139</span><span id="line-139">    * &lt;p&gt;</span>
+<span class="source-line-no">140</span><span id="line-140">    * Uses {@link RdfXmlSerializer#DEFAULT} and {@link RdfXmlParser#DEFAULT}.</span>
+<span class="source-line-no">141</span><span id="line-141">    */</span>
+<span class="source-line-no">142</span><span id="line-142">   public RdfXml() {</span>
+<span class="source-line-no">143</span><span id="line-143">      this(RdfXmlSerializer.DEFAULT, RdfXmlParser.DEFAULT);</span>
+<span class="source-line-no">144</span><span id="line-144">   }</span>
+<span class="source-line-no">145</span><span id="line-145"></span>
+<span class="source-line-no">146</span><span id="line-146">   /**</span>
+<span class="source-line-no">147</span><span id="line-147">    * Constructor.</span>
+<span class="source-line-no">148</span><span id="line-148">    *</span>
+<span class="source-line-no">149</span><span id="line-149">    * @param s</span>
+<span class="source-line-no">150</span><span id="line-150">    *    The serializer to use for serializing output.</span>
+<span class="source-line-no">151</span><span id="line-151">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">152</span><span id="line-152">    * @param p</span>
+<span class="source-line-no">153</span><span id="line-153">    *    The parser to use for parsing input.</span>
+<span class="source-line-no">154</span><span id="line-154">    *    &lt;br&gt;Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">155</span><span id="line-155">    */</span>
+<span class="source-line-no">156</span><span id="line-156">   public RdfXml(RdfXmlSerializer s, RdfXmlParser p) {</span>
+<span class="source-line-no">157</span><span id="line-157">      super(s, p);</span>
+<span class="source-line-no">158</span><span id="line-158">   }</span>
+<span class="source-line-no">159</span><span id="line-159">}</span>
 
 
 

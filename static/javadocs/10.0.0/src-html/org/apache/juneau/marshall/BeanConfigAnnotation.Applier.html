@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import org.apache.juneau.commons.bean.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import org.apache.juneau.commons.reflect.*;</span>
@@ -40,7 +40,7 @@
 <span class="source-line-no">027</span><span id="line-27"> *</span>
 <span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
 <span class="source-line-no">029</span><span id="line-29"> * Houses the {@link Applier} that pushes {@link BeanConfig @BeanConfig} attributes into a</span>
-<span class="source-line-no">030</span><span id="line-30"> * {@link org.apache.juneau.marshall.MarshallingContext.Builder}. The annotation itself lives in</span>
+<span class="source-line-no">030</span><span id="line-30"> * {@link MarshallingContext.Builder}. The annotation itself lives in</span>
 <span class="source-line-no">031</span><span id="line-31"> * {@code juneau-commons} (in {@link BeanConfig}), but</span>
 <span class="source-line-no">032</span><span id="line-32"> * the application logic lives here in {@code juneau-marshall} because it depends on</span>
 <span class="source-line-no">033</span><span id="line-33"> * marshall-layer types ({@link AnnotationApplier}, {@link MarshallingContext} builder APIs,</span>
@@ -60,7 +60,7 @@
 <span class="source-line-no">047</span><span id="line-47">   private BeanConfigAnnotation() {}</span>
 <span class="source-line-no">048</span><span id="line-48"></span>
 <span class="source-line-no">049</span><span id="line-49">   /**</span>
-<span class="source-line-no">050</span><span id="line-50">    * Applies {@link BeanConfig} annotations to a {@link org.apache.juneau.marshall.MarshallingContext.Builder}.</span>
+<span class="source-line-no">050</span><span id="line-50">    * Applies {@link BeanConfig} annotations to a {@link MarshallingContext.Builder}.</span>
 <span class="source-line-no">051</span><span id="line-51">    */</span>
 <span class="source-line-no">052</span><span id="line-52">   public static class Applier extends AnnotationApplier&lt;BeanConfig,MarshallingContext.Builder&gt; {</span>
 <span class="source-line-no">053</span><span id="line-53"></span>

@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.arg;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -101,7 +101,7 @@
 <span class="source-line-no">088</span><span id="line-88">      return AP.find(Query.class, pi)</span>
 <span class="source-line-no">089</span><span id="line-89">         .stream()</span>
 <span class="source-line-no">090</span><span id="line-90">         .map(AnnotationInfo::inner)</span>
-<span class="source-line-no">091</span><span id="line-91">         .filter(x -&gt; ne(x.def()))</span>
+<span class="source-line-no">091</span><span id="line-91">         .filter(x -&gt; ine(x.def()))</span>
 <span class="source-line-no">092</span><span id="line-92">         .findFirst()</span>
 <span class="source-line-no">093</span><span id="line-93">         .map(Query::def);</span>
 <span class="source-line-no">094</span><span id="line-94">      // @formatter:on</span>
@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">      schemaBuilder.applyAll(Query.class, pi);</span>
 <span class="source-line-no">134</span><span id="line-134">      this.schema = schemaBuilder.build();</span>
 <span class="source-line-no">135</span><span id="line-135"></span>
-<span class="source-line-no">136</span><span id="line-136">      this.def = findDef(pi).or(() -&gt; opt(classLevelQuery).filter(q -&gt; ne(q.def())).map(Query::def)).orElse(null);</span>
+<span class="source-line-no">136</span><span id="line-136">      this.def = findDef(pi).or(() -&gt; o(classLevelQuery).filter(q -&gt; ine(q.def())).map(Query::def)).orElse(null);</span>
 <span class="source-line-no">137</span><span id="line-137">      this.type = pi.getParameterType();</span>
 <span class="source-line-no">138</span><span id="line-138">      @SuppressWarnings({</span>
 <span class="source-line-no">139</span><span id="line-139">         "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>

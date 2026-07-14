@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.parquet;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.marshall.parquet.ParquetSchemaElement.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.io.*;</span>
@@ -231,7 +231,7 @@
 <span class="source-line-no">218</span><span id="line-218">      if (rows.size() == 1 &amp;&amp; rows.get(0) instanceof Map&lt;?, ?&gt; m &amp;&amp; m.containsKey("value") &amp;&amp; targetWantsScalar) {</span>
 <span class="source-line-no">219</span><span id="line-219">         var inner = m.get("value");</span>
 <span class="source-line-no">220</span><span id="line-220">         if (type.isOptional())</span>
-<span class="source-line-no">221</span><span id="line-221">            return (T)opt(convertToType(inner, type.getElementType()));</span>
+<span class="source-line-no">221</span><span id="line-221">            return (T)o(convertToType(inner, type.getElementType()));</span>
 <span class="source-line-no">222</span><span id="line-222">         if (type.isArray()) {</span>
 <span class="source-line-no">223</span><span id="line-223">            var list = new ArrayList&lt;&gt;(List.of(inner));</span>
 <span class="source-line-no">224</span><span id="line-224">            return (T)convertToType(list, type);</span>
@@ -277,9 +277,9 @@
 <span class="source-line-no">264</span><span id="line-264">      }</span>
 <span class="source-line-no">265</span><span id="line-265">      if (type.isOptional()) {</span>
 <span class="source-line-no">266</span><span id="line-266">         if (rows.isEmpty())</span>
-<span class="source-line-no">267</span><span id="line-267">            return (T)opte();</span>
+<span class="source-line-no">267</span><span id="line-267">            return (T)oe();</span>
 <span class="source-line-no">268</span><span id="line-268">         var inner = unwrapValueHolder(rows.get(0), type.getElementType());</span>
-<span class="source-line-no">269</span><span id="line-269">         return (T)opt(inner);</span>
+<span class="source-line-no">269</span><span id="line-269">         return (T)o(inner);</span>
 <span class="source-line-no">270</span><span id="line-270">      }</span>
 <span class="source-line-no">271</span><span id="line-271">      if (type.isArray()) {</span>
 <span class="source-line-no">272</span><span id="line-272">         var componentMeta = type.getElementType();</span>
@@ -311,7 +311,7 @@
 <span class="source-line-no">298</span><span id="line-298"></span>
 <span class="source-line-no">299</span><span id="line-299">   private static byte[] readAllBytes(ParserPipe pipe) throws IOException {</span>
 <span class="source-line-no">300</span><span id="line-300">      try (var is = pipe.getInputStream()) {</span>
-<span class="source-line-no">301</span><span id="line-301">         var baos = new java.io.ByteArrayOutputStream();</span>
+<span class="source-line-no">301</span><span id="line-301">         var baos = new ByteArrayOutputStream();</span>
 <span class="source-line-no">302</span><span id="line-302">         var buf = new byte[8192];</span>
 <span class="source-line-no">303</span><span id="line-303">         int n;</span>
 <span class="source-line-no">304</span><span id="line-304">         while ((n = is.read(buf)) &gt;= 0)</span>
@@ -498,8 +498,8 @@
 <span class="source-line-no">485</span><span id="line-485">      var lh = dec.readListHeader();</span>
 <span class="source-line-no">486</span><span id="line-486">      var pathStack = new ArrayList&lt;SchemaStackFrame&gt;();</span>
 <span class="source-line-no">487</span><span id="line-487">      var result = new LinkedHashMap&lt;String, Integer&gt;();</span>
-<span class="source-line-no">488</span><span id="line-488">      var rawByteArrayPaths = new java.util.LinkedHashSet&lt;String&gt;();</span>
-<span class="source-line-no">489</span><span id="line-489">      var uuidPaths = new java.util.LinkedHashSet&lt;String&gt;();</span>
+<span class="source-line-no">488</span><span id="line-488">      var rawByteArrayPaths = new LinkedHashSet&lt;String&gt;();</span>
+<span class="source-line-no">489</span><span id="line-489">      var uuidPaths = new LinkedHashSet&lt;String&gt;();</span>
 <span class="source-line-no">490</span><span id="line-490">      var columnLogical = new LinkedHashMap&lt;String, ColumnLogical&gt;();</span>
 <span class="source-line-no">491</span><span id="line-491">      for (int i = 0; i &lt; lh.size; i++) {</span>
 <span class="source-line-no">492</span><span id="line-492">         dec.readStructBegin();</span>
@@ -737,7 +737,7 @@
 <span class="source-line-no">724</span><span id="line-724"></span>
 <span class="source-line-no">725</span><span id="line-725">   /** Returns true if rows are key-value pairs (Map with non-String keys format). */</span>
 <span class="source-line-no">726</span><span id="line-726">   private static boolean isKeyValuePairFormat(List&lt;?&gt; rows) {</span>
-<span class="source-line-no">727</span><span id="line-727">      if (e(rows))</span>
+<span class="source-line-no">727</span><span id="line-727">      if (ie(rows))</span>
 <span class="source-line-no">728</span><span id="line-728">         return false;</span>
 <span class="source-line-no">729</span><span id="line-729">      var first = (Map&lt;?,?&gt;) rows.get(0);</span>
 <span class="source-line-no">730</span><span id="line-730">      return first.containsKey("key") &amp;&amp; first.containsKey("value") &amp;&amp; first.size() == 2;</span>

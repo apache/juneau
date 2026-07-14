@@ -53,14 +53,14 @@
 <span class="source-line-no">040</span><span id="line-40">   /**</span>
 <span class="source-line-no">041</span><span id="line-41">    * The {@code "allowedParserOptions"} annotation attribute name — used in {@code noInherit} matching.</span>
 <span class="source-line-no">042</span><span id="line-42">    *</span>
-<span class="source-line-no">043</span><span id="line-43">    * @see org.apache.juneau.rest.server.Rest#allowedParserOptions()</span>
+<span class="source-line-no">043</span><span id="line-43">    * @see Rest#allowedParserOptions()</span>
 <span class="source-line-no">044</span><span id="line-44">    */</span>
 <span class="source-line-no">045</span><span id="line-45">   public static final String PROPERTY_allowedParserOptions = "allowedParserOptions";</span>
 <span class="source-line-no">046</span><span id="line-46"></span>
 <span class="source-line-no">047</span><span id="line-47">   /**</span>
 <span class="source-line-no">048</span><span id="line-48">    * The {@code "allowedSerializerOptions"} annotation attribute name — used in {@code noInherit} matching.</span>
 <span class="source-line-no">049</span><span id="line-49">    *</span>
-<span class="source-line-no">050</span><span id="line-50">    * @see org.apache.juneau.rest.server.Rest#allowedSerializerOptions()</span>
+<span class="source-line-no">050</span><span id="line-50">    * @see Rest#allowedSerializerOptions()</span>
 <span class="source-line-no">051</span><span id="line-51">    */</span>
 <span class="source-line-no">052</span><span id="line-52">   public static final String PROPERTY_allowedSerializerOptions = "allowedSerializerOptions";</span>
 <span class="source-line-no">053</span><span id="line-53"></span>
@@ -90,7 +90,7 @@
 <span class="source-line-no">077</span><span id="line-77">    * parent resource into deferred (first-invocation) construction of its {@code @Rest(children=...)} sub-resources</span>
 <span class="source-line-no">078</span><span id="line-78">    * instead of the default eager construction at startup.</span>
 <span class="source-line-no">079</span><span id="line-79">    *</span>
-<span class="source-line-no">080</span><span id="line-80">    * @see org.apache.juneau.rest.server.Rest#lazyChildren()</span>
+<span class="source-line-no">080</span><span id="line-80">    * @see Rest#lazyChildren()</span>
 <span class="source-line-no">081</span><span id="line-81">    */</span>
 <span class="source-line-no">082</span><span id="line-82">   public static final String PROPERTY_lazyChildren = "lazyChildren";</span>
 <span class="source-line-no">083</span><span id="line-83"></span>
@@ -253,8 +253,8 @@
 <span class="source-line-no">240</span><span id="line-240">    * {@code "true"} opts the resource in and requires a wired backend (startup-fail if missing); {@code "false"} short-circuits</span>
 <span class="source-line-no">241</span><span id="line-241">    * the observability block entirely; {@code ""} (default) inherits / uses the existing silent-no-op behavior.</span>
 <span class="source-line-no">242</span><span id="line-242">    *</span>
-<span class="source-line-no">243</span><span id="line-243">    * @see org.apache.juneau.rest.server.Rest#observability()</span>
-<span class="source-line-no">244</span><span id="line-244">    * @see org.apache.juneau.rest.server.RestOp#observability()</span>
+<span class="source-line-no">243</span><span id="line-243">    * @see Rest#observability()</span>
+<span class="source-line-no">244</span><span id="line-244">    * @see RestOp#observability()</span>
 <span class="source-line-no">245</span><span id="line-245">    */</span>
 <span class="source-line-no">246</span><span id="line-246">   public static final String PROPERTY_observability = "observability";</span>
 <span class="source-line-no">247</span><span id="line-247"></span>
@@ -263,7 +263,7 @@
 <span class="source-line-no">250</span><span id="line-250">    * {@link MetricsRecorder#record(String,String,String,int,java.time.Duration,Throwable,String,String) record()}. Empty string (default) uses</span>
 <span class="source-line-no">251</span><span id="line-251">    * the recorder's own default name derivation.</span>
 <span class="source-line-no">252</span><span id="line-252">    *</span>
-<span class="source-line-no">253</span><span id="line-253">    * @see org.apache.juneau.rest.server.RestOp#metricName()</span>
+<span class="source-line-no">253</span><span id="line-253">    * @see RestOp#metricName()</span>
 <span class="source-line-no">254</span><span id="line-254">    */</span>
 <span class="source-line-no">255</span><span id="line-255">   public static final String PROPERTY_metricName = "metricName";</span>
 <span class="source-line-no">256</span><span id="line-256"></span>
@@ -273,7 +273,7 @@
 <span class="source-line-no">260</span><span id="line-260">    * {@code key=value} pairs (e.g. {@code "team=payments,region=us-east"}). Empty string (default) means</span>
 <span class="source-line-no">261</span><span id="line-261">    * no additional tags.</span>
 <span class="source-line-no">262</span><span id="line-262">    *</span>
-<span class="source-line-no">263</span><span id="line-263">    * @see org.apache.juneau.rest.server.RestOp#metricTags()</span>
+<span class="source-line-no">263</span><span id="line-263">    * @see RestOp#metricTags()</span>
 <span class="source-line-no">264</span><span id="line-264">    */</span>
 <span class="source-line-no">265</span><span id="line-265">   public static final String PROPERTY_metricTags = "metricTags";</span>
 <span class="source-line-no">266</span><span id="line-266"></span>

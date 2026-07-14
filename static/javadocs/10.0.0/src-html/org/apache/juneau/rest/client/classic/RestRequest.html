@@ -31,10 +31,10 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.httppart.HttpPartType.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.IoUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.IoUtils.*;</span>
+<span class="source-line-no">024</span><span id="line-24">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import static org.apache.juneau.http.classic.HttpEntities.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import static org.apache.juneau.http.classic.HttpHeaders.*;</span>
 <span class="source-line-no">027</span><span id="line-27">import static org.apache.juneau.rest.RestSharedConstants.*;</span>
@@ -117,7 +117,7 @@
 <span class="source-line-no">104</span><span id="line-104"> * &lt;/ul&gt;</span>
 <span class="source-line-no">105</span><span id="line-105"> *</span>
 <span class="source-line-no">106</span><span id="line-106"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClientBasics"&gt;juneau-rest-client Basics&lt;/a&gt;</span>
+<span class="source-line-no">107</span><span id="line-107"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauRestClient"&gt;juneau-rest-client Basics&lt;/a&gt;</span>
 <span class="source-line-no">108</span><span id="line-108"> * &lt;/ul&gt;</span>
 <span class="source-line-no">109</span><span id="line-109"> */</span>
 <span class="source-line-no">110</span><span id="line-110">@SuppressWarnings({</span>
@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161">            value = x3.copyWith(getPartSerializerSession(), null).getValue();</span>
 <span class="source-line-no">162</span><span id="line-162">         } else {</span>
 <span class="source-line-no">163</span><span id="line-163">            var v = x.getValue();</span>
-<span class="source-line-no">164</span><span id="line-164">            value = (e(v) &amp;&amp; skipIfEmpty) ? null : v;</span>
+<span class="source-line-no">164</span><span id="line-164">            value = (ie(v) &amp;&amp; skipIfEmpty) ? null : v;</span>
 <span class="source-line-no">165</span><span id="line-165">         }</span>
 <span class="source-line-no">166</span><span id="line-166">      }</span>
 <span class="source-line-no">167</span><span id="line-167"></span>
@@ -185,7 +185,7 @@
 <span class="source-line-no">172</span><span id="line-172">      public String getValue() { return value; }</span>
 <span class="source-line-no">173</span><span id="line-173"></span>
 <span class="source-line-no">174</span><span id="line-174">      boolean isValid() {</span>
-<span class="source-line-no">175</span><span id="line-175">         return !(e(name) || value == null);</span>
+<span class="source-line-no">175</span><span id="line-175">         return !(ie(name) || value == null);</span>
 <span class="source-line-no">176</span><span id="line-176">      }</span>
 <span class="source-line-no">177</span><span id="line-177">   }</span>
 <span class="source-line-no">178</span><span id="line-178"></span>
@@ -1753,7 +1753,7 @@
 <span class="source-line-no">1740</span><span id="line-1740">   public RestRequest serializerSessionOptionsHeader(Map&lt;String,?&gt; properties) {</span>
 <span class="source-line-no">1741</span><span id="line-1741">      if (isEmpty(properties))</span>
 <span class="source-line-no">1742</span><span id="line-1742">         return this;</span>
-<span class="source-line-no">1743</span><span id="line-1743">      return header(HEADER_JuneauSerializerOptions, Json5.DEFAULT.of(properties));</span>
+<span class="source-line-no">1743</span><span id="line-1743">      return header(HEADER_JuneauSerializerOptions, Json5.of(properties));</span>
 <span class="source-line-no">1744</span><span id="line-1744">   }</span>
 <span class="source-line-no">1745</span><span id="line-1745"></span>
 <span class="source-line-no">1746</span><span id="line-1746">   /**</span>
@@ -1767,7 +1767,7 @@
 <span class="source-line-no">1754</span><span id="line-1754">   public RestRequest parserSessionOptionsHeader(Map&lt;String,?&gt; properties) {</span>
 <span class="source-line-no">1755</span><span id="line-1755">      if (isEmpty(properties))</span>
 <span class="source-line-no">1756</span><span id="line-1756">         return this;</span>
-<span class="source-line-no">1757</span><span id="line-1757">      return header(HEADER_JuneauParserOptions, Json5.DEFAULT.of(properties));</span>
+<span class="source-line-no">1757</span><span id="line-1757">      return header(HEADER_JuneauParserOptions, Json5.of(properties));</span>
 <span class="source-line-no">1758</span><span id="line-1758">   }</span>
 <span class="source-line-no">1759</span><span id="line-1759"></span>
 <span class="source-line-no">1760</span><span id="line-1760">   /**</span>
@@ -1806,7 +1806,7 @@
 <span class="source-line-no">1793</span><span id="line-1793">   public RestRequest serializerSessionOptionsQuery(Map&lt;String,?&gt; properties) {</span>
 <span class="source-line-no">1794</span><span id="line-1794">      if (isEmpty(properties))</span>
 <span class="source-line-no">1795</span><span id="line-1795">         return this;</span>
-<span class="source-line-no">1796</span><span id="line-1796">      return serializerSessionOptionsQuery(Uon.DEFAULT.of(properties));</span>
+<span class="source-line-no">1796</span><span id="line-1796">      return serializerSessionOptionsQuery(Uon.of(properties));</span>
 <span class="source-line-no">1797</span><span id="line-1797">   }</span>
 <span class="source-line-no">1798</span><span id="line-1798"></span>
 <span class="source-line-no">1799</span><span id="line-1799">   /**</span>
@@ -1820,7 +1820,7 @@
 <span class="source-line-no">1807</span><span id="line-1807">   public RestRequest parserSessionOptionsQuery(Map&lt;String,?&gt; properties) {</span>
 <span class="source-line-no">1808</span><span id="line-1808">      if (isEmpty(properties))</span>
 <span class="source-line-no">1809</span><span id="line-1809">         return this;</span>
-<span class="source-line-no">1810</span><span id="line-1810">      return parserSessionOptionsQuery(Uon.DEFAULT.of(properties));</span>
+<span class="source-line-no">1810</span><span id="line-1810">      return parserSessionOptionsQuery(Uon.of(properties));</span>
 <span class="source-line-no">1811</span><span id="line-1811">   }</span>
 <span class="source-line-no">1812</span><span id="line-1812"></span>
 <span class="source-line-no">1813</span><span id="line-1813">   /**</span>
@@ -2620,7 +2620,7 @@
 <span class="source-line-no">2607</span><span id="line-2607">      var h = request.getFirstHeader("Content-Type");</span>
 <span class="source-line-no">2608</span><span id="line-2608">      if (nn(h)) {</span>
 <span class="source-line-no">2609</span><span id="line-2609">         var s = h.getValue();</span>
-<span class="source-line-no">2610</span><span id="line-2610">         if (ne(s))</span>
+<span class="source-line-no">2610</span><span id="line-2610">         if (ine(s))</span>
 <span class="source-line-no">2611</span><span id="line-2611">            return ContentType.of(s);</span>
 <span class="source-line-no">2612</span><span id="line-2612">      }</span>
 <span class="source-line-no">2613</span><span id="line-2613">      return def;</span>
@@ -2637,7 +2637,7 @@
 <span class="source-line-no">2624</span><span id="line-2624">    * @return A new header.</span>
 <span class="source-line-no">2625</span><span id="line-2625">    */</span>
 <span class="source-line-no">2626</span><span id="line-2626">   protected Header createHeader(String name, Object value, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {</span>
-<span class="source-line-no">2627</span><span id="line-2627">      if (e(name))</span>
+<span class="source-line-no">2627</span><span id="line-2627">      if (ie(name))</span>
 <span class="source-line-no">2628</span><span id="line-2628">         return null;</span>
 <span class="source-line-no">2629</span><span id="line-2629">      if (skipIfEmpty == null)</span>
 <span class="source-line-no">2630</span><span id="line-2630">         skipIfEmpty = client.isSkipEmptyHeaderData();</span>
@@ -2675,7 +2675,7 @@
 <span class="source-line-no">2662</span><span id="line-2662">    * @return A new part.</span>
 <span class="source-line-no">2663</span><span id="line-2663">    */</span>
 <span class="source-line-no">2664</span><span id="line-2664">   protected NameValuePair createPart(String name, Object value, HttpPartType type, HttpPartSerializer serializer, HttpPartSchema schema, Boolean skipIfEmpty) {</span>
-<span class="source-line-no">2665</span><span id="line-2665">      if (e(name))</span>
+<span class="source-line-no">2665</span><span id="line-2665">      if (ie(name))</span>
 <span class="source-line-no">2666</span><span id="line-2666">         return null;</span>
 <span class="source-line-no">2667</span><span id="line-2667">      if (skipIfEmpty == null) {</span>
 <span class="source-line-no">2668</span><span id="line-2668">         if (type == QUERY)</span>
@@ -2702,10 +2702,10 @@
 <span class="source-line-no">2689</span><span id="line-2689">   }</span>
 <span class="source-line-no">2690</span><span id="line-2690"></span>
 <span class="source-line-no">2691</span><span id="line-2691">   RestRequest formDataArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
-<span class="source-line-no">2692</span><span id="line-2692">      var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
+<span class="source-line-no">2692</span><span id="line-2692">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
 <span class="source-line-no">2693</span><span id="line-2693"></span>
 <span class="source-line-no">2694</span><span id="line-2694">      if (! isMulti) {</span>
-<span class="source-line-no">2695</span><span id="line-2695">         if (! (skipIfEmpty &amp;&amp; e(s(value))))</span>
+<span class="source-line-no">2695</span><span id="line-2695">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
 <span class="source-line-no">2696</span><span id="line-2696">            return formData(createPart(name, value, FORMDATA, serializer, schema, skipIfEmpty));</span>
 <span class="source-line-no">2697</span><span id="line-2697">         return this;</span>
 <span class="source-line-no">2698</span><span id="line-2698">      }</span>
@@ -2731,7 +2731,7 @@
 <span class="source-line-no">2718</span><span id="line-2718">      }</span>
 <span class="source-line-no">2719</span><span id="line-2719"></span>
 <span class="source-line-no">2720</span><span id="line-2720">      if (skipIfEmpty)</span>
-<span class="source-line-no">2721</span><span id="line-2721">         l.removeIf(x -&gt; e(x.getValue()));</span>
+<span class="source-line-no">2721</span><span id="line-2721">         l.removeIf(x -&gt; ie(x.getValue()));</span>
 <span class="source-line-no">2722</span><span id="line-2722"></span>
 <span class="source-line-no">2723</span><span id="line-2723">      formData.append(l);</span>
 <span class="source-line-no">2724</span><span id="line-2724"></span>
@@ -2745,10 +2745,10 @@
 <span class="source-line-no">2732</span><span id="line-2732">   }</span>
 <span class="source-line-no">2733</span><span id="line-2733"></span>
 <span class="source-line-no">2734</span><span id="line-2734">   RestRequest headerArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
-<span class="source-line-no">2735</span><span id="line-2735">      var isMulti = e(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);</span>
+<span class="source-line-no">2735</span><span id="line-2735">      var isMulti = ie(name) || "*".equals(name) || value instanceof HeaderList || isHeaderArray(value);</span>
 <span class="source-line-no">2736</span><span id="line-2736"></span>
 <span class="source-line-no">2737</span><span id="line-2737">      if (! isMulti) {</span>
-<span class="source-line-no">2738</span><span id="line-2738">         if (! (skipIfEmpty &amp;&amp; e(s(value))))</span>
+<span class="source-line-no">2738</span><span id="line-2738">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
 <span class="source-line-no">2739</span><span id="line-2739">            return header(createHeader(name, value, serializer, schema, skipIfEmpty));</span>
 <span class="source-line-no">2740</span><span id="line-2740">         return this;</span>
 <span class="source-line-no">2741</span><span id="line-2741">      }</span>
@@ -2773,7 +2773,7 @@
 <span class="source-line-no">2760</span><span id="line-2760">      }</span>
 <span class="source-line-no">2761</span><span id="line-2761"></span>
 <span class="source-line-no">2762</span><span id="line-2762">      if (skipIfEmpty)</span>
-<span class="source-line-no">2763</span><span id="line-2763">         l.removeIf(x -&gt; e(x.getValue()));</span>
+<span class="source-line-no">2763</span><span id="line-2763">         l.removeIf(x -&gt; ie(x.getValue()));</span>
 <span class="source-line-no">2764</span><span id="line-2764"></span>
 <span class="source-line-no">2765</span><span id="line-2765">      headerData.append(l);</span>
 <span class="source-line-no">2766</span><span id="line-2766"></span>
@@ -2783,7 +2783,7 @@
 <span class="source-line-no">2770</span><span id="line-2770">   boolean isLoggingSuppressed() { return suppressLogging; }</span>
 <span class="source-line-no">2771</span><span id="line-2771"></span>
 <span class="source-line-no">2772</span><span id="line-2772">   RestRequest pathArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer) {</span>
-<span class="source-line-no">2773</span><span id="line-2773">      var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
+<span class="source-line-no">2773</span><span id="line-2773">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
 <span class="source-line-no">2774</span><span id="line-2774"></span>
 <span class="source-line-no">2775</span><span id="line-2775">      if (! isMulti)</span>
 <span class="source-line-no">2776</span><span id="line-2776">         return pathData(createPart(name, value, PATH, serializer, schema, false));</span>
@@ -2813,10 +2813,10 @@
 <span class="source-line-no">2800</span><span id="line-2800">   }</span>
 <span class="source-line-no">2801</span><span id="line-2801"></span>
 <span class="source-line-no">2802</span><span id="line-2802">   RestRequest queryArg(String name, Object value, HttpPartSchema schema, HttpPartSerializer serializer, boolean skipIfEmpty) {</span>
-<span class="source-line-no">2803</span><span id="line-2803">      var isMulti = e(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
+<span class="source-line-no">2803</span><span id="line-2803">      var isMulti = ie(name) || "*".equals(name) || value instanceof PartList || isNameValuePairArray(value);</span>
 <span class="source-line-no">2804</span><span id="line-2804"></span>
 <span class="source-line-no">2805</span><span id="line-2805">      if (! isMulti) {</span>
-<span class="source-line-no">2806</span><span id="line-2806">         if (! (skipIfEmpty &amp;&amp; e(s(value))))</span>
+<span class="source-line-no">2806</span><span id="line-2806">         if (! (skipIfEmpty &amp;&amp; ie(s(value))))</span>
 <span class="source-line-no">2807</span><span id="line-2807">            return queryData(createPart(name, value, QUERY, serializer, schema, skipIfEmpty));</span>
 <span class="source-line-no">2808</span><span id="line-2808">         return this;</span>
 <span class="source-line-no">2809</span><span id="line-2809">      }</span>
@@ -2842,7 +2842,7 @@
 <span class="source-line-no">2829</span><span id="line-2829">      }</span>
 <span class="source-line-no">2830</span><span id="line-2830"></span>
 <span class="source-line-no">2831</span><span id="line-2831">      if (skipIfEmpty)</span>
-<span class="source-line-no">2832</span><span id="line-2832">         l.removeIf(x -&gt; e(x.getValue()));</span>
+<span class="source-line-no">2832</span><span id="line-2832">         l.removeIf(x -&gt; ie(x.getValue()));</span>
 <span class="source-line-no">2833</span><span id="line-2833"></span>
 <span class="source-line-no">2834</span><span id="line-2834">      queryData.append(l);</span>
 <span class="source-line-no">2835</span><span id="line-2835"></span>
@@ -2857,15 +2857,15 @@
 <span class="source-line-no">2844</span><span id="line-2844">   @SuppressWarnings({"unchecked", "rawtypes"})</span>
 <span class="source-line-no">2845</span><span id="line-2845">   private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {</span>
 <span class="source-line-no">2846</span><span id="line-2846">      if (serializer == null)</span>
-<span class="source-line-no">2847</span><span id="line-2847">         throw illegalArg("No serializer registered for cursor-streamed request body.");</span>
+<span class="source-line-no">2847</span><span id="line-2847">         throw iaex("No serializer registered for cursor-streamed request body.");</span>
 <span class="source-line-no">2848</span><span id="line-2848">      try {</span>
 <span class="source-line-no">2849</span><span id="line-2849">         var consumer = body.getConsumer();</span>
 <span class="source-line-no">2850</span><span id="line-2850">         var writerKind = body.getWriterKind();</span>
 <span class="source-line-no">2851</span><span id="line-2851"></span>
 <span class="source-line-no">2852</span><span id="line-2852">         if (writerKind == TokenWriter.class &amp;&amp; !(serializer instanceof TokenWritable))</span>
-<span class="source-line-no">2853</span><span id="line-2853">            throw illegalArg("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());</span>
+<span class="source-line-no">2853</span><span id="line-2853">            throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());</span>
 <span class="source-line-no">2854</span><span id="line-2854">         if (writerKind == RecordWriter.class &amp;&amp; !(serializer instanceof RecordWritable))</span>
-<span class="source-line-no">2855</span><span id="line-2855">            throw illegalArg("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());</span>
+<span class="source-line-no">2855</span><span id="line-2855">            throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());</span>
 <span class="source-line-no">2856</span><span id="line-2856"></span>
 <span class="source-line-no">2857</span><span id="line-2857">         var buf = new ByteArrayOutputStream();</span>
 <span class="source-line-no">2858</span><span id="line-2858">         Object output = serializer.isWriterSerializer()</span>
@@ -2878,7 +2878,7 @@
 <span class="source-line-no">2865</span><span id="line-2865">            ((Consumer) consumer).accept(w);</span>
 <span class="source-line-no">2866</span><span id="line-2866">            w.flush();</span>
 <span class="source-line-no">2867</span><span id="line-2867">         }</span>
-<span class="source-line-no">2868</span><span id="line-2868">         if (output instanceof java.io.Writer ow)</span>
+<span class="source-line-no">2868</span><span id="line-2868">         if (output instanceof Writer ow)</span>
 <span class="source-line-no">2869</span><span id="line-2869">            ow.flush();</span>
 <span class="source-line-no">2870</span><span id="line-2870"></span>
 <span class="source-line-no">2871</span><span id="line-2871">         // Use the serializer's primary produces() media type if no explicit Content-Type set.</span>

@@ -86,8 +86,9 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a></code>, <code><a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-83">ExecutableInfo</a></span>
-<span class="extends-implements">extends <a href="AccessibleInfo.html" title="class in org.apache.juneau.commons.reflect">AccessibleInfo</a></span></div>
+<div class="type-signature"><span class="modifiers">public abstract sealed class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-85">ExecutableInfo</a></span>
+<span class="extends-implements">extends <a href="AccessibleInfo.html" title="class in org.apache.juneau.commons.reflect">AccessibleInfo</a></span>
+<span class="permits">permits <a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect">ConstructorInfo</a>, <a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect">MethodInfo</a></span></div>
 <div class="block">Abstract base class containing common functionality for <a href="ConstructorInfo.html" title="class in org.apache.juneau.commons.reflect"><code>ConstructorInfo</code></a> and <a href="MethodInfo.html" title="class in org.apache.juneau.commons.reflect"><code>MethodInfo</code></a>.
 
  <p>
@@ -438,7 +439,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="declaringClass">
 <h3>declaringClass</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-93">declaringClass</a></span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-95">declaringClass</a></span></div>
 </section>
 </li>
 </ul>
@@ -452,7 +453,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(org.apache.juneau.commons.reflect.ClassInfo,java.lang.reflect.Executable)">
 <h3>ExecutableInfo</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-116">ExecutableInfo</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;declaringClass,
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-118">ExecutableInfo</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;declaringClass,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Executable.html" title="class or interface in java.lang.reflect" class="external-link">Executable</a>&nbsp;inner)</span></div>
 <div class="block">Constructor.
 
@@ -478,7 +479,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="accessible()">
 <h3>accessible</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-135">accessible</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="ExecutableInfo.html" title="class in org.apache.juneau.commons.reflect">ExecutableInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-137">accessible</a></span>()</div>
 <div class="block">Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -489,7 +490,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="canAccept(java.lang.Object...)">
 <h3>canAccept</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-173">canAccept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-175">canAccept</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this executable can accept the specified arguments in the specified order.
 
  <p>
@@ -529,7 +530,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnnotatedExceptionTypes()">
 <h3>getAnnotatedExceptionTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link">AnnotatedType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-202">getAnnotatedExceptionTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link">AnnotatedType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-204">getAnnotatedExceptionTypes</a></span>()</div>
 <div class="block">Returns an array of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link"><code>AnnotatedType</code></a> objects that represent the use of types to specify the declared exceptions.
 
  <p>
@@ -559,7 +560,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnnotatedParameterTypes()">
 <h3>getAnnotatedParameterTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link">AnnotatedType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-223">getAnnotatedParameterTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link">AnnotatedType</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-225">getAnnotatedParameterTypes</a></span>()</div>
 <div class="block">Returns an array of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link"><code>AnnotatedType</code></a> objects that represent the use of types to specify formal parameter types.
 
  <p>
@@ -589,7 +590,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getAnnotatedReceiverType()">
 <h3>getAnnotatedReceiverType</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link">AnnotatedType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-244">getAnnotatedReceiverType</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link">AnnotatedType</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-246">getAnnotatedReceiverType</a></span>()</div>
 <div class="block">Returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/AnnotatedType.html" title="class or interface in java.lang.reflect" class="external-link"><code>AnnotatedType</code></a> object that represents the use of a type to specify the receiver type of the method/constructor.
 
  <p>
@@ -619,7 +620,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDeclaredAnnotations()">
 <h3>getDeclaredAnnotations</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-259">getDeclaredAnnotations</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-261">getDeclaredAnnotations</a></span>()</div>
 <div class="block">Returns the declared annotations on this executable.
 
  <p>
@@ -638,7 +639,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="getDeclaredAnnotations(java.lang.Class)">
 <h3>getDeclaredAnnotations</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>
-<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;A&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-268">getDeclaredAnnotations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/stream/Stream.html" title="class or interface in java.util.stream" class="external-link">Stream</a>&lt;<a href="AnnotationInfo.html" title="class in org.apache.juneau.commons.reflect">AnnotationInfo</a>&lt;A&gt;&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-270">getDeclaredAnnotations</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
 <div class="block">Returns the declared annotations of the specified type on this executable.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -653,7 +654,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDeclaringClass()">
 <h3>getDeclaringClass</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-285">getDeclaringClass</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-287">getDeclaringClass</a></span>()</div>
 <div class="block">Returns metadata about the class that declared this method or constructor.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -664,7 +665,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDeclaringClass(org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>isDeclaringClass</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-293">isDeclaringClass</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-295">isDeclaringClass</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;value)</span></div>
 <div class="block">Returns <jk>true</jk> if the declaring class of this executable matches the specified class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -677,7 +678,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getExceptionTypes()">
 <h3>getExceptionTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-300">getExceptionTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-302">getExceptionTypes</a></span>()</div>
 <div class="block">Returns the exception types on this executable.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -688,7 +689,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNameFull()">
 <h3>getNameFull</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-313">getNameFull</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-315">getNameFull</a></span>()</div>
 <div class="block">Returns the full name of this executable.
 
  <h5 class='section'>Examples:</h5>
@@ -705,7 +706,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameter(int)">
 <h3>getParameter</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-321">getParameter</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-323">getParameter</a></span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Returns parameter information at the specified index.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -718,7 +719,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameterCount()">
 <h3>getParameterCount</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-334">getParameterCount</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-336">getParameterCount</a></span>()</div>
 <div class="block">Returns the number of parameters in this executable.
 
  <p>
@@ -732,7 +733,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameters()">
 <h3>getParameters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-344">getParameters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-346">getParameters</a></span>()</div>
 <div class="block">Returns the parameters defined on this executable.
 
  <p>
@@ -746,7 +747,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getParameterTypes()">
 <h3>getParameterTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-362">getParameterTypes</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&gt;</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-364">getParameterTypes</a></span>()</div>
 <div class="block">Returns the parameter types for this executable.
 
  <p>
@@ -768,7 +769,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNameShort()">
 <h3>getNameShort</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-377">getNameShort</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-379">getNameShort</a></span>()</div>
 <div class="block">Returns the short name of this executable.
 
  <h5 class='section'>Examples:</h5>
@@ -785,7 +786,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getNameSimple()">
 <h3>getNameSimple</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-384">getNameSimple</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-386">getNameSimple</a></span>()</div>
 <div class="block">Returns the simple name of the underlying method.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -796,7 +797,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getTypeParameters()">
 <h3>getTypeParameters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/TypeVariable.html" title="class or interface in java.lang.reflect" class="external-link">TypeVariable</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-406">getTypeParameters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/TypeVariable.html" title="class or interface in java.lang.reflect" class="external-link">TypeVariable</a>&lt;?&gt;[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-408">getTypeParameters</a></span>()</div>
 <div class="block">Returns an array of <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/TypeVariable.html" title="class or interface in java.lang.reflect" class="external-link"><code>TypeVariable</code></a> objects that represent the type variables declared by the generic declaration.
 
  <p>
@@ -827,7 +828,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasAnnotation(java.lang.Class)">
 <h3>hasAnnotation</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-418">hasAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;A extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/annotation/Annotation.html" title="class or interface in java.lang.annotation" class="external-link">Annotation</a>&gt;</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-420">hasAnnotation</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;A&gt;&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if this executable has the specified annotation.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
@@ -842,7 +843,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasAnyName(java.util.Collection)">
 <h3>hasAnyName</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-428">hasAnyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-430">hasAnyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;names)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has a name in the specified set.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -855,7 +856,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasAnyName(java.lang.String...)">
 <h3>hasAnyName</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-438">hasAnyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-440">hasAnyName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>...&nbsp;names)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has a name in the specified list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -868,7 +869,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasMatchingParameters(java.util.List)">
 <h3>hasMatchingParameters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-448">hasMatchingParameters</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&gt;&nbsp;params)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-450">hasMatchingParameters</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="ParameterInfo.html" title="class in org.apache.juneau.commons.reflect">ParameterInfo</a>&gt;&nbsp;params)</span></div>
 <div class="block">Returns <jk>true</jk> if this executable has matching parameter types with the provided parameter list.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -881,7 +882,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasName(java.lang.String)">
 <h3>hasName</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-459">hasName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-461">hasName</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has this name.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -894,7 +895,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasNumParameters(int)">
 <h3>hasNumParameters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-472">hasNumParameters</a></span><wbr><span class="parameters">(int&nbsp;number)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-474">hasNumParameters</a></span><wbr><span class="parameters">(int&nbsp;number)</span></div>
 <div class="block">Returns <jk>true</jk> if this executable has this number of arguments.
 
  <p>
@@ -910,7 +911,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameters()">
 <h3>hasParameters</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-484">hasParameters</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-486">hasParameters</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this executable has at least one parameter.
 
  <p>
@@ -924,7 +925,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypeParents(java.lang.Class...)">
 <h3>hasParameterTypeParents</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-494">hasParameterTypeParents</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-496">hasParameterTypeParents</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has the specified argument parent classes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -937,7 +938,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypeParents(org.apache.juneau.commons.reflect.ClassInfo...)">
 <h3>hasParameterTypeParents</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-505">hasParameterTypeParents</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-507">hasParameterTypeParents</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has the specified argument parent classes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -950,7 +951,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypes(java.lang.Class...)">
 <h3>hasParameterTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-516">hasParameterTypes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-518">hasParameterTypes</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has the specified arguments.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -963,7 +964,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypes(org.apache.juneau.commons.reflect.ClassInfo...)">
 <h3>hasParameterTypes</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-527">hasParameterTypes</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-529">hasParameterTypes</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has the specified arguments.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -976,7 +977,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterType(org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>hasParameterType</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-538">hasParameterType</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-540">hasParameterType</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if this executable has a parameter of the specified type in any position.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -989,7 +990,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypeParent(org.apache.juneau.commons.reflect.ClassInfo)">
 <h3>hasParameterTypeParent</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-551">hasParameterTypeParent</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-553">hasParameterTypeParent</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>&nbsp;type)</span></div>
 <div class="block">Returns <jk>true</jk> if this executable has a parameter that is a parent of the specified type in any position.
 
  <p>
@@ -1005,7 +1006,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypesLenient(java.lang.Class...)">
 <h3>hasParameterTypesLenient</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-565">hasParameterTypesLenient</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-567">hasParameterTypesLenient</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has at most only these arguments using lenient matching.
 
  <p>
@@ -1022,7 +1023,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="hasParameterTypesLenient(org.apache.juneau.commons.reflect.ClassInfo...)">
 <h3>hasParameterTypesLenient</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-579">hasParameterTypesLenient</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;args)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-581">hasParameterTypesLenient</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;args)</span></div>
 <div class="block">Returns <jk>true</jk> if this method has at most only these arguments using lenient matching.
 
  <p>
@@ -1039,7 +1040,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="is(org.apache.juneau.commons.reflect.ElementFlag)">
 <h3>is</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-589">is</a></span><wbr><span class="parameters">(<a href="ElementFlag.html" title="enum class in org.apache.juneau.commons.reflect">ElementFlag</a>&nbsp;flag)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-591">is</a></span><wbr><span class="parameters">(<a href="ElementFlag.html" title="enum class in org.apache.juneau.commons.reflect">ElementFlag</a>&nbsp;flag)</span></div>
 <div class="block">Returns <jk>true</jk> if all specified flags are applicable to this method.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -1054,7 +1055,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isConstructor()">
 <h3>isConstructor</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-613">isConstructor</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-615">isConstructor</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this executable represents a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/reflect/Constructor.html" title="class or interface in java.lang.reflect" class="external-link"><code>Constructor</code></a>.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1066,7 +1067,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isDeprecated()">
 <h3>isDeprecated</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-620">isDeprecated</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-622">isDeprecated</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this method has the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link"><code>@Deprecated</code></a> annotation on it.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1077,7 +1078,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isNotDeprecated()">
 <h3>isNotDeprecated</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-630">isNotDeprecated</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-632">isNotDeprecated</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this method doesn't have the <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link"><code>@Deprecated</code></a> annotation on it.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -1088,7 +1089,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isSynthetic()">
 <h3>isSynthetic</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-651">isSynthetic</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-653">isSynthetic</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this executable is a synthetic construct as defined by the Java Language Specification.
 
  <p>
@@ -1115,7 +1116,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isVarArgs()">
 <h3>isVarArgs</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-669">isVarArgs</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-671">isVarArgs</a></span>()</div>
 <div class="block">Returns <jk>true</jk> if this executable was declared to take a variable number of arguments.
 
  <p>
@@ -1142,7 +1143,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="isVisible(org.apache.juneau.commons.reflect.Visibility)">
 <h3>isVisible</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-677">isVisible</a></span><wbr><span class="parameters">(<a href="Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;v)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-679">isVisible</a></span><wbr><span class="parameters">(<a href="Visibility.html" title="enum class in org.apache.juneau.commons.reflect">Visibility</a>&nbsp;v)</span></div>
 <div class="block">Identifies if the specified visibility matches this method.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -1155,7 +1156,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parameterMatchesLenientCount(java.lang.Class...)">
 <h3>parameterMatchesLenientCount</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-695">parameterMatchesLenientCount</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;argTypes)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-697">parameterMatchesLenientCount</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;?&gt;...&nbsp;argTypes)</span></div>
 <div class="block">Returns how well this method matches the specified arg types using lenient matching.
 
  <p>
@@ -1176,7 +1177,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parameterMatchesLenientCount(org.apache.juneau.commons.reflect.ClassInfo...)">
 <h3>parameterMatchesLenientCount</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-726">parameterMatchesLenientCount</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;argTypes)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-728">parameterMatchesLenientCount</a></span><wbr><span class="parameters">(<a href="ClassInfo.html" title="class in org.apache.juneau.commons.reflect">ClassInfo</a>...&nbsp;argTypes)</span></div>
 <div class="block">Returns how well this method matches the specified arg types using lenient matching.
 
  <p>
@@ -1197,7 +1198,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parameterMatchesLenientCount(java.lang.Object...)">
 <h3>parameterMatchesLenientCount</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-757">parameterMatchesLenientCount</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;argTypes)</span></div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-759">parameterMatchesLenientCount</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>...&nbsp;argTypes)</span></div>
 <div class="block">Returns how well this method matches the specified arg types using lenient matching.
 
  <p>
@@ -1218,7 +1219,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAccessible()">
 <h3>setAccessible</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-779">setAccessible</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-781">setAccessible</a></span>()</div>
 <div class="block">Attempts to call <code>x.setAccessible(<jk>true</jk>)</code> and quietly ignores security exceptions.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -1231,7 +1232,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toGenericString()">
 <h3>toGenericString</h3>
-<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-808">toGenericString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-810">toGenericString</a></span>()</div>
 <div class="block">Returns a string describing this executable, including type parameters.
 
  <p>
@@ -1262,7 +1263,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-863">toString</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/reflect/ExecutableInfo.html#line-865">toString</a></span>()</div>
 <div class="block">Returns a detailed string representation of this executable (method or constructor).
 
  <p>

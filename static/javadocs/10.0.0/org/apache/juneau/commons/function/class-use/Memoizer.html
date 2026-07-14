@@ -70,10 +70,6 @@ loadScripts(document, 'script');</script>
 <div class="block">Thread-safe system property access with support for global and per-thread overrides,
  making it useful for unit tests and configuration management.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#org.apache.juneau.commons.utils">org.apache.juneau.commons.utils</a></div>
-<div class="col-last odd-row-color">
-<div class="block">Common internal utilities.</div>
-</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -99,6 +95,11 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><span class="type-name-label">Memoizer.</span><code><a href="../Memoizer.html#map(java.util.function.Function)" class="member-name-link">map</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;? super <a href="../Memoizer.html" title="type parameter in Memoizer">T</a>,<wbr>? extends U&gt;&nbsp;mapper)</code></div>
 <div class="col-last even-row-color">
 <div class="block">If a value is present, applies the provided mapping function to it and returns a Memoizer describing the result.</div>
+</div>
+<div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;<a href="../Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;T&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Suppliers.</span><code><a href="../Suppliers.html#memoizer(java.util.function.Supplier)" class="member-name-link">memoizer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Resettable memoizing supplier.</div>
 </div>
 </div>
 </section>
@@ -141,22 +142,6 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="../../settings/StringSetting.html" class="type-name-link" title="class in org.apache.juneau.commons.settings">StringSetting</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">A specialized <a href="../../settings/Setting.html" title="class in org.apache.juneau.commons.settings"><code>Setting</code></a> for string values that provides convenience methods for type conversion.</div>
-</div>
-</div>
-</section>
-</li>
-<li>
-<section class="detail" id="org.apache.juneau.commons.utils">
-<h2>Uses of <a href="../Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a> in <a href="../../utils/package-summary.html">org.apache.juneau.commons.utils</a></h2>
-<div class="caption"><span>Methods in <a href="../../utils/package-summary.html">org.apache.juneau.commons.utils</a> that return <a href="../Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a></span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Method</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="../Memoizer.html" title="class in org.apache.juneau.commons.function">Memoizer</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#memoizer(java.util.function.Supplier)" class="member-name-link">memoizer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;T&gt;&nbsp;supplier)</code></div>
-<div class="col-last even-row-color">
-<div class="block">Creates a memoizing supplier that caches the result of the first call and supports resetting.</div>
 </div>
 </div>
 </section>

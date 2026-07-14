@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.function.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -111,11 +111,11 @@
 <span class="source-line-no">098</span><span id="line-98">      assertArgNotNull("s", s);</span>
 <span class="source-line-no">099</span><span id="line-99">      var slash = s.indexOf('/');</span>
 <span class="source-line-no">100</span><span id="line-100">      if (slash &lt; 0)</span>
-<span class="source-line-no">101</span><span id="line-101">         throw illegalArg("Invalid protocol version: {0}", s);</span>
+<span class="source-line-no">101</span><span id="line-101">         throw iaex("Invalid protocol version: {0}", s);</span>
 <span class="source-line-no">102</span><span id="line-102">      var protocol = s.substring(0, slash);</span>
 <span class="source-line-no">103</span><span id="line-103">      var rest = s.substring(slash + 1);</span>
 <span class="source-line-no">104</span><span id="line-104">      var dot = rest.indexOf('.');</span>
-<span class="source-line-no">105</span><span id="line-105">      Supplier&lt;RuntimeException&gt; err = () -&gt; illegalArg("Invalid protocol version: {0}", s);</span>
+<span class="source-line-no">105</span><span id="line-105">      Supplier&lt;RuntimeException&gt; err = () -&gt; iaex("Invalid protocol version: {0}", s);</span>
 <span class="source-line-no">106</span><span id="line-106">      if (dot &lt; 0)</span>
 <span class="source-line-no">107</span><span id="line-107">         return new HttpProtocolVersion(protocol, parseInt(rest, err), 0);</span>
 <span class="source-line-no">108</span><span id="line-108">      return new HttpProtocolVersion(protocol, parseInt(rest.substring(0, dot), err), parseInt(rest.substring(dot + 1), err));</span>

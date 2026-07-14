@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.http.header;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.function.*;</span>
@@ -113,7 +113,7 @@
 <span class="source-line-no">100</span><span id="line-100">    * @return Parsed {@link MediaRanges}, or {@code null} if the wire value is absent.</span>
 <span class="source-line-no">101</span><span id="line-101">    */</span>
 <span class="source-line-no">102</span><span id="line-102">   public Optional&lt;MediaRanges&gt; asMediaRanges() {</span>
-<span class="source-line-no">103</span><span id="line-103">      return opt(toMediaRanges());</span>
+<span class="source-line-no">103</span><span id="line-103">      return o(toMediaRanges());</span>
 <span class="source-line-no">104</span><span id="line-104">   }</span>
 <span class="source-line-no">105</span><span id="line-105"></span>
 <span class="source-line-no">106</span><span id="line-106">   /**</span>

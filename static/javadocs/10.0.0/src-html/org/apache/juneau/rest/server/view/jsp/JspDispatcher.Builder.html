@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.view.jsp;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.io.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -168,7 +168,7 @@
 <span class="source-line-no">155</span><span id="line-155">       */</span>
 <span class="source-line-no">156</span><span id="line-156">      public JspDispatcher build() {</span>
 <span class="source-line-no">157</span><span id="line-157">         if (basePath == null)</span>
-<span class="source-line-no">158</span><span id="line-158">            throw illegalArg("basePath must not be null");</span>
+<span class="source-line-no">158</span><span id="line-158">            throw iaex("basePath must not be null");</span>
 <span class="source-line-no">159</span><span id="line-159">         return new JspDispatcher(this);</span>
 <span class="source-line-no">160</span><span id="line-160">      }</span>
 <span class="source-line-no">161</span><span id="line-161">   }</span>

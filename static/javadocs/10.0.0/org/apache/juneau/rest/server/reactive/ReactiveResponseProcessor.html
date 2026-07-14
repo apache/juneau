@@ -93,7 +93,7 @@ implements <a href="../processor/ResponseProcessor.html" title="interface in org
  This processor ships in the opt-in <code>juneau-rest-server-reactive</code> module and is <b>not</b> wired
  into <code>DefaultConfig</code>. A bare <code>juneau-rest-server</code> has zero reactive behavior. When the
  <code>juneau-rest-server-reactive</code> jar is on the classpath, its
- <code>META-INF/services/org.apache.juneau.rest.server.processor.ResponseProcessor</code> provider file is discovered
+ <code>META-INF/services/ResponseProcessor</code> provider file is discovered
  by <code>RestContext</code> via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ServiceLoader.html" title="class or interface in java.util" class="external-link"><code>ServiceLoader</code></a> and this processor is front-loaded ahead of
  <code>AsyncResponseProcessor</code> in the chain &mdash; no <code>@Rest(responseProcessors=...)</code> entry required.
 

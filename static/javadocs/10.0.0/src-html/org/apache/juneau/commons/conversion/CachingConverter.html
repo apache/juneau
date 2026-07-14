@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.conversion;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.lang.reflect.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
@@ -93,8 +93,8 @@
 <span class="source-line-no">080</span><span id="line-80">   static &lt;T&gt; T nullDefault(Class&lt;T&gt; type, Class&lt;?&gt;... args) {</span>
 <span class="source-line-no">081</span><span id="line-81">      if (type == Optional.class) {</span>
 <span class="source-line-no">082</span><span id="line-82">         if (args.length &gt; 0)</span>
-<span class="source-line-no">083</span><span id="line-83">            return (T) opt(nullDefault(args[0], Arrays.copyOfRange(args, 1, args.length)));</span>
-<span class="source-line-no">084</span><span id="line-84">         return (T) opte();</span>
+<span class="source-line-no">083</span><span id="line-83">            return (T) o(nullDefault(args[0], Arrays.copyOfRange(args, 1, args.length)));</span>
+<span class="source-line-no">084</span><span id="line-84">         return (T) oe();</span>
 <span class="source-line-no">085</span><span id="line-85">      }</span>
 <span class="source-line-no">086</span><span id="line-86">      if (type == OptionalInt.class)</span>
 <span class="source-line-no">087</span><span id="line-87">         return (T) OptionalInt.empty();</span>
@@ -249,7 +249,7 @@
 <span class="source-line-no">236</span><span id="line-236">    *</span>
 <span class="source-line-no">237</span><span id="line-237">    * &lt;p&gt;</span>
 <span class="source-line-no">238</span><span id="line-238">    * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access</span>
-<span class="source-line-no">239</span><span id="line-239">    * contextual objects such as {@link java.util.TimeZone} or {@link java.util.Locale}.</span>
+<span class="source-line-no">239</span><span id="line-239">    * contextual objects such as {@link TimeZone} or {@link Locale}.</span>
 <span class="source-line-no">240</span><span id="line-240">    *</span>
 <span class="source-line-no">241</span><span id="line-241">    * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">242</span><span id="line-242">    * @param memberOf The outer instance for non-static inner class construction, or &lt;jk&gt;null&lt;/jk&gt;.</span>
@@ -281,7 +281,7 @@
 <span class="source-line-no">268</span><span id="line-268">    *</span>
 <span class="source-line-no">269</span><span id="line-269">    * &lt;p&gt;</span>
 <span class="source-line-no">270</span><span id="line-270">    * The session is forwarded to the cached {@link Conversion} function so conversion lambdas can access</span>
-<span class="source-line-no">271</span><span id="line-271">    * contextual objects such as {@link java.util.TimeZone} or {@link java.util.Locale}.</span>
+<span class="source-line-no">271</span><span id="line-271">    * contextual objects such as {@link TimeZone} or {@link Locale}.</span>
 <span class="source-line-no">272</span><span id="line-272">    *</span>
 <span class="source-line-no">273</span><span id="line-273">    * @param o The object to convert. Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">274</span><span id="line-274">    * @param memberOf The outer instance for non-static inner class construction, or &lt;jk&gt;null&lt;/jk&gt;.</span>

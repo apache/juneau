@@ -72,15 +72,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../Utils.html#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable)" class="member-name-link">safeSupplier</a><wbr>(<a href="../ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../ThrowableUtils.html#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable)" class="member-name-link">safeSupplier</a><wbr>(<a href="../ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Allows you to wrap a supplier that throws an exception so that it can be used in a fluent interface.</div>
+<div class="block">Executes a <a href="../ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils"><code>ThrowableUtils.SupplierWithThrowable</code></a>; wraps any checked throwable in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Utils.</span><code><a href="../Utils.html#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable,java.util.function.Function)" class="member-name-link">safeSupplier</a><wbr>(<a href="../ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier,
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../ThrowableUtils.html#safeSupplier(org.apache.juneau.commons.utils.ThrowableUtils.SupplierWithThrowable,java.util.function.Function)" class="member-name-link">safeSupplier</a><wbr>(<a href="../ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils">ThrowableUtils.SupplierWithThrowable</a>&lt;T&gt;&nbsp;supplier,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Allows you to wrap a supplier that throws an exception with a custom exception mapper.</div>
+<div class="block">Executes a <a href="../ThrowableUtils.SupplierWithThrowable.html" title="interface in org.apache.juneau.commons.utils"><code>ThrowableUtils.SupplierWithThrowable</code></a>; maps any checked throwable via the provided function.</div>
 </div>
 </div>
 </section>

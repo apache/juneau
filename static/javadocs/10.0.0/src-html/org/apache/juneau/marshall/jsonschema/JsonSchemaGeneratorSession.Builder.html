@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.marshall.jsonschema.TypeCategory.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.lang.reflect.*;</span>
@@ -384,7 +384,7 @@
 <span class="source-line-no">371</span><span id="line-371"></span>
 <span class="source-line-no">372</span><span id="line-372">      out.append(jscm.getSchema());</span>
 <span class="source-line-no">373</span><span id="line-373"></span>
-<span class="source-line-no">374</span><span id="line-374">      Predicate&lt;String&gt; ne = Utils::ne;</span>
+<span class="source-line-no">374</span><span id="line-374">      Predicate&lt;String&gt; ne = Shorts::ine;</span>
 <span class="source-line-no">375</span><span id="line-375">      out.appendIfAbsentIf(ne, PROP_type, type);</span>
 <span class="source-line-no">376</span><span id="line-376">      out.appendIfAbsentIf(ne, PROP_format, format);</span>
 <span class="source-line-no">377</span><span id="line-377"></span>
@@ -430,7 +430,7 @@
 <span class="source-line-no">417</span><span id="line-417"></span>
 <span class="source-line-no">418</span><span id="line-418">      out.append(jscm.getSchema());</span>
 <span class="source-line-no">419</span><span id="line-419"></span>
-<span class="source-line-no">420</span><span id="line-420">      Predicate&lt;Object&gt; neo = Utils::ne;</span>
+<span class="source-line-no">420</span><span id="line-420">      Predicate&lt;Object&gt; neo = Shorts::ine;</span>
 <span class="source-line-no">421</span><span id="line-421">      out.appendIfAbsentIf(neo, "description", description);</span>
 <span class="source-line-no">422</span><span id="line-422">      out.appendIfAbsentIf(neo, "example", example);</span>
 <span class="source-line-no">423</span><span id="line-423"></span>

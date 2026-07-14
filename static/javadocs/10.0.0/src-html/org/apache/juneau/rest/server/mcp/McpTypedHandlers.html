@@ -50,7 +50,7 @@
 <span class="source-line-no">037</span><span id="line-37">    * Conversion behavior:</span>
 <span class="source-line-no">038</span><span id="line-38">    * &lt;ul&gt;</span>
 <span class="source-line-no">039</span><span id="line-39">    *    &lt;li&gt;The incoming {@code Map&lt;String,Object&gt;} arguments are serialized to JSON and re-parsed as</span>
-<span class="source-line-no">040</span><span id="line-40">    *        {@link McpTypedToolHandler#argumentType()} via {@link Json#of(Object)} / {@link Json#to(Object, Class, java.lang.reflect.Type...)}.</span>
+<span class="source-line-no">040</span><span id="line-40">    *        {@link McpTypedToolHandler#argumentType()} via {@link Json#of(Object)} / {@link Json#to(String, Class)}.</span>
 <span class="source-line-no">041</span><span id="line-41">    *    &lt;li&gt;If the typed handler returns a {@link CallToolResult}, it is passed through unchanged.</span>
 <span class="source-line-no">042</span><span id="line-42">    *    &lt;li&gt;Otherwise, the return value is JSON-serialized and wrapped in a single {@link TextContent}</span>
 <span class="source-line-no">043</span><span id="line-43">    *        inside a {@link CallToolResult}.</span>
@@ -107,8 +107,8 @@
 <span class="source-line-no">094</span><span id="line-94">      if (arguments == null || arguments.isEmpty())</span>
 <span class="source-line-no">095</span><span id="line-95">         return null;</span>
 <span class="source-line-no">096</span><span id="line-96">      try {</span>
-<span class="source-line-no">097</span><span id="line-97">         var json = Json.DEFAULT.of(arguments);</span>
-<span class="source-line-no">098</span><span id="line-98">         return Json.DEFAULT.to(json, type);</span>
+<span class="source-line-no">097</span><span id="line-97">         var json = Json.of(arguments);</span>
+<span class="source-line-no">098</span><span id="line-98">         return Json.to(json, type);</span>
 <span class="source-line-no">099</span><span id="line-99">      } catch (Exception e) {</span>
 <span class="source-line-no">100</span><span id="line-100">         throw new McpException(McpDispatcher.CODE_INVALID_PARAMS, "Failed to bind arguments to " + type.getName() + ": " + e.getMessage());</span>
 <span class="source-line-no">101</span><span id="line-101">      }</span>
@@ -124,7 +124,7 @@
 <span class="source-line-no">111</span><span id="line-111">         text = s;</span>
 <span class="source-line-no">112</span><span id="line-112">      else {</span>
 <span class="source-line-no">113</span><span id="line-113">         try {</span>
-<span class="source-line-no">114</span><span id="line-114">            text = Json.DEFAULT.of(result);</span>
+<span class="source-line-no">114</span><span id="line-114">            text = Json.of(result);</span>
 <span class="source-line-no">115</span><span id="line-115">         } catch (Exception e) {</span>
 <span class="source-line-no">116</span><span id="line-116">            throw new McpException(McpDispatcher.CODE_INTERNAL_ERROR, "Failed to serialize tool result: " + e.getMessage());</span>
 <span class="source-line-no">117</span><span id="line-117">         }</span>

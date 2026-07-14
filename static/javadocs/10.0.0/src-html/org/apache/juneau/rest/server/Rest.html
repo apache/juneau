@@ -43,8 +43,8 @@
 <span class="source-line-no">030</span><span id="line-30">import org.apache.juneau.marshall.parser.*;</span>
 <span class="source-line-no">031</span><span id="line-31">import org.apache.juneau.marshall.serializer.*;</span>
 <span class="source-line-no">032</span><span id="line-32">import org.apache.juneau.rest.server.arg.*;</span>
-<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.rest.server.converter.*;</span>
-<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.rest.server.auth.*;</span>
+<span class="source-line-no">033</span><span id="line-33">import org.apache.juneau.rest.server.auth.*;</span>
+<span class="source-line-no">034</span><span id="line-34">import org.apache.juneau.rest.server.converter.*;</span>
 <span class="source-line-no">035</span><span id="line-35">import org.apache.juneau.rest.server.guard.*;</span>
 <span class="source-line-no">036</span><span id="line-36">import org.apache.juneau.rest.server.logger.*;</span>
 <span class="source-line-no">037</span><span id="line-37">import org.apache.juneau.rest.server.openapi.*;</span>
@@ -61,7 +61,7 @@
 <span class="source-line-no">048</span><span id="line-48"> * a REST resource.</span>
 <span class="source-line-no">049</span><span id="line-49"> *</span>
 <span class="source-line-no">050</span><span id="line-50"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClassBasics"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
+<span class="source-line-no">051</span><span id="line-51"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestAnnotatedClasses"&gt;@Rest-Annotated Class Basics&lt;/a&gt;</span>
 <span class="source-line-no">052</span><span id="line-52"></span>
 <span class="source-line-no">053</span><span id="line-53"> * &lt;/ul&gt;</span>
 <span class="source-line-no">054</span><span id="line-54"> */</span>
@@ -186,7 +186,7 @@
 <span class="source-line-no">173</span><span id="line-173">    * &lt;p&gt;</span>
 <span class="source-line-no">174</span><span id="line-174">    * Resolves the {@link java.security.Principal} and roles for requests to this resource and its descendant child</span>
 <span class="source-line-no">175</span><span id="line-175">    * resources (inherited unless cut off via {@code noInherit={"authenticator"}}), so that {@code roleGuard} /</span>
-<span class="source-line-no">176</span><span id="line-176">    * {@link org.apache.juneau.rest.server.guard.RoleBasedRestGuard} / {@link org.apache.juneau.rest.server.auth.Auth @Auth}</span>
+<span class="source-line-no">176</span><span id="line-176">    * {@link RoleBasedRestGuard} / {@link Auth @Auth}</span>
 <span class="source-line-no">177</span><span id="line-177">    * / {@code isUserInRole} resolve against the computed identity.</span>
 <span class="source-line-no">178</span><span id="line-178">    *</span>
 <span class="source-line-no">179</span><span id="line-179">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -295,7 +295,7 @@
 <span class="source-line-no">282</span><span id="line-282">    *</span>
 <span class="source-line-no">283</span><span id="line-283">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">284</span><span id="line-284">    *    &lt;li class='jma'&gt;{@link #mixinDefs()}</span>
-<span class="source-line-no">285</span><span id="line-285">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerCompositionMixinsAndPaths"&gt;REST Server &amp;mdash; Mixins and Multi-Mount Paths&lt;/a&gt;</span>
+<span class="source-line-no">285</span><span id="line-285">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerComposition"&gt;REST Server &amp;mdash; Mixins and Multi-Mount Paths&lt;/a&gt;</span>
 <span class="source-line-no">286</span><span id="line-286">    *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestServerMixinSubContexts"&gt;REST Server &amp;mdash; Mixin Sub-Contexts&lt;/a&gt;</span>
 <span class="source-line-no">287</span><span id="line-287">    * &lt;/ul&gt;</span>
 <span class="source-line-no">288</span><span id="line-288">    *</span>
@@ -472,7 +472,7 @@
 <span class="source-line-no">459</span><span id="line-459">    *</span>
 <span class="source-line-no">460</span><span id="line-460">    * &lt;p&gt;</span>
 <span class="source-line-no">461</span><span id="line-461">    * Entries are merged in application order. A leading hyphen removes a previously added key: &lt;js&gt;"-escapeSolidus"&lt;/js&gt;.</span>
-<span class="source-line-no">462</span><span id="line-462">    * Method-level {@link org.apache.juneau.rest.server.RestGet#allowedSerializerOptions()} values are always merged on top.</span>
+<span class="source-line-no">462</span><span id="line-462">    * Method-level {@link RestGet#allowedSerializerOptions()} values are always merged on top.</span>
 <span class="source-line-no">463</span><span id="line-463">    * Use {@link #noInherit()} to prevent inheriting less-derived contributions.</span>
 <span class="source-line-no">464</span><span id="line-464">    *</span>
 <span class="source-line-no">465</span><span id="line-465">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -579,7 +579,7 @@
 <span class="source-line-no">566</span><span id="line-566">    * &lt;/ul&gt;</span>
 <span class="source-line-no">567</span><span id="line-567">    *</span>
 <span class="source-line-no">568</span><span id="line-568">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">569</span><span id="line-569">    *    &lt;li class='jm'&gt;{@link org.apache.juneau.rest.server.RestContext#getDebugEnablement()}</span>
+<span class="source-line-no">569</span><span id="line-569">    *    &lt;li class='jm'&gt;{@link RestContext#getDebugEnablement()}</span>
 <span class="source-line-no">570</span><span id="line-570">    * &lt;/ul&gt;</span>
 <span class="source-line-no">571</span><span id="line-571">    *</span>
 <span class="source-line-no">572</span><span id="line-572">    * @return The annotation value.</span>
@@ -784,7 +784,7 @@
 <span class="source-line-no">771</span><span id="line-771">    *    &lt;li&gt;Honors the client's {@code Accept} header on the success path. When a {@code @RestOp} method returns a</span>
 <span class="source-line-no">772</span><span id="line-772">    *       {@link org.apache.juneau.bean.rfc7807.Problem} (or throws a</span>
 <span class="source-line-no">773</span><span id="line-773">    *       {@link org.apache.juneau.bean.rfc7807.ProblemException}), the</span>
-<span class="source-line-no">774</span><span id="line-774">    *       {@link org.apache.juneau.rest.server.processor.ProblemDetailsProcessor} only serializes it as</span>
+<span class="source-line-no">774</span><span id="line-774">    *       {@link ProblemDetailsProcessor} only serializes it as</span>
 <span class="source-line-no">775</span><span id="line-775">    *       {@code application/problem+json} when the {@code Accept} header matches that media type (or {@code *&amp;#47;*}).</span>
 <span class="source-line-no">776</span><span id="line-776">    * &lt;/ul&gt;</span>
 <span class="source-line-no">777</span><span id="line-777">    *</span>
@@ -807,7 +807,7 @@
 <span class="source-line-no">794</span><span id="line-794">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">795</span><span id="line-795">    *    &lt;li class='jc'&gt;{@link org.apache.juneau.bean.rfc7807.Problem}</span>
 <span class="source-line-no">796</span><span id="line-796">    *    &lt;li class='jc'&gt;{@link org.apache.juneau.bean.rfc7807.ProblemException}</span>
-<span class="source-line-no">797</span><span id="line-797">    *    &lt;li class='jc'&gt;{@link org.apache.juneau.rest.server.processor.ProblemDetailsProcessor}</span>
+<span class="source-line-no">797</span><span id="line-797">    *    &lt;li class='jc'&gt;{@link ProblemDetailsProcessor}</span>
 <span class="source-line-no">798</span><span id="line-798">    * &lt;/ul&gt;</span>
 <span class="source-line-no">799</span><span id="line-799">    *</span>
 <span class="source-line-no">800</span><span id="line-800">    * @return The annotation value.</span>
@@ -820,7 +820,7 @@
 <span class="source-line-no">807</span><span id="line-807">    * &lt;p&gt;</span>
 <span class="source-line-no">808</span><span id="line-808">    * When enabled, every {@code @RestOp}-annotated handler invocation on this resource is submitted to a</span>
 <span class="source-line-no">809</span><span id="line-809">    * {@code Executors.newVirtualThreadPerTaskExecutor()} virtual-thread-per-task executor</span>
-<span class="source-line-no">810</span><span id="line-810">    * lazily built by the {@link org.apache.juneau.rest.server.RestContext}. The platform request thread blocks on</span>
+<span class="source-line-no">810</span><span id="line-810">    * lazily built by the {@link RestContext}. The platform request thread blocks on</span>
 <span class="source-line-no">811</span><span id="line-811">    * the virtual thread's completion (so the handler's return value, exceptions, and observability hooks are</span>
 <span class="source-line-no">812</span><span id="line-812">    * preserved verbatim), but blocking I/O inside the handler now parks a virtual thread instead of the</span>
 <span class="source-line-no">813</span><span id="line-813">    * carrier — i.e. the carrier thread is freed to service other concurrent requests while the handler is</span>
@@ -873,7 +873,7 @@
 <span class="source-line-no">860</span><span id="line-860">    * &lt;ul class='values'&gt;</span>
 <span class="source-line-no">861</span><span id="line-861">    *    &lt;li&gt;&lt;js&gt;"true"&lt;/js&gt; &amp;mdash; strict opt-in: the resource &lt;em&gt;requires&lt;/em&gt; a wired observability backend.</span>
 <span class="source-line-no">862</span><span id="line-862">    *       If neither a {@code @Bean MetricsRecorder} nor a {@code @Bean TracerHook} is registered when the</span>
-<span class="source-line-no">863</span><span id="line-863">    *       {@link org.apache.juneau.rest.server.RestContext} is built, construction fails with a precise error.</span>
+<span class="source-line-no">863</span><span id="line-863">    *       {@link RestContext} is built, construction fails with a precise error.</span>
 <span class="source-line-no">864</span><span id="line-864">    *       All operations on this resource have observability enabled.</span>
 <span class="source-line-no">865</span><span id="line-865">    *    &lt;li&gt;&lt;js&gt;"false"&lt;/js&gt; &amp;mdash; explicit opt-out: the observability block is short-circuited for every</span>
 <span class="source-line-no">866</span><span id="line-866">    *       operation on this resource, even when a wired backend is present. Also suppresses</span>
@@ -905,7 +905,7 @@
 <span class="source-line-no">892</span><span id="line-892"></span>
 <span class="source-line-no">893</span><span id="line-893">   /**</span>
 <span class="source-line-no">894</span><span id="line-894">    * Configurable timeout (milliseconds) applied to {@link java.util.concurrent.CompletableFuture}-returning</span>
-<span class="source-line-no">895</span><span id="line-895">    * handlers by {@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor}. Default is 30,000 ms.</span>
+<span class="source-line-no">895</span><span id="line-895">    * handlers by {@link AsyncResponseProcessor}. Default is 30,000 ms.</span>
 <span class="source-line-no">896</span><span id="line-896">    *</span>
 <span class="source-line-no">897</span><span id="line-897">    * &lt;p&gt;</span>
 <span class="source-line-no">898</span><span id="line-898">    * On timeout, the future is cancelled with {@code mayInterruptIfRunning=true} and the response is</span>
@@ -922,7 +922,7 @@
 <span class="source-line-no">909</span><span id="line-909">    * &lt;/ul&gt;</span>
 <span class="source-line-no">910</span><span id="line-910">    *</span>
 <span class="source-line-no">911</span><span id="line-911">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">912</span><span id="line-912">    *    &lt;li class='jc'&gt;{@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor}</span>
+<span class="source-line-no">912</span><span id="line-912">    *    &lt;li class='jc'&gt;{@link AsyncResponseProcessor}</span>
 <span class="source-line-no">913</span><span id="line-913">    *    &lt;li class='ja'&gt;{@link RestOp#asyncTimeoutMillis()}</span>
 <span class="source-line-no">914</span><span id="line-914">    * &lt;/ul&gt;</span>
 <span class="source-line-no">915</span><span id="line-915">    *</span>
@@ -936,7 +936,7 @@
 <span class="source-line-no">923</span><span id="line-923">    * completion callbacks through a dedicated thread pool.</span>
 <span class="source-line-no">924</span><span id="line-924">    *</span>
 <span class="source-line-no">925</span><span id="line-925">    * &lt;p&gt;</span>
-<span class="source-line-no">926</span><span id="line-926">    * When set, the {@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor} switches from</span>
+<span class="source-line-no">926</span><span id="line-926">    * When set, the {@link AsyncResponseProcessor} switches from</span>
 <span class="source-line-no">927</span><span id="line-927">    * {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)}, so the</span>
 <span class="source-line-no">928</span><span id="line-928">    * response-handler work runs on the named pool instead of the future's natural completion thread (often an</span>
 <span class="source-line-no">929</span><span id="line-929">    * I/O-driver or database-callback thread).</span>
@@ -970,12 +970,12 @@
 <span class="source-line-no">957</span><span id="line-957">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
 <span class="source-line-no">958</span><span id="line-958">    *    &lt;li class='note'&gt;</span>
 <span class="source-line-no">959</span><span id="line-959">    *       MDC propagation still works when this executor is set — the</span>
-<span class="source-line-no">960</span><span id="line-960">    *       {@link org.apache.juneau.rest.server.processor.MdcAsyncListener} wraps the callback &lt;em&gt;before&lt;/em&gt; it is</span>
+<span class="source-line-no">960</span><span id="line-960">    *       {@link MdcAsyncListener} wraps the callback &lt;em&gt;before&lt;/em&gt; it is</span>
 <span class="source-line-no">961</span><span id="line-961">    *       routed through the executor, so the MDC snapshot is restored on whichever thread the executor picks.</span>
 <span class="source-line-no">962</span><span id="line-962">    * &lt;/ul&gt;</span>
 <span class="source-line-no">963</span><span id="line-963">    *</span>
 <span class="source-line-no">964</span><span id="line-964">    * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">965</span><span id="line-965">    *    &lt;li class='jc'&gt;{@link org.apache.juneau.rest.server.processor.AsyncResponseProcessor}</span>
+<span class="source-line-no">965</span><span id="line-965">    *    &lt;li class='jc'&gt;{@link AsyncResponseProcessor}</span>
 <span class="source-line-no">966</span><span id="line-966">    *    &lt;li class='ja'&gt;{@link RestOp#asyncCompletionExecutor()}</span>
 <span class="source-line-no">967</span><span id="line-967">    * &lt;/ul&gt;</span>
 <span class="source-line-no">968</span><span id="line-968">    *</span>
@@ -1012,7 +1012,7 @@
 <span class="source-line-no">999</span><span id="line-999">    * The encoders can also be tailored at the method level using {@link RestOp#encoders()} (and related annotations).</span>
 <span class="source-line-no">1000</span><span id="line-1000">    *</span>
 <span class="source-line-no">1001</span><span id="line-1001">    * &lt;p&gt;</span>
-<span class="source-line-no">1002</span><span id="line-1002">    * For programmatic equivalents, contribute an {@link org.apache.juneau.marshall.encoders.EncoderSet} bean via</span>
+<span class="source-line-no">1002</span><span id="line-1002">    * For programmatic equivalents, contribute an {@link EncoderSet} bean via</span>
 <span class="source-line-no">1003</span><span id="line-1003">    * {@link org.apache.juneau.commons.inject.Bean @Bean(name="encoders")}.</span>
 <span class="source-line-no">1004</span><span id="line-1004">    *</span>
 <span class="source-line-no">1005</span><span id="line-1005">    * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</span>
@@ -1181,7 +1181,7 @@
 <span class="source-line-no">1168</span><span id="line-1168">    * The parsers can also be tailored at the method level using {@link RestOp#parsers()} (and related annotations).</span>
 <span class="source-line-no">1169</span><span id="line-1169">    *</span>
 <span class="source-line-no">1170</span><span id="line-1170">    * &lt;p&gt;</span>
-<span class="source-line-no">1171</span><span id="line-1171">    * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.parser.ParserSet} bean via</span>
+<span class="source-line-no">1171</span><span id="line-1171">    * For programmatic equivalents, contribute a {@link ParserSet} bean via</span>
 <span class="source-line-no">1172</span><span id="line-1172">    * {@link org.apache.juneau.commons.inject.Bean @Bean(name="parsers")}.</span>
 <span class="source-line-no">1173</span><span id="line-1173">    *</span>
 <span class="source-line-no">1174</span><span id="line-1174">    * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</span>
@@ -1270,7 +1270,7 @@
 <span class="source-line-no">1257</span><span id="line-1257">    *</span>
 <span class="source-line-no">1258</span><span id="line-1258">    * &lt;h5 class='topic'&gt;Path variables&lt;/h5&gt;</span>
 <span class="source-line-no">1259</span><span id="line-1259">    * &lt;p&gt;</span>
-<span class="source-line-no">1260</span><span id="line-1260">    * The path can contain variables that get resolved to {@link org.apache.juneau.http.Path @Path} parameters</span>
+<span class="source-line-no">1260</span><span id="line-1260">    * The path can contain variables that get resolved to {@link Path @Path} parameters</span>
 <span class="source-line-no">1261</span><span id="line-1261">    * or access through the {@link RestRequest#getPathParams()} method.</span>
 <span class="source-line-no">1262</span><span id="line-1262">    *</span>
 <span class="source-line-no">1263</span><span id="line-1263">    * &lt;h5 class='figure'&gt;Example:&lt;/h5&gt;</span>
@@ -1610,7 +1610,7 @@
 <span class="source-line-no">1597</span><span id="line-1597">    * The serializers can also be tailored at the method level using {@link RestOp#serializers()} (and related annotations).</span>
 <span class="source-line-no">1598</span><span id="line-1598">    *</span>
 <span class="source-line-no">1599</span><span id="line-1599">    * &lt;p&gt;</span>
-<span class="source-line-no">1600</span><span id="line-1600">    * For programmatic equivalents, contribute a {@link org.apache.juneau.marshall.serializer.SerializerSet} bean via</span>
+<span class="source-line-no">1600</span><span id="line-1600">    * For programmatic equivalents, contribute a {@link SerializerSet} bean via</span>
 <span class="source-line-no">1601</span><span id="line-1601">    * {@link org.apache.juneau.commons.inject.Bean @Bean(name="serializers")}.</span>
 <span class="source-line-no">1602</span><span id="line-1602">    *</span>
 <span class="source-line-no">1603</span><span id="line-1603">    * &lt;h5 class='section'&gt;Inheritance Rules&lt;/h5&gt;</span>

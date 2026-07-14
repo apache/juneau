@@ -29,8 +29,8 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.utils;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Exceptions.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ObjectUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -102,7 +102,7 @@
 <span class="source-line-no">089</span><span id="line-89">    */</span>
 <span class="source-line-no">090</span><span id="line-90">   public static final void assertArg(boolean expression, String msg, Object...args) throws IllegalArgumentException {</span>
 <span class="source-line-no">091</span><span id="line-91">      if (! expression)</span>
-<span class="source-line-no">092</span><span id="line-92">         throw illegalArg(msg, args);</span>
+<span class="source-line-no">092</span><span id="line-92">         throw iaex(msg, args);</span>
 <span class="source-line-no">093</span><span id="line-93">   }</span>
 <span class="source-line-no">094</span><span id="line-94"></span>
 <span class="source-line-no">095</span><span id="line-95">   /**</span>
@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">    */</span>
 <span class="source-line-no">108</span><span id="line-108">   public static final void assertState(boolean expression, String msg, Object...args) throws IllegalStateException {</span>
 <span class="source-line-no">109</span><span id="line-109">      if (! expression)</span>
-<span class="source-line-no">110</span><span id="line-110">         throw illegalState(msg, args);</span>
+<span class="source-line-no">110</span><span id="line-110">         throw isex(msg, args);</span>
 <span class="source-line-no">111</span><span id="line-111">   }</span>
 <span class="source-line-no">112</span><span id="line-112"></span>
 <span class="source-line-no">113</span><span id="line-113">   /**</span>
@@ -159,7 +159,7 @@
 <span class="source-line-no">146</span><span id="line-146">    */</span>
 <span class="source-line-no">147</span><span id="line-147">   public static final &lt;T&gt; T assertNotNull(T o, String msg, Object...args) throws IllegalStateException {</span>
 <span class="source-line-no">148</span><span id="line-148">      if (o == null)</span>
-<span class="source-line-no">149</span><span id="line-149">         throw illegalState(msg, args);</span>
+<span class="source-line-no">149</span><span id="line-149">         throw isex(msg, args);</span>
 <span class="source-line-no">150</span><span id="line-150">      return o;</span>
 <span class="source-line-no">151</span><span id="line-151">   }</span>
 <span class="source-line-no">152</span><span id="line-152"></span>
@@ -305,7 +305,7 @@
 <span class="source-line-no">292</span><span id="line-292">      assertArgNotNull(ARG_type, type);</span>
 <span class="source-line-no">293</span><span id="line-293">      assertArgNotNull(ARG_o, o);</span>
 <span class="source-line-no">294</span><span id="line-294">      if (! type.isInstance(o))</span>
-<span class="source-line-no">295</span><span id="line-295">         throw illegalArg("Object is not an instance of {0}: {1}", cn(type), cn(o));</span>
+<span class="source-line-no">295</span><span id="line-295">         throw iaex("Object is not an instance of {0}: {1}", ClassUtils.className(type), ClassUtils.className(o));</span>
 <span class="source-line-no">296</span><span id="line-296">      return (T)o;</span>
 <span class="source-line-no">297</span><span id="line-297">   }</span>
 <span class="source-line-no">298</span><span id="line-298"></span>
@@ -358,7 +358,7 @@
 <span class="source-line-no">345</span><span id="line-345">   public static final &lt;E&gt; Class&lt;E&gt;[] assertClassArrayArgIsType(String name, Class&lt;E&gt; type, Class&lt;?&gt;[] value) throws IllegalArgumentException {</span>
 <span class="source-line-no">346</span><span id="line-346">      for (var i = 0; i &lt; value.length; i++)</span>
 <span class="source-line-no">347</span><span id="line-347">         if (! type.isAssignableFrom(value[i]))</span>
-<span class="source-line-no">348</span><span id="line-348">            throw illegalArg("Arg {0} did not have arg of type {1} at index {2}: {3}", name, cn(type), i, cn(value[i]));</span>
+<span class="source-line-no">348</span><span id="line-348">            throw iaex("Arg {0} did not have arg of type {1} at index {2}: {3}", name, ClassUtils.className(type), i, ClassUtils.className(value[i]));</span>
 <span class="source-line-no">349</span><span id="line-349">      return (Class&lt;E&gt;[])value;</span>
 <span class="source-line-no">350</span><span id="line-350">   }</span>
 <span class="source-line-no">351</span><span id="line-351"></span>
@@ -374,7 +374,7 @@
 <span class="source-line-no">361</span><span id="line-361">   @SafeVarargs</span>
 <span class="source-line-no">362</span><span id="line-362">   public static final &lt;T&gt; T assertOneOf(T actual, T...expected) {</span>
 <span class="source-line-no">363</span><span id="line-363">      for (var e : expected) {</span>
-<span class="source-line-no">364</span><span id="line-364">         if (eq(actual, e))</span>
+<span class="source-line-no">364</span><span id="line-364">         if (equal(actual, e))</span>
 <span class="source-line-no">365</span><span id="line-365">            return actual;</span>
 <span class="source-line-no">366</span><span id="line-366">      }</span>
 <span class="source-line-no">367</span><span id="line-367">      throw new AssertionError("Invalid value specified: " + actual);</span>
@@ -392,7 +392,7 @@
 <span class="source-line-no">379</span><span id="line-379">   public static final &lt;T&gt; T[] assertArgNoNulls(String name, T[] o) throws IllegalArgumentException {</span>
 <span class="source-line-no">380</span><span id="line-380">      assertArgNotNull(name, o);</span>
 <span class="source-line-no">381</span><span id="line-381">      for (var i = 0; i &lt; o.length; i++)</span>
-<span class="source-line-no">382</span><span id="line-382">         assertArg(nn(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);</span>
+<span class="source-line-no">382</span><span id="line-382">         assertArg(isNotNull(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);</span>
 <span class="source-line-no">383</span><span id="line-383">      return o;</span>
 <span class="source-line-no">384</span><span id="line-384">   }</span>
 <span class="source-line-no">385</span><span id="line-385"></span>
@@ -420,7 +420,7 @@
 <span class="source-line-no">407</span><span id="line-407">      assertArgNotNull(name, collection);</span>
 <span class="source-line-no">408</span><span id="line-408">      var i = 0;</span>
 <span class="source-line-no">409</span><span id="line-409">      for (var element : collection)</span>
-<span class="source-line-no">410</span><span id="line-410">         assertArg(nn(element), "Argument ''{0}'' element at index {1} cannot be null.", name, i++);</span>
+<span class="source-line-no">410</span><span id="line-410">         assertArg(isNotNull(element), "Argument ''{0}'' element at index {1} cannot be null.", name, i++);</span>
 <span class="source-line-no">411</span><span id="line-411">      return collection;</span>
 <span class="source-line-no">412</span><span id="line-412">   }</span>
 <span class="source-line-no">413</span><span id="line-413"></span>

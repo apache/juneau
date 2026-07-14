@@ -92,7 +92,7 @@
 <span class="source-line-no">079</span><span id="line-79"> * &lt;p&gt;</span>
 <span class="source-line-no">080</span><span id="line-80"> * When {@code @Rest(asyncCompletionExecutor="poolName")} or the per-op equivalent is set, this processor</span>
 <span class="source-line-no">081</span><span id="line-81"> * switches from {@code future.whenComplete(callback)} to {@code future.whenCompleteAsync(callback, executor)},</span>
-<span class="source-line-no">082</span><span id="line-82"> * routing the response-handler work through the named {@link java.util.concurrent.Executor} bean. The MDC</span>
+<span class="source-line-no">082</span><span id="line-82"> * routing the response-handler work through the named {@link Executor} bean. The MDC</span>
 <span class="source-line-no">083</span><span id="line-83"> * snapshot (see below) is taken on the request thread &lt;em&gt;before&lt;/em&gt; the executor routing so the MDC context</span>
 <span class="source-line-no">084</span><span id="line-84"> * is always available regardless of which thread the executor picks.</span>
 <span class="source-line-no">085</span><span id="line-85"> *</span>

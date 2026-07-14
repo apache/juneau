@@ -30,9 +30,9 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.httppart;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.IoUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
@@ -408,9 +408,9 @@
 <span class="source-line-no">395</span><span id="line-395">    */</span>
 <span class="source-line-no">396</span><span id="line-396">   public Optional&lt;ParserMatch&gt; getParserMatch() {</span>
 <span class="source-line-no">397</span><span id="line-397">      if (nn(mediaType) &amp;&amp; nn(parser))</span>
-<span class="source-line-no">398</span><span id="line-398">         return opt(new ParserMatch(mediaType, parser));</span>
+<span class="source-line-no">398</span><span id="line-398">         return o(new ParserMatch(mediaType, parser));</span>
 <span class="source-line-no">399</span><span id="line-399">      var mt = getMediaType();</span>
-<span class="source-line-no">400</span><span id="line-400">      return opt(mt).flatMap(parsers::getParserMatch);</span>
+<span class="source-line-no">400</span><span id="line-400">      return o(mt).flatMap(parsers::getParserMatch);</span>
 <span class="source-line-no">401</span><span id="line-401">   }</span>
 <span class="source-line-no">402</span><span id="line-402"></span>
 <span class="source-line-no">403</span><span id="line-403">   /**</span>
@@ -501,12 +501,12 @@
 <span class="source-line-no">488</span><span id="line-488">   private Encoder getEncoder() throws UnsupportedMediaType {</span>
 <span class="source-line-no">489</span><span id="line-489">      if (encoder == null) {</span>
 <span class="source-line-no">490</span><span id="line-490">         var ce = req.getHeaderParam("content-encoding").orElse(null);</span>
-<span class="source-line-no">491</span><span id="line-491">         if (ne(ce)) {</span>
+<span class="source-line-no">491</span><span id="line-491">         if (ine(ce)) {</span>
 <span class="source-line-no">492</span><span id="line-492">            ce = ce.trim();</span>
 <span class="source-line-no">493</span><span id="line-493">            encoder = encoders.getEncoder(ce);</span>
 <span class="source-line-no">494</span><span id="line-494">            if (encoder == null)</span>
 <span class="source-line-no">495</span><span id="line-495">               throw new UnsupportedMediaType("Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",</span>
-<span class="source-line-no">496</span><span id="line-496">                  req.getHeaderParam("content-encoding").orElse(null), Json5.DEFAULT.of(encoders.getSupportedEncodings()));</span>
+<span class="source-line-no">496</span><span id="line-496">                  req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));</span>
 <span class="source-line-no">497</span><span id="line-497">         }</span>
 <span class="source-line-no">498</span><span id="line-498"></span>
 <span class="source-line-no">499</span><span id="line-499">         if (nn(encoder))</span>
@@ -525,7 +525,7 @@
 <span class="source-line-no">512</span><span id="line-512">      } catch (UnsupportedMediaType e) {</span>
 <span class="source-line-no">513</span><span id="line-513">         throw e;</span>
 <span class="source-line-no">514</span><span id="line-514">      } catch (SchemaValidationException e) {</span>
-<span class="source-line-no">515</span><span id="line-515">         throw new BadRequest("Validation failed on request content. " + lm(e));</span>
+<span class="source-line-no">515</span><span id="line-515">         throw new BadRequest("Validation failed on request content. " + localizedMessage(e));</span>
 <span class="source-line-no">516</span><span id="line-516">      } catch (ParseException e) {</span>
 <span class="source-line-no">517</span><span id="line-517">         throw new BadRequest(e, "Could not convert request content content to class type ''{0}''.", cm);</span>
 <span class="source-line-no">518</span><span id="line-518">      } catch (IOException e) {</span>
@@ -601,7 +601,7 @@
 <span class="source-line-no">588</span><span id="line-588"></span>
 <span class="source-line-no">589</span><span id="line-589">      var ct = req.getHeader(ContentType.class);</span>
 <span class="source-line-no">590</span><span id="line-590">      throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",</span>
-<span class="source-line-no">591</span><span id="line-591">         ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.DEFAULT.of(req.getOpContext().getParsers().getSupportedMediaTypes()));</span>
+<span class="source-line-no">591</span><span id="line-591">         ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));</span>
 <span class="source-line-no">592</span><span id="line-592">   }</span>
 <span class="source-line-no">593</span><span id="line-593"></span>
 <span class="source-line-no">594</span><span id="line-594">   /**</span>

@@ -84,13 +84,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-51">LogRecord</a></span>
+<div class="type-signature"><span class="modifiers">public class </span><span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-54">LogRecord</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></span></div>
 <div class="block">LogRecord that supports lazy message formatting.
 
  <p>
  This class extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>java.util.logging.LogRecord</code></a> and overrides <a href="#getMessage()"><code>getMessage()</code></a> to use
- <a href="../utils/Utils.html#f(java.lang.String,java.lang.Object...)"><code>Utils.f(String, Object...)</code></a> for lazy formatting.
+ <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a> for lazy formatting.
  The message is only formatted when <a href="#getMessage()"><code>getMessage()</code></a> is actually called.
 
  <h5 class='section'>Usage:</h5>
@@ -102,7 +102,7 @@ loadScripts(document, 'script');</script>
 
  <h5 class='section'>See Also:</h5><ul>
    <li class='jc'><a href="Logger.html" title="class in org.apache.juneau.commons.logging"><code>Logger</code></a>
-   <li class='jc'><a href="../utils/Utils.html#f(java.lang.String,java.lang.Object...)"><code>Utils.f(String, Object...)</code></a>
+   <li class='jc'><a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a>
    <li class='jc'><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link"><code>LogRecord</code></a>
  </ul></div>
 <dl class="notes">
@@ -189,7 +189,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,java.util.logging.Level,java.lang.String,java.lang.Object[],java.lang.Throwable)">
 <h3>LogRecord</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-87">LogRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-90">LogRecord</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;loggerName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/Level.html" title="class or interface in java.util.logging" class="external-link">Level</a>&nbsp;level,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;msg,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>[]&nbsp;parameters,
@@ -216,12 +216,12 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getMessage()">
 <h3>getMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-103">getMessage</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-106">getMessage</a></span>()</div>
 <div class="block">Returns the log message, formatting it lazily if needed.
 
  <p>
  If parameters were set via <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#setParameters(java.lang.Object%5B%5D)" title="class or interface in java.util.logging" class="external-link"><code>LogRecord.setParameters(Object[])</code></a>, the message is formatted
- using <a href="../utils/Utils.html#f(java.lang.String,java.lang.Object...)"><code>Utils.f(String, Object...)</code></a> on first access.</div>
+ using <a href="../utils/StringUtils.html#format(java.lang.String,java.lang.Object...)"><code>StringUtils.format(String, Object...)</code></a> on first access.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html#getMessage()" title="class or interface in java.util.logging" class="external-link">getMessage</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.logging/java/util/logging/LogRecord.html" title="class or interface in java.util.logging" class="external-link">LogRecord</a></code></dd>
@@ -233,7 +233,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSourceClassName()">
 <h3>getSourceClassName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-115">getSourceClassName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-118">getSourceClassName</a></span>()</div>
 <div class="block">Returns the source class name, calculating it lazily from the stack trace if not already set.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -246,7 +246,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getSourceMethodName()">
 <h3>getSourceMethodName</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-127">getSourceMethodName</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-130">getSourceMethodName</a></span>()</div>
 <div class="block">Returns the source method name, calculating it lazily from the stack trace if not already set.</div>
 <dl class="notes">
 <dt>Overrides:</dt>
@@ -259,7 +259,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="formatted(java.lang.String)">
 <h3>formatted</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-247">formatted</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/org/apache/juneau/commons/logging/LogRecord.html#line-250">formatted</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;format)</span></div>
 <div class="block">Formats this log record as a string using the specified format pattern.
 
  <p>

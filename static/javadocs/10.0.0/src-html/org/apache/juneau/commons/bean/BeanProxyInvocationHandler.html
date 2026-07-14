@@ -30,151 +30,150 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.bean;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
-<span class="source-line-no">022</span><span id="line-22"></span>
-<span class="source-line-no">023</span><span id="line-23">import java.lang.reflect.*;</span>
-<span class="source-line-no">024</span><span id="line-24">import java.util.*;</span>
-<span class="source-line-no">025</span><span id="line-25"></span>
-<span class="source-line-no">026</span><span id="line-26">/**</span>
-<span class="source-line-no">027</span><span id="line-27"> * Provides an {@link InvocationHandler} for creating dynamic proxy instances of bean interfaces.</span>
-<span class="source-line-no">028</span><span id="line-28"> *</span>
-<span class="source-line-no">029</span><span id="line-29"> * &lt;p&gt;</span>
-<span class="source-line-no">030</span><span id="line-30"> * This class enables the creation of bean instances from interfaces without requiring concrete implementations.</span>
-<span class="source-line-no">031</span><span id="line-31"> * When the {@code useInterfaceProxies} setting is enabled in the marshalling context, this handler is used to create</span>
-<span class="source-line-no">032</span><span id="line-32"> * proxy instances that implement bean interfaces.</span>
-<span class="source-line-no">033</span><span id="line-33"> *</span>
-<span class="source-line-no">034</span><span id="line-34"> * &lt;p&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> * The handler stores bean property values in an internal map and intercepts method calls to:</span>
-<span class="source-line-no">036</span><span id="line-36"> * &lt;ul&gt;</span>
-<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;&lt;b&gt;Getter methods&lt;/b&gt; - Returns values from the internal property map&lt;/li&gt;</span>
-<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;b&gt;Setter methods&lt;/b&gt; - Stores values in the internal property map&lt;/li&gt;</span>
-<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;b&gt;{@code equals(Object)}&lt;/b&gt; - Compares property maps, with special handling for other proxy instances&lt;/li&gt;</span>
-<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;{@code hashCode()}&lt;/b&gt; - Returns hash code based on the property map&lt;/li&gt;</span>
-<span class="source-line-no">041</span><span id="line-41"> *    &lt;li&gt;&lt;b&gt;{@code toString()}&lt;/b&gt; - Serializes the property map to JSON&lt;/li&gt;</span>
-<span class="source-line-no">042</span><span id="line-42"> * &lt;/ul&gt;</span>
-<span class="source-line-no">043</span><span id="line-43"> *</span>
-<span class="source-line-no">044</span><span id="line-44"> * &lt;p&gt;</span>
-<span class="source-line-no">045</span><span id="line-45"> * When comparing two proxy instances using {@code equals()}, if both are created with {@code BeanProxyInvocationHandler},</span>
-<span class="source-line-no">046</span><span id="line-46"> * the comparison is optimized by directly comparing their internal property maps rather than converting to {@link BeanMap}.</span>
-<span class="source-line-no">047</span><span id="line-47"> *</span>
-<span class="source-line-no">048</span><span id="line-48"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
-<span class="source-line-no">049</span><span id="line-49"> * &lt;p class='bjava'&gt;</span>
-<span class="source-line-no">050</span><span id="line-50"> *    &lt;jc&gt;// Define an interface&lt;/jc&gt;</span>
-<span class="source-line-no">051</span><span id="line-51"> *    &lt;jk&gt;public interface&lt;/jk&gt; Person {</span>
-<span class="source-line-no">052</span><span id="line-52"> *       &lt;jk&gt;String&lt;/jk&gt; &lt;jsm&gt;getName&lt;/jsm&gt;();</span>
-<span class="source-line-no">053</span><span id="line-53"> *       &lt;jk&gt;void&lt;/jk&gt; &lt;jsm&gt;setName&lt;/jsm&gt;(&lt;jk&gt;String&lt;/jk&gt; name);</span>
-<span class="source-line-no">054</span><span id="line-54"> *       &lt;jk&gt;int&lt;/jk&gt; &lt;jsm&gt;getAge&lt;/jsm&gt;();</span>
-<span class="source-line-no">055</span><span id="line-55"> *       &lt;jk&gt;void&lt;/jk&gt; &lt;jsm&gt;setAge&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt; age);</span>
-<span class="source-line-no">056</span><span id="line-56"> *    }</span>
-<span class="source-line-no">057</span><span id="line-57"> *</span>
-<span class="source-line-no">058</span><span id="line-58"> *    &lt;jc&gt;// Create a proxy instance&lt;/jc&gt;</span>
-<span class="source-line-no">059</span><span id="line-59"> *    &lt;jk&gt;var&lt;/jk&gt; bc = &lt;jsm&gt;MarshallingContext&lt;/jsm&gt;.&lt;jsm&gt;create&lt;/jsm&gt;().&lt;jsm&gt;useInterfaceProxies&lt;/jsm&gt;().&lt;jsm&gt;build&lt;/jsm&gt;();</span>
-<span class="source-line-no">060</span><span id="line-60"> *    &lt;jk&gt;var&lt;/jk&gt; person = bc.&lt;jsm&gt;getClassMeta&lt;/jsm&gt;(Person.&lt;jk&gt;class&lt;/jk&gt;).&lt;jsm&gt;newInstance&lt;/jsm&gt;();</span>
-<span class="source-line-no">061</span><span id="line-61"> *</span>
-<span class="source-line-no">062</span><span id="line-62"> *    &lt;jc&gt;// Use it like a regular bean&lt;/jc&gt;</span>
-<span class="source-line-no">063</span><span id="line-63"> *    person.&lt;jsm&gt;setName&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;);</span>
-<span class="source-line-no">064</span><span id="line-64"> *    person.&lt;jsm&gt;setAge&lt;/jsm&gt;(25);</span>
-<span class="source-line-no">065</span><span id="line-65"> *    &lt;jk&gt;var&lt;/jk&gt; name = person.&lt;jsm&gt;getName&lt;/jsm&gt;(); &lt;jc&gt;// Returns "John"&lt;/jc&gt;</span>
-<span class="source-line-no">066</span><span id="line-66"> * &lt;/p&gt;</span>
-<span class="source-line-no">067</span><span id="line-67"> *</span>
-<span class="source-line-no">068</span><span id="line-68"> * &lt;h5 class='topic'&gt;Thread safety&lt;/h5&gt;</span>
-<span class="source-line-no">069</span><span id="line-69"> *</span>
-<span class="source-line-no">070</span><span id="line-70"> * Instances are not thread-safe.</span>
-<span class="source-line-no">071</span><span id="line-71"> * Property values are stored in a mutable {@link HashMap} with no synchronization.</span>
-<span class="source-line-no">072</span><span id="line-72"> *</span>
-<span class="source-line-no">073</span><span id="line-73"> * @param &lt;T&gt; The interface class type</span>
-<span class="source-line-no">074</span><span id="line-74"> * @see BeanConfigContext#isUseInterfaceProxies()</span>
-<span class="source-line-no">075</span><span id="line-75"> * @see BeanMeta#getBeanProxyInvocationHandler()</span>
-<span class="source-line-no">076</span><span id="line-76"> * @see Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)</span>
-<span class="source-line-no">077</span><span id="line-77"> */</span>
-<span class="source-line-no">078</span><span id="line-78">@SuppressWarnings({</span>
-<span class="source-line-no">079</span><span id="line-79">   "java:S3740" // Raw Class/Map types used intentionally for reflective proxy dispatch where generic parameters are erased at runtime</span>
-<span class="source-line-no">080</span><span id="line-80">})</span>
-<span class="source-line-no">081</span><span id="line-81">public class BeanProxyInvocationHandler&lt;T&gt; implements InvocationHandler {</span>
-<span class="source-line-no">082</span><span id="line-82"></span>
-<span class="source-line-no">083</span><span id="line-83">   private final BeanMeta&lt;T&gt; meta;                 // The BeanMeta for this instance</span>
-<span class="source-line-no">084</span><span id="line-84">   private Map&lt;String,Object&gt; beanProps;     // The map of property names to bean property values.</span>
-<span class="source-line-no">085</span><span id="line-85"></span>
-<span class="source-line-no">086</span><span id="line-86">   /**</span>
-<span class="source-line-no">087</span><span id="line-87">    * Constructor.</span>
-<span class="source-line-no">088</span><span id="line-88">    *</span>
-<span class="source-line-no">089</span><span id="line-89">    * @param meta The bean metadata for the interface. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
-<span class="source-line-no">090</span><span id="line-90">    */</span>
-<span class="source-line-no">091</span><span id="line-91">   public BeanProxyInvocationHandler(BeanMeta&lt;T&gt; meta) {</span>
-<span class="source-line-no">092</span><span id="line-92">      this.meta = meta;</span>
-<span class="source-line-no">093</span><span id="line-93">      this.beanProps = new HashMap&lt;&gt;();</span>
-<span class="source-line-no">094</span><span id="line-94">   }</span>
-<span class="source-line-no">095</span><span id="line-95"></span>
-<span class="source-line-no">096</span><span id="line-96">   /**</span>
-<span class="source-line-no">097</span><span id="line-97">    * Handles method invocations on the proxy instance.</span>
-<span class="source-line-no">098</span><span id="line-98">    *</span>
-<span class="source-line-no">099</span><span id="line-99">    * &lt;p&gt;</span>
-<span class="source-line-no">100</span><span id="line-100">    * This method intercepts all method calls on the proxy and routes them appropriately:</span>
-<span class="source-line-no">101</span><span id="line-101">    * &lt;ul&gt;</span>
-<span class="source-line-no">102</span><span id="line-102">    *    &lt;li&gt;If the method is {@code equals(Object)}, compares property maps&lt;/li&gt;</span>
-<span class="source-line-no">103</span><span id="line-103">    *    &lt;li&gt;If the method is {@code hashCode()}, returns the hash code of the property map&lt;/li&gt;</span>
-<span class="source-line-no">104</span><span id="line-104">    *    &lt;li&gt;If the method is {@code toString()}, serializes the property map to JSON&lt;/li&gt;</span>
-<span class="source-line-no">105</span><span id="line-105">    *    &lt;li&gt;If the method is a getter (identified via {@link BeanMeta#getGetterProps()}), returns the property value&lt;/li&gt;</span>
-<span class="source-line-no">106</span><span id="line-106">    *    &lt;li&gt;If the method is a setter (identified via {@link BeanMeta#getSetterProps()}), stores the property value&lt;/li&gt;</span>
-<span class="source-line-no">107</span><span id="line-107">    *    &lt;li&gt;Otherwise, throws {@link UnsupportedOperationException}&lt;/li&gt;</span>
-<span class="source-line-no">108</span><span id="line-108">    * &lt;/ul&gt;</span>
-<span class="source-line-no">109</span><span id="line-109">    *</span>
-<span class="source-line-no">110</span><span id="line-110">    * &lt;p&gt;</span>
-<span class="source-line-no">111</span><span id="line-111">    * The {@code equals()} method has special optimization: when comparing two proxy instances created with this handler,</span>
-<span class="source-line-no">112</span><span id="line-112">    * it directly compares their internal property maps using {@link Proxy#getInvocationHandler(Object)} to access the</span>
-<span class="source-line-no">113</span><span id="line-113">    * other instance's handler.</span>
-<span class="source-line-no">114</span><span id="line-114">    *</span>
-<span class="source-line-no">115</span><span id="line-115">    * @param proxy The proxy instance on which the method was invoked</span>
-<span class="source-line-no">116</span><span id="line-116">    * @param method The method that was invoked</span>
-<span class="source-line-no">117</span><span id="line-117">    * @param args The arguments passed to the method, or &lt;jk&gt;null&lt;/jk&gt; if no arguments</span>
-<span class="source-line-no">118</span><span id="line-118">    * @return The return value of the method invocation</span>
-<span class="source-line-no">119</span><span id="line-119">    * @throws UnsupportedOperationException If the method is not a supported bean method (getter, setter, equals, hashCode, or toString)</span>
-<span class="source-line-no">120</span><span id="line-120">    */</span>
-<span class="source-line-no">121</span><span id="line-121">   @Override /* Overridden from InvocationHandler */</span>
-<span class="source-line-no">122</span><span id="line-122">   @SuppressWarnings({</span>
-<span class="source-line-no">123</span><span id="line-123">      "java:S3776" // Cognitive complexity acceptable for proxy invocation routing</span>
-<span class="source-line-no">124</span><span id="line-124">   })</span>
-<span class="source-line-no">125</span><span id="line-125">   public Object invoke(Object proxy, Method method, Object[] args) {</span>
-<span class="source-line-no">126</span><span id="line-126">      var mi = info(method);</span>
-<span class="source-line-no">127</span><span id="line-127">      if (mi.hasName("equals") &amp;&amp; mi.hasParameterTypes(Object.class)) {</span>
-<span class="source-line-no">128</span><span id="line-128">         var arg = args[0];</span>
-<span class="source-line-no">129</span><span id="line-129">         if (arg == null)</span>
-<span class="source-line-no">130</span><span id="line-130">            return false;</span>
-<span class="source-line-no">131</span><span id="line-131">         if (proxy == arg)</span>
-<span class="source-line-no">132</span><span id="line-132">            return true;</span>
-<span class="source-line-no">133</span><span id="line-133">         if (eq(proxy.getClass(), arg.getClass())) {</span>
-<span class="source-line-no">134</span><span id="line-134">            var ih = Proxy.getInvocationHandler(arg);</span>
-<span class="source-line-no">135</span><span id="line-135">            if (ih instanceof BeanProxyInvocationHandler ih2) {</span>
-<span class="source-line-no">136</span><span id="line-136">               return beanProps.equals(ih2.beanProps);</span>
-<span class="source-line-no">137</span><span id="line-137">            }</span>
-<span class="source-line-no">138</span><span id="line-138">         }</span>
-<span class="source-line-no">139</span><span id="line-139">         @SuppressWarnings({</span>
-<span class="source-line-no">140</span><span id="line-140">            "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>
-<span class="source-line-no">141</span><span id="line-141">         })</span>
-<span class="source-line-no">142</span><span id="line-142">         var argMeta = (BeanMeta&lt;Object&gt;) BeanMeta.of(arg.getClass(), meta.getConfig());</span>
-<span class="source-line-no">143</span><span id="line-143">         return eq(beanProps, BeanMap.of(arg, argMeta));</span>
-<span class="source-line-no">144</span><span id="line-144">      }</span>
-<span class="source-line-no">145</span><span id="line-145"></span>
-<span class="source-line-no">146</span><span id="line-146">      if (mi.hasName("hashCode") &amp;&amp; mi.getParameterCount() == 0)</span>
-<span class="source-line-no">147</span><span id="line-147">         return Integer.valueOf(this.beanProps.hashCode());</span>
-<span class="source-line-no">148</span><span id="line-148"></span>
-<span class="source-line-no">149</span><span id="line-149">      if (mi.hasName("toString") &amp;&amp; mi.getParameterCount() == 0)</span>
-<span class="source-line-no">150</span><span id="line-150">         return Objects.toString(this.beanProps);</span>
-<span class="source-line-no">151</span><span id="line-151"></span>
-<span class="source-line-no">152</span><span id="line-152">      var prop = meta.getGetterProps().get(method);</span>
-<span class="source-line-no">153</span><span id="line-153">      if (nn(prop))</span>
-<span class="source-line-no">154</span><span id="line-154">         return beanProps.get(prop);</span>
-<span class="source-line-no">155</span><span id="line-155"></span>
-<span class="source-line-no">156</span><span id="line-156">      prop = meta.getSetterProps().get(method);</span>
-<span class="source-line-no">157</span><span id="line-157">      if (nn(prop)) {</span>
-<span class="source-line-no">158</span><span id="line-158">         beanProps.put(prop, args[0]);</span>
-<span class="source-line-no">159</span><span id="line-159">         return null;</span>
-<span class="source-line-no">160</span><span id="line-160">      }</span>
-<span class="source-line-no">161</span><span id="line-161"></span>
-<span class="source-line-no">162</span><span id="line-162">      throw unsupportedOp("Unsupported bean method.  method=''{0}''", method);</span>
-<span class="source-line-no">163</span><span id="line-163">   }</span>
-<span class="source-line-no">164</span><span id="line-164">}</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21"></span>
+<span class="source-line-no">022</span><span id="line-22">import java.lang.reflect.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
+<span class="source-line-no">024</span><span id="line-24"></span>
+<span class="source-line-no">025</span><span id="line-25">/**</span>
+<span class="source-line-no">026</span><span id="line-26"> * Provides an {@link InvocationHandler} for creating dynamic proxy instances of bean interfaces.</span>
+<span class="source-line-no">027</span><span id="line-27"> *</span>
+<span class="source-line-no">028</span><span id="line-28"> * &lt;p&gt;</span>
+<span class="source-line-no">029</span><span id="line-29"> * This class enables the creation of bean instances from interfaces without requiring concrete implementations.</span>
+<span class="source-line-no">030</span><span id="line-30"> * When the {@code useInterfaceProxies} setting is enabled in the marshalling context, this handler is used to create</span>
+<span class="source-line-no">031</span><span id="line-31"> * proxy instances that implement bean interfaces.</span>
+<span class="source-line-no">032</span><span id="line-32"> *</span>
+<span class="source-line-no">033</span><span id="line-33"> * &lt;p&gt;</span>
+<span class="source-line-no">034</span><span id="line-34"> * The handler stores bean property values in an internal map and intercepts method calls to:</span>
+<span class="source-line-no">035</span><span id="line-35"> * &lt;ul&gt;</span>
+<span class="source-line-no">036</span><span id="line-36"> *    &lt;li&gt;&lt;b&gt;Getter methods&lt;/b&gt; - Returns values from the internal property map&lt;/li&gt;</span>
+<span class="source-line-no">037</span><span id="line-37"> *    &lt;li&gt;&lt;b&gt;Setter methods&lt;/b&gt; - Stores values in the internal property map&lt;/li&gt;</span>
+<span class="source-line-no">038</span><span id="line-38"> *    &lt;li&gt;&lt;b&gt;{@code equals(Object)}&lt;/b&gt; - Compares property maps, with special handling for other proxy instances&lt;/li&gt;</span>
+<span class="source-line-no">039</span><span id="line-39"> *    &lt;li&gt;&lt;b&gt;{@code hashCode()}&lt;/b&gt; - Returns hash code based on the property map&lt;/li&gt;</span>
+<span class="source-line-no">040</span><span id="line-40"> *    &lt;li&gt;&lt;b&gt;{@code toString()}&lt;/b&gt; - Serializes the property map to JSON&lt;/li&gt;</span>
+<span class="source-line-no">041</span><span id="line-41"> * &lt;/ul&gt;</span>
+<span class="source-line-no">042</span><span id="line-42"> *</span>
+<span class="source-line-no">043</span><span id="line-43"> * &lt;p&gt;</span>
+<span class="source-line-no">044</span><span id="line-44"> * When comparing two proxy instances using {@code equals()}, if both are created with {@code BeanProxyInvocationHandler},</span>
+<span class="source-line-no">045</span><span id="line-45"> * the comparison is optimized by directly comparing their internal property maps rather than converting to {@link BeanMap}.</span>
+<span class="source-line-no">046</span><span id="line-46"> *</span>
+<span class="source-line-no">047</span><span id="line-47"> * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
+<span class="source-line-no">048</span><span id="line-48"> * &lt;p class='bjava'&gt;</span>
+<span class="source-line-no">049</span><span id="line-49"> *    &lt;jc&gt;// Define an interface&lt;/jc&gt;</span>
+<span class="source-line-no">050</span><span id="line-50"> *    &lt;jk&gt;public interface&lt;/jk&gt; Person {</span>
+<span class="source-line-no">051</span><span id="line-51"> *       &lt;jk&gt;String&lt;/jk&gt; &lt;jsm&gt;getName&lt;/jsm&gt;();</span>
+<span class="source-line-no">052</span><span id="line-52"> *       &lt;jk&gt;void&lt;/jk&gt; &lt;jsm&gt;setName&lt;/jsm&gt;(&lt;jk&gt;String&lt;/jk&gt; name);</span>
+<span class="source-line-no">053</span><span id="line-53"> *       &lt;jk&gt;int&lt;/jk&gt; &lt;jsm&gt;getAge&lt;/jsm&gt;();</span>
+<span class="source-line-no">054</span><span id="line-54"> *       &lt;jk&gt;void&lt;/jk&gt; &lt;jsm&gt;setAge&lt;/jsm&gt;(&lt;jk&gt;int&lt;/jk&gt; age);</span>
+<span class="source-line-no">055</span><span id="line-55"> *    }</span>
+<span class="source-line-no">056</span><span id="line-56"> *</span>
+<span class="source-line-no">057</span><span id="line-57"> *    &lt;jc&gt;// Create a proxy instance&lt;/jc&gt;</span>
+<span class="source-line-no">058</span><span id="line-58"> *    &lt;jk&gt;var&lt;/jk&gt; bc = &lt;jsm&gt;MarshallingContext&lt;/jsm&gt;.&lt;jsm&gt;create&lt;/jsm&gt;().&lt;jsm&gt;useInterfaceProxies&lt;/jsm&gt;().&lt;jsm&gt;build&lt;/jsm&gt;();</span>
+<span class="source-line-no">059</span><span id="line-59"> *    &lt;jk&gt;var&lt;/jk&gt; person = bc.&lt;jsm&gt;getClassMeta&lt;/jsm&gt;(Person.&lt;jk&gt;class&lt;/jk&gt;).&lt;jsm&gt;newInstance&lt;/jsm&gt;();</span>
+<span class="source-line-no">060</span><span id="line-60"> *</span>
+<span class="source-line-no">061</span><span id="line-61"> *    &lt;jc&gt;// Use it like a regular bean&lt;/jc&gt;</span>
+<span class="source-line-no">062</span><span id="line-62"> *    person.&lt;jsm&gt;setName&lt;/jsm&gt;(&lt;js&gt;"John"&lt;/js&gt;);</span>
+<span class="source-line-no">063</span><span id="line-63"> *    person.&lt;jsm&gt;setAge&lt;/jsm&gt;(25);</span>
+<span class="source-line-no">064</span><span id="line-64"> *    &lt;jk&gt;var&lt;/jk&gt; name = person.&lt;jsm&gt;getName&lt;/jsm&gt;(); &lt;jc&gt;// Returns "John"&lt;/jc&gt;</span>
+<span class="source-line-no">065</span><span id="line-65"> * &lt;/p&gt;</span>
+<span class="source-line-no">066</span><span id="line-66"> *</span>
+<span class="source-line-no">067</span><span id="line-67"> * &lt;h5 class='topic'&gt;Thread safety&lt;/h5&gt;</span>
+<span class="source-line-no">068</span><span id="line-68"> *</span>
+<span class="source-line-no">069</span><span id="line-69"> * Instances are not thread-safe.</span>
+<span class="source-line-no">070</span><span id="line-70"> * Property values are stored in a mutable {@link HashMap} with no synchronization.</span>
+<span class="source-line-no">071</span><span id="line-71"> *</span>
+<span class="source-line-no">072</span><span id="line-72"> * @param &lt;T&gt; The interface class type</span>
+<span class="source-line-no">073</span><span id="line-73"> * @see BeanConfigContext#isUseInterfaceProxies()</span>
+<span class="source-line-no">074</span><span id="line-74"> * @see BeanMeta#getBeanProxyInvocationHandler()</span>
+<span class="source-line-no">075</span><span id="line-75"> * @see Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler)</span>
+<span class="source-line-no">076</span><span id="line-76"> */</span>
+<span class="source-line-no">077</span><span id="line-77">@SuppressWarnings({</span>
+<span class="source-line-no">078</span><span id="line-78">   "java:S3740" // Raw Class/Map types used intentionally for reflective proxy dispatch where generic parameters are erased at runtime</span>
+<span class="source-line-no">079</span><span id="line-79">})</span>
+<span class="source-line-no">080</span><span id="line-80">public class BeanProxyInvocationHandler&lt;T&gt; implements InvocationHandler {</span>
+<span class="source-line-no">081</span><span id="line-81"></span>
+<span class="source-line-no">082</span><span id="line-82">   private final BeanMeta&lt;T&gt; meta;                 // The BeanMeta for this instance</span>
+<span class="source-line-no">083</span><span id="line-83">   private Map&lt;String,Object&gt; beanProps;     // The map of property names to bean property values.</span>
+<span class="source-line-no">084</span><span id="line-84"></span>
+<span class="source-line-no">085</span><span id="line-85">   /**</span>
+<span class="source-line-no">086</span><span id="line-86">    * Constructor.</span>
+<span class="source-line-no">087</span><span id="line-87">    *</span>
+<span class="source-line-no">088</span><span id="line-88">    * @param meta The bean metadata for the interface. Must not be &lt;jk&gt;null&lt;/jk&gt;.</span>
+<span class="source-line-no">089</span><span id="line-89">    */</span>
+<span class="source-line-no">090</span><span id="line-90">   public BeanProxyInvocationHandler(BeanMeta&lt;T&gt; meta) {</span>
+<span class="source-line-no">091</span><span id="line-91">      this.meta = meta;</span>
+<span class="source-line-no">092</span><span id="line-92">      this.beanProps = new HashMap&lt;&gt;();</span>
+<span class="source-line-no">093</span><span id="line-93">   }</span>
+<span class="source-line-no">094</span><span id="line-94"></span>
+<span class="source-line-no">095</span><span id="line-95">   /**</span>
+<span class="source-line-no">096</span><span id="line-96">    * Handles method invocations on the proxy instance.</span>
+<span class="source-line-no">097</span><span id="line-97">    *</span>
+<span class="source-line-no">098</span><span id="line-98">    * &lt;p&gt;</span>
+<span class="source-line-no">099</span><span id="line-99">    * This method intercepts all method calls on the proxy and routes them appropriately:</span>
+<span class="source-line-no">100</span><span id="line-100">    * &lt;ul&gt;</span>
+<span class="source-line-no">101</span><span id="line-101">    *    &lt;li&gt;If the method is {@code equals(Object)}, compares property maps&lt;/li&gt;</span>
+<span class="source-line-no">102</span><span id="line-102">    *    &lt;li&gt;If the method is {@code hashCode()}, returns the hash code of the property map&lt;/li&gt;</span>
+<span class="source-line-no">103</span><span id="line-103">    *    &lt;li&gt;If the method is {@code toString()}, serializes the property map to JSON&lt;/li&gt;</span>
+<span class="source-line-no">104</span><span id="line-104">    *    &lt;li&gt;If the method is a getter (identified via {@link BeanMeta#getGetterProps()}), returns the property value&lt;/li&gt;</span>
+<span class="source-line-no">105</span><span id="line-105">    *    &lt;li&gt;If the method is a setter (identified via {@link BeanMeta#getSetterProps()}), stores the property value&lt;/li&gt;</span>
+<span class="source-line-no">106</span><span id="line-106">    *    &lt;li&gt;Otherwise, throws {@link UnsupportedOperationException}&lt;/li&gt;</span>
+<span class="source-line-no">107</span><span id="line-107">    * &lt;/ul&gt;</span>
+<span class="source-line-no">108</span><span id="line-108">    *</span>
+<span class="source-line-no">109</span><span id="line-109">    * &lt;p&gt;</span>
+<span class="source-line-no">110</span><span id="line-110">    * The {@code equals()} method has special optimization: when comparing two proxy instances created with this handler,</span>
+<span class="source-line-no">111</span><span id="line-111">    * it directly compares their internal property maps using {@link Proxy#getInvocationHandler(Object)} to access the</span>
+<span class="source-line-no">112</span><span id="line-112">    * other instance's handler.</span>
+<span class="source-line-no">113</span><span id="line-113">    *</span>
+<span class="source-line-no">114</span><span id="line-114">    * @param proxy The proxy instance on which the method was invoked</span>
+<span class="source-line-no">115</span><span id="line-115">    * @param method The method that was invoked</span>
+<span class="source-line-no">116</span><span id="line-116">    * @param args The arguments passed to the method, or &lt;jk&gt;null&lt;/jk&gt; if no arguments</span>
+<span class="source-line-no">117</span><span id="line-117">    * @return The return value of the method invocation</span>
+<span class="source-line-no">118</span><span id="line-118">    * @throws UnsupportedOperationException If the method is not a supported bean method (getter, setter, equals, hashCode, or toString)</span>
+<span class="source-line-no">119</span><span id="line-119">    */</span>
+<span class="source-line-no">120</span><span id="line-120">   @Override /* Overridden from InvocationHandler */</span>
+<span class="source-line-no">121</span><span id="line-121">   @SuppressWarnings({</span>
+<span class="source-line-no">122</span><span id="line-122">      "java:S3776" // Cognitive complexity acceptable for proxy invocation routing</span>
+<span class="source-line-no">123</span><span id="line-123">   })</span>
+<span class="source-line-no">124</span><span id="line-124">   public Object invoke(Object proxy, Method method, Object[] args) {</span>
+<span class="source-line-no">125</span><span id="line-125">      var mi = info(method);</span>
+<span class="source-line-no">126</span><span id="line-126">      if (mi.hasName("equals") &amp;&amp; mi.hasParameterTypes(Object.class)) {</span>
+<span class="source-line-no">127</span><span id="line-127">         var arg = args[0];</span>
+<span class="source-line-no">128</span><span id="line-128">         if (arg == null)</span>
+<span class="source-line-no">129</span><span id="line-129">            return false;</span>
+<span class="source-line-no">130</span><span id="line-130">         if (proxy == arg)</span>
+<span class="source-line-no">131</span><span id="line-131">            return true;</span>
+<span class="source-line-no">132</span><span id="line-132">         if (eq(proxy.getClass(), arg.getClass())) {</span>
+<span class="source-line-no">133</span><span id="line-133">            var ih = Proxy.getInvocationHandler(arg);</span>
+<span class="source-line-no">134</span><span id="line-134">            if (ih instanceof BeanProxyInvocationHandler ih2) {</span>
+<span class="source-line-no">135</span><span id="line-135">               return beanProps.equals(ih2.beanProps);</span>
+<span class="source-line-no">136</span><span id="line-136">            }</span>
+<span class="source-line-no">137</span><span id="line-137">         }</span>
+<span class="source-line-no">138</span><span id="line-138">         @SuppressWarnings({</span>
+<span class="source-line-no">139</span><span id="line-139">            "unchecked" // Type erasure on reflective/generic cast; element type is verified at call site</span>
+<span class="source-line-no">140</span><span id="line-140">         })</span>
+<span class="source-line-no">141</span><span id="line-141">         var argMeta = (BeanMeta&lt;Object&gt;) BeanMeta.of(arg.getClass(), meta.getConfig());</span>
+<span class="source-line-no">142</span><span id="line-142">         return eq(beanProps, BeanMap.of(arg, argMeta));</span>
+<span class="source-line-no">143</span><span id="line-143">      }</span>
+<span class="source-line-no">144</span><span id="line-144"></span>
+<span class="source-line-no">145</span><span id="line-145">      if (mi.hasName("hashCode") &amp;&amp; mi.getParameterCount() == 0)</span>
+<span class="source-line-no">146</span><span id="line-146">         return Integer.valueOf(this.beanProps.hashCode());</span>
+<span class="source-line-no">147</span><span id="line-147"></span>
+<span class="source-line-no">148</span><span id="line-148">      if (mi.hasName("toString") &amp;&amp; mi.getParameterCount() == 0)</span>
+<span class="source-line-no">149</span><span id="line-149">         return Objects.toString(this.beanProps);</span>
+<span class="source-line-no">150</span><span id="line-150"></span>
+<span class="source-line-no">151</span><span id="line-151">      var prop = meta.getGetterProps().get(method);</span>
+<span class="source-line-no">152</span><span id="line-152">      if (nn(prop))</span>
+<span class="source-line-no">153</span><span id="line-153">         return beanProps.get(prop);</span>
+<span class="source-line-no">154</span><span id="line-154"></span>
+<span class="source-line-no">155</span><span id="line-155">      prop = meta.getSetterProps().get(method);</span>
+<span class="source-line-no">156</span><span id="line-156">      if (nn(prop)) {</span>
+<span class="source-line-no">157</span><span id="line-157">         beanProps.put(prop, args[0]);</span>
+<span class="source-line-no">158</span><span id="line-158">         return null;</span>
+<span class="source-line-no">159</span><span id="line-159">      }</span>
+<span class="source-line-no">160</span><span id="line-160"></span>
+<span class="source-line-no">161</span><span id="line-161">      throw uoex("Unsupported bean method.  method=''{0}''", method);</span>
+<span class="source-line-no">162</span><span id="line-162">   }</span>
+<span class="source-line-no">163</span><span id="line-163">}</span>
 
 
 

@@ -30,9 +30,9 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.marshall.parser;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.SystemUtils.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.io.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.lang.reflect.*;</span>
@@ -413,7 +413,7 @@
 <span class="source-line-no">400</span><span id="line-400">       * Juneau's analog of Jackson's</span>
 <span class="source-line-no">401</span><span id="line-401">       * &lt;c&gt;ObjectMapper.setDefaultSetterInfo(JsonSetter.Value.forValueNulls(...))&lt;/c&gt;.</span>
 <span class="source-line-no">402</span><span id="line-402">       * Applied as the fallback when no per-property</span>
-<span class="source-line-no">403</span><span id="line-403">       * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.</span>
+<span class="source-line-no">403</span><span id="line-403">       * {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.</span>
 <span class="source-line-no">404</span><span id="line-404">       *</span>
 <span class="source-line-no">405</span><span id="line-405">       * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">406</span><span id="line-406">       * &lt;p class='bjava'&gt;</span>
@@ -683,7 +683,7 @@
 <span class="source-line-no">670</span><span id="line-670">    * @throws ExecutableException Exception occurred on invoked constructor/method/field.</span>
 <span class="source-line-no">671</span><span id="line-671">    */</span>
 <span class="source-line-no">672</span><span id="line-672">   public &lt;T&gt; T doParse(ParserSession session, ParserPipe pipe, ClassMeta&lt;T&gt; type) throws IOException, ParseException {</span>
-<span class="source-line-no">673</span><span id="line-673">      throw unsupportedOp();</span>
+<span class="source-line-no">673</span><span id="line-673">      throw uoex();</span>
 <span class="source-line-no">674</span><span id="line-674">   }</span>
 <span class="source-line-no">675</span><span id="line-675"></span>
 <span class="source-line-no">676</span><span id="line-676">   /**</span>
@@ -883,7 +883,7 @@
 <span class="source-line-no">870</span><span id="line-870">    *</span>
 <span class="source-line-no">871</span><span id="line-871">    * &lt;p&gt;</span>
 <span class="source-line-no">872</span><span id="line-872">    * The outer object is used when instantiating top-level non-static inner classes and when setting</span>
-<span class="source-line-no">873</span><span id="line-873">    * {@link org.apache.juneau.marshall.ParentProperty @ParentProperty} fields on parsed beans.</span>
+<span class="source-line-no">873</span><span id="line-873">    * {@link ParentProperty @ParentProperty} fields on parsed beans.</span>
 <span class="source-line-no">874</span><span id="line-874">    * This is important when a parser is used to parse inline content (e.g. JSON5 embedded in a Markdown</span>
 <span class="source-line-no">875</span><span id="line-875">    * table cell) where the parent bean context must be preserved.</span>
 <span class="source-line-no">876</span><span id="line-876">    *</span>
@@ -892,7 +892,7 @@
 <span class="source-line-no">879</span><span id="line-879">    * @param type The object type to create.</span>
 <span class="source-line-no">880</span><span id="line-880">    * @param outer</span>
 <span class="source-line-no">881</span><span id="line-881">    *    The outer object to associate with this parse session.</span>
-<span class="source-line-no">882</span><span id="line-882">    *    Used for {@link org.apache.juneau.marshall.ParentProperty @ParentProperty} injection and</span>
+<span class="source-line-no">882</span><span id="line-882">    *    Used for {@link ParentProperty @ParentProperty} injection and</span>
 <span class="source-line-no">883</span><span id="line-883">    *    non-static inner class construction.</span>
 <span class="source-line-no">884</span><span id="line-884">    *    Can be &lt;jk&gt;null&lt;/jk&gt;.</span>
 <span class="source-line-no">885</span><span id="line-885">    * @return The parsed object.</span>
@@ -1040,7 +1040,7 @@
 <span class="source-line-no">1027</span><span id="line-1027"></span>
 <span class="source-line-no">1028</span><span id="line-1028">   /**</span>
 <span class="source-line-no">1029</span><span id="line-1029">    * Returns the context-level {@link Nulls} default consulted at parse-time when no per-property</span>
-<span class="source-line-no">1030</span><span id="line-1030">    * {@link org.apache.juneau.marshall.MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.</span>
+<span class="source-line-no">1030</span><span id="line-1030">    * {@link MarshalledProp#nulls() @MarshalledProp(nulls=…)} is configured.</span>
 <span class="source-line-no">1031</span><span id="line-1031">    *</span>
 <span class="source-line-no">1032</span><span id="line-1032">    * @return The current value (never &lt;jk&gt;null&lt;/jk&gt;; {@link Nulls#NOT_SET} when unconfigured).</span>
 <span class="source-line-no">1033</span><span id="line-1033">    * @see Parser.Builder#nulls(Nulls)</span>

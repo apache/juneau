@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.sse;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.concurrent.*;</span>
@@ -52,7 +52,7 @@
 <span class="source-line-no">039</span><span id="line-39"></span>
 <span class="source-line-no">040</span><span id="line-40">   SseSubscription(String id, int queueSize, Consumer&lt;String&gt; closeCallback) {</span>
 <span class="source-line-no">041</span><span id="line-41">      if (isEmpty(id))</span>
-<span class="source-line-no">042</span><span id="line-42">         throw illegalArg("id cannot be null or empty.");</span>
+<span class="source-line-no">042</span><span id="line-42">         throw iaex("id cannot be null or empty.");</span>
 <span class="source-line-no">043</span><span id="line-43">      this.id = id;</span>
 <span class="source-line-no">044</span><span id="line-44">      this.queue = new LinkedBlockingDeque&lt;&gt;(queueSize);</span>
 <span class="source-line-no">045</span><span id="line-45">      this.closeCallback = assertArgNotNull("closeCallback", closeCallback);</span>

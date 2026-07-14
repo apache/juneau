@@ -32,8 +32,8 @@
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ClassUtils.*;</span>
 <span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">023</span><span id="line-23">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
 <span class="source-line-no">025</span><span id="line-25">import java.beans.*;</span>
 <span class="source-line-no">026</span><span id="line-26">import java.util.*;</span>
@@ -134,7 +134,7 @@
 <span class="source-line-no">121</span><span id="line-121">      public Builder applyAnnotations(List&lt;Marshalled&gt; annotations) {</span>
 <span class="source-line-no">122</span><span id="line-122"></span>
 <span class="source-line-no">123</span><span id="line-123">         annotations.forEach(x -&gt; {</span>
-<span class="source-line-no">124</span><span id="line-124">            if (ne(x.typeName()))</span>
+<span class="source-line-no">124</span><span id="line-124">            if (ine(x.typeName()))</span>
 <span class="source-line-no">125</span><span id="line-125">               typeName(x.typeName());</span>
 <span class="source-line-no">126</span><span id="line-126">            if (isNotVoid(x.interceptor()))</span>
 <span class="source-line-no">127</span><span id="line-127">               interceptor(x.interceptor());</span>
@@ -142,7 +142,7 @@
 <span class="source-line-no">129</span><span id="line-129">               implClass(x.implClass());</span>
 <span class="source-line-no">130</span><span id="line-130">            if (isNotEmptyArray(x.dictionary()))</span>
 <span class="source-line-no">131</span><span id="line-131">               dictionary(x.dictionary());</span>
-<span class="source-line-no">132</span><span id="line-132">            if (ne(x.example()))</span>
+<span class="source-line-no">132</span><span id="line-132">            if (ine(x.example()))</span>
 <span class="source-line-no">133</span><span id="line-133">               example(x.example());</span>
 <span class="source-line-no">134</span><span id="line-134">         });</span>
 <span class="source-line-no">135</span><span id="line-135">         return this;</span>

@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> *       The parser treats the configured &lt;c&gt;nullValue&lt;/c&gt; string (e.g. &lt;c&gt;&amp;lt;NULL&amp;gt;&lt;/c&gt;) as Java null</span>
 <span class="source-line-no">043</span><span id="line-43"> *       when it appears as a value.</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;&lt;b&gt;Non-string map keys&lt;/b&gt; — TOML keys are always strings. Non-string key types</span>
-<span class="source-line-no">045</span><span id="line-45"> *       (e.g. &lt;c&gt;Map&amp;lt;Integer,String&amp;gt;&lt;/c&gt;) are converted via {@link org.apache.juneau.marshall.parser.ParserSession#convertAttrToType(Object, String, org.apache.juneau.marshall.ClassMeta) convertAttrToType}.</span>
+<span class="source-line-no">045</span><span id="line-45"> *       (e.g. &lt;c&gt;Map&amp;lt;Integer,String&amp;gt;&lt;/c&gt;) are converted via {@link ParserSession#convertAttrToType(Object, String, org.apache.juneau.marshall.ClassMeta) convertAttrToType}.</span>
 <span class="source-line-no">046</span><span id="line-46"> *       Null keys are serialized as the string &lt;c&gt;null&lt;/c&gt; and converted back to Java null during parsing.</span>
 <span class="source-line-no">047</span><span id="line-47"> *    &lt;li&gt;&lt;b&gt;Polymorphic types&lt;/b&gt; — Parsing to interfaces or abstract classes requires a</span>
 <span class="source-line-no">048</span><span id="line-48"> *       {@link org.apache.juneau.marshall.MarshallingContext.Builder#beanDictionary(Class[]) bean dictionary}</span>

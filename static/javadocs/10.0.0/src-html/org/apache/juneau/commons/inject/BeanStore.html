@@ -31,7 +31,7 @@
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static java.util.stream.Collectors.*;</span>
 <span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24">import java.util.function.*;</span>
@@ -236,7 +236,7 @@
 <span class="source-line-no">223</span><span id="line-223">    * @see BeanInstantiator BeanInstantiator — for instantiating a bean from its own constructors, builders, or factory methods</span>
 <span class="source-line-no">224</span><span id="line-224">    */</span>
 <span class="source-line-no">225</span><span id="line-225">   default &lt;T&gt; Optional&lt;T&gt; createBeanFromMethod(Class&lt;T&gt; beanType, Object onClassOrObject, Predicate&lt;MethodInfo&gt; filter, Object... extraBeans) {</span>
-<span class="source-line-no">226</span><span id="line-226">      return opte();</span>
+<span class="source-line-no">226</span><span id="line-226">      return oe();</span>
 <span class="source-line-no">227</span><span id="line-227">   }</span>
 <span class="source-line-no">228</span><span id="line-228"></span>
 <span class="source-line-no">229</span><span id="line-229">   /**</span>
@@ -270,7 +270,7 @@
 <span class="source-line-no">257</span><span id="line-257">    * @return The implementation class, or {@link Optional#empty()} if no binding exists.</span>
 <span class="source-line-no">258</span><span id="line-258">    */</span>
 <span class="source-line-no">259</span><span id="line-259">   default &lt;T&gt; Optional&lt;Class&lt;? extends T&gt;&gt; getBeanType(Class&lt;T&gt; beanType) {</span>
-<span class="source-line-no">260</span><span id="line-260">      return opte();</span>
+<span class="source-line-no">260</span><span id="line-260">      return oe();</span>
 <span class="source-line-no">261</span><span id="line-261">   }</span>
 <span class="source-line-no">262</span><span id="line-262"></span>
 <span class="source-line-no">263</span><span id="line-263">   /**</span>

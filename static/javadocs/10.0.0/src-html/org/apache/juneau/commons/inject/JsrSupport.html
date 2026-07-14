@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.inject;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">import java.util.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
@@ -98,7 +98,7 @@
 <span class="source-line-no">085</span><span id="line-85">    */</span>
 <span class="source-line-no">086</span><span id="line-86">   public static boolean isInjectAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">087</span><span id="line-87">      var name = annotation.getName();</span>
-<span class="source-line-no">088</span><span id="line-88">      return eqAny(name, JUNEAU_INJECT, JAKARTA_INJECT, JAVAX_INJECT, SPRING_AUTOWIRED);</span>
+<span class="source-line-no">088</span><span id="line-88">      return eqa(name, JUNEAU_INJECT, JAKARTA_INJECT, JAVAX_INJECT, SPRING_AUTOWIRED);</span>
 <span class="source-line-no">089</span><span id="line-89">   }</span>
 <span class="source-line-no">090</span><span id="line-90"></span>
 <span class="source-line-no">091</span><span id="line-91">   /**</span>
@@ -106,7 +106,7 @@
 <span class="source-line-no">093</span><span id="line-93">    */</span>
 <span class="source-line-no">094</span><span id="line-94">   public static boolean isNamedAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">095</span><span id="line-95">      var name = annotation.getName();</span>
-<span class="source-line-no">096</span><span id="line-96">      return eqAny(name, JUNEAU_NAMED, JAKARTA_NAMED, JAVAX_NAMED);</span>
+<span class="source-line-no">096</span><span id="line-96">      return eqa(name, JUNEAU_NAMED, JAKARTA_NAMED, JAVAX_NAMED);</span>
 <span class="source-line-no">097</span><span id="line-97">   }</span>
 <span class="source-line-no">098</span><span id="line-98"></span>
 <span class="source-line-no">099</span><span id="line-99">   /**</span>
@@ -115,7 +115,7 @@
 <span class="source-line-no">102</span><span id="line-102">   public static boolean isQualifierMeta(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">103</span><span id="line-103">      return Arrays.stream(annotation.annotationType().getAnnotations())</span>
 <span class="source-line-no">104</span><span id="line-104">         .map(a -&gt; a.annotationType().getName())</span>
-<span class="source-line-no">105</span><span id="line-105">         .anyMatch(n -&gt; eqAny(n, JUNEAU_QUALIFIER, JAKARTA_QUALIFIER, JAVAX_QUALIFIER));</span>
+<span class="source-line-no">105</span><span id="line-105">         .anyMatch(n -&gt; eqa(n, JUNEAU_QUALIFIER, JAKARTA_QUALIFIER, JAVAX_QUALIFIER));</span>
 <span class="source-line-no">106</span><span id="line-106">   }</span>
 <span class="source-line-no">107</span><span id="line-107"></span>
 <span class="source-line-no">108</span><span id="line-108">   /**</span>
@@ -123,14 +123,14 @@
 <span class="source-line-no">110</span><span id="line-110">    */</span>
 <span class="source-line-no">111</span><span id="line-111">   public static boolean isSingletonAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">112</span><span id="line-112">      var name = annotation.getName();</span>
-<span class="source-line-no">113</span><span id="line-113">      return eqAny(name, JUNEAU_SINGLETON, JAKARTA_SINGLETON, JAVAX_SINGLETON);</span>
+<span class="source-line-no">113</span><span id="line-113">      return eqa(name, JUNEAU_SINGLETON, JAKARTA_SINGLETON, JAVAX_SINGLETON);</span>
 <span class="source-line-no">114</span><span id="line-114">   }</span>
 <span class="source-line-no">115</span><span id="line-115"></span>
 <span class="source-line-no">116</span><span id="line-116">   /**</span>
 <span class="source-line-no">117</span><span id="line-117">    * Returns &lt;jk&gt;true&lt;/jk&gt; if the class is a supported provider interface.</span>
 <span class="source-line-no">118</span><span id="line-118">    */</span>
 <span class="source-line-no">119</span><span id="line-119">   public static boolean isProviderType(Class&lt;?&gt; type) {</span>
-<span class="source-line-no">120</span><span id="line-120">      return type != null &amp;&amp; eqAny(type.getName(), JUNEAU_PROVIDER, JAKARTA_PROVIDER, JAVAX_PROVIDER);</span>
+<span class="source-line-no">120</span><span id="line-120">      return type != null &amp;&amp; eqa(type.getName(), JUNEAU_PROVIDER, JAKARTA_PROVIDER, JAVAX_PROVIDER);</span>
 <span class="source-line-no">121</span><span id="line-121">   }</span>
 <span class="source-line-no">122</span><span id="line-122"></span>
 <span class="source-line-no">123</span><span id="line-123">   /**</span>
@@ -138,7 +138,7 @@
 <span class="source-line-no">125</span><span id="line-125">    */</span>
 <span class="source-line-no">126</span><span id="line-126">   public static boolean isPostConstructAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">127</span><span id="line-127">      var name = annotation.getName();</span>
-<span class="source-line-no">128</span><span id="line-128">      return eqAny(name, JUNEAU_POSTCONSTRUCT, JAKARTA_POSTCONSTRUCT, JAVAX_POSTCONSTRUCT);</span>
+<span class="source-line-no">128</span><span id="line-128">      return eqa(name, JUNEAU_POSTCONSTRUCT, JAKARTA_POSTCONSTRUCT, JAVAX_POSTCONSTRUCT);</span>
 <span class="source-line-no">129</span><span id="line-129">   }</span>
 <span class="source-line-no">130</span><span id="line-130"></span>
 <span class="source-line-no">131</span><span id="line-131">   /**</span>
@@ -146,7 +146,7 @@
 <span class="source-line-no">133</span><span id="line-133">    */</span>
 <span class="source-line-no">134</span><span id="line-134">   public static boolean isPreDestroyAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">135</span><span id="line-135">      var name = annotation.getName();</span>
-<span class="source-line-no">136</span><span id="line-136">      return eqAny(name, JUNEAU_PREDESTROY, JAKARTA_PREDESTROY, JAVAX_PREDESTROY);</span>
+<span class="source-line-no">136</span><span id="line-136">      return eqa(name, JUNEAU_PREDESTROY, JAKARTA_PREDESTROY, JAVAX_PREDESTROY);</span>
 <span class="source-line-no">137</span><span id="line-137">   }</span>
 <span class="source-line-no">138</span><span id="line-138"></span>
 <span class="source-line-no">139</span><span id="line-139">   /**</span>
@@ -177,7 +177,7 @@
 <span class="source-line-no">164</span><span id="line-164">    */</span>
 <span class="source-line-no">165</span><span id="line-165">   public static boolean isValueAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">166</span><span id="line-166">      var name = annotation.getName();</span>
-<span class="source-line-no">167</span><span id="line-167">      return eqAny(name, JUNEAU_VALUE, SPRING_VALUE);</span>
+<span class="source-line-no">167</span><span id="line-167">      return eqa(name, JUNEAU_VALUE, SPRING_VALUE);</span>
 <span class="source-line-no">168</span><span id="line-168">   }</span>
 <span class="source-line-no">169</span><span id="line-169"></span>
 <span class="source-line-no">170</span><span id="line-170">   /**</span>
@@ -210,7 +210,7 @@
 <span class="source-line-no">197</span><span id="line-197">    */</span>
 <span class="source-line-no">198</span><span id="line-198">   public static boolean isValidAnnotation(AnnotationInfo&lt;?&gt; annotation) {</span>
 <span class="source-line-no">199</span><span id="line-199">      var name = annotation.getName();</span>
-<span class="source-line-no">200</span><span id="line-200">      return eqAny(name, JAKARTA_VALID, JAVAX_VALID, SPRING_VALIDATED);</span>
+<span class="source-line-no">200</span><span id="line-200">      return eqa(name, JAKARTA_VALID, JAVAX_VALID, SPRING_VALIDATED);</span>
 <span class="source-line-no">201</span><span id="line-201">   }</span>
 <span class="source-line-no">202</span><span id="line-202">}</span>
 

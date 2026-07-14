@@ -29,10 +29,10 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.settings;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
-<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.function.Suppliers.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.reflect.ReflectionUtils.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
+<span class="source-line-no">022</span><span id="line-22">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
 <span class="source-line-no">024</span><span id="line-24">import java.nio.charset.*;</span>
 <span class="source-line-no">025</span><span id="line-25">import java.util.*;</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">      v = SYSTEM_ENV_SOURCE.get(property.replace('.', '_').toUpperCase());</span>
 <span class="source-line-no">188</span><span id="line-188">      if (v.isPresent())</span>
 <span class="source-line-no">189</span><span id="line-189">         return v.value();  // Not testable</span>
-<span class="source-line-no">190</span><span id="line-190">      return opte();</span>
+<span class="source-line-no">190</span><span id="line-190">      return oe();</span>
 <span class="source-line-no">191</span><span id="line-191">   }</span>
 <span class="source-line-no">192</span><span id="line-192"></span>
 <span class="source-line-no">193</span><span id="line-193">   /**</span>
@@ -529,7 +529,7 @@
 <span class="source-line-no">516</span><span id="line-516">      v = globalStore.get().get(name);</span>
 <span class="source-line-no">517</span><span id="line-517">      if (v.isPresent())</span>
 <span class="source-line-no">518</span><span id="line-518">         return v.value();</span>
-<span class="source-line-no">519</span><span id="line-519">      return opte();</span>
+<span class="source-line-no">519</span><span id="line-519">      return oe();</span>
 <span class="source-line-no">520</span><span id="line-520">   }</span>
 <span class="source-line-no">521</span><span id="line-521"></span>
 <span class="source-line-no">522</span><span id="line-522">   /**</span>
@@ -556,7 +556,7 @@
 <span class="source-line-no">543</span><span id="line-543">    * This method searches for a value using the same lookup order as {@link #get(String)}.</span>
 <span class="source-line-no">544</span><span id="line-544">    * If a value is found, it is converted to the type of the default value using {@link #toType(String, Class)}.</span>
 <span class="source-line-no">545</span><span id="line-545">    * Supported types include any type that has a static method with signature &lt;c&gt;public static &amp;lt;T&amp;gt; T anyName(String arg)&lt;/c&gt;</span>
-<span class="source-line-no">546</span><span id="line-546">    * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link java.nio.charset.Charset}, {@link java.io.File}, etc.</span>
+<span class="source-line-no">546</span><span id="line-546">    * or a public constructor with signature &lt;c&gt;public T(String arg)&lt;/c&gt;, such as {@link Boolean}, {@link Integer}, {@link Charset}, {@link java.io.File}, etc.</span>
 <span class="source-line-no">547</span><span id="line-547">    *</span>
 <span class="source-line-no">548</span><span id="line-548">    * &lt;h5 class='section'&gt;Example:&lt;/h5&gt;</span>
 <span class="source-line-no">549</span><span id="line-549">    * &lt;p class='bjava'&gt;</span>
@@ -610,7 +610,7 @@
 <span class="source-line-no">597</span><span id="line-597">    */</span>
 <span class="source-line-no">598</span><span id="line-598">   public Settings setGlobal(String name, String value) {</span>
 <span class="source-line-no">599</span><span id="line-599">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">600</span><span id="line-600">      globalStore.orElseThrow(()-&gt;illegalState(MSG_globalDisabled)).set(name, value);</span>
+<span class="source-line-no">600</span><span id="line-600">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).set(name, value);</span>
 <span class="source-line-no">601</span><span id="line-601">      return this;</span>
 <span class="source-line-no">602</span><span id="line-602">   }</span>
 <span class="source-line-no">603</span><span id="line-603"></span>
@@ -627,7 +627,7 @@
 <span class="source-line-no">614</span><span id="line-614">    */</span>
 <span class="source-line-no">615</span><span id="line-615">   public void unsetGlobal(String name) {</span>
 <span class="source-line-no">616</span><span id="line-616">      assertArgNotNull(ARG_name, name);</span>
-<span class="source-line-no">617</span><span id="line-617">      globalStore.orElseThrow(()-&gt;illegalState(MSG_globalDisabled)).unset(name);</span>
+<span class="source-line-no">617</span><span id="line-617">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).unset(name);</span>
 <span class="source-line-no">618</span><span id="line-618">   }</span>
 <span class="source-line-no">619</span><span id="line-619"></span>
 <span class="source-line-no">620</span><span id="line-620">   /**</span>
@@ -718,7 +718,7 @@
 <span class="source-line-no">705</span><span id="line-705">    * @see #unsetGlobal(String)</span>
 <span class="source-line-no">706</span><span id="line-706">    */</span>
 <span class="source-line-no">707</span><span id="line-707">   public Settings clearGlobal() {</span>
-<span class="source-line-no">708</span><span id="line-708">      globalStore.orElseThrow(()-&gt;illegalState(MSG_globalDisabled)).clear();</span>
+<span class="source-line-no">708</span><span id="line-708">      globalStore.orElseThrow(()-&gt;isex(MSG_globalDisabled)).clear();</span>
 <span class="source-line-no">709</span><span id="line-709">      return this;</span>
 <span class="source-line-no">710</span><span id="line-710">   }</span>
 <span class="source-line-no">711</span><span id="line-711"></span>

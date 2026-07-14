@@ -30,7 +30,7 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.bean.jsonapi;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.CollectionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.ThrowableUtils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">021</span><span id="line-21"></span>
 <span class="source-line-no">022</span><span id="line-22">import java.util.*;</span>
 <span class="source-line-no">023</span><span id="line-23"></span>
@@ -259,9 +259,9 @@
 <span class="source-line-no">246</span><span id="line-246">    */</span>
 <span class="source-line-no">247</span><span id="line-247">   public JsonApiDocument validate() {</span>
 <span class="source-line-no">248</span><span id="line-248">      if (data != null &amp;&amp; errors != null)</span>
-<span class="source-line-no">249</span><span id="line-249">         throw illegalState("JSON:API document must not contain both 'data' and 'errors'.");</span>
+<span class="source-line-no">249</span><span id="line-249">         throw isex("JSON:API document must not contain both 'data' and 'errors'.");</span>
 <span class="source-line-no">250</span><span id="line-250">      if (data == null &amp;&amp; errors == null &amp;&amp; meta == null)</span>
-<span class="source-line-no">251</span><span id="line-251">         throw illegalState("JSON:API document must contain at least one of 'data', 'errors', or 'meta'.");</span>
+<span class="source-line-no">251</span><span id="line-251">         throw isex("JSON:API document must contain at least one of 'data', 'errors', or 'meta'.");</span>
 <span class="source-line-no">252</span><span id="line-252">      return this;</span>
 <span class="source-line-no">253</span><span id="line-253">   }</span>
 <span class="source-line-no">254</span><span id="line-254"></span>

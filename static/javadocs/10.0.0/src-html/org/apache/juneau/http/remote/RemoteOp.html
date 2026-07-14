@@ -45,7 +45,7 @@
 <span class="source-line-no">032</span><span id="line-32"> * Note that this annotation is optional if you do not need to override any of the values.</span>
 <span class="source-line-no">033</span><span id="line-33"> *</span>
 <span class="source-line-no">034</span><span id="line-34"> * &lt;h5 class='section'&gt;See Also:&lt;/h5&gt;&lt;ul&gt;</span>
-<span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxyBasics"&gt;REST Proxy Basics&lt;/a&gt;</span>
+<span class="source-line-no">035</span><span id="line-35"> *    &lt;li class='link'&gt;&lt;a class="doclink" href="https://juneau.apache.org/docs/topics/RestProxies"&gt;REST Proxy Basics&lt;/a&gt;</span>
 <span class="source-line-no">036</span><span id="line-36"> * &lt;/ul&gt;</span>
 <span class="source-line-no">037</span><span id="line-37"> */</span>
 <span class="source-line-no">038</span><span id="line-38">@Documented</span>
@@ -174,7 +174,7 @@
 <span class="source-line-no">161</span><span id="line-161">    * &lt;js&gt;"http://other-host/api/users/{id}"&lt;/js&gt;.</span>
 <span class="source-line-no">162</span><span id="line-162">    *</span>
 <span class="source-line-no">163</span><span id="line-163">    * &lt;p&gt;</span>
-<span class="source-line-no">164</span><span id="line-164">    * Precedence (most-specific first): an {@link org.apache.juneau.http.Url @Url} parameter, then this method-level</span>
+<span class="source-line-no">164</span><span id="line-164">    * Precedence (most-specific first): an {@link Url @Url} parameter, then this method-level</span>
 <span class="source-line-no">165</span><span id="line-165">    * value, then the interface-level default ({@link Remote#baseUrl()}), then the client root URL.</span>
 <span class="source-line-no">166</span><span id="line-166">    *</span>
 <span class="source-line-no">167</span><span id="line-167">    * &lt;h5 class='section'&gt;Notes:&lt;/h5&gt;&lt;ul&gt;</span>
@@ -374,10 +374,10 @@
 <span class="source-line-no">361</span><span id="line-361">    * &lt;ul&gt;</span>
 <span class="source-line-no">362</span><span id="line-362">    *    &lt;li&gt;Auto-retry applies only to idempotent verbs (&lt;c&gt;GET&lt;/c&gt;/&lt;c&gt;PUT&lt;/c&gt;/&lt;c&gt;DELETE&lt;/c&gt;/&lt;c&gt;HEAD&lt;/c&gt;); non-idempotent</span>
 <span class="source-line-no">363</span><span id="line-363">    *       verbs (&lt;c&gt;POST&lt;/c&gt;/&lt;c&gt;PATCH&lt;/c&gt;) are retried only when {@link #retryNonIdempotent()} is &lt;jk&gt;true&lt;/jk&gt;.</span>
-<span class="source-line-no">364</span><span id="line-364">    *    &lt;li&gt;A request whose body is not repeatable (e.g. a streaming {@link java.io.InputStream}/{@link java.io.Reader}</span>
+<span class="source-line-no">364</span><span id="line-364">    *    &lt;li&gt;A request whose body is not repeatable (e.g. a streaming {@link InputStream}/{@link Reader}</span>
 <span class="source-line-no">365</span><span id="line-365">    *       body) is never retried.</span>
 <span class="source-line-no">366</span><span id="line-366">    *    &lt;li&gt;Retries are disabled for streaming return modes ({@link RemoteReturn#RESPONSE}, raw</span>
-<span class="source-line-no">367</span><span id="line-367">    *       {@link java.io.InputStream}/{@link java.io.Reader} returns, and streaming cursors) and for</span>
+<span class="source-line-no">367</span><span id="line-367">    *       {@link InputStream}/{@link Reader} returns, and streaming cursors) and for</span>
 <span class="source-line-no">368</span><span id="line-368">    *       {@link java.util.concurrent.Future}/{@link java.util.concurrent.CompletableFuture} returns.</span>
 <span class="source-line-no">369</span><span id="line-369">    * &lt;/ul&gt;</span>
 <span class="source-line-no">370</span><span id="line-370">    *</span>

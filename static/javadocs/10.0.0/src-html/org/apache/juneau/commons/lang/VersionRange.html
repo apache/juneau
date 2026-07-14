@@ -29,7 +29,7 @@
 <span class="source-line-no">016</span><span id="line-16"> */</span>
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.commons.lang;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
-<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.Shorts.*;</span>
 <span class="source-line-no">020</span><span id="line-20"></span>
 <span class="source-line-no">021</span><span id="line-21">/**</span>
 <span class="source-line-no">022</span><span id="line-22"> * Represents an OSGi-style version range like &lt;js&gt;"1.2"&lt;/js&gt; or &lt;js&gt;"[1.0,2.0)"&lt;/js&gt;.</span>
@@ -86,7 +86,7 @@
 <span class="source-line-no">073</span><span id="line-73">    * @return &lt;jk&gt;true&lt;/jk&gt; if the specified version string matches this version range.</span>
 <span class="source-line-no">074</span><span id="line-74">    */</span>
 <span class="source-line-no">075</span><span id="line-75">   public boolean matches(String v) {</span>
-<span class="source-line-no">076</span><span id="line-76">      if (e(v))</span>
+<span class="source-line-no">076</span><span id="line-76">      if (ie(v))</span>
 <span class="source-line-no">077</span><span id="line-77">         return (minVersion == null &amp;&amp; maxVersion == null);</span>
 <span class="source-line-no">078</span><span id="line-78">      var ver = new Version(v);</span>
 <span class="source-line-no">079</span><span id="line-79">      return (minVersion == null || ver.isAtLeast(minVersion, minExclusive))</span>

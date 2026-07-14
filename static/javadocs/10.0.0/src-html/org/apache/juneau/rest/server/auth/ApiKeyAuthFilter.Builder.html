@@ -30,8 +30,8 @@
 <span class="source-line-no">017</span><span id="line-17">package org.apache.juneau.rest.server.auth;</span>
 <span class="source-line-no">018</span><span id="line-18"></span>
 <span class="source-line-no">019</span><span id="line-19">import static org.apache.juneau.commons.utils.AssertionUtils.*;</span>
-<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
-<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.Utils.*;</span>
+<span class="source-line-no">020</span><span id="line-20">import static org.apache.juneau.commons.utils.Shorts.*;</span>
+<span class="source-line-no">021</span><span id="line-21">import static org.apache.juneau.commons.utils.StringUtils.*;</span>
 <span class="source-line-no">022</span><span id="line-22"></span>
 <span class="source-line-no">023</span><span id="line-23">import java.util.*;</span>
 <span class="source-line-no">024</span><span id="line-24"></span>
@@ -226,7 +226,7 @@
 <span class="source-line-no">213</span><span id="line-213">   public Optional&lt;AuthResult&gt; authenticate(HttpServletRequest req) throws AuthenticationException {</span>
 <span class="source-line-no">214</span><span id="line-214">      var key = readKey(req);</span>
 <span class="source-line-no">215</span><span id="line-215">      if (isBlank(key))</span>
-<span class="source-line-no">216</span><span id="line-216">         return opte();</span>
+<span class="source-line-no">216</span><span id="line-216">         return oe();</span>
 <span class="source-line-no">217</span><span id="line-217"></span>
 <span class="source-line-no">218</span><span id="line-218">      java.security.Principal principal;</span>
 <span class="source-line-no">219</span><span id="line-219">      try {</span>
@@ -245,7 +245,7 @@
 <span class="source-line-no">232</span><span id="line-232">      }</span>
 <span class="source-line-no">233</span><span id="line-233"></span>
 <span class="source-line-no">234</span><span id="line-234">      var roles = ClaimsRoleExtractor.extractRoles(principal, rolesClaim);</span>
-<span class="source-line-no">235</span><span id="line-235">      return opt(AuthResult.of(principal, roles));</span>
+<span class="source-line-no">235</span><span id="line-235">      return o(AuthResult.of(principal, roles));</span>
 <span class="source-line-no">236</span><span id="line-236">   }</span>
 <span class="source-line-no">237</span><span id="line-237"></span>
 <span class="source-line-no">238</span><span id="line-238">   private String readKey(HttpServletRequest req) {</span>

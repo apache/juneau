@@ -72,37 +72,37 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safe(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safe</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safe(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safe</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Used to wrap code that returns a value but throws an exception.</div>
+<div class="block">Executes a supplier; wraps any checked exception in <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link"><code>RuntimeException</code></a>.</div>
 </div>
 <div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safe(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safe</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safe(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safe</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a>&gt;&nbsp;exceptionMapper)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Used to wrap code that returns a value but throws an exception, with a custom exception mapper.</div>
+<div class="block">Executes a supplier; maps any checked exception via the provided function.</div>
 </div>
 <div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safeCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safeCatch</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+<div class="col-second even-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safeCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safeCatch</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr>T&gt;&nbsp;exceptionFunction)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Executes a supplier that may throw an exception and returns the result or a fallback value.</div>
+<div class="block">Executes a supplier; returns the result or a fallback value produced by the exception function.</div>
 </div>
 <div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safeOpt(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safeOpt</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safeOpt(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safeOpt</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Executes a supplier that may throw an exception and returns an Optional.</div>
+<div class="block">Executes a supplier; returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> of the result, or empty if an exception is thrown.</div>
 </div>
 <div class="col-first even-row-color"><code>static &lt;T&gt;&nbsp;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;T&gt;</code></div>
-<div class="col-second even-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safeOptCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safeOptCatch</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
+<div class="col-second even-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safeOptCatch(org.apache.juneau.commons.function.ThrowingSupplier,java.util.function.Function)" class="member-name-link">safeOptCatch</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>,<wbr>T&gt;&nbsp;exceptionFunction)</code></div>
 <div class="col-last even-row-color">
-<div class="block">Executes a supplier that may throw an exception and returns an Optional with the result or a fallback value.</div>
+<div class="block">Executes a supplier; returns an <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link"><code>Optional</code></a> of the result or the exception function's value.</div>
 </div>
 <div class="col-first odd-row-color"><code>static &lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color"><span class="type-name-label">Utils.</span><code><a href="../../utils/Utils.html#safeOrNull(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safeOrNull</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">ThrowableUtils.</span><code><a href="../../utils/ThrowableUtils.html#safeOrNull(org.apache.juneau.commons.function.ThrowingSupplier)" class="member-name-link">safeOrNull</a><wbr>(<a href="../ThrowingSupplier.html" title="interface in org.apache.juneau.commons.function">ThrowingSupplier</a>&lt;T&gt;&nbsp;s)</code></div>
 <div class="col-last odd-row-color">
-<div class="block">Executes a supplier that may throw an exception and returns the result or <c>null</c>.</div>
+<div class="block">Executes a supplier; returns the result or <code>null</code> if an exception is thrown.</div>
 </div>
 </div>
 </section>

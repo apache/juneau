@@ -55,7 +55,7 @@
 <span class="source-line-no">042</span><span id="line-42"> *    &lt;li&gt;Otherwise (header absent, blank, or rejected by the validator), a fresh id is minted via the configured</span>
 <span class="source-line-no">043</span><span id="line-43"> *       {@linkplain Builder#idSupplier(Supplier) supplier} (default: {@link UUID#randomUUID()}).</span>
 <span class="source-line-no">044</span><span id="line-44"> *    &lt;li&gt;The chosen id is stashed on the underlying servlet request under the</span>
-<span class="source-line-no">045</span><span id="line-45"> *       {@link org.apache.juneau.rest.server.RestServerConstants#REQUEST_ID REQUEST_ID} attribute key.</span>
+<span class="source-line-no">045</span><span id="line-45"> *       {@link RestServerConstants#REQUEST_ID REQUEST_ID} attribute key.</span>
 <span class="source-line-no">046</span><span id="line-46"> *    &lt;li&gt;The chosen id is echoed on the response as {@code X-Request-Id}.</span>
 <span class="source-line-no">047</span><span id="line-47"> * &lt;/ul&gt;</span>
 <span class="source-line-no">048</span><span id="line-48"> *</span>
@@ -156,7 +156,7 @@
 <span class="source-line-no">143</span><span id="line-143"></span>
 <span class="source-line-no">144</span><span id="line-144">      Supplier&lt;String&gt; idSupplier;</span>
 <span class="source-line-no">145</span><span id="line-145">      Predicate&lt;String&gt; validator;</span>
-<span class="source-line-no">146</span><span id="line-146">      String attributeKey = org.apache.juneau.rest.server.RestServerConstants.REQUEST_ID;</span>
+<span class="source-line-no">146</span><span id="line-146">      String attributeKey = RestServerConstants.REQUEST_ID;</span>
 <span class="source-line-no">147</span><span id="line-147"></span>
 <span class="source-line-no">148</span><span id="line-148">      /**</span>
 <span class="source-line-no">149</span><span id="line-149">       * Constructor.</span>
@@ -200,7 +200,7 @@
 <span class="source-line-no">187</span><span id="line-187">       * Overrides the servlet-request attribute key under which the id is stashed.</span>
 <span class="source-line-no">188</span><span id="line-188">       *</span>
 <span class="source-line-no">189</span><span id="line-189">       * &lt;p&gt;</span>
-<span class="source-line-no">190</span><span id="line-190">       * Defaults to {@link org.apache.juneau.rest.server.RestServerConstants#REQUEST_ID}.  Override only when</span>
+<span class="source-line-no">190</span><span id="line-190">       * Defaults to {@link RestServerConstants#REQUEST_ID}.  Override only when</span>
 <span class="source-line-no">191</span><span id="line-191">       * coexisting with a third-party filter that publishes the id under a different key.</span>
 <span class="source-line-no">192</span><span id="line-192">       *</span>
 <span class="source-line-no">193</span><span id="line-193">       * @param value The attribute key.  Must not be &lt;jk&gt;null&lt;/jk&gt; or blank.</span>
