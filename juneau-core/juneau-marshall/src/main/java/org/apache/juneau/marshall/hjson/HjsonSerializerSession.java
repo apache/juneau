@@ -254,8 +254,8 @@ public class HjsonSerializerSession extends WriterSerializerSession implements R
 		} else if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
 		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2)
-				serializeBeanMap(out, o2, getBeanTypeName(this, eType, aType, pMeta), false);
+			if (sType.isBeanMap())
+				serializeBeanMap(out, (BeanMap) o, getBeanTypeName(this, eType, aType, pMeta), false);
 			else
 				serializeMap(out, (Map) o, eType, false);
 		} else if (sType.isCollection()) {

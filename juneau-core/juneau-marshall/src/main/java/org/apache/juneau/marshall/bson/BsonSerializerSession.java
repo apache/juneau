@@ -186,11 +186,11 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 			serializeBeanMap(child, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta));
 			out.writeChildDocument(child);
 		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2) {
+			if (sType.isBeanMap()) {
 				out.writeElement(DOCUMENT.value, name);
 				var child = out.createChild();
 				child.startDocument();
-				serializeBeanMap(child, o2, getBeanTypeName(this, eType, aType, pMeta));
+				serializeBeanMap(child, (BeanMap)o, getBeanTypeName(this, eType, aType, pMeta));
 				out.writeChildDocument(child);
 			} else {
 				out.writeElement(DOCUMENT.value, name);
@@ -387,7 +387,7 @@ public class BsonSerializerSession extends OutputStreamSerializerSession impleme
 		if (sType != null && sType.isBean()) {
 			pop();
 			serializeBeanMap(bsonOut, toBeanMap(o), getBeanTypeName(this, eType, sType, null));
-		} else if (sType != null && sType.isMap() && !(o instanceof BeanMap)) {
+		} else if (sType != null && sType.isMap() && !sType.isBeanMap()) {
 			pop();
 			serializeMap(bsonOut, (Map)o, eType);
 		} else {

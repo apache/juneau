@@ -218,15 +218,15 @@ public class PrototextSerializerSession extends WriterSerializerSession implemen
 			if (nn(fieldName)) {
 				out.messageStart(fieldName, ctx.useColonForMessages);
 				indent++;
-				if (o instanceof BeanMap o2)
-					serializeBeanMap(out, o2, typeName);
+				if (sType.isBeanMap())
+					serializeBeanMap(out, (BeanMap) o, typeName);
 				else
 					serializeMap(out, (Map) o, sType);
 				indent--;
 				out.messageEnd(indent);
 			} else {
-				if (o instanceof BeanMap o2)
-					serializeBeanMap(out, o2, typeName);
+				if (sType.isBeanMap())
+					serializeBeanMap(out, (BeanMap) o, typeName);
 				else
 					serializeMap(out, (Map) o, sType);
 			}

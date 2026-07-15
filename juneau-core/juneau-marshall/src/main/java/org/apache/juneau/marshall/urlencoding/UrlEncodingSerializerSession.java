@@ -182,8 +182,8 @@ public class UrlEncodingSerializerSession extends UonSerializerSession {
 		if (sType.isBean()) {
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2)
-				serializeBeanMap(out, o2, typeName);
+			if (sType.isBeanMap())
+				serializeBeanMap(out, (BeanMap)o, typeName);
 			else
 				serializeMap(out, (Map)o, sType);
 		} else if (sType.isCollection() || sType.isArray()) {

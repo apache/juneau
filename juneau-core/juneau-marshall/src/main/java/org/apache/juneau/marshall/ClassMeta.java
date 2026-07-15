@@ -114,7 +114,6 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		LIST(17),
 		SET(18),
 		DELEGATE(19),
-		BEAN(20),
 		ITERATOR(21),
 		ITERABLE(22),
 		STREAM(23),

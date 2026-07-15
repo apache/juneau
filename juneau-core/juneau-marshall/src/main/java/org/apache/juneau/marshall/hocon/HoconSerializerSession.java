@@ -283,8 +283,8 @@ public class HoconSerializerSession extends WriterSerializerSession implements R
 		} else if (sType.isBean()) {
 			serializeBeanMap(hw, toBeanMap(o), getBeanTypeName(this, eType, aType, pMeta), false);
 		} else if (sType.isMap()) {
-			if (o instanceof BeanMap o2)
-				serializeBeanMap(hw, o2, getBeanTypeName(this, eType, aType, pMeta), false);
+			if (sType.isBeanMap())
+				serializeBeanMap(hw, (BeanMap) o, getBeanTypeName(this, eType, aType, pMeta), false);
 			else
 				serializeMap(hw, (Map) o, eType, false);
 		} else if (sType.isCollection()) {

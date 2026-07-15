@@ -116,7 +116,7 @@ public class ProtobufSerializerSession extends OutputStreamSerializerSession {
 		if (o == null)
 			return;
 		var cm = getClassMetaForObject(o);
-		if (cm != null && (cm.isMap() && ! cm.isBean()) && ! (o instanceof BeanMap))
+		if (cm != null && (cm.isMap() && ! cm.isBean()) && ! cm.isBeanMap())
 			throw new SerializeException("Protobuf binary serialization requires a bean root type, not a raw Map.");
 		serializeBean(w, toBeanMap(o), getClassMetaForObject(o));
 		w.flush();

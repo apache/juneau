@@ -277,8 +277,8 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 		else if (sType.isBean())
 			serializeBeanMap(out, toBeanMap(o), typeName);
 		else if (sType.isMap()) {
-			if (o instanceof BeanMap o2)
-				serializeBeanMap(out, o2, typeName);
+			if (sType.isBeanMap())
+				serializeBeanMap(out, (BeanMap)o, typeName);
 			else
 				serializeMap(out, (Map)o, eType);
 		} else if (sType.isCollection()) {
