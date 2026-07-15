@@ -23,7 +23,6 @@ import java.util.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.beans.*;

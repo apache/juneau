@@ -84,6 +84,13 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Next-gen REST client, used by the @Remote typed-client (PetStoreClient) round-trip test. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-client</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

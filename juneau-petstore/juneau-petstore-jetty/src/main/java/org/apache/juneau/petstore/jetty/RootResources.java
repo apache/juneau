@@ -33,6 +33,13 @@ import org.apache.juneau.rest.server.widget.*;
  * {@link ShutdownResource}).  The admin trio is a documented Jetty-only non-parity feature — the Spring Boot
  * deployment in {@code juneau-petstore-springboot} does not mount it.
  *
+ * <p>
+ * Also showcases the Config API + SVL variable resolver: the root page's header is driven by
+ * {@code $C{Petstore/appName}}, which resolves against the {@code [Petstore]} section of
+ * {@code juneau-petstore-jetty.cfg} (the same {@code $C{...}} pattern already used by the {@code source} navlink
+ * below, which resolves {@code $C{Source/gitHub}}).  Jetty-only — Spring Boot's embedded container has no
+ * {@code .cfg}/{@code Config} equivalent.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauPetstore">juneau-petstore</a>
  * </ul>
@@ -58,6 +65,9 @@ import org.apache.juneau.rest.server.widget.*;
 @HtmlDocConfig(
 	widgets={
 		ContentTypeMenuItem.class
+	},
+	header={
+		"<h3>$C{Petstore/appName}</h3>"
 	},
 	navlinks={
 		"api: servlet:/api",

@@ -137,6 +137,18 @@ class PetstoreJetty_Test extends TestBase {
 		assertTrue(body.contains("petstore"), "expected petstore link on root: " + body);
 	}
 
+	/**
+	 * Confirms the Config API + SVL var-resolver showcase: {@code RootResources}'s {@code @HtmlDocConfig(header=...)}
+	 * references {@code $C{Petstore/appName}}, which resolves against the {@code [Petstore]} section of
+	 * {@code juneau-petstore-jetty.cfg} — proving the {@code .cfg} value reaches the rendered page.
+	 */
+	@Test void a02_rootHeaderResolvesConfigSvlAppName() throws Exception {
+		var resp = get("/", "text/html");
+		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+		var body = resp.body();
+		assertTrue(body.contains("Apache Juneau Petstore"), "expected $C{Petstore/appName}-resolved header: " + body);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// b — petstore CRUD over real HTTP, JSON
 	//-----------------------------------------------------------------------------------------------------------------
