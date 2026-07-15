@@ -54,6 +54,8 @@ import org.apache.juneau.rest.server.widget.*;
 		PetMustacheViewResource.class,
 		PetFreemarkerViewResource.class,
 		PetstoreUiResource.class,
+		PetInfoResource.class,
+		PetHtmlResource.class,
 		HelloResource.class
 	}
 )

@@ -19,6 +19,11 @@ package org.apache.juneau.petstore.rest;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.image.*;
+import java.io.*;
+
+import javax.imageio.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.dto.Order;
@@ -142,5 +147,42 @@ class PetStoreResource_Test extends TestBase {
 		var c = client();
 		c.delete("/users/dvaughn").run().assertStatus(200);
 		c.get("/users/dvaughn").run().assertStatus(404);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// d — pet photos
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static byte[] pngBytes() throws IOException {
+		var image = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+		try (var baos = new ByteArrayOutputStream()) {
+			ImageIO.write(image, "png", baos);
+			return baos.toByteArray();
+		}
+	}
+
+	@Test void d01_getPetPhoto_notUploaded_404() throws Exception {
+		client().get("/pets/1/photo").accept("image/png").run().assertStatus(404);
+	}
+
+	@Test void d02_getPetPhoto_unknownPet_404() throws Exception {
+		client().get("/pets/99999/photo").accept("image/png").run().assertStatus(404);
+	}
+
+	@Test void d03_putPetPhoto_unknownPet_404() throws Exception {
+		client().put("/pets/99999/photo", new ByteArrayInputStream(pngBytes())).contentType("image/png")
+			.run().assertStatus(404);
+	}
+
+	@Test void d04_putPetPhoto_thenGet_roundTrip() throws Exception {
+		var c = client();
+		c.put("/pets/1/photo", new ByteArrayInputStream(pngBytes())).contentType("image/png")
+			.run().assertStatus(200);
+
+		var bytes = c.get("/pets/1/photo").accept("image/png").run().assertStatus(200).getContent().asBytes();
+		assertTrue(bytes.length > 0);
+
+		var pet = c.get("/pets/1").run().assertStatus(200).getContent().as(Pet.class);
+		assertEquals("/petstore/pets/1/photo", pet.getPhoto());
 	}
 }

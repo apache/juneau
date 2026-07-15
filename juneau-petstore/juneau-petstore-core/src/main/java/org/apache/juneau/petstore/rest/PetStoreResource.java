@@ -16,11 +16,14 @@
  */
 package org.apache.juneau.petstore.rest;
 
+import java.awt.image.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.dto.*;
+import org.apache.juneau.petstore.marshall.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -40,6 +43,8 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<li>{@code POST   /pets}                — create pet
  * 	<li>{@code PUT    /pets/{id}}           — update pet
  * 	<li>{@code DELETE /pets/{id}}           — delete pet
+ * 	<li>{@code GET    /pets/{id}/photo}     — get pet photo
+ * 	<li>{@code PUT    /pets/{id}/photo}     — upload pet photo
  * 	<li>{@code GET    /orders}              — list orders
  * 	<li>{@code GET    /orders/{id}}         — get order
  * 	<li>{@code POST   /orders}              — create order
@@ -70,6 +75,9 @@ public class PetStoreResource extends BasicRestServlet {
 
 	/** Backing store.  Singleton servlet → singleton store, shared across requests. */
 	private final transient PetStore store = new PetStore();
+
+	/** In-memory photo bytes, keyed by pet ID.  Not seeded from JSON — populated only via {@link #putPetPhoto}. */
+	private final transient Map<Long,BufferedImage> photos = new ConcurrentHashMap<>();
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Pets
@@ -142,6 +150,44 @@ public class PetStoreResource extends BasicRestServlet {
 		} catch (PetstoreNotFoundException e) {
 			throw new NotFound(e.getMessage());
 		}
+	}
+
+	/**
+	 * Retrieves the uploaded photo for a pet.
+	 *
+	 * @param id The pet ID.
+	 * @return The photo image.
+	 * @throws NotFound If no pet with the given ID exists, or no photo has been uploaded for it.
+	 */
+	@RestGet(path="/pets/{id}/photo", serializers=PetPhotoSerializer.class)
+	public BufferedImage getPetPhoto(@Path("id") long id) {
+		if (store.getPet(id) == null)
+			throw new NotFound("Pet not found: id={0}", id);
+		var image = photos.get(id);
+		if (image == null)
+			throw new NotFound("No photo uploaded for pet: id={0}", id);
+		return image;
+	}
+
+	/**
+	 * Uploads a photo for a pet.
+	 *
+	 * <p>
+	 * On success, also updates the pet's {@link Pet#getPhoto() photo} field to point back at this endpoint.
+	 *
+	 * @param id The pet ID.
+	 * @param image The photo image.
+	 * @return OK.
+	 * @throws NotFound If no pet with the given ID exists.
+	 */
+	@RestPut(path="/pets/{id}/photo", parsers=PetPhotoParser.class)
+	public Ok putPetPhoto(@Path("id") long id, @Content BufferedImage image) {
+		var pet = store.getPet(id);
+		if (pet == null)
+			throw new NotFound("Pet not found: id={0}", id);
+		photos.put(id, image);
+		pet.setPhoto("/petstore/pets/" + id + "/photo");
+		return Ok.INSTANCE;
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
