@@ -147,7 +147,7 @@ public class BasicOpenApiProviderSession {
 		if (swaggerMap == null)
 			swaggerMap = new Json5Map();
 		var openApiMap = transform(swaggerMap);
-		var openApiJson = Json5.DEFAULT_READABLE.write(openApiMap);
+		var openApiJson = Json5R.of(openApiMap);
 		return jp.parse(openApiJson, OpenApi.class);
 	}
 

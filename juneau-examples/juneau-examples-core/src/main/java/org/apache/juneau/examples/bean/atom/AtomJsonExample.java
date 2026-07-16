@@ -38,7 +38,7 @@ public class AtomJsonExample {
 		var feed = AtomFeed.getAtomFeed();
 
 		// Get JSON marshaller with readable output.
-		var s = Json5.DEFAULT_READABLE;
+		var s = Json5R.DEFAULT;
 
 		// Serialize to ATOM/JSON
 		//Produces

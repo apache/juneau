@@ -112,6 +112,71 @@ public class Hocon extends CharMarshaller {
 	}
 
 	/**
+	 * Parses the contents of a {@link Reader} into the specified object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c> that catches any
+	 * {@link IOException} from the underlying stream and rethrows it as an unchecked {@link ParseException}, so the
+	 * caller is not burdened with a checked exception.
+	 *
+	 * @param <T> The class type of the object being created.
+	 * @param input The input reader.
+	 * @param type The object type to create.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered or an I/O error occurred on the underlying stream.
+	 */
+	public static <T> T to(Reader input, Class<T> type) throws ParseException {
+		try {
+			return DEFAULT.read(input, type);
+		} catch (IOException e) {
+			throw new ParseException(e);
+		}
+	}
+
+	/**
+	 * Parses the contents of a {@link Reader} into the specified parameterized object type using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c> that catches any
+	 * {@link IOException} from the underlying stream and rethrows it as an unchecked {@link ParseException}, so the
+	 * caller is not burdened with a checked exception.
+	 *
+	 * @param <T> The class type of the object to create.
+	 * @param input The input reader.
+	 * @param type The object type to create.
+	 * @param args The type arguments of the class if it's a collection or map.
+	 * @return The parsed object.
+	 * @throws ParseException Malformed input encountered or an I/O error occurred on the underlying stream.
+	 */
+	public static <T> T to(Reader input, Type type, Type... args) throws ParseException {
+		try {
+			return DEFAULT.read(input, type, args);
+		} catch (IOException e) {
+			throw new ParseException(e);
+		}
+	}
+
+	/**
+	 * Serializes a POJO to the specified {@link Writer} using the {@link #DEFAULT} marshaller.
+	 *
+	 * <p>
+	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>, <jv>output</jv>)</c> that catches any
+	 * {@link IOException} from the underlying stream and rethrows it as an unchecked {@link SerializeException}, so the
+	 * caller is not burdened with a checked exception.
+	 *
+	 * @param object The object to serialize.
+	 * @param output The writer to serialize to.
+	 * @throws SerializeException If a problem occurred trying to convert the output or an I/O error occurred on the underlying stream.
+	 */
+	public static void of(Object object, Writer output) throws SerializeException {
+		try {
+			DEFAULT.write(object, output);
+		} catch (IOException e) {
+			throw new SerializeException(e);
+		}
+	}
+
+	/**
 	 * Opens a low-level {@link RecordReader} cursor over the specified input using the {@link #DEFAULT} marshaller.
 	 *
 	 * <p>

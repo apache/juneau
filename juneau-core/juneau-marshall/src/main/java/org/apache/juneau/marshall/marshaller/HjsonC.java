@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.marshall.marshaller;
 
-import org.apache.juneau.marshall.markdown.*;
+import org.apache.juneau.marshall.hjson.*;
 import java.io.*;
 import java.lang.reflect.*;
 import org.apache.juneau.marshall.parser.*;
@@ -24,57 +24,41 @@ import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.stream.*;
 
 /**
- * A pairing of a {@link MarkdownSerializer} and {@link MarkdownParser} into a single class with convenience to/of methods.
+ * A {@link Hjson} variant that produces <b>compact</b> (single-line) Hjson output.
  *
  * <p>
- * The general idea is to combine a single serializer and parser inside a simplified API for serializing and parsing POJOs.
+ * 	This is the first-class facade form of the compact Hjson variant.  It pairs
+ * 	{@link HjsonSerializer#DEFAULT_COMPACT} with {@link HjsonParser#DEFAULT} and exposes the full
+ * 	static shortcut surface bound to its own {@link #DEFAULT} instance.
  *
  * <h5 class='figure'>Examples:</h5>
  * <p class='bjava'>
- * 	<jc>// Using instance.</jc>
- * 	Markdown <jv>md</jv> = <jk>new</jk> Markdown();
- * 	MyPojo <jv>myPojo</jv> = <jv>md</jv>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = <jv>md</jv>.write(<jv>myPojo</jv>);
- * </p>
- * <p class='bjava'>
- * 	<jc>// Using DEFAULT instance.</jc>
- * 	MyPojo <jv>myPojo</jv> = Markdown.<jsf>DEFAULT</jsf>.read(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = Markdown.<jsf>DEFAULT</jsf>.write(<jv>myPojo</jv>);
- * </p>
- *
- * <h5 class='figure'>Example output (bean with name/age):</h5>
- * <p class='bcode'>
- * 	| Property | Value |
- * 	|---|---|
- * 	| name | Alice |
- * 	| age | 30 |
- * </p>
- *
- * <p class='bjava'>
  *	<jc>// Using static shortcuts.</jc>
- * 	MyPojo <jv>myPojo</jv> = Markdown.<jsm>to</jsm>(<jv>string</jv>, MyPojo.<jk>class</jk>);
- * 	String <jv>string</jv> = Markdown.<jsm>of</jsm>(<jv>myPojo</jv>);
+ * 	String <jv>hjson</jv> = HjsonC.<jsm>of</jsm>(<jv>myPojo</jv>);
+ * 	MyPojo <jv>myPojo</jv> = HjsonC.<jsm>to</jsm>(<jv>hjson</jv>, MyPojo.<jk>class</jk>);
  * </p>
+ *
+ * <h5 class='section'>Notes:</h5><ul>
+ * 	<li class='note'>Because Java <i>hides</i> (does not override) static members, this class redeclares the
+ * 		entire static shortcut surface of {@link Hjson} so that every shortcut is bound to this class's
+ * 		compact {@link #DEFAULT} rather than the readable {@link Hjson#DEFAULT}.
+ * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/Marshallers">Marshallers</a>
+ * 	<li class='link'><a class="doclink" href="https://hjson.github.io/syntax.html">Hjson Specification</a>
  * </ul>
  */
 @SuppressWarnings({
 	"resource" // Cursor shortcut methods return Closeables owned by the caller; Eclipse JDT @Owning warning is by design.
 })
-public class Markdown extends CharMarshaller {
+public class HjsonC extends Hjson {
 
-	/**
-	 * Default reusable instance using fragment-mode serializer and parser.
-	 */
-	public static final Markdown DEFAULT = new Markdown();
+	/** Default reusable instance, compact format. */
+	public static final HjsonC DEFAULT = new HjsonC();
 
 	/**
 	 * Serializes a POJO to a <c>String</c> using the {@link #DEFAULT} marshaller.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>)</c>.
 	 *
 	 * @param object The object to serialize.
 	 * @return The serialized object.
@@ -86,9 +70,6 @@ public class Markdown extends CharMarshaller {
 
 	/**
 	 * Parses an input into the specified object type using the {@link #DEFAULT} marshaller.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c>.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input The input.
@@ -102,9 +83,6 @@ public class Markdown extends CharMarshaller {
 
 	/**
 	 * Parses an input into the specified parameterized object type using the {@link #DEFAULT} marshaller.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c>.
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input.
@@ -121,9 +99,8 @@ public class Markdown extends CharMarshaller {
 	 * Parses the contents of a {@link Reader} into the specified object type using the {@link #DEFAULT} marshaller.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>)</c> that catches any
-	 * {@link IOException} from the underlying stream and rethrows it as an unchecked {@link ParseException}, so the
-	 * caller is not burdened with a checked exception.
+	 * Catches any {@link IOException} from the underlying stream and rethrows it as an unchecked
+	 * {@link ParseException}.
 	 *
 	 * @param <T> The class type of the object being created.
 	 * @param input The input reader.
@@ -143,9 +120,8 @@ public class Markdown extends CharMarshaller {
 	 * Parses the contents of a {@link Reader} into the specified parameterized object type using the {@link #DEFAULT} marshaller.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.read(<jv>input</jv>, <jv>type</jv>, <jv>args</jv>)</c> that catches any
-	 * {@link IOException} from the underlying stream and rethrows it as an unchecked {@link ParseException}, so the
-	 * caller is not burdened with a checked exception.
+	 * Catches any {@link IOException} from the underlying stream and rethrows it as an unchecked
+	 * {@link ParseException}.
 	 *
 	 * @param <T> The class type of the object to create.
 	 * @param input The input reader.
@@ -166,9 +142,8 @@ public class Markdown extends CharMarshaller {
 	 * Serializes a POJO to the specified {@link Writer} using the {@link #DEFAULT} marshaller.
 	 *
 	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.write(<jv>object</jv>, <jv>output</jv>)</c> that catches any
-	 * {@link IOException} from the underlying stream and rethrows it as an unchecked {@link SerializeException}, so the
-	 * caller is not burdened with a checked exception.
+	 * Catches any {@link IOException} from the underlying stream and rethrows it as an unchecked
+	 * {@link SerializeException}.
 	 *
 	 * @param object The object to serialize.
 	 * @param output The writer to serialize to.
@@ -185,9 +160,6 @@ public class Markdown extends CharMarshaller {
 	/**
 	 * Opens a low-level {@link RecordReader} cursor over the specified input using the {@link #DEFAULT} marshaller.
 	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.readRecords(<jv>input</jv>)</c>.
-	 *
 	 * @param input The input.
 	 * @return A new {@link RecordReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
@@ -198,9 +170,6 @@ public class Markdown extends CharMarshaller {
 
 	/**
 	 * Opens a low-level {@link RecordWriter} cursor over the specified output using the {@link #DEFAULT} marshaller.
-	 *
-	 * <p>
-	 * A shortcut for calling <c><jsf>DEFAULT</jsf>.writeRecords(<jv>output</jv>)</c>.
 	 *
 	 * @param output The output.
 	 * @return A new {@link RecordWriter}.
@@ -214,23 +183,9 @@ public class Markdown extends CharMarshaller {
 	 * Constructor.
 	 *
 	 * <p>
-	 * Uses {@link MarkdownSerializer#DEFAULT} and {@link MarkdownParser#DEFAULT}.
+	 * Uses {@link HjsonSerializer#DEFAULT_COMPACT} and {@link HjsonParser#DEFAULT}.
 	 */
-	public Markdown() {
-		this(MarkdownSerializer.DEFAULT, MarkdownParser.DEFAULT);
-	}
-
-	/**
-	 * Constructor.
-	 *
-	 * @param s
-	 * 	The serializer to use for serializing output.
-	 * 	<br>Must not be <jk>null</jk>.
-	 * @param p
-	 * 	The parser to use for parsing input.
-	 * 	<br>Must not be <jk>null</jk>.
-	 */
-	public Markdown(MarkdownSerializer s, MarkdownParser p) {
-		super(s, p);
+	public HjsonC() {
+		super(HjsonSerializer.DEFAULT_COMPACT, HjsonParser.DEFAULT);
 	}
 }

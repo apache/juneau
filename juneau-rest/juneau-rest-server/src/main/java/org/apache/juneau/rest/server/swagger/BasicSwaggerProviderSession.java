@@ -688,7 +688,7 @@ public class BasicSwaggerProviderSession {
 			omSwagger.remove(SWAGGER_produces);
 
 		try {
-			var swaggerJson = Json5.DEFAULT_READABLE.write(omSwagger);
+			var swaggerJson = Json5R.of(omSwagger);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new ServletException("Error detected in swagger.", e);
