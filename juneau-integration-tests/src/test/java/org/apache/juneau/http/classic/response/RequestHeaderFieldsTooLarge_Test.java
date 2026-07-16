@@ -35,7 +35,7 @@ class RequestHeaderFieldsTooLarge_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws RequestHeaderFieldsTooLarge {
-			throw new RequestHeaderFieldsTooLarge("foo {0}", "bar");
+			throw new RequestHeaderFieldsTooLarge("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws RequestHeaderFieldsTooLarge {
@@ -43,7 +43,7 @@ class RequestHeaderFieldsTooLarge_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws RequestHeaderFieldsTooLarge {
-			throw new RequestHeaderFieldsTooLarge(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new RequestHeaderFieldsTooLarge(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws RequestHeaderFieldsTooLarge {

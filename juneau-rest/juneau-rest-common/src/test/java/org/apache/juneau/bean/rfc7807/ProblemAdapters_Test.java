@@ -104,7 +104,7 @@ class ProblemAdapters_Test extends TestBase {
 
 	@Test
 	void b01_badRequest_withMessage() {
-		var p = ProblemAdapters.fromException(new BadRequest("Field {0} is invalid", "balance"));
+		var p = ProblemAdapters.fromException(new BadRequest("Field %s is invalid", "balance"));
 		assertEquals(Integer.valueOf(400), p.getStatus());
 		assertEquals("Bad Request", p.getTitle());
 		assertEquals("Field balance is invalid", p.getDetail());
@@ -112,7 +112,7 @@ class ProblemAdapters_Test extends TestBase {
 
 	@Test
 	void b02_notFound_withFormatArgs() {
-		var p = ProblemAdapters.fromException(new NotFound("Order {0} not found", 42));
+		var p = ProblemAdapters.fromException(new NotFound("Order %s not found", 42));
 		assertEquals(Integer.valueOf(404), p.getStatus());
 		assertEquals("Not Found", p.getTitle());
 		assertEquals("Order 42 not found", p.getDetail());
@@ -152,7 +152,7 @@ class ProblemAdapters_Test extends TestBase {
 	@Test
 	void c02_notFound_withCauseAndMessage() {
 		var cause = new IllegalArgumentException("ignored");
-		var p = ProblemAdapters.fromException(new NotFound(cause, "Order {0} missing", 7));
+		var p = ProblemAdapters.fromException(new NotFound(cause, "Order %s missing", 7));
 		assertEquals(Integer.valueOf(404), p.getStatus());
 		assertEquals("Not Found", p.getTitle());
 		assertEquals("Order 7 missing", p.getDetail());

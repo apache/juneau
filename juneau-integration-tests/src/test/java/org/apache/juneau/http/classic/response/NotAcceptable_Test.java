@@ -35,7 +35,7 @@ class NotAcceptable_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws NotAcceptable {
-			throw new NotAcceptable("foo {0}", "bar");
+			throw new NotAcceptable("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws NotAcceptable {
@@ -43,7 +43,7 @@ class NotAcceptable_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws NotAcceptable {
-			throw new NotAcceptable(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new NotAcceptable(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws NotAcceptable {

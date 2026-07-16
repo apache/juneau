@@ -25,8 +25,7 @@ import org.apache.juneau.bean.swagger.Swagger;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.serializer.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.*;
 
 /**
@@ -97,7 +96,6 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 		try {
 			RestRequest req = session.getBean(RestRequest.class).orElseThrow(InternalServerError::new);
 			Optional<Swagger> swagger = req.getSwagger();
-			WriterSerializer s = Json5Serializer.DEFAULT;
 			Optional<Operation> methodSwagger = req.getOperationSwagger();
 			char c = charAt(key, 0);
 			if (c == 'c') {
@@ -122,7 +120,7 @@ public class RequestSwaggerVar extends MultipartResolvingVar {
 					return swagger.map(Swagger::getInfo).map(Info::getSiteName).orElse(null);
 			} else if (c == 't') {
 				if ("tags".equals(key))
-					return swagger.map(Swagger::getTags).map(s::toString).orElse(null);
+					return swagger.map(Swagger::getTags).map(Json5::of).orElse(null);
 				if ("termsOfService".equals(key))
 					return swagger.map(Swagger::getInfo).map(Info::getTermsOfService).orElse(null);
 				if ("title".equals(key))

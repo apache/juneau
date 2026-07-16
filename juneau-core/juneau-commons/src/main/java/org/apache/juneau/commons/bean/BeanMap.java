@@ -172,7 +172,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		if (p == null) {
 			if (meta.getConfig().isIgnoreUnknownBeanProperties())
 				return;
-			throw brex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
+			throw brex(meta.getClassInfo(), "Bean property '%s' not found.", property);
 		}
 		p.add(this, property, value);
 	}
@@ -520,7 +520,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				propertyCache.forEach(this::put);
 				propertyCache = null;
 			} catch (IllegalArgumentException e) {
-				throw brex(e, meta.getBeanInfo().inner(), "IllegalArgumentException occurred on call to class constructor ''{0}'' with argument types ''{1}''", c.getNameSimple(),
+				throw brex(e, meta.getBeanInfo().inner(), "IllegalArgumentException occurred on call to class constructor '%s' with argument types '%s'", c.getNameSimple(),
 					Arrays.toString(getClasses(args)));
 			} catch (Exception e) {
 				throw brex(e);
@@ -735,7 +735,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 
 			p = getPropertyMeta("*");
 			if (p == null)
-				throw brex(meta.getClassInfo(), "Bean property ''{0}'' not found.", property);
+				throw brex(meta.getClassInfo(), "Bean property '%s' not found.", property);
 		}
 		return p.set(this, property, value);
 	}

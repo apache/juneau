@@ -104,14 +104,14 @@ public class HoconResolver {
 	private HoconValue resolveSubstitution(HoconValue.HoconSubstitution sub, boolean optional) {
 		var path = sub.getPath();
 		if (inProgress.contains(path))
-			throw rex("Circular substitution: {0}", path);
+			throw rex("Circular substitution: %s", path);
 		inProgress.add(path);
 		try {
 			var found = lookup(path);
 			if (found == null) {
 				if (optional)
 					return null;
-				throw rex("Substitution ''${0}'' not found", path);
+				throw rex("Substitution '$%s' not found", path);
 			}
 			var resolved = resolveValue(found);
 			if (resolved != null)
@@ -202,14 +202,14 @@ public class HoconResolver {
 			Function<String, HoconValue> lookup) {
 		var path = sub.getPath();
 		if (inProgress.contains(path))
-			throw rex("Circular substitution: {0}", path);
+			throw rex("Circular substitution: %s", path);
 		inProgress.add(path);
 		try {
 			var found = lookup.apply(path);
 			if (found == null) {
 				if (optional)
 					return null;
-				throw rex("Substitution ''${0}'' not found", path);
+				throw rex("Substitution '$%s' not found", path);
 			}
 			var resolved = resolveValueWithLookup(found, lookup);
 			if (resolved != null)

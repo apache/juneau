@@ -422,7 +422,9 @@ public class Shorts {
 	public static boolean ine(CharSequence s) { return StringUtils.isNotEmpty(s); }
 
 	/**
-	 * Formats a message using {@link java.text.MessageFormat}-style {0} placeholders.
+	 * Formats a message using printf-style ({@code %s}/{@code %d}/…) placeholders.
+	 *
+	 * <p>For MessageFormat-style ({@code {0}}) patterns, use {@link #mf(String,Object...)}.
 	 *
 	 * @param p The pattern.
 	 * @param a The arguments.
@@ -432,7 +434,9 @@ public class Shorts {
 	public static String f(String p, Object...a) { return StringUtils.format(p, a); }
 
 	/**
-	 * Returns a supplier that lazily formats a message (deferred until {@link Supplier#get()}).
+	 * Returns a supplier that lazily formats a printf-style message (deferred until {@link Supplier#get()}).
+	 *
+	 * <p>For MessageFormat-style ({@code {0}}) patterns, use {@link #mfs(String,Object...)}.
 	 *
 	 * @param p The pattern.
 	 * @param a The arguments.
@@ -440,6 +444,29 @@ public class Shorts {
 	 * @see StringUtils#format(String,Object...)
 	 */
 	public static Supplier<String> fs(String p, Object...a) { return () -> StringUtils.format(p, a); }
+
+	/**
+	 * Formats a message using {@link java.text.MessageFormat}-style {0} placeholders.
+	 *
+	 * <p>MessageFormat counterpart to {@link #f(String,Object...)}, for patterns that genuinely need
+	 * MessageFormat semantics (e.g. externally-authored i18n {@code .properties} strings).
+	 *
+	 * @param p The pattern.
+	 * @param a The arguments.
+	 * @return The formatted string.
+	 * @see StringUtils#mformat(String,Object...)
+	 */
+	public static String mf(String p, Object...a) { return StringUtils.mformat(p, a); }
+
+	/**
+	 * Returns a supplier that lazily formats a MessageFormat-style message (deferred until {@link Supplier#get()}).
+	 *
+	 * @param p The pattern.
+	 * @param a The arguments.
+	 * @return A supplier of the formatted string.
+	 * @see StringUtils#mformat(String,Object...)
+	 */
+	public static Supplier<String> mfs(String p, Object...a) { return () -> StringUtils.mformat(p, a); }
 
 	/**
 	 * Returns a human-readable string representation of the specified object.

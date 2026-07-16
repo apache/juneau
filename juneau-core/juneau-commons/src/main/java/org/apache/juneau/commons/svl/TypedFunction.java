@@ -120,7 +120,7 @@ public abstract class TypedFunction implements VarFunction {
 			if (c.acceptsArity(n)) { o = c; break; }
 		}
 		if (o == null)
-			throw iaex("Function ''{0}'' has no overload accepting {1} argument(s)", name(), n);
+			throw iaex("Function '%s' has no overload accepting %s argument(s)", name(), n);
 
 		var coerced = ArgCoercer.coerce(name(), o.argTypes, args);
 		try {
@@ -138,9 +138,9 @@ public abstract class TypedFunction implements VarFunction {
 			var cause = e.getTargetException();
 			if (cause instanceof RuntimeException re)
 				throw re;
-			throw iaex("Function ''{0}'' threw {1}: {2}", name(), cns(cause), cause.getMessage());
+			throw iaex("Function '%s' threw %s: %s", name(), cns(cause), cause.getMessage());
 		} catch (IllegalAccessException e) {
-			throw iaex("Function ''{0}'' invoke method must be public: {1}", name(), e.getMessage());
+			throw iaex("Function '%s' invoke method must be public: %s", name(), e.getMessage());
 		}
 	}
 
@@ -160,7 +160,7 @@ public abstract class TypedFunction implements VarFunction {
 			found.add(new Overload(m, argTypes, takesSession, variadic));
 		}
 		if (found.isEmpty())
-			throw iaex("TypedFunction subclass {0} must declare a public invoke(...) method", cls.getName());
+			throw iaex("TypedFunction subclass %s must declare a public invoke(...) method", cls.getName());
 		// Sort by descending fixedCount so larger arity overloads get matched before any
 		// variadic overload they might overlap with.
 		found.sort((a, b) -> Integer.compare(b.fixedCount, a.fixedCount));

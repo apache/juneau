@@ -35,7 +35,7 @@ class UpgradeRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws UpgradeRequired {
-			throw new UpgradeRequired("foo {0}", "bar");
+			throw new UpgradeRequired("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws UpgradeRequired {
@@ -43,7 +43,7 @@ class UpgradeRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws UpgradeRequired {
-			throw new UpgradeRequired(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new UpgradeRequired(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws UpgradeRequired {

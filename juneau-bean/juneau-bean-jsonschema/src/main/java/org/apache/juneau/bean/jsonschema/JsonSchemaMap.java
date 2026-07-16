@@ -25,7 +25,7 @@ import java.net.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * A container for retrieving JSON {@link JsonSchema} objects by URI.
@@ -135,7 +135,7 @@ public abstract class JsonSchemaMap extends ConcurrentHashMap<URI,JsonSchema> {
 		try (var r = getReader(uri)) {
 			if (r == null)
 				return null;
-			return Json5Parser.DEFAULT.parse(r, JsonSchema.class);
+			return Json5.DEFAULT.read(r, JsonSchema.class);
 		} catch (Exception e) { // HTT - compiler-generated branch from try-with-resources null check
 			throw toRex(e);
 		}

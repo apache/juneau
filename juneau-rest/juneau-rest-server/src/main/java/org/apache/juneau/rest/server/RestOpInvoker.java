@@ -158,7 +158,7 @@ public class RestOpInvoker extends MethodInvoker {
 			} catch (BasicHttpException e) {
 				throw e;
 			} catch (Exception e) {
-				throw new BadRequest(e, "Could not resolve parameter {0} of type ''{1}'' on method ''{2}''.", i, pi.getParameterType(), getFullName());
+				throw new BadRequest(e, "Could not resolve parameter %s of type '%s' on method '%s'.", i, pi.getParameterType(), getFullName());
 			}
 		}
 
@@ -206,7 +206,7 @@ public class RestOpInvoker extends MethodInvoker {
 
 		} catch (IllegalAccessException | IllegalArgumentException e) {
 			observed = e;
-			throw new InternalServerError(e, "Error occurred invoking method ''{0}''.", inner().getNameFull());
+			throw new InternalServerError(e, "Error occurred invoking method '%s'.", inner().getNameFull());
 		} catch (InvocationTargetException e) {
 			Throwable e2 = e.getTargetException();
 			observed = e2;

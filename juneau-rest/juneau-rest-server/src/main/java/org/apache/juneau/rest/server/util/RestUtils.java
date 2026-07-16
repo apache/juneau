@@ -329,7 +329,7 @@ public class RestUtils {
 	 */
 	public static String validatePathInfo(String value) {
 		if (value != null && (value.isEmpty() || value.charAt(0) != '/'))
-			throw rex("Value is not a valid path-info path: [{0}]", value);
+			throw rex("Value is not a valid path-info path: [%s]", value);
 		return value;
 	}
 
@@ -352,9 +352,9 @@ public class RestUtils {
 	 */
 	public static String validateServletPath(String value) {
 		if (value == null)
-			throw rex("Value is not a valid servlet path: [{0}]", value);
+			throw rex("Value is not a valid servlet path: [%s]", value);
 		if (! value.isEmpty() && (value.equals("/") || value.charAt(value.length() - 1) == '/' || value.charAt(0) != '/'))
-			throw rex("Value is not a valid servlet path: [{0}]", value);
+			throw rex("Value is not a valid servlet path: [%s]", value);
 		return value;
 	}
 

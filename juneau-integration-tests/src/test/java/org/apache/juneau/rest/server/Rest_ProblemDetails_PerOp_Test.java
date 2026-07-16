@@ -45,7 +45,7 @@ class Rest_ProblemDetails_PerOp_Test extends TestBase {
 	public static class A {
 		@RestGet(path="/order/{id}", problemDetails="false")
 		public String order(@Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 
@@ -67,7 +67,7 @@ class Rest_ProblemDetails_PerOp_Test extends TestBase {
 	public static class B {
 		@RestGet(path="/order/{id}", problemDetails="true")
 		public String order(@Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 
@@ -89,7 +89,7 @@ class Rest_ProblemDetails_PerOp_Test extends TestBase {
 	public static class C {
 		@RestGet("/order/{id}")
 		public String order(@Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 
@@ -110,7 +110,7 @@ class Rest_ProblemDetails_PerOp_Test extends TestBase {
 	public static class D {
 		@RestGet("/order/{id}")
 		public String order(@Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 

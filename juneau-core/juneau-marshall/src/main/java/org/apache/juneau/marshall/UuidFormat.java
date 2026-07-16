@@ -154,7 +154,7 @@ public enum UuidFormat {
 		try {
 			return UUID.fromString(s);
 		} catch (IllegalArgumentException e) {
-			throw iaex("Invalid UUID value ''{0}'' for format {1}: {2}", value, format, e.getMessage());
+			throw iaex("Invalid UUID value '%s' for format %s: %s", value, format, e.getMessage());
 		}
 	}
 

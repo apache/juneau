@@ -933,7 +933,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 					return System.identityHashCode(proxy);
 				if (eq(method.getName(), "equals") && method.getParameterCount() == 1)
 					return proxy == args[0];
-				throw exex("Unsupported provider method: {0}", method.getName());
+				throw exex("Unsupported provider method: %s", method.getName());
 			};
 			return Proxy.newProxyInstance(providerType.getClassLoader(), new Class<?>[] {providerType}, handler);
 		}
@@ -1018,7 +1018,7 @@ public final class ParameterInfo extends ElementInfo implements Annotatable {
 		if (r.isPresent())
 			return r.get();
 
-		throw exex("Could not resolve value for parameter {0}", this);
+		throw exex("Could not resolve value for parameter %s", this);
 	}
 
 	/**

@@ -35,8 +35,8 @@ class AssertionUtils_Test extends TestBase {
 	void a001_assertArg() {
 		// Should not throw when expression is true
 		assertArg(true, "Should not throw");
-		assertArg(true, "Message with {0}", "arg");
-		assertArg(true, "Test {0} {1} {2}", "a", "b", "c");
+		assertArg(true, "Message with %s", "arg");
+		assertArg(true, "Test %s %s %s", "a", "b", "c");
 
 		// Should throw when expression is false
 		assertThrowsWithMessage(IllegalArgumentException.class, "Test message", () -> {
@@ -44,11 +44,11 @@ class AssertionUtils_Test extends TestBase {
 		});
 
 		assertThrowsWithMessage(IllegalArgumentException.class, fixedSizeList("Test message", "arg1"), () -> {
-			assertArg(false, "Test message {0}", "arg1");
+			assertArg(false, "Test message %s", "arg1");
 		});
 
 		assertThrowsWithMessage(IllegalArgumentException.class, "Test", () -> {
-			assertArg(false, "Test {0} {1} {2}", "a", "b", "c");
+			assertArg(false, "Test %s %s %s", "a", "b", "c");
 		});
 	}
 

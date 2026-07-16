@@ -106,7 +106,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		 */
 		public Builder signingKey(byte[] value) {
 			assertArgNotNull("value", value);
-			assertArg(value.length >= 32, "signingKey must be at least 32 bytes (256 bits) for HS256; was {0}", value.length);
+			assertArg(value.length >= 32, "signingKey must be at least 32 bytes (256 bits) for HS256; was %s", value.length);
 			signingKey = value.clone();
 			return this;
 		}
@@ -118,7 +118,7 @@ public class SignedCookieSessionStore implements SessionStore {
 		 * @return This object.
 		 */
 		public Builder maxCookieBytes(int value) {
-			assertArg(value > 0, "maxCookieBytes must be positive (was {0})", value);
+			assertArg(value > 0, "maxCookieBytes must be positive (was %s)", value);
 			maxCookieBytes = value;
 			return this;
 		}

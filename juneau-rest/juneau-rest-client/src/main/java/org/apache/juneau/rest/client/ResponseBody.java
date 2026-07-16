@@ -193,7 +193,7 @@ public final class ResponseBody {
 		var h = response.getFirstHeader("Content-Type");
 		var ct = h == null ? null : h.value();
 		return response.getClient().getMatchingParser(ct).orElseThrow(() -> new UnsupportedMediaType(
-			"No parser matched the response Content-Type ''{0}'' and no default parser is configured on the client.", ct));
+			"No parser matched the response Content-Type '%s' and no default parser is configured on the client.", ct));
 	}
 
 	/**

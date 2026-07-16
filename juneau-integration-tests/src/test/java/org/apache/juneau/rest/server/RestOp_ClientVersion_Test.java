@@ -59,13 +59,13 @@ class RestOp_ClientVersion_Test extends TestBase {
 		var a = MockRestClient.build(A1.class);
 		a.get("/").run().assertContent("no-version");
 		for (var s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[%s]",s).is("[1.0,1.0]");
 		}
 		for (var s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("[1.1,2)");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[%s]").is("[1.1,2)");
 		}
 		for (var s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("2");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[%s]").is("2");
 		}
 	}
 
@@ -97,13 +97,13 @@ class RestOp_ClientVersion_Test extends TestBase {
 		var a = MockRestClient.build(A2.class);
 		a.get("/").run().assertContent("no-version");
 		for (var s : "1, 1.0, 1.0.0, 1.0.1".split("\\s*,\\s*")) {
-			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]",s).is("[1.0,1.0]");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[%s]",s).is("[1.0,1.0]");
 		}
 		for (var s : "1.1, 1.1.1, 1.2, 1.9.9".split("\\s*,\\s*")) {
-			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("[1.1,2)");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[%s]").is("[1.1,2)");
 		}
 		for (var s : "2, 2.0, 2.1, 9, 9.9".split("\\s*,\\s*")) {
-			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[{0}]").is("2");
+			a.get("/").header(ClientVersion.of(s)).run().assertContent().setMsg("s=[%s]").is("2");
 		}
 	}
 

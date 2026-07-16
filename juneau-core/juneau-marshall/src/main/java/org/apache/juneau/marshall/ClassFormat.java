@@ -222,7 +222,7 @@ public enum ClassFormat {
 		try {
 			return resolveWithArraySuffix(s, cl);
 		} catch (ClassNotFoundException firstAttempt) {
-			throw iaex("Could not resolve class ''{0}'' for format {1}: {2}", value, format, firstAttempt.getMessage());
+			throw iaex("Could not resolve class '%s' for format %s: %s", value, format, firstAttempt.getMessage());
 		}
 	}
 

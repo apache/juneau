@@ -41,7 +41,7 @@ class BeanRuntimeException_Test extends TestBase {
 
 	@Test
 	void a02_constructor_withClassAndMessageWithArgs_formatsMessage() {
-		var ex = new BeanRuntimeException(Integer.class, "Value is {0}", 42);
+		var ex = new BeanRuntimeException(Integer.class, "Value is %s", 42);
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Integer"));
 		assertTrue(ex.getMessage().contains("42"));
@@ -71,7 +71,7 @@ class BeanRuntimeException_Test extends TestBase {
 
 	@Test
 	void b02_constructor_withMessageAndArgs_formatsMessage() {
-		var ex = new BeanRuntimeException("Value is {0}", 123);
+		var ex = new BeanRuntimeException("Value is %s", 123);
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("123"));
 		assertNull(ex.getCause());
@@ -125,7 +125,7 @@ class BeanRuntimeException_Test extends TestBase {
 	@Test
 	void d02_constructor_withCauseClassAndMessageWithArgs_formatsMessage() {
 		var cause = new RuntimeException("Underlying error");
-		var ex = new BeanRuntimeException(cause, Integer.class, "Value {0} failed", 99);
+		var ex = new BeanRuntimeException(cause, Integer.class, "Value %s failed", 99);
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Integer"));

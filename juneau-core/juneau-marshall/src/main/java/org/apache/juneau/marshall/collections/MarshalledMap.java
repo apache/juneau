@@ -1611,10 +1611,10 @@ public class MarshalledMap extends LinkedHashMap<String,Object> {
 			}
 
 		} catch (Exception e) {
-			throw brex(e, cm.inner(), "Error occurred attempting to cast to an object of type ''{0}''", cn(cm));
+			throw brex(e, cm.inner(), "Error occurred attempting to cast to an object of type '%s'", cn(cm));
 		}
 
-		throw brex(cm.inner(), "Cannot convert to class type ''{0}''.  Only beans and maps can be converted using this method.", cn(cm));
+		throw brex(cm.inner(), "Cannot convert to class type '%s'.  Only beans and maps can be converted using this method.", cn(cm));
 	}
 
 	private PathTraversal getPathTraversal() {

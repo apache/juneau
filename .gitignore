@@ -25,7 +25,7 @@ AGENTS.md
 .cursor/
 /agents/
 /.claude/
-/todo/
+/.work/
 
 # Maven Shade Plugin generated files
 **/dependency-reduced-pom.xml

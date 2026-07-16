@@ -692,7 +692,7 @@ public class JsonMap extends MarshalledMap {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public void putJson(String key, String json) throws ParseException {
-		this.put(key, JsonParser.DEFAULT.parse(json, Object.class));
+		this.put(key, Json.to(json, Object.class));
 	}
 
 	@Override /* Overridden from MarshalledMap */
@@ -721,7 +721,7 @@ public class JsonMap extends MarshalledMap {
 
 	/**
 	 * Convenience method for serializing this map to the specified <c>Writer</c> using the
-	 * {@link JsonSerializer#DEFAULT} serializer.
+	 * {@link Json#DEFAULT} marshaller.
 	 *
 	 * @param w The writer to serialize this object to.
 	 * @return This object.
@@ -729,7 +729,7 @@ public class JsonMap extends MarshalledMap {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public JsonMap writeTo(Writer w) throws IOException, SerializeException {
-		JsonSerializer.DEFAULT.serialize(this, w);
+		Json.DEFAULT.write(this, w);
 		return this;
 	}
 }

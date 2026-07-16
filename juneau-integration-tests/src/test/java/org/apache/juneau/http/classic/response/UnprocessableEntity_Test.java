@@ -35,7 +35,7 @@ class UnprocessableEntity_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws UnprocessableEntity {
-			throw new UnprocessableEntity("foo {0}", "bar");
+			throw new UnprocessableEntity("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws UnprocessableEntity {
@@ -43,7 +43,7 @@ class UnprocessableEntity_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws UnprocessableEntity {
-			throw new UnprocessableEntity(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new UnprocessableEntity(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws UnprocessableEntity {

@@ -25,7 +25,7 @@ import org.apache.juneau.bean.rfc7807.*;
 import org.apache.juneau.bean.rfc7807.adapter.*;
 import org.apache.juneau.http.header.*;
 import org.apache.juneau.http.response.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.rest.server.*;
 
@@ -161,7 +161,7 @@ public class ProblemDetailsProcessor implements ResponseProcessor {
 
 		try {
 			var os = res.getNegotiatedOutputStream();
-			JsonSerializer.DEFAULT.serialize(problem, os);
+			Json.DEFAULT.write(problem, os);
 			os.flush();
 			os.finish();
 		} catch (SerializeException e) {

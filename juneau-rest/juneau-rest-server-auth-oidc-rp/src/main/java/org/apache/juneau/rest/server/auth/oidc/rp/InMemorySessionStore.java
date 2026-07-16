@@ -78,7 +78,7 @@ public class InMemorySessionStore implements SessionStore {
 	 * @param clock The clock used for TTL comparisons.  Must not be <jk>null</jk>.
 	 */
 	public InMemorySessionStore(int maxEntries, Clock clock) {
-		assertArg(maxEntries > 0, "maxEntries must be positive (was {0})", maxEntries);
+		assertArg(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
 		this.maxEntries = maxEntries;
 		this.clock = assertArgNotNull("clock", clock);
 		this.byId = new LinkedHashMap<>(16, 0.75f, true) {

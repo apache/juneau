@@ -74,7 +74,7 @@ public abstract class RestServlet extends HttpServlet {
 	private static final AnnotationProvider AP = AnnotationProvider.INSTANCE;
 
 	// Error message constants
-	private static final String MSG_servletInitError = "Servlet init error on class ''{0}''";
+	private static final String MSG_servletInitError = "Servlet init error on class '%s'";
 
 	private final AtomicReference<RestContext> context = new AtomicReference<>();
 	private final AtomicReference<Exception> initException = new AtomicReference<>();
@@ -330,7 +330,7 @@ public abstract class RestServlet extends HttpServlet {
 				throw initException.get();
 			if (context.get() == null)
 				throw new InternalServerError(
-					"Servlet {0} not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", cn(this));
+					"Servlet %s not initialized.  init(ServletConfig) was not called.  This can occur if you've overridden this method but didn't call super.init(RestConfig).", cn(this));
 			getContext().execute(this, r1, r2);
 
 		} catch (Exception e) {

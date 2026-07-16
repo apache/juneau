@@ -117,7 +117,7 @@ public class PetSecureResource extends BasicRestServlet {
 	public Pet getPet(@Path("id") long id) {
 		var pet = store.getPet(id);
 		if (pet == null)
-			throw new NotFound("Pet not found: id={0}", id);
+			throw new NotFound("Pet not found: id=%s", id);
 		return pet;
 	}
 

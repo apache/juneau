@@ -102,7 +102,7 @@ public final class RecordStreamBody implements HttpBody {
 		assertArgNotNull("serializer", serializer);
 		assertArgNotNull("consumer", consumer);
 		if (! (serializer instanceof RecordWritable))
-			throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
+			throw iaex("Serializer '%s' does not support the record-writer surface.", serializer.getClass().getName());
 		return new RecordStreamBody(serializer, consumer, RecordWriter.class, false);
 	}
 
@@ -129,7 +129,7 @@ public final class RecordStreamBody implements HttpBody {
 		assertArgNotNull("serializer", serializer);
 		assertArgNotNull("consumer", consumer);
 		if (! (serializer instanceof TokenWritable))
-			throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
+			throw iaex("Serializer '%s' does not support the token-writer surface.", serializer.getClass().getName());
 		return new RecordStreamBody(serializer, consumer, TokenWriter.class, false);
 	}
 

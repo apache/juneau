@@ -135,7 +135,7 @@ public final class MustacheView implements View {
 		if (isBlank(key))
 			throw iaex("attribute key must not be null or blank");
 		if (value == null)
-			throw iaex("attribute value must not be null (attribute ''{0}'')", key);
+			throw iaex("attribute value must not be null (attribute '%s')", key);
 		var copy = new LinkedHashMap<>(attributes);
 		copy.put(key, value);
 		return new MustacheView(templateName, Map.copyOf(copy), responseHeaders);
@@ -159,7 +159,7 @@ public final class MustacheView implements View {
 			if (isBlank(k))
 				throw iaex("attribute key must not be null or blank");
 			if (v == null)
-				throw iaex("attribute value must not be null (attribute ''{0}'')", k);
+				throw iaex("attribute value must not be null (attribute '%s')", k);
 			copy.put(k, v);
 		});
 		return new MustacheView(templateName, Map.copyOf(copy), responseHeaders);
@@ -184,7 +184,7 @@ public final class MustacheView implements View {
 		if (isBlank(name))
 			throw iaex("header name must not be null or blank");
 		if (value == null)
-			throw iaex("header value must not be null (header ''{0}'')", name);
+			throw iaex("header value must not be null (header '%s')", name);
 		var copy = new LinkedHashMap<>(responseHeaders);
 		copy.put(name, value);
 		return new MustacheView(templateName, attributes, Map.copyOf(copy));

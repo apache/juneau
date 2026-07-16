@@ -46,7 +46,7 @@ class ExecutableException_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a002_constructor_messageWithArgs() {
-		ExecutableException e = new ExecutableException("Test {0} message {1}", "arg1", "arg2");
+		ExecutableException e = new ExecutableException("Test %s message %s", "arg1", "arg2");
 		assertTrue(e.getMessage().contains("arg1"));
 		assertTrue(e.getMessage().contains("arg2"));
 		assertNull(e.getCause());
@@ -68,7 +68,7 @@ class ExecutableException_Test extends TestBase {
 	@Test
 	void a004_constructor_causeAndMessage() {
 		Throwable cause = new RuntimeException("cause");
-		ExecutableException e = new ExecutableException(cause, "Test {0}", "arg");
+		ExecutableException e = new ExecutableException(cause, "Test %s", "arg");
 		assertSame(cause, e.getCause());
 		assertTrue(e.getMessage().contains("arg"));
 	}

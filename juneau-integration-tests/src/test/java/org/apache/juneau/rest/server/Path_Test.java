@@ -384,27 +384,27 @@ class Path_Test extends TestBase {
 	public static class F  {
 		@RestGet(path="/")
 		public String a(RequestPathParamList path) {
-			return Shorts.f("a: {0}", path.toString());
+			return Shorts.f("a: %s", path.toString());
 		}
 		@RestGet(path="/*")
 		public String b(RequestPathParamList path) {
-			return Shorts.f("b: {0}", path.toString());
+			return Shorts.f("b: %s", path.toString());
 		}
 		@RestGet(path="/fc")
 		public String c(RequestPathParamList path) {
-			return Shorts.f("c: {0}", path.toString());
+			return Shorts.f("c: %s", path.toString());
 		}
 		@RestGet(path="/fd/{c}/{d}")
 		public String d(RequestPathParamList path) {
-			return Shorts.f("d: {0}", path.toString());
+			return Shorts.f("d: %s", path.toString());
 		}
 		@RestGet(path="/fe/{a}/{b}")
 		public String e(RequestPathParamList path) {
-			return Shorts.f("e: {0}", path.toString());
+			return Shorts.f("e: %s", path.toString());
 		}
 		@RestGet(path="/ff/{c}/{d}/*")
 		public String f(RequestPathParamList path) {
-			return Shorts.f("f: {0}", path.toString());
+			return Shorts.f("f: %s", path.toString());
 		}
 	}
 

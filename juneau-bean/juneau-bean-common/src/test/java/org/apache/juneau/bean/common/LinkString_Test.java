@@ -39,7 +39,7 @@ class LinkString_Test extends TestBase {
 	}
 
 	@Test void a03_constructorWithFormatArgs() {
-		var a = new LinkString("Item", "/items/{0}", "abc");
+		var a = new LinkString("Item", "/items/%s", "abc");
 		assertEquals("Item", a.getName());
 		assertEquals("/items/abc", a.getUri().toString());
 	}

@@ -35,7 +35,7 @@ class MethodNotAllowed_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws MethodNotAllowed {
-			throw new MethodNotAllowed("foo {0}", "bar");
+			throw new MethodNotAllowed("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws MethodNotAllowed {
@@ -43,7 +43,7 @@ class MethodNotAllowed_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws MethodNotAllowed {
-			throw new MethodNotAllowed(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new MethodNotAllowed(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws MethodNotAllowed {

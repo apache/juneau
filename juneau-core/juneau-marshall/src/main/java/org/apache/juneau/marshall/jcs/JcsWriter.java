@@ -110,10 +110,10 @@ public class JcsWriter extends JsonWriter {
 			var c = s.charAt(i);
 			if (Character.isHighSurrogate(c)) {
 				if (i + 1 >= s.length() || !Character.isLowSurrogate(s.charAt(i + 1)))
-					throw rex("Lone high surrogate at index {0} in string", i);
+					throw rex("Lone high surrogate at index %s in string", i);
 				i++;
 			} else if (Character.isLowSurrogate(c)) {
-				throw rex("Lone low surrogate at index {0} in string", i);
+				throw rex("Lone low surrogate at index %s in string", i);
 			}
 		}
 	}

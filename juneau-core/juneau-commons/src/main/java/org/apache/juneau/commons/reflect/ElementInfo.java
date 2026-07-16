@@ -118,7 +118,7 @@ public abstract sealed class ElementInfo permits ClassInfo, ParameterInfo, Acces
 			case INTERFACE -> isInterface();
 			case ABSTRACT -> isAbstract();
 			case NOT_ABSTRACT -> isNotAbstract();
-			default -> throw rex("Invalid flag for element: {0}", flag);
+			default -> throw rex("Invalid flag for element: %s", flag);
 		};
 	}
 

@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.hal;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Represents a HAL Link Object as defined by
@@ -231,6 +231,6 @@ public class HalLink {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 }

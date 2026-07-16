@@ -204,7 +204,7 @@ public class ParserSet {
 				if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else if (! v.getSimpleName().equals(CLASS_NoInherit)) {
-					throw rex("Invalid type passed to ParserSet.Builder.add(): {0}", cn(v));
+					throw rex("Invalid type passed to ParserSet.Builder.add(): %s", cn(v));
 				}
 			}
 			entries.addAll(0, l);
@@ -407,7 +407,7 @@ public class ParserSet {
 				} else if (Parser.class.isAssignableFrom(v)) {
 					l.add(createBuilder(v));
 				} else {
-					throw rex("Invalid type passed to ParserGrouup.Builder.set(): {0}", cn(v));
+					throw rex("Invalid type passed to ParserGrouup.Builder.set(): %s", cn(v));
 				}
 			}
 			entries = l;
@@ -428,7 +428,7 @@ public class ParserSet {
 			if (o instanceof Parser.Builder<?> x) {
 				Parser.Builder<?> x2 = x.copy();
 				if (neq(x.getClass(), x2.getClass()))
-					throw rex("Copy method not implemented on class {0}", cn(x));
+					throw rex("Copy method not implemented on class %s", cn(x));
 				x = x2;
 				if (nn(bcBuilder))
 					x.marshallingContext(bcBuilder);

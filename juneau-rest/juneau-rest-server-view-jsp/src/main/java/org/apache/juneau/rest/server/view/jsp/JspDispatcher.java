@@ -105,7 +105,7 @@ public class JspDispatcher implements RawTemplateDispatcher {
 			var ctx = req.getServletContext();
 			var rd = ctx.getRequestDispatcher(target);
 			if (rd == null)
-				throw new InternalServerError("Could not resolve RequestDispatcher for ''{0}''. {1}",
+				throw new InternalServerError("Could not resolve RequestDispatcher for '%s'. %s",
 					target, JspViewRenderer.NO_ENGINE_DIAGNOSTIC);
 			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
 		} catch (NoClassDefFoundError ex) {
@@ -113,7 +113,7 @@ public class JspDispatcher implements RawTemplateDispatcher {
 		} catch (IOException | NotFound ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw new InternalServerError(ex, "JSP render failed for ''{0}''", target);
+			throw new InternalServerError(ex, "JSP render failed for '%s'", target);
 		}
 	}
 

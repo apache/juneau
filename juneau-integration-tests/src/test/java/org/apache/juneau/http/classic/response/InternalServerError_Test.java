@@ -35,7 +35,7 @@ class InternalServerError_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws InternalServerError {
-			throw new InternalServerError("foo {0}", "bar");
+			throw new InternalServerError("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws InternalServerError {
@@ -43,7 +43,7 @@ class InternalServerError_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws InternalServerError {
-			throw new InternalServerError(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new InternalServerError(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws InternalServerError {

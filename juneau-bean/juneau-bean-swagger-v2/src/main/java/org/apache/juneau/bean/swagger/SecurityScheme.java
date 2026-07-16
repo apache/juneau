@@ -440,7 +440,7 @@ public class SecurityScheme extends SwaggerElement {
 	 */
 	public SecurityScheme setType(String value) {
 		if (isStrict() && ! contains(value, VALID_TYPES))
-			throw rex("Invalid value passed in to setType(String).  Value=''{0}'', valid values={1}", value, Json5.of(VALID_TYPES));
+			throw rex("Invalid value passed in to setType(String).  Value='%s', valid values=%s", value, Json5.of(VALID_TYPES));
 		type = value;
 		return this;
 	}

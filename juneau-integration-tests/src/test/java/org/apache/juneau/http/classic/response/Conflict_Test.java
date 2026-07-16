@@ -35,7 +35,7 @@ class Conflict_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws Conflict {
-			throw new Conflict("foo {0}", "bar");
+			throw new Conflict("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws Conflict {
@@ -43,7 +43,7 @@ class Conflict_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws Conflict {
-			throw new Conflict(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new Conflict(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws Conflict {

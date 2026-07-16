@@ -131,7 +131,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 
 		String cen = xml.childName();
 		if ((! cen.isEmpty()) && (! isCollection))
-			throw brex(cmProperty.inner(), "Annotation error on property ''{0}''.  @Xml.childName can only be specified on collections and arrays.", name);
+			throw brex(cmProperty.inner(), "Annotation error on property '%s'.  @Xml.childName can only be specified on collections and arrays.", name);
 
 		if (xmlFormat == XmlFormat.COLLAPSED) {
 			if (isCollection) {
@@ -142,7 +142,7 @@ public class XmlBeanPropertyMeta extends ExtendedBeanPropertyMeta {
 			if (ie(cen))
 				cen = name;
 			} else {
-				throw brex(cmBean.inner(), "Annotation error on property ''{0}''.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
+				throw brex(cmBean.inner(), "Annotation error on property '%s'.  @Xml.format=COLLAPSED can only be specified on collections and arrays.", name);
 			}
 			if (cen.isEmpty())
 				cen = cmProperty.getBeanDictionaryName();

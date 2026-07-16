@@ -201,7 +201,7 @@ public class RdfParserSession extends ReaderParserSession {
 				return parseAnything(object(), st.getObject(), outer, null);
 			}
 		}
-		throw new ParseException(this, "Unknown value type for node ''{0}''", n);
+		throw new ParseException(this, "Unknown value type for node '%s'", n);
 	}
 
 	private boolean isBag(RDFNode n) {
@@ -297,7 +297,7 @@ public class RdfParserSession extends ReaderParserSession {
 					}
 				}
 			} else {
-				throw new ParseException(this, "Unrecognized node type ''{0}'' for object", n);
+				throw new ParseException(this, "Unrecognized node type '%s' for object", n);
 			}
 		} else if (nn(builder)) {
 			var r = n.asResource();
@@ -332,7 +332,7 @@ public class RdfParserSession extends ReaderParserSession {
 			} else if (r.canAs(RDFList.class)) {
 				parseIntoCollection(r.as(RDFList.class), (Collection)o, sType, pMeta);
 			} else {
-				throw new ParseException(this, "Unrecognized node type ''{0}'' for collection", n);
+				throw new ParseException(this, "Unrecognized node type '%s' for collection", n);
 			}
 			if (sType.isArray() || sType.isArgs())
 				o = toArray(sType, (Collection)o);
@@ -369,9 +369,9 @@ public class RdfParserSession extends ReaderParserSession {
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+			throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		}
 
 		if (nn(swap) && nn(o))
@@ -506,7 +506,7 @@ public class RdfParserSession extends ReaderParserSession {
 			return type.isOptional() ? (T)oe() : null;
 
 		if (roots.size() > 1)
-			throw new ParseException(this, "Too many root nodes found in model:  {0}", roots.size());
+			throw new ParseException(this, "Too many root nodes found in model:  %s", roots.size());
 		var resource = roots.get(0);
 
 		return parseAnything(type, resource, getOuter(), null);

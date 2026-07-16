@@ -35,14 +35,25 @@ import org.apache.juneau.commons.utils.*;
  *
  * <p>
  * This class extends {@link java.util.logging.LogRecord java.util.logging.LogRecord} and overrides {@link #getMessage()} to use
- * {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} for lazy formatting.
- * The message is only formatted when {@link #getMessage()} is actually called.
+ * {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)} (printf-style <js>"%s"</js>/<js>"%d"</js>) for
+ * lazy formatting. The message is only formatted when {@link #getMessage()} is actually called.
  *
  * <h5 class='section'>Usage:</h5>
  * <p>
  * This class is used internally by {@link Logger} when logging formatted messages.
  * The formatted message is only computed when the LogRecord's message is actually
  * accessed (e.g., by a Handler or Formatter).
+ * </p>
+ *
+ * <h5 class='section'>Formatting contract:</h5>
+ * <p>
+ * Juneau {@link Logger} patterns are <b>printf-style</b> (rendered here via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)}).
+ * Because this override returns the already-substituted message, downstream {@link java.util.logging.Handler Handlers} and
+ * {@link java.util.logging.Formatter Formatters} that call {@link #getMessage()} see fully-rendered text and never re-apply
+ * formatting — so the printf-vs-MessageFormat choice is purely internal. The JDK's {@link java.text.MessageFormat}
+ * parameter contract of {@link java.util.logging.LogRecord} only resurfaces if a record is serialized and consumed as a
+ * plain {@link java.util.logging.LogRecord} by a non-Juneau handler; such a consumer would apply MessageFormat to the raw
+ * <c>{0}</c> pattern, so printf patterns are not intended for that scenario.
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>

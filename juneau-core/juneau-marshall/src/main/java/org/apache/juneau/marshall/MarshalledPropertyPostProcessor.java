@@ -527,7 +527,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				try {
 					validator.validate(v);
 				} catch (SchemaValidationException e) {
-					throw new BeanRuntimeException(e, null, "Schema validation failed on property ''{0}'': {1}", propertyName, e.getMessage());
+					throw new BeanRuntimeException(e, null, "Schema validation failed on property '%s': %s", propertyName, e.getMessage());
 				}
 			}
 			return v;
@@ -538,7 +538,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 				try {
 					validator.validate(o);
 				} catch (SchemaValidationException e) {
-					throw new BeanRuntimeException(e, null, "Schema validation failed on property ''{0}'': {1}", propertyName, e.getMessage());
+					throw new BeanRuntimeException(e, null, "Schema validation failed on property '%s': %s", propertyName, e.getMessage());
 				}
 			}
 			return nn(innerWrite) ? innerWrite.apply(session, o) : o;
@@ -606,7 +606,7 @@ final class MarshalledPropertyPostProcessor implements BeanPropertyPostProcessor
 		}
 		if (ci.isAssignableTo(Surrogate.class))
 			throw uoex("Surrogate swaps not yet supported on bean properties.");
-		throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. {0}", cn(c));
+		throw rex("Invalid class used in @Swap annotation.  Must be a subclass of ObjectSwap or Surrogate. %s", cn(c));
 	}
 
 	private static ClassInfo owningClass(BeanPropertyMeta.Builder b) {

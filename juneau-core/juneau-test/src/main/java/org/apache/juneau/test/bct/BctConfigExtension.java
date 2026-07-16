@@ -53,7 +53,7 @@ public class BctConfigExtension implements BeforeEachCallback, AfterEachCallback
 			var c = x.getDeclaredConstructor();
 			c.setAccessible(true);
 			set(c.newInstance());
-		}, e -> rex(e, "Failed to instantiate BeanConverter: {0}. It must have a no-arg constructor.", x.getName())); // HTT - requires invalid converter without no-arg constructor
+		}, e -> rex(e, "Failed to instantiate BeanConverter: %s. It must have a no-arg constructor.", x.getName())); // HTT - requires invalid converter without no-arg constructor
 	}
 
 	@Override

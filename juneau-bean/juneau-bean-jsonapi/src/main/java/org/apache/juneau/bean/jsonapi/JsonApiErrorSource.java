@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.jsonapi;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Represents the {@code source} sub-object of a JSON:API Error Object.
@@ -95,6 +95,6 @@ public class JsonApiErrorSource {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 }

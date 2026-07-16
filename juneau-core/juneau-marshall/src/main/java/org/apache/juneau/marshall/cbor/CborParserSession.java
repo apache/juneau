@@ -243,7 +243,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 					}
 					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
@@ -257,7 +257,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 					}
 					o = m;
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				// Merged scalar tier: one CBOR data type (BOOLEAN/UINT/NINT/FLOAT/STRING/BINARY) covers
@@ -287,7 +287,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
@@ -301,7 +301,7 @@ public class CborParserSession extends InputStreamParserSession implements Token
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (dt == MAP) {
 				var m = newGenericMap();
@@ -312,12 +312,12 @@ public class CborParserSession extends InputStreamParserSession implements Token
 				else if (nn(sType.getProxyInvocationHandler()))
 					o = newBeanMap(outer, sType.inner()).load(m).getBean();
 				else
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+					throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			} else if (dt == UNDEFINED || dt == SIMPLE) {
 				// Treat as null for unknown simple values
 				o = null;
 			} else {
-				throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 			}
 		}
 

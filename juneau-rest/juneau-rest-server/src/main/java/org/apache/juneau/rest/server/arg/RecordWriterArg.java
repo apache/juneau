@@ -97,7 +97,7 @@ public class RecordWriterArg extends SimpleRestOperationArg {
 		var serializer = match.get().getSerializer();
 		if (!(serializer instanceof RecordWritable))
 			throw new UnsupportedMediaType(
-				"Serializer ''{0}'' (matched on Accept) does not support the record-writer surface.",
+				"Serializer '%s' (matched on Accept) does not support the record-writer surface.",
 				serializer.getClass().getName());
 		var mediaType = res.getMediaType();
 		if (mediaType == null)
@@ -120,7 +120,7 @@ public class RecordWriterArg extends SimpleRestOperationArg {
 		var cursor = ((RecordWritable) session).serializeRecords(output);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
-				"Serializer ''{0}'' produced cursor type ''{1}'' which is not assignable to the declared parameter type ''{2}''.",
+				"Serializer '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",
 				serializer.getClass().getName(),
 				cursor == null ? "null" : cursor.getClass().getName(),
 				declaredType.getName());

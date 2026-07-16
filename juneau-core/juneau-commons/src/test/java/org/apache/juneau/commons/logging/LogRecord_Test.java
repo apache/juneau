@@ -52,7 +52,7 @@ class LogRecord_Test extends TestBase {
 	}
 
 	@Test void a02_constructor_withParameters() {
-		var rec = new LogRecord("test.logger", Level.INFO, "User {0}", new Object[]{"John"}, null);
+		var rec = new LogRecord("test.logger", Level.INFO, "User %s", new Object[]{"John"}, null);
 
 		assertEquals("test.logger", rec.getLoggerName());
 		assertEquals(Level.INFO, rec.getLevel());
@@ -84,7 +84,7 @@ class LogRecord_Test extends TestBase {
 	//====================================================================================================
 
 	@Test void b01_getMessage_formatsLazily() {
-		var rec = new LogRecord("test.logger", Level.INFO, "Value: {0}", new Object[]{42}, null);
+		var rec = new LogRecord("test.logger", Level.INFO, "Value: %s", new Object[]{42}, null);
 
 		// Message should be formatted when accessed
 		var message = rec.getMessage();
@@ -95,7 +95,7 @@ class LogRecord_Test extends TestBase {
 	}
 
 	@Test void b02_getMessage_withMultipleArgs() {
-		var rec = new LogRecord("test.logger", Level.INFO, "{0} + {1} = {2}",
+		var rec = new LogRecord("test.logger", Level.INFO, "%s + %s = %s",
 			new Object[]{1, 2, 3}, null);
 
 		assertEquals("1 + 2 = 3", rec.getMessage());
@@ -226,7 +226,7 @@ class LogRecord_Test extends TestBase {
 	}
 
 	@Test void d07_formatted_msg() {
-		var rec = new LogRecord("test.logger", Level.INFO, "Test {0}", new Object[]{"value"}, null);
+		var rec = new LogRecord("test.logger", Level.INFO, "Test %s", new Object[]{"value"}, null);
 
 		var formatted = rec.formatted("{msg}");
 		assertEquals("Test value", formatted);
@@ -318,7 +318,7 @@ class LogRecord_Test extends TestBase {
 	}
 
 	@Test void e03_formatted_mixedPlaceholders() {
-		var rec = new LogRecord("test.logger", Level.INFO, "Test {0}", new Object[]{"value"}, null);
+		var rec = new LogRecord("test.logger", Level.INFO, "Test %s", new Object[]{"value"}, null);
 
 		var formatted = rec.formatted("%1$tb %1$td, %1$tY {level}: {msg}");
 		assertTrue(formatted.contains("INFO"));
@@ -340,7 +340,7 @@ class LogRecord_Test extends TestBase {
 
 	@Test void f02_formatted_complexFormat() {
 		var exception = new RuntimeException("Error");
-		var rec = new LogRecord("test.logger", Level.SEVERE, "Failed: {0}",
+		var rec = new LogRecord("test.logger", Level.SEVERE, "Failed: %s",
 			new Object[]{"operation"}, exception);
 
 		var formatted = rec.formatted("[{timestamp}] {level}: {msg}%n{exception}");

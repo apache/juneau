@@ -233,7 +233,7 @@ public class JettyServerComponent implements MicroserviceListener {
 				if (jettyXml == null)
 					jettyXml = loadSystemResourceAsString("jetty.xml", ".", "files");
 				if (jettyXml == null)
-					throw rex("jetty.xml file ''{0}'' was not found on the file system or classpath.", jettyConfig);
+					throw rex("jetty.xml file '%s' was not found on the file system or classpath.", jettyConfig);
 
 				if (resolveVars2)
 					jettyXml = vr.resolve(jettyXml);
@@ -275,7 +275,7 @@ public class JettyServerComponent implements MicroserviceListener {
 						var rs = (RestServlet)c.newInstance();
 						mountWithCollisionCheck(rs, rs.getPath(), "Jetty/servlets[" + s + "]", mountedPaths);
 					} else {
-						throw rex("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: {0}", s);
+						throw rex("Invalid servlet specified in Jetty/servlets.  Must be a subclass of RestServlet: %s", s);
 					}
 				} catch (ClassNotFoundException e) {
 					throw toRex(e);
@@ -289,7 +289,7 @@ public class JettyServerComponent implements MicroserviceListener {
 						var rs = (Servlet)c.newInstance();
 						mountWithCollisionCheck(rs, k, "Jetty/servletMap[" + k + "]", mountedPaths);
 					} else {
-						throw rex("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: {0}", cn(v));
+						throw rex("Invalid servlet specified in Jetty/servletMap.  Must be a subclass of Servlet: %s", cn(v));
 					}
 				} catch (ClassNotFoundException e) {
 					throw toRex(e);
@@ -543,7 +543,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	private void checkPathCollision(String pathSpec, String source, Map<String,String> mountedPaths) {
 		var prior = mountedPaths.get(pathSpec);
 		if (nn(prior))
-			throw rex("Servlet mount path collision: ''{0}'' is already mounted by {1}; refused by {2}.", pathSpec, prior, source);
+			throw rex("Servlet mount path collision: '%s' is already mounted by %s; refused by %s.", pathSpec, prior, source);
 		mountedPaths.put(pathSpec, source);
 	}
 }

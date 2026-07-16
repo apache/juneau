@@ -232,7 +232,7 @@ public final class RrpcInterfaceMethodMeta {
 		for (var i = 0; i < params.length; i++) {
 			if (params[i].getAnnotation(Url.class) != null) {
 				if (index != -1)
-					throw iaex("Method {0}.{1} declares more than one @Url parameter; at most one is allowed",
+					throw iaex("Method %s.%s declares more than one @Url parameter; at most one is allowed",
 						method.getDeclaringClass().getName(), method.getName());
 				index = i;
 			}
@@ -269,11 +269,11 @@ public final class RrpcInterfaceMethodMeta {
 		var mn = method.getName();
 		if (multipart) {
 			if (hasContentParam)
-				throw iaex("Method {0}.{1} declares both @Multipart and @Content; a method is either multipart or single-@Content, not both", cn, mn);
+				throw iaex("Method %s.%s declares both @Multipart and @Content; a method is either multipart or single-@Content, not both", cn, mn);
 			if (partCount == 0)
-				throw iaex("Method {0}.{1} is annotated @Multipart but declares no @Part parameters", cn, mn);
+				throw iaex("Method %s.%s is annotated @Multipart but declares no @Part parameters", cn, mn);
 		} else if (partCount > 0) {
-			throw iaex("Method {0}.{1} declares @Part parameter(s) but is not annotated @Multipart", cn, mn);
+			throw iaex("Method %s.%s declares @Part parameter(s) but is not annotated @Multipart", cn, mn);
 		}
 	}
 

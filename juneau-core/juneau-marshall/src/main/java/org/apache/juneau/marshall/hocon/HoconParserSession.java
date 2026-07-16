@@ -162,7 +162,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				value = resolveSelfRefConcatIfNeeded(value, path, root);
 				root.setPath(path, value);
 			} else {
-				throw new ParseException(this, "Expected =, : or brace at line {0}", t.getLine());
+				throw new ParseException(this, "Expected =, : or brace at line %s", t.getLine());
 			}
 			t.skipWhitespaceAndComments();
 			if (t.peek().type() == HoconTokenizer.TokenType.NEWLINE)
@@ -181,7 +181,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			case TRUE -> "true";
 			case FALSE -> "false";
 			case NUMBER -> tok.numberValue().toString();
-			default -> throw new ParseException(this, "Expected key at line {0}", t.getLine());
+			default -> throw new ParseException(this, "Expected key at line %s", t.getLine());
 		};
 		if (first == null)
 			return EMPTY_PATH;
@@ -318,7 +318,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				yield new HoconValue.HoconSubstitution(st.stringValue(), tok.type() == HoconTokenizer.TokenType.OPT_SUBSTITUTION);
 			}
 			case EOF -> null;
-			default -> throw new ParseException(this, "Unexpected token {0} at line {1}", tok.type(), t.getLine());
+			default -> throw new ParseException(this, "Unexpected token %s at line %s", tok.type(), t.getLine());
 		};
 	}
 
@@ -363,7 +363,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				value = resolveSelfRefConcatIfNeeded(value, fullPath, effectiveRoot);
 				obj.setPath(path, value);
 			} else {
-				throw new ParseException(this, "Expected =, : or brace at line {0}", t.getLine());
+				throw new ParseException(this, "Expected =, : or brace at line %s", t.getLine());
 			}
 			// skipWhitespaceAndComments is a no-op while a token is cached (see HoconTokenizer), so a
 			// closing `}` already peeked by parseValueOrConcat's concat loop is preserved here and the

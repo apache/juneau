@@ -153,9 +153,9 @@ public class Range extends HttpStringHeader {
 		 */
 		public Builder range(long startValue, long endValue) {
 			if (startValue < 0)
-				throw iaex("range start must be non-negative: {0}", startValue);
+				throw iaex("range start must be non-negative: %s", startValue);
 			if (endValue < startValue)
-				throw iaex("range end {0} must be >= start {1}", endValue, startValue);
+				throw iaex("range end %s must be >= start %s", endValue, startValue);
 			return spec(startValue + "-" + endValue);
 		}
 
@@ -168,7 +168,7 @@ public class Range extends HttpStringHeader {
 		 */
 		public Builder from(long startValue) {
 			if (startValue < 0)
-				throw iaex("range start must be non-negative: {0}", startValue);
+				throw iaex("range start must be non-negative: %s", startValue);
 			return spec(startValue + "-");
 		}
 
@@ -181,7 +181,7 @@ public class Range extends HttpStringHeader {
 		 */
 		public Builder suffix(long length) {
 			if (length < 0)
-				throw iaex("suffix length must be non-negative: {0}", length);
+				throw iaex("suffix length must be non-negative: %s", length);
 			return spec("-" + length);
 		}
 

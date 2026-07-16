@@ -456,7 +456,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	public ClassMeta<?> getArg(int index) {
 		if (nn(args) && index >= 0 && index < args.size())
 			return args.get(index);
-		throw brex("Invalid argument index specified:  {0}.  Only {1} arguments are defined.", index, args == null ? 0 : args.size());
+		throw brex("Invalid argument index specified:  %s.  Only %s arguments are defined.", index, args == null ? 0 : args.size());
 	}
 
 	/**
@@ -1404,7 +1404,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
 				if (marshallingContext.isIgnoreUnknownEnumValues())
 					return null;
-				throw new ExecutableException("Could not resolve enum value ''{0}'' on class ''{1}''", arg, cn(inner()));
+				throw new ExecutableException("Could not resolve enum value '%s' on class '%s'", arg, cn(inner()));
 			}
 		}
 
@@ -1484,7 +1484,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			return first(l).map(x -> (ObjectSwap<T,?>)x).orElse(null);
 		}
 
-		throw new ClassMetaRuntimeException(c, "Invalid swap class ''{0}'' specified.  Must extend from ObjectSwap or Surrogate.", c);
+		throw new ClassMetaRuntimeException(c, "Invalid swap class '%s' specified.  Must extend from ObjectSwap or Surrogate.", c);
 	}
 
 	private String findBeanDictionaryName() {

@@ -58,7 +58,7 @@ class ClassMetaRuntimeException_Test {
 
 	// Varargs constructor with format args
 	@Test void a06_message_with_args() {
-		var e = new ClassMetaRuntimeException("value={0}", 42);
+		var e = new ClassMetaRuntimeException("value=%s", 42);
 		assertTrue(e.getMessage().contains("42"));
 	}
 }

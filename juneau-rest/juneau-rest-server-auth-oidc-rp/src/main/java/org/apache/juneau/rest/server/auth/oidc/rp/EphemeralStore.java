@@ -80,8 +80,8 @@ public class EphemeralStore {
 	public EphemeralStore(Duration ttl, int maxEntries, Clock clock) {
 		assertArgNotNull("ttl", ttl);
 		assertArg(!ttl.isZero() && !ttl.isNegative(), "ttl must be positive");
-		assertArg(ttl.compareTo(MAX_TTL) <= 0, "ttl must not exceed 30 minutes (was {0})", ttl);
-		assertArg(maxEntries > 0, "maxEntries must be positive (was {0})", maxEntries);
+		assertArg(ttl.compareTo(MAX_TTL) <= 0, "ttl must not exceed 30 minutes (was %s)", ttl);
+		assertArg(maxEntries > 0, "maxEntries must be positive (was %s)", maxEntries);
 		this.ttl = ttl;
 		this.maxEntries = maxEntries;
 		this.clock = assertArgNotNull("clock", clock);

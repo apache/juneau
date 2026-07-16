@@ -168,7 +168,7 @@ public class ProfileConfigStore extends ConfigStore {
 			try {
 				update(baseName, mergedContents());
 			} catch (IOException e) {  // HTT: re-merge IO failure only on a real FileStore IO error mid-reload; not reproducible with in-memory stores.
-				throw new ConfigException(e, "Failed to re-merge profile overlays for ''{0}''", baseName);
+				throw new ConfigException(e, "Failed to re-merge profile overlays for '%s'", baseName);
 			}
 		};
 		delegate.register(baseName, reloadListener);

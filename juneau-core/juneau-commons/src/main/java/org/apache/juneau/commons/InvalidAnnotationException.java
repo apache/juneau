@@ -48,7 +48,7 @@ public class InvalidAnnotationException extends BasicRuntimeException {
 			.filter(Objects::nonNull)
 			.findFirst()
 			.ifPresent(a -> {
-				throw new InvalidAnnotationException("@{0} annotation cannot be used in a @{1} bean.  Method=''{2}''", cns(a), cns(onMethod.getDeclaringClass()), onMethod);
+				throw new InvalidAnnotationException("@%s annotation cannot be used in a @%s bean.  Method='%s'", cns(a), cns(onMethod.getDeclaringClass()), onMethod);
 			});
 		// @formatter:on
 	}

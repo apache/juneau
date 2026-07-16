@@ -18,10 +18,8 @@ package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 /**
- * An extension of {@link AssertionError} with helper constructors for messages with message-style arguments.
+ * An extension of {@link AssertionError} with helper constructors for messages with printf-style arguments.
  */
 public class BasicAssertionError extends AssertionError {
 
@@ -30,8 +28,8 @@ public class BasicAssertionError extends AssertionError {
 	/**
 	 * Constructor.
 	 *
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The printf-style message.
+	 * @param args Optional printf-style arguments.
 	 */
 	public BasicAssertionError(String message, Object...args) {
 		super(f(message, args));
@@ -41,8 +39,8 @@ public class BasicAssertionError extends AssertionError {
 	 * Constructor.
 	 *
 	 * @param cause The cause of this exception.
-	 * @param message The {@link MessageFormat}-style message.
-	 * @param args Optional {@link MessageFormat}-style arguments.
+	 * @param message The printf-style message.
+	 * @param args Optional printf-style arguments.
 	 */
 	public BasicAssertionError(Throwable cause, String message, Object...args) {
 		super(f(message, args), cause);

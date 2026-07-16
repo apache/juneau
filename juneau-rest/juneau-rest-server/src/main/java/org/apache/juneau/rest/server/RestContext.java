@@ -74,7 +74,7 @@ import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.marshall.encoders.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.httppart.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.jsonschema.*;
 import org.apache.juneau.marshall.oapi.*;
 import org.apache.juneau.marshall.parser.*;
@@ -2181,7 +2181,7 @@ public class RestContext extends Context {
 			} catch (RuntimeException e) {
 				throw e;
 			} catch (Exception e) {
-				throw rex(e, "Failed to construct mixin sub-context for {0}: {1}", rm.type().getName(), e.getMessage());
+				throw rex(e, "Failed to construct mixin sub-context for %s: %s", rm.type().getName(), e.getMessage());
 			}
 			out.put(rm.type(), mixinCtx);
 		}
@@ -2328,7 +2328,7 @@ public class RestContext extends Context {
 			if (!al.isEmpty()) {
 				try {
 					if (mi.isNotPublic())
-						throw servletException("@RestOp method {0}.{1} must be defined as public.", classInfo.inner().getName(), mi.getNameSimple());
+						throw servletException("@RestOp method %s.%s must be defined as public.", classInfo.inner().getName(), mi.getNameSimple());
 					var roc = new RestOpContext(mi.inner(), opContext, targetSupplier);
 					if ("RRPC".equals(roc.getHttpMethod())) {
 						RestOpContext roc2 = new RrpcRestOpContext(mi.inner(), opContext, targetSupplier);
@@ -2337,7 +2337,7 @@ public class RestContext extends Context {
 						b.add(roc);
 					}
 				} catch (Exception e) {
-					throw servletException(e, "Problem occurred trying to initialize methods on class {0}", classInfo.inner().getName());
+					throw servletException(e, "Problem occurred trying to initialize methods on class %s", classInfo.inner().getName());
 				}
 			}
 		}
@@ -2642,11 +2642,11 @@ public class RestContext extends Context {
 				.forEach(y -> { var sig = y.getSignature(); if (!initMap.containsKey(sig)) initMap.put(sig, y.accessible()); });
 			for (var m : initMap.values()) {
 				if (!m.canResolveAllParameters(beanStore, r))
-					throw servletException("Could not call @RestInit method {0}.{1}.  Could not find prerequisites: {2}.", cns(m.getDeclaringClass()), m.getSignature(), m.getMissingParameterTypes(beanStore, r));
+					throw servletException("Could not call @RestInit method %s.%s.  Could not find prerequisites: %s.", cns(m.getDeclaringClass()), m.getSignature(), m.getMissingParameterTypes(beanStore, r));
 				try {
 					m.inject(beanStore, r);
 				} catch (Exception e) {
-					throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", cns(m.getDeclaringClass()), m.getSignature());
+					throw servletException(e, "Exception thrown from @RestInit method %s.%s.", cns(m.getDeclaringClass()), m.getSignature());
 				}
 			}
 
@@ -4782,11 +4782,11 @@ public class RestContext extends Context {
 					if (nn(ra[i]))
 						break;
 				} catch (ExecutableException e) {
-					throw new InternalServerError(e.unwrap(), "Could not resolve parameter {0} on method {1}.", i, mi.getNameFull());
+					throw new InternalServerError(e.unwrap(), "Could not resolve parameter %s on method %s.", i, mi.getNameFull());
 				}
 			}
 			if (ra[i] == null)
-				throw new InternalServerError("Could not resolve parameter {0} on method {1}.", i, mi.getNameFull());
+				throw new InternalServerError("Could not resolve parameter %s on method %s.", i, mi.getNameFull());
 		}
 
 		return ra;
@@ -4931,7 +4931,7 @@ public class RestContext extends Context {
 			res.setContentType(ContentType.APPLICATION_PROBLEM_JSON.getValue());
 			res.setHeader("Content-Encoding", "identity");
 			var os = res.getOutputStream();
-			JsonSerializer.DEFAULT.serialize(problem, os);
+			Json.DEFAULT.write(problem, os);
 			os.flush();
 			return true;
 		} catch (Exception ex) {
@@ -4972,13 +4972,13 @@ public class RestContext extends Context {
 					.setDetail(ve.getMessage())
 					.set("errors", ve.getViolations());
 				res.setContentType(ContentType.APPLICATION_PROBLEM_JSON.getValue());
-				JsonSerializer.DEFAULT.serialize(problem, os);
+				Json.DEFAULT.write(problem, os);
 			} else {
 				var envelope = new LinkedHashMap<String,Object>();
 				envelope.put("status", statusCode);
 				envelope.put("errors", ve.getViolations());
 				res.setContentType("application/json");
-				JsonSerializer.DEFAULT.serialize(envelope, os);
+				Json.DEFAULT.write(envelope, os);
 			}
 			os.flush();
 			return true;
@@ -5001,7 +5001,7 @@ public class RestContext extends Context {
 		try {
 			m.inject(beanStore, resource.get());
 		} catch (Exception e) {
-			throw servletException(e, "Exception thrown from @RestInit method {0}.{1}.", cns(m.getDeclaringClass()), m.getSignature());
+			throw servletException(e, "Exception thrown from @RestInit method %s.%s.", cns(m.getDeclaringClass()), m.getSignature());
 		}
 	}
 
@@ -5022,11 +5022,11 @@ public class RestContext extends Context {
 		var rc = session.getStatus();
 		var onPath = pathInfo == null ? " on no pathInfo" : (" on path '" + pathInfo + "'");
 		if (rc == SC_NOT_FOUND)
-			throw new NotFound("Method ''{0}'' not found on resource with matching pattern{1}.", methodUC, onPath);
+			throw new NotFound("Method '%s' not found on resource with matching pattern%s.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)
-			throw new PreconditionFailed("Method ''{0}'' not found on resource{1} with matching matcher.", methodUC, onPath);
+			throw new PreconditionFailed("Method '%s' not found on resource%s with matching matcher.", methodUC, onPath);
 		else if (rc == SC_METHOD_NOT_ALLOWED)
-			throw new MethodNotAllowed("Method ''{0}'' not found on resource{1}.", methodUC, onPath);
+			throw new MethodNotAllowed("Method '%s' not found on resource%s.", methodUC, onPath);
 		else
 			throw new ServletException("Invalid method response: " + rc, session.getException());
 	}
@@ -5109,7 +5109,7 @@ public class RestContext extends Context {
 		}
 
 		var output = opSession.getResponse().getContent().orElse(null);
-		throw new NotImplemented("No response processors found to process output of type ''{0}''", cn(output));
+		throw new NotImplemented("No response processors found to process output of type '%s'", cn(output));
 	}
 
 	@Override /* Overridden from Context */
@@ -5157,7 +5157,7 @@ public class RestContext extends Context {
 			try {
 				x.invoke(session.getBeanStore(), getResource());
 			} catch (IllegalAccessException | IllegalArgumentException e) {
-				throw new InternalServerError(e, "Error occurred invoking start-call method ''{0}''.", x.getFullName());
+				throw new InternalServerError(e, "Error occurred invoking start-call method '%s'.", x.getFullName());
 			} catch (InvocationTargetException e) {
 				var t = e.getTargetException();
 				if (t instanceof BasicHttpException t2)

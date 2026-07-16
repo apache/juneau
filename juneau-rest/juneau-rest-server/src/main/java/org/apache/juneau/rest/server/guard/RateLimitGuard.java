@@ -200,7 +200,7 @@ public class RateLimitGuard extends RestGuard {
 
 	private static TooManyRequests tooManyRequests(RateLimitInfo info) {
 		var retry = Math.max(1L, info.secondsUntilReset());
-		var ex = new TooManyRequests("Rate limit exceeded for key ''{0}''. Retry after {1}s.", info.key(), retry);
+		var ex = new TooManyRequests("Rate limit exceeded for key '%s'. Retry after %ss.", info.key(), retry);
 		ex.setHeader(HEADER_LIMIT, Integer.toString(info.limit()));
 		ex.setHeader(HEADER_REMAINING, "0");
 		ex.setHeader(HEADER_RESET, Long.toString(info.secondsUntilReset()));

@@ -109,6 +109,6 @@ public class HttpLongHeader extends HttpHeaderBean {
 	private static Long toLong(String value) {
 		if (value == null)
 			return null;
-		return parseLong(value, () -> iaex("Value ''{0}'' could not be parsed as a long.", value));
+		return parseLong(value, () -> iaex("Value '%s' could not be parsed as a long.", value));
 	}
 }

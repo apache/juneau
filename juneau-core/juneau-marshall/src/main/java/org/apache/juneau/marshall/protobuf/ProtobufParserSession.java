@@ -103,7 +103,7 @@ public class ProtobufParserSession extends InputStreamParserSession {
 	protected <T> T doParse(ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException, ExecutableException {
 		var is = new ProtobufReader(pipe.getInputStream());
 		if (! type.isBean())
-			throw new ParseException(this, "Protobuf binary parsing requires a bean target type, but got ''{0}''", cn(type.inner()));
+			throw new ParseException(this, "Protobuf binary parsing requires a bean target type, but got '%s'", cn(type.inner()));
 		return (T)parseMessage(type, is, getOuter());
 	}
 

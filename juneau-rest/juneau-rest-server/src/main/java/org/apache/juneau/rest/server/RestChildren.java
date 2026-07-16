@@ -602,7 +602,7 @@ public class RestChildren {
 			if (children.containsKey(key)) {
 				if (! replace) {
 					destroyQuietly(cc);
-					throw isex("Child resource already registered at path ''{0}''.", key);
+					throw isex("Child resource already registered at path '%s'.", key);
 				}
 				replaced = children.get(key);
 				var withoutExisting = new LinkedHashMap<>(children);

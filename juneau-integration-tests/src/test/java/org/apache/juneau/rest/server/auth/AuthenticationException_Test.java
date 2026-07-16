@@ -35,7 +35,7 @@ class AuthenticationException_Test extends TestBase {
 	}
 
 	@Test void a02_constructorWithMessage() {
-		var ex = new AuthenticationException("Token {0}", "missing");
+		var ex = new AuthenticationException("Token %s", "missing");
 		Assertions.assertEquals("Token missing", ex.getMessage());
 	}
 
@@ -47,7 +47,7 @@ class AuthenticationException_Test extends TestBase {
 
 	@Test void a04_constructorWithCauseAndMessage() {
 		var cause = new IllegalStateException("inner");
-		var ex = new AuthenticationException(cause, "wrapped {0}", "value");
+		var ex = new AuthenticationException(cause, "wrapped %s", "value");
 		Assertions.assertSame(cause, ex.getCause());
 		Assertions.assertEquals("wrapped value", ex.getMessage());
 	}

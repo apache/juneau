@@ -120,7 +120,7 @@ public class Section {
 			var bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {
 				if (! ignoreUnknownProperties)
-					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
+					throw new ParseException("Unknown property '%s' encountered in configuration section '%s'.", k, name);
 			} else {
 				bm.put(k, config.get(name + '/' + k).as(bpm.getBeanInfo().inner()).orElse(null));
 			}
@@ -196,7 +196,7 @@ public class Section {
 		assertArgNotNull(ARG_c, c);
 
 		if (! c.isInterface())
-			throw iaex("Class ''{0}'' passed to toInterface() is not an interface.", cn(c));
+			throw iaex("Class '%s' passed to toInterface() is not an interface.", cn(c));
 
 		return o((T)Proxy.newProxyInstance(c.getClassLoader(), a(c), (InvocationHandler)(proxy, method, args) -> {
 			var bi = Introspector.getBeanInfo(c, null);
@@ -208,7 +208,7 @@ public class Section {
 				if (method.equals(wm))
 					return config.set(name + '/' + pd.getName(), args[0]);
 			}
-			throw uoex("Unsupported interface method.  method=''{0}''", method);
+			throw uoex("Unsupported interface method.  method='%s'", method);
 		}));
 	}
 
@@ -250,7 +250,7 @@ public class Section {
 	public Section writeToBean(Object bean, boolean ignoreUnknownProperties) throws ParseException {
 		assertArgNotNull(ARG_bean, bean);
 		if (! isPresent())
-			throw iaex("Section ''{0}'' not found in configuration.", name);
+			throw iaex("Section '%s' not found in configuration.", name);
 
 		var keys = configMap.getKeys(name);
 
@@ -259,7 +259,7 @@ public class Section {
 			var bpm = bm.getPropertyMeta(k);
 			if (bpm == null) {
 				if (! ignoreUnknownProperties)
-					throw new ParseException("Unknown property ''{0}'' encountered in configuration section ''{1}''.", k, name);
+					throw new ParseException("Unknown property '%s' encountered in configuration section '%s'.", k, name);
 			} else {
 				bm.put(k, config.get(name + '/' + k).as(bpm.getBeanInfo().inner()).orElse(null));
 			}

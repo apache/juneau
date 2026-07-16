@@ -319,7 +319,7 @@ public class MarshallingTraverseSession extends MarshallingSession {
 			Object o = stack.removeLast().o;
 			Object o2 = set.remove(o);
 			if (o2 == null)
-				onError(null, "Couldn't remove object of type ''{0}'' on attribute ''{1}'' from object stack.", cn(o), stack);
+				onError(null, "Couldn't remove object of type '%s' on attribute '%s' from object stack.", cn(o), stack);
 		}
 		isBottom = false;
 	}
@@ -411,6 +411,6 @@ public class MarshallingTraverseSession extends MarshallingSession {
 			return true;
 
 		stack.add(new StackElement(stack.size(), attrName, o, cm));
-		throw new MarshallingRecursionException("Recursion occurred, stack={0}", getStack(true));
+		throw new MarshallingRecursionException("Recursion occurred, stack=%s", getStack(true));
 	}
 }

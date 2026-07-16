@@ -289,7 +289,7 @@ public class CborTokenReader implements TokenReader {
 					// Guard against pathologically deep tag chains blowing the JVM stack.
 					if (tagNestingDepth >= maxTagNestingDepth)
 						throw new ParseException(
-							"CBOR tag nesting depth exceeded the maximum of {0}.  Increase the limit via CborTokenReader.setMaxTagNestingDepth(int) if this is intentional.",
+							"CBOR tag nesting depth exceeded the maximum of %s.  Increase the limit via CborTokenReader.setMaxTagNestingDepth(int) if this is intentional.",
 							maxTagNestingDepth);
 					tagNestingDepth++;
 					try {
@@ -305,7 +305,7 @@ public class CborTokenReader implements TokenReader {
 				currentToken = TokenType.VALUE_NULL;
 				consumedOneElement();
 			}
-			default -> throw new ParseException("Unexpected CBOR data type: {0}", dt);
+			default -> throw new ParseException("Unexpected CBOR data type: %s", dt);
 		}
 		return currentToken;
 	}
@@ -321,7 +321,7 @@ public class CborTokenReader implements TokenReader {
 			case BOOLEAN:   return Boolean.toString(is.readBoolean());
 			case FLOAT:     return Double.toString(is.readDouble());
 			default:
-				throw new ParseException("Cannot use CBOR data type {0} as a map key", dt);
+				throw new ParseException("Cannot use CBOR data type %s as a map key", dt);
 		}
 	}
 
@@ -456,7 +456,7 @@ public class CborTokenReader implements TokenReader {
 		} catch (Exception e) {
 			if (e instanceof IOException ioe) throw ioe;
 			if (e instanceof ParseException pe) throw pe;
-			throw new ParseException(s, "read failed: {0}", e.getMessage());
+			throw new ParseException(s, "read failed: %s", e.getMessage());
 		}
 	}
 

@@ -278,8 +278,8 @@ class RestClient_BasicCalls_Test extends TestBase {
 			/*[15]*/ s2
 		);
 		for (var i = 0; i < bodies.size(); i++) {
-			client().header("Check","Content-Type").accept("application/json").build().formPost("/checkHeader",bodies.get(i)).run().assertContent().setMsg("Body {0} failed",i).asString().isContains("application/x-www-form-urlencoded");
-			client().build().formPost("/bean",bodies.get(i)).accept("application/json").run().assertContent().setMsg("Body {0} failed","#"+i).is("{\"f\":1}");
+			client().header("Check","Content-Type").accept("application/json").build().formPost("/checkHeader",bodies.get(i)).run().assertContent().setMsg("Body %s failed",i).asString().isContains("application/x-www-form-urlencoded");
+			client().build().formPost("/bean",bodies.get(i)).accept("application/json").run().assertContent().setMsg("Body %s failed","#"+i).is("{\"f\":1}");
 		}
 	}
 

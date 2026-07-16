@@ -675,7 +675,7 @@ public final class FieldInfo extends AccessibleInfo implements Comparable<FieldI
 			} else if (o2.isPresent()) {
 				value = o2.get();
 			} else {
-				throw exex("Could not resolve value for field {0}", this);
+				throw exex("Could not resolve value for field %s", this);
 			}
 		}
 

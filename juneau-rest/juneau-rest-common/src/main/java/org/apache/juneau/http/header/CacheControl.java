@@ -250,7 +250,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder maxAge(long seconds) {
 			if (seconds < 0)
-				throw iaex("max-age must be non-negative: {0}", seconds);
+				throw iaex("max-age must be non-negative: %s", seconds);
 			maxAge = seconds;
 			return this;
 		}
@@ -276,7 +276,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder sMaxAge(long seconds) {
 			if (seconds < 0)
-				throw iaex("s-maxage must be non-negative: {0}", seconds);
+				throw iaex("s-maxage must be non-negative: %s", seconds);
 			sMaxAge = seconds;
 			return this;
 		}
@@ -302,7 +302,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder staleWhileRevalidate(long seconds) {
 			if (seconds < 0)
-				throw iaex("stale-while-revalidate must be non-negative: {0}", seconds);
+				throw iaex("stale-while-revalidate must be non-negative: %s", seconds);
 			staleWhileRevalidate = seconds;
 			return this;
 		}
@@ -316,7 +316,7 @@ public class CacheControl extends HttpStringHeader {
 		 */
 		public Builder staleIfError(long seconds) {
 			if (seconds < 0)
-				throw iaex("stale-if-error must be non-negative: {0}", seconds);
+				throw iaex("stale-if-error must be non-negative: %s", seconds);
 			staleIfError = seconds;
 			return this;
 		}

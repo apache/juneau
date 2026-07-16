@@ -48,7 +48,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a001_bex_withClass() {
-		BeanRuntimeException ex = brex(String.class, "Error in class {0}", "TestClass");
+		BeanRuntimeException ex = brex(String.class, "Error in class %s", "TestClass");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Error in class TestClass"));
 		assertTrue(ex.getMessage().contains("java.lang.String")); // Class name is in message
@@ -59,7 +59,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a002_bex_withMessage() {
-		BeanRuntimeException ex = brex("Error message {0}", "test");
+		BeanRuntimeException ex = brex("Error message %s", "test");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Error message test"));
 	}
@@ -81,7 +81,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a004_bex_withCauseAndClass() {
 		var cause = new IOException("root cause");
-		BeanRuntimeException ex = brex(cause, String.class, "Error in {0}", "TestClass");
+		BeanRuntimeException ex = brex(cause, String.class, "Error in %s", "TestClass");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Error in TestClass"));
@@ -97,7 +97,7 @@ class ThrowableUtils_Test extends TestBase {
 		// Note: bex(Throwable, String, ...) calls new BeanRuntimeException(f(msg, args), cause)
 		// but BeanRuntimeException doesn't have a (String, Throwable) constructor,
 		// so it matches BeanRuntimeException(String) and the cause is lost
-		BeanRuntimeException ex = brex(cause, "Error message {0}", "test");
+		BeanRuntimeException ex = brex(cause, "Error message %s", "test");
 		assertNotNull(ex);
 		// The cause is not preserved because BeanRuntimeException(String) constructor is used
 		assertTrue(ex.getMessage().contains("Error message test"));
@@ -263,7 +263,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a011_illegalArg_withMessage() {
-		IllegalArgumentException ex = iaex("Invalid parameter {0}", "userId");
+		IllegalArgumentException ex = iaex("Invalid parameter %s", "userId");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Invalid parameter userId"));
 		assertNull(ex.getCause());
@@ -286,7 +286,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a013_illegalArg_withCauseAndMessage() {
 		var cause = new IOException("root cause");
-		IllegalArgumentException ex = iaex(cause, "Invalid parameter {0}", "userId");
+		IllegalArgumentException ex = iaex(cause, "Invalid parameter %s", "userId");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Invalid parameter userId"));
@@ -297,7 +297,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a014_ioex_withMessage() {
-		IOException ex = ioex("File not found: {0}", "/tmp/test.txt");
+		IOException ex = ioex("File not found: %s", "/tmp/test.txt");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("File not found: /tmp/test.txt"));
 		assertNull(ex.getCause());
@@ -320,7 +320,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a016_ioex_withCauseAndMessage() {
 		var cause = new FileNotFoundException("config.xml");
-		IOException ex = ioex(cause, "Failed to load {0}", "configuration");
+		IOException ex = ioex(cause, "Failed to load %s", "configuration");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Failed to load configuration"));
@@ -342,7 +342,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a018_rex_withMessage() {
-		RuntimeException ex = rex("Error message {0}", "test");
+		RuntimeException ex = rex("Error message %s", "test");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Error message test"));
 		assertNull(ex.getCause());
@@ -365,7 +365,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a020_rex_withCauseAndMessage() {
 		var cause = new SQLException("Database error");
-		RuntimeException ex = rex(cause, "Failed to process {0} at {1}", "user", "login");
+		RuntimeException ex = rex(cause, "Failed to process %s at %s", "user", "login");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Failed to process user at login"));
@@ -412,7 +412,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a023_unsupportedOp_withMessage() {
-		UnsupportedOperationException ex = uoex("Operation {0} is not supported for type {1}", "delete", "User");
+		UnsupportedOperationException ex = uoex("Operation %s is not supported for type %s", "delete", "User");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Operation delete is not supported for type User"));
 		assertNull(ex.getCause());
@@ -435,7 +435,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a025_unsupportedOp_withCauseAndMessage() {
 		var cause = new IllegalStateException("Locked");
-		UnsupportedOperationException ex = uoex(cause, "Cannot {0} on {1}", "delete", "immutable collection");
+		UnsupportedOperationException ex = uoex(cause, "Cannot %s on %s", "delete", "immutable collection");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Cannot delete on immutable collection"));
@@ -457,7 +457,7 @@ class ThrowableUtils_Test extends TestBase {
 	//====================================================================================================
 	@Test
 	void a027_exex_withMessage() {
-		ExecutableException ex = exex("Error message {0}", "test");
+		ExecutableException ex = exex("Error message %s", "test");
 		assertNotNull(ex);
 		assertTrue(ex.getMessage().contains("Error message test"));
 		assertNull(ex.getCause());
@@ -480,7 +480,7 @@ class ThrowableUtils_Test extends TestBase {
 	@Test
 	void a029_exex_withCauseAndMessage() {
 		var cause = new IOException("root cause");
-		ExecutableException ex = exex(cause, "Error message {0}", "test");
+		ExecutableException ex = exex(cause, "Error message %s", "test");
 		assertNotNull(ex);
 		assertSame(cause, ex.getCause());
 		assertTrue(ex.getMessage().contains("Error message test"));
@@ -574,7 +574,7 @@ class ThrowableUtils_Test extends TestBase {
 		System.setProperty("juneau.enableVerboseExceptions", "true");
 		try {
 			// Any method that calls log() will trigger the verbose branch if it re-reads the setting
-			var ex = iaex("test {0}", "verbose");
+			var ex = iaex("test %s", "verbose");
 			assertNotNull(ex);
 		} finally {
 			System.clearProperty("juneau.enableVerboseExceptions");

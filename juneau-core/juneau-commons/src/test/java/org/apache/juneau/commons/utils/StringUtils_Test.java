@@ -1488,10 +1488,10 @@ class StringUtils_Test extends TestBase {
 		var lineSep = System.lineSeparator();
 		assertEquals("Line 1" + lineSep + "Line 2", format("Line 1%nLine 2", "dummy"));
 
-		// MessageFormat style
-		assertEquals("Hello John, you are 30 years old", format("Hello {0}, you are {1} years old", "John", 30));
-		assertEquals("Hello {0}", format("Hello {0}")); // No args
-		assertEquals("Hello {}", format("Hello {}")); // Unnumbered placeholder
+		// MessageFormat style is handled by mformat(), not format() (which is printf-only as of 10.0.0)
+		assertEquals("Hello John, you are 30 years old", mformat("Hello {0}, you are {1} years old", "John", 30));
+		assertEquals("Hello {0}", mformat("Hello {0}")); // No args
+		assertEquals("Hello {}", format("Hello {}")); // Printf-only: { is literal
 	}
 
 	//====================================================================================================
@@ -4403,7 +4403,7 @@ class StringUtils_Test extends TestBase {
 
 		// Invalid input invokes the supplier and the supplier's exception is thrown.
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> parseInt("invalid", () -> Shorts.iaex("Bad int: {0}", "invalid")));
+			() -> parseInt("invalid", () -> Shorts.iaex("Bad int: %s", "invalid")));
 		assertEquals("Bad int: invalid", ex.getMessage());
 
 		// Custom RuntimeException subtype is preserved by the generic signature.
@@ -4449,7 +4449,7 @@ class StringUtils_Test extends TestBase {
 
 		// Invalid input invokes the supplier and the supplier's exception is thrown.
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> parseIntWithSuffix("1X", () -> Shorts.iaex("Bad size: {0}", "1X")));
+			() -> parseIntWithSuffix("1X", () -> Shorts.iaex("Bad size: %s", "1X")));
 		assertEquals("Bad size: 1X", ex.getMessage());
 	}
 
@@ -4479,7 +4479,7 @@ class StringUtils_Test extends TestBase {
 
 		// Invalid input invokes the supplier and the supplier's exception is thrown.
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> parseLong("invalid", () -> Shorts.iaex("Bad long: {0}", "invalid")));
+			() -> parseLong("invalid", () -> Shorts.iaex("Bad long: %s", "invalid")));
 		assertEquals("Bad long: invalid", ex.getMessage());
 	}
 

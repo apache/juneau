@@ -181,7 +181,7 @@ class ClassicResponse_Test extends TestBase {
 		"unused" // Parameters required to match @MethodSource argument arity; not every parameterized test uses every column.
 	})
 	void a08_exceptionWithMessage(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
-		var instance = type.getDeclaredConstructor(String.class, Object[].class).newInstance("test {0}", new Object[]{"msg"});
+		var instance = type.getDeclaredConstructor(String.class, Object[].class).newInstance("test %s", new Object[]{"msg"});
 		assertEquals("test msg", instance.getMessage());
 		var statusLine = ((HttpResponse)instance).getStatusLine();
 		assertEquals(expectedCode, statusLine.getStatusCode());

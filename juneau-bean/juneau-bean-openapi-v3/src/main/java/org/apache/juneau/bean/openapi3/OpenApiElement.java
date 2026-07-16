@@ -26,7 +26,7 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Root class for all Swagger beans.
@@ -134,7 +134,7 @@ public abstract class OpenApiElement {
 	public OpenApiElement set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		if (strict)
-			throw rex("Cannot set property ''{0}'' in strict mode.", property);
+			throw rex("Cannot set property '%s' in strict mode.", property);
 		if (extra == null)
 			extra = map();
 		extra.put(property, value);
@@ -143,7 +143,7 @@ public abstract class OpenApiElement {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 
 	/**

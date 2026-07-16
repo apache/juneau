@@ -258,7 +258,7 @@ public class ContentDisposition extends HttpStringRangesHeader {
 		 */
 		public Builder size(long value) {
 			if (value < 0)
-				throw iaex("size must be non-negative: {0}", value);
+				throw iaex("size must be non-negative: %s", value);
 			return tokenParam("size", Long.toString(value));
 		}
 

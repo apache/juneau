@@ -90,7 +90,7 @@ abstract sealed class TemplateSegment permits LiteralSegment, VarRefSegment, Scr
 	static VarResolverException wrapDispatchFailure(Exception e, String identifier, String sourceFragment) {
 		if (e instanceof VarResolverException e2)
 			return e2;
-		throw new VarResolverException(e, "Problem occurred resolving variable ''{0}'' in string ''{1}''", identifier, sourceFragment);
+		throw new VarResolverException(e, "Problem occurred resolving variable '%s' in string '%s'", identifier, sourceFragment);
 	}
 
 	/**

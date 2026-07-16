@@ -336,7 +336,7 @@ public abstract class ObjectSwap<T,S> {
 		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
 	})
 	public S swap(MarshallingSession session, T o, String template) throws Exception {
-		throw new SerializeException("Swap method not implemented on ObjectSwap ''{0}''", cn(this));
+		throw new SerializeException("Swap method not implemented on ObjectSwap '%s'", cn(this));
 	}
 
 	@Override /* Overridden from Object */
@@ -387,7 +387,7 @@ public abstract class ObjectSwap<T,S> {
 		"java:S112" // throws Exception intentional - callback/lifecycle method for user implementations
 	})
 	public T unswap(MarshallingSession session, S f, ClassMeta<?> hint, String template) throws Exception {
-		throw new ParseException("Unswap method not implemented on ObjectSwap ''{0}''", cn(this));
+		throw new ParseException("Unswap method not implemented on ObjectSwap '%s'", cn(this));
 	}
 
 	/**

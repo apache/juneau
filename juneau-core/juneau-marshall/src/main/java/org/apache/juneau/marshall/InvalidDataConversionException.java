@@ -60,7 +60,7 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, Class<?> toType, Exception cause) {
-		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), name(toType), value(value));
+		this(cause, "Invalid data conversion from type '%s' to type '%s'.  Value=%s.", name(value), name(toType), value(value));
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class InvalidDataConversionException extends BasicRuntimeException {
 	 * @param value The value being converted.
 	 */
 	public InvalidDataConversionException(Object value, ClassMeta<?> toType, Exception cause) {
-		this(cause, "Invalid data conversion from type ''{0}'' to type ''{1}''.  Value={2}.", name(value), s(toType), value(value));
+		this(cause, "Invalid data conversion from type '%s' to type '%s'.  Value=%s.", name(value), s(toType), value(value));
 	}
 
 	/**

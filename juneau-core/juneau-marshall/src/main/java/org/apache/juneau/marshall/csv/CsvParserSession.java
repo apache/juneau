@@ -251,7 +251,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 			}
 			if (m.containsKey(typeColName))
 				return cast(m, null, eType);
-			throw new ParseException(this, "Polymorphic type ''{0}'' requires _type column for resolution", eType);
+			throw new ParseException(this, "Polymorphic type '%s' requires _type column for resolution", eType);
 		}
 		if (eType.isBean()) {
 			return parseRowIntoBean(headers, row, eType, outer);
@@ -358,7 +358,7 @@ public class CsvParserSession extends ReaderParserSession implements RecordReada
 				return (T) csvParsed;
 			return convertToType(val, eType);
 		} catch (InvalidDataConversionException e) {
-			throw new ParseException(e, "Could not convert CSV cell value ''{0}'' to type ''{1}''.", val, eType);
+			throw new ParseException(e, "Could not convert CSV cell value '%s' to type '%s'.", val, eType);
 		}
 	}
 

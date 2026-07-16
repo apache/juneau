@@ -35,7 +35,7 @@ class HttpVersionNotSupported_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws HttpVersionNotSupported {
-			throw new HttpVersionNotSupported("foo {0}", "bar");
+			throw new HttpVersionNotSupported("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws HttpVersionNotSupported {
@@ -43,7 +43,7 @@ class HttpVersionNotSupported_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws HttpVersionNotSupported {
-			throw new HttpVersionNotSupported(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new HttpVersionNotSupported(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws HttpVersionNotSupported {

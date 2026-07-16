@@ -25,7 +25,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Root class for all Swagger beans.
@@ -135,7 +135,7 @@ public abstract class SwaggerElement {
 	public SwaggerElement set(String property, Object value) {
 		assertArgNotNull(ARG_property, property);
 		if (strict)
-			throw rex("Cannot set property ''{0}'' in strict mode.", property);
+			throw rex("Cannot set property '%s' in strict mode.", property);
 		if (extra == null)
 			extra = map();
 		extra.put(property, value);
@@ -144,7 +144,7 @@ public abstract class SwaggerElement {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 
 	/**

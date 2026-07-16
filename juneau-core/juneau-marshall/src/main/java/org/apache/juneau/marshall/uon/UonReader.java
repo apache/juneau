@@ -52,7 +52,7 @@ public class UonReader extends ParserReader {
 			return 10 + c - 'a';
 		if (c >= 'A' && c <= 'F')
 			return 10 + c - 'A';
-		throw ioex("Invalid hex character ''{0}'' found in escape pattern.", c);
+		throw ioex("Invalid hex character '%s' found in escape pattern.", c);
 	}
 
 	private final boolean decodeChars;
@@ -136,7 +136,7 @@ public class UonReader extends ParserReader {
 
 				} else if (b0 < 192) {
 					// 10xxxxxx
-					throw ioex("Invalid hex value for first escape pattern in UTF-8 sequence: {0}", b0);
+					throw ioex("Invalid hex value for first escape pattern in UTF-8 sequence: %s", b0);
 
 				} else if (b0 < 224) {
 					// 110xxxxx	10xxxxxx
@@ -166,7 +166,7 @@ public class UonReader extends ParserReader {
 					}
 
 				} else
-					throw ioex("Invalid hex value for first escape pattern in UTF-8 sequence: {0}", b0);
+					throw ioex("Invalid hex value for first escape pattern in UTF-8 sequence: %s", b0);
 
 				if (cx < 0x10000)
 					cbuf[off + i++] = (char)cx;

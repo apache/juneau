@@ -504,7 +504,7 @@ public class Json5Map extends MarshalledMap {
 	 * @throws ParseException Malformed input encountered.
 	 */
 	public void putJson5(String key, String json5) throws ParseException {
-		this.put(key, Json5Parser.DEFAULT.parse(json5, Object.class));
+		this.put(key, Json5.to(json5, Object.class));
 	}
 
 	@Override /* Overridden from MarshalledMap */
@@ -556,7 +556,7 @@ public class Json5Map extends MarshalledMap {
 
 	/**
 	 * Convenience method for serializing this map to the specified <c>Writer</c> using the
-	 * {@link Json5Serializer#DEFAULT} serializer.
+	 * {@link Json5#DEFAULT} marshaller.
 	 *
 	 * @param w The writer to serialize this object to.
 	 * @return This object.
@@ -564,7 +564,7 @@ public class Json5Map extends MarshalledMap {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Json5Map writeTo(Writer w) throws IOException, SerializeException {
-		Json5Serializer.DEFAULT.serialize(this, w);
+		Json5.DEFAULT.write(this, w);
 		return this;
 	}
 }

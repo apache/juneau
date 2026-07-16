@@ -352,7 +352,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		var cm = req.getMarshallingSession().getClassMeta(type);
-		var name = HttpParts.getName(QUERY, cm).orElseThrow(() -> rex("@Query(name) not found on class {0}", cn(type)));
+		var name = HttpParts.getName(QUERY, cm).orElseThrow(() -> rex("@Query(name) not found on class %s", cn(type)));
 		return get(name).as(type);
 	}
 

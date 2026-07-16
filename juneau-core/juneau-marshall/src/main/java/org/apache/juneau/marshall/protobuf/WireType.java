@@ -81,7 +81,7 @@ public enum WireType {
 			case 3: return SGROUP;
 			case 4: return EGROUP;
 			case 5: return I32;
-			default: throw iaex("Invalid protobuf wire type: {0}", code);
+			default: throw iaex("Invalid protobuf wire type: %s", code);
 		}
 	}
 

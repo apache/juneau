@@ -481,7 +481,7 @@ public class Messages extends ResourceBundle {
 		var s = getString(key);
 		if (s.startsWith("{!"))
 			return s;
-		return f(s, args);
+		return mf(s, args);
 	}
 
 	@Override /* Overridden from ResourceBundle */

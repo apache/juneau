@@ -166,7 +166,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 	<T> T parseAnything(ClassMeta<?> eType, MsgPackInputStream is, Object outer, BeanPropertyMeta pMeta) throws IOException, ParseException, ExecutableException {
 		if (++parseDepth > MAX_PARSE_DEPTH) {
 			parseDepth--;
-			throw new ParseException(this, "Maximum parse depth exceeded ({0}).", MAX_PARSE_DEPTH);
+			throw new ParseException(this, "Maximum parse depth exceeded (%s).", MAX_PARSE_DEPTH);
 		}
 		try {
 			return parseAnything0(eType, is, outer, pMeta);
@@ -207,7 +207,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 		// G8: array32/map32/str32/bin32/ext32 lengths are 32-bit unsigned (up to 2^32-1); a value in
 		// [2^31, 2^32-1] would truncate to a negative int.  Java containers/arrays cannot exceed int range.
 		if (rawLength > Integer.MAX_VALUE)
-			throw new ParseException(this, "MessagePack length {0} exceeds the maximum supported size of {1}.", rawLength, Integer.MAX_VALUE);
+			throw new ParseException(this, "MessagePack length %s exceeds the maximum supported size of %s.", rawLength, Integer.MAX_VALUE);
 		int length = (int)rawLength;
 
 		if (dt != DataType.NULL) {
@@ -275,7 +275,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 					}
 					o = builder == null ? m.getBean() : builder.build(this, m.getBean(), eType);
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (sType.isMap()) {
 				if (dt == MAP) {
@@ -289,7 +289,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 					}
 					o = m;
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (sType.isBoolean() || sType.isCharSequence() || sType.isChar() || sType.isNumber() || sType.isByteArray()) {
 				// Merged scalar tier: one wire-type (BOOLEAN/INT/LONG/FLOAT/DOUBLE/STRING/BIN) covers
@@ -319,7 +319,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 						l.add(parseAnything(sType.getElementType(), is, l, pMeta));
 					o = l;
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (sType.isArray() || sType.isArgs()) {
 				if (dt == MAP) {
@@ -333,7 +333,7 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 						l.add(parseAnything(sType.isArgs() ? sType.getArg(i) : sType.getElementType(), is, l, pMeta));
 					o = toArray(sType, l);
 				} else {
-					throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+					throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 				}
 			} else if (dt == MAP) {
 				var m = newGenericMap();
@@ -344,9 +344,9 @@ public class MsgPackParserSession extends InputStreamParserSession implements To
 				else if (nn(sType.getProxyInvocationHandler()))
 					o = newBeanMap(outer, sType.inner()).load(m).getBean();
 				else
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+					throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			} else {
-				throw new ParseException(this, "Invalid data type {0} encountered for parse type {1}", dt, sType);
+				throw new ParseException(this, "Invalid data type %s encountered for parse type %s", dt, sType);
 			}
 		}
 

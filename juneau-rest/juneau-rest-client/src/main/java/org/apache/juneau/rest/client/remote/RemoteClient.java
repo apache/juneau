@@ -317,7 +317,7 @@ public final class RemoteClient {
 			if (urlParamIndex >= 0) {
 				var arg = (args == null || urlParamIndex >= args.length) ? null : args[urlParamIndex];
 				var value = arg == null ? null : arg.toString();
-				assertArg(! isBlank(value), "@Url parameter on {0}.{1} must not be null or blank",
+				assertArg(! isBlank(value), "@Url parameter on %s.%s must not be null or blank",
 					method.getDeclaringClass().getName(), method.getName());
 				return requireHttpScheme(value.trim());
 			}
@@ -337,7 +337,7 @@ public final class RemoteClient {
 		private static String requireHttpScheme(String url) {
 			var scheme = schemeOf(url);
 			assertArg(scheme == null || scheme.equalsIgnoreCase("http") || scheme.equalsIgnoreCase("https"),
-				"Unsupported URL scheme ''{0}'' in @Remote URL override; only http/https are allowed: {1}", scheme, url);
+				"Unsupported URL scheme '%s' in @Remote URL override; only http/https are allowed: %s", scheme, url);
 			return url;
 		}
 
@@ -676,7 +676,7 @@ public final class RemoteClient {
 				var session = serializer != null ? serializer.getPartSession() : OpenApiSerializer.DEFAULT.getPartSession();
 				return session.serialize(partType, schema, value);
 			} catch (Exception e) {
-				throw rex(e, "Could not serialize HTTP {0} part value of type {1}", partType, value == null ? "null" : cn(value));
+				throw rex(e, "Could not serialize HTTP %s part value of type %s", partType, value == null ? "null" : cn(value));
 			}
 		}
 
@@ -705,7 +705,7 @@ public final class RemoteClient {
 			try {
 				value = m.invoke(bean);
 			} catch (ReflectiveOperationException e) {
-				throw rex(e, "Could not read @Request bean property via {0}", m.getName());
+				throw rex(e, "Could not read @Request bean property via %s", m.getName());
 			}
 			var prop = propertyName(m.getName());
 			// @Request bean part serialization keeps the default OpenAPI serializer (custom per-part serializers are
@@ -1077,7 +1077,7 @@ public final class RemoteClient {
 			try {
 				return newHttpTypeInstance(c, body);
 			} catch (ReflectiveOperationException e) {
-				throw rex(e, "Could not instantiate HTTP response/exception type {0}", c.getName());
+				throw rex(e, "Could not instantiate HTTP response/exception type %s", c.getName());
 			}
 		}
 
@@ -1275,7 +1275,7 @@ public final class RemoteClient {
 					return ap.get();
 			}
 			return c.getMatchingParser(responseContentType).orElseThrow(() -> new UnsupportedMediaType(
-				"No parser matched the response Content-Type ''{0}'' and no default parser is configured on the client.", responseContentType));
+				"No parser matched the response Content-Type '%s' and no default parser is configured on the client.", responseContentType));
 		}
 
 		private static String combinePaths(String base, String method) {

@@ -238,7 +238,7 @@ public class BctAssertions {
 	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>, () -> <js>"User validation failed"</js>);
 	 *
 	 *    <jc>// With formatted message using Shorts.fs() for convenient message suppliers with arguments</jc>
-	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>, <jsm>fs</jsm>(<js>"User {0} validation failed"</js>, <js>"John"</js>));
+	 *    <jsm>assertBean</jsm>(<jv>myBean</jv>, <js>"name,age"</js>, <js>"John,30"</js>, <jsm>fs</jsm>(<js>"User %s validation failed"</js>, <js>"John"</js>));
 	 * </p>
 	 *
 	 * <h5 class='section'>Nested Property Testing:</h5>
@@ -386,7 +386,7 @@ public class BctAssertions {
 	 *
 	 * @param message Optional custom error message supplier. If provided, will be composed with the default assertion message.
 	 *                Use {@link Shorts#fs(String, Object...) Shorts.fs()} to conveniently
-	 *                create message suppliers with format arguments (e.g., <code>fs("User {0} validation failed", userName)</code>).
+	 *                create message suppliers with format arguments (e.g., <code>fs("User %s validation failed", userName)</code>).
 	 * @param actual The bean object to test. Must not be null.
 	 * @param fields Comma-delimited list of property names to test. Supports nested syntax with {}.
 	 * @param expected Comma-delimited list of expected values. Must match the order of fields.
@@ -496,7 +496,7 @@ public class BctAssertions {
 				var e = converter.stringify(expected[i]);
 				var a = tokens.stream().map(x -> converter.getNested(actualList.get(i2), x)).collect(joining(","));
 				if (neq(e, a)) {
-					errors.add(assertEqualsFailed(e, a, composeMessage(message, "Bean at row <{0}> did not match.", i)));
+					errors.add(assertEqualsFailed(e, a, composeMessage(message, "Bean at row <%s> did not match.", i)));
 				}
 			}
 		}
@@ -511,7 +511,7 @@ public class BctAssertions {
 
 		throw assertEqualsFailed(Stream.of(expected).map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "\"", "\"")),
 			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "\"", "\"")),
-			composeMessage(message, "{0} bean assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
+			composeMessage(message, "%s bean assertions failed:\n%s", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
 	/**
@@ -560,7 +560,7 @@ public class BctAssertions {
 		assertNotNull(actual, MSG_value_was_null);
 
 		var a = BctConfiguration.getConverter().stringify(actual);
-		assertTrue(a.contains(expected), composeMessage(message, "String did not contain expected substring.  ==> expected: <{0}> but was: <{1}>", expected, a));
+		assertTrue(a.contains(expected), composeMessage(message, "String did not contain expected substring.  ==> expected: <%s> but was: <%s>", expected, a));
 	}
 
 	/**
@@ -611,7 +611,7 @@ public class BctAssertions {
 
 		for (var e : expected) {
 			if (! a.contains(e)) {
-				errors.add(assertEqualsFailed(true, false, composeMessage(message, "String did not contain expected substring.  ==> expected: <{0}> but was: <{1}>", e, a)));
+				errors.add(assertEqualsFailed(true, false, composeMessage(message, "String did not contain expected substring.  ==> expected: <%s> but was: <%s>", e, a)));
 			}
 		}
 
@@ -629,7 +629,7 @@ public class BctAssertions {
 		}
 
 		throw assertEqualsFailed(missingSubstrings.stream().map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "\"", "\"")), escapeForJava(a),
-			composeMessage(message, "{0} substring assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
+			composeMessage(message, "%s substring assertions failed:\n%s", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
 	/**
@@ -694,7 +694,7 @@ public class BctAssertions {
 	public static void assertEmpty(Supplier<String> message, Object value) {
 		assertNotNull(value, MSG_value_was_null);
 		var size = BctConfiguration.getConverter().size(value);
-		assertEquals(0, size, composeMessage(message, "Value was not empty. Size=<{0}>", size));
+		assertEquals(0, size, composeMessage(message, "Value was not empty. Size=<%s>", size));
 	}
 
 	/**
@@ -786,16 +786,16 @@ public class BctAssertions {
 				var e = expected[i];
 				if (e instanceof String e2) {
 					if (neq(e2, converter.stringify(x))) {
-						errors.add(assertEqualsFailed(e2, converter.stringify(x), composeMessage(message, "Element at index {0} did not match.", i)));
+						errors.add(assertEqualsFailed(e2, converter.stringify(x), composeMessage(message, "Element at index %s did not match.", i)));
 					}
 				} else if (e instanceof Predicate<?> p) {
 					Predicate<Object> e2 = (Predicate<Object>) p;
 					if (! e2.test(x)) {
-						errors.add(new AssertionFailedError(composeMessage(message, "Element at index {0} did not pass predicate.  ==> actual: <{1}>", i, converter.stringify(x)).get()));
+						errors.add(new AssertionFailedError(composeMessage(message, "Element at index %s did not pass predicate.  ==> actual: <%s>", i, converter.stringify(x)).get()));
 					}
 				} else {
 					if (neq(e, x)) {
-						errors.add(assertEqualsFailed(e, x, composeMessage(message, "Element at index {0} did not match.  ==> expected: <{1}({2})> but was: <{3}({4})>", i, e, cns(e), x, cns(x))));
+						errors.add(assertEqualsFailed(e, x, composeMessage(message, "Element at index %s did not match.  ==> expected: <%s(%s)> but was: <%s(%s)>", i, e, cns(e), x, cns(x))));
 					}
 				}
 			}
@@ -814,7 +814,7 @@ public class BctAssertions {
 
 		throw assertEqualsFailed(Stream.of(expected).map(converter::stringify).map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "[\"", "\"]")),
 			actualStrings.stream().map(StringUtils::escapeForJava).collect(joining(JOINER_comma_space, "[\"", "\"]")),
-			composeMessage(message, "{0} list assertions failed:\n{1}", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
+			composeMessage(message, "%s list assertions failed:\n%s", errors.size(), errors.stream().map(x -> x.getMessage()).collect(joining("\n"))));
 	}
 
 	/**
@@ -1006,7 +1006,7 @@ public class BctAssertions {
 
 		var v = BctConfiguration.getConverter().stringify(value);
 		var m = StringUtils.getGlobMatchPattern(pattern).matcher(v);
-		assertTrue(m.matches(), composeMessage(message, "Pattern didn''t match. ==> pattern: <{0}> but was: <{1}>", pattern, v));
+		assertTrue(m.matches(), composeMessage(message, "Pattern didn't match. ==> pattern: <%s> but was: <%s>", pattern, v));
 	}
 
 	/**
@@ -1185,7 +1185,7 @@ public class BctAssertions {
 		if (customMessage == null) {
 			return fs(defaultMessage, defaultArgs);
 		}
-		return fs("{0}, Caused by: {1}", customMessage.get(), f(defaultMessage, defaultArgs));
+		return fs("%s, Caused by: %s", customMessage.get(), f(defaultMessage, defaultArgs));
 	}
 
 	private BctAssertions() {}

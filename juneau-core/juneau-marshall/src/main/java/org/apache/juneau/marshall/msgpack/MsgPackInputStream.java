@@ -127,7 +127,7 @@ public class MsgPackInputStream extends ParserInputStream {
 		// Java arrays/collections are int-indexed; a 32-bit MessagePack length in [2^31, 2^32-1] would
 		// otherwise truncate to a negative int and allocate the wrong size (G8).
 		if (length > Integer.MAX_VALUE)
-			throw ioex("MessagePack length {0} exceeds the maximum supported size of {1}.", length, Integer.MAX_VALUE);
+			throw ioex("MessagePack length %s exceeds the maximum supported size of %s.", length, Integer.MAX_VALUE);
 		var b = new byte[(int)length];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
@@ -154,7 +154,7 @@ public class MsgPackInputStream extends ParserInputStream {
 	DataType readDataType() throws IOException {
 		int i = read();
 		if (i == -1)
-			throw ioex("Unexpected end of file found at position {0}", pos2);
+			throw ioex("Unexpected end of file found at position %s", pos2);
 		DataType currentDataType = TYPES[i];
 		switch (currentDataType) {
 			case NULL, FLOAT: {

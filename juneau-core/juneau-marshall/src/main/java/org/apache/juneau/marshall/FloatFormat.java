@@ -169,7 +169,7 @@ public enum FloatFormat {
 			case NOT_SET, NaN_AS_NULL -> null;
 			case NaN_AS_STRING -> nonFiniteTokenFloat(value);
 			case NaN_AS_NUMBER -> Float.valueOf(value);
-			case NaN_AS_ERROR -> throw iaex("Non-finite float value {0} rejected by FloatFormat.NaN_AS_ERROR", value);
+			case NaN_AS_ERROR -> throw iaex("Non-finite float value %s rejected by FloatFormat.NaN_AS_ERROR", value);
 		};
 	}
 
@@ -179,7 +179,7 @@ public enum FloatFormat {
 			case NOT_SET, NaN_AS_NULL -> null;
 			case NaN_AS_STRING -> nonFiniteToken(value);
 			case NaN_AS_NUMBER -> Double.valueOf(value);
-			case NaN_AS_ERROR -> throw iaex("Non-finite double value {0} rejected by FloatFormat.NaN_AS_ERROR", value);
+			case NaN_AS_ERROR -> throw iaex("Non-finite double value %s rejected by FloatFormat.NaN_AS_ERROR", value);
 		};
 	}
 
@@ -227,9 +227,9 @@ public enum FloatFormat {
 				return (T) Double.valueOf(parseDouble(s));
 			if (Float.class.equals(targetType) || float.class.equals(targetType))
 				return (T) Float.valueOf(parseFloat(s));
-			throw iaex("Unsupported FloatFormat target type: {0}", targetType.getName());
+			throw iaex("Unsupported FloatFormat target type: %s", targetType.getName());
 		} catch (NumberFormatException e) {
-			throw iaex("Invalid float value ''{0}'' for format {1}: {2}", value, format, e.getMessage());
+			throw iaex("Invalid float value '%s' for format %s: %s", value, format, e.getMessage());
 		}
 	}
 

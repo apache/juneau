@@ -141,7 +141,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 
 	private Character toCharacter(String in, String loc) {
 		if (in.length() != 1)
-			throw new ConfigException("Invalid syntax for character on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
+			throw new ConfigException("Invalid syntax for character on annotation @%s(%s): %s", ca.getSimpleName(), loc, in);
 		return in.charAt(0);
 	}
 
@@ -200,7 +200,7 @@ public abstract class AnnotationApplier<A extends Annotation,B> {
 		try {
 			return string(in).map(Integer::parseInt);
 		} catch (NumberFormatException e) {
-			throw new ConfigException(e, "Invalid syntax for integer on annotation @{0}({1}): {2}", ca.getSimpleName(), loc, in);
+			throw new ConfigException(e, "Invalid syntax for integer on annotation @%s(%s): %s", ca.getSimpleName(), loc, in);
 		}
 	}
 

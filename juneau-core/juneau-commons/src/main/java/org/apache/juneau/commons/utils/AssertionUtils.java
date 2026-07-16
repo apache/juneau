@@ -130,7 +130,7 @@ public class AssertionUtils {
 	 * @throws IllegalArgumentException Constructed exception.
 	 */
 	public static final <T> T assertArgNotNull(String name, T o) throws IllegalArgumentException {
-		assertArg(o != null, "Argument ''{0}'' cannot be null.", name);
+		assertArg(o != null, "Argument '%s' cannot be null.", name);
 		return o;
 	}
 
@@ -160,7 +160,7 @@ public class AssertionUtils {
 	 */
 	public static final String assertArgNotNullOrBlank(String name, String o) throws IllegalArgumentException {
 		assertArgNotNull(name, o);
-		assertArg(! o.isBlank(), "Argument ''{0}'' cannot be blank.", name);
+		assertArg(! o.isBlank(), "Argument '%s' cannot be blank.", name);
 		return o;
 	}
 
@@ -292,7 +292,7 @@ public class AssertionUtils {
 		assertArgNotNull(ARG_type, type);
 		assertArgNotNull(ARG_o, o);
 		if (! type.isInstance(o))
-			throw iaex("Object is not an instance of {0}: {1}", ClassUtils.className(type), ClassUtils.className(o));
+			throw iaex("Object is not an instance of %s: %s", ClassUtils.className(type), ClassUtils.className(o));
 		return (T)o;
 	}
 
@@ -345,7 +345,7 @@ public class AssertionUtils {
 	public static final <E> Class<E>[] assertClassArrayArgIsType(String name, Class<E> type, Class<?>[] value) throws IllegalArgumentException {
 		for (var i = 0; i < value.length; i++)
 			if (! type.isAssignableFrom(value[i]))
-				throw iaex("Arg {0} did not have arg of type {1} at index {2}: {3}", name, ClassUtils.className(type), i, ClassUtils.className(value[i]));
+				throw iaex("Arg %s did not have arg of type %s at index %s: %s", name, ClassUtils.className(type), i, ClassUtils.className(value[i]));
 		return (Class<E>[])value;
 	}
 
@@ -379,7 +379,7 @@ public class AssertionUtils {
 	public static final <T> T[] assertArgNoNulls(String name, T[] o) throws IllegalArgumentException {
 		assertArgNotNull(name, o);
 		for (var i = 0; i < o.length; i++)
-			assertArg(isNotNull(o[i]), "Argument ''{0}'' parameter {1} cannot be null.", name, i);
+			assertArg(isNotNull(o[i]), "Argument '%s' parameter %s cannot be null.", name, i);
 		return o;
 	}
 
@@ -407,7 +407,7 @@ public class AssertionUtils {
 		assertArgNotNull(name, collection);
 		var i = 0;
 		for (var element : collection)
-			assertArg(isNotNull(element), "Argument ''{0}'' element at index {1} cannot be null.", name, i++);
+			assertArg(isNotNull(element), "Argument '%s' element at index %s cannot be null.", name, i++);
 		return collection;
 	}
 

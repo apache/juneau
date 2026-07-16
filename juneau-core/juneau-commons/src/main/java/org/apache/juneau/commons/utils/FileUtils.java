@@ -63,7 +63,7 @@ public class FileUtils {
 	public static void create(File f) {
 		if (f.exists())
 			return;
-		safe(() -> optional(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file ''{0}''", f.getAbsolutePath())));
+		safe(() -> optional(f.createNewFile()).filter(x -> x).orElseThrow(() -> rex("Could not create file '%s'", f.getAbsolutePath())));
 	}
 
 	/**
@@ -225,12 +225,12 @@ public class FileUtils {
 		assertArgNotNull(ARG_f, f);
 		if (f.exists()) {
 			if (clean) {
-				optional(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory ''{0}''", f.getAbsolutePath()));
+				optional(deleteFile(f)).filter(x -> x).orElseThrow(() -> rex("Could not clean directory '%s'", f.getAbsolutePath()));
 			} else {
 				return f;
 			}
 		}
-		optional(f.mkdirs()).filter(x -> x).orElseThrow(() -> rex("Could not create directory ''{0}''", f.getAbsolutePath()));
+		optional(f.mkdirs()).filter(x -> x).orElseThrow(() -> rex("Could not create directory '%s'", f.getAbsolutePath()));
 		return f;
 	}
 
@@ -305,7 +305,7 @@ public class FileUtils {
 		} catch (@SuppressWarnings("unused") NoSuchFileException e) {
 			return emptyOptional();
 		} catch (IOException e) {
-			throw rex(e, "Could not canonicalize ''{0}''", target);
+			throw rex(e, "Could not canonicalize '%s'", target);
 		}
 		return optional(f);
 	}
@@ -421,10 +421,10 @@ public class FileUtils {
 		var l = System.currentTimeMillis();
 		if (lm == l)
 			l++;
-		optional(f.setLastModified(l)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
+		optional(f.setLastModified(l)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file '%s'", f.getAbsolutePath()));
 
 		// Linux only gives 1s precision, so set the date 1s into the future.
 		if (lm == f.lastModified())
-			optional(f.setLastModified(l + 1000)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file ''{0}''", f.getAbsolutePath()));
+			optional(f.setLastModified(l + 1000)).filter(x -> x).orElseThrow(() -> rex("Could not modify timestamp on file '%s'", f.getAbsolutePath()));
 	}
 }

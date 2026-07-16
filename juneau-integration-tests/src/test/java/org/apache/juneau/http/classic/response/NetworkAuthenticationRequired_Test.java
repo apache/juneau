@@ -35,7 +35,7 @@ class NetworkAuthenticationRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws NetworkAuthenticationRequired {
-			throw new NetworkAuthenticationRequired("foo {0}", "bar");
+			throw new NetworkAuthenticationRequired("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws NetworkAuthenticationRequired {
@@ -43,7 +43,7 @@ class NetworkAuthenticationRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws NetworkAuthenticationRequired {
-			throw new NetworkAuthenticationRequired(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new NetworkAuthenticationRequired(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws NetworkAuthenticationRequired {

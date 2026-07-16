@@ -2102,7 +2102,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			headerData.stream().map(SimpleHeader::new).filter(SimplePart::isValid).forEach(request::addHeader);
 
 			if (request2 == null && content != NO_BODY)
-				throw new RestCallException(null, null, "Method does not support content entity.  Method={0}, URI={1}", getMethod(), getURI());
+				throw new RestCallException(null, null, "Method does not support content entity.  Method=%s, URI=%s", getMethod(), getURI());
 
 			if (nn(request2)) {
 
@@ -2141,7 +2141,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 						if (contentType == null)
 							throw new RestCallException(null, null,
 								"Content-Type not specified on request.  Cannot match correct serializer.  Use contentType(String) or mediaType(String) to specify transport language.");
-						throw new RestCallException(null, null, "No matching serializer for media type ''{0}''", contentType);
+						throw new RestCallException(null, null, "No matching serializer for media type '%s'", contentType);
 					}
 					entity = stringEntity(input2 == null ? "" : MarshallingContext.DEFAULT.getClassMetaForObject(input2).toString(input2), getRequestContentType(TEXT_PLAIN));
 				}
@@ -2196,14 +2196,14 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 						if (nn(thrownInstance)) {
 							if (thrownInstance instanceof Exception ex)
 								throw ex;
-							throw new RestCallException(response, thrownInstance, "Server threw non-Exception: {0}", className);
+							throw new RestCallException(response, thrownInstance, "Server threw non-Exception: %s", className);
 						}
 					}
 				}
 			}
 
 			if (errorCodes.test(sc) && ! ignoreErrors) {
-				throw new RestCallException(response, null, "HTTP method ''{0}'' call to ''{1}'' caused response code ''{2}, {3}''.\nResponse: \n{4}", method, getURI(), sc, response.getReasonPhrase(),
+				throw new RestCallException(response, null, "HTTP method '%s' call to '%s' caused response code '%s, %s'.\nResponse: \n%s", method, getURI(), sc, response.getReasonPhrase(),
 					response.getContent().asAbbreviatedString(1000));
 			}
 
@@ -2756,7 +2756,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createHeader(k, v, serializer, schema, skipIfEmpty)));
 		} else if (nn(value)) {
-			throw rex("Invalid value type for header arg ''{0}'': {1}", name, cn(value));
+			throw rex("Invalid value type for header arg '%s': %s", name, cn(value));
 		}
 
 		if (skipIfEmpty)
@@ -2791,7 +2791,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 		} else if (isBean(value)) {
 			toBeanMap(value).forEach((k, v) -> l.add(createPart(k, v, PATH, serializer, schema, false)));
 		} else if (nn(value)) {
-			throw rex("Invalid value type for path arg ''{0}'': {1}", name, cn(value));
+			throw rex("Invalid value type for path arg '%s': %s", name, cn(value));
 		}
 
 		pathData.append(l);
@@ -2850,9 +2850,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			var writerKind = body.getWriterKind();
 
 			if (writerKind == TokenWriter.class && !(serializer instanceof TokenWritable))
-				throw iaex("Serializer ''{0}'' does not support the token-writer surface.", serializer.getClass().getName());
+				throw iaex("Serializer '%s' does not support the token-writer surface.", serializer.getClass().getName());
 			if (writerKind == RecordWriter.class && !(serializer instanceof RecordWritable))
-				throw iaex("Serializer ''{0}'' does not support the record-writer surface.", serializer.getClass().getName());
+				throw iaex("Serializer '%s' does not support the record-writer surface.", serializer.getClass().getName());
 
 			var buf = new ByteArrayOutputStream();
 			Object output = serializer.isWriterSerializer()

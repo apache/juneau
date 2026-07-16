@@ -39,9 +39,9 @@ class ByteArrayAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		var assertion1 = test(null).setMsg("A {0}", 1);
+		var assertion1 = test(null).setMsg("A %s", 1);
 		assertThrows(BasicAssertionError.class, assertion1::isExists, "A 1");
-		var assertion2 = test(null).setMsg("A {0}", 1).setThrowable(RuntimeException.class);
+		var assertion2 = test(null).setMsg("A %s", 1).setThrowable(RuntimeException.class);
 		assertThrows(RuntimeException.class, assertion2::isExists, "A 1");
 	}
 

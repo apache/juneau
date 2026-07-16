@@ -35,7 +35,7 @@ class InsufficentStorage_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws InsufficientStorage {
-			throw new InsufficientStorage("foo {0}", "bar");
+			throw new InsufficientStorage("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws InsufficientStorage {
@@ -43,7 +43,7 @@ class InsufficentStorage_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws InsufficientStorage {
-			throw new InsufficientStorage(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new InsufficientStorage(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws InsufficientStorage {

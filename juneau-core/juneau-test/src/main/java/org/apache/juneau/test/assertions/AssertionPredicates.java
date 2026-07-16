@@ -21,7 +21,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.test.assertions.AssertionPredicate.*;
 
-import java.text.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
@@ -107,7 +106,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string contains the specified substring.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not contain expected.  Expected='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not contain expected.  Expected='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -124,7 +123,7 @@ public class AssertionPredicates {
 	 * Uses standard Java equality for testing.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match expected.  Expected='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match expected.  Expected='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -138,7 +137,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified value.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match expected.  Expected='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match expected.  Expected='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -152,7 +151,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string does not match the specified value ignoring case.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match expected.  Expected='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match expected.  Expected='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -166,7 +165,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value is exactly specified type.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value was not expected type.  Expected='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value was not expected type.  Expected='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param type The specified type.
@@ -195,7 +194,7 @@ public class AssertionPredicates {
 	 * Match pattern can contain the <js>"*"</js> meta-character.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -211,7 +210,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value does not match the specified value.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value unexpectedly matched.  Value='{0}'."</js>.
+	 * Assertion error message is <js>"Value unexpectedly matched.  Value='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -225,7 +224,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string does not match the specified value.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value unexpectedly matched.  Value='{0}'."</js>.
+	 * Assertion error message is <js>"Value unexpectedly matched.  Value='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The specified value.
@@ -281,7 +280,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified regular expression.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param value The regular expression to match.
@@ -296,7 +295,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified regular expression.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param expression The regular expression to match.
@@ -312,7 +311,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value converted to a string matches the specified regular expression.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value did not match pattern.  Pattern='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value did not match pattern.  Pattern='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param expression The regular expression to match.
@@ -341,7 +340,7 @@ public class AssertionPredicates {
 	 * <p>
 	 * If the predicate extends from {@link AssertionPredicate}, the assertion error
 	 * message is <js>"Value did not pass test."</js> followed by the inner assertion error.
-	 * Otherwise the message is <js>"Value did not pass test.  Value='{0}'."</js>
+	 * Otherwise the message is <js>"Value did not pass test.  Value='%s'."</js>
 	 *
 	 * @param <T> The object type being tested.
 	 * @param predicate The predicate to run.
@@ -357,13 +356,13 @@ public class AssertionPredicates {
 	 * <p>
 	 * If the message specified is <jk>null</jk> and the predicate extends from {@link AssertionPredicate}, the assertion error
 	 * message is <js>"Value did not pass test."</js> followed by the inner assertion error.
-	 * Otherwise the message is <js>"Value did not pass test.  Value='{0}'."</js>
+	 * Otherwise the message is <js>"Value did not pass test.  Value='%s'."</js>
 	 *
 	 * @param <T> The object type being tested.
 	 * @param predicate The predicate to run.
 	 * @param msg
 	 * 	The error message if predicate fails.
-	 * 	<br>Supports {@link MessageFormat}-style arguments.
+	 * 	<br>Supports printf-style arguments.
 	 * @param args
 	 * 	Optional message arguments.
 	 * 	<br>Can contain {@code #VALUE} to specify the value itself as an argument.
@@ -378,7 +377,7 @@ public class AssertionPredicates {
 	 * Predicate that returns <jk>true</jk> if the tested value is the specified or child type.
 	 *
 	 * <p>
-	 * Assertion error message is <js>"Value was not expected type.  Expected='{0}', Actual='{1}'."</js>.
+	 * Assertion error message is <js>"Value was not expected type.  Expected='%s', Actual='%s'."</js>.
 	 *
 	 * @param <T> The object type being tested.
 	 * @param type The specified type.

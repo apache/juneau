@@ -392,7 +392,7 @@ public class Json5List extends MarshalledList {
 	 */
 	public Object cast(ClassMeta<?> cm) {
 		try {
-			return Json5Parser.DEFAULT.parse(Json5Serializer.DEFAULT.serialize(this), cm);
+			return Json5.to(Json5.of(this), cm);
 		} catch (ParseException | SerializeException e) {
 			throw toRex(e);
 		}
@@ -452,8 +452,8 @@ public class Json5List extends MarshalledList {
 	}
 
 	/**
-	 * Convenience method for serializing this list to the specified Writer using the {@link Json5Serializer#DEFAULT}
-	 * serializer.
+	 * Convenience method for serializing this list to the specified Writer using the {@link Json5#DEFAULT}
+	 * marshaller.
 	 *
 	 * @param w The writer to send the serialized contents of this object.
 	 * @return This object.
@@ -461,7 +461,7 @@ public class Json5List extends MarshalledList {
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 */
 	public Json5List writeTo(Writer w) throws IOException, SerializeException {
-		Json5Serializer.DEFAULT.serialize(this, w);
+		Json5.DEFAULT.write(this, w);
 		return this;
 	}
 }

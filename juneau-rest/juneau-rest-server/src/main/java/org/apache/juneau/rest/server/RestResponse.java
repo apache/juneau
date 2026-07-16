@@ -199,7 +199,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		opContext.getDefaultResponseHeaders().forEach(x -> addHeader(x.getName(), resolveCspNonce(maybeResolveUris(x.getName(), x.getValue()))));
 
 		if (charset == null)
-			throw new NotAcceptable("No supported charsets in header ''Accept-Charset'': ''{0}''", request.getHeaderParam("Accept-Charset").orElse(null));
+			throw new NotAcceptable("No supported charsets in header 'Accept-Charset': '%s'", request.getHeaderParam("Accept-Charset").orElse(null));
 		inner.setCharacterEncoding(charset.name());
 
 	}
@@ -410,7 +410,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 				if (match == null) {
 					// Identity should always match unless "identity;q=0" or "*;q=0" is specified.
 					if (ENCODING_DISABLED_PATTERN.matcher(ae).find()) {
-						throw new NotAcceptable("Unsupported encoding in request header ''Accept-Encoding'': ''{0}''\n\tSupported codings: {1}", ae, Json5.of(encoders.getSupportedEncodings()));
+						throw new NotAcceptable("Unsupported encoding in request header 'Accept-Encoding': '%s'\n\tSupported codings: %s", ae, Json5.of(encoders.getSupportedEncodings()));
 					}
 				} else {
 					encoder = match.getEncoder();
@@ -1021,7 +1021,7 @@ public class RestResponse extends HttpServletResponseWrapper {
 		} catch (@SuppressWarnings("unused") UnsupportedEncodingException e) {
 			var ce = getCharacterEncoding();
 			setCharacterEncoding("UTF-8");
-			throw new NotAcceptable("Unsupported charset in request header ''Accept-Charset'': ''{0}''", ce);
+			throw new NotAcceptable("Unsupported charset in request header 'Accept-Charset': '%s'", ce);
 		}
 	}
 

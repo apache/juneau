@@ -109,6 +109,6 @@ public class HttpIntegerHeader extends HttpHeaderBean {
 	private static Integer toInteger(String value) {
 		if (value == null)
 			return null;
-		return parseInt(value, () -> iaex("Value ''{0}'' could not be parsed as an integer.", value));
+		return parseInt(value, () -> iaex("Value '%s' could not be parsed as an integer.", value));
 	}
 }

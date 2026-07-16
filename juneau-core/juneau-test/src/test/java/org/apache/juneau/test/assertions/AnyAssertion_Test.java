@@ -61,8 +61,8 @@ class AnyAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		assertThrowsWithMessage(BasicAssertionError.class, "Foo 1", ()->test(null).setMsg("Foo {0}", 1).isExists());
-		assertThrowsWithMessage(RuntimeException.class, "Foo 1", ()->test(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class).isExists());
+		assertThrowsWithMessage(BasicAssertionError.class, "Foo 1", ()->test(null).setMsg("Foo %s", 1).isExists());
+		assertThrowsWithMessage(RuntimeException.class, "Foo 1", ()->test(null).setMsg("Foo %s", 1).setThrowable(RuntimeException.class).isExists());
 	}
 
 	@Test void a02_stdout() {

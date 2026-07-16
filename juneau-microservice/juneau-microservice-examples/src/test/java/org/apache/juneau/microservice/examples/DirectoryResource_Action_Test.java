@@ -63,7 +63,7 @@ class DirectoryResource_Action_Test extends TestBase {
 		var action = new Action("view", "/view", "file.txt");
 
 		// Test that setUri(String, Object...) returns Action (not LinkString)
-		Action result = action.setUri("/files/{0}/download", "myfile.txt");
+		Action result = action.setUri("/files/%s/download", "myfile.txt");
 
 		assertSame(action, result);
 		assertInstanceOf(Action.class, result);
@@ -74,7 +74,7 @@ class DirectoryResource_Action_Test extends TestBase {
 		// Test chaining multiple fluent calls
 		var result = new Action("view", "/view", "file.txt")
 			.setName("download")
-			.setUri("/download/{0}", "newfile.txt");
+			.setUri("/download/%s", "newfile.txt");
 
 		assertInstanceOf(Action.class, result);
 		assertEquals("download", result.getName());
@@ -83,7 +83,7 @@ class DirectoryResource_Action_Test extends TestBase {
 
 	@Test void a06_constructor() {
 		// Test basic constructor functionality
-		var action = new Action("view", "/files/{0}/view", "test.txt");
+		var action = new Action("view", "/files/%s/view", "test.txt");
 
 		assertEquals("view", action.getName());
 		assertTrue(action.getUri().toString().contains("test.txt"));

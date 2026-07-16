@@ -35,7 +35,7 @@ class Forbidden_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws Forbidden {
-			throw new Forbidden("foo {0}", "bar");
+			throw new Forbidden("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws Forbidden {
@@ -43,7 +43,7 @@ class Forbidden_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws Forbidden {
-			throw new Forbidden(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new Forbidden(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws Forbidden {

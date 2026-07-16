@@ -99,7 +99,7 @@ public class IniSerializerSession extends WriterSerializerSession implements Rec
 			return;
 		var aType = getClassMetaForObject(o);
 		if (!aType.isBean() && !aType.isMap())
-			throw new SerializeException(this, "INI format requires a bean or Map<String,?> at root. Got: {0}", aType.inner().getName());
+			throw new SerializeException(this, "INI format requires a bean or Map<String,?> at root. Got: %s", aType.inner().getName());
 		var w = getIniWriter(out);
 		var eType = getExpectedRootType(o);
 		if (isAddBeanTypes() || isAddRootType()) {

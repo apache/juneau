@@ -204,7 +204,7 @@ public final class ParquetSchemaBuilder {
 	private void addBeanSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var bm = cm.getBeanMeta();
 		if (bm == null) // HTT: addBeanSchema is only called after isBean() check; getBeanMeta() is non-null
-			throw iaex("Class ''{0}'' is not a bean", cm.getName());
+			throw iaex("Class '%s' is not a bean", cm.getName());
 		var beanClass = cm.inner();
 		// Recursion reached here indirectly (e.g. through Optional/collection of the same type) at the depth
 		// limit: keep the legacy String back-reference placeholder so the enclosing group's child count stays
@@ -213,7 +213,7 @@ public final class ParquetSchemaBuilder {
 		if (typesInProgress.getOrDefault(beanClass, 0) >= maxRecursionDepth) {
 			if (cycleHandling == ParquetCycleHandling.THROW) {
 				var path = parentPath != null ? parentPath + "." + name : name; // HTT: parentPath is always non-null when recursion limit is reached at depth ≥ 2
-				throw new SerializeException("Cyclic type reference at ''{0}'' (type ''{1}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());
+				throw new SerializeException("Cyclic type reference at '%s' (type '%s'). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", path, beanClass.getName());
 			}
 			addLeafSchema(elements, marshallingContext.getClassMeta(String.class), name, parentPath, isRoot);
 			return;
@@ -255,7 +255,7 @@ public final class ParquetSchemaBuilder {
 					propCm = marshallingContext.getClassMeta(childSample.getClass());
 				if (propCm != null && propCm.isBean() && typesInProgress.getOrDefault(propCm.inner(), 0) >= maxRecursionDepth) { // HTT: propCm is non-null
 					if (cycleHandling == ParquetCycleHandling.THROW)
-						throw new SerializeException("Cyclic type reference at ''{0}.{1}'' (type ''{2}''). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", childParentPath, p.getName(), propCm.inner().getName());
+						throw new SerializeException("Cyclic type reference at '%s.%s' (type '%s'). Use @ParentProperty to exclude back-references or set cycleHandling(NULL).", childParentPath, p.getName(), propCm.inner().getName());
 					continue;
 				}
 				entries.add(new ResolvedProp(p.getName(), propCm, childSample));
@@ -312,7 +312,7 @@ public final class ParquetSchemaBuilder {
 	private void addListSchema(List<ParquetSchemaElement> elements, ClassMeta<?> cm, String name, String parentPath, boolean isRoot, Object sampleBean, Map<Class<?>, Integer> typesInProgress) {
 		var et = cm.getElementType();
 		if (et == null) // HTT: ClassMeta always provides an element type (at least Object) for list types
-			throw iaex("List element type cannot be determined for ''{0}''", cm.getName());
+			throw iaex("List element type cannot be determined for '%s'", cm.getName());
 		// Resolve element type from sample when generics are erased (et is Object) for proper list-of-bean
 		// expansion into leaf columns (e.g. members.list.element.name, members.list.element.age)
 		var sampleCollection = extractSampleCollection(sampleBean);

@@ -67,10 +67,10 @@ class Verify_Test extends TestBase {
 		test(verify(Boolean.FALSE).isFalse()).isNull();
 		test(x1.is("foo")).isNull();
 
-		test(verify("foo").msg("bar{0}", "baz").is("foo")).isNull();
-		test(verify("foo").msg("bar{0}", "baz").is("bar")).is("barbaz");
-		test(verify("foo").msg("bar{0}", "baz").isType(Integer.class)).is("barbaz");
-		test(verify(null).msg("bar{0}", "baz").is("bar")).is("barbaz");
-		test(verify("foo").msg("bar{0}", "baz").is(null)).is("barbaz");
+		test(verify("foo").msg("bar%s", "baz").is("foo")).isNull();
+		test(verify("foo").msg("bar%s", "baz").is("bar")).is("barbaz");
+		test(verify("foo").msg("bar%s", "baz").isType(Integer.class)).is("barbaz");
+		test(verify(null).msg("bar%s", "baz").is("bar")).is("barbaz");
+		test(verify("foo").msg("bar%s", "baz").is(null)).is("barbaz");
 	}
 }

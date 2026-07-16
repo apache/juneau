@@ -204,14 +204,14 @@ public class ComboSerialize_Tester<T> {
 				}
 			}
 
-			assertEquals(exp, r, fs("{0}/{1} serialize-normal failed.", label, testName));
+			assertEquals(exp, r, fs("%s/%s serialize-normal failed.", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
 			assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
-				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
+				throw new BasicAssertionError(e, "%s/%s failed.  exception=%s", label, testName, e.getLocalizedMessage());
 			assertContains(exceptionMsg, e.getMessage());
 		}
 	}

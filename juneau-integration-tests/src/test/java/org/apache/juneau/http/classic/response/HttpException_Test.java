@@ -35,7 +35,7 @@ class HttpException_Test extends TestBase {
 	public static class A {
 		@RestGet
 		public void f1() throws BasicHttpException {
-			throw new BasicHttpException(225, new RuntimeException("foo"), "bar {0}", "baz");
+			throw new BasicHttpException(225, new RuntimeException("foo"), "bar %s", "baz");
 		}
 		@RestGet
 		public void f2() throws BasicHttpException {
@@ -47,7 +47,7 @@ class HttpException_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws BasicHttpException {
-			throw new BasicHttpException(225, "bar {0}", "baz");
+			throw new BasicHttpException(225, "bar %s", "baz");
 		}
 		@RestGet
 		public void f5() throws BasicHttpException {
@@ -120,11 +120,11 @@ class HttpException_Test extends TestBase {
 		assertEquals("foo<bar>&baz", x.getFullStackMessage(false));
 		assertEquals("foo bar  baz", x.getFullStackMessage(true));
 
-		x = new BasicHttpException(100, new RuntimeException("foo<bar>&qux"), "foo{0}","<bar>&baz");
+		x = new BasicHttpException(100, new RuntimeException("foo<bar>&qux"), "foo%s","<bar>&baz");
 		assertEquals("foo<bar>&baz\nCaused by (RuntimeException): foo<bar>&qux", x.getFullStackMessage(false));
 		assertEquals("foo bar  baz\nCaused by (RuntimeException): foo bar  qux", x.getFullStackMessage(true));
 
-		x = new BasicHttpException(100, new RuntimeException(), "foo{0}","<bar>&baz");
+		x = new BasicHttpException(100, new RuntimeException(), "foo%s","<bar>&baz");
 		assertEquals("foo<bar>&baz\nCaused by (RuntimeException)", x.getFullStackMessage(false));
 		assertEquals("foo bar  baz\nCaused by (RuntimeException)", x.getFullStackMessage(true));
 	}

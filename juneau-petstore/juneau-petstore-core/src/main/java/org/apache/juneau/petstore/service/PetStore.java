@@ -24,7 +24,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
-import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.petstore.dto.*;
 
 /**
@@ -96,10 +96,10 @@ public class PetStore {
 			if (in == null)
 				return new ArrayList<>();
 			try (var reader = new InputStreamReader(in, StandardCharsets.UTF_8)) {
-				return Json5Parser.DEFAULT.parse(reader, List.class, elementType);
+				return Json5.DEFAULT.read(reader, List.class, elementType);
 			}
 		} catch (Exception e) {
-			throw brex(e, "Failed to load petstore seed resource ''{0}''", resourcePath);
+			throw brex(e, "Failed to load petstore seed resource '%s'", resourcePath);
 		}
 	}
 
@@ -275,7 +275,7 @@ public class PetStore {
 		if (user.getUsername() == null)
 			throw iaex("User username must not be null");
 		if (users.putIfAbsent(user.getUsername(), user) != null)
-			throw iaex("User already exists: username=''{0}''", user.getUsername());
+			throw iaex("User already exists: username='%s'", user.getUsername());
 		return user;
 	}
 

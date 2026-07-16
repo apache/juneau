@@ -129,7 +129,7 @@ public class SerializerPipe implements Closeable {
 		else if (output instanceof File output2)
 			outputStream = new BufferedOutputStream(new FileOutputStream(output2));
 		else
-			throw ioex("Cannot convert object of type {0} to an OutputStream.", cn(output));
+			throw ioex("Cannot convert object of type %s to an OutputStream.", cn(output));
 
 		return new NoCloseOutputStream(outputStream);
 	}

@@ -17,7 +17,7 @@
 package org.apache.juneau.bean.jsonpatch;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Abstract base for a JSON Patch operation per
@@ -83,6 +83,6 @@ public abstract class JsonPatchOperation {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 }

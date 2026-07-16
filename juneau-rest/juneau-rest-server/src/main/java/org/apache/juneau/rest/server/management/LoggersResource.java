@@ -81,7 +81,7 @@ public class LoggersResource extends BasicRestResource {
 	public String getLogger(RestRequest req, @Path("name") String name) {
 		var level = manager.getLevel(req.getContext(), name);
 		if (level == null)
-			throw new NotFound("No logger named ''{0}'' is registered.", name);
+			throw new NotFound("No logger named '%s' is registered.", name);
 		return level;
 	}
 

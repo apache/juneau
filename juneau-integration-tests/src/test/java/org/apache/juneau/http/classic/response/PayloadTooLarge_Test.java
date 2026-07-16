@@ -35,7 +35,7 @@ class PayloadTooLarge_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws PayloadTooLarge {
-			throw new PayloadTooLarge("foo {0}", "bar");
+			throw new PayloadTooLarge("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws PayloadTooLarge {
@@ -43,7 +43,7 @@ class PayloadTooLarge_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws PayloadTooLarge {
-			throw new PayloadTooLarge(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new PayloadTooLarge(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws PayloadTooLarge {

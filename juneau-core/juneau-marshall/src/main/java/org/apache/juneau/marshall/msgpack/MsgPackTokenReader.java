@@ -229,7 +229,7 @@ public class MsgPackTokenReader implements TokenReader {
 				currentToken = TokenType.VALUE_BINARY;
 				consumedOneElement();
 			}
-			default -> throw new ParseException("Unexpected MsgPack data type: {0}", dt);
+			default -> throw new ParseException("Unexpected MsgPack data type: %s", dt);
 		}
 		return currentToken;
 	}
@@ -247,7 +247,7 @@ public class MsgPackTokenReader implements TokenReader {
 			case FLOAT:     return Float.toString(is.readFloat());
 			case DOUBLE:    return Double.toString(is.readDouble());
 			default:
-				throw new ParseException("Cannot use MsgPack data type {0} as a map key", dt);
+				throw new ParseException("Cannot use MsgPack data type %s as a map key", dt);
 		}
 	}
 
@@ -362,7 +362,7 @@ public class MsgPackTokenReader implements TokenReader {
 		} catch (Exception e) {
 			if (e instanceof IOException ioe) throw ioe;
 			if (e instanceof ParseException pe) throw pe;
-			throw new ParseException(s, "read failed: {0}", e.getMessage());
+			throw new ParseException(s, "read failed: %s", e.getMessage());
 		}
 	}
 

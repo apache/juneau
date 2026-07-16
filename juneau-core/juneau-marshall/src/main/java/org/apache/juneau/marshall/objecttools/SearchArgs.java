@@ -67,7 +67,7 @@ public class SearchArgs {
 		searchArgs.forEach(s -> {
 			var i = indexOf(s, '=', '>', '<');
 			if (i == -1)
-				throw new PatternException("Invalid search terms: ''{0}''", searchArgs);
+				throw new PatternException("Invalid search terms: '%s'", searchArgs);
 			var c = s.charAt(i);
 			append(s.substring(0, i).trim(), s.substring(c == '=' ? i + 1 : i).trim());
 		});

@@ -35,7 +35,7 @@ class PreconditionRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws PreconditionRequired {
-			throw new PreconditionRequired("foo {0}", "bar");
+			throw new PreconditionRequired("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws PreconditionRequired {
@@ -43,7 +43,7 @@ class PreconditionRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws PreconditionRequired {
-			throw new PreconditionRequired(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new PreconditionRequired(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws PreconditionRequired {

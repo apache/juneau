@@ -258,7 +258,7 @@ public class Lists<E> {
 						if (converted != null) {
 							add(converted);
 						} else {
-							throw rex("Object of type {0} could not be converted to type {1}", cn(o), cn(elementType));
+							throw rex("Object of type %s could not be converted to type %s", cn(o), cn(elementType));
 						}
 					}
 				}

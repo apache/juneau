@@ -35,7 +35,7 @@ class UriTooLong_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws UriTooLong {
-			throw new UriTooLong("foo {0}", "bar");
+			throw new UriTooLong("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws UriTooLong {
@@ -43,7 +43,7 @@ class UriTooLong_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws UriTooLong {
-			throw new UriTooLong(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new UriTooLong(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws UriTooLong {

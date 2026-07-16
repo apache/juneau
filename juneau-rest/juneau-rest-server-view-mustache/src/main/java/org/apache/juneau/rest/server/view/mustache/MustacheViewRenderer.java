@@ -126,7 +126,7 @@ public class MustacheViewRenderer implements ViewRenderer {
 		} catch (IOException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw new InternalServerError(ex, "Mustache render failed for ''{0}''", templateName);
+			throw new InternalServerError(ex, "Mustache render failed for '%s'", templateName);
 		}
 	}
 }

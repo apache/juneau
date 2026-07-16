@@ -41,27 +41,34 @@ import java.util.logging.*;
  * 	<li>All standard {@link java.util.logging.Logger} functionality via delegation
  * 	<li>Convenience methods for formatted logging at all log levels
  * 	<li>Lazy evaluation of formatted messages using {@link org.apache.juneau.commons.utils.Shorts#fs(String, Object...)}
- * 	<li>Support for both MessageFormat-style and printf-style formatting
+ * 	<li>Printf-style formatting (rendered via {@link org.apache.juneau.commons.utils.StringUtils#format(String, Object...)})
  * </ul>
  *
  * <h5 class='section'>Format Support:</h5>
  * <p>
- * The formatting methods support both MessageFormat-style and printf-style formatting:
+ * The formatting methods use printf-style ({@link java.util.Formatter}) placeholders. MessageFormat-style
+ * (<js>"{0}"</js>) patterns are <b>not</b> expanded here — use {@link org.apache.juneau.commons.utils.Shorts#mf(String, Object...)} /
+ * {@link org.apache.juneau.commons.utils.StringUtils#mformat(String, Object...)} for those:
  * </p>
  * <ul>
- * 	<li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, etc.
- * 	<li><b>MessageFormat-style:</b> <js>"{0}"</js>, <js>"{1,number}"</js>, etc.
- * 	<li><b>Un-numbered MessageFormat:</b> <js>"{}"</js> - Sequential placeholders
+ * 	<li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%1$s"</js>, etc.
  * </ul>
+ *
+ * <p>
+ * Juneau {@link Logger} patterns are printf-style. Because {@link LogRecord#getMessage()} returns the
+ * already-substituted message, the {@link java.text.MessageFormat} parameter contract of the underlying
+ * {@link java.util.logging.LogRecord} only surfaces if a record is serialized and consumed as a plain
+ * {@link java.util.logging.LogRecord} by a non-Juneau handler.
+ * </p>
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	Logger <jv>logger</jv> = Logger.getLogger(MyClass.<jk>class</jk>.getName());
  *
- * 	<jc>// Formatted logging at different levels</jc>
- * 	<jv>logger</jv>.severe(<js>"Error processing user {0}: {1}"</js>, userId, error);
+ * 	<jc>// Formatted logging at different levels (printf-style placeholders)</jc>
+ * 	<jv>logger</jv>.severe(<js>"Error processing user %s: %s"</js>, userId, error);
  * 	<jv>logger</jv>.warning(<js>"Failed to connect to %s after %d attempts"</js>, hostname, attempts);
- * 	<jv>logger</jv>.info(<js>"Processing {} items"</js>, count);
+ * 	<jv>logger</jv>.info(<js>"Processing %s items"</js>, count);
  * 	<jv>logger</jv>.fine(<js>"Debug value: %s"</js>, debugValue);
  * </p>
  *

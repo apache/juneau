@@ -243,7 +243,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 		} catch (IOException | BasicHttpException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw new InternalServerError(ex, "Mustache render failed for ''{0}''", safeTemplate);
+			throw new InternalServerError(ex, "Mustache render failed for '%s'", safeTemplate);
 		}
 	}
 
@@ -271,7 +271,7 @@ public class MustacheDispatcher implements RawTemplateDispatcher {
 			bp = "/" + bp;
 		if (resolved.startsWith(bp))
 			return resolved.substring(bp.length());
-		throw iaex("Resolved path ''{0}'' does not start with base ''{1}''", resolved, bp);
+		throw iaex("Resolved path '%s' does not start with base '%s'", resolved, bp);
 	}
 
 	/**

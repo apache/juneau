@@ -1185,7 +1185,7 @@ class BasicXml_Test extends TestBase {
 	void a01_serializeNormal(Input input) {
 		try {
 			var r = s1.serialize(input.in);
-			assertEquals(input.e1, r, fs("{0} serialize-normal failed", input.label));
+			assertEquals(input.e1, r, fs("%s serialize-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -1201,7 +1201,7 @@ class BasicXml_Test extends TestBase {
 			var c = input.in == null ? Object.class : input.in.getClass();
 			var o = parser.parse(r, c);
 			r = s1.serialize(o);
-			assertEquals(input.e1, r, fs("{0} parse-normal failed", input.label));
+			assertEquals(input.e1, r, fs("%s parse-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -1214,7 +1214,7 @@ class BasicXml_Test extends TestBase {
 	void a03_serializeReadable(Input input) {
 		try {
 			var r = s2.serialize(input.in);
-			assertEquals(input.e2, r, fs("{0} serialize-readable failed", input.label));
+			assertEquals(input.e2, r, fs("%s serialize-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -1230,7 +1230,7 @@ class BasicXml_Test extends TestBase {
 			var c = input.in == null ? Object.class : input.in.getClass();
 			var o = parser.parse(r, c);
 			r = s2.serialize(o);
-			assertEquals(input.e2, r, fs("{0} parse-readable failed", input.label));
+			assertEquals(input.e2, r, fs("%s parse-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -1243,7 +1243,7 @@ class BasicXml_Test extends TestBase {
 	void a05_serializeNsEnabled(Input input) {
 		try {
 			var r = s3.serialize(input.in);
-			assertEquals(input.e3, r, fs("{0} serialize-ns-enabled failed", input.label));
+			assertEquals(input.e3, r, fs("%s serialize-ns-enabled failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -1259,7 +1259,7 @@ class BasicXml_Test extends TestBase {
 			var c = input.in == null ? Object.class : input.in.getClass();
 			var o = parser.parse(r, c);
 			r = s3.serialize(o);
-			assertEquals(input.e3, r, fs("{0} parse-ns-enabled failed", input.label));
+			assertEquals(input.e3, r, fs("%s parse-ns-enabled failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {

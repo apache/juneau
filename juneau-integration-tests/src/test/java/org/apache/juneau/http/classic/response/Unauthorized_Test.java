@@ -35,7 +35,7 @@ class Unauthorized_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws Unauthorized {
-			throw new Unauthorized("foo {0}", "bar");
+			throw new Unauthorized("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws Unauthorized {
@@ -43,7 +43,7 @@ class Unauthorized_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws Unauthorized {
-			throw new Unauthorized(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new Unauthorized(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws Unauthorized {

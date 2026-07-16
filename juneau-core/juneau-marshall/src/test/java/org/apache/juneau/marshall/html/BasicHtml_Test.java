@@ -2554,7 +2554,7 @@ class BasicHtml_Test extends TestBase {
 	void a1_serializeNormal(Input input) {
 		try {
 			var r = s1.serialize(input.in);
-			assertEquals(input.e1, r, fs("{0} serialize-normal failed", input.label));
+			assertEquals(input.e1, r, fs("%s serialize-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2569,7 +2569,7 @@ class BasicHtml_Test extends TestBase {
 			var r = s1.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s1.serialize(o);
-			assertEquals(input.e1, r, fs("{0} parse-normal failed", input.label));
+			assertEquals(input.e1, r, fs("%s parse-normal failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2596,7 +2596,7 @@ class BasicHtml_Test extends TestBase {
 	void b1_serializeReadable(Input input) {
 		try {
 			var r = s2.serialize(input.in);
-			assertEquals(input.e2, r, fs("{0} serialize-readable failed", input.label));
+			assertEquals(input.e2, r, fs("%s serialize-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2611,7 +2611,7 @@ class BasicHtml_Test extends TestBase {
 			var r = s2.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s2.serialize(o);
-			assertEquals(input.e2, r, fs("{0} parse-readable failed", input.label));
+			assertEquals(input.e2, r, fs("%s parse-readable failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2638,7 +2638,7 @@ class BasicHtml_Test extends TestBase {
 	void c1_serializeAbridged(Input input) {
 		try {
 			var r = s3.serialize(input.in);
-			assertEquals(input.e3, r, fs("{0} serialize-addRootType failed", input.label));
+			assertEquals(input.e3, r, fs("%s serialize-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -2653,7 +2653,7 @@ class BasicHtml_Test extends TestBase {
 			var r = s3.serialize(input.in);
 			var o = parser.parse(r, input.type);
 			r = s3.serialize(o);
-			assertEquals(input.e3, r, fs("{0} parse-addRootType failed", input.label));
+			assertEquals(input.e3, r, fs("%s parse-addRootType failed", input.label));
 		} catch (AssertionError e) {
 			throw e;
 		} catch (Throwable e) {
@@ -3116,7 +3116,7 @@ class BasicHtml_Test extends TestBase {
 
 	private static void assertInstancesOf(Class<?> c, Object...values) {
 		for (var i = 0; i < values.length; i++) {
-			assertInstanceOf(c, values[i], fs("Object {0} not expected type.  Expected={1}, Actual={2}", i, c, cns(values[i])));
+			assertInstanceOf(c, values[i], fs("Object %s not expected type.  Expected=%s, Actual=%s", i, c, cns(values[i])));
 		}
 	}
 }

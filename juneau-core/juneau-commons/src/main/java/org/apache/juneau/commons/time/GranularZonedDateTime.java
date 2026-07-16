@@ -884,7 +884,7 @@ public class GranularZonedDateTime {
 	 */
 	public GranularZonedDateTime roll(ChronoField field, int amount) {
 		var unit = toChronoUnit(field);
-		assertArg(unit != null, "Unsupported roll field: {0}", field);
+		assertArg(unit != null, "Unsupported roll field: %s", field);
 		var newZdt = zdt.plus(amount, unit);
 		return new GranularZonedDateTime(newZdt, precision);
 	}

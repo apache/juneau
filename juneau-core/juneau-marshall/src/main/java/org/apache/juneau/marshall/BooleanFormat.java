@@ -186,7 +186,7 @@ public enum BooleanFormat {
 		return switch (s.toLowerCase()) {
 			case "true", "1", "yes", "y", "on" -> true;
 			case "false", "0", "no", "n", "off" -> false;
-			default -> throw iaex("Invalid boolean value ''{0}'' for format {1}", value, format);
+			default -> throw iaex("Invalid boolean value '%s' for format %s", value, format);
 		};
 	}
 

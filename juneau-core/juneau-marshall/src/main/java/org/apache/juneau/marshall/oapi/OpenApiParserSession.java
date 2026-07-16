@@ -300,7 +300,7 @@ public class OpenApiParserSession extends UonParserSession {
 					type = (ClassMeta<T>)CM_JsonMap;
 
 				if (! type.isMapOrBean())
-					throw new ParseException("Invalid type {0} for part type OBJECT.", type);
+					throw new ParseException("Invalid type %s for part type OBJECT.", type);
 
 				var ss = new String[] {};
 
@@ -327,12 +327,12 @@ public class OpenApiParserSession extends UonParserSession {
 					for (var s : ss) {
 						var kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
-							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+							throw new ParseException("Invalid input %s for part type OBJECT.", in);
 						var key = kv[0];
 						var value = kv[1];
 						var bpm = m.getPropertyMeta(key);
 						if (bpm == null && ! isIgnoreUnknownBeanProperties())
-							throw new ParseException("Invalid input {0} for part type OBJECT.  Cannot find property {1}", in, key);
+							throw new ParseException("Invalid input %s for part type OBJECT.  Cannot find property %s", in, key);
 						m.put(key, parse(partType, schema.getProperty(key), value, ((ClassMeta<T>)(bpm == null ? object() : bpm.getBeanInfo()))));
 					}
 					return m.getBean();
@@ -352,7 +352,7 @@ public class OpenApiParserSession extends UonParserSession {
 					for (var s : ss) {
 						var kv = StringUtils.splita(s, '=', 2);
 						if (kv.length != 2)
-							throw new ParseException("Invalid input {0} for part type OBJECT.", in);
+							throw new ParseException("Invalid input %s for part type OBJECT.", in);
 						var key = kv[0];
 						var value = kv[1];
 						m.put(key, parse(partType, schema.getProperty(key), value, eType));

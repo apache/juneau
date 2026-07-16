@@ -28,7 +28,7 @@ import java.util.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.swap.*;
@@ -1373,7 +1373,7 @@ public class JsonSchema {
 				this.additionalItemsSchemaArray = value2;
 				setMasterOn(this.additionalItemsSchemaArray);
 			} else {
-				throw brex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", cn(value));
+				throw brex(JsonSchemaProperty.class, "Invalid attribute type '%s' passed in.  Must be one of the following:  Boolean, JsonSchemaArray", cn(value));
 			}
 		}
 		return this;
@@ -1399,7 +1399,7 @@ public class JsonSchema {
 				this.additionalPropertiesSchema = value2;
 				setMasterOn(this.additionalPropertiesSchema);
 			} else
-				throw brex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  Boolean, JsonSchema", cn(value));
+				throw brex(JsonSchemaProperty.class, "Invalid attribute type '%s' passed in.  Must be one of the following:  Boolean, JsonSchema", cn(value));
 		}
 		return this;
 	}
@@ -1751,7 +1751,7 @@ public class JsonSchema {
 				this.itemsSchemaArray = value2;
 				setMasterOn(this.itemsSchemaArray);
 			} else {
-				throw brex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", cn(value));
+				throw brex(JsonSchemaProperty.class, "Invalid attribute type '%s' passed in.  Must be one of the following:  JsonSchema, JsonSchemaArray", cn(value));
 			}
 		}
 		return this;
@@ -2090,7 +2090,7 @@ public class JsonSchema {
 			else if (value instanceof JsonTypeArray value2)
 				this.typeJsonTypeArray = value2;
 			else
-				throw brex(JsonSchemaProperty.class, "Invalid attribute type ''{0}'' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", cn(value));
+				throw brex(JsonSchemaProperty.class, "Invalid attribute type '%s' passed in.  Must be one of the following:  SimpleType, SimpleTypeArray", cn(value));
 		}
 		return this;
 	}
@@ -2152,7 +2152,7 @@ public class JsonSchema {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 
 	private void setMasterOn(Collection<JsonSchema> ss) {

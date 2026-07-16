@@ -102,7 +102,7 @@ public class SurrogateSwap<T,F> extends ObjectSwap<T,F> {
 	})
 	public T unswap(MarshallingSession session, F f, ClassMeta<?> hint) throws ParseException {
 		if (unswapMethod == null)
-			throw new ParseException("unswap() method not implement on surrogate class ''{1}'': {0}", cn(f), getNormalClass().getNameFull());
+			throw new ParseException("unswap() method not implement on surrogate class '%2$s': %1$s", cn(f), getNormalClass().getNameFull());
 		try {
 			return (T)unswapMethod.invoke(f);
 		} catch (Exception e) {

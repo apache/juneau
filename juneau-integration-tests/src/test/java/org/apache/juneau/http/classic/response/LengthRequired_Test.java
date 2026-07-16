@@ -35,7 +35,7 @@ class LengthRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws LengthRequired {
-			throw new LengthRequired("foo {0}", "bar");
+			throw new LengthRequired("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws LengthRequired {
@@ -43,7 +43,7 @@ class LengthRequired_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws LengthRequired {
-			throw new LengthRequired(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new LengthRequired(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws LengthRequired {

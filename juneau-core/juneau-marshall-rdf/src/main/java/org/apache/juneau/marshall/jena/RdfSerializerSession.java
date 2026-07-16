@@ -148,7 +148,7 @@ public class RdfSerializerSession extends WriterSerializerSession {
 		var langName = ctx.getLanguage();
 		lang = toLang(langName);
 		if (lang == null)
-			throw rex("Unknown RDF language encountered: ''{0}''", langName);
+			throw rex("Unknown RDF language encountered: '%s'", langName);
 	}
 
 	private static Lang toLang(String langName) {

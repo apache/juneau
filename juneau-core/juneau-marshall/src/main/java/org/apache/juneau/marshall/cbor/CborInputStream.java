@@ -151,7 +151,7 @@ public class CborInputStream extends ParserInputStream {
 			return readUInt8();
 		if (additionalInfo == 31)
 			throw ioex("Indefinite-length CBOR encoding not supported");
-		throw ioex("Reserved additional info value: {0}", additionalInfo);
+		throw ioex("Reserved additional info value: %s", additionalInfo);
 	}
 
 	/**
@@ -236,7 +236,7 @@ public class CborInputStream extends ParserInputStream {
 					default -> dt = SIMPLE;
 				}
 			}
-			default -> throw ioex("Invalid major type: {0}", majorType);
+			default -> throw ioex("Invalid major type: %s", majorType);
 		}
 
 		lastDataType = dt;
@@ -400,7 +400,7 @@ public class CborInputStream extends ParserInputStream {
 		var b = new byte[(int)length];
 		var bytesRead = read(b);
 		if (bytesRead != b.length)
-			throw ioex("Expected to read {0} bytes but only read {1}", b.length, bytesRead);
+			throw ioex("Expected to read %s bytes but only read %s", b.length, bytesRead);
 		return b;
 	}
 
@@ -426,14 +426,14 @@ public class CborInputStream extends ParserInputStream {
 			var chunkMajorType = getMajorType(ib);
 			var chunkInfo = getAdditionalInfo(ib);
 			if (chunkMajorType != expectedMajorType)
-				throw ioex("Invalid chunk major type {0} in indefinite-length string (expected {1})", chunkMajorType, expectedMajorType);
+				throw ioex("Invalid chunk major type %s in indefinite-length string (expected %s)", chunkMajorType, expectedMajorType);
 			if (chunkInfo == 31)
 				throw ioex("Nested indefinite-length string chunk not allowed");
 			var chunkLen = (int)readArgument(chunkInfo);
 			var chunk = new byte[chunkLen];
 			var bytesRead = read(chunk);
 			if (bytesRead != chunk.length)
-				throw ioex("Expected to read {0} bytes but only read {1}", chunk.length, bytesRead);
+				throw ioex("Expected to read %s bytes but only read %s", chunk.length, bytesRead);
 			baos.write(chunk, 0, chunk.length);
 		}
 		return baos.toByteArray();

@@ -492,7 +492,7 @@ public class RequestContent {
 				ce = ce.trim();
 				encoder = encoders.getEncoder(ce);
 				if (encoder == null)
-					throw new UnsupportedMediaType("Unsupported encoding in request header ''Content-Encoding'': ''{0}''\n\tSupported codings: {1}",
+					throw new UnsupportedMediaType("Unsupported encoding in request header 'Content-Encoding': '%s'\n\tSupported codings: %s",
 						req.getHeaderParam("content-encoding").orElse(null), Json5.of(encoders.getSupportedEncodings()));
 			}
 
@@ -514,7 +514,7 @@ public class RequestContent {
 		} catch (SchemaValidationException e) {
 			throw new BadRequest("Validation failed on request content. " + localizedMessage(e));
 		} catch (ParseException e) {
-			throw new BadRequest(e, "Could not convert request content content to class type ''{0}''.", cm);
+			throw new BadRequest(e, "Could not convert request content content to class type '%s'.", cm);
 		} catch (IOException e) {
 			throw new InternalServerError(e, "I/O exception occurred while parsing request content.");
 		} catch (Exception e) {
@@ -587,7 +587,7 @@ public class RequestContent {
 			return BasicConverter.INSTANCE.to(asString(), cm.inner());
 
 		var ct = req.getHeader(ContentType.class);
-		throw new UnsupportedMediaType("Unsupported media-type in request header ''Content-Type'': ''{0}''\n\tSupported media-types: {1}",
+		throw new UnsupportedMediaType("Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",
 			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
 	}
 

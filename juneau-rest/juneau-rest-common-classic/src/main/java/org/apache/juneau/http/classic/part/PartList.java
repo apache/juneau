@@ -320,7 +320,7 @@ public class PartList extends ControlledArrayList<NameValuePair> {
 		assertArgNotNull(ARG_type, type);
 
 		var name = PartBeanMeta.of(type).getSchema().getName();
-		assertArg(nn(name), "Part name could not be found on bean type ''{0}''", cn(type));
+		assertArg(nn(name), "Part name could not be found on bean type '%s'", cn(type));
 
 		return get(name, type);
 	}

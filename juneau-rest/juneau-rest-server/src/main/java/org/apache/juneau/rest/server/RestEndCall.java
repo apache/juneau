@@ -57,9 +57,9 @@ import jakarta.servlet.http.*;
  * 			Exception <jv>exception</jv> = (Exception)<jv>req</jv>.getAttribute(<js>"Exception"</js>);
  * 			Long <jv>execTime</jv> = (Long)<jv>req</jv>.getAttribute(<js>"ExecTime"</js>);
  * 			<jk>if</jk> (<jv>exception</jv> != <jk>null</jk>)
- * 				<jv>logger</jv>.warn(<jv>exception</jv>, <js>"Request failed in {0}ms."</js>, <jv>execTime</jv>);
+ * 				<jv>logger</jv>.warn(<jv>exception</jv>, <js>"Request failed in %sms."</js>, <jv>execTime</jv>);
  * 			<jk>else</jk>
- * 				<jv>logger</jv>.fine(<js>"Request finished in {0}ms."</js>, <jv>execTime</jv>);
+ * 				<jv>logger</jv>.fine(<js>"Request finished in %sms."</js>, <jv>execTime</jv>);
  * 		}
  * 	}
  * </p>

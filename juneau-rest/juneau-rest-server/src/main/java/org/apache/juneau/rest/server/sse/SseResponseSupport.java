@@ -22,6 +22,7 @@ import java.io.*;
 import java.time.*;
 import java.util.concurrent.*;
 
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.util.*;
@@ -87,7 +88,7 @@ public class SseResponseSupport implements AutoCloseable {
 	 * @throws IOException If an I/O error occurred.
 	 */
 	public SseResponseSupport sendEvent(SseEvent event) throws IOException {
-		SseSerializer.DEFAULT.serialize(event, writer);
+		Sse.DEFAULT.write(event, writer);
 		return this;
 	}
 

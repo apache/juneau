@@ -372,7 +372,7 @@ public class CborOutputStream extends OutputStream {
 		writeHead(3, length);
 		int length2 = writeUtf8To(s);
 		if (length != length2)
-			throw new SerializeException("Unexpected length.  Expected={0}, Actual={1}", length, length2);
+			throw new SerializeException("Unexpected length.  Expected=%s, Actual=%s", length, length2);
 		return this;
 	}
 

@@ -197,7 +197,7 @@ public class Json5ParserSession extends JsonParserSession {
 			}
 		}
 		if (s == null)
-			throw new ParseException(this, "Could not find expected end character ''{0}''.", (char)qc);
+			throw new ParseException(this, "Could not find expected end character '%s'.", (char)qc);
 
 		skipCommentsAndSpace(r);
 		if (r.peek() == '+') {

@@ -132,7 +132,7 @@ public class RequestHttpPart {
 			}
 			return o(parser.parse(HEADER, schema, orElse(null), type));
 		} catch (ParseException e) {
-			throw new BadRequest(e, "Could not parse {0} parameter ''{1}''.", partType.toString().toLowerCase(), getName());
+			throw new BadRequest(e, "Could not parse %s parameter '%s'.", partType.toString().toLowerCase(), getName());
 		}
 	}
 

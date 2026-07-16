@@ -22,7 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Represents a JSON:API Resource Object as defined by
@@ -226,6 +226,6 @@ public class JsonApiResource {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 }

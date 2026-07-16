@@ -509,7 +509,7 @@ public class XmlUtils {
 					if (xmlNs.prefix().equals(prefix))
 						return Namespace.of(prefix, xmlNs.namespaceURI());
 			}
-			throw brex("Found @Xml.prefix annotation with no matching URI.  prefix=''{0}''", prefix);
+			throw brex("Found @Xml.prefix annotation with no matching URI.  prefix='%s'", prefix);
 		}
 
 		// If only namespaceURI specified, need to search for prefix. // HTT: reached only via XmlSerializer when @Xml has namespace but no prefix; not exercised by unit tests

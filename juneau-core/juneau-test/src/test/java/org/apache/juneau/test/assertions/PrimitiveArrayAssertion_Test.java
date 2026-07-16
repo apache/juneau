@@ -44,9 +44,9 @@ class PrimitiveArrayAssertion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_msg() {
-		var assertion1 = byteArray(null).setMsg("Foo {0}", 1);
+		var assertion1 = byteArray(null).setMsg("Foo %s", 1);
 		assertThrows(BasicAssertionError.class, assertion1::isExists, "Foo 1");
-		var assertion2 = byteArray(null).setMsg("Foo {0}", 1).setThrowable(RuntimeException.class);
+		var assertion2 = byteArray(null).setMsg("Foo %s", 1).setThrowable(RuntimeException.class);
 		assertThrows(RuntimeException.class, assertion2::isExists, "Foo 1");
 	}
 

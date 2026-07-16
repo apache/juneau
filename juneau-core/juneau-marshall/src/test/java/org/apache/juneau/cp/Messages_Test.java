@@ -157,4 +157,12 @@ class Messages_Test extends TestBase {
 		var x = Messages.of(Test2.class);
 		assertString("{file=Test2.properties,yyy=bar}", x);
 	}
+
+	@Test void a14_getString_messageFormatPlaceholder() {
+		// Regression: .properties-sourced MessageFormat {0} messages must still render through
+		// Messages.getString (now routed through mf() rather than f()).
+		var x = Messages.of(MessageBundleTest1.class);
+		assertEquals("foo bar", x.getString("foo", "bar"));
+		assertEquals("fooja bar", x.forLocale(JAPAN).getString("foo", "bar"));
+	}
 }

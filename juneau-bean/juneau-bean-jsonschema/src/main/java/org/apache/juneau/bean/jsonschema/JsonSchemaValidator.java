@@ -27,7 +27,7 @@ import java.util.regex.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Validates values against a {@link JsonSchema} bean per the JSON Schema Draft 2020-12 specification.
@@ -107,8 +107,6 @@ import org.apache.juneau.marshall.json.*;
  * @since 10.0.0
  */
 public final class JsonSchemaValidator implements PropertyValidator {
-
-	private static final JsonSerializer JSON_FOR_EQ = JsonSerializer.DEFAULT;
 
 	private final JsonSchema schema;
 	private final Pattern patternCache;
@@ -198,7 +196,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			if (jsonEquals(e, value))
 				return;
 		}
-		throw new SchemaValidationException("Value ''{0}'' does not match one of the allowed enum values.", value);
+		throw new SchemaValidationException("Value '%s' does not match one of the allowed enum values.", value);
 	}
 
 	private static void validateConst(JsonSchema s, Object value) {
@@ -206,14 +204,14 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		if (c == null)
 			return;  // const=null is indistinguishable from "not set" in the bean; treat as unset.
 		if (! jsonEquals(c, value))
-			throw new SchemaValidationException("Value ''{0}'' does not match required const ''{1}''.", value, c);
+			throw new SchemaValidationException("Value '%s' does not match required const '%s'.", value, c);
 	}
 
 	private static void validateType(JsonSchema s, Object value) {
 		var single = s.getTypeAsJsonType();
 		if (nn(single)) {
 			if (! matchesType(single, value))
-				throw new SchemaValidationException("Value of type ''{0}'' does not match expected schema type ''{1}''.", typeName(value), single);
+				throw new SchemaValidationException("Value of type '%s' does not match expected schema type '%s'.", typeName(value), single);
 			return;
 		}
 		var arr = s.getTypeAsJsonTypeArray();
@@ -223,7 +221,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 			if (matchesType(t, value))
 				return;
 		}
-		throw new SchemaValidationException("Value of type ''{0}'' does not match any expected schema types ''{1}''.", typeName(value), arr);
+		throw new SchemaValidationException("Value of type '%s' does not match any expected schema types '%s'.", typeName(value), arr);
 	}
 
 	@SuppressWarnings({
@@ -287,14 +285,14 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		var maxL = s.getMaxLength();
 		var len = value.codePointCount(0, value.length());
 		if (nn(minL) && len < minL)
-			throw new SchemaValidationException("String length {0} is less than minLength {1}.", len, minL);
+			throw new SchemaValidationException("String length %s is less than minLength %s.", len, minL);
 		if (nn(maxL) && len > maxL)
-			throw new SchemaValidationException("String length {0} exceeds maxLength {1}.", len, maxL);
+			throw new SchemaValidationException("String length %s exceeds maxLength %s.", len, maxL);
 		var pattern = patternOverride;
 		if (pattern == null && nn(s.getPattern()))
 			pattern = Pattern.compile(s.getPattern());
 		if (pattern != null && ! pattern.matcher(value).find())
-			throw new SchemaValidationException("Value ''{0}'' does not match pattern ''{1}''.", value, s.getPattern());
+			throw new SchemaValidationException("Value '%s' does not match pattern '%s'.", value, s.getPattern());
 	}
 
 	// =================================================================================================================
@@ -309,21 +307,21 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		try {
 			bd = toBigDecimal(value);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw new SchemaValidationException("Value ''{0}'' is not a finite number.", value);
+			throw new SchemaValidationException("Value '%s' is not a finite number.", value);
 		}
 
 		if (nn(s.getMinimum()) && bd.compareTo(toBigDecimal(s.getMinimum())) < 0)
-			throw new SchemaValidationException("Value {0} is less than minimum {1}.", bd, s.getMinimum());
+			throw new SchemaValidationException("Value %s is less than minimum %s.", bd, s.getMinimum());
 		if (nn(s.getMaximum()) && bd.compareTo(toBigDecimal(s.getMaximum())) > 0)
-			throw new SchemaValidationException("Value {0} exceeds maximum {1}.", bd, s.getMaximum());
+			throw new SchemaValidationException("Value %s exceeds maximum %s.", bd, s.getMaximum());
 		if (nn(s.getExclusiveMinimum()) && bd.compareTo(toBigDecimal(s.getExclusiveMinimum())) <= 0)
-			throw new SchemaValidationException("Value {0} is not greater than exclusive minimum {1}.", bd, s.getExclusiveMinimum());
+			throw new SchemaValidationException("Value %s is not greater than exclusive minimum %s.", bd, s.getExclusiveMinimum());
 		if (nn(s.getExclusiveMaximum()) && bd.compareTo(toBigDecimal(s.getExclusiveMaximum())) >= 0)
-			throw new SchemaValidationException("Value {0} is not less than exclusive maximum {1}.", bd, s.getExclusiveMaximum());
+			throw new SchemaValidationException("Value %s is not less than exclusive maximum %s.", bd, s.getExclusiveMaximum());
 		if (nn(s.getMultipleOf())) {
 			var mof = toBigDecimal(s.getMultipleOf());
 			if (mof.signum() != 0 && bd.remainder(mof).compareTo(BigDecimal.ZERO) != 0)
-				throw new SchemaValidationException("Value {0} is not a multiple of {1}.", bd, mof);
+				throw new SchemaValidationException("Value %s is not a multiple of %s.", bd, mof);
 		}
 	}
 
@@ -336,9 +334,9 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		var max = s.getMaxItems();
 		var size = value.size();
 		if (nn(min) && size < min)
-			throw new SchemaValidationException("Array size {0} is less than minItems {1}.", size, min);
+			throw new SchemaValidationException("Array size %s is less than minItems %s.", size, min);
 		if (nn(max) && size > max)
-			throw new SchemaValidationException("Array size {0} exceeds maxItems {1}.", size, max);
+			throw new SchemaValidationException("Array size %s exceeds maxItems %s.", size, max);
 		if (Boolean.TRUE.equals(s.getUniqueItems()) && hasDuplicates(value))
 			throw new SchemaValidationException("Array contains duplicate items but uniqueItems is true.");
 		var items = s.getItemsAsSchema();
@@ -382,14 +380,14 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		var maxP = s.getMaxProperties();
 		var size = value.size();
 		if (nn(minP) && size < minP)
-			throw new SchemaValidationException("Object property count {0} is less than minProperties {1}.", size, minP);
+			throw new SchemaValidationException("Object property count %s is less than minProperties %s.", size, minP);
 		if (nn(maxP) && size > maxP)
-			throw new SchemaValidationException("Object property count {0} exceeds maxProperties {1}.", size, maxP);
+			throw new SchemaValidationException("Object property count %s exceeds maxProperties %s.", size, maxP);
 		var required = s.getRequired();
 		if (nn(required)) {
 			for (var key : required) {
 				if (! value.containsKey(key))
-					throw new SchemaValidationException("Required property ''{0}'' is missing.", key);
+					throw new SchemaValidationException("Required property '%s' is missing.", key);
 			}
 		}
 		var props = s.getProperties();
@@ -440,7 +438,7 @@ public final class JsonSchemaValidator implements PropertyValidator {
 		if (a.equals(b))
 			return true;
 		try {
-			return JSON_FOR_EQ.toString(a).equals(JSON_FOR_EQ.toString(b));
+			return Json.of(a).equals(Json.of(b));
 		} catch (@SuppressWarnings("unused") Exception e) {
 			return false;
 		}

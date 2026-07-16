@@ -16,7 +16,7 @@
  */
 package org.apache.juneau.examples.bean.atom;
 
-import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Atom feed JSON example.
@@ -37,8 +37,8 @@ public class AtomJsonExample {
 
 		var feed = AtomFeed.getAtomFeed();
 
-		// Get JSON serializer with readable output.
-		var s = Json5Serializer.DEFAULT_READABLE;
+		// Get JSON marshaller with readable output.
+		var s = Json5.DEFAULT_READABLE;
 
 		// Serialize to ATOM/JSON
 		//Produces
@@ -119,6 +119,6 @@ public class AtomJsonExample {
 		 *  ]
 		 *  }
 		 */
-		var atomJson = s.serialize(feed);
+		var atomJson = s.write(feed);
 	}
 }

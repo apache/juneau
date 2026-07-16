@@ -35,7 +35,7 @@ class MisdirectedRequest_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws MisdirectedRequest {
-			throw new MisdirectedRequest("foo {0}", "bar");
+			throw new MisdirectedRequest("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws MisdirectedRequest {
@@ -43,7 +43,7 @@ class MisdirectedRequest_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws MisdirectedRequest {
-			throw new MisdirectedRequest(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new MisdirectedRequest(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws MisdirectedRequest {

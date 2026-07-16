@@ -172,7 +172,7 @@ public class IdTokenValidatorAdapter {
 		 * @return This object.
 		 */
 		public Builder maxClockSkewSeconds(int value) {
-			assertArg(value >= 0, "maxClockSkewSeconds must be non-negative (was {0})", value);
+			assertArg(value >= 0, "maxClockSkewSeconds must be non-negative (was %s)", value);
 			maxClockSkewSeconds = value;
 			return this;
 		}
@@ -245,7 +245,7 @@ public class IdTokenValidatorAdapter {
 		try {
 			claims = validator.validate(jwt, expectedNonce == null ? null : new Nonce(expectedNonce));
 		} catch (BadJOSEException e) {
-			throw new AuthenticationException(e, "ID token validation failed: {0}", e.getMessage());
+			throw new AuthenticationException(e, "ID token validation failed: %s", e.getMessage());
 		} catch (JOSEException e) {
 			throw new AuthenticationException(e, "ID token signature verification failed");
 		}

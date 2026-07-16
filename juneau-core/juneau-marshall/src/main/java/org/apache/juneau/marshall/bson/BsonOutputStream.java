@@ -291,7 +291,7 @@ public class BsonOutputStream extends OutputStream {
 			// BSON Decimal128 (0x13) is bounded to 34 significant digits with exponent in [-6176,6111]; values
 			// outside that range are an unavoidable lossy case, so fail cleanly instead of leaking an unchecked
 			// NumberFormatException.  See the BsonSerializer limitations javadoc.
-			var e2 = new SerializeException("Value out of BSON Decimal128 range (max 34 significant digits, exponent -6176..6111): {0}", value);
+			var e2 = new SerializeException("Value out of BSON Decimal128 range (max 34 significant digits, exponent -6176..6111): %s", value);
 			e2.initCause(e);
 			throw e2;
 		}

@@ -434,7 +434,7 @@ public class DirectoryResource extends BasicRestServlet {
 		try {
 			Files.delete(f.toPath());
 		} catch (@SuppressWarnings("unused") IOException e) {
-			throw new Forbidden("Could not delete file {0}", f.getAbsolutePath());
+			throw new Forbidden("Could not delete file %s", f.getAbsolutePath());
 		}
 	}
 

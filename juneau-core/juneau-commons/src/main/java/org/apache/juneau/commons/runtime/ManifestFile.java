@@ -92,7 +92,7 @@ public class ManifestFile {
 			mf = new Manifest();
 			mf.read(fis);
 		} catch (IOException e) {
-			throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f));
+			throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n%s", read(f));
 		}
 		this.mainAttributes = readMain(mf);
 		this.sections = readSections(mf);
@@ -135,7 +135,7 @@ public class ManifestFile {
 			mf = new Manifest();
 			mf.read(in);
 		} catch (IOException e) {
-			throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(path));
+			throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n%s", read(path));
 		}
 		this.mainAttributes = readMain(mf);
 		this.sections = readSections(mf);

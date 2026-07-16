@@ -4162,7 +4162,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 				else if (ci.isAssignableTo(Surrogate.class))
 					objectSwapsList.addAll(SurrogateSwap.findObjectSwaps(ci.inner(), this));
 				else
-					throw rex("Invalid class {0} specified in MarshallingContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
+					throw rex("Invalid class %s specified in MarshallingContext.swaps property.  Must be a subclass of ObjectSwap or Surrogate.", cn(ci.inner()));
 			}
 		});
 		objectSwaps = u(objectSwapsList);
@@ -4547,7 +4547,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					var bs = beanSessionOrDefault(session);
 					var str = in.toString();
 					if (!isProbablyJsonArray(str, false))
-						throw rex("Cannot convert string to {0}: {1}", outType.getName(), str);
+						throw rex("Cannot convert string to %s: %s", outType.getName(), str);
 					var elemType = args.length > 0 ? args[0] : null;
 					var l2 = Json5List.ofString(str).setBeanSession(bs);
 					var result = newCollection(outType);
@@ -5528,7 +5528,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 			if (cm2.isMap()) {
 				var pParams = (beanp.params().length == 0 ? a(Object.class, Object.class) : beanp.params());
 				if (pParams.length != 2)
-					throw rex("Invalid number of parameters specified for Map (must be 2): {0}", pParams.length);
+					throw rex("Invalid number of parameters specified for Map (must be 2): %s", pParams.length);
 				var keyType = resolveType(pParams[0], cm2.getKeyType(), cm.getKeyType());
 				var valueType = resolveType(pParams[1], cm2.getValueType(), cm.getValueType());
 				if (keyType.isObject() && valueType.isObject())
@@ -5547,7 +5547,7 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 					} else {
 						typeName = "Array";
 					}
-					throw rex("Invalid number of parameters specified for {1} (must be 1): {0}", pParams.length, typeName);
+					throw rex("Invalid number of parameters specified for %2$s (must be 1): %1$s", pParams.length, typeName);
 				}
 				var elementType = resolveType(pParams[0], cm2.getElementType(), cm.getElementType());
 				if (elementType.isObject())

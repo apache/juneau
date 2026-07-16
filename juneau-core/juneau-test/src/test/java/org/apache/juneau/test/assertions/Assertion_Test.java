@@ -48,7 +48,7 @@ class Assertion_Test extends TestBase {
 
 	public static class A extends StringAssertion {
 		public A(Object text) { super(text); }
-		public A doError() { throw error(new A1("foo", null), "bar {0}", "baz"); }
+		public A doError() { throw error(new A1("foo", null), "bar %s", "baz"); }
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

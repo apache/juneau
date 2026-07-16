@@ -96,7 +96,48 @@ class Shorts_Test extends TestBase {
 	void b002_ne_isNotEmpty_charSeq() { assertTrue(ine("x")); }
 
 	@Test
-	void b003_f_format() { assertEquals("hello world", f("{0} {1}", "hello", "world")); }
+	void b003_f_format() { assertEquals("hello world", f("%s %s", "hello", "world")); }
+
+	@Test
+	void b003a_mf_messageFormat() { assertEquals("hello world", mf("{0} {1}", "hello", "world")); }
+
+	@Test
+	void b003b_mf_typedNumber() {
+		// Typed MessageFormat conversion (locale-aware grouping) must render identically to java.text.MessageFormat.
+		var expected = new java.text.MessageFormat("{0,number}").format(new Object[]{1234567});
+		assertEquals(expected, mf("{0,number}", 1234567));
+	}
+
+	@Test
+	void b003c_mf_singleQuoteEscaping() { assertEquals("'x'", mf("''{0}''", "x")); }
+
+	@Test
+	void b003d_mfs_supplier() { assertEquals("hello world", mfs("{0} {1}", "hello", "world").get()); }
+
+	@Test
+	void b003e_mf_nullArg() { assertEquals("Value: null", mf("Value: {0}", (Object)null)); }
+
+	@Test
+	void b003f_mf_missingArgKeepsPlaceholder() {
+		// java.text.MessageFormat inserts the placeholder text when an argument is missing.
+		assertEquals("a {1}", mf("{0} {1}", "a"));
+	}
+
+	@Test
+	void b003g_mf_noArgsReturnsPatternVerbatim() {
+		// With no args the pattern is returned as-is (single quotes left untouched).
+		assertEquals("It''s a test", mf("It''s a test"));
+	}
+
+	@Test
+	void b003h_mf_typedDate() {
+		var d = new java.util.Date(0L);
+		var expected = new java.text.MessageFormat("{0,date,short}").format(new Object[]{d});
+		assertEquals(expected, mf("{0,date,short}", d));
+	}
+
+	@Test
+	void b003i_mf_multiArgWithReuse() { assertEquals("Hello and Hello", mf("{0} and {0}", "Hello")); }
 
 	@Test
 	void b004_b_isBlank() { assertTrue(ib("   ")); }
@@ -190,7 +231,7 @@ class Shorts_Test extends TestBase {
 
 	@Test
 	void e001_rex_runtimeException() {
-		RuntimeException e = rex("test {0}", "msg");
+		RuntimeException e = rex("test %s", "msg");
 		assertEquals("test msg", e.getMessage());
 	}
 
@@ -202,7 +243,7 @@ class Shorts_Test extends TestBase {
 
 	@Test
 	void e003_ise_illegalState() {
-		IllegalStateException e = isex("bad state {0}", 1);
+		IllegalStateException e = isex("bad state %s", 1);
 		assertEquals("bad state 1", e.getMessage());
 	}
 

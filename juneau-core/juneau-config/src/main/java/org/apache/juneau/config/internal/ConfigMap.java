@@ -94,7 +94,7 @@ public class ConfigMap implements ConfigStoreListener {
 					if (c != '#' && l.indexOf('=') != -1) {
 						var e = new ConfigMapEntry(l, lines.subList(start, i));
 						if (entries.containsKey(e.key))
-							throw new ConfigException("Duplicate entry found in section [{0}] of configuration:  {1}", name2, e.key);
+							throw new ConfigException("Duplicate entry found in section [%s] of configuration:  %s", name2, e.key);
 						entries.put(e.key, e);
 						start = i + 1;
 					}
@@ -198,12 +198,12 @@ public class ConfigMap implements ConfigStoreListener {
 
 	private static void checkKeyName(String s) {
 		if (! isValidKeyName(s))
-			throw iaex("Invalid key name: ''{0}''", s);
+			throw iaex("Invalid key name: '%s'", s);
 	}
 
 	private static void checkSectionName(String s) {
 		if (! ("".equals(s) || isValidNewSectionName(s)))
-			throw iaex("Invalid section name: ''{0}''", s);
+			throw iaex("Invalid section name: '%s'", s);
 	}
 
 	private static boolean isValidConfigName(String s) {
@@ -853,17 +853,17 @@ public class ConfigMap implements ConfigStoreListener {
 				if (c == '[') {
 					var l = line.trim();
 					if (c2 != ']' || ! isValidNewSectionName(l.substring(1, l.length() - 1)))
-						throw new ConfigException("Invalid section name found in configuration:  {0}", line);
+						throw new ConfigException("Invalid section name found in configuration:  %s", line);
 				} else if (c == '<') {
 					var l = line.trim();
 					var i = l.indexOf('>');
 					if (i != -1) {
 						var l2 = l.substring(1, i);
 						if (! isValidConfigName(l2))
-							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
+							throw new ConfigException("Invalid import config name found in configuration:  %s", line);
 						var l3 = l.substring(i + 1);
 						if (! (isEmpty(l3) || firstChar(l3) == '#'))
-							throw new ConfigException("Invalid import config name found in configuration:  {0}", line);
+							throw new ConfigException("Invalid import config name found in configuration:  %s", line);
 						var importName = l2.trim();
 						// Circular imports are detected in ConfigStore.getMap() which throws a clean ConfigException.
 						if (! imports2.containsKey(importName))
@@ -949,7 +949,7 @@ public class ConfigMap implements ConfigStoreListener {
 		for (var i = sections.size() - 1; i >= 0; i--) {
 			var cs = sections.get(i);
 			if (entries.containsKey(cs.name))
-				throw new ConfigException("Duplicate section found in configuration:  [{0}]", cs.name);
+				throw new ConfigException("Duplicate section found in configuration:  [%s]", cs.name);
 			entries.put(cs.name, cs);
 		}
 

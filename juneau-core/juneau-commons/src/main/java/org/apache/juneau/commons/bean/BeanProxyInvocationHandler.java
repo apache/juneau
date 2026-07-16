@@ -158,6 +158,6 @@ public class BeanProxyInvocationHandler<T> implements InvocationHandler {
 			return null;
 		}
 
-		throw uoex("Unsupported bean method.  method=''{0}''", method);
+		throw uoex("Unsupported bean method.  method='%s'", method);
 	}
 }

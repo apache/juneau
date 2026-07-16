@@ -73,6 +73,6 @@ public class DefaultArg implements RestOpArg {
 		"resource" // Bean values may be AutoCloseable but lifecycle is owned by the container, not this resolver.
 	})
 	public Object resolve(RestOpSession opSession) throws Exception {
-		return opSession.getBeanStore().getBean(type, qualifier).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type {0}", cn(type)));
+		return opSession.getBeanStore().getBean(type, qualifier).orElseThrow(() -> new ArgException(paramInfo, "Could not resolve bean type %s", cn(type)));
 	}
 }

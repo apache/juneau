@@ -35,7 +35,7 @@ class TooManyRequests_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws TooManyRequests {
-			throw new TooManyRequests("foo {0}", "bar");
+			throw new TooManyRequests("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws TooManyRequests {
@@ -43,7 +43,7 @@ class TooManyRequests_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws TooManyRequests {
-			throw new TooManyRequests(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new TooManyRequests(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws TooManyRequests {

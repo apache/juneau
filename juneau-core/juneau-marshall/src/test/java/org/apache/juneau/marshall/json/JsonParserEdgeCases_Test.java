@@ -452,10 +452,10 @@ class JsonParserEdgeCases_Test extends TestBase {
 	private static void assertParseError(Input input, Throwable t) {
 		if (t instanceof ParseException t2) {
 			if (input.errorText != null)
-				assertTrue(t2.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, t2.getRootCause().getMessage()));
+				assertTrue(t2.getRootCause().getMessage().contains(input.errorText), fs("Got ParseException but didn't contain expected text '%s'.  Test=%s, Input=%s, Message=%s", input.errorText, input.name, input.jsonReadable, t2.getRootCause().getMessage()));
 		} else if (t instanceof IOException t2) {
 			if (input.errorText != null)
-				assertTrue(t2.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text ''{0}''.  Test={1}, Input={2}, Message={3}", input.errorText, input.name, input.jsonReadable, t2.getMessage()));
+				assertTrue(t2.getMessage().contains(input.errorText), fs("Got IOException but didn't contain expected text '%s'.  Test=%s, Input=%s, Message=%s", input.errorText, input.name, input.jsonReadable, t2.getMessage()));
 		} else {
 			fail("Expected ParseException.  Test="+input.name+", Input=" + input.jsonReadable + ", Exception=" + cn(t) + "," + t.getLocalizedMessage());
 		}

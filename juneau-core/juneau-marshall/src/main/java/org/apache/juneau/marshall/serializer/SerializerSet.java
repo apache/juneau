@@ -200,7 +200,7 @@ public class SerializerSet {
 				if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
-					throw rex("Invalid type passed to SerializeGroup.Builder.add(): {0}", cn(e));
+					throw rex("Invalid type passed to SerializeGroup.Builder.add(): %s", cn(e));
 				}
 			}
 			entries.addAll(0, l);
@@ -403,7 +403,7 @@ public class SerializerSet {
 				} else if (Serializer.class.isAssignableFrom(e)) {
 					l.add(createBuilder(e));
 				} else {
-					throw rex("Invalid type passed to SerializeGroup.Builder.set(): {0}", cn(e));
+					throw rex("Invalid type passed to SerializeGroup.Builder.set(): %s", cn(e));
 				}
 			}
 			entries = l;
@@ -424,7 +424,7 @@ public class SerializerSet {
 			if (o instanceof Serializer.Builder<?> x) {
 				Serializer.Builder<?> x2 = x.copy();
 				if (neq(x.getClass(), x2.getClass()))
-					throw rex("Copy method not implemented on class {0}", cn(x));
+					throw rex("Copy method not implemented on class %s", cn(x));
 				x = x2;
 				if (nn(bcBuilder))
 					x.marshallingContext(bcBuilder);

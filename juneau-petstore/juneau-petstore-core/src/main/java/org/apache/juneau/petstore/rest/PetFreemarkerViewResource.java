@@ -76,7 +76,7 @@ public class PetFreemarkerViewResource extends BasicRestServlet {
 	public View viewPet(@Path("id") long id) {
 		var pet = store.getPet(id);
 		if (pet == null)
-			throw new NotFound("Pet not found: id={0}", id);
+			throw new NotFound("Pet not found: id=%s", id);
 		return FreemarkerView.of("pet.ftlh").attr("pet", pet);
 	}
 }

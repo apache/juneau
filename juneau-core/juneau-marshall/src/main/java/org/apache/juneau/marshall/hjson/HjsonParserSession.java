@@ -131,7 +131,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 		// Same per-property type threading as parseObject so braceless-root beans get typed-map keys (Bug #7b).
 		var beanMeta = (type != null && type.isBean()) ? type.getBeanMeta() : null;
 		if (t.read().type() != HjsonTokenizer.TokenType.COLON)
-			throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
+			throw new ParseException(this, "Expected : after key at line %s", t.getLine());
 		t.skipWhitespaceAndComments();
 		var value = parseValue(t, propertyType(beanMeta, firstKey, type));
 		result.put(firstKey, value);
@@ -142,7 +142,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			var key = readKey(t);
 			t.skipWhitespaceAndComments();
 			if (t.read().type() != HjsonTokenizer.TokenType.COLON)
-				throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
+				throw new ParseException(this, "Expected : after key at line %s", t.getLine());
 			t.skipWhitespaceAndComments();
 			value = parseValue(t, propertyType(beanMeta, key, type));
 			result.put(key, value);
@@ -164,7 +164,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			case LBRACE -> parseObject(t, type);
 			case LBRACKET -> parseArray(t, type);
 			case EOF -> null;
-			default -> throw new ParseException(this, "Unexpected token {0} at line {1}", tok.type(), t.getLine());
+			default -> throw new ParseException(this, "Unexpected token %s at line %s", tok.type(), t.getLine());
 		};
 		if (raw == null)
 			return null;
@@ -189,7 +189,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			var key = readKey(t);
 			t.skipWhitespaceAndComments();
 			if (t.read().type() != HjsonTokenizer.TokenType.COLON)
-				throw new ParseException(this, "Expected ':' after key at line {0}", t.getLine());
+				throw new ParseException(this, "Expected : after key at line %s", t.getLine());
 			t.skipWhitespaceAndComments();
 			var valueType = propertyType(beanMeta, key, type);
 			var value = parseValue(t, valueType);
@@ -262,7 +262,7 @@ public class HjsonParserSession extends ReaderParserSession implements RecordRea
 			case TRUE -> "true";
 			case FALSE -> "false";
 			case NUMBER -> tok.numberValue().toString();
-			default -> throw new ParseException(this, "Expected key at line {0}", t.getLine());
+			default -> throw new ParseException(this, "Expected key at line %s", t.getLine());
 		};
 	}
 

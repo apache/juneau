@@ -216,39 +216,39 @@ class RestOp_Throws_Test extends TestBase {
 
 	@Rest
 	public static class B {
-		@RestGet public void badRequest() { throw new BadRequest("foo {0}", "bar"); }
-		@RestGet public void conflict() { throw new Conflict("foo {0}", "bar"); }
-		@RestGet public void expectationFailed() { throw new ExpectationFailed("foo {0}", "bar"); }
-		@RestGet public void failedDependency() { throw new FailedDependency("foo {0}", "bar"); }
-		@RestGet public void forbidden() { throw new Forbidden("foo {0}", "bar"); }
-		@RestGet public void gone() { throw new Gone("foo {0}", "bar"); }
-		@RestGet public void httpVersionNotSupported() { throw new HttpVersionNotSupported("foo {0}", "bar"); }
-		@RestGet public void insufficientStorage() { throw new InsufficientStorage("foo {0}", "bar"); }
-		@RestGet public void internalServerError() { throw new InternalServerError("foo {0}", "bar"); }
-		@RestGet public void lengthRequired() { throw new LengthRequired("foo {0}", "bar"); }
-		@RestGet public void locked() { throw new Locked("foo {0}", "bar"); }
-		@RestGet public void loopDetected() { throw new LoopDetected("foo {0}", "bar"); }
-		@RestGet public void methodNotAllowed() { throw new MethodNotAllowed("foo {0}", "bar"); }
-		@RestGet public void misdirectedRequest() { throw new MisdirectedRequest("foo {0}", "bar"); }
-		@RestGet public void networkAuthenticationRequired() { throw new NetworkAuthenticationRequired("foo {0}", "bar"); }
-		@RestGet public void notAcceptable() { throw new NotAcceptable("foo {0}", "bar"); }
-		@RestGet public void notExtended() { throw new NotExtended("foo {0}", "bar"); }
-		@RestGet public void notFound() { throw new NotFound("foo {0}", "bar"); }
-		@RestGet public void notImplemented() { throw new NotImplemented("foo {0}", "bar"); }
-		@RestGet public void payloadTooLarge() { throw new PayloadTooLarge("foo {0}", "bar"); }
-		@RestGet public void preconditionFailed() { throw new PreconditionFailed("foo {0}", "bar"); }
-		@RestGet public void preconditionRequired() { throw new PreconditionRequired("foo {0}", "bar"); }
-		@RestGet public void rangeNotSatisfiable() { throw new RangeNotSatisfiable("foo {0}", "bar"); }
-		@RestGet public void requestHeaderFieldsTooLarge() { throw new RequestHeaderFieldsTooLarge("foo {0}", "bar"); }
-		@RestGet public void serviceUnavailable() { throw new ServiceUnavailable("foo {0}", "bar"); }
-		@RestGet public void tooManyRequests() { throw new TooManyRequests("foo {0}", "bar"); }
-		@RestGet public void unauthorized() { throw new Unauthorized("foo {0}", "bar"); }
-		@RestGet public void unavailableForLegalReasons() { throw new UnavailableForLegalReasons("foo {0}", "bar"); }
-		@RestGet public void unprocessableEntity() { throw new UnprocessableEntity("foo {0}", "bar"); }
-		@RestGet public void unsupportedMediaType() { throw new UnsupportedMediaType("foo {0}", "bar"); }
-		@RestGet public void upgradeRequired() { throw new UpgradeRequired("foo {0}", "bar"); }
-		@RestGet public void uriTooLong() { throw new UriTooLong("foo {0}", "bar"); }
-		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates("foo {0}", "bar"); }
+		@RestGet public void badRequest() { throw new BadRequest("foo %s", "bar"); }
+		@RestGet public void conflict() { throw new Conflict("foo %s", "bar"); }
+		@RestGet public void expectationFailed() { throw new ExpectationFailed("foo %s", "bar"); }
+		@RestGet public void failedDependency() { throw new FailedDependency("foo %s", "bar"); }
+		@RestGet public void forbidden() { throw new Forbidden("foo %s", "bar"); }
+		@RestGet public void gone() { throw new Gone("foo %s", "bar"); }
+		@RestGet public void httpVersionNotSupported() { throw new HttpVersionNotSupported("foo %s", "bar"); }
+		@RestGet public void insufficientStorage() { throw new InsufficientStorage("foo %s", "bar"); }
+		@RestGet public void internalServerError() { throw new InternalServerError("foo %s", "bar"); }
+		@RestGet public void lengthRequired() { throw new LengthRequired("foo %s", "bar"); }
+		@RestGet public void locked() { throw new Locked("foo %s", "bar"); }
+		@RestGet public void loopDetected() { throw new LoopDetected("foo %s", "bar"); }
+		@RestGet public void methodNotAllowed() { throw new MethodNotAllowed("foo %s", "bar"); }
+		@RestGet public void misdirectedRequest() { throw new MisdirectedRequest("foo %s", "bar"); }
+		@RestGet public void networkAuthenticationRequired() { throw new NetworkAuthenticationRequired("foo %s", "bar"); }
+		@RestGet public void notAcceptable() { throw new NotAcceptable("foo %s", "bar"); }
+		@RestGet public void notExtended() { throw new NotExtended("foo %s", "bar"); }
+		@RestGet public void notFound() { throw new NotFound("foo %s", "bar"); }
+		@RestGet public void notImplemented() { throw new NotImplemented("foo %s", "bar"); }
+		@RestGet public void payloadTooLarge() { throw new PayloadTooLarge("foo %s", "bar"); }
+		@RestGet public void preconditionFailed() { throw new PreconditionFailed("foo %s", "bar"); }
+		@RestGet public void preconditionRequired() { throw new PreconditionRequired("foo %s", "bar"); }
+		@RestGet public void rangeNotSatisfiable() { throw new RangeNotSatisfiable("foo %s", "bar"); }
+		@RestGet public void requestHeaderFieldsTooLarge() { throw new RequestHeaderFieldsTooLarge("foo %s", "bar"); }
+		@RestGet public void serviceUnavailable() { throw new ServiceUnavailable("foo %s", "bar"); }
+		@RestGet public void tooManyRequests() { throw new TooManyRequests("foo %s", "bar"); }
+		@RestGet public void unauthorized() { throw new Unauthorized("foo %s", "bar"); }
+		@RestGet public void unavailableForLegalReasons() { throw new UnavailableForLegalReasons("foo %s", "bar"); }
+		@RestGet public void unprocessableEntity() { throw new UnprocessableEntity("foo %s", "bar"); }
+		@RestGet public void unsupportedMediaType() { throw new UnsupportedMediaType("foo %s", "bar"); }
+		@RestGet public void upgradeRequired() { throw new UpgradeRequired("foo %s", "bar"); }
+		@RestGet public void uriTooLong() { throw new UriTooLong("foo %s", "bar"); }
+		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates("foo %s", "bar"); }
 	}
 
 	@Test void b01_userSpecifiedMessage() throws Exception {
@@ -572,39 +572,39 @@ class RestOp_Throws_Test extends TestBase {
 
 	@Rest
 	public static class D {
-		@RestGet public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
-		@RestGet public void conflict() { throw new Conflict(t, "foo {0}", "bar"); }
-		@RestGet public void expectationFailed() { throw new ExpectationFailed(t, "foo {0}", "bar"); }
-		@RestGet public void failedDependency() { throw new FailedDependency(t, "foo {0}", "bar"); }
-		@RestGet public void forbidden() { throw new Forbidden(t, "foo {0}", "bar"); }
-		@RestGet public void gone() { throw new Gone(t, "foo {0}", "bar"); }
-		@RestGet public void httpVersionNotSupported() { throw new HttpVersionNotSupported(t, "foo {0}", "bar"); }
-		@RestGet public void insufficientStorage() { throw new InsufficientStorage(t, "foo {0}", "bar"); }
-		@RestGet public void internalServerError() { throw new InternalServerError(t, "foo {0}", "bar"); }
-		@RestGet public void lengthRequired() { throw new LengthRequired(t, "foo {0}", "bar"); }
-		@RestGet public void locked() { throw new Locked(t, "foo {0}", "bar"); }
-		@RestGet public void loopDetected() { throw new LoopDetected(t, "foo {0}", "bar"); }
-		@RestGet public void methodNotAllowed() { throw new MethodNotAllowed(t, "foo {0}", "bar"); }
-		@RestGet public void misdirectedRequest() { throw new MisdirectedRequest(t, "foo {0}", "bar"); }
-		@RestGet public void networkAuthenticationRequired() { throw new NetworkAuthenticationRequired(t, "foo {0}", "bar"); }
-		@RestGet public void notAcceptable() { throw new NotAcceptable(t, "foo {0}", "bar"); }
-		@RestGet public void notExtended() { throw new NotExtended(t, "foo {0}", "bar"); }
-		@RestGet public void notFound() { throw new NotFound(t, "foo {0}", "bar"); }
-		@RestGet public void notImplemented() { throw new NotImplemented(t, "foo {0}", "bar"); }
-		@RestGet public void payloadTooLarge() { throw new PayloadTooLarge(t, "foo {0}", "bar"); }
-		@RestGet public void preconditionFailed() { throw new PreconditionFailed(t, "foo {0}", "bar"); }
-		@RestGet public void preconditionRequired() { throw new PreconditionRequired(t, "foo {0}", "bar"); }
-		@RestGet public void rangeNotSatisfiable() { throw new RangeNotSatisfiable(t, "foo {0}", "bar"); }
-		@RestGet public void requestHeaderFieldsTooLarge() { throw new RequestHeaderFieldsTooLarge(t, "foo {0}", "bar"); }
-		@RestGet public void serviceUnavailable() { throw new ServiceUnavailable(t, "foo {0}", "bar"); }
-		@RestGet public void tooManyRequests() { throw new TooManyRequests(t, "foo {0}", "bar"); }
-		@RestGet public void unauthorized() { throw new Unauthorized(t, "foo {0}", "bar"); }
-		@RestGet public void unavailableForLegalReasons() { throw new UnavailableForLegalReasons(t, "foo {0}", "bar"); }
-		@RestGet public void unprocessableEntity() { throw new UnprocessableEntity(t, "foo {0}", "bar"); }
-		@RestGet public void unsupportedMediaType() { throw new UnsupportedMediaType(t, "foo {0}", "bar"); }
-		@RestGet public void upgradeRequired() { throw new UpgradeRequired(t, "foo {0}", "bar"); }
-		@RestGet public void uriTooLong() { throw new UriTooLong(t, "foo {0}", "bar"); }
-		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t, "foo {0}", "bar"); }
+		@RestGet public void badRequest() { throw new BadRequest(t, "foo %s", "bar"); }
+		@RestGet public void conflict() { throw new Conflict(t, "foo %s", "bar"); }
+		@RestGet public void expectationFailed() { throw new ExpectationFailed(t, "foo %s", "bar"); }
+		@RestGet public void failedDependency() { throw new FailedDependency(t, "foo %s", "bar"); }
+		@RestGet public void forbidden() { throw new Forbidden(t, "foo %s", "bar"); }
+		@RestGet public void gone() { throw new Gone(t, "foo %s", "bar"); }
+		@RestGet public void httpVersionNotSupported() { throw new HttpVersionNotSupported(t, "foo %s", "bar"); }
+		@RestGet public void insufficientStorage() { throw new InsufficientStorage(t, "foo %s", "bar"); }
+		@RestGet public void internalServerError() { throw new InternalServerError(t, "foo %s", "bar"); }
+		@RestGet public void lengthRequired() { throw new LengthRequired(t, "foo %s", "bar"); }
+		@RestGet public void locked() { throw new Locked(t, "foo %s", "bar"); }
+		@RestGet public void loopDetected() { throw new LoopDetected(t, "foo %s", "bar"); }
+		@RestGet public void methodNotAllowed() { throw new MethodNotAllowed(t, "foo %s", "bar"); }
+		@RestGet public void misdirectedRequest() { throw new MisdirectedRequest(t, "foo %s", "bar"); }
+		@RestGet public void networkAuthenticationRequired() { throw new NetworkAuthenticationRequired(t, "foo %s", "bar"); }
+		@RestGet public void notAcceptable() { throw new NotAcceptable(t, "foo %s", "bar"); }
+		@RestGet public void notExtended() { throw new NotExtended(t, "foo %s", "bar"); }
+		@RestGet public void notFound() { throw new NotFound(t, "foo %s", "bar"); }
+		@RestGet public void notImplemented() { throw new NotImplemented(t, "foo %s", "bar"); }
+		@RestGet public void payloadTooLarge() { throw new PayloadTooLarge(t, "foo %s", "bar"); }
+		@RestGet public void preconditionFailed() { throw new PreconditionFailed(t, "foo %s", "bar"); }
+		@RestGet public void preconditionRequired() { throw new PreconditionRequired(t, "foo %s", "bar"); }
+		@RestGet public void rangeNotSatisfiable() { throw new RangeNotSatisfiable(t, "foo %s", "bar"); }
+		@RestGet public void requestHeaderFieldsTooLarge() { throw new RequestHeaderFieldsTooLarge(t, "foo %s", "bar"); }
+		@RestGet public void serviceUnavailable() { throw new ServiceUnavailable(t, "foo %s", "bar"); }
+		@RestGet public void tooManyRequests() { throw new TooManyRequests(t, "foo %s", "bar"); }
+		@RestGet public void unauthorized() { throw new Unauthorized(t, "foo %s", "bar"); }
+		@RestGet public void unavailableForLegalReasons() { throw new UnavailableForLegalReasons(t, "foo %s", "bar"); }
+		@RestGet public void unprocessableEntity() { throw new UnprocessableEntity(t, "foo %s", "bar"); }
+		@RestGet public void unsupportedMediaType() { throw new UnsupportedMediaType(t, "foo %s", "bar"); }
+		@RestGet public void upgradeRequired() { throw new UpgradeRequired(t, "foo %s", "bar"); }
+		@RestGet public void uriTooLong() { throw new UriTooLong(t, "foo %s", "bar"); }
+		@RestGet public void variantAlsoNegotiates() { throw new VariantAlsoNegotiates(t, "foo %s", "bar"); }
 	}
 
 	@Test void d01_nestedThrowableWithMessage() throws Exception {
@@ -749,7 +749,7 @@ class RestOp_Throws_Test extends TestBase {
 
 	@Rest(serializers=Json5Serializer.class)
 	public static class E {
-		@RestGet public void badRequest() { throw new BadRequest(t, "foo {0}", "bar"); }
+		@RestGet public void badRequest() { throw new BadRequest(t, "foo %s", "bar"); }
 	}
 
 	@Test void e01_useAcceptForSerialization() throws Exception {

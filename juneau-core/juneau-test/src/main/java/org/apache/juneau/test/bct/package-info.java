@@ -210,7 +210,7 @@
  *    <jsm>assertBean</jsm>(() -> <js>"User validation failed"</js>, <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  *
  *    <jc>// Formatted message using Shorts.fs() for convenient message suppliers with arguments</jc>
- *    <jsm>assertBean</jsm>(<jsm>fs</jsm>(<js>"User {0} validation failed"</js>, <js>"Alice"</js>), <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
+ *    <jsm>assertBean</jsm>(<jsm>fs</jsm>(<js>"User %s validation failed"</js>, <js>"Alice"</js>), <jv>user</jv>, <js>"name,age"</js>, <js>"Alice,25"</js>);
  * </p>
  *
  * <h5 class='section'>Customizing the Default Converter:</h5>

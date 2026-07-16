@@ -255,7 +255,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			try {
 				return getJson5Parser().parseWithOuter(json5, eType, outer);
 			} catch (Exception e) {
-				throw new ParseException(this, e, "Could not parse key-value table as ''{0}'' via JSON5 ''{1}''.", eType, json5);
+				throw new ParseException(this, e, "Could not parse key-value table as '%s' via JSON5 '%s'.", eType, json5);
 			}
 		}
 
@@ -293,7 +293,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 					try {
 						setName(pmcm, val, key);
 					} catch (Exception e) {
-						throw new ParseException(this, e, "Could not set @NameProperty on ''{0}''.", key);
+						throw new ParseException(this, e, "Could not set @NameProperty on '%s'.", key);
 					}
 					pm.set(m, key, val);
 					setCurrentProperty(null);
@@ -324,7 +324,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				try {
 					setName(valueType, val, key);
 				} catch (Exception e) {
-					throw new ParseException(this, e, "Could not set @NameProperty for map key ''{0}''.", key);
+					throw new ParseException(this, e, "Could not set @NameProperty for map key '%s'.", key);
 				}
 				map.put(key, val);
 			}
@@ -438,7 +438,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 				try {
 				return getJson5Parser().parseWithOuter(json5, actualType, outer);
 			} catch (Exception e) {
-				throw new ParseException(this, e, "Could not parse table row as ''{0}'' via JSON5 ''{1}''.", actualType, json5);
+				throw new ParseException(this, e, "Could not parse table row as '%s' via JSON5 '%s'.", actualType, json5);
 			}
 		}
 
@@ -585,7 +585,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 			try {
 				return getJson5Parser().parseWithOuter(inner, eType, outer);
 			} catch (Exception e) {
-				throw new ParseException(this, e, "Could not parse inline JSON5 ''{0}'' to type ''{1}''.", inner, eType);
+				throw new ParseException(this, e, "Could not parse inline JSON5 '%s' to type '%s'.", inner, eType);
 			}
 		}
 
@@ -620,7 +620,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		try {
 			return convertToType(val, eType);
 		} catch (@SuppressWarnings("unused") Exception e) {
-			throw new ParseException(this, "Could not convert Markdown cell value ''{0}'' to type ''{1}''.", val, eType);
+			throw new ParseException(this, "Could not convert Markdown cell value '%s' to type '%s'.", val, eType);
 		}
 	}
 

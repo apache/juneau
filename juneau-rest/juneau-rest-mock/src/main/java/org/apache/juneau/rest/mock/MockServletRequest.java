@@ -30,7 +30,7 @@ import java.security.*;
 import java.util.*;
 
 import org.apache.http.*;
-import org.apache.juneau.marshall.urlencoding.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.util.*;
 
 import jakarta.servlet.*;
@@ -367,7 +367,7 @@ public class MockServletRequest implements HttpServletRequest {
 	@Override /* Overridden from HttpServletRequest */
 	public ServletInputStream getInputStream() throws IOException {
 		if (nn(formDataMap))
-			content = UrlEncodingSerializer.DEFAULT.toString(formDataMap).getBytes();
+			content = UrlEncoding.of(formDataMap).getBytes();
 		return new BoundedServletInputStream(new ByteArrayInputStream(content), Integer.MAX_VALUE);
 	}
 

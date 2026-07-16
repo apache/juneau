@@ -269,7 +269,7 @@ public class Maps<K,V> {
 						add(key, value);
 					});
 				} else {
-					throw rex("Object of type {0} could not be converted to type {1}", cn(o), "Map");
+					throw rex("Object of type %s could not be converted to type %s", cn(o), "Map");
 				}
 			}
 		}
@@ -757,7 +757,7 @@ public class Maps<K,V> {
 			return (K)o;
 		if (nn(keyFunction))
 			return keyFunction.apply(o);
-		throw rex("Object of type {0} could not be converted to key type {1}", cn(o), cn(keyType));
+		throw rex("Object of type %s could not be converted to key type %s", cn(o), cn(keyType));
 	}
 
 	/**
@@ -774,6 +774,6 @@ public class Maps<K,V> {
 			return (V)o;
 		if (nn(valueFunction))
 			return valueFunction.apply(o);
-		throw rex("Object of type {0} could not be converted to value type {1}", cn(o), cn(valueType));
+		throw rex("Object of type %s could not be converted to value type %s", cn(o), cn(valueType));
 	}
 }

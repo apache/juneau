@@ -448,7 +448,7 @@ final class VarTemplateCompiler {
 				throw parseError("Expected function name");
 			var name = body.substring(start, pos);
 			if (!Character.isLetter(name.charAt(0)))
-				throw parseError("Function name must start with a letter (got ''{0}'')", name);
+				throw parseError("Function name must start with a letter (got ''%s'')", name);
 			skipWs();
 			return name;
 		}
@@ -538,7 +538,7 @@ final class VarTemplateCompiler {
 				}
 			}
 			if (pos >= body.length() || body.charAt(pos) != '{')
-				throw parseError("Expected ''{'' after ''{0}'' in nested marker", first);
+				throw parseError("Expected ''{'' after ''%s'' in nested marker", first);
 			pos++; // consume '{'
 			var depth = 1;
 			var inEscape = false;
@@ -559,7 +559,7 @@ final class VarTemplateCompiler {
 				}
 				pos++;
 			}
-			throw parseError("Unterminated nested marker starting at index {0}", start);
+			throw parseError("Unterminated nested marker starting at index %s", start);
 		}
 
 		/**
@@ -583,14 +583,14 @@ final class VarTemplateCompiler {
 		void expect(char c) {
 			skipWs();
 			if (pos >= body.length() || body.charAt(pos) != c)
-				throw parseError("Expected ''{0}''", c);
+				throw parseError("Expected ''%s''", c);
 			pos++;
 		}
 
 		void expectEnd() {
 			skipWs();
 			if (pos < body.length())
-				throw parseError("Unexpected trailing content ''{0}''", body.substring(pos));
+				throw parseError("Unexpected trailing content ''%s''", body.substring(pos));
 		}
 
 		char peek() {

@@ -1526,9 +1526,9 @@ public class SerializerSession extends MarshallingTraverseSession {
 		if (nn(listener))
 			listener.onBeanGetterException(this, t, p);
 		String prefix = (isDebug() ? getStack(false) + ": " : "");
-		addWarning("{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t));
+		addWarning("%sCould not call getValue() on property '%s' of class '%s', exception = %s", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t));
 		if (! isIgnoreInvocationExceptionsOnGetters())
-			throw new SerializeException(this, "{0}Could not call getValue() on property ''{1}'' of class ''{2}'', exception = {3}", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t))
+			throw new SerializeException(this, "%sCould not call getValue() on property '%s' of class '%s', exception = %s", prefix, p.getName(), p.getBeanMeta().getBeanInfo(), localizedMessage(t))
 				.initCause(t);
 	}
 

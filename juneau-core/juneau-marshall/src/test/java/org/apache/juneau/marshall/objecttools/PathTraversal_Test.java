@@ -1236,7 +1236,7 @@ class PathTraversal_Test extends TestBase {
 
 	@Test void p02_causeConstructor() {
 		var cause = new RuntimeException("boom");
-		var x = new PathTraversalException(cause, 500, "Failed {0}", "x");
+		var x = new PathTraversalException(cause, 500, "Failed %s", "x");
 		assertSame(cause, x.getCause());
 		assertEquals(500, x.getStatus());
 		assertEquals("Failed x", x.getMessage());
@@ -1245,7 +1245,7 @@ class PathTraversal_Test extends TestBase {
 	@Test void p03_covariantSetMessage() {
 		var x = new PathTraversalException(400, "orig");
 		// setMessage is covariantly typed to return PathTraversalException and returns the same instance.
-		PathTraversalException y = x.setMessage("new {0}", "msg");
+		PathTraversalException y = x.setMessage("new %s", "msg");
 		assertSame(x, y);
 		assertEquals("new msg", x.getMessage());
 	}

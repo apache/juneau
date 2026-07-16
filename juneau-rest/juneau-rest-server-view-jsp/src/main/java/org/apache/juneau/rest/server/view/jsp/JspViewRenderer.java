@@ -132,7 +132,7 @@ public class JspViewRenderer implements ViewRenderer {
 		try {
 			target = joinPath(basePath, view.getTemplateName());
 		} catch (IllegalArgumentException ex) {
-			throw new InternalServerError(ex, "JSP template name escapes configured base path: ''{0}''",
+			throw new InternalServerError(ex, "JSP template name escapes configured base path: '%s'",
 				view.getTemplateName());
 		}
 
@@ -143,7 +143,7 @@ public class JspViewRenderer implements ViewRenderer {
 			var ctx = req.getServletContext();
 			var rd = ctx.getRequestDispatcher(target);
 			if (rd == null)
-				throw new InternalServerError("Could not resolve RequestDispatcher for ''{0}''. {1}",
+				throw new InternalServerError("Could not resolve RequestDispatcher for '%s'. %s",
 					target, NO_ENGINE_DIAGNOSTIC);
 			rd.forward(req.getHttpServletRequest(), res.getHttpServletResponse());
 			return FINISHED;
@@ -152,7 +152,7 @@ public class JspViewRenderer implements ViewRenderer {
 		} catch (IOException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw new InternalServerError(ex, "JSP render failed for ''{0}''", target);
+			throw new InternalServerError(ex, "JSP render failed for '%s'", target);
 		}
 	}
 

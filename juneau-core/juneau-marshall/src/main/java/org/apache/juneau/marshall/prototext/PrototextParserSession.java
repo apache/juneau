@@ -315,7 +315,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			if (pMeta == null && isIgnoreUnknownBeanProperties())
 				continue;
 			if (pMeta == null)
-				throw new ParseException(this, "Unknown property ''{0}''", key);
+				throw new ParseException(this, "Unknown property '%s'", key);
 			var targetType = (ClassMeta<?>) pMeta.getBeanInfo();
 			var converted = convertValue(val, targetType);
 			bm.put(key, converted);

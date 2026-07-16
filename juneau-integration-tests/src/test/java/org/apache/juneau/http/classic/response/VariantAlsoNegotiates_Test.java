@@ -35,7 +35,7 @@ class VariantAlsoNegotiates_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws VariantAlsoNegotiates {
-			throw new VariantAlsoNegotiates("foo {0}", "bar");
+			throw new VariantAlsoNegotiates("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws VariantAlsoNegotiates {
@@ -43,7 +43,7 @@ class VariantAlsoNegotiates_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws VariantAlsoNegotiates {
-			throw new VariantAlsoNegotiates(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new VariantAlsoNegotiates(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws VariantAlsoNegotiates {

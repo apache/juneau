@@ -177,7 +177,7 @@ public class ContextBeanCreator<T> {
 	public ContextBeanCreator<T> type(Class<? extends T> value) {
 		builder = Context.createBuilder((Class<? extends Context>)value);
 		if (builder == null)
-			throw iaex("Creator for class {0} not found.", cn(value));
+			throw iaex("Creator for class %s not found.", cn(value));
 		return this;
 	}
 }

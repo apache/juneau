@@ -182,7 +182,7 @@ public class HttpParts {
 		if (o instanceof Map.Entry o4) {
 			return BasicPart.of(s(o4.getKey()), o4.getValue());
 		}
-		throw rex("Object of type {0} could not be converted to a Part.", cn(o));
+		throw rex("Object of type %s could not be converted to a Part.", cn(o));
 	}
 
 	/**

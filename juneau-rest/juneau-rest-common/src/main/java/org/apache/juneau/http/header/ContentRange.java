@@ -159,9 +159,9 @@ public class ContentRange extends HttpStringHeader {
 		 */
 		public Builder range(long startValue, long endValue) {
 			if (startValue < 0)
-				throw iaex("range start must be non-negative: {0}", startValue);
+				throw iaex("range start must be non-negative: %s", startValue);
 			if (endValue < startValue)
-				throw iaex("range end {0} must be >= start {1}", endValue, startValue);
+				throw iaex("range end %s must be >= start %s", endValue, startValue);
 			start = startValue;
 			end = endValue;
 			rangeUnsatisfied = false;
@@ -192,7 +192,7 @@ public class ContentRange extends HttpStringHeader {
 		 */
 		public Builder length(long value) {
 			if (value < 0)
-				throw iaex("complete-length must be non-negative: {0}", value);
+				throw iaex("complete-length must be non-negative: %s", value);
 			completeLength = value;
 			lengthUnknown = false;
 			return this;

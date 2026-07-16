@@ -2804,7 +2804,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 					if (ci.isAssignableToAny(RestCallInterceptor.class, HttpRequestInterceptor.class, HttpResponseInterceptor.class))
 						interceptors(ci.newInstance());
 					else
-						throw new ConfigException("Invalid class of type ''{0}'' passed to interceptors().", ci.getName());
+						throw new ConfigException("Invalid class of type '%s' passed to interceptors().", ci.getName());
 				}
 			}
 			return self();
@@ -2871,7 +2871,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				ClassInfo ci = ClassInfo.of(o);
 				if (nn(ci)) {
 					if (! ci.isAssignableToAny(HttpRequestInterceptor.class, HttpResponseInterceptor.class, RestCallInterceptor.class))
-						throw new ConfigException("Invalid object of type ''{0}'' passed to interceptors().", ci.getName());
+						throw new ConfigException("Invalid object of type '%s' passed to interceptors().", ci.getName());
 					if (o instanceof HttpRequestInterceptor o2)
 						addInterceptorLast(o2);
 					if (o instanceof HttpResponseInterceptor o2)
@@ -4606,7 +4606,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			if (isEmpty(s))
 				rootUrl = null;
 			else if (s.indexOf("://") == -1)
-				throw rex("Invalid rootUrl value: ''{0}''.  Must be a valid absolute URL.", value);
+				throw rex("Invalid rootUrl value: '%s'.  Must be a valid absolute URL.", value);
 			else {
 				final var url = s;
 				rootUrl = () -> url;
@@ -6197,7 +6197,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 
 		if (state != S5)
-			throw new RestCallException(null, null, "Invalid format for call string.  State={0}", state);
+			throw new RestCallException(null, null, "Invalid format for call string.  State=%s", state);
 
 		try {
 			var req = request(method, uri, ine(content));
@@ -8073,7 +8073,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			s = fixUrl(s);
 			return new URI(s);
 		} catch (URISyntaxException e) {
-			throw new RestCallException(null, e, "Invalid URI encountered:  {0}", x);  // Shouldn't happen.
+			throw new RestCallException(null, e, "Invalid URI encountered:  %s", x);  // Shouldn't happen.
 		}
 	}
 }

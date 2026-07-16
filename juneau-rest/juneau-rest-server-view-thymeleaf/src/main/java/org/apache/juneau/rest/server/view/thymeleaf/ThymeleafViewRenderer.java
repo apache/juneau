@@ -120,7 +120,7 @@ public class ThymeleafViewRenderer implements ViewRenderer {
 		} catch (IOException ex) {
 			throw ex;
 		} catch (Exception ex) {
-			throw new InternalServerError(ex, "Thymeleaf render failed for ''{0}''",
+			throw new InternalServerError(ex, "Thymeleaf render failed for '%s'",
 				view.getTemplateName());
 		}
 	}

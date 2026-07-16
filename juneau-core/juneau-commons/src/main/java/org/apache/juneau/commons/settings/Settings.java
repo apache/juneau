@@ -768,7 +768,7 @@ public class Settings {
 				toTypeFunctions.putIfAbsent(c, f);
 		}
 		if (f == null)
-			throw rex("Invalid env type: {0}", c);
+			throw rex("Invalid env type: %s", c);
 		return f.apply(s);
 	}
 }

@@ -263,7 +263,7 @@ public class ReflectionMap<V> {
 		 */
 		public Builder<V> append(String key, V value) {
 			if (Shorts.ie(key))  // NOAI
-				throw rex("Invalid reflection signature: [{0}]", key);
+				throw rex("Invalid reflection signature: [%s]", key);
 			try {
 				splitNames(key, k -> {
 					if (k.endsWith(")")) {
@@ -287,7 +287,7 @@ public class ReflectionMap<V> {
 					}
 			});
 			} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
-			throw rex("Invalid reflection signature: [{0}]", key);
+			throw rex("Invalid reflection signature: [%s]", key);
 			}
 
 			return this;

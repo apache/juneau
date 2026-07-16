@@ -85,7 +85,7 @@ public class PetMustacheViewResource extends BasicRestServlet {
 	public View viewPet(@Path("id") long id) {
 		var pet = store.getPet(id);
 		if (pet == null)
-			throw new NotFound("Pet not found: id={0}", id);
+			throw new NotFound("Pet not found: id=%s", id);
 		return MustacheView.of("pet").attr("pet", pet);
 	}
 }

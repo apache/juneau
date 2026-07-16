@@ -35,7 +35,7 @@ class NotImplemented_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws NotImplemented {
-			throw new NotImplemented("foo {0}", "bar");
+			throw new NotImplemented("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws NotImplemented {
@@ -43,7 +43,7 @@ class NotImplemented_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws NotImplemented {
-			throw new NotImplemented(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new NotImplemented(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws NotImplemented {

@@ -269,7 +269,7 @@ public class BasicSwaggerProviderSession {
 
 			var r = rr.swagger();
 
-			omSwagger.append(parseMap(r.value(), "@Swagger(value) on class {0}", c));
+			omSwagger.append(parseMap(r.value(), "@Swagger(value) on class %s", c));
 
 			if (! SwaggerAnnotation.empty(r)) {
 				var info = omSwagger.getMap(SWAGGER_info, true);
@@ -308,7 +308,7 @@ public class BasicSwaggerProviderSession {
 				);
 		}
 
-		omSwagger.appendIf(nem, SWAGGER_externalDocs, parseMap(mb.findFirstString(SWAGGER_externalDocs), "Messages/externalDocs on class {0}", c));
+		omSwagger.appendIf(nem, SWAGGER_externalDocs, parseMap(mb.findFirstString(SWAGGER_externalDocs), "Messages/externalDocs on class %s", c));
 
 		var info = omSwagger.getMap(SWAGGER_info, true);
 
@@ -317,8 +317,8 @@ public class BasicSwaggerProviderSession {
 			.appendIf(ne, SWAGGER_description, resolve(mb.findFirstString(SWAGGER_description)))
 			.appendIf(ne, SWAGGER_version, resolve(mb.findFirstString(SWAGGER_version)))
 			.appendIf(ne, SWAGGER_termsOfService, resolve(mb.findFirstString(SWAGGER_termsOfService)))
-			.appendIf(nem, SWAGGER_contact, parseMap(mb.findFirstString(SWAGGER_contact), "Messages/contact on class {0}", c))
-			.appendIf(nem, SWAGGER_license, parseMap(mb.findFirstString(SWAGGER_license), "Messages/license on class {0}", c));
+			.appendIf(nem, SWAGGER_contact, parseMap(mb.findFirstString(SWAGGER_contact), "Messages/contact on class %s", c))
+			.appendIf(nem, SWAGGER_license, parseMap(mb.findFirstString(SWAGGER_license), "Messages/license on class %s", c));
 
 		if (info.isEmpty())
 			omSwagger.remove(SWAGGER_info);
@@ -343,10 +343,10 @@ public class BasicSwaggerProviderSession {
 
 		var s = mb.findFirstString("tags");
 		if (nn(s)) {
-			for (var m : parseListOrCdl(s, "Messages/tags on class {0}", c).elements(Json5Map.class)) {
+			for (var m : parseListOrCdl(s, "Messages/tags on class %s", c).elements(Json5Map.class)) {
 				var name = m.getString(SWAGGER_name);
 				if (name == null)
-					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class {0}", c);
+					throw new SwaggerException(null, "Tag definition found without name in resource bundle on class %s", c);
 				if (tagMap.containsKey(name))
 					tagMap.get(name).putAll(m);
 				else
@@ -381,7 +381,7 @@ public class BasicSwaggerProviderSession {
 			// Get the operation from the existing swagger so far.
 			var op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
 
-			op.append(parseMap(ms.value(), "@OpSwagger(value) on class {0} method {1}", c, m));
+			op.append(parseMap(ms.value(), "@OpSwagger(value) on class %s method %s", c, m));
 			op.appendIf(ne, SWAGGER_operationId,
 				firstNonEmpty(
 					resolve(ms.operationId()),
@@ -419,44 +419,44 @@ public class BasicSwaggerProviderSession {
 			);
 			op.appendIf(nec, SWAGGER_tags,
 				merge(
-					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class {0} method {1}", c, m),
-					parseListOrCdl(ms.tags(), "@OpSwagger(tags) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(mn + ".tags"), "Messages/tags on class %s method %s", c, m),
+					parseListOrCdl(ms.tags(), "@OpSwagger(tags) on class %s method %s", c, m)
 				)
 			);
 			op.appendIf(nec, SWAGGER_schemes,
 				merge(
-					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class {0} method {1}", c, m),
-					parseListOrCdl(ms.schemes(), "@OpSwagger(schemes) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(mn + ".schemes"), "Messages/schemes on class %s method %s", c, m),
+					parseListOrCdl(ms.schemes(), "@OpSwagger(schemes) on class %s method %s", c, m)
 				)
 			);
 			op.appendIf(nec, SWAGGER_consumes,
 				firstNonEmpty(
-					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class {0} method {1}", c, m),
-					parseListOrCdl(ms.consumes(), "@OpSwagger(consumes) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(mn + ".consumes"), "Messages/consumes on class %s method %s", c, m),
+					parseListOrCdl(ms.consumes(), "@OpSwagger(consumes) on class %s method %s", c, m)
 				)
 			);
 			op.appendIf(nec, SWAGGER_produces,
 				firstNonEmpty(
-					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class {0} method {1}", c, m),
-					parseListOrCdl(ms.produces(), "@OpSwagger(produces) on class {0} method {1}", c, m)
+					parseListOrCdl(mb.findFirstString(mn + ".produces"), "Messages/produces on class %s method %s", c, m),
+					parseListOrCdl(ms.produces(), "@OpSwagger(produces) on class %s method %s", c, m)
 				)
 			);
 			op.appendIf(nec, SWAGGER_parameters,
 				merge(
-					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class {0} method {1}", c, m),
-					parseList(ms.parameters(), "@OpSwagger(parameters) on class {0} method {1}", c, m)
+					parseList(mb.findFirstString(mn + ".parameters"), "Messages/parameters on class %s method %s", c, m),
+					parseList(ms.parameters(), "@OpSwagger(parameters) on class %s method %s", c, m)
 				)
 			);
 			op.appendIf(nem, SWAGGER_responses,
 				merge(
-					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class {0} method {1}", c, m),
-					parseMap(ms.responses(), "@OpSwagger(responses) on class {0} method {1}", c, m)
+					parseMap(mb.findFirstString(mn + ".responses"), "Messages/responses on class %s method %s", c, m),
+					parseMap(ms.responses(), "@OpSwagger(responses) on class %s method %s", c, m)
 				)
 			);
 			op.appendIf(nem, SWAGGER_externalDocs,
 				merge(
 					op.getMap(SWAGGER_externalDocs),
-					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class {0} method {1}", c, m),
+					parseMap(mb.findFirstString(mn + ".externalDocs"), "Messages/externalDocs on class %s method %s", c, m),
 					toMap(ms.externalDocs())
 				)
 			);
@@ -688,7 +688,7 @@ public class BasicSwaggerProviderSession {
 			omSwagger.remove(SWAGGER_produces);
 
 		try {
-			var swaggerJson = Json5Serializer.DEFAULT_READABLE.toString(omSwagger);
+			var swaggerJson = Json5.DEFAULT_READABLE.write(omSwagger);
 			return jp.parse(swaggerJson, Swagger.class);
 		} catch (Exception e) {
 			throw new ServletException("Error detected in swagger.", e);
@@ -1076,7 +1076,7 @@ public class BasicSwaggerProviderSession {
 			return o2;
 		if (o instanceof MarshalledMap o2)
 			return new Json5Map(o2);
-		throw new SwaggerException(null, "Unexpected data type ''{0}''.  Expected Map or String.", cn(o));
+		throw new SwaggerException(null, "Unexpected data type '%s'.  Expected Map or String.", cn(o));
 	}
 
 	private MarshalledMap parseMap(String o, String location, Object...args) throws ParseException {

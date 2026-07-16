@@ -128,7 +128,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 					// Key is being overwritten with a different value, remove old value from tracking
 					values.remove(existingValue);
 				}
-				assertArg(! (values.contains(value) && ! value.equals(existingValue)), "Value ''{0}'' is already mapped to a different key in this BidiMap.", value);
+				assertArg(! (values.contains(value) && ! value.equals(existingValue)), "Value '%s' is already mapped to a different key in this BidiMap.", value);
 				values.add(value);
 			}
 			map.put(key, value);
@@ -304,7 +304,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 	@Override /* Map */
 	public V put(K key, V value) {
 		var existingKeyForValue = reverse.get(value);
-		assertArg(! (nn(existingKeyForValue) && ! existingKeyForValue.equals(key)), "Value ''{0}'' is already mapped to key ''{1}'' in this BidiMap.", value, existingKeyForValue);
+		assertArg(! (nn(existingKeyForValue) && ! existingKeyForValue.equals(key)), "Value '%s' is already mapped to key '%s' in this BidiMap.", value, existingKeyForValue);
 		var oldValue = forward.put(key, value);
 		if (nn(oldValue)) {
 			reverse.remove(oldValue);
@@ -330,7 +330,7 @@ public class BidiMap<K,V> implements Map<K,V> {
 			var key = entry.getKey();
 			var value = entry.getValue();
 			var existingKeyForValue = reverse.get(value);
-			assertArg(! (nn(existingKeyForValue) && ! existingKeyForValue.equals(key)), "Value ''{0}'' is already mapped to key ''{1}'' in this BidiMap.", value, existingKeyForValue);
+			assertArg(! (nn(existingKeyForValue) && ! existingKeyForValue.equals(key)), "Value '%s' is already mapped to key '%s' in this BidiMap.", value, existingKeyForValue);
 		}
 		// All checks passed, now perform the updates
 		for (var entry : m.entrySet()) {

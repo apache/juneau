@@ -130,7 +130,7 @@ class ProblemMapper_Test extends TestBase {
 		@Bean public ProblemMapper<NotFound> nfMapper() { return new B_CustomNotFoundMapper(); }
 		@RestGet("/order/{id}")
 		public String order(@org.apache.juneau.http.Path("id") int id) {
-			throw new NotFound("Order {0} missing", id);
+			throw new NotFound("Order %s missing", id);
 		}
 	}
 
@@ -158,7 +158,7 @@ class ProblemMapper_Test extends TestBase {
 	public static class C {
 		@RestGet("/order/{id}")
 		public String order(@org.apache.juneau.http.Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 
@@ -234,7 +234,7 @@ class ProblemMapper_Test extends TestBase {
 		@Bean public ProblemMapper<NotFound> abstain() { return new E_AlwaysAbstainMapper(); }
 		@RestGet("/order/{id}")
 		public String order(@org.apache.juneau.http.Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 
@@ -292,7 +292,7 @@ class ProblemMapper_Test extends TestBase {
 		@Bean public ProblemLocalizationStrategy loc() { return new F_TaggingLocalizationStrategy(); }
 		@RestGet("/order/{id}")
 		public String order(@org.apache.juneau.http.Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 
@@ -319,7 +319,7 @@ class ProblemMapper_Test extends TestBase {
 	public static class G {
 		@RestGet("/order/{id}")
 		public String order(@org.apache.juneau.http.Path("id") int id) {
-			throw new NotFound("Order {0} not found", id);
+			throw new NotFound("Order %s not found", id);
 		}
 	}
 

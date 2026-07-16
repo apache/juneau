@@ -471,6 +471,6 @@ public class BasicHttpResponse implements HttpResponse {
 		assertArgNotNull(ARG_response, response);
 		int expected = getStatusLine().getStatusCode();
 		int actual = response.getStatusLine().getStatusCode();
-		assertInteger(actual).setMsg("Unexpected status code.  Expected:[{0}], Actual:[{1}]", expected, actual).is(expected);
+		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);
 	}
 }

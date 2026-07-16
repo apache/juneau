@@ -32,7 +32,7 @@ import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
-import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.marshall.serializer.*;
 
@@ -259,7 +259,7 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 			var example = sType.getExample(this, jpSession());
 			if (nn(example)) {
 				try {
-					return Json5Parser.DEFAULT.parse(toJson(example), Object.class);
+					return Json5.to(toJson(example), Object.class);
 				} catch (ParseException e) {
 					throw new SerializeException(e);
 				}

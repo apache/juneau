@@ -696,7 +696,7 @@ public class BeanInstantiator<T> {
 	public Builder<T> type(Class<? extends T> value) {
 		assertArgNotNull(ARG_value, value);
 		beanSubType = info(value);
-		assertArg(beanType.isAssignableFrom(beanSubType), "type must be a subclass of beanType. beanType={0}, type={1}", cn(beanType), cn(beanSubType));
+		assertArg(beanType.isAssignableFrom(beanSubType), "type must be a subclass of beanType. beanType=%s, type=%s", cn(beanType), cn(beanSubType));
 		reset();
 		return this;
 	}
@@ -753,7 +753,7 @@ public class BeanInstantiator<T> {
 	public Builder<T> builder(Class<?> value) {
 		explicitBuilderType = info(assertArgNotNull(ARG_value, value));
 		builderType.set(explicitBuilderType);
-		assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type {0} for bean type {1}. Builder must have a build(), create(), or get() method that returns {1} (or a parent of {1}). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
+		assertArg(isValidBuilderType(explicitBuilderType), "Invalid builder type %1$s for bean type %2$s. Builder must have a build(), create(), or get() method that returns %2$s (or a parent of %2$s). The method may have @Inject annotation to allow injected parameters; otherwise, it must have no parameters.", cn(explicitBuilderType), cn(beanType));
 		builderTypes.get();  // Triggers validation on type hierarchy.
 		reset();
 		return this;
@@ -1780,7 +1780,7 @@ public class BeanInstantiator<T> {
 				// Builder method must return the exact beanSubType
 				if (!returnType.is(beanSubType.inner())) {
 					log("Builder method %s returns %s, but must return %s", method.getNameFull(), returnType.getName(), beanSubType.getName());
-					throw exex("Builder method {0} returns {1}, but must return {2}. Builder build methods must always return the exact bean subtype being created.", method.getNameFull(), returnType.getName(), beanSubType.getName());
+					throw exex("Builder method %s returns %s, but must return %s. Builder build methods must always return the exact bean subtype being created.", method.getNameFull(), returnType.getName(), beanSubType.getName());
 				}
 				bean = (T)beanType.cast(builtBean);
 
@@ -1830,7 +1830,7 @@ public class BeanInstantiator<T> {
 				}
 
 				log("Failed to create bean using builder");
-				throw exex("Could not instantiate class {0} using builder type {1}. Builder must have a build(), create(), or get() method that returns {0}. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : cn(builder2));
+				throw exex("Could not instantiate class %1$s using builder type %2$s. Builder must have a build(), create(), or get() method that returns %1$s. The method may have @Inject annotation to allow injected parameters.", beanSubType.getName(), builderTypeInfo != null ? builderTypeInfo.getName() : cn(builder2));
 			} else {
 				// Builder type is invalid and was auto-detected - fall through to factory methods/constructors
 				log("Builder detected but builder type is invalid. Builder type: %s. Falling back to factory methods/constructors.", cn(builder2));
@@ -1944,7 +1944,7 @@ public class BeanInstantiator<T> {
 				runPostCreateHooks(fallbackBean);
 				return fallbackBean;
 			}
-			throw exex("Could not instantiate class {0}: {1}.", beanSubType.getName(), "Class is an interface");
+			throw exex("Could not instantiate class %s: %s.", beanSubType.getName(), "Class is an interface");
 		}
 
 		if (beanSubType.isAbstract()) {
@@ -1955,7 +1955,7 @@ public class BeanInstantiator<T> {
 				runPostCreateHooks(fallbackBean);
 				return fallbackBean;
 			}
-			throw exex("Could not instantiate class {0}: {1}.", beanSubType.getName(), "Class is abstract");
+			throw exex("Could not instantiate class %s: %s.", beanSubType.getName(), "Class is abstract");
 		}
 
 		if (fallbackSupplier != null) {
@@ -1966,7 +1966,7 @@ public class BeanInstantiator<T> {
 		}
 
 		log("Failed to create bean: no methods/constructors found with matching parameters");
-		throw exex("Could not instantiate class {0}:  No methods/constructors found with matching parameters", beanSubType.getName());
+		throw exex("Could not instantiate class %s:  No methods/constructors found with matching parameters", beanSubType.getName());
 	}
 
 	/**
@@ -2010,7 +2010,7 @@ public class BeanInstantiator<T> {
 
 		// This should never happen if beanSubType validation is correct, but check anyway
 		if (result.isEmpty() || !result.get(result.size() - 1).is(beanType.inner())) {
-			throw iaex("beanType {0} was not found in the parent hierarchy of beanSubType {1}. This indicates a validation error.", beanType.getName(), beanSubType.getName());
+			throw iaex("beanType %s was not found in the parent hierarchy of beanSubType %s. This indicates a validation error.", beanType.getName(), beanSubType.getName());
 		}
 
 		return result;

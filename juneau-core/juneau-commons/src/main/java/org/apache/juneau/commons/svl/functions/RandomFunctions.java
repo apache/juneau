@@ -76,7 +76,7 @@ public final class RandomFunctions {
 			return String.valueOf(ThreadLocalRandom.current().nextInt(max));
 		}
 		public String invoke(int min, int max) {
-			if (min > max) throw iaex("randInt: min ({0}) must be <= max ({1})", min, max);
+			if (min > max) throw iaex("randInt: min (%s) must be <= max (%s)", min, max);
 			return String.valueOf(ThreadLocalRandom.current().nextLong(min, (long) max + 1));
 		}
 	}
@@ -85,7 +85,7 @@ public final class RandomFunctions {
 	public static class RandLong extends TypedFunction {
 		@Override public String name() { return "randLong"; }
 		public String invoke(long min, long max) {
-			if (min > max) throw iaex("randLong: min ({0}) must be <= max ({1})", min, max);
+			if (min > max) throw iaex("randLong: min (%s) must be <= max (%s)", min, max);
 			if (max == Long.MAX_VALUE)
 				return String.valueOf(ThreadLocalRandom.current().nextLong(min, max));
 			return String.valueOf(ThreadLocalRandom.current().nextLong(min, max + 1));

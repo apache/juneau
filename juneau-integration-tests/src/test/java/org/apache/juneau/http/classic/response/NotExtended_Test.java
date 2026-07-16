@@ -35,7 +35,7 @@ class NotExtended_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws NotExtended {
-			throw new NotExtended("foo {0}", "bar");
+			throw new NotExtended("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws NotExtended {
@@ -43,7 +43,7 @@ class NotExtended_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws NotExtended {
-			throw new NotExtended(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new NotExtended(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws NotExtended {

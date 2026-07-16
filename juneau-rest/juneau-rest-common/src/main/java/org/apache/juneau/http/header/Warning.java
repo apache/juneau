@@ -171,7 +171,7 @@ public class Warning extends HttpStringHeader {
 
 		private static String render(int code, String agent, String text, String date) {
 			if (code < 0 || code > 999)
-				throw iaex("warn-code must be in the range 0-999: {0}", code);
+				throw iaex("warn-code must be in the range 0-999: %s", code);
 			assertArgNotNull("agent", agent);
 			assertArgNotNull("text", text);
 			var a = agent.trim();

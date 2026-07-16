@@ -166,7 +166,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 						if (x instanceof Class<?> x2)
 							addClass(info(x2));
 						else
-							throw brex("Collection class ''{0}'' passed to BeanRegistry does not contain Class objects.", ci.getName());
+							throw brex("Collection class '%s' passed to BeanRegistry does not contain Class objects.", ci.getName());
 					});
 				} else if (ci.isAssignableTo(Map.class)) {
 					Map<?,?> m = BeanInstantiator.of(Map.class).type(ci).preferZeroArgConstructor().run();
@@ -178,7 +178,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 						else if (isArray(v))
 							val = getTypedClassMeta(v);
 						else
-							throw brex("Class ''{0}'' was passed to BeanRegistry but value of type ''{1}'' found in map is not a Type object.", ci.getName(), cn(v));
+							throw brex("Class '%s' was passed to BeanRegistry but value of type '%s' found in map is not a Type object.", ci.getName(), cn(v));
 						addToMap(typeName, val);
 					});
 				} else {
@@ -188,7 +188,7 @@ public class BeanRegistry implements BeanRegistryLookup {
 						.map(x -> x.inner().typeName())
 						.filter(Shorts::ine)
 						.findFirst()
-						.orElseThrow(() -> brex("Class ''{0}'' was passed to BeanRegistry but it doesn't have a @Marshalled(typeName) annotation defined.", ci.getName()));
+						.orElseThrow(() -> brex("Class '%s' was passed to BeanRegistry but it doesn't have a @Marshalled(typeName) annotation defined.", ci.getName()));
 					// @formatter:on
 					addToMap(typeName, bc.getClassMeta(ci.inner()));
 				}

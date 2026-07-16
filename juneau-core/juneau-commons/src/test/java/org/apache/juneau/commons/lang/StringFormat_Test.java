@@ -16,26 +16,31 @@
  */
 package org.apache.juneau.commons.lang;
 
-import static java.util.stream.Collectors.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.*;
-import java.text.*;
 import java.util.*;
-import java.util.stream.*;
 
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.function.*;
 import org.junit.jupiter.api.*;
 
+/**
+ * Tests for the printf-only {@link StringFormat} engine.
+ *
+ * <p>
+ * MessageFormat-grammar behavior is no longer owned by this engine; it lives behind
+ * {@code Shorts.mf(...)}/{@code Shorts.mfs(...)} / {@code StringUtils.mformat(...)} (backed by
+ * {@link java.text.MessageFormat}) and is exercised in {@code Shorts_Test}.
+ */
 @SuppressWarnings({
 	"java:S5961" // High assertion count acceptable in comprehensive test
 })
 class StringFormat_Test extends TestBase {
 
 	private static StringFormat fs(String pattern) {
-		return StringFormat.of(pattern);
+		return StringFormat.ofPrintf(pattern);
 	}
 
 	private static String stringify(ThrowingSupplier<String> supplier) {
@@ -82,100 +87,6 @@ class StringFormat_Test extends TestBase {
 			System.out.println("toPattern(): " + toPattern);
 			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
 		}
-	}
-
-	private static void assertMessageFormat(String pattern, Locale locale, Object... args) {
-		var expected = stringify(()->new MessageFormat(pattern, locale).format(args));
-		var actual = "";
-		var fmt = (StringFormat)null;
-		try {
-			var fmt2 = fs(pattern);
-			fmt = fmt2;
-			actual = stringify(()->fmt2.format(locale, args));
-		} catch (Throwable t) {
-			actual = cns(t) + ": " + t.getLocalizedMessage();
-		}
-		if (!expected.equals(actual)) {
-			System.out.println("Pattern: " + pattern);
-			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
-			System.out.println("toPattern(): " + toPattern);
-			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
-		}
-	}
-
-	private static void assertMessageFormat(String pattern, Object... args) {
-		var expected = stringify(()->MessageFormat.format(pattern, args));
-		var actual = "";
-		var fmt = (StringFormat)null;
-		try {
-			var fmt2 = fs(pattern);
-			fmt = fmt2;
-			actual = stringify(()->fmt2.format(args));
-		} catch (Throwable t) {
-			actual = cns(t) + ": " + t.getLocalizedMessage();
-		}
-		if (!expected.equals(actual)) {
-			System.out.println("Pattern: " + pattern);
-			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
-			System.out.println("toPattern(): " + toPattern);
-			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
-		}
-	}
-
-	private static void assertMixedFormat(String expected, String pattern, Object... args) {
-		var actual = "";
-		var fmt = (StringFormat)null;
-		try {
-			var fmt2 = fs(pattern);
-			fmt = fmt2;
-			actual = stringify(()->fmt2.format(args));
-		} catch (Throwable t) {
-			actual = cns(t) + ": " + t.getLocalizedMessage();
-		}
-		if (!expected.equals(actual)) {
-			System.out.println("Pattern: " + pattern);
-			var toPattern = o(fmt).map(x -> x.toPattern()).orElse(null);
-			System.out.println("toPattern(): " + toPattern);
-			fail("Pattern: " + pattern + ", toPattern(): " + toPattern + ", expected: <" + expected + "> but was: <" + actual + ">");
-		}
-	}
-
-	//====================================================================================================
-	// MessageFormat tests
-	//====================================================================================================
-	@Test void a01_messageFormat() {
-		assertMessageFormat("Hello {0}", "John");
-		assertMessageFormat("Price: {0,number,currency}", 19.99);
-		assertMessageFormat("{0} has {1} items and {2} friends", "John", 5, 3);
-		assertMessageFormat("Hello {0} world", "John");
-		assertMessageFormat("Count: {0,number,integer}", 1234);
-		assertMessageFormat("Date: {0,date,short}", new Date(0));
-		assertMessageFormat("Time: {0,time,short}", new Date(0));
-		// Simple {0} with Date - uses DATE_FORMAT_CACHE for formatting
-		assertMessageFormat("Date: {0}", new Date(0));
-		assertMessageFormat("Value: {0}", (String)null);
-		assertMessageFormat("Name: {0}", "");
-		assertMessageFormat("Text: {0}\nNewline\tTab", "Hello");
-		assertMessageFormat("Unicode: {0} 中文", "Test");
-		assertMessageFormat("{0}{1}", "A", "B");
-		assertMessageFormat("{0} and {0} again", "Hello");
-		assertMessageFormat("Price: {0,number,currency}, Count: {1,number,integer}, Date: {2,date,short}", 19.99, 42, new Date(0L));
-		assertMessageFormat("Price: {0,number,currency}", Locale.US, 19.99);
-		assertMessageFormat("Price: {0,number,currency}", Locale.FRANCE, 19.99);
-		assertMessageFormat("a '{0}' b");
-		assertMessageFormat("a ''{0}'' b", 1);
-		assertMessageFormat("'{0}'");
-		assertMessageFormat("''{0}''", 1);
-
-		// Errors
-		assertMessageFormat("Set: {{0}}", 50);
-		assertMessageFormat("Set: {{0}} and {{1}}", "A", "B");
-		assertMessageFormat("Hello {0}");
-		assertMessageFormat("{0} has {1} items and {2} friends", "John", 5);
-		assertMessageFormat("Hello {");
-		assertMessageFormat("Hello {0");
-		assertMessageFormat("Hello '");
-		assertMessageFormat("Hello 'x");
 	}
 
 	//====================================================================================================
@@ -272,45 +183,18 @@ class StringFormat_Test extends TestBase {
 	}
 
 	//====================================================================================================
-	// Mixed format tests
+	// Printf value-adds beyond raw String.format
 	//====================================================================================================
-	@Test void a03_mixedFormat() {
-		assertMixedFormat("Hello John, you have 5 items", "Hello {0}, you have %d items", "John", 5);
-		assertMixedFormat("User Alice has admin and 10 items", "User {0} has %s and {2} items", "Alice", "admin", 10);
-		assertMixedFormat("Alice loves Bob, and Alice also loves Charlie", "%1$s loves %2$s, and {0} also loves %3$s", "Alice", "Bob", "Charlie");
-		assertMixedFormat("Alice has 5 items, Bob has 3 items, total: 8", "{0} has %d items, {2} has %d items, total: %d", "Alice", 5, "Bob", 3, 8);
-		assertMixedFormat("Alice Bob Charlie", "{0} %2$s {2}", "Alice", "Bob", "Charlie");
-		assertMixedFormat("Hello John, you have 5 items", "Hello {0}, you have %d items", "John", 5);
-		assertMixedFormat("A B B D C", "{0} %s {1} %s {2}", "A", "B", "C", "D");
-		assertMixedFormat("ABB", "{0}%s{1}", "A", "B", "C");
-		assertMixedFormat("Hello and Hello are the same", "{0} and %1$s are the same", "Hello");
+	@Test void a04_printfValueAdds() {
+		// { and ' are literal text on the printf path (java.util.Formatter semantics).
+		assertEquals("Hello {0} world", fs("Hello {0} world").format("ignored-extra-arg"));
+		assertEquals("a '{0}' b", fs("a '{0}' b").format("ignored"));
 
-		// Errors
-		assertMixedFormat("MissingFormatArgumentException: Format specifier '%s'", "Hello {0} and %s", "John");
-		assertMixedFormat("John has 5 items and {2} friends", "{0} has %d items and {2} friends", "John", 5);
-		assertMixedFormat("MissingFormatArgumentException: Format specifier '%s'", "%1$s loves %2$s, and {0} also loves %3$s", "Alice", "Bob");
-	}
+		// BigDecimal with %d - String.format throws exception, but our optimized code handles it via longValue().
+		assertEquals("Number: 42", fs("Number: %d").format(new BigDecimal("42")));
 
-	//====================================================================================================
-	// Supported but deviates from MessageFormat/String.format
-	//====================================================================================================
-	@Test void a04_supportedButDeviatesFromMessageFormat() {
-		// {} is not supported by MessageFormat, only by StringFormat as an extension
-		assertMixedFormat("Hello John world", "Hello {} world", "John");
-		assertMixedFormat("A B C", "{} {} {}", "A", "B", "C");
-		// BigDecimal with %d - String.format throws exception, but our optimized code handles it
-		assertMixedFormat("Number: 42", "Number: %d", new BigDecimal("42"));
-		// MessageFormat throws NullPointerException when locale is null, but StringFormat handles it
-		// So we test StringFormat's behavior directly instead of comparing with MessageFormat
-		// Use Locale.US to get dollar sign for currency formatting
-		// Note: Java 25 changed currency format from "$19.99" to "USD 19.99", so we check for both
-		var fmt = fs("Price: {0,number,currency}");
-		var result = stringify(()->fmt.format(Locale.US, 19.99));
-		assertTrue(result.contains("19.99"), "Result should contain '19.99', but was: " + result);
-		assertTrue(result.contains("Price: "), "Result should contain 'Price: ', but was: " + result);
-		// Accept either old format ($19.99) or new format (USD 19.99) for Java 25 compatibility
-		assertTrue(result.contains("$") || result.contains("USD"),
-			"Result should contain '$' or 'USD' for currency, but was: " + result);
+		// Lenient null handling for simple string conversions (renders "null" rather than throwing).
+		assertEquals("Value: null", fs("Value: %s").format((Object)null));
 	}
 
 	//====================================================================================================
@@ -323,36 +207,36 @@ class StringFormat_Test extends TestBase {
 
 	@Test void a06_caching() {
 		// Should return the same instance due to caching
-		assertSame(fs("Hello {0}"), fs("Hello {0}"));
+		assertSame(fs("Hello %s"), fs("Hello %s"));
 
 		// Different patterns should return different instances
-		assertNotSame(fs("Hello {0}"), fs("Hello %s"));
+		assertNotSame(fs("Hello %s"), fs("Hello %d"));
 
 		// Constructor doesn't use cache, so instances should be different
-		var fmt1 = new StringFormat("Hello {0}");
-		var fmt2 = new StringFormat("Hello {0}");
+		var fmt1 = new StringFormat("Hello %s");
+		var fmt2 = new StringFormat("Hello %s");
 		assertNotSame(fmt1, fmt2);
 		assertEquals(fmt1, fmt2); // But they should be equal
 	}
 
 	@Test void a07_equalsAndHashCode() {
-		var fmt1 = StringFormat.of("Hello {0}");
-		var fmt2 = StringFormat.of("Hello {0}");
-		var fmt3 = StringFormat.of("Hello %s");
+		var fmt1 = StringFormat.ofPrintf("Hello %s");
+		var fmt2 = StringFormat.ofPrintf("Hello %s");
+		var fmt3 = StringFormat.ofPrintf("Hello %d");
 
-		// Test equals - covers line 623
+		// Test equals
 		assertEquals(fmt1, fmt2);
 		assertNotEquals(fmt1, fmt3);
 
-		// Test equals with null - covers line 623 (instanceof check fails)
+		// Test equals with null (instanceof check fails)
 		assertNotEquals(null, fmt1);
 
-		// Test equals with different type - covers line 623 (instanceof check fails)
-		assertNotEquals("Hello {0}", fmt1);
+		// Test equals with different type (instanceof check fails)
+		assertNotEquals("Hello %s", fmt1);
 		assertNotEquals(fmt1, new Object());
 
-		// Test equals with different pattern - covers line 623 (pattern comparison)
-		var fmt4 = StringFormat.of("Different pattern");
+		// Test equals with different pattern
+		var fmt4 = StringFormat.ofPrintf("Different pattern");
 		assertNotEquals(fmt1, fmt4);
 
 		// Test hashCode
@@ -360,35 +244,24 @@ class StringFormat_Test extends TestBase {
 	}
 
 	@Test void a08_toString() {
-		assertEquals("Hello {0}", fs("Hello {0}").toString());
+		assertEquals("Hello %s", fs("Hello %s").toString());
 	}
 
 	@Test void a09_toPattern() {
-		// Literal tokens
+		// Literal tokens ({ and ' are literal on the printf path)
 		assertEquals("[L:Hello ]", fs("Hello ").toPattern());
-		assertEquals("[L:a ][L:{0}][L: b]", fs("a '{0}' b").toPattern());  // Single quotes don't escape MessageFormat
+		assertEquals("[L:a '{0}' b]", fs("a '{0}' b").toPattern());
+		assertEquals("[L:Hello {0}]", fs("Hello {0}").toPattern());
 
-		// MessageFormat tokens - simple (content == null) - Line 228: content == null branch
-		assertEquals("[L:Hello ][M:s0]", fs("Hello {0}").toPattern());
-		assertEquals("[L:Hello ][M:s0][L: ][M:s1]", fs("Hello {0} {1}").toPattern());
-
-		// MessageFormat tokens - complex (content != null) - Line 228: content != null branch
-		assertEquals("[L:Price: ][M:o0:{0,number,currency}]", fs("Price: {0,number,currency}").toPattern());
-		assertEquals("[L:Count: ][M:o0:{0,number,integer}]", fs("Count: {0,number,integer}").toPattern());
-		assertEquals("[L:Date: ][M:o0:{0,date,short}]", fs("Date: {0,date,short}").toPattern());
-
-		// StringFormat tokens - Line 406: StringFormatToken.toString()
+		// StringFormat (printf) tokens
 		assertEquals("[L:Hello ][S:s0:%s]", fs("Hello %s").toPattern());  // Simple format: 's'
 		assertEquals("[L:Number: ][S:d0:%d]", fs("Number: %d").toPattern());  // Simple format: 'd'
 		assertEquals("[L:Hex: ][S:x0:%x]", fs("Hex: %x").toPattern());  // Simple format: 'x'
 		assertEquals("[L:Float: ][S:z0:%.2f]", fs("Float: %.2f").toPattern());  // Complex format: 'z' (other)
 		assertEquals("[L:ID: ][S:z0:%05d]", fs("ID: %05d").toPattern());  // Complex format: 'z' (other)
+		assertEquals("[L:Hello ][S:s0:%s][L: ][S:s1:%s]", fs("Hello %s %s").toPattern());
 
-		// Mixed formats
-		assertEquals("[L:Hello ][M:s0][L:, you have ][S:d1:%d][L: items]", fs("Hello {0}, you have %d items").toPattern());
-		assertEquals("[L:Price: ][M:o0:{0,number,currency}][L: and ][S:s1:%s]", fs("Price: {0,number,currency} and %s").toPattern());
-
-		// Time conversions (2-character) - Line 529: 't' or 'T' handling
+		// Time conversions (2-character) - 't' or 'T' handling
 		assertEquals("[L:Month: ][S:z0:%tm]", fs("Month: %tm").toPattern());  // %tm is 2-character time conversion
 		assertEquals("[L:Year: ][S:z0:%tY]", fs("Year: %tY").toPattern());  // %tY is 2-character time conversion
 		assertEquals("[L:Date: ][S:z0:%TD]", fs("Date: %TD").toPattern());  // %TD is 2-character time conversion
@@ -400,91 +273,13 @@ class StringFormat_Test extends TestBase {
 	}
 
 	@Test void a10_veryLongPattern() {
-		var pattern = "Start: " + IntStream.range(0, 10).mapToObj(i -> "{" + i + "}").collect(joining(" ")) + " ";
-		var args = IntStream.range(0, 10).boxed().toArray();
-		assertMessageFormat(pattern, args);
-	}
-
-	@Test void a11_parseIndexErrors() {
-		assertThrows(IllegalArgumentException.class, () -> fs("Hello {abc}"));
-	}
-
-	//====================================================================================================
-	// Test coverage for line 162 branches in MessageFormatToken.append()
-	//====================================================================================================
-	@Test void a14_messageFormatTokenBranches() {
-		// Test args == null branch - covers line 162 (args == null)
-		var fmt1 = StringFormat.of("Hello {0}");
-		var result1 = fmt1.format((Object[])null);
-		assertEquals("Hello {0}", result1);
-
-		// Test with complex format and null args
-		var fmt2 = StringFormat.of("Price: {0,number,currency}");
-		var result2 = fmt2.format((Object[])null);
-		assertEquals("Price: {0,number,currency}", result2);
-
-		// Test locale == null branch - covers line 167 (locale == null ? Locale.getDefault() : locale)
-		// When locale is null, should use Locale.getDefault()
-		var fmt3 = StringFormat.of("Hello {0}");
-		var result3 = fmt3.format((Locale)null, "World");
-		// Should format using default locale
-		assertEquals("Hello World", result3);
-
-		// Test locale != null branch - covers line 167 (else branch)
-		// When locale is provided, should use that locale
-		var fmt4 = StringFormat.of("Price: {0,number,currency}");
-		var result4 = fmt4.format(Locale.US, 19.99);
-		// Should format using US locale (dollar sign)
-		assertTrue(result4.contains("19.99") || result4.contains("$19.99"));
-
-		var result5 = fmt4.format(Locale.FRANCE, 19.99);
-		// Should format using France locale (different currency symbol)
-		assertTrue(result5.contains("19.99") || result5.contains("19,99"));
-
-		// Note on other branches:
-		// - index >= args.length: This branch exists but testing it is complex because MessageFormat
-		//   behavior with missing arguments may vary. The existing test a01_messageFormat() already
-		//   tests patterns with missing args (line 188: assertMessageFormat("Hello {0}") with no args).
-		// - index < 0: parseIndexMF can parse negative numbers (it uses Integer.parseInt), so technically
-		//   a pattern like "{-1}" could create index = -1. However, MessageFormat syntax doesn't support
-		//   negative indices, so this is a defensive check. The branch exists but is unlikely to be
-		//   reached through normal MessageFormat patterns. Testing it would require either: (1) a pattern
-		//   that somehow parses to a negative index, or (2) directly constructing a MessageFormatToken
-		//   with a negative index via reflection. This may be marked as HTT (Hard To Test) if it cannot
-		//   be reached through the public API.
-	}
-
-	//====================================================================================================
-	// Test coverage for line 217 branches in StringFormatToken.append()
-	//====================================================================================================
-	@Test void a15_stringFormatTokenBranches() {
-		// Test args == null branch - covers line 217 (args == null)
-		var fmt1 = StringFormat.of("Hello %s");
-		assertThrows(MissingFormatArgumentException.class, () -> fmt1.format((Object[])null));
-
-		// Test with complex format and null args
-		var fmt2 = StringFormat.of("Price: %.2f");
-		assertThrows(MissingFormatArgumentException.class, () -> fmt2.format((Object[])null));
-
-		// Test with explicit index format and null args
-		var fmt3 = StringFormat.of("First: %1$s, Second: %2$s");
-		assertThrows(MissingFormatArgumentException.class, () -> fmt3.format((Object[])null));
-
-		// Note on other branches:
-		// - index >= args.length: This branch exists but testing it is complex because the index
-		//   calculation depends on how sequential vs explicit indices are handled. The existing
-		//   test a02_stringFormat() already tests patterns with missing args (line 282-283:
-		//   assertStringFormat("Hello %s") and assertStringFormat("Hello %s and %s", "John")).
-		//   These tests verify that MissingFormatArgumentException is thrown, which exercises
-		//   the index >= args.length branch.
-		// - index < 0: parseIndexSF can parse negative numbers (it uses Integer.parseInt), and the
-		//   index is calculated as parseIndexSF(...) - 1. So if parseIndexSF returns 0, index = -1.
-		//   However, printf-style format specifiers use 1-based indexing (e.g., %1$s), so parseIndexSF
-		//   would return 1, making index = 0. A negative index would require parseIndexSF to return 0,
-		//   which would mean a format specifier like %0$s. While this is technically possible to parse,
-		//   it's invalid printf syntax (indices must be >= 1). The branch exists as a defensive check
-		//   but is unlikely to be reached through normal printf patterns. This may be marked as HTT
-		//   (Hard To Test) if it cannot be reached through the public API.
+		var sb = new StringBuilder("Start:");
+		var args = new Object[10];
+		for (var i = 0; i < 10; i++) {
+			sb.append(" %s");
+			args[i] = i;
+		}
+		assertStringFormat(sb.toString(), args);
 	}
 
 	@Test void a12_localeHandling() {
@@ -493,37 +288,48 @@ class StringFormat_Test extends TestBase {
 		assertStringFormat("Number: %d", (Locale)null, 42);
 		assertStringFormat("Float: %.2f", (Locale)null, 3.14);  // Use .2f for consistent formatting
 
-		// Test with default locale (covers locale.equals(Locale.getDefault()) on line 260)
+		// Test with default locale (covers locale.equals(Locale.getDefault()))
 		assertStringFormat("Hello %s", Locale.getDefault(), "John");
 		assertStringFormat("Number: %d", Locale.getDefault(), 42);
 		assertStringFormat("Float: %.2f", Locale.getDefault(), 3.14);  // Use .2f for consistent formatting
 
-		// Test with non-default locale (covers else branch on line 259 and false case on line 260)
+		// Test with non-default locale (covers else branch and false case)
 		assertStringFormat("Hello %s", Locale.FRANCE, "John");
 		assertStringFormat("Number: %d", Locale.GERMANY, 42);
 		assertStringFormat("Float: %.2f", Locale.JAPAN, 3.14);  // Use .2f for consistent formatting
 	}
 
 	//====================================================================================================
-	// format(String, Locale, Object...) - covers lines 413-415
+	// formatPrintf(String, Locale, Object...)
 	//====================================================================================================
-	@Test void a13_format_withLocale() {
-		// Test with empty args - covers lines 413-414 (args.length == 0, return pattern)
-		String result1 = StringFormat.format("Hello", Locale.US);
-		assertEquals("Hello", result1);
+	@Test void a13_formatPrintf_withLocale() {
+		// Test with empty args (args.length == 0, return pattern)
+		assertEquals("Hello", StringFormat.formatPrintf("Hello", Locale.US));
+		assertEquals("Test pattern", StringFormat.formatPrintf("Test pattern", Locale.FRANCE));
 
-		String result2 = StringFormat.format("Test pattern", Locale.FRANCE);
-		assertEquals("Test pattern", result2);
+		// Test with args
+		assertEquals("Hello World", StringFormat.formatPrintf("Hello %s", Locale.US, "World"));
 
-		// Test with args - covers line 415 (calls of(pattern).format(locale, args))
-		String result3 = StringFormat.format("Hello %s", Locale.US, "World");
-		assertEquals("Hello World", result3);
+		// Test with null locale and empty args
+		assertEquals("Test", StringFormat.formatPrintf("Test", (Locale)null));
 
-		String result4 = StringFormat.format("Price: {0,number,currency}", Locale.US, 19.99);
-		assertTrue(result4.contains("19.99") || result4.contains("$19.99"));
+		// Default-locale convenience entry point
+		assertEquals("Hello World", StringFormat.formatPrintf("Hello %s", "World"));
+		assertEquals("NoArgs", StringFormat.formatPrintf("NoArgs"));
+	}
 
-		// Test with null locale and empty args - covers line 413-414
-		String result5 = StringFormat.format("Test", (Locale)null);
-		assertEquals("Test", result5);
+	//====================================================================================================
+	// Missing-argument behavior in StringFormatToken.append()
+	//====================================================================================================
+	@Test void a15_stringFormatTokenBranches() {
+		// Missing args -> MissingFormatArgumentException (matches String.format)
+		var fmt1 = StringFormat.ofPrintf("Hello %s");
+		assertThrows(MissingFormatArgumentException.class, () -> fmt1.format((Object[])null));
+
+		var fmt2 = StringFormat.ofPrintf("Price: %.2f");
+		assertThrows(MissingFormatArgumentException.class, () -> fmt2.format((Object[])null));
+
+		var fmt3 = StringFormat.ofPrintf("First: %1$s, Second: %2$s");
+		assertThrows(MissingFormatArgumentException.class, () -> fmt3.format((Object[])null));
 	}
 }

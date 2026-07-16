@@ -49,7 +49,7 @@ class ArgException_Test extends TestBase {
 	}
 
 	@Test void a02_withArgs() {
-		var x = new ArgException(testParameterInfo, "Test {0} {1}", "foo", "bar");
+		var x = new ArgException(testParameterInfo, "Test %s %s", "foo", "bar");
 		assertTrue(x.getMessage().contains("Test foo bar"));
 		assertTrue(x.getMessage().contains("parameter 0"));
 	}

@@ -650,7 +650,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 	private void flattenListValues(Object obj, String path, int partIndex, boolean firstInRow, int currentRep, int listDepth, int maxDef, List<FlattenedEntry> out, Set<Object> seen) throws SerializeException {
 		if (obj != null && seen.contains(obj)) {
 			if (ctx.cycleHandling == ParquetCycleHandling.THROW)
-				throw new SerializeException("Cyclic reference at path ''{0}''. Set cycleHandling(NULL) to serialize as null.", path);
+				throw new SerializeException("Cyclic reference at path '%s'. Set cycleHandling(NULL) to serialize as null.", path);
 			out.add(new FlattenedEntry(null, Math.max(0, maxDef - 1), currentRep));
 			return;
 		}
@@ -773,7 +773,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 
 	private Object handleCycle(String path) throws SerializeException {
 		if (ctx.cycleHandling == ParquetCycleHandling.THROW)
-			throw new SerializeException("Cyclic reference at path ''{0}''. Set cycleHandling(NULL) to serialize as null.", path);
+			throw new SerializeException("Cyclic reference at path '%s'. Set cycleHandling(NULL) to serialize as null.", path);
 		return null;
 	}
 
@@ -824,7 +824,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 				w.writeFixedLenByteArray(toFixedLenByteArray(v));
 				break;
 			default:
-				throw new SerializeException("Unsupported Parquet physical type: {0}", col.type);
+				throw new SerializeException("Unsupported Parquet physical type: %s", col.type);
 		}
 	}
 
@@ -928,7 +928,7 @@ public class ParquetSerializerSession extends OutputStreamSerializerSession impl
 		try {
 			return Instant.parse(String.valueOf(v));
 		} catch (@SuppressWarnings("unused") Exception e) {
-			throw new SerializeException("Cannot convert value of type {0} to a TIMESTAMP", v.getClass().getName());
+			throw new SerializeException("Cannot convert value of type %s to a TIMESTAMP", v.getClass().getName());
 		}
 	}
 

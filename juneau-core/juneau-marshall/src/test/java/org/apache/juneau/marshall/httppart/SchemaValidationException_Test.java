@@ -31,7 +31,7 @@ class SchemaValidationException_Test extends TestBase {
 	}
 
 	@Test void a02_withArgs() {
-		var x = new SchemaValidationException("Test {0} {1}", "foo", "bar");
+		var x = new SchemaValidationException("Test %s %s", "foo", "bar");
 		assertTrue(x.getMessage().contains("Test foo bar"));
 	}
 

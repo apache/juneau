@@ -224,7 +224,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	private String getElementAsString(XmlReader r) {
 		int t = r.getEventType();
 		if (t > 2)
-			throw rex("Invalid event type on stream reader for elementToString() method: ''{0}''", XmlUtils.toReadableEvent(r));
+			throw rex("Invalid event type on stream reader for elementToString() method: '%s'", XmlUtils.toReadableEvent(r));
 		rsb.setLength(0);
 		rsb.append("<").append(t == 1 ? "" : "/").append(r.getLocalName());
 		if (t == 1)
@@ -334,7 +334,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				} while (depth > 0);
 				break;
 			} else {
-				throw new ParseException(this, "Unexpected event type ''{0}''", eventType);
+				throw new ParseException(this, "Unexpected event type '%s'", eventType);
 			}
 			eventType = r.next();
 		}
@@ -487,13 +487,13 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 							sb = getStringBuilder();
 						sb.append(getElementAsString(r));
 					} else
-						throw new ParseException("End element found where one was not expected.  {0}", XmlUtils.toReadableEvent(r));
+						throw new ParseException("End element found where one was not expected.  %s", XmlUtils.toReadableEvent(r));
 				}
 				depth--;
 			} else if (event == COMMENT) {
 				// Ignore comments.
 			} else {
-				throw new ParseException("Unexpected event type: {0}", XmlUtils.toReadableEvent(r));
+				throw new ParseException("Unexpected event type: %s", XmlUtils.toReadableEvent(r));
 			}
 		} while (depth >= 0);
 
@@ -1009,7 +1009,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 				m = newGenericMap().append(wrapperAttr, m);
 			o = newBeanMap(outer, sType.inner()).load(m).getBean();
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}'', property: ''{2}''", cn(sType), sType.getNotABeanReason(),
+			throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s', property: '%s'", cn(sType), sType.getNotABeanReason(),
 				pMeta == null ? null : pMeta.getName());
 		}
 

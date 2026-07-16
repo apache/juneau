@@ -221,7 +221,7 @@ public class ProtobufReader {
 		while (off < len) {
 			var r = is.read(b, off, len - off);
 			if (r == -1)
-				throw ioex("Expected to read {0} bytes but stream ended at {1}", len, off);
+				throw ioex("Expected to read %s bytes but stream ended at %s", len, off);
 			off += r;
 		}
 		return b;
@@ -249,7 +249,7 @@ public class ProtobufReader {
 			case I64 -> skip(8);
 			case I32 -> skip(4);
 			case LEN -> skip((int)readVarint());
-			default -> throw ioex("Cannot skip unsupported protobuf wire type: {0}", wireType);
+			default -> throw ioex("Cannot skip unsupported protobuf wire type: %s", wireType);
 		}
 	}
 

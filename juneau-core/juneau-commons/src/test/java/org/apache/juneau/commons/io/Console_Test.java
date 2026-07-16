@@ -77,21 +77,21 @@ class Console_Test extends TestBase {
 
 	@Test
 	void a02_out_withSingleArgument() {
-		Console.out("test{0}", 123);
+		Console.out("test%s", 123);
 		var output = outCapture.toString();
 		assertTrue(output.contains("test123"), output);
 	}
 
 	@Test
 	void a03_out_withMultipleArguments() {
-		Console.out("test{0} {1} {2}", "a", "b", "c");
+		Console.out("test%s %s %s", "a", "b", "c");
 		var output = outCapture.toString();
 		assertTrue(output.contains("testa b c"), output);
 	}
 
 	@Test
 	void a04_out_withNullArgument() {
-		Console.out("test{0}", (Object)null);
+		Console.out("test%s", (Object)null);
 		var output = outCapture.toString();
 		assertTrue(output.contains("testnull"), output);
 	}
@@ -111,35 +111,29 @@ class Console_Test extends TestBase {
 	}
 
 	@Test
-	void a07_out_withMessageFormatPattern() {
-		Console.out("Value: {0,number}", 12345);
+	void a07_out_withNumericArgument() {
+		Console.out("Value: %d", 12345);
 		var output = outCapture.toString();
-		assertTrue(output.contains("Value:"), output);
-		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.contains("Value:") && output.chars().anyMatch(Character::isDigit),
-			"Output should contain 'Value:' and at least one digit. Actual: " + output);
+		assertTrue(output.contains("Value: 12345"), output);
 	}
 
 	@Test
 	void a08_out_withSpecialCharacters() {
-		Console.out("test{0}", "a\nb\tc");
+		Console.out("test%s", "a\nb\tc");
 		var output = outCapture.toString();
 		assertTrue(output.contains("testa"), output);
 	}
 
 	@Test
-	void a09_out_withNumberFormatting() {
-		Console.out("Number: {0,number,integer}", 1234);
+	void a09_out_withIntegerFormatting() {
+		Console.out("Number: %d", 1234);
 		var output = outCapture.toString();
-		assertTrue(output.contains("Number:"), output);
-		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.contains("Number:") && output.chars().anyMatch(Character::isDigit),
-			"Output should contain 'Number:' and at least one digit. Actual: " + output);
+		assertTrue(output.contains("Number: 1234"), output);
 	}
 
 	@Test
-	void a10_out_withDateFormatting() {
-		Console.out("Date: {0,date}", new java.util.Date(0));
+	void a10_out_withDateArgument() {
+		Console.out("Date: %s", new java.util.Date(0));
 		var output = outCapture.toString();
 		assertTrue(output.contains("Date:"), output);
 	}
@@ -165,21 +159,21 @@ class Console_Test extends TestBase {
 
 	@Test
 	void b02_err_withSingleArgument() {
-		Console.err("test{0}", 123);
+		Console.err("test%s", 123);
 		var output = errCapture.toString();
 		assertTrue(output.contains("test123"), output);
 	}
 
 	@Test
 	void b03_err_withMultipleArguments() {
-		Console.err("test{0} {1} {2}", "a", "b", "c");
+		Console.err("test%s %s %s", "a", "b", "c");
 		var output = errCapture.toString();
 		assertTrue(output.contains("testa b c"), output);
 	}
 
 	@Test
 	void b04_err_withNullArgument() {
-		Console.err("test{0}", (Object)null);
+		Console.err("test%s", (Object)null);
 		var output = errCapture.toString();
 		assertTrue(output.contains("testnull"), output);
 	}
@@ -199,35 +193,29 @@ class Console_Test extends TestBase {
 	}
 
 	@Test
-	void b07_err_withMessageFormatPattern() {
-		Console.err("Error: {0,number}", 12345);
+	void b07_err_withNumericArgument() {
+		Console.err("Error: %d", 12345);
 		var output = errCapture.toString();
-		assertTrue(output.contains("Error:"), output);
-		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.contains("Error:") && output.chars().anyMatch(Character::isDigit),
-			"Output should contain 'Error:' and at least one digit. Actual: " + output);
+		assertTrue(output.contains("Error: 12345"), output);
 	}
 
 	@Test
 	void b08_err_withSpecialCharacters() {
-		Console.err("test{0}", "a\nb\tc");
+		Console.err("test%s", "a\nb\tc");
 		var output = errCapture.toString();
 		assertTrue(output.contains("testa"), output);
 	}
 
 	@Test
-	void b09_err_withNumberFormatting() {
-		Console.err("Number: {0,number,integer}", 1234);
+	void b09_err_withIntegerFormatting() {
+		Console.err("Number: %d", 1234);
 		var output = errCapture.toString();
-		assertTrue(output.contains("Number:"), output);
-		// MessageFormat may add locale-specific formatting (e.g., commas), so check for digits
-		assertTrue(output.contains("Number:") && output.chars().anyMatch(Character::isDigit),
-			"Output should contain 'Number:' and at least one digit. Actual: " + output);
+		assertTrue(output.contains("Number: 1234"), output);
 	}
 
 	@Test
-	void b10_err_withDateFormatting() {
-		Console.err("Date: {0,date}", new java.util.Date(0));
+	void b10_err_withDateArgument() {
+		Console.err("Date: %s", new java.util.Date(0));
 		var output = errCapture.toString();
 		assertTrue(output.contains("Date:"), output);
 	}
@@ -271,11 +259,12 @@ class Console_Test extends TestBase {
 
 	@Test
 	void c03_complexFormatting() {
-		Console.out("User {0} has {1} items worth {2,number,currency}", "John", 5, 99.99);
+		Console.out("User %s has %d items worth $%.2f", "John", 5, 99.99);
 		var output = outCapture.toString();
 		assertTrue(output.contains("User"), output);
 		assertTrue(output.contains("John"), output);
 		assertTrue(output.contains("5"), output);
+		assertTrue(output.contains("99.99"), output);
 	}
 }
 

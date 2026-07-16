@@ -138,7 +138,7 @@ public abstract class ConfigStore extends Context implements Closeable {
 		// Detect circular imports before recursing into ConfigMap construction.
 		var loading = LOADING.get();
 		if (! loading.add(key))
-			throw new ConfigException("Import loop detected in configuration:  {0}", importChain(loading, name));
+			throw new ConfigException("Import loop detected in configuration:  %s", importChain(loading, name));
 		try {
 			cm = new ConfigMap(this, name, format2);
 		} finally {

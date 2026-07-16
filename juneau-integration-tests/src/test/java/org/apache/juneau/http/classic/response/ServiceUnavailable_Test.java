@@ -35,7 +35,7 @@ class ServiceUnavailable_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws ServiceUnavailable {
-			throw new ServiceUnavailable("foo {0}", "bar");
+			throw new ServiceUnavailable("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws ServiceUnavailable {
@@ -43,7 +43,7 @@ class ServiceUnavailable_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws ServiceUnavailable {
-			throw new ServiceUnavailable(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new ServiceUnavailable(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws ServiceUnavailable {

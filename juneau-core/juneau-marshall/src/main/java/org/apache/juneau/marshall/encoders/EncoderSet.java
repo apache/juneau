@@ -167,7 +167,7 @@ public class EncoderSet {
 				if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else if (! cns(v).equals("NoInherit")) {
-					throw iaex("Invalid type passed to EncoderSet.Builder.add(): {0}", cn(v));
+					throw iaex("Invalid type passed to EncoderSet.Builder.add(): %s", cn(v));
 				}
 			}
 			entries.addAll(0, l);
@@ -263,7 +263,7 @@ public class EncoderSet {
 				} else if (Encoder.class.isAssignableFrom(v)) {
 					l.add(v);
 				} else {
-					throw iaex("Invalid type passed to EncoderSet.Builder.set(): {0}", cn(v));
+					throw iaex("Invalid type passed to EncoderSet.Builder.set(): %s", cn(v));
 				}
 			}
 			entries = l;

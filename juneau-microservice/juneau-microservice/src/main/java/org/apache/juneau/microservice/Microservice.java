@@ -462,7 +462,7 @@ public class Microservice implements ConfigEventListener {
 			else if (value instanceof Class value2)
 				this.manifest = new ManifestFile(value2);
 			else
-				throw rex("Invalid type passed to Builder.manifest(Object).  Type=[{0}]", cn(value));
+				throw rex("Invalid type passed to Builder.manifest(Object).  Type=[%s]", cn(value));
 
 			return this;
 		}
@@ -752,7 +752,7 @@ public class Microservice implements ConfigEventListener {
 				try (var fis = new FileInputStream(f)) {
 					m.read(fis);
 				} catch (IOException e) {
-					throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(f), e);
+					throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n%s", read(f), e);
 				}
 			} else {
 				// Otherwise, read from manifest file in the jar file containing the main class.
@@ -761,7 +761,7 @@ public class Microservice implements ConfigEventListener {
 					try {
 						m.read(url.openStream());
 					} catch (IOException e) {
-						throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n{0}", read(url.openStream()), e);
+						throw ioex(e, "Problem detected in MANIFEST.MF.  Contents below:\n%s", read(url.openStream()), e);
 					}
 				}
 			}

@@ -111,7 +111,7 @@ public class ResponseHeader extends BasicHeader {
 		try {
 			return o(parser.parse(HEADER, schema, getValue(), type));
 		} catch (ParseException e) {
-			throw rex(e, "Could not parse response header {0}.", getName());
+			throw rex(e, "Could not parse response header %s.", getName());
 		}
 	}
 
@@ -272,7 +272,7 @@ public class ResponseHeader extends BasicHeader {
 		} catch (Exception e) {
 			throw toRex(e);
 		}
-		throw rex("Could not determine a method to construct type {0}", cn(c));
+		throw rex("Could not determine a method to construct type %s", cn(c));
 	}
 
 	/**

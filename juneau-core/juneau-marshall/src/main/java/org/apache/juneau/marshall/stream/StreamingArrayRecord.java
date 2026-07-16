@@ -68,7 +68,7 @@ public final class StreamingArrayRecord {
 	public static RecordReader reader(TokenReader cursor) throws IOException, ParseException {
 		var t = cursor.next();
 		if (t != TokenType.START_ARRAY)
-			throw new ParseException("Expected START_ARRAY at the root of arrayRecordReader input but got {0}", t);
+			throw new ParseException("Expected START_ARRAY at the root of arrayRecordReader input but got %s", t);
 		return new RecordReader() {
 			@Override public boolean canRead() throws IOException, ParseException {
 				return cursor.canRead();

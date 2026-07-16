@@ -405,7 +405,7 @@ public class OidcRelyingParty {
 		 * @return This object.
 		 */
 		public Builder clockSkewSeconds(int value) {
-			assertArg(value >= 0, "clockSkewSeconds must be non-negative (was {0})", value);
+			assertArg(value >= 0, "clockSkewSeconds must be non-negative (was %s)", value);
 			clockSkewSeconds = value;
 			return this;
 		}
@@ -613,7 +613,7 @@ public class OidcRelyingParty {
 		}
 		if (! parsed.indicatesSuccess()) {
 			var err = parsed.toErrorResponse().getErrorObject();
-			throw new AuthenticationException("OIDC callback returned an error: {0}", err == null ? "unknown" : err.getCode()); // HTT: err==null branch requires an error response with no error object, which Nimbus never produces
+			throw new AuthenticationException("OIDC callback returned an error: %s", err == null ? "unknown" : err.getCode()); // HTT: err==null branch requires an error response with no error object, which Nimbus never produces
 		}
 		var success = parsed.toSuccessResponse();
 		if (success.getAuthorizationCode() == null)
@@ -789,7 +789,7 @@ public class OidcRelyingParty {
 			var verified = logoutTokenProcessor().process(jwt, null);
 			claims = new LogoutTokenClaimsSet(verified);
 		} catch (com.nimbusds.jose.proc.BadJOSEException | com.nimbusds.jose.JOSEException e) {
-			throw new AuthenticationException(e, "Logout token validation failed: {0}", e.getMessage());
+			throw new AuthenticationException(e, "Logout token validation failed: %s", e.getMessage());
 		} catch (com.nimbusds.oauth2.sdk.ParseException e) {
 			throw new AuthenticationException(e, "Logout token claims could not be parsed");
 		}

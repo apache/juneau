@@ -35,7 +35,7 @@ class RangeNotSatisfiable_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws RangeNotSatisfiable {
-			throw new RangeNotSatisfiable("foo {0}", "bar");
+			throw new RangeNotSatisfiable("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws RangeNotSatisfiable {
@@ -43,7 +43,7 @@ class RangeNotSatisfiable_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws RangeNotSatisfiable {
-			throw new RangeNotSatisfiable(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new RangeNotSatisfiable(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws RangeNotSatisfiable {

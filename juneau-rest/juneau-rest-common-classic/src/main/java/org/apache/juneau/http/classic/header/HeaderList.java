@@ -337,7 +337,7 @@ public class HeaderList extends ControlledArrayList<Header> {
 		assertArgNotNull(ARG_type, type);
 
 		String name = HeaderBeanMeta.of(type).getSchema().getName();
-		assertArg(nn(name), "Header name could not be found on bean type ''{0}''", cn(type));
+		assertArg(nn(name), "Header name could not be found on bean type '%s'", cn(type));
 
 		return get(name, type);
 	}

@@ -437,7 +437,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			if (pMeta == null && isIgnoreUnknownBeanProperties())
 				continue;
 			if (pMeta == null)
-				throw new ParseException(this, "Unknown property ''{0}''", key);
+				throw new ParseException(this, "Unknown property '%s'", key);
 			ClassMeta<?> targetType = (ClassMeta<?>) pMeta.getBeanInfo();
 			Object converted = convertValue(val, targetType);
 			bm.put(key, converted);

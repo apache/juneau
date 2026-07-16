@@ -77,7 +77,7 @@ enum HtmlTag {
 			return forString(r.getLocalName(), false);
 		else if (et == END_ELEMENT)
 			return forString(r.getLocalName(), true);
-		throw new ParseException(session, "Invalid call to HtmlTag.forEvent on event of type ''{0}''", XmlUtils.toReadableEvent(r));
+		throw new ParseException(session, "Invalid call to HtmlTag.forEvent on event of type '%s'", XmlUtils.toReadableEvent(r));
 	}
 
 	@SuppressWarnings({

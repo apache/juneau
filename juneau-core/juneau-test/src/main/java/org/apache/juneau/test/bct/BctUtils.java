@@ -50,7 +50,7 @@ public class BctUtils {
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 *   <jk>if</jk> (!<jsm>eq</jsm>(<jv>expected</jv>, <jv>actual</jv>)) {
-	 *       <jk>throw</jk> <jsm>assertEqualsFailed</jsm>(<jv>expected</jv>, <jv>actual</jv>, () -&gt; <js>"Custom context message with arg {0}"</js>, <jv>arg</jv>);
+	 *       <jk>throw</jk> <jsm>assertEqualsFailed</jsm>(<jv>expected</jv>, <jv>actual</jv>, () -&gt; <js>"Custom context message with arg %s"</js>, <jv>arg</jv>);
 	 *   }
 	 * </p>
 	 *

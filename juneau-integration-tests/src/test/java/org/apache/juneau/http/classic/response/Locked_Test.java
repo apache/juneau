@@ -35,7 +35,7 @@ class Locked_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws Locked {
-			throw new Locked("foo {0}", "bar");
+			throw new Locked("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws Locked {
@@ -43,7 +43,7 @@ class Locked_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws Locked {
-			throw new Locked(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new Locked(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws Locked {

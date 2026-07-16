@@ -142,7 +142,7 @@ public class PartBeanMeta<T> {
 	public T construct(String name, Object value) {
 
 		if (constructor == null)
-			throw uoex("Constructor for type {0} could not be found.", cn(type));
+			throw uoex("Constructor for type %s could not be found.", cn(type));
 
 		if (name == null)
 			name = schema.getName();
@@ -153,7 +153,7 @@ public class PartBeanMeta<T> {
 			args[0] = pt[0] == String.class ? s(value) : value;
 		} else {
 			if (name == null)
-				throw uoex("Constructor for type {0} requires a name as the first argument.", cn(type));
+				throw uoex("Constructor for type %s requires a name as the first argument.", cn(type));
 			args[0] = name;
 			args[1] = pt[1] == String.class ? s(value) : value;
 		}

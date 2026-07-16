@@ -240,7 +240,7 @@ public class ParserPipe implements Closeable {
 				doClose = true;
 			}
 		} else {
-			throw ioex("Cannot convert object of type {0} to an InputStream.", cn(input));
+			throw ioex("Cannot convert object of type %s to an InputStream.", cn(input));
 		}
 
 		return inputStream;
@@ -318,7 +318,7 @@ public class ParserPipe implements Closeable {
 			}
 			doClose = true;
 		} else {
-			throw ioex("Cannot convert object of type {0} to an InputStream.", cn(input));
+			throw ioex("Cannot convert object of type %s to an InputStream.", cn(input));
 		}
 
 		return reader;

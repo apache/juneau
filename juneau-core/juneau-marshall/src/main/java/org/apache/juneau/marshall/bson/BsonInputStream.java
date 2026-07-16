@@ -84,9 +84,9 @@ public class BsonInputStream extends ParserInputStream {
 	 */
 	private int checkLength(int len, String what) throws IOException {
 		if (len < 0)
-			throw ioex("Invalid BSON {0} length (negative): {1}", what, len);
+			throw ioex("Invalid BSON %s length (negative): %s", what, len);
 		if (len > maxLength)
-			throw ioex("BSON {0} length {1} exceeds maximum allowed {2}", what, len, maxLength);
+			throw ioex("BSON %s length %s exceeds maximum allowed %s", what, len, maxLength);
 		return len;
 	}
 
@@ -205,7 +205,7 @@ public class BsonInputStream extends ParserInputStream {
 	public void readDocumentTerminator() throws IOException {
 		var b = read();
 		if (b != 0x00)
-			throw ioex("Expected document terminator, got {0}", b);
+			throw ioex("Expected document terminator, got %s", b);
 	}
 
 	/**
@@ -260,7 +260,7 @@ public class BsonInputStream extends ParserInputStream {
 	public String readString() throws IOException {
 		var len = readLE4();
 		if (len <= 0)
-			throw ioex("Invalid BSON string length: {0}", len);
+			throw ioex("Invalid BSON string length: %s", len);
 		checkLength(len, "string");
 		var bytes = new byte[len - 1]; // length includes null
 		for (var i = 0; i < bytes.length; i++) {
@@ -271,7 +271,7 @@ public class BsonInputStream extends ParserInputStream {
 		}
 		var term = read();
 		if (term != 0x00)
-			throw ioex("Expected string terminator, got {0}", term);
+			throw ioex("Expected string terminator, got %s", term);
 		return new String(bytes, UTF8);
 	}
 
@@ -389,7 +389,7 @@ public class BsonInputStream extends ParserInputStream {
 			case 0x12 -> readLE8();
 			case 0x13 -> skip(16);
 			case 0x7F, 0xFF -> { /* BSON MinKey/MaxKey - zero bytes, marker types with no payload to consume */ }
-			default -> throw ioex("Unknown BSON type: {0}", type);
+			default -> throw ioex("Unknown BSON type: %s", type);
 		}
 	}
 

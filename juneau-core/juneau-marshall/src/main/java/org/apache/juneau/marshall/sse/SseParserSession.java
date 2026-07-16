@@ -117,6 +117,6 @@ public class SseParserSession extends ReaderParserSession implements RecordReada
 		}
 		if (List.class.isAssignableFrom(type.inner()))
 			return (T) events;
-		throw new ParseException(this, "SseParser cannot produce target type ''{0}''.", type);
+		throw new ParseException(this, "SseParser cannot produce target type '%s'.", type);
 	}
 }

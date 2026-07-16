@@ -303,7 +303,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		} else if (sType.isVoid()) {
 			var s = parseString(r, isUrlParamValue);
 			if (nn(s))
-				throw new ParseException(this, "Expected ''null'' for void value, but was ''{0}''.", s);
+				throw new ParseException(this, "Expected 'null' for void value, but was '%s'.", s);
 		} else if (sType.isObject()) {
 			if (c == '(') {
 				var m = newGenericMap();
@@ -403,7 +403,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else if (c == 'n') {
 			@SuppressWarnings({
 				"unused" // Intentionally unused; variable/parameter is required by the interface contract
@@ -411,7 +411,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			int ignored = r.read();
 			parseNull(r);
 		} else {
-			throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+			throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		}
 
 		if (o == null && sType.isPrimitive())
@@ -436,7 +436,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			return true;
 		if (eqic(s, "false"))
 			return false;
-		throw new ParseException(this, "Unrecognized syntax for boolean.  ''{0}''.", s);
+		throw new ParseException(this, "Unrecognized syntax for boolean.  '%s'.", s);
 	}
 
 	@SuppressWarnings({
@@ -731,7 +731,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 		var s = parseString(r, false);
 		if ("ull".equals(s))
 			return null;
-		throw new ParseException(this, "Unexpected character sequence: ''{0}''", s);
+		throw new ParseException(this, "Unexpected character sequence: '%s'", s);
 	}
 
 	private Number parseNumber(UonReader r, Class<? extends Number> c) throws IOException, ParseException {
@@ -778,7 +778,7 @@ public class UonParserSession extends ReaderParserSession implements HttpPartPar
 			if (c == -1)
 				return;
 			if (! Character.isWhitespace(c))
-				throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
+				throw new ParseException(this, "Remainder after parse: '%s'.", (char)c);
 		}
 	}
 

@@ -259,7 +259,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				else if (nn(sType.getProxyInvocationHandler()))
 					o = newBeanMap(outer, sType.inner()).load(m).getBean();
 				else
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+					throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			}
 		} else if (c == '[') {
 			if (sType.isObject()) {
@@ -271,7 +271,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 				var l = (ArrayList)parseFlowSequence(r, list(), sType, pMeta);
 				o = toArray(sType, l);
 			} else {
-				throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
+				throw new ParseException(this, "Unrecognized syntax for class type '%s', starting character '%s'", sType, (char)c);
 			}
 		} else if (c == '\'') {
 			String s = parseSingleQuotedString(r);
@@ -291,7 +291,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					var l = (ArrayList)parseBlockSequence(r, list(), sType, pMeta, 0);
 					o = toArray(sType, l);
 				} else {
-					throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
+					throw new ParseException(this, "Unrecognized syntax for class type '%s', starting character '%s'", sType, (char)c);
 				}
 			} else {
 				String s = parsePlainScalar(r, 0);
@@ -364,7 +364,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					return cast(m2, pMeta, eType);
 				if (nn(sType.getProxyInvocationHandler()))
 					return newBeanMap(outer, sType.inner()).load(m2).getBean();
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			}
 		}
 		if (sType.isObject())
@@ -422,7 +422,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 					return cast(m2, pMeta, eType);
 				if (nn(sType.getProxyInvocationHandler()))
 					return newBeanMap(outer, sType.inner()).load(m2).getBean();
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 			}
 		}
 
@@ -466,7 +466,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 		} else if (sType.canCreateNewInstanceFromString(outer)) {
 			return sType.newInstanceFromString(outer, s);
 		} else {
-			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', value ''{1}''", sType, s);
+			throw new ParseException(this, "Unrecognized syntax for class type '%s', value '%s'", sType, s);
 		}
 	}
 
@@ -771,7 +771,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 
 			c = r.read(); // Should be ':'
 			if (c != ':')
-				throw new ParseException(this, "Expected ':' after key in YAML block mapping, found ''{0}''", (char)c);
+				throw new ParseException(this, "Expected ':' after key in YAML block mapping, found '%s'", (char)c);
 
 			c = r.peek();
 			if (c == ' ')
@@ -984,7 +984,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 
 				c = r.read(); // Should be ':'
 				if (c != ':')
-					throw new ParseException(this, "Expected ':' after attribute name in YAML block mapping, found ''{0}''", (char)c);
+					throw new ParseException(this, "Expected ':' after attribute name in YAML block mapping, found '%s'", (char)c);
 
 				if (! currAttr.equals(getBeanTypePropertyName((ClassMeta<?>) m.getBeanInfo()))) {
 					var pm = m.getPropertyMeta(currAttr);
@@ -1152,7 +1152,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 						break;
 					}
 					default:
-						throw new ParseException(this, "Invalid escape sequence '\\{0}' in YAML string.", (char)c);
+						throw new ParseException(this, "Invalid escape sequence '\\%s' in YAML string.", (char)c);
 				}
 				// @formatter:on
 			} else if (c == '"') {
@@ -1240,7 +1240,7 @@ public class YamlParserSession extends ReaderParserSession implements RecordRead
 			} else if (c == ' ' || c == '\t') {
 				continue;
 			} else {
-				throw new ParseException(this, "Unexpected character ''{0}'' in YAML block scalar indicator.", (char)c);
+				throw new ParseException(this, "Unexpected character '%s' in YAML block scalar indicator.", (char)c);
 			}
 		}
 

@@ -584,7 +584,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				var rs = (RestServlet)c.newInstance();
 				mountWithCollisionCheck(rs, rs.getPath(), "Tomcat/servlets[" + className + "]", mountedPaths);
 			} else {
-				throw rex("Invalid servlet specified in Tomcat/servlets.  Must be a subclass of RestServlet: {0}", className);
+				throw rex("Invalid servlet specified in Tomcat/servlets.  Must be a subclass of RestServlet: %s", className);
 			}
 		} catch (ClassNotFoundException e) {
 			throw toRex(e);
@@ -598,7 +598,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 				var rs = (Servlet)c.newInstance();
 				mountWithCollisionCheck(rs, pathKey, "Tomcat/servletMap[" + pathKey + "]", mountedPaths);
 			} else {
-				throw rex("Invalid servlet specified in Tomcat/servletMap.  Must be a subclass of Servlet: {0}", cn(className));
+				throw rex("Invalid servlet specified in Tomcat/servletMap.  Must be a subclass of Servlet: %s", cn(className));
 			}
 		} catch (ClassNotFoundException e) {
 			throw toRex(e);
@@ -614,7 +614,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	private void checkPathCollision(String pathSpec, String source, Map<String,String> mountedPaths) {
 		var prior = mountedPaths.get(pathSpec);
 		if (nn(prior))
-			throw rex("Servlet mount path collision: ''{0}'' is already mounted by {1}; refused by {2}.", pathSpec, prior, source);
+			throw rex("Servlet mount path collision: '%s' is already mounted by %s; refused by %s.", pathSpec, prior, source);
 		mountedPaths.put(pathSpec, source);
 	}
 }

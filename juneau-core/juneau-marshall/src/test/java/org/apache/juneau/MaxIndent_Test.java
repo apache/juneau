@@ -226,7 +226,7 @@ class MaxIndent_Test extends TestBase {
 				return;
 			}
 
-			assertEquals(expected, r, fs("{0}/{1} parse-normal failed", input.label, testName));
+			assertEquals(expected, r, fs("%s/%s parse-normal failed", input.label, testName));
 
 		} catch (AssertionError e) {
 			throw e;

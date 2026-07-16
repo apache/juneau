@@ -294,7 +294,7 @@ public class UonWriter extends SerializerWriter {
 	 */
 	private UonWriter appendHex(int b) {
 		if (b > 255)
-			throw rex("Invalid value passed to appendHex.  Must be in the range 0-255.  Value={0}", b);
+			throw rex("Invalid value passed to appendHex.  Must be in the range 0-255.  Value=%s", b);
 		w('%').w(hexArray[b >>> 4]).w(hexArray[b & 0x0F]);
 		return this;
 	}

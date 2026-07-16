@@ -150,7 +150,7 @@ public enum EnumFormat {
 		for (var e : enumClass.getEnumConstants())
 			if (e.name().equalsIgnoreCase(s) || s.equalsIgnoreCase(e.toString()))
 				return e;
-		throw iaex("Could not resolve enum value ''{0}'' on class ''{1}''", value, enumClass.getName());
+		throw iaex("Could not resolve enum value '%s' on class '%s'", value, enumClass.getName());
 	}
 
 	/**

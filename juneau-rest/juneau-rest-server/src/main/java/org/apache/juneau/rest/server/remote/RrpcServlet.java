@@ -73,7 +73,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 	public List<LinkString> getInterfaces() throws Exception {
 		var l = new LinkedList<LinkString>();
 		for (var c : getServiceMap().keySet())
-			l.add(new LinkString(c.getName(), "servlet:/{0}", urlEncode(c.getName())));
+			l.add(new LinkString(c.getName(), "servlet:/%s", urlEncode(c.getName())));
 		return l;
 	}
 
@@ -117,7 +117,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 
 		// Find the parser.
 		if (p == null)
-			throw new UnsupportedMediaType("Could not find parser for media type ''{0}''", contentType);
+			throw new UnsupportedMediaType("Could not find parser for media type '%s'", contentType);
 		RrpcInterfaceMeta rim = getInterfaceClass(javaInterface);
 
 		// Find the service.
@@ -150,7 +150,7 @@ public abstract class RrpcServlet extends BasicRestServlet {
 
 		List<LinkString> l = list();
 		for (var s : getMethods(javaInterface).keySet())
-			l.add(new LinkString(s, "servlet:/{0}/{1}", urlEncode(javaInterface), urlEncode(s)));
+			l.add(new LinkString(s, "servlet:/%s/%s", urlEncode(javaInterface), urlEncode(s)));
 		return l;
 	}
 

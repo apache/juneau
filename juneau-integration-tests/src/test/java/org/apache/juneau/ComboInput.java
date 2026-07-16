@@ -296,7 +296,7 @@ public class ComboInput<T> {
 		for (var f : verify) {
 			var s = f.apply(o);
 			if (ine(s)) {
-				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
+				throw new BasicAssertionError("Verification failed on test %s/%s: %s", label, testName, s);
 			}
 		}
 	}

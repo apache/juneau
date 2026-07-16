@@ -121,7 +121,7 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 			for (var item : arr)
 				writeIfEvent(w, item);
 		} else {
-			throw new SerializeException("SseSerializer cannot serialize objects of type ''{0}''.", cn(o));
+			throw new SerializeException("SseSerializer cannot serialize objects of type '%s'.", cn(o));
 		}
 	}
 
@@ -129,7 +129,7 @@ public class SseSerializerSession extends WriterSerializerSession implements Rec
 		if (item == null)
 			return;
 		if (!(item instanceof SseEvent e))
-			throw new SerializeException("SseSerializer encountered non-SseEvent element of type ''{0}''.", cn(item));
+			throw new SerializeException("SseSerializer encountered non-SseEvent element of type '%s'.", cn(item));
 		writeEvent(w, e);
 	}
 

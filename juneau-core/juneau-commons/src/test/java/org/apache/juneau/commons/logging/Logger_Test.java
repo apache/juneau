@@ -198,7 +198,7 @@ class Logger_Test extends TestBase {
 	@Test void c01_severe_formatted() {
 		try (var capture = getLogger("c01").captureEvents()) {
 			var logger = getLogger("c01");
-			logger.severe("User {0} logged in", "John");
+			logger.severe("User %s logged in", "John");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -211,7 +211,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c02").captureEvents()) {
 			var logger = getLogger("c02");
 			var exception = new RuntimeException("Error");
-			logger.severe(exception, "Failed to process {0}", "request");
+			logger.severe(exception, "Failed to process %s", "request");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -237,7 +237,7 @@ class Logger_Test extends TestBase {
 	@Test void c04_info_formatted() {
 		try (var capture = getLogger("c04").captureEvents()) {
 			var logger = getLogger("c04");
-			logger.info("Processing {} items", 42);
+			logger.info("Processing %s items", 42);
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -275,7 +275,7 @@ class Logger_Test extends TestBase {
 		// Test line 241: log(Level level, String msg, Object param1)
 		try (var capture = getLogger("c07").captureEvents()) {
 			var logger = getLogger("c07");
-			logger.log(Level.INFO, "User {0} logged in", "john");
+			logger.log(Level.INFO, "User %s logged in", "john");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -289,7 +289,7 @@ class Logger_Test extends TestBase {
 		// Test line 246: log(Level level, String msg, Object[] params)
 		try (var capture = getLogger("c08").captureEvents()) {
 			var logger = getLogger("c08");
-			logger.log(Level.INFO, "User {0} logged in from {1}", new Object[]{"john", "NYC"});
+			logger.log(Level.INFO, "User %s logged in from %s", new Object[]{"john", "NYC"});
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -358,7 +358,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c12").captureEvents()) {
 			var logger = getLogger("c12");
 			var exception = new RuntimeException("Test error");
-			logger.warning(exception, "Warning: {0} occurred", "error");
+			logger.warning(exception, "Warning: %s occurred", "error");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -373,7 +373,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c13").captureEvents()) {
 			var logger = getLogger("c13");
 			var exception = new IllegalStateException("State error");
-			logger.info(exception, "Info: {0} occurred", "issue");
+			logger.info(exception, "Info: %s occurred", "issue");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -387,7 +387,7 @@ class Logger_Test extends TestBase {
 		// Test line 361: config(String pattern, Object...args)
 		try (var capture = getLogger("c14").captureEvents()) {
 			var logger = getLogger("c14");
-			logger.config("Configuration: {0} = {1}", "timeout", 30);
+			logger.config("Configuration: %s = %s", "timeout", 30);
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -402,7 +402,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c15").captureEvents()) {
 			var logger = getLogger("c15");
 			var exception = new IllegalArgumentException("Config error");
-			logger.config(exception, "Configuration: {0} failed", "setup");
+			logger.config(exception, "Configuration: %s failed", "setup");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -416,7 +416,7 @@ class Logger_Test extends TestBase {
 		// Test line 382: fine(String pattern, Object...args)
 		try (var capture = getLogger("c16").captureEvents()) {
 			var logger = getLogger("c16");
-			logger.fine("Fine detail: {0} = {1}", "key", "value");
+			logger.fine("Fine detail: %s = %s", "key", "value");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -431,7 +431,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c17").captureEvents()) {
 			var logger = getLogger("c17");
 			var exception = new RuntimeException("Fine error");
-			logger.fine(exception, "Fine detail: {0} occurred", "event");
+			logger.fine(exception, "Fine detail: %s occurred", "event");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -445,7 +445,7 @@ class Logger_Test extends TestBase {
 		// Test line 403: finer(String pattern, Object...args)
 		try (var capture = getLogger("c18").captureEvents()) {
 			var logger = getLogger("c18");
-			logger.finer("Finer detail: {0} = {1}", "param", 42);
+			logger.finer("Finer detail: %s = %s", "param", 42);
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -460,7 +460,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c19").captureEvents()) {
 			var logger = getLogger("c19");
 			var exception = new RuntimeException("Finer error");
-			logger.finer(exception, "Finer detail: {0} occurred", "trace");
+			logger.finer(exception, "Finer detail: %s occurred", "trace");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -474,7 +474,7 @@ class Logger_Test extends TestBase {
 		// Test line 424: finest(String pattern, Object...args)
 		try (var capture = getLogger("c20").captureEvents()) {
 			var logger = getLogger("c20");
-			logger.finest("Finest detail: {0} = {1}", "debug", "value");
+			logger.finest("Finest detail: %s = %s", "debug", "value");
 
 			var records = capture.getRecords();
 			assertSize(1, records);
@@ -489,7 +489,7 @@ class Logger_Test extends TestBase {
 		try (var capture = getLogger("c21").captureEvents()) {
 			var logger = getLogger("c21");
 			var exception = new RuntimeException("Finest error");
-			logger.finest(exception, "Finest detail: {0} occurred", "debug");
+			logger.finest(exception, "Finest detail: %s occurred", "debug");
 
 			var records = capture.getRecords();
 			assertSize(1, records);

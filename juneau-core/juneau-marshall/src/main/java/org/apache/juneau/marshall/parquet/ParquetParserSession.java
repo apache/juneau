@@ -201,7 +201,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		var footer = Arrays.copyOfRange(bytes, footerStart, bytes.length - 8);
 		var meta = parseFileMetaData(footer);
 		if (meta.numRows() < 0 || meta.numRows() > MAX_NUM_ROWS)
-			throw new ParseException("Invalid numRows: {0}", meta.numRows());
+			throw new ParseException("Invalid numRows: %s", meta.numRows());
 		ClassMeta<?> effectiveType = type;
 		if (type.isOptional())
 			effectiveType = type.getElementType();
@@ -407,10 +407,10 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 		if (uncompressedSize < 0 || uncompressedSize > MAX_PAGE_SIZE
 			|| compressedSize < 0 || compressedSize > MAX_PAGE_SIZE
 			|| bodyStart + compressedSize > fileBytes.length)
-			throw new ParseException("Invalid page header for column ''{0}'': uncompressed=''{1}'', compressed=''{2}''",
+			throw new ParseException("Invalid page header for column '%s': uncompressed='%s', compressed='%s'",
 				columnPath, uncompressedSize, compressedSize);
 		if (numValues < 0 || numValues > MAX_NUM_VALUES)
-			throw new ParseException("Invalid page num_values for column ''{0}'': {1}", columnPath, numValues);
+			throw new ParseException("Invalid page num_values for column '%s': %s", columnPath, numValues);
 		return new PageHeaderInfo(pageType, uncompressedSize, compressedSize, numValues, encoding, bodyStart);
 	}
 
@@ -757,7 +757,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int repBitWidth = 32 - Integer.numberOfLeadingZeros(maxRep);
 
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
-				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
+				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			// Skip a leading dictionary page if present, then read the single data page.  Repeated
 			// (list/map) columns carry rep+def levels with cross-page state; Juneau emits them as a single
@@ -917,7 +917,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int repBitWidth = 32 - Integer.numberOfLeadingZeros(maxRep);
 
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
-				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
+				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			// Skip a leading dictionary page if present, then read the single data page.  Repeated
 			// (list/map) columns carry rep+def levels with cross-page state; Juneau emits them as a single
@@ -996,7 +996,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 	private static List<Object> readColumnChunk(byte[] fileBytes, ColumnChunkMeta cc, int numRows, Map<String, Integer> schemaRepetition, Set<String> rawByteArrayPaths, Set<String> uuidPaths, Map<String, ColumnLogical> columnLogical, boolean trimStrings) throws ParseException {
 		try {
 			if (cc.numValues() < 0 || cc.numValues() > MAX_NUM_VALUES)
-				throw new ParseException("Invalid numValues for column ''{0}'': {1}", String.join(".", cc.pathInSchema()), cc.numValues());
+				throw new ParseException("Invalid numValues for column '%s': %s", String.join(".", cc.pathInSchema()), cc.numValues());
 			var codec = CompressionCodec.fromThrift(cc.codec());
 			var path = String.join(".", cc.pathInSchema());
 			int rep = schemaRepetition.getOrDefault(path, OPTIONAL);
@@ -1027,7 +1027,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 			int pageGuard = 0;
 			while (consumed < valuesToRead && pageOff < fileBytes.length) {
 				if (++pageGuard > MAX_PAGES_PER_CHUNK)
-					throw new ParseException("Column ''{0}'' exceeds the maximum of {1} pages per chunk", path, MAX_PAGES_PER_CHUNK);
+					throw new ParseException("Column '%s' exceeds the maximum of %s pages per chunk", path, MAX_PAGES_PER_CHUNK);
 				var ph = readPageHeader(fileBytes, pageOff, path);
 				var compressedData = Arrays.copyOfRange(fileBytes, ph.bodyStart(), ph.bodyStart() + ph.compressedSize());
 				var decompressed = codec.decompress(compressedData, ph.uncompressedSize());
@@ -1130,7 +1130,7 @@ public class ParquetParserSession extends InputStreamParserSession implements Re
 				} else {
 					int idx = idxDecoder.readInt();
 					if (idx >= dictionary.size())
-						throw new ParseException("Dictionary index {0} out of range [0,{1})", idx, dictionary.size());
+						throw new ParseException("Dictionary index %s out of range [0,%s)", idx, dictionary.size());
 					values.add(dictionary.get(idx));
 				}
 			}

@@ -35,7 +35,7 @@ class UnsupportedMediaType_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws UnsupportedMediaType {
-			throw new UnsupportedMediaType("foo {0}", "bar");
+			throw new UnsupportedMediaType("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws UnsupportedMediaType {
@@ -43,7 +43,7 @@ class UnsupportedMediaType_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws UnsupportedMediaType {
-			throw new UnsupportedMediaType(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new UnsupportedMediaType(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws UnsupportedMediaType {

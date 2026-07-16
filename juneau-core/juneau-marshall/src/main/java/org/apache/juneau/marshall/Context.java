@@ -536,7 +536,7 @@ public abstract class Context {
 				else if (x instanceof MethodInfo x2)
 					work.add(rstream(ap.find(x2)).filter(CONTEXT_APPLY_FILTER));
 				else
-					iaex("Invalid type passed to applyAnnotations:  {0}", cn(x));
+					iaex("Invalid type passed to applyAnnotations:  %s", cn(x));
 			});
 			return work;
 		}
@@ -792,7 +792,7 @@ public abstract class Context {
 
 		private Context innerBuild() {
 			if (type == null)
-				throw rex("Type not specified for context builder {0}", cn(getClass()));
+				throw rex("Type not specified for context builder %s", cn(getClass()));
 			if (nn(impl) && type.isInstance(impl))
 				return type.cast(impl);
 			if (nn(cache))
@@ -832,7 +832,7 @@ public abstract class Context {
 					).orElse(null))
 				.filter(Objects::nonNull)
 				.findFirst()
-				.orElseThrow(() -> rex("Could not find builder create method on class {0}", cn(type)));
+				.orElseThrow(() -> rex("Could not find builder create method on class %s", cn(type)));
 			// @formatter:on
 		})
 		.build();
@@ -863,7 +863,7 @@ public abstract class Context {
 			var bt = info(builderType);
 			return ct
 				.getPublicConstructor(x -> x.hasNumParameters(1) && x.getParameter(0).getParameterType().isAssignableFrom(builderType))
-				.orElseThrow(() -> rex("Public constructor not found: {0}({1})", ct.getName(), bt.getName()));
+				.orElseThrow(() -> rex("Public constructor not found: %s(%s)", ct.getName(), bt.getName()));
 		})
 		.build();
 

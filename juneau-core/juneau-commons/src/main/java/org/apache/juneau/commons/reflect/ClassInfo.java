@@ -1385,16 +1385,16 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 		while (pt != cc.getSuperclass()) {
 			extractTypes(typeMap, cc);
 			cc = cc.getSuperclass();
-			assertArg(nn(cc), "Class ''{0}'' is not a subclass of parameterized type ''{1}''", inner.getSimpleName(), pt.getSimpleName());
+			assertArg(nn(cc), "Class '%s' is not a subclass of parameterized type '%s'", inner.getSimpleName(), pt.getSimpleName());
 		}
 
 		Type gsc = cc.getGenericSuperclass();
 
-		assertArg(gsc instanceof ParameterizedType, "Class ''{0}'' is not a parameterized type", pt.getSimpleName());
+		assertArg(gsc instanceof ParameterizedType, "Class '%s' is not a parameterized type", pt.getSimpleName());
 
 		var cpt = (ParameterizedType)gsc;
 		Type[] atArgs = cpt.getActualTypeArguments();
-		assertArg(index < atArgs.length, "Invalid type index. index={0}, argsLength={1}", index, atArgs.length);
+		assertArg(index < atArgs.length, "Invalid type index. index=%s, argsLength=%s", index, atArgs.length);
 		Type actualType = cpt.getActualTypeArguments()[index];
 
 		if (typeMap.containsKey(actualType))
@@ -1428,7 +1428,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 		} else if (actualType instanceof ParameterizedType actualType2) {
 			return (Class<?>)actualType2.getRawType();
 		}
-		throw iaex("Could not resolve variable ''{0}'' to a type.", actualType.getTypeName());
+		throw iaex("Could not resolve variable '%s' to a type.", actualType.getTypeName());
 	}
 
 	/**
@@ -2585,7 +2585,7 @@ public non-sealed class ClassInfo extends ElementInfo implements Annotatable, Ty
 	 */
 	public Object newInstance() throws ExecutableException {
 		if (inner == null)
-			throw exex("Type ''{0}'' cannot be instantiated", getNameFull());
+			throw exex("Type '%s' cannot be instantiated", getNameFull());
 		try {
 			return inner.getDeclaredConstructor().newInstance();
 		} catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {

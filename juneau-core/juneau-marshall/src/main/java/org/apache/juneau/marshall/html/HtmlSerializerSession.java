@@ -714,7 +714,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		} catch (StackOverflowError t) {
 			throw t;
 		} catch (Exception t) {
-			onError(t, "Could not call getValue() on property ''{0}'', {1}", e.getKey(), localizedMessage(t));
+			onError(t, "Could not call getValue() on property '%s', %s", e.getKey(), localizedMessage(t));
 		}
 
 		String link = getLink(ppMeta);

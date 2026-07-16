@@ -282,11 +282,11 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		if (element == null)
 			return;
 		if (element instanceof SseEvent ev) {
-			SseSerializer.DEFAULT.serialize(ev, w);
+			Sse.DEFAULT.write(ev, w);
 			return;
 		}
 		var data = element instanceof CharSequence c ? c.toString() : Json.of(element);
-		SseSerializer.DEFAULT.serialize(new SseEvent(null, data), w);
+		Sse.DEFAULT.write(new SseEvent(null, data), w);
 	}
 
 	@SuppressWarnings({

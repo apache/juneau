@@ -24,9 +24,8 @@ import static org.apache.juneau.bean.swagger.SwaggerBuilder.*;
 import java.net.*;
 
 import org.apache.juneau.commons.http.*;
-import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.json.*;
-import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Sample class which shows the usage of DTO module which is a
@@ -78,7 +77,7 @@ public class BeanExample {
 				)
 			);
 
-		var html = HtmlSerializer.DEFAULT.serialize(mytable);
+		var html = Html.of(mytable);
 
 		var mainJsp =
 			form().action("main.jsp").method("GET")
@@ -99,7 +98,7 @@ public class BeanExample {
 		 * <button type='reset'>Reset</button>
 		 * </form>
 		 */
-		html = HtmlSerializer.DEFAULT.serialize(mainJsp);
+		html = Html.of(mainJsp);
 
 		/**
 		 * Produces
@@ -113,7 +112,7 @@ public class BeanExample {
 		 *    ]
 		 * }
 		 */
-		html = Json5Serializer.DEFAULT.serialize(mainJsp);
+		html = Json5.of(mainJsp);
 
 		var feed =
 			feed("tag:foo.org", "Title", CONST_timestamp)

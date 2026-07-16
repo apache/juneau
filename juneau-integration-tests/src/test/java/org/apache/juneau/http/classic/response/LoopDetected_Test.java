@@ -35,7 +35,7 @@ class LoopDetected_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws LoopDetected {
-			throw new LoopDetected("foo {0}", "bar");
+			throw new LoopDetected("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws LoopDetected {
@@ -43,7 +43,7 @@ class LoopDetected_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws LoopDetected {
-			throw new LoopDetected(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new LoopDetected(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws LoopDetected {

@@ -18,13 +18,11 @@ package org.apache.juneau.commons.io;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 /**
  * A utility for logging formatted messages to the console.
  *
  * <p>
- * Uses {@link MessageFormat} for formatting messages with arguments.
+ * Uses printf-style ({@code %s}/{@code %d}/…) formatting for messages with arguments.
  */
 @SuppressWarnings({
 	"java:S106", // System.err/out usage is intentional for console output utility
@@ -43,17 +41,17 @@ public class Console {
 	 * Prints a message with arguments to {@link System#err}.
 	 *
 	 * <p>
-	 * Arguments are formatted using {@link MessageFormat}.
+	 * Arguments are formatted using printf-style ({@code %s}) placeholders.
 	 *
 	 * <p>
 	 * Useful for debug messages.
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Console.<jsm>err</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
+	 * 	Console.<jsm>err</jsm>(<js>"myPojo=%s"</js>, <jv>myPojo</jv>);
 	 * </p>
 	 *
-	 * @param msg The {@link MessageFormat}-styled message.
+	 * @param msg The printf-styled message.
 	 * @param args The arguments sent to the formatter.
 	 */
 	public static final void err(String msg, Object...args) {
@@ -64,17 +62,17 @@ public class Console {
 	 * Prints a message with arguments to {@link System#out}.
 	 *
 	 * <p>
-	 * Arguments are formatted using {@link MessageFormat}.
+	 * Arguments are formatted using printf-style ({@code %s}) placeholders.
 	 *
 	 * <p>
 	 * Useful for debug messages.
 	 *
 	 * <h5 class='figure'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	Console.<jsm>out</jsm>(<js>"myPojo={0}"</js>, <jv>myPojo</jv>);
+	 * 	Console.<jsm>out</jsm>(<js>"myPojo=%s"</js>, <jv>myPojo</jv>);
 	 * </p>
 	 *
-	 * @param msg The {@link MessageFormat}-styled message.
+	 * @param msg The printf-styled message.
 	 * @param args The arguments sent to the formatter.
 	 */
 	public static final void out(String msg, Object...args) {

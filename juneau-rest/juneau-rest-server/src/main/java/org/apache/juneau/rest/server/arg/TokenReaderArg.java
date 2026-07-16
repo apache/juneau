@@ -103,7 +103,7 @@ public class TokenReaderArg extends SimpleRestOperationArg {
 		var parser = match.get().getParser();
 		if (!(parser instanceof TokenReadable))
 			throw new UnsupportedMediaType(
-				"Parser ''{0}'' (matched on Content-Type) does not support the token-reader surface.",
+				"Parser '%s' (matched on Content-Type) does not support the token-reader surface.",
 				parser.getClass().getName());
 		// Build a request-configured session so the cursor honors the same config as a parsed body
 		// (locale / timezone / schema / charset), then open the cursor on the session.
@@ -121,7 +121,7 @@ public class TokenReaderArg extends SimpleRestOperationArg {
 		var cursor = ((TokenReadable) session).parseTokens(input);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
-				"Parser ''{0}'' produced cursor type ''{1}'' which is not assignable to the declared parameter type ''{2}''.",
+				"Parser '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",
 				parser.getClass().getName(),
 				cursor == null ? "null" : cursor.getClass().getName(),
 				declaredType.getName());

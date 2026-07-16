@@ -19,7 +19,7 @@ package org.apache.juneau.bean.jsonapi;
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * Represents a JSON:API Link Object as defined by
@@ -193,6 +193,6 @@ public class JsonApiLink {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 }

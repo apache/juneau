@@ -156,7 +156,7 @@ public class Json5TokenReader extends JsonTokenReader {
 			return;
 		}
 		if (c != ',')
-			throw parseException("Expected ',' or ']' but got ''{0}''", (char) c);
+			throw parseException("Expected , or ] but got '%s'", (char) c);
 		var c2 = readSkipWsAndComments();
 		if (c2 == -1)
 			throw parseException("Unexpected end of input after ','");
@@ -180,7 +180,7 @@ public class Json5TokenReader extends JsonTokenReader {
 			return;
 		}
 		if (c != ',')
-			throw parseException("Expected ',' or '}' but got ''{0}''", (char) c);
+			throw parseException("Expected , or } but got '%s'", (char) c);
 		var c2 = readSkipWsAndComments();
 		if (c2 == -1)
 			throw parseException("Unexpected end of input after ','");

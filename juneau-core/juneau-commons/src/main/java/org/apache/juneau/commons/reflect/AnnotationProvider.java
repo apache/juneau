@@ -351,14 +351,14 @@ public class AnnotationProvider {
 
 					ci.getPublicMethod(x -> x.hasName("onClass")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(Class[].class))
-							throw brex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));
+							throw brex("Invalid annotation @%s used in runtime annotations.  Annotation must define an onClass() method that returns a Class array.", cns(a));
 						for (var c : (Class<?>[])mi.accessible().invoke(a))
 							runtimeAnnotations.append(c.getName(), annotationToStore);
 					});
 
 					ci.getPublicMethod(x -> x.hasName("on")).ifPresent(mi -> {
 						if (! mi.getReturnType().is(String[].class))
-							throw brex("Invalid annotation @{0} used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));
+							throw brex("Invalid annotation @%s used in runtime annotations.  Annotation must define an on() method that returns a String array.", cns(a));
 						for (var s : (String[])mi.accessible().invoke(a))
 							runtimeAnnotations.append(s, annotationToStore);
 					});
@@ -366,7 +366,7 @@ public class AnnotationProvider {
 				} catch (BeanRuntimeException e) {
 					throw e;
 				} catch (Exception e) {
-					throw brex(e, (Class<?>)null, "Invalid annotation @{0} used in runtime annotations.", cn(a));
+					throw brex(e, (Class<?>)null, "Invalid annotation @%s used in runtime annotations.", cn(a));
 				}
 			}
 			return this;

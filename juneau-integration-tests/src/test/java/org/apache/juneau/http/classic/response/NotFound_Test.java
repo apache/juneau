@@ -35,7 +35,7 @@ class NotFound_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws NotFound {
-			throw new NotFound("foo {0}", "bar");
+			throw new NotFound("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws NotFound {
@@ -43,7 +43,7 @@ class NotFound_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws NotFound {
-			throw new NotFound(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new NotFound(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws NotFound {

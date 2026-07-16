@@ -125,7 +125,7 @@ public class JettySettings {
 			else if (value instanceof Reader value2)
 				jettyXml = read(value2);
 			else
-				throw rex("Invalid object type passed to jettyXml(Object): {0}", cn(value));
+				throw rex("Invalid object type passed to jettyXml(Object): %s", cn(value));
 			jettyXmlResolveVars = resolveVars;
 			return this;
 		}

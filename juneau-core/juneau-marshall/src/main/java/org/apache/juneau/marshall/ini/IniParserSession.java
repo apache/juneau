@@ -102,7 +102,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			if (sections.isEmpty())
 				return type.canCreateNewBean(getOuter()) ? type.newInstance(getOuter()) : null;
 			if (!type.isBean() && !type.isMap())
-				throw new ParseException(this, "INI format requires bean or Map<String,?> target. Got: {0}", type.inner().getName());
+				throw new ParseException(this, "INI format requires bean or Map<String,?> target. Got: %s", type.inner().getName());
 			if (type.isMap()) {
 				var result = buildMapFromSections(sections, "");
 				return (T) convertMapToTarget(result, type);
@@ -183,7 +183,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 				if (pMeta == null && isIgnoreUnknownBeanProperties())
 					continue;
 				if (pMeta == null)
-					throw new ParseException(this, "Unknown property ''{0}''", key);
+					throw new ParseException(this, "Unknown property '%s'", key);
 				var value = parseValue(rawValue, (ClassMeta<?>) pMeta.getBeanInfo());
 				bm.put(key, value);
 			}

@@ -18,7 +18,6 @@ package org.apache.juneau.test.assertions;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -44,7 +43,7 @@ import org.apache.juneau.commons.utils.*;
  * 	<jc>// AssertionError with specified message is thrown otherwise.</jc>
  * 	Predicate&lt;MyBean&gt; <jv>predicate</jv> = <jk>new</jk> AssertionPredicate&lt;MyBean&gt;(
  * 		<jv>x</jv> -&gt; <jv>x</jv>.getFoo().equals(<js>"bar"</js>),
- * 		<js>"Foo did not equal bar.  Bean was=''{0}''"</js>,
+ * 		<js>"Foo did not equal bar.  Bean was='%s'"</js>,
  * 		<jsf>VALUE</jsf>
  * 	);
  * 	<jsm>assertObject</jsm>(<jv>myBean</jv>).is(<jv>predicate</jv>);
@@ -209,7 +208,7 @@ public class AssertionPredicate<T> implements Predicate<T> {
 	 * @param inner The predicate test.
 	 * @param message
 	 * 	The error message if predicate fails.
-	 * 	<br>Supports {@link MessageFormat}-style arguments.
+	 * 	<br>Supports printf-style arguments.
 	 * @param args
 	 * 	Optional message arguments.
 	 * 	<br>Can contain {@link #VALUE} to specify the value itself as an argument.

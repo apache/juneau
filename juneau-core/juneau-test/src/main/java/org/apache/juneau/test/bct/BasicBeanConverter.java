@@ -803,7 +803,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.stream()
 			.filter(x -> x.canExtract(this, o, name))
 			.findFirst()
-			.orElseThrow(() -> rex("Could not find extractor for object of type {0}", cn(o))).extract(this, o, name);
+			.orElseThrow(() -> rex("Could not find extractor for object of type %s", cn(o))).extract(this, o, name);
 		// @formatter:on
 	}
 
@@ -836,7 +836,7 @@ public class BasicBeanConverter implements BeanConverter {
 			.computeIfAbsent(c, this::findListifier)
 			.map(x -> (Listifier)x)
 			.map(x -> (List<Object>)x.apply(this, o2))
-			.orElseThrow(() -> iaex("Object of type {0} could not be converted to a list.", cns(o2)));
+			.orElseThrow(() -> iaex("Object of type %s could not be converted to a list.", cns(o2)));
 		// @formatter:on
 	}
 
@@ -901,7 +901,7 @@ public class BasicBeanConverter implements BeanConverter {
 		if (isEmpty.isPresent())
 			return isTrue(isEmpty.get()) ? 0 : 1;
 
-		throw iaex("Object of type {0} does not have a determinable size.", cns(o));
+		throw iaex("Object of type %s does not have a determinable size.", cns(o));
 	}
 
 	@Override

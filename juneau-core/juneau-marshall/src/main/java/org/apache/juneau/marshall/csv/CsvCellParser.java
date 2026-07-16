@@ -63,7 +63,7 @@ public final class CsvCellParser {
 		try {
 			return p.parseValue();
 		} catch (Exception e) {
-			throw new ParseException(e, "Invalid CSV cell notation at position {0}: ''{1}''", p.pos, cell);
+			throw new ParseException(e, "Invalid CSV cell notation at position %s: '%s'", p.pos, cell);
 		}
 	}
 

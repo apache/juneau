@@ -122,7 +122,7 @@ import jakarta.servlet.http.*;
  * 		<jc>// Log the incoming request.</jc>
  * 		<ja>@RestPreCall</ja>
  * 		<jk>public void</jk> onPreCall(Accept <jv>accept</jv>, Logger <jv>logger</jv>) {
- * 			<jv>logger</jv>.fine(<js>"Accept {0} header found."</js>, <jv>accept</jv>);
+ * 			<jv>logger</jv>.fine(<js>"Accept %s header found."</js>, <jv>accept</jv>);
  * 		}
  * 	}
  * </p>

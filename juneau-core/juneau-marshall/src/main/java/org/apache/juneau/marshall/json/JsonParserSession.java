@@ -263,11 +263,11 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			else if (nn(sType.getProxyInvocationHandler()))
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			else
-				throw new ParseException(this, "Class ''{0}'' could not be instantiated.  Reason: ''{1}''", cn(sType), sType.getNotABeanReason());
+				throw new ParseException(this, "Class '%s' could not be instantiated.  Reason: '%s'", cn(sType), sType.getNotABeanReason());
 		} else if (sType.canCreateNewInstanceFromString(outer) && canCoerceNonStringToString()) {
 			o = sType.newInstanceFromString(outer, parseString(r));
 		} else {
-			throw new ParseException(this, "Unrecognized syntax for class type ''{0}'', starting character ''{1}''", sType, (char)c);
+			throw new ParseException(this, "Unrecognized syntax for class type '%s', starting character '%s'", sType, (char)c);
 		}
 
 		if (nn(wrapperAttr))
@@ -293,7 +293,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			parseKeyword("false", r);
 			return Boolean.FALSE;
 		} else {
-			throw new ParseException(this, "Unrecognized syntax.  Expected boolean value, actual=''{0}''", r.read(100));
+			throw new ParseException(this, "Unrecognized syntax.  Expected boolean value, actual='%s'", r.read(100));
 		}
 	}
 
@@ -572,9 +572,9 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			String s = r.read(keyword.length());
 			if (s.equals(keyword))
 				return;
-			throw new ParseException(this, "Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''", keyword, s);
+			throw new ParseException(this, "Unrecognized syntax.  Expected='%s', Actual='%s'", keyword, s);
 		} catch (@SuppressWarnings("unused") IndexOutOfBoundsException e) {
-			throw new ParseException(this, "Unrecognized syntax.  Expected=''{0}'', found end-of-file.", keyword);
+			throw new ParseException(this, "Unrecognized syntax.  Expected='%s', found end-of-file.", keyword);
 		}
 	}
 
@@ -593,7 +593,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 	protected Number parseNumber(ParserReader r, String s, Class<? extends Number> type) throws ParseException {
 
 		if (s.isEmpty())
-			throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+			throw new ParseException(this, "Invalid JSON number: '%s'", s);
 
 		var isNegative = false;
 		var c = s.charAt(0);
@@ -603,17 +603,17 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		}
 
 		if (c == '.')
-			throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+			throw new ParseException(this, "Invalid JSON number: '%s'", s);
 
 		if (c == '0' && s.length() > (isNegative ? 2 : 1)) {
 			var c2 = s.charAt((isNegative ? 2 : 1));
 			if (c2 != '.' && c2 != 'e' && c2 != 'E')
-				throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+				throw new ParseException(this, "Invalid JSON number: '%s'", s);
 		}
 
 		var i = s.indexOf('.');
 		if (i != -1 && (s.length() == (i + 1) || ! decChars.contains(s.charAt(i + 1))))
-			throw new ParseException(this, "Invalid JSON number: ''{0}''", s);
+			throw new ParseException(this, "Invalid JSON number: '%s'", s);
 
 		return StringUtils.parseNumber(s, type);
 	}
@@ -632,7 +632,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		r.mark();
 		int qc = r.read();
 		if (qc != '"') {
-			var msg = (qc == '\'' ? "Invalid quote character \"{0}\" being used." : "Did not find quote character marking beginning of string.  Character=\"{0}\"");
+			var msg = (qc == '\'' ? "Invalid quote character \"%s\" being used." : "Did not find quote character marking beginning of string.  Character=\"%s\"");
 			throw new ParseException(this, msg, (char)qc);
 		}
 		String s = null;
@@ -641,7 +641,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		while (c != -1) {
 			c = r.read();
 			if (c <= 0x1F)
-				throw new ParseException(this, "Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
+				throw new ParseException(this, "Unescaped control character encountered: '0x%s'", String.format("%04X", c));
 			if (isInEscape) {
 				// @formatter:off
 				switch (c) {
@@ -679,7 +679,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 			}
 		}
 		if (s == null)
-			throw new ParseException(this, "Could not find expected end character ''{0}''.", (char)qc);
+			throw new ParseException(this, "Could not find expected end character '%s'.", (char)qc);
 
 		skipCommentsAndSpace(r);
 		if (r.peek() == '+')
@@ -770,7 +770,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 				} else {
 					currAttr = parseFieldName(r.unread());
 					if (! currAttr.equals(wrapperAttr))
-						throw new ParseException(this, "Expected to find wrapper attribute ''{0}'' but found attribute ''{1}''", wrapperAttr, currAttr);
+						throw new ParseException(this, "Expected to find wrapper attribute '%s' but found attribute '%s'", wrapperAttr, currAttr);
 					state = S3;
 				}
 			} else if (state == S3) {  // NOSONAR - State check necessary for state machine
@@ -803,7 +803,7 @@ public class JsonParserSession extends ReaderParserSession implements TokenReada
 		skipCommentsAndSpace(r);
 		int c = r.read();
 		if (c != -1 && c != ';')  // var x = {...}; expressions can end with a semicolon.
-			throw new ParseException(this, "Remainder after parse: ''{0}''.", (char)c);
+			throw new ParseException(this, "Remainder after parse: '%s'.", (char)c);
 	}
 
 	@Override /* Overridden from ParserSession */

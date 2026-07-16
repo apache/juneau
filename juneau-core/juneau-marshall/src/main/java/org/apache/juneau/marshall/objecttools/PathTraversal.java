@@ -202,7 +202,7 @@ public class PathTraversal {
 		try {
 			return Integer.parseInt(key);
 		} catch (@SuppressWarnings("unused") NumberFormatException e) {
-			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot address an item in an array with a non-integer key ''{0}''", key);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot address an item in an array with a non-integer key '%s'", key);
 		}
 	}
 
@@ -796,9 +796,9 @@ public class PathTraversal {
 			}
 			var n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
-				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL '%s' not found.", parentUrl);
 			if (n.o == null && n.cm.isObject())
-				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL '%s' not found.", parentUrl);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isMap())
@@ -806,7 +806,7 @@ public class PathTraversal {
 			if (cm.isCollection() && o instanceof List o2)
 				return o2.set(parseInt(childKey), convert(val, cm.getElementType()));
 			if (cm.isCollection())
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot PUT to indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot PUT to indexed position in non-List collection '%s' of type '%s'", url, cm);
 			if (cm.isArray()) {
 				o = setArrayEntry(n.o, parseInt(childKey), val, cm.getElementType());
 				var pct = n.parent.cm;
@@ -820,11 +820,11 @@ public class PathTraversal {
 					m.put(n.keyName, o);
 					return url;
 				}
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on '%s' with parent node type '%s'", url, pct);
 			}
 			if (cm.isBean())
 				return session.toBeanMap(o).put(childKey, val);
-			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on '%s' whose parent is of type '%s'", url, cm);
 		}
 
 		if (method == POST) {
@@ -842,13 +842,13 @@ public class PathTraversal {
 					root = new JsonNode(null, null, o2, null);
 					return url + "/" + (o2.length - 1);
 				}
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on '%s' of type '%s'", url, cm);
 			}
 			var n = getNode(url, root);
 			if (n == null)
-				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL '%s' not found.", url);
 			if (n.o == null && n.cm.isObject())
-				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", url);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL '%s' not found.", url);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isArray()) {
@@ -864,14 +864,14 @@ public class PathTraversal {
 					m.put(childKey, o2);
 					return url + "/" + (o2.length - 1);
 				}
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on '%s' with parent node type '%s'", url, pct);
 			}
 			if (cm.isCollection()) {
 				var c = (Collection)o;
 				c.add(convert(val, cm.getElementType()));
 				return (c instanceof List c2 ? url + "/" + (c2.size() - 1) : null);
 			}
-			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' of type ''{1}''", url, cm);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on '%s' of type '%s'", url, cm);
 		}
 
 		if (method == DELETE) {
@@ -884,9 +884,9 @@ public class PathTraversal {
 			}
 			var n = (parentUrl == null ? root : getNode(parentUrl, root));
 			if (n == null)
-				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL '%s' not found.", parentUrl);
 			if (n.o == null && n.cm.isObject())
-				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL ''{0}'' not found.", parentUrl);
+				throw new PathTraversalException(HTTP_NOT_FOUND, "Node at URL '%s' not found.", parentUrl);
 			var cm = n.cm;
 			var o = n.o;
 			if (cm.isMap())
@@ -894,7 +894,7 @@ public class PathTraversal {
 			if (cm.isCollection() && o instanceof List o2)
 				return o2.remove(parseInt(childKey));
 			if (cm.isCollection())
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot DELETE indexed position in non-List collection ''{0}'' of type ''{1}''", url, cm);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot DELETE indexed position in non-List collection '%s' of type '%s'", url, cm);
 			if (cm.isArray()) {
 				int index = parseInt(childKey);
 				var old = ((Object[])o)[index];
@@ -910,11 +910,11 @@ public class PathTraversal {
 					m.put(n.keyName, o2);
 					return old;
 				}
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on ''{0}'' with parent node type ''{1}''", url, pct);
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform POST on '%s' with parent node type '%s'", url, pct);
 			}
 			if (cm.isBean())
 				return session.toBeanMap(o).put(childKey, null);
-			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on ''{0}'' whose parent is of type ''{1}''", url, cm);
+			throw new PathTraversalException(HTTP_BAD_REQUEST, "Cannot perform PUT on '%s' whose parent is of type '%s'", url, cm);
 		}
 
 		return null;	// Never gets here.
@@ -978,7 +978,7 @@ public class PathTraversal {
 			o2 = m.get(parentKey);
 			var pMeta = m.getPropertyMeta(parentKey);
 			if (pMeta == null)
-				throw new PathTraversalException(HTTP_BAD_REQUEST, "Unknown property ''{0}'' encountered while trying to parse into class ''{1}''", parentKey, m.getBeanInfo());
+				throw new PathTraversalException(HTTP_BAD_REQUEST, "Unknown property '%s' encountered while trying to parse into class '%s'", parentKey, m.getBeanInfo());
 			ct2 = (ClassMeta) pMeta.getBeanInfo();
 		}
 

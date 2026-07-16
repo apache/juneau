@@ -104,7 +104,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public Pet getPet(@Path("id") long id) {
 		var pet = store.getPet(id);
 		if (pet == null)
-			throw new NotFound("Pet not found: id={0}", id);
+			throw new NotFound("Pet not found: id=%s", id);
 		return pet;
 	}
 
@@ -162,10 +162,10 @@ public class PetStoreResource extends BasicRestServlet {
 	@RestGet(path="/pets/{id}/photo", serializers=PetPhotoSerializer.class)
 	public BufferedImage getPetPhoto(@Path("id") long id) {
 		if (store.getPet(id) == null)
-			throw new NotFound("Pet not found: id={0}", id);
+			throw new NotFound("Pet not found: id=%s", id);
 		var image = photos.get(id);
 		if (image == null)
-			throw new NotFound("No photo uploaded for pet: id={0}", id);
+			throw new NotFound("No photo uploaded for pet: id=%s", id);
 		return image;
 	}
 
@@ -184,7 +184,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public Ok putPetPhoto(@Path("id") long id, @Content BufferedImage image) {
 		var pet = store.getPet(id);
 		if (pet == null)
-			throw new NotFound("Pet not found: id={0}", id);
+			throw new NotFound("Pet not found: id=%s", id);
 		photos.put(id, image);
 		pet.setPhoto("/petstore/pets/" + id + "/photo");
 		return Ok.INSTANCE;
@@ -215,7 +215,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public Order getOrder(@Path("id") long id) {
 		var order = store.getOrder(id);
 		if (order == null)
-			throw new NotFound("Order not found: id={0}", id);
+			throw new NotFound("Order not found: id=%s", id);
 		return order;
 	}
 
@@ -288,7 +288,7 @@ public class PetStoreResource extends BasicRestServlet {
 	public User getUser(@Path("username") String username) {
 		var user = store.getUser(username);
 		if (user == null)
-			throw new NotFound("User not found: username={0}", username);
+			throw new NotFound("User not found: username=%s", username);
 		return user;
 	}
 

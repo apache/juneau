@@ -91,7 +91,7 @@ public class DelegateBeanMap<T> extends BeanMap<T> {
 			else
 				bme = this.getProperty(k);
 			if (bme == null)
-				throw brex(super.getBeanInfo().inner(), "Property ''{0}'' not found on class.", k);
+				throw brex(super.getBeanInfo().inner(), "Property '%s' not found on class.", k);
 			s.add(bme);
 		});
 		return s;

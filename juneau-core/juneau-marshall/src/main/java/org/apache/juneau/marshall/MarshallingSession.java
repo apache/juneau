@@ -1194,13 +1194,13 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	public final <T> BeanMap<T> toBeanMap(T o, Class<? super T> c) throws BeanRuntimeException {
 		assertArgNotNull(ARG_o, o);
 		assertArgNotNull(ARG_c, c);
-		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class=''{0}'', objectClass=''{1}'', object=''{2}''", cn(c), cn(o), 0);
+		assertArg(c.isInstance(o), "The specified object is not an instance of the specified class.  class='%s', objectClass='%s', object='%s'", cn(c), cn(o), 0);
 
 		var cm = getClassMeta(c);
 
 		BeanMeta m = cm.getBeanMeta();
 		if (m == null)
-			throw brex(c, "Class is not a bean.  Reason=''{0}''", cm.getNotABeanReason());
+			throw brex(c, "Class is not a bean.  Reason='%s'", cm.getNotABeanReason());
 		var bm = new BeanMap<>(o, m);
 		bm.setBeanSession(this);
 		return bm;
@@ -1407,7 +1407,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return convertToType(value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToType(value, c);
-		throw iaex("Unsupported targetType for convertToType: {0}", cn(targetType));
+		throw iaex("Unsupported targetType for convertToType: %s", cn(targetType));
 	}
 
 	/**
@@ -1429,7 +1429,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 			return convertToMemberType(outer, value, cm);
 		if (targetType instanceof Class<?> c)
 			return convertToMemberType(outer, value, c);
-		throw iaex("Unsupported targetType for convertToMemberType: {0}", cn(targetType));
+		throw iaex("Unsupported targetType for convertToMemberType: %s", cn(targetType));
 	}
 
 	/**

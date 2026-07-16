@@ -63,7 +63,7 @@ class UriResolution_Test extends TestBase {
 					System.out.println(r);
 				}
 
-				assertEquals(expected, r, fs("{0}/{1} serialize-normal failed", label, cns(s)));
+				assertEquals(expected, r, fs("%s/%s serialize-normal failed", label, cns(s)));
 
 			} catch (AssertionError e) {
 				throw e;
@@ -80,7 +80,7 @@ class UriResolution_Test extends TestBase {
 				var m = p.parse(r, TreeMap.class, String.class, String.class);
 
 				var r2 = Json5Serializer.DEFAULT.toString(m);
-				assertEquals(r2, results.json, fs("{0}/{1} parse failed", label, cns(s)));
+				assertEquals(r2, results.json, fs("%s/%s parse failed", label, cns(s)));
 
 			} catch (AssertionError e) {
 				throw e;

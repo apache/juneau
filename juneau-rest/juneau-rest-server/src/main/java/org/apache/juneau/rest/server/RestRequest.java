@@ -559,7 +559,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	}
 
 	private static PreconditionFailed preconditionFailed(String headerName) {
-		return new PreconditionFailed("Precondition ''{0}'' failed.", headerName);
+		return new PreconditionFailed("Precondition '%s' failed.", headerName);
 	}
 
 	/**
@@ -1809,18 +1809,18 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		var q = getQueryParams().get(QUERY_juneauSerializerOptions).asString().orElse(null);
 		if (q != null && !q.isBlank()) {
-			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter ''{0}''.", QUERY_juneauSerializerOptions));
+			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter '%s'.", QUERY_juneauSerializerOptions));
 			var invalid = m1.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
-				badRequest("Invalid session options in query parameter ''{0}'': ''{1}''", QUERY_juneauSerializerOptions, invalid);
+				badRequest("Invalid session options in query parameter '%s': '%s'", QUERY_juneauSerializerOptions, invalid);
 		}
 
 		var h = getHeaderParam(HEADER_JuneauSerializerOptions).asString().orElse(null);
 		if (h != null && !h.isBlank()) {
-			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header ''{0}''.", HEADER_JuneauSerializerOptions));
+			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header '%s'.", HEADER_JuneauSerializerOptions));
 			var invalid = m2.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
-				badRequest("Invalid session options in header ''{0}'': ''{1}''", HEADER_JuneauSerializerOptions, invalid);
+				badRequest("Invalid session options in header '%s': '%s'", HEADER_JuneauSerializerOptions, invalid);
 		}
 
 		return mergeSessionMaps(getAttributes().asMap(), m1, m2, serializerSessionProperties);
@@ -1854,18 +1854,18 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		var q = getQueryParams().get(QUERY_juneauParserOptions).asString().orElse(null);
 		if (q != null && !q.isBlank()) {
-			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter ''{0}''.", QUERY_juneauParserOptions));
+			m1 = parseUonMap(q, e -> badRequest(e, "Could not parse UON session options from query parameter '%s'.", QUERY_juneauParserOptions));
 			var invalid = m1.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
-				badRequest("Invalid session options in query parameter ''{0}'': ''{1}''", QUERY_juneauParserOptions, invalid);
+				badRequest("Invalid session options in query parameter '%s': '%s'", QUERY_juneauParserOptions, invalid);
 		}
 
 		var h = getHeaderParam(HEADER_JuneauParserOptions).asString().orElse(null);
 		if (h != null && !h.isBlank()) {
-			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header ''{0}''.", HEADER_JuneauParserOptions));
+			m2 = parseJsonMap(h, e -> badRequest(e, "Could not parse JSON5 session options from header '%s'.", HEADER_JuneauParserOptions));
 			var invalid = m2.keySet().stream().filter(k -> !allowlist.contains(k)).collect(Collectors.joining(","));
 			if (!invalid.isEmpty())
-				badRequest("Invalid session options in header ''{0}'': ''{1}''", HEADER_JuneauParserOptions, invalid);
+				badRequest("Invalid session options in header '%s': '%s'", HEADER_JuneauParserOptions, invalid);
 		}
 
 		return mergeSessionMaps(getAttributes().asMap(), m1, m2, parserSessionProperties);

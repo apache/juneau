@@ -568,7 +568,7 @@ public class IoUtils {
 			return read(in2);
 		if (in instanceof byte[] in2)
 			return read(in2);
-		throw iaex("Invalid type passed to read:  {0}", ClassUtils.className(in));
+		throw iaex("Invalid type passed to read:  %s", ClassUtils.className(in));
 	}
 
 	/**

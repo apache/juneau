@@ -353,7 +353,7 @@ public class CollectionUtils {
 	})
 	public static List<Object> arrayToList(Object array) {
 		assertArgNotNull(ARG_array, array);
-		assertArg(ClassUtils.isArray(array), "Input must be an array but was {0}", ClassUtils.className(array));
+		assertArg(ClassUtils.isArray(array), "Input must be an array but was %s", ClassUtils.className(array));
 
 		var componentType = array.getClass().getComponentType();
 		var length = Array.getLength(array);
@@ -2046,7 +2046,7 @@ public class CollectionUtils {
 			return o2.isEmpty() ? Collections.emptyList() : Collections.singletonList(o2.get());
 		if (ClassUtils.isArray(o))
 			return arrayToList(o);
-		throw rex("Could not convert object of type {0} to a list", ClassUtils.className(o));
+		throw rex("Could not convert object of type %s to a list", ClassUtils.className(o));
 	}
 
 	/**
@@ -2202,7 +2202,7 @@ public class CollectionUtils {
 	 * @return A new stream.
 	 */
 	public static Stream<Object> toStream(Object array) {
-		assertArg(ClassUtils.isArray(array), "Arg was not an array.  Type: {0}", ClassUtils.className(array));
+		assertArg(ClassUtils.isArray(array), "Arg was not an array.  Type: %s", ClassUtils.className(array));
 		var length = Array.getLength(array);
 		return IntStream.range(0, length).mapToObj(i -> Array.get(array, i));
 	}

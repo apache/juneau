@@ -88,7 +88,7 @@ public class TokenWriterArg extends SimpleRestOperationArg {
 		var serializer = match.get().getSerializer();
 		if (!(serializer instanceof TokenWritable))
 			throw new UnsupportedMediaType(
-				"Serializer ''{0}'' (matched on Accept) does not support the token-writer surface.",
+				"Serializer '%s' (matched on Accept) does not support the token-writer surface.",
 				serializer.getClass().getName());
 		var mediaType = res.getMediaType();
 		if (mediaType == null)
@@ -111,7 +111,7 @@ public class TokenWriterArg extends SimpleRestOperationArg {
 		var cursor = ((TokenWritable) session).serializeTokens(output);
 		if (!declaredType.isInstance(cursor))
 			throw new UnsupportedMediaType(
-				"Serializer ''{0}'' produced cursor type ''{1}'' which is not assignable to the declared parameter type ''{2}''.",
+				"Serializer '%s' produced cursor type '%s' which is not assignable to the declared parameter type '%s'.",
 				serializer.getClass().getName(),
 				cursor == null ? "null" : cursor.getClass().getName(),
 				declaredType.getName());

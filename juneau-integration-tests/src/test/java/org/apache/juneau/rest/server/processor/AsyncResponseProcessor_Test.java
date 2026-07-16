@@ -129,7 +129,7 @@ class AsyncResponseProcessor_Test extends TestBase {
 		@RestGet("/badRequest/{id}")
 		public CompletableFuture<String> badRequest(@Path String id) {
 			var f = new CompletableFuture<String>();
-			f.completeExceptionally(new BadRequest("Bad id: ''{0}''", id));
+			f.completeExceptionally(new BadRequest("Bad id: '%s'", id));
 			return f;
 		}
 	}

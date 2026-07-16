@@ -173,7 +173,7 @@ public enum BitSetFormat {
 				}
 			}
 		} catch (IllegalArgumentException e) {
-			throw iaex("Invalid BitSet value ''{0}'' for format {1}: {2}", value, fmt, e.getMessage());
+			throw iaex("Invalid BitSet value '%s' for format %s: %s", value, fmt, e.getMessage());
 		}
 		return bs;
 	}

@@ -537,7 +537,7 @@ public class BeanMeta<T> {
 			}
 
 			// Check for missing properties.
-			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw brex(c, "The property ''{0}'' was defined on the @BeanType(properties=X) annotation of class ''{1}'' but was not found on the class definition.", x, ci.getNameSimple()); });
+			fixedBeanProps.stream().filter(x -> ! normalProps.containsKey(x)).findFirst().ifPresent(x -> { throw brex(c, "The property '%s' was defined on the @BeanType(properties=X) annotation of class '%s' but was not found on the class definition.", x, ci.getNameSimple()); });
 
 			// For records with renamed properties, remap constructor args to use the actual property names.
 			if (ci.isRecord() && ine(beanConstructor.args())) {
@@ -565,7 +565,7 @@ public class BeanMeta<T> {
 			for (var fp : beanConstructor.args()) {
 				var m = normalProps.get(fp);
 				if (m == null)
-					throw brex(c, "The property ''{0}'' was defined on the @BeanCtor(properties=X) annotation but was not found on the class definition.", fp);
+					throw brex(c, "The property '%s' was defined on the @BeanCtor(properties=X) annotation but was not found on the class definition.", fp);
 				m.setAsConstructorArg();
 			}
 
@@ -1159,7 +1159,7 @@ public class BeanMeta<T> {
 				args = con.getParameters().stream().map(x -> x.getName()).toList();
 				for (int i = 0; i < args.size(); i++) {
 					if (isBlank(args.get(i)))
-						throw brex(ci, "Could not find name for parameter #{0} of constructor ''{1}''", i, con.getNameFull());
+						throw brex(ci, "Could not find name for parameter #%s of constructor '%s'", i, con.getNameFull());
 				}
 			}
 			return new BeanConstructor(o(con), args);
@@ -1383,7 +1383,7 @@ public class BeanMeta<T> {
 				n = pn.getPropertyName(n);
 
 				if ("*".equals(bpName) && methodType == UNKNOWN)
-					throw brex(ci, "Found @BeanProp(\"*\") but could not determine method type on method ''{0}''.", m.getNameSimple());
+					throw brex(ci, "Found @BeanProp(\"*\") but could not determine method type on method '%s'.", m.getNameSimple());
 
 				if (methodType != UNKNOWN) {
 					if (nn(bpName) && ! bpName.isEmpty())

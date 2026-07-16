@@ -144,7 +144,7 @@ public class IfRange extends HttpHeaderBean {
 				return o2.toString();
 			if (o instanceof ZonedDateTime o2)
 				return RFC_1123_DATE_TIME.format(o2);
-			throw rex("Invalid object type returned by supplier: {0}", cn(o));
+			throw rex("Invalid object type returned by supplier: %s", cn(o));
 		}
 		if (nn(etagValue))
 			return s(etagValue);

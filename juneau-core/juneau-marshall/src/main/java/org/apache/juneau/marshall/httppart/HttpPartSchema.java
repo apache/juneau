@@ -701,7 +701,7 @@ public class HttpPartSchema {
 				if (ine(value))
 					this.collectionFormat = HttpPartCollectionFormat.fromString(value);
 			} catch (Exception e) {
-				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as collectionFormat value.  Valid values: {1}", value, HttpPartCollectionFormat.values());
+				throw new BasicRuntimeException(e, "Invalid value '%s' passed in as collectionFormat value.  Valid values: %s", value, HttpPartCollectionFormat.values());
 			}
 			return this;
 		}
@@ -1249,7 +1249,7 @@ public class HttpPartSchema {
 				if (ine(value))
 					format = HttpPartFormat.fromString(value);
 			} catch (Exception e) {
-				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as format value.  Valid values: {1}", value, HttpPartFormat.values());
+				throw new BasicRuntimeException(e, "Invalid value '%s' passed in as format value.  Valid values: %s", value, HttpPartFormat.values());
 			}
 			return this;
 		}
@@ -2002,7 +2002,7 @@ public class HttpPartSchema {
 				if (ine(value))
 					this.pattern = Pattern.compile(value);
 			} catch (Exception e) {
-				throw new BasicRuntimeException(e, "Invalid value {0} passed in as pattern value.  Must be a valid regular expression.", value);
+				throw new BasicRuntimeException(e, "Invalid value %s passed in as pattern value.  Must be a valid regular expression.", value);
 			}
 			return this;
 		}
@@ -2459,7 +2459,7 @@ public class HttpPartSchema {
 				if (ine(value))
 					type = HttpPartDataType.fromString(value);
 			} catch (Exception e) {
-				throw new BasicRuntimeException(e, "Invalid value ''{0}'' passed in as type value.  Valid values: {1}", value, HttpPartDataType.values());
+				throw new BasicRuntimeException(e, "Invalid value '%s' passed in as type value.  Valid values: %s", value, HttpPartDataType.values());
 			}
 			return this;
 		}
@@ -4205,17 +4205,17 @@ public class HttpPartSchema {
 			if (! isValidAllowEmpty(in))
 				throw new SchemaValidationException("Empty value not allowed.");
 			if (! isValidConst(in))
-				throw new SchemaValidationException("Value does not match constant.  Must be: {0}", const_);
+				throw new SchemaValidationException("Value does not match constant.  Must be: %s", const_);
 			if (! isValidPattern(in))
-				throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
+				throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: %s", pattern.pattern());
 			if (! isValidEnum(in))
-				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following:  {0}", toCdl(enum_));
+				throw new SchemaValidationException("Value does not match one of the expected values.  Must be one of the following:  %s", toCdl(enum_));
 			if (! isValidMaxLength(in))
 				throw new SchemaValidationException("Maximum length of value exceeded.");
 			if (! isValidMinLength(in))
 				throw new SchemaValidationException("Minimum length of value not met.");
 			if (! isValidFormat(in))
-				throw new SchemaValidationException("Value does not match expected format: {0}", format);
+				throw new SchemaValidationException("Value does not match expected format: %s", format);
 		}
 		return in;
 	}
@@ -4314,9 +4314,9 @@ public class HttpPartSchema {
 					if (! isValidMaxLength(s))
 						throw new SchemaValidationException("Maximum length of value exceeded.");
 					if (! isValidPattern(s))
-						throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: {0}", pattern.pattern());
+						throw new SchemaValidationException("Value does not match expected pattern.  Must match pattern: %s", pattern.pattern());
 					if (! isValidFormat(s))
-						throw new SchemaValidationException("Value does not match expected format: {0}", format);
+						throw new SchemaValidationException("Value does not match expected format: %s", format);
 				}
 				break;
 			}

@@ -48,9 +48,9 @@ public class TestUtils extends BasicTestUtils {
 	}
 
 	public static <T extends Throwable> T assertThrowable(Class<? extends Throwable> expectedType, String expectedSubstring, T t) {
-		assertTrue(expectedType.isInstance(t), fs("Expected throwable of type: {0}.\nActual: {1}", expectedType.getName(), t == null ? "null" : t.getClass().getName()));
+		assertTrue(expectedType.isInstance(t), fs("Expected throwable of type: %s.\nActual: %s", expectedType.getName(), t == null ? "null" : t.getClass().getName()));
 		var messages = getMessages(t);
-		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: {0}.\nActual:\n{1}", expectedSubstring, messages));
+		assertTrue(messages.contains(expectedSubstring), fs("Expected message to contain: %s.\nActual:\n%s", expectedSubstring, messages));
 		return t;
 	}
 

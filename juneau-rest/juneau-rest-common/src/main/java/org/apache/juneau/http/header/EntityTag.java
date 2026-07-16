@@ -80,7 +80,7 @@ public class EntityTag {
 			if (value.length() > 1 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"')
 				value = value.substring(1, value.length() - 1);
 			else
-				throw iaex("Invalid value for entity-tag: [{0}]", (isWeak ? ("W/" + value) : value));
+				throw iaex("Invalid value for entity-tag: [%s]", (isWeak ? ("W/" + value) : value));
 		}
 		this.value = value;
 

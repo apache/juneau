@@ -35,7 +35,7 @@ class UnavailableForLegalReasons_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws UnavailableForLegalReasons {
-			throw new UnavailableForLegalReasons("foo {0}", "bar");
+			throw new UnavailableForLegalReasons("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws UnavailableForLegalReasons {
@@ -43,7 +43,7 @@ class UnavailableForLegalReasons_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws UnavailableForLegalReasons {
-			throw new UnavailableForLegalReasons(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new UnavailableForLegalReasons(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws UnavailableForLegalReasons {

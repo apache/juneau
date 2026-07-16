@@ -672,12 +672,12 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		if (key == null) {
 			// Allow null for non-primitive types
 			if (keyType.isPrimitive())
-				throw rex("Cannot set null key for primitive type {0}", keyType.getName());
+				throw rex("Cannot set null key for primitive type %s", keyType.getName());
 			return null;
 		}
 		if (keyType.isInstance(key))
 			return keyType.cast(key);
-		throw rex("Object of type {0} could not be converted to key type {1}", cn(key), cn(keyType));
+		throw rex("Object of type %s could not be converted to key type %s", cn(key), cn(keyType));
 	}
 
 	private V convertValue(Object value) {
@@ -687,12 +687,12 @@ public class FilteredMap<K,V> extends AbstractMap<K,V> {
 		if (value == null) {
 			// Allow null for non-primitive types
 			if (valueType.isPrimitive())
-				throw rex("Cannot set null value for primitive type {0}", valueType.getName());
+				throw rex("Cannot set null value for primitive type %s", valueType.getName());
 			return null;
 		}
 		if (valueType.isInstance(value))
 			return valueType.cast(value);
-		throw rex("Object of type {0} could not be converted to value type {1}", cn(value), cn(valueType));
+		throw rex("Object of type %s could not be converted to value type %s", cn(value), cn(valueType));
 	}
 
 	@Override

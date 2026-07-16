@@ -91,13 +91,13 @@ public class JsonTokenReader implements TokenReader {
 	 * Error-message format string for invalid JSON numbers.  Used with
 	 * {@link #parseException(String, Object...)}.
 	 */
-	protected static final String MSG_invalidNumber = "Invalid JSON number: ''{0}''";
+	protected static final String MSG_invalidNumber = "Invalid JSON number: '%s'";
 
 	/**
 	 * Error-message format string for unexpected characters at the cursor's current position.
 	 * Used with {@link #parseException(String, Object...)}.
 	 */
-	protected static final String MSG_unexpectedChar = "Unexpected character: ''{0}''";
+	protected static final String MSG_unexpectedChar = "Unexpected character: '%s'";
 
 	/**
 	 * State-machine state: at root, after <c>[</c>, after <c>:</c>, or after <c>,</c> inside an
@@ -363,7 +363,7 @@ public class JsonTokenReader implements TokenReader {
 						return;
 					}
 					if (c != ',')
-						throw parseException("Expected ',' or ']' but got ''{0}''", (char) c);
+						throw parseException("Expected , or ] but got '%s'", (char) c);
 					// If a trailing-comma case follows (next non-ws is ']'), keep the comma-or-end
 					// state so a subsequent next() closes the container correctly.  Format-specific
 					// hook: plain JSON rejects trailing commas, JSON5 accepts.
@@ -385,7 +385,7 @@ public class JsonTokenReader implements TokenReader {
 						return;
 					}
 					if (c != ',')
-						throw parseException("Expected ',' or '}' but got ''{0}''", (char) c);
+						throw parseException("Expected , or } but got '%s'", (char) c);
 					var c2 = readSkipWsAndComments();
 					if (c2 == '}') {
 						r.unread();
@@ -403,7 +403,7 @@ public class JsonTokenReader implements TokenReader {
 					if (c == -1)
 						return;
 					if (c != ':')
-						throw parseException("Expected ':' after field name but got ''{0}''", (char) c);
+						throw parseException("Expected : after field name but got '%s'", (char) c);
 					state = S00_expectValue;
 					break;
 				}
@@ -445,7 +445,7 @@ public class JsonTokenReader implements TokenReader {
 		} catch (Exception e) {
 			if (e instanceof IOException ioe) throw ioe;
 			if (e instanceof ParseException pe) throw pe;
-			throw new ParseException(s, "read failed: {0}", e.getMessage());
+			throw new ParseException(s, "read failed: %s", e.getMessage());
 		}
 	}
 
@@ -578,7 +578,7 @@ public class JsonTokenReader implements TokenReader {
 			return;
 		}
 		if (c != '"')
-			throw parseException("Expected '\"' for field name but got ''{0}''", (char) c);
+			throw parseException("Expected \" for field name but got '%s'", (char) c);
 		r.unread();
 		currentFieldName = maybeTrim(readString());
 		currentToken = TokenType.FIELD_NAME;
@@ -593,7 +593,7 @@ public class JsonTokenReader implements TokenReader {
 
 	private void readColonThenValue(int c) throws IOException, ParseException {
 		if (c != ':')
-			throw parseException("Expected ':' after field name but got ''{0}''", (char) c);
+			throw parseException("Expected : after field name but got '%s'", (char) c);
 		var c2 = readSkipWsAndComments();
 		if (c2 == -1)
 			throw parseException("Unexpected end of input after ':'");
@@ -620,7 +620,7 @@ public class JsonTokenReader implements TokenReader {
 			return;
 		}
 		if (c != ',')
-			throw parseException("Expected ',' or '}' but got ''{0}''", (char) c);
+			throw parseException("Expected , or } but got '%s'", (char) c);
 		var c2 = readSkipWsAndComments();
 		if (c2 == -1)
 			throw parseException("Unexpected end of input after ','");
@@ -648,7 +648,7 @@ public class JsonTokenReader implements TokenReader {
 			return;
 		}
 		if (c != ',')
-			throw parseException("Expected ',' or ']' but got ''{0}''", (char) c);
+			throw parseException("Expected , or ] but got '%s'", (char) c);
 		var c2 = readSkipWsAndComments();
 		if (c2 == -1)
 			throw parseException("Unexpected end of input after ','");
@@ -698,7 +698,7 @@ public class JsonTokenReader implements TokenReader {
 		while (c != -1) {
 			c = r.read();
 			if (c <= 0x1F && c != -1)
-				throw parseException("Unescaped control character encountered: ''0x{0}''", String.format("%04X", c));
+				throw parseException("Unescaped control character encountered: '0x%s'", String.format("%04X", c));
 			if (inEscape) {
 				switch (c) {
 					case 'n': r.replace('\n'); break;
@@ -771,7 +771,7 @@ public class JsonTokenReader implements TokenReader {
 	private void expectLiteral(String literal) throws IOException, ParseException {
 		var s = r.read(literal.length());
 		if (!literal.equals(s))
-			throw parseException("Unrecognized syntax.  Expected=''{0}'', Actual=''{1}''", literal, s);
+			throw parseException("Unrecognized syntax.  Expected='%s', Actual='%s'", literal, s);
 	}
 
 	/**

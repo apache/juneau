@@ -415,7 +415,7 @@ public class RestResponse implements HttpResponse, AutoCloseable {
 			try {
 				if (! request.isLoggingSuppressed() && (request.isDebug() || client.logRequestsPredicate.test(request, this))) {
 					if (client.logRequests == DetailLevel.SIMPLE) {
-						client.log(client.logRequestsLevel, "HTTP {0} {1}, {2}", request.getMethod(), request.getURI(), this.getStatusLine());
+						client.log(client.logRequestsLevel, "HTTP %s %s, %s", request.getMethod(), request.getURI(), this.getStatusLine());
 					} else if (request.isDebug() || client.logRequests == DetailLevel.FULL) {
 						var output = getContent().asString();
 						var sb = new StringBuilder();

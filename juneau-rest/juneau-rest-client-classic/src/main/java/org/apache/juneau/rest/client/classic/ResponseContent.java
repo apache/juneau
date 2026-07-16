@@ -307,7 +307,7 @@ public class ResponseContent implements HttpEntity {
 			if (ct == null && client.hasParsers())
 				throw new ParseException("Content-Type not specified in response header.  Cannot find appropriate parser.");
 
-			throw new ParseException("Unsupported media-type in request header ''Content-Type'': ''{0}''", ct);
+			throw new ParseException("Unsupported media-type in request header 'Content-Type': '%s'", ct);
 
 		} catch (ParseException | IOException e) {
 			response.close();
@@ -341,14 +341,14 @@ public class ResponseContent implements HttpEntity {
 			var matchedParser = parser != null ? parser : client.getMatchingParser(ct);
 			if (matchedParser == null)
 				throw new RestCallException(response, null,
-					"No registered parser matches Content-Type ''{0}'' for cursor return type ''{1}''.",
+					"No registered parser matches Content-Type '%s' for cursor return type '%s'.",
 					ct, type.inner().getName());
 
 			var isToken = type.isChildOf(TokenReader.class) || type.is(TokenReader.class);
 			var supported = isToken ? matchedParser instanceof TokenReadable : matchedParser instanceof RecordReadable;
 			if (!supported)
 				throw new RestCallException(response, null,
-					"Parser ''{0}'' does not support the {1} surface.",
+					"Parser '%s' does not support the %s surface.",
 					matchedParser.getClass().getName(),
 					isToken ? "token-reader" : "record-reader");
 
@@ -359,7 +359,7 @@ public class ResponseContent implements HttpEntity {
 
 			if (!type.inner().isInstance(cursor))
 				throw new RestCallException(response, null,
-					"Parser ''{0}'' produced cursor type ''{1}'' which is not assignable to the declared type ''{2}''.",
+					"Parser '%s' produced cursor type '%s' which is not assignable to the declared type '%s'.",
 					matchedParser.getClass().getName(),
 					cursor == null ? "null" : cursor.getClass().getName(),
 					type.inner().getName());

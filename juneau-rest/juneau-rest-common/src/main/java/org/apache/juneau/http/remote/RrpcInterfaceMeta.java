@@ -98,7 +98,7 @@ public final class RrpcInterfaceMeta {
 
 	private RrpcInterfaceMeta(Class<?> iface, boolean includeUnannotated) {
 		if (!iface.isInterface())
-			throw iaex("Class {0} is not an interface", iface.getName());
+			throw iaex("Class %s is not an interface", iface.getName());
 		var remote = iface.getAnnotation(Remote.class);
 
 		this.iface = iface;
@@ -228,9 +228,9 @@ public final class RrpcInterfaceMeta {
 	public static RrpcInterfaceMeta of(Class<?> iface) {
 		assertArgNotNull("iface", iface);
 		if (!iface.isInterface())
-			throw iaex("Class {0} is not an interface", iface.getName());
+			throw iaex("Class %s is not an interface", iface.getName());
 		if (iface.getAnnotation(Remote.class) == null)
-			throw iaex("Class {0} is not annotated with @Remote", iface.getName());
+			throw iaex("Class %s is not annotated with @Remote", iface.getName());
 		return CACHE.computeIfAbsent(iface, RrpcInterfaceMeta::new);
 	}
 
@@ -527,7 +527,7 @@ public final class RrpcInterfaceMeta {
 		if (method.isEmpty())
 			method = HttpUtils.detectHttpMethod(m, true, "GET");
 		if (!isOneOf(method, "DELETE", "GET", "POST", "PUT", "OPTIONS", "HEAD", "CONNECT", "TRACE", "PATCH"))
-			throw iaex("Invalid @RemoteOp method ''{0}'' on {1}.{2}", method, m.getDeclaringClass().getName(), m.getName());
+			throw iaex("Invalid @RemoteOp method '%s' on %s.%s", method, m.getDeclaringClass().getName(), m.getName());
 		return new RrpcInterfaceMethodMeta(m, method, trimSlashes(path), returnType,
 			parseConstantParts(a.headers(), ':'),
 			parseConstantParts(a.queryData(), '='),

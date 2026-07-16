@@ -83,7 +83,7 @@ public class SchemaUtils {
 			return o2;
 		if (o instanceof MarshalledMap o2)
 			return new JsonMap(o2);
-		throw new ParseException("Unexpected data type ''{0}''.  Expected Map or String.", cn(o));
+		throw new ParseException("Unexpected data type '%s'.  Expected Map or String.", cn(o));
 	}
 
 	/**

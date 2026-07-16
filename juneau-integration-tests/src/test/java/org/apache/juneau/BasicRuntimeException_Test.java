@@ -40,7 +40,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -52,7 +52,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -64,7 +64,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -76,7 +76,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -88,7 +88,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -100,7 +100,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -112,7 +112,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -124,7 +124,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -136,7 +136,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertTrue(x.getMessage().contains("New message"));
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertTrue(x.getMessage().contains("Message arg1"));
 	}
 
@@ -148,7 +148,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 
@@ -160,7 +160,7 @@ class BasicRuntimeException_Test extends TestBase {
 		assertEquals("New message", x.getMessage());
 
 		// Test setMessage with args
-		assertSame(x, x.setMessage("Message {0}", "arg1"));
+		assertSame(x, x.setMessage("Message %s", "arg1"));
 		assertEquals("Message arg1", x.getMessage());
 	}
 }

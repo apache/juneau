@@ -87,11 +87,11 @@ public class RoundTripObjectSwap_Tester<T,S> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: %s, but was %s.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " swap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: %s, but was %s.", exceptionMsg, e.getMessage()));
 		}
 	}
 
@@ -108,11 +108,11 @@ public class RoundTripObjectSwap_Tester<T,S> {
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
-			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: %s, but was %s.", exceptionMsg, e.getMessage()));
 		} catch (Exception e) {
 			if (exceptionMsg == null)
 				throw new AssertionError("Test [" + label + " unswap] failed with exception: " + e.getLocalizedMessage(), e);
-			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: {0}, but was {1}.", exceptionMsg, e.getMessage()));
+			assertTrue(e.getMessage().contains(exceptionMsg), fs("Expected exception message to contain: %s, but was %s.", exceptionMsg, e.getMessage()));
 		}
 	}
 

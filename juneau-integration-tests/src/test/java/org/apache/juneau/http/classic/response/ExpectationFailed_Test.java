@@ -35,7 +35,7 @@ class ExpectationFailed_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws ExpectationFailed {
-			throw new ExpectationFailed("foo {0}", "bar");
+			throw new ExpectationFailed("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws ExpectationFailed {
@@ -43,7 +43,7 @@ class ExpectationFailed_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws ExpectationFailed {
-			throw new ExpectationFailed(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new ExpectationFailed(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws ExpectationFailed {

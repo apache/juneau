@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.jsonschema.*;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.marshall.parser.*;
 
 /**
@@ -131,7 +132,7 @@ public final class JsonSchemaBeanGenerator {
 	public static JsonSchema toBean(JsonMap schemaMap) {
 		assertArgNotNull("schemaMap", schemaMap);
 		try {
-			var json = JsonSerializer.DEFAULT.toString(schemaMap);
+			var json = Json.of(schemaMap);
 			return JsonParser.create().ignoreUnknownBeanProperties().build().parse(json, JsonSchema.class);
 		} catch (ParseException e) {
 			throw toRex(e);

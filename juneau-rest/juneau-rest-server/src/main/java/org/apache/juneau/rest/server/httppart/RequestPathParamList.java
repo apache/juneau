@@ -320,7 +320,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 */
 	public <T> Optional<T> get(Class<T> type) {
 		var cm = req.getMarshallingSession().getClassMeta(type);
-		var name = HttpParts.getName(PATH, cm).orElseThrow(() -> rex("@Path(name) not found on class {0}", cn(type)));
+		var name = HttpParts.getName(PATH, cm).orElseThrow(() -> rex("@Path(name) not found on class %s", cn(type)));
 		return get(name).as(type);
 	}
 

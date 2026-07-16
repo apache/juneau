@@ -138,7 +138,7 @@ public class ResponseProcessorList {
 		try {
 			return BeanInstantiator.of(ResponseProcessor.class, bs).type((Class<? extends ResponseProcessor>) o).run();
 		} catch (ExecutableException e) {
-			throw new ConfigException(e, "Could not instantiate class {0}", o);
+			throw new ConfigException(e, "Could not instantiate class %s", o);
 		}
 	}
 

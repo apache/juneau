@@ -35,7 +35,7 @@ class FailedDependency_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws FailedDependency {
-			throw new FailedDependency("foo {0}", "bar");
+			throw new FailedDependency("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws FailedDependency {
@@ -43,7 +43,7 @@ class FailedDependency_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws FailedDependency {
-			throw new FailedDependency(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new FailedDependency(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws FailedDependency {

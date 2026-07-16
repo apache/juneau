@@ -55,7 +55,7 @@ public class RrpcRestOpContext extends RestOpContext {
 		var interfaceClass = getMarshallingContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);
 		if (meta.getMethodsByPath().isEmpty())
-			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());
+			throw new InternalServerError("Method %s returns an interface %s that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class RrpcRestOpContext extends RestOpContext {
 		var interfaceClass = getMarshallingContext().getClassMeta(getJavaMethod().getGenericReturnType());
 		meta = new RrpcInterfaceMeta(interfaceClass.inner(), null);
 		if (meta.getMethodsByPath().isEmpty())
-			throw new InternalServerError("Method {0} returns an interface {1} that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());
+			throw new InternalServerError("Method %s returns an interface %s that doesn't define any remote methods.", getJavaMethod().getName(), interfaceClass.getNameFull());
 	}
 
 	@Override

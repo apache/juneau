@@ -572,12 +572,12 @@ public class FilteredSet<E> extends AbstractSet<E> {
 		if (element == null) {
 			// Allow null for non-primitive types
 			if (elementType.isPrimitive())
-				throw rex("Cannot set null element for primitive type {0}", elementType.getName());
+				throw rex("Cannot set null element for primitive type %s", elementType.getName());
 			return null;
 		}
 		if (elementType.isInstance(element))
 			return elementType.cast(element);
-		throw rex("Object of type {0} could not be converted to element type {1}", cn(element), cn(elementType));
+		throw rex("Object of type %s could not be converted to element type %s", cn(element), cn(elementType));
 	}
 
 	@Override

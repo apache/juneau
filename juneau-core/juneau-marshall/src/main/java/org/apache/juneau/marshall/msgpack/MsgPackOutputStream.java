@@ -398,7 +398,7 @@ public class MsgPackOutputStream extends OutputStream {
 			return appendLong(value.longValue());
 		if (value.signum() > 0 && value.bitLength() == 64)
 			return append1(UINT64).append8(value.longValue());
-		throw new SerializeException("BigInteger value ''{0}'' is outside the range supported by MessagePack integer types (64-bit).", value);
+		throw new SerializeException("BigInteger value '%s' is outside the range supported by MessagePack integer types (64-bit).", value);
 	}
 
 	/**
@@ -445,7 +445,7 @@ public class MsgPackOutputStream extends OutputStream {
 		int length2 = writeUtf8To(cs);
 
 		if (length != length2)
-			throw new SerializeException("Unexpected length.  Expected={0}, Actual={1}", length, length2);
+			throw new SerializeException("Unexpected length.  Expected=%s, Actual=%s", length, length2);
 
 		return this;
 	}

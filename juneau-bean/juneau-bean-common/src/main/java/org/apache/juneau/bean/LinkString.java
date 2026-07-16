@@ -18,8 +18,6 @@ package org.apache.juneau.bean;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
-import java.text.*;
-
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.httppart.*;
 import org.apache.juneau.marshall.html.*;
@@ -55,7 +53,7 @@ public class LinkString implements Comparable<LinkString> {
 	 *
 	 * @param name Corresponds to the text inside of the <xt>&lt;A&gt;</xt> element.
 	 * @param uri Corresponds to the value of the <xa>href</xa> attribute of the <xt>&lt;A&gt;</xt> element.
-	 * @param uriArgs Optional arguments for {@link MessageFormat} style arguments in the href.
+	 * @param uriArgs Optional printf-style ({@link String#format(String, Object...)}) arguments in the href.
 	 */
 	public LinkString(String name, String uri, Object...uriArgs) {
 		setName(name);
@@ -157,7 +155,7 @@ public class LinkString implements Comparable<LinkString> {
 	 * @param value
 	 * 	The new value for this property.
 	 * 	<br>Can be <jk>null</jk> to unset the property.
-	 * @param args {@link MessageFormat}-style arguments in the URL.
+	 * @param args Optional printf-style ({@link String#format(String, Object...)}) arguments in the URL.
 	 * @return This object.
 	 */
 	public LinkString setUri(String value, Object...args) {

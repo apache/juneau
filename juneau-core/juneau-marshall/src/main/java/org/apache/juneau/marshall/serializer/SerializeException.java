@@ -23,7 +23,7 @@ import java.text.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.*;
-import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.marshaller.*;
 
 /**
  * General exception thrown whenever an error occurs during serialization.
@@ -66,7 +66,7 @@ public class SerializeException extends BasicRuntimeException {
 		if (nn(session)) {
 			Map<String,Object> m = session.getLastLocation();
 			if (nn(m) && ! m.isEmpty())
-				msg = "Serialize exception occurred at " + Json5Serializer.DEFAULT.toString(m) + ".  " + msg;
+				msg = "Serialize exception occurred at " + Json5.of(m) + ".  " + msg;
 		}
 		return msg;
 	}

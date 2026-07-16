@@ -283,12 +283,12 @@ public class TimeMatcherFactory extends MatcherFactory {
 			}
 
 			if (i != s.length())
-				throw new PatternException("Invalid range pattern ({0}): pattern=[{1}], pos=[{2}], char=[{3}]", state, s, i, c);
+				throw new PatternException("Invalid range pattern (%s): pattern=[%s], pos=[%s], char=[%s]", state, s, i, c);
 
 			if (state == S1) {
 				// No tokens found.
 			} else if (state == S2 || state == S3 || state == S4 || state == S5 || state == S6 || state == S10 || state == S11 || state == S12) {
-				throw new PatternException("Invalid range pattern (E{0}): {1}", state, s);
+				throw new PatternException("Invalid range pattern (E%s): %s", state, s);
 			} else if (state == S7) {
 				l.add(new TimestampRange(eq, s1));
 			} else if (state == S8) {

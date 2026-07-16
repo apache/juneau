@@ -265,7 +265,7 @@ public class ComboRoundTrip_Tester<T> {
 		for (var v : verify) {
 			var s = v.apply(o);
 			if (ine(s)) {
-				throw new BasicAssertionError("Verification failed on test {0}/{1}: {2}", label, testName, s);
+				throw new BasicAssertionError("Verification failed on test %s/%s: %s", label, testName, s);
 			}
 		}
 	}
@@ -288,14 +288,14 @@ public class ComboRoundTrip_Tester<T> {
 				System.out.println(r);
 			}
 
-			assertEquals(exp, r, fs("{0}/{1} serialize-normal failed.", label, testName));
+			assertEquals(exp, r, fs("%s/%s serialize-normal failed.", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
 			assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
-				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
+				throw new BasicAssertionError(e, "%s/%s failed.  exception=%s", label, testName, e.getLocalizedMessage());
 			assertContains(exceptionMsg, e.getMessage());
 		}
 	}
@@ -312,14 +312,14 @@ public class ComboRoundTrip_Tester<T> {
 			o = postConvert.apply((T)o);
 			r = s.serializeToString(o);
 
-			assertEquals(exp, r, fs("{0}/{1} parse-normal failed", label, testName));
+			assertEquals(exp, r, fs("%s/%s parse-normal failed", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
 			assertContains(exceptionMsg, e.getMessage());
 		} catch (Throwable e) {
 			if (exceptionMsg == null)
-				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
+				throw new BasicAssertionError(e, "%s/%s failed.  exception=%s", label, testName, e.getLocalizedMessage());
 			assertContains(exceptionMsg, e.getMessage());
 		}
 	}
@@ -340,7 +340,7 @@ public class ComboRoundTrip_Tester<T> {
 			assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
-				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
+				throw new BasicAssertionError(e, "%s/%s failed.  exception=%s", label, testName, e.getLocalizedMessage());
 			assertContains(exceptionMsg, e.getMessage());
 		}
 	}
@@ -355,14 +355,14 @@ public class ComboRoundTrip_Tester<T> {
 			var r = s.serializeToString(in.get());
 			var o = p.parse(r, type);
 			r = jsonForEquivalency.serialize(o);
-			assertEquals(exp, r, fs("{0}/{1} parse-normal failed on JSON equivalency", label, testName));
+			assertEquals(exp, r, fs("%s/%s parse-normal failed on JSON equivalency", label, testName));
 		} catch (AssertionError e) {
 			if (exceptionMsg == null)
 				throw e;
 			assertContains(exceptionMsg, e.getMessage());
 		} catch (Exception e) {
 			if (exceptionMsg == null)
-				throw new BasicAssertionError(e, "{0}/{1} failed.  exception={2}", label, testName, e.getLocalizedMessage());
+				throw new BasicAssertionError(e, "%s/%s failed.  exception=%s", label, testName, e.getLocalizedMessage());
 			assertContains(exceptionMsg, e.getMessage());
 		}
 	}

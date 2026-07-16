@@ -261,8 +261,8 @@ class RestServlet_Test extends TestBase {
 	@Test void d01_logBeforeInitFallsBackToClassLogger() {
 		// Pre-init: c == null -> doLog uses Logger.getLogger(cn(this)). Just exercises the branch.
 		var s = new A();
-		assertDoesNotThrow(() -> s.log(Level.FINEST, "test message {0}", "x"));
-		assertDoesNotThrow(() -> s.log(Level.FINEST, new RuntimeException("boom"), "with cause {0}", "y"));
+		assertDoesNotThrow(() -> s.log(Level.FINEST, "test message %s", "x"));
+		assertDoesNotThrow(() -> s.log(Level.FINEST, new RuntimeException("boom"), "with cause %s", "y"));
 	}
 
 	@Test void d02_logAfterInitGoesThroughContextLogger() throws Exception {
@@ -270,7 +270,7 @@ class RestServlet_Test extends TestBase {
 		s.init(mockServletConfig());
 		// Context's getLogger() may be null (no Logger bean configured in this minimal init), but the
 		// fallback inside doLog handles that — exercise both branches by calling log().
-		assertDoesNotThrow(() -> s.log(Level.FINEST, "hello {0}", "world"));
+		assertDoesNotThrow(() -> s.log(Level.FINEST, "hello %s", "world"));
 		assertDoesNotThrow(() -> s.log(Level.FINEST, new RuntimeException("x"), "with cause"));
 		s.destroy();
 	}

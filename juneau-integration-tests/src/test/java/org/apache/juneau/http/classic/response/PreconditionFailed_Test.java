@@ -35,7 +35,7 @@ class PreconditionFailed_Test extends TestBase {
 		}
 		@RestGet
 		public void f2() throws PreconditionFailed {
-			throw new PreconditionFailed("foo {0}", "bar");
+			throw new PreconditionFailed("foo %s", "bar");
 		}
 		@RestGet
 		public void f3() throws PreconditionFailed {
@@ -43,7 +43,7 @@ class PreconditionFailed_Test extends TestBase {
 		}
 		@RestGet
 		public void f4() throws PreconditionFailed {
-			throw new PreconditionFailed(new RuntimeException("baz"), "foo {0}", "bar");
+			throw new PreconditionFailed(new RuntimeException("baz"), "foo %s", "bar");
 		}
 		@RestGet
 		public void f5() throws PreconditionFailed {

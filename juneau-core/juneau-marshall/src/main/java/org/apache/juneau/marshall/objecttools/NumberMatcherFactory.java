@@ -230,12 +230,12 @@ public class NumberMatcherFactory extends MatcherFactory {
 			}
 
 			if (i != s.length())
-				throw new PatternException("Invalid range pattern ({0}): {1}", state, s);
+				throw new PatternException("Invalid range pattern (%s): %s", state, s);
 
 			if (state == S1) {
 				// No tokens found.
 			} else if (state == S2 || state == S3 || state == S4 || state == S8 || state == S9) {
-				throw new PatternException("Invalid range pattern (E{0}): {1}", state, s);
+				throw new PatternException("Invalid range pattern (E%s): %s", state, s);
 			} else if (state == S6) {
 				n1 = Integer.parseInt(s.substring(mark).trim());
 				l.add(new NumberRange(eq, n1, isNot));

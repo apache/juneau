@@ -26,7 +26,7 @@ import java.util.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.objecttools.*;
 
 /**
@@ -511,11 +511,11 @@ public class Swagger extends SwaggerElement {
 		assertArgNotNullOrBlank(ARG_ref, ref);
 		assertArgNotNull(ARG_c, c);
 		if (! ref.startsWith("#/"))
-			throw rex("Unsupported reference:  ''{0}''", ref);
+			throw rex("Unsupported reference:  '%s'", ref);
 		try {
 			return new PathTraversal(this).get(ref.substring(1), c);
 		} catch (Exception e) {
-			throw brex(e, c, "Reference ''{0}'' could not be converted to type ''{1}''.", ref, cn(c));
+			throw brex(e, c, "Reference '%s' could not be converted to type '%s'.", ref, cn(c));
 		}
 	}
 
@@ -1190,6 +1190,6 @@ public class Swagger extends SwaggerElement {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return JsonSerializer.DEFAULT.toString(this);
+		return Json.of(this);
 	}
 }

@@ -214,8 +214,8 @@ public class UrlEncodingParserSession extends UonParserSession {
 				o = newBeanMap(outer, sType.inner()).load(m).getBean();
 			} else {
 				if (nn(sType.getNotABeanReason()))
-					throw new ParseException(this, "Class ''{0}'' could not be instantiated as application/x-www-form-urlencoded.  Reason: ''{1}''", sType, sType.getNotABeanReason());
-				throw new ParseException(this, "Malformed application/x-www-form-urlencoded input for class ''{0}''.", sType);
+					throw new ParseException(this, "Class '%s' could not be instantiated as application/x-www-form-urlencoded.  Reason: '%s'", sType, sType.getNotABeanReason());
+				throw new ParseException(this, "Malformed application/x-www-form-urlencoded input for class '%s'.", sType);
 			}
 		}
 

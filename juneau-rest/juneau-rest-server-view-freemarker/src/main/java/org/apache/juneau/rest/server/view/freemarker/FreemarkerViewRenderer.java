@@ -127,7 +127,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		} catch (IOException ex) {
 			throw ex;
 		} catch (TemplateException | RuntimeException ex) {
-			throw new InternalServerError(ex, "FreeMarker render failed for ''{0}''", templateName);
+			throw new InternalServerError(ex, "FreeMarker render failed for '%s'", templateName);
 		}
 	}
 }

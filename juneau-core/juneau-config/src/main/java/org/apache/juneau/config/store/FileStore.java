@@ -530,7 +530,7 @@ public class FileStore extends ConfigStore {
 			if (! Files.exists(p)) {
 				Files.createDirectories(p.getParent());
 				if (! Files.exists(p) && ! p.toFile().createNewFile()) { // HTT - createNewFile() failure requires OS-level file system restrictions
-					throw ioex("Could not create file: {0}", p);
+					throw ioex("Could not create file: %s", p);
 				}
 			}
 		} catch (@SuppressWarnings("unused") IOException e) {

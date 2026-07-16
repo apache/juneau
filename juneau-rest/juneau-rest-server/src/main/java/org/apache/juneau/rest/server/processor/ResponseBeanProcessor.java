@@ -91,7 +91,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 						} else if (o2 instanceof HttpPart o23) {
 							h = HttpStringHeader.of(o23.getName(), o23.getValue());
 						} else {
-							throw new InternalServerError("Invalid type ''{0}'' for header ''{1}''", cn(o2), n);
+							throw new InternalServerError("Invalid type '%s' for header '%s'", cn(o2), n);
 						}
 						res.addHeader(h);
 					}
@@ -106,7 +106,7 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 					res.addHeader(h);
 				}
 			} catch (Exception e) {
-				throw new InternalServerError(e, "Could not set header ''{0}''", n);
+				throw new InternalServerError(e, "Could not set header '%s'", n);
 			}
 		}
 
@@ -161,6 +161,6 @@ public class ResponseBeanProcessor implements ResponseProcessor {
 			return l((Object[])o);
 		if (o instanceof Collection<?> c)
 			return c;
-		throw new InternalServerError("Could not iterate over Headers of type ''{0}''", cn(o));
+		throw new InternalServerError("Could not iterate over Headers of type '%s'", cn(o));
 	}
 }

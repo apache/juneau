@@ -158,7 +158,7 @@ public class HtmlParserSession extends XmlParserSession {
 			if (t == tag)
 				return tag;
 
-		throw new ParseException(this, "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
+		throw new ParseException(this, "Unexpected tag: '%s'.  Expected one of the following: %s", tag, expected);
 	}
 
 	/*
@@ -221,7 +221,7 @@ public class HtmlParserSession extends XmlParserSession {
 			event = skipWs(r);
 
 		if (event == END_DOCUMENT)
-			throw new ParseException(this, "Unexpected end of stream in parseAnything for type ''{0}''", eType);
+			throw new ParseException(this, "Unexpected end of stream in parseAnything for type '%s'", eType);
 
 		// Handle @Html(asXml=true) beans.
 		var hcm = getHtmlClassMeta(sType);
@@ -389,7 +389,7 @@ public class HtmlParserSession extends XmlParserSession {
 		}
 
 		if (! isValid)
-			throw new ParseException(this, "Unexpected tag ''{0}'' for type ''{1}''", tag, eType);
+			throw new ParseException(this, "Unexpected tag '%s' for type '%s'", tag, eType);
 
 		if (nn(swap) && nn(o))
 			o = unswap(swap, o, eType);
@@ -626,7 +626,7 @@ public class HtmlParserSession extends XmlParserSession {
 		int et = r.getEventType();
 
 		if (et != START_ELEMENT)
-			throw new ParseException(this, "skipToNextTag() call on invalid event ''{0}''.  Must only be called on START_ELEMENT events.", XmlUtils.toReadableEvent(r));
+			throw new ParseException(this, "skipToNextTag() call on invalid event '%s'.  Must only be called on START_ELEMENT events.", XmlUtils.toReadableEvent(r));
 
 		String n = r.getLocalName();
 
@@ -652,7 +652,7 @@ public class HtmlParserSession extends XmlParserSession {
 		if (tag.isOneOf(expected))
 			r.next();
 		else
-			throw new ParseException(this, "Unexpected tag: ''{0}''.  Expected one of the following: {1}", tag, expected);
+			throw new ParseException(this, "Unexpected tag: '%s'.  Expected one of the following: %s", tag, expected);
 	}
 
 	/*
@@ -853,7 +853,7 @@ public class HtmlParserSession extends XmlParserSession {
 			}
 			return "";
 		} else {
-			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): ''{0}''", tag);
+			throw new ParseException(this, "Invalid tag found in parseWhitespaceElement(): '%s'", tag);
 		}
 	}
 }

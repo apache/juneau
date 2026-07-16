@@ -2085,19 +2085,18 @@ public class StringUtils {
 	}
 
 	/**
-	 * Formats a string using printf-style and/or MessageFormat-style format specifiers.
+	 * Formats a string using printf-style format specifiers.
 	 *
 	 * <p>
-	 * This method provides unified string formatting that supports both printf-style formatting
-	 * (similar to C's <c>printf()</c> function and Java's {@link String#format(String, Object...)})
-	 * and MessageFormat-style formatting in the same pattern.
+	 * This method provides printf-style formatting (similar to C's <c>printf()</c> function and Java's
+	 * {@link String#format(String, Object...)}). As of 10.0.0 it is <b>printf-only</b>: <c>{</c> and
+	 * <c>'</c> are ordinary literal characters (no MessageFormat <c>{0}</c> placeholders, no single-quote
+	 * escaping). For MessageFormat-style (<js>"{0}"</js>) patterns — including externally-authored i18n
+	 * <c>.properties</c> strings — use {@link #mformat(String, Object...)} instead.
 	 *
 	 * <h5 class='section'>Format Support:</h5>
 	 * <ul>
 	 *   <li><b>Printf-style:</b> <js>"%s"</js>, <js>"%d"</js>, <js>"%.2f"</js>, <js>"%1$s"</js>, etc.</li>
-	 *   <li><b>MessageFormat-style:</b> <js>"{0}"</js>, <js>"{1,number}"</js>, <js>"{2,date}"</js>, etc.</li>
-	 *   <li><b>Un-numbered MessageFormat:</b> <js>"{}"</js> - Sequential placeholders that are automatically numbered</li>
-	 *   <li><b>Mixed formats:</b> Both styles can be used in the same pattern</li>
 	 * </ul>
 	 *
 	 * <h5 class='section'>Printf Format Specifiers:</h5>
@@ -2122,9 +2121,6 @@ public class StringUtils {
 	 * <p>
 	 * Printf format specifiers follow this pattern: <c>%[argument_index$][flags][width][.precision]conversion</c>
 	 * </p>
-	 * <p>
-	 * MessageFormat placeholders follow this pattern: <c>{argument_index[,format_type[,format_style]]}</c>
-	 * </p>
 	 *
 	 * <h5 class='section'>Examples:</h5>
 	 * <p class='bjava'>
@@ -2136,18 +2132,6 @@ public class StringUtils {
 	 * 	format(<js>"Price: $%.2f"</js>, 19.99);
 	 * 	<jc>// Returns: "Price: $19.99"</jc>
 	 *
-	 * 	<jc>// MessageFormat-style formatting</jc>
-	 * 	format(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
-	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
-	 *
-	 * 	<jc>// Un-numbered MessageFormat placeholders (sequential)</jc>
-	 * 	format(<js>"Hello {}, you have {} items"</js>, <js>"John"</js>, 5);
-	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
-	 *
-	 * 	<jc>// Mixed format styles in the same pattern</jc>
-	 * 	format(<js>"User {0} has %d items and %s status"</js>, <js>"Alice"</js>, 10, <js>"active"</js>);
-	 * 	<jc>// Returns: "User Alice has 10 items and active status"</jc>
-	 *
 	 * 	<jc>// Width and alignment (printf)</jc>
 	 * 	format(<js>"Name: %-20s Age: %3d"</js>, <js>"John"</js>, 25);
 	 * 	<jc>// Returns: "Name: John                 Age:  25"</jc>
@@ -2157,21 +2141,16 @@ public class StringUtils {
 	 * 	<jc>// Returns: "Color: #FF5733"</jc>
 	 *
 	 * 	<jc>// Argument index (reuse arguments)</jc>
-	 * 	format(<js>"%1$s loves %2$s, and {0} also loves %3$s"</js>, <js>"Alice"</js>, <js>"Bob"</js>, <js>"Charlie"</js>);
+	 * 	format(<js>"%1$s loves %2$s, and %1$s also loves %3$s"</js>, <js>"Alice"</js>, <js>"Bob"</js>, <js>"Charlie"</js>);
 	 * 	<jc>// Returns: "Alice loves Bob, and Alice also loves Charlie"</jc>
 	 * </p>
 	 *
 	 * <h5 class='section'>Comparison with mformat():</h5>
-	 * <p>
-	 * This method supports both MessageFormat-style and printf-style formats.
-	 * </p>
 	 * <p class='bjava'>
-	 * 	<jc>// Both styles supported (this method)</jc>
+	 * 	<jc>// Printf style (this method)</jc>
 	 * 	format(<js>"Hello %s, you have %d items"</js>, <js>"John"</js>, 5);
-	 * 	format(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
-	 * 	format(<js>"User {0} has %d items"</js>, <js>"Alice"</js>, 10);
 	 *
-	 * 	<jc>// MessageFormat style only</jc>
+	 * 	<jc>// MessageFormat style</jc>
 	 * 	mformat(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
 	 * </p>
 	 *
@@ -2181,16 +2160,51 @@ public class StringUtils {
 	 * or cause a {@link NullPointerException} for numeric conversions (consistent with {@link String#format(String, Object...)}).
 	 * </p>
 	 *
-	 * @param pattern The format string supporting both MessageFormat and printf-style placeholders.
+	 * @param pattern The printf-style format string.
 	 * @param args The arguments to format.
 	 * @return The formatted string.
 	 * @throws IllegalFormatException If the format string is invalid or arguments don't match the format specifiers.
-	 * @see StringFormat for detailed format specification
 	 * @see String#format(String, Object...)
+	 * @see #mformat(String, Object...)
 	 * @see StringFormat for detailed format specification
 	 */
 	public static String format(String pattern, Object...args) {
-		return StringFormat.format(pattern, args);
+		return StringFormat.formatPrintf(pattern, args);
+	}
+
+	/**
+	 * Formats a pattern string using {@link java.text.MessageFormat}-style placeholders only.
+	 *
+	 * <p>
+	 * This is the MessageFormat counterpart to {@link #format(String, Object...)}: it is intended for
+	 * patterns that use MessageFormat syntax (<js>"{0}"</js>, <js>"{1,number}"</js>, <js>"{2,date}"</js>,
+	 * <js>"''"</js>-quoting) — most importantly externally-authored patterns such as i18n
+	 * <c>.properties</c> resource-bundle strings. Use {@link #format(String, Object...)} for printf-style
+	 * (<js>"%s"</js>/<js>"%d"</js>) patterns.
+	 *
+	 * <p>
+	 * Rendering is delegated to {@link java.text.MessageFormat}. As a convenience, when no arguments are
+	 * supplied the pattern is returned verbatim (so <js>"''"</js>-quoting is left untouched for placeholder-free
+	 * strings).
+	 *
+	 * <h5 class='section'>Examples:</h5>
+	 * <p class='bjava'>
+	 * 	mformat(<js>"Hello {0}, you have {1} items"</js>, <js>"John"</js>, 5);
+	 * 	<jc>// Returns: "Hello John, you have 5 items"</jc>
+	 * </p>
+	 *
+	 * @param pattern The MessageFormat-style pattern.
+	 * @param args The arguments to format.
+	 * @return The formatted string.
+	 * @throws IllegalArgumentException If the pattern is <jk>null</jk> or contains invalid placeholders.
+	 * @see #format(String, Object...)
+	 * @see java.text.MessageFormat
+	 */
+	public static String mformat(String pattern, Object...args) {
+		assertArgNotNull("pattern", pattern);
+		if (args.length == 0)
+			return pattern;
+		return MessageFormat.format(pattern, args);
 	}
 
 	/**
@@ -2198,7 +2212,7 @@ public class StringUtils {
 	 *
 	 * <p>
 	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is resolved by the function.
-	 * For un-numbered sequential placeholders <js>"{}"</js>, use {@link #format(String, Object...)} instead.
+	 * For numbered MessageFormat placeholders <js>"{0}"</js>, use {@link #mformat(String, Object...)} instead.
 	 *
 	 * <p>
 	 * Variable values are converted to strings using {@link #readable(Object)} to ensure consistent,
@@ -2281,7 +2295,7 @@ public class StringUtils {
 	 *
 	 * <p>
 	 * Supports named MessageFormat-style variables: <js>"{key}"</js> where <c>key</c> is a map key.
-	 * For un-numbered sequential placeholders <js>"{}"</js>, use {@link #format(String, Object...)} instead.
+	 * For numbered MessageFormat placeholders <js>"{0}"</js>, use {@link #mformat(String, Object...)} instead.
 	 *
 	 * <p>
 	 * Variable values are converted to strings using {@link #readable(Object)} to ensure consistent,
@@ -5210,7 +5224,7 @@ public class StringUtils {
 			return null;
 		if (s.length() == 1)
 			return s.charAt(0);
-		throw iaex("Invalid character: ''{0}''", s);
+		throw iaex("Invalid character: '%s'", s);
 	}
 
 	/**
@@ -6900,9 +6914,9 @@ public class StringUtils {
 		}
 
 		if (start == -1)
-			throw iaex("Start character '{' not found in string:  {0}", s);
+			throw iaex("Start character { not found in string:  %s", s);
 		if (end == -1)
-			throw iaex("End character '}' not found in string  {0}", s);
+			throw iaex("End character } not found in string  %s", s);
 		return splitNested(s.substring(start, end));
 	}
 
@@ -7008,7 +7022,7 @@ public class StringUtils {
 		if (state == S4)
 			l.add(s.substring(mark));
 		else if (state == S2 || state == S3)
-			throw iaex("Unmatched string quotes: {0}", s);
+			throw iaex("Unmatched string quotes: %s", s);
 		return l.toArray(new String[l.size()]);
 	}
 
@@ -8035,7 +8049,7 @@ public class StringUtils {
 		if (isEmpty(str))
 			return str;
 		if (wrapLength <= 0)
-			throw iaex("wrapLength must be > 0: {0}", wrapLength);
+			throw iaex("wrapLength must be > 0: %s", wrapLength);
 		if (newline == null)
 			throw iaex("newline cannot be null");
 

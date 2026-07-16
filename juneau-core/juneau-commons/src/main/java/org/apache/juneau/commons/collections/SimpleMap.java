@@ -218,13 +218,13 @@ public class SimpleMap<K,V> extends AbstractMap<K,V> {
 	})
 	public SimpleMap(K[] keys, V[] values) {
 		assertArgsNotNull(ARG_keys, keys, ARG_values, values);
-		assertArg(keys.length == values.length, "keys ''{0}'' and values ''{1}'' array lengths differ", keys.length, values.length);
+		assertArg(keys.length == values.length, "keys '%s' and values '%s' array lengths differ", keys.length, values.length);
 
 		// Check for duplicate keys
 		for (var i = 0; i < keys.length; i++) {
 			for (var j = i + 1; j < keys.length; j++) {
 				if (Shorts.eq(keys[i], keys[j])) {
-					throw iaex("Duplicate key found: {0}", keys[i]);
+					throw iaex("Duplicate key found: %s", keys[i]);
 				}
 			}
 		}

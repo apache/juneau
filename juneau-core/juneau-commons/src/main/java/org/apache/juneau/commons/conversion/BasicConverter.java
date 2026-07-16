@@ -300,7 +300,7 @@ public class BasicConverter extends CachingConverter {
 			return (in, memberOf, session, args) -> {
 				var s = in.toString();
 				if (s.length() != 1)
-					throw iaex("Cannot convert string of length {0} to char: ''{1}''", s.length(), s);
+					throw iaex("Cannot convert string of length %s to char: '%s'", s.length(), s);
 				return (O) Character.valueOf(s.charAt(0));
 			};
 		if (Number.class.isAssignableFrom(inType))

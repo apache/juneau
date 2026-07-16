@@ -37,7 +37,7 @@ class LogsResource_Action_Test extends TestBase {
 
 	@Test void a02_withArgs() {
 		// Test constructor with URI args
-		var x = new Action("view", "/logs/{0}", "test.log");
+		var x = new Action("view", "/logs/%s", "test.log");
 
 		assertEquals("view", x.getName());
 		assertTrue(x.getUri().toString().contains("test.log"));
@@ -85,7 +85,7 @@ class LogsResource_Action_Test extends TestBase {
 		// Test setUri(String, Object...) returns correct type
 		var x = new Action("view", "/logs/test.log");
 
-		Action result = x.setUri("/logs/{0}/{1}", "dir", "file.log");
+		Action result = x.setUri("/logs/%s/%s", "dir", "file.log");
 
 		// Verify fluent chaining
 		assertSame(x, result);
@@ -105,7 +105,7 @@ class LogsResource_Action_Test extends TestBase {
 		assertTrue(x.getUri().toString().contains("/logs/other.log"));
 
 		// Continue chaining
-		x.setName("delete").setUri("/logs/{0}", "final.log");
+		x.setName("delete").setUri("/logs/%s", "final.log");
 
 		assertEquals("delete", x.getName());
 		assertTrue(x.getUri().toString().contains("final.log"));

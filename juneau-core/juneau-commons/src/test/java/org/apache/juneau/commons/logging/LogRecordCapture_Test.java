@@ -302,7 +302,7 @@ class LogRecordCapture_Test extends TestBase {
 	@Test void h02_capturesFormattedMessages() {
 		var logger = getLogger("h02");
 		try (var capture = logger.captureEvents()) {
-			logger.info("User {0} logged in", "John");
+			logger.info("User %s logged in", "John");
 			logger.warning("Failed after %d attempts", 3);
 
 			var records = capture.getRecords();
