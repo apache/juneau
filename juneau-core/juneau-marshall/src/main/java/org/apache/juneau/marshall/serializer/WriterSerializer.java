@@ -46,7 +46,6 @@ import org.apache.juneau.marshall.json5.*;
 public class WriterSerializer extends Serializer implements ThrowingFunction<Object,String> {
 
 	// Property name constants
-	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_maxIndent = "maxIndent";
 	private static final String PROP_quoteChar = "quoteChar";
 	private static final String PROP_streamCharset = "streamCharset";
@@ -66,7 +65,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		private boolean useWhitespace;
 		private Character quoteChar;
 		private Character quoteCharOverride;
-		private Charset fileCharset;
 		private Charset streamCharset;
 		private int maxIndent;
 
@@ -74,7 +72,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			fileCharset = Charset.defaultCharset();
 			streamCharset = UTF8;
 			maxIndent = env("WriterSerializer.maxIndent", 100);
 			quoteChar = env("WriterSerializer.quoteChar").map(x -> (!x.isEmpty() ? x.charAt(0) : null)).orElse(null);
@@ -90,7 +87,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 			maxIndent = copyFrom.maxIndent;
 			quoteChar = copyFrom.quoteChar;
@@ -106,7 +102,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		 */
 		protected Builder(WriterSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			fileCharset = copyFrom.getFileCharset();
 			streamCharset = copyFrom.getStreamCharset();
 			maxIndent = copyFrom.maxIndent;
 			quoteChar = copyFrom.quoteChar;
@@ -122,44 +117,11 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
-		/**
-		 * File charset.
-		 *
-		 * <p>
-		 * The character set to use for writing <c>Files</c> to the file system.
-		 *
-		 * <p>
-		 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that writes UTF-8 files.</jc>
-		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
-		 * 		.<jsm>create</jsm>()
-		 * 		.fileCharset(Charset.<jsm>forName</jsm>(<js>"UTF-8"</js>))
-		 * 		.build();
-		 *
-		 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-		 * 	<jv>serializer</jv>.serialize(<jk>new</jk> File(<js>"MyBean.txt"</js>), <jv>myBean</jv>);
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default is the system JVM setting.
-		 * 	<br>Can be <jk>null</jk> (defaults to system default).
-		 * @return This object.
-		 */
-		public SELF fileCharset(Charset value) {
-			fileCharset = value;
-			return self();
-		}
-
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
-				fileCharset,
 				streamCharset,
 				maxIndent,
 				quoteChar,
@@ -431,7 +393,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	protected final boolean useWhitespace;
 	protected final Character quoteChar;
 	protected final Character quoteCharOverride;
-	private final Charset fileCharset;
 	private final Charset streamCharset;
 	protected final int maxIndent;
 
@@ -446,7 +407,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	protected WriterSerializer(Builder<?> builder) {
 		super(builder);
 
-		fileCharset = builder.fileCharset;
 		maxIndent = builder.maxIndent;
 		quoteChar = builder.quoteChar;
 		quoteCharOverride = builder.quoteCharOverride;
@@ -541,15 +501,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	}
 
 	/**
-	 * File charset.
-	 *
-	 * @see Builder#fileCharset(Charset)
-	 * @return
-	 * 	The character set to use when writing to <c>Files</c> on the file system.
-	 */
-	protected final Charset getFileCharset() { return fileCharset; }
-
-	/**
 	 * Maximum indentation.
 	 *
 	 * @see Builder#maxIndent(int)
@@ -588,7 +539,6 @@ public class WriterSerializer extends Serializer implements ThrowingFunction<Obj
 	@Override /* Overridden from Serializer */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_fileCharset, fileCharset)
 			.a(PROP_maxIndent, maxIndent)
 			.a(PROP_quoteChar, quoteChar)
 			.a(PROP_streamCharset, streamCharset)

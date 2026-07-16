@@ -122,7 +122,6 @@ public class SerializerConfigAnnotation {
 		public void apply(AnnotationInfo<SerializerConfig> ai, WriterSerializer.Builder b) {
 			SerializerConfig a = ai.inner();
 
-			charset(a.fileCharset()).ifPresent(b::fileCharset);
 			integer(a.maxIndent(), "maxIndent").ifPresent(b::maxIndent);
 			character(a.quoteChar(), "quoteChar").ifPresent(b::quoteChar);
 			charset(a.streamCharset()).ifPresent(b::streamCharset);

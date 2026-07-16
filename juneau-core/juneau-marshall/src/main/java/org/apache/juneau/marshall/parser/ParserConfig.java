@@ -121,30 +121,6 @@ public @interface ParserConfig {
 	String debugOutputLines() default "";
 
 	/**
-	 * File charset.
-	 *
-	 * <p>
-	 * The character set to use for reading <c>Files</c> from the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		<js>"DEFAULT"</js> can be used to indicate the JVM default file system charset.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link ReaderParser.Builder#fileCharset(Charset)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String fileCharset() default "";
-
-	/**
 	 * Parser listener.
 	 *
 	 * <p>

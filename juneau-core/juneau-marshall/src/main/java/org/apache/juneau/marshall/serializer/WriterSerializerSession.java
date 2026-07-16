@@ -52,12 +52,10 @@ import org.apache.juneau.commons.collections.*;
 public class WriterSerializerSession extends SerializerSession {
 
 	// Property name constants
-	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_streamCharset = "streamCharset";
 	private static final String PROP_useWhitespace = "useWhitespace";
 	private static final String PROP_maxIndent = "maxIndent";
 	private static final String PROP_quoteChar = "quoteChar";
-	private static final String PROP_WriterSerializerSession_fileCharset = "WriterSerializerSession.fileCharset";
 	private static final String PROP_WriterSerializerSession_streamCharset = "WriterSerializerSession.streamCharset";
 	private static final String PROP_WriterSerializerSession_useWhitespace = "WriterSerializerSession.useWhitespace";
 	private static final String PROP_WriterSerializerSession_maxIndent = "WriterSerializerSession.maxIndent";
@@ -75,7 +73,6 @@ public class WriterSerializerSession extends SerializerSession {
 	public abstract static class Builder<SELF extends Builder<SELF>> extends SerializerSession.Builder<SELF> {
 
 		private boolean useWhitespace;
-		private Charset fileCharset;
 		private Charset streamCharset;
 		private int maxIndent;
 		private char quoteChar;
@@ -88,7 +85,6 @@ public class WriterSerializerSession extends SerializerSession {
 		 */
 		protected Builder(WriterSerializer ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
-			fileCharset = ctx.getFileCharset();
 			streamCharset = ctx.getStreamCharset();
 			useWhitespace = ctx.useWhitespace;
 			maxIndent = ctx.getMaxIndent();
@@ -98,29 +94,6 @@ public class WriterSerializerSession extends SerializerSession {
 		@Override
 		public WriterSerializerSession build() {
 			return new WriterSerializerSession(this);
-		}
-
-		/**
-		 * File charset.
-		 *
-		 * <p>
-		 * The character set to use for writing Files to the file system.
-		 *
-		 * <p>
-		 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
-		 *
-		 * <p>
-		 * If not specified, defaults to the JVM system default charset.
-		 *
-		 * @param value
-		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk> (value will not be set, defaults to JVM system default charset).
-		 * @return This object.
-		 */
-		public SELF fileCharset(Charset value) {
-			if (nn(value))
-				fileCharset = value;
-			return self();
 		}
 
 		/**
@@ -141,8 +114,6 @@ public class WriterSerializerSession extends SerializerSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_fileCharset, PROP_WriterSerializerSession_fileCharset:
-					return fileCharset(cvt(value, Charset.class));
 				case PROP_streamCharset, PROP_WriterSerializerSession_streamCharset:
 					return streamCharset(cvt(value, Charset.class));
 				case PROP_useWhitespace, PROP_WriterSerializerSession_useWhitespace:
@@ -234,7 +205,6 @@ public class WriterSerializerSession extends SerializerSession {
 	}
 
 	private final boolean useWhitespace;
-	private final Charset fileCharset;
 	private final Charset streamCharset;
 	private final int maxIndent;
 	private final char quoteChar;
@@ -246,19 +216,11 @@ public class WriterSerializerSession extends SerializerSession {
 	 */
 	protected WriterSerializerSession(Builder<?> builder) {
 		super(builder);
-		fileCharset = builder.fileCharset;
 		streamCharset = builder.streamCharset;
 		useWhitespace = builder.useWhitespace;
 		maxIndent = builder.maxIndent;
 		quoteChar = builder.quoteChar;
 	}
-
-	/**
-	 * Returns the file charset defined on this session.
-	 *
-	 * @return the file charset defined on this session.
-	 */
-	public Charset getFileCharset() { return fileCharset; }
 
 	/**
 	 * Returns the stream charset defined on this session.
@@ -328,7 +290,6 @@ public class WriterSerializerSession extends SerializerSession {
 	@Override /* Overridden from SerializerSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_fileCharset, fileCharset)
 			.a(PROP_streamCharset, streamCharset)
 			.a(PROP_useWhitespace, useWhitespace)
 			.a(PROP_maxIndent, maxIndent)

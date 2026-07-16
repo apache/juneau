@@ -234,21 +234,7 @@ class ContextSession_Test extends TestBase {
 			assertEquals("text/xml", session.getMediaType().toString());
 		}
 
-		// -- WriterSerializerSession: fileCharset, streamCharset, useWhitespace --
-
-		@Test void e10_writerSerializer_fileCharset_shortForm() {
-			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
-				.property("fileCharset", "UTF-16")
-				.build();
-			assertEquals(Charset.forName("UTF-16"), session.getFileCharset());
-		}
-
-		@Test void e11_writerSerializer_fileCharset_qualifiedForm() {
-			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
-				.property("WriterSerializerSession.fileCharset", Charset.forName("ISO-8859-1"))
-				.build();
-			assertEquals(Charset.forName("ISO-8859-1"), session.getFileCharset());
-		}
+		// -- WriterSerializerSession: streamCharset, useWhitespace --
 
 		@Test void e12_writerSerializer_streamCharset_shortForm() {
 			var session = (WriterSerializerSession) JsonSerializer.DEFAULT.createSession()
@@ -264,14 +250,7 @@ class ContextSession_Test extends TestBase {
 			assertEquals(Charset.forName("ISO-8859-1"), session.getStreamCharset());
 		}
 
-		// -- ReaderParserSession: fileCharset, streamCharset --
-
-		@Test void e14_readerParser_fileCharset_shortForm() {
-			var session = (ReaderParserSession) JsonParser.DEFAULT.createSession()
-				.property("fileCharset", "UTF-16")
-				.build();
-			assertEquals(Charset.forName("UTF-16"), session.getFileCharset());
-		}
+		// -- ReaderParserSession: streamCharset --
 
 		@Test void e15_readerParser_streamCharset_qualifiedForm() {
 			var session = (ReaderParserSession) JsonParser.DEFAULT.createSession()

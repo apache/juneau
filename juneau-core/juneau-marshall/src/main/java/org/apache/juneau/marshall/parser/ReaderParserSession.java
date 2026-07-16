@@ -40,9 +40,7 @@ import org.apache.juneau.commons.collections.*;
 public class ReaderParserSession extends ParserSession {
 
 	// Property name constants
-	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_streamCharset = "streamCharset";
-	private static final String PROP_ReaderParserSession_fileCharset = "ReaderParserSession.fileCharset";
 	private static final String PROP_ReaderParserSession_streamCharset = "ReaderParserSession.streamCharset";
 
 	// Argument name constants for assertArgNotNull
@@ -56,7 +54,6 @@ public class ReaderParserSession extends ParserSession {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends ParserSession.Builder<SELF> {
 
-		private Charset fileCharset;
 		private Charset streamCharset;
 		private ReaderParser ctx;
 
@@ -69,35 +66,12 @@ public class ReaderParserSession extends ParserSession {
 		protected Builder(ReaderParser ctx) {
 			super(assertArgNotNull(ARG_ctx, ctx));
 			this.ctx = ctx;
-			fileCharset = ctx.getFileCharset();
 			streamCharset = ctx.getStreamCharset();
 		}
 
 		@Override
 		public ReaderParserSession build() {
 			return new ReaderParserSession(this);
-		}
-
-		/**
-		 * File charset.
-		 *
-		 * <p>
-		 * The character set to use for reading Files from the file system.
-		 *
-		 * <p>
-		 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-		 *
-		 * <p>
-		 * If not specified, defaults to the JVM system default charset.
-		 *
-		 * @param value
-		 * 	The new property value.
-		 * 	<br>Can be <jk>null</jk>.
-		 * @return This object.
-		 */
-		public SELF fileCharset(Charset value) {
-			fileCharset = value;
-			return self();
 		}
 
 		@Override /* Overridden from Builder */
@@ -107,8 +81,6 @@ public class ReaderParserSession extends ParserSession {
 				return self();
 			}
 			switch (key) {
-				case PROP_fileCharset, PROP_ReaderParserSession_fileCharset:
-					return fileCharset(cvt(value, Charset.class));
 				case PROP_streamCharset, PROP_ReaderParserSession_streamCharset:
 					return streamCharset(cvt(value, Charset.class));
 				default:
@@ -166,7 +138,6 @@ public class ReaderParserSession extends ParserSession {
 	}
 
 	private final ReaderParser ctx;
-	private final Charset fileCharset;
 	private final Charset streamCharset;
 
 	/**
@@ -177,7 +148,6 @@ public class ReaderParserSession extends ParserSession {
 	protected ReaderParserSession(Builder<?> builder) {
 		super(builder);
 		ctx = builder.ctx;
-		fileCharset = builder.fileCharset;
 		streamCharset = builder.streamCharset;
 	}
 
@@ -209,13 +179,6 @@ public class ReaderParserSession extends ParserSession {
 	}
 
 	/**
-	 * Returns the file charset defined on this session.
-	 *
-	 * @return the file charset defined on this session.
-	 */
-	public Charset getFileCharset() { return fileCharset; }
-
-	/**
 	 * Returns the stream charset defined on this session.
 	 *
 	 * @return the stream charset defined on this session.
@@ -228,7 +191,6 @@ public class ReaderParserSession extends ParserSession {
 	@Override /* Overridden from ParserSession */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_fileCharset, fileCharset)
 			.a(PROP_streamCharset, streamCharset);
 	}
 }

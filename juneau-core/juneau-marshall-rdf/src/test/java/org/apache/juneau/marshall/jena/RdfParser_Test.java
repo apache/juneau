@@ -332,7 +332,6 @@ class RdfParser_Test extends TestBase {
 		@Test void d07_exampleAndCharsets() {
 			assertNotNull(RdfParser.create().example(Integer.class, "42").build());
 			assertNotNull(RdfParser.create().example(Integer.class, 42).build());
-			assertNotNull(RdfParser.create().fileCharset(java.nio.charset.StandardCharsets.UTF_8).build());
 			assertNotNull(RdfParser.create().streamCharset(java.nio.charset.StandardCharsets.UTF_8).build());
 		}
 
@@ -433,7 +432,6 @@ class RdfParser_Test extends TestBase {
 			assertNotNull(p.createSession().debug(false).build());
 			assertNotNull(p.createSession().javaMethod(null).build());
 			assertNotNull(p.createSession().locale(Locale.US).build());
-			assertNotNull(p.createSession().fileCharset(java.nio.charset.Charset.defaultCharset()).build());
 			assertNotNull(p.createSession().mediaType(org.apache.juneau.commons.http.MediaType.JSON).build());
 		}
 

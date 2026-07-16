@@ -19,7 +19,6 @@ package org.apache.juneau.marshall.parser;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.charset.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
@@ -59,7 +58,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		autoCloseStreams="$X{true}",
 		binaryFormat="$X{HEX}",
 		debugOutputLines="$X{1}",
-		fileCharset="$X{US-ASCII}",
 		streamCharset="$X{US-ASCII}",
 		listener=AA.class,
 		trimStrings="$X{true}",
@@ -73,7 +71,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("true", x.isAutoCloseStreams());
 		check("1", x.getDebugOutputLines());
-		check("US-ASCII", x.getFileCharset());
 		check("US-ASCII", x.getStreamCharset());
 		check("AA", x.getListener());
 		check("true", x.isTrimStrings());
@@ -104,7 +101,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
-		check(Charset.defaultCharset().toString(), x.getFileCharset());
 		check("UTF-8", x.getStreamCharset());
 		check(null, x.getListener());
 		check("false", x.isTrimStrings());
@@ -134,7 +130,6 @@ class ParserConfigAnnotationTest extends TestBase {
 		var x = JsonParser.create().apply(al).build().getSession();
 		check("false", x.isAutoCloseStreams());
 		check("5", x.getDebugOutputLines());
-		check(Charset.defaultCharset().toString(), x.getFileCharset());
 		check("UTF-8", x.getStreamCharset());
 		check(null, x.getListener());
 		check("false", x.isTrimStrings());

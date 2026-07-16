@@ -234,7 +234,6 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	}
 
 	@SerializerConfig(
-		fileCharset="$X{UTF-8}",
 		streamCharset="$X{ISO-8859-1}"
 	)
 	static class E {}
@@ -243,12 +242,10 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void d02_charsetWithNonDefaultValue() {
 		var al = AnnotationWorkList.of(sr, rstream(e.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
-		check("UTF-8", x.getFileCharset().name());
 		check("ISO-8859-1", x.getStreamCharset().name());
 	}
 
 	@SerializerConfig(
-		fileCharset="$X{default}",
 		streamCharset="$X{DEFAULT}"
 	)
 	static class E2 {}
@@ -257,7 +254,6 @@ class SerializerConfigAnnotation_Test extends TestBase {
 	@Test void d02b_charsetWithDefaultValue() {
 		var al = AnnotationWorkList.of(sr, rstream(e2.getAnnotations()));
 		var x = JsonSerializer.create().apply(al).build().getSession();
-		check(Charset.defaultCharset().name(), x.getFileCharset().name());
 		check(Charset.defaultCharset().name(), x.getStreamCharset().name());
 	}
 

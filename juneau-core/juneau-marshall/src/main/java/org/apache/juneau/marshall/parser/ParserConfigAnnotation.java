@@ -111,7 +111,6 @@ public class ParserConfigAnnotation {
 		public void apply(AnnotationInfo<ParserConfig> ai, ReaderParser.Builder b) {
 			ParserConfig a = ai.inner();
 
-			charset(a.fileCharset()).ifPresent(b::fileCharset);
 			charset(a.streamCharset()).ifPresent(b::streamCharset);
 		}
 	}

@@ -375,7 +375,6 @@ class RdfSerializer_Test extends TestBase {
 		@Test void f02_exampleAndCharsets() {
 			assertNotNull(RdfSerializer.create().example(Integer.class, "42").build());
 			assertNotNull(RdfSerializer.create().example(Integer.class, 42).build());
-			assertNotNull(RdfSerializer.create().fileCharset(java.nio.charset.StandardCharsets.UTF_8).build());
 			assertNotNull(RdfSerializer.create().streamCharset(java.nio.charset.StandardCharsets.UTF_8).build());
 		}
 
@@ -609,7 +608,6 @@ class RdfSerializer_Test extends TestBase {
 			assertNotNull(s.createSession().debug(false).build());
 			assertNotNull(s.createSession().javaMethod(null).build());
 			assertNotNull(s.createSession().locale(Locale.US).build());
-			assertNotNull(s.createSession().fileCharset(java.nio.charset.Charset.defaultCharset()).build());
 			assertNotNull(s.createSession().mediaType(org.apache.juneau.commons.http.MediaType.JSON).build());
 		}
 	}

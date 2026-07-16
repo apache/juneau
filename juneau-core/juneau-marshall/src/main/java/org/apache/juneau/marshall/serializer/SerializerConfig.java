@@ -184,36 +184,6 @@ public @interface SerializerConfig {
 	String detectRecursions() default "";
 
 	/**
-	 * File charset.
-	 *
-	 * <p>
-	 * The character set to use for writing Files to the file system.
-	 *
-	 * <p>
-	 * Used when passing in files to {@link Serializer#serialize(Object, Object)}.
-	 *
-	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='note'>
-	 * 		Format: string
-	 * 	<li class='note'>
-	 * 		"DEFAULT" can be used to indicate the JVM default file system charset.
-	 * 	<li class='note'>
-	 * 		Default: JVM system default.
-	 * 	<li class='note'>
-	 * 		Supports <a class="doclink" href="https://juneau.apache.org/docs/topics/DefaultVarResolver">VarResolver.DEFAULT</a> (e.g. <js>"$C{myConfigVar}"</js>).
-	 * 	<li class='note'>
-	 * 		This setting does not apply to the RDF serializers.
-	 * </ul>
-	 *
-	 * <h5 class='section'>See Also:</h5><ul>
-	 * 	<li class='jm'>{@link WriterSerializer.Builder#fileCharset(Charset)}
-	 * </ul>
-	 *
-	 * @return The annotation value.
-	 */
-	String fileCharset() default "";
-
-	/**
 	 * Ignore recursion errors.
 	 *
 	 * <p>

@@ -122,8 +122,7 @@ public abstract class Marshaller {
 	 * 			{@link org.apache.juneau.marshall.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
 	 * 			{@link org.apache.juneau.marshall.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.marshall.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 		<li>{@link File} containing system encoded text.
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
@@ -194,8 +193,7 @@ public abstract class Marshaller {
 	 * 			{@link org.apache.juneau.marshall.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
 	 * 			{@link org.apache.juneau.marshall.parser.ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link org.apache.juneau.marshall.parser.ReaderParser.Builder#fileCharset(Charset)} property value).
+	 * 		<li>{@link File} containing system encoded text.
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>

@@ -49,7 +49,6 @@ import org.apache.juneau.commons.collections.*;
 public class ReaderParser extends Parser {
 
 	// Property name constants
-	private static final String PROP_fileCharset = "fileCharset";
 	private static final String PROP_streamCharset = "streamCharset";
 
 	// Argument name constants for assertArgNotNull
@@ -63,14 +62,12 @@ public class ReaderParser extends Parser {
 	})
 	public abstract static class Builder<SELF extends Builder<SELF>> extends Parser.Builder<SELF> {
 
-		private Charset fileCharset;
 		private Charset streamCharset;
 
 		/**
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			fileCharset = env("ReaderParser.fileCharset").map(Charset::forName).orElse(Charset.defaultCharset());
 			streamCharset = env("ReaderParser.streamCharset", UTF8);
 		}
 
@@ -82,7 +79,6 @@ public class ReaderParser extends Parser {
 		 */
 		protected Builder(Builder<?> copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 		}
 
@@ -94,7 +90,6 @@ public class ReaderParser extends Parser {
 		 */
 		protected Builder(ReaderParser copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
-			fileCharset = copyFrom.fileCharset;
 			streamCharset = copyFrom.streamCharset;
 		}
 
@@ -106,44 +101,11 @@ public class ReaderParser extends Parser {
 		@Override /* Overridden from Context.Builder<?> */
 		public abstract SELF copy();
 
-		/**
-		 * File charset.
-		 *
-		 * <p>
-		 * The character set to use for reading <c>Files</c> from the file system.
-		 *
-		 * <p>
-		 * Used when passing in files to {@link Parser#parse(Object, Class)}.
-		 *
-		 * <h5 class='section'>Example:</h5>
-		 * <p class='bjava'>
-		 * 	<jc>// Create a parser that reads UTF-8 files.</jc>
-		 * 	ReaderParser <jv>parser</jv> = JsonParser
-		 * 		.<jsm>create</jsm>()
-		 * 		.fileCharset(<js>"UTF-8"</js>)
-		 * 		.build();
-		 *
-		 * 	<jc>// Use it to read a UTF-8 encoded file.</jc>
-		 * 	MyBean <jv>myBean</jv> = <jv>parser</jv>.parse(<jk>new</jk> File(<js>"MyBean.txt"</js>), MyBean.<jk>class</jk>);
-		 * </p>
-		 *
-		 * @param value
-		 * 	The new value for this property.
-		 * 	<br>The default value is <js>"DEFAULT"</js> which causes the system default to be used.
-		 * 	<br>Can be <jk>null</jk> (defaults to system default).
-		 * @return This object.
-		 */
-		public SELF fileCharset(Charset value) {
-			fileCharset = value;
-			return self();
-		}
-
 		@Override /* Overridden from Context.Builder<?> */
 		public HashKey hashKey() {
 			// @formatter:off
 			return HashKey.of(
 				super.hashKey(),
-				fileCharset,
 				streamCharset
 			);
 			// @formatter:on
@@ -217,7 +179,6 @@ public class ReaderParser extends Parser {
 		return new DefaultBuilder();
 	}
 
-	private final Charset fileCharset;
 	private final Charset streamCharset;
 
 	/**
@@ -227,7 +188,6 @@ public class ReaderParser extends Parser {
 	 */
 	protected ReaderParser(Builder<?> builder) {
 		super(builder);
-		fileCharset = builder.fileCharset;
 		streamCharset = builder.streamCharset;
 	}
 
@@ -243,15 +203,6 @@ public class ReaderParser extends Parser {
 	public final boolean isReaderParser() { return true; }
 
 	/**
-	 * File charset.
-	 *
-	 * @see Builder#fileCharset(Charset)
-	 * @return
-	 * 	The character set to use for reading <c>Files</c> from the file system.
-	 */
-	protected final Charset getFileCharset() { return fileCharset; }
-
-	/**
 	 * Input stream charset.
 	 *
 	 * @see Builder#streamCharset(Charset)
@@ -263,7 +214,6 @@ public class ReaderParser extends Parser {
 	@Override /* Overridden from Parser */
 	protected FluentMap<String,Object> properties() {
 		return super.properties()
-			.a(PROP_fileCharset, fileCharset)
 			.a(PROP_streamCharset, streamCharset);
 	}
 }
