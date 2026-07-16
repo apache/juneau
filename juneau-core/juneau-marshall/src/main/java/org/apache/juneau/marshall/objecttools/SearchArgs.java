@@ -105,5 +105,5 @@ public class SearchArgs {
 	 *
 	 * @return An unmodifiable map of query search terms.
 	 */
-	public Map<String,String> getSearch() { return search; }
+	public Map<String,String> getSearch() { return u(search); }
 }

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -74,6 +75,8 @@ public enum EnumFormat {
 	/** {@link Enum#ordinal()} as a numeric value. */
 	ORDINAL;
 
+	private static final String ARG_enumClass = "enumClass";
+
 	/**
 	 * Formats the specified enum value using this format.
 	 *
@@ -117,6 +120,7 @@ public enum EnumFormat {
 		"java:S3776" // Cognitive complexity acceptable for enum format parsing dispatch
 	})
 	public static <E extends Enum<E>> E parse(String value, Class<E> enumClass) {
+		assertArgNotNull(ARG_enumClass, enumClass);
 		if (value == null)
 			return null;
 		var s = value.trim();

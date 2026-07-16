@@ -18,6 +18,8 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.Locale;
+
 /**
  * Supported wire formats for {@link Boolean} / <code><jk>boolean</jk></code> values.
  *
@@ -183,7 +185,7 @@ public enum BooleanFormat {
 		var s = value.trim();
 		if (s.isEmpty())
 			throw iaex("Cannot parse a blank value as Boolean");
-		return switch (s.toLowerCase()) {
+		return switch (s.toLowerCase(Locale.ROOT)) {
 			case "true", "1", "yes", "y", "on" -> true;
 			case "false", "0", "no", "n", "off" -> false;
 			default -> throw iaex("Invalid boolean value '%s' for format %s", value, format);

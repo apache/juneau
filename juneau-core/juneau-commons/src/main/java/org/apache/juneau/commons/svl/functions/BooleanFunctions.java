@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import org.apache.juneau.commons.svl.*;
 
 /**
@@ -117,6 +119,6 @@ public final class BooleanFunctions {
 			return true;
 		if (t.isEmpty() || t.equalsIgnoreCase("false") || t.equals("0") || t.equalsIgnoreCase("no") || t.equalsIgnoreCase("off"))
 			return false;
-		throw new IllegalArgumentException("cannot coerce '" + s + "' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)");
+		throw iaex("cannot coerce '%s' to boolean (accepted: true/1/yes/on, false/0/no/off, empty)", s);
 	}
 }

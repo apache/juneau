@@ -508,7 +508,7 @@ class TomlTokenizer {
 		while (peek() >= 0 && Character.isLetter(peek())) {
 			sb.append((char) read());
 		}
-		String s = sb.toString().toLowerCase();
+		String s = sb.toString().toLowerCase(Locale.ROOT);
 		if (s.equals("inf"))
 			return Double.POSITIVE_INFINITY;
 		if (s.equals("-inf"))

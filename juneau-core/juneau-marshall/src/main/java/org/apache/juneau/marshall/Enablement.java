@@ -58,7 +58,7 @@ public enum Enablement {
 	 * @return The resolved value, or <jk>null</jk> if no match found.
 	 */
 	public static Enablement fromString(String s) {
-		return MAP.get(emptyIfNull(s).toUpperCase());
+		return MAP.get(emptyIfNull(s).toUpperCase(Locale.ROOT));
 	}
 
 	/**

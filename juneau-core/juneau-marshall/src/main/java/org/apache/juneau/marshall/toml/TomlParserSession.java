@@ -273,7 +273,7 @@ public class TomlParserSession extends ReaderParserSession implements RecordRead
 			// Date-like patterns kept as string for convertValue to parse as LocalDate, YearMonth, Year
 			if (isDateLikeString(noUnderscore))
 				return s;
-			if (s.contains(".") || s.toLowerCase().contains("e"))
+			if (s.contains(".") || s.toLowerCase(Locale.ROOT).contains("e"))
 				return Double.parseDouble(noUnderscore);
 			try {
 				return Long.parseLong(noUnderscore);

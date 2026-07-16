@@ -78,7 +78,7 @@ public enum TypeCategory {
 		if (isEmpty(s))
 			return Collections.emptySet();
 		Set<TypeCategory> set = CollectionUtils.set();
-		split(s, x -> set.add(valueOf(x.toUpperCase())));
+		split(s, x -> set.add(valueOf(x.toUpperCase(Locale.ROOT))));
 		return set;
 	}
 
@@ -92,7 +92,7 @@ public enum TypeCategory {
 		if (isEmpty(s))
 			return new TypeCategory[0];
 		List<TypeCategory> list = list();
-		split(s, x -> list.add(valueOf(x.toUpperCase())));
+		split(s, x -> list.add(valueOf(x.toUpperCase(Locale.ROOT))));
 		return list.toArray(new TypeCategory[list.size()]);
 	}
 }

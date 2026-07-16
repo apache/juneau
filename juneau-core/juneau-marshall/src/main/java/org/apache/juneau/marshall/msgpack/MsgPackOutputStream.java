@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.msgpack;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.marshall.msgpack.DataType.*;
 
@@ -47,6 +48,8 @@ public class MsgPackOutputStream extends OutputStream {
 	private final OutputStream os;
 
 	private static final long L2X31 = ((long)(1 << 30)) * 2;
+
+	private static final String ARG_value = "value";
 
 	/**
 	 * Constructor.
@@ -394,6 +397,7 @@ public class MsgPackOutputStream extends OutputStream {
 	 * @return This stream.
 	 */
 	MsgPackOutputStream appendBigInteger(BigInteger value) {
+		assertArgNotNull(ARG_value, value);
 		if (value.bitLength() < 64)
 			return appendLong(value.longValue());
 		if (value.signum() > 0 && value.bitLength() == 64)

@@ -256,7 +256,7 @@ public class LocalFile {
 		if (nn(clazz)) {
 			var is = clazz.getResourceAsStream(clazzPath);
 			if (is == null)
-				throw new IOException("Classpath resource not found: " + clazzPath + " (relative to " + cn(clazz) + ")");
+				throw ioex("Classpath resource not found: %s (relative to %s)", clazzPath, cn(clazz));
 			return is;
 		}
 		return Files.newInputStream(path);

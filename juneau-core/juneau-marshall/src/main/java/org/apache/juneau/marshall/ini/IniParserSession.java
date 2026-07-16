@@ -275,7 +275,7 @@ public class IniParserSession extends ReaderParserSession implements RecordReada
 			return getJson5Parser().parse(trimmed, targetType);
 		if (targetType.isNumber()) {
 			try {
-				if (trimmed.contains(".") || trimmed.toLowerCase().contains("e"))
+				if (trimmed.contains(".") || trimmed.toLowerCase(Locale.ROOT).contains("e"))
 					return Double.parseDouble(trimmed);
 				return Long.parseLong(trimmed);
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {

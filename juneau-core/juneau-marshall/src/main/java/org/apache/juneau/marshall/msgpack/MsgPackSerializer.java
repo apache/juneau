@@ -123,6 +123,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 */
 		protected Builder(Builder copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			addBeanTypesMsgPack = copyFrom.addBeanTypesMsgPack;
 		}
 
 		/**
@@ -133,6 +134,7 @@ public class MsgPackSerializer extends OutputStreamSerializer implements MsgPack
 		 */
 		protected Builder(MsgPackSerializer copyFrom) {
 			super(assertArgNotNull(ARG_copyFrom, copyFrom));
+			addBeanTypesMsgPack = copyFrom.addBeanTypesMsgPack;
 		}
 
 		/**

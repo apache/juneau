@@ -197,7 +197,7 @@ class PrototextTokenizer {
 		var isTerminator = term < 0
 			|| term == ' ' || term == '\t' || term == '\n' || term == '\r' || term == 0x0B || term == 0x0C
 			|| term == ',' || term == ';' || term == ']' || term == '}';
-		var tok = buf.toString().toLowerCase();
+		var tok = buf.toString().toLowerCase(Locale.ROOT);
 		var isSpecial = isTerminator && (tok.equals("nan") || tok.equals("inf") || tok.equals("infinity"));
 		// Restore consumed chars in reverse order (pushback is a LIFO stack — to make the next read
 		// return buf[0], buf[0] must be on top, so we push buf[N-1] ... buf[0]).
@@ -343,7 +343,7 @@ class PrototextTokenizer {
 		while (isLetterOrUnderscore(peekChar()) || Character.isDigit(peekChar()))
 			sb.append((char) readChar());
 		var s = sb.toString();
-		var lower = s.toLowerCase();
+		var lower = s.toLowerCase(Locale.ROOT);
 		if (lower.equals("inf") || lower.equals("infinity"))
 			return new PrototextToken(PrototextToken.TokenType.FLOAT, neg ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
 		if (lower.equals("nan"))
@@ -522,7 +522,7 @@ class PrototextTokenizer {
 	boolean readBoolean() throws IOException, ParseException {
 		var t = read();
 		if (t.type() == PrototextToken.TokenType.IDENT) {
-			var s = t.stringValue().toLowerCase();
+			var s = t.stringValue().toLowerCase(Locale.ROOT);
 			if (s.equals("true") || s.equals("t") || s.equals("1"))
 				return true;
 			if (s.equals("false") || s.equals("f") || s.equals("0"))

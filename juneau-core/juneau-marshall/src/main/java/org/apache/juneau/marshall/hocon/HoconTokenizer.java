@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.hocon;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
 import java.io.*;
+import java.util.Locale;
 
 /**
  * Tokenizer for HOCON (Human-Optimized Config Object Notation) format.
@@ -440,7 +441,7 @@ public class HoconTokenizer {
 		if (matchNumberPrefix(raw, false) == raw.length()) {
 			var numStr = raw;
 			try {
-				if (numStr.contains(".") || numStr.toLowerCase().contains("e"))
+				if (numStr.contains(".") || numStr.toLowerCase(Locale.ROOT).contains("e"))
 					return Token.number(Double.parseDouble(numStr));
 				return parseIntegerOrLongToken(numStr);
 			} catch (@SuppressWarnings("unused") NumberFormatException e) {

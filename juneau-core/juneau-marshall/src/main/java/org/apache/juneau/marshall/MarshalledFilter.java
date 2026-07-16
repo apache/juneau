@@ -603,10 +603,10 @@ public class MarshalledFilter implements BeanFilter {
 	protected MarshalledFilter(Builder builder) {
 		this.beanClass = builder.beanClass;
 		this.typeName = builder.typeName;
-		this.properties = copyOf(builder.properties);
-		this.excludeProperties = copyOf(builder.excludeProperties);
-		this.readOnlyProperties = copyOf(builder.readOnlyProperties);
-		this.writeOnlyProperties = copyOf(builder.writeOnlyProperties);
+		this.properties = u(copyOf(builder.properties));
+		this.excludeProperties = u(copyOf(builder.excludeProperties));
+		this.readOnlyProperties = u(copyOf(builder.readOnlyProperties));
+		this.writeOnlyProperties = u(copyOf(builder.writeOnlyProperties));
 		this.example = builder.example;
 		this.implClass = builder.implClass;
 		this.interfaceClass = builder.interfaceClass;
@@ -614,7 +614,7 @@ public class MarshalledFilter implements BeanFilter {
 		this.unsortedProperties = builder.unsortedProperties;
 		this.fluentSetters = builder.fluentSetters;
 		this.propertyNamer = builder.propertyNamer.asOptional().orElse(null);
-		this.beanDictionary = builder.dictionary == null ? list() : u(copyOf(builder.dictionary));
+		this.beanDictionary = builder.dictionary == null ? u(list()) : u(copyOf(builder.dictionary));
 		this.interceptor = builder.interceptor.asOptional().orElse(BeanInterceptor.DEFAULT);
 	}
 

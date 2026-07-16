@@ -18,6 +18,8 @@ package org.apache.juneau.marshall;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.Locale;
+
 /**
  * Supported wire formats for non-finite {@link Float} / {@link Double} values
  * ({@link Double#NaN NaN}, {@link Double#POSITIVE_INFINITY +Infinity}, {@link Double#NEGATIVE_INFINITY -Infinity}).
@@ -234,7 +236,7 @@ public enum FloatFormat {
 	}
 
 	private static double parseDouble(String s) {
-		var lower = s.toLowerCase();
+		var lower = s.toLowerCase(Locale.ROOT);
 		return switch (lower) {
 			case "nan" -> Double.NaN;
 			case "infinity", "+infinity", "inf", "+inf" -> Double.POSITIVE_INFINITY;
@@ -244,7 +246,7 @@ public enum FloatFormat {
 	}
 
 	private static float parseFloat(String s) {
-		var lower = s.toLowerCase();
+		var lower = s.toLowerCase(Locale.ROOT);
 		return switch (lower) {
 			case "nan" -> Float.NaN;
 			case "infinity", "+infinity", "inf", "+inf" -> Float.POSITIVE_INFINITY;

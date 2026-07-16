@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.marshall.collections;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
@@ -56,6 +57,9 @@ public class JsonPointer {
 	/** Sentinel distinguishing an absent value from a present <jk>null</jk> value during traversal. */
 	private static final Object MISSING = new Object();
 
+	private static final String ARG_rawMemberName = "rawMemberName";
+	private static final String ARG_token = "token";
+
 	/**
 	 * Parses and validates the specified RFC 6901 JSON Pointer string.
 	 *
@@ -74,6 +78,7 @@ public class JsonPointer {
 	 * @return The encoded reference token.
 	 */
 	public static String encodeToken(String rawMemberName) {
+		assertArgNotNull(ARG_rawMemberName, rawMemberName);
 		return rawMemberName.replace("~", "~0").replace("/", "~1");
 	}
 
@@ -84,6 +89,7 @@ public class JsonPointer {
 	 * @return The decoded member name.
 	 */
 	public static String decodeToken(String token) {
+		assertArgNotNull(ARG_token, token);
 		return token.replace("~1", "/").replace("~0", "~");
 	}
 

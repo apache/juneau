@@ -18,6 +18,7 @@ package org.apache.juneau.marshall;
 
 import java.math.*;
 import java.time.*;
+import java.util.Locale;
 
 /**
  * Supported wire formats for {@link Duration} values.
@@ -172,7 +173,7 @@ public enum DurationFormat {
 		BigDecimal nanos = null;
 		if (valid) {
 			var value = new BigDecimal(s.substring(0, i));
-			nanos = switch (s.substring(i).toLowerCase()) {
+			nanos = switch (s.substring(i).toLowerCase(Locale.ROOT)) {
 				case "d" -> value.multiply(BigDecimal.valueOf(86_400_000_000_000L));
 				case "h" -> value.multiply(BigDecimal.valueOf(3_600_000_000_000L));
 				case "m" -> value.multiply(BigDecimal.valueOf(60_000_000_000L));

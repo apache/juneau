@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.marshall.stream;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.io.*;
 import java.lang.reflect.*;
 import java.math.*;
@@ -54,6 +56,9 @@ import org.apache.juneau.marshall.*;
 	"resource" // TokenWriter is a fluent Closeable returning itself; discarding the chained return value is intentional, and the writer is the caller's to close.
 })
 public final class PojoWalker {
+
+	private static final String ARG_w = "w";
+	private static final String ARG_options = "options";
 
 	/**
 	 * Databind-level settings honored by {@link PojoWalker}.
@@ -128,6 +133,8 @@ public final class PojoWalker {
 	 * @throws IOException If the writer's underlying stream fails.
 	 */
 	public static void walk(TokenWriter w, Object value, Options options) throws IOException {
+		assertArgNotNull(ARG_w, w);
+		assertArgNotNull(ARG_options, options);
 		// Identity-based ancestor set: tracks the objects on the current walk path so a
 		// self-referencing graph throws instead of overflowing the stack.  Shared-but-acyclic
 		// references are fine because each node is removed from the set once its subtree completes.

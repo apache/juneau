@@ -257,7 +257,7 @@ public class PrototextParserSession extends ReaderParserSession implements Recor
 			case IDENT -> {
 				var s = tok.stringValue();
 				if (s == null) yield null;
-				var lower = s.toLowerCase();
+				var lower = s.toLowerCase(Locale.ROOT);
 				if (lower.equals("true") || lower.equals("t") || lower.equals("1"))
 					yield Boolean.TRUE;
 				if (lower.equals("false") || lower.equals("f") || lower.equals("0"))

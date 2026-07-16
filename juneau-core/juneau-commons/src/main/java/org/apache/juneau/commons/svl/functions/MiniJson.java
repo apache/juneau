@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.svl.functions;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -52,7 +54,7 @@ final class MiniJson {
 		var result = p.parseValue();
 		p.skipWs();
 		if (p.pos < p.src.length())
-			throw new IllegalArgumentException("Trailing characters at offset " + p.pos);
+			throw iaex("Trailing characters at offset %s", p.pos);
 		return result;
 	}
 
@@ -194,7 +196,7 @@ final class MiniJson {
 	}
 
 	private IllegalArgumentException err(String msg) {
-		return new IllegalArgumentException(msg + " at offset " + pos);
+		return iaex("%s at offset %s", msg, pos);
 	}
 
 	/**

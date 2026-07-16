@@ -70,6 +70,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	private static final String ARG_o = "o";
 	private static final String ARG_c = "c";
 	private static final String ARG_classes = "classes";
+	private static final String ARG_value = "value";
 
 	/**
 	 * Builder class.
@@ -1160,6 +1161,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@Override
 	public final <T> BeanMap<T> toBeanMap(T o) {
+		assertArgNotNull(ARG_o, o);
 		if (o instanceof BeanMap o2)
 			return o2;
 		return this.toBeanMap(o, (Class<T>)o.getClass());
@@ -1472,6 +1474,7 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 	 */
 	@Override /* BeanSession */
 	public final Collection<?> parseToList(CharSequence value) {
+		assertArgNotNull(ARG_value, value);
 		return new Json5List(value).setBeanSession(this);
 	}
 
