@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.marshaller;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -45,7 +46,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 	}
 
 	@Test void a02_writeTokens() throws Exception {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = Json.ofTokens(sb)) {
 			w.startArray().number(1).endArray();
 		}
@@ -61,7 +62,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 	}
 
 	@Test void a04_writeRecords() throws Exception {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = Json.ofRecords(sb)) {
 			w.write(Map.of("a", 1));
 		}
@@ -79,7 +80,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 	}
 
 	@Test void a06_writeArrayRecords() throws Exception {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = Json.ofArrayRecords(sb)) {
 			w.write(1);
 			w.write(2);
@@ -89,7 +90,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 
 	@Test void a07_jsonlArrayRecordsAreLineDelimited() throws Exception {
 		// JSONL aliases its line record stream — no surrounding [...] brackets.
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = Jsonl.ofArrayRecords(sb)) {
 			w.write(Map.of("x", 1));
 			w.write(Map.of("x", 2));
@@ -112,7 +113,7 @@ class MarshallerStreamShortcuts_Test extends TestBase {
 	}
 
 	@Test void a09_writeTokensClassCastForNonTokenFormat() {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		assertThrows(ClassCastException.class, () -> Csv.DEFAULT.writeTokens(sb));
 	}
 }

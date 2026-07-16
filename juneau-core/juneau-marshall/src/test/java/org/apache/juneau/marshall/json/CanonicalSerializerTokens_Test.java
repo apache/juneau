@@ -18,6 +18,8 @@ package org.apache.juneau.marshall.json;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.jcs.*;
 import org.junit.jupiter.api.*;
@@ -28,12 +30,12 @@ import org.junit.jupiter.api.*;
  * disabled (canonical output can't be expressed through the generic walker).
  */
 @SuppressWarnings({
-	"resource" // Token writers wrap in-memory StringBuilders; nothing to clean up.
+	"resource" // Token writers wrap in-memory StringWriters; nothing to clean up.
 })
 class CanonicalSerializerTokens_Test extends TestBase {
 
 	@Test void a01_jcsSerializeTokensEmitsRawJson() throws Exception {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = JcsSerializer.DEFAULT.serializeTokens(sb)) {
 			w.startObject();
 			w.fieldName("a"); w.number(1L);
@@ -43,13 +45,13 @@ class CanonicalSerializerTokens_Test extends TestBase {
 	}
 
 	@Test void a02_jcsSerializeTokensDisablesObjectBridge() throws Exception {
-		try (var w = JcsSerializer.DEFAULT.serializeTokens(new StringBuilder())) {
+		try (var w = JcsSerializer.DEFAULT.serializeTokens(new StringWriter())) {
 			assertThrows(UnsupportedOperationException.class, () -> w.object(1));
 		}
 	}
 
 	@Test void a03_jsonSchemaSerializeTokensEmitsRawJson() throws Exception {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = JsonSchemaSerializer.DEFAULT.serializeTokens(sb)) {
 			w.startArray();
 			w.number(1L);
@@ -60,7 +62,7 @@ class CanonicalSerializerTokens_Test extends TestBase {
 	}
 
 	@Test void a04_jsonSchemaSerializeTokensDisablesObjectBridge() throws Exception {
-		try (var w = JsonSchemaSerializer.DEFAULT.serializeTokens(new StringBuilder())) {
+		try (var w = JsonSchemaSerializer.DEFAULT.serializeTokens(new StringWriter())) {
 			assertThrows(UnsupportedOperationException.class, () -> w.object(1));
 		}
 	}

@@ -1187,13 +1187,10 @@ public class Serializer extends MarshallingTraverseContext {
 	 * 	<ul>
 	 * 		<li>{@link Writer}
 	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder} - Output will be written to the specified string builder.
 	 * 	</ul>
 	 * 	<br>Stream-based serializers can handle the following output class types:
 	 * 	<ul>
 	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
 	 * 	</ul>
 	 * @throws SerializeException If a problem occurred trying to convert the output.
 	 * @throws IOException Thrown by the underlying stream.

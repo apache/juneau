@@ -298,8 +298,7 @@ public class JsonSerializerSession extends WriterSerializerSession implements To
 	 * DOES honor the databind settings (<c>keepNullProperties</c>, <c>trimEmptyMaps</c>,
 	 * <c>trimEmptyCollections</c>, <c>sortMaps</c>, <c>sortCollections</c>, <c>trimStrings</c>).
 	 *
-	 * @param output The output.  Accepts {@link Writer}, {@link OutputStream}, {@link File}, or
-	 * 	{@link StringBuilder}.
+	 * @param output The output.  Accepts {@link Writer} or {@link OutputStream}.
 	 * @return A new {@link JsonTokenWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */

@@ -20,6 +20,8 @@ import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.stream.*;
 import org.junit.jupiter.api.*;
@@ -73,7 +75,7 @@ class Json5lTokenStream_Test extends TestBase {
 	@Nested class B_writer extends TestBase {
 
 		@Test void b01_strictDefault() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5lSerializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject(); w.fieldName("a"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("b"); w.number(2); w.endObject();
@@ -83,7 +85,7 @@ class Json5lTokenStream_Test extends TestBase {
 
 		@Test void b02_sugarUnquotedKeysSingleQuotes() throws Exception {
 			var s = Json5lSerializer.create().json5Sugar().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = s.serializeTokens(sb)) {
 				w.startObject(); w.fieldName("a"); w.string("x"); w.endObject();
 				w.startObject(); w.fieldName("b"); w.string("y"); w.endObject();
@@ -93,7 +95,7 @@ class Json5lTokenStream_Test extends TestBase {
 
 		@Test void b03_capability() throws Exception {
 			assertInstanceOf(TokenWritable.class, Json5lSerializer.DEFAULT);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5lSerializer.DEFAULT.serializeTokens(sb)) {
 				assertWriterStreaming(w);
 			}
@@ -114,7 +116,7 @@ class Json5lTokenStream_Test extends TestBase {
 		}
 
 		@Test void c02_roundTrip() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (RecordWriter w = Json5lSerializer.DEFAULT.serializeArrayRecords(sb)) {
 				assertTrue(w.isStreaming());
 				w.write(java.util.Map.of("x", 1));

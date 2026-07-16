@@ -310,24 +310,19 @@ class MsgPackTokenStreamCoverage_Test extends TestBase {
 			assertArrayEquals(bos.toByteArray(), bos2.toByteArray());
 		}
 
-		@Test void w02_forOutput() throws Exception {
+		@Test void w02_constructorAndSessionTypeRejection() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = MsgPackTokenWriter.forOutput(bos, MsgPackTokenWriter.Settings.DEFAULT)) {
+			try (var w = new MsgPackTokenWriter(bos, MsgPackTokenWriter.Settings.DEFAULT)) {
 				w.number(1);
 			}
 			assertTrue(bos.toByteArray().length > 0);
 
-			var f = File.createTempFile("msgpacktok", ".mp");
-			f.deleteOnExit();
-			try (var w = MsgPackTokenWriter.forOutput(f, MsgPackTokenWriter.Settings.DEFAULT)) {
-				w.startArray().number(1).number(2).endArray();
-			}
-			assertTrue(f.length() > 0);
-
+			// The Object-to-OutputStream narrowing (and null/illegal-type rejection) lives on the
+			// session (the Object interface boundary); the writer takes a statically-typed OutputStream.
 			assertThrowsWithMessage(IOException.class, "Output cannot be null.",
-				() -> MsgPackTokenWriter.forOutput(null, MsgPackTokenWriter.Settings.DEFAULT));
+				() -> MsgPackSerializer.DEFAULT.serializeTokens(null));
 			assertThrowsWithMessage(IOException.class, "Cannot convert object of type",
-				() -> MsgPackTokenWriter.forOutput("not-a-stream", MsgPackTokenWriter.Settings.DEFAULT));
+				() -> MsgPackSerializer.DEFAULT.serializeTokens("not-a-stream"));
 		}
 
 		@Test void w03_numberOverloadsRoundTrip() throws Exception {

@@ -170,23 +170,6 @@ class JsonTokenWriterEdges_Test extends TestBase {
 		assertEquals("\"x\"", bos.toString(StandardCharsets.UTF_8));
 	}
 
-	@Test void a14_forOutputFile() throws Exception {
-		var f = File.createTempFile("juneau-jtw-", ".json");
-		f.deleteOnExit();
-		try (var w = JsonTokenWriter.forOutput(f, DEFAULT)) {
-			w.number(42L);
-		}
-		assertEquals("42", new String(java.nio.file.Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8));
-	}
-
-	@Test void a15_forOutputStringBuilder() throws Exception {
-		var sb = new StringBuilder();
-		try (var w = JsonTokenWriter.forOutput(sb, DEFAULT)) {
-			w.bool(false);
-		}
-		assertEquals("false", sb.toString());
-	}
-
 	@Test void a16_forOutputNullRejected() {
 		assertThrowsWithMessage(IOException.class, "Output cannot be null.", () -> JsonTokenWriter.forOutput(null, DEFAULT));
 	}

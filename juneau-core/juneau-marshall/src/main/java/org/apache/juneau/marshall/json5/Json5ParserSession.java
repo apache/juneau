@@ -102,7 +102,7 @@ public class Json5ParserSession extends JsonParserSession {
 	 * missing values) are applied unconditionally as part of the format.
 	 *
 	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
-	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * 	or <code><jk>byte</jk>[]</code>.
 	 * @return A new {@link Json5TokenReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
@@ -117,8 +117,7 @@ public class Json5ParserSession extends JsonParserSession {
 			false /* strict */,
 			isAutoCloseStreams(),
 			isUnbuffered(),
-			getStreamCharset(),
-			getFileCharset());
+			getStreamCharset());
 		return new Json5TokenReader(pipe, new JsonTokenReader.Settings(isTrimStrings()), this);
 	}
 

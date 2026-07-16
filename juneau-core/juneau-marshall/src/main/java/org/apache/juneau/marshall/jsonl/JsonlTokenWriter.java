@@ -20,7 +20,6 @@ import java.io.*;
 import java.math.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.commons.io.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.stream.*;
 
@@ -75,7 +74,7 @@ public class JsonlTokenWriter implements TokenWriter {
 	/**
 	 * Internal factory that mirrors {@link JsonTokenWriter#forOutput(Object, JsonTokenWriter.Settings)}
 	 * so the per-format {@code tokenWriter(...)} factory can hand in any of the supported output
-	 * types ({@link Writer}, {@link OutputStream}, {@link File}, {@link StringBuilder}).
+	 * types ({@link Writer}, {@link OutputStream}).
 	 *
 	 * @param output The output object.
 	 * @param settings The output-formatting settings.
@@ -89,12 +88,6 @@ public class JsonlTokenWriter implements TokenWriter {
 			return new JsonlTokenWriter(w, settings);
 		if (output instanceof OutputStream os)
 			return new JsonlTokenWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), settings);
-		if (output instanceof File f) {
-			var os = new BufferedOutputStream(new FileOutputStream(f));
-			return new JsonlTokenWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), settings, os);
-		}
-		if (output instanceof StringBuilder sb)
-			return new JsonlTokenWriter(new StringBuilderWriter(sb), settings);
 		throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to a Writer.");
 	}
 

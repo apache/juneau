@@ -99,27 +99,6 @@ public class MsgPackTokenWriter implements TokenWriter {
 		this.settings = settings;
 	}
 
-	/**
-	 * Internal factory used by {@link MsgPackSerializerSession#serializeTokens(Object)} to coerce
-	 * supported output types ({@link OutputStream}, {@link File}) to a MsgPack writer.
-	 *
-	 * @param output The output object.
-	 * @param settings The settings.
-	 * @return A new {@link MsgPackTokenWriter}.
-	 * @throws IOException If the output type is not supported or could not be opened.
-	 */
-	public static MsgPackTokenWriter forOutput(Object output, Settings settings) throws IOException {
-		if (output == null)
-			throw new IOException("Output cannot be null.");
-		if (output instanceof OutputStream os)
-			return new MsgPackTokenWriter(os, null, settings);
-		if (output instanceof File f) {
-			var os = new BufferedOutputStream(new FileOutputStream(f));
-			return new MsgPackTokenWriter(os, os, settings);
-		}
-		throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to an OutputStream.");
-	}
-
 	/** The active write target for child bytes (top buffer or finalOut). */
 	private OutputStream activeOut() {
 		return buffers.isEmpty() ? finalOut : buffers.peek();

@@ -385,17 +385,15 @@ class RestServerVars_Test extends TestBase {
 
 	@Test void e06_serializedRequestAttrVar_resolveTo_serializerFound() throws Exception {
 		// Serializer.serialize(Object,Object) is final so we use a real serializer (Json5).
-		// The production code calls s.serialize(w, o) where w is the Writer and o is the attribute
-		// value used as the output destination; we supply a StringBuilder so the serializer has a
-		// valid output target and can write successfully.
+		// The attribute value is serialized into the var-resolution Writer.
 		var req = mock(RestRequest.class, RETURNS_DEEP_STUBS);
-		var outputSb = new StringBuilder();
 		var attr = mock(RequestAttribute.class);
-		when(attr.orElse(any())).thenReturn(outputSb);
+		when(attr.orElse(any())).thenReturn("myValue");
 		when(req.getAttribute(any())).thenReturn(attr);
 		when(req.getOpContext().getSerializers().getSerializer(any(String.class))).thenReturn(Optional.of(Json5Serializer.DEFAULT));
-		new SerializedRequestAttrVar().resolveTo(sessionWith(req), new StringWriter(), "application/json,myKey");
-		assertFalse(outputSb.toString().isEmpty());
+		var w = new StringWriter();
+		new SerializedRequestAttrVar().resolveTo(sessionWith(req), w, "application/json,myKey");
+		assertTrue(w.toString().contains("myValue"));
 	}
 
 	// -----------------------------------------------------------------------------------------

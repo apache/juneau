@@ -398,7 +398,7 @@ class ArrayRecordStream_Test extends TestBase {
 			}
 			return baos.toByteArray();
 		}
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = ((ArrayRecordWritable) fmt.serializer).serializeArrayRecords(sb)) {
 			for (var b : beans)
 				w.write(b);

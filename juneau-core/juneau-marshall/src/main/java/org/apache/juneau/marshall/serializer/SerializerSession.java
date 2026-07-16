@@ -1201,14 +1201,8 @@ public class SerializerSession extends MarshallingTraverseSession {
 	 * 	<ul>
 	 * 		<li>{@link Writer}
 	 * 		<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 		<li>{@link File} - Output will be written as system-default encoded stream.
-	 * 		<li>{@link StringBuilder}
 	 * 	</ul>
-	 * 	<br>For byte-based serializers, this can be any of the following types:
-	 * 	<ul>
-	 * 		<li>{@link OutputStream}
-	 * 		<li>{@link File}
-	 * 	</ul>
+	 * 	<br>For byte-based serializers, this must be an {@link OutputStream}.
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
 	 */

@@ -19,6 +19,7 @@ package org.apache.juneau.marshall.stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -97,7 +98,7 @@ class MultiRecordStream_Test extends TestBase {
 		assumeTrue(fmt != Format.SSE);
 
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2), new Bean("c", 3));
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = ((RecordWritable) fmt.serializer).serializeRecords(sb)) {
 			for (var b : beans)
 				w.write(b);
@@ -128,7 +129,7 @@ class MultiRecordStream_Test extends TestBase {
 
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2));
 
-		var streamed = new StringBuilder();
+		var streamed = new StringWriter();
 		try (var w = ((RecordWritable) fmt.serializer).serializeRecords(streamed)) {
 			for (var b : beans)
 				w.write(b);
@@ -145,7 +146,7 @@ class MultiRecordStream_Test extends TestBase {
 
 	@Test
 	void d01_sseMultipleEvents() throws Exception {
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = SseSerializer.DEFAULT.serializeRecords(sb)) {
 			w.write(new SseEvent().setEvent("a").setData("1"));
 			w.write(new SseEvent().setEvent("b").setData("2"));
@@ -167,7 +168,7 @@ class MultiRecordStream_Test extends TestBase {
 		assumeTrue(fmt.parser != null);
 
 		var beans = List.of(new Bean("a", 1), new Bean("b", 2));
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		try (var w = ((RecordWritable) fmt.serializer).serializeRecords(sb)) {
 			for (var b : beans)
 				w.write(b);

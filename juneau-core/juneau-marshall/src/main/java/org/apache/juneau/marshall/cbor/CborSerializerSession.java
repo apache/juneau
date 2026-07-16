@@ -137,12 +137,16 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 	 * format &mdash; no text-formatting concepts apply); <c>uriContext</c>,
 	 * <c>uriResolution</c>, <c>uriRelativity</c>, <c>listener</c>.
 	 *
-	 * @param output The output.  Accepts {@link OutputStream} or {@link File}.
+	 * @param output The output.  Accepts an {@link OutputStream}.
 	 * @return A new {@link CborTokenWriter}.
 	 * @throws IOException If the output type is not supported or could not be opened.
 	 */
 	@Override /* TokenWritable */
 	public TokenWriter serializeTokens(Object output) throws IOException {
+		if (output == null)
+			throw new IOException("Output cannot be null.");
+		if (!(output instanceof OutputStream os))
+			throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to an OutputStream.");
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),
@@ -151,7 +155,7 @@ public class CborSerializerSession extends OutputStreamSerializerSession impleme
 			isSortCollections(),
 			isTrimStrings(),
 			getMarshallingContext());
-		return CborTokenWriter.forOutput(output, new CborTokenWriter.Settings(walk));
+		return new CborTokenWriter(os, new CborTokenWriter.Settings(walk));
 	}
 
 	/**

@@ -18,8 +18,6 @@ package org.apache.juneau.marshall.serializer;
 
 import static org.apache.juneau.commons.utils.IoUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.commons.utils.ThrowableUtils.*;
-
 import java.io.*;
 import java.nio.charset.*;
 
@@ -34,28 +32,21 @@ import org.apache.juneau.commons.utils.*;
  * <ul>
  * 	<li>{@link Writer}
  * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
- * 	<li>{@link File} - Output will be written as system-default encoded stream.
- * 	<li>{@link StringBuilder}
  * </ul>
  *
  * <p>
- * For stream-based serializers, the output object can be any of the following:
- * <ul>
- * 	<li>{@link OutputStream}
- * 	<li>{@link File}
- * </ul>
+ * For stream-based serializers, the output object must be an {@link OutputStream}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
  * </ul>
  */
 @SuppressWarnings({
-	"resource" // outputStream/writer wrap the caller-supplied output; their lifecycle is managed here via close() honoring the autoClose flag.
+	"resource" // outputStream/writer wrap the caller-supplied output; the caller retains ownership and close() only flushes.
 })
 public class SerializerPipe implements Closeable {
 
 	private final Object output;
-	private final boolean autoClose;
 
 	private OutputStream outputStream;
 	private Writer writer;
@@ -68,7 +59,6 @@ public class SerializerPipe implements Closeable {
 	 */
 	SerializerPipe(Object output) {
 		this.output = output;
-		this.autoClose = false;
 		this.charset = null;
 	}
 
@@ -76,15 +66,11 @@ public class SerializerPipe implements Closeable {
 	 * Writer-based constructor.
 	 *
 	 * @param output The object to pipe the serializer output to.
+	 * @param streamCharset The charset to use when writing to an {@link OutputStream}.  If <jk>null</jk>, defaults to UTF-8.
 	 */
-	SerializerPipe(Object output, Charset streamCharset, Charset fileCharset) {
-		boolean isFile = (output instanceof File);
+	SerializerPipe(Object output, Charset streamCharset) {
 		this.output = output;
-		this.autoClose = isFile;
-		Charset cs = isFile ? fileCharset : streamCharset;
-		if (cs == null)
-			cs = isFile ? Charset.defaultCharset() : UTF8;
-		this.charset = cs;
+		this.charset = streamCharset != null ? streamCharset : UTF8;
 	}
 
 	/**
@@ -94,8 +80,6 @@ public class SerializerPipe implements Closeable {
 	public void close() {
 		try {
 			IoUtils.flush(writer, outputStream);
-			if (autoClose)
-				IoUtils.close(writer, outputStream);
 		} catch (IOException e) {
 			throw brex(e);
 		}
@@ -108,11 +92,7 @@ public class SerializerPipe implements Closeable {
 	 * Subclasses can override this method to implement their own specialized output streams.
 	 *
 	 * <p>
-	 * This method can be used if the output object is any of the following class types:
-	 * <ul>
-	 * 	<li>{@link OutputStream}
-	 * 	<li>{@link File}
-	 * </ul>
+	 * This method can be used if the output object is an {@link OutputStream}.
 	 *
 	 * @return
 	 * 	The output object wrapped in an output stream.
@@ -126,8 +106,6 @@ public class SerializerPipe implements Closeable {
 
 		if (output instanceof OutputStream output2)
 			outputStream = output2;
-		else if (output instanceof File output2)
-			outputStream = new BufferedOutputStream(new FileOutputStream(output2));
 		else
 			throw ioex("Cannot convert object of type %s to an OutputStream.", cn(output));
 
@@ -152,7 +130,6 @@ public class SerializerPipe implements Closeable {
 	 * <ul>
 	 * 	<li>{@link Writer}
 	 * 	<li>{@link OutputStream} - Output will be written as UTF-8 encoded stream.
-	 * 	<li>{@link File} - Output will be written as system-default encoded stream.
 	 * </ul>
 	 *
 	 * @return
@@ -165,20 +142,12 @@ public class SerializerPipe implements Closeable {
 		if (output == null)
 			throw new SerializeException("Output cannot be null.");
 
-		try {
-			if (output instanceof Writer output2)
-				writer = output2;
-			else if (output instanceof OutputStream output2)
-				writer = new OutputStreamWriter(output2, charset);
-			else if (output instanceof File output2)
-				writer = new OutputStreamWriter(new BufferedOutputStream(new FileOutputStream(output2)));
-			else if (output instanceof StringBuilder output2)
-				writer = new StringBuilderWriter(output2);
-			else
-				throw new SerializeException("Cannot convert object of type " + cn(output) + " to a Writer.");
-		} catch (FileNotFoundException e) {
-			throw castException(SerializeException.class, e);
-		}
+		if (output instanceof Writer output2)
+			writer = output2;
+		else if (output instanceof OutputStream output2)
+			writer = new OutputStreamWriter(output2, charset);
+		else
+			throw new SerializeException("Cannot convert object of type " + cn(output) + " to a Writer.");
 
 		return new NoCloseWriter(writer);
 	}

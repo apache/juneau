@@ -344,7 +344,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void b09_arrayWriterBuffersAndEmitsArray() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = RecordAdapter.arrayWriter(serializerSession(), sb)) {
 				assertFalse(w.isStreaming());
 				w.write(1);
@@ -355,7 +355,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void b10_arrayWriterRejectsWriteAfterClose() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			var w = RecordAdapter.arrayWriter(serializerSession(), sb);
 			w.close();
 			assertThrowsWithMessage(IllegalStateException.class, "Array stream is closed", () -> w.write(1));
@@ -372,7 +372,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void b12_writerSingleShot() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = RecordAdapter.writer(serializerSession(), sb)) {
 				assertFalse(w.isStreaming());
 				w.write(Map.of("a", 1));
@@ -398,13 +398,13 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void b15_writerWrapsSerializeExceptionAsIOException() throws Exception {
-			try (var w = RecordAdapter.writer(serializerSession(), new StringBuilder())) {
+			try (var w = RecordAdapter.writer(serializerSession(), new StringWriter())) {
 				assertThrows(IOException.class, () -> w.write(new BadBean()));
 			}
 		}
 
 		@Test void b16_arrayWriterWrapsSerializeExceptionAsIOException() throws Exception {
-			var w = RecordAdapter.arrayWriter(serializerSession(), new StringBuilder());
+			var w = RecordAdapter.arrayWriter(serializerSession(), new StringWriter());
 			w.write(new BadBean());
 			// The buffered serialize happens on close(), wrapping the SerializeException as IOException.
 			assertThrows(IOException.class, w::close);
@@ -443,7 +443,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void c03_writerStreamsElements() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = StreamingArrayRecord.writer(JsonSerializer.DEFAULT.serializeTokens(sb))) {
 				assertTrue(w.isStreaming());
 				w.write(1);
@@ -454,7 +454,7 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void c04_writerRejectsWriteAfterCloseAndIsIdempotent() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			var w = StreamingArrayRecord.writer(JsonSerializer.DEFAULT.serializeTokens(sb));
 			w.write(1);
 			w.close();
@@ -490,10 +490,10 @@ class StreamInternals_Test extends TestBase {
 		}
 
 		@Test void d04_arrayRecordWritableCountDefaultDelegates() throws Exception {
-			var marker = RecordAdapter.writer(JsonSerializer.DEFAULT.getSession(), new StringBuilder());
+			var marker = RecordAdapter.writer(JsonSerializer.DEFAULT.getSession(), new StringWriter());
 			ArrayRecordWritable aw = output -> marker;
 			// The count-prefixed default ignores the count and delegates to the 1-arg form.
-			assertSame(marker, aw.serializeArrayRecords(new StringBuilder(), 3));
+			assertSame(marker, aw.serializeArrayRecords(new StringWriter(), 3));
 			assertTrue(aw.isArrayRecordStreaming());
 			marker.close();
 		}

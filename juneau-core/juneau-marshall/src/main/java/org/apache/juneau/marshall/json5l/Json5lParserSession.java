@@ -100,7 +100,7 @@ public class Json5lParserSession extends Json5ParserSession {
 	 * {@link Json5ParserSession#parseTokens(Object)}.
 	 *
 	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence}, {@link InputStream},
-	 * 	<code><jk>byte</jk>[]</code>, or {@link File}.
+	 * 	or <code><jk>byte</jk>[]</code>.
 	 * @return A new {@link Json5lTokenReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
@@ -115,8 +115,7 @@ public class Json5lParserSession extends Json5ParserSession {
 			false /* strict */,
 			isAutoCloseStreams(),
 			isUnbuffered(),
-			getStreamCharset(),
-			getFileCharset());
+			getStreamCharset());
 		return new Json5lTokenReader(pipe, new JsonTokenReader.Settings(isTrimStrings()), this);
 	}
 

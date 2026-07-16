@@ -40,8 +40,9 @@ public interface TokenWritable extends RecordWritable {
 	/**
 	 * Opens a low-level {@link TokenWriter} push generator targeting the specified output.
 	 *
-	 * @param output The output.  Subtypes define the supported types (typically
-	 * 	{@link Writer} / {@link OutputStream} / {@link File} / {@link StringBuilder}).
+	 * @param output The output.  Subtypes define the supported types: byte formats (cbor, msgpack)
+	 * 	accept an {@link OutputStream}; char formats (json, json5, jsonl, jsonschema, jcs) accept a
+	 * 	{@link Writer} or an {@link OutputStream} (encoded as UTF-8).
 	 * @return A new {@link TokenWriter}.
 	 * @throws IOException If a problem occurred opening the underlying output.
 	 */

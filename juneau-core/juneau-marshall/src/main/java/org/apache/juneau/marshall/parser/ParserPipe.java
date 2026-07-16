@@ -36,7 +36,6 @@ import org.apache.juneau.marshall.*;
  * 	<li>{@link CharSequence}
  * 	<li>{@link InputStream}
  * 	<li><code><jk>byte</jk>[]</code>
- * 	<li>{@link File}
  * 	<li><code><jk>null</jk></code>
  * </ul>
  *
@@ -45,14 +44,13 @@ import org.apache.juneau.marshall.*;
  * <ul>
  * 	<li>{@link InputStream}
  * 	<li><code><jk>byte</jk>[]</code>
- * 	<li>{@link File}
  * 	<li>{@link String} - Hex-encoded bytes.  (not BASE-64!)
  * 	<li><code><jk>null</jk></code>
  * </ul>
  *
  * <p>
- * Note that Readers and InputStreams will NOT be automatically closed when {@link #close()} is called, but
- * streams and readers created from other types (e.g. Files) WILL be automatically closed.
+ * Note that Readers and InputStreams will NOT be automatically closed when {@link #close()} is called
+ * unless the {@code autoCloseStreams} setting is enabled.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/SerializersAndParsers">Serializers and Parsers</a>
@@ -81,12 +79,12 @@ public class ParserPipe implements Closeable {
 	 * Shortcut constructor, typically for straight string input.
 	 *
 	 * <p>
-	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>, <jk>null</jk>);</code>
+	 * Equivalent to calling <code><jk>new</jk> ParserPipe(input, <jk>false</jk>, <jk>false</jk>, <jk>false</jk>, <jk>false</jk>, <jk>null</jk>);</code>
 	 *
 	 * @param input The input object.
 	 */
 	public ParserPipe(Object input) {
-		this(input, false, false, false, false, null, null);
+		this(input, false, false, false, false, null);
 	}
 
 	/**
@@ -135,22 +133,16 @@ public class ParserPipe implements Closeable {
 	 * 	If <jk>true</jk>, we read one character at a time from underlying readers when the readers are expected to be parsed
 	 * 	multiple times.
 	 * 	<br>Otherwise, we read character data into a reusable buffer.
-	 * @param fileCharset
-	 * 	The charset to expect when reading from {@link File Files}.
 	 * @param streamCharset
 	 * 	The charset to expect when reading from {@link InputStream InputStreams}.
 	 */
-	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, Charset streamCharset, Charset fileCharset) {
-		boolean isFile = input instanceof File;
+	public ParserPipe(Object input, boolean debug, boolean strict, boolean autoCloseStreams, boolean unbuffered, Charset streamCharset) {
 		this.input = input;
 		this.debug = debug;
 		this.strict = strict;
 		this.autoCloseStreams = autoCloseStreams;
 		this.unbuffered = unbuffered;
-		Charset cs = isFile ? fileCharset : streamCharset;
-		if (cs == null)
-			cs = (isFile ? Charset.defaultCharset() : UTF8);
-		this.charset = cs;
+		this.charset = streamCharset != null ? streamCharset : UTF8;
 		if (input instanceof CharSequence cs2)
 			this.inputString = cs2.toString();
 		this.binaryFormat = null;
@@ -230,15 +222,6 @@ public class ParserPipe implements Closeable {
 			inputString = input2;
 			inputStream = new ByteArrayInputStream(convertFromString(input2));
 			doClose = false;
-		} else if (input instanceof File input2) {
-			if (debug) {
-				var b = readBytes(input2);
-				inputString = toHex(b);
-				inputStream = new ByteArrayInputStream(b);
-			} else {
-				inputStream = new FileInputStream(input2);
-				doClose = true;
-			}
 		} else {
 			throw ioex("Cannot convert object of type %s to an InputStream.", cn(input));
 		}
@@ -302,21 +285,6 @@ public class ParserPipe implements Closeable {
 				inputString = read(reader);
 				reader = new StringReader(inputString);
 			}
-		} else if (input instanceof File input2) {
-			CharsetDecoder cd = charset.newDecoder();
-			if (strict) {
-				cd.onMalformedInput(CodingErrorAction.REPORT);
-				cd.onUnmappableCharacter(CodingErrorAction.REPORT);
-			} else {
-				cd.onMalformedInput(CodingErrorAction.REPLACE);
-				cd.onUnmappableCharacter(CodingErrorAction.REPLACE);
-			}
-			reader = new InputStreamReader(new FileInputStream(input2), cd);
-			if (debug) {
-				inputString = read(reader);
-				reader = new StringReader(inputString);
-			}
-			doClose = true;
 		} else {
 			throw ioex("Cannot convert object of type %s to an InputStream.", cn(input));
 		}

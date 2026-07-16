@@ -142,6 +142,10 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 	 */
 	@Override /* TokenWritable */
 	public TokenWriter serializeTokens(Object output) throws IOException {
+		if (output == null)
+			throw new IOException("Output cannot be null.");
+		if (!(output instanceof OutputStream os))
+			throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to an OutputStream.");
 		var walk = new PojoWalker.Options(
 			isKeepNullProperties(),
 			isTrimEmptyMaps(),
@@ -150,7 +154,7 @@ public class MsgPackSerializerSession extends OutputStreamSerializerSession impl
 			isSortCollections(),
 			isTrimStrings(),
 			getMarshallingContext());
-		return MsgPackTokenWriter.forOutput(output, new MsgPackTokenWriter.Settings(walk));
+		return new MsgPackTokenWriter(os, new MsgPackTokenWriter.Settings(walk));
 	}
 
 	/**

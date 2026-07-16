@@ -196,8 +196,6 @@ public class ReaderParserSession extends ParserSession {
 	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or whatever the encoding specified by
 	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
-	 * 		<li>{@link File} containing system encoded text (or whatever the encoding specified by
-	 * 			{@link ReaderParser.Builder#streamCharset(Charset)}).
 	 * 	</ul>
 	 * @return
 	 * 	A new {@link ParserPipe} wrapper around the specified input object.
@@ -207,7 +205,7 @@ public class ReaderParserSession extends ParserSession {
 	})
 	@Override /* Overridden from ParserSesson */
 	public final ParserPipe createPipe(Object input) {
-		return setPipe(new ParserPipe(input, isDebug(), true, ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset, fileCharset));
+		return setPipe(new ParserPipe(input, isDebug(), true, ctx.isAutoCloseStreams(), ctx.isUnbuffered(), streamCharset));
 	}
 
 	/**

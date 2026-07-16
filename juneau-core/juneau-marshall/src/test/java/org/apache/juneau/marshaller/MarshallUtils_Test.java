@@ -20,6 +20,7 @@ import static org.apache.juneau.marshall.marshaller.MarshallUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -112,29 +113,25 @@ class MarshallUtils_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_serializeToWriter_charFormats() throws Exception {
-		var sb = new StringBuilder();
-		json(MAP, sb);
-		assertNotNull(sb.toString());
-		assertTrue(!sb.isEmpty());
-
-		sb.setLength(0); json5(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); jsonl(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); jcs(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); hjson(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); xml(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); html(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); uon(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); urlEncoding(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); yaml(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); csv("foo", sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); openApi(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); plainText(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); markdown(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); markdownDoc(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); ini(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); toml(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); hocon(MAP, sb); assertTrue(!sb.isEmpty());
-		sb.setLength(0); proto(MAP, sb); assertTrue(!sb.isEmpty());
+		assertFalse(json(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(json5(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(jsonl(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(jcs(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(hjson(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(xml(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(html(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(uon(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(urlEncoding(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(yaml(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(csv("foo", new StringWriter()).toString().isEmpty());
+		assertFalse(openApi(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(plainText(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(markdown(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(markdownDoc(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(ini(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(toml(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(hocon(MAP, new StringWriter()).toString().isEmpty());
+		assertFalse(proto(MAP, new StringWriter()).toString().isEmpty());
 	}
 
 	@Test void c02_serializeToOutputStream_binaryFormats() throws Exception {
@@ -215,19 +212,19 @@ class MarshallUtils_Test extends TestBase {
 
 	@Test void e04_parseStringClass_iniTomlHoconProto() throws Exception {
 		// These require Map root.
-		var iniStr = ini(new A04_Bean(), new StringBuilder()).toString();
+		var iniStr = ini(new A04_Bean(), new StringWriter()).toString();
 		var iniParsed = MarshallUtils.<JsonMap>ini(iniStr, JsonMap.class);
 		assertNotNull(iniParsed);
 
-		var tomlStr = toml(new A04_Bean(), new StringBuilder()).toString();
+		var tomlStr = toml(new A04_Bean(), new StringWriter()).toString();
 		var tomlParsed = MarshallUtils.<JsonMap>toml(tomlStr, JsonMap.class);
 		assertNotNull(tomlParsed);
 
-		var hoconStr = hocon(new A04_Bean(), new StringBuilder()).toString();
+		var hoconStr = hocon(new A04_Bean(), new StringWriter()).toString();
 		var hoconParsed = MarshallUtils.<JsonMap>hocon(hoconStr, JsonMap.class);
 		assertNotNull(hoconParsed);
 
-		var protoStr = proto(new A04_Bean(), new StringBuilder()).toString();
+		var protoStr = proto(new A04_Bean(), new StringWriter()).toString();
 		var protoParsed = MarshallUtils.<JsonMap>proto(protoStr, JsonMap.class);
 		assertNotNull(protoParsed);
 	}

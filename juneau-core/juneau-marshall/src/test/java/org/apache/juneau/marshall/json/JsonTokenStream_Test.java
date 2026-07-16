@@ -281,7 +281,7 @@ class JsonTokenStream_Test extends TestBase {
 	@Nested class C_writer extends TestBase {
 
 		@Test void c01_emptyObject() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject().endObject();
 			}
@@ -289,7 +289,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c02_emptyArray() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startArray().endArray();
 			}
@@ -297,7 +297,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c03_simpleObject() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
@@ -310,7 +310,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c04_nested() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a");
@@ -330,7 +330,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c05_stringEscaping() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.string("a\nb");
@@ -342,7 +342,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c06_numberOverloads() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.number(7L);
@@ -356,7 +356,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c07_stringNullEmitsNull() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.string(null);
@@ -366,7 +366,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c08_binaryAsBase64String() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				w.binary(new byte[]{1, 2, 3, 4});
@@ -376,14 +376,14 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c09_capability() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				assertTrue(w.isStreaming());
 			}
 		}
 
 		@Test void c10_doubleFieldNameRejected() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a");
@@ -392,7 +392,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c11_fieldNameOutsideObjectRejected() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				assertThrows(IllegalStateException.class, () -> w.fieldName("a"));
 				w.startArray();
@@ -401,7 +401,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c12_writeEndKindMismatch() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				assertThrows(IllegalStateException.class, w::endArray);
@@ -409,7 +409,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c13_nonFiniteDoubleRejected() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startArray();
 				assertThrows(IOException.class, () -> w.number(Double.NaN));
@@ -437,7 +437,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void c16_writeAfterCloseThrows() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			var w = toJsonTokens(sb);
 			w.startArray().endArray();
 			w.close();
@@ -464,7 +464,7 @@ class JsonTokenStream_Test extends TestBase {
 	@Nested class D_roundTrip extends TestBase {
 
 		@Test void d01_basicRoundTrip() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("greeting"); w.string("hello");
@@ -497,7 +497,7 @@ class JsonTokenStream_Test extends TestBase {
 			// Build the same value twice: once via the token writer, once via JsonSerializer.DEFAULT.
 			// Outputs should be byte-for-byte equal because both produce compact RFC-8259 JSON with
 			// double-quoted keys and no whitespace.
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = toJsonTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
@@ -528,7 +528,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void e02_jsonSerializerDeclaresFull() throws Exception {
 			assertInstanceOf(TokenWritable.class, JsonSerializer.DEFAULT);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				assertWriterStreaming(w);
 			}
@@ -539,7 +539,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void f01_useWhitespacePrettyPrints() throws Exception {
 			var ser = JsonSerializer.create().useWhitespace().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
@@ -564,7 +564,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void f02_useWhitespaceEmptyContainersStayCompact() throws Exception {
 			var ser = JsonSerializer.create().useWhitespace().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("empties");
@@ -587,7 +587,7 @@ class JsonTokenStream_Test extends TestBase {
 		@Test void f03_quoteCharOverride() throws Exception {
 			// Single-quote output (e.g. for embedding in HTML attributes).
 			var ser = JsonSerializer.create().quoteChar('\'').build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("greeting"); w.string("o'reilly");
@@ -598,7 +598,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void f04_escapeSolidus() throws Exception {
 			var ser = JsonSerializer.create().escapeSolidus().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startArray();
 				w.string("path/to/thing");
@@ -609,7 +609,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void f05_trimStringsOnWriter() throws Exception {
 			var ser = JsonSerializer.create().trimStrings().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("  padded  "); w.string("  value  ");
@@ -621,7 +621,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void f06_defaultSerializerStaysCompact() throws Exception {
 			// JsonSerializer.DEFAULT should still produce the canonical compact form.
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
@@ -666,7 +666,7 @@ class JsonTokenStream_Test extends TestBase {
 			// useWhitespace + maxIndent=2 means levels 0..2 indent (0/2/4 spaces), and levels >= 2
 			// emit no further per-level indent.  The structural newlines themselves still appear.
 			var ser = JsonSerializer.create().useWhitespace().maxIndent(2).build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("a");
@@ -716,14 +716,10 @@ class JsonTokenStream_Test extends TestBase {
 			}
 		}
 
-		@Test void f13_fileCharsetHonored() throws Exception {
-			var tmp = File.createTempFile("juneau-tokenstream-", ".json");
-			tmp.deleteOnExit();
-			try (var os = new FileOutputStream(tmp)) {
-				os.write(new byte[]{'"', (byte) 0xE9, '"'});  // ISO_8859_1 'é'
-			}
-			var p = JsonParser.create().fileCharset(java.nio.charset.StandardCharsets.ISO_8859_1).build();
-			try (var r = p.parseTokens(tmp)) {
+		@Test void f13_streamCharsetHonored() throws Exception {
+			var bytes = new byte[]{'"', (byte) 0xE9, '"'};  // ISO_8859_1 'é'
+			var p = JsonParser.create().streamCharset(java.nio.charset.StandardCharsets.ISO_8859_1).build();
+			try (var r = p.parseTokens(new ByteArrayInputStream(bytes))) {
 				assertEquals(TokenType.VALUE_STRING, r.next());
 				assertEquals("é", r.getString());
 			}
@@ -734,7 +730,7 @@ class JsonTokenStream_Test extends TestBase {
 			// the token output.  We pick one writer-side flag (addBeanTypesJson + sortMaps) and one
 			// reader-side flag (debugOutputLines + listener=null).
 			var ser = JsonSerializer.create().addBeanTypesJson().sortMaps().keepNullProperties().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("z"); w.number(1);
@@ -883,7 +879,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h01_simpleScalar() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(42);
 			}
@@ -891,7 +887,7 @@ class JsonTokenStream_Test extends TestBase {
 		}
 
 		@Test void h02_nullEmitsNil() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(null);
 			}
@@ -903,7 +899,7 @@ class JsonTokenStream_Test extends TestBase {
 			b.name = "alice";
 			b.age = 30;
 			b.tags = List.of("x", "y");
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(b);
 			}
@@ -915,7 +911,7 @@ class JsonTokenStream_Test extends TestBase {
 			var b1 = new HBean(); b1.name = "a"; b1.age = 1;
 			var b2 = new HBean(); b2.name = "b"; b2.age = 2;
 			var beans = List.of(b1, b2);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(beans);
 			}
@@ -928,7 +924,7 @@ class JsonTokenStream_Test extends TestBase {
 			m.put("b", List.of("x", "y"));
 			m.put("c", new int[]{10, 20});
 			m.put("d", Map.of("nested", true));
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -937,7 +933,7 @@ class JsonTokenStream_Test extends TestBase {
 
 		@Test void h06_byteArrayEmitsBinary() throws Exception {
 			var bytes = new byte[]{1, 2, 3, 4};
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(bytes);
 			}
@@ -952,7 +948,7 @@ class JsonTokenStream_Test extends TestBase {
 			var payload = new HBean();
 			payload.name = "alice";
 			payload.age = 30;
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("envelopeVersion"); w.number(1);
@@ -970,7 +966,7 @@ class JsonTokenStream_Test extends TestBase {
 			m.put("m", 3);
 			// With sortMaps, keys come out in alphabetical order.
 			var ser = JsonSerializer.create().sortMaps().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -982,7 +978,7 @@ class JsonTokenStream_Test extends TestBase {
 			var m = new LinkedHashMap<String, Integer>();
 			m.put("z", 1);
 			m.put("a", 2);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -998,7 +994,7 @@ class JsonTokenStream_Test extends TestBase {
 			// But the actual default on JsonSerializer.DEFAULT is to skip nulls during a databind
 			// emit; verify that the walker honors the configured setting.
 			var skipNullsSer = JsonSerializer.create().keepNullProperties(false).build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = skipNullsSer.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -1010,7 +1006,7 @@ class JsonTokenStream_Test extends TestBase {
 			m.put("a", 1);
 			m.put("b", null);
 			var ser = JsonSerializer.create().keepNullProperties().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -1022,7 +1018,7 @@ class JsonTokenStream_Test extends TestBase {
 			m.put("a", 1);
 			m.put("b", Map.of());
 			var ser = JsonSerializer.create().trimEmptyMaps().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -1034,7 +1030,7 @@ class JsonTokenStream_Test extends TestBase {
 			m.put("a", 1);
 			m.put("b", List.of());
 			var ser = JsonSerializer.create().trimEmptyCollections().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.object(m);
 			}
@@ -1044,7 +1040,7 @@ class JsonTokenStream_Test extends TestBase {
 		@Test void h14_sortCollectionsHonored() throws Exception {
 			var l = List.of("c", "a", "b");
 			var ser = JsonSerializer.create().sortCollections().build();
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = ser.serializeTokens(sb)) {
 				w.object(l);
 			}
@@ -1055,7 +1051,7 @@ class JsonTokenStream_Test extends TestBase {
 			// java.time.LocalDate has a swap registered in DefaultSwaps; object() should emit
 			// it as the swapped string form (ISO-8601), not as a bean walk over its public methods.
 			var date = java.time.LocalDate.of(2026, java.time.Month.JUNE, 12);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(date);
 			}
@@ -1074,7 +1070,7 @@ class JsonTokenStream_Test extends TestBase {
 			b.scores.put("math", 95);
 			b.scores.put("english", 87);
 
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(b);
 			}

@@ -19,6 +19,8 @@ package org.apache.juneau.marshall.json5;
 import static org.apache.juneau.marshall.stream.TokenStreamAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.stream.*;
 import org.junit.jupiter.api.*;
@@ -155,7 +157,7 @@ class Json5TokenStream_Test extends TestBase {
 	@Nested class B_writer extends TestBase {
 
 		@Test void b01_defaultQuoteCharIsSingle() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.string("hi");
@@ -166,7 +168,7 @@ class Json5TokenStream_Test extends TestBase {
 		}
 
 		@Test void b02_simpleAttrsUnquotedField() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("user_id"); w.number(42);
@@ -177,7 +179,7 @@ class Json5TokenStream_Test extends TestBase {
 
 		@Test void b03_simpleAttrsQuotesNonIdentifier() throws Exception {
 			// Field names with special chars or reserved words still get quoted.
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("not-an-identifier"); w.number(1);
@@ -189,7 +191,7 @@ class Json5TokenStream_Test extends TestBase {
 
 		@Test void b04_capability() throws Exception {
 			assertInstanceOf(TokenWritable.class, Json5Serializer.DEFAULT);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				assertWriterStreaming(w);
 			}
@@ -203,7 +205,7 @@ class Json5TokenStream_Test extends TestBase {
 	@Nested class C_roundTrip extends TestBase {
 
 		@Test void c01_roundTrip() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("name"); w.string("alice");
@@ -273,7 +275,7 @@ class Json5TokenStream_Test extends TestBase {
 			var b = new EBean();
 			b.name = "alice";
 			b.age = 30;
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				w.object(b);
 			}
@@ -287,7 +289,7 @@ class Json5TokenStream_Test extends TestBase {
 			var m = new java.util.LinkedHashMap<String, Object>();
 			m.put("a", 1);
 			m.put("b", java.util.List.of("x", "y"));
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = Json5Serializer.DEFAULT.serializeTokens(sb)) {
 				w.object(m);
 			}

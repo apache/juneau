@@ -42,7 +42,7 @@ public interface TokenReadable extends RecordReadable {
 	 * Opens a low-level {@link TokenReader} cursor over the specified input.
 	 *
 	 * @param input The input.  Subtypes define the supported types (typically
-	 * 	{@link Reader} / {@link CharSequence} / {@link InputStream} / {@code byte[]} / {@link File}).
+	 * 	{@link Reader} / {@link CharSequence} / {@link InputStream} / <code><jk>byte</jk>[]</code>).
 	 * @return A new {@link TokenReader} cursor positioned at {@link TokenType#NOT_AVAILABLE}.
 	 * @throws IOException If a problem occurred reading the underlying input.
 	 */

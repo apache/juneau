@@ -103,7 +103,7 @@ public class JsonlParserSession extends JsonParserSession {
 	 * honored/ignored builder properties as {@link JsonParserSession#parseTokens(Object)}.
 	 *
 	 * @param input The input.  Accepts {@link Reader}, {@link CharSequence},
-	 * 	{@link InputStream}, <code><jk>byte</jk>[]</code>, or {@link File}.
+	 * 	{@link InputStream}, or <code><jk>byte</jk>[]</code>.
 	 * @return A new {@link JsonlTokenReader}.
 	 * @throws IOException If a problem occurred opening the underlying input.
 	 */
@@ -118,8 +118,7 @@ public class JsonlParserSession extends JsonParserSession {
 			false /* strict */,
 			isAutoCloseStreams(),
 			isUnbuffered(),
-			getStreamCharset(),
-			getFileCharset());
+			getStreamCharset());
 		return new JsonlTokenReader(pipe, new JsonTokenReader.Settings(isTrimStrings()), this);
 	}
 

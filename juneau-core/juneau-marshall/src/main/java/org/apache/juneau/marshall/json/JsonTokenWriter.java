@@ -23,7 +23,6 @@ import java.io.*;
 import java.math.*;
 import java.nio.charset.*;
 
-import org.apache.juneau.commons.io.*;
 import org.apache.juneau.marshall.stream.*;
 
 /**
@@ -543,8 +542,8 @@ public class JsonTokenWriter implements TokenWriter {
 
 	/**
 	 * Internal factory used by {@link JsonSerializer#serializeTokens(Object)}.  Coerces the supported
-	 * output types ({@link Writer} / {@link OutputStream} / {@link File} / {@link StringBuilder})
-	 * into a {@link Writer} the JSON encoder can target.
+	 * output types ({@link Writer} / {@link OutputStream}) into a {@link Writer} the JSON encoder can
+	 * target.
 	 *
 	 * @param output The output object.
 	 * @param settings The output-formatting settings.
@@ -558,13 +557,6 @@ public class JsonTokenWriter implements TokenWriter {
 			return new JsonTokenWriter(w, null, false, settings);
 		if (output instanceof OutputStream os)
 			return new JsonTokenWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8), null, true, settings);
-		if (output instanceof File f) {
-			var os = new BufferedOutputStream(new FileOutputStream(f));
-			var w = new OutputStreamWriter(os, StandardCharsets.UTF_8);
-			return new JsonTokenWriter(w, os, true, settings);
-		}
-		if (output instanceof StringBuilder sb)
-			return new JsonTokenWriter(new StringBuilderWriter(sb), null, false, settings);
 		throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to a Writer.");
 	}
 }

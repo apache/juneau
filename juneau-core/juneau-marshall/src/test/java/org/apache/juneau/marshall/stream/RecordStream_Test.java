@@ -600,7 +600,7 @@ class RecordStream_Test extends TestBase {
 			writeAll(fmt, ((RecordWritable) fmt.serializer).serializeRecords(baos), value);
 			return Base64.getEncoder().encodeToString(baos.toByteArray());
 		}
-		var sb = new StringBuilder();
+		var sb = new StringWriter();
 		writeAll(fmt, ((RecordWritable) fmt.serializer).serializeRecords(sb), value);
 		return sb.toString();
 	}

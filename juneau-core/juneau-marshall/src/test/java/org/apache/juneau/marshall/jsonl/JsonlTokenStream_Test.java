@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.nio.charset.*;
-import java.nio.file.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.marshall.json.*;
@@ -89,7 +87,7 @@ class JsonlTokenStream_Test extends TestBase {
 	@Nested class B_writer extends TestBase {
 
 		@Test void b01_singleObjectGetsTrailingNewline() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject();
 				w.fieldName("a"); w.number(1);
@@ -99,7 +97,7 @@ class JsonlTokenStream_Test extends TestBase {
 		}
 
 		@Test void b02_multipleObjects() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject(); w.fieldName("a"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("b"); w.number(2); w.endObject();
@@ -108,7 +106,7 @@ class JsonlTokenStream_Test extends TestBase {
 		}
 
 		@Test void b03_topLevelScalars() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				w.number(1);
 				w.number(2);
@@ -119,14 +117,14 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void b04_capability() throws Exception {
 			assertInstanceOf(TokenWritable.class, JsonlSerializer.DEFAULT);
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				assertWriterStreaming(w);
 			}
 		}
 
 		@Test void b05_writeAfterCloseThrows() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			var w = JsonlSerializer.DEFAULT.serializeTokens(sb);
 			w.startObject().endObject();
 			w.close();
@@ -190,7 +188,7 @@ class JsonlTokenStream_Test extends TestBase {
 	@Nested class D_roundTrip extends TestBase {
 
 		@Test void d01_writeThenRead() throws Exception {
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				w.startObject(); w.fieldName("x"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("x"); w.number(2); w.endObject();
@@ -222,7 +220,7 @@ class JsonlTokenStream_Test extends TestBase {
 		@Test void e01_objectEmitsTrailingNewline() throws Exception {
 			var b1 = new EBean(); b1.name = "alice"; b1.age = 30;
 			var b2 = new EBean(); b2.name = "bob";   b2.age = 40;
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				w.object(b1);
 				w.object(b2);
@@ -238,7 +236,7 @@ class JsonlTokenStream_Test extends TestBase {
 				java.util.Map.of("x", 1),
 				java.util.Map.of("x", 2),
 				java.util.Map.of("x", 3));
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (var w = JsonlSerializer.DEFAULT.serializeTokens(sb)) {
 				for (var r : records)
 					w.object(r);
@@ -248,15 +246,14 @@ class JsonlTokenStream_Test extends TestBase {
 	}
 
 	// =================================================================================
-	// F. File-backed writer resource ownership
+	// F. Owned-resource lifecycle + stream round-trip
 	// =================================================================================
 
-	@Nested class F_fileResource extends TestBase {
+	@Nested class F_ownedResource extends TestBase {
 
 		@Test void f01_closeClosesOwnedStream() throws Exception {
-			// The File factory registers the stream it opened as 'owned'; close() must close it.
-			// Use the package-private (out, settings, owned) constructor with a probe Closeable to
-			// directly assert the owned resource is closed.
+			// The (out, settings, owned) constructor records a Closeable as 'owned'; close() must close it.
+			// Use a probe Closeable to directly assert the owned resource is closed.
 			var closed = Flag.create();
 			Closeable probe = closed::set;
 			var w = new JsonlTokenWriter(new StringWriter(), JsonTokenWriter.Settings.DEFAULT, probe);
@@ -275,21 +272,20 @@ class JsonlTokenStream_Test extends TestBase {
 			assertEquals(1, closeCount.get());
 		}
 
-		@Test void f03_fileWriterFlushesFullContent() throws Exception {
-			// End-to-end: the File factory's BufferedOutputStream is owned and closed, so the full
-			// content (including JSONL trailing newlines) is on disk after close().
-			var tmp = File.createTempFile("juneau-jsonl-tokenstream-", ".jsonl");
-			tmp.deleteOnExit();
-			try (var w = JsonlSerializer.DEFAULT.serializeTokens(tmp)) {
+		@Test void f03_streamWriterFlushesFullContent() throws Exception {
+			// End-to-end: on close() the underlying OutputStreamWriter is flushed, so the full JSONL
+			// content (including trailing newlines) reaches the target OutputStream.
+			var baos = new ByteArrayOutputStream();
+			try (var w = JsonlSerializer.DEFAULT.serializeTokens(baos)) {
 				w.startObject(); w.fieldName("a"); w.number(1); w.endObject();
 				w.startObject(); w.fieldName("b"); w.number(2); w.endObject();
 			}
-			// Raw-bytes proof: the owned file stream was flushed+closed, so the full JSONL content
-			// (including trailing newlines) is on disk after close().
-			assertString("{\"a\":1}\n{\"b\":2}\n", Files.readString(tmp.toPath(), StandardCharsets.UTF_8));
+			// Raw-bytes proof: the OutputStreamWriter was flushed on close, so the full JSONL content
+			// (including trailing newlines) is present.
+			assertString("{\"a\":1}\n{\"b\":2}\n", baos.toString(StandardCharsets.UTF_8));
 
-			// BCT state proof: stream the records back off disk and assert each parsed record's shape.
-			try (var r = JsonlParser.DEFAULT.parseTokens(tmp)) {
+			// BCT state proof: stream the records back and assert each parsed record's shape.
+			try (var r = JsonlParser.DEFAULT.parseTokens(new ByteArrayInputStream(baos.toByteArray()))) {
 				assertTrue(r.canRead());
 				assertBean(r.read(java.util.Map.class), "a", "1");
 				assertTrue(r.canRead());
@@ -316,7 +312,7 @@ class JsonlTokenStream_Test extends TestBase {
 
 		@Test void g02_roundTrip() throws Exception {
 			// Write several records via serializeArrayRecords(...).
-			var sb = new StringBuilder();
+			var sb = new StringWriter();
 			try (RecordWriter w = JsonlSerializer.DEFAULT.serializeArrayRecords(sb)) {
 				assertTrue(w.isStreaming());
 				w.write(java.util.Map.of("x", 1));

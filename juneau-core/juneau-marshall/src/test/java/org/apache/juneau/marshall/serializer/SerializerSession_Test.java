@@ -1200,8 +1200,8 @@ class SerializerSession_Test extends TestBase {
 		var s = JsonSerializer.DEFAULT.createSession().build();
 		var method = SerializerSession.class.getDeclaredMethod("createPipe", Object.class);
 		method.setAccessible(true);
-		var sb = new StringBuilder();
-		var pipe = method.invoke(s, sb);
+		var sw = new StringWriter();
+		var pipe = method.invoke(s, sw);
 		assertNotNull(pipe);
 	}
 

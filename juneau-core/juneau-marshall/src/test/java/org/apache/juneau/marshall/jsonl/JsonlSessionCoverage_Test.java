@@ -204,23 +204,6 @@ class JsonlSessionCoverage_Test extends TestBase {
 			assertEquals("1\n", sw.toString());
 		}
 
-		@Test void c05_forOutputStringBuilder() throws Exception {
-			var sb = new StringBuilder();
-			try (var w = JsonlTokenWriter.forOutput(sb, SETTINGS)) {
-				w.bool(true);
-			}
-			assertEquals("true\n", sb.toString());
-		}
-
-		@Test void c06_forOutputFile() throws Exception {
-			var f = File.createTempFile("juneau-jltw-", ".jsonl");
-			f.deleteOnExit();
-			try (var w = JsonlTokenWriter.forOutput(f, SETTINGS)) {
-				w.number(42L);
-			}
-			assertEquals("42\n", new String(java.nio.file.Files.readAllBytes(f.toPath()), StandardCharsets.UTF_8));
-		}
-
 		@Test void c07_forOutputNullRejected() {
 			assertThrowsWithMessage(IOException.class, "Output cannot be null.", () -> JsonlTokenWriter.forOutput(null, SETTINGS));
 		}

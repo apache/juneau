@@ -295,7 +295,7 @@ public class WriterSerializerSession extends SerializerSession {
 
 	@Override /* Overridden from SerializerSession */
 	protected SerializerPipe createPipe(Object output) {
-		return new SerializerPipe(output, streamCharset, fileCharset);
+		return new SerializerPipe(output, streamCharset);
 	}
 
 	/**

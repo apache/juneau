@@ -101,27 +101,6 @@ public class CborTokenWriter implements TokenWriter {
 		this.settings = settings;
 	}
 
-	/**
-	 * Internal factory used by {@link CborSerializerSession#serializeTokens(Object)} to coerce
-	 * supported output types ({@link OutputStream}, {@link File}) to a CBOR writer.
-	 *
-	 * @param output The output object.
-	 * @param settings The settings.
-	 * @return A new {@link CborTokenWriter}.
-	 * @throws IOException If the output type is not supported or could not be opened.
-	 */
-	public static CborTokenWriter forOutput(Object output, Settings settings) throws IOException {
-		if (output == null)
-			throw new IOException("Output cannot be null.");
-		if (output instanceof OutputStream os)
-			return new CborTokenWriter(os, null, settings);
-		if (output instanceof File f) {
-			var os = new BufferedOutputStream(new FileOutputStream(f));
-			return new CborTokenWriter(os, os, settings);
-		}
-		throw new IOException("Cannot convert object of type " + output.getClass().getName() + " to an OutputStream.");
-	}
-
 	@Override /* TokenWriter */
 	public TokenWriter startObject() throws IOException {
 		assertOpen();

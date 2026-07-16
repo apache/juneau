@@ -808,15 +808,12 @@ public class Parser extends MarshallingContextable {
 	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
 	 * 		<li><code><jk>byte</jk>[]</code> containing UTF-8 encoded text (or charset defined by
 	 * 			{@link ReaderParser.Builder#streamCharset(Charset)} property value).
-	 * 		<li>{@link File} containing system encoded text (or charset defined by
-	 * 			{@link ReaderParser.Builder#fileCharset(Charset)} property value).
 	 * 	</ul>
 	 * 	<br>Stream-based parsers can handle the following input class types:
 	 * 	<ul>
 	 * 		<li><jk>null</jk>
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
 	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link InputStreamParser.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @param type

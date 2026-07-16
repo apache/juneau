@@ -307,24 +307,19 @@ class CborTokenStreamCoverage_Test extends TestBase {
 			assertArrayEquals(bos.toByteArray(), bos2.toByteArray());
 		}
 
-		@Test void w02_forOutput() throws Exception {
+		@Test void w02_constructorAndSessionTypeRejection() throws Exception {
 			var bos = new ByteArrayOutputStream();
-			try (var w = CborTokenWriter.forOutput(bos, CborTokenWriter.Settings.DEFAULT)) {
+			try (var w = new CborTokenWriter(bos, CborTokenWriter.Settings.DEFAULT)) {
 				w.number(1);
 			}
 			assertTrue(bos.toByteArray().length > 0);
 
-			var f = File.createTempFile("cbortok", ".cbor");
-			f.deleteOnExit();
-			try (var w = CborTokenWriter.forOutput(f, CborTokenWriter.Settings.DEFAULT)) {
-				w.startArray().number(1).number(2).endArray();
-			}
-			assertTrue(f.length() > 0);
-
+			// The Object-to-OutputStream narrowing (and null/illegal-type rejection) lives on the
+			// session (the Object interface boundary); the writer takes a statically-typed OutputStream.
 			assertThrowsWithMessage(IOException.class, "Output cannot be null.",
-				() -> CborTokenWriter.forOutput(null, CborTokenWriter.Settings.DEFAULT));
+				() -> CborSerializer.DEFAULT.serializeTokens(null));
 			assertThrowsWithMessage(IOException.class, "Cannot convert object of type",
-				() -> CborTokenWriter.forOutput("not-a-stream", CborTokenWriter.Settings.DEFAULT));
+				() -> CborSerializer.DEFAULT.serializeTokens("not-a-stream"));
 		}
 
 		@Test void w03_numberOverloadsRoundTrip() throws Exception {

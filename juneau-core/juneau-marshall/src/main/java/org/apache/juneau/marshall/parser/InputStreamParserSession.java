@@ -117,7 +117,6 @@ public class InputStreamParserSession extends ParserSession {
 	 * 		<li><jk>null</jk>
 	 * 		<li>{@link InputStream}
 	 * 		<li><code><jk>byte</jk>[]</code>
-	 * 		<li>{@link File}
 	 * 		<li>{@link CharSequence} containing encoded bytes according to the {@link org.apache.juneau.marshall.MarshallingContext.Builder#binaryFormat(BinaryFormat)} setting.
 	 * 	</ul>
 	 * @return
