@@ -261,21 +261,25 @@
 			<version>${project.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		<!-- These two are copied only as their assembly-produced 'bin' zip; match that exact artifact. -->
+		<!--
+			These two are copied only as their assembly-produced 'bin' zip (see the dependency:copy
+			artifactItems below).  Do NOT declare the zip:bin artifact here: it is attached during the
+			source module's 'package' phase, so a 'mvn test' reactor run (which stops before 'package')
+			cannot resolve it and the build fails at dependency-resolution time.  Depending on the plain
+			main jar instead still gives the reactor the module-ordering edge (forcing these modules to
+			build, and thus package their bin zips, before juneau-distrib) while remaining resolvable
+			during 'test'.  The dependency:copy execution fetches the zip:bin by coordinate at 'package'.
+		-->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-examples-core</artifactId>
 			<version>${project.version}</version>
-			<classifier>bin</classifier>
-			<type>zip</type>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-petstore-jetty</artifactId>
 			<version>${project.version}</version>
-			<classifier>bin</classifier>
-			<type>zip</type>
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
