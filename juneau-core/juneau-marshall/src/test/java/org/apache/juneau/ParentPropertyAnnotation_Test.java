@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -184,5 +186,66 @@ class ParentPropertyAnnotation_Test extends TestBase {
 		var newParent = new ParentBean();
 		var ex = assertThrows(ExecutableException.class, () -> prop.set(bean, newParent));
 		assertTrue(ex.getMessage().contains("No setter defined"), "Should throw exception when trying to set read-only property");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Cyclic @ParentProperty graph serialization contract (behavior-pinning).
+	//
+	// A @ParentProperty back-reference that is also a normally-visible bean property forms a parent/child cycle.
+	// Juneau does NOT auto-omit the back-reference on the write side, so the serialization contract is:
+	//   - default config: maxDepth=100 size guard silently truncates -> finite (but semantically-incomplete) output, no throw.
+	//   - detectRecursions(): fail-fast with a recursion SerializeException.
+	//   - ignoreRecursions(): omit the repeated node -> round-trips cleanly (parent re-injected via @ParentProperty).
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class F_Parent {
+		public String name;
+		public F_Child child;
+	}
+
+	public static class F_Child {
+		public String name;
+
+		@ParentProperty
+		public F_Parent parent;
+	}
+
+	// Builds a parent/child cycle: Parent -> child (Child) -> parent (@ParentProperty back-reference -> Parent).
+	static F_Parent f_cyclicGraph() {
+		var p = new F_Parent();
+		p.name = "p";
+		var c = new F_Child();
+		c.name = "c";
+		p.child = c;
+		c.parent = p;
+		return p;
+	}
+
+	@Test void f01_cyclicGraph_defaultConfig_truncatesFiniteNoThrow() {
+		var p = f_cyclicGraph();
+		// Default config does NOT throw: the maxDepth=100 size guard silently truncates the cycle to finite output.
+		var json = assertDoesNotThrow(() -> JsonSerializer.DEFAULT.serialize(p));
+		assertTrue(json.length() < 100_000, "Output should be finite (truncated at maxDepth): length=" + json.length());
+		assertTrue(json.contains("\"name\":\"c\""), "Output should contain the traversed graph: " + json);
+	}
+
+	@Test void f02_cyclicGraph_detectRecursions_throws() {
+		var p = f_cyclicGraph();
+		var s = JsonSerializer.create().detectRecursions().build();
+		assertThrowsWithMessage(SerializeException.class, "Recursion occurred", () -> s.serialize(p));
+	}
+
+	@Test void f03_cyclicGraph_ignoreRecursions_roundTrips() throws Exception {
+		var p = f_cyclicGraph();
+		var s = JsonSerializer.create().ignoreRecursions().build();
+		var json = assertDoesNotThrow(() -> s.serialize(p));
+		// The back-reference to the already-seen parent is omitted -> output is finite and does not re-nest.
+		assertTrue(json.contains("\"name\":\"c\""), "Output should serialize the child: " + json);
+		assertFalse(json.contains("\"child\":{\"child\""), "Cycle should be broken (no re-nesting): " + json);
+		// Round-trips cleanly, and the parser re-injects the parent via @ParentProperty.
+		var p2 = JsonParser.DEFAULT.parse(json, F_Parent.class);
+		assertEquals("p", p2.name);
+		assertEquals("c", p2.child.name);
+		assertSame(p2, p2.child.parent, "Parser should re-inject the parent via @ParentProperty");
 	}
 }

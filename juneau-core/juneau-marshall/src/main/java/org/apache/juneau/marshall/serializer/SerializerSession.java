@@ -526,6 +526,13 @@ public class SerializerSession extends MarshallingTraverseSession {
 	/**
 	 * Returns <jk>true</jk> if the specified value should not be serialized.
 	 *
+	 * <p>
+	 * A value is also omitted (dropped) when it would exceed {@link #getMaxDepth() maxDepth} (via
+	 * {@link #willExceedDepth()}) — over-depth values are silently truncated from the output rather than throwing.
+	 * Exceeding <c>maxDepth</c> is a size guard, not a cycle detector; when
+	 * {@link org.apache.juneau.marshall.MarshallingTraverseContext.Builder#detectRecursions() detectRecursions} is enabled, an actual recursion
+	 * instead throws a {@link SerializeException}.
+	 *
 	 * @param cm The class type of the object being serialized.
 	 * @param attrName The bean attribute name, or <jk>null</jk> if this isn't a bean attribute.
 	 * @param value The object being serialized.

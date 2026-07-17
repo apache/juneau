@@ -198,8 +198,9 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	 *
 	 * @see MarshallingTraverseContext.Builder#maxDepth(int)
 	 * @return
-	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
-	 *	<br>If this depth is exceeded, an exception is thrown.
+	 * 	The depth beyond which nodes in the POJO tree are dropped (truncated) from the output.
+	 *	<br>Values deeper than this limit are silently omitted rather than causing an exception to be thrown.
+	 *	<br>This is a size guard, not a cycle detector.
 	 */
 	public final int getMaxDepth() { return ctx.getMaxDepth(); }
 
@@ -334,13 +335,25 @@ public class MarshallingTraverseSession extends MarshallingSession {
 	/**
 	 * Push the specified object onto the stack.
 	 *
+	 * <p>
+	 * When the current depth exceeds {@link #getMaxDepth() maxDepth}, this method returns <jk>null</jk> so that the
+	 * over-depth node is dropped (truncated) from the output rather than traversed further.  Exceeding <c>maxDepth</c>
+	 * does <b>not</b> throw an exception — it is a size guard that truncates deeply-nested (or cyclic) models, not a
+	 * cycle detector.  To fail-fast on genuine cycles, enable
+	 * {@link MarshallingTraverseContext.Builder#detectRecursions() detectRecursions}; to omit repeated nodes as
+	 * <jk>null</jk>, enable {@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions}.
+	 *
 	 * @param attrName The attribute name.
 	 * @param o The current object being traversed.
 	 * @param eType The expected class type.
 	 * @return
 	 * 	The {@link ClassMeta} of the object so that <c>instanceof</c> operations only need to be performed
 	 * 	once (since they can be expensive).
-	 * @throws MarshallingRecursionException If recursion occurred.
+	 * 	<br>Returns <jk>null</jk> when the object is <jk>null</jk>, when <c>maxDepth</c> is exceeded (over-depth node
+	 * 	dropped), or when a recursion is detected under {@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions}.
+	 * @throws MarshallingRecursionException If recursion occurred while
+	 * 	{@link MarshallingTraverseContext.Builder#detectRecursions() detectRecursions} is enabled without
+	 * 	{@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions}.
 	 */
 	protected final ClassMeta<?> push(String attrName, Object o, ClassMeta<?> eType) throws MarshallingRecursionException {
 		indent++;
@@ -387,6 +400,10 @@ public class MarshallingTraverseSession extends MarshallingSession {
 
 	/**
 	 * Returns <jk>true</jk> if we're about to exceed the max depth for the document.
+	 *
+	 * <p>
+	 * When this returns <jk>true</jk>, the over-depth value is dropped (truncated) from the output rather than
+	 * causing an exception to be thrown — exceeding {@link #getMaxDepth() maxDepth} is a size guard, not a cycle detector.
 	 *
 	 * @return <jk>true</jk> if we're about to exceed the max depth for the document.
 	 */

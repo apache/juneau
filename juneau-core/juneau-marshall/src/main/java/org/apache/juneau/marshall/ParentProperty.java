@@ -79,6 +79,25 @@ import java.lang.annotation.*;
  * 	<li>This allows child objects to navigate back to their parent if needed
  * </ul>
  *
+ * <h5 class='section'>Cyclic graphs and serialization:</h5>
+ * <ul class='spaced-list'>
+ * 	<li>When a <ja>@ParentProperty</ja> back-reference is also a normally-visible bean property (e.g. a <jk>public</jk>
+ * 		field or getter, as in the example above), it forms a parent-to-child/child-to-parent <b>cycle</b>.  Unlike
+ * 		Jackson's <c>@JsonBackReference</c>, Juneau does <b>not</b> auto-omit the <ja>@ParentProperty</ja> member on the
+ * 		write (serialize) side — the annotation is a parse-time convenience only.  This is intentional.
+ * 	<li>Under the <b>default</b> serializer configuration (<c>detectRecursions=<jk>false</jk></c>,
+ * 		<c>ignoreRecursions=<jk>false</jk></c>), serializing such a cyclic graph produces <b>finite but
+ * 		semantically-incomplete</b> output: the traversal is silently truncated at
+ * 		{@link MarshallingTraverseContext.Builder#maxDepth(int) maxDepth} (default <c>100</c>).  No exception is thrown —
+ * 		<c>maxDepth</c> is a size guard, not a cycle detector.
+ * 	<li>To fail-fast on cycles with a clear error, enable
+ * 		{@link MarshallingTraverseContext.Builder#detectRecursions() detectRecursions} — a
+ * 		{@link MarshallingRecursionException} (surfaced as a serialize exception) is thrown.
+ * 	<li>To omit the back-reference and round-trip cleanly, enable
+ * 		{@link MarshallingTraverseContext.Builder#ignoreRecursions() ignoreRecursions} — the repeated node is emitted as
+ * 		<jk>null</jk>, and parsing re-injects the parent via this annotation.
+ * </ul>
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/ParentPropertyAnnotation">@ParentProperty Annotation</a>
 

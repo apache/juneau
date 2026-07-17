@@ -101,12 +101,18 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 *
 		 * <p>
 		 * Recursions can occur when traversing models that aren't true trees but rather contain loops.
-		 * <br>In general, unchecked recursions cause stack-overflow-errors.
-		 * <br>These show up as {@link MarshallingRecursionException MarshallingRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
+		 * <br>When recursion detection is disabled, such loops are instead bounded by {@link #maxDepth(int) maxDepth}
+		 * 	(default <c>100</c>): the over-depth branch is silently truncated, producing finite but semantically-incomplete output.
+		 * <br>If the stack is exhausted before <c>maxDepth</c> is reached, the resulting {@link StackOverflowError} is
+		 * 	converted to a {@link MarshallingRecursionException MarshallingRecursionException} with the message <js>"Depth too deep.  Stack overflow occurred."</js>.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
+		 * 	<li class='note'>
+		 * 		This is the recommended way to fail-fast on cyclic bean graphs such as parent/child
+		 * 		{@link ParentProperty @ParentProperty} references.  Under the default config such cycles are instead
+		 * 		silently truncated at {@link #maxDepth(int) maxDepth} (see the {@link ParentProperty} Javadoc).
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -175,6 +181,9 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>
 		 * 		Checking for recursion can cause a small performance penalty.
+		 * 	<li class='note'>
+		 * 		Use this to serialize cyclic bean graphs (such as parent/child {@link ParentProperty @ParentProperty}
+		 * 		references) by emitting the repeated node as <jk>null</jk> so the output round-trips cleanly.
 		 * </ul>
 		 *
 		 * <h5 class='section'>Example:</h5>
@@ -249,17 +258,18 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 		 * Max traversal depth.
 		 *
 		 * <p>
-		 * When enabled, abort traversal if specified depth is reached in the POJO tree.
+		 * Specifies the maximum depth traversed in the POJO tree.
 		 *
 		 * <p>
-		 * If this depth is exceeded, an exception is thrown.
-		 *
-		 * <p>
-		 * This prevents stack overflows from occurring when trying to traverse models with recursive references.
+		 * When this depth is exceeded, the over-depth nodes are silently dropped (truncated) from the output — no
+		 * exception is thrown.  This is a size guard that bounds the output of deeply-nested (or cyclic) models; it is
+		 * <b>not</b> a cycle detector.  For genuine recursive references, enable {@link #detectRecursions()} to fail-fast
+		 * with a {@link MarshallingRecursionException}, or {@link #ignoreRecursions()} to emit repeated nodes as
+		 * <jk>null</jk> so the output round-trips cleanly.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
-		 * 	<jc>// Create a serializer that throws an exception if the depth reaches greater than 20.</jc>
+		 * 	<jc>// Create a serializer that truncates output beyond a depth of 20.</jc>
 		 * 	WriterSerializer <jv>serializer</jv> = JsonSerializer
 		 * 		.<jsm>create</jsm>()
 		 * 		.maxDepth(20)
@@ -322,8 +332,9 @@ public abstract class MarshallingTraverseContext extends MarshallingContextable 
 	 *
 	 * @see Builder#maxDepth(int)
 	 * @return
-	 * 	The depth at which traversal is aborted if depth is reached in the POJO tree.
-	 *	<br>If this depth is exceeded, an exception is thrown.
+	 * 	The depth beyond which nodes in the POJO tree are dropped (truncated) from the output.
+	 *	<br>Values deeper than this limit are silently omitted rather than causing an exception to be thrown.
+	 *	<br>This is a size guard, not a cycle detector.
 	 */
 	public final int getMaxDepth() { return maxDepth; }
 
