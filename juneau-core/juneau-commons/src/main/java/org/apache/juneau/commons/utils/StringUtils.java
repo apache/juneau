@@ -516,7 +516,7 @@ public class StringUtils {
 			if (i == 0) {
 				result.append(uncapitalize(word));
 			} else {
-				result.append(capitalize(word.toLowerCase()));
+				result.append(capitalize(lowerCaseRoot(word)));
 			}
 		}
 
@@ -2699,9 +2699,9 @@ public class StringUtils {
 		if (end > lines.length)
 			end = lines.length;
 		var sb = new StringBuilder();
-		var format = String.format("%%0%dd", digits);
+		var format = String.format(Locale.ROOT, "%%0%dd", digits);
 		for (var l : fixedSizeList(lines).subList(start - 1, end))
-			sb.append(String.format(format, start++)).append(": ").append(l).append("\n");
+			sb.append(String.format(Locale.ROOT, format, start++)).append(": ").append(l).append("\n");
 		return sb.toString();
 	}
 
@@ -3283,6 +3283,7 @@ public class StringUtils {
 		"java:S3776" // Inherent branching in a hand-written JSON-number-grammar scanner (sign, integer part, optional fraction, optional exponent); splitting would harm readability.
 	})
 	public static int matchNumberPrefix(String s, boolean allowLeadingZeros) {
+		assertArgNotNull(ARG_s, s);
 		var len = s.length();
 		var i = 0;
 		if (i < len && s.charAt(i) == '-')
@@ -4249,7 +4250,7 @@ public class StringUtils {
 		for (var i = 0; i < words.size(); i++) {
 			if (i > 0)
 				result.append('-');
-			result.append(words.get(i).toLowerCase());
+			result.append(lowerCaseRoot(words.get(i)));
 		}
 
 		return result.toString();
@@ -5609,7 +5610,7 @@ public class StringUtils {
 
 		var result = new StringBuilder();
 		for (var word : words) {
-			result.append(capitalize(word.toLowerCase()));
+			result.append(capitalize(lowerCaseRoot(word)));
 		}
 
 		return result.toString();
@@ -5640,7 +5641,7 @@ public class StringUtils {
 		if (count == 1)
 			return word;
 
-		var lower = word.toLowerCase();
+		var lower = lowerCaseRoot(word);
 		var length = word.length();
 
 		// Words ending in s, x, z, ch, sh -> add "es"
@@ -6380,7 +6381,7 @@ public class StringUtils {
 		for (var i = 0; i < words.size(); i++) {
 			if (i > 0)
 				result.append('_');
-			result.append(words.get(i).toLowerCase());
+			result.append(lowerCaseRoot(words.get(i)));
 		}
 
 		return result.toString();

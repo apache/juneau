@@ -48,6 +48,7 @@ public class ClassUtils {
 	// Argument name constants for assertArgNotNull
 	private static final String ARG_value = "value";
 	private static final String ARG_args = "args";
+	private static final String ARG_paramTypes = "paramTypes";
 	private static final String ARG_x = "x";
 
 	/**
@@ -357,6 +358,7 @@ public class ClassUtils {
 	 * 	matches (fast path optimization).
 	 */
 	public static Object[] getMatchingArgs(Class<?>[] paramTypes, Object...args) {
+		assertArgNotNull(ARG_paramTypes, paramTypes);
 		assertArgNotNull(ARG_args, args);
 		var needsShuffle = paramTypes.length != args.length;
 		if (! needsShuffle) {

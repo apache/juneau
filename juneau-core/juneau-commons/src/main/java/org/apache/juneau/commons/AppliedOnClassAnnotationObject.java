@@ -108,6 +108,6 @@ public class AppliedOnClassAnnotationObject extends AppliedAnnotationObject {
 	 * @return The targets this annotation applies to.
 	 */
 	public Class<?>[] onClass() {
-		return onClass;
+		return copyOf(onClass);
 	}
 }

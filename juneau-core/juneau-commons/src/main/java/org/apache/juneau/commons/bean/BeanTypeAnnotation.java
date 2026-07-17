@@ -296,7 +296,7 @@ public class BeanTypeAnnotation {
 
 		@Override /* Overridden from BeanType */
 		public String[] description() {
-			return description;
+			return copyOf(description);
 		}
 
 		@Override /* Overridden from BeanType */

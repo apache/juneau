@@ -121,7 +121,8 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return This object.
 	 */
 	public IntegerHolder add(Integer x) {
-		set(get() + (x == null ? 0 : x));
+		var v = get();
+		set((v == null ? 0 : v) + (x == null ? 0 : x));
 		return this;
 	}
 
@@ -139,8 +140,10 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return The new value after addition.
 	 */
 	public Integer addAndGet(Integer x) {
-		set(get() + (x == null ? 0 : x));
-		return get();
+		var v = get();
+		var result = (v == null ? 0 : v) + (x == null ? 0 : x);
+		set(result);
+		return result;
 	}
 
 	/**
@@ -156,7 +159,8 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return This object.
 	 */
 	public IntegerHolder decrement() {
-		set(get() - 1);
+		var v = get();
+		set((v == null ? 0 : v) - 1);
 		return this;
 	}
 
@@ -173,8 +177,10 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return The decremented value.
 	 */
 	public Integer decrementAndGet() {
-		set(get() - 1);
-		return get();
+		var v = get();
+		var result = (v == null ? 0 : v) - 1;
+		set(result);
+		return result;
 	}
 
 	/**
@@ -212,7 +218,8 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return This object.
 	 */
 	public IntegerHolder increment() {
-		set(get() + 1);
+		var v = get();
+		set((v == null ? 0 : v) + 1);
 		return this;
 	}
 
@@ -229,8 +236,10 @@ public class IntegerHolder extends Holder<Integer> {
 	 * @return The incremented value.
 	 */
 	public Integer incrementAndGet() {
-		set(get() + 1);
-		return get();
+		var v = get();
+		var result = (v == null ? 0 : v) + 1;
+		set(result);
+		return result;
 	}
 
 	/**

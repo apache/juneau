@@ -121,7 +121,8 @@ public class ByteHolder extends Holder<Byte> {
 	 * @return This object.
 	 */
 	public ByteHolder add(Byte x) {
-		set((byte)(get() + (x == null ? 0 : x)));
+		var v = get();
+		set((byte)((v == null ? 0 : v) + (x == null ? 0 : x)));
 		return this;
 	}
 
@@ -139,8 +140,10 @@ public class ByteHolder extends Holder<Byte> {
 	 * @return The new value after addition.
 	 */
 	public Byte addAndGet(Byte x) {
-		set((byte)(get() + (x == null ? 0 : x)));
-		return get();
+		var v = get();
+		var result = (byte)((v == null ? 0 : v) + (x == null ? 0 : x));
+		set(result);
+		return result;
 	}
 
 	/**
@@ -156,7 +159,8 @@ public class ByteHolder extends Holder<Byte> {
 	 * @return This object.
 	 */
 	public ByteHolder decrement() {
-		set((byte)(get() - 1));
+		var v = get();
+		set((byte)((v == null ? 0 : v) - 1));
 		return this;
 	}
 
@@ -173,8 +177,10 @@ public class ByteHolder extends Holder<Byte> {
 	 * @return The decremented value.
 	 */
 	public Byte decrementAndGet() {
-		set((byte)(get() - 1));
-		return get();
+		var v = get();
+		var result = (byte)((v == null ? 0 : v) - 1);
+		set(result);
+		return result;
 	}
 
 	/**
@@ -190,7 +196,8 @@ public class ByteHolder extends Holder<Byte> {
 	 * @return This object.
 	 */
 	public ByteHolder increment() {
-		set((byte)(get() + 1));
+		var v = get();
+		set((byte)((v == null ? 0 : v) + 1));
 		return this;
 	}
 
@@ -207,8 +214,10 @@ public class ByteHolder extends Holder<Byte> {
 	 * @return The incremented value.
 	 */
 	public Byte incrementAndGet() {
-		set((byte)(get() + 1));
-		return get();
+		var v = get();
+		var result = (byte)((v == null ? 0 : v) + 1);
+		set(result);
+		return result;
 	}
 
 	/**

@@ -27,6 +27,12 @@ import java.util.*;
  * <p>
  * Used to compare version numbers.
  *
+ * <h5 class='section'>Equality vs. matching:</h5>
+ * <p>
+ * {@link #equals(Object)}, {@link #hashCode()} and {@link #compareTo(Version)} are <b>strict</b> and
+ * mutually consistent &mdash; two versions are only equal when their full part sequences are identical
+ * (e.g. <js>"1.2"</js> is <b>not</b> equal to <js>"1.2.3"</js> or <js>"1.2.0"</js>).  For the looser
+ * prefix/compatibility comparison (where trailing parts are ignored), use {@link #matches(Version)}.
  */
 public class Version implements Comparable<Version> {
 
@@ -93,26 +99,7 @@ public class Version implements Comparable<Version> {
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		return o instanceof Version o2 && eq(this, o2, Version::equals);
-	}
-
-	/**
-	 * Returns <jk>true</jk> if the specified version is equal to this version.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bjava'>
-	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
-	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).isEqualsTo(Version.<jsm>of</jsm>(<js>"1.2"</js>)));
-	 * </p>
-	 *
-	 * @param v The version to compare to.
-	 * @return <jk>true</jk> if the specified version is equal to this version.
-	 */
-	public boolean equals(Version v) {
-		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++)
-			if (v.parts[i] - parts[i] != 0)
-				return false;
-		return true;
+		return o instanceof Version o2 && Arrays.equals(parts, o2.parts);
 	}
 
 	/**
@@ -246,6 +233,35 @@ public class Version implements Comparable<Version> {
 			if (v.parts[i] > 0)
 				return true;
 		return ! exclusive;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if this version matches the specified version, comparing only the parts they have in
+	 * common (i.e. one version is a prefix of the other).
+	 *
+	 * <p>
+	 * This is a looser comparison than {@link #equals(Object)}, which requires the full version part sequences to be
+	 * identical.  Two versions <i>match</i> when every part up to the length of the shorter version is identical; any
+	 * trailing parts on the longer version are ignored.  Unlike {@link #equals(Object)}, this relation is <b>not</b>
+	 * consistent with {@link #hashCode()} and must never be used as the basis for hash- or tree-based collection
+	 * membership.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2"</js>)));
+	 * 	<jsm>assertTrue</jsm>(Version.<jsm>of</jsm>(<js>"1.2"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2.3"</js>)));
+	 * 	<jsm>assertFalse</jsm>(Version.<jsm>of</jsm>(<js>"1.2.3"</js>).matches(Version.<jsm>of</jsm>(<js>"1.2.4"</js>)));
+	 * </p>
+	 *
+	 * @param v The version to compare to.
+	 * @return <jk>true</jk> if this version matches the specified version on their common parts.
+	 */
+	public boolean matches(Version v) {
+		for (int i = 0; i < Math.min(parts.length, v.parts.length); i++)
+			if (v.parts[i] - parts[i] != 0)
+				return false;
+		return true;
 	}
 
 	@Override /* Overridden from Object */

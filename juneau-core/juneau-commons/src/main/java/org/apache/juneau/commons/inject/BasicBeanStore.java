@@ -17,6 +17,7 @@
 package org.apache.juneau.commons.inject;
 
 import static org.apache.juneau.commons.reflect.ReflectionUtils.*;
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
@@ -96,6 +97,10 @@ public class BasicBeanStore implements WritableBeanStore {
 	private static final String PROP_overridingParent = "overridingParent";
 	private static final String PROP_parent = "parent";
 	private static final String PROP_type = "type";
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_beanType = "beanType";
+	private static final String ARG_onClassOrObject = "onClassOrObject";
 
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> entries;
 	private final ConcurrentHashMap<Class<?>, ConcurrentHashMap<String, Supplier<?>>> defaults;
@@ -704,6 +709,8 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public <T> Optional<T> createBeanFromMethod(Class<T> beanType, Object onClassOrObject, Predicate<MethodInfo> filter, Object... extraBeans) {
+		assertArgNotNull(ARG_beanType, beanType);
+		assertArgNotNull(ARG_onClassOrObject, onClassOrObject);
 		Object resource = onClassOrObject instanceof Class ? null : onClassOrObject;
 		Class<?> resourceClass = onClassOrObject instanceof Class<?> c ? c : onClassOrObject.getClass();
 		return info(resourceClass)

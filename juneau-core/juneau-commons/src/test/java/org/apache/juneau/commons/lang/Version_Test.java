@@ -92,13 +92,24 @@ class Version_Test extends TestBase {
 		assertTrue(x.isAtMost(of("1.3.0.1")));
 	}
 
-	@Test void a04_isEqualsTo() {
+	@Test void a04_equals() {
 		var x = of("1.2.3");
 
+		// equals(Object) is strict/exact: only identical part sequences are equal.
 		assertEquals(x, of("1.2.3"));
-		assertEquals(x, of("1.2"));
-		assertEquals(x, of("1.2.3.4"));
+		assertNotEquals(x, of("1.2"));
+		assertNotEquals(x, of("1.2.3.4"));
 		assertNotEquals(x, of("1.2.4"));
+	}
+
+	@Test void a04b_matches() {
+		var x = of("1.2.3");
+
+		// matches(Version) is the looser prefix comparison (trailing parts ignored).
+		assertTrue(x.matches(of("1.2.3")));
+		assertTrue(x.matches(of("1.2")));
+		assertTrue(x.matches(of("1.2.3.4")));
+		assertFalse(x.matches(of("1.2.4")));
 	}
 
 	@Test void a05_compareTo() {
@@ -165,18 +176,22 @@ class Version_Test extends TestBase {
 	void b06_equalsObject_versionsWithDifferentLengths() {
 		var v1 = of("1.2");
 		var v2 = of("1.2.0");
-		// equals(Version) compares only common parts, so these should be equal
-		assertEquals(v1, v2);
-		assertEquals(v2, v1);
+		// equals(Object) is strict: differing lengths are not equal (but they still match()).
+		assertNotEquals(v1, v2);
+		assertNotEquals(v2, v1);
+		assertTrue(v1.matches(v2));
+		assertTrue(v2.matches(v1));
 	}
 
 	@Test
 	void b07_equalsObject_versionsWithTrailingZeros() {
 		var v1 = of("1.2.3");
 		var v2 = of("1.2.3.0");
-		// equals(Version) compares only common parts, so these should be equal
-		assertEquals(v1, v2);
-		assertEquals(v2, v1);
+		// equals(Object) is strict: a trailing zero makes them unequal (but they still match()).
+		assertNotEquals(v1, v2);
+		assertNotEquals(v2, v1);
+		assertTrue(v1.matches(v2));
+		assertTrue(v2.matches(v1));
 	}
 
 	@Test

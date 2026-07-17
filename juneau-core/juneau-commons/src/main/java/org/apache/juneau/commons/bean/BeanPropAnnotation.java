@@ -228,7 +228,7 @@ public class BeanPropAnnotation {
 
 		@Override /* Overridden from BeanProp */
 		public String[] description() {
-			return description;
+			return copyOf(description);
 		}
 
 		@Override /* Overridden from BeanProp */
@@ -248,7 +248,7 @@ public class BeanPropAnnotation {
 
 		@Override /* Overridden from BeanProp */
 		public Class<?>[] params() {
-			return params;
+			return copyOf(params);
 		}
 
 		@Override /* Overridden from BeanProp */

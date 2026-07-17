@@ -303,7 +303,7 @@ class ClassUtils_Test {
 		assertNull(result7[1]);
 
 		// Null paramTypes - should throw
-		assertThrows(NullPointerException.class, () -> {
+		assertThrows(IllegalArgumentException.class, () -> {
 			getMatchingArgs(null, "test");
 		});
 	}

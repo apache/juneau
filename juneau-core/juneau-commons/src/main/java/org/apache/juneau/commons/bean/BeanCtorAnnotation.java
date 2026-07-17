@@ -104,7 +104,7 @@ public class BeanCtorAnnotation {
 
 		@Override /* Overridden from BeanCtor */
 		public String[] description() {
-			return description;
+			return copyOf(description);
 		}
 
 		@Override /* Overridden from BeanCtor */

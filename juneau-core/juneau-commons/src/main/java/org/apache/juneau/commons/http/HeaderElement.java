@@ -55,6 +55,6 @@ public class HeaderElement {
 	 * @return The parameters array, never <jk>null</jk>.
 	 */
 	public NameValuePair[] getParameters() {
-		return parameters;
+		return parameters.clone();
 	}
 }

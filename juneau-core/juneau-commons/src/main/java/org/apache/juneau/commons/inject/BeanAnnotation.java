@@ -173,7 +173,7 @@ public class BeanAnnotation {
 
 		@Override /* Overridden from Bean */
 		public String[] methodScope() {
-			return methodScope;
+			return copyOf(methodScope);
 		}
 
 		@Override /* Overridden from Bean */
@@ -188,7 +188,7 @@ public class BeanAnnotation {
 
 		@Override /* Overridden from annotation */
 		public String[] description() {
-			return description;
+			return copyOf(description);
 		}
 
 		@Override /* Overridden from Bean */

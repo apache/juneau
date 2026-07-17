@@ -104,7 +104,7 @@ public class BeanIgnoreAnnotation {
 
 		@Override /* Overridden from BeanIgnore */
 		public String[] description() {
-			return description;
+			return copyOf(description);
 		}
 
 		@Override /* Overridden from BeanIgnore */

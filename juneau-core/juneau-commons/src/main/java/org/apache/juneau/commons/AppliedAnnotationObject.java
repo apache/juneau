@@ -713,6 +713,6 @@ public class AppliedAnnotationObject extends AnnotationObject {
 	 * @return The targets this annotation applies to.
 	 */
 	public String[] on() {
-		return on;
+		return copyOf(on);
 	}
 }
