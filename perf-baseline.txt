@@ -38,27 +38,62 @@
 # ignored by the per-module perf-guard parser.
 # ============================================================================
 
-# 2026-07-13 re-baseline (set by FINISHED-232): fresh warm-machine full-suite run via
-# `python3 scripts/test.py --full`, SERIAL / single-threaded execution model (no
-# reactor -T, no Surefire forkCount/parallel — parallelism stays OFF per FINISHED-231's
-# Phase-0 isolation-audit gate). Post-TODO-160-migration reality: 135,130 tests, suite wall-clock 281s.
-# Per-module values are test.py timing-log wall-clock seconds (incl. per-fork JVM startup).
-suite = 281                              # set by FINISHED-232 (2026-07-13 re-baseline); measured 281.2s warm/serial.
-juneau-integration-tests/core = 88                   # set by FINISHED-232; measured 88.3s (time-dominant bucket).
-juneau-integration-tests/container.springboot = 5    # set by FINISHED-232; measured 4.9s.
-juneau-integration-tests/container.jetty = 8         # set by FINISHED-232; measured 7.5s under full-load; jetty container time is startup/shutdown-variable.
-juneau-core/juneau-marshall/core = 17.5              # set by FINISHED-232; 76,973 tests (count-dominant, fast in-memory).
-juneau-core/juneau-marshall-rdf/core = 9.2           # set by FINISHED-232; 21,921 tests.
-juneau-microservice/juneau-microservice/core = 12.3  # set by FINISHED-232; 205 tests but embedded-server startup heavy; time-variable.
-juneau-core/juneau-commons/core = 1.9                # set by FINISHED-232; 5,311 tests.
-juneau-core/juneau-config/core = 2.7                 # set by FINISHED-232; 458 tests.
-juneau-bean/juneau-bean-atom/core = 0.4
-juneau-bean/juneau-bean-common/core = 1.0
-juneau-bean/juneau-bean-html5/core = 3.4             # set by FINISHED-232; 12,427 tests.
-juneau-bean/juneau-bean-mcp/core = 0.4
-juneau-bean/juneau-bean-openapi-v3/core = 1.0        # set by FINISHED-232; measured 1.05s.
-juneau-bean/juneau-bean-swagger-v2/core = 0.9        # set by FINISHED-232; measured 0.87s.
-juneau-bean/juneau-bean-jsonschema/core = 0.6        # set by FINISHED-232; measured 0.63s.
+# 2026-07-17 parallel-model re-baseline (set by TODO-252, superseding the FINISHED-232 serial
+# baseline): warm-machine full-suite runs via `python3 scripts/test.py --full`, PARALLEL execution
+# model — reactor `mvn -T1C` parallel *module* builds (enabled in scripts/test.py) + Surefire
+# `forkCount=8` on the juneau-integration-tests core bucket.  135,210 tests.
+#
+# IMPORTANT — reading these numbers under the parallel model:
+#   * The 'suite' value is the AUTHORITATIVE metric: it is the real subprocess wall-clock of the
+#     parallel `mvn test` phase.  Measured 122-130s across 3 green runs (was 281s serial ≈ -55%).
+#   * The per-'<module>/<bucket>' values are NOT real wall-clock under -T.  scripts/test.py derives
+#     them by SUMMING each test class's Surefire <time> for the module; under -T1C those per-class
+#     wall-times are inflated by CPU contention (up to 16 module builds run concurrently) and, for
+#     forked buckets, further multiplied by forkCount (e.g. integration-tests/core sums ~230s across
+#     its 8 forks while its real module wall-clock is a fraction of that).  They are therefore
+#     ADVISORY only — self-consistent within this fixed -T1C+forkCount=8 model, useful for catching a
+#     large per-module regression, but not comparable to the old serial per-module seconds.
+#   * Values below are the MAX observed across the 3 re-baseline runs (rounded up) so normal
+#     warm-cache/JIT variance does not trip the ±20% guard; only a real >20%-over-worst jump fires.
+suite = 130                                          # parallel wall-clock; measured 122-130s across 3 runs.
+juneau-integration-tests/core = 252                  # -T+forkCount=8 summed/inflated (real module wall-clock far lower); time-dominant.
+juneau-integration-tests/container.springboot = 5.5
+juneau-integration-tests/container.jetty = 9         # startup/shutdown-variable.
+juneau-microservice/juneau-microservice-examples/core = 22.5
+juneau-core/juneau-marshall/core = 17.5              # 76,973 tests (count-dominant, fast in-memory).
+juneau-core/juneau-marshall-rdf/core = 15.5          # 21,921 tests.
+juneau-rest/juneau-rest-server-auth-saml/core = 13.5
+juneau-rest/juneau-rest-server-springboot/container.springboot = 11.5
+juneau-rest/juneau-rest-server-view-jsp/core = 10
+juneau-petstore/juneau-petstore-jetty/container.jetty = 9.5
+juneau-petstore/juneau-petstore-springboot/container.springboot = 9.5
+juneau-rest/juneau-rest-server-view-thymeleaf/core = 8.5
+juneau-rest/juneau-rest-server-auth-jwt/core = 7.5
+juneau-rest/juneau-rest-server-metrics-micrometer/core = 7.5
+juneau-rest/juneau-rest-server-view-freemarker/core = 7.5
+juneau-microservice/juneau-microservice/core = 7.5   # embedded-server startup heavy; time-variable.
+juneau-rest/juneau-rest-server-view-mustache/core = 7
+juneau-rest/juneau-rest-server-auth-oidc-rp/core = 6.6
+juneau-rest/juneau-rest-server-mcp/core = 6.5
+juneau-rest/juneau-rest-server-tracing-otel/core = 6
+juneau-bean/juneau-bean-html5/core = 5.5             # 12,427 tests.
+juneau-core/juneau-config/core = 4
+juneau-petstore/juneau-petstore-core/core = 4.5
+juneau-rest/juneau-rest-server-reactive/core = 4
+juneau-bean/juneau-bean-common/core = 2.8
+juneau-microservice/juneau-microservice-jetty/core = 3
+juneau-bean/juneau-bean-jsonschema/core = 2.5
+juneau-rest/juneau-rest-server/core = 2.6
+juneau-rest/juneau-rest-mock/core = 2.3
+juneau-rest/juneau-rest-server-auth-oauth/core = 2.5
+juneau-core/juneau-commons/core = 2.2                # 5,311 tests.
+juneau-bean/juneau-bean-mcp/core = 2
+juneau-bean/juneau-bean-atom/core = 2
+juneau-bean/juneau-bean-jsonapi/core = 2
+juneau-bean/juneau-bean-hal/core = 2
+juneau-bean/juneau-bean-jsonpatch/core = 2
+juneau-bean/juneau-bean-openapi-v3/core = 1.5
+juneau-bean/juneau-bean-swagger-v2/core = 1.3
 
 # ─── [observability] ──────────────────────────────────────────────────────────
 #

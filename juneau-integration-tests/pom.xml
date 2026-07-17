@@ -689,7 +689,7 @@
 								isolated (classes run sequentially within a fork).  Container tests keep the
 								default single fork.
 							-->
-							<forkCount>4</forkCount>
+							<forkCount>8</forkCount>
 							<reuseForks>true</reuseForks>
 						</configuration>
 					</execution>

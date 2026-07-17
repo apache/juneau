@@ -361,12 +361,19 @@ def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, en
 	return 0
 
 
+# Reactor-level parallel *module* builds.  -T1C runs one build thread per CPU core, so independent
+# reactor modules (and their test forks) build concurrently, overlapping the otherwise-serial
+# per-module test phases.  Requires the juneau-distrib dependency:copy ordering fix (MDEP-187) to be
+# -T-safe.  This is parallel *module* execution only, NOT in-JVM concurrent test classes/methods.
+PARALLELISM = "-T1C"
+
+
 def build(verbose=False):
-	return run_command("mvn clean install -DskipTests", verbose)
+	return run_command(f"mvn clean install {PARALLELISM} -DskipTests", verbose)
 
 
 def test(verbose=False, no_container=False):
-	cmd = "mvn test -Drat.skip=true"
+	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
 	return run_command(cmd, verbose)
