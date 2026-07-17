@@ -513,19 +513,19 @@
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-api</artifactId>
-			<version>1.62.0</version>
+			<version>1.63.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-sdk</artifactId>
-			<version>1.62.0</version>
+			<version>1.63.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>io.opentelemetry</groupId>
 			<artifactId>opentelemetry-sdk-testing</artifactId>
-			<version>1.62.0</version>
+			<version>1.63.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
