@@ -84,6 +84,10 @@ public final class RestClient implements Closeable {
 		BodyConverter.of(File.class, file -> TransportBody.of(FileBody.of(file)))
 	);
 
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_method = "method";
+	private static final String ARG_url = "url";
+
 	final HttpTransport transport;
 	final List<HttpHeader> defaultHeaders;
 	final List<HttpPart> defaultQueryData;
@@ -204,6 +208,8 @@ public final class RestClient implements Closeable {
 	 * @return A new {@link RestRequest}. Never <jk>null</jk>.
 	 */
 	public RestRequest request(String method, String url) {
+		assertArgNotNull(ARG_method, method);
+		assertArgNotNull(ARG_url, url);
 		var resolvedUrl = rootUrl != null && !url.contains("://") ? rootUrl + url : url;
 		return new RestRequest(this, method, resolvedUrl);
 	}
