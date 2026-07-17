@@ -162,10 +162,30 @@ public abstract sealed class HoconValue permits HoconValue.HoconObject, HoconVal
 		/**
 		 * Returns the elements.
 		 *
-		 * @return The elements list.
+		 * @return An unmodifiable copy of the elements list.
 		 */
 		public List<HoconValue> getElements() {
-			return elements;
+			return u(copyOf(elements));
+		}
+
+		/**
+		 * Adds an element to this array.
+		 *
+		 * @param element The element to add.
+		 */
+		public void add(HoconValue element) {
+			elements.add(element);
+		}
+
+		/**
+		 * Replaces the contents of this array with the specified elements.
+		 *
+		 * @param value The new elements. Can be <jk>null</jk> to clear the array.
+		 */
+		public void setElements(List<HoconValue> value) {
+			elements.clear();
+			if (value != null)
+				elements.addAll(value);
 		}
 
 		/**

@@ -81,17 +81,13 @@ public class HoconResolver {
 			}
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
-				var elements = arr.getElements();
-				var toRemove = new ArrayList<Integer>();
-				for (var i = 0; i < elements.size(); i++) {
-					var resolved = resolveValue(elements.get(i));
-					if (resolved == null)
-						toRemove.add(i);
-					else
-						elements.set(i, resolved);
+				var resolved = new ArrayList<HoconValue>();
+				for (var el : arr.getElements()) {
+					var r = resolveValue(el);
+					if (r != null)
+						resolved.add(r);
 				}
-				for (var i = toRemove.size() - 1; i >= 0; i--)
-					elements.remove(toRemove.get(i).intValue());
+				arr.setElements(resolved);
 				yield val;
 			}
 			case SUBSTITUTION -> resolveSubstitution((HoconValue.HoconSubstitution) val, false);
@@ -187,8 +183,10 @@ public class HoconResolver {
 			}
 			case ARRAY -> {
 				var arr = (HoconValue.HoconArray) val;
-				for (var i = 0; i < arr.getElements().size(); i++)
-					arr.getElements().set(i, resolveValueWithLookup(arr.getElements().get(i), lookup));
+				var resolved = new ArrayList<HoconValue>();
+				for (var el : arr.getElements())
+					resolved.add(resolveValueWithLookup(el, lookup));
+				arr.setElements(resolved);
 				yield val;
 			}
 			case SUBSTITUTION -> resolveSubstitutionWithLookup((HoconValue.HoconSubstitution) val, false, lookup);

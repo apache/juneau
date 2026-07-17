@@ -147,12 +147,12 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				var value = parseValueOrConcat(t);
 				var existing = root.getPath(path);
 				if (existing instanceof HoconValue.HoconArray arr)
-					arr.getElements().add(value);
+					arr.add(value);
 				else {
 					var newArr = new HoconValue.HoconArray();
 					if (existing != null)
-						newArr.getElements().add(existing);
-					newArr.getElements().add(value);
+						newArr.add(existing);
+					newArr.add(value);
 					root.setPath(path, newArr);
 				}
 			} else if (next.type() == HoconTokenizer.TokenType.EQUALS || next.type() == HoconTokenizer.TokenType.COLON) {
@@ -347,12 +347,12 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 				var value = parseValueOrConcat(t);
 				var existing = obj.getPath(path);
 				if (existing instanceof HoconValue.HoconArray arr)
-					arr.getElements().add(value);
+					arr.add(value);
 				else {
 					var newArr = new HoconValue.HoconArray();
 					if (existing != null)
-						newArr.getElements().add(existing);
-					newArr.getElements().add(value);
+						newArr.add(existing);
+					newArr.add(value);
 					obj.setPath(path, newArr);
 				}
 			} else if (next.type() == HoconTokenizer.TokenType.EQUALS || next.type() == HoconTokenizer.TokenType.COLON) {
@@ -389,7 +389,7 @@ public class HoconParserSession extends ReaderParserSession implements RecordRea
 			// arrays appear without a separator; the result is already a flattened HoconArray at
 			// that point.  Here we must add the element as-is so nested arrays like
 			// `[[1,2,3], [4,5,6]]` (with separators) stay nested rather than flattening.
-			arr.getElements().add(parseValueOrConcat(t));
+			arr.add(parseValueOrConcat(t));
 			// parseValueOrConcat's internal concat loop calls peekNoSkip(), which eagerly consumes the
 			// closing-bracket char from the underlying reader and stashes it as peeked=RBRACKET.
 			// skipWhitespaceAndComments is a no-op while a token is cached (see HoconTokenizer), so it
