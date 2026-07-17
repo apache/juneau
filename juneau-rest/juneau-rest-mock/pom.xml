@@ -103,7 +103,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>2.0.17</version>
+			<version>2.0.18</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- Test-only: SLF4J binding required for MDC.put/get to work; slf4j-simple uses NOPMDCAdapter so logback-classic is needed for real MDC. -->
