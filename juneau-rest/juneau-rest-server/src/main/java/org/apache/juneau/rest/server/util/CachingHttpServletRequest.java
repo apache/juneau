@@ -61,9 +61,9 @@ public class CachingHttpServletRequest extends HttpServletRequestWrapper {
 	/**
 	 * Returns the content of the servlet request without consuming the stream.
 	 *
-	 * @return The content of the request.
+	 * @return The content of the request.  This is a defensive copy; modifying it does not affect the cached request body.
 	 */
-	public byte[] getContent() { return content; }
+	public byte[] getContent() { return content.clone(); }
 
 	@Override
 	public ServletInputStream getInputStream() { return new BoundedServletInputStream(content); }

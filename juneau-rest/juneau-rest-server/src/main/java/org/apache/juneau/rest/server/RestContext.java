@@ -4003,7 +4003,7 @@ public class RestContext extends Context {
 	 * @return The resolved mount paths (never {@code null}; possibly empty).
 	 * @since 10.0.0
 	 */
-	public String[] getPaths() { return paths; }
+	public String[] getPaths() { return copyOf(paths); }
 
 	/**
 	 * Returns the path matcher for this context.
@@ -4081,7 +4081,7 @@ public class RestContext extends Context {
 	 * 	The REST-op-arg classes for this resource.
 	 * 	<br>Never <jk>null</jk>.
 	 */
-	public Class<? extends RestOpArg>[] getRestOpArgs() { return restOpArgs.get(); }
+	public Class<? extends RestOpArg>[] getRestOpArgs() { return copyOf(restOpArgs.get()); }
 
 	/**
 	 * Returns the child resources associated with this servlet.

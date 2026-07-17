@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
 import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.isEmpty;
@@ -88,7 +89,14 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class AuthFilterChain implements Filter, Authenticator {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_value = "value";
+	private static final String ARG_pattern = "pattern";
 
 	/**
 	 * A single entry in the chain: an {@link AuthFilter} paired with an optional path pattern.
@@ -136,6 +144,7 @@ public class AuthFilterChain implements Filter, Authenticator {
 		 * @return This object.
 		 */
 		public Builder append(AuthFilter value) {
+			assertArgNotNull(ARG_value, value);
 			entries.add(new Entry(value, null));
 			return this;
 		}
@@ -152,6 +161,8 @@ public class AuthFilterChain implements Filter, Authenticator {
 		 * @return This object.
 		 */
 		public Builder append(AuthFilter value, String pattern) {
+			assertArgNotNull(ARG_value, value);
+			assertArgNotNullOrBlank(ARG_pattern, pattern);
 			entries.add(new Entry(value, UrlPathMatcher.of(pattern)));
 			return this;
 		}

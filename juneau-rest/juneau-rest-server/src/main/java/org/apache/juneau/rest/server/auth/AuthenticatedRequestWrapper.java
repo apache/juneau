@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.auth;
 
+import static org.apache.juneau.commons.utils.AssertionUtils.*;
+
 import java.security.*;
 import java.util.*;
 
@@ -48,7 +50,14 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S115" // Constants use UPPER_snakeCase convention
+})
 public class AuthenticatedRequestWrapper extends HttpServletRequestWrapper {
+
+	// Argument name constants for assertArgNotNull
+	private static final String ARG_req = "req";
+	private static final String ARG_result = "result";
 
 	private final Principal principal;
 	private final Set<String> roles;
@@ -60,7 +69,8 @@ public class AuthenticatedRequestWrapper extends HttpServletRequestWrapper {
 	 * @param result The authentication result. Must not be <jk>null</jk>.
 	 */
 	public AuthenticatedRequestWrapper(HttpServletRequest req, AuthResult result) {
-		super(req);
+		super(assertArgNotNull(ARG_req, req));
+		assertArgNotNull(ARG_result, result);
 		this.principal = result.getPrincipal();
 		this.roles = new HashSet<>(result.getRoles());
 	}

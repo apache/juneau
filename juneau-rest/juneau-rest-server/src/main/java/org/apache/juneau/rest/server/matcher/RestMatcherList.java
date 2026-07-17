@@ -124,12 +124,12 @@ public class RestMatcherList {
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as optional.
 	 */
-	public RestMatcher[] getOptionalEntries() { return optionalEntries; }
+	public RestMatcher[] getOptionalEntries() { return copyOf(optionalEntries); }
 
 	/**
 	 * Returns the entries in this list that are specified as required.
 	 *
 	 * @return An unmodifiable list of entries in this list that are specified as required.
 	 */
-	public RestMatcher[] getRequiredEntries() { return requiredEntries; }
+	public RestMatcher[] getRequiredEntries() { return copyOf(requiredEntries); }
 }

@@ -969,6 +969,13 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	/** The required matchers extracted from {@link #matchersList}. */
 	private final Memoizer<RestMatcher[]> requiredMatchers = memoizer(() -> matchersList.get().getRequiredEntries());
 
+	// Immutable, cached views over the routing arrays returned by the public getters.  Built once (memoized) so
+	// there is zero per-call allocation on the routing hot path and no live-array exposure to callers.  Internal
+	// hot-path code reads the private array memoizers directly; these views exist only for the public API surface.
+	private final Memoizer<List<UrlPathMatcher>> pathMatchersView = memoizer(() -> List.of(pathMatchers.get()));
+	private final Memoizer<List<RestMatcher>> optionalMatchersView = memoizer(() -> List.of(optionalMatchers.get()));
+	private final Memoizer<List<RestMatcher>> requiredMatchersView = memoizer(() -> List.of(requiredMatchers.get()));
+
 	/** The computed response metadata for this operation method. */
 	private final Memoizer<ResponseBeanMeta> responseMeta = memoizer(() -> ResponseBeanMeta.create(methodInfo(), appliedAnnotations()));
 
@@ -1368,7 +1375,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		// Pre-warm httpMethod so it is in the memoizer cache for immediate use by compareTo/match.
 		httpMethod.get();
 
-			var pm = getPathMatchers();
+			var pm = pathMatchers.get();
 			bs.add(UrlPathMatcher[].class, pm);
 			bs.addBean(UrlPathMatcher.class, pm.length > 0 ? pm[0] : null);
 
@@ -1385,8 +1392,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public int compareTo(RestOpContext o) {
 		int c;
 
-		var pm = getPathMatchers();
-		var opm = o.getPathMatchers();
+		var pm = pathMatchers.get();
+		var opm = o.pathMatchers.get();
 		for (int i = 0; i < Math.min(pm.length, opm.length); i++) {
 			c = pm[i].compareTo(opm[i]);
 			if (c != 0)
@@ -1397,11 +1404,11 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (c != 0)
 			return c;
 
-		c = cmp(o.getRequiredMatchers().length, getRequiredMatchers().length);
+		c = cmp(o.requiredMatchers.get().length, requiredMatchers.get().length);
 		if (c != 0)
 			return c;
 
-		c = cmp(o.getOptionalMatchers().length, getOptionalMatchers().length);
+		c = cmp(o.optionalMatchers.get().length, optionalMatchers.get().length);
 		if (c != 0)
 			return c;
 
@@ -1425,6 +1432,14 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		}
 
 		c = cmp(method.getReturnType().getName(), o.method.getReturnType().getName());
+		if (c != 0)
+			return c;
+
+		// Declaring-class tie-breaker: keeps compareTo consistent with equals()/hashCode() (which key off method
+		// identity) for two ops whose methods share the same signature but differ by declaring class.  Only affects
+		// ordering that was previously a zero-tie, so it makes tie-break stability deterministic rather than changing
+		// any non-tied dispatch precedence.
+		c = cmp(method.getDeclaringClass().getName(), o.method.getDeclaringClass().getName());
 		if (c != 0)
 			return c;
 
@@ -1671,31 +1686,34 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	 *
 	 * @return The path pattern.
 	 */
-	public String getPathPattern() { return getPathMatchers()[0].toString(); }
+	public String getPathPattern() { return pathMatchers.get()[0].toString(); }
 
 	/**
 	 * Returns the URL path matchers for this operation.
 	 *
 	 * @return The URL path matchers for this operation.
 	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>The returned list is an immutable, cached view.
 	 */
-	public UrlPathMatcher[] getPathMatchers() { return pathMatchers.get(); }
+	public List<UrlPathMatcher> getPathMatchers() { return pathMatchersView.get(); }
 
 	/**
 	 * Returns the optional matchers for this operation.
 	 *
 	 * @return The optional matchers for this operation.
 	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>The returned list is an immutable, cached view.
 	 */
-	public RestMatcher[] getOptionalMatchers() { return optionalMatchers.get(); }
+	public List<RestMatcher> getOptionalMatchers() { return optionalMatchersView.get(); }
 
 	/**
 	 * Returns the required matchers for this operation.
 	 *
 	 * @return The required matchers for this operation.
 	 * 	<br>Never <jk>null</jk>.
+	 * 	<br>The returned list is an immutable, cached view.
 	 */
-	public RestMatcher[] getRequiredMatchers() { return requiredMatchers.get(); }
+	public List<RestMatcher> getRequiredMatchers() { return requiredMatchersView.get(); }
 
 	/**
 	 * Returns the call logger for this operation.
@@ -1803,7 +1821,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 
 	private UrlPathMatch matchPattern(RestSession call) {
 		UrlPathMatch pm = null;
-		for (var pp : getPathMatchers())
+		for (var pp : pathMatchers.get())
 			if (pm == null)
 				pm = pp.match(call.getUrlPath());
 		return pm;
@@ -1835,8 +1853,8 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 		if (pm == null)
 			return 0;
 
-		var rm = getRequiredMatchers();
-		var om = getOptionalMatchers();
+		var rm = requiredMatchers.get();
+		var om = optionalMatchers.get();
 		if (rm.length == 0 && om.length == 0) {
 			session.urlPathMatch(pm);  // Cache so we don't have to recalculate.
 			return 2;

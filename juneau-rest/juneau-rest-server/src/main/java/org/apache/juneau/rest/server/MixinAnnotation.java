@@ -379,32 +379,32 @@ public class MixinAnnotation {
 		}
 
 		@Override /* Overridden from Mixin */ public Class<?> type() { return type; }
-		@Override /* Overridden from Mixin */ public Class<? extends RestGuard>[] guards() { return guards; }
+		@Override /* Overridden from Mixin */ public Class<? extends RestGuard>[] guards() { return copyOf(guards); }
 		@Override /* Overridden from Mixin */ public String roleGuard() { return roleGuard; }
 		@Override /* Overridden from Mixin */ public String rolesDeclared() { return rolesDeclared; }
-		@Override /* Overridden from Mixin */ public Class<? extends RestConverter>[] converters() { return converters; }
-		@Override /* Overridden from Mixin */ public Class<? extends Encoder>[] encoders() { return encoders; }
-		@Override /* Overridden from Mixin */ public Class<? extends Serializer>[] serializers() { return serializers; }
-		@Override /* Overridden from Mixin */ public Class<?>[] parsers() { return parsers; }
-		@Override /* Overridden from Mixin */ public Class<? extends ResponseProcessor>[] responseProcessors() { return responseProcessors; }
-		@Override /* Overridden from Mixin */ public Class<? extends RestOpArg>[] restOpArgs() { return restOpArgs; }
+		@Override /* Overridden from Mixin */ public Class<? extends RestConverter>[] converters() { return copyOf(converters); }
+		@Override /* Overridden from Mixin */ public Class<? extends Encoder>[] encoders() { return copyOf(encoders); }
+		@Override /* Overridden from Mixin */ public Class<? extends Serializer>[] serializers() { return copyOf(serializers); }
+		@Override /* Overridden from Mixin */ public Class<?>[] parsers() { return copyOf(parsers); }
+		@Override /* Overridden from Mixin */ public Class<? extends ResponseProcessor>[] responseProcessors() { return copyOf(responseProcessors); }
+		@Override /* Overridden from Mixin */ public Class<? extends RestOpArg>[] restOpArgs() { return copyOf(restOpArgs); }
 		@Override /* Overridden from Mixin */ public Class<? extends CallLogger> callLogger() { return callLogger; }
 		@Override /* Overridden from Mixin */ public Class<? extends HttpPartSerializer> partSerializer() { return partSerializer; }
 		@Override /* Overridden from Mixin */ public Class<? extends HttpPartParser> partParser() { return partParser; }
 		@Override /* Overridden from Mixin */ public Debug debug() { return debug; }
 		@Override /* Overridden from Mixin */ public String messages() { return messages; }
-		@Override /* Overridden from Mixin */ public String[] defaultRequestHeaders() { return defaultRequestHeaders; }
-		@Override /* Overridden from Mixin */ public String[] defaultResponseHeaders() { return defaultResponseHeaders; }
-		@Override /* Overridden from Mixin */ public String[] defaultRequestAttributes() { return defaultRequestAttributes; }
-		@Override /* Overridden from Mixin */ public String[] produces() { return produces; }
-		@Override /* Overridden from Mixin */ public String[] consumes() { return consumes; }
+		@Override /* Overridden from Mixin */ public String[] defaultRequestHeaders() { return copyOf(defaultRequestHeaders); }
+		@Override /* Overridden from Mixin */ public String[] defaultResponseHeaders() { return copyOf(defaultResponseHeaders); }
+		@Override /* Overridden from Mixin */ public String[] defaultRequestAttributes() { return copyOf(defaultRequestAttributes); }
+		@Override /* Overridden from Mixin */ public String[] produces() { return copyOf(produces); }
+		@Override /* Overridden from Mixin */ public String[] consumes() { return copyOf(consumes); }
 		@Override /* Overridden from Mixin */ public String defaultAccept() { return defaultAccept; }
 		@Override /* Overridden from Mixin */ public String defaultContentType() { return defaultContentType; }
 		@Override /* Overridden from Mixin */ public String defaultCharset() { return defaultCharset; }
 		@Override /* Overridden from Mixin */ public String maxInput() { return maxInput; }
 		@Override /* Overridden from Mixin */ public String path() { return path; }
-		@Override /* Overridden from Mixin */ public String[] paths() { return paths; }
-		@Override /* Overridden from Mixin */ public String[] noInherit() { return noInherit; }
+		@Override /* Overridden from Mixin */ public String[] paths() { return copyOf(paths); }
+		@Override /* Overridden from Mixin */ public String[] noInherit() { return copyOf(noInherit); }
 	}
 
 	/**
