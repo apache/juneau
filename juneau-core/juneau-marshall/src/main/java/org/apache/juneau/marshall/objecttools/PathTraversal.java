@@ -139,6 +139,7 @@ import org.apache.juneau.marshall.parser.*;
 	"rawtypes"   // Raw types necessary for generic type handling
 })
 public class PathTraversal {
+	// Internal traversal node — never serialized; 'parent' is an upward tree pointer used only to walk back up the model during PUT/POST/DELETE rewrites.
 	class JsonNode {
 		Object o;
 		ClassMeta cm;

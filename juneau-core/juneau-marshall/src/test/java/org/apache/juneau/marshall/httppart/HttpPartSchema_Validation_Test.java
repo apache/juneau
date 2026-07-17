@@ -1385,4 +1385,41 @@ class HttpPartSchema_Validation_Test extends TestBase {
 		s.validateOutput(l("abc", "defghi"));
 		assertThrowsWithMessage(SchemaValidationException.class, "Minimum length of value not met.", ()->s.validateOutput(l("a", "b")));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Nested-schema finiteness invariant
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void t01_deepNesting_buildAndToStringFinite() {
+		// Invariant anchor: the nested items/additionalProperties schema graph is an immutable DAG assembled
+		// bottom-up (each child is fully built before the parent's final field is assigned), so build() and
+		// toString() over a deeply-nested schema are finite.  The only way to manufacture a cycle is a
+		// self-referential builder, which would infinite-loop/StackOverflow at construction time and never
+		// reach here.
+		var depth = 100;
+		var b = HttpPartSchema.create().tString();
+		for (var i = 0; i < depth; i++) {
+			b = (i % 2 == 0)
+				? HttpPartSchema.create().tArray().items(b)
+				: HttpPartSchema.create().tObject().additionalProperties(b);
+		}
+		var built = b.build();
+
+		// toString()/serialize over the full nested graph returns finitely (no depth blow-up).
+		var str = assertDoesNotThrow(built::toString);
+		assertNotNull(str);
+		assertFalse(str.isEmpty());
+
+		// The graph is fully materialized to the requested depth (acyclic DAG, not truncated by a cycle guard).
+		var levels = 0;
+		var cur = built;
+		while (cur != null && levels <= depth + 5) {
+			levels++;
+			var next = cur.getItems();
+			if (next == null)
+				next = cur.getProperty("anyKey");  // additionalProperties fallback
+			cur = next;
+		}
+		assertTrue(levels >= depth, "Expected the nested schema to be reachable to full depth");
+	}
 }

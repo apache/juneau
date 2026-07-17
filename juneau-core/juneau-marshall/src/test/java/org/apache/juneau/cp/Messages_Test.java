@@ -165,4 +165,26 @@ class Messages_Test extends TestBase {
 		assertEquals("foo bar", x.getString("foo", "bar"));
 		assertEquals("fooja bar", x.forLocale(JAPAN).getString("foo", "bar"));
 	}
+
+	@Test void a15_parentChainTerminationAndFlatness() {
+		// Invariant anchor: a Messages parent chain is a finite, null-terminated singly-linked list, and
+		// toString() emits a FLAT key/value view (parent keys are folded into the child keyMap at
+		// construction) rather than recursively stringifying the parent2 back-reference.  Serialization/
+		// toString() therefore terminates regardless of chain depth.
+		var leaf = Messages.of(Test2.class);                                     // deepest link: file, yyy
+		var mid = Messages.create(MessageBundleTest1.class).parent(leaf).build(); // + foo/bar/xx...
+		var top = Messages.chain(Messages.of(Test2.class), mid);                 // 3-link chain
+
+		// (b) toString() returns finitely (no depth blow-up / no infinite recursion into parent2).
+		var s = assertDoesNotThrow(top::toString);
+
+		// (a) The flattened view resolves keys contributed by every level of the chain.
+		assertTrue(s.contains("yyy="), "Expected key contributed by the deepest link (Test2)");
+		assertTrue(s.contains("bar="), "Expected key contributed by the middle link (MessageBundleTest1)");
+		assertTrue(s.contains("foo="), "Expected key contributed by the middle link (MessageBundleTest1)");
+		assertTrue(s.contains("file="), "Expected shared 'file' key");
+
+		// Flattening is not nested — the private parent2 back-reference is never exposed as a bean value.
+		assertFalse(s.contains("parent2"), "toString() must not expose the parent2 back-reference");
+	}
 }
