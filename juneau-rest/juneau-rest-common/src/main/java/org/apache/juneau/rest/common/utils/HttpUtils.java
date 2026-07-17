@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.common.utils;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.lang.reflect.*;
 
 /**
@@ -47,14 +49,14 @@ public class HttpUtils {
 		String n = m.getName();
 		if (detectMethod) {
 			if (n.startsWith("do") && n.length() > 2) {
-				String n2 = n.substring(2).toUpperCase();
+				String n2 = ucr(n.substring(2));
 				for (var t : UC_METHODS)
 					if (n2.equals(t))
 						return n2;
 			}
 			for (var t : LC_METHODS)
 				if (n.startsWith(t) && (n.length() == t.length() || Character.isUpperCase(n.charAt(t.length()))))
-					return t.toUpperCase();
+					return ucr(t);
 		}
 		return def;
 	}
@@ -73,7 +75,7 @@ public class HttpUtils {
 		String n = m.getName();
 		if (method == null) {
 			if (n.startsWith("do") && n.length() > 2) {
-				String n2 = n.substring(2).toUpperCase();
+				String n2 = ucr(n.substring(2));
 				for (var t : UC_METHODS)
 					if (n2.equals(t))
 						return "/";

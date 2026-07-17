@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.collections;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Cache modes for {@link Cache} and related cache classes.
  *
@@ -122,7 +124,7 @@ public enum CacheMode {
 	public static CacheMode parse(String value) {
 		if (value == null)
 			return FULL;
-		return switch (value.toUpperCase()) {
+		return switch (ucr(value)) {
 			case CONST_NONE -> NONE;
 			case CONST_WEAK -> WEAK;
 			case CONST_FULL -> FULL;

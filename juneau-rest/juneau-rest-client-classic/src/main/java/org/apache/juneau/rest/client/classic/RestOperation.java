@@ -16,8 +16,9 @@
  */
 package org.apache.juneau.rest.client.classic;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.net.*;
-import java.util.*;
 
 import org.apache.http.client.utils.*;
 import org.apache.juneau.http.*;
@@ -104,7 +105,7 @@ public class RestOperation {
 	 */
 	public RestOperation(String method, Object url, Object body) {
 		this.url = url;
-		this.method = method.toUpperCase(Locale.ENGLISH);
+		this.method = ucr(method);
 		this.content = body;
 		this.hasContent = HttpMethod.hasContent(method);
 	}

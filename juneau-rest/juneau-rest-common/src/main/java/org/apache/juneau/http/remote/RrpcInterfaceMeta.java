@@ -516,9 +516,9 @@ public final class RrpcInterfaceMeta {
 		if (!v.isEmpty()) {
 			var i = v.indexOf(' ');
 			if (i == -1) {
-				method = v.toUpperCase();
+				method = ucr(v);
 			} else {
-				method = v.substring(0, i).trim().toUpperCase();
+				method = ucr(v.substring(0, i).trim());
 				path = v.substring(i).trim();
 			}
 		}

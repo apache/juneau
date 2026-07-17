@@ -1121,7 +1121,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 		if (! swagger2.isPresent())
 			return oe();
 
-		return o(swagger2.get().getOperation(opContext.getPathPattern(), getMethod().toLowerCase()));
+		return o(swagger2.get().getOperation(opContext.getPathPattern(), lcr(getMethod())));
 	}
 
 	/**

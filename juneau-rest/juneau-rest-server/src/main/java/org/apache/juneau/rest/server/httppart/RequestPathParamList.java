@@ -397,7 +397,7 @@ public class RequestPathParamList extends ArrayList<RequestPathParam> {
 	 * @return The list of all unique header names in this list.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<String> getNames() { return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
+	public List<String> getNames() { return stream().map(RequestPathParam::getName).map(x -> caseSensitive ? x : lcr(x)).distinct().toList(); }
 
 	/**
 	 * Returns the decoded remainder of the URL following any path pattern matches.

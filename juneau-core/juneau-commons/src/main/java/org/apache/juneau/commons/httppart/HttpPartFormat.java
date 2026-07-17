@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.httppart;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Valid values for the <c>format</c> field.
  *
@@ -218,7 +220,7 @@ public enum HttpPartFormat {
 	 * @return The enum.
 	 */
 	public static HttpPartFormat fromString(String value) {
-		value = value.toUpperCase().replace('-', '_');
+		value = ucr(value).replace('-', '_');
 		return valueOf(value);
 	}
 
@@ -237,6 +239,6 @@ public enum HttpPartFormat {
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return name().toLowerCase().replace('_', '-');
+		return lcr(name()).replace('_', '-');
 	}
 }

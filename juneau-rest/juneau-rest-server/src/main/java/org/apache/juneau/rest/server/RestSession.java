@@ -366,7 +366,7 @@ public class RestSession extends ContextSession {
 			if (method == null)
 				method = req.getMethod();
 
-			method = method.toUpperCase(Locale.ENGLISH);
+			method = ucr(method);
 		}
 
 		return method;

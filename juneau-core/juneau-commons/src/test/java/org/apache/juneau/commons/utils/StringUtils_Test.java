@@ -3689,6 +3689,19 @@ class StringUtils_Test extends TestBase {
 	}
 
 	//====================================================================================================
+	// lowerCaseRoot(String)
+	//====================================================================================================
+	@Test
+	void a122a_lowerCaseRoot() {
+		assertNull(lowerCaseRoot(null));
+		assertEquals("", lowerCaseRoot(""));
+		assertEquals("hello", lowerCaseRoot("Hello"));
+		assertEquals("hello", lowerCaseRoot("HELLO"));
+		// Locale.ROOT keeps ASCII 'I' -> 'i' regardless of default locale (e.g. Turkish).
+		assertEquals("id", lowerCaseRoot("ID"));
+	}
+
+	//====================================================================================================
 	// mapped(String[],Function<String,String>)
 	//====================================================================================================
 	@Test
@@ -6615,6 +6628,19 @@ class StringUtils_Test extends TestBase {
 		assertEquals("HELLO WORLD", upperCase("Hello World"));
 		assertEquals("123", upperCase("123"));
 		assertEquals("ABC", upperCase("abc"));
+	}
+
+	//====================================================================================================
+	// upperCaseRoot(String)
+	//====================================================================================================
+	@Test
+	void a226a_upperCaseRoot() {
+		assertNull(upperCaseRoot(null));
+		assertEquals("", upperCaseRoot(""));
+		assertEquals("HELLO", upperCaseRoot("hello"));
+		assertEquals("ABC", upperCaseRoot("abc"));
+		// Locale.ROOT keeps ASCII 'i' -> 'I' regardless of default locale (e.g. Turkish).
+		assertEquals("ID", upperCaseRoot("id"));
 	}
 
 	//====================================================================================================

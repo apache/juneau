@@ -84,6 +84,6 @@ public class HttpMethod {
 	 * @return <jk>true</jk> if specified http method has content.
 	 */
 	public static boolean hasContent(String name) {
-		return ! NO_BODY_METHODS.contains(emptyIfNull(name).toUpperCase());
+		return ! NO_BODY_METHODS.contains(ucr(emptyIfNull(name)));
 	}
 }

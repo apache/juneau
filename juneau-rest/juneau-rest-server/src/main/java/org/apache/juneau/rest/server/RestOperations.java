@@ -76,7 +76,7 @@ public class RestOperations {
 		 * @return Adds a method context to this builder.
 		 */
 		public Builder add(String httpMethodName, RestOpContext value) {
-			httpMethodName = httpMethodName.toUpperCase();
+			httpMethodName = ucr(httpMethodName);
 			map.computeIfAbsent(httpMethodName, k -> new TreeSet<>()).add(value);
 			set.add(value);
 			return this;

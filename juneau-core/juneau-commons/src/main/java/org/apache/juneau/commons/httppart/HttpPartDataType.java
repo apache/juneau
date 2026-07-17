@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.httppart;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Valid values for the <c>type</c> field.
  *
@@ -72,11 +74,11 @@ public enum HttpPartDataType {
 	 * @return The enum.
 	 */
 	public static HttpPartDataType fromString(String value) {
-		return valueOf(value.toUpperCase());
+		return valueOf(ucr(value));
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return name().toLowerCase();
+		return lcr(name());
 	}
 }

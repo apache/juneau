@@ -466,7 +466,7 @@ public class RequestFormParamList extends ArrayList<RequestFormParam> {
 	 * Returns all the unique header names in this list.
 	 * @return The list of all unique header names in this list.
 	 */
-	public List<String> getNames() { return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
+	public List<String> getNames() { return stream().map(RequestFormParam::getName).map(x -> caseSensitive ? x : lcr(x)).distinct().toList(); }
 
 	/**
 	 * Returns all headers in sorted order.

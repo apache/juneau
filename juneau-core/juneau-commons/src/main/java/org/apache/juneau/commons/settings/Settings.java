@@ -184,7 +184,7 @@ public class Settings {
 		var v = SYSTEM_PROPERTY_SOURCE.get(property);
 		if (v.isPresent())
 			return v.value();  // Not testable
-		v = SYSTEM_ENV_SOURCE.get(property.replace('.', '_').toUpperCase());
+		v = SYSTEM_ENV_SOURCE.get(ucr(property.replace('.', '_')));
 		if (v.isPresent())
 			return v.value();  // Not testable
 		return oe();

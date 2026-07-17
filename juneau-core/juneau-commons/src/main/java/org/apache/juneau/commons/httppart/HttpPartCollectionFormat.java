@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.commons.httppart;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 /**
  * Valid values for the <c>collectionFormat</c> field.
  *
@@ -71,11 +73,11 @@ public enum HttpPartCollectionFormat {
 			return null;
 		if (value.equalsIgnoreCase("UON"))
 			return UONC;
-		return valueOf(value.toUpperCase());
+		return valueOf(ucr(value));
 	}
 
 	@Override /* Overridden from Object */
 	public String toString() {
-		return name().toLowerCase();
+		return lcr(name());
 	}
 }

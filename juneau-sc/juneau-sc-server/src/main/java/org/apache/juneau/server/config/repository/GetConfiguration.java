@@ -17,6 +17,7 @@
 package org.apache.juneau.server.config.repository;
 
 import static org.apache.juneau.commons.utils.FileUtils.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.nio.file.*;
@@ -81,7 +82,7 @@ public class GetConfiguration implements Command, GetValue<Map<String,ConfigItem
 		gitControl.branch(branch);
 		gitControl.pullFromRepo();
 
-		var fileDefaultStr = APPLICATION.toLowerCase().concat(EXT);
+		var fileDefaultStr = lcr(APPLICATION).concat(EXT);
 		var fileProjectStr = this.project.concat(EXT);
 
 		// Resolve the config file names under the checkout root through the shared boundary check

@@ -152,6 +152,18 @@ class Shorts_Test extends TestBase {
 	void b007_uc_upperCase() { assertEquals("ABC", uc("abc")); }
 
 	@Test
+	void b007a_lcr_lowerCaseRoot() {
+		assertEquals("abc", lcr("ABC"));
+		assertNull(lcr(null));
+	}
+
+	@Test
+	void b007b_ucr_upperCaseRoot() {
+		assertEquals("ABC", ucr("abc"));
+		assertNull(ucr(null));
+	}
+
+	@Test
 	void b008_tr_trim() { assertEquals("x", tr("  x  ")); }
 
 	@Test

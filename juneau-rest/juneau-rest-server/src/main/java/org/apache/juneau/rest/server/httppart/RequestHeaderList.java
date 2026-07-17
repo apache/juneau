@@ -393,7 +393,7 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	 * @return The list of all unique header names in this list.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<String> getNames() { return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
+	public List<String> getNames() { return stream().map(RequestHeader::getName).map(x -> caseSensitive ? x : lcr(x)).distinct().toList(); }
 
 	/**
 	 * Returns all headers in sorted order.
@@ -521,6 +521,6 @@ public class RequestHeaderList extends ArrayList<RequestHeader> {
 	}
 
 	private String key(String name) {
-		return caseSensitive ? name : name.toLowerCase();
+		return caseSensitive ? name : lcr(name);
 	}
 }

@@ -1290,7 +1290,7 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	private static String normalizeHttpMethod(String v) {
 		if ("METHOD".equalsIgnoreCase(v))
 			return "*";
-		return v.toUpperCase(Locale.ENGLISH);
+		return ucr(v);
 	}
 
 	/**

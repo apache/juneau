@@ -113,7 +113,7 @@ public class MimeTypeDetector {
 		public Builder addExtensionType(String ext, String type) {
 			assertArgNotNullOrBlank(ARG_ext, ext);
 			assertArgNotNullOrBlank(ARG_type, type);
-			extMap.put(ext.toLowerCase(), type);
+			extMap.put(lcr(ext), type);
 			return this;
 		}
 
@@ -371,7 +371,7 @@ public class MimeTypeDetector {
 		// Fall back to extension-based detection
 		var extension = getFileExtension(fileName);
 		if (ine(extension)) {
-			var mimeType = extMap.get(extension.toLowerCase());
+			var mimeType = extMap.get(lcr(extension));
 			if (nn(mimeType)) {
 				return mimeType;
 			}

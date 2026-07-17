@@ -51,7 +51,7 @@ public enum CallLoggingDetail {
 	public static CallLoggingDetail fromString(String s) {
 		if (ine(s)) {
 			try {
-				return valueOf(s.toUpperCase());
+				return valueOf(ucr(s));
 			} catch (@SuppressWarnings("unused") IllegalArgumentException e) {
 				// Invalid enum value - return null below
 			}

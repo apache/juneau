@@ -428,7 +428,7 @@ public class RequestQueryParamList extends ArrayList<RequestQueryParam> {
 	 * @return The list of all unique header names in this list.
 	 * 	<br>List is unmodifiable.
 	 */
-	public List<String> getNames() { return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : x.toLowerCase()).distinct().toList(); }
+	public List<String> getNames() { return stream().map(RequestQueryParam::getName).map(x -> caseSensitive ? x : lcr(x)).distinct().toList(); }
 
 	/**
 	 * Locates the position/limit query arguments ({@code &amp;p=}, {@code &amp;l=}) in the query string and returns them as a {@link PageArgs} object.

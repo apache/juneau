@@ -105,12 +105,12 @@ public class OperationMap extends TreeMap<String,Operation> {
 		@Override
 		public int compare(String o1, String o2) {
 			// Since keys are now stored in lowercase, we need to normalize them for comparison
-			var s1 = methods.get(emptyIfNull(o1).toLowerCase());
-			var s2 = methods.get(emptyIfNull(o2).toLowerCase());
+			var s1 = methods.get(lcr(emptyIfNull(o1)));
+			var s2 = methods.get(lcr(emptyIfNull(o2)));
 			if (s1 == null)
-				s1 = emptyIfNull(o1).toLowerCase();
+				s1 = lcr(emptyIfNull(o1));
 			if (s2 == null)
-				s2 = emptyIfNull(o2).toLowerCase();
+				s2 = lcr(emptyIfNull(o2));
 			return StringUtils.compare(s1, s2);
 		}
 	};
@@ -143,6 +143,6 @@ public class OperationMap extends TreeMap<String,Operation> {
 	 */
 	@Override
 	public Operation put(String key, Operation value) {
-		return super.put(emptyIfNull(key).toLowerCase(), value);
+		return super.put(lcr(emptyIfNull(key)), value);
 	}
 }

@@ -1003,7 +1003,7 @@ public class StringUtils {
 	public static boolean containsIgnoreCase(String str, String search) {
 		if (str == null || search == null)
 			return false;
-		return str.toLowerCase().contains(search.toLowerCase());
+		return str.toLowerCase(Locale.ROOT).contains(search.toLowerCase(Locale.ROOT));
 	}
 
 	/**
@@ -1423,7 +1423,7 @@ public class StringUtils {
 	public static boolean endsWithIgnoreCase(String str, String suffix) {
 		if (str == null || suffix == null)
 			return false;
-		return str.toLowerCase().endsWith(suffix.toLowerCase());
+		return str.toLowerCase(Locale.ROOT).endsWith(suffix.toLowerCase(Locale.ROOT));
 	}
 
 	/**
@@ -2555,7 +2555,7 @@ public class StringUtils {
 		var unitStart = i;
 		while (i < len && LETTER.contains(s.charAt(i)))
 			i++;
-		var unit = s.substring(unitStart, i).trim().toLowerCase();
+		var unit = s.substring(unitStart, i).trim().toLowerCase(Locale.ROOT);
 
 			// Convert to milliseconds
 			var ms = parseUnit(unit, value);
@@ -2815,7 +2815,7 @@ public class StringUtils {
 	public static int indexOfIgnoreCase(String str, String search) {
 		if (str == null || search == null)
 			return -1;
-		return str.toLowerCase().indexOf(search.toLowerCase());
+		return str.toLowerCase(Locale.ROOT).indexOf(search.toLowerCase(Locale.ROOT));
 	}
 
 	/**
@@ -3912,7 +3912,7 @@ public class StringUtils {
 			return false;
 
 		// Remove separators and check if it's 12 hex digits
-		var cleaned = mac.replaceAll("[:-]", "").toUpperCase();
+		var cleaned = mac.replaceAll("[:-]", "").toUpperCase(Locale.ROOT);
 		if (cleaned.length() != 12)
 			return false;
 
@@ -4292,7 +4292,7 @@ public class StringUtils {
 	public static int lastIndexOfIgnoreCase(String str, String search) {
 		if (str == null || search == null)
 			return -1;
-		return str.toLowerCase().lastIndexOf(search.toLowerCase());
+		return str.toLowerCase(Locale.ROOT).lastIndexOf(search.toLowerCase(Locale.ROOT));
 	}
 
 	/**
@@ -4443,6 +4443,22 @@ public class StringUtils {
 	}
 
 	/**
+	 * Null-safe convenience method for {@link String#toLowerCase(Locale)} using {@link Locale#ROOT}.
+	 *
+	 * <p>
+	 * Locale-independent lower-casing for parse/match/normalize/key-fold code paths (as opposed to
+	 * {@link #lowerCase(String)}, which uses the default locale and is intended for display casing).
+	 *
+	 * @param s The string to convert.
+	 * @return The lowercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see #upperCaseRoot(String)
+	 * @see #lowerCase(String)
+	 */
+	public static String lowerCaseRoot(String s) {
+		return s == null ? null : s.toLowerCase(Locale.ROOT);
+	}
+
+	/**
 	 * Maps each element of a string array using the specified function.
 	 *
 	 * <p>
@@ -4518,7 +4534,7 @@ public class StringUtils {
 		if (isEmpty(str))
 			return null;
 
-		var upper = str.toUpperCase().replaceAll("[^A-Z]", "");
+		var upper = str.toUpperCase(Locale.ROOT).replaceAll("[^A-Z]", "");
 		if (upper.isEmpty())
 			return "";
 
@@ -6442,7 +6458,7 @@ public class StringUtils {
 		if (isEmpty(str))
 			return null;
 
-		var upper = str.toUpperCase();
+		var upper = str.toUpperCase(Locale.ROOT);
 		var result = new StringBuilder(4);
 		result.append(upper.charAt(0));
 
@@ -7059,7 +7075,7 @@ public class StringUtils {
 	public static boolean startsWithIgnoreCase(String str, String prefix) {
 		if (str == null || prefix == null)
 			return false;
-		return str.toLowerCase().startsWith(prefix.toLowerCase());
+		return str.toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT));
 	}
 
 	/**
@@ -7808,6 +7824,22 @@ public class StringUtils {
 	}
 
 	/**
+	 * Null-safe convenience method for {@link String#toUpperCase(Locale)} using {@link Locale#ROOT}.
+	 *
+	 * <p>
+	 * Locale-independent upper-casing for parse/match/normalize/key-fold code paths (as opposed to
+	 * {@link #upperCase(String)}, which uses the default locale and is intended for display casing).
+	 *
+	 * @param s The string to convert.
+	 * @return The uppercase string, or <jk>null</jk> if the input was <jk>null</jk>.
+	 * @see #lowerCaseRoot(String)
+	 * @see #upperCase(String)
+	 */
+	public static String upperCaseRoot(String s) {
+		return s == null ? null : s.toUpperCase(Locale.ROOT);
+	}
+
+	/**
 	 * Decodes a <c>application/x-www-form-urlencoded</c> string using <c>UTF-8</c> encoding scheme.
 	 *
 	 * @param s The string to decode.
@@ -8149,7 +8181,7 @@ public class StringUtils {
 	 */
 	private static int estimateSyllables(String word) {
 
-		var lower = word.toLowerCase();
+		var lower = word.toLowerCase(Locale.ROOT);
 		var count = 0;
 		var prevWasVowel = false;
 

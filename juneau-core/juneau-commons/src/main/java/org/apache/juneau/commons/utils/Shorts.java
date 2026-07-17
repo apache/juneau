@@ -505,6 +505,19 @@ public class Shorts {
 	public static String lc(String s) { return StringUtils.lowerCase(s); }
 
 	/**
+	 * Converts the specified string to lower case using {@link Locale#ROOT} (null-safe).
+	 *
+	 * <p>
+	 * Locale-independent — use for parse/match/normalize/key-fold code paths (as opposed to {@link #lc(String)},
+	 * which uses the default locale and is intended for display casing).
+	 *
+	 * @param s The string.
+	 * @return The lower-cased string, or null if null.
+	 * @see StringUtils#lowerCaseRoot(String)
+	 */
+	public static String lcr(String s) { return StringUtils.lowerCaseRoot(s); }
+
+	/**
 	 * Converts the specified string to upper case (null-safe).
 	 *
 	 * @param s The string.
@@ -512,6 +525,19 @@ public class Shorts {
 	 * @see StringUtils#upperCase(String)
 	 */
 	public static String uc(String s) { return StringUtils.upperCase(s); }
+
+	/**
+	 * Converts the specified string to upper case using {@link Locale#ROOT} (null-safe).
+	 *
+	 * <p>
+	 * Locale-independent — use for parse/match/normalize/key-fold code paths (as opposed to {@link #uc(String)},
+	 * which uses the default locale and is intended for display casing).
+	 *
+	 * @param s The string.
+	 * @return The upper-cased string, or null if null.
+	 * @see StringUtils#upperCaseRoot(String)
+	 */
+	public static String ucr(String s) { return StringUtils.upperCaseRoot(s); }
 
 	/**
 	 * Trims leading/trailing whitespace from the specified string (null-safe).

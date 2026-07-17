@@ -379,7 +379,7 @@ public class BasicSwaggerProviderSession {
 				continue;
 
 			// Get the operation from the existing swagger so far.
-			var op = getOperation(omSwagger, sm.getPathPattern(), sm.getHttpMethod().toLowerCase());
+			var op = getOperation(omSwagger, sm.getPathPattern(), lcr(sm.getHttpMethod()));
 
 			op.append(parseMap(ms.value(), "@OpSwagger(value) on class %s method %s", c, m));
 			op.appendIf(ne, SWAGGER_operationId,
