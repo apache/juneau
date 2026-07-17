@@ -322,7 +322,7 @@
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
 			<artifactId>tomcat-embed-jasper</artifactId>
-			<version>10.1.34</version>
+			<version>11.0.22</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
